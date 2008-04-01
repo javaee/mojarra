@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.4 2002/03/08 00:24:49 jvisvanathan Exp $
+ * $Id: FacesFilter.java,v 1.5 2002/03/08 00:31:00 jvisvanathan Exp $
  */
 
 /*
@@ -420,7 +420,6 @@ public class FacesFilter implements Filter {
         }
         int targetAction = nh.getTargetAction();
         String targetPath = nh.getTargetPath();
-        System.out.println("targetPath " + targetPath);
         // if targetAction is pass or undefined, continue with rendering
         // without navigation.
         if ( targetPath != null && (targetAction != NavigationHandler.UNDEFINED ||
