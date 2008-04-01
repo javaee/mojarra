@@ -301,21 +301,13 @@
             <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
             <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
 
-            <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
 
-            <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
 
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/> 
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
 
             <!-- To run the following tests, comment above tests, uncomment
                  following tests and set saveStateInClient property in 
@@ -327,6 +319,15 @@
             -->
 
 <!-- put non-running testcases here
+
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
+            <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
+            <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/> 
+            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
 
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
 
