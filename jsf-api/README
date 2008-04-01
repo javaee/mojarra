@@ -46,3 +46,6 @@ is to force the user of the RenderContext to create an instance with a
 factory method, then initialize it.  See
 <jsf-ri/src/com/sun/faces/taglib/html_basic/UseFacesTag.java.doStartTag()>.
 This solution may need revisiting.
+
+Testing MileStone 1 using Tomcat 3.2 resulted in some exceptions. So be sure
+to upgrade to version 4.0 and above.
