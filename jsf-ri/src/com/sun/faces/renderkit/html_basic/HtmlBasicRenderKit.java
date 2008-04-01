@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.11 2001/12/13 00:12:25 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -51,7 +51,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.11 2001/12/13 00:12:25 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -173,8 +173,11 @@ public Renderer getRenderer(String name) throws FacesException {
     Class rendererClass;
     Renderer result;
 
+    String className = props.getProperty(name);
+    Assert.assert_it(null != className);
+
     try {
-	rendererClass = Class.forName(name);
+	rendererClass = Class.forName(className);
 	result = (Renderer) rendererClass.newInstance();
     }
     catch (IllegalAccessException e) {
