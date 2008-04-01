@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.35 2002/06/24 04:18:15 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.36 2002/06/24 04:23:14 craigmcc Exp $
  */
 
 /*
@@ -506,7 +506,9 @@ public interface UIComponent {
 
     /**
      * <p>Process all events queued to this <code>UIComponent</code>, by
-     * calling the <code>processEvent()</code> method for each of them.
+     * calling the <code>processEvent()</code> method of the component itself,
+     * followed by the <code>processEvent()</code> method of each registered
+     * {@link RequestEventHandler}, for each of them.
      * Normally, component writers will not override this method -- it is
      * primarily available for use by tools.  Component writers should
      * override the <code>processEvent()</code> method instead.</p>

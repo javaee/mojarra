@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.6 2002/06/24 04:18:15 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.7 2002/06/24 04:23:14 craigmcc Exp $
  */
 
 /*
@@ -1016,7 +1016,9 @@ public abstract class UIComponentBase implements UIComponent {
 
     /**
      * <p>Process all events queued to this <code>UIComponent</code>, by
-     * calling the <code>processEvent()</code> method for each of them.
+     * calling the <code>processEvent()</code> method of the component itself,
+     * followed by the <code>processEvent()</code> method of each registered
+     * {@link RequestEventHandler}, for each of them.
      * Normally, component writers will not override this method -- it is
      * primarily available for use by tools.  Component writers should
      * override the <code>processEvent()</code> method instead.</p>
@@ -1035,6 +1037,16 @@ public abstract class UIComponentBase implements UIComponent {
             FacesEvent event = (FacesEvent) events.next();
             if (processEvent(context, event)) {
                 result = true;
+            }
+            if (handlers != null) {
+                Iterator handlers = getRequestEventHandlers();
+                while (handlers.hasNext()) {
+                    RequestEventHandler handler =
+                        (RequestEventHandler) handlers.next();
+                    if (handler.processEvent(context, this, event)) {
+                        result = true;
+                    }
+                }
             }
         }
         return (result);
