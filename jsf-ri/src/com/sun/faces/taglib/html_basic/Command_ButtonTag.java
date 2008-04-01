@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,6 +21,18 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+
+import java.util.Iterator;
+
+import javax.faces.FacesException;
+import javax.faces.RenderContext;
+import javax.faces.Renderer;
+import javax.faces.RenderKit;
+import javax.faces.WCommand;
+import javax.faces.WForm;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -29,7 +41,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -38,62 +50,161 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class Command_ButtonTag extends TagSupport
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    private String image = null;
+    private String name = null;
+    private String label = null;
 
-//
-// Constructors and Initializers    
-//
+    // Relationship Instance Variables
 
-public Command_ButtonTag()
-{
-    super();
-    // ParameterCheck.nonNull();
-    this.init();
-}
+    //
+    // Constructors and Initializers    
+    //
 
-protected void init()
-{
-    // super.init();
-}
+    public Command_ButtonTag()
+    {
+        super();
+        // ParameterCheck.nonNull();
+        this.init();
+    }
 
-//
-// Class methods
-//
+    protected void init()
+    {
+        // super.init();
+    }
 
-//
-// General Methods
-//
+    //
+    // Class methods
+    //
 
-// ----VERTIGO_TEST_START
+    //
+    // General Methods
+    //
+    public String getName() {
+        return name;
+    }
 
-//
-// Test methods
-//
+    public void setName(String name) {
+        this.name= name;
+    }
 
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    Command_ButtonTag me = new Command_ButtonTag();
-    Log.setApplicationName("Command_ButtonTag");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: Command_ButtonTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $");
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * Process the start of this tag.
+     * @exception JspException if a JSP exception has occurred
+     */
+    public int doStartTag() throws JspException {
+        // Get the RenderContext from the session. It was set there
+        // in the BeginTag.
+        //
+        RenderContext renderContext;
+        renderContext = (RenderContext)pageContext.getSession().
+            getAttribute("renderContext");
+System.out.println("COMMAND)BUTTONTAG.DOSTARTTAG:rendercontext:"+renderContext);
+ 
+        // 1. get an instance of "WCommand"
+        // Normally, this would be retrieved from some instance pool,
+        // but for now, we will just instantiate one..
+        //
+        WCommand wCommand = new WCommand();
+System.out.println("COMMAND)BUTTONTAG.DOSTARTTAG:WCOMMAND:"+wCommand);
+
+        // 2. set tag attributes into the instance..
+        //
+        wCommand.setAttribute(renderContext, "name", getName());
+        wCommand.setAttribute(renderContext, "image", getImage());
+        wCommand.setAttribute(renderContext, "label", getLabel());
+System.out.println("COMMAND)BUTTONTAG.DOSTARTTAG:WCOMMAND SET ATTR");
+ 
+        // 3. find the parent (WForm), and add WCommand instance as
+        // a child.
+        // wForm.add(...
+        //
+
+        // 4. place back in namespace..
+        //
+
+        // 5. Obtain "Renderer" instance from the "RenderKit
+        //
+        Renderer renderer = null;
+
+        RenderKit renderKit = renderContext.getRenderKit();
+System.out.println("COMMAND)BUTTONTAG.DOSTARTTAG:GOT RENDERKIT:"+renderKit);
+        if (renderKit == null) {
+            throw new JspException("Can't determine RenderKit!");
+        }
+
+        try {
+            renderer = renderKit.getRenderer("com.sun.faces.renderkit.html_basic.ButtonRenderer");
+System.out.println("COMMAND)BUTTONTAG.DOSTARTTAG:GOT RENDERER:"+renderer);
+        } catch (FacesException e) {
+e.printStackTrace();
+            throw new JspException(
+                "FacesException!!! " + e.getMessage());
+        } 
+             
+        if (renderer == null) {
+            throw new JspException(
+                "Could not determine 'renderer' for component");
+        }
+            
+        // 6. Render the good stuff...
+        //
+        try {
+            renderer.renderStart(renderContext, wCommand); 
+System.out.println("COMMAND)BUTTONTAG.DOSTARTTAG:RENDERER.RENDERSTART:");
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        }
+         
+        return (EVAL_BODY_INCLUDE);
+    }
+
+    // ----VERTIGO_TEST_START
+
+    //
+    // Test methods
+    //
+
+    public static void main(String [] args)
+    {
+        Assert.setEnabled(true);
+        Command_ButtonTag me = new Command_ButtonTag();
+        Log.setApplicationName("Command_ButtonTag");
+        Log.setApplicationVersion("0.0");
+        Log.setApplicationVersionDate("$Id: Command_ButtonTag.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $");
     
-}
+    }
 
-// ----VERTIGO_TEST_END
+    // ----VERTIGO_TEST_END
 
 } // end of class Command_ButtonTag

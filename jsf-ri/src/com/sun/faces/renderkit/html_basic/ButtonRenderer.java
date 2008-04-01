@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.3 2001/11/07 00:18:33 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -18,8 +18,10 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
+import javax.faces.WCommand;
 import javax.faces.WComponent;
 
 import org.mozilla.util.Assert;
@@ -33,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.3 2001/11/07 00:18:33 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -42,95 +44,150 @@ import org.mozilla.util.ParameterCheck;
 
 public class ButtonRenderer extends Object implements Renderer
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    private String property = null;
+    private String type = null;
+    private String value = null;
 
-//
-// Constructors and Initializers    
-//
+    // Relationship Instance Variables
 
-public ButtonRenderer()
-{
-    super();
-    // ParameterCheck.nonNull();
-    this.init();
-}
+    //
+    // Constructors and Initializers    
+    //
 
-protected void init()
-{
-    // super.init();
-}
+    public ButtonRenderer()
+    {
+        super();
+        // ParameterCheck.nonNull();
+        this.init();
+    }
 
-//
-// Class methods
-//
+    protected void init()
+    {
+        // super.init();
+    }
 
-//
-// General Methods
-//
+    //
+    // Class methods
+    //
 
-//
-// Methods From Renderer
-//
+    //
+    // General Methods
+    //
 
-public boolean supportsType(WComponent c) {
-    return false;
-}
+    /**
+     * Return the property name.
+     */
+    public String getProperty() {
+        return (property);
+    }
 
-public boolean supportsType(String componentType) {
-    return false;
-}
+    /**
+     * Set the property name.
+     *
+     * @param name The property name
+     */
+    public void setProperty(String property) {
+        this.property = property;
+    }
 
-public Iterator getSupportedAttributeNames(String componentType) {
-    return null;
-}
+    /**
+     * Return the button "type".
+     */
+    public String getType() {
+        return type;
+    }
 
-public void renderStart(RenderContext rc, WComponent c) throws IOException {
-    return;
-}
+    /**
+     * Sets the button "type".
+     *
+     * @param name The property name
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
 
-public void renderChildren(RenderContext rc, WComponent c) throws IOException {
-    return;
-}
+    //
+    // Methods From Renderer
+    //
+    public boolean supportsType(WComponent c) {
+        return true;
+    }
 
-public void renderEnd(RenderContext rc, WComponent c) throws IOException {
-    return;
-}
+    public boolean supportsType(String componentType) {
+        return true;
+    }
 
-public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
-    return false;
-}
+    public Iterator getSupportedAttributeNames(String componentType) {
+        return null;
+    }
 
-
-// ----VERTIGO_TEST_START
-
-//
-// Test methods
-//
-
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    ButtonRenderer me = new ButtonRenderer();
-    Log.setApplicationName("ButtonRenderer");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: ButtonRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $");
+    public void renderStart(RenderContext rc, WComponent c) throws IOException {
     
-}
+        OutputMethod outputMethod = rc.getOutputMethod();
+        WCommand wCommand = (WCommand)c;
+        StringBuffer output = new StringBuffer();
+        output.append("<input type=");
+        if (wCommand.getAttribute(rc, "image") != null) {
+            output.append("image src=");
+            output.append(wCommand.getAttribute(rc, "image"));
+            output.append(" name=");
+            output.append(wCommand.getAttribute(rc, "name"));
+        } else {
+            output.append("submit name=");
+            output.append(wCommand.getAttribute(rc, "name"));
+            output.append(" value=");
+            output.append(wCommand.getAttribute(rc, "label"));
+        }
+        output.append(">");
 
-// ----VERTIGO_TEST_END
+        outputMethod.writeText(output.toString());
+        outputMethod.flush();
+    }
+
+    public void renderChildren(RenderContext rc, WComponent c) 
+        throws IOException {
+        return;
+    }
+
+    public void renderEnd(RenderContext rc, WComponent c) throws IOException {
+        return;
+    }
+
+    public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
+        return false;
+    }
+
+
+    // ----VERTIGO_TEST_START
+
+    //
+    // Test methods
+    //
+
+    public static void main(String [] args)
+    {
+        Assert.setEnabled(true);
+        ButtonRenderer me = new ButtonRenderer();
+        Log.setApplicationName("ButtonRenderer");
+        Log.setApplicationVersion("0.0");
+        Log.setApplicationVersionDate("$Id: ButtonRenderer.java,v 1.3 2001/11/07 00:18:33 rogerk Exp $");
+    
+    }
+
+    // ----VERTIGO_TEST_END
 
 } // end of class ButtonRenderer

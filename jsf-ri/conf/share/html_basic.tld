@@ -185,6 +185,16 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+        <name>name</name>
+        <required>true</required>
+    </attribute>
+    <attribute>
+        <name>label</name>
+    </attribute>
+    <attribute>
+        <name>image</name>
+    </attribute>
   </tag>
 
   <tag>
@@ -324,4 +334,9 @@
     </attribute>
   </tag>
 
+  <tag>
+      <name>useFaces</name>
+      <tagclass>com.sun.faces.taglib.html_basic.UseFacesTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+  </tag>
 </taglib>

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.1 2001/11/01 07:29:07 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import javax.faces.ClientCapabilities;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.1 2001/11/01 07:29:07 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -153,10 +153,11 @@ public Iterator getRendererNamesForComponent(String componentType) {
 }
 
 public Renderer getRenderer(String name) throws FacesException {
-    ParameterCheck.nonNull(name);
+//    ParameterCheck.nonNull(name);
     
     Class rendererClass;
     Renderer result;
+System.out.println("HTMLBASICRENDERKIT.GETRENDERER NAME:"+name);
     try {
 	rendererClass = Class.forName(name);
 	result = (Renderer) rendererClass.newInstance();
@@ -193,7 +194,7 @@ public static void main(String [] args)
     Assert.setEnabled(true);
     Log.setApplicationName("HtmlBasicRenderKit");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.1 2001/11/01 07:29:07 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $");
     System.setProperty(RenderKit.DEFAULT_RENDERKIT_PROPERTY_NAME,
 		       HtmlBasicRenderKit.class.getName());
 

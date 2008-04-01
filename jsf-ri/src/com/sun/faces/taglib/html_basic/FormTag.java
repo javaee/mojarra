@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.1 2001/10/28 01:04:38 edburns Exp $
+ * $Id: FormTag.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -29,7 +29,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.1 2001/10/28 01:04:38 edburns Exp $
+ * @version $Id: FormTag.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,7 +90,7 @@ public static void main(String [] args)
     FormTag me = new FormTag();
     Log.setApplicationName("FormTag");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: FormTag.java,v 1.1 2001/10/28 01:04:38 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: FormTag.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $");
     
 }
 
