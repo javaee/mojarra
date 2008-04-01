@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,7 +126,7 @@ public static void main(String [] args)
     TextAndGraphicRenderer me = new TextAndGraphicRenderer();
     Log.setApplicationName("TextAndGraphicRenderer");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: TextAndGraphicRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: TextAndGraphicRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $");
     
 }
 

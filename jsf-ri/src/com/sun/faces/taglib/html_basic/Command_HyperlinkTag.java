@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.2 2001/11/08 20:55:26 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -29,7 +29,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.2 2001/11/08 20:55:26 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,7 +90,7 @@ public static void main(String [] args)
     Command_HyperlinkTag me = new Command_HyperlinkTag();
     Log.setApplicationName("Command_HyperlinkTag");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: Command_HyperlinkTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: Command_HyperlinkTag.java,v 1.2 2001/11/08 20:55:26 edburns Exp $");
     
 }
 
