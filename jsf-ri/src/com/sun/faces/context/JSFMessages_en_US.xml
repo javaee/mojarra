@@ -1,0 +1,99 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="MSG0001" severity="1" summary="{0} is not a valid number.">
+  	<detail>Please re-enter a valid number.</detail>
+  </message>
+  <message messageId="MSG0002" severity="2" summary="{0} is not a valid date." >
+      <detail>Please re-enter date in mm/dd/yy format.</detail>
+  </message>
+  <message messageId="MSG0003" severity="3" summary="{0} field cannot be empty." />
+  <message messageId="MSG0004" severity="2" summary="{0} out of range." >
+      <detail>Value should be between {1} and {2}.</detail>
+  </message>
+  <message messageId="MSG0005" severity="4" summary="Conversion Error." >
+      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+  </message>
+  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
+      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.DoubleRangeValidator.LIMIT" 
+           severity="1" summary="Validation Error." >
+      <detail>Specified attribute cannot be converted to proper type.</detail>
+  </message>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.MAXIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is greater than allowable maximum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.MINIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is less than allowable minimum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.DoubleRangeValidator.TYPE" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is not of the correct type.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.LengthValidator.LIMIT" 
+           severity="1" summary="Validation Error." >
+      <detail>Specified attribute cannot be converted to proper type.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LengthValidator.MAXIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is greater than allowable maximum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.LengthValidator.MINIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is less than allowable minimum of {0}.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is required.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.IntegerRangeValidator.LIMIT" 
+           severity="1" summary="Validation Error." >
+      <detail>Specified attribute cannot be converted to proper type.</detail>
+  </message>
+  <message messageId="javax.faces.validator.IntegerRangeValidator.MAXIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is greater than allowable maximum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.IntegerRangeValidator.MINIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is less than allowable minimum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.IntegerRangeValidator.TYPE" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is not of the correct type.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.StringRangeValidator.LIMIT" 
+           severity="1" summary="Validation Error." >
+      <detail>Specified attribute cannot be converted to proper type.</detail>
+  </message>
+  <message messageId="javax.faces.validator.StringRangeValidator.MAXIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is greater than allowable maximum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.StringRangeValidator.MINIMUM" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is less than allowable minimum of {0}.</detail>
+  </message>
+  <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is not of the correct type.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is required.</detail>
+  </message>
+
+</messages>
+

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.1 2002/06/25 20:47:56 jvisvanathan Exp $
+ * $Id: MessageResourcesImpl.java,v 1.2 2002/07/24 19:15:33 jvisvanathan Exp $
  */
 
 /*
@@ -79,7 +79,9 @@ public class MessageResourcesImpl extends MessageResources
     //
     
     private MessageCatalog findCatalog(Locale locale) {
-        
+       
+        MessageCatalog cat = null;
+ 
         ParameterCheck.nonNull(locale);
         String[] name = new String[4];
         int i = 3;
@@ -108,24 +110,23 @@ public class MessageResourcesImpl extends MessageResources
 
         for (int j = i+1; j < name.length; j++) {
             // if catalog does not exist it needs to be loaded from XML file.
+            // start with variant appended to resource file name and iterate
+            // until a catalog is found to match locale.
             synchronized( catalogList ) {
-                MessageCatalog cat = (MessageCatalog)catalogList.get(name[j]);
+                cat = (MessageCatalog)catalogList.get(name[j]);
                 if (cat == null) {
                     cat = loadMessages(name[j]+".xml", locale);
                     if ( cat != null ) {
                         catalogList.put(name[j], cat);
+                        break;
                     }    
-                }
-                // store the loaded catalog.
-                if (cat != null ){
-                    for (int k = i+1; k < j; k++) {
-                        catalogList.put(name[k], cat);
-                        return cat;
-                    }
+                } else {
+                    // catalog is already loaded. 
+                    break;
                 }
             }    
         }    
-        return null;
+        return cat;
     }
         
     private Digester initConfig() {

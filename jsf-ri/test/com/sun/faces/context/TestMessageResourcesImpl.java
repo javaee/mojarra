@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.1 2002/06/25 20:48:02 jvisvanathan Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.2 2002/07/24 19:15:34 jvisvanathan Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import com.sun.faces.context.MessageResourcesImpl;
 import com.sun.faces.util.Util;
 import java.util.Iterator;
 import javax.faces.FacesException;
+import java.util.Locale;
 
 /**
  *
@@ -30,7 +31,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.1 2002/06/25 20:48:02 jvisvanathan Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.2 2002/07/24 19:15:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,6 +116,42 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         assertTrue ( msg != null );
         assertTrue((msg.getDetail()).equals("Value should be between 1000 and 10000.")); 
         assertTrue((msg.getSummary()).equals("userId out of range."));
+    }
+
+    public void testFindCatalog() {
+
+        boolean gotException = false;
+        Message msg = null;
+
+        MessageResources resources = Util.getMessageResources();
+        assertTrue( resources != null );
+
+        // if no locale is set, it should use the fall back,
+        // JSFMessages.xml
+        msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
+        assertTrue ( msg != null );
+        assertTrue((msg.getSummary()).equals("userId field cannot be empty."));
+
+        // passing an invalid locale should use fall back.
+        Locale en_locale = new Locale("eng", "us");
+        getFacesContext().setLocale(en_locale);
+
+        System.out.println("Testing get methods");
+        try {
+            msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
+        } catch ( Exception fe) {
+            gotException = true;
+        }
+        assertTrue(!gotException);
+        gotException = false;
+        msg = null;
+      
+        en_locale = new Locale("en", "us"); 
+        msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
+        assertTrue ( msg != null );
+        assertTrue((msg.getSummary()).equals("userId field cannot be empty."));
+        msg = null;
+
     }
 
 } // end of class TestMessageListImpl
