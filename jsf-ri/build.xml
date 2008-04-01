@@ -47,19 +47,8 @@
 <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
-  <property name="javamail.jar" value="${lib.home}/mail.jar"/>
-  <property name="jaf.jar" value="${lib.home}/activation.jar"/>
-  <property name="jaxp.jar" value="${lib.home}/jaxp.jar"/>
-  <property name="xalan.jar" value="${lib.home}/xalan.jar"/>
-  <property name="crimson.jar" value="${lib.home}/crimson.jar"/>
-  <property name="dom4j.jar" value="${lib.home}/dom4j.jar"/>
-  <property name="jndi.jar" value="${lib.home}/jndi.jar"/>
+  <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
-  <property name="jaxm.jar" value="${lib.home}/jaxm.jar"/>
-  <property name="log4j.jar" value="${lib.home}/log4j.jar"/>
-  <property name="junit.jar" value="${lib.home}/junit.jar"/>
-  <property name="jaxm-client.jar" value="${lib.home}/client.jar"/>
-  <property name="jsf-api.jar" value="${lib.home}/jsf-api.jar"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -75,18 +64,8 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
-    <pathelement location="${javamail.jar}"/>
-    <pathelement location="${jaf.jar}"/>
-    <pathelement location="${jaxp.jar}"/>
-    <pathelement location="${xalan.jar}"/>
-    <pathelement location="${crimson.jar}"/>
-    <pathelement location="${dom4j.jar}"/>
-    <pathelement location="${jndi.jar}"/>
+    <pathelement location="${mozutil.jar}"/>
     <pathelement location="${servlet.jar}"/>
-    <pathelement location="${jaxm.jar}"/>
-    <pathelement location="${jaxm-client.jar}"/>
-    <pathelement location="${log4j.jar}"/>
-    <pathelement location="${jsf-api.jar}"/>
   </path>
 
   <path id="test.classpath">
