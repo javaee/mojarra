@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.2 2002/05/20 17:46:31 craigmcc Exp $
+ * $Id: Validator.java,v 1.3 2002/06/03 16:36:22 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.context.MessageList;
  * robust user interfaces for configuring them.</p>
  */
 
-public interface Validator {
+public abstract class Validator {
 
 
     /**
@@ -55,7 +55,7 @@ public interface Validator {
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public AttributeDescriptor getAttributeDescriptor(String name);
+    public abstract AttributeDescriptor getAttributeDescriptor(String name);
 
 
     /**
@@ -63,7 +63,7 @@ public interface Validator {
      * attributes for this <code>Validator</code>.  If no attributes are
      * supported, an empty <code>Iterator</code> is returned.</p>
      */
-    public Iterator getAttributeNames();
+    public abstract Iterator getAttributeNames();
 
 
     /**
@@ -76,7 +76,7 @@ public interface Validator {
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
      */
-    public void validate(FacesContext context, UIComponent component);
+    public abstract void validate(FacesContext context, UIComponent component);
 
 
 }
