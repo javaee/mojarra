@@ -16,7 +16,7 @@
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
 
-  <property name="Name"             value="jsf-api"/>
+  <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
   <property name="version"          value="0.04"/>
 
@@ -290,9 +290,9 @@
              sourcepath="${src.dir}"
              destdir="${build.javadocs}"
              author="true"
-             version="true" private="true"
-             windowtitle="${Name} API"
-             doctitle="${Name}"
+             version="true" private="false" protected="true"
+             windowtitle="${Name} (Version ${version})"
+             doctitle="${Name} (Version ${version})"
              bottom="Copyright &#169; 2002 Sun Microsystems, Inc. All Rights Reserved.">
       <classpath refid="compile.classpath"/>
     </javadoc>
