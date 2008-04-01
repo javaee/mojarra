@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.10 2002/06/07 00:01:03 eburns Exp $
+ * $Id: FacesTag.java,v 1.11 2002/06/10 19:12:44 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.10 2002/06/07 00:01:03 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.11 2002/06/10 19:12:44 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,16 +133,5 @@ public final String getRendererType()
 // 
 // Methods From TagSupport
 //
-
-public int doStartTag() throws JspException
-{
-    
-    return doStart();
-}
-
-public int doEndTag() throws JspException
-{
-    return doEnd();
-}
 
 } // end of class FacesTag
