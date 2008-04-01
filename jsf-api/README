@@ -1,5 +1,5 @@
 			     JSR #000127
-		  Java Server Faces 1.0
+		  Java Server Faces 0.03
 
 This README covers the jsf-api and jsf-ri workspaces.
 
@@ -10,7 +10,82 @@ larger development base to Java server application development.
 http://java.sun.com/aboutJava/communityprocess/jsr/jsr_127.html
 http://wspack.sfbay.sun.com/jsf/
 
-This CVS module contains the sources for Java Server Faces 1.0 API.
+This CVS module contains the sources for Java Server Faces 0.03 API.
+
+0.03 Release notes:
+
+Changes impacting Faces authors:
+
+- Removal of UseFaces tag.  Please remove any usage of the UseFaces tag
+  in your JSP Pages.
+
+- Introduction of Page Superclass.  Replacing UseFaces is the faces Page
+  Superclass.  Please put before your taglib declaration in each JSP
+  Page that uses Faces tags.
+
+    <%@ page extends="com.sun.faces.Page" %>
+
+- Introduction of NavigationMap tag.  Define a NavigationMap tag before
+  your Form tag that shows where to go from this JSP page.  Like this:
+
+        <faces:NavigationMap id="navMap" scope="session" >
+            <faces:outcome commandName="login" outcome="success" 
+                    targetAction="forward"
+                    targetPath = "welcome.jsp" />
+
+            <faces:outcome commandName="login" outcome="failure" 
+                    targetAction="forward"
+                    targetPath = "error.jsp" />
+        </faces:NavigationMap>
+
+  Then, reference this NavigationMap by id in the Form tag:
+
+     <faces:Form id="basicForm" model="LoginBean" navigationMapId="navMap" >
+
+Internal Changes, not impacting Faces authors:
+
+- Introduction of LifecycleStage mechanism.  This is a major RI change.
+  Prior to this change, Faces relied on the JSP Custom Tag handlers to
+  drive UIComponent creation and rendering.  This release causes each
+  Request to the faces server to go thru the following LifecycleStage
+  segments:
+
+  wireUp: The JSP Page is parsed by the included hacked jasper engine
+  and you end up with a complete tree of UIComponents, rooted in a
+  UIPage instance.
+
+  init: Components can do any per request initialization (currently none)
+
+  restoreState: Any state persisting on a postback is applied to the
+  tree from wireUp.  Currently we just replace the root of the tree from
+  wireUp with a root we stored in the HttpSession under the requestURI
+  key on the previous request.  If there is no entry in the HttpSession
+  under that key, this stage currently does nothing.
+
+  applyNewValues: Currently does nothing.  Will be where the value
+  change paramaters are pulled out of the request query string and
+  applied to their appropriate UIComponent, generating
+  ValueChangeEvents.
+
+  processEvents: queue events, dispatch events, handle navigation
+
+  preRender: currently does nothing
+
+  saveState: Currently store the root of this component tree in the
+  HttpSession under the key requestURI.  This entry in the HttpSession
+  only lasts until the request is processed.
+
+  render: Call back to the HttpJspPage implementation's _jspService() to
+  render the tree via the tag handlers.
+
+  dispose: dispose the tree.
+
+- Removal of FacesFilter, replace with Page superclass.
+
+- UIComponent instances are no longer stored in ObjectManager.  Rather,
+  there is a new interface, TreeNavigator, that wraps the UIPage root of
+  the component tree and provides methods to find a component by id, and
+  for traversing the tree.
 
 Milestone 1 Release notes:
 
