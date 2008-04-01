@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.14 2002/08/02 01:43:13 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.15 2002/08/08 16:25:55 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.FacesException;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
@@ -46,7 +46,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.14 2002/08/02 01:43:13 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.15 2002/08/08 16:25:55 rkitain Exp $
  * 
  *
  */
@@ -156,7 +156,7 @@ public class TestRenderers_1 extends JspFacesTestCase
          
         // Test inputRenderer.
         System.out.println("Testing InputRenderer");
-        UIComponent textEntry = new UITextEntry();
+        UIComponent textEntry = new UIInput();
         textEntry.setComponentId("input_renderer");
         root.addChild(textEntry);
 
@@ -186,7 +186,7 @@ public class TestRenderers_1 extends JspFacesTestCase
          
         // Test TextAreaRenderer.
         System.out.println("Testing InputRenderer");
-        UIComponent textEntry = new UITextEntry();
+        UIComponent textEntry = new UIInput();
         textEntry.setComponentId("textarea_renderer");
         root.addChild(textEntry);
 

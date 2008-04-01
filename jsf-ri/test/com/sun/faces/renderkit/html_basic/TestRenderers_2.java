@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.9 2002/08/02 01:17:42 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.10 2002/08/08 16:25:55 rkitain Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -43,7 +43,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.9 2002/08/02 01:17:42 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.10 2002/08/08 16:25:55 rkitain Exp $
  * 
  *
  */
@@ -308,7 +308,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public void testSecretRenderer(UIComponent root) throws IOException {
         System.out.println("Testing SecretRenderer");
-        UITextEntry textEntry = new UITextEntry();
+        UIInput textEntry = new UIInput();
         textEntry.setValue(null);
         textEntry.setComponentId("my_secret");
         root.addChild(textEntry);
@@ -331,7 +331,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = secretRenderer.supportsComponentType("javax.faces.component.UITextEntry");
+        result = secretRenderer.supportsComponentType("javax.faces.component.UIInput");
         assertTrue(result);
         result = secretRenderer.supportsComponentType(textEntry);
         assertTrue(result);
