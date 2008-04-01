@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.18 2002/08/15 16:29:27 craigmcc Exp $
+ * $Id: UICommand.java,v 1.19 2002/08/15 20:12:27 craigmcc Exp $
  */
 
 /*
@@ -144,7 +144,7 @@ public class UICommand extends UIComponentBase {
 
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
-            super.encodeEnd(context);
+            super.encodeBegin(context);
             return;
         }
 
