@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.9 2002/08/30 17:52:06 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.10 2002/08/30 22:18:31 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.9 2002/08/30 17:52:06 rkitain Exp $
+ * @version $Id: MessageRenderer.java,v 1.10 2002/08/30 22:18:31 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,10 +165,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
         String message = null;
 
-        //PENDING(rogerk) if string contains "{" char assume it has
+        //PENDING(rogerk) if string contains "{" char and enclosing "}"
+        // two char positions later (ex: "{0}") assume it has
         // something like "{0}", in which case do the message format.
 
-        if ((currentValue.indexOf("{0}") >= 0) && (parameterList.size() > 0))  {
+        int i = 0;
+        if ((-1 != (i = currentValue.indexOf('{'))) && 
+            (currentValue.charAt(i + 2) == '}') && 
+            (parameterList.size() > 0)) {
             Object[] params = parameterList.toArray();
             message = MessageFormat.format(currentValue, params);
         } else {
