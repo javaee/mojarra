@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.4 2002/08/02 00:38:31 eburns Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.5 2002/08/08 00:46:14 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.4 2002/08/02 00:38:31 eburns Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.5 2002/08/08 00:46:14 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -172,7 +172,7 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     
     // PENDING(visvan) - will not deal with simultaneous requests
     // for the same session
-    HttpSession session = facesContext.getHttpSession(true);
+    HttpSession session = facesContext.getHttpSession();
 
     // Reconstitute or create the request tree
     HttpServletRequest request = (HttpServletRequest)

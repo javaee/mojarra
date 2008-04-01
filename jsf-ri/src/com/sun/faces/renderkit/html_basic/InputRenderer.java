@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.27 2002/08/07 23:40:34 rkitain Exp $
+ * $Id: InputRenderer.java,v 1.28 2002/08/08 00:46:15 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.27 2002/08/07 23:40:34 rkitain Exp $
+ * @version $Id: InputRenderer.java,v 1.28 2002/08/08 00:46:15 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,6 +89,7 @@ public class InputRenderer extends HtmlBasicRenderer {
         if ( componentType == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
+	return false;
 //        return (componentType.equals(UITextEntry.TYPE));
     }
 

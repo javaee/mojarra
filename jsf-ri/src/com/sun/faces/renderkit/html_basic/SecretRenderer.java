@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.25 2002/08/07 23:40:34 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.26 2002/08/08 00:46:15 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.25 2002/08/07 23:40:34 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.26 2002/08/08 00:46:15 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,6 +87,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
         if ( componentType == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+	return false;
 //        return (componentType.equals(UITextEntry.TYPE));
     }
 

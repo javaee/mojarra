@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.20 2002/08/05 23:00:29 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.21 2002/08/08 00:46:13 eburns Exp $
  */
 
 /*
@@ -112,6 +112,11 @@ public class FacesContextImpl extends FacesContext
         this.request = request;
         this.response = response;
         this.locale = request.getLocale();
+	// PENDING(edburns): don't depend on the session being there!
+        if (this.request instanceof HttpServletRequest) {
+            this.session =
+                ((HttpServletRequest) request).getSession();
+        }
         this.viewHandler = lifecycle.getViewHandler();
         this.applicationHandler = lifecycle.getApplicationHandler();
         
@@ -147,22 +152,7 @@ public class FacesContextImpl extends FacesContext
     public HttpSession getHttpSession() {
         return (this.session);
     }
-
-    public HttpSession getHttpSession(boolean create) {
-	HttpSession result = null;
-	if (!create) {
-	    result = getHttpSession();
-	}
-	else {
-	    if (this.request instanceof HttpServletRequest && 
-		null == this.session) {
-		this.session = ((HttpServletRequest) request).getSession(true);
-	    }
-	    result = this.session;
-        }
-	return result;
-    }
-
+    
     public Locale getLocale() {
         return (this.locale);
     }
@@ -581,7 +571,7 @@ public class FacesContextImpl extends FacesContext
 	    }
 	    // PENDING (visvan) store model objects in correct scope.
 	    object = value;
-	    getHttpSession(true).setAttribute(baseName, object);   
+	    getHttpSession().setAttribute(baseName, object);   
 	} else {
 	    property = expression.substring((expression.indexOf(".")+1));
 	    baseName = expression.substring(0, expression.indexOf("."));
@@ -615,8 +605,8 @@ public class FacesContextImpl extends FacesContext
         if ( modelObj != null ) {
             return modelObj;
         }
-        if (getHttpSession(true) != null ) {
-            modelObj = getHttpSession(true).getAttribute(modelRef);
+        if (getHttpSession() != null ) {
+            modelObj = getHttpSession().getAttribute(modelRef);
             if ( modelObj != null ) {
                 return modelObj;
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.13 2002/08/02 01:17:39 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.14 2002/08/08 00:46:17 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.13 2002/08/02 01:17:39 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.14 2002/08/08 00:46:17 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,7 +120,7 @@ public void testAccessors()
     assertTrue(result);
     
     
-    HttpSession session = getFacesContext().getHttpSession(true);
+    HttpSession session = getFacesContext().getHttpSession();
     result = null != session;
     System.out.println("Testing getHttpSession: " + result);
     assertTrue(result);
