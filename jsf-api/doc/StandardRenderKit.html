@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.11 2002/08/15 18:26:58 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.12 2002/08/21 20:20:07 craigmcc Exp $</h3>
 </div>
 
 
@@ -430,6 +430,22 @@
       specified compound identifier, or the global errors not associated with
       any component if the compoundId is a zero-length String.  If no
       compoundId at all is specified, render all error messages.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Label</td>
+    <td>(none)</td>
+    <td>(none)</td>
+    <td>for</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render the nested components surrounded by an HTML
+      <code>&lt;label&gt;</code> element with the specified <code>for</code>
+      attribute (which must match the rendered <code>id</code> attribute
+      for some input field).
     </td>
   </tr>
 
