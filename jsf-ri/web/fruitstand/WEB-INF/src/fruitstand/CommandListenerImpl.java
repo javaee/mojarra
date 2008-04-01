@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.6 2002/03/08 00:24:51 jvisvanathan Exp $
+ * $Id: CommandListenerImpl.java,v 1.7 2002/03/19 00:50:18 jvisvanathan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -51,7 +51,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.6 2002/03/08 00:24:51 jvisvanathan Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.7 2002/03/19 00:50:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -207,7 +207,7 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
     Assert.assert_it(null != req);
     Assert.assert_it(null != user);
 
-    if (sourceId.equals("createAccount")) {
+    if (cmdName.equals("createAccount")) {
 	// serialize the user bean
 	synchronized(servletContext) {
             try {
@@ -223,7 +223,7 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
             }
 	}
     }
-    else if (sourceId.equals("Login")) {
+    else if (cmdName.equals("Login")) {
 	synchronized(servletContext) {
             try {
 	        validateLogin(user); 
@@ -239,7 +239,7 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
 	}
     }
 
-    else if (sourceId.equals("checkout")) {
+    else if (cmdName.equals("checkout")) {
         synchronized(servletContext) {
             try {
                 if ( nh != null ) {
@@ -253,7 +253,7 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
             }
         }
     }
-    else if (sourceId.equals("confirm")) {
+    else if (cmdName.equals("confirm")) {
         synchronized(servletContext) {
             try {
                 if ( nh != null ) {

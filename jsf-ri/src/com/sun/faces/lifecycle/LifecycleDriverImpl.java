@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:48 eburns Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.4 2002/03/19 00:50:18 jvisvanathan Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import javax.faces.FacesContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
 import javax.faces.UIPage;
+import javax.faces.UIComponent;
 
 /**
  *
@@ -53,7 +54,7 @@ import javax.faces.UIPage;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.4 2002/03/19 00:50:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -386,6 +387,18 @@ boolean traverseTreeInvokingMethod(FacesContext ctx, TreeNavigator treeNav,
 				String cycleName)
 {
     boolean result = true;
+    UIComponent next = null;
+
+    while (null != (next = treeNav.getNextStart())) {
+        if (cycleName.equals("init")) {
+            next.init(ctx);
+        } else if (cycleName.equals("preRender")) {
+            next.preRender(ctx);
+        } else if (cycleName.equals("dispose")) {
+            next.dispose(ctx);
+        } 
+    }
+    treeNav.reset();
     return result;
 }
 
