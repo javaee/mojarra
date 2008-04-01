@@ -145,7 +145,7 @@ public class WSelectBoolean extends WComponent {
             try {
                 String state_str = (String) ModelAccessor.
                         getModelObject(rc, (String) model);
-                state = Boolean.getBoolean(state_str);
+                state = (Boolean.valueOf(state_str)).booleanValue();
             } catch ( FacesException e ) {
                 // PENDING (visvan) skip this exception ??
                 return selected;

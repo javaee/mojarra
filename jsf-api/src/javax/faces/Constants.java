@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.4 2001/12/06 22:02:30 visvan Exp $
+ * $Id: Constants.java,v 1.5 2001/12/12 20:40:24 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -104,5 +104,10 @@ public class Constants {
      * Name for EventDispatcherFactory
      */
     public static final String REF_EVENTDISPATCHERFACTORY = "eventDispatcherFactory";
+
+    /**
+     * Starting string for hidden checkbox field
+     */
+     public static final String REF_HIDDENCHECKBOX = "facesCheckbox";
     
 }
