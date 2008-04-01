@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.2 2002/05/14 00:44:05 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.3 2002/05/17 05:00:30 craigmcc Exp $
  */
 
 /*
@@ -34,9 +34,6 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * for all calls to the <code>createRenderKit()</code> method with the
  * same render kit identifier value, from within the same web application.
  * </p>
- *
- * <p><strong>FIXME</strong> - Specify a way for third party
- * {@link RenderKit}s to register themselves.</p>
  */
 
 public abstract class RenderKitFactory {
@@ -47,6 +44,21 @@ public abstract class RenderKitFactory {
      * for this JavaServer Faces implementation.</p>
      */
     public static final String DEFAULT_RENDER_KIT = "DEFAULT";
+
+
+    /**
+     * <p>Register a new {@link RenderKit} instance that is immediately
+     * available via this factory instance.</p>
+     *
+     * @param renderKit RenderKit instance that we are registering
+     *
+     * @exception IllegalArgumentException if the render kit identifier
+     *  of the new render kit is either the reserved default value, or
+     *  is already registered
+     * @exception NullPointerException if <code>renderKit</code>
+     *  is <code>null</code>
+     */
+    public abstract void addRenderKit(RenderKit renderKit);
 
 
     /**
@@ -74,6 +86,8 @@ public abstract class RenderKitFactory {
      * </p>
      */
     public abstract Iterator getRenderKitIds();
+
+
 
 
 }
