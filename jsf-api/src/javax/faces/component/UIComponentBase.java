@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.10 2002/07/16 22:11:29 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.11 2002/07/22 18:28:45 craigmcc Exp $
  */
 
 /*
@@ -445,15 +445,15 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * @param componentId The component identifier to check
      *
+     * @exception IllegalArgumentException if this component identifier
+     *  is <code>null</code>
      * @exception IllegalArgumentException if this component identifier is
      *  already in use by one of our children
-     * @exception NullPointerException if this component identifier
-     *  is <code>null</code>
      */
     private void checkComponentId(String componentId) {
 
         if (componentId == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException("Component Id is null");
         }
         if (isChildrenAllocated()) {
             Iterator kids = children.iterator();
@@ -500,6 +500,8 @@ public abstract class UIComponentBase implements UIComponent {
      * @param component {@link UIComponent} to be added
      *
      * @exception IllegalArgumentException if the component identifier
+     *  of the new component has not been set
+     * @exception IllegalArgumentException if the component identifier
      *  of the new component is not unique within the children of
      *  this component
      * @exception NullPointerException if <code>component</code> is null
@@ -523,6 +525,8 @@ public abstract class UIComponentBase implements UIComponent {
      *  <code>UIComponent</code>
      * @param component Component to be added
      *
+     * @exception IllegalArgumentException if the component identifier
+     *  of the new component has not been set
      * @exception IllegalArgumentException if the component identifier
      *  of the new component is not unique within the children of
      *  this component

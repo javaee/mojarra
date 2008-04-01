@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.38 2002/07/16 22:11:28 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.39 2002/07/22 18:28:45 craigmcc Exp $
  */
 
 /*
@@ -213,6 +213,8 @@ public interface UIComponent {
      * @param component {@link UIComponent} to be added
      *
      * @exception IllegalArgumentException if the component identifier
+     *  of the new component has not been set
+     * @exception IllegalArgumentException if the component identifier
      *  of the new component is not unique within the children of
      *  this component
      * @exception NullPointerException if <code>component</code> is null
@@ -228,6 +230,8 @@ public interface UIComponent {
      *  <code>UIComponent</code>
      * @param component Component to be added
      *
+     * @exception IllegalArgumentException if the component identifier
+     *  of the new component has not been set
      * @exception IllegalArgumentException if the component identifier
      *  of the new component is not unique within the children of
      *  this component

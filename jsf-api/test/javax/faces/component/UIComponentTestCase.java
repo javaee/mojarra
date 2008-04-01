@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.8 2002/07/16 22:11:30 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.9 2002/07/22 18:28:46 craigmcc Exp $
  */
 
 /*
@@ -91,6 +91,89 @@ public class UIComponentTestCase extends TestCase {
 
 
     // ------------------------------------------------ Individual Test Methods
+
+
+    /**
+     * [3.1.3] Negative tests for <code>addChild()</code>.
+     */
+    public void testAddChildNegative() {
+
+        // Child components we will need
+        UIForm form1 = new UIForm();
+        form1.setComponentId("form1");
+        UIForm form1a = new UIForm();
+        form1a.setComponentId("form1"); // Duplicate id
+        UIForm form2 = new UIForm();
+        form2.setComponentId("form2");
+
+        // Add first child explicitly
+        component.addChild(form1);
+
+        // Null child - simple
+        try {
+            component.addChild(null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+
+        // Null child - indexed
+        try {
+            component.addChild(0, null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+
+        // No component id - simple
+        try {
+            component.addChild(new UIForm());
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // No component id - indexed
+        try {
+            component.addChild(0, new UIForm());
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // Duplicate component id - simple
+        try {
+            component.addChild(form1a);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // Duplicate component id - indexed
+        try {
+            component.addChild(0, form1a);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // Index out of bounds - low
+        try {
+            component.addChild(-1, form2);
+            fail("Should have thrown IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            ; // Expected result
+        }
+
+        // Index out of bounds - high
+        try {
+            component.addChild(2, form2);
+            fail("Should have thrown IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            ; // Expected result
+        }
+
+    }
 
 
     /**
