@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.2 2001/12/20 22:26:42 ofung Exp $
+ * $Id: DebugUtil.java,v 1.3 2002/05/30 01:42:09 eburns Exp $
  */
 
 /*
@@ -15,13 +15,20 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.SelectItem;
+
+import java.util.Iterator;
+
+import java.io.PrintStream;
+
 /**
  *
  *  <B>DebugUtil</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.2 2001/12/20 22:26:42 ofung Exp $
+ * @version $Id: DebugUtil.java,v 1.3 2002/05/30 01:42:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -39,6 +46,8 @@ public class DebugUtil extends Object
 //
 
 public static boolean keepWaiting = true;
+
+private static int curDepth = 0;
 
 //
 // Instance Variables
@@ -91,6 +100,91 @@ public static void waitForDebugger() {
 			       e.getMessage());
 	}
     }
+}
+
+private static void indentPrintln(PrintStream out, String str)
+{
+    int i = 0;
+    
+    // handle indentation
+    for (i = 0; i < curDepth; i++) {
+	out.print("  ");
+    }
+    out.print(str + "\n");
+}
+
+public static void printTree(UIComponent root, PrintStream out) 
+{
+    if (null == root) {
+	return;
+    }
+    int i = 0;
+    
+    indentPrintln(out, "===>Type:" + root.getComponentType());
+    indentPrintln(out, "id:"+root.getComponentId());
+
+    if (root.getModel() != null) {
+	indentPrintln(out, "modelReference:"+root.getModel());
+    }
+    
+    SelectItem items[] = null;
+    SelectItem curItem = null;
+    int j = 0;
+
+    if (root instanceof javax.faces.component.UISelectOne) {
+	items = ((javax.faces.component.UISelectOne)root).getItems();
+	indentPrintln(out, " {");
+	for (j = 0; j < items.length; j++) {
+	    curItem = items[j];
+	    indentPrintln(out, "\t value=" + curItem.getValue() + 
+			  " label=" + curItem.getLabel() + " description=" + 
+			  curItem.getDescription());
+	}
+	indentPrintln(out, " }");
+    } else {
+	indentPrintln(out, "value=" + root.getValue());
+	
+	Iterator it = root.getAttributeNames();
+	if (it != null) {
+	    while (it.hasNext()) {
+		String attrValue = null, attrName = (String)it.next();
+		Object attrObj = root.getAttribute(attrName);
+		
+		if (!(attrValue instanceof String)) {
+		    // chop off the address since we don't want to print
+		    // out anything that'll vary from invocation to
+		    // invocation
+		    attrValue = attrObj.toString();
+		    int at = 0;
+		    boolean doTruncate = false;
+		    if (-1 == (at = attrValue.indexOf("$"))) {
+			if (-1 != (at = attrValue.indexOf("@"))) {
+			    doTruncate = true;
+			}
+		    }
+		    else {
+			doTruncate = true;
+		    }
+		    
+		    if (doTruncate) {
+			attrValue = attrValue.substring(0, at);
+		    }
+		}
+		else {
+		    attrValue = (String) attrObj;
+		}
+		    
+		indentPrintln(out, "attr=" + attrName + 
+			      " : " + attrValue); 
+	    }
+	}
+    }
+    curDepth++;
+    Iterator it = root.getChildren();
+    while (it.hasNext()) {
+	printTree((UIComponent) it.next(), out);
+    }
+    curDepth--;
 }
 //
 // General Methods

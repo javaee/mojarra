@@ -200,11 +200,41 @@
         <copy file="${basedir}/web/test/treeTest.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
+        <copy file="${basedir}/web/test/Faces_Basic.jsf"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic_uiml.jsf"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic_xul.jsf"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
         <copy file="${basedir}/web/test/testWhile.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
         <copy file="${basedir}/web/basic/Faces_Basic.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic.uiml"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic.xul"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+<!-- Copy over the "correct" files for automated comparison checking -->
+
+        <copy file="${basedir}/web/test/Faces_Basic_correct_jsp"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic_correct_uiml"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic_correct_xul"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/test/Faces_Basic_correct_xul_tree"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
 
 
     </target>
@@ -236,7 +266,7 @@
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
             <!-- uncomment this to attach the debugger to the tomcat vm -->
-            <!-- <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/> -->
+            <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/>
 
             <arg value="-config"/>
             <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
@@ -287,6 +317,7 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl_Model"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>

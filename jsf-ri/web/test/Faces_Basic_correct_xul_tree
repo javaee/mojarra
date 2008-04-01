@@ -1,0 +1,87 @@
+===>Type:root
+id:null
+value=null
+  ===>Type:Form
+  id:basicForm
+  value=null
+  attr=componentId : basicForm
+  attr=parent : com.sun.faces.tree.XmlTreeFactoryImpl
+    ===>Type:Output
+    id:userLabel
+    value=UserName
+    attr=componentId : userLabel
+    attr=parent : javax.faces.component.UIForm
+    attr=value : UserName
+    ===>Type:TextEntry
+    id:userName
+    value=default
+    attr=componentId : userName
+    attr=parent : javax.faces.component.UIForm
+    attr=value : default
+    ===>Type:Output
+    id:pwdLabel
+    value=Password
+    attr=componentId : pwdLabel
+    attr=parent : javax.faces.component.UIForm
+    attr=value : Password
+    ===>Type:TextEntry
+    id:password
+    value=null
+    attr=componentId : password
+    attr=parent : javax.faces.component.UIForm
+    attr=type : password
+    ===>Type:Output
+    id:addrLabel
+    value=Address
+    attr=componentId : addrLabel
+    attr=parent : javax.faces.component.UIForm
+    attr=value : Address
+    ===>Type:TextEntry
+    id:address
+    value=null
+    attr=multiline : true
+    attr=componentId : address
+    attr=parent : javax.faces.component.UIForm
+    ===>Type:SelectBoolean
+    id:validUser
+    modelReference:${UserBean.validUser}
+    value=null
+    attr=model : 
+    attr=label : Checker
+    attr=componentId : validUser
+    attr=parent : javax.faces.component.UIForm
+    ===>Type:SelectOne
+    id:shipType
+    modelReference:${UserBean.items}
+     {
+    	 value=nextDay label=Next Day description=null
+    	 value=nextWeek label=Next Week description=null
+    	 value=nextMonth label=Next Month description=null
+     }
+    ===>Type:SelectOne
+    id:appleQuantity
+    modelReference:${UserBean.appleQuantity}
+     {
+    	 value=0 label=0.00 description=null
+    	 value=1 label=1.00 description=null
+    	 value=2 label=2.00 description=null
+    	 value=3 label=3.00 description=null
+    	 value=4 label=4.00 description=null
+    	 value=5 label=5.00 description=null
+    	 value=6 label=6.00 description=null
+    	 value=7 label=7.00 description=null
+    	 value=8 label=8.00 description=null
+    	 value=9 label=9.00 description=null
+     }
+    ===>Type:Command
+    id:login
+    value=null
+    attr=label : Login
+    attr=componentId : login
+    attr=parent : javax.faces.component.UIForm
+    ===>Type:Command
+    id:login2
+    value=null
+    attr=componentId : login2
+    attr=parent : javax.faces.component.UIForm
+    attr=src : duke.gif

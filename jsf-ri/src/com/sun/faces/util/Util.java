@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.7 2002/05/28 22:43:39 rkitain Exp $
+ * $Id: Util.java,v 1.8 2002/05/30 01:42:09 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.7 2002/05/28 22:43:39 rkitain Exp $
+ * @version $Id: Util.java,v 1.8 2002/05/30 01:42:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,6 +69,20 @@ private Util()
 	    return loader.loadClass(name);
 	}
     }
+
+    /**
+     * Generate a new identifier currently used to uniquely identify
+     * components.
+     */
+    public static synchronized String generateId() {
+        if (id == Long.MAX_VALUE) {
+            id = 0;
+        } else { 
+            id++;
+        }
+        return Long.toHexString(id);
+    }
+
 
 //
 // General Methods
