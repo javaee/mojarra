@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.8 2002/07/16 17:26:19 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.9 2002/07/16 17:28:46 craigmcc Exp $
  */
 
 /*
@@ -112,7 +112,7 @@ public abstract class RenderKit {
      * @exception NullPointerException if <code>componentType</code>
      *  is <code>null</code>
      */
-    public abstract Iterator getRenderers(String componentType);
+    public abstract Iterator getRendererTypes(String componentType);
 
 
     /**
