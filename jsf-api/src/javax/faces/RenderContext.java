@@ -1,6 +1,6 @@
 package javax.faces;
 
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Locale;
 
 /**
@@ -70,6 +70,18 @@ public abstract class RenderContext {
      *        of user-interface components for the associated request.
      */
     public abstract void setOutputMethod(OutputMethod outputMethod);
+
+    /**
+
+    * The HttpSession for this RenderContext. <P>
+
+    * PENDING(edburns): Amy, not sure if a RenderContext should have an
+    * HttpSession.
+
+
+    */
+
+    public abstract HttpSession getSession();
 
     /**
      * Returns the ancestor of the component currently at the top
