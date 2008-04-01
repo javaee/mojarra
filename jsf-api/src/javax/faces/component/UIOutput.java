@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.11 2002/06/27 21:47:28 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.12 2002/07/15 18:08:24 craigmcc Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public class UIOutput extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeBegin(FacesContext context) throws IOException {
+    public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();

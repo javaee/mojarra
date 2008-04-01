@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.9 2002/06/07 23:31:12 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.10 2002/07/15 18:08:24 craigmcc Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public class UIGraphic extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeBegin(FacesContext context) throws IOException {
+    public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();

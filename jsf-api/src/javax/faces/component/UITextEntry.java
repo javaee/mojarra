@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.7 2002/06/07 23:31:12 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.8 2002/07/15 18:08:24 craigmcc Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class UITextEntry extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeBegin(FacesContext context) throws IOException {
+    public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
