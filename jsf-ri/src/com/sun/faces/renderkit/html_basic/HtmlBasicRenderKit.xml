@@ -139,6 +139,22 @@
     <component>
         <type>javax.faces.component.UIOutput</type>
         <renderer>
+            <type>ErrorsRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.ErrorsRenderer</class>
+            <attribute>
+                <name>compoundId</name>
+                <display-name>Compound Identifier</display-name>
+                <description>An expression that identifies a component</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>color</name>
+                <display-name>Color</display-name>
+                <description></description>
+                <type>java.lang.String</type>
+            </attribute>
+        </renderer>
+        <renderer>
             <type>TextRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
         <!-- Add Attribute Desc stuff here -->
