@@ -13,6 +13,8 @@
 
 <checkbox id="validUser" label="Checker" />
 
+<uicomponent class="basic.BasicTextEntry" id="customComponent" value="custom"/>
+
 <button id="login" label="Login" value="myLogin" />
 
 </window>

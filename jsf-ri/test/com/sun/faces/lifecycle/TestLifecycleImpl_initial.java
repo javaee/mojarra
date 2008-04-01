@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.1 2002/06/07 22:47:37 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.2 2002/06/09 01:43:08 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.1 2002/06/07 22:47:37 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.2 2002/06/09 01:43:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -56,7 +56,7 @@ public class TestLifecycleImpl_initial extends FacesContextTestCaseJsp
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/Faces_Basic.xul";
+public static final String TEST_URI_XUL = "/components.xul";
 public static final String TEST_URI = "/components.jsp";
 
 public static final String EXPECTED_OUTPUT_FILENAME = 

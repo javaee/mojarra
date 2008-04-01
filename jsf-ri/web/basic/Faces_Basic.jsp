@@ -33,9 +33,17 @@
              <td> <faces:selectboolean_checkbox id="validUser" />
                   </td>
              </tr>
-<tr>
 
-</tr>
+             <tr>
+            <TD>
+	      Custom Component
+            </TD>
+	    <TD>
+	      <faces:uicomponent id="customComponent" />
+            </TD>
+             </tr>
+
+
              <tr> 
              <td><faces:command_button id="login" /></td>
              </tr>

@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.4 2002/06/07 00:01:13 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.5 2002/06/09 01:43:08 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.FacesContextTestCaseJsp;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.4 2002/06/07 00:01:13 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.5 2002/06/09 01:43:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -49,7 +49,7 @@ public class TestLifecycleImpl extends FacesContextTestCaseJsp
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/Faces_Basic.xul";
+public static final String TEST_URI_XUL = "/components.xul";
 public static final String TEST_URI = "/components.jsp";
 public static final String ENTERING_CALLED = "ENTERING_CALLED";
 public static final String EXITING_CALLED = "EXITING_CALLED";

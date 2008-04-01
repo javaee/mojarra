@@ -1,1 +1,153 @@
-Please see the README in ../jsf-api.
+This README documents the Sun Reference implementation (RI) for JSR 127,
+JavaServer (tm) Faces.
+
+jsf-api cvs tag for this implementation: JSF_API_20020605
+jsf-api-spec for this implementation: JSF_20020604.pdf
+
+Overview of the Current Implementation
+======================================
+
+This is the first RI snapshot since version 0.03 of the spec on
+20020320.  The API has changed quite a bit since then, with all of the
+old API classes either being removed or moved into different packages.
+As such, the old RI was put aside and we created the new one by copying
+code from the old as appropriate.
+
+This snapshot implements the entire breadth of the jsf-api, but lacks
+depth in some areas.  Currently we have support for a simple webapp, an
+example of which is in the web/basic directory.  This webapp illustrates
+several key concepts of the jsf-api spec:
+
+* A separate metadata file for defining the component tree
+
+* The syntax for putting required parameters into the query string to
+  get the RI to function correctly.
+
+* The ability to implement new UIComponent subclasses to create custom
+  components.
+
+* The use of the stock javax.faces.webapp.FacesServlet.
+
+* The use of the HtmlBasicRenderKit, which is the default RenderKit for
+  the RI.
+
+Directory Overview
+==================
+
+Only directories of interest to the Expert Group are mentioned in this
+overview.
+
+src/com/sun/faces
+
+                  Constants file
+
+                  /renderkit
+
+                    The HtmlBasicRenderKit.  This implements the
+                    javax.faces.render package.
+
+                  /util
+
+                    Utility classes
+
+                  /lifecycle
+
+                    Implements the javax.faces.lifecycle package
+
+                  /tree
+
+                    Implements the javax.faces.tree package.  This
+                    implementation uses a modified version of XUL
+                    language <http://www.mozilla.org/docs/xul/xulnotes>
+                    for the metadata format for specifying the tree.
+
+                  /context
+
+                    Implements the javax.faces.context package.  Please
+                    note that this is where some of the ObjectManager
+                    functionality has migrated.
+
+                  /taglib
+
+                    A VERY simple taglib to go along with the
+                    HtmlBasicRenderKit.
+
+test/com/sun/faces
+
+                   Cactus unit tests for all of the functionality in the
+                   current RI.
+
+web/basic
+
+          The basic webapp.  
+
+Build Instructions
+==================
+
+Copy build.properties.sample to build.properties and make sure all of
+the values in that file are valid for your system.
+
+Make sure you have the ../jsf-api directory built.
+
+Ant targets:
+
+  ant 
+
+      The default target just produces jsf-ri.jar
+
+  ant run.test
+
+      Run the junit unit tests
+
+  ant deploy.tomcat.basic
+
+      Create the basic webapp and deploy it to your tomcat server.
+
+Known Issues With This Release
+==============================
+
+* Components are instantiated on each request.
+
+* Components don't get their RendererType property set until renderering
+  time, which implies that the default decode() is used, but the
+  RenderKit's encode is used.
+
+* The javax.faces.webapp.ComponentTag in jsf-api cvs tag JSF_API_20020605
+  doesn't work unless you apply the following patch:
+
+* The unit tests could use some refactoring
+
+* It's impossible to use the same tree on different jsp pages since the
+  filename of the XUL tree must be the same as the filename of the JSP
+  page, with different extensions of course.  For example: login.xul and
+  login.jsp.  This restriction will be lifted when we have a better idea
+  for navigation.
+
+Index: ComponentTag.java
+===================================================================
+RCS file: /export/cvs/jsf-api/src/javax/faces/webapp/ComponentTag.java,v
+retrieving revision 1.1
+diff -u -r1.1 ComponentTag.java
+--- ComponentTag.java	2002/06/06 04:30:32	1.1
++++ ComponentTag.java	2002/06/09 01:31:14
+@@ -12,7 +12,9 @@
+ 
+ import javax.faces.component.UIComponent;
+ 
++import javax.servlet.jsp.JspException;
+ 
++
+ /**
+  * <p><strong>ComponentTag</strong> is a generic custom action that accepts
+  * only a component identifier (<code>id</code>) and renderer type
+@@ -102,6 +104,9 @@
+         }
+ 
+     }
++
++    public int doStartTag() throws JspException { return super.doStart(); }
++    public int doEndTag() throws JspException { return super.doEnd(); }
+ 
+ 
+ }
+

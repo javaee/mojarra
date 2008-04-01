@@ -1,5 +1,5 @@
 /*
- * $Id: JspRenderResponsePhase.java,v 1.2 2002/06/08 00:40:24 eburns Exp $
+ * $Id: JspRenderResponsePhase.java,v 1.3 2002/06/09 01:43:08 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
+import javax.faces.tree.Tree;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
@@ -33,7 +34,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: JspRenderResponsePhase.java,v 1.2 2002/06/08 00:40:24 eburns Exp $
+ * @version $Id: JspRenderResponsePhase.java,v 1.3 2002/06/09 01:43:08 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -75,42 +76,25 @@ public JspRenderResponsePhase(Lifecycle newDriver, int newId)
 // General Methods
 //
 
- /**
-  * Strips off the first part of the path. <P>
-  * PRECONDITION: requestURI is at least a filename.
-  */
-protected String removeFirstPart(String requestURI) {
-    String result = requestURI;
-    int i = requestURI.indexOf("/");
-    if (-1 != i && requestURI.length() > i) {
-	requestURI = requestURI.substring(i + 1);
-	i = requestURI.indexOf("/");
-	if (-1 != i && requestURI.length() > i) {
-	    result = requestURI.substring(i);
-	}
-    } else {
-	// This uri doesn't have a leading slash.  Make sure it does.
-	result = "/" + requestURI;
-    }
-    return result;
-}
-
 /**
 
-* Remove the first part of the url <P>.
-
-* Remove the second part iff it is equal to "/faces" <P>.
+This implementation just replaces the file extension on treeId with
+".jsp".
 
 */
 
-protected String fixURI(String requestURI) 
+protected String fixTreeId(String treeId) throws FacesException
 {
-    String result = removeFirstPart(requestURI);
-    String facesServletName = "/faces";
+    ParameterCheck.nonNull(treeId);
 
-    if (-1 != result.indexOf(facesServletName)) {
-	result = result.substring(facesServletName.length());
+    String result = null;
+    int i = 0;
+
+    if (-1 == (i = treeId.indexOf("."))) {
+	throw new FacesException("invalid treeId");
     }
+
+    result = treeId.substring(0, i) + ".jsp";
 
     return result;
 }
@@ -127,8 +111,9 @@ public int execute(FacesContext facesContext) throws FacesException
     HttpServletRequest request = (HttpServletRequest) 
 	facesContext.getServletRequest();
     RequestDispatcher requestDispatcher = null;
+    Tree tree = facesContext.getResponseTree();
     try {
-	requestURI = fixURI(request.getRequestURI());
+	requestURI = fixTreeId(tree.getTreeId());
 	requestDispatcher = request.getRequestDispatcher(requestURI);
 	requestDispatcher.forward(request, facesContext.getServletResponse());
     }
