@@ -27,22 +27,6 @@
   <!-- ===================== HTML 3.2 basic tags ====================== -->
 
   <tag>
-    <name>uicomponent</name>
-    <tagclass>javax.faces.webapp.ComponentTag</tagclass>
-    <bodycontent>JSP</bodycontent>
-      <attribute>
-        <name>id</name>
-        <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-      </attribute>
-      <attribute>
-        <name>modelReference</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-      </attribute>
-  </tag>
-
-  <tag>
     <name>form</name>
     <tagclass>com.sun.faces.taglib.html_basic.FormTag</tagclass>
     <bodycontent>JSP</bodycontent>

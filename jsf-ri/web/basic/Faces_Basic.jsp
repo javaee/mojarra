@@ -10,68 +10,140 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
 
-        <faces:form id="basicForm" >
+        <faces:form id="basicForm" formName="basicForm" >
 
             <table> 
             <tr> 
-              <td> <faces:output_text id="userLabel" /> </td>
+              <td> <faces:output_text id="userLabel" text="Username" /> </td>
               <td> <faces:textentry_input id="userName" />
               </td>
             </tr>
 
             <tr>
-               <td> <faces:output_text id="pwdLabel" /> </td>
+               <td> <faces:output_text id="pwdLabel" text="Password" /> </td>
                <td> <faces:textentry_secret id="password" /> </td>
              </tr>
        
              <tr>
-                <td> <faces:output_text id="addrLabel" /> </td>
-                <td> <faces:textentry_textarea id="address" /> </td>
+                <td> <faces:output_text id="addrLabel" text="Address" /> </td>
+                <td> <faces:textentry_textarea rows="10" cols="10" 
+                                               id="address" /> </td>
              </tr>
 
               <tr>
-             <td> <faces:selectboolean_checkbox id="validUser" />
+             <td> <faces:selectboolean_checkbox id="validUser" 
+                                                label="Valid User"/>
                   </td>
              </tr>
 
-             <tr>
-            <TD>
-	      Custom Component
-            </TD>
-	    <TD>
-	      <faces:uicomponent id="customComponent" />
-            </TD>
-             </tr>
+      <TR>
 
-	  <TR>
-	    <TD>Apple Quantity</TD>
-	    <TD>
-	    <faces:selectone_optionlist id="appleQuantity" />
-	    </TD>
-	  </TR>
+	<TD>
 
-	  <TR>
-	    <TD>Ship Type</TD>
+	      <faces:command_hyperlink id="link" target="index.html"
+				       label="back to index"/>
 
-	    <TD>
+	</TD>
 
-	    <TABLE><TR><TD>
-	    <faces:selectone_radiogroup id="shipType" />
-	    </TD></TR></TABLE>
-
-	    </TD>
-
-	  </TR>
-
-          </TR>
-            <td><faces:command_hyperlink id="mylink" /></td>
-          </TR>
+      </TR>
 
 
+      <TR>
 
-             <tr> 
-             <td><faces:command_button id="login" /></td>
-             </tr>
+	<TD>
+
+	      <faces:command_hyperlink id="imageLink" target="index.html"
+				       image="duke.gif"/>
+              Image Link to index
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <faces:selectone_optionlist id="appleQuantity">
+
+		<faces:selectitem  value="0" label="0"/>
+		<faces:selectitem  value="1" label="1"/>
+		<faces:selectitem  value="2" label="2"/>
+		<faces:selectitem  value="3" label="3"/>
+		<faces:selectitem  value="4" label="4" selected="true"/>
+		<faces:selectitem  value="5" label="5"/>
+		<faces:selectitem  value="6" label="6"/>
+		<faces:selectitem  value="7" label="7"/>
+		<faces:selectitem  value="8" label="8"/>
+		<faces:selectitem  value="9" label="9"/>
+
+	      </faces:selectone_optionlist>
+
+              Option List
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <faces:selectone_radiogroup id="shipType" align="horizontal">
+
+		<faces:selectitem value="nextDay" label="Next Day" />
+		<faces:selectitem value="nextWeek" label="Next Week" 
+                                  selected="true" />
+		<faces:selectitem value="nextMonth" label="Next Month" />
+
+              </faces:selectone_radiogroup>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+		<faces:selectone_radiogroup id="verticalRadio" 
+                                            align="vertical" border="1" >
+
+  		<faces:selectitem value="nextDay" label="Next Day" 
+                                  selected="true" />
+		<faces:selectitem value="nextWeek" label="Next Week"  />
+		<faces:selectitem value="nextMonth" label="Next Month" />
+
+                </faces:selectone_radiogroup>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <faces:command_button id="login" label="Login" 
+				    commandname="login"/>
+
+	</TD>
+
+      </TR>
+
+
+      <TR>
+
+	<TD>
+
+	      <faces:command_button id="imageButton" image="duke.gif"
+				    commandname="login"/>
+
+               Image button that does the same thing
+
+	</TD>
+
+      </TR>
+
 
           </table>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: BasicApplicationHandler.java,v 1.2 2002/06/25 18:31:08 eburns Exp $
+ * $Id: BasicApplicationHandler.java,v 1.3 2002/07/12 22:25:00 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
 	    return false;
 	}
         
-        String treeId = "/welcome.xul";
+        String treeId = "/welcome.jsp";
         TreeFactory treeFactory = (TreeFactory)
 	FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
         Assert.assert_it(null != treeFactory);

@@ -10,10 +10,10 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
 
-        <faces:form id="/welcomeForm" >
+        <faces:form id="welcomeForm" formName="welcomeForm" >
 
              <p>
-              <faces:output_text id="userLabel" />  </P>
+              <faces:output_text id="userLabel" text="userLabel" />  </P>
 
         </faces:form>
 </HTML>
