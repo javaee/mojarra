@@ -213,10 +213,10 @@ public class FacesServlet extends HttpServlet {
 // (from action mappings table)
 // Use that url as the target.
 
-        String forwardUrl = "/Login.jsp";
+//        String forwardUrl = "/Login.jsp";
 
-        getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl)).
-            forward(req, res);        
+//        getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl)).
+//            forward(req, res);        
     }
 
 }
