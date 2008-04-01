@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.3 2002/01/16 21:02:45 rogerk Exp $
+ * $Id: UITextEntry.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
  */
 
 /*
@@ -11,6 +11,9 @@ package javax.faces;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import javax.servlet.ServletRequest;
+import java.util.Vector;
+import java.util.EventObject;
 
 /**
  * Class for representing a user-interface component accepts
@@ -33,11 +36,13 @@ import java.util.Iterator;
  * which interact with the model object under the covers.
  *
  */
-public class UITextEntry extends UIComponent {
+public class UITextEntry extends UIComponent implements EventDispatcher {
 
     private static String TYPE = "TextEntry";
     private Object model = null;
     private String text = null;
+
+    private Vector valueChangeListeners = null;
 
     /** 
      * Returns a String representing the this component type.  
@@ -94,7 +99,8 @@ public class UITextEntry extends UIComponent {
         }    
         else { 
             try {
-                value = (String) rc.getObjectAccessor().getObject(rc.getRequest(), (String) model);
+                value =(String)rc.getObjectAccessor().getObject(rc.getRequest(), 
+                        (String) model);
             } catch ( FacesException e ) {
                 // PENDING (visvan) skip this exception ??
                 return text;
@@ -138,7 +144,17 @@ public class UITextEntry extends UIComponent {
      *         scoped namespace or if the object referred to by listenerId
      *         does not implement the <code>ValueChangeListener</code> interface.
      */
-    public void addValueChangeListener(String listenerId) throws FacesException {
+    public void addValueChangeListener(String listenerId) 
+            throws FacesException {
+        // PENDING ( visvan ) if listener does not implement
+        // valueChangeListener interface or if it doesn't exist
+        // throw FacesException
+        if ( listenerId != null ) {
+             if ( valueChangeListeners == null ) {
+                 valueChangeListeners = new Vector();
+             }
+             valueChangeListeners.add(listenerId);
+         }
     }
 
     /**
@@ -148,7 +164,12 @@ public class UITextEntry extends UIComponent {
      * @throws FacesException if listenerId is not registered as a
      *         value-change listener for this component.
      */
-    public void removeValueChangeListener(String listenerId) throws FacesException {
+    public void removeValueChangeListener(String listenerId)
+            throws FacesException {
+        // Assert.assert_it( valueChangeListeners != null );
+        if ( listenerId != null ) {
+            valueChangeListeners.remove(listenerId);
+        }
     }
 
     /**
@@ -156,7 +177,67 @@ public class UITextEntry extends UIComponent {
      *         for this component
      */
     public Iterator getValueChangeListeners() {
-	return null;
+         return valueChangeListeners == null? null : valueChangeListeners.iterator();
+    }
+
+    /**
+     * Dispatches the specified event to any registered listeners.
+     * @param e the object describing the event
+     */
+    public void dispatch(EventObject e) throws FacesException {
+
+        // ParameterCheck.nonNull(e);
+
+        ValueChangeEvent value_event = null;
+        if ( e instanceof ValueChangeEvent)  {
+            value_event = (ValueChangeEvent) e;
+        } else {
+            throw new FacesException("Invalid event type. " +
+                    "Expected ValueChangeEvent");
+        }
+
+        String new_value = (String) value_event.getNewValue();
+        String srcId = value_event.getSourceId();
+        String modelRef = (String) getModel();
+
+        EventContext eventContext = value_event.getEventContext();
+        // Assert.assert_it( eventContext != null );
+
+        ObjectManager ot = eventContext.getObjectManager();
+        // Assert.assert_it( ot != null );
+
+        ServletRequest request = eventContext.getRequest();
+
+        RenderContext rc = (RenderContext)ot.get(request,
+                Constants.REF_RENDERCONTEXT);
+        // Assert.assert_it( rc != null );
+ 
+        // PENDING ( visvan ) according to the latest version of the
+        // spec, value changes will not not pushed to model object
+        // until it is validated. This change will be made along with
+        // model object changes.
+        if ( modelRef == null ) {
+            setText(rc, (String)value_event.getNewValue());
+        } else {
+            rc.getObjectAccessor().setObject(request, modelRef,
+                                             new_value);
+        }
+
+        // dispatch value change listeners.
+        if ( valueChangeListeners == null ) {
+            return;
+        }    
+        Iterator listeners = getValueChangeListeners();
+        // Assert.assert_it( listeners != null );
+        while ( listeners.hasNext() ) {
+            String listenerName = (String) listeners.next();
+            // Assert.assert_it( listenerName != null );
+
+            ValueChangeListener vcl = (ValueChangeListener)ot.get(request,
+                    listenerName);
+            // Assert.assert_it ( vcl != null );
+            vcl.handleValueChange(value_event);
+        }
     }
 
 }

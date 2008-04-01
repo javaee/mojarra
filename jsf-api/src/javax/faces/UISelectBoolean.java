@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.4 2002/01/17 22:25:20 edburns Exp $
+ * $Id: UISelectBoolean.java,v 1.5 2002/01/25 18:35:07 visvan Exp $
  */
 
 /*
@@ -10,17 +10,22 @@
 package javax.faces;
 
 import java.util.Iterator;
+import javax.servlet.ServletRequest;
+import java.util.Vector;
+import java.util.EventObject;
 
 /**
  * Class for representing a user-interface component which allows
  * the user to select a boolean value.
  */
-public class UISelectBoolean extends UIComponent {
+public class UISelectBoolean extends UIComponent implements EventDispatcher {
     private static String TYPE = "SelectBoolean";
 
     private String modelReference = null;
     private String messageModelReference = null;
     private boolean selected = false;
+
+    private Vector valueChangeListeners = null;
 
     /** 
      * Returns a String representing the select-boolean type.  
@@ -125,6 +130,12 @@ public class UISelectBoolean extends UIComponent {
      *         does not implement the <code>ValueChangeListener</code> interface.
      */
     public void addValueChangeListener(String listenerId) throws FacesException {
+        if ( listenerId != null ) {
+             if ( valueChangeListeners == null ) {
+                 valueChangeListeners = new Vector();
+             }
+             valueChangeListeners.add(listenerId);
+         }
     }
 
     /**
@@ -135,6 +146,10 @@ public class UISelectBoolean extends UIComponent {
      *         value-change listener for this component.
      */
     public void removeValueChangeListener(String listenerId) throws FacesException {
+        // Assert.assert_it( valueChangeListeners != null );
+        if ( listenerId != null ) {
+             valueChangeListeners.remove(listenerId);
+        }
     }
 
     /**
@@ -142,7 +157,7 @@ public class UISelectBoolean extends UIComponent {
      *         for this component
      */
     public Iterator getValueChangeListeners() {
-	return null;
+        return valueChangeListeners == null? null : valueChangeListeners.iterator();
     }
 
     /**
@@ -231,6 +246,68 @@ public class UISelectBoolean extends UIComponent {
      *         UNVALIDATED, VALID, or INVALID
      */
     public void setValidState(int validState) {
+    }
+
+    /**
+     * Dispatches the specified event to any registered listeners.
+     * @param e the object describing the event
+     */
+    public void dispatch(EventObject e) throws FacesException {
+
+        // ParameterCheck.nonNull(e);
+
+        ValueChangeEvent value_event = null;
+        if ( e instanceof ValueChangeEvent)  {
+            value_event = (ValueChangeEvent) e;
+        } else {
+            throw new FacesException("Invalid event type. " +
+                    "Expected ValueChangeEvent");
+        }
+
+        String new_value = (String) value_event.getNewValue();
+        String srcId = value_event.getSourceId();
+        String modelRef = (String) getModelReference();
+
+        EventContext eventContext = value_event.getEventContext();
+        // Assert.assert_it( eventContext != null );
+
+        ObjectManager ot = eventContext.getObjectManager();
+        // Assert.assert_it( ot != null );
+
+        ServletRequest request = eventContext.getRequest();
+
+        RenderContext rc = (RenderContext)ot.get(request,
+                Constants.REF_RENDERCONTEXT);
+        // Assert.assert_it( rc != null );
+
+        // PENDING ( visvan ) according to the latest version of the
+        // spec, value changes will not not pushed to model object
+        // until it is validated. This change will be made along with
+        // model object changes.
+        if ( modelRef == null ) {
+            boolean state = (Boolean.valueOf(new_value)).booleanValue();
+            setSelected(rc, state);
+        } else {
+            rc.getObjectAccessor().setObject(request, modelRef,
+                                             new_value);
+        }
+
+        // dispatch value change listeners.
+        if ( valueChangeListeners == null ) {
+            return;
+        }    
+        Iterator listeners = getValueChangeListeners();
+        // Assert.assert_it( listeners != null );
+        
+        while ( listeners.hasNext() ) {
+            String listenerName = (String) listeners.next();
+            // Assert.assert_it( listenerName != null );
+
+            ValueChangeListener vcl = (ValueChangeListener)ot.get(request,
+                    listenerName);
+            // Assert.assert_it ( vcl != null );
+            vcl.handleValueChange(value_event);
+        }
     }
 
 }

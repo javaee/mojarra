@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.11 2002/01/17 02:15:02 edburns Exp $
+ * $Id: RenderKit.java,v 1.12 2002/01/25 18:35:07 visvan Exp $
  */
 
 /*
@@ -63,17 +63,17 @@ public abstract class RenderKit {
 
     /**
      * Decodes any events described by the request represented
-     * in the specified event context and places appropriate Event 
+     * in the specified event context and places appropriate Event
      * objects on the event queue provided by the event context.
      * Event decoding is handled by the render kit because the render kit
      * is responsible for encoding the events when rendering user-interface
-     * components in the response to the client.  The precise encoding 
+     * components in the response to the client.  The precise encoding
      * and decoding of client-generated events is defined by the render kit.
      *
      * @param ec the event context used for the event processing phase of
      *           the request
      */
-    public abstract void queueEvents(ServletRequest request, EventQueue queue);
+    public abstract void queueEvents(EventContext ec);
  
     /**
      * Invoked when this render kit is first instantiated.  Subclasses

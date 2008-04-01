@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListener.java,v 1.3 2002/01/10 22:32:21 edburns Exp $
+ * $Id: CommandListener.java,v 1.4 2002/01/25 18:35:06 visvan Exp $
  */
 
 /*
@@ -17,14 +17,17 @@ import java.util.EventListener;
  * to respond to a command event.
  *
  * @see UICommand#addCommandListener
+ * @see UITextEntry#addCommandListener
  */
 public interface CommandListener extends EventListener {
     /**
      * Invoked when a command event occurs.
      * @param event the CommandEvent object describing the
      *          command event
-     * @throws CommandFailedException if the command could not
-     *         be performed successfully
+     * @param nh NavigationHandler object which should be configured by
+     *           the command listener to describe the outcome and
+     *           possible navigational result of executing the command
      */
-    public void doCommand(CommandEvent event) throws CommandFailedException;
+    void doCommand(CommandEvent event, NavigationHandler nh) throws
+            CommandFailedException;
 }

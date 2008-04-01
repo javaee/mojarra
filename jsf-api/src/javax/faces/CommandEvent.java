@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.5 2002/01/16 21:02:44 rogerk Exp $
+ * $Id: CommandEvent.java,v 1.6 2002/01/25 18:35:06 visvan Exp $
  */
 
 /*
@@ -34,23 +34,27 @@ public class CommandEvent extends FacesEvent {
 
     /**
      * Creates a command event.
-     * @param request the ServletRequest object where this event was derived
-     * @param sourceId a String containing the id of the component 
+     * @param ec EventContext object representing the event-processing
+     *           phase of the request where this event originated
+     * @param sourceId a String containing the id of the component
      *        where this event originated
      * @param commandName a String containing the name of the command
      *        associated with this event
-     * @throws NullPointerException if sourceName or commandName is null
+     * @throws NullPointerException if sourceId or commandName is null
      */
-    public CommandEvent(ServletRequest request, String sourceId, String commandName) {
-	super(request, sourceId);
-	this.commandName = commandName;
+    public CommandEvent(EventContext ec, String sourceId, String commandName) {
+        super(ec, sourceId);
+        this.commandName = commandName;
     }
 
     /**
+     * This property will contain the commandName attribute value of
+     * the source component where this event originated.
      * @return String containing the name of the command associated
      *         with this event
      */
     public String getCommandName() {
-	return commandName;
+        return commandName;
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.14 2002/01/24 18:33:33 rogerk Exp $
+ * $Id: Constants.java,v 1.15 2002/01/25 18:35:06 visvan Exp $
  */
 
 /*
@@ -93,20 +93,17 @@ public class Constants {
     public static final String REF_UITEXTENTRY = "UITextEntry";
 
     /**
-     * Name for listeners
+     * Name for formId.
      */
-    // PENDING ( visvan ) all constants must start with "faces". So
-    // need to declare a Faces constant an use it with listeners.
-    public static final String REF_FORMLISTENERS = ".formListeners";
-    public static final String REF_VALUECHANGELISTENERS = ".valueChangeListeners";
-    public static final String REF_COMMANDLISTENERS = ".commandListeners";
-    public static final String REF_COMMAND = ".command";
-
+    public static final String REF_UIFORMID = "faces.formId";
+    
     /**
-     * Name for EventDispatcherFactory
+     * Name to specify actioncodes in NavigationHandler.
      */
-    public static final String REF_EVENTDISPATCHERFACTORY = "eventDispatcherFactory";
-
+    public static final String REF_FORWARD = "forward";
+    public static final String REF_REDIRECT = "redirect";
+    public static final String REF_PASS = "pass";
+    
     /**
      * Name for EventContextFactory
      */
@@ -117,6 +114,12 @@ public class Constants {
      */
     public static final String REF_OBJECTACCESSORFACTORY = "objectAccessorFactory";
 
+    /**
+     * Name for NavigationHandlerFactory
+     */
+    public static final String REF_NAVIGATIONHANDLERFACTORY = 
+            "navigationHandlerFactory";
+    
     /**
      * The name of a Renderer.
      */

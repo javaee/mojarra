@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.3 2002/01/17 22:25:20 edburns Exp $
+ * $Id: UIForm.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces;
 import java.util.Hashtable;
 import java.util.Iterator;
 import javax.servlet.ServletRequest;
+import java.util.EventObject;
 
 /**
  * Class for representing a form user-interface component. 
@@ -31,12 +32,15 @@ import javax.servlet.ServletRequest;
  * @see UICommand  
  * </ol>
  */
-public class UIForm extends UIComponent {
+public class UIForm extends UIComponent implements EventDispatcher {
 
     private static String TYPE = "Form";
     private String modelReference = null;
     private String messageModelReference = null;
-
+    
+    // PENDING ( visvan ) added per discussion with Amy on NavigationHandler
+    private String navigationMapId = null;
+    
     /** 
      * Returns a String representing the form's type.  
      *
@@ -85,7 +89,7 @@ public class UIForm extends UIComponent {
      *         scoped namespace or if the object referred to by listenerId
      *         does not implement the <code>FormListener</code> interface.
      */
-    public void addFormListener(ServletRequest req, String listenerId) 
+    public void addFormListener(String listenerId) 
             throws FacesException {
     }
 
@@ -105,6 +109,53 @@ public class UIForm extends UIComponent {
      */
     public Iterator getFormListeners() {
 	return null; //compile
+    }
+
+    /**
+     * Dispatches the specified event to any registered listeners.
+     * @param e the object describing the event
+     */
+    public void dispatch(EventObject e) throws FacesException {
+    }
+    
+    /**
+     * Registers the specified id as a navigationMap object
+     * for this form.  The specified navigationMap id must be registered
+     * in the scoped namespace and it must implement the <code>
+     * NavigationMap</code> interface, else an exception will  be thrown.
+     *
+     * @see NavigationMap
+     * @param navMapId the id of the NavigationMap
+     * @throws FacesException if navMapId is not registered in the
+     *         scoped namespace or if the object referred to by navMapId
+     *         does not implement the <code>NavigationMap</code> interface.
+     */
+    public void setNavigationMapId(String navMapId) {
+        // PENDING ( visvan ) add FacesException and assertions as per javadoc.        
+        navigationMapId = navMapId;            
+    }
+    
+    /** 
+     * @return String containing the navigationMapId
+     */
+    public String getNavigationMapId() {
+        return navigationMapId;
+    }  
+    
+    /** 
+     * @param rc the render context used to render this component
+     * @return NavigationMap instance represented by navigationMapId.
+     */
+    public NavigationMap getNavigationMap(RenderContext rc) {
+        
+        // ParameterCheck.nonNull(rc);
+        
+        ObjectManager objectManager = rc.getObjectManager();
+        // Assert.assert_it( objectManager != null );
+        
+        NavigationMap navMap = (NavigationMap) 
+                        objectManager.get(rc.getRequest(), navigationMapId);
+        return navMap;
     }
 
     /**

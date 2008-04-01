@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.5 2002/01/16 21:02:44 rogerk Exp $
+ * $Id: FacesEvent.java,v 1.6 2002/01/25 18:35:06 visvan Exp $
  */
 
 /*
@@ -19,28 +19,46 @@ import javax.servlet.ServletRequest;
  */
 public abstract class FacesEvent extends EventObject {
     private String sourceId;
-    private ServletRequest request;
+    private EventContext eventContext;
 
     /**
-     * Initializes the request and sourceId properties of
+     * Initializes the eventContext and sourceName properties of
      * this FacesEvent object.
-     * @param request the ServletRequest object which this event was derived
+     * @param ec EventContext object representing the event-processing 
+     *           phase of the request where this event originated
      * @param sourceId the id of the component where this event originated
-     * @throws NullPointerException if sourceId is null
+     * @throws NullPointerException if sourceName is null
      */
-    protected FacesEvent(ServletRequest request, String sourceId) {
+    protected FacesEvent(EventContext ec, String sourceId) {
 	super(sourceId);
-	this.request = request;
+	this.eventContext = ec;
 	this.sourceId = sourceId;
     }
 
     /**
-     * @return UIComponent instance representing the component where
-     *         this event originated
+     * @return EventContext object representing the event-processing 
+     *           phase of the request where this event originated
+     */
+    public EventContext getEventContext() {
+	return eventContext;
+    }
+
+    /**
+     * @return object where this event originated
      */
     public Object getSource() {
-	//return (UIComponent)ObjectManager.get(request, sourceId);
-	return null;
+	return getSourceComponent();
+    }
+
+    /**
+     * This is a convenience method for <code>getSource</code> which
+     * returns the source object cast to UIComponent.
+     * @return UIComponent where this event originated
+     */
+    public UIComponent getSourceComponent() {
+        return eventContext != null?
+	    (UIComponent)(eventContext.getObjectManager().get(eventContext.getRequest(),
+						sourceId)) : null;
     }
 
     /**
@@ -49,14 +67,5 @@ public abstract class FacesEvent extends EventObject {
      */
     public String getSourceId() { 
 	return sourceId;
-    }
-
-    /**
-     * @return ServletRequest object representing the request this
-     *         event was derived from or null if this event did
-     *         not originate from a request.
-     */
-    public ServletRequest getRequest() {
-        return request;
     }
 }

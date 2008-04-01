@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.3 2002/01/17 02:15:02 edburns Exp $
+ * $Id: UICommand.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
  */
 
 /*
@@ -11,13 +11,17 @@ package javax.faces;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Vector;
+import java.util.EventObject;
+import javax.servlet.ServletRequest;
 
 /**
  * Class for representing a user-interface component which allows
  * the user to execute a command.
  */
-public class UICommand extends UIComponent {
+public class UICommand extends UIComponent implements EventDispatcher {
     private static String COMMAND_TYPE = "Command";
+    private Vector cmdListeners = null;
 
     /** 
      * Returns a String representing the this component type.  
@@ -69,6 +73,12 @@ public class UICommand extends UIComponent {
      *         does not implement the <code>CommandListener</code> interface.
      */
     public void addCommandListener(String listenerId) throws FacesException {
+        if ( listenerId != null ) {
+             if ( cmdListeners == null ) {
+                 cmdListeners = new Vector();
+             }
+             cmdListeners.add(listenerId);
+         }
     }
 
     /**
@@ -79,6 +89,11 @@ public class UICommand extends UIComponent {
      *         command listener for this component.
      */
     public void removeCommandListener(String listenerId) throws FacesException {
+        // Assert.assert_it( cmdListeners != null );
+        // PENDING ( visvan ) do assertion as per javadoc.
+        if ( listenerId != null ) {
+            cmdListeners.remove(listenerId);
+        }
     }
 
     /**
@@ -86,7 +101,59 @@ public class UICommand extends UIComponent {
      *         for this component
      */
     public Iterator getCommandListeners() {
-	return null;
+        return cmdListeners == null? null : cmdListeners.iterator();    
+    }
+
+    /**
+     * Dispatches the specified event to any registered command listeners.
+     * @param e the object describing the event
+     */
+    public void dispatch(EventObject e) throws FacesException {
+   
+        // ParameterCheck.nonNull(e);
+
+        // if there are no listeners to dispatch just return
+        if ( cmdListeners == null ) {
+            return;
+        }    
+        CommandEvent cmd_event = null;
+        if ( e instanceof CommandEvent)  {
+            cmd_event = (CommandEvent) e;
+        } else {
+            throw new FacesException("Invalid event type. " +
+                    "Expected CommandEvent");
+        }
+
+        EventContext eventContext = ((FacesEvent)cmd_event).getEventContext();
+        // Assert.assert_it( eventContext != null );
+
+        ObjectManager ot = eventContext.getObjectManager();
+        //Assert.assert_it( ot != null );
+
+        Iterator listeners = getCommandListeners();
+        // Assert.assert_it( listeners != null);
+        
+        while ( listeners.hasNext() ) {
+            String listenerName = (String) listeners.next();
+            // Assert.assert_it( listenerName != null );
+
+            ServletRequest request = eventContext.getRequest();
+            CommandListener cl = (CommandListener)ot.get(request, listenerName);
+            // Assert.assert_it ( cl != null );
+            // Out come of the command execution will be set inside
+            // the commandListener.
+            try {
+                NavigationHandler nh = eventContext.getNavigationHandler();
+                // PENDING ( visvan ) what if there is no navigationMap
+                // defined, then the handler will be null. revisit this.
+                // For now comment out assertion.
+                // Assert.assert_it( nh != null );
+                cl.doCommand(cmd_event, nh);
+            } catch ( CommandFailedException cfe ) {
+                throw new FacesException ("CommandListener" + listenerName
+                        + " execution unsuccessful");
+            }
+        }
     }
 	
 }

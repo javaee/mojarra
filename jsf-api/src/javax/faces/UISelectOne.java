@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.3 2002/01/16 21:02:45 rogerk Exp $
+ * $Id: UISelectOne.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
  */
 
 /*
@@ -12,23 +12,24 @@ package javax.faces;
 import java.util.Iterator;
 import java.util.Hashtable;
 import java.util.Collection;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
+import java.util.Vector;
+import java.util.EventObject;
+import javax.servlet.ServletRequest;
 
 /**
  * Class for representing a user-interface component which allows
  * the user to select one value from many.
  */
-public class UISelectOne extends UIComponent {
+public class UISelectOne extends UIComponent implements EventDispatcher {
+
     private static String TYPE = "SelectOne";
     // PENDING(edburns): don't cast these to Strings all over the place.
     private Object modelRef = null;
     private Object selectedValueModelRef = null;
     private Collection items;
     private Object selectedItem;
+
+    private Vector valueChangeListeners = null;
 
     /** 
      * Returns a String representing the select-one type.  
@@ -86,8 +87,8 @@ public class UISelectOne extends UIComponent {
     // in turn access the model using the "model" set of methods.
 
     public void setItems(RenderContext rc, Collection newItems) {
-	ParameterCheck.nonNull(rc);
-	Assert.assert_it(checkModelConsistency());
+	// ParameterCheck.nonNull(rc);
+	// Assert.assert_it(checkModelConsistency());
 	
 	items = newItems;
 	if (null != modelRef) {
@@ -121,9 +122,9 @@ public class UISelectOne extends UIComponent {
     */
     
     public Collection getItems(RenderContext rc, String name) {
-	ParameterCheck.nonNull(rc);
-	ParameterCheck.nonNull(name);
-	Assert.assert_it(checkModelConsistency());
+	// ParameterCheck.nonNull(rc);
+	// ParameterCheck.nonNull(name);
+	// Assert.assert_it(checkModelConsistency());
 	Collection modelItems = items;
 
 	// We can't do anything without having a model
@@ -150,15 +151,15 @@ public class UISelectOne extends UIComponent {
     */
     
     public Object getSelectedValue(RenderContext rc) { 
-	ParameterCheck.nonNull(rc);
-	Assert.assert_it(checkModelConsistency());
+	// ParameterCheck.nonNull(rc);
+	// Assert.assert_it(checkModelConsistency());
 	Object result = selectedItem;
 
 	// We can't do anything without having a model
 	if (null != selectedValueModelRef) {
 	    try {
 		result = rc.getObjectAccessor().getObject(rc.getRequest(), 
-							  (String) selectedValueModelRef);
+				  (String) selectedValueModelRef);
 		selectedItem = null;
 	    } catch ( FacesException e ) {
 	    }
@@ -176,8 +177,8 @@ public class UISelectOne extends UIComponent {
     */
     
     public void setSelectedValue(RenderContext rc, Object value) {
-	ParameterCheck.nonNull(rc);
-	Assert.assert_it(checkModelConsistency());
+	// ParameterCheck.nonNull(rc);
+	// Assert.assert_it(checkModelConsistency());
 	selectedItem = value;
 	
 	if (null != selectedValueModelRef) {
@@ -204,6 +205,12 @@ public class UISelectOne extends UIComponent {
      *         does not implement the <code>ValueChangeListener</code> interface.
      */
     public void addValueChangeListener(String listenerId) throws FacesException {
+        if ( listenerId != null ) {
+             if ( valueChangeListeners == null ) {
+                 valueChangeListeners = new Vector();
+             }
+             valueChangeListeners.add(listenerId);
+         }
     }
 
     /**
@@ -214,6 +221,10 @@ public class UISelectOne extends UIComponent {
      *         value-change listener for this component.
      */
     public void removeValueChangeListener(String listenerId) throws FacesException {
+        // Assert.assert_it( valueChangeListeners != null );
+        if ( listenerId != null ) {
+            valueChangeListeners.remove(listenerId);
+        }
     }
 
     /**
@@ -221,7 +232,73 @@ public class UISelectOne extends UIComponent {
      *         for this component
      */
     public Iterator getValueChangeListeners() {
-	return null;
+         return valueChangeListeners == null? null : valueChangeListeners.iterator();
+    }
+
+    /**
+     * Dispatches the specified event to any registered listeners.
+     * @param e the object describing the event
+     */
+    public void dispatch(EventObject e) throws FacesException {
+
+        // PENDING ( visvan ) except the method to set
+        // the values locally, rest of the code is the same
+        // for all components that support value change events.
+        // TODO: Is it feasible to move the common code to 
+        // some util class ?? 
+
+        // ParameterCheck.nonNull(e);
+
+        ValueChangeEvent value_event = null;
+        if ( e instanceof ValueChangeEvent)  {
+            value_event = (ValueChangeEvent) e;
+        } else {
+            throw new FacesException("Invalid event type. " +
+                    "Expected ValueChangeEvent");
+        }
+
+        String new_value = (String) value_event.getNewValue();
+        String srcId = value_event.getSourceId();
+        String modelRef = (String) getSelectedValueModel();
+
+        EventContext eventContext = value_event.getEventContext();
+        // Assert.assert_it( eventContext != null );
+
+        ObjectManager ot = eventContext.getObjectManager();
+        // Assert.assert_it( ot != null );
+
+        ServletRequest request = eventContext.getRequest();
+
+        RenderContext rc = (RenderContext)ot.get(request,
+                Constants.REF_RENDERCONTEXT);
+        // Assert.assert_it( rc != null );
+
+        // PENDING ( visvan ) according to the latest version of the
+        // spec, value changes will not not pushed to model object
+        // until it is validated. This change will be made along with
+        // model object changes.
+        if ( modelRef == null ) {
+            setSelectedValue(rc, value_event.getNewValue());
+        } else {
+            rc.getObjectAccessor().setObject(request, modelRef,
+                                             new_value);
+        }
+
+        // dispatch value change listeners.
+        if ( valueChangeListeners == null ) {
+            return;
+        }    
+        Iterator listeners = getValueChangeListeners();
+        // Assert.assert_it( listeners != null );
+        while ( listeners.hasNext() ) {
+            String listenerName = (String) listeners.next();
+            // Assert.assert_it( listenerName != null );
+
+            ValueChangeListener vcl = (ValueChangeListener)ot.get(request,
+                    listenerName);
+            // Assert.assert_it ( vcl != null );
+            vcl.handleValueChange(value_event);
+        }
     }
 
 }
