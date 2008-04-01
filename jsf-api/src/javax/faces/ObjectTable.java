@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.9 2001/12/02 01:00:59 edburns Exp $
+ * $Id: ObjectTable.java,v 1.10 2001/12/05 05:06:07 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -81,7 +81,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
   VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.9 2001/12/02 01:00:59 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.10 2001/12/05 05:06:07 edburns Exp $
  * 
  * @see	javax.faces.RenderContext#getObjectTable
  *
@@ -126,6 +126,12 @@ public abstract class ObjectTable
 
     private static ObjectTable instance = null;
 
+    private static Object GLOBAL_SCOPE_KEY = null;
+
+    static {
+	GLOBAL_SCOPE_KEY = new Object();
+    }
+
 /**
   *
 
@@ -167,7 +173,7 @@ private Scope keyToScope(Object scopeKey) {
     return result;
 }
 
-private Object getEnclosingScope(Object scopeKey) {
+private Object getEnclosingScopeKey(Object scopeKey) {
     Object result = null;
 
     // PENDING(edburns): I really don't like hard coding scope enclosure
@@ -180,7 +186,7 @@ private Object getEnclosingScope(Object scopeKey) {
     }
     else if (scopeKey instanceof HttpSession) {
 	// Object is the type of GlobalScope
-	result = new Object();
+	result = GLOBAL_SCOPE_KEY;
     }
     
     return result;
@@ -221,7 +227,7 @@ private Object getEnclosingScope(Object scopeKey) {
 	Object result = null;
 	// this loop searches through scope instances for a hit for this
 	// (scopeKey, name) pair.  It starts out with the above scope,
-	// then calls getEnclosingScope() until either:
+	// then calls getEnclosingScopeKey() until either:
 
 	// 1. A hit is found
 
@@ -231,7 +237,7 @@ private Object getEnclosingScope(Object scopeKey) {
 	    do {
 		result = scope.get(scopeKey, name);
 		if (null == result) {
-		    scopeKey = getEnclosingScope(scopeKey);
+		    scopeKey = getEnclosingScopeKey(scopeKey);
 		    scope = null;
 		    if (null != scopeKey) {
 			scope = keyToScope(scopeKey);
@@ -244,7 +250,7 @@ private Object getEnclosingScope(Object scopeKey) {
 
 
     public Object get(Object name) {
-	return GlobalScope.get("global", name);
+	return GlobalScope.get(GLOBAL_SCOPE_KEY, name);
     }
 
     public void enter(Object scopeKey) {
