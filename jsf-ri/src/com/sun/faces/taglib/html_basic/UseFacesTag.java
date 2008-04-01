@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.13 2002/07/31 19:22:02 jvisvanathan Exp $
+ * $Id: UseFacesTag.java,v 1.14 2002/08/15 00:29:52 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.FacesException;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.13 2002/07/31 19:22:02 jvisvanathan Exp $
+ * @version $Id: UseFacesTag.java,v 1.14 2002/08/15 00:29:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -192,7 +192,7 @@ public class UseFacesTag extends FacesBodyTag
         ResponseWriter writer = facesContext.getResponseWriter();
         if ((writer == null) ||
             !(writer instanceof JspResponseWriter)) {
-            writer = new JspResponseWriter(getBodyContent());
+            writer = new JspResponseWriter(pageContext);
             facesContext.setResponseWriter(writer);
         }
 
