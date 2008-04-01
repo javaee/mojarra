@@ -13,6 +13,17 @@ import java.util.Iterator;
  * </ol>
  */
 public abstract class RenderKit {
+
+/**
+
+ * The value of this property is the fully qualified className of the
+ * default RenderKit implementation.  This class must implement
+ * RenderKit and have a public no-arg constructor.
+
+ */
+
+public static final String DEFAULT_RENDERKIT_PROPERTY_NAME = "FACES_DEFAULT_RENDERER";
+
     /**
      * Returns a RenderKit instance targeted for the client described
      * by the specified ClientCapabilities instance.
@@ -22,7 +33,31 @@ public abstract class RenderKit {
      * @throws NullPointerException if client is null
      */
     public static RenderKit getRenderKitForClient(ClientCapabilities client) {
-        return null;
+	String defaultRenderKitName;
+	Class renderKitClass;
+	RenderKit result = null;
+	
+	defaultRenderKitName = System.getProperty(DEFAULT_RENDERKIT_PROPERTY_NAME);
+	if (null == defaultRenderKitName) {
+	    return null;
+	}
+	try {
+	    renderKitClass = Class.forName(defaultRenderKitName);
+	    result = (RenderKit) renderKitClass.newInstance();
+	}
+	catch (IllegalAccessException e) {
+	    System.out.println("Can't create instance for " + 
+			       defaultRenderKitName + ": " + e.getMessage());
+	}
+	catch (InstantiationException e) {
+	    System.out.println("Can't create instance for " + 
+			       defaultRenderKitName + ": " + e.getMessage());
+	}
+	catch (ClassNotFoundException e) {
+	    System.out.println("Can't find class for " + 
+			       defaultRenderKitName + ": " + e.getMessage());
+	}
+	return result;
     }
 
     /**
