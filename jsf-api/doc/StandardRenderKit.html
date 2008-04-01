@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.14 2002/08/26 20:57:01 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.15 2002/08/28 23:45:04 craigmcc Exp $</h3>
 </div>
 
 
@@ -216,12 +216,6 @@
 
 <div align="center">
   <h2>Component Class:  UIInput</h2>
-
-  <p>Any child components nested inside this component will be rendered
-  in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>labelAlign</code> attribute
-  (PAGE_START, PAGE_END, LINE_START, LINE_END).
-  </p>
 </div>
 
 <table width="100%" border="1" cellpadding="3" cellspacing="3"
@@ -239,7 +233,7 @@
     <td>Date</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, dateStyle, timezone</td>
+    <td>dateStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
@@ -256,7 +250,7 @@
     <td>DateTime</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, formatPattern, timezone</td>
+    <td>formatPattern, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
@@ -272,7 +266,7 @@
     <td>DateTime</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, dateStyle, timeStyle, timezone</td>
+    <td>dateStyle, timeStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary, and store.
@@ -289,7 +283,7 @@
     <td>Text</td>
     <td>Any</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign</td>
+    <td>&nbsp;</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -303,7 +297,7 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>labelAlign, formatPattern</td>
+    <td>formatPattern</td>
     <td>
       Get DecimalFormat as for encoding, parse text input,
       convert as necessary, and store.
@@ -319,7 +313,7 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>labelAlign, numberStyle</td>
+    <td>numberStyle</td>
     <td>
       Get NumberFormat instance as for encoding, parse text input,
       convert as necessary, and store.
@@ -342,7 +336,7 @@
     <td>Secret</td>
     <td>Any</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, redisplay</td>
+    <td>redisplay</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -359,7 +353,7 @@
     <td>Text</td>
     <td>Any</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign</td>
+    <td>&nbsp;</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -373,7 +367,7 @@
     <td>Textarea</td>
     <td>Any</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign</td>
+    <td>&nbsp;</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -387,7 +381,7 @@
     <td>Time</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, timeStyle, timezone</td>
+    <td>timeStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
@@ -403,7 +397,7 @@
     <td>Upload</td>
     <td>Any</td>
     <td>value <em>or</em> modelReference</td>
-    <td>accept, filename, labelAlign</td>
+    <td>accept, filename</td>
     <td>
       Convert via JAF based on media type, and store.  <strong>FIXME:</strong>
       Availability of this Renderer implies that JSF implementations must
@@ -758,12 +752,6 @@
 
 <div align="center">
   <h2>Component Class:  UISelectBoolean</h2>
-
-  <p>Any child components nested inside this component will be rendered
-  in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>labelAlign</code> attribute
-  (PAGE_START, PAGE_END, LINE_START, LINE_END).
-  </p>
 </div>
 
 <table width="100%" border="1" cellpadding="3" cellspacing="3"
@@ -781,7 +769,7 @@
     <td>Checkbox</td>
     <td>Convertible to boolean</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign</td>
+    <td>&nbsp;</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -797,13 +785,6 @@
 
 <div align="center">
   <h2>Component Class:  UISelectMany</h2>
-
-  <p>Any child components (except UISelectItem and UISelectOne instances)
-  nested inside this component will be rendered
-  in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>labelAlign</code> attribute
-  (PAGE_START, PAGE_END, LINE_START, LINE_END).
-  </p>
 
   <p><strong>FIXME</strong> - Consider supporting collation of the collected
   options.</p>
@@ -824,7 +805,7 @@
     <td>Checkbox</td>
     <td>Convertible to String</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, layout</td>
+    <td>layout</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -841,7 +822,7 @@
     <td>Listbox</td>
     <td>Convertible to String[]</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign</td>
+    <td>&nbsp;</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -858,7 +839,7 @@
     <td>Menu</td>
     <td>Convertible to String[]</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, size</td>
+    <td>size</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -878,13 +859,6 @@
 <div align="center">
   <h2>Component Class:  UISelectOne</h2>
 
-  <p>Any child components (except UISelectItem and UISelectOne instances)
-  nested inside this component will be rendered
-  in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>labelAlign</code> attribute
-  (PAGE_START, PAGE_END, LINE_START, LINE_END).
-  </p>
-
   <p><strong>FIXME</strong> - Consider supporting collation of the collected
   options.</p>
 </div>
@@ -904,7 +878,7 @@
     <td>Listbox</td>
     <td>Convertible to String</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign</td>
+    <td>&nbsp;</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -921,7 +895,7 @@
     <td>Menu</td>
     <td>Convertible to String</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, size</td>
+    <td>size</td>
     <td>
       Convert as necessary and store.
     </td>
@@ -938,7 +912,7 @@
     <td>Radio</td>
     <td>Convertible to String</td>
     <td>value <em>or</em> modelReference</td>
-    <td>labelAlign, layout</td>
+    <td>layout</td>
     <td>
       Convert as necessary and store.
     </td>
