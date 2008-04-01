@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.4 2002/07/13 00:49:51 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.5 2002/07/15 19:52:40 eburns Exp $ 
  */ 
 
 
@@ -64,7 +64,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.4 2002/07/13 00:49:51 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.5 2002/07/15 19:52:40 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -88,7 +88,7 @@ public String getExpectedOutputFilename() {
 
 
 public static final String ignore[] = { 
-    "<form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252FTestRenderResponsePhase.jsp;jsessionid=9672E420036333427351C52577D165C2\">"
+    "<form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm;jsessionid=7731635534E51514D5F07572A3B58945\">"
 }; 
      
 public String [] getLinesToIgnore() { 

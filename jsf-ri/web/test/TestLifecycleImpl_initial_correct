@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.jsp;jsessionid=151570B338F444B3F451B049396260F0">
+<form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm;jsessionid=D052F380C278B50418E9F9100477A730">
   <TABLE BORDER="1">
 
 
@@ -98,20 +98,20 @@
 
 	<TD>
 
-	      <select name="/basicForm/appleQuantity"></select>
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-
 	      
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	      <select name="/basicForm/appleQuantity"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected="selected">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select>
 
               Option List
 
@@ -123,13 +123,13 @@
 
 	<TD>
 
-	      <select name="/basicForm/shipType"></select>
+	      
 
 		
 		
 		
 
-              
+              <select name="/basicForm/shipType"><option value="nextDay">Next Day</option><option value="nextWeek" selected="selected">Next Week</option><option value="nextMonth">Next Month</option></select>
 
 	</TD>
 
@@ -138,13 +138,13 @@
       <TR>
 
 	<TD>
-		<select name="/basicForm/verticalRadio"></select>
+		
 
   		
 		
 		
 
-                
+                <select name="/basicForm/verticalRadio"><option value="nextDay" selected="selected">Next Day</option><option value="nextWeek">Next Week</option><option value="nextMonth">Next Month</option></select>
 
 	</TD>
 
