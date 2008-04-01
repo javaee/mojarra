@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.1 2002/06/03 19:18:17 eburns Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.2 2002/06/03 19:31:08 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.Validator;
+import javax.faces.validator.Validator;
 
 import java.util.Iterator;
 
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.1 2002/06/03 19:18:17 eburns Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.2 2002/06/03 19:31:08 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE

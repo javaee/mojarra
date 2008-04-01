@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.1 2002/06/03 19:18:18 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.2 2002/06/03 19:31:09 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UITextEntry;
-import javax.faces.component.Validator;
+import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.FacesContextTestCase;
@@ -38,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.1 2002/06/03 19:18:18 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.2 2002/06/03 19:31:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
