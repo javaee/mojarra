@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.2 2002/06/03 19:26:58 eburns Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.3 2002/06/03 20:08:18 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UITextEntry;
-import javax.faces.component.FacesEvent;
+import javax.faces.event.FacesEvent;
 
 import com.sun.faces.FacesContextTestCase;
 
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.2 2002/06/03 19:26:58 eburns Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.3 2002/06/03 20:08:18 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

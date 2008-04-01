@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.2 2002/05/28 20:52:01 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.3 2002/06/03 20:08:18 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.context.MessageList;
 import javax.faces.FactoryFinder;
-import javax.faces.component.FacesEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.LifecycleFactory;
 
 import org.apache.commons.beanutils.PropertyUtils;

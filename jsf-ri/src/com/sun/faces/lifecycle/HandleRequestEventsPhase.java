@@ -1,5 +1,5 @@
 /*
- * $Id: HandleRequestEventsPhase.java,v 1.1 2002/06/03 19:18:17 eburns Exp $
+ * $Id: HandleRequestEventsPhase.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.component.FacesEvent;
+import javax.faces.event.FacesEvent;
 
 import java.util.Iterator;
 
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: HandleRequestEventsPhase.java,v 1.1 2002/06/03 19:18:17 eburns Exp $
+ * @version $Id: HandleRequestEventsPhase.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#HANDLE_REQUEST_EVENTS_PHASE

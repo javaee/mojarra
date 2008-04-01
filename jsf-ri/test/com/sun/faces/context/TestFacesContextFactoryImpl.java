@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.1 2002/05/28 18:20:39 jvisvanathan Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 import com.sun.faces.context.FacesContextFactoryImpl;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.FacesEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 
@@ -37,7 +37,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.1 2002/05/28 18:20:39 jvisvanathan Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
