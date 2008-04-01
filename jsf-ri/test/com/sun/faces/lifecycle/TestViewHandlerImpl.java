@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.3 2002/07/12 23:58:46 rkitain Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.4 2002/07/13 00:49:51 eburns Exp $ 
  */ 
 
 
@@ -42,6 +42,8 @@ import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util; 
 import com.sun.faces.CompareFiles; 
 
+import com.sun.faces.tree.SimpleTreeImpl; 
+
 
 import com.sun.faces.TestBean; 
 
@@ -62,7 +64,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.3 2002/07/12 23:58:46 rkitain Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.4 2002/07/13 00:49:51 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -77,17 +79,17 @@ public class TestViewHandlerImpl extends JspFacesTestCase
 // 
 
 
-public static final String TEST_URI = "/TestRenderResponsePhase.jsp";
+public static final String TEST_URI = "/TestRenderResponsePhase.jsp"; 
 
 
 public String getExpectedOutputFilename() { 
-    return "RenderResponse_correct"; 
+    return "TestViewHandlerImpl_correct"; 
 } 
 
 
-public static final String ignore[] = {
-    "<FORM METHOD=\"post\" ACTION=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2FTestRenderResponsePhase.jsp;jsessionid=80E0636212B5916924E002B6076365E7\">"
-};
+public static final String ignore[] = { 
+    "<form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252FTestRenderResponsePhase.jsp;jsessionid=9672E420036333427351C52577D165C2\">"
+}; 
      
 public String [] getLinesToIgnore() { 
     return ignore; 
@@ -155,16 +157,10 @@ public void testRender()
     int rc = Phase.GOTO_NEXT; 
     UIComponentBase root = null; 
     String value = null; 
-    SimpleTreeImpl tree = null;
-    LifecycleImpl lifecycle = new LifecycleImpl();
+    SimpleTreeImpl newTree = new SimpleTreeImpl(config.getServletContext(),
+						TEST_URI);
+    getFacesContext().setRequestTree(newTree);
 
-    root = new UIComponentBase() {
-        public String getComponentType() { return "Root"; }
-    };
-    root.setComponentId("root");
-
-    tree = new SimpleTreeImpl(config.getServletContext(), root, TEST_URI);
-    getFacesContext().setRequestTree(tree);
     try { 
         ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
         viewHandler.renderView(getFacesContext()); 

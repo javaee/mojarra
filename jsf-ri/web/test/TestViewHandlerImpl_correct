@@ -1,0 +1,169 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<HTML>
+    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    
+    <BODY>
+        <H3> JSF Basic Components Test Page </H3>
+
+<form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252FTestRenderResponsePhase.jsp;jsessionid=9672E420036333427351C52577D165C2">
+  <TABLE BORDER="1">
+
+
+      <TR>
+
+	<TD>
+
+	      <input type="text" name="/basicForm/userName" value="Default_username">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="text" name="/basicForm/password" value="Default_password">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit" name="login">
+
+	</TD>
+
+      </TR>
+
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit" name="login">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      Output Text
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="checkbox" name="/basicForm/validUser" checked="checked">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <select name="/basicForm/appleQuantity"></select>
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	      
+
+              Option List
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <select name="/basicForm/shipType"></select>
+
+		
+		
+		
+
+              
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+		<select name="/basicForm/verticalRadio"></select>
+
+  		
+		
+		
+
+                
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="text" name="/basicForm/address" value="Hi There">
+
+	</TD>
+
+      </TR>
+
+  <TABLE>
+
+</form>
+
+
+    </BODY>
+</HTML>

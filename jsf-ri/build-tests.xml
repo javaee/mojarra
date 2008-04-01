@@ -136,7 +136,6 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
-            includes="com/sun/faces/lifecycle/TestRenderResponsePhase.java,com/sun/faces/lifecycle/TestReconstituteRequestTreePhase.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -291,6 +290,7 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestReconstituteRequestTreePhase"/>
             <test name="com.sun.faces.lifecycle.TestGenericPhaseImpl"/> 
@@ -304,7 +304,6 @@
 
             <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
 
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
 
