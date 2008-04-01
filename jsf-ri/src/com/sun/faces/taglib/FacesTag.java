@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.4 2002/03/08 00:24:50 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.5 2002/03/13 18:04:24 eburns Exp $
  */
 
 /*
@@ -23,9 +23,9 @@ import javax.faces.ObjectManager;
 import javax.faces.Constants;
 import javax.faces.RenderContext;
 import javax.faces.FacesException;
+import javax.faces.TreeNavigator;
 
 import com.sun.faces.util.Util;
-import com.sun.faces.taglib.html_basic.FormTag;
 
 /**
  *
@@ -33,7 +33,7 @@ import com.sun.faces.taglib.html_basic.FormTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.4 2002/03/08 00:24:50 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.5 2002/03/13 18:04:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,8 +61,15 @@ public abstract class FacesTag extends TagSupport
 
 // Relationship Instance Variables
 
+// PENDING(edburns): not sure if it is safe to have ivars like this
+
     protected RenderContext renderContext = null;
-    protected ObjectManager objectManager = null;
+
+    /** The UIComponent mapped to this tag
+     */
+    
+    protected UIComponent uiComponent = null;
+
 //
 // Constructors and Initializers    
 //
@@ -114,6 +121,18 @@ public FacesTag()
         this.model = model;
     }
 
+    /**
+ 
+    * This is overridden by subclasses that need to get their component
+    * from somewhere else.  For example, SelectOne_RadioTag gets its
+    * component from its parent.  Same for SelectOne_Option.
+
+    */ 
+
+    public UIComponent getComponentForTag() {
+	return uiComponent;
+    }
+
 //
 // General Methods
 //
@@ -132,23 +151,6 @@ public FacesTag()
         // scope. This should be fixed later.
         objectManager.put(pageContext.getSession(), getId(), c);
     }
-    
-    public void addToParent(UIComponent c, ObjectManager objectManager ) {
-        // get the UIForm component which is the parent
-        // of this component.
-        FormTag ancestor = null;
-        try {
-            ancestor = (FormTag) findAncestorWithClass(this,
-                    FormTag.class);
-            String formId  = ancestor.getId();
-            UIComponent parentForm = (UIComponent) objectManager.get(pageContext.getRequest(),
-                    formId);
-            Assert.assert_it ( parentForm != null );
-            parentForm.add(c);
-        } catch ( Exception e ) {
-            // If form tag cannot be found then model is null
-        }
-    }   
 
 // 
 // Methods to be overridden by subclass
@@ -209,7 +211,38 @@ public abstract String getRendererType();
 
 public void addListeners(UIComponent comp) throws JspException {}
 
-public void addValidators(UIComponent comp) throws JspException {}
+/**
+
+* The next two methods can be overridden by FacesTag subclasses that
+* don't want to change the state of the TreeNavigator by calling
+* getNextStart() or getNextEnd().  An example of this is the tags
+* representing values for a UISelectOne's collection.
+
+*/
+
+public UIComponent getComponentFromStart(ObjectManager objectManager) {
+    UIComponent result = null;
+    TreeNavigator treeNav = null;
+    treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+					       Constants.REF_TREENAVIGATOR);
+    Assert.assert_it(null!= treeNav);
+    
+    result = treeNav.getNextStart();
+    Assert.assert_it(null != result);
+    return result;
+}
+
+public UIComponent getComponentFromEnd(ObjectManager objectManager) {
+    UIComponent result = null;
+    TreeNavigator treeNav = null;
+    treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+					       Constants.REF_TREENAVIGATOR);
+    Assert.assert_it(null!= treeNav);
+    
+    result = treeNav.getNextEnd();
+    Assert.assert_it(null != result);
+    return result;
+}
 
 //
 // Methods from TagSupport
@@ -221,45 +254,20 @@ public void addValidators(UIComponent comp) throws JspException {}
      */
     public int doStartTag() throws JspException {
 	String rendererType = null;
-        objectManager = (ObjectManager) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTMANAGER);
+        ObjectManager objectManager = null;
+
+	objectManager = (ObjectManager) pageContext.getServletContext().
+	    getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
-        renderContext = (RenderContext)objectManager.get(pageContext.getSession(),
-							 Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
+        renderContext = 
+	    (RenderContext)objectManager.get(pageContext.getSession(),
+					     Constants.REF_RENDERCONTEXT);
+        Assert.assert_it(null != renderContext);
         
-        UIComponent uiComponent = null;
+        uiComponent = getComponentFromStart(objectManager);
 
-        // 1. if we don't have an "id" generate one
-        //
-        if (getId() == null) {
-            String gId = Util.generateId();
-            setId(gId);
-        }
-
-        // 2. Get or create the component instance.
-        //
-        uiComponent = (UIComponent) objectManager.get(pageContext.getRequest(),
-						      getId());
-        if ( uiComponent == null ) {
-            uiComponent = newComponentInstance();
-            // Id should be set before adding the component to the tree.
-            uiComponent.setId(getId());
-            addToScope(uiComponent, objectManager);
-            addToParent(uiComponent, objectManager);
-            // listeners and validators should be added only at the time the 
-            // component is created.
-            addListeners(uiComponent);
-            addValidators(uiComponent);
-         }
-        
-         // Call subclass methods
-         // PENDING ( visvan ) attributes should be set only the first except
-         // for optionList and Radio Tags ??
-	 setAttributes(uiComponent);
-         
-	 // 3. Render the component, if it has a renderer
+        // 3. Render the component, if it has a renderer
         //
 	if (null != (rendererType = getRendererType())) {
 	    try {
@@ -282,27 +290,24 @@ public void addValidators(UIComponent comp) throws JspException {}
      */
     public int doEndTag() throws JspException {
 	String rendererType = null;
-        // get ObjectManager from ServletContext.
-        ObjectManager objectManager = (ObjectManager)pageContext.getServletContext().
+        ObjectManager objectManager = null;
+
+	objectManager = (ObjectManager) pageContext.getServletContext().
 	    getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
-        renderContext = 
-            (RenderContext)objectManager.get(pageContext.getSession(),
-					     Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
 	
-	//PENDING(rogerk)can we eliminate this extra get if wCommand is
-	//instance variable? If so, threading issue?
-
-        UIComponent wComponent = (UIComponent) objectManager.get(pageContext.getRequest(), 
-								 getId());
-        Assert.assert_it( wComponent != null );
+        renderContext = 
+	    (RenderContext)objectManager.get(pageContext.getSession(),
+					     Constants.REF_RENDERCONTEXT);
+        Assert.assert_it(null != renderContext);
+        
+        uiComponent = getComponentFromEnd(objectManager);
 
         // Complete the rendering process
         //
 	if (null != (rendererType = getRendererType())) {
 	    try {
-		wComponent.renderComplete(renderContext);
+		uiComponent.renderComplete(renderContext);
 	    } catch (java.io.IOException e) {
 		throw new JspException("Problem completing rendering: "+
 				       e.getMessage());
@@ -312,6 +317,7 @@ public void addValidators(UIComponent comp) throws JspException {}
 	    }
 	}
 	renderContext = null;
+	uiComponent = null;
         return getEndCode();
     }
 

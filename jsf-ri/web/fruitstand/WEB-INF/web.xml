@@ -14,7 +14,7 @@
   <display-name>FruitStand Demo</display-name>
 
     <!-- Define servlet-mapped and path-mapped example filters -->
-
+<!--
     <filter>
         <filter-name>Faces Filter</filter-name>
         <filter-class>com.sun.faces.servlet.FacesFilter</filter-class>
@@ -24,6 +24,7 @@
         <filter-name>Faces Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+-->
 
   <listener>
     <listener-class>com.sun.faces.servlet.SessionListener</listener-class>

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.16 2002/01/25 18:45:17 visvan Exp $
+ * $Id: FormRenderer.java,v 1.17 2002/03/13 18:04:23 eburns Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ import javax.faces.UIForm;
 import javax.faces.UIComponent;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -38,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.16 2002/01/25 18:45:17 visvan Exp $
+ * @version $Id: FormRenderer.java,v 1.17 2002/03/13 18:04:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -144,8 +145,11 @@ public class FormRenderer extends Object implements Renderer
         Assert.assert_it(null != formId);
 
         StringBuffer out = new StringBuffer();
-        out.append("<FORM METHOD=\"POST\" ");
-
+        out.append("<FORM METHOD=\"POST\" ACTION=\"");
+	// We need the action to be the same as this page so the tree
+	// can be correctly loaded for event processing.
+	String requestURI = ((HttpServletRequest)rc.getRequest()).getRequestURI();
+	out.append(requestURI + "\" ");
         out.append("NAME=\"" + formId + "\"");
         out.append(">");
         outputMethod.writeText(out.toString());

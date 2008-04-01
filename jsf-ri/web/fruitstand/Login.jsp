@@ -9,6 +9,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
    <title>Login</title>
+    <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 </head>
 <body>

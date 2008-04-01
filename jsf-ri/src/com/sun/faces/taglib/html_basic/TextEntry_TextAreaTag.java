@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.20 2002/02/14 03:57:41 edburns Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.21 2002/03/13 18:04:24 eburns Exp $
  */
 
 /*
@@ -23,12 +23,15 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
+import javax.faces.UIComponent;
 import javax.faces.UITextEntry;
 import javax.faces.ObjectManager;
+import javax.faces.TreeNavigator;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+
 
 /**
  *
@@ -36,7 +39,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.20 2002/02/14 03:57:41 edburns Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.21 2002/03/13 18:04:24 eburns Exp $
  * 
  *
  */
@@ -96,64 +99,40 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
      * Renders TextEntry_TextAreaTag's start tag and its attributes.
      */
     public int doStartTag() throws JspException{
+	String rendererType = null;
+	TreeNavigator treeNav = null;
+        ObjectManager objectManager = null;
+	RenderContext renderContext = null;
 
-        Assert.assert_it( pageContext != null );
-        // PENDING(visvan) use tagext class to validate attributes.
-        // get ObjectManager from ServletContext.
-        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
-                Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( rc != null );
+	objectManager = (ObjectManager) pageContext.getServletContext().
+	    getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it( objectManager != null );
+	
+        renderContext = 
+	    (RenderContext)objectManager.get(pageContext.getSession(),
+					     Constants.REF_RENDERCONTEXT);
+        Assert.assert_it(null != renderContext);
+        
+	treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+					   Constants.REF_TREENAVIGATOR);
+	Assert.assert_it(null!= treeNav);
+	
+        UIComponent uiComponent = treeNav.getNextStart();
+	Assert.assert_it(null != uiComponent);
 
-        UITextEntry c = null;
-
-        // 1. if we don't have an "id" generate one
+        // Render the component, if it has a renderer
         //
-        if (id == null) {
-            String gId = Util.generateId();
-            setId(gId);
-        }
-
-        // 2. Get or create the component instance.
-        //
-        c = (UITextEntry) ot.get(pageContext.getRequest(), getId());
-        if (c == null) {
-            c = createComponent(rc);
-            addToScope(c, ot);
-        }
-
-        // 3. Render the component.
-        //
-        try {
-            c.setRendererType("TextAreaRenderer");
-            c.render(rc);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem rendering component: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem rendering component: "+
-                f.getMessage());
-        }
-
+	try {
+	    uiComponent.setRendererType("TextAreaRenderer");
+	    uiComponent.render(renderContext);
+	} catch (java.io.IOException e) {
+	    throw new JspException("Problem rendering component: "+
+				   e.getMessage());
+	} catch (FacesException f) {
+	    throw new JspException("Problem rendering component: "+
+				   f.getMessage());
+	}
         return(EVAL_BODY_INCLUDE);
-    }
-
-    /** Adds the component and listener to the ObjectManager
-     * in the appropriate scope
-     *
-     * @param c UIComponent to be stored in namescope
-     * @param ot Object pool
-     */
-    public void addToScope(UITextEntry c, ObjectManager ot) {
-
-        // PENDING ( visvan ) right now, we are not saving the state of the
-        // components. So if the scope is specified as reques, when the form
-        // is resubmitted we would't be able to retrieve the state of the
-        // components. So to get away with that we are storing in session
-        // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), id, c);
     }
 
     /**
@@ -183,33 +162,38 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
      * Renders the Form's end Tag
      */
     public int doEndTag() throws JspException{
-
-        Assert.assert_it( pageContext != null );
-        // get ObjectManager from ServletContext.
-        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
-                Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( rc != null );
-
-//PENDING(rogerk)can we eliminate this extra get if component is instance
-//variable? If so, threading issue?
-//
-        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), id);
-        Assert.assert_it( c != null );
+	String rendererType = null;
+	TreeNavigator treeNav = null;
+        ObjectManager objectManager = null;
+	RenderContext renderContext = null;
+	
+	objectManager = (ObjectManager) pageContext.getServletContext().
+	    getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it( objectManager != null );
+	
+        renderContext = 
+	    (RenderContext)objectManager.get(pageContext.getSession(),
+					     Constants.REF_RENDERCONTEXT);
+        Assert.assert_it(null != renderContext);
+        
+	treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+					   Constants.REF_TREENAVIGATOR);
+	Assert.assert_it(null!= treeNav);
+	
+        UIComponent uiComponent = treeNav.getNextEnd();
+	Assert.assert_it(null != uiComponent);
 
         // Complete the rendering process
         //
-        try {
-            c.renderComplete(rc);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem completing rendering: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem completing rendering: "+
-                f.getMessage());
-        }
+	try {
+	    uiComponent.renderComplete(renderContext);
+	} catch (java.io.IOException e) {
+	    throw new JspException("Problem completing rendering: "+
+				   e.getMessage());
+	} catch (FacesException f) {
+	    throw new JspException("Problem completing rendering: "+
+				   f.getMessage());
+	}
 
         return(EVAL_PAGE);
     }
@@ -229,55 +213,6 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         model = null;
         scope = null;
         valueChangeListener = null;
-    }
-
-
-    /**
-     * Creates a TextEntry component and sets renderer specific
-     * properties.
-     */
-    protected UITextEntry createComponent(RenderContext rc) 
-            throws JspException {
-        UITextEntry c = new UITextEntry();
-        // set renderer specific properties 
-        c.setId(getId());
-        c.setAttribute("rows", rows);
-        c.setAttribute("cols", cols);
-        c.setAttribute("wrap", wrap);
-
-       try {
-            c.addValueChangeListener(valueChangeListener);    
-        } catch (FacesException fe) {
-            throw new JspException("Listener + " + valueChangeListener +
-                   " does not implement valueChangeListener interface" );
-        }
-        
-        // If model attribute is not found get it
-        // from parent form if it exists. If not
-        // set text as an attribute so that it can be
-        // used during rendering.
-
-        // PENDING ( visvan )
-        // make sure that the model object is registered
-        if ( model != null ) {
-            c.setModelReference(model);
-        } else {
-            // PENDING ( visvan ) all tags should implement a common
-            // interface ??
-            FormTag ancestor = null;
-            try {
-                ancestor = (FormTag) findAncestorWithClass(this,
-                    FormTag.class);
-               String model_str = ancestor.getModel();
-               if ( model_str != null ) {
-                   model = "$" + model_str + "." + id;
-                   c.setModelReference(model);
-               }
-            } catch ( Exception e ) {
-                // If form tag cannot be found then model is null
-            }
-        }
-        return c;
     }
 
     /**

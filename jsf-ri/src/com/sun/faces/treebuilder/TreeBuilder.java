@@ -1,5 +1,5 @@
 /*
- * $Id: TreeBuilder.java,v 1.2 2002/03/08 22:16:08 eburns Exp $
+ * $Id: TreeBuilder.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.lang.reflect.Method;
 
  *
  *
- * @version $Id: TreeBuilder.java,v 1.2 2002/03/08 22:16:08 eburns Exp $
+ * @version $Id: TreeBuilder.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *
@@ -327,6 +327,9 @@ private void handleSpecialAttr(UIComponent child, String attrName,
 	catch (SecurityException e) {
 	    System.out.println("debug: edburns: handleSpecialAttr: " + e);
 	}
+    }
+    else if (attrName.equals("required")) {
+	// PENDING(visvan): deal with validation
     }
 
     if (null != attrMethod) {

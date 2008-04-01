@@ -11,6 +11,7 @@
    <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
    <title>StoreFront</title>
 </head>
+    <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 <body>
 <faces:UseFaces>

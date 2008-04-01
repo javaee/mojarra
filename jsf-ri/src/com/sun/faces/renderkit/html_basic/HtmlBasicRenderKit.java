@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.23 2002/03/11 23:25:34 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.24 2002/03/13 18:04:23 eburns Exp $
  */
 
 /*
@@ -39,6 +39,10 @@ import javax.faces.UISelectBoolean;
 import javax.faces.UISelectOne;
 import javax.faces.EventContext;
 import javax.faces.ObjectManager;
+import javax.faces.FacesContext;
+import javax.faces.TreeNavigator;
+
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -46,7 +50,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.23 2002/03/11 23:25:34 jvisvanathan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.24 2002/03/13 18:04:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,7 +176,7 @@ public Renderer getRenderer(String name) throws FacesException {
     Assert.assert_it(null != className);
 
     try {
-	rendererClass = Class.forName(className);
+	rendererClass = Util.loadClass(className);
 	result = (Renderer) rendererClass.newInstance();
     }
     catch (IllegalAccessException e) {
@@ -249,7 +253,17 @@ public void queueEvents(EventContext eventContext) {
             int name_idx = Constants.REF_HIDDENCHECKBOX.length();
             param_name = param_name.substring(name_idx);
         }
-        c = (UIComponent)(objectManager.get(request,param_name));
+
+        // PENDING ( visvan ) type of the component and model should be
+        // encoded as a hidden field so that it need not be obtained
+        // from the ObjectManager since the component may not exist in
+        // the pool. Also value should also be encoded as a hidden
+        // field so that change in values can be detected without UIComponent.
+	TreeNavigator treeNav = (TreeNavigator)objectManager.get(request,
+						 Constants.REF_TREENAVIGATOR);
+	Assert.assert_it(null != treeNav);
+
+        c = treeNav.findComponentForId(param_name);
         // if the component is not found then it might not have been a
         // faces component or it was not stored in OBJECTMANAGER because of the scope.
         if ( c == null ) {
@@ -277,6 +291,11 @@ public void queueEvents(EventContext eventContext) {
         CommandEvent cmd_event = (CommandEvent) cmd_events.elementAt(i);
         eventQueue.add(cmd_event);
     }
+}
+
+public void applyNewValuesToTree(FacesContext ctx, TreeNavigator tree)
+{
+
 }
 									
 protected void initialize() {

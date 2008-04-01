@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.10 2002/02/08 18:26:41 visvan Exp $
+ * $Id: RadioRenderer.java,v 1.11 2002/03/13 18:04:24 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.10 2002/02/08 18:26:41 visvan Exp $
+ * @version $Id: RadioRenderer.java,v 1.11 2002/03/13 18:04:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -138,6 +138,7 @@ public class RadioRenderer extends Object implements Renderer {
             throw new FacesException("Invalid component type. " +
                                      "Expected UISelectOne");
         }
+	Iterator itemsIter;
 	String curValue;
         String radioId = uiSelectOne.getId();
         Assert.assert_it(null != radioId);
@@ -149,35 +150,41 @@ public class RadioRenderer extends Object implements Renderer {
 
         String selectedValue = (String) uiSelectOne.getSelectedValue(rc);
 
-        // Iterate over the components items collection and
-        // build the rendering string.
-        //
-        Iterator itemsIter = uiSelectOne.getItems(rc);
-	curValue = (String) uiSelectOne.getAttribute(rc, "curValue");
+	// We require a way to tell which item in the UISelectOne's
+	// collection maps to this tag instance.  We do this by sticking
+	// an Iterator in the component's attribute set.
+	itemsIter = (Iterator) uiSelectOne.getAttribute(rc, "curValue");
+	if (null == itemsIter) {
+	    // this must be the first one.
+	    itemsIter = uiSelectOne.getItems(rc);
+	    // Store the item iter in the attr set, for the next RadioTag.
+	    uiSelectOne.setAttribute("curValue", itemsIter);
+	}
+	Assert.assert_it(null != itemsIter);
 
-	Assert.assert_it(null != curValue);
+	UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
+	Assert.assert_it(null != item);
+	if (!itemsIter.hasNext()) {
+	    // if this is the last item in the collection, remove our
+	    // temporary Iterator from the attr set.
+	    uiSelectOne.setAttribute("curValue", null);
+	}
 
-        while (itemsIter.hasNext()) {
-            UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
-	    // Only print out the current value from the collection, as
-	    // set in the Tag.
-	    if (curValue.equals(item.getValue())) {
-		String itemLabel = item.getLabel();
-		output.append("<INPUT TYPE=\"RADIO\"");
-		if ((null != selectedValue) &&
-		    selectedValue.equals(item.getValue())) {
-		    output.append(" CHECKED");
-		}
-		output.append(" NAME=\"");
-		output.append(radioId);
-		output.append("\" VALUE=\"");
-		output.append(item.getValue());
-		output.append("\">");
-		if (itemLabel != null) {
-		    output.append(" ");
-		    output.append(itemLabel);
-		}
-	    }
+	curValue = item.getValue();
+	String itemLabel = item.getLabel();
+	output.append("<INPUT TYPE=\"RADIO\"");
+	if ((null != selectedValue) &&
+	    selectedValue.equals(item.getValue())) {
+	    output.append(" CHECKED");
+	}
+	output.append(" NAME=\"");
+	output.append(radioId);
+	output.append("\" VALUE=\"");
+	output.append(item.getValue());
+	output.append("\">");
+	if (itemLabel != null) {
+	    output.append(" ");
+	    output.append(itemLabel);
 	}
 	
 	outputMethod.writeText(output.toString());

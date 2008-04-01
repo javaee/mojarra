@@ -8,11 +8,13 @@
 <title>FruitStand.com</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
+    <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 <h2><font color="#0000FF"> FruitStand.com </font></h2>
 <hr>
 <font size="4" color="#0000FF">Here are the items you selected.</font>
 <faces:UseFaces>
+<faces:Form id="purchaseConfirm" model="UserBean" navigationMapId="purchaseNavMap" >
 <table cellpadding="10">
   <th>Item</th>
   <th>Amount(lbs)</th>
@@ -87,7 +89,6 @@ The items listed above will be billed to: <br>
 
 <faces:Listener id="handleConfirm" scope="session" className="fruitstand.CommandListenerImpl" />
 
-<faces:Form id="purchaseConfirm" model="UserBean" navigationMapId="purchaseNavMap" >
 
 <TABLE border="2"><TR><TD>
 <TABLE>

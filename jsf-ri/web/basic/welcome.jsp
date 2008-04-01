@@ -5,8 +5,9 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
-    <H3> JSF Basic Components Test Page </H3>
+    <H3> JSF Basic Components Test Page  </H3>
     <hr>
     <faces:UseFaces>
         <faces:Form id='basicForm' >

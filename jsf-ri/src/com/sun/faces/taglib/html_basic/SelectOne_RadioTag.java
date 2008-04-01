@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.12 2002/02/08 18:26:42 visvan Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.13 2002/03/13 18:04:24 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.UISelectOne;
 import javax.faces.UIComponent;
+import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
 
@@ -27,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.12 2002/02/08 18:26:42 visvan Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.13 2002/03/13 18:04:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -168,6 +169,24 @@ public SelectOne_RadioTag()
     }
 
     public void addListeners(UIComponent comp) throws JspException {
+    }
+
+    public UIComponent getComponentFromStart(ObjectManager objectManager) {
+	RadioGroupTag ancestor = null;
+	
+	// get the UISelectOne that is our component.
+	try {
+	    ancestor = (RadioGroupTag) 
+		findAncestorWithClass(this, RadioGroupTag.class);
+	} catch ( Exception e ) {
+	    throw new IllegalStateException("Option must be enclosed in a SelectOne_Option tag");
+	}
+	Assert.assert_it(null != ancestor);
+	return ancestor.getComponentForTag();
+    }
+
+    public UIComponent getComponentFromEnd(ObjectManager objectManager) {
+	return getComponentFromStart(objectManager);
     }
 
     /**

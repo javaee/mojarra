@@ -1,5 +1,5 @@
 /*
- * $Id: TreeNavigatorImpl.java,v 1.2 2002/03/08 22:16:09 eburns Exp $
+ * $Id: TreeNavigatorImpl.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.TreeNavigator;
 
 /**
 
- * @version $Id: TreeNavigatorImpl.java,v 1.2 2002/03/08 22:16:09 eburns Exp $
+ * @version $Id: TreeNavigatorImpl.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
  * 
  * @see	javax.faces.TreeNavigator
 
@@ -50,6 +50,7 @@ public class TreeNavigatorImpl extends Object implements TreeNavigator
 private UIComponent root;
 private Stack startStack;
 private Stack endStack;
+private boolean startTraversalDone = false;
 
 //
 // Constructors and Initializers    
@@ -72,6 +73,12 @@ public TreeNavigatorImpl(UIComponent newRoot)
 // General Methods
 //
 
+public void replaceRoot(TreeNavigator newRoot) {
+    ParameterCheck.nonNull(newRoot);
+    this.reset();
+    root = newRoot.getRoot();
+}
+
 // 
 // Methods from TreeNavigator
 //
@@ -85,8 +92,11 @@ public UIComponent getNextStart() {
     Iterator childIter;
     UIComponent cur = null;
 
-    // if there is nothing on the stack, that means we're at the root
+    if (startTraversalDone) {
+	return cur;
+    }
 
+    // if there is nothing on the stack, that means we're at the root
     if (startStack.empty()) {
 	cur = root;
 	iter = cur.getChildren(null);
@@ -112,6 +122,10 @@ public UIComponent getNextStart() {
 		if (!iter.hasNext()) {
 		    // pop up a level
 		    startStack.pop();
+		    // done with traversal
+		    if (startStack.empty()) {
+			startTraversalDone = true;
+		    }
 		}
 	    }
 	}
@@ -135,6 +149,7 @@ public UIComponent getNextEnd() {
 public void reset() {
     startStack.clear();
     endStack.clear();
+    startTraversalDone = false;
 }
 
 public UIComponent findComponentForId(String id) {

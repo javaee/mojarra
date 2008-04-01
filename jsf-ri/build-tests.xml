@@ -193,8 +193,11 @@
         <copy file="${cactus.home}/sample/web/test/jspRedirector.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
-        <!-- Copy Unit test (jsp) file. -->
+        <!-- Copy Unit test (jsp) files. -->
         <copy file="${basedir}/web/test/treeTest.jsp"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+        <copy file="${basedir}/web/basic/Faces_Basic.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
 
@@ -278,6 +281,7 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.lifecycle.TestLifecycleDriverImpl"/>
             <test name="com.sun.faces.treebuilder.TestTreebuilder"/>
             <test name="com.sun.faces.TestObjectManager"/>
             <test name="com.sun.faces.TestEventContext"/>

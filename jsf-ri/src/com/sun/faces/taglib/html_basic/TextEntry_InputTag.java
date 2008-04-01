@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.23 2002/03/08 00:24:50 jvisvanathan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.24 2002/03/13 18:04:24 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.23 2002/03/08 00:24:50 jvisvanathan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.24 2002/03/13 18:04:24 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -164,7 +164,7 @@ public class TextEntry_InputTag extends FacesTag
     }    
     
     public void addValidators(UIComponent comp) throws JspException {
-        
+	/**        
         ParameterCheck.nonNull(comp);
 	Assert.assert_it(comp instanceof UITextEntry);
 	UITextEntry uiTextEntry = (UITextEntry) comp;
@@ -220,6 +220,7 @@ public class TextEntry_InputTag extends FacesTag
                 System.out.println("Length validator not added"); 
             }    
         }    
+	**/
     }     
    
     //

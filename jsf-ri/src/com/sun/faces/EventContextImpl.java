@@ -1,5 +1,5 @@
 /*
- * $Id: EventContextImpl.java,v 1.3 2002/01/25 18:45:16 visvan Exp $
+ * $Id: EventContextImpl.java,v 1.4 2002/03/13 18:04:20 eburns Exp $
  */
 
 /*
@@ -35,6 +35,7 @@ import com.sun.faces.NavigationHandlerFactory;
 import javax.faces.EventQueueFactory;
 import javax.faces.UIForm;
 import javax.faces.NavigationMap;
+import javax.faces.TreeNavigator;
 
 /**
  *
@@ -42,7 +43,7 @@ import javax.faces.NavigationMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventContextImpl.java,v 1.3 2002/01/25 18:45:16 visvan Exp $
+ * @version $Id: EventContextImpl.java,v 1.4 2002/03/13 18:04:20 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -202,7 +203,11 @@ public class EventContextImpl extends EventContext
         // objectManager
         String formId=(String)request.getParameter(Constants.REF_UIFORMID);
         if ( formId != null) {
-            UIForm form_obj = (UIForm) objectManager.get(request, formId);
+	    TreeNavigator treeNav = (TreeNavigator)objectManager.get(request,
+						  Constants.REF_TREENAVIGATOR);
+	    Assert.assert_it(null != treeNav);
+	    
+	    UIForm form_obj = (UIForm) treeNav.findComponentForId(formId);
             // PENDING ( visvan ) Form object should not be null. If it is
             // request scoped ??
             if ( form_obj != null ) {

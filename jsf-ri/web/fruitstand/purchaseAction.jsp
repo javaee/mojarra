@@ -11,6 +11,7 @@
    <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
    <title>FruitStand.com</title>
 </head>
+    <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
 <faces:UseFaces>
@@ -19,7 +20,9 @@
 Thank you for your purchase. 
 <br>
 <br>
+<faces:Form>
 <faces:Output_Text id='confirmOrder' value='Your order will be shipped on 01/11/2001' />
+</faces:Form>
 </font>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>

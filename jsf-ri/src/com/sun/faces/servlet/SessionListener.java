@@ -1,5 +1,5 @@
 /*
- * $Id: SessionListener.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
+ * $Id: SessionListener.java,v 1.6 2002/03/13 18:04:24 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.Constants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SessionListener.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
+ * @version $Id: SessionListener.java,v 1.6 2002/03/13 18:04:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,7 +136,11 @@ public void sessionDestroyed(HttpSessionEvent sce) {
     ObjectManager objectManager;
     objectManager = (ObjectManager) session.getServletContext().
 	getAttribute(Constants.REF_OBJECTMANAGER);
-    Assert.assert_it(null != objectManager);
+
+    // It is no longer an error for the OM to not exist at this point.
+    if (null == objectManager) {
+	return;
+    }
     
     // exit the scope for this session
     // PENDING(edburns): Hans doesn't want this in the public API
