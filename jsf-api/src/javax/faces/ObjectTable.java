@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.5 2001/11/29 21:21:15 edburns Exp $
+ * $Id: ObjectTable.java,v 1.6 2001/11/29 23:57:38 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -81,7 +81,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
   VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.5 2001/11/29 21:21:15 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.6 2001/11/29 23:57:38 edburns Exp $
  * 
  * @see	javax.faces.RenderContext#getObjectTable
  *
@@ -111,6 +111,18 @@ public abstract class ObjectTable
 	public void put(Object name, Object value);
 
 	public Object get(Object scopeKey, Object name);
+
+	/**
+
+	* Search this Scope for the named object.  Takes more time
+	* because it has to run through all the scopeKeys.
+	* Implementations may simply traverse themselves to find a
+	* scopeKey for which there is a value under name, then call
+	* this.get(scopeKey, name);
+
+	*/
+
+	public Object get(Object name);
 
 	public void enter(Object scopeKey);
 
@@ -205,9 +217,31 @@ private Scope keyToScope(Object scopeKey) {
 	return null;
     }
 
+    /**
+
+    * Search narrow-to-broad through scopes List until we find a scope
+    * that contains the named object. <P>
+
+    * PRECONDITION: this.getScopes() returns a List for which the
+    * iterator() runs narrow to broad. <P>
+
+    * POSTCONDITION: if found, the get has been performed on the first
+    * scope to contain an object under name. <P>
+
+    * @result the object, or null if not found.
+
+    */ 
 
     public Object get(Object name) {
-	return GlobalScope.get("global", name);
+	Object result = null;
+	Iterator scopes = this.getScopes().iterator();
+	while (scopes.hasNext()) {
+	    result = ((Scope)scopes.next()).get(name);
+	    if (null != result) {
+		break;
+	    }
+	}
+	return result;
     }
 
     public void enter(Object scopeKey) {
