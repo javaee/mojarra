@@ -41,6 +41,12 @@ public abstract class WComponent {
      * @return a String representing the component's functional type
      *         
      */
+
+    // PENDING(edburns): Spec Compliance: instance into Scoped Namespace
+    // per spec:
+    // http://javaweb.sfbay.sun.com/~aim/faces/jsr-127-archive/msg00124.html
+    // section "Configuring UI Components"
+
     public abstract String getType();
 
     /**
