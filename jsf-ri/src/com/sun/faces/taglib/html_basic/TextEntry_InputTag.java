@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.9 2001/12/08 00:33:53 rogerk Exp $
+ * $Id: TextEntry_InputTag.java,v 1.10 2001/12/10 18:18:02 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.9 2001/12/08 00:33:53 rogerk Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.10 2001/12/10 18:18:02 visvan Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -139,8 +139,6 @@ public class TextEntry_InputTag extends TagSupport
             }
         }
 
-        // JV return evaluate body tag again because listener
-        // tags might be nested
         return(EVAL_BODY_INCLUDE);
     }
     
@@ -166,15 +164,23 @@ public class TextEntry_InputTag extends TagSupport
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         ot.put(pageContext.getSession(), name, c);
-        String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
-        Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
-        if ( listeners == null) {
-            listeners = new Vector();
-        }    
-        // this vector contains only the name of the listeners. The
-        // listener itself is stored in the objectTable.
-        listeners.add(valueChangeListener);
-        ot.put(pageContext.getSession(),lis_name, listeners);
+
+        if ( valueChangeListener != null ) {
+            String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
+            Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
+            if ( listeners == null) {
+                listeners = new Vector();
+            }    
+            // this vector contains only the name of the listeners. The
+            // listener itself is stored in the objectTable. We do this
+            // because if the listeners are stored in the components, then
+            // they have to exist for the event listeners to be dispatched 
+            // at the time we process the events.
+            // According to the spec, listeners should be dispatched
+            // independent of components. 
+            listeners.add(valueChangeListener);
+            ot.put(pageContext.getSession(),lis_name, listeners);
+        }
     }
     
     /**
@@ -228,7 +234,6 @@ public class TextEntry_InputTag extends TagSupport
         if ( model != null ) {
             c.setModel(model);
         } else {
-            // JV CHANGE
             // PENDING ( visvan ) all tags should implement a common
             // interface ??
             FormTag ancestor = null;
@@ -328,7 +333,7 @@ public class TextEntry_InputTag extends TagSupport
     }
 
     /**
-     * Sets valueChanheListener attribute
+     * Sets valueChangeListener attribute
      * @param change_listener value of formListener attribute
      */
     public void setValueChangeListener(String change_listener) {

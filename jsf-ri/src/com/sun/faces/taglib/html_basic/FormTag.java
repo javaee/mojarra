@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.12 2001/12/08 00:33:53 rogerk Exp $
+ * $Id: FormTag.java,v 1.13 2001/12/10 18:18:01 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.12 2001/12/08 00:33:53 rogerk Exp $
+ * @version $Id: FormTag.java,v 1.13 2001/12/10 18:18:01 visvan Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -176,15 +176,17 @@ public class FormTag extends TagSupport
 
         // PENDING ( visvan ) this should be done in Component's 
         // addListener method. 
-        String lis_name = name.concat(Constants.REF_FORMLISTENERS);
-        listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
-        if ( listeners == null) {
-            listeners = new Vector();
-        }    
-        // this vector contains only the name of the listeners. The
-        // listener itself is stored in the objectTable.
-        listeners.add(formListener);
-        ot.put(pageContext.getSession(),lis_name, listeners);
+        if ( formListener != null ) {
+            String lis_name = name.concat(Constants.REF_FORMLISTENERS);
+            listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
+            if ( listeners == null) {
+                listeners = new Vector();
+            }    
+            // this vector contains only the name of the listeners. The
+            // listener itself is stored in the objectTable.
+            listeners.add(formListener);
+            ot.put(pageContext.getSession(),lis_name, listeners);
+        }
     }
 
     /**

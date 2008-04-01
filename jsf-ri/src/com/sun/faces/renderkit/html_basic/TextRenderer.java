@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.10 2001/11/29 01:54:35 rogerk Exp $
+ * $Id: TextRenderer.java,v 1.11 2001/12/10 18:18:01 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.10 2001/11/29 01:54:35 rogerk Exp $
+ * @version $Id: TextRenderer.java,v 1.11 2001/12/10 18:18:01 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,7 +118,7 @@ public class TextRenderer extends Object implements Renderer
         } else {
             throw new FacesException("Invalid component type. Expected WOutput");
         }
-        String text = (String) label.getValue();
+        String text = (String) label.getValue(rc);
         if ( text != null ) { 
             OutputMethod outputMethod = rc.getOutputMethod();
             Assert.assert_it(outputMethod != null );

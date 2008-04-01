@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.7 2001/12/06 22:59:16 visvan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.8 2001/12/10 18:18:00 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,6 +40,7 @@ import javax.faces.CommandEvent;
 import javax.faces.ValueChangeEvent;
 import javax.faces.RenderContext;
 import javax.faces.Constants;
+import javax.faces.WSelectBoolean;
 
 import javax.faces.ObjectTable;
 
@@ -49,7 +50,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.7 2001/12/06 22:59:16 visvan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.8 2001/12/10 18:18:00 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -240,13 +241,33 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
 
         // add value change events first. Because they should
         // be processed before command events.
-        if ( c instanceof WTextEntry ) {
+        if ( c instanceof WTextEntry || c instanceof WSelectBoolean) {
+             String old_value = null;
+             String model_str = null;
+             // check in for Component types will be removed
+             // once we support encoding of types using 
+             /// hidden fields.	
+            if ( c instanceof WTextEntry ) {
+                WTextEntry te = (WTextEntry) c;
+                old_value = te.getText(rc);
+                model_str = (String) te.getModel();
+            } else {
+                WSelectBoolean sb = (WSelectBoolean) c;
+                // PENDING ( visvan ) HTML sends value of checkbox only
+                // if it is selected. So we cannot detect if it
+                // it is deselecte unless we track its state through
+                // hideen field and JavaScript. Will be fixed in the
+                // later check ins.  
+                // if checkbox is sent as part of the request, then
+                // its state is selected. Note HTML does not send
+                // state, but it sends the value of "value" attribute. 
+                param_value = "true";
+                boolean old_state = sb.isSelected(rc);
+                old_value = String.valueOf(old_state);
+                model_str = (String) sb.getModel();
+            }
 
-            WTextEntry te = (WTextEntry) c;
             // construct value changed event objects and put in the queue.
-            String model_str = (String) te.getModel();
-            String old_value = te.getText(rc);
-
             ValueChangeEvent e =  new ValueChangeEvent(request, param_name,
                         model_str, param_value);
             if ( old_value != null && old_value.compareTo(param_value) != 0 ) {

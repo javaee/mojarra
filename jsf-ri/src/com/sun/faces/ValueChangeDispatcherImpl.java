@@ -25,7 +25,7 @@ import javax.faces.ModelAccessor;
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.1 2001/12/06 22:59:16 visvan Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.2 2001/12/10 18:18:00 visvan Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
@@ -60,15 +60,16 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
         String modelRef = value_event.getModelReference();
 
         if ( modelRef == null ) {
-            // PENDING ( visvan ) this needs to change later
             WTextEntry c = (WTextEntry) ot.get(request, srcName);
             if ( c != null ) {
                 c.setText(rc, (String)value_event.getNewValue());
             }
         } else {
             ModelAccessor.setModelObject(rc, modelRef, new_value);
-            dispatchListeners(request, value_event,ot);
         }
+        // components can have listeners without model
+        dispatchListeners(request, value_event,ot);
+
     }
    
     /**
@@ -87,11 +88,11 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
         if ( lis_list != null && lis_list.size() > 0 ) {
             for ( int i = 0; i < lis_list.size(); ++i) {
                 String lis_ref_name = (String) lis_list.elementAt(i);
-                ValueChangeListener listener = (ValueChangeListener) 
+                // tags could have put in null listeners.
+                if ( lis_ref_name != null ) {
+                    ValueChangeListener listener = (ValueChangeListener) 
                         ot.get(request, lis_ref_name);
-                Assert.assert_it( listener != null );
-
-                if ( listener != null ) {
+                    Assert.assert_it(listener != null );
                     listener.handleValueChange(e);
                 }
             }    

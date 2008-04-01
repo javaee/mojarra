@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
+ * $Id: Output_TextTag.java,v 1.9 2001/12/10 18:18:01 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -28,6 +28,7 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WOutput;
 import javax.faces.ObjectTable;
+import java.util.Vector;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -39,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
+ * @version $Id: Output_TextTag.java,v 1.9 2001/12/10 18:18:01 visvan Exp $
  * 
  *
  */
@@ -61,6 +62,9 @@ public class Output_TextTag extends TagSupport
     // Attribute Instance Variables
     private String name = null;
     private String value = null;
+    private String scope = null;
+    private String valueChangeListener = null;
+    private String model = null;
 
     // Relationship Instance Variables
 
@@ -109,9 +113,7 @@ public class Output_TextTag extends TagSupport
             WOutput c = (WOutput) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
-                // PENDING (visvan ) scope should be an attribute of the tag
-                // for now using the default scope, request
-                ot.put(pageContext.getRequest(), name, c);
+                addToScope(c, ot);
             }
             try {
                 rc.pushChild(c);
@@ -129,6 +131,35 @@ public class Output_TextTag extends TagSupport
             }
         }
         return(EVAL_BODY_INCLUDE);
+    }
+
+    /** 
+     * Adds the component and listener to the ObjectTable
+     * in the appropriate scope
+     *
+     * @param c WComponent to be stored in namescope
+     * @param ot Object pool
+     */
+    public void addToScope(WOutput c, ObjectTable ot) {
+
+        // PENDING ( visvan ) right now, we are not saving the state of the
+        // components. So if the scope is specified as reques, when the form
+        // is resubmitted we would't be able to retrieve the state of the
+        // components. So to get away with that we are storing in session
+        // scope. This should be fixed later.
+        ot.put(pageContext.getSession(), name, c);
+
+        if ( valueChangeListener != null ) {
+            String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
+            Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
+            if ( listeners == null) {
+                listeners = new Vector();
+            }
+            // this vector contains only the name of the listeners. The
+            // listener itself is stored in the objectTable.
+            listeners.add(valueChangeListener);
+            ot.put(pageContext.getSession(),lis_name, listeners);
+        }
     }
 
     /**
@@ -169,33 +200,41 @@ public class Output_TextTag extends TagSupport
         WOutput c = new WOutput();
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
+
         // set render independent attributes 
-        c.setValue(value);
+        // If model attribute is not found get it
+        // from parent form if it exists. If not
+        // set text as an attribute so that it can be
+        // used during rendering.
+
+        // PENDING ( visvan )
+        // make sure that the model object is registered
+        if ( model != null ) {
+            c.setModel(model);
+        } else {
+            // PENDING ( visvan ) all tags should implement a common
+            // interface. Also at this point we must ensure that
+            // the bean has a property with this name and has 
+            // accessor methods for it. Need to figure out an
+            // efficient way to do that. 
+            FormTag ancestor = null;
+            try {
+                ancestor = (FormTag) findAncestorWithClass(this,
+                    FormTag.class);
+               String model_str = ancestor.getModel();
+               if ( model_str != null ) {
+                   model = "$" + model_str + "." + name;
+                   c.setModel(model);
+               }
+            } catch ( Exception e ) {
+                // If form tag cannot be found then model is null
+            }
+        }
+        if ( value != null ) {
+            c.setValue(rc,value);
+        }
         return c;
     }
-
-    /**
-     * Figures out the name of the package to which the
-     * class belongs.
-     *
-     * @param class_name name of the class
-     * @return String package name of the class
-     *
-    protected String getRendererPackage(String class_name) {
-        Class renderclass = null;
-        System.out.println("class_name " + class_name);
-        try {
-            renderclass = Class.forName(class_name);
-        } catch ( ClassNotFoundException e ) {
-            System.out.println("Couldn't find Text Renderer class");
-        }
-        String packageName = (renderclass.getPackage()).getName();
-        if ( packageName == null ) {
-            System.out.println("Package name is null");
-        }
-        String full_name = packageName + "." + class_name;
-        return full_name;
-    } */
 
     /**
      * Returns the value of the "name" attribute
@@ -229,6 +268,57 @@ public class Output_TextTag extends TagSupport
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Returns the value of valueChangeListener attribute
+     *
+     * @return String value of valueChangeListener attribute
+     */
+    public String getValueChangeListener() {
+        return this.valueChangeListener;
+    }
+
+    /**
+     * Sets valueChanheListener attribute
+     * @param change_listener value of formListener attribute
+     */
+    public void setValueChangeListener(String change_listener) {
+        this.valueChangeListener = change_listener;
+    }
+
+    /**
+     * Returns the value of the scope attribute
+     *
+     * @return String value of scope attribute
+     */
+    public String getScope() {
+        return this.scope;
+    }
+
+    /**
+     * Sets scope attribute
+     * @param scope value of scope attribute
+     */
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    /**
+     * Returns the value of the model attribute
+     *
+     * @return String value of model attribute
+     */
+    public String getModel() {
+        return this.model;
+    }
+
+    /**
+     * Sets the model attribute
+     * @param model value of model attribute
+     */
+    public void setModel(String model) {
+        this.model = model;
     }
 
 } // end of class Output_TextTag

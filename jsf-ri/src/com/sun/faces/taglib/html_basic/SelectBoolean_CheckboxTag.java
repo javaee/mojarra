@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -29,6 +29,7 @@ import javax.faces.RenderKit;
 import javax.faces.WForm;
 import javax.faces.WSelectBoolean;
 import javax.faces.ObjectTable;
+import java.util.Vector;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -39,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,6 +66,9 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     private String name = null;
     private String value = null;
     private String label = null;
+    private String model = null;
+    private String scope = null;
+    private String valueChangeListener = null;
 
     // Relationship Instance Variables
 
@@ -121,6 +125,57 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     }
 
     /**
+     * Returns the value of valueChangeListener attribute
+     *
+     * @return String value of valueChangeListener attribute
+     */
+    public String getValueChangeListener() {
+        return this.valueChangeListener;
+    }
+
+    /**
+     * Sets valueChangeListener attribute
+     * @param change_listener value of formListener attribute
+     */
+    public void setValueChangeListener(String change_listener) {
+        this.valueChangeListener = change_listener;
+    }
+
+    /**
+     * Returns the value of the scope attribute
+     *
+     * @return String value of scope attribute
+     */
+    public String getScope() {
+        return this.scope;
+    }
+
+    /**
+     * Sets scope attribute
+     * @param scope value of scope attribute
+     */
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    /**
+     * Returns the value of the model attribute
+     *
+     * @return String value of model attribute
+     */
+    public String getModel() {
+        return this.model;
+    }
+
+    /**
+     * Sets the model attribute
+     * @param model value of model attribute
+     */
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    /**
      * Process the start of this tag.
      * @exception JspException if a JSP exception has occurred
      */
@@ -142,14 +197,9 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             WSelectBoolean wSelectBoolean = (WSelectBoolean) 
                 ot.get(pageContext.getRequest(), name);
             if ( wSelectBoolean == null ) {
-                wSelectBoolean = new WSelectBoolean();
+                wSelectBoolean = createComponent(renderContext);
+                addToScope(wSelectBoolean, ot);
             }
-
-            wSelectBoolean.setAttribute(renderContext, "checked", getChecked());
-            wSelectBoolean.setAttribute(renderContext, "name", getName());
-            wSelectBoolean.setAttribute(renderContext, "value", getValue());
-            wSelectBoolean.setAttribute(renderContext, "label", getLabel());
-            ot.put(pageContext.getRequest(), name, wSelectBoolean);
 
             // 2. Get a RenderKit and associated Renderer for this
             //    component.
@@ -195,12 +245,92 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     }
 
     /**
+     * Creates a TextEntry component and sets renderer specific
+     * properties.
+     *
+     * @param rc renderContext client information
+     */
+    protected WSelectBoolean createComponent(RenderContext renderContext) 
+            throws JspException {
+
+        WSelectBoolean wSelectBoolean = new WSelectBoolean();
+
+        // set renderer specific properties
+        wSelectBoolean.setAttribute(renderContext, "name", getName());
+        wSelectBoolean.setAttribute(renderContext, "value", getValue());
+        wSelectBoolean.setAttribute(renderContext, "label", getLabel());
+
+        // If model attribute is not found get it
+        // from parent form if it exists. If not
+        // set text as an attribute so that it can be
+        // used during rendering.
+
+        // PENDING ( visvan )
+        // make sure that the model object is registered
+        if ( model != null ) {
+            wSelectBoolean.setModel(model);
+        } else {
+            // PENDING ( visvan ) all tags should implement a common
+            // interface ??
+            FormTag ancestor = null;
+            try {
+                ancestor = (FormTag) findAncestorWithClass(this,
+                    FormTag.class);
+               String model_str = ancestor.getModel();
+               if ( model_str != null ) {
+                   model = "$" + model_str + "." + name;
+                   wSelectBoolean.setModel(model);
+               }
+            } catch ( Exception e ) {
+                // If form tag cannot be found then model is null
+            }
+        }
+        if ( checked != null ) {
+             boolean state = Boolean.getBoolean(checked);
+             wSelectBoolean.setSelected(renderContext, state);
+        }
+        return wSelectBoolean;
+    }
+
+    /** Adds the component and listener to the ObjectTable
+     * in the appropriate scope
+     *
+     * @param c WComponent to be stored in namescope
+     * @param ot Object pool
+     */
+    public void addToScope(WSelectBoolean c, ObjectTable ot) {
+   
+        // PENDING ( visvan ) right now, we are not saving the state of the
+        // components. So if the scope is specified as reques, when the form
+        // is resubmitted we would't be able to retrieve the state of the
+        // components. So to get away with that we are storing in session
+        // scope. This should be fixed later.
+        ot.put(pageContext.getSession(), name, c);
+
+        if ( valueChangeListener != null ) {
+            String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
+            Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
+            if ( listeners == null) {
+                listeners = new Vector();
+            }
+            // this vector contains only the name of the listeners. The
+            // listener itself is stored in the objectTable. We do this
+            // because if the listeners are stored in the components, then
+            // they have to exist for the event listeners to be dispatched
+            // at the time we process the events.
+            // According to the spec, listeners should be dispatched
+            // independent of components.
+            listeners.add(valueChangeListener);
+            ot.put(pageContext.getSession(),lis_name, listeners);
+        }
+    }
+
+    /**
      * End Tag Processing
      */
     public int doEndTag() throws JspException{
 
         return EVAL_PAGE;
     }
-
 
 } // end of class SelectBoolean_CheckboxTag

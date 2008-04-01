@@ -30,7 +30,7 @@ import javax.faces.CommandFailedException;
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.1 2001/12/06 22:59:15 visvan Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.2 2001/12/10 18:17:59 visvan Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent
@@ -72,16 +72,19 @@ public class CommandDispatcherImpl extends CommandDispatcher {
         Vector lis_list = (Vector) ot.get(request, lis_name);
         if ( lis_list != null && lis_list.size() > 0 ) {
             for ( int i = 0; i < lis_list.size(); ++i) {
+                // tags could have put in null for listener name.
                 String lis_ref_name = (String) lis_list.elementAt(i);
-                CommandListener cl = (CommandListener) 
+                if ( lis_ref_name != null ) {
+                    CommandListener cl = (CommandListener) 
                         ot.get(request, lis_ref_name);
-                Assert.assert_it ( cl != null );
-                try {
-                   cl.doCommand(cmd_event);
-                } catch ( CommandFailedException e ) {
-                    // PENDING ( visvan ) skip for now till
-                    // we decide how to do error handling in listeners.
-                }    
+                    Assert.assert_it ( cl != null );
+                    try {
+                        cl.doCommand(cmd_event);
+                    } catch ( CommandFailedException e ) {
+                        // PENDING ( visvan ) skip for now till
+                        // we decide how to do error handling in listeners.
+                    } 
+                }   
             }    
         }
     

@@ -4,6 +4,8 @@ public class LoginBean {
 
     String userName = null;
     String password = null;
+    String address = null;
+    String validUser = null;
 
     public LoginBean () {
         System.out.println("Model Object Created");
@@ -19,14 +21,34 @@ public class LoginBean {
         return userName;
     }
 
-   public void setPassword(String pwd) {
-        System.out.println("Set Password " + password);
+    public void setPassword(String pwd) {
         password = pwd;
+        System.out.println("set Password " + password);
     }
 
     public String getPassword() {
         System.out.println("get Password " + password);
         return password;
+    }
+
+    public void setAddress(String addr) {
+        address = addr;
+        System.out.println("Set Address " + address);
+    }
+
+    public String getAddress() {
+        System.out.println("get Address " + address);
+        return address;
+    }
+
+    public void setValidUser(String valid_user) {
+        validUser = valid_user;
+        System.out.println("Set validUser " + validUser);
+    }
+
+    public String getvalidUser() {
+        System.out.println("get validUser " + validUser);
+        return validUser;
     }
 
 }
