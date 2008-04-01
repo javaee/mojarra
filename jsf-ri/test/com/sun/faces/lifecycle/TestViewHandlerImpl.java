@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.7 2002/07/15 23:48:34 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.8 2002/07/17 22:34:06 jvisvanathan Exp $ 
  */ 
 
 
@@ -33,7 +33,7 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.component.UITextEntry; 
 import javax.faces.validator.Validator; 
 import javax.faces.component.AttributeDescriptor; 
-
+import javax.servlet.ServletException;
 
 import com.sun.faces.JspFacesTestCase; 
 import com.sun.faces.FileOutputResponseWrapper; 
@@ -64,7 +64,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.7 2002/07/15 23:48:34 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.8 2002/07/17 22:34:06 jvisvanathan Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -167,7 +167,11 @@ public void testRender()
     } catch (IOException e) { 
         System.out.println("ViewHandler IOException:"+e); 
         rc = -1; 
-    } 
+    } catch (ServletException se) { 
+        System.out.println("ViewHandler ServletException: "+se); 
+        rc = -1; 
+    }
+    
     assertTrue(Phase.GOTO_NEXT == rc); 
 
 

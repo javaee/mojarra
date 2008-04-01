@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.30 2002/06/28 22:46:59 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.31 2002/07/17 22:34:03 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.30 2002/06/28 22:46:59 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.31 2002/07/17 22:34:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -212,7 +212,7 @@ public class HtmlBasicRenderKit extends RenderKit
      * @throws FacesException If the renderer instance is not found for
      *         the given renderer type.
      */
-    public Renderer getRenderer(String rendererType) throws FacesException {
+    public Renderer getRenderer(String rendererType) {
 
         ParameterCheck.nonNull(rendererType);
         Assert.assert_it(rendererTable != null);
@@ -278,7 +278,29 @@ public class HtmlBasicRenderKit extends RenderKit
 
         return rendererTable.keySet().iterator();
     }
+    
+   
+    public Iterator getRendererTypes(UIComponent component) {
+        return null;
+    }    
 
+    public void addComponentClass(Class componentClass) {
+    }
+    
+   
+    public Iterator getComponentClasses() {
+        return null;
+    }
+    
+    
+    public void addRenderer(String rendererType, Renderer renderer) {
+    }
+    
+  
+    public Iterator getRendererTypes(String componentType) {
+        return null;
+    }
+    
     // The test for this class is in TestRenderKit.java
 
 } // end of class HtmlBasicRenderKit

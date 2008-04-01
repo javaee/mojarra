@@ -5,7 +5,7 @@
 
 package com.sun.faces.util;
 
-
+import java.util.Locale;
 import javax.faces.component.AttributeDescriptor;
 
 /**
@@ -75,5 +75,13 @@ public class AttributeDescriptorImpl extends AttributeDescriptor {
 	return type;
     }
 
+    public String getDisplayName(Locale locale) {
+        return null;
+    }    
+    
+   
+    public String getDescription(Locale locale) {
+        return null;
+    }    
 
 }

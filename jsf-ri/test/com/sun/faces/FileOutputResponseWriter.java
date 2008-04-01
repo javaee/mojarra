@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.1 2002/06/06 00:15:02 eburns Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.2 2002/07/17 22:34:04 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.1 2002/06/06 00:15:02 eburns Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.2 2002/07/17 22:34:04 jvisvanathan Exp $
  * 
  *
  */
@@ -116,6 +116,42 @@ public void close() throws IOException
 {
     out.close();
 }
+
+public void writeText(char[] text,int off, int len) {
+}
+
+public void writeText(char[] text ) {
+}
+
+public void writeText(char text ) {
+}
+
+public void writeText(Object text ) {
+}
+
+public void writeComment(Object text ) {
+}
+
+public void writeAttribute(String name, Object value) throws IOException {
+}    
+
+public void writeURIAttribute(String name, Object value) throws IOException {
+}    
+
+public void startElement(String name) throws IOException {
+}
+
+public void endElement(String name) throws IOException {
+}    
+
+public void startDocument() throws IOException {
+    throw new UnsupportedOperationException();
+}
+
+public void endDocument() throws IOException {
+    throw new UnsupportedOperationException();
+}
+
 
 
 

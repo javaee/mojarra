@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.9 2002/06/25 20:48:01 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.10 2002/07/17 22:34:05 jvisvanathan Exp $
  */
 
 /*
@@ -37,6 +37,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.context.ResponseWriter;
+import javax.faces.webapp.ServletResponseWriter;
+import java.io.PrintWriter;
 import javax.faces.context.ResponseStream;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.RIConstants;
@@ -53,7 +55,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.9 2002/06/25 20:48:01 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.10 2002/07/17 22:34:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,11 +167,19 @@ public void testAccessors()
     assertTrue(result);
     System.out.println("Testing responseStream: " + result);
 
-    ResponseWriter responseWriter = new ResponseWriter() {
+    /*ResponseWriter responseWriter = new ResponseWriter() {
 	    public void close() {}
 	    public void flush() {}
 	    public void write(char[] cbuf, int off, int len) {}
-	};
+          
+	}; */
+    ResponseWriter responseWriter = null;
+    try {
+        responseWriter = new 
+        ServletResponseWriter((getFacesContext().getServletResponse()).getWriter());
+    } catch ( Exception e ) {
+        assertTrue(false);
+    }    
     getFacesContext().setResponseWriter(responseWriter);
     result = responseWriter == getFacesContext().getResponseWriter();
     assertTrue(result);

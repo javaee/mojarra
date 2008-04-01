@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.3 2002/06/25 21:42:53 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.4 2002/07/17 22:34:02 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.3 2002/06/25 21:42:53 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.4 2002/07/17 22:34:02 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -39,8 +39,7 @@ public class LifecycleFactoryImpl extends LifecycleFactory
 //
 // Protected Constants
 //
-
-static final int FIRST_PHASE = Lifecycle.CREATE_REQUEST_TREE_PHASE;
+static final int FIRST_PHASE = Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE;
 static final int LAST_PHASE = Lifecycle.RENDER_RESPONSE_PHASE;
 
 

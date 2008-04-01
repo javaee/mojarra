@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.9 2002/07/13 01:21:56 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.10 2002/07/17 22:34:06 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.9 2002/07/13 01:21:56 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.10 2002/07/17 22:34:06 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -164,9 +164,9 @@ public void testExtraPhases()
 		   
 	       });
 	factory.registerAfter(LifecycleFactory.DEFAULT_LIFECYCLE,
-			      Lifecycle.CREATE_REQUEST_TREE_PHASE, 
+			      Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE, 
 	       new GenericPhaseImpl(null, 
-				    Lifecycle.CREATE_REQUEST_TREE_PHASE) {
+				    Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE) {
 		   public int execute(FacesContext facesContext) 
 		       throws FacesException
 		   {
