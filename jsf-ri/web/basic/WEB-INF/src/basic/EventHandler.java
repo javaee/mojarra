@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.5 2002/01/25 18:45:20 visvan Exp $
+ * $Id: EventHandler.java,v 1.6 2002/03/07 23:45:08 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.CommandFailedException;
 import javax.faces.ValueChangeListener;
 import javax.faces.ValueChangeEvent;
 import javax.faces.NavigationHandler;
+import javax.faces.UIComponent;
 
 import javax.servlet.http.*;
 import javax.servlet.*;
@@ -40,12 +41,17 @@ public class EventHandler implements CommandListener,ValueChangeListener{
            System.out.println("Command " + e.getCommandName() + " Execution Successful");
            nh.handleCommandSuccess(e.getCommandName());
        } 
-       System.out.println("Name of UIComponent that generated event " + e.getSourceId());
+       UIComponent source = e.getSourceComponent();
+       System.out.println("Name of UIComponent that generated event " + 
+			  source.getId());
        System.out.println("CommandEvent processing successful");
     }
 
     public void handleValueChange(ValueChangeEvent e) {
-       System.out.println("Name of UIComponent that generated event " + e.getSourceId());
+       UIComponent source = e.getSourceComponent();
+
+       System.out.println("Name of UIComponent that generated event " + 
+			  source.getId());
        System.out.println("New Value " + e.getNewValue());
        System.out.println("ValueChangeEvent processing successful");
     }

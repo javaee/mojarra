@@ -1,5 +1,5 @@
 /*
- * $Id: TestEventContext.java,v 1.3 2002/01/25 18:45:20 visvan Exp $
+ * $Id: TestEventContext.java,v 1.4 2002/03/07 23:45:08 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.NavigationMapImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestEventContext.java,v 1.3 2002/01/25 18:45:20 visvan Exp $
+ * @version $Id: TestEventContext.java,v 1.4 2002/03/07 23:45:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,7 +95,7 @@ public void testAccessors()
     result = null == caps; // PENDING(edburns): should not be null
     System.out.println("Testing getEventQueue: " + result);
     assertTrue(result);
-    
+
     req = eventContext.getRequest();
     result = null != req;
     System.out.println("Testing getRequest: " + result);
@@ -124,8 +124,8 @@ public void testAccessors()
     input.setId("source");
     objectManager.put( request, "source", input);
 
-    ValueChangeEvent valueChange = new ValueChangeEvent(eventContext, "source", 
-             "value");
+    ValueChangeEvent valueChange = new ValueChangeEvent(eventContext, input, 
+							"value");
     eventDispatcher = eventContext.getEventDispatcher(valueChange);
     result = null != eventDispatcher;
     System.out.println("Testing getEventDispatcher for valueChange: " + 
@@ -136,7 +136,7 @@ public void testAccessors()
 		       "UITextEntry: " + result);
     assertTrue(result);
     
-    CommandEvent command = new CommandEvent (eventContext, "name", "value");
+    CommandEvent command = new CommandEvent (eventContext, uiCommand, "value");
     eventDispatcher = eventContext.getEventDispatcher(command);
     result = null != eventDispatcher;
     System.out.println("Testing getEventDispatcher for command: " + 

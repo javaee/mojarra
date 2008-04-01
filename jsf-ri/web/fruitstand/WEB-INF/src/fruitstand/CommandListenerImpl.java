@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.4 2002/01/25 18:45:21 visvan Exp $
+ * $Id: CommandListenerImpl.java,v 1.5 2002/03/07 23:45:08 eburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -27,6 +27,7 @@ import javax.faces.CommandFailedException;
 import javax.faces.NavigationHandler;
 import javax.faces.FacesEvent;
 import javax.faces.EventContext;
+import javax.faces.UIComponent;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +51,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.4 2002/01/25 18:45:21 visvan Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.5 2002/03/07 23:45:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -191,7 +192,9 @@ private void validateLogin(UserBean user) throws CommandFailedException {
 
 public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFailedException
 {
-    String sourceId = e.getSourceId();
+    UIComponent source = e.getSourceComponent();
+
+    String sourceId = source.getId();
     String cmdName = e.getCommandName();
     ObjectManager ot = ObjectManager.getInstance();
     FacesEvent fe = (FacesEvent) e;

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.20 2002/02/26 21:24:48 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.21 2002/03/07 23:45:07 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.20 2002/02/26 21:24:48 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.21 2002/03/07 23:45:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -290,16 +290,15 @@ public void queueEvents(EventContext eventContext) {
 	    }
 
             // construct value changed event objects and put in the queue.
-            ValueChangeEvent e =  new ValueChangeEvent(eventContext,
-                        param_name, param_value);
+            ValueChangeEvent e =  new ValueChangeEvent(eventContext, c, 
+						       param_value);
             if ( old_value != null && old_value.compareTo(param_value) != 0 ) {
                 eventQueue.add(e);
             } else if ( old_value == null ) {
                 eventQueue.add(e);
             }
 	} else if ( c instanceof UICommand) {
-            CommandEvent e =  new CommandEvent(eventContext, param_name, 
-					       param_value);
+            CommandEvent e =  new CommandEvent(eventContext, c, param_value);
             cmd_events.add(e);
         }
 
