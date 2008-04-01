@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.12 2002/08/01 20:51:31 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.13 2002/08/02 01:17:39 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.12 2002/08/01 20:51:31 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.13 2002/08/02 01:17:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,8 +125,8 @@ public void testAccessors()
     System.out.println("Testing getHttpSession: " + result);
     assertTrue(result);
     
-    assertTrue(facesContext.getApplicationHandler() != null);
-    assertTrue(facesContext.getViewHandler() != null );
+    assertTrue(getFacesContext().getApplicationHandler() == null);
+    assertTrue(getFacesContext().getViewHandler() != null );
     
     Locale locale = getFacesContext().getLocale();
     result = null != locale;
@@ -321,20 +321,13 @@ public void testMessageMethodsNull() {
     gotException = false;
     
     try {
-        fc.addMessage(null);
+        fc.addMessage(null, null);
     } catch ( NullPointerException fe) {
         gotException = true;
     }
     assertTrue(gotException);
     gotException = false;
     
-    try {
-        fc.getMessages(null);
-    } catch ( NullPointerException fe) {
-        gotException = true;
-    }
-    assertTrue(gotException);
-    gotException = false;
 }
 
 public void testMessageMethods() {
@@ -343,10 +336,10 @@ public void testMessageMethods() {
     
     System.out.println("Testing add methods");
     Message msg1 = new MessageImpl (2, "summary1", "detail1");
-    fc.addMessage(msg1);
+    fc.addMessage(null, msg1);
     
     Message msg2 = new MessageImpl (3, "summary2", "detail2");
-    fc.addMessage(msg2);
+    fc.addMessage(null, msg2);
     
     UICommand command = new UICommand();
     Message msg3 = new MessageImpl (4, "summary3", "detail3");
@@ -373,7 +366,7 @@ public void testMessageMethods() {
     }
     
     it = null;
-    it = fc.getMessages();
+    it = fc.getMessages(null);
     while ( it.hasNext() ) {
        Message result = (Message) it.next();
        //System.out.println("summary " + result.getSummary());

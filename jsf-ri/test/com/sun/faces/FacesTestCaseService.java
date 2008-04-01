@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.5 2002/06/25 21:08:40 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.6 2002/08/02 01:17:38 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.5 2002/06/25 21:08:40 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.6 2002/08/02 01:17:38 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -148,7 +148,7 @@ public void setUp()
     }    
     
     TestBean testBean = new TestBean();
-    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    (facesContext.getHttpSession(true)).setAttribute("TestBean", testBean);
     System.setProperty(RIConstants.DISABLE_RENDERERS, 
 		       RIConstants.DISABLE_RENDERERS);
 

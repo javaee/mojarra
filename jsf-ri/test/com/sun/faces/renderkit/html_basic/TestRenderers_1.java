@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.12 2002/07/22 16:58:04 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.13 2002/08/02 01:17:42 eburns Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FormEvent;
@@ -45,7 +46,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.12 2002/07/22 16:58:04 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.13 2002/08/02 01:17:42 eburns Exp $
  * 
  *
  */
@@ -299,6 +300,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // Test RadioRenderer.
         System.out.println("Testing RadioRenderer");
         UISelectOne uiSelectOne = new UISelectOne();
+	UISelectItems uiSelectItems = new UISelectItems();
         uiSelectOne.setComponentId("radio_renderer");
         root.addChild(uiSelectOne);
 
@@ -307,7 +309,9 @@ public class TestRenderers_1 extends JspFacesTestCase
         SelectItem item3 = new SelectItem("Three", "Three" ,null);
         
         SelectItem[] items = {item1, item2,item3};
-        uiSelectOne.setItems(items);
+        uiSelectItems.setValue(items);
+	uiSelectItems.setComponentId("items");
+	uiSelectOne.addChild(uiSelectItems);
         
         RadioRenderer radioRenderer = new RadioRenderer();
         // test decode method

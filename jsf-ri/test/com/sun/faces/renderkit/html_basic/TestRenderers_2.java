@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.8 2002/07/22 16:58:04 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.9 2002/08/02 01:17:42 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.component.SelectItem;
+import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIComponent;
@@ -42,7 +43,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.8 2002/07/22 16:58:04 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.9 2002/08/02 01:17:42 eburns Exp $
  * 
  *
  */
@@ -264,6 +265,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testOptionListRenderer(UIComponent root) throws IOException {
         System.out.println("Testing OptionListRenderer");
         UISelectOne selectOne = new UISelectOne();
+	UISelectItems uiSelectItems = new UISelectItems();
         selectOne.setValue(null);
         selectOne.setComponentId("my_optionlist");
         SelectItem item1 = new SelectItem("Red", "Red", null);
@@ -271,7 +273,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
         SelectItem[] selectItems = {item1, item2, item3, item4};
-        selectOne.setItems(selectItems);
+        uiSelectItems.setValue(selectItems);
+	uiSelectItems.setComponentId("items");
+	selectOne.addChild(uiSelectItems);
         root.addChild(selectOne);
 
         OptionListRenderer optionlistRenderer = new OptionListRenderer();

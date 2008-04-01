@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.3 2002/06/21 18:54:38 eburns Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.4 2002/08/02 01:17:39 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.3 2002/06/21 18:54:38 eburns Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.4 2002/08/02 01:17:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,6 +95,8 @@ public void testCreateMethods()
         facesContext = facesContextFactory.getFacesContext(null,null, null, 
 							   null);
     } catch ( FacesException fe) {
+        gotException = true;
+    } catch ( NullPointerException ee) {
         gotException = true;
     }
     assertTrue(gotException);

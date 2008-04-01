@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.4 2002/06/22 00:15:09 jvisvanathan Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.5 2002/08/02 01:17:40 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.4 2002/06/22 00:15:09 jvisvanathan Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.5 2002/08/02 01:17:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,7 +112,8 @@ public void testInvokeNormal()
 
     life.setApplicationHandler(appHandler);
     getFacesContext().addApplicationEvent(new CommandEvent(root, "command"));
-    getFacesContext().addApplicationEvent(new FormEvent(root, "form"));
+    getFacesContext().addApplicationEvent(new FormEvent(root, "formName",
+							"commandName"));
     rc = invokeApplicationPhase.execute(getFacesContext());
     assertTrue(Phase.GOTO_RENDER == rc);
     assertTrue(System.getProperty(DID_COMMAND).equals(DID_COMMAND));

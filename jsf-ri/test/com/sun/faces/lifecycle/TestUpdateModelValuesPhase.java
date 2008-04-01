@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.9 2002/06/25 20:48:03 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.10 2002/08/02 01:17:41 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.9 2002/06/25 20:48:03 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.10 2002/08/02 01:17:41 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,7 +127,7 @@ public void testUpdateNormal()
     assertTrue(null == userName.getValue());
 
     assertTrue(testBean.getOne().equals("one"));
-    assertTrue(false == (getFacesContext().getMessagesAll().hasNext()));
+    assertTrue(false == (getFacesContext().getMessages().hasNext()));
 }
 
 public void testUpdateFailed()
@@ -170,7 +170,7 @@ public void testUpdateFailed()
     assertTrue(Phase.GOTO_RENDER == rc);    
 
     assertTrue(null != userName.getValue());
-    assertTrue(true == (getFacesContext().getMessagesAll().hasNext()));
+    assertTrue(true == (getFacesContext().getMessages().hasNext()));
     
 }
 

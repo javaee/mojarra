@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.3 2002/06/22 00:15:08 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.4 2002/08/02 01:17:39 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.3 2002/06/22 00:15:08 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.4 2002/08/02 01:17:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,14 +172,30 @@ public void testModelObjectSearch() {
     testBean.setOne("one");
     
     boolean gotException = false;
-    assertTrue(facesContext.getModelType(null) == null );
-    assertTrue(facesContext.getModelValue(null) == null );
+    try {
+	facesContext.getModelType(null);
+    }
+    catch (NullPointerException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+    
+    gotException = false;
+    try {
+	facesContext.getModelValue(null);
+    }
+    catch (NullPointerException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+
+
     try {
         facesContext.setModelValue(null,null);
     } catch ( Exception e ) {
         gotException = true;
     }    
-    assertTrue( !gotException);
+    assertTrue(gotException);
     // store the bean in various scope and make sure the narrow to broad
     // search works.
     
