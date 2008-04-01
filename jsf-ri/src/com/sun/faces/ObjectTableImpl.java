@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.4 2001/11/17 01:32:59 edburns Exp $
+ * $Id: ObjectTableImpl.java,v 1.5 2001/11/22 02:02:17 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableImpl.java,v 1.4 2001/11/17 01:32:59 edburns Exp $
+ * @version $Id: ObjectTableImpl.java,v 1.5 2001/11/22 02:02:17 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -215,7 +215,14 @@ public void enter(Object scopeKey) {
 }
     
 public void exit(Object scopeKey) {
+    ParameterCheck.nonNull(scopeKey);
     // Call listeners
+
+    // clear the map
+    Map scopeMap = (Map) innerMap.get(scopeKey);
+    Assert.assert_it(null != scopeMap);
+
+    scopeMap.clear();
     innerMap.remove(scopeKey);
 }
 } // end of class ScopeImpl

@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.2 2001/11/21 00:23:00 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.3 2001/11/22 02:02:17 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -26,6 +26,8 @@ import javax.faces.FacesException;
 import javax.faces.ObjectTable;
 import javax.faces.ObjectTableFactory;
 import javax.faces.ObjectTable.Scope;
+import javax.faces.ObjectTable.ActiveValue;
+import javax.faces.ObjectTable.LazyValue;
 
 import com.sun.faces.ObjectTableImpl.ScopeImpl;
 
@@ -40,7 +42,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.2 2001/11/21 00:23:00 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.3 2001/11/22 02:02:17 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -196,6 +198,66 @@ public void testPutGet() {
     result = get1.equals("foo1foo1");
 
     System.out.println("Testing the put with scopeKey as first arg" + result);
+    assertTrue(result);
+}
+
+public void testLazyActive() {
+    boolean result = false;
+    Object one, two;
+    String lazy = "lazy";
+    String active = "active";
+
+    System.out.println("test convenience method: putting .class ");
+    objectTable.put(objectTable.GlobalScope, lazy, StringBuffer.class);
+    
+    one = objectTable.get(lazy);
+    two = objectTable.get(lazy);
+    result = one == two;
+    System.out.println("result: " + result);
+    assertTrue(result);
+
+    result = false; 
+    System.out.println("test putting LazyValue directly ");
+    objectTable.put(objectTable.GlobalScope, lazy, 
+		    new LazyValue() {
+			public Object getValue(Scope scope, Object scopeKey, Object name) {
+			    Object result = null;
+			    try {
+				result = StringBuffer.class.newInstance();
+			    }
+			    catch (Exception e) {
+				System.out.println(e.getMessage());
+			    }
+			    return result;
+			}
+		    });
+    
+    one = objectTable.get(lazy);
+    two = objectTable.get(lazy);
+    result = one == two;
+    System.out.println("result: " + result);
+    assertTrue(result);
+
+    result = false;
+    System.out.println("test putting ActiveValue directly ");
+    objectTable.put(objectTable.GlobalScope, active, 
+		    new ActiveValue() {
+			public Object getValue(Scope scope, Object scopeKey, Object name) {
+			    Object result = null;
+			    try {
+				result = StringBuffer.class.newInstance();
+			    }
+			    catch (Exception e) {
+				System.out.println(e.getMessage());
+			    }
+			    return result;
+			}
+		    });
+    
+    one = objectTable.get(active);
+    two = objectTable.get(active);
+    result = one != two;
+    System.out.println("result: " + result);
     assertTrue(result);
 }
 
