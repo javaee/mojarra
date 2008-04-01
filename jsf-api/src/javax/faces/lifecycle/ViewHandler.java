@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.1 2002/06/14 04:32:02 craigmcc Exp $
+ * $Id: ViewHandler.java,v 1.2 2002/07/16 21:56:38 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.lifecycle;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletException;
 
 
 /**
@@ -47,8 +48,10 @@ public interface ViewHandler {
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
+     * @exception ServletException if a servlet error occurs
      */
-    public void renderView(FacesContext context) throws IOException;
+    public void renderView(FacesContext context)
+        throws IOException, ServletException;
 
 
 }
