@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.3 2001/11/09 23:48:51 edburns Exp $
+ * $Id: UseFacesTag.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -38,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UseFacesTag.java,v 1.3 2001/11/09 23:48:51 edburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,7 +88,6 @@ public UseFacesTag()
  */
 public int doStartTag() throws JspException {
 
-    System.out.println("USEFACESTAG.DOSTARTTAG:GETTING RENDERCONTEXT");
     // Get the RenderContext from the session.  If it doesn't
     // exist, create one, and put it in the session.
     //
@@ -100,7 +99,6 @@ public int doStartTag() throws JspException {
         try {
 	    factory = RenderContextFactory.newInstance();
             renderContext = factory.newRenderContext(pageContext.getRequest());
-System.out.println("USEFACESTAG.DOSTARTTAG:GOT RENDERCONTEXT:"+renderContext);
         } catch (FacesException e) {
             throw new JspException(e.getMessage());
         }
@@ -108,12 +106,9 @@ System.out.println("USEFACESTAG.DOSTARTTAG:GOT RENDERCONTEXT:"+renderContext);
 
     JspOutputMethod outputMethod = new JspOutputMethod();
     outputMethod.setPageContext(pageContext);
-System.out.println("USEFACESTAG.DOSTARTTAG:SET PAGECONTEXT");
     renderContext.setOutputMethod(outputMethod);
-System.out.println("USEFACESTAG.DOSTARTTAG:SET OUTPUTMETHOD");
     pageContext.getSession().setAttribute("renderContext",
-        renderContext);
-System.out.println("USEFACESTAG.DOSTARTTAG:SET RENDERCONTEXT");
+					  renderContext);
     return EVAL_BODY_INCLUDE;
 }
 
@@ -129,7 +124,7 @@ public static void main(String [] args)
     UseFacesTag me = new UseFacesTag();
     Log.setApplicationName("UseFacesTag");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: UseFacesTag.java,v 1.3 2001/11/09 23:48:51 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: UseFacesTag.java,v 1.4 2001/11/10 01:09:22 edburns Exp $");
     try {
         me.doStartTag(); 
     } catch (Exception e) {

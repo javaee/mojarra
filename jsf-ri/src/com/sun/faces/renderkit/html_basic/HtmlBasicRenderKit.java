@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.3 2001/11/09 23:48:51 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import javax.faces.ClientCapabilities;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.3 2001/11/09 23:48:51 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -157,7 +157,7 @@ public Renderer getRenderer(String name) throws FacesException {
     
     Class rendererClass;
     Renderer result;
-System.out.println("HTMLBASICRENDERKIT.GETRENDERER NAME:"+name);
+
     try {
 	rendererClass = Class.forName(name);
 	result = (Renderer) rendererClass.newInstance();
@@ -194,7 +194,7 @@ public static void main(String [] args)
     Assert.setEnabled(true);
     Log.setApplicationName("HtmlBasicRenderKit");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.3 2001/11/09 23:48:51 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.4 2001/11/10 01:09:22 edburns Exp $");
 }
 
 // ----VERTIGO_TEST_END
