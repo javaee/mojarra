@@ -67,7 +67,7 @@
 
               </td>
 
-              <td> <faces:validation_message componentId="userName"/> </td>
+            <td> <faces:output_errors id="err1" compoundId="/basicForm/userName" /> </td>
 
             </tr>
 
@@ -93,8 +93,7 @@
 
                </td>
 
-              <td> <faces:validation_message componentId="password"/> </td>
-
+            <td> <faces:output_errors id="err2" compoundId="/basicForm/password"/> </td>
 
              </tr>
 
@@ -121,7 +120,7 @@
 
                </td>
 
-              <td> <faces:validation_message componentId="double"/> </td>
+-              <td> <faces:output_errors id="err3" compoundId="/basicForm/double"/> </td>
 
 
              </tr>
@@ -149,7 +148,7 @@
 
                </td>
 
-              <td> <faces:validation_message componentId="integer"/> </td>
+              <td> <faces:output_errors id="err4" compoundId="/basicForm/integer"/> </td>
 
 
              </tr>
@@ -178,7 +177,7 @@
 
                </td>
 
-              <td> <faces:validation_message componentId="string"/> </td>
+              <td> <faces:output_errors id="err5" compoundId="/basicForm/string"/> </td>
 
 
              </tr>
