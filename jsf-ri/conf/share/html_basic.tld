@@ -441,5 +441,19 @@
 
  </tag>
 
+ <tag>
+   <name>eventhandler</name>
+   <tagclass>javax.faces.webapp.EventHandlerTag</tagclass>
+   <bodycontent>JSP</bodycontent>
+
+   <attribute>
+  
+     <name>className</name>
+     <required>true</required> 
+     <rtexprvalue>false</rtexprvalue>
+   </attribute>
+
+ </tag>
+
 
 </taglib>

@@ -6,6 +6,7 @@
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="WEB-INF/lib/basic.tld" prefix="basic" %>
 
     <H3> JSF Basic Components Test Page </H3>
     <hr>
@@ -13,6 +14,20 @@
         <faces:form id="basicForm" formName="basicForm" >
 
             <table> 
+
+            <tr>
+
+             <td><FONT COLOR="RED">Custom</FONT></TD>
+
+             <td><basic:textentry_input_valuechange id="custom">
+
+                   <faces:eventhandler className="basic.EventHandler"/>
+
+                 </basic:textentry_input_valuechange>
+                 
+
+            </tr>
+
             <tr> 
               <td> <faces:output_text id="userLabel" text="Username" /> </td>
               <td> 

@@ -1,5 +1,5 @@
 /*
- * $Id: HttpSessionListenerImpl.java,v 1.4 2002/07/23 18:04:12 eburns Exp $
+ * $Id: HttpSessionListenerImpl.java,v 1.5 2002/07/23 19:37:30 eburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpSessionEvent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HttpSessionListenerImpl.java,v 1.4 2002/07/23 18:04:12 eburns Exp $
+ * @version $Id: HttpSessionListenerImpl.java,v 1.5 2002/07/23 19:37:30 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -46,7 +46,6 @@ public class HttpSessionListenerImpl extends Object implements HttpSessionListen
 // Class Variables
 //
 
-private static boolean didGlobalInit = false;
 
 //
 // Instance Variables
@@ -98,9 +97,8 @@ protected void init()
 
 public void sessionCreated(HttpSessionEvent sce) {
     System.out.println("sessionCreated");
-    if (!didGlobalInit) {
+    if (null == sce.getSession().getAttribute("LoginBean")) {
 	sce.getSession().setAttribute("LoginBean", new LoginBean());
-	didGlobalInit = true;
     }
 }
 
