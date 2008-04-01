@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeImpl.java,v 1.6 2002/07/10 22:44:02 eburns Exp $
+ * $Id: XmlTreeImpl.java,v 1.7 2002/08/01 21:18:42 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeImpl.java,v 1.6 2002/07/10 22:44:02 eburns Exp $
+ * @version $Id: XmlTreeImpl.java,v 1.7 2002/08/01 21:18:42 jvisvanathan Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -96,13 +96,6 @@ void setPageUrl(String pageUrl) {
 public String getPageUrl() {
     return pageUrl;
 }
-
-public void release()
-{
-    super.release();
-    pageUrl = null;
-}
-
 // The testcase for this class is TestXmlTreeImpl.java 
 
 
