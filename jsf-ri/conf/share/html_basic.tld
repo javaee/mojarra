@@ -1228,6 +1228,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>redisplay</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <!-- HTML 4.0 Attributes  -->
     <attribute>
       <name>value</name>
