@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.19 2002/06/19 18:14:40 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.20 2002/06/20 22:11:45 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.19 2002/06/19 18:14:40 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.20 2002/06/20 22:11:45 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -181,12 +181,12 @@ public class HyperlinkRenderer extends Renderer {
 // include the "target attribute's value.
 // ex: <a href="http://java.sun.com".....
 // For faces pages, we are expecting the "target" attribute to
-// reference another ".xul" file.
+// begin with "/faces" (ex: /faces/Faces_Basic.xul).
 //PENDING(rogerk) what if "target" attribute is not set (null)???
 //
         String target = (String)component.getAttribute("target");
         if (target != null) {
-            if (target.endsWith(".xul")) {
+            if (target.startsWith(RIConstants.URL_PREFIX)) {
                 writer.write(href(context, component));
             } else {
                 writer.write(target);
@@ -242,6 +242,7 @@ public class HyperlinkRenderer extends Renderer {
         //
         String target = (String)component.getAttribute("target");
         if (target != null) {
+            target = target.substring(RIConstants.URL_PREFIX.length());
             sb.append(target);
         } else {
             sb.append(context.getResponseTree().getTreeId());
