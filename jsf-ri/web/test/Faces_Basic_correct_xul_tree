@@ -2,28 +2,33 @@
 id:root
 value=null
 attr=componentId : root
+attr=rendersChildren : false
   ===>Type:Form
   id:basicForm
   value=null
   attr=componentId : basicForm
   attr=parent : com.sun.faces.tree.XmlTreeFactoryImpl
+  attr=rendersChildren : false
     ===>Type:Output
     id:userLabel
     value=UserName
     attr=componentId : userLabel
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     attr=value : UserName
     ===>Type:TextEntry
     id:userName
     value=default
     attr=componentId : userName
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     attr=value : default
     ===>Type:Output
     id:pwdLabel
     value=Password
     attr=componentId : pwdLabel
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     attr=value : Password
     ===>Type:TextEntry
     id:password
@@ -31,11 +36,13 @@ attr=componentId : root
     attr=componentId : password
     attr=parent : javax.faces.component.UIForm
     attr=type : password
+    attr=rendersChildren : false
     ===>Type:Output
     id:addrLabel
     value=Address
     attr=componentId : addrLabel
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     attr=value : Address
     ===>Type:TextEntry
     id:address
@@ -43,14 +50,17 @@ attr=componentId : root
     attr=multiline : true
     attr=componentId : address
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     ===>Type:SelectBoolean
     id:validUser
     modelReference:${UserBean.validUser}
-    value=null
+    value=false
     attr=model : 
     attr=label : Checker
     attr=componentId : validUser
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
+    attr=value : false
     ===>Type:SelectOne
     id:shipType
     modelReference:${UserBean.items}
@@ -80,9 +90,11 @@ attr=componentId : root
     attr=label : Login
     attr=componentId : login
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     ===>Type:Command
     id:login2
     value=null
     attr=componentId : login2
     attr=parent : javax.faces.component.UIForm
+    attr=rendersChildren : false
     attr=src : duke.gif
