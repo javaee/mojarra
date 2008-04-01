@@ -51,12 +51,7 @@
       <detail>Value is less than allowable minimum of {0}.</detail>
   </message>
 
-  <message messageId="javax.faces.validator.RequiredValidator.FAILED_MESSAGE_ID" 
-           severity="1" summary="Validation Error." >
-      <detail>Value is required.</detail>
-  </message>
-
-  <message messageId="javax.faces.validator.RequiredValidator.FAILED_MESSAGE_ID" 
+  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
            severity="1" summary="Validation Error." >
       <detail>Value is required.</detail>
   </message>
@@ -93,6 +88,11 @@
   <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
            severity="1" summary="Validation Error." >
       <detail>Value is not of the correct type.</detail>
+  </message>
+
+  <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
+           severity="1" summary="Validation Error." >
+      <detail>Value is required.</detail>
   </message>
 
 </messages>
