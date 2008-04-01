@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.13 2002/08/24 18:38:52 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.14 2002/08/26 20:57:01 craigmcc Exp $</h3>
 </div>
 
 
@@ -119,10 +119,13 @@
       &nbsp;
     </td>
     <td>
-      Render an HTML hyperlink to the specified URL.  Nested child components
-      can be used to provide the image and/or text for the hyperlink.  URL
-      rewriting will be performed to maintain session state in the absence
-      of cookies.
+      Render an HTML hyperlink to the specified URL.  Nested child
+      <code>UIGraphic</code> and <code>UIOutput</code> components
+      can be used to provide the image and/or text for the hyperlink.
+      Nested <code>UIParameter</code> components (with the <code>name</code>
+      attribute defined) can be used to configure request parameters that
+      will be added to the specified URL.  URL rewriting will be performed
+      to maintain session state in the absence of cookies.
     </td>
   </tr>
 
@@ -279,6 +282,20 @@
       datetime instance for the specified dateStyle (SHORT, MEDIUM, LONG,
       FULL), and timeStyle (SHORT, MEDIUM, LONG, FULL), set time zone
       (if specified), render formatted result as text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Text</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>labelAlign</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to String, render literally as hidden input
+      field.
     </td>
   </tr>
 
