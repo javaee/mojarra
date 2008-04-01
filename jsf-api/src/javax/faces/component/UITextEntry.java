@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.4 2002/05/17 04:55:39 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.1 2002/05/17 04:55:39 craigmcc Exp $
  */
 
 /*
@@ -17,17 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * <p><strong>UIOutput</strong> is a {@link UIComponent} that can display
- * output to the user.  The user cannot manipulate this component; it is
- * for display purposes only.  Any localization of the text to be rendered
- * is the responsibility of the application.</p>
+ * <p><strong>UITextEntry</strong> is a {@link UIComponent} that can display
+ * output to, and then accept input text from, the user.  It is typically
+ * rendered as either a single-line text field or a multi-line text box.</p>
  *
  * <p>The local value of the text to be displayed by this component
  * is stored in the <code>value</code> property, and must be a
  * <code>java.lang.String</code> (as must the model property corresponding
  * to any model reference for this component).</p>
  *
- * <p>For convenience, the local value of the text to be displayed is
+ * <p>For convenience, the local value of the text value is
  * accessible via the <code>getText()</code> and <code>setText()</code>
  * methods.  The <code>currentValue()</code> method should be used to
  * retrieve the value to be rendered.</p>
@@ -37,12 +36,15 @@ import javax.servlet.http.HttpServletRequest;
  * <p>In the absence of a Renderer performing more sophisticated processing,
  * this component supports the following functionality:</p>
  * <ul>
+ * <li><em>decode()</em> - Copy the value of the request parameter that
+ *     corresponds to this field to the local value.  If there is no such
+ *     parameter, set the local value to a zero-length String.</li>
  * <li><em>encode()</em> - Render the current value of this component
- *     directly to the response.</li>
+ *     as a single-line text field.</li>
  * </ul>
  */
 
-public class UIOutput extends UIComponent {
+public class UITextEntry extends UIComponent {
 
 
     // ------------------------------------------------------- Static Variables
@@ -51,7 +53,7 @@ public class UIOutput extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "Output";
+    public static final String TYPE = "TextEntry";
 
 
     // ------------------------------------------------------------- Properties
@@ -93,6 +95,30 @@ public class UIOutput extends UIComponent {
 
 
     /**
+     * <p>Decode the new value of this component from the incoming request.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs while reading
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void decode(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        String newValue =
+            context.getServletRequest().getParameter(getCompoundId());
+        if (newValue == null) {
+            newValue = "";
+        }
+        setValue(newValue);
+
+    }
+
+
+    /**
      * <p>Render the current value of this component.</p>
      *
      * @param context FacesContext for the response we are creating
@@ -108,10 +134,14 @@ public class UIOutput extends UIComponent {
         }
         String value = (String) currentValue();
         if (value == null) {
-            throw new NullPointerException();
+            value = "";
         }
         PrintWriter writer = context.getServletResponse().getWriter();
+        writer.print("<input type=\"text\" name=\"");
+        writer.print(getCompoundId());
+        writer.print("\" value=\"");
         writer.print(value);
+        writer.print("\">");
 
     }
 

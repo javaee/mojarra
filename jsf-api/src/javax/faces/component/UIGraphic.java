@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.2 2002/05/15 18:20:07 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.3 2002/05/17 04:55:39 craigmcc Exp $
  */
 
 /*
@@ -8,6 +8,12 @@
  */
 
 package javax.faces.component;
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -23,10 +29,20 @@ package javax.faces.component;
  * character; otherwise, it is interpreted as an absolute or relative path
  * that should be used unchanged.</p>
  *
- * <p>For convenience, the local value of the selected state is accessible
+ * <p>For convenience, the local value of the image URL is accessible
  * via the <code>getImagePath()</code> and <code>setImagePath()</code>
  * methods.  The <code>currentValue()</code> method should be used to
  * retrieve the value to be rendered.</p>
+ *
+ * <h3>Default Behavior</h3>
+ *
+ * <p>In the absence of a Renderer performing more sophisticated processing,
+ * this component supports the following functionality:</p>
+ * <ul>
+ * <li><em>encode()</em> - Create an HTML <code>&lt;img&gt;</code> element,
+ *     with a <code>src</code> attribute based on the current value stored
+ *     in the component.</li>
+ * </ul>
  */
 
 public class UIGraphic extends UIComponent {
@@ -77,6 +93,37 @@ public class UIGraphic extends UIComponent {
 
 
     // ------------------------------------------- Lifecycle Processing Methods
+
+
+    /**
+     * <p>Render the current value of this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encode(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        String value = (String) currentValue();
+        if (value == null) {
+            throw new NullPointerException();
+        }
+        PrintWriter writer = context.getServletResponse().getWriter();
+        writer.print("<img src=\"");
+        if (value.startsWith("/")) {
+            HttpServletRequest request =
+                (HttpServletRequest) context.getServletRequest();
+            writer.print(request.getContextPath());
+        }
+        writer.print(value);
+        writer.print("\">");
+
+    }
 
 
 }
