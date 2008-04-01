@@ -45,7 +45,7 @@ public class WSelectBoolean extends WComponent {
      * @throws NullPointerException if value is null
      * @throws FacesException if model is not one of the valid instances
      */
-    public void setModel(Object model) {}
+    public void setModel(Object model) throws FacesException {}
 
     /**
      * Returns boolean value indicating whether the state of this
@@ -59,3 +59,4 @@ public class WSelectBoolean extends WComponent {
     }
 
 }
+

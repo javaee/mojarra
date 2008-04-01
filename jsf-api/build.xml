@@ -26,7 +26,13 @@
   <property name="build.lib" value="${build.dir}/lib"/>
   <property name="build.javadocs" value="${build.dir}/javadocs"/>
 
+  <!-- The base directory for dependent jars -->
+  <property name="lib.home" value="${basedir}/lib"/>
+
+  <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
+
   <path id="classpath">
+    <pathelement location="${servlet.jar}"/>
   </path>
 
   <!-- 

@@ -7,7 +7,7 @@ import java.util.Iterator;
 /**
  * The base class for representing all state associated with a
  * user-interface component.  
- *
+ * <p>
  * A WComponent instance may act as a "parent" container if one or
  * more WComponent instances are added as children.
  * A WComponent instance may act as a "child" if it is added to
@@ -27,11 +27,39 @@ public abstract class WComponent {
      */
     // Aim10-25-01: hint-WTextEntry should return "TextEntry"
     public abstract String getType();
+
+    /**
+     * The renderer name to be used to render this component in the
+     * specified render context.  
+     * @param rc the render context used to render this component
+     * @return String containing the name of the renderer set for
+     *         this component
+     */
+    public String getRendererName(RenderContext rc) {
+	return null;
+    }
+
+    /**
+     * Sets the renderer name to be used to render this component
+     * in the specified render context.  The specified rendererName
+     * must exist in the render context's render kit and the renderer
+     * corresponding to that name must support rendering this component's
+     * type, else an exception will be thrown.
+     *
+     * @param rc the render context used to render this component
+     * @param rendererName String containing the name of the renderer
+     * @throws NullPointerException if rc or rendererName is null
+     * @throws FacesException if the specified rendererName is not
+     *         supported by the render kit or the renderer does not
+     *         support rendering this component type
+     */
+    public void setRendererName(RenderContext rc, String rendererName) throws FacesException {
+    }
  
     /**
      * Returns an iteration containing all the attribute names
-     * available with this component within the specified render
-     * context.
+     * corresponding to attributes set specifically on this
+     * component within the specified render context.
      *
      * @param rc the render context used to render this component
      * @return an Iteration of attribute names on this component
@@ -42,8 +70,8 @@ public abstract class WComponent {
 
     /**
      * Returns the component attribute with the given name
-     * within the specified render context or null if there is no
-     * attribute by that name.
+     * within the specified render context or null if there is the
+     * specified attribute is not set on this component.
      *
      * @param rc the render context used to render this component
      * @param attributeName a String specifying the name of the attribute
@@ -55,7 +83,7 @@ public abstract class WComponent {
     }
 
     /**
-     * Binds an object to a given attribute name for this component
+     * Binds an object to the specified attribute name for this component
      * within the specified render context.
      *
      * @param rc the render context used to render this component
@@ -191,27 +219,58 @@ public abstract class WComponent {
         return 0;
     }
 
-    /**
-     * Invoked just prior to rendering this component.  Subclasses
-     * should override this method if any processing is required
-     * prior to rendering.
-     * @param rc the render context used to render this component
-     * @throws IOException // Aim10-25-01: under what conditions?
-     */
-    public void preRender(RenderContext rc) throws IOException {}
+    //Aim:11-2-01: should we put getPerformsLayout(),renderAll()
+    //in a separate interface ???
 
     /**
-     * Renders the component.  By default it will obtain the
-     * renderer from the appropriate RenderKit instance and invoke
-     * renderStart() on the renderer.
+     * The performsLayout property.
+     * @param rc the render context used to render this component
+     * @return boolean value indicating whether or not this component
+     *         takes responsibility for laying out and rendering its
+     *         children.
+     */
+    public boolean getPerformsLayout(RenderContext rc) {
+	return false;
+    }
+
+    /**
+     * Invokes full render processing on this component and its
+     * descendents. This method should only be called on components
+     * which return <code>true</code> from getPerformsLayout().
+     * It calls the following sequence of methods, passing 
+     * in the specified render context:
+     * <ol>
+     * <li>render(rc)
+     * <li>renderChildren(rc)
+     * <li>postRender(rc)
+     * </ol>
+     * This method will recursively drive the rendering process for
+     * this component and all of its descendents, treating the
+     * rendering of that hierarchy as an atomic process.  This 
+     * method should only be called if the the portion of the page
+     * defined by this hierarchy is completely defined by this
+     * hierarchy (no interleaved presentation markup).
+     */
+    public void renderAll(RenderContext rc) throws IOException {}
+
+    /**
+     * Renders this component.  By default it will invoke renderStart()
+     * on the renderer corresponding to the rendererName property of
+     * this component.  
+     * This method renders this component only and does not perform
+     * any recursive rendering on children.
+     *
      * @param rc the render context used to render this component
      * @throws IOException // Aim10-25-01: under what conditions?
      */
     public void render(RenderContext rc) throws IOException {}
 
     /**
-     * Renders all children of this component.  By default it
-     * will invoke renderChildren() on the renderer.
+     * Invoked from renderAll() to Render the children of this component.  
+     * By default it will invoke renderChildren() on the renderer 
+     * corresponding to the rendererName property of this component.  
+     * If this component type does not support rendering the layout 
+     * of its children, it should override this method to do nothing.
      * @param rc the render context used to render this component
      * @throws IOException // Aim10-25-01: under what conditions?
      */
@@ -219,12 +278,12 @@ public abstract class WComponent {
 
     /**
      * Invoked after this component and all of it's children are
-     * rendered.  By default it will obtain the renderer from the
-     * appropriate RenderKit instance and invoke renderEnd() on the
-     * renderer.
+     * rendered. By default it will invoke renderEnd() on the renderer 
+     * corresponding to the rendererName property of this component.  
      * @param rc the render context used to render this component
      * @throws IOException // Aim10-25-01: under what conditions?
      */
     public void postRender(RenderContext rc) throws IOException {}
 
 }
+

@@ -106,8 +106,12 @@ public static final String DEFAULT_RENDERKIT_PROPERTY_NAME = "FACES_DEFAULT_REND
     protected void initialize() {}
 
     /**
-     * Invoked prior to ..Aim10-29-01: look at servlet spec
+     * Subclasses should override this method to perform any clean-up
+     * and releasing of resources.
      */
     protected void destroy() {}
+    //Aim11-2-02: who would invoke destroy??
+
 
 }
+
