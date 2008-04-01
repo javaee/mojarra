@@ -4,18 +4,30 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <faces:useFaces>
-        <faces:form name='basicForm' >
-            <faces:Output_Text name='hello_label' value='Hello World' />
-             <P></P>
-	    <faces:command_button name="Login" label="login"/>
+        <faces:form name='basicForm' model="LoginBean">
+            <faces:Listener name="loginListener" scope="session" className="basic.EventHandler" />
+            <faces:Command name="handleLogin" scope="session" className="basic.EventHandler" onCompletion="welcome.jsp" onError="error.jsp"/>
+
+           <table> 
+            <tr> 
+              <td> <faces:Output_Text name='userLabel'  value='UserName' /> </td>
+              <td> <faces:TextEntry_Input name="userName" size="20" maxlength="26" valueChangeListener="loginListener" />  </td>
+            </tr>
+
+             <tr>
+                <td> <faces:Output_Text name='pwdLabel'  value='Password' /> </td>
+                <td> <faces:TextEntry_Secret name="password" size="20" maxlength="26" /> </td>
+             </tr>
+       
+             <tr> 
+             <td><faces:command_button name="login" label="login" command="handleLogin" /></td>
+             </tr>
+          </table>
+
             <P></P>
             <faces:command_button name="Login" image="duke.gif"/>
             <P></P>
-            <faces:selectboolean_checkbox name="Checkbox" value="Checker" label="Check this"/>
-            <P></P>
-            <faces:TextEntry_Input name="textField" value="Hello World" size="20" maxlength="26"/>
-            <P></P>
-            <faces:TextEntry_Secret name="password" value="Hello World" size="20" maxlength="26"/>
+            <faces:SelectBoolean_Checkbox name="Checkbox" value="Checker" label="Check this"/>
             <P></P>
             <faces:TextEntry_TextArea name="textarea" cols="150" rows="10" wrap="OFF"> Hello World </faces:TextEntry_TextArea>
             <P></P>

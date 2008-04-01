@@ -104,6 +104,16 @@ Configuring UI Components
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>model</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>formListener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -213,6 +223,26 @@ Configuring UI Components
     </attribute>
     <attribute>
         <name>image</name>
+    </attribute>
+    <attribute>
+      <name>commandListener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>commandName</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>command</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
 
@@ -429,6 +459,21 @@ Configuring UI Components
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>model</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>valueChangeListener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
 
  <tag>
@@ -487,5 +532,56 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
  </tag>
-  
+ 
+<tag>
+      <name>Listener</name>
+      <tagclass>com.sun.faces.taglib.html_basic.ListenerTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+      <attribute>
+      <name>name</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>className</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+ </tag>
+
+<tag>
+      <name>Command</name>
+      <tagclass>com.sun.faces.taglib.html_basic.CommandTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+      <attribute>
+      <name>name</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>className</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onCompletion</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onError</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+ </tag> 
 </taglib>

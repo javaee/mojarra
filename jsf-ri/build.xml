@@ -178,8 +178,8 @@
     <unjar src="${jsf-api.jar}" dest="${dist.home}/${app.name}/WEB-INF/classes"/>
 
     <!-- copy dependent libs -->
-    <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <copy  file="${commons.collections.jar}" todir="${dist.home}/${app.name}/WEB-INF/classes"/>
+    <unjar  src="${commons.beanutils.jar}" dest="${dist.home}/${app.name}/WEB-INF/lib"/>
+    <unjar  src="${commons.collections.jar}" dest="${dist.home}/${app.name}/WEB-INF/classes"/>
     <!-- copy tld file -->
     <copy file="${conf.share.dir}/html_basic.tld"
          toDir="${dist.home}/${app.name}/WEB-INF"/>
@@ -220,8 +220,8 @@
     <!-- <copy  file="${jsf-api.jar}" todir="${deploy.home}/WEB-INF/lib"/> -->
     <unjar src="${jsf-api.jar}" dest="${deploy.home}/WEB-INF/classes"/>
     <!-- copy dependent libs to tomcat/libs -->
-    <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
-    <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
+    <unjar  src="${commons.beanutils.jar}" dest="${deploy.home}/WEB-INF/classes"/>
+    <unjar  src="${commons.collections.jar}" dest="${deploy.home}/WEB-INF/classes"/>
   </target>
 
   <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
@@ -297,6 +297,63 @@
         <ant antfile="build-tests.xml" target="test.tomcat.40"/>
     
     </target>
+
+    <!-- builds"basic" sample app -->
+    <target name="build.basic.war" depends="clean,prepare,compile,compile.basic.sample" >
+     <property name="basic.name"  value="basic"/>
+     <!-- name of the war file -->
+     <property name="dist.war"  value="${basic.name}.war"/>
+
+     <mkdir  dir="${dist.home}/${basic.name}"/>
+
+     <!-- copy basic directory under dist.home -->
+    <copy todir="${dist.home}/${basic.name}">
+      <fileset dir="${basedir}/web/${basic.name}" />
+    </copy>
+
+    <!-- copy all the classes under basic package -->
+    <copy todir="${dist.home}/${basic.name}">
+      <fileset dir="${build.home}/${basic.name}"/>
+    </copy>
+
+    <!-- copy all the classes under com.sun.faces package -->
+    <copy todir="${dist.home}/${basic.name}/WEB-INF/classes">
+      <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
+    </copy>
+   
+    <!-- copy all the classes under javax.faces package -->
+    <!-- <copy  file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/classes> -->
+    <unjar src="${jsf-api.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
+
+    <!-- copy dependent libs -->
+    <unjar  src="${commons.beanutils.jar}" dest="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <unjar  src="${commons.collections.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
+
+    <!-- copy tld file -->
+    <copy file="${conf.share.dir}/html_basic.tld"
+         toDir="${dist.home}/${basic.name}/WEB-INF"/>
+
+    <!-- create a war file for distribution -->
+    <jar jarfile="${dist.home}/${dist.war}"
+         basedir="${dist.home}/${basic.name}"/>
+  </target>
+
+  <target name="compile.basic.sample"
+          description="Compile java files in the sample app named app.name">
+    <property name="basic.name"  value="basic"/>
+    <mkdir dir="${build.home}/${basic.name}/WEB-INF/classes"/>
+    <javac  srcdir="${basedir}/web/${basic.name}/WEB-INF/src"
+           destdir="${build.home}/${basic.name}/WEB-INF/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+    <copy todir="${build.home}/${basic.name}/WEB-INF/classes">
+        <fileset dir="${basedir}/web/${basic.name}/WEB-INF/src"
+                 includes="**/*.properties"/>
+    </copy>
+  </target>
 
 
   <target name="main" depends="prepare,compile"/>

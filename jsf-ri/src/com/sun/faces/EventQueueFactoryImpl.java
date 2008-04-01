@@ -1,5 +1,5 @@
 /*
- * $Id: EventQueueFactoryImpl.java,v 1.1 2001/11/21 00:42:42 visvan Exp $
+ * $Id: EventQueueFactoryImpl.java,v 1.2 2001/12/06 22:59:15 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -31,55 +31,56 @@ import javax.faces.EventQueue;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventQueueFactoryImpl.java,v 1.1 2001/11/21 00:42:42 visvan Exp $
+ * @version $Id: EventQueueFactoryImpl.java,v 1.2 2001/12/06 22:59:15 visvan Exp $
+ * @author Jayashri Visvanathan
  * 
- * @see	Blah
- * @see	Bloo
+ * @see	javax.faces.EventQueueFactory
+ * @see	javax.faces.EventQueue
  *
  */
 
 public class EventQueueFactoryImpl extends EventQueueFactory
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public EventQueueFactoryImpl()
-{
-    super();
-}
+    public EventQueueFactoryImpl()
+    {
+        super();
+    }
 
-//
-// Methods from EventQueueFactory
-//
+    //
+    // Methods from EventQueueFactory
+    //
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-public EventQueue newEventQueue() throws FacesException {
-    EventQueue result = new EventQueueImpl();
-    return result;
-}
+    public EventQueue newEventQueue() throws FacesException {
+        EventQueue result = new EventQueueImpl();
+        return result;
+    }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
 } // end of class EventQueueFactoryImpl

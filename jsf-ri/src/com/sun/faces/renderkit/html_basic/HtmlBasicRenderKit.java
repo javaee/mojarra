@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.7 2001/12/06 22:59:16 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -19,7 +19,8 @@ package com.sun.faces.renderkit.html_basic;
 import java.util.Iterator;
 import java.util.Properties;
 import java.io.InputStream;
-
+import java.util.Vector;
+import java.util.Enumeration;
 import javax.servlet.ServletRequest;
 
 import org.mozilla.util.Assert;
@@ -32,6 +33,15 @@ import javax.faces.Renderer;
 import javax.faces.FacesException;
 import javax.faces.ClientCapabilities;
 import javax.faces.EventQueue;
+import javax.faces.WComponent;
+import javax.faces.WCommand;
+import javax.faces.WTextEntry;
+import javax.faces.CommandEvent;
+import javax.faces.ValueChangeEvent;
+import javax.faces.RenderContext;
+import javax.faces.Constants;
+
+import javax.faces.ObjectTable;
 
 /**
  *
@@ -39,7 +49,7 @@ import javax.faces.EventQueue;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.7 2001/12/06 22:59:16 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -181,6 +191,80 @@ public Renderer getRenderer(String name) throws FacesException {
 }
 
 public void queueEvents(ServletRequest request, EventQueue queue) {
+
+    String param_name = null;
+    String param_value = null;
+    String cmdName = null;
+    WComponent c = null;
+    Vector cmd_events = new Vector();
+    ObjectTable ot = null;
+    RenderContext rc = null;
+ 
+    Enumeration param_names = request.getParameterNames();
+
+    if ( param_names.hasMoreElements() ) {
+        // get ObjectTable
+        ot = ObjectTable.getInstance();
+        Assert.assert_it(ot != null );
+
+        // get renderContext
+        rc = (RenderContext)ot.get(request,
+                Constants.REF_RENDERCONTEXT);
+        Assert.assert_it( rc != null );
+    }
+
+    while ( param_names.hasMoreElements() ) {
+        param_name = (String) param_names.nextElement();
+        param_value = (String) request.getParameter(param_name);
+        if ( param_value != null ) {
+            param_value = param_value.trim();
+            if ( param_value.equals("") ) {
+                continue;
+            }
+        } else {
+            continue;
+        }
+
+        // PENDING ( visvan ) type of the component and model should be
+        // encoded as a hidden field so that it need not be obtained
+        // from the ObjectTable since the component may not exist in
+        // the pool. Also value should also be encoded as a hidden
+        // field so that change in values can be detected without WComponent.
+
+        c = (WComponent)(ot.get(request,param_name));
+        // if the component is not found then it might not have been a
+        // faces component or it was not stored in OT because of the scope.
+        if ( c == null ) {
+            continue;
+        }
+
+        // add value change events first. Because they should
+        // be processed before command events.
+        if ( c instanceof WTextEntry ) {
+
+            WTextEntry te = (WTextEntry) c;
+            // construct value changed event objects and put in the queue.
+            String model_str = (String) te.getModel();
+            String old_value = te.getText(rc);
+
+            ValueChangeEvent e =  new ValueChangeEvent(request, param_name,
+                        model_str, param_value);
+            if ( old_value != null && old_value.compareTo(param_value) != 0 ) {
+                queue.add(e);
+            } else if ( old_value == null ) {
+                queue.add(e);
+            }
+        } else if ( c instanceof WCommand) {
+            CommandEvent e =  new CommandEvent(request, param_name, param_value);
+            cmd_events.add(e);
+        }
+
+    }
+    // add command events to the end of the queue
+    for ( int i = 0; i < cmd_events.size(); ++i ) {
+        CommandEvent e = (CommandEvent) cmd_events.elementAt(i);
+        queue.add(e);
+    }
 }
 									
 protected void initialize() {

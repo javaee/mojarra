@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.8 2001/11/29 01:54:36 rogerk Exp $
+ * $Id: Command_ButtonTag.java,v 1.9 2001/12/06 22:59:17 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -30,6 +30,7 @@ import javax.faces.WCommand;
 import javax.faces.WForm;
 import javax.faces.ObjectTable;
 
+import java.util.Vector;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -39,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.8 2001/11/29 01:54:36 rogerk Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.9 2001/12/06 22:59:17 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,7 +65,11 @@ public class Command_ButtonTag extends TagSupport {
     private String image = null;
     private String name = null;
     private String label = null;
-
+    private String commandName = null;
+    private String scope = null;
+    private String commandListener = null;
+    private String command = null;
+ 
     // Relationship Instance Variables
 
     //
@@ -113,6 +118,74 @@ public class Command_ButtonTag extends TagSupport {
     public void setLabel(String label) {
         this.label = label;
     }
+    
+    /**
+     * Returns the value of commandListener attribute
+     *
+     * @return String value of commandListener attribute
+     */
+    public String getCommandListener() {
+        return this.commandListener;
+    }
+
+    /**
+     * Sets commandListener attribute
+     * @param command_listener value of commandListener attribute
+     */
+    public void setCommandListener(String command_listener) {
+        this.commandListener = command_listener;
+    }
+
+    /**
+     * Returns the value of commandListener attribute
+     *
+     * @return String value of commandListener attribute
+     */
+    public String getCommand() {
+        return this.command;
+    }
+
+    /**
+     * Sets command attribute
+     * @param command value of command attribute
+     */
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    /**
+     * Returns the value of the scope attribute
+     *
+     * @return String value of scope attribute
+     */
+    public String getScope() {
+        return this.scope;
+    }
+
+    /**
+     * Sets scope attribute
+     * @param scope value of scope attribute
+     */
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+    
+    /**
+     * Returns the value of the commandName attribute
+     *
+     * @return String value of commandName attribute
+     */
+    public String getCommandName() {
+        return this.commandName;
+    }
+
+    /**
+     * Sets commandName attribute
+     * @param cmd_name value of commandName attribute
+     */
+    public void setCommandName(String cmd_name) {
+        this.commandName = cmd_name;
+    }
 
     /**
      * Process the start of this tag.
@@ -137,12 +210,12 @@ public class Command_ButtonTag extends TagSupport {
                 (WCommand) ot.get(pageContext.getRequest(), name);
             if ( wCommand == null ) {
                 wCommand = new WCommand();
+                addToScope(wCommand, ot);
             }
             wCommand.setAttribute(renderContext, "name", getName());
             wCommand.setAttribute(renderContext, "image", getImage());
             wCommand.setAttribute(renderContext, "label", getLabel());
-            ot.put(pageContext.getRequest(), name, wCommand);
-        
+            
             // 2. Get a RenderKit and associated Renderer for this
             //    component.
             //
@@ -168,7 +241,7 @@ public class Command_ButtonTag extends TagSupport {
             // 3. Render the component.
             //
             try {
-                renderer.renderStart(renderContext, wCommand); 
+                renderer.renderStart(renderContext, wCommand);  
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
                     e.getMessage());
@@ -180,5 +253,45 @@ public class Command_ButtonTag extends TagSupport {
          
         return (EVAL_BODY_INCLUDE);
     }
+    
+    /** Adds the component and listener to the ObjectTable
+     * in the appropriate scope
+     *
+     * @param c WComponent to be stored in namescope
+     * @param ot Object pool
+     */
+    public void addToScope(WCommand c, ObjectTable ot) {
+   
+        Vector listeners = null; 
+        // PENDING ( visvan ) right now, we are not saving the state of the
+        // components. So if the scope is specified as reques, when the form
+        // is resubmitted we would't be able to retrieve the state of the
+        // components. So to get away with that we are storing in session
+        // scope. This should be fixed later.
+        ot.put(pageContext.getSession(), name, c);
+  
+        if ( commandListener != null ) {
+            String lis_name = name.concat(Constants.REF_COMMANDLISTENERS);
+            listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
+            if ( listeners == null) {
+                listeners = new Vector();
+            }    
+            // this vector contains only the name of the listeners. The
+            // listener itself is stored in the objectTable.
+            listeners.add(commandListener);
+            ot.put(pageContext.getSession(),lis_name, listeners);
+        }
+
+        if ( command != null ) {
+            // put the "Command" listener in the objectTable
+            String cmd_name = name.concat(Constants.REF_COMMAND);
+            String cmd = (String) ot.get(pageContext.getRequest(), cmd_name);
+            if ( cmd == null) {
+                ot.put(pageContext.getSession(),cmd_name, command);
+            }
+        }
+    }
+
+    
  
 } // end of class Command_ButtonTag

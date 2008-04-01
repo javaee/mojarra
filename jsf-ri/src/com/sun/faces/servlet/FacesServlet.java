@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.5 2001/12/05 20:29:59 edburns Exp $
+ * $Id: FacesServlet.java,v 1.6 2001/12/06 22:59:16 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -31,6 +31,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.faces.RenderKit;
+import javax.faces.FacesEvent;
+import javax.faces.EventDispatcher;
+import javax.faces.EventDispatcherFactory;
+import java.util.EventObject;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -66,6 +71,7 @@ public class FacesServlet extends HttpServlet {
         ObjectTableFactory otFactory;
         EventQueueFactory eqFactory;
         RenderContextFactory rcFactory;
+        EventDispatcherFactory edFactory;
 
         ServletContext servletContext = getServletContext();
         Assert.assert_it(null != servletContext);
@@ -121,6 +127,20 @@ public class FacesServlet extends HttpServlet {
         Assert.assert_it(null != rcFactory);
 	objectTable.put(ObjectTable.GlobalScope,
 			Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
+
+        // Step 4: Create the EventDispatcherFactory and put it in the
+        // ObjectTable in GlobalScope
+
+        edFactory = (EventDispatcherFactory)objectTable.get(
+            Constants.REF_EVENTDISPATCHERFACTORY);
+        // The EventDispatcherFactory must not exist at this point.  It is an
+        // error if it does exist.
+        Assert.assert_it(null == edFactory);
+
+        edFactory = EventDispatcherFactory.newInstance();
+        Assert.assert_it(null != edFactory);
+        objectTable.put(ObjectTable.GlobalScope,
+                        Constants.REF_EVENTDISPATCHERFACTORY, edFactory);
     }
 
     /**
@@ -177,14 +197,14 @@ public class FacesServlet extends HttpServlet {
 	catch (Exception e) {
 	    System.out.println("Caught exception calling super.service: " + 
 			       e.getMessage());
-	}
+	} 
 	
 	// exit the scope for this request
 	ObjectTable objectTable;
         objectTable = (ObjectTable) getServletContext().
 	    getAttribute(Constants.REF_OBJECTTABLE);
 	objectTable.exit(req);
-    }
+    } 
 
 
     /**
@@ -211,6 +231,8 @@ public class FacesServlet extends HttpServlet {
         RenderContextFactory rcFactory;
         EventQueue eq;
         EventQueueFactory eqFactory;
+        EventDispatcherFactory edFactory;
+
 	HttpSession thisSession = req.getSession();
 
         ObjectTable objectTable = (ObjectTable)getServletContext().
@@ -240,7 +262,7 @@ public class FacesServlet extends HttpServlet {
 
         // Attempt to get an event queue from the object table
         // for the current session.  If one doesn't exist, create one.
-        //
+         
         eq = (EventQueue)objectTable.get(thisSession, 
 					 Constants.REF_EVENTQUEUE);
         if (eq == null) {
@@ -256,39 +278,60 @@ public class FacesServlet extends HttpServlet {
             objectTable.put(thisSession, Constants.REF_EVENTQUEUE, eq);
         }
 
-// PENDING (rogerk) plug in event handling helper class
-// invocations here.
-// If there are no events in the queue, simply forward to the target.
-//
-// eq = (EventQueue)objectTable.get(
-//  ObjectTable.SessionScope, "faces.EventQueue");
-// RenderKit rk = rc.getRenderKit();
-// rk.queueEvents(req, eq);
-// if (eq.isEmpty()) {
-//      
+        // If there are no events in the queue, simply forward to the target.
+        
+        RenderKit rk = rc.getRenderKit();
+        Assert.assert_it(rk != null);
 
+        rk.queueEvents(req, eq);
+
+        if (!eq.isEmpty()) {
+           edFactory = (EventDispatcherFactory)
+                       objectTable.get(Constants.REF_EVENTDISPATCHERFACTORY);
+           Assert.assert_it(edFactory != null );
+
+           while (!eq.isEmpty()) {
+               EventObject e = (EventObject) eq.getNext();
+               try {
+                   
+                   EventDispatcher d = edFactory.newEventDispatcher(e);
+                   Assert.assert_it ( d != null );
+
+                   d.dispatch(req, res,e);
+               } catch ( FacesException fe ) {
+                   throw new ServletException("Error while dispatching events " +
+                       fe.getMessage() );
+               }    
+               eq.remove(e);
+           }    
+        }
+  
         // Get the last portion of the request and use it as an index 
         // into mappings configuration table to get the target url.
         //  
+        System.out.println("FORWARDING REQUEST");
         String selectUrl = null;
         String requestInfo = req.getRequestURI();
         int lastPathSeperator = requestInfo.lastIndexOf("/") + 1;
         if (lastPathSeperator != -1) { 
             selectUrl = requestInfo.substring(lastPathSeperator,
-                requestInfo.length()); 
+            requestInfo.length()); 
         }
 
-//PENDING (rogerk) use selectUrl to determine where to forward
-// (from action mappings table)
-// Use that url as the target.
-
+        //PENDING (rogerk) use selectUrl to determine where to forward
+        // (from action mappings table)
+        // Use that url as the target.
         String forwardUrl = "/"+selectUrl;
-System.out.println("FORWARDURL:"+forwardUrl);
-
+        System.out.println("FORWARDURL:"+ forwardUrl);
         RequestDispatcher reqD = 
-            getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl));
-        reqD.forward(req, res);        
-
-    }
+                getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl));
+        try {
+            reqD.forward(req, res); 
+        } catch ( IllegalStateException ie ) {
+            // PENDING ( visvan ) skip this exception which is occuring
+            // because of two forwards one in CommandDispatcher if there
+            // was a Command and one in FacesServlet. Revisit later.
+        }        
+    }    
 
 }

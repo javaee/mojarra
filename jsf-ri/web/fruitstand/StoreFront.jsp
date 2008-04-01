@@ -9,6 +9,7 @@
 <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 <body>
 <faces:useFaces>
+
 <form action="purchaseConfirm.jsp"
             method='post'>
 <font color="#3333FF"><font size=+2>Welcome to FruitStand.com</font></font>

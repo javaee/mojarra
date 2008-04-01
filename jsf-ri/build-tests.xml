@@ -283,6 +283,8 @@
 
             <!-- Suite of tests -->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
+            <test name="com.sun.faces.TestEventQueue"/>
+            <test name="com.sun.faces.TestEventDispatcherFactory"/>
         </junit>
 
     </target>
