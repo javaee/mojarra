@@ -9,6 +9,8 @@
 	    <faces:command_button name="Login" label="login"/>
 <P></P>
             <faces:command_button name="Login" image="duke.gif"/>
+<P></P>
+            <faces:selectboolean_checkbox name="Checkbox" value="Checker" label="Check this"/>
         </faces:form>
     </faces:useFaces>
 </HTML>
