@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.11 2001/12/20 22:26:39 ofung Exp $
+ * $Id: CheckboxRenderer.java,v 1.12 2001/12/21 00:38:46 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.11 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.12 2001/12/21 00:38:46 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,9 +135,9 @@ public class CheckboxRenderer extends Object implements Renderer {
 
         StringBuffer output = new StringBuffer();
 
-        output.append("<input type=\"checkbox\" ");
+        output.append("<INPUT TYPE=\"CHECKBOX\" ");
         if (wSelectBoolean.isSelected(rc)) {
-            output.append(" checked");
+            output.append(" CHECKED");
         }
 
         // do not render the name and value of the checkbox.The
@@ -158,7 +158,7 @@ public class CheckboxRenderer extends Object implements Renderer {
 
         // render a hiddenField to track the state of the checkbox
         output.append(" ");
-        output.append ("<input type=\"hidden\" name=\"");
+        output.append ("<INPUT TYPE=\"HIDDEN\" NAME=\"");
         output.append ( hiddenFieldname );
         output.append ("\">");
  

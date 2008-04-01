@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.10 2001/12/20 22:26:39 ofung Exp $
+ * $Id: HyperlinkRenderer.java,v 1.11 2001/12/21 00:38:46 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.10 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.11 2001/12/21 00:38:46 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -132,18 +132,18 @@ public class HyperlinkRenderer extends Object implements Renderer {
         Assert.assert_it(outputMethod != null );
  
         StringBuffer output = new StringBuffer();
-        output.append("<a href=");
+        output.append("<A HREF=\"");
         output.append(wCommand.getAttribute(rc, "target"));
-        output.append(">");
+        output.append("\">");
         if (wCommand.getAttribute(rc, "image") != null) {
-            output.append("<img src=");
+            output.append("<IMAGE SRC=\"");
             output.append(wCommand.getAttribute(rc, "image"));
-            output.append(">");
+            output.append("\">");
         }
         if (wCommand.getAttribute(rc, "text") != null) {
             output.append(wCommand.getAttribute(rc, "text"));
         }
-        output.append("</a>");
+        output.append("</A>");
 
         outputMethod.writeText(output.toString());
         outputMethod.flush(); 

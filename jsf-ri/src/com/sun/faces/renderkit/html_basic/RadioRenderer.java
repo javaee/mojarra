@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.3 2001/12/20 22:26:40 ofung Exp $
+ * $Id: RadioRenderer.java,v 1.4 2001/12/21 00:38:46 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.3 2001/12/20 22:26:40 ofung Exp $
+ * @version $Id: RadioRenderer.java,v 1.4 2001/12/21 00:38:46 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,17 +134,17 @@ public class RadioRenderer extends Object implements Renderer {
 	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
 
         StringBuffer output = new StringBuffer();
-        output.append("<input type=radio");
+        output.append("<INPUT TYPE=\"RADIO\"");
 
         if ((null != selectedValue) &&
 	    selectedValue.equals(wSelectOne.getAttribute(rc, "value"))) {
-            output.append(" checked");
+            output.append(" CHECKED");
         }
-        output.append(" name=");
+        output.append(" NAME=\"");
         output.append(wSelectOne.getAttribute(rc, "name"));
-        output.append(" value=");
+        output.append("\" VALUE=\"");
         output.append(wSelectOne.getAttribute(rc, "value"));
-        output.append(">");
+        output.append("\">");
         if (wSelectOne.getAttribute(rc, "label") != null) {
             output.append(" ");
             output.append(wSelectOne.getAttribute(rc, "label"));

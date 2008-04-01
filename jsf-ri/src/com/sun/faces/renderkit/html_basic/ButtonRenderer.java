@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.11 2001/12/20 22:26:39 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.12 2001/12/21 00:38:46 rogerk Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.11 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: ButtonRenderer.java,v 1.12 2001/12/21 00:38:46 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -169,17 +169,20 @@ public class ButtonRenderer extends Object implements Renderer
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
-        output.append("<input type=");
+        output.append("<INPUT TYPE=");
         if (wCommand.getAttribute(rc, "image") != null) {
-            output.append("image src=");
+            output.append("\"IMAGE\" SRC=\"");
             output.append(wCommand.getAttribute(rc, "image"));
-            output.append(" name=");
+            output.append("\"");
+            output.append(" NAME=\"");
             output.append(wCommand.getAttribute(rc, "name"));
+            output.append("\"");
         } else {
             String label = (String)wCommand.getAttribute(rc, "label");
-            output.append("submit name=");
+            output.append("\"SUBMIT\" NAME=\"");
             output.append(wCommand.getAttribute(rc, "name"));
-            output.append(" value=");
+            output.append("\"");
+            output.append(" value=\"");
 	    // Follow the UE Spec for Button:
 	    // http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
             // JavaServerFaces/uispecs/WCommand_Button.html
@@ -187,12 +190,15 @@ public class ButtonRenderer extends Object implements Renderer
                 output.append("&nbsp;&nbsp;");
                 output.append(label);
                 output.append("&nbsp;&nbsp;");
+                output.append("\"");
             } else if (label.length() == 2) {
                 output.append("&nbsp;&nbsp;&nbsp;");
                 output.append(label);
                 output.append("&nbsp;&nbsp;&nbsp;");
+                output.append("\"");
             } else {
                 output.append(label);
+                output.append("\"");
             }
         }
         output.append(">");
