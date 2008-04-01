@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_Input_ValueChangeTag.java,v 1.1 2002/07/23 19:37:30 eburns Exp $
+ * $Id: TextEntry_Input_ValueChangeTag.java,v 1.2 2002/08/09 19:38:11 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -28,7 +28,7 @@ import com.sun.faces.taglib.html_basic.TextEntry_InputTag;
 /**
  *
 
- * @version $Id: TextEntry_Input_ValueChangeTag.java,v 1.1 2002/07/23 19:37:30 eburns Exp $
+ * @version $Id: TextEntry_Input_ValueChangeTag.java,v 1.2 2002/08/09 19:38:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
