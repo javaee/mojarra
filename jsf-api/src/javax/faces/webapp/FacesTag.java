@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.8 2002/06/08 18:18:55 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.9 2002/06/10 18:15:06 craigmcc Exp $
  */
 
 /*
@@ -94,11 +94,7 @@ public abstract class FacesTag extends TagSupport {
      */
     public int getDoStartValue() throws JspException {
 
-        if (component.getRendersChildren()) {
-            return (SKIP_BODY);
-        } else {
-            return (EVAL_BODY_INCLUDE);
-        }
+        return (EVAL_BODY_INCLUDE);
 
     }
 
@@ -107,15 +103,15 @@ public abstract class FacesTag extends TagSupport {
      * <p>An override for the model reference expression associated with our
      * {@link UIComponent}, if not <code>null</code>.</p>
      */
-    protected String modelReference = null;
+    protected String model = null;
 
 
     /**
      * <p>Return the override for the model reference expression.</p>
      */
-    public String getModelReference() {
+    public String getModel() {
 
-        return (this.modelReference);
+        return (this.model);
 
     }
 
@@ -123,11 +119,11 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Set an override for the model reference expression.</p>
      *
-     * @param modelReference The new model reference expression
+     * @param model The new model reference expression
      */
-    public void setModelReference(String model) {
+    public void setModel(String model) {
 
-        this.modelReference = modelReference;
+        this.model = model;
 
     }
 
@@ -147,7 +143,7 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Render the beginning of the {@link UIComponent} that is associated
      * with this tag (via the <code>id</code> attribute), by following these
-     * steps.</p>
+     * steps:</p>
      * <ul>
      * <li>Ensure that an appropriate {@link ResponseWriter} is associated
      *     with the current {@link FacesContext}.  This ensures that encoded
@@ -179,7 +175,7 @@ public abstract class FacesTag extends TagSupport {
      *
      * @exception JspException if an error occurs
      */
-    public int doStart() throws JspException {
+    public int doStartTag() throws JspException {
 
         // Ensure that an appropriate ResponseWriter is available
         context = (FacesContext)
@@ -262,7 +258,7 @@ public abstract class FacesTag extends TagSupport {
      *
      * @exception JspException if an error occurs
      */
-    public int doEnd() throws JspException {
+    public int doEndTag() throws JspException {
 
         // Render the ending of the component associated with this tag
         try {
@@ -293,7 +289,7 @@ public abstract class FacesTag extends TagSupport {
 
         super.release();
         this.id = null;
-        this.modelReference = null;
+        this.model = null;
 
     }
 
@@ -389,8 +385,8 @@ public abstract class FacesTag extends TagSupport {
         component.setRendererType(getRendererType());
 
         // Override other properties as required
-        if (modelReference != null) {
-            component.setModelReference(modelReference);
+        if (model != null) {
+            component.setModel(model);
         }
 
     }
