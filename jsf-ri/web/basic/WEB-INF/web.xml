@@ -20,10 +20,6 @@
         <listener-class>basic.BasicServletContextListener</listener-class>
     </listener>
 
-    <listener>
-        <listener-class>basic.HttpSessionListenerImpl</listener-class>
-    </listener>
-
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

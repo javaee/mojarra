@@ -15,6 +15,8 @@
 	    basename="basic.Resources"
 	    scope="session" var="basicBundle"/>
 
+	<jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
+
        <faces:usefaces>  
         <faces:form id="basicForm" formName="basicForm" >
 
