@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.4 2002/06/12 23:51:05 jvisvanathan Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.5 2002/06/18 18:47:00 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.4 2002/06/12 23:51:05 jvisvanathan Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.5 2002/06/18 18:47:00 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -75,16 +75,12 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 			facesContext.setModelValue(model, comp.getValue());
 		    }
 		    catch (Throwable e) {
-                        // PENDING (visvan) only validation and conversion erros should be put
-                        // in messageList. remove this after confirming with Ed/Craig.
-                        // PENDING (visvan) log error.
-			/*message = "Exception caught during setModelValue for " +
-			    comp.getCompoundId() + "\nThrowable " +
-			    e.toString() + ": " + e.getMessage();
-			facesContext.getMessageList().add(message,
-							  comp.getCompoundId(),
-							  null); */
-			rc = Phase.GOTO_RENDER;
+                        Object[] params = new Object[3];
+                        params[0] = comp.getValue();
+                        params[1] = model;
+                        params[2] = e.getMessage(); 
+			facesContext.getMessageList().add("MSG0005", 
+                            comp.getComponentId(),params);
 		    }
 		}
 		
@@ -123,6 +119,12 @@ public int execute(FacesContext facesContext) throws FacesException
     int rc = Phase.GOTO_NEXT;
     callback = pushValues;
     rc = traverseTreeInvokingCallback(facesContext);
+
+    // If we have gotten one or more errors, go to render phase.
+    //
+    if (facesContext.getMessageList().size() > 0) {
+        rc = Phase.GOTO_RENDER;
+    }
     if (Phase.GOTO_NEXT == rc) {
 	callback = clearValues;
 	rc = traverseTreeInvokingCallback(facesContext);
