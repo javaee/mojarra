@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.4 2001/11/29 21:22:19 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.5 2001/12/01 02:30:54 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -17,6 +17,11 @@
 package com.sun.faces;
 
 import junit.framework.TestCase;
+
+import javax.servlet.*;
+
+import junit.framework.*;
+import org.apache.cactus.*;
 
 import javax.faces.RenderKit;
 import javax.servlet.ServletRequest;
@@ -42,14 +47,14 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.4 2001/11/29 21:22:19 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.5 2001/12/01 02:30:54 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestObjectTable extends TestCase
+public class TestObjectTable extends ServletTestCase
 {
 //
 // Protected Constants

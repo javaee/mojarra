@@ -20,12 +20,16 @@
 
         servlet.jar                   The servlet jar (either 2.2 or 2.3)
 
+        cactus.jar                    The Cactus jar (either for Servlet API
+                                      2.2 or 2.3)
+
+        cactus.ant.jar                The Cactus custom Ant tasks jar
+
+        httpclient.jar                The Cactus httpclient jar
+
         junit.jar                     The JUnit jar
 
-        tomcat.home.32                The home directory of where Tomcat 3.2
-                                      is installed
-
-        tomcat.home.40                The home directory of where Tomcat 4.0
+        tomcat.home                   The home directory of where Tomcat 4.0
                                       is installed
 
         compile.debug                 The debug mode for compilation
@@ -59,24 +63,55 @@
     <!-- Output directory for tests -->
     <property name="out.test.dir" value="${build.home}/test"/>
 
+    <!-- map tomcat.home to tomcat.home.40 -->
+    <property name="tomcat.home.40" value="${tomcat.home}"/>
+
     <!-- Compilation Classpath -->
     <path id="compile.classpath">
       <pathelement location="${servlet.jar}"/>
       <pathelement location="${junit.jar}"/>
+      <pathelement location="${cactus.jar}"/>
+      <pathelement location="${httpclient.jar}"/>
       <pathelement location="${build.home}/classes"/>
-      <pathelement location="${jsf-api.jar}"/>
+      <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
+      <!-- For cactus.properties -->
+      <pathelement location="${conf.test.dir}"/>
     </path>
 
 <!-- ========== Executable Targets ======================================== -->
+
+<!--
+        Initialization of custom Ant tasks
+-->
+    <target name="init">
+
+      <unjar src="${jsf-api.jar}" dest="${build.home}/classes"/>
+
+        <taskdef name="runservertests"
+            classname="org.apache.cactus.ant.RunServerTestsTask">
+            <classpath>
+                <pathelement location="${cactus.ant.jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+        </taskdef>
+
+    </target>
 
 
 <!-- 
         Create directories and copy files for the struts tests
 -->
-    <target name="prepare.test">
+    <target name="prepare.test" depends="init">
 
         <!-- Create target directories for classes -->
         <mkdir dir="${out.test.dir}/classes"/>
+
+        <!-- Create directory where servlet engines will run -->
+        <mkdir dir="${out.test.dir}/servers"/>
+
+        <!-- Create a lib directory where needed libs for the test war will
+             be put -->
+        <mkdir dir="${out.test.dir}/lib"/>
 
     </target>
 
@@ -99,6 +134,137 @@
 
     </target>
 
+    <target name="prepare.test.war" depends="compile.test">
+
+       <copy todir="${out.test.dir}/classes">
+        <fileset dir="${build.home}/classes" includes="**/*.*"/>
+       </copy>
+
+        <!-- Copy needed libs in /lib -->
+        <copy file="${junit.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
+
+        <war warfile="${out.test.dir}/test.war"
+             webxml="${conf.test.dir}/web.xml">
+
+            <classes dir="${out.test.dir}/classes"/>
+
+            <!-- We need to copy the Cactus, JUnit and Struts jars in the war.
+                 This is because if we just put these jars in the global
+                 classpath for the Servlet engine, the Cactus jar might not be
+                 able to load the test case class as the test classes are loaded
+                 by the war classloader. This will depend on servlet engines -->
+
+            <lib dir="${out.test.dir}/lib"/>
+
+        </war>
+
+    </target>
+
+<!--
+        Prepare test directory structure for Tomcat 4.0 servlet engine
+-->
+    <target name="prepare.test.tomcat.40" depends="prepare.test.war" if="tomcat.home.40">
+
+        <property name="out.tomcat.40.dir" value="${out.test.dir}/servers/tomcat40"/>
+        <filter token="out.tomcat.40.full.dir" value="${out.tomcat.40.dir}"/>
+
+        <mkdir dir="${out.tomcat.40.dir}/webapps/test"/>
+        <mkdir dir="${out.tomcat.40.dir}/conf"/>
+
+        <!-- Expand the war file -->
+        <unjar src="${out.test.dir}/test.war" dest="${out.tomcat.40.dir}/webapps/test"/>
+    
+        <!-- Copy configuration files -->
+        <copy file="${conf.test.dir}/tomcat40/server.xml"
+            todir="${out.tomcat.40.dir}/conf" filtering="on"/>
+
+
+    </target>
+
+<!--
+        Run unit tests on Tomcat 4.0 servlet engine
+-->
+    <target name="test.tomcat.40" depends="prepare.test.tomcat.40">
+
+        <!-- Start the servlet engine, wait for it to be started, run the
+             unit tests, stop the servlet engine, wait for it to be stopped.
+             The servlet engine is automatically stopped if the tests fail for
+             any reason.-->
+
+        <runservertests testURL="http://localhost:8080/test"
+            startTarget="start.tomcat.40"
+            stopTarget="stop.tomcat.40"
+            testTarget="run.cactus.test"/>
+
+    </target>
+
+<!--
+        Start Tomcat 4.0 servlet engine
+-->
+    <target name="start.tomcat.40">
+
+<echo message="${out.tomcat.40.dir}"/>
+
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
+            <arg value="-config"/>
+            <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
+            <arg value="start"/>
+            <classpath>
+              <pathelement location="${java.home}/../lib/tools.jar"/>
+              <fileset dir="${tomcat.home.40}">
+                  <include name="bin/bootstrap.jar"/>
+                  <include name="server/catalina.jar"/>
+              </fileset>
+            </classpath>
+        </java>
+
+    </target>
+
+<!--
+        Stop Tomcat 4.0 servlet engine
+-->
+    <target name="stop.tomcat.40">
+
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
+            <arg value="stop"/>
+            <classpath>
+              <fileset dir="${tomcat.home.40}">
+                  <include name="bin/bootstrap.jar"/>
+                  <include name="server/catalina.jar"/>
+              </fileset>
+            </classpath>
+        </java>
+
+    </target>
+
+<!--
+        Start the Cactus test using JUnit test runner.
+-->
+    <target name="run.cactus.test">
+
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+
+            <classpath>
+                <pathelement path="${java.class.path}"/>
+                <pathelement location="${out.test.dir}/classes"/>
+                <!-- For cactus.properties -->
+                <pathelement location="${conf.test.dir}"/>
+            </classpath>
+            <classpath refid="compile.classpath"/>
+
+            <formatter type="plain" usefile="false"/>
+
+            <!-- Suite of tests -->
+            <test name="com.sun.faces.TestObjectTable"/>
+
+        </junit>
+
+    </target>
+
+
     <target name="run.test" depends="compile.test">
 
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
@@ -113,7 +279,6 @@
 
             <!-- Suite of tests -->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
-            <test name="com.sun.faces.TestObjectTable"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
         </junit>
 

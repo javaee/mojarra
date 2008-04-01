@@ -19,6 +19,25 @@
     JSF milestone.  This tld is lifted from the struts tld.
   </info>
 
+  <!-- PENDING(edburns): Spec Compliance: Support the "name" attribute 
+
+http://javaweb.sfbay.sun.com/~aim/faces/jsr-127-archive/msg00124.html
+
+Configuring UI Components
+
+      In a JSP application, the UI component tags will drive the
+      configuration of UI component objects in the scoped namespace.
+      If the "name" tag attribute is set, that name is used as the
+      key in the scoped namespace, else a unique name will be generated
+      automatically by JSF.  If the "scope" tag attribute is set, the
+      object will be placed in that scope, else scope will default to
+      Request.  [Note: for immutable UI components which exist solely
+      to drive rendering (such as static text or images), we may still
+      offer the approach of re-using the tag instance as the component
+      instance to save the extra object].
+
+  -->
+
   <!-- ===================== HTML 3.2 basic tags ====================== -->
 
   <tag>

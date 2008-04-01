@@ -226,19 +226,27 @@
     </java>
   </target>
 
-    <target name="run.test" depends="prepare,compile,compile.test"
-     description="Run unit tests">
-
-        <ant antfile="build-tests.xml" target="run.test"/>
-    
-    </target>
-
     <target name="compile.test" depends="prepare,compile"
      description="Run unit tests">
 
         <ant antfile="build-tests.xml" target="compile.test"/>
     
     </target>
+
+    <target name="run.test" depends="compile.test"
+     description="Run unit tests">
+
+        <ant antfile="build-tests.xml" target="run.test"/>
+    
+    </target>
+
+    <target name="run.cactus.test" depends="compile.test"
+     description="Run unit tests">
+
+        <ant antfile="build-tests.xml" target="test.tomcat.40"/>
+    
+    </target>
+
 
   <target name="main" depends="prepare,compile"/>
 
