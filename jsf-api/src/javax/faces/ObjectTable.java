@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.4 2001/11/17 02:08:10 edburns Exp $
+ * $Id: ObjectTable.java,v 1.5 2001/11/29 21:21:15 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -81,7 +81,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
   VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.4 2001/11/17 02:08:10 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.5 2001/11/29 21:21:15 edburns Exp $
  * 
  * @see	javax.faces.RenderContext#getObjectTable
  *
@@ -123,6 +123,8 @@ public abstract class ObjectTable
     public static Scope SessionScope = null;
 
     public static Scope GlobalScope = null;
+
+    private static ObjectTable instance = null;
 
 /**
   *
@@ -223,6 +225,46 @@ private Scope keyToScope(Object scopeKey) {
 
     public abstract List getScopes();
     public abstract void setScopes(List scopes);
+
+    /**
+
+    * PENDING(edburns): this is a temporary method to allow the static
+    * ObjectTable.getInstance() method to work.  It is called by the
+    * ObjectTableFactoryImpl. <P>
+
+    * PRECONDITION: This method is being called from the ObjectTableImpl
+    * ctor. <P>
+
+    * POSTCONDITION: Subsequent calls to ObjectTable.getInstance() will
+    * return this instance. <P>
+
+    * @param: ot the ObjectTable instance to be set so subsequent calls
+    * to ObjectTable.getInstance() return this instance. 
+
+    * @see ObjectTable#getInstance
+
+    */
+
+    protected static void setInstance(ObjectTable ot) {
+	instance = ot;
+    }
+
+    /**
+
+    * PRECONDITION: ObjectTable.setObjectTable() has been called with
+    * <B>the</B> ObjectTable instance. <P>
+
+    * POSTCONDITION: No change in state. <P>
+    
+    * @result: the singleton ObjectTable instance.
+
+    * @see ObjectTable#setInstance
+
+    */
+
+    public static ObjectTable getInstance() {
+	return instance;
+    }
 }
 
 				   
