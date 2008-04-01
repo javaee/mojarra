@@ -1,20 +1,90 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020607
-jsf-api-spec for this implementation: JSF_20020607.pdf
+jsf-api cvs tag for this implementation: JSF_API_20020614A
+jsf-api-spec for this implementation: JSF_20020614.pdf
 
 
 Major changes/features in this release:
 =======================================
 
-* A "page-url" element has been added to ".xul" files which refers to
-  uri for jsp page.
+[2.4][3.1.8][UIComponent] UIComponent.event() renamed to processEvent().
+Added UIComponent.processEvents() for the default functionality to
+process the event queue for a single component. Event handler can return
+true to trigger transfer to Render Response.
 
-* Faces_Basic webapp has a link and submit button that navigates to
-  another page upon click.
+[6.1][Lifecycle] Added executePhase() method for executing an individual
+phase. Details of lifecycle management are still under discussion.
 
-* Change to a completely "path info" based URI scheme.
+[6.2][PhaseListener] Remove obsolete class. Custom phases can do
+anything that listeners could do, and then some, so listeners were
+redundant.
+
+[5.2][Message] Remove messageId and reference propeties. Former is not
+needed once the localization has taken place, and the latter can be
+established externally.
+
+[5.3][MessageImpl] Added concrete implemenation of Mesasge (should
+really be named MessageBase though).
+
+[5.5][FacesContextFactory] createFacesContext() renamed to
+getFacesContext().
+
+[3.3][TreeFactory] createTree() renamed to getTree().
+
+[5.8][FacesContextFactory][FacesServlet] Simplify to a single
+getFacesContext() method that takes a Lifecycle instance, rather than a
+Lifecycle identifier, as the last parameter.
+
+[9.1.3][FacesServlet] Lifecycle identifier to use is now configurable
+via a context initialization parameter.
+
+[7.3][RenderKitFactory] createRenderKit() renamed to getRenderKit().
+
+[Renderer] Implement attribute descriptor support
+
+[2.7][5.1.4][ApplicationHandler] Event processing methods collapsed into
+single processEvent() method. Applications are explicitly allowed to
+queue Messages. Added FacesContext.getApplicationEventsCount().
+
+[6.4][ViewHandler] Added new pluggable interface for how the Render
+Response phase actually performs its output. Default implementation must
+support RD.forward().
+
+[6.5][LifecycleFactory] createLifecycle() renamed to getLifecycle().
+Added missing addLifecycle() method. Removed -- at least for now --
+registerBefore() and registerAfter() since an implementation can
+completely configure its own Lifecycle before calling addLifecycle() to
+register it. This area is still under discussion so will likely change
+some more.
+
+[2.4][3.1.8][5.1.8][UIComponent][FacesContext] Migrate queueing of
+request events from UIComponent to FacesContext.
+
+[5.1.5][FacesContext] Removed obsolete MessageList
+class (replaced by MessageResources support), and put message queuing
+methods directly on FacesContext.
+
+[5.1.6][FacesContext] Removed getPhaseId() and setPhaseId() in
+preparation for possibly eliminating formal phase identifiers.
+
+[5.6][MessageResources] Added new class to represent a set of
+localizable messages keyed by message ids. More than one
+MessageResources can be used in the same JSF app.
+
+[5.7][MessageResourcesFactory] Added factory class for MessageResources
+instances. Two standard instances (one for API classes, one for
+implementation classes) must be supported, but apps and component
+libraries can also add their own. You should be able to reuse a lot of
+the code in .03 that supported this concept.
+
+[4.8][4.9][UISelectMany][UISelectOne] Now accept Object types instead of
+String types only. Supports arrays and Lists as the "items" property
+value, as well as the value pointed at by "itemsModelReference".
+Abstracted common logic into new UISelectBase class (not public).
+
+AttributeDescriptor Support is implemented
+
 
 Known Issues With This Release
 ==============================
@@ -78,3 +148,5 @@ Known Issues With This Release
 
 *  There is no way to register validators in XUL.
 
+*  AttributeDescriptor support happens all the time, even though it's
+   only used at design time.
