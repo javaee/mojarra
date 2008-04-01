@@ -13,35 +13,44 @@
 -->
 <project name="JSF-API" default="main" basedir=".">
 
-<!-- ************ Per user local properties ******************************* -->
-
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
   <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- Commons local     -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
 
-  <property name="Name" value="jsf-api"/>
-  <property name="name" value="jsf-api"/>
-  <property name="version" value="0.4"/>
+  <property name="Name"             value="jsf-api"/>
+  <property name="name"             value="jsf-api"/>
+  <property name="version"          value="0.04"/>
 
-  <property name="debug" value="true" />
-  <property name="deprecation" value="false" />
-  <property name="optimize" value="false" />
+  <property name="debug"            value="true" />
+  <property name="deprecation"      value="false" />
+  <property name="optimize"         value="false" />
 
-  <property name="src.dir" value="src"/>
-  <property name="java.dir" value="${src.dir}"/>
-  
-  <property name="build.dir" value="build"/>
-  <property name="build.classes" value="${build.dir}/classes"/>
-  <property name="build.lib" value="${build.dir}/lib"/>
-  <property name="build.javadocs" value="${build.dir}/javadocs"/>
+  <property name="lib.home"         value="${basedir}/lib"/>
+  <property name="src.dir"          value="${basedir}/src"/>
+  <property name="test.dir"         value="${basedir}/test"/>
 
-  <!-- The base directory for dependent jars -->
-  <property name="lib.home" value="${basedir}/lib"/>
-  <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
+  <property name="junit.jar"        value="${lib.home}/junit.jar"/>
+  <property name="servlet.jar"      value="${lib.home}/servlet.jar"/>
 
-  <path id="classpath">
-    <pathelement location="${servlet.jar}"/>
+  <property name="build.dir"        value="build"/>
+  <property name="build.classes"    value="${build.dir}/classes"/>
+  <property name="build.lib"        value="${build.dir}/lib"/>
+  <property name="build.test"       value="${build.dir}/test"/>
+  <property name="build.javadocs"   value="${build.dir}/javadocs"/>
+
+  <path id="compile.classpath">
     <pathelement location="${build.classes}"/>
+    <pathelement location="${servlet.jar}"/>
+  </path>
+
+  <property name="test.failonerror" value="true"/>
+  <property name="test.runner"      value="junit.textui.TestRunner"/>
+
+
+  <path id="test.classpath">
+    <pathelement location="${build.classes}"/>
+    <pathelement location="${test.classes}"/>
+    <pathelement location="${junit.jar}"/>
+    <pathelement location="${servlet.jar}"/>
   </path>
 
 
@@ -57,7 +66,7 @@
 
   <!-- 
        ===================================================================
-         Build the code           
+         Build the API code
        =================================================================== 
   -->
   <target name="build" depends="prepare">
@@ -65,16 +74,42 @@
     <mkdir dir="${build.classes}"/>
     <mkdir dir="${build.lib}"/>
     
-    <javac srcdir="${java.dir}"
+    <javac srcdir="${src.dir}"
            destdir="${build.classes}"
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}" >
-      <classpath refid="classpath" />
+      <classpath refid="compile.classpath" />
     </javac>
     
     <copy todir="${build.classes}">
-      <fileset dir="${java.dir}">
+      <fileset dir="${src.dir}">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+
+  </target>
+
+
+  <!-- 
+       ===================================================================
+         Build the test code
+       =================================================================== 
+  -->
+  <target name="build.test" depends="build">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.test}"/>
+    
+    <javac srcdir="${test.dir}"
+           destdir="${build.test}"
+           debug="${debug}"
+           deprecation="${deprecation}"
+           optimize="${optimize}" >
+      <classpath refid="test.classpath" />
+    </javac>
+    
+    <copy todir="${build.test}">
+      <fileset dir="${test.dir}">
         <exclude name="**/*.java" />
       </fileset>
     </copy>
@@ -88,11 +123,27 @@
        =================================================================== 
   -->
 
+
+  <target name="test" depends="build.test"
+   description="Run all JUnit test cases"
+       depends="test.uicomponent">
+  </target>
+
+  <target name="test.uicomponent" depends="build.test">
+    <echo message="Running UIComponent tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIComponentTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+
 <!--
   <target name="test-finder" depends="build" 
    description="Run the factory test">
     <java classname="javax.faces.FactoryFinder" fork="yes">
-      <classpath refid="classpath" />
+      <classpath refid="compile.classpath" />
     </java>
   </target>
 -->
@@ -143,7 +194,7 @@
   
   <target name="javadoc_check">
     <uptodate property="javadoc.notrequired" targetfile="${build.javadocs}/packages.html" >
-        <srcfiles dir= "${java.dir}" includes="**/*.java"/>
+        <srcfiles dir= "${src.dir}" includes="**/*.java"/>
     </uptodate>
   </target>
 
@@ -152,14 +203,14 @@
           description="Create the JavaDoc API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="javax.*"
-             sourcepath="${java.dir}"
+             sourcepath="${src.dir}"
              destdir="${build.javadocs}"
              author="true"
              version="true" private="true"
              windowtitle="${Name} API"
              doctitle="${Name}"
              bottom="Copyright &#169; 2002 Sun Microsystems, Inc. All Rights Reserved.">
-      <classpath refid="classpath"/>
+      <classpath refid="compile.classpath"/>
     </javadoc>
   </target>
   
