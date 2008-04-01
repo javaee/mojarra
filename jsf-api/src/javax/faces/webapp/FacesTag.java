@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.4 2002/06/05 21:46:55 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.5 2002/06/06 02:37:16 craigmcc Exp $
  */
 
 /*
@@ -181,7 +181,7 @@ public abstract class FacesTag extends TagSupport {
         context = (FacesContext)
             pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
                                      PageContext.REQUEST_SCOPE);
-        if (context != null) { // FIXME - i18n
+        if (context == null) { // FIXME - i18n
             throw new JspException("Cannot find FacesContext");
         }
         ResponseWriter writer = context.getResponseWriter();
@@ -235,8 +235,6 @@ public abstract class FacesTag extends TagSupport {
                 throw new JspException(e);
             }
         }
-
-        // FIXME - what about rendersChildren???
 
         // Return the appropriate control value
         return (getDoStartValue());
