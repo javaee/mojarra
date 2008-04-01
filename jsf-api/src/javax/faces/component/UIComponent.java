@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.18 2002/05/21 01:44:18 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.19 2002/05/22 17:47:26 craigmcc Exp $
  */
 
 /*
@@ -28,123 +28,10 @@ import javax.faces.render.Renderer;
  * organized into trees under a root <code>UIComponent</code> that represents
  * the entire request or response.</p>
  *
- * <h3>Properties</h3>
- *
- * <p>Each <code>UIComponent</code> instance supports the following
- * JavaBean properties to describe its render-independent characteristics:</p>
- * <ul>
- * <li><strong>componentId</strong> (java.lang.String) - An identifier for this
- *     component, which must be unique across all children of the parent
- *     node in a tree.  Identifiers may be composed of letters, digits,
- *     dashes ('-'), and underscores ('_').  To minimize the size of
- *     responses rendered by JavaServer Faces, it is recommended that
- *     identifiers be as short as possible.</li>
- * <li><strong>componentType</strong> - The canonical name of the component
- *     type represented by this <code>UIComponent</code> instance.  For all
- *     standard component types, this value is represented by a manifest
- *     constant String named <code>TYPE</code> in the implementation class.
- *     To facilitate introspection by tools, it is recommended that user
- *     defined <code>UIComponent</code> subclasses follow the same
- *     convention.</li>
- * <li><strong>compoundId</strong> (java.lang.String) - A unique (within
- *     the component tree containing this component) identifier for the
- *     current node, which begins with a slash character ('/'), followed by
- *     the <code>componentId</code> of each parent of the current component
- *     (from the top down) followed by a slash character ('/'), and ending
- *     with the <code>componentId</code> of this component.  [READ-ONLY]</li>
- * <li><strong>facesContext</strong> (javax.faces.context.FacesContext) -
- *     For the root component in a component tree, the {@link FacesContext}
- *     within which this component tree is registered.</p>
- * <li><strong>model</strong> (java.lang.STring) - A symbolic expression
- *     used to attach this component to <em>model</em> data in the underlying
- *     application (typically a JavaBean property).  The syntax of this
- *     expression corresponds to the expression language described in
- *     Appendix A of the <em>JavaServer Pages Standard Tag Library</em>
- *     (version 1.0) specification.</li>
- * <li><strong>parent</strong> (javax.faces.component.UIComponent) - The
- *     parent <code>UIComponent</code> in the tree within which this component
- *     is nested.  The root node of a component tree will not have a parent.
- *     </li>
- * <li><strong>rendererType</strong> (java.lang.String) - Logical identifier
- *     of the type of {@link Renderer} to use when rendering this component
- *     to a response.  If not specified, this component must render itself
- *     directly in the <a href="#render(javax.faces.context.FacesContext)">
- *     render()</a> method.</li>
- * <li><strong>rendersChildren</strong> (java.lang.Boolean) - If set to
- *     <code>true</code>, this component (or the <code>Renderer</code> to
- *     which rendering is delegated) takes responsibility for rendering all
- *     child components.  If set to <code>false</code>, the JavaServer Faces
- *     implementation will be responsible for calling the rendering methods
- *     for all child components.</li>
- * <li><strong>value</strong> - The local value of this
- *     <code>UIComponent</code>, which represents a server-side cache of the
- *     value most recently entered by a user.  <strong>FIXME</strong> -
- *     discussions about when this value is cleared, how validation and
- *     caching of converted values works, and so on.</li>
- * </ul>
- *
- * <h3>Attributes</h3>
- *
- * <p>Each <code>UIComponent</code> instance supports a set of dynamically
- * defined <em>attributes</em>, normally used to describe the render-dependent
- * characteristics of the component.  In addition, properties that represent
- * the render-independent characteristics of the component MUST be gettable
- * and settable via the attributes access methods as well.</p>
- *
- * <p>Individual <code>RenderKit</code> implementations will support unique
- * sets of render-dependent attributes for a given component type.  The names
- * and characteristics of these attributes can be determined by acquiring a
- * <code>Renderer</code> of the type specified by the <code>rendererType</code>
- * property, and calling its <code>getAttributeNames()</code> method.</p>
- *
- * <h3>Component Trees and Navigation</h3>
- *
- * <p>Every <code>UIComponent</code> instance can belong to a tree of
- * components representing the current request or response.  This is
- * represented by the existence of a <code>parent</code> property to
- * represent the parent node, and a set of methods that facilitate
- * manipulation of the set of children belonging to the current node.</p>
- *
- * <p>Further, a unique (within a component tree) identifier, accessible
- * via the <code>compoundId</code> read-only property, can be calculated
- * for each component in the tree.  The syntax and semantics of compound
- * identifiers match the corresponding notions in operating system filesystems,
- * as well as URL schemes that support hierarchical identifiers (such as
- * <code>http</code>), where a leading slash character ('/') identifies
- * the root of the component tree, and subordinate nodes of the tree are
- * selected by their <code>componentId</code> property followed by a slash.</p>
- *
- * <p><code>UIComponent</code> supports navigation from one component to
- * another, within the component tree containing this component, using
- * absolute and relative path expressions.  See
- * <a href="#findComponent(java.lang.String)">findComponent()</a> for
- * more information.</p>
- *
- * <h3>Events</h3>
- *
- * <p>Each component can be the target of zero or more events, which are
- * typically fired during the <em>Apply Request Values</em> phase of the
- * request processing lifecycle, by some other component that is processing
- * a state change that affects the receiving component as well.  During the
- * <em>Handle Request Events</em> phase, the <code>events()</code> method
- * of each <code>UIComponent</code> will be called, which can then iterate
- * through the events queued for this component by calling the
- * <code>getEvents()</code> method.</p>
- *
- * <h3>Validators</h3>
- *
- * <p>Each component can be associated with zero or more {@link Validator}
- * instances, used to check the correctness of the state of this component,
- * as represented in the current request.  Each such {@link Validator} will
- * be called during the <em>Process Validations</em> Phase of the request
- * processing lifecycle, and given the opportunity to add error messages
- * to the message list associated with our {@link FacesContext}.</p>
-
- * <h3>Lifecyle Phase Processing</h3>
- *
- * <p><strong>FIXME</strong> - Document how decode and
- * encode calls get delegated to the {@link Renderer}, if a
- * <code>rendererType</code> is specified.</p>
+ * <p>Concrete subclasses of <code>UIComponent</code> must implement the
+ * <code>getComponentType()</code> method.  Component types are used to
+ * select the appropriate {@link Renderer} to be used for decoding and
+ * encoding, if the <code>rendererType</code> property is non-null.</p>
  */
 
 public abstract class UIComponent {
@@ -321,10 +208,15 @@ public abstract class UIComponent {
      */
     public String getCompoundId() {
 
+        // Special handling for root node
+        UIComponent parent = getParent();
+        if (parent == null) {
+            return ("/");
+        }
+
         // Accumulate the component identifiers of our ancestors
         ArrayList list = new ArrayList();
         list.add(getComponentId());
-        UIComponent parent = getParent();
         while (parent != null) {
             list.add(0, parent.getComponentId());
             parent = parent.getParent();
@@ -343,32 +235,7 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the {@link FacesContext} within which the component tree
-     * (for which this component is the root node) is registered.</p>
-     */
-    public FacesContext getFacesContext() {
-
-        return ((FacesContext) getAttribute("facesContext"));
-
-    }
-
-
-    /**
-     * <p>Set the {@link FacesContext} within which the component tree
-     * (for which this component is the root node) is registered.</p>
-     *
-     * @param context The new {@link FacesContext}, or <code>null</code>
-     *  to disconnect this node from any context
-     */
-    public void setFacesContext(FacesContext context) {
-
-        setAttribute("facesContext", context);
-
-    }
-
-
-    /**
-     * <p>Return the symbolic model reference expression of this
+     * <p>Return the model reference expression of this
      * <code>UIComponent</code>, if any.</p>
      */
     public String getModel() {
@@ -379,10 +246,10 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Set the symbolic model reference expression of this
+     * <p>Set the model reference expression of this
      * <code>UIComponent</code>.</p>
      *
-     * @param model The new symbolic model reference expression, or
+     * @param model The new model reference expression, or
      *  <code>null</code> to disconnect this component from any model data
      */
     public void setModel(String model) {
@@ -508,16 +375,23 @@ public abstract class UIComponent {
      *     return the corresponding model value, if possible; else</li>
      * <li>Return <code>null</code>.</li>
      * </ul>
+     *
+     * @param context FacesContext within which to evaluate the model
+     *  reference expression, if necessary
+     *
+     * @exception NullPointerException if <code>context</code> is null
      */
-    public Object currentValue() {
+    public Object currentValue(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         Object value = getAttribute("value");
         if (value != null) {
             return (value);
         }
         String model = (String) getAttribute("model");
         if (model != null) {
-            FacesContext context = findComponent("/").getFacesContext();
             if (context != null) {
                 return (context.getModelValue(model));
             }
@@ -552,9 +426,14 @@ public abstract class UIComponent {
      *
      * @exception IllegalArgumentException if this component identifier is
      *  already in use by one of our children
+     * @exception NullPointerException if this component identifier
+     *  is <code>null</code>
      */
     private void checkComponentId(String componentId) {
 
+        if (componentId == null) {
+            throw new NullPointerException();
+        }
         if (isChildrenAllocated()) {
             Iterator kids = children.iterator();
             while (kids.hasNext()) {
@@ -594,32 +473,8 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Insert the specified {@link UIComponent} at the specified
-     * position in the child list.</p>
-     *
-     * @param index Zero-relative index at which to add this
-     *  {@link UIComponent}
-     * @param component {@link UIComponent} to be added
-     *
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component is not unique within the children of
-     *  this component
-     * @exception IndexOutOfBoundsException if the index is out of range
-     *  ((index < 0) || (index &gt;= size()))
-     * @exception NullPointerException if <code>component</code> is null
-     */
-    public void addChild(int index, UIComponent component) {
-
-        checkComponentId(component.getComponentId());
-        getChildList().add(index, component);
-        component.setParent(this);
-
-    }
-
-
-    /**
-     * <p>Append the specified {@link UIComponent} to the end of the
-     * child list.</p>
+     * <p>Append the specified <code>UIComponent</code> to the end of the
+     * child list for this component.</p>
      *
      * @param component {@link UIComponent} to be added
      *
@@ -638,9 +493,33 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Remove all child {@link UIComponent}s from the child list,
-     * recursively performing this operation when a child {@link UIComponent}
-     * also has children.</p>
+     * <p>Insert the specified <code>UIComponent</code> at the specified
+     * position in the child list for this component.</p>
+     *
+     * @param index Zero-relative index at which to add this
+     *  <code>UIComponent</code>
+     * @param component Component to be added
+     *
+     * @exception IllegalArgumentException if the component identifier
+     *  of the new component is not unique within the children of
+     *  this component
+     * @exception IndexOutOfBoundsException if the index is out of range
+     *  ((index < 0) || (index &gt;= size()))
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public void addChild(int index, UIComponent component) {
+
+        checkComponentId(component.getComponentId());
+        getChildList().add(index, component);
+        component.setParent(this);
+
+    }
+
+
+    /**
+     * <p>Remove all child <code>UIComponent</code>s from the child list,
+     * recursively performing this operation when a child
+     * <code>UIComponent</code> also has children.</p>
      */
     public void clearChildren() {
 
@@ -659,28 +538,24 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return <code>true</code> if the specified {@link UIComponent}
+     * <p>Return <code>true</code> if the specified <code>UIComponent</code>
      * is a direct child of this <code>UIComponent</code>; otherwise,
      * return <code>false</code>.</p>
      *
-     * @param component {@link UIComponent} to be checked
+     * @param component Component to be checked
      *
      * @exception NullPointerException if <code>component</code> is null
      */
     public boolean containsChild(UIComponent component) {
 
-        if (isChildrenAllocated()) {
-            return (getChildList().contains(component));
-        } else {
-            return (false);
-        }
+        return (component.getParent() == this);
 
     }
 
 
     /**
-     * <p>Return the {@link UIComponent} at the specified position
-     * in the child list.</p>
+     * <p>Return the <code>UIComponent</code> at the specified position
+     * in the child list for this component.</p>
      *
      * @param index Position of the desired component
      *
@@ -803,7 +678,8 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the number of {@link UIComponent}s on the child list.</p>
+     * <p>Return the number of <code>UIComponent</code>s on the child list
+     * for this component.</p>
      */
     public int getChildCount() {
 
@@ -817,8 +693,11 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the child {@link UIComponent}s
-     * of this <code>UIComonent</code> in the proper sequence.</p>
+     * <p>Return an <code>Iterator</code> over the child
+     * <code>UIComponent</code>s of this <code>UIComonent</code>,
+     * in the order of their position in the child list.  If this
+     * component has no children, an empty <code>Iterator</code>
+     * is returned.</p>
      */
     public Iterator getChildren() {
 
@@ -832,10 +711,10 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Remove the child {@link UIComponent} at the specified position
-     * in the child list.</p>
+     * <p>Remove the child <code>UIComponent</code> at the specified position
+     * in the child list for this component.</p>
      *
-     * @param index Position of the desired component
+     * @param index Position of the component to be removed
      *
      * @exception IndexOutOfBoundsException if the index is out of range
      *  ((index < 0) || (index &gt;= size()))
@@ -850,20 +729,25 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Remove the child {@link UIComponent} from the child list.</p>
+     * <p>Remove the child <code>UIComponent</code> from the child list
+     * for this component.</p>
      *
-     * @param component {@link UIComponent} to be removed
+     * @param component Child component to be removed
      *
+     * @exception IllegalArgumentException if <code>component</code> is
+     *  not a child of this component
      * @exception NullPointerException if <code>component</code> is null
      */
     public void removeChild(UIComponent component) {
 
         if (component == null) {
-            throw new NullPointerException("remove");
+            throw new NullPointerException("removeChild");
         }
         if (containsChild(component)) {
             getChildList().remove(component);
             component.setParent(null);
+        } else {
+            throw new IllegalArgumentException("removeChild");
         }
 
     }
@@ -1060,50 +944,9 @@ public abstract class UIComponent {
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
      */
-    protected void event(FacesContext context, FacesEvent event) {
+    public void event(FacesContext context, FacesEvent event) {
 
         ; // Default implementation does nothing
-
-    }
-
-
-    /**
-     * <p>Process each event queued to this <code>UIComponent</code>.  This
-     * method will be called during the <em>Handle Request Events</em> phase
-     * of the request processing lifecycle.</p>
-     *
-     * <p><strong>FIXME</strong> - How can we indicate that our phase should
-     * go directly to rendering, instead of proceeding?</p>
-     *
-     * @param context FacesContext for the request we are processing
-     */
-    public void events(FacesContext context) {
-
-        Iterator events = getEvents();
-        while (events.hasNext()) {
-            event(context, (FacesEvent) events.next());
-        }
-
-    }
-
-
-    /**
-     * <p>Give each {@link Validator} associated with this
-     * <code>UIComponent</code> an opportunity to check for correctness,
-     * and add error messages to the {@link MessageList} associated with
-     * the specified {@link FacesContext}.  This method will be called
-     * (for each component) during the <em>Process Validations</em>
-     * phase of the request processing lifecycle.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     */
-    public void validate(FacesContext context) {
-
-        Iterator validators = getValidators();
-        while (validators.hasNext()) {
-            ((Validator) validators.next()).validate(context, this);
-        }
-
 
     }
 

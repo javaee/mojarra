@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.5 2002/05/18 20:33:46 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.6 2002/05/22 17:47:26 craigmcc Exp $
  */
 
 /*
@@ -106,7 +106,7 @@ public class UIOutput extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value = (String) currentValue();
+        String value = (String) currentValue(context);
         if (value == null) {
             throw new NullPointerException();
         }

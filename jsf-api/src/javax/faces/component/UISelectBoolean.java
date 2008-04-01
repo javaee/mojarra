@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.4 2002/05/18 20:33:46 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.5 2002/05/22 17:47:26 craigmcc Exp $
  */
 
 /*
@@ -136,7 +136,7 @@ public class UISelectBoolean extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        Boolean value = (Boolean) currentValue();
+        Boolean value = (Boolean) currentValue(context);
         if (value == null) {
             throw new NullPointerException();
         }

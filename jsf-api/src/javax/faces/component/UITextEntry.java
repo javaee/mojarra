@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.2 2002/05/18 20:33:47 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.3 2002/05/22 17:47:26 craigmcc Exp $
  */
 
 /*
@@ -132,7 +132,7 @@ public class UITextEntry extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value = (String) currentValue();
+        String value = (String) currentValue(context);
         if (value == null) {
             value = "";
         }
