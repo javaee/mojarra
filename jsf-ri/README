@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020730B
-jsf-api-spec for this implementation: JSF_20020730.pdf
+jsf-api cvs tag for this implementation: JSF_API_20020826
+jsf-api-spec for this implementation: JSF_20020826.pdf
 
 Installation Notes
 ==================
@@ -12,14 +12,6 @@ container, such as that distributed with Java Web Services Developer
 Pack <http://java.sun.com/webservices/webservicespack.html>.  Please
 follow the instructions for your container and have it working well in
 your environment before continuing with these installation notes.
-
-To deploy the demo webapp to your container, simply copy the file
-example/cardemo.war to the webapps directory in your container.  To view
-the demo webapp, start your container, and visit:
-
-http://<YOUR_CONTAINER_HOST>:<YOUR_CONTAINER_PORT>/cardemo/
-
-in your web browser.
 
 To use JavaServer (tm) Faces in your own webapp, you need to follow the
 online documentation at <http://java.sun.com/j2ee/javaserverfaces/>.
@@ -38,9 +30,13 @@ Major changes/features in this release:
   <fmt:setBundle> tag. There is a dependency on jstl.jar and standard.jar
   due to this feature.
 
+* We have most Standard RenderKit components implemented
+
 
 Known Issues With This Release
 ==============================
+
+* The StandardRenderKit.jsp page in the basic webapp crashes tomcat.
 
 * Due to a bug in JSTL 1.0, you must have the jstl.jar and standard.jar in
   your WEB-INF/lib directory of each webapp.  It is not sufficient to
