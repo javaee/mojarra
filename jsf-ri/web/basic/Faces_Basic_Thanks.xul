@@ -8,7 +8,7 @@
 
 <label id="thanksLabel" value="Thanks for visiting the 'Basic Components Page'" />
 
-<link id="mylink" target="/Faces_Basic.xul" text="Back To Components Page" value="mylink"/>
+<link id="mylink" target="/faces/Faces_Basic.xul" text="Back To Components Page" value="mylink"/>
 
 </window>
 
