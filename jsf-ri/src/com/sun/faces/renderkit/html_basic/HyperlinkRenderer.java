@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.4 2001/11/15 18:49:15 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -18,8 +18,10 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
+import javax.faces.WCommand;
 import javax.faces.WComponent;
 
 import org.mozilla.util.Assert;
@@ -33,104 +35,118 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.4 2001/11/15 18:49:15 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class HyperlinkRenderer extends Object implements Renderer
-{
-//
-// Protected Constants
-//
+public class HyperlinkRenderer extends Object implements Renderer {
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public HyperlinkRenderer()
-{
-    super();
-    // ParameterCheck.nonNull();
-    this.init();
-}
+    public HyperlinkRenderer() {
+        super(); 
+        // ParameterCheck.nonNull();
+        this.init();
+    }
 
-protected void init()
-{
-    // super.init();
-}
+    protected void init() {
+        // super.init();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-//
-// Methods From Renderer
-//
+    //
+    // Methods From Renderer
+    //
 
-public boolean supportsType(WComponent c) {
-    return false;
-}
+    public boolean supportsType(WComponent c) { 
+        return false;
+    }
 
-public boolean supportsType(String componentType) {
-    return false;
-}
+    public boolean supportsType(String componentType) { 
+        return false;
+    }
 
-public Iterator getSupportedAttributeNames(String componentType) {
-    return null;
-}
+    public Iterator getSupportedAttributeNames(String componentType) {
+        return null;
+    }
 
-public void renderStart(RenderContext rc, WComponent c) throws IOException {
-    return;
-}
+    public void renderStart(RenderContext rc, WComponent c) throws IOException {
+        OutputMethod outputMethod = rc.getOutputMethod();
+        WCommand wCommand = (WCommand)c;
+        StringBuffer output = new StringBuffer();
+        output.append("<a href=");
+        output.append(wCommand.getAttribute(rc, "target"));
+        output.append(">");
+        if (wCommand.getAttribute(rc, "image") != null) {
+            output.append("<img src=");
+            output.append(wCommand.getAttribute(rc, "image"));
+            output.append(">");
+        }
+        if (wCommand.getAttribute(rc, "text") != null) {
+            output.append(wCommand.getAttribute(rc, "text"));
+        }
+        output.append("</a>");
 
-public void renderChildren(RenderContext rc, WComponent c) throws IOException {
-    return;
-}
+        outputMethod.writeText(output.toString());
+        outputMethod.flush(); 
+    }
 
-public void renderEnd(RenderContext rc, WComponent c) throws IOException {
-    return;
-}
+    public void renderChildren(RenderContext rc, WComponent c) 
+        throws IOException {
+        return;
+    }
 
-public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
-    return false;
-}
+    public void renderEnd(RenderContext rc, WComponent c) throws IOException {
+        return;
+    }
+
+    public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
+        return false;
+    }
 
 
-// ----VERTIGO_TEST_START
+    // ----VERTIGO_TEST_START
 
-//
-// Test methods
-//
+    //
+    // Test methods
+    //
 
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    HyperlinkRenderer me = new HyperlinkRenderer();
-    Log.setApplicationName("HyperlinkRenderer");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HyperlinkRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $");
+    public static void main(String [] args) {
+        Assert.setEnabled(true);
+        HyperlinkRenderer me = new HyperlinkRenderer();
+        Log.setApplicationName("HyperlinkRenderer");
+        Log.setApplicationVersion("0.0");
+        Log.setApplicationVersionDate("$Id: HyperlinkRenderer.java,v 1.4 2001/11/15 18:49:15 rogerk Exp $");
     
-}
+    }
 
-// ----VERTIGO_TEST_END
+    // ----VERTIGO_TEST_END
 
 } // end of class HyperlinkRenderer
