@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.20 2002/08/07 17:04:59 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.21 2002/08/07 23:31:15 craigmcc Exp $
  */
 
 /*
@@ -201,7 +201,7 @@ public abstract class FacesTag extends TagSupport {
 
         // Render the beginning of the component associated with this tag
         try {
-            component.encodeBegin(context);
+            encodeBegin();
         } catch (IOException e) {
             component = null;
             context = null;
@@ -259,9 +259,9 @@ public abstract class FacesTag extends TagSupport {
         boolean rendersChildren = component.getRendersChildren();
         try {
             if (rendersChildren) {
-                component.encodeChildren(context);
+                encodeChildren();
             }
-            component.encodeEnd(context);
+            encodeEnd();
         } catch (IOException e) {
             throw new JspException(e);
         } finally {
@@ -301,6 +301,54 @@ public abstract class FacesTag extends TagSupport {
      * to this tag.  Concrete subclasses must override this method.</p>
      */
     public abstract UIComponent createComponent();
+
+
+    /**
+     * <p>Delegate to the <code>encodeBegin()</code> method of our
+     * corresponding {@link UIComponent}.  This method is called from
+     * <code>doStartTag()</code>.  Normally, delegation occurs unconditionally;
+     * however, this method is abstracted out so that advanced tags can
+     * conditionally perform this call.
+     *
+     * @exception IOException if an input/output error occurs
+     */
+    protected void encodeBegin() throws IOException {
+
+        component.encodeBegin(context);
+
+    }
+
+
+    /**
+     * <p>Delegate to the <code>encodeChildren()</code> method of our
+     * corresponding {@link UIComponent}.  This method is called from
+     * <code>doStartTag()</code>.  Normally, delegation occurs unconditionally;
+     * however, this method is abstracted out so that advanced tags can
+     * conditionally perform this call.
+     *
+     * @exception IOException if an input/output error occurs
+     */
+    protected void encodeChildren() throws IOException {
+
+        component.encodeChildren(context);
+
+    }
+
+
+    /**
+     * <p>Delegate to the <code>encodeEnd()</code> method of our
+     * corresponding {@link UIComponent}.  This method is called from
+     * <code>doStartTag()</code>.  Normally, delegation occurs unconditionally;
+     * however, this method is abstracted out so that advanced tags can
+     * conditionally perform this call.
+     *
+     * @exception IOException if an input/output error occurs
+     */
+    protected void encodeEnd() throws IOException {
+
+        component.encodeEnd(context);
+
+    }
 
 
     /**
@@ -457,7 +505,7 @@ public abstract class FacesTag extends TagSupport {
         ResponseWriter writer = context.getResponseWriter();
         if ((writer == null) ||
             !(writer instanceof JspResponseWriter)) {
-            writer = new JspResponseWriter(pageContext.getOut());
+            writer = new JspResponseWriter(pageContext);
             context.setResponseWriter(writer);
         }
 

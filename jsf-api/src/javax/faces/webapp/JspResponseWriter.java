@@ -1,5 +1,5 @@
 /*
- * $Id: JspResponseWriter.java,v 1.2 2002/07/16 21:52:04 craigmcc Exp $
+ * $Id: JspResponseWriter.java,v 1.3 2002/08/07 23:31:16 craigmcc Exp $
  */
 
 /*
@@ -13,11 +13,12 @@ package javax.faces.webapp;
 import java.io.IOException;
 import javax.faces.context.ResponseWriter;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 
 
 /**
  * <p><strong>JspResponseWriter</strong> is a concrete implementation of
- * {@link ResponseWriter} that wraps a <code>JspWriter</code> passed to its
+ * {@link ResponseWriter} that wraps a <code>PageContext</code> passed to its
  * constructor.</p>
  *
  * <p><strong>FIXME</strong> - Should this implementation be in jsf-api?</p>
@@ -31,18 +32,18 @@ public final class JspResponseWriter extends ResponseWriterBase {
 
     /**
      * <p>Create a <code>JspResponseWriter</code> that wraps the specified
-     * <code>JspWriter</code>.</p>
+     * <code>PageContext</code>.</p>
      *
      * @param writer The <code>JspWriter</code> to be wrapped
      *
-     * @exception NullPointerException if <code>writer</code> is null
+     * @exception NullPointerException if <code>pageContext</code> is null
      */
-    public JspResponseWriter(JspWriter writer) {
+    public JspResponseWriter(PageContext pageContext) {
 
-        if (writer == null) {
+        if (pageContext == null) {
             throw new NullPointerException();
         }
-        this.writer = writer;
+        this.pageContext = pageContext;
 
     }
 
@@ -51,9 +52,9 @@ public final class JspResponseWriter extends ResponseWriterBase {
 
 
     /**
-     * <p>The <code>JspWriter</code> that we are wrapping.</p>
+     * <p>The <code>PageContext</code> that we are wrapping.</p>
      */
-    private JspWriter writer = null;
+    private PageContext pageContext = null;
 
 
     // --------------------------------------------------------- Public Methods
@@ -66,7 +67,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void close() throws IOException {
 
-        writer.close();
+        pageContext.getOut().close();
 
     }
 
@@ -78,7 +79,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void flush() throws IOException {
 
-        writer.flush();
+        pageContext.getOut().flush();
 
     }
 
@@ -92,7 +93,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void write(char cbuf[]) throws IOException {
 
-        writer.print(cbuf);
+        pageContext.getOut().print(cbuf);
 
     }
 
@@ -108,7 +109,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void write(char cbuf[], int off, int len) throws IOException {
 
-        writer.print(new String(cbuf, off, len));
+        pageContext.getOut().print(new String(cbuf, off, len));
 
     }
 
@@ -123,7 +124,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void write(int c) throws IOException {
 
-        writer.print((char) (c & 0xffff));
+        pageContext.getOut().print((char) (c & 0xffff));
 
     }
 
@@ -137,7 +138,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void write(String s) throws IOException {
 
-        writer.print(s);
+        pageContext.getOut().print(s);
 
     }
 
@@ -153,7 +154,7 @@ public final class JspResponseWriter extends ResponseWriterBase {
      */
     public void write(String s, int off, int len) throws IOException {
 
-        writer.print(s.substring(off, len));
+        pageContext.getOut().print(s.substring(off, len));
 
     }
 
