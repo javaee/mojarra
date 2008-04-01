@@ -6,9 +6,56 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.12 2002/08/21 20:20:07 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.13 2002/08/24 18:38:52 craigmcc Exp $</h3>
 </div>
 
+
+<div align="center">
+  <h2>General Principles</h2>
+</div>
+
+<ul>
+<li><strong>Tag Name Convention</strong> - The name of a tag is the standard
+    HTML renderkit is derived from the name of the component class and the
+    rendererType, according to the following algorithm:
+    <ul>
+    <li>Take the name of the component class (such as <code>UICommand</code>,
+        strip off the <code>UIPrefix</code>, and convert to all lower case.
+        </li>
+    <li>If there is no renderer type specified, this is the complete name
+        of the tag.</li>
+    <li>If there is a renderer type specified, append an underscore character
+        ("_") and the renderer type (converted to all lower case).</li>
+    </ul></li>
+<li><strong>Attribute "id"</strong> - All components are currently required to
+    specify this value, which becomes the <code>componentId</code> of the
+    underlying component.  Component ids must be unique within a parent.</li>
+<li><strong>Attribute "fooClass"</strong> - Used to identify the CSS stylesheet
+    class for rendering this component, which will itself be rendered as a
+    <code>class</code> attribute.  We cannot use <code>class</code> as the
+    attribute name of a JSP custom tag, so we adopt the convention that
+    the "foo" is the same as the shortened name of the comopnent class
+    (i.e. for all <code>UICommand</code> tags, the attribute name would be
+    <code>commandClass</code>).  In cases where a component generates more than
+    one HTML element, a surrounding HTML <code>&lt;span&gt;</code> element
+    must be rendered in order to set the CSS style class.  For brevity, these
+    render-dependent attributes are omitted from the table.</li>
+<li><strong>Attribute "columnClasses"</strong> - Some renderers support an attribute
+    of this name, which contains a comma-delimited list of CSS style classes
+    that will be used in sequence.  If a rendered table has more columns than
+    the number of class names in this list, it will be restarted from the
+    beginning as many times as needed.  However, the first column in a new
+    row will always be rendered with the first class listed here.</li>
+<li><strong>Attribute "rowClasses"</strong> - Some renderers support an attribute
+    of this name, which contains a comma-delimited list of CSS style classes
+    that will be used in sequence.  If a rendered table has more rows than
+    the number of class names in this list, it will be restarted from the
+    beginning as many times as needed.</li>
+<li><strong>Common HTML Attributes</strong> - Each tag that renders an HTML element
+    should also support all of the low-level event handling (etc.) attributes
+    of the corresponding HTML/4.0 element.  These render-dependent attributes
+    are omitted from the table for brevity.</li>
+</ul>
 
 
 <div align="center">
@@ -98,7 +145,7 @@
   </tr>
 
   <tr>
-    <td>Form</td>
+    <td>(none)</td>
     <td>(none)</td>
     <td>formName</td>
     <td>accept, accept-charset, enctype, method</td>
@@ -552,6 +599,113 @@
 
 </table>
 
+
+<div align="center">
+  <h2>Component Class:  UIPanel</h2>
+
+  <p>Note that CSS style classes cascade, so that panel renderers that use an
+  HTML table can establish a hierarchy of styles by using the
+  <code>panelClass</code>, <code>rowClasses</code>, and
+  <code>columnClasses</code> attributes in many flexible patterns.</p>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Data</td>
+    <td>(none)</td>
+    <td>modelReference</td>
+    <td>var</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Represents the template of a row to be generated for each element
+      of the <code>List</code> pointed at by <code>modelReference</code>.
+      Each element of the collection will be exposed as a request attribute
+      named by <code>var</code>, so that model reference expressions in the
+      template components can access the values for the current element.
+      There should be one child component per column to be created.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Grid</td>
+    <td>(none)</td>
+    <td>&nbsp;</td>
+    <td>columnClasses, columns, footerClass, headerClass,
+        rowClasses</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render an HTML table (from our child components)
+      based on the following rules:
+      <ul>
+      <li>If <code>headerClass</code> is specified, the first child will be
+          rendered as a row across all of the columns.</li>
+      <li>Each intervening child is rendered in a separate table data
+          element, with a new row started each <code>columns</code>
+          children.</li>
+      <li>If <code>footerClass</code> is specified, the last child will be
+          rendered as a row across all of the columns.</li>
+      </ul>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>Group</td>
+    <td>(none)</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render the child components.  This component exists simply to
+      allow the creation of arbitrary groups of components where a
+      parent component expects to see a single child (such as the
+      contents of an individual cell for the <em>Grid</em> renderer).
+    </td>
+  </tr>
+
+
+  <tr>
+    <td>List</td>
+    <td>(none)</td>
+    <td>&nbsp;</td>
+    <td>columnClasses, footerClass, headerClass, rowClasses</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render an HTML table (from our child components)
+      based on the following rules:
+      <ul>
+      <li>If <code>headerClass</code> is specified, the first child should be
+          a <code>panel_group</code> whose children represent column headers
+          for the table to be rendered.</li>
+      <li>Zero or more <code>panel_data</code> tags that identify the data
+          collection to be iterated over, and whose children represent a
+          template for each row to be rendered.</li>
+      <li>If <code>footerClass</code> is specified, the last child should be
+          a <code>panel_group</code> whose children represent column footers
+          for the table to be rendered.</li>
+      </ul>
+    </td>
+  </tr>
+
+</table>
 
 
 <div align="center">
