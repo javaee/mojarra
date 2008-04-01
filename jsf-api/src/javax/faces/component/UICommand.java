@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.2 2002/05/08 01:11:46 craigmcc Exp $
+ * $Id: UICommand.java,v 1.3 2002/05/14 00:41:37 craigmcc Exp $
  */
 
 /*
@@ -8,6 +8,9 @@
  */
 
 package javax.faces.component;
+
+
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -29,7 +32,10 @@ package javax.faces.component;
  * </ul>
  */
 
-public abstract class UICommand extends UIComponent {
+public class UICommand extends UIComponent {
+
+
+    // ------------------------------------------------------- Static Variables
 
 
     /**
@@ -42,24 +48,63 @@ public abstract class UICommand extends UIComponent {
 
 
     /**
-     * <p>Return the command name (or the <code>compoundId</code> if no command
-     * name has been specified).</p>
-     *
-     * <p><strong>FIXME</strong> - Should the default value be
-     * just the <code>componentId</code> property instead?</p>
+     * <p>Return the command name associated with this command.</p>
      */
-    public abstract String getName();
+    public String getCommandName() {
+
+        return ((String) getAttribute("commandName"));
+
+    }
 
 
     /**
      * <p>Set the command name for this <code>UICommand</code>.</p>
      *
-     * @param name The new command name
+     * @param commandName The new command name
      *
      * @exception NullPointerException if <code>name</code> is
      *  <code>null</code>
      */
-    public abstract void setName(String name);
+    public void setCommandName(String commandName) {
+
+        if (commandName == null) {
+            throw new NullPointerException("setCommandName");
+        }
+        setAttribute("commandName", commandName);
+
+    }
 
     
+    /**
+     * <p>Return the component type of this <code>UIComponent</code>.</p>
+     */
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
+
+
+    // ------------------------------------------- Lifecycle Processing Methods
+
+
+    /**
+     * <p>If this command has been selected, record it so that the application
+     * will be notified that this command should be processed.</p>
+     *
+     * <p><strong>FIXME</strong> - How should the generic component class
+     * recognize that it has been selected?</p>
+     *
+     * <p><strong>FIXME</strong> - How are command events propogated
+     * to the application?</p>
+     *
+     * @param context FacesContext for the current request being processed
+     */
+    public void applyRequestValues(FacesContext context) {
+
+        ; // FIXME - provide default implementation
+
+    }
+
+
 }

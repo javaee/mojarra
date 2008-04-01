@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.6 2002/05/11 20:25:11 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.7 2002/05/14 00:41:37 craigmcc Exp $
  */
 
 /*
@@ -52,6 +52,9 @@ import javax.faces.render.Renderer;
  *     the <code>componentId</code> of each parent of the current component
  *     (from the top down) followed by a slash character ('/'), and ending
  *     with the <code>componentId</code> of this component.  [READ-ONLY]</li>
+ * <li><strong>facesContext</strong> (javax.faces.context.FacesContext) -
+ *     For the root component in a component tree, the {@link FacesContext}
+ *     within which this component tree is registered.</p>
  * <li><strong>model</strong> (java.lang.STring) - A symbolic expression
  *     used to attach this component to <em>model</em> data in the underlying
  *     application (typically a JavaBean property).  The syntax of this
@@ -82,15 +85,11 @@ import javax.faces.render.Renderer;
  * the render-independent characteristics of the component MUST be gettable
  * and settable via the attributes access methods as well.</p>
  *
- * <p>The set of supported attribute names for the render-independent
- * characteristics of a particular <code>UIComponent</code> subclass can be
- * introspected (for example, by development tools), through a call to the
- * <code>getAttributeNames()</code>, and <code>getAttributeDescriptor()</code>
- * can be called to return the description of each such characteristic.  To
- * acquire the supported set of render-dependent characteristics, you should
- * acquire an appropriate <code>Renderer</code> instance (of the type specified
- * by the <code>rendererType</code> property) and call
- * <code>getAttributeNames()</code> on that instance.</p>
+ * <p>Individual <code>RenderKit</code> implementations will support unique
+ * sets of render-dependent attributes for a given component type.  The names
+ * and characteristics of these attributes can be determined by acquiring a
+ * <code>Renderer</code> of the type specified by the <code>rendererType</code>
+ * property, and calling its <code>getAttributeNames()</code> method.</p>
  *
  * <h3>Component Trees and Navigation</h3>
  *
@@ -191,11 +190,13 @@ public abstract class UIComponent {
             throw new NullPointerException("getAttribute");
         }
 
-        // Special cases for read-only pseudo-attributes
+        // Special cases for read-only and special case attributes
         if ("componentType".equals(name)) {
             return (getComponentType());
         } else if ("compoundId".equals(name)) {
             return (getCompoundId());
+        } else if ("value".equals(name)) {
+            return (getValue());
         }
 
         // Return the selected attribute value
@@ -208,32 +209,18 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return an {@link AttributeDescriptor} describing a
-     * render-independent attribute that is supported by this component,
-     * or <code>null</code> if no attribute by this name is supported
-     * by this component.</p>
-     *
-     * <p><strong>FIXME</strong> - The set of attributes supported by a
-     * component is dependent on the RenderKit (if any) in use,
-     * so does this belong here?  How about the self-rendering case?</p>
-     *
-     * @param name Name of the requested attribute
-     *
-     * @exception NullPointerException if <code>name</code> is
-     *  <code>null</code>
-     */
-    public abstract AttributeDescriptor getAttributeDescriptor(String name);
-
-
-    /**
      * <p>Return an <code>Iterator</code> over the names of all
-     * render-independent attributes supported by this
-     * <code>UIComponent</code>.  For each such attribute, descriptive
-     * information can be retrieved via <code>getAttributeDescriptor()</code>,
-     * and the current value can be retrieved via <code>getAttribute()</code>.
-     *</p>
+     * currently defined attributes of this <code>UIComponent</code>.
      */
-    public abstract Iterator getAttributeNames();
+    public Iterator getAttributeNames() {
+
+        if (isAttributesAllocated()) {
+            return (getAttributes().keySet().iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
 
 
     /**
@@ -344,6 +331,31 @@ public abstract class UIComponent {
 
 
     /**
+     * <p>Return the {@link FacesContext} within which the component tree
+     * (for which this component is the root node) is registered.</p>
+     */
+    public FacesContext getFacesContext() {
+
+        return ((FacesContext) getAttribute("facesContext"));
+
+    }
+
+
+    /**
+     * <p>Set the {@link FacesContext} within which the component tree
+     * (for which this component is the root node) is registered.</p>
+     *
+     * @param context The new {@link FacesContext}, or <code>null</code>
+     *  to disconnect this node from any context
+     */
+    public void setFacesContext(FacesContext context) {
+
+        setAttribute("facesContext", context);
+
+    }
+
+
+    /**
      * <p>Return the symbolic model reference expression of this
      * <code>UIComponent</code>, if any.</p>
      */
@@ -420,7 +432,7 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the local value of this <code>UIComponent</code>.</p>
+     * <p>Return the local value of this <code>UIComponent</code>, if any.
      */
     public Object getValue() {
 
@@ -437,6 +449,35 @@ public abstract class UIComponent {
     public void setValue(Object value) {
 
         setAttribute("value", value);
+
+    }
+
+
+    /**
+     * <p>Evaluate and return the current value of this component, according
+     * to the following algorithm:</p>
+     * <ul>
+     * <li>If the <code>value</code> property has been set (corresponding
+     *     to the local value for this component), return that; else</li>
+     * <li>If the <code>model</code> property has been set, retrieve and
+     *     return the corresponding model value, if possible; else</li>
+     * <li>Return <code>null</code>.</li>
+     * </ul>
+     */
+    public Object currentValue() {
+
+        Object value = getAttribute("value");
+        if (value != null) {
+            return (value);
+        }
+        String model = (String) getAttribute("model");
+        if (model != null) {
+            FacesContext context = findComponent("/").getFacesContext();
+            if (context != null) {
+                return (context.getModelValue(model));
+            }
+        }
+        return (null);
 
     }
 
@@ -829,9 +870,15 @@ public abstract class UIComponent {
      *
      * <p><strong>FIXME</strong> - Any need for exceptions here?</p>
      *
+     * <p>The default implementation does nothing.</p>
+     *
      * @param context FacesContext for the current request being processed
      */
-    public abstract void applyRequestValues(FacesContext context);
+    public void applyRequestValues(FacesContext context) {
+
+        ; // No action required
+
+    }
 
 
     /**
@@ -848,9 +895,15 @@ public abstract class UIComponent {
      * <p><strong>FIXME</strong> - Specify how a component gets access to the
      * events that have been queued to it.</p>
      *
+     * <p>The default implementation does nothing.</p>
+     *
      * @param context FacesContext for the current request being processed
      */
-    public abstract void handleRequestEvents(FacesContext context);
+    public void handleRequestEvents(FacesContext context) {
+
+        ; // No action required
+
+    }
 
 
     /**
@@ -864,9 +917,15 @@ public abstract class UIComponent {
      * in the rendered response (<p><strong>FIXME</strong> - Specify the
      * mechanism for doing this).</p>
      *
+     * <p>The default implementation does nothing.</p>
+     *
      * @param context FacesContext for the current request being processed
      */
-    public abstract void processValidations(FacesContext context);
+    public void processValidations(FacesContext context) {
+
+        ; // No action required
+
+    }
 
 
     /**
@@ -878,13 +937,19 @@ public abstract class UIComponent {
      * <p><strong>FIXME</strong> - Not sufficient for components with children.
      * </p>
      *
+     * <p>The default implementation does nothing.</p>
+     *
      * @param context FacesContext for the current request being processed
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public abstract void render(FacesContext context) throws IOException;
+    public void render(FacesContext context) throws IOException {
+
+        ; // No action required
+
+    }
 
 
     /**
@@ -893,9 +958,15 @@ public abstract class UIComponent {
      * there is no model data associated with this component, no action
      * is performed.</p>
      *
+     * <p>The default implementation does nothing.</p>
+     *
      * @param context FacesContext for the current request being processed
      */
-    public abstract void updateModelValues(FacesContext context);
+    public void updateModelValues(FacesContext context) {
+
+        ; // No action required
+
+    }
 
 
 }

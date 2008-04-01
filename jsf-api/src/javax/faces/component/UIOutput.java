@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.1 2002/05/07 19:29:18 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.2 2002/05/14 00:41:37 craigmcc Exp $
  */
 
 /*
@@ -16,17 +16,21 @@ package javax.faces.component;
  * for display purposes only.  Any localization of the text to be rendered
  * is the responsibility of the application.</p>
  *
- * <h3>Properties</h3>
+ * <p>The local value of the text to be displayed by this component
+ * is stored in the <code>value</code> property, and must be a
+ * <code>java.lang.String</code> (as must the model property corresponding
+ * to any model reference for this component).</p>
  *
- * <p>Each <code>UIOutput</code> instance supports the following JavaBean
- * properties to describe its render-independent characteristics:</p>
- * <ul>
- * <li><strong>text</strong> (java.lang.String) - the text value that will
- *     be rendered (verbatim) for this component.</li>
- * </ul>
+ * <p>For convenience, the local value of the text to be displayed is
+ * accessible via the <code>getText()</code> and <code>setText()</code>
+ * methods.  The <code>currentValue()</code> method should be used to
+ * retrieve the value to be rendered.</p>
  */
 
-public abstract class UIOutput extends UIComponent {
+public class UIOutput extends UIComponent {
+
+
+    // ------------------------------------------------------- Static Variables
 
 
     /**
@@ -39,31 +43,38 @@ public abstract class UIOutput extends UIComponent {
 
 
     /**
-     * <p>Return the text to be rendered for this component, according to the
-     * following algorithm:</p>
-     * <ul>
-     * <li>If a non-null value has been set with
-     *     <a href="#setText(java.lang.String)">setText()</a>, return it;
-     *     else</li>
-     * <li>If the <code>model</code> property is non-null, evaluate the
-     *     expression, convert the result to a String (if necessary), and
-     *     return that value; else</li>
-     * <li>Return a zero-length String ("").</li>
-     * </ul>
+     * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
-    public abstract String getText();
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
 
 
     /**
-     * <p>Set the text to be rendered for this component.  A <code>null</code>
-     * value erases any previously stored text value, which will cause the
-     * <a href="#getText()">getText()</a> method to evaluate the
-     * <code>model</code> expression (if any).</p>
-     *
-     * @param text New text to be rendered, or <code>null</code> to
-     *  select the corresponding model value (if any)
+     * <p>Return the local value of the text to be displayed.</p>
      */
-    public abstract void setText(String text);
+    public String getText() {
+
+        return ((String) getAttribute("value"));
+
+    }
+
+
+    /**
+     * <p>Set the local value of the text to be displayed.</p>
+     *
+     * @param text The new text
+     */
+    public void setText(String text) {
+
+        setAttribute("value", text);
+
+    }
+
+
+    // --------------------------------------------------------- Public Methods
 
 
 }
