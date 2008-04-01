@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioGroupTag.java,v 1.6 2002/09/08 21:30:57 eburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.20 2002/09/08 21:59:46 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// SelectOne_RadioGroupTag.java
+// SelectOne_RadioTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -31,14 +31,14 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_RadioGroupTag.java,v 1.6 2002/09/08 21:30:57 eburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.20 2002/09/08 21:59:46 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectOne_RadioGroupTag extends SelectOne_ListboxTag
+public class SelectOne_RadioTag extends SelectOne_ListboxTag
 {
     //
     // Protected Constants
@@ -64,7 +64,7 @@ public class SelectOne_RadioGroupTag extends SelectOne_ListboxTag
     // Constructors and Initializers    
     //
 
-    public SelectOne_RadioGroupTag()
+    public SelectOne_RadioTag()
     {
         super();
     }
@@ -119,4 +119,4 @@ public class SelectOne_RadioGroupTag extends SelectOne_ListboxTag
 // 
 
 
-} // end of class SelectOne_RadioGroupTag
+} // end of class SelectOne_RadioTag

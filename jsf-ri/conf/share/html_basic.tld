@@ -387,8 +387,8 @@
   </tag>
   
   <tag>
-    <name>selectone_radiogroup</name>
-    <tagclass>com.sun.faces.taglib.html_basic.SelectOne_RadioGroupTag</tagclass>
+    <name>selectone_radio</name>
+    <tagclass>com.sun.faces.taglib.html_basic.SelectOne_RadioTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
       <name>id</name>

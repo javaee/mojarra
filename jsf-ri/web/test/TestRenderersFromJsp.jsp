@@ -24,7 +24,7 @@
 
             <faces:selectone_listbox id="appleQuantity" />
 
-            <faces:selectone_radiogroup id="shipType" />
+            <faces:selectone_radio id="shipType" />
 
             <faces:textentry_secret id="password" />
 
