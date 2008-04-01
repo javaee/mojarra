@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.13 2002/07/29 00:47:05 craigmcc Exp $
+ * $Id: UIForm.java,v 1.14 2002/07/31 01:05:19 craigmcc Exp $
  */
 
 /*
@@ -222,9 +222,9 @@ public class UIForm extends UIComponentBase {
             if (!formName.startsWith("/")) {
                 sb.append("/");
             }
-            sb.append(URLEncoder.encode(formName));
+            sb.append(formName);
         }
-        return (response.encodeURL(URLEncoder.encode(sb.toString())));
+        return (response.encodeURL(sb.toString()));
 
     }
 
