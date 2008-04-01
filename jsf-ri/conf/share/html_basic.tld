@@ -409,6 +409,29 @@ Configuring UI Components
   </tag>
 
   <tag>
+    <name>RadioGroup</name>
+    <tagclass>com.sun.faces.taglib.html_basic.RadioGroupTag</tagclass>
+    <bodycontent>JSP</bodycontent>
+    <attribute>
+        <name>name</name>
+        <required>true</required>
+    </attribute>
+    <attribute>
+      <name>model</name>
+      <required>false</required>
+    </attribute>
+    <attribute>
+      <name>selectedValueModel</name>
+      <required>false</required>
+    </attribute>
+    <attribute>
+      <name>valueChangeListener</name>
+      <required>false</required>
+    </attribute>
+  </tag>
+
+
+  <tag>
     <name>SelectOne_Radio</name>
     <tagclass>com.sun.faces.taglib.html_basic.SelectOne_RadioTag</tagclass>
     <bodycontent>JSP</bodycontent>
@@ -416,15 +439,12 @@ Configuring UI Components
         <name>checked</name>
     </attribute>
     <attribute>
-        <name>name</name>
-        <required>true</required>
-    </attribute>
-    <attribute>
       <name>value</name>
       <required>true</required>
     </attribute>
     <attribute>
         <name>label</name>
+        <required>false</required>
     </attribute>
   </tag>
 

@@ -240,7 +240,7 @@
     <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
   </target>
 
-  <target name="deploy.tomcat.basic">
+  <target name="deploy.tomcat.basic" depends="build.basic.war">
     <unjar  src="${dist.home}/basic.war" dest="${basic.home}"/>
   </target>
 
@@ -306,7 +306,7 @@
     </target>
 
     <!-- builds"basic" sample app -->
-    <target name="build.basic.war" depends="clean,prepare,compile,compile.basic.sample" >
+    <target name="build.basic.war" depends="clean.tomcat,prepare,compile,compile.basic.sample" >
      <!-- name of the war file -->
      <property name="dist.war"  value="${basic.name}.war"/>
 

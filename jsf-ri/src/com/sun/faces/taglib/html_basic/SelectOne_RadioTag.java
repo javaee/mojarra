@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.2 2001/12/08 00:33:53 rogerk Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.3 2001/12/12 00:24:42 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -32,6 +32,7 @@ import javax.faces.ObjectTable;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import java.util.Collection;
 
 /**
  *
@@ -39,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.2 2001/12/08 00:33:53 rogerk Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.3 2001/12/12 00:24:42 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -63,7 +64,6 @@ public class SelectOne_RadioTag extends TagSupport
 // Attribute Instance Variables
 
     private String checked = null;
-    private String name = null;
     private String value = null;
     private String label = null;
 
@@ -99,13 +99,6 @@ protected void init()
     public void setChecked(String checked) {
         this.checked = checked;
     }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getValue() {
         return value;
@@ -131,75 +124,91 @@ protected void init()
      * Process the start of this tag.
      * @exception JspException if a JSP exception has occurred
      */
-    public int doStartTag() throws JspException {
-
-        Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
-        Assert.assert_it( ot != null );
-        RenderContext renderContext = 
-            (RenderContext)ot.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
-
-        if (name != null) {
-
-            // 1. Get or create the component instance.
-            //
-            WSelectOne wSelectOne = (WSelectOne) 
-                ot.get(pageContext.getRequest(), name);
-            if ( wSelectOne == null ) {
-                wSelectOne = new WSelectOne();
-            }
-
-            wSelectOne.setAttribute(renderContext, "checked", getChecked());
-            wSelectOne.setAttribute(renderContext, "name", getName());
-            wSelectOne.setAttribute(renderContext, "value", getValue());
-            wSelectOne.setAttribute(renderContext, "label", getLabel());
-            ot.put(pageContext.getRequest(), name, wSelectOne);
-
-            // 2. Get a RenderKit and associated Renderer for this
-            //    component.
-            //
-            RenderKit renderKit = renderContext.getRenderKit();
-            if (renderKit == null) {
-                throw new JspException("Can't determine RenderKit!");
-            }
-
-            Renderer renderer = null;
-            try {
-                renderer = renderKit.getRenderer(
-                    "com.sun.faces.renderkit.html_basic.RadioRenderer");
-            } catch (FacesException e) {
-                throw new JspException(
-                    "FacesException!!! " + e.getMessage());
-            }
-
-            if (renderer == null) {
-                throw new JspException(
-                    "Could not determine 'renderer' for component");
-            }
-
-            // 3. Render the component. (Push the component on
-            //    the render stack first).
-            //
-            try {
-                renderContext.pushChild(wSelectOne);
-                renderer.renderStart(renderContext, wSelectOne);
-//PENDING(rogerk) complet/pop should be done in doEndTag
-//
-                renderer.renderComplete(renderContext, wSelectOne);
-                renderContext.popChild();
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering component: "+
-                    e.getMessage());
-            } catch (FacesException f) {
-                throw new JspException("Problem rendering component: "+
-                    f.getMessage());
-            }
-        }
-        return (EVAL_BODY_INCLUDE);
+public int doStartTag() throws JspException {
+    ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+	getAttribute(Constants.REF_OBJECTTABLE);
+    Assert.assert_it( ot != null );
+    RenderContext renderContext = 
+	(RenderContext)ot.get(pageContext.getSession(),
+			      Constants.REF_RENDERCONTEXT);
+    Assert.assert_it( renderContext != null );
+    
+    // Ascend the tag hierarchy to get the RadioGroup tag
+    RadioGroupTag ancestor = null;
+    WSelectOne wSelectOne = null;
+    String parentName = null;
+    
+    // get the WSelectOne that is our component.
+    try {
+	ancestor = (RadioGroupTag) 
+	    findAncestorWithClass(this, RadioGroupTag.class);
+	parentName = ancestor.getName();
+    } catch ( Exception e ) {
+	throw new JspException("Option must be enclosed in a SelectOne_Option tag");
     }
+    Assert.assert_it(null != ancestor);
+    Assert.assert_it(null != parentName);
+    
+    // by virtue of being inside a RadioGroup there must be a
+    // WSelectOne instance under the name.
+    wSelectOne = (WSelectOne) ot.get(pageContext.getRequest(), parentName);
+    Assert.assert_it(null != wSelectOne);
+    
+    // These over-write the values from "the last time around", but
+    // its ok, since we just use it for rendering.
+    wSelectOne.setAttribute(renderContext, "checked", getChecked());
+    wSelectOne.setAttribute(renderContext, "value", getValue());
+    wSelectOne.setAttribute(renderContext, "label", getLabel());
+
+    // Add this value to the Collection
+    ancestor.getItems().add(getValue());
+    // if it is checked, make sure the model knows about it.
+    if (null != getChecked()) {
+	wSelectOne.setSelectedValue(renderContext, getValue());
+    }
+    
+    RenderKit renderKit = renderContext.getRenderKit();
+    if (renderKit == null) {
+	throw new JspException("Can't determine RenderKit!");
+    }
+    
+    Renderer renderer = null;
+    try {
+	renderer = renderKit.getRenderer("com.sun.faces.renderkit.html_basic.RadioRenderer");
+    } catch (FacesException e) {
+	throw new JspException(
+			       "FacesException!!! " + e.getMessage());
+    }
+    
+    if (renderer == null) {
+	throw new JspException(
+			       "Could not determine 'renderer' for component");
+    }
+    
+    // 3. Render the component. (Push the component on
+    //    the render stack first).
+    //
+    try {
+	renderContext.pushChild(wSelectOne);
+	renderer.renderStart(renderContext, wSelectOne);
+	//PENDING(rogerk) complet/pop should be done in doEndTag
+	//
+	renderer.renderComplete(renderContext, wSelectOne);
+	renderContext.popChild();
+    } catch (java.io.IOException e) {
+	throw new JspException("Problem rendering component: "+
+			       e.getMessage());
+    } catch (FacesException f) {
+	throw new JspException("Problem rendering component: "+
+			       f.getMessage());
+    }
+
+    wSelectOne.setAttribute(renderContext, "checked", null);
+    wSelectOne.setAttribute(renderContext, "value", null);
+    wSelectOne.setAttribute(renderContext, "label", null);
+
+    return (EVAL_BODY_INCLUDE);
+}
 
     /**
      * End Tag Processing

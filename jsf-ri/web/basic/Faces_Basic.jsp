@@ -6,6 +6,7 @@
     <faces:UseFaces>
         <faces:Form name='basicForm' model="LoginBean">
             <faces:Listener name="loginListener" scope="session" className="basic.EventHandler" />
+            <faces:Listener name="selectOneListener" scope="session" className="basic.EventHandler" />
             <faces:Command name="handleLogin" scope="session" className="basic.EventHandler" onCompletion="welcome.jsp" onError="error.jsp"/>
 
            <table> 
@@ -28,7 +29,27 @@
              <td> <faces:SelectBoolean_Checkbox name="validUser" value="Checker" valueChangeListener="loginListener" label="Check this" />
                   </td>
              </tr>
+<tr>
+           <table> 
+<TR>
+<faces:RadioGroup name="shipType" 
+                  model="$ShipTypeBean.shipType" 
+                  selectedValueModel="$ShipTypeBean.currentShipType" 
+                  valueChangeListener="selectOneListener">
+  <TABLE border="2"><TR><TD>
+  <TABLE>
+  <TR>
+  <TD>Select Shipping</TD>
+  <TD><faces:SelectOne_Radio value="nextDay" label=" Next Day"/></TD>
+  <TD><faces:SelectOne_Radio checked="true" value="nextWeek" label="Next Week"/> </TD>
+  <TD><faces:SelectOne_Radio value="nextMonth" label="Next Month"/> </TD>
+  </TABLE>
+  </TD></TR></TABLE>
+</faces:RadioGroup>
 
+</TR>
+          </table>
+</tr>
              <tr> 
              <td><faces:Command_Button name="login" label="login" command="handleLogin" /></td>
              </tr>

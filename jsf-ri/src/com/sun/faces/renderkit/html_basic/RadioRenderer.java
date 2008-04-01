@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.1 2001/12/04 01:08:30 edburns Exp $
+ * $Id: RadioRenderer.java,v 1.2 2001/12/12 00:24:42 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.1 2001/12/04 01:08:30 edburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.2 2001/12/12 00:24:42 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,10 +136,13 @@ public class RadioRenderer extends Object implements Renderer {
         }
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
+	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
 
         StringBuffer output = new StringBuffer();
         output.append("<input type=radio");
-        if (wSelectOne.getAttribute(rc, "checked") != null) {
+
+        if ((null != selectedValue) &&
+	    selectedValue.equals(wSelectOne.getAttribute(rc, "value"))) {
             output.append(" checked");
         }
         output.append(" name=");

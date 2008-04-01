@@ -1,5 +1,5 @@
 /*
- * $Id: HttpSessionListenerImpl.java,v 1.1 2001/12/06 22:59:19 visvan Exp $
+ * $Id: HttpSessionListenerImpl.java,v 1.2 2001/12/12 00:24:42 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -31,7 +31,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HttpSessionListenerImpl.java,v 1.1 2001/12/06 22:59:19 visvan Exp $
+ * @version $Id: HttpSessionListenerImpl.java,v 1.2 2001/12/12 00:24:42 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,6 +105,7 @@ public void sessionCreated(HttpSessionEvent sce) {
 	Assert.assert_it(null != ot);
 
 	ot.put(ObjectTable.SessionScope, "LoginBean", LoginBean.class);
+	ot.put(ObjectTable.SessionScope, "ShipTypeBean", ShipTypeBean.class);
 	didGlobalInit = true;
     }
 }

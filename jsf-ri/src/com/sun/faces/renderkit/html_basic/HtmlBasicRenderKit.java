@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.8 2001/12/10 18:18:00 visvan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.9 2001/12/12 00:24:42 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -41,6 +41,7 @@ import javax.faces.ValueChangeEvent;
 import javax.faces.RenderContext;
 import javax.faces.Constants;
 import javax.faces.WSelectBoolean;
+import javax.faces.WSelectOne;
 
 import javax.faces.ObjectTable;
 
@@ -50,7 +51,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.8 2001/12/10 18:18:00 visvan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.9 2001/12/12 00:24:42 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -241,7 +242,8 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
 
         // add value change events first. Because they should
         // be processed before command events.
-        if ( c instanceof WTextEntry || c instanceof WSelectBoolean) {
+        if ( c instanceof WTextEntry || c instanceof WSelectBoolean ||
+	     c instanceof WSelectOne) {
              String old_value = null;
              String model_str = null;
              // check in for Component types will be removed
@@ -251,7 +253,7 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
                 WTextEntry te = (WTextEntry) c;
                 old_value = te.getText(rc);
                 model_str = (String) te.getModel();
-            } else {
+            } else if (c instanceof WSelectBoolean) {
                 WSelectBoolean sb = (WSelectBoolean) c;
                 // PENDING ( visvan ) HTML sends value of checkbox only
                 // if it is selected. So we cannot detect if it
@@ -265,7 +267,11 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
                 boolean old_state = sb.isSelected(rc);
                 old_value = String.valueOf(old_state);
                 model_str = (String) sb.getModel();
-            }
+            } else if (c instanceof WSelectOne) {
+		WSelectOne so = (WSelectOne) c;
+		old_value = (String) so.getSelectedValue(rc);
+		model_str = (String) so.getSelectedValueModel();
+	    }
 
             // construct value changed event objects and put in the queue.
             ValueChangeEvent e =  new ValueChangeEvent(request, param_name,
@@ -275,8 +281,9 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
             } else if ( old_value == null ) {
                 queue.add(e);
             }
-        } else if ( c instanceof WCommand) {
-            CommandEvent e =  new CommandEvent(request, param_name, param_value);
+	} else if ( c instanceof WCommand) {
+            CommandEvent e =  new CommandEvent(request, param_name, 
+					       param_value);
             cmd_events.add(e);
         }
 
