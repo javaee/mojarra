@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.24 2002/03/13 18:04:23 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.25 2002/04/02 01:26:20 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.24 2002/03/13 18:04:23 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.25 2002/04/02 01:26:20 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -230,14 +230,6 @@ public void queueEvents(EventContext eventContext) {
     while ( param_names.hasMoreElements() ) {
         param_name = (String) param_names.nextElement();
         param_value = (String) request.getParameter(param_name);
-        if ( param_value != null ) {
-            param_value = param_value.trim();
-            if ( param_value.equals("") ) {
-                continue;
-            }
-        } else {
-            continue;
-        }
 
         // check to see if param_name is a hidden field. We use hidden
         // fields to track the status of the checkbox because HTML
@@ -254,11 +246,6 @@ public void queueEvents(EventContext eventContext) {
             param_name = param_name.substring(name_idx);
         }
 
-        // PENDING ( visvan ) type of the component and model should be
-        // encoded as a hidden field so that it need not be obtained
-        // from the ObjectManager since the component may not exist in
-        // the pool. Also value should also be encoded as a hidden
-        // field so that change in values can be detected without UIComponent.
 	TreeNavigator treeNav = (TreeNavigator)objectManager.get(request,
 						 Constants.REF_TREENAVIGATOR);
 	Assert.assert_it(null != treeNav);
@@ -269,11 +256,14 @@ public void queueEvents(EventContext eventContext) {
         if ( c == null ) {
             continue;
         }
+
         // if value changed, update the local value in the component's 
         // attribute set and create valueChangeEvent to add to eventQueue
         if ( ! (c instanceof UICommand ) ) {
             String old_value = (String) c.getValue(rc);
-            if ( old_value == null || !(old_value.equals(param_value))) {
+
+            if ( (old_value != null && !(old_value.equals(param_value))) || 
+                (old_value == null && param_value != null )) {
                 ValueChangeEvent e =  new ValueChangeEvent(eventContext,
                         c, param_value);
                 eventQueue.add(e);
