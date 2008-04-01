@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.1 2002/06/07 00:01:13 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.1 2002/06/07 00:01:13 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,10 +104,10 @@ public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
 
 public void setUp()
 {
-    Util.initServletContextForFaces(config.getServletContext());
+    Util.verifyFactoriesAndInitDefaultRenderKit(config.getServletContext());
     
-    facesContextFactory = (FacesContextFactory) config.getServletContext().
-	getAttribute(FactoryFinder.FACES_CONTEXT_FACTORY);
+    facesContextFactory = (FacesContextFactory) 
+	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
     assertTrue(null != facesContextFactory);
     
     facesContext = 

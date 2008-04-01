@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextTestCaseJsp.java,v 1.1 2002/06/07 00:01:12 eburns Exp $
+ * $Id: FacesContextTestCaseJsp.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FacesContextTestCaseJsp.java,v 1.1 2002/06/07 00:01:12 eburns Exp $
+ * @version $Id: FacesContextTestCaseJsp.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -77,10 +77,10 @@ protected FacesContext facesContext = null;
 
 public void setUp()
 {
-    Util.initServletContextForFaces(config.getServletContext());
+    Util.verifyFactoriesAndInitDefaultRenderKit(config.getServletContext());
     
-    facesContextFactory = (FacesContextFactory) config.getServletContext().
-	getAttribute(FactoryFinder.FACES_CONTEXT_FACTORY);
+    facesContextFactory = (FacesContextFactory) 
+	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
     assertTrue(null != facesContextFactory);
     
     facesContext = 
@@ -95,7 +95,7 @@ public void setUp()
 
 public void tearDown()
 {
-    Util.releaseServletContextFromFaces(config.getServletContext());
+    Util.releaseFactoriesAndDefaultRenderKit(config.getServletContext());
     (facesContext.getHttpSession()).removeAttribute("TestBean");
 }
 

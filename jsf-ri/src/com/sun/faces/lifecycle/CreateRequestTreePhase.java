@@ -1,5 +1,5 @@
 /*
- * $Id: CreateRequestTreePhase.java,v 1.1 2002/06/01 00:58:21 eburns Exp $
+ * $Id: CreateRequestTreePhase.java,v 1.2 2002/06/07 21:42:13 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.ServletContext;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: CreateRequestTreePhase.java,v 1.1 2002/06/01 00:58:21 eburns Exp $
+ * @version $Id: CreateRequestTreePhase.java,v 1.2 2002/06/07 21:42:13 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -104,7 +104,7 @@ public int execute(FacesContext facesContext) throws FacesException
     RenderKit renderKit = null;
 
     treeFactory = (TreeFactory)
-	servletContext.getAttribute(FactoryFinder.TREE_FACTORY);
+	FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     Assert.assert_it(null != treeFactory);
     
     // PENDING(edburns): deal with possibly null treeId
@@ -112,7 +112,7 @@ public int execute(FacesContext facesContext) throws FacesException
     
     if (renderKitId != null) {
 	renderKitFactory = (RenderKitFactory)
-	    servletContext.getAttribute(FactoryFinder.RENDER_KIT_FACTORY);
+	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	Assert.assert_it(null != renderKitFactory);
 	renderKit = renderKitFactory.createRenderKit(renderKitId);
 	if (renderKit != null) {
