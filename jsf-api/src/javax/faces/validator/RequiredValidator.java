@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.1 2002/06/03 19:27:27 craigmcc Exp $
+ * $Id: RequiredValidator.java,v 1.2 2002/06/03 22:24:30 craigmcc Exp $
  */
 
 /*
@@ -10,8 +10,6 @@
 package javax.faces.validator;
 
 
-import java.util.Collections;
-import java.util.Iterator;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -29,7 +27,7 @@ import javax.faces.context.MessageList;
  * this Validator -- which behavior do we want?</p>
  */
 
-public final class RequiredValidator extends Validator {
+public final class RequiredValidator extends ValidatorImpl {
 
 
     // ----------------------------------------------------- Manifest Constants
@@ -40,41 +38,11 @@ public final class RequiredValidator extends Validator {
      * this validation fails.</p>
      */
     public static final String FAILED_MESSAGE_ID =
-        "javax.faces.component.RequiredValidator.FAILED";
+        "javax.faces.validator.RequiredValidator.FAILED";
 
 
 
     // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Return an {@link AttributeDescriptor} for the specified attribute
-     * name that is supported by this <code>Validator</code>.</p>
-     *
-     * @param name The requested attribute name
-     *
-     * @exception IllegalArgumentException if this attribute is not
-     *  supported by this <code>Validator</code>.
-     * @exception NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     */
-    public AttributeDescriptor getAttributeDescriptor(String name) {
-
-        throw new IllegalArgumentException(name);
-
-    }
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of the supported
-     * attributes for this <code>Validator</code>.  If no attributes are
-     * supported, an empty <code>Iterator</code> is returned.</p>
-     */
-    public Iterator getAttributeNames() {
-
-        return (Collections.EMPTY_LIST.iterator());
-
-    }
 
 
     /**

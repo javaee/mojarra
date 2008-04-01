@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.2 2002/06/03 22:24:30 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.1 2002/06/03 22:24:30 craigmcc Exp $
  */
 
 /*
@@ -18,49 +18,50 @@ import javax.faces.context.MessageList;
 
 
 /**
- * <p><strong>LengthValidator</strong> is a {@link Validator} that checks
- * the number of characters in the String representation of the value of the
- * associated component.  The following algorithm is implemented:</p>
+ * <p><strong>StringRangeValidator</strong> is a {@link Validator} that checks
+ * the value of the corresponding component against specified minimum and
+ * maximum values.  The following algorithm is implemented:</p>
  * <ul>
  * <li>Call getValue() to retrieve the current value of the component.
  *     If it is <code>null</code>, exit immediately.  (If null values
  *     should not be allowed, a {@link RequiredValidator} can be configured
  *     to check for this case.)</li>
- * <li>Convert the value to a String, if necessary, by calling its
- *     <code>toString()</code> method.</li>
- * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is an Integer, check the length of the converted
- *     String against this limit.  If the String length is less than the
- *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
- *     {@link MessageList} for this request.</li>
+ * <li>If the current component value is not a <code>String</code>,
+ *     add a TYPE_MESSAGE_ID message to the {@link MessageList} for this
+ *     request, and skip subsequent checks.</li>
  * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is an Integer, check the length of the converted
- *     String against this limit.  If the String length is larger than the
+ *     component, and it is a String, check the component value against
+ *     this limit.  If the component value is greater than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
+ *     {@link MessageList} for this request.</li>
+ * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
+ *     component, and it is a String, check the component value against
+ *     this limit.  If the component value is less than the
+ *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
  *     {@link MessageList} for this request.</li>
  * </ul>
  */
 
-public final class LengthValidator extends ValidatorImpl {
+public final class StringRangeValidator extends ValidatorImpl {
 
 
     // ----------------------------------------------------- Manifest Constants
 
 
     /**
-     * <p>The attribute name of an <code>Integer</code> value representing
-     * the maximum length to check for.</p>
+     * <p>The attribute name of a <code>String</code> representing
+     * the maximum value to check for.</p>
      */
     public static final String MAXIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.LengthValidator.MAXIMUM";
+        "javax.faces.validator.StringRangeValidator.MAXIMUM";
 
 
     /**
-     * <p>The attribute name of an <code>Integer</code> value representing
-     * the minimum length to check for.</p>
+     * <p>The attribute name of a <code>String</code> representing
+     * the minimum value to check for.</p>
      */
     public static final String MINIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.LengthValidator.MINIMUM";
+        "javax.faces.validator.StringRangeValidator.MINIMUM";
 
 
     /**
@@ -73,22 +74,30 @@ public final class LengthValidator extends ValidatorImpl {
 
     /**
      * <p>The message identifier of the {@link Message} to be created if
-     * the maximum length check fails.  The message format string for this
+     * the minimum value check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
-     * will be replaced by the configured maximum length.</p>
+     * will be replaced by the configured maximum value.</p>
      */
     public static final String MAXIMUM_MESSAGE_ID =
-        "javax.faces.validator.LengthValidator.MAXIMUM";
+        "javax.faces.validator.StringRangeValidator.MAXIMUM";
 
 
     /**
      * <p>The message identifier of the {@link Message} to be created if
-     * the minimum length check fails.  The message format string for this
+     * the minimum value check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
-     * will be replaced by the configured minimum length.</p>
+     * will be replaced by the configured minimum value.</p>
      */
     public static final String MINIMUM_MESSAGE_ID =
-        "javax.faces.validator.LengthValidator.MINIMUM";
+        "javax.faces.validator.StringRangeValidator.MINIMUM";
+
+
+    /**
+     * <p>The message identifier of the {@link Message} to be created if
+     * the current value of this component is not of the correct type.
+     */
+    public static final String TYPE_MESSAGE_ID =
+        "javax.faces.validator.StringRangeValidator.TYPE";
 
 
     // ----------------------------------------------------- Static Initializer
@@ -99,18 +108,16 @@ public final class LengthValidator extends ValidatorImpl {
         descriptors.put
             (MAXIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
-                                         Integer.class,
-                                         "Maximum Length",
-                                         "The maximum number of characters " +
-                                         "allowed for this value"));
+                                         String.class,
+                                         "Maximum Value",
+                                         "The maximum allowed value"));
 
         descriptors.put
             (MINIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
-                                         Integer.class,
-                                         "Minimum Length",
-                                         "The minimum number of characters " +
-                                         "allowed for this value"));
+                                         String.class,
+                                         "Minimum Value",
+                                         "The minimum allowed value"));
 
     }
 
@@ -132,9 +139,15 @@ public final class LengthValidator extends ValidatorImpl {
 
         Object value = component.getValue();
         if (value != null) {
-            String svalue = value.toString();
-            checkMaximum(context, component, svalue);
-            checkMinimum(context, component, svalue);
+            try {
+                String converted = (String) value;
+                checkMaximum(context, component, converted);
+                checkMinimum(context, component, converted);
+            } catch (ClassCastException e) {
+                context.getMessageList().add(TYPE_MESSAGE_ID,
+                                             component.getCompoundId());
+                return;
+            }
         }
 
     }
@@ -144,19 +157,19 @@ public final class LengthValidator extends ValidatorImpl {
 
 
     /**
-     * <p>Check the specified value against the maximum length constraint
+     * <p>Check the specified value against the maximum constraint
      * (if any).</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
-     * @param svalue String version of the component value to be checked
+     * @param value Component value being checked
      */
     private void checkMaximum(FacesContext context, UIComponent component,
-                              String svalue) {
+                              String value) {
 
-        Integer attribute = null;
+        String attribute = null;
         try {
-            attribute = (Integer)
+            attribute = (String)
                 component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
             if (attribute == null) {
                 return;
@@ -166,7 +179,8 @@ public final class LengthValidator extends ValidatorImpl {
                                          component.getCompoundId());
             return;
         }
-        if (svalue.length() > attribute.intValue()) {
+
+        if (value.compareTo(attribute) > 0) {
             context.getMessageList().add(MAXIMUM_MESSAGE_ID,
                                          component.getCompoundId(),
                                          new Object[] { attribute });
@@ -176,19 +190,19 @@ public final class LengthValidator extends ValidatorImpl {
 
 
     /**
-     * <p>Check the specified value against the minimum length constraint
+     * <p>Check the specified value against the minimum constraint
      * (if any).</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
-     * @param svalue String version of the component value to be checked
+     * @param value Component value being checked
      */
     private void checkMinimum(FacesContext context, UIComponent component,
-                              String svalue) {
+                              String value) {
 
-        Integer attribute = null;
+        String attribute = null;
         try {
-            attribute = (Integer)
+            attribute = (String)
                 component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
             if (attribute == null) {
                 return;
@@ -198,7 +212,8 @@ public final class LengthValidator extends ValidatorImpl {
                                          component.getCompoundId());
             return;
         }
-        if (svalue.length() < attribute.intValue()) {
+
+        if (value.compareTo(attribute) < 0) {
             context.getMessageList().add(MINIMUM_MESSAGE_ID,
                                          component.getCompoundId(),
                                          new Object[] { attribute });
