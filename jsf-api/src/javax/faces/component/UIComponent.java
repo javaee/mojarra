@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.20 2002/05/25 00:45:10 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.21 2002/05/30 18:36:44 craigmcc Exp $
  */
 
 /*
@@ -947,14 +947,17 @@ public abstract class UIComponent {
     /**
      * <p>Process an individual event queued to this <code>UIComponent</code>.
      * The default implementation does nothing, but can be overridden by
-     * subclasses of <code>UIComponent</code>.</p>
+     * subclasses of <code>UIComponent</code>.  Return <code>true</code> if
+     * lifecycle processing should proceed directly to the <em>Render
+     * Response</em> phase once all events have been processed for all
+     * components, or <code>false</code> for the normal lifecycle flow.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
      */
-    public void event(FacesContext context, FacesEvent event) {
+    public boolean event(FacesContext context, FacesEvent event) {
 
-        ; // Default implementation does nothing
+        return (false); // Default implementation does nothing
 
     }
 
