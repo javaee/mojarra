@@ -9,7 +9,7 @@
 
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-
+       <faces:usefaces>  
         <faces:form id="basicForm" formName="basicForm" >
 
             <table> 
@@ -148,4 +148,5 @@
           </table>
 
         </faces:form>
+       </faces:usefaces>
 </HTML>

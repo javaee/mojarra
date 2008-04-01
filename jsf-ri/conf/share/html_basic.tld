@@ -25,7 +25,11 @@
   </info>
 
   <!-- ===================== HTML 3.2 basic tags ====================== -->
-
+  <tag>
+      <name>usefaces</name>
+      <tagclass>com.sun.faces.taglib.html_basic.UseFacesTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+  </tag>
   <tag>
     <name>form</name>
     <tagclass>com.sun.faces.taglib.html_basic.FormTag</tagclass>
@@ -61,7 +65,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>commandname</name>
+        <name>commandName</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -150,7 +154,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>itemsmodelreference</name>
+      <name>itemsModelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -208,7 +212,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>itemsmodelreference</name>
+      <name>itemsModelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -292,7 +296,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>maxlength</name>
+      <name>maxLength</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -323,7 +327,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>maxlength</name>
+      <name>maxLength</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

@@ -13,10 +13,11 @@
 the tree navigation mechanism.  Test using getNextStart() inside while
 loop.</P>
 
-  <faces:Form id="1" modelReference="${1}" navigationMapId="navMap" >
+  <faces:usefaces>
+  <faces:form id="1" >
 
-            <faces:Output_Text id="5"  value="5" />
+            <faces:output_text id="5"  text="5" />
 
-  </faces:Form>
-
+  </faces:form>
+</faces:usefaces>
 </HTML>

@@ -9,7 +9,7 @@
 
     <H3> Basic Components Thank You Page </H3>
     <hr>
-
+       <faces:usefaces>
         <faces:form id="/basicForm" >
 
             <table> 
@@ -24,4 +24,5 @@
           </table>
 
         </faces:form>
+     </faces:usefaces>
 </HTML>

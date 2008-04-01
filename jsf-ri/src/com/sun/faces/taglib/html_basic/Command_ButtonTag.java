@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.26 2002/07/12 19:44:36 eburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.27 2002/07/15 22:30:02 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.26 2002/07/12 19:44:36 eburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.27 2002/07/15 22:30:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,8 +77,8 @@ public Command_ButtonTag()
 // Accessors
 //
 
-    public String getCommandname() { return commandname; }
-    public void setCommandname(String newCommandname) { 
+    public String getCommandName() { return commandname; }
+    public void setCommandName(String newCommandname) { 
 	ParameterCheck.nonNull(newCommandname);
 	commandname = newCommandname;
     }
@@ -113,7 +113,7 @@ public Command_ButtonTag()
 	UICommand button = (UICommand) component;
 
 	if (null == button.getCommandName()) {
-	    button.setCommandName(getCommandname());
+	    button.setCommandName(getCommandName());
 	}
 	if (null == button.getAttribute("label")) {
 	    button.setAttribute("label", getLabel());

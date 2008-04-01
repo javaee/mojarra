@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="%2Ftest%2Ffaces%2Fform%2FbasicForm%2FTestRenderResponsePhase.jsp;jsessionid=80E0636212B5916924E002B6076365E7">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm/TestRenderResponsePhase.jsp;jsessionid=3433E62952B267E082E1C83280B480E3">
   <TABLE BORDER="1">
 
 
@@ -189,7 +189,6 @@
   <TABLE>
 
 </FORM>
-
 
     </BODY>
 </HTML>

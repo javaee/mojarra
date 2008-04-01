@@ -9,7 +9,8 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<faces:form formName="basicForm" id="basicForm">
+       <faces:usefaces>
+       <faces:form formName="basicForm" id="basicForm">
   <TABLE BORDER="1">
 
 
@@ -38,7 +39,7 @@
 	<TD>
 
 	      <faces:command_button id="login" label="Login" 
-				    commandname="login"/>
+				    commandName="login"/>
 
 	</TD>
 
@@ -50,7 +51,7 @@
 	<TD>
 
 	      <faces:command_button id="imageButton" image="duke.gif"
-				    commandname="login"/>
+				    commandName="login"/>
 
 	</TD>
 
@@ -172,7 +173,7 @@
   <TABLE>
 
 </faces:form>
-
+</faces:usefaces>
 
     </BODY>
 </HTML>

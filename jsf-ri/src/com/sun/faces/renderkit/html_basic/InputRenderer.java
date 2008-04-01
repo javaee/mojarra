@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
+ * $Id: InputRenderer.java,v 1.23 2002/07/15 22:30:01 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
+ * @version $Id: InputRenderer.java,v 1.23 2002/07/15 22:30:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -187,7 +187,7 @@ public class InputRenderer extends HtmlBasicRenderer {
             writer.write("\"");
         }
         //render maxlength if specified
-        String textField_ml = (String)component.getAttribute("maxlength");
+        String textField_ml = (String)component.getAttribute("maxLength");
         if ( textField_ml != null ) {
             writer.write(" MAXLENGTH=\"");
             writer.write(textField_ml);

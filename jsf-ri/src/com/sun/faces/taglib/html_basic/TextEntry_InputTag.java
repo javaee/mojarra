@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.33 2002/07/12 19:44:38 eburns Exp $
+ * $Id: TextEntry_InputTag.java,v 1.34 2002/07/15 22:30:02 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.33 2002/07/12 19:44:38 eburns Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.34 2002/07/15 22:30:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,11 +85,11 @@ public TextEntry_InputTag()
 	return size;
     }
 
-    public void setMaxlength(String newMaxlength) {
+    public void setMaxLength(String newMaxlength) {
 	maxlength = newMaxlength;
     }
 
-    public String getMaxlength() {
+    public String getMaxLength() {
 	return maxlength;
     }
 
@@ -121,8 +121,8 @@ public TextEntry_InputTag()
 	if (null == textEntry.getAttribute("size")) {
 	    textEntry.setAttribute("size", getSize());
 	}
-	if (null == textEntry.getAttribute("maxlength")) {
-	    textEntry.setAttribute("maxlength", getMaxlength());
+	if (null == textEntry.getAttribute("maxLength")) {
+	    textEntry.setAttribute("maxLength", getMaxLength());
 	}
     }
 

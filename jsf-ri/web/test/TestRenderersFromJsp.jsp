@@ -9,6 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
+       <faces:usefaces>
         <faces:form id="/basicForm">
 
             <faces:textentry_input id="userName" />
@@ -30,6 +31,6 @@
             <faces:textentry_textarea id="address" />
 
         </faces:form>
-
+       </faces:usefaces>
     </BODY>
 </HTML>

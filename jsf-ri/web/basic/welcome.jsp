@@ -9,11 +9,12 @@
 
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-
+      <faces:usefaces>
         <faces:form id="welcomeForm" formName="welcomeForm" >
 
              <p>
               <faces:output_text id="userLabel" text="userLabel" />  </P>
 
         </faces:form>
+     </faces:usefaces>
 </HTML>

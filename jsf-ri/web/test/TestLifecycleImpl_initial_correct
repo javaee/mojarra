@@ -9,7 +9,8 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm;jsessionid=D052F380C278B50418E9F9100477A730">
+       
+       <form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm;jsessionid=626946F9A6E524029051D9A8C6309723">
   <TABLE BORDER="1">
 
 
