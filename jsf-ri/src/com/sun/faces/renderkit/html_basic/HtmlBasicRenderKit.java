@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.26 2002/04/05 19:41:16 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.27 2002/04/16 23:27:30 rkitain Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import javax.faces.ClientCapabilities;
 import javax.faces.EventQueue;
 import javax.faces.UIComponent;
 import javax.faces.UICommand;
+import javax.faces.UISelectBoolean;
 import javax.faces.CommandEvent;
 import javax.faces.ValueChangeEvent;
 import javax.faces.FacesContext;
@@ -45,7 +46,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.26 2002/04/05 19:41:16 jvisvanathan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.27 2002/04/16 23:27:30 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -239,6 +240,15 @@ public void queueEvents(FacesContext facesContext) {
             // checkbox
             int name_idx = Constants.REF_HIDDENCHECKBOX.length();
             param_name = param_name.substring(name_idx);
+
+            // If the checkbox was checked, then it will be coming
+            // as a request parameter... 
+            //
+            if (request.getParameter(param_name) != null) {
+                param_value="true";
+            } else {
+                param_value="false";
+            }
         }
 
 	TreeNavigator treeNav = (TreeNavigator)objectManager.get(request,
@@ -262,6 +272,19 @@ public void queueEvents(FacesContext facesContext) {
                 ValueChangeEvent e =  new ValueChangeEvent(facesContext,
                         c, param_value);
                 eventQueue.add(e);
+
+//PENDING(rogerk) this is really gross..., - if a checkbox is checked,
+// then the value comes in as one of "true" "yes" or "on".
+// If we had the notion of an "HTML Boolean Component", then it probably
+// would make more sense to do this translation there (at least to avoid
+// the messy "instanceof".
+//
+                if (c instanceof UISelectBoolean &&
+                    (param_value.equalsIgnoreCase("true") ||
+                    param_value.equalsIgnoreCase("yes") ||
+                    param_value.equalsIgnoreCase("on"))) {
+                    param_value="true";
+                }
                 c.setValue(param_value);
             }    
 	} else { 

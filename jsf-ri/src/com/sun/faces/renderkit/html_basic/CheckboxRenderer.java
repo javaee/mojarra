@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.18 2002/04/05 19:41:14 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.19 2002/04/16 23:27:30 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.18 2002/04/05 19:41:14 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.19 2002/04/16 23:27:30 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -140,7 +140,11 @@ public class CheckboxRenderer extends Object implements Renderer {
         StringBuffer output = new StringBuffer();
 
         output.append("<INPUT TYPE=\"CHECKBOX\" ");
-        if (wSelectBoolean.isSelected(fc)) {
+        output.append(" NAME=\"");
+        output.append(cbId);
+        output.append("\"");
+
+        if (wSelectBoolean.getAttribute(fc, "checked") != null) {
             output.append(" CHECKED ");
         }
 
@@ -150,8 +154,6 @@ public class CheckboxRenderer extends Object implements Renderer {
         // box during form submissions if it is not selected.
 
         String hiddenFieldname = Constants.REF_HIDDENCHECKBOX + cbId;
-        String clickScript = hiddenFieldname + ".value=this.checked";
-        output.append("onClick=\"" + clickScript + "\" ");
 
         output.append(">");
         if (wSelectBoolean.getAttribute(fc, "label") != null) {
@@ -163,9 +165,13 @@ public class CheckboxRenderer extends Object implements Renderer {
         output.append(" ");
         output.append ("<INPUT TYPE=\"HIDDEN\" NAME=\"");
         output.append ( hiddenFieldname );
+        output.append("\"");
+        output.append(" VALUE=\"");
+        output.append("false");
         output.append ("\">");
  
         outputMethod.writeText(output.toString());
+
         outputMethod.flush();
     }
 
