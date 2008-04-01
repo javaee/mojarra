@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="post-EA2"/>
+  <property name="version" value="20020906"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -28,6 +28,9 @@
 
   <!-- The base directory for the JSF APIs -->
   <property name="jsf.api.home" value ="../jsf-api"/>
+
+  <!-- The base directory for the JSF DEMOs -->
+  <property name="jsf.demo.home" value ="../jsf-demo"/>
 
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
@@ -305,8 +308,17 @@
     <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
 
+    <!-- Build the demos from the jsf-demo repository -->
+    <ant dir="${jsf.demo.home}" inheritAll="false"
+         antfile="${jsf.demo.home}/build.xml" target="clean"/>
+    <ant dir="${jsf.demo.home}" inheritAll="false" target="copyJarsToDemos"
+         antfile="${jsf.demo.home}/build.xml" />
+
     <!-- copy the necessary examples -->
     <!-- PENDING(raj): include cardemo here -->
+    <copy todir="${dist.home}/example/helloDuke">
+      <fileset dir="${jsf.demo.home}/helloDuke"/>
+    </copy>
 
     <!-- create the zip file -->
     <zip zipfile="jsf-${version}.zip" basedir="${dist.home}" />
