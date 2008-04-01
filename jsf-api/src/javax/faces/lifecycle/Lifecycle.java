@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.5 2002/05/15 23:49:30 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.6 2002/05/15 23:57:01 craigmcc Exp $
  */
 
 /*
@@ -201,7 +201,10 @@ public abstract class Lifecycle {
     /**
      * <p>Execute the {@link Phase}s registered for this <code>Lifecycle</code>
      * instance, according to the algorithm described in the class description.
-     * </p>
+     * As phases are executed, call the <code>setPhaseId()</code> method of
+     * {@link FacesContext} as transitions between phases occur.</p>
+     *
+     * <p><strong>FIXME</strong> - setPhaseId() to what value when done?</p>
      *
      * @param context FacesContext for the current request being processed
      *

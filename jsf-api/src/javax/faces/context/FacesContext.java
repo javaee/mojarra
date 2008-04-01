@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.7 2002/05/15 01:03:52 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.8 2002/05/15 23:57:01 craigmcc Exp $
  */
 
 /*
@@ -66,6 +66,24 @@ public abstract class FacesContext {
      * instance.</p>
      */
     public abstract Lifecycle getLifecycle();
+
+
+    /**
+     * <p>Return the phase identifier representing the current phase in the
+     * request processing lifecycle.</p>
+     */
+    public abstract int getPhaseId();
+
+
+    /**
+     * <p>Set the phase identifier representing the current phase in the
+     * request processing lifecycle.  This should only be called by the
+     * <code>execute()</code> method of the {@link Lifecycle} instance that
+     * is processing the current request.
+     *
+     * @param phaseId The new phase identifier
+     */
+    public abstract void setPhaseId();
 
 
     /**
