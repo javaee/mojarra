@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.37 2002/06/24 04:34:54 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.38 2002/07/16 22:11:28 craigmcc Exp $
  */
 
 /*
@@ -156,6 +156,18 @@ public interface UIComponent {
      * must override this method to do so. </p>
      */
     public boolean getRendersChildren();
+
+
+    /**
+     * <p>Return a flag indicating whether this component has concrete
+     * implementations of the <code>decode()</code> and
+     * <code>encodeXxx()</code> methods, and is therefore suitable for
+     * use in the <em>direct implementation</em> programming model
+     * for rendering.  The default implementation returns <code>false</code>;
+     * components that want to return <code>true</code> must override
+     * this method to do so.</p>
+     */
+    public boolean getRendersSelf();
 
 
     /**

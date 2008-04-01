@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.9 2002/06/27 21:47:28 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.10 2002/07/16 22:11:29 craigmcc Exp $
  */
 
 /*
@@ -111,6 +111,12 @@ public abstract class UIComponentBase implements UIComponent {
             } else {
                 return (Boolean.FALSE);
             }
+        } else if ("rendersSelf".equals(name)) {
+            if (getRendersSelf()) {
+                return (Boolean.TRUE);
+            } else {
+                return (Boolean.FALSE);
+            }
         }
 
         // Return the selected attribute value
@@ -161,7 +167,8 @@ public abstract class UIComponentBase implements UIComponent {
         // Special cases for read-only pseudo-attributes
         if ("componentType".equals(name) ||
             "compoundId".equals(name) ||
-            "rendersChildren".equals(name)) {
+            "rendersChildren".equals(name) ||
+            "rendersSelf".equals(name)) {
             throw new IllegalArgumentException(name);
         }
 
@@ -335,6 +342,22 @@ public abstract class UIComponentBase implements UIComponent {
      * must override this method to do so. </p>
      */
     public boolean getRendersChildren() {
+
+        return (false);
+
+    }
+
+
+    /**
+     * <p>Return a flag indicating whether this component has concrete
+     * implementations of the <code>decode()</code> and
+     * <code>encodeXxx()</code> methods, and is therefore suitable for
+     * use in the <em>direct implementation</em> programming model
+     * for rendering.  The default implementation returns <code>false</code>;
+     * components that want to return <code>true</code> must override
+     * this method to do so.</p>
+     */
+    public boolean getRendersSelf() {
 
         return (false);
 

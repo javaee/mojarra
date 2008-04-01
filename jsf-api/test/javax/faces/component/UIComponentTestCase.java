@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.7 2002/07/12 00:30:05 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.8 2002/07/16 22:11:30 craigmcc Exp $
  */
 
 /*
@@ -156,9 +156,11 @@ public class UIComponentTestCase extends TestCase {
         assertNull("rendererType7", component.getRendererType());
         assertNull("rendererType8", component.getAttribute("rendererType"));
 
-        // rendersChildren
+        // rendersChildren and rendersSelf
         assertEquals("rendersChildren1", component.getRendersChildren(),
                      ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
+        assertEquals("rendersSelf1", component.getRendersSelf(),
+                     ((Boolean) component.getAttribute("rendersSelf")).booleanValue());
 
         // value
         assertNull("value1", component.getValue());
@@ -437,6 +439,13 @@ public class UIComponentTestCase extends TestCase {
             ; // Expected result
         }
 
+        try {
+            component.setAttribute("rendersSelf", Boolean.FALSE); // Read-only prop
+            fail("setAttribute did not throw IAE");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
         // [3.1.9] addValidator()
         try {
             component.addValidator(null);
@@ -454,6 +463,16 @@ public class UIComponentTestCase extends TestCase {
     public void testRendersChildren() {
 
         assertTrue("rendersChildren", !component.getRendersChildren());
+
+    }
+
+
+    /**
+     * [3.1.11] Renders Self.
+     */
+    public void testRendersSelf() {
+
+        assertTrue("rendersSelf", !component.getRendersSelf());
 
     }
 
