@@ -85,6 +85,14 @@
     <cvs command="update -d -P"/>
   </target>
 
+  <!-- 
+       ===================================================================
+         Convenience target: pull.clean.build
+       =================================================================== 
+  -->
+  <target name="pull.clean.build" depends="cvsupdate,clean,main">
+  </target>
+
 
   <target name="init"
    description="Initialize and evaluate conditionals">
