@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.7 2002/06/18 18:23:25 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl.java,v 1.8 2002/06/25 21:42:55 eburns Exp $
  */
 
 /*
@@ -20,11 +20,10 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.Phase;
-import javax.faces.lifecycle.PhaseListener;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FormEvent;
-import javax.faces.event.CommandEvent;
+import javax.faces.event.FacesEvent;
 
 import java.util.Iterator;
 
@@ -36,7 +35,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.7 2002/06/18 18:23:25 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.8 2002/06/25 21:42:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,7 +64,6 @@ public static final String TEST_URI = "/components.jsp";
 // Relationship Instance Variables
 
 protected LifecycleImpl sharedLifecycleImpl = null;
-protected PhaseListener sharedPhaseListener = null;
 
 //
 // Constructors and Initializers    
@@ -95,24 +93,6 @@ protected void setSharedLifecycleImpl(LifecycleImpl newLife)
     sharedLifecycleImpl = newLife;
 }
     
-protected PhaseListener getSharedPhaseListener()
-{
-    if (null == sharedPhaseListener) {
-	sharedPhaseListener = new PhaseListener() {
-		public void entering(FacesContext context, int phaseId, 
-				     Phase phase) {
-		    System.setProperty(ENTER_CALLED, ENTER_CALLED);
-		}
-		
-		public void exiting(FacesContext context, int phaseId,
-				    Phase phase, int stateChange) {
-		    System.setProperty(EXIT_CALLED, EXIT_CALLED);
-		}
-	    };
-    }
-    return sharedPhaseListener;
-}
-
 protected void initWebRequest(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
@@ -122,10 +102,11 @@ protected void initWebRequest(WebRequest theRequest)
 public void testApplicationHandler()
 {
     ApplicationHandler result = null, app = new ApplicationHandler() {
-	    public void commandEvent(FacesContext context, CommandEvent event){
-	    }
-	    public void formEvent(FacesContext context, FormEvent event) {}
-	};
+	    public boolean processEvent(FacesContext context, 
+					FacesEvent event) 
+	    {return true;} 
+	}; 
+    
     
     LifecycleImpl life = new LifecycleImpl();
     boolean exceptionThrown = false;
@@ -204,132 +185,19 @@ public void testExtraPhases()
     catch (IllegalStateException e) {
 	exceptionThrown = true;
     }
-    assertTrue(!exceptionThrown);
-    
-    // Make sure the default instance exists
-    life = factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    assertTrue(null != life);
-
-    life.execute(getFacesContext());
-
-    assertTrue(EMPTY != System.getProperty(beforeRender));
-    assertTrue(EMPTY != System.getProperty(afterCreateRequest));
-}
-
-
-public void beginPhaseListenersBasic_1(WebRequest theRequest)
-{
-    initWebRequest(theRequest);
-}
-
-public void testPhaseListenersBasic_1()
-{
-    LifecycleImpl life = getSharedLifecycleImpl();
-    PhaseListener listener = getSharedPhaseListener();
-
-    System.setProperty(ENTER_CALLED, EMPTY);
-    System.setProperty(EXIT_CALLED, EMPTY);
-
-    life.addPhaseListener(listener);
-
-    life.execute(getFacesContext());
-
-    // verify the listeners are called
-    assertTrue(EMPTY != System.getProperty(ENTER_CALLED));
-    assertTrue(EMPTY != System.getProperty(EXIT_CALLED));
-    
-}
-
-public void beginPhaseListenersBasic_2(WebRequest theRequest)
-{
-    initWebRequest(theRequest);
-}
-
-public void testPhaseListenersBasic_2()
-{
-    LifecycleImpl life = getSharedLifecycleImpl();
-    PhaseListener listener = getSharedPhaseListener();
-
-    System.setProperty(ENTER_CALLED, EMPTY);
-    System.setProperty(EXIT_CALLED, EMPTY);
-
-    life.removePhaseListener(listener);
-
-    life.execute(getFacesContext());
-
-    // verify the listeners are not called
-    assertTrue(EMPTY.equals(System.getProperty(ENTER_CALLED)));
-    assertTrue(EMPTY.equals(System.getProperty(EXIT_CALLED)));
-}
-
-public void beginPhaseListenersAdvanced_1(WebRequest theRequest)
-{
-    initWebRequest(theRequest);
-}
-
-public void testPhaseListenersAdvanced_1()
-{
-    LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
-    LifecycleImpl life = null;
-    PhaseListener listener = getSharedPhaseListener();
-    boolean exceptionThrown = false;
-
-    System.setProperty(ENTER_CALLED, EMPTY);
-    System.setProperty(EXIT_CALLED, EMPTY);
-
-    try {
-	factory.registerAfter(LifecycleFactory.DEFAULT_LIFECYCLE,
-			      Lifecycle.CREATE_REQUEST_TREE_PHASE, 
-	       new GenericPhaseImpl(null, 
-				    Lifecycle.CREATE_REQUEST_TREE_PHASE) {
-		   public int execute(FacesContext facesContext) 
-		       throws FacesException
-		   {
-		       return Phase.GOTO_RENDER;
-		   }
-	       });
-    }
-    catch (IllegalStateException e) {
+    catch (UnsupportedOperationException e) {
 	exceptionThrown = true;
     }
-    assertTrue(!exceptionThrown);
-
+    assertTrue(exceptionThrown);
+    
     // Make sure the default instance exists
-    life = (LifecycleImpl) 
-	factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
     assertTrue(null != life);
-    setSharedLifecycleImpl(life);
-    
-    life.addPhaseListener(listener);
 
     life.execute(getFacesContext());
 
-    // verify the listeners are called
-    assertTrue(EMPTY != System.getProperty(ENTER_CALLED));
-    assertTrue(EMPTY != System.getProperty(EXIT_CALLED));
-    
-}
-
-public void beginPhaseListenersAdvanced_2(WebRequest theRequest)
-{
-    initWebRequest(theRequest);
-}
-
-public void testPhaseListenersAdvanced_2()
-{
-    LifecycleImpl life = getSharedLifecycleImpl();
-    PhaseListener listener = getSharedPhaseListener();
-
-    life.removePhaseListener(listener);
-
-    System.setProperty(ENTER_CALLED, EMPTY);
-    System.setProperty(EXIT_CALLED, EMPTY);
-
-    life.execute(getFacesContext());
-
-    // verify the listeners are not called
-    assertTrue(EMPTY.equals(System.getProperty(ENTER_CALLED)));
-    assertTrue(EMPTY.equals(System.getProperty(EXIT_CALLED)));
+    assertTrue(EMPTY == System.getProperty(beforeRender));
+    assertTrue(EMPTY == System.getProperty(afterCreateRequest));
 }
 
 } // end of class TestLifecycleImpl

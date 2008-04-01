@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.9 2002/06/25 21:08:38 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.10 2002/06/25 21:42:53 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.9 2002/06/25 21:08:38 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.10 2002/06/25 21:42:53 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -203,19 +203,7 @@ protected int executeRender(FacesContext context) throws FacesException
     Assert.assert_it(null != renderPhase);
     rc = renderPhase.execute(context);
     
-    callExitingListeners(context, Lifecycle.RENDER_RESPONSE_PHASE, renderPhase,
-			 rc);
     return rc;
-}
-
-protected void callEnteringListeners(FacesContext context, int curPhaseId, 
-				     Phase curPhase)
-{
-}
-
-protected void callExitingListeners(FacesContext context, int curPhaseId, 
-				    Phase curPhase, int stateChange)
-{
 }
 
 //
@@ -268,7 +256,6 @@ public void execute(FacesContext context) throws FacesException
 	    return;
 	}
 
-	callEnteringListeners(context, curPhaseId, curPhase);
 	// Execute the current phase
 	if (Phase.GOTO_EXIT == (rc = curPhase.execute(context))) {
 	    return;
@@ -277,7 +264,6 @@ public void execute(FacesContext context) throws FacesException
 	    executeRender(context);
 	    return;
 	}
-	callExitingListeners(context, curPhaseId, curPhase, rc);
 
 	// Execute the after phases for the current phase, if any
 	if (Phase.GOTO_EXIT == (rc = wrapper.executeAfter(context))) {
@@ -293,8 +279,11 @@ public void execute(FacesContext context) throws FacesException
 
 public int executePhase(FacesContext context, Phase phase) throws FacesException
 {
-    Assert.assert_it(false, "PENDING():");
-    return -1;
+    if (null == context || null == phase) { 
+	throw new NullPointerException("Null FacesContext"); 
+    } 
+    
+    return phase.execute(context); 
 }
 
 

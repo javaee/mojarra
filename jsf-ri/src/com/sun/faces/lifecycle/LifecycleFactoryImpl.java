@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.2 2002/06/21 00:31:22 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.3 2002/06/25 21:42:53 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.2 2002/06/21 00:31:22 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.3 2002/06/25 21:42:53 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -168,8 +168,7 @@ public Iterator getLifecycleIds()
 
 public void registerAfter(String lifecycleId, int phaseId, Phase phase)
 {
-
-    Assert.assert_it(false, "PENDING(): fixme");
+    throw new UnsupportedOperationException("PENDING(): fixme");
     
     /**********
     Lifecycle life =verifyRegisterArgs(lifecycleId, phaseId, phase);
@@ -182,7 +181,7 @@ public void registerAfter(String lifecycleId, int phaseId, Phase phase)
 public void registerBefore(String lifecycleId, int phaseId, Phase phase)
 {
 
-    Assert.assert_it(false, "PENDING(): fixme");
+    throw new UnsupportedOperationException("PENDING(): fixme");
     /********
 
     Lifecycle life =verifyRegisterArgs(lifecycleId, phaseId, phase);
