@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.15 2002/07/31 22:40:07 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.16 2002/08/01 00:28:24 jvisvanathan Exp $
  */
 
 /*
@@ -34,6 +34,8 @@ import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
 import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.lifecycle.ApplicationHandler;
+import javax.faces.lifecycle.ViewHandler;
 
 import javax.faces.context.MessageResourcesFactory;
 import javax.faces.context.MessageResources;
@@ -62,7 +64,6 @@ public class FacesContextImpl extends FacesContext
     // Instance Variables
     //
     private ServletContext servletContext = null;
-    private Lifecycle lifecycle = null;
     private Locale locale = null;
     private ServletRequest request = null;
     private Tree requestTree = null;
@@ -75,6 +76,8 @@ public class FacesContextImpl extends FacesContext
     private HashMap requestEvents = null;
     private int requestEventsCount = 0;
     private HashMap messageList = null;
+    private ViewHandler viewHandler = null;
+    private ApplicationHandler applicationHandler = null;
     
     // Attribute Instance Variables
 
@@ -104,7 +107,9 @@ public class FacesContextImpl extends FacesContext
             this.session =
                 ((HttpServletRequest) request).getSession();
         }
-        this.lifecycle = lifecycle; 
+        this.viewHandler = lifecycle.getViewHandler();
+        this.applicationHandler = lifecycle.getApplicationHandler();
+        
     }
 
     //
@@ -137,12 +142,7 @@ public class FacesContextImpl extends FacesContext
     public HttpSession getHttpSession() {
         return (this.session);
     }
-
-    public Lifecycle getLifecycle() {
-        return (this.lifecycle);
-    }
-
-
+    
     public Locale getLocale() {
         return (this.locale);
     }
@@ -630,7 +630,6 @@ public class FacesContextImpl extends FacesContext
         response = null;
         servletContext = null;
         session = null;
-        lifecycle = null;
         locale = null;
         requestTree = null;
         responseTree = null;
@@ -639,8 +638,18 @@ public class FacesContextImpl extends FacesContext
         applicationEvents = null;
         requestEvents = null;
         requestEventsCount = 0;
-    }    
-        
+        viewHandler = null;
+        applicationHandler = null;
+    }
+    
+    public ViewHandler getViewHandler() {
+        return this.viewHandler;
+    }
+   
+    public ApplicationHandler getApplicationHandler() {
+        return this.applicationHandler;
+    }
+    
     // The testcase for this class is TestFacesContextImpl.java 
     // The testcase for this class is TestFacesContextImpl_Model.java
 
