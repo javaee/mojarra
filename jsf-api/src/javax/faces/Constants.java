@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.17 2002/03/08 00:22:07 jvisvanathan Exp $
+ * $Id: Constants.java,v 1.18 2002/03/08 22:13:42 eburns Exp $
  */
 
 /*
@@ -129,6 +129,12 @@ public class Constants {
      */
     public static final String REF_NAVIGATIONHANDLERFACTORY = 
             "navigationHandlerFactory";
+
+    /**
+     * Name for TreeEngine
+     */
+    public static final String REF_TREEENGINE = 
+            "faces.treeEngine";
     
     /**
      * The name of a Renderer.
@@ -139,6 +145,12 @@ public class Constants {
      * Starting string for hidden checkbox field
      */
      public static final String REF_HIDDENCHECKBOX = "facesCheckbox";
+
+    /**
+     * The tree navigator
+     */
+     public static final String REF_TREENAVIGATOR = "faces.TreeNavigator";
+
 
     /**
      * The session attributes key under which our transaction token is
