@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.11 2002/06/08 00:35:50 craigmcc Exp $
+ * $Id: UIForm.java,v 1.12 2002/07/09 00:05:24 craigmcc Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ public class UIForm extends UIComponentBase {
     /**
      * <p>Path Info prefix that indicates a form submit.</p>
      */
-    private static final String PREFIX = "/faces/form/";
+    private static final String PREFIX = "/faces/form";
 
 
     /**
@@ -191,15 +191,21 @@ public class UIForm extends UIComponentBase {
      */
     private String action(FacesContext context) {
 
+        Object value = currentValue(context);
+
         HttpServletRequest request =
             (HttpServletRequest) context.getServletRequest();
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer(request.getContextPath());
         sb.append(PREFIX);
-        sb.append(URLEncoder.encode(currentValue(context).toString())); // FIXME - null handling?
-        sb.append("/");
-        sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
+        if (value != null) {
+            String formName = value.toString();
+            if (!formName.startsWith("/")) {
+                sb.append("/");
+            }
+            sb.append(URLEncoder.encode(formName));
+        }
         return (response.encodeURL(URLEncoder.encode(sb.toString())));
 
     }
