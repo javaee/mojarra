@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.21 2002/08/17 22:20:30 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.22 2002/08/19 21:38:49 rkitain Exp $
  */
 
 /*
@@ -37,6 +37,7 @@ import javax.faces.component.UIInput;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.context.MessageImpl;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 
@@ -50,7 +51,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.21 2002/08/17 22:20:30 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.22 2002/08/19 21:38:49 rkitain Exp $
  * 
  *
  */
@@ -151,6 +152,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_textarea", "TextAreaRenderer");
 
         theRequest.addParameter("/my_graphic_image", "graphicimage");
+
+        theRequest.addParameter("/my_output_errors", "outputerrors");
     } 
 
     public void testRenderers() {
@@ -185,6 +188,8 @@ public class TestRenderers_2 extends JspFacesTestCase
 	    testOutputNumberRendererWithPattern(root);
 
             testGraphicImageRenderer(root);
+
+            testOutputErrorsRenderer(root);
             
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
@@ -484,6 +489,41 @@ public class TestRenderers_2 extends JspFacesTestCase
         result = imageRenderer.supportsComponentType(img);
         assertTrue(result);
         result = imageRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+
+    public void testOutputErrorsRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing OutputErrorsRenderer");
+        UIOutput output = new UIOutput();
+        output.setComponentId("my_output_errors");
+        root.addChild(output);
+
+        ErrorsRenderer errorsRenderer = new ErrorsRenderer();
+
+        // populate facescontext with some errors
+        // specifically, add a "global" message and
+        // "component" message. 
+
+        getFacesContext().addMessage(null,new MessageImpl(1,
+            "global message summary", "global message detail"));
+        getFacesContext().addMessage(output, new MessageImpl(1,
+            "component message summary", "component message detail"));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        errorsRenderer.encodeBegin(getFacesContext(), output);
+        errorsRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = errorsRenderer.supportsComponentType("javax.faces.component.UIOutput");
+        assertTrue(result);
+        result = errorsRenderer.supportsComponentType(output);
+        assertTrue(result);
+        result = errorsRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
 
