@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.2 2002/07/30 22:51:36 craigmcc Exp $
+ * $Id: UISelectBase.java,v 1.3 2002/08/04 20:02:47 craigmcc Exp $
  */
 
 /*
@@ -58,10 +58,10 @@ abstract class UISelectBase extends UIComponentBase {
                                         item.getItemDescription()));
             } else if (kid instanceof UISelectItems) {
                 Object value = kid.currentValue(context);
-                if (value instanceof UISelectItem) {
+                if (value instanceof SelectItem) {
                     list.add(value);
-                } else if (value instanceof UISelectItem[]) {
-                    UISelectItem items[] = (UISelectItem[]) value;
+                } else if (value instanceof SelectItem[]) {
+                    SelectItem items[] = (SelectItem[]) value;
                     for (int i = 0; i < items.length; i++) {
                         list.add(items[i]);
                     }
