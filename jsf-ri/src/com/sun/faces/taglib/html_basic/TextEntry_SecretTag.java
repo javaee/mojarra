@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.15 2002/01/17 02:17:04 edburns Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.16 2002/01/23 00:50:07 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.15 2002/01/17 02:17:04 edburns Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.16 2002/01/23 00:50:07 edburns Exp $
  * 
  *
  */
@@ -190,7 +190,7 @@ public class TextEntry_SecretTag extends TagSupport
     protected UITextEntry createComponent(RenderContext rc) {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
-        c.setAttribute("id", id);
+        c.setId(getId());
         c.setAttribute("size", size);
         c.setAttribute("maxlength", maxlength);
 

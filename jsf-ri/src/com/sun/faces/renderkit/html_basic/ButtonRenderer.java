@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.14 2002/01/16 21:06:34 rogerk Exp $
+ * $Id: ButtonRenderer.java,v 1.15 2002/01/23 00:50:05 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.14 2002/01/16 21:06:34 rogerk Exp $
+ * @version $Id: ButtonRenderer.java,v 1.15 2002/01/23 00:50:05 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -168,6 +168,8 @@ public class ButtonRenderer extends Object implements Renderer
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
+	String id = wCommand.getId();
+	Assert.assert_it(null != id);
         StringBuffer output = new StringBuffer();
         output.append("<INPUT TYPE=");
         if (wCommand.getAttribute(rc, "image") != null) {
@@ -175,12 +177,12 @@ public class ButtonRenderer extends Object implements Renderer
             output.append(wCommand.getAttribute(rc, "image"));
             output.append("\"");
             output.append(" NAME=\"");
-            output.append(wCommand.getAttribute(rc, "id"));
+            output.append(id);
             output.append("\"");
         } else {
             String label = (String)wCommand.getAttribute(rc, "label");
             output.append("\"SUBMIT\" NAME=\"");
-            output.append(wCommand.getAttribute(rc, "id"));
+            output.append(id);
             output.append("\"");
             output.append(" value=\"");
 	    // Follow the UE Spec for Button:

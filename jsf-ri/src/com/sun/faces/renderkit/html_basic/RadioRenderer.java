@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.5 2002/01/10 22:32:49 edburns Exp $
+ * $Id: RadioRenderer.java,v 1.6 2002/01/23 00:50:06 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.5 2002/01/10 22:32:49 edburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.6 2002/01/23 00:50:06 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,6 +133,8 @@ public class RadioRenderer extends Object implements Renderer {
         Assert.assert_it(outputMethod != null );
 	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
 
+	String id = wSelectOne.getId();
+	Assert.assert_it(null != id);
         StringBuffer output = new StringBuffer();
         output.append("<INPUT TYPE=\"RADIO\"");
 
@@ -141,7 +143,7 @@ public class RadioRenderer extends Object implements Renderer {
             output.append(" CHECKED");
         }
         output.append(" NAME=\"");
-        output.append(wSelectOne.getAttribute(rc, "name"));
+        output.append(id);
         output.append("\" VALUE=\"");
         output.append(wSelectOne.getAttribute(rc, "value"));
         output.append("\">");

@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.9 2002/01/10 22:32:49 edburns Exp $
+ * $Id: InputRenderer.java,v 1.10 2002/01/23 00:50:06 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.9 2002/01/10 22:32:49 edburns Exp $
+ * @version $Id: InputRenderer.java,v 1.10 2002/01/23 00:50:06 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,7 +121,8 @@ public class InputRenderer extends Object implements Renderer
         output.append("<INPUT TYPE=\"text\"");
             
         // render name of the component if specified
-        String textField_name = (String)textField.getAttribute(rc, "name");
+        String textField_name = textField.getId();
+	Assert.assert_it(null != textField_name);
         if ( textField_name != null ) {
             output.append(" NAME=\"");
             output.append(textField_name);

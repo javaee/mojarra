@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.18 2002/01/23 00:50:07 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.18 2002/01/23 00:50:07 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -278,7 +278,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         UISelectBoolean wSelectBoolean = new UISelectBoolean();
 
         // set renderer specific properties
-        wSelectBoolean.setAttribute("id", getId());
+        wSelectBoolean.setId(getId());
         wSelectBoolean.setAttribute("value", getValue());
         wSelectBoolean.setAttribute("label", getLabel());
 

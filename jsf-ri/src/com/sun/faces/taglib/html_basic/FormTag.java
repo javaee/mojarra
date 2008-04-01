@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.20 2002/01/17 22:27:02 edburns Exp $
+ * $Id: FormTag.java,v 1.21 2002/01/23 00:50:07 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.20 2002/01/17 22:27:02 edburns Exp $
+ * @version $Id: FormTag.java,v 1.21 2002/01/23 00:50:07 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -173,7 +173,7 @@ public class FormTag extends TagSupport
         UIForm c = new UIForm();
 
         // set renderer specific properties 
-        c.setAttribute("id", id);
+        c.setId(getId());
 
         // set render independent attributes
         // make sure that the model object is registered

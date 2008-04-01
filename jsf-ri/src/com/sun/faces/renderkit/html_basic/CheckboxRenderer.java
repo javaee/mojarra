@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.13 2002/01/10 22:32:48 edburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.14 2002/01/23 00:50:06 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.13 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.14 2002/01/23 00:50:06 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -145,7 +145,8 @@ public class CheckboxRenderer extends Object implements Renderer {
         // field because HTML doesn't send the status of the check
         // box during form submissions if it is not selected.
 
-        String cb_name = (String) wSelectBoolean.getAttribute(rc, "name");
+        String cb_name = wSelectBoolean.getId();
+	Assert.assert_it(null != cb_name);
         String hiddenFieldname = Constants.REF_HIDDENCHECKBOX + cb_name;
         String clickScript = hiddenFieldname + ".value=this.checked";
         output.append("onClick=\"" + clickScript + "\" ");

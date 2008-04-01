@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.17 2002/01/23 00:50:07 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.17 2002/01/23 00:50:07 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -207,7 +207,7 @@ public class Command_ButtonTag extends TagSupport {
                 wCommand = new UICommand();
                 addToScope(wCommand, objectManager);
             }
-            wCommand.setAttribute("id", getId());
+            wCommand.setId(getId());
             wCommand.setAttribute("image", getImage());
             wCommand.setAttribute("label", getLabel());
             

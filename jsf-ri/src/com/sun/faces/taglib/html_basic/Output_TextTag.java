@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.15 2002/01/17 02:17:03 edburns Exp $
+ * $Id: Output_TextTag.java,v 1.16 2002/01/23 00:50:07 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.15 2002/01/17 02:17:03 edburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.16 2002/01/23 00:50:07 edburns Exp $
  * 
  *
  */
@@ -215,7 +215,7 @@ public class Output_TextTag extends TagSupport
     protected UIOutput createComponent(RenderContext rc) {
         UIOutput c = new UIOutput();
         // set renderer specific properties 
-        c.setAttribute("id", id);
+        c.setId(getId());
 
         // set render independent attributes 
         // If model attribute is not found get it

@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.10 2002/01/16 21:06:34 rogerk Exp $
+ * $Id: SecretRenderer.java,v 1.11 2002/01/23 00:50:06 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.10 2002/01/16 21:06:34 rogerk Exp $
+ * @version $Id: SecretRenderer.java,v 1.11 2002/01/23 00:50:06 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,7 +121,8 @@ public class SecretRenderer extends Object implements Renderer
         output.append("<INPUT TYPE=\"PASSWORD\"");
             
         // render name of the component if specified
-        String textField_name = (String)textField.getAttribute(rc, "id");
+        String textField_name = textField.getId();
+	Assert.assert_it(null != textField_name);
         if ( textField_name != null ) {
             output.append(" NAME=\"");
             output.append(textField_name);
