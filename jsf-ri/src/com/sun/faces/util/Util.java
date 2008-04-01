@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.28 2002/08/17 00:57:07 jvisvanathan Exp $
+ * $Id: Util.java,v 1.29 2002/08/19 21:37:49 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.28 2002/08/17 00:57:07 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.29 2002/08/19 21:37:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,6 +127,8 @@ public class Util extends Object
 
     public static final String MISSING_CLASS_ERROR_MESSAGE_ID =
         "com.sun.faces.MISSING_CLASS_ERROR";
+    public static final String COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID =
+        "com.sun.faces.COMPONENT_NOT_FOUND_ERROR";
 //
 // Class Variables
 //
