@@ -188,7 +188,8 @@
              version="true" private="true"
              windowtitle="${Name} API"
              doctitle="${Name}"
-             bottom="Copyright &#169; 2001 Sun Microsystems, Inc. All Rights Reserved.">
+             bottom="Copyright &#169; 2002 Sun Microsystems, Inc. All Rights Reserved.">
+      <classpath refid="classpath"/>
     </javadoc>
   </target>
   
