@@ -1,5 +1,5 @@
 /*
- * $Id: TestBeanAccessor.java,v 1.1 2002/04/15 20:57:51 eburns Exp $
+ * $Id: TestBeanAccessor.java,v 1.2 2002/04/15 23:07:59 eburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestBeanAccessor.java,v 1.1 2002/04/15 20:57:51 eburns Exp $
+ * @version $Id: TestBeanAccessor.java,v 1.2 2002/04/15 23:07:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,6 +104,46 @@ public void testSet()
     
 }
 
+public void testGet()
+{
+    ObjectAccessor objectAccessor = facesContext.getObjectAccessor();
+    ObjectManager objectManager = facesContext.getObjectManager();
+    TestBean testBean = new TestBean();
+    InnerBean inner = new InnerBean();
+    Inner2Bean inner2 = new Inner2Bean();
+    String result;
+
+    // Init the beans
+    testBean.setOne("one");
+    inner.setTwo("two");
+    inner2.setThree("three");
+    inner.setInner2(inner2);
+    testBean.setInner(inner);
+
+    objectManager.put(request, "TestBean", testBean);
+    
+    // Test one level of nesting
+    result = (String) objectAccessor.getObject(request, "$TestBean.one");
+    assertTrue(result.equals("one"));
+
+    inner = (InnerBean) objectAccessor.getObject(request, "$TestBean.inner");
+    assertTrue(null != inner);
+
+    // Test two levels of nesting
+    result = (String) objectAccessor.getObject(request, "$TestBean.inner.two");
+    assertTrue(result.equals("two"));
+
+    inner2 = (Inner2Bean) 
+	objectAccessor.getObject(request, "$TestBean.inner.inner2");
+    assertTrue(null != inner2);
+
+    // Test three levels of nesting
+    result = (String) objectAccessor.getObject(request, 
+					       "$TestBean.inner.inner2.three");
+    assertTrue(result.equals("three"));
+    
+}
+
 public static class TestBean extends Object
 {
 
@@ -158,6 +198,7 @@ protected Inner2Bean inner2 = null;
 public void setInner2(Inner2Bean newInner2)
 {
     inner2 = newInner2;
+    System.setProperty(PROP, TRUE);
 }
 
 public Inner2Bean getInner2() 
