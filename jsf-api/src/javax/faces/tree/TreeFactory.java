@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.5 2002/05/29 19:54:06 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.6 2002/06/07 22:21:25 craigmcc Exp $
  */
 
 /*
@@ -53,18 +53,6 @@ public abstract class TreeFactory {
      */
     public abstract Tree createTree(ServletContext context,
                                     String treeId) throws FacesException;
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the set of tree identifiers
-     * of all {@link Tree} instances that can be created by this factory,
-     * for this web application.
-     * If no trees are supported, an empty <code>Iterator</code> must be
-     * returned.</p>
-     *
-     * @param context ServletContext for this web application
-     */
-    public abstract Iterator getTreeIds(ServletContext context);
 
 
 }
