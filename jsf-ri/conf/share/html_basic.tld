@@ -309,7 +309,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>selected</name>
+        <name>checked</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
