@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
+ * $Id: FormRenderer.java,v 1.6 2001/11/21 17:48:48 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -18,6 +18,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -35,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
+ * @version $Id: FormRenderer.java,v 1.6 2001/11/21 17:48:48 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,7 +102,7 @@ public class FormRenderer extends Object implements Renderer
 
 
     public void renderStart(RenderContext rc, WComponent c ) 
-            throws IOException {
+        throws IOException, FacesException {
         // render the form
         try {
             WForm form = null;

@@ -68,9 +68,12 @@ component
      * @param c the WComponent instance representing the component state
      *          being rendered
      * @throws IOException
+     * @throws FacesException if the specified componentType is not
+     *         supported by this renderer
      * @throws NullPointerException if rc or c is null
      */
-    public void renderStart(RenderContext rc, WComponent c) throws IOException;
+    public void renderStart(RenderContext rc, WComponent c) 
+        throws IOException, FacesException;
 
     /**
      * Invoked to render the children of the specified component using
