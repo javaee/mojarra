@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.1 2002/05/28 20:52:02 eburns Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.2 2002/06/26 18:43:24 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.1 2002/05/28 20:52:02 eburns Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.2 2002/06/26 18:43:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,12 +75,12 @@ public void testDefault()
     assertTrue(factory != null);
 
     // Make sure the default instance exists
-    life = factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
     assertTrue(null != life);
 
     // Make sure multiple requests for the same name give the same
     // instance.
-    life2 = factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    life2 = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
     assertTrue(life == life2);
 }
 
@@ -129,11 +129,14 @@ public void testIllegalStateException()
     catch (IllegalStateException e) {
 	exceptionThrown = true;
     }
-    assertTrue(!exceptionThrown);
+    catch (UnsupportedOperationException e) {
+	exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
     
 
     // Make sure the default instance exists
-    life = factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
     assertTrue(null != life);
 
     exceptionThrown = false;
@@ -144,6 +147,9 @@ public void testIllegalStateException()
 			       new GenericPhaseImpl(life, Lifecycle.RENDER_RESPONSE_PHASE));
     }
     catch (IllegalStateException e) {
+	exceptionThrown = true;
+    }
+    catch (UnsupportedOperationException e) {
 	exceptionThrown = true;
     }
     assertTrue(exceptionThrown);
@@ -167,6 +173,9 @@ public void testIllegalArgumentException()
     catch (IllegalArgumentException e) {
 	exceptionThrown = true;
     }
+    catch (UnsupportedOperationException e) {
+	exceptionThrown = true;
+    }
     assertTrue(exceptionThrown);
 
     exceptionThrown = false;
@@ -177,6 +186,9 @@ public void testIllegalArgumentException()
 			       new GenericPhaseImpl(null, Lifecycle.RENDER_RESPONSE_PHASE));
     }
     catch (IllegalArgumentException e) {
+	exceptionThrown = true;
+    }
+    catch (UnsupportedOperationException e) {
 	exceptionThrown = true;
     }
     assertTrue(exceptionThrown);

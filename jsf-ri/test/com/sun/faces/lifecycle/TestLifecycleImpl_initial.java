@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.4 2002/06/18 18:23:25 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.5 2002/06/26 18:43:24 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
-import javax.faces.lifecycle.PhaseListener;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.RIConstants;
@@ -29,7 +28,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.4 2002/06/18 18:23:25 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.5 2002/06/26 18:43:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -42,17 +41,16 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/components.xul";
-public static final String TEST_URI = "/components.jsp";
+public static final String TEST_URI_XUL = "/components_1.xul";
+public static final String TEST_URI = "/components_1.jsp";
 
 public String getExpectedOutputFilename() {
     return "TestLifecycleImpl_initial_correct";
 }
 
 public static final String ignore[] = {
-    "        <form method=\"post\" action=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=form&name=basicForm&tree=/Faces_Basic.xul\">",
-    "            <a href=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul\"></a>",
-    "	    <!-- <a href=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul\"></a> -->"
+    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents_1.xul;jsessionid=73083205D69562F604C556A1E4B54538\">"
+
 };
 
 public String [] getLinesToIgnore() {
@@ -109,25 +107,6 @@ public void testExecuteInitial()
 {
     boolean result = false;
     LifecycleImpl life = new LifecycleImpl();
-    System.setProperty(ENTER_CALLED, EMPTY);
-    System.setProperty(EXIT_CALLED, EMPTY);
-
-    PhaseListener listener = new PhaseListener() {
-	    public void entering(FacesContext context, int phaseId, 
-				 Phase phase) {
-	       assertTrue(phaseId < Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
-	       System.setProperty(ENTER_CALLED, ENTER_CALLED);
-	    }
-	    public void exiting(FacesContext context, int phaseId,
-				Phase phase, int stateChange) {
-	       assertTrue(phaseId < Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE
-			  ||
-			  phaseId == Lifecycle.RENDER_RESPONSE_PHASE);
-	       System.setProperty(EXIT_CALLED, EXIT_CALLED);
-	    }
-	};
-    
-    life.addPhaseListener(listener);
 
     try {
 	life.execute(getFacesContext());
@@ -136,11 +115,6 @@ public void testExecuteInitial()
 	e.printStackTrace();
 	assertTrue(e.getMessage(), false);
     }
-    assertTrue(System.getProperty(ENTER_CALLED).equals(ENTER_CALLED));
-    assertTrue(System.getProperty(EXIT_CALLED).equals(EXIT_CALLED));
-    
-    System.setProperty(ENTER_CALLED, EMPTY);
-    System.setProperty(EXIT_CALLED, EMPTY);
 
     assertTrue(verifyExpectedOutput());
 
