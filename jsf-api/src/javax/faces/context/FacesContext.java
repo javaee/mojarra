@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.8 2002/05/15 23:57:01 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.9 2002/05/16 17:09:42 craigmcc Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ public abstract class FacesContext {
      *
      * @param phaseId The new phase identifier
      */
-    public abstract void setPhaseId();
+    public abstract void setPhaseId(int phaseId);
 
 
     /**
