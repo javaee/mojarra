@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.15 2002/01/24 00:35:24 rogerk Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.16 2002/02/05 18:57:03 edburns Exp $
  */
 
 /*
@@ -11,24 +11,15 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.taglib.FacesTag;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.Constants;
-import javax.faces.FacesException;
-import javax.faces.RenderContext;
-import javax.faces.Renderer;
-import javax.faces.RenderKit;
 import javax.faces.UICommand;
-import javax.faces.UIForm;
-import javax.faces.ObjectManager;
+import javax.faces.UIComponent;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  *
@@ -36,14 +27,14 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.15 2002/01/24 00:35:24 rogerk Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.16 2002/02/05 18:57:03 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class Command_HyperlinkTag extends TagSupport
+public class Command_HyperlinkTag extends FacesTag
 {
     //
     // Protected Constants
@@ -71,12 +62,6 @@ public class Command_HyperlinkTag extends TagSupport
 
     public Command_HyperlinkTag() {
         super();
-        // ParameterCheck.nonNull();
-        this.init();
-    }
-
-    protected void init() {
-        // super.init();
     }
 
     //
@@ -86,13 +71,6 @@ public class Command_HyperlinkTag extends TagSupport
     //
     // General Methods
     //
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getTarget() {
         return target;
@@ -118,92 +96,24 @@ public class Command_HyperlinkTag extends TagSupport
         this.text = text;
     }
 
-    /**
-     * Process the start of this tag.
-     * @exception JspException if a JSP exception has occurred
-     */
-    public int doStartTag() throws JspException {
+//
+// Methods from FacesTag
+//
 
-        Assert.assert_it( pageContext != null );
-        ObjectManager objectManager = (ObjectManager) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( objectManager != null );
-        RenderContext renderContext = 
-            (RenderContext)objectManager.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
-
-        UICommand uiCommand = null;
-
-        // 1. if we don't have an "id" generate one
-        //
-        if (id == null) {
-            String gId = Util.generateId(); 
-            setId(gId);
-        }
-
-        // 2. Get or create the component instance.
-        //
-        uiCommand = (UICommand) objectManager.get(pageContext.getRequest(), id);
-        if ( uiCommand == null ) {
-            uiCommand = new UICommand();
-            objectManager.put(pageContext.getRequest(), getId(), uiCommand);
-        }
-
-        uiCommand.setId(getId());
-        uiCommand.setAttribute("target", getTarget());
-        uiCommand.setAttribute("image", getImage());
-        uiCommand.setAttribute("text", getText());
-
-        // 3. Render the component.
-        //
-        try {
-            uiCommand.setRendererType("HyperlinkRenderer");
-            uiCommand.render(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem rendering component: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem rendering component: "+
-                f.getMessage());
-        }
-        return (EVAL_BODY_INCLUDE);
+    public UIComponent newComponentInstance() {
+	return new UICommand();
     }
 
-    /**
-     * End Tag Processing
-     */
-    public int doEndTag() throws JspException{
+    public void setAttributes(UIComponent comp) {
+	ParameterCheck.nonNull(comp);
+        comp.setAttribute("target", getTarget());
+        comp.setAttribute("image", getImage());
+        comp.setAttribute("text", getText());
 
-        Assert.assert_it( pageContext != null );
-        // get ObjectManager from ServletContext.
-        ObjectManager objectManager = (ObjectManager)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( objectManager != null );
-        RenderContext renderContext = 
-            (RenderContext)objectManager.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
+    }
 
-//PENDING(rogerk)can we eliminate this extra get if component is instance
-//variable? If so, threading issue?
-//
-        UICommand uiCommand = (UICommand) objectManager.get(pageContext.getRequest(), getId());
-        Assert.assert_it( uiCommand != null );
-
-        // Complete the rendering process
-        //
-        try {
-            uiCommand.renderComplete(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem completing rendering: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem completing rendering: "+
-                f.getMessage());
-        }
-
-        return EVAL_PAGE;
+    public String getRendererType() {
+	return "HyperlinkRenderer";
     }
 
     /**
