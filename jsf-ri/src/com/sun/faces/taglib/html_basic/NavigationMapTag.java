@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationMapTag.java,v 1.1 2002/01/25 18:45:18 visvan Exp $
+ * $Id: NavigationMapTag.java,v 1.2 2002/02/26 21:24:48 eburns Exp $
  */
 
 /*
@@ -24,13 +24,15 @@ import javax.faces.Constants;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.sun.faces.util.Util;
+
 /**
  *
  *  <B>NavigationMapTag</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NavigationMapTag.java,v 1.1 2002/01/25 18:45:18 visvan Exp $
+ * @version $Id: NavigationMapTag.java,v 1.2 2002/02/26 21:24:48 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -137,7 +139,7 @@ public class NavigationMapTag extends TagSupport
             className = "com.sun.faces.NavigationMapImpl";
         }    
         try {
-            Class navMap_class = Class.forName(className);
+            Class navMap_class = Util.loadClass(className);
             navMap_obj = (NavigationMap) navMap_class.newInstance();
         }catch (IllegalAccessException iae) {
             throw new JspException("Can't create instance for " +

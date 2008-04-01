@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.19 2002/01/28 18:31:13 visvan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.20 2002/02/26 21:24:48 eburns Exp $
  */
 
 /*
@@ -40,13 +40,15 @@ import javax.faces.UISelectOne;
 import javax.faces.EventContext;
 import javax.faces.ObjectManager;
 
+import com.sun.faces.util.Util;
+
 /**
  *
  *  <B>HtmlBasicRenderKit</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.19 2002/01/28 18:31:13 visvan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.20 2002/02/26 21:24:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,7 +174,7 @@ public Renderer getRenderer(String name) throws FacesException {
     Assert.assert_it(null != className);
 
     try {
-	rendererClass = Class.forName(className);
+	rendererClass = Util.loadClass(className);
 	result = (Renderer) rendererClass.newInstance();
     }
     catch (IllegalAccessException e) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ListenerTag.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
+ * $Id: ListenerTag.java,v 1.6 2002/02/26 21:24:48 eburns Exp $
  */
 
 /*
@@ -27,13 +27,15 @@ import javax.faces.Constants;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.sun.faces.util.Util;
+
 /**
  *
  *  <B>ListenerTag</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListenerTag.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
+ * @version $Id: ListenerTag.java,v 1.6 2002/02/26 21:24:48 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -133,7 +135,7 @@ public class ListenerTag extends TagSupport
         throws JspException {
         EventListener lis_obj = null;
         try {
-            Class lis_class = Class.forName(className);
+            Class lis_class = Util.loadClass(className);
             lis_obj = (EventListener) lis_class.newInstance();
         }catch (IllegalAccessException iae) {
             throw new JspException("Can't create instance for " +

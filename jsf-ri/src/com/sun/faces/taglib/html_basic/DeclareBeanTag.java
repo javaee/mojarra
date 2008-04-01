@@ -1,5 +1,5 @@
 /*
- * $Id: DeclareBeanTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: DeclareBeanTag.java,v 1.5 2002/02/26 21:24:48 eburns Exp $
  */
 
 /*
@@ -27,13 +27,15 @@ import javax.faces.Constants;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.sun.faces.util.Util;
+
 /**
  *
  *  <B>DeclareBeanTag</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DeclareBeanTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: DeclareBeanTag.java,v 1.5 2002/02/26 21:24:48 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -96,7 +98,7 @@ public class DeclareBeanTag extends TagSupport
 	Class beanClass;
 	
 	try {
-	    beanClass = Class.forName(className);
+	    beanClass = Util.loadClass(className);
 	    
 	}
 	catch (ClassNotFoundException e) {

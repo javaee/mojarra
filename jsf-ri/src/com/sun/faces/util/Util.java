@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.4 2002/01/24 00:35:25 rogerk Exp $
+ * $Id: Util.java,v 1.5 2002/02/26 21:24:48 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.Constants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.4 2002/01/24 00:35:25 rogerk Exp $
+ * @version $Id: Util.java,v 1.5 2002/02/26 21:24:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -205,6 +205,18 @@ private Util()
 	}
 	return result;
     }
+
+    public static Class loadClass(String name) throws ClassNotFoundException {
+	ClassLoader loader =
+	    Thread.currentThread().getContextClassLoader();
+	if (loader == null) {
+	    return Class.forName(name);
+	}
+	else {
+	    return loader.loadClass(name);
+	}
+    }
+
 //
 // General Methods
 //

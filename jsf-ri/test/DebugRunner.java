@@ -1,5 +1,5 @@
 /*
- * $Id: DebugRunner.java,v 1.5 2002/01/10 22:20:12 edburns Exp $
+ * $Id: DebugRunner.java,v 1.6 2002/02/26 21:24:48 eburns Exp $
  */
 
 /*
@@ -15,12 +15,14 @@
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugRunner.java,v 1.5 2002/01/10 22:20:12 edburns Exp $
+ * @version $Id: DebugRunner.java,v 1.6 2002/02/26 21:24:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
+
+import com.sun.faces.util.Util;
 
 public class DebugRunner extends Object
 {
@@ -123,7 +125,7 @@ public static void main(String args[]) {
     }
     Class testClass = null;
     try {
-	testClass = Class.forName(args[0]);
+	testClass = Util.loadClass(args[0]);
     }
     catch (Exception e) {
 	System.out.println("Can't get class for " + args[0]);
