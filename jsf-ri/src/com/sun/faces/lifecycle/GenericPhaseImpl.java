@@ -1,5 +1,5 @@
 /*
- * $Id: GenericPhaseImpl.java,v 1.1 2002/05/28 20:52:01 eburns Exp $
+ * $Id: GenericPhaseImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
  */
 
 /*
@@ -19,8 +19,10 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.PhaseListener;
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIComponent;
 
-import java.util.ArrayList;
+import com.sun.faces.tree.TreeNavigator;
+import com.sun.faces.tree.TreeNavigatorImpl;
 
 /**
 
@@ -30,7 +32,7 @@ import java.util.ArrayList;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: GenericPhaseImpl.java,v 1.1 2002/05/28 20:52:01 eburns Exp $
+ * @version $Id: GenericPhaseImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Phase
@@ -59,10 +61,9 @@ protected int id = -1;
 
 protected Lifecycle lifecycleDriver = null;
 
-protected Object lock = null;
+protected LifecycleCallback callback = null;
 
-protected ArrayList beforePhases = null;
-protected ArrayList afterPhases = null;
+protected Object lock = null;
 
 //
 // Constructors and Genericializers    
@@ -71,13 +72,27 @@ protected ArrayList afterPhases = null;
 public GenericPhaseImpl(Lifecycle newDriver, int newId)
 {
     super();
+    this.init(newDriver, newId, null);
+}
+
+public GenericPhaseImpl(Lifecycle newDriver, int newId, 
+			LifecycleCallback newCallback)
+{
+    super();
+    this.init(newDriver, newId, newCallback);
+}
+
+public void init(Lifecycle newDriver, int newId, LifecycleCallback newCallback)
+{
     ParameterCheck.withinRange(newId, LifecycleFactoryImpl.FIRST_PHASE, 
 			       LifecycleFactoryImpl.LAST_PHASE);
 
     lifecycleDriver = newDriver;
     id = newId;
+    callback = newCallback;
     lock = new Object();
 }
+    
 
 //
 // Class methods
@@ -98,6 +113,54 @@ public int getId()
     return id;
 }
 
+void setLifecycleCallback(LifecycleCallback newCallback)
+{
+    callback = newCallback;
+}
+
+LifecycleCallback getLifecycleCallback()
+{
+    return callback;
+}
+
+/**
+
+* @param facesContext the facesContext for this request
+
+* @param callback May be null.  If non-null, the callback will be
+* invoked on each component in the tree.
+
+*/
+
+public int traverseTreeInvokingCallback(FacesContext facesContext) throws FacesException
+{
+    TreeNavigator treeNav = null;
+    UIComponent next = null;
+    int result = Phase.GOTO_NEXT;
+
+    // PENDING(edburns): use a factory for the TreeNavigator instance
+    if (Lifecycle.RENDER_RESPONSE_PHASE == id) {
+	treeNav = 
+	    new TreeNavigatorImpl(facesContext.getResponseTree().getRoot());
+    }
+    else {
+	treeNav = 
+	    new TreeNavigatorImpl(facesContext.getRequestTree().getRoot());
+    }
+    if (null == treeNav) {
+	throw new FacesException("Can't create TreeNavigator");
+    }
+
+    while (null != (next = treeNav.getNextStart())) {
+	if (null != callback) {
+	    callback.takeActionOnComponent(facesContext, next);
+	}
+    }
+    treeNav.reset();
+
+    return result;
+}
+
 // 
 // Methods from Phase
 //
@@ -110,11 +173,12 @@ public int getId()
 
 public int execute(FacesContext facesContext) throws FacesException
 {
-    return Phase.GOTO_NEXT;
+    return traverseTreeInvokingCallback(facesContext);
 }
 
 
 // The testcase for this class is TestLifecycleImpl.java 
+// The testcase for this class is TestGenericPhaseImpl.java 
 
 
 } // end of class GenericPhaseImpl

@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.2 2002/05/30 22:23:50 rkitain Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.3 2002/06/01 00:58:22 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.apache.commons.logging.impl.SimpleLog;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.2 2002/05/30 22:23:50 rkitain Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.3 2002/06/01 00:58:22 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,7 +90,7 @@ protected XmlDialectProvider dialectProvider = null;
 // Constructors and Initializers    
 //
 
-protected XmlTreeFactoryImpl()
+public XmlTreeFactoryImpl()
 {
     super();
 
@@ -159,12 +159,13 @@ public Tree createTree(ServletContext servletContext,
     RuleSetBase ruleSet = null;
 
     root = new UIComponent() {
-	    public String getComponentType() { return "root"; } 
+	    public String getComponentType() { return "Root"; } 
 	};
+    root.setComponentId("root");
 
     if (null == treeId) {
 	// PENDING(edburns): need name for default tree
-	result = new XmlTreeImpl(root, "default");
+	result = new XmlTreeImpl(servletContext, root, "default");
 	return result;
     }
 
@@ -224,7 +225,7 @@ public Tree createTree(ServletContext servletContext,
 	throw new FacesException("Can't parse stream for " + treeId, e);
     }
 
-    result = new XmlTreeImpl(root, treeId);
+    result = new XmlTreeImpl(servletContext, root, treeId);
 
     return result;
 }

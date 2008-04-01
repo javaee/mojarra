@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextTestCase.java,v 1.1 2002/05/30 18:32:55 eburns Exp $
+ * $Id: FacesContextTestCase.java,v 1.2 2002/06/01 00:58:22 eburns Exp $
  */
 
 /*
@@ -17,6 +17,8 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
+import com.sun.faces.util.Util;
+
 /**
  *
  *  <B>FacesContextTestCase</B> is a base class that creates a
@@ -25,7 +27,7 @@ import javax.faces.context.FacesContextFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FacesContextTestCase.java,v 1.1 2002/05/30 18:32:55 eburns Exp $
+ * @version $Id: FacesContextTestCase.java,v 1.2 2002/06/01 00:58:22 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -58,24 +60,9 @@ protected FacesContext facesContext = null;
 // Constructors and Initializers    
 //
 
-    public FacesContextTestCase() {
-	super("FacesContextTestCase");
-	init();
-    }
+    public FacesContextTestCase() { super("FacesContextTestCase"); }
 
-    public FacesContextTestCase(String name) {
-	super(name);
-	init();
-    }
-
-public void init()
-{
-    System.setProperty(FactoryFinder.FACES_CONTEXT_FACTORY,
-		       "com.sun.faces.context.FacesContextFactoryImpl");
-    facesContextFactory = (FacesContextFactory) 
-	FactoryFinder.createFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-    assertTrue(null != facesContextFactory);
-}
+    public FacesContextTestCase(String name) { super(name); }
 
 //
 // Class methods
@@ -87,10 +74,21 @@ public void init()
 
 public void setUp()
 {
+    Util.initServletContextForFaces(config.getServletContext());
+    
+    facesContextFactory = (FacesContextFactory) config.getServletContext().
+	getAttribute(FactoryFinder.FACES_CONTEXT_FACTORY);
+    assertTrue(null != facesContextFactory);
+    
     facesContext = 
 	facesContextFactory.createFacesContext(config.getServletContext(),
 					       request, response);
     assertTrue(null != facesContext);
+}
+
+public void tearDown()
+{
+    Util.releaseServletContextFromFaces(config.getServletContext());
 }
 
 } // end of class FacesContextTestCase

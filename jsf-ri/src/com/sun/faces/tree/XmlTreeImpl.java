@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeImpl.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * $Id: XmlTreeImpl.java,v 1.2 2002/06/01 00:58:22 eburns Exp $
  */
 
 /*
@@ -17,6 +17,11 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.component.UIComponent;
 import javax.faces.render.RenderKit;
 import javax.faces.tree.Tree;
+import javax.faces.FactoryFinder;
+
+import javax.servlet.ServletContext;
+
+import com.sun.faces.RIConstants;
 
 /**
  *
@@ -24,7 +29,7 @@ import javax.faces.tree.Tree;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeImpl.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * @version $Id: XmlTreeImpl.java,v 1.2 2002/06/01 00:58:22 eburns Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -57,11 +62,26 @@ protected UIComponent root = null;
 // Constructors and Initializers    
 //
 
-public XmlTreeImpl(UIComponent newRoot, String newTreeId)
+/**
+
+* PRECONDITION: the ServletContext has been initialized with all the
+* required factories.
+
+*/ 
+
+public XmlTreeImpl(ServletContext context, UIComponent newRoot, 
+		   String newTreeId)
 {
     super();
+    ParameterCheck.nonNull(context);
+
     setRoot(newRoot);
     setTreeId(newTreeId);
+
+    renderKit = (RenderKit) 
+	context.getAttribute(RIConstants.DEFAULT_RENDER_KIT);
+    Assert.assert_it(null != renderKit);
+    
 }
 
 //

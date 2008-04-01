@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.8 2002/05/30 01:42:09 eburns Exp $
+ * $Id: Util.java,v 1.9 2002/06/01 00:58:22 eburns Exp $
  */
 
 /*
@@ -12,8 +12,19 @@
 package com.sun.faces.util;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
+
+import javax.servlet.ServletContext;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.RenderKit;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.tree.TreeFactory;
+import javax.faces.context.FacesContextFactory;
+
+import com.sun.faces.RIConstants;
 
 /**
  *
@@ -21,7 +32,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.8 2002/05/30 01:42:09 eburns Exp $
+ * @version $Id: Util.java,v 1.9 2002/06/01 00:58:22 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,6 +93,104 @@ private Util()
         }
         return Long.toHexString(id);
     }
+
+    /**
+
+    * Init all the factories needed by faces. <P>
+
+    * PRECONDITION: The ServletContext attr set has not been initialized
+    * with the required factories, and singleton instances.<P>
+
+    * POSTCONDITION: The ServletContext attr set has been initialized to
+    * contain the factories under the keys given as constants in
+    * FactoryFinder. <P>
+
+    * @see javax.faces.FactoryFinder
+
+    */
+
+    public static void initServletContextForFaces(ServletContext context) throws FacesException {
+	RenderKitFactory renderKitFactory = null;
+	LifecycleFactory lifecycleFactory = null;
+	TreeFactory treeFactory = null;
+	FacesContextFactory facesContextFactory = null;
+	RenderKit defaultRenderKit = null;
+
+	Assert.assert_it(null == 
+                       context.getAttribute(FactoryFinder.RENDER_KIT_FACTORY));
+	renderKitFactory = (RenderKitFactory)
+	    FactoryFinder.createFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	Assert.assert_it(null != renderKitFactory);
+	context.setAttribute(FactoryFinder.RENDER_KIT_FACTORY, 
+			     renderKitFactory);
+
+	Assert.assert_it(null == 
+                       context.getAttribute(FactoryFinder.LIFECYCLE_FACTORY));
+	lifecycleFactory = (LifecycleFactory)
+	    FactoryFinder.createFactory(FactoryFinder.LIFECYCLE_FACTORY);
+	Assert.assert_it(null != lifecycleFactory);
+	context.setAttribute(FactoryFinder.LIFECYCLE_FACTORY, 
+			     lifecycleFactory);
+
+	Assert.assert_it(null == 
+                       context.getAttribute(FactoryFinder.TREE_FACTORY));
+	treeFactory = (TreeFactory)
+	    FactoryFinder.createFactory(FactoryFinder.TREE_FACTORY);
+	Assert.assert_it(null != treeFactory);
+	context.setAttribute(FactoryFinder.TREE_FACTORY, 
+			     treeFactory);
+
+	Assert.assert_it(null == 
+                    context.getAttribute(FactoryFinder.FACES_CONTEXT_FACTORY));
+	facesContextFactory = (FacesContextFactory)
+	    FactoryFinder.createFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+	Assert.assert_it(null != facesContextFactory);
+	context.setAttribute(FactoryFinder.FACES_CONTEXT_FACTORY, 
+			     facesContextFactory);
+
+	Assert.assert_it(null == 
+		 context.getAttribute(RIConstants.DEFAULT_RENDER_KIT));
+	defaultRenderKit = 
+         renderKitFactory.createRenderKit(RIConstants.DEFAULT_RENDER_KIT);
+	Assert.assert_it(null != defaultRenderKit);
+	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, 
+			     defaultRenderKit);
+    }
+
+    /** 
+
+    * Release the factories initialized in the initServletContextForFaces method. <P>
+
+    * PRECONDITION: the POSTCONDITION of initServletContextForFaces is satisfied <P>
+
+    * POSTCONDITION: The ServletContext attr set has no entries for the
+    * factories from initServletContextForFaces().
+
+    */
+
+    public static void releaseServletContextFromFaces(ServletContext context) throws FacesException {
+	Assert.assert_it(null != 
+		 context.getAttribute(FactoryFinder.RENDER_KIT_FACTORY));
+	context.removeAttribute(FactoryFinder.RENDER_KIT_FACTORY);
+
+	Assert.assert_it(null != 
+		 context.getAttribute(FactoryFinder.LIFECYCLE_FACTORY));
+	context.removeAttribute(FactoryFinder.LIFECYCLE_FACTORY);
+
+	Assert.assert_it(null != 
+		 context.getAttribute(FactoryFinder.TREE_FACTORY));
+	context.removeAttribute(FactoryFinder.TREE_FACTORY);
+
+	Assert.assert_it(null != 
+		 context.getAttribute(FactoryFinder.FACES_CONTEXT_FACTORY));
+	context.removeAttribute(FactoryFinder.FACES_CONTEXT_FACTORY);
+
+	Assert.assert_it(null != 
+		 context.getAttribute(RIConstants.DEFAULT_RENDER_KIT));
+	context.removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
+    }
+			 
+
 
 
 //

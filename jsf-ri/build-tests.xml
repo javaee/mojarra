@@ -238,6 +238,8 @@
          <copy file="${basedir}/web/test/CorrectRenderersResponse"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
+        <copy file="${basedir}/web/test/GenericPhase_correct"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
 
     </target>
 
@@ -319,12 +321,15 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.lifecycle.TestCreateRequestTreePhase"/>
+            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl_Model"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
+            <test name="com.sun.faces.lifecycle.TestGenericPhaseImpl"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>

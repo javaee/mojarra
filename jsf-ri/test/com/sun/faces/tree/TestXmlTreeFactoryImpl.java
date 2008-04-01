@@ -1,5 +1,5 @@
 /*
- * $Id: TestXmlTreeFactoryImpl.java,v 1.1 2002/05/30 01:42:09 eburns Exp $
+ * $Id: TestXmlTreeFactoryImpl.java,v 1.2 2002/06/01 00:58:23 eburns Exp $
  */
 
 /*
@@ -16,8 +16,6 @@ import com.sun.faces.util.DebugUtil;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
-import org.apache.cactus.ServletTestCase;
-
 import javax.faces.tree.TreeFactory;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
@@ -31,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.sun.faces.CompareFiles;
+import com.sun.faces.FacesContextTestCase;
 
 /**
  *
@@ -38,13 +37,13 @@ import com.sun.faces.CompareFiles;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestXmlTreeFactoryImpl.java,v 1.1 2002/05/30 01:42:09 eburns Exp $
+ * @version $Id: TestXmlTreeFactoryImpl.java,v 1.2 2002/06/01 00:58:23 eburns Exp $
  * 
  * @see	com.sun.faces.tree.XULTreeFactoryImpl
  *
  */
 
-public class TestXmlTreeFactoryImpl extends ServletTestCase
+public class TestXmlTreeFactoryImpl extends FacesContextTestCase
 {
 //
 // Protected Constants
@@ -118,6 +117,8 @@ public void testCreate()
     root = tree.getRoot();
     assertTrue(null != root);
 
+    assertTrue(null != tree.getRenderKit());
+
     try {
         file = new File ( OUTPUT_FILENAME );
 	fs = new FileOutputStream(file);
@@ -135,7 +136,8 @@ public void testCreate()
 				     null));
     } catch (Throwable e ) {
 	System.out.println("Throwable: " + e.getMessage());
-	assertTrue(false);
+	assertTrue("Exception while comparing files " + OUTPUT_FILENAME +
+		   " and " + CORRECT_XUL_FILENAME, false);
     }
     
     
@@ -153,6 +155,8 @@ public void testCreateNull()
 
     root = tree.getRoot();
     assertTrue(null != root);
+
+    assertTrue(null != tree.getRenderKit());
 
     DebugUtil.printTree(root, System.out);
 }

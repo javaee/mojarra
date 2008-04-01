@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.1 2002/05/28 20:52:01 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
  */
 
 /*
@@ -21,10 +21,10 @@ import javax.faces.lifecycle.PhaseListener;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 
 import java.util.Iterator;
 import java.util.ArrayList;
-
 
 /**
  *
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.1 2002/05/28 20:52:01 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -92,10 +92,23 @@ public LifecycleImpl()
 
 protected void initPhases()
 {
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, 
-						     Lifecycle.CREATE_REQUEST_TREE_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.APPLY_REQUEST_VALUES_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new CreateRequestTreePhase(this, 
+					Lifecycle.CREATE_REQUEST_TREE_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE,
+                 new LifecycleCallback() {
+		     public int takeActionOnComponent(FacesContext context,
+						      UIComponent component) throws FacesException {
+			 // PENDING(edburns): not sure what to do in
+			 // this phase
+			 // PENDING(edburns): log this
+			 System.out.println("RECONSTITUTE_REQUEST_TREE_PHASE:"+
+					    " " + component.getComponentId());
+			 return Phase.GOTO_NEXT;
+		     }
+		 }
+							    )));
+    phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
+                                       Lifecycle.APPLY_REQUEST_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.HANDLE_REQUEST_EVENTS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.PROCESS_VALIDATIONS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.UPDATE_MODEL_VALUES_PHASE)));

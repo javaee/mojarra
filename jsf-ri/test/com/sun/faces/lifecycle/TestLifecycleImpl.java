@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.1 2002/05/28 20:52:02 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.2 2002/06/01 00:58:23 eburns Exp $
  */
 
 /*
@@ -10,8 +10,6 @@
 // TestLifecycleImpl.java
 
 package com.sun.faces.lifecycle;
-
-import org.apache.cactus.ServletTestCase;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -26,20 +24,22 @@ import javax.faces.context.FacesContext;
 
 import java.util.Iterator;
 
+import com.sun.faces.FacesContextTestCase;
+
 /**
  *
  *  <B>TestLifecycleImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.1 2002/05/28 20:52:02 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.2 2002/06/01 00:58:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestLifecycleImpl extends ServletTestCase
+public class TestLifecycleImpl extends FacesContextTestCase
 {
 //
 // Protected Constants
@@ -152,8 +152,7 @@ public void testExtraPhases()
     life = factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
     assertTrue(null != life);
 
-    // PENDING(edburns): When we have a faces context, use it
-    life.execute(null);
+    life.execute(facesContext);
 
     assertTrue(empty != System.getProperty(beforeRender));
     assertTrue(empty != System.getProperty(afterCreateRequest));
@@ -183,7 +182,7 @@ public void testPhaseListenersBasic()
     
     life.addPhaseListener(listener);
 
-    life.execute(null);
+    life.execute(facesContext);
 
     // verify the listeners are called
     assertTrue(empty != System.getProperty(enteringCalled));
@@ -194,7 +193,7 @@ public void testPhaseListenersBasic()
     System.setProperty(enteringCalled, empty);
     System.setProperty(exitingCalled, empty);
 
-    life.execute(null);
+    life.execute(facesContext);
 
     // verify the listeners are not called
     assertTrue(empty == System.getProperty(enteringCalled));
@@ -248,7 +247,7 @@ public void testPhaseListenersAdvanced()
     
     life.addPhaseListener(listener);
 
-    life.execute(null);
+    life.execute(facesContext);
 
     // verify the listeners are called
     assertTrue(empty != System.getProperty(enteringCalled));
@@ -259,7 +258,7 @@ public void testPhaseListenersAdvanced()
     System.setProperty(enteringCalled, empty);
     System.setProperty(exitingCalled, empty);
 
-    life.execute(null);
+    life.execute(facesContext);
 
     // verify the listeners are not called
     assertTrue(empty == System.getProperty(enteringCalled));
