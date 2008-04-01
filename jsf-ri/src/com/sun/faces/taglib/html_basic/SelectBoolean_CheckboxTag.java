@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.11 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.11 2001/12/13 00:15:59 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -201,38 +201,12 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
                 addToScope(wSelectBoolean, ot);
             }
 
-            // 2. Get a RenderKit and associated Renderer for this
-            //    component.
-            //
-            RenderKit renderKit = renderContext.getRenderKit();
-            if (renderKit == null) {
-                throw new JspException("Can't determine RenderKit!");
-            }
-
-            Renderer renderer = null;
-            try {
-                renderer = renderKit.getRenderer(
-                    "com.sun.faces.renderkit.html_basic.CheckboxRenderer");
-            } catch (FacesException e) {
-                throw new JspException(
-                    "FacesException!!! " + e.getMessage());
-            }
-
-            if (renderer == null) {
-                throw new JspException(
-                    "Could not determine 'renderer' for component");
-            }
-
-            // 3. Render the component. (Push the component on
-            //    the render stack first).
+            // 2. Render the component.
             //
             try {
-                renderContext.pushChild(wSelectBoolean);
-                renderer.renderStart(renderContext, wSelectBoolean);
-//PENDING(rogerk) complet/pop should be done in doEndTag
-//
-                renderer.renderComplete(renderContext, wSelectBoolean);
-                renderContext.popChild();
+                wSelectBoolean.setRendererName(renderContext,
+                    "CheckboxRenderer");
+                wSelectBoolean.render(renderContext);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
                     e.getMessage());
@@ -242,6 +216,59 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             }
         }
         return (EVAL_BODY_INCLUDE);
+    }
+
+    /**
+     * End Tag Processing
+     */
+    public int doEndTag() throws JspException{
+
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTTABLE);
+        Assert.assert_it( ot != null );
+        RenderContext renderContext =
+            (RenderContext)ot.get(pageContext.getSession(),
+            Constants.REF_RENDERCONTEXT);
+        Assert.assert_it( renderContext != null );
+
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
+        WSelectBoolean wSelectBoolean =
+            (WSelectBoolean) ot.get(pageContext.getRequest(), name);
+        Assert.assert_it( wSelectBoolean != null );
+
+        // Complete the rendering process
+        //
+        try {
+            wSelectBoolean.renderComplete(renderContext);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
+        }
+
+        return EVAL_PAGE;
+    }
+
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
+
+        super.release();
+
+        checked = null;
+        name = null;
+        value = null;
+        label = null;
+        model = null;
+        scope = null;
+        valueChangeListener = null;
     }
 
     /**
@@ -323,14 +350,6 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             listeners.add(valueChangeListener);
             ot.put(pageContext.getSession(),lis_name, listeners);
         }
-    }
-
-    /**
-     * End Tag Processing
-     */
-    public int doEndTag() throws JspException{
-
-        return EVAL_PAGE;
     }
 
 } // end of class SelectBoolean_CheckboxTag

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.1 2001/12/12 20:08:57 edburns Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.2 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -41,7 +41,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.1 2001/12/12 20:08:57 edburns Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.2 2001/12/13 00:15:59 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -251,18 +251,18 @@ public int doStartTag() throws JspException {
 	addToScope(wSelectOne, ot);
     }
 
-    Renderer renderer = getRenderer(renderContext);
+    // 2. Render the component.
+    //
     try {
-	renderContext.pushChild(wSelectOne);
-	renderer.renderStart(renderContext, wSelectOne);
+        wSelectOne.setRendererName(renderContext,
+            "OptionListRenderer");
+        wSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
-	//e.printStackTrace();
-	throw new JspException("Problem rendering Input component: "+
-			       e.getMessage());
+        throw new JspException("Problem rendering component: "+
+            e.getMessage());
     } catch (FacesException f) {
-	
-	throw new JspException("Problem rendering component: "+
-			       f.getMessage());
+        throw new JspException("Problem rendering component: "+
+            f.getMessage());
     }
 
     return (EVAL_BODY_INCLUDE);
@@ -280,25 +280,48 @@ public int doEndTag() throws JspException {
 			      Constants.REF_RENDERCONTEXT);
     Assert.assert_it( renderContext != null );
     
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
     WSelectOne wSelectOne = (WSelectOne)ot.get(pageContext.getRequest(), name);
     Assert.assert_it(null != wSelectOne);
     
     // The magic method: setting the collection into the component
     wSelectOne.setItems(renderContext, items);
-    Renderer renderer = getRenderer(renderContext);
+
+    // Complete the rendering process
+    //
     try {
-	renderer.renderComplete(renderContext, wSelectOne);
-	renderContext.popChild();
+//PENDING(rogerk)we need to reset the renderer name for WSelectOne, becuase
+//it is a tag has enclosing component of the same type (WSelectOne) - 
+//sharing same attribute list (renderer name is set in attributeList of
+//WComponent.
+//
+        wSelectOne.setRendererName(renderContext,
+            "OptionListRenderer");
+        wSelectOne.renderComplete(renderContext);
     } catch (java.io.IOException e) {
-	//e.printStackTrace();
-	throw new JspException("Problem rendering Input component: "+
-			       e.getMessage());
+        throw new JspException("Problem completing rendering: "+
+            e.getMessage());
     } catch (FacesException f) {
-	
-	throw new JspException("Problem rendering component: "+
-			       f.getMessage());
-    }    
+        throw new JspException("Problem completing rendering: "+
+            f.getMessage());
+    }
+
     return EVAL_PAGE;
 }
+
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
+
+        super.release();
+
+        name = null;
+        model = null;
+        selectedValueModel = null;
+        valueChangeListener = null;
+    }
 
 } // end of class SelectOne_OptionListTag

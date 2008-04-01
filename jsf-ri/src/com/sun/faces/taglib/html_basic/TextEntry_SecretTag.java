@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.10 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.10 2001/12/13 00:15:59 rogerk Exp $
  * 
  *
  */
@@ -111,22 +111,23 @@ public class TextEntry_SecretTag extends TagSupport
         Assert.assert_it( rc != null );
 
         if ( name != null ) {
-            Renderer renderer = getRenderer(rc);
+
+            // 1. Get or create the component instance.
+            //
             WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot);
             }
+
+            // 2. Render the component.
+            //
             try {
-               rc.pushChild(c);
-               renderer.renderStart(rc, c);
-//PENDING(rogerk) complet/pop should be done in doEndTag
-//
-               renderer.renderComplete(rc, c);
-               rc.popChild();
+                c.setRendererName(rc, "SecretRenderer");
+                c.render(rc);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Password component: "+
-                        e.getMessage());
+                throw new JspException("Problem rendering component: "+
+                    e.getMessage());
             } catch (FacesException f) {
                 throw new JspException("Problem rendering component: "+
                     f.getMessage());
@@ -140,34 +141,51 @@ public class TextEntry_SecretTag extends TagSupport
      */
     public int doEndTag() throws JspException{
 
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTTABLE);
+        Assert.assert_it( ot != null );
+        RenderContext rc =
+            (RenderContext)ot.get(pageContext.getSession(),
+            Constants.REF_RENDERCONTEXT);
+        Assert.assert_it( rc != null );
+
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
+        WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
+        Assert.assert_it( c != null );
+
+        // Complete the rendering process
+        //
+        try {
+            c.renderComplete(rc);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
+        }
+
         return EVAL_PAGE;
     }
 
     /**
-     * Returns the appropriate renderer for the tag
-     *
-     * @param rc RenderContext to obtain renderkit
+     * Tag cleanup method.
      */
-    public Renderer getRenderer(RenderContext rc ) throws JspException{
+    public void release() {
 
-        Renderer renderer = null;
-        RenderKit renderKit = rc.getRenderKit();
-        if (renderKit == null) {
-            throw new JspException("Can't determine RenderKit!");
-        }
-        try {
-            String class_name = "com.sun.faces.renderkit.html_basic.SecretRenderer";
-            renderer = renderKit.getRenderer(class_name);
-        } catch (FacesException e) {
-            e.printStackTrace();
-            throw new JspException("FacesException " + e.getMessage());
-        }
+        super.release();
 
-        if (renderer == null) {
-            throw new JspException(
-                "Could not determine 'renderer' for TextEntry component");
-        }
-        return renderer;	
+        name = null;
+        value = null;
+        size = null;
+        maxlength = null;
+        model = null;
+        scope = null;
+        valueChangeListener = null;
     }
 
     /**

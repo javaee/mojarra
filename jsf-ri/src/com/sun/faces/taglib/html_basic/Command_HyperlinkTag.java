@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.9 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.9 2001/12/13 00:15:59 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -144,38 +144,11 @@ public class Command_HyperlinkTag extends TagSupport
             wCommand.setAttribute(renderContext, "text", getText());
             ot.put(pageContext.getRequest(), target, wCommand);
 
-            // 2. Get a RenderKit and associated Renderer for this
-            //    component.
-            //
-            RenderKit renderKit = renderContext.getRenderKit();
-            if (renderKit == null) {
-                throw new JspException("Can't determine RenderKit!");
-            }
-
-            Renderer renderer = null;
-            try {
-                renderer = renderKit.getRenderer(
-                    "com.sun.faces.renderkit.html_basic.HyperlinkRenderer");
-            } catch (FacesException e) {
-                throw new JspException(
-                    "FacesException!!! " + e.getMessage());
-            }
-
-            if (renderer == null) {
-                throw new JspException(
-                    "Could not determine 'renderer' for component");
-            }
-
-            // 3. Render the component. (Push the component on
-            //    the render stack first).
+            // 2. Render the component.
             //
             try {
-                renderContext.pushChild(wCommand);
-                renderer.renderStart(renderContext, wCommand);
-//PENDING(rogerk) complet/pop should be done in doEndTag
-//
-                renderer.renderComplete(renderContext, wCommand);
-                renderContext.popChild();
+                wCommand.setRendererName(renderContext, "HyperlinkRenderer");
+                wCommand.render(renderContext);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
                     e.getMessage());
@@ -183,7 +156,6 @@ public class Command_HyperlinkTag extends TagSupport
                 throw new JspException("Problem rendering component: "+
                     f.getMessage());
             }
-
         }
         return (EVAL_BODY_INCLUDE);
     }
@@ -193,7 +165,48 @@ public class Command_HyperlinkTag extends TagSupport
      */
     public int doEndTag() throws JspException{
 
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTTABLE);
+        Assert.assert_it( ot != null );
+        RenderContext renderContext = 
+            (RenderContext)ot.get(pageContext.getSession(),
+            Constants.REF_RENDERCONTEXT);
+        Assert.assert_it( renderContext != null );
+
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
+        WCommand wCommand = (WCommand) ot.get(pageContext.getRequest(), target);
+        Assert.assert_it( wCommand != null );
+
+        // Complete the rendering process
+        //
+        try {
+            wCommand.renderComplete(renderContext);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
+        }
+
         return EVAL_PAGE;
     }
+
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
+
+        super.release();
+
+        target = null;
+        image = null;
+        text = null;
+    }
+
 
 } // end of class Command_HyperlinkTag

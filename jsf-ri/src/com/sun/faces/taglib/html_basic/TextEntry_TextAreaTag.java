@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.10 2001/12/13 00:16:00 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.10 2001/12/13 00:16:00 rogerk Exp $
  * 
  *
  */
@@ -112,23 +112,27 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         Assert.assert_it( rc != null );
 
         if ( name != null ) {
-            Renderer renderer = getRenderer(rc);
+
+           // 1. Get or create the component instance.
+           //
             WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot);
             }
+
+            // 2. Render the component.
+            //
             try {
-               rc.pushChild(c);
-               renderer.renderStart(rc, c);
+                c.setRendererName(rc, "TextAreaRenderer");
+                c.render(rc);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering TextArea component: "+
-                        e.getMessage());
+                throw new JspException("Problem rendering component: "+
+                    e.getMessage());
             } catch (FacesException f) {
                 throw new JspException("Problem rendering component: "+
                     f.getMessage());
             }
-
         }
         return(EVAL_BODY_INCLUDE);
     }
@@ -198,49 +202,44 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
         WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
-        if ( c != null ) {
-            Renderer renderer = getRenderer(rc);
-            try {
-                renderer.renderComplete(rc, c);
-                rc.popChild();
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering TextArea component: "+
-                        e.getMessage());
-            }catch (FacesException e) {
-                e.printStackTrace();
-                throw new JspException("FacesException " + e.getMessage());
-            }
+        Assert.assert_it( c != null );
+
+        // Complete the rendering process
+        //
+        try {
+            c.renderComplete(rc);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
         }
+
         return(EVAL_PAGE);
     }
 
     /**
-     * Returns the appropriate renderer for the tag
-     *
-     * @param rc RenderContext to obtain renderkit
+     * Tag cleanup method.
      */
-    public Renderer getRenderer(RenderContext rc ) throws JspException{
+    public void release() {
 
-        Renderer renderer = null;
-        RenderKit renderKit = rc.getRenderKit();
-        if (renderKit == null) {
-            throw new JspException("Can't determine RenderKit!");
-        }
-        try {
-            String class_name = "com.sun.faces.renderkit.html_basic.TextAreaRenderer";
-            renderer = renderKit.getRenderer(class_name);
-        } catch (FacesException e) {
-            e.printStackTrace();
-            throw new JspException("FacesException " + e.getMessage());
-        }
+        super.release();
 
-        if (renderer == null) {
-            throw new JspException(
-                "Could not determine 'renderer' for TextEntry component");
-        }
-        return renderer;	
+        name = null;
+        value = null;
+        rows = null;
+        cols = null;
+        wrap = null;
+        model = null;
+        scope = null;
+        valueChangeListener = null;
     }
+
 
     /**
      * Creates a TextEntry component and sets renderer specific

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.1 2001/12/12 20:08:58 edburns Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.2 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.1 2001/12/12 20:08:58 edburns Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.2 2001/12/13 00:15:59 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -195,20 +195,15 @@ public int doStartTag() throws JspException {
 	wSelectOne.setSelectedValue(renderContext, getLabel());
     }
     
-    Renderer renderer = getRenderer(renderContext);
     try {
-	renderContext.pushChild(wSelectOne);
-	renderer.renderStart(renderContext, wSelectOne);
-	//PENDING(rogerk) complet/pop should be done in doEndTag
-	//
-	renderer.renderComplete(renderContext, wSelectOne);
-	renderContext.popChild();
+        wSelectOne.setRendererName(renderContext, "OptionRenderer");
+        wSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
-	throw new JspException("Problem rendering component: "+
-			       e.getMessage());
+        throw new JspException("Problem rendering component: "+
+            e.getMessage());
     } catch (FacesException f) {
-	throw new JspException("Problem rendering component: "+
-			       f.getMessage());
+        throw new JspException("Problem rendering component: "+
+            f.getMessage());
     }
 
     wSelectOne.setAttribute(renderContext, "selected", null);
@@ -218,12 +213,68 @@ public int doStartTag() throws JspException {
     return (EVAL_BODY_INCLUDE);
 }
 
-    /**
-     * End Tag Processing
-     */
-    public int doEndTag() throws JspException{
+/**
+ * End Tag Processing
+ */
+public int doEndTag() throws JspException{
+    ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+        getAttribute(Constants.REF_OBJECTTABLE);
+    Assert.assert_it( ot != null );
+    RenderContext renderContext =
+        (RenderContext)ot.get(pageContext.getSession(),
+                              Constants.REF_RENDERCONTEXT);
+    Assert.assert_it( renderContext != null );
 
-        return EVAL_PAGE;
+    // Ascend the tag hierarchy to get the RadioGroup tag
+    SelectOne_OptionListTag ancestor = null;
+    WSelectOne wSelectOne = null;
+    String parentName = null;
+
+    // get the WSelectOne that is our component.
+    try {
+        ancestor = (SelectOne_OptionListTag)
+            findAncestorWithClass(this, SelectOne_OptionListTag.class);
+        parentName = ancestor.getName();
+    } catch ( Exception e ) {
+        throw new JspException("Option must be enclosed in a SelectOne_Option tag");
     }
+    Assert.assert_it(null != ancestor);
+    Assert.assert_it(null != parentName);
+
+    // by virtue of being inside a RadioGroup there must be a
+    // WSelectOne instance under the name.
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
+    wSelectOne = (WSelectOne) ot.get(pageContext.getRequest(), parentName);
+    Assert.assert_it(null != wSelectOne);
+
+    // Complete the rendering process
+    //
+    try {
+        wSelectOne.renderComplete(renderContext);
+    } catch (java.io.IOException e) {
+        throw new JspException("Problem completing rendering: "+
+            e.getMessage());
+    } catch (FacesException f) {
+        throw new JspException("Problem completing rendering: "+
+            f.getMessage());
+    }
+
+    return EVAL_PAGE;
+}
+
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
+
+        super.release();
+
+        selected = null;
+        value = null;
+        label = null;
+    }
+
 
 } // end of class SelectOne_OptionTag

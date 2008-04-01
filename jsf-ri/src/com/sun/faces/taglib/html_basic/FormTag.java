@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.13 2001/12/10 18:18:01 visvan Exp $
+ * $Id: FormTag.java,v 1.14 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.13 2001/12/10 18:18:01 visvan Exp $
+ * @version $Id: FormTag.java,v 1.14 2001/12/13 00:15:59 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -108,56 +108,34 @@ public class FormTag extends TagSupport
         Assert.assert_it( rc != null );
 
         if ( name != null ) {
-            Renderer renderer = getRenderer(rc);
+
+            // 1. Get or create the component instance.
+            //
             WForm c = (WForm) ot.get(pageContext.getRequest(), name);
-            if (c == null) {
+            if ( c == null ) {
                 c = createComponent(rc);
                 addToScope(c, ot);
             }
+
+            // 2. Render the component.
+            //
             try {
-                rc.pushChild(c); 
-                renderer.renderStart(rc, c);
+                c.setRendererName(rc, "FormRenderer");
+                c.render(rc);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Form component: "+
-                        e.getMessage());
+                throw new JspException("Problem rendering component: "+
+                    e.getMessage());
             } catch (FacesException f) {
                 throw new JspException("Problem rendering component: "+
-                f.getMessage());
+                    f.getMessage());
             }
+
             // PENDING (visvan) return evaluate body tag again because listener
             // tags might be nested
         }
         return(EVAL_BODY_INCLUDE);
     }
 
-    /**
-     * Returns the appropriate renderer for WForm Component
-     * @param RenderContext Contains client information.
-     * @return Renderer Renderer for Form compoenent
-     * @exception JspException if an renderer could not be found
-     */
-     public Renderer getRenderer(RenderContext rc ) throws JspException {
-        Renderer renderer = null;
-   
-        RenderKit renderKit = rc.getRenderKit();
-        if (renderKit == null) {
-            throw new JspException("Can't determine RenderKit!");
-        }
-        try {
-            String class_name = "com.sun.faces.renderkit.html_basic.FormRenderer";
-            renderer = renderKit.getRenderer(class_name);
-        } catch (FacesException e) {
-            e.printStackTrace();
-            throw new JspException("FacesException " + e.getMessage());
-        }
-
-        if (renderer == null) {
-            throw new JspException(
-                "Could not determine 'renderer' for Form component");
-        }
-        return renderer;	
-    }
-    
     /** Adds the component and listener to the ObjectTable
      * in the appropriate scope
      *
@@ -293,21 +271,39 @@ public class FormTag extends TagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
         WForm c = (WForm) ot.get(pageContext.getRequest(), name);
-        if ( c != null ) {
-            Renderer form_renderer = getRenderer(rc);
-            try {
-                form_renderer.renderComplete(rc, c);
-                rc.popChild();
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Form component: "+
-                        e.getMessage());
-            }catch (FacesException e) {
-                e.printStackTrace();
-                throw new JspException("FacesException " + e.getMessage());
-            }
+        Assert.assert_it( c != null );
+
+        // Complete the rendering process
+        //
+        try {
+            c.renderComplete(rc);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
         }
+
         return(EVAL_PAGE);
     }
+
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
+
+        super.release();
+
+        name = null;
+        model = null;
+        scope = null;
+        formListener = null;
+    }
+
 
 } // end of class FormTag

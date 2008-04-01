@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.3 2001/12/12 00:24:42 edburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.4 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.3 2001/12/12 00:24:42 edburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.4 2001/12/13 00:15:59 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,6 +149,8 @@ public int doStartTag() throws JspException {
     Assert.assert_it(null != ancestor);
     Assert.assert_it(null != parentName);
     
+    // 1. Set up the component
+    //
     // by virtue of being inside a RadioGroup there must be a
     // WSelectOne instance under the name.
     wSelectOne = (WSelectOne) ot.get(pageContext.getRequest(), parentName);
@@ -167,40 +169,17 @@ public int doStartTag() throws JspException {
 	wSelectOne.setSelectedValue(renderContext, getValue());
     }
     
-    RenderKit renderKit = renderContext.getRenderKit();
-    if (renderKit == null) {
-	throw new JspException("Can't determine RenderKit!");
-    }
-    
-    Renderer renderer = null;
-    try {
-	renderer = renderKit.getRenderer("com.sun.faces.renderkit.html_basic.RadioRenderer");
-    } catch (FacesException e) {
-	throw new JspException(
-			       "FacesException!!! " + e.getMessage());
-    }
-    
-    if (renderer == null) {
-	throw new JspException(
-			       "Could not determine 'renderer' for component");
-    }
-    
-    // 3. Render the component. (Push the component on
-    //    the render stack first).
+    // 2. Render the component.
     //
     try {
-	renderContext.pushChild(wSelectOne);
-	renderer.renderStart(renderContext, wSelectOne);
-	//PENDING(rogerk) complet/pop should be done in doEndTag
-	//
-	renderer.renderComplete(renderContext, wSelectOne);
-	renderContext.popChild();
+        wSelectOne.setRendererName(renderContext, "RadioRenderer");
+        wSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
-	throw new JspException("Problem rendering component: "+
-			       e.getMessage());
+        throw new JspException("Problem rendering component: "+
+            e.getMessage());
     } catch (FacesException f) {
-	throw new JspException("Problem rendering component: "+
-			       f.getMessage());
+        throw new JspException("Problem rendering component: "+
+            f.getMessage());
     }
 
     wSelectOne.setAttribute(renderContext, "checked", null);
@@ -215,7 +194,64 @@ public int doStartTag() throws JspException {
      */
     public int doEndTag() throws JspException{
 
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTTABLE);
+        Assert.assert_it( ot != null );
+        RenderContext renderContext =
+            (RenderContext)ot.get(pageContext.getSession(),
+            Constants.REF_RENDERCONTEXT);
+        Assert.assert_it( renderContext != null );
+
+        // get the WSelectOne that is our component.
+        String parentName = null;
+        RadioGroupTag ancestor = null;
+        try {
+            ancestor = (RadioGroupTag)
+                findAncestorWithClass(this, RadioGroupTag.class);
+            parentName = ancestor.getName();
+        } catch ( Exception e ) {
+            throw new JspException("Option must be enclosed in a SelectOne_Option tag");
+        }
+        Assert.assert_it(null != ancestor);
+        Assert.assert_it(null != parentName);
+
+        // by virtue of being inside a RadioGroup there must be a
+        // WSelectOne instance under the name.
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
+        WSelectOne wSelectOne = 
+            (WSelectOne) ot.get(pageContext.getRequest(), parentName);
+        Assert.assert_it(null != wSelectOne);
+
+        // Complete the rendering process
+        //
+        try {
+            wSelectOne.renderComplete(renderContext);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
+        }
+
         return EVAL_PAGE;
     }
+
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
+
+        super.release();
+
+        checked = null;
+        value = null;
+        label = null;
+    }
+
 
 } // end of class SelectOne_RadioTag

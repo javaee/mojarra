@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.9 2001/12/10 18:18:01 visvan Exp $
+ * $Id: Output_TextTag.java,v 1.10 2001/12/13 00:15:59 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.9 2001/12/10 18:18:01 visvan Exp $
+ * @version $Id: Output_TextTag.java,v 1.10 2001/12/13 00:15:59 rogerk Exp $
  * 
  *
  */
@@ -109,25 +109,26 @@ public class Output_TextTag extends TagSupport
         Assert.assert_it( rc != null );
 
         if ( name != null ) {
-            Renderer renderer = getRenderer(rc);
+
+            // 1. Get or create the component instance.
+            //
             WOutput c = (WOutput) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot);
             }
+
+            // 2. Render the component.
+            //
             try {
-                rc.pushChild(c);
-                renderer.renderStart(rc, c);
-//PENDING(rogerk) complet/pop should be done in doEndTag
-//
-                renderer.renderComplete(rc, c);
-                rc.popChild();
+                c.setRendererName(rc, "TextRenderer");
+                c.render(rc);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Output_Text component: "+
-                        e.getMessage());
+                throw new JspException("Problem rendering component: "+
+                    e.getMessage());
             } catch (FacesException f) {
                 throw new JspException("Problem rendering component: "+
-                f.getMessage());
+                    f.getMessage());
             }
         }
         return(EVAL_BODY_INCLUDE);
@@ -167,29 +168,49 @@ public class Output_TextTag extends TagSupport
      */
     public int doEndTag() throws JspException{
 
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTTABLE);
+        Assert.assert_it( ot != null );
+        RenderContext rc =
+            (RenderContext)ot.get(pageContext.getSession(),
+            Constants.REF_RENDERCONTEXT);
+        Assert.assert_it( rc != null );
+
+//PENDING(rogerk)can we eliminate this extra get if component is instance
+//variable? If so, threading issue?
+//
+        WOutput c = (WOutput) ot.get(pageContext.getRequest(), name);
+        Assert.assert_it( c != null );
+
+        // Complete the rendering process
+        //
+        try {
+            c.renderComplete(rc);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem completing rendering: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem completing rendering: "+
+                f.getMessage());
+        }
+
         return EVAL_PAGE;
     }
 
-    public Renderer getRenderer(RenderContext rc ) throws JspException{
+    /**
+     * Tag cleanup method.
+     */
+    public void release() {
 
-        Renderer renderer = null;
-        RenderKit renderKit = rc.getRenderKit();
-        if (renderKit == null) {
-            throw new JspException("Can't determine RenderKit!");
-        }
-        try {
-            String class_name = "com.sun.faces.renderkit.html_basic.TextRenderer";
-            renderer = renderKit.getRenderer(class_name);
-        } catch (FacesException e) {
-            e.printStackTrace();
-            throw new JspException("FacesException " + e.getMessage());
-        }
+        super.release();
 
-        if (renderer == null) {
-            throw new JspException(
-                "Could not determine 'renderer' for Output component");
-        }
-        return renderer;	
+        name = null;
+        value = null;
+        scope = null;
+        valueChangeListener = null;
+        model = null;
     }
 
     /**
