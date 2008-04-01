@@ -1,3 +1,8 @@
+REM
+REM Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+REM SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+REM
+
 @if "%TOMCAT_HOME%" == "" goto printUsage
 @if "%JSF_RI_HOME%" == "" goto printUsage
 @if "%CACTUS_HOME%" == "" goto printUsage

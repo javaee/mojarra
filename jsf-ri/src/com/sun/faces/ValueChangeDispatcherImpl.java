@@ -1,3 +1,12 @@
+/*
+ * $Id: ValueChangeDispatcherImpl.java,v 1.5 2001/12/20 22:26:39 ofung Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 package com.sun.faces;
 
 import org.mozilla.util.Assert;
@@ -28,7 +37,7 @@ import javax.faces.ModelAccessor;
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.4 2001/12/12 20:41:59 visvan Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.5 2001/12/20 22:26:39 ofung Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {

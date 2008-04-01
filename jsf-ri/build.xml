@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
 <!-- ************ JSF build file ************************************** -->
 
 <project name="JSF-RI" default="main" basedir=".">

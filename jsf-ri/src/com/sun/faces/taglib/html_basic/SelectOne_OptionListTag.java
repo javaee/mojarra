@@ -1,15 +1,10 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.2 2001/12/13 00:15:59 rogerk Exp $
- *
- * Copyright 2000-2001 by Sun Microsystems, Inc.,
- * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
- * All rights reserved.
- *
- * This software is the confidential and proprietary information
- * of Sun Microsystems, Inc. ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Sun.
+ * $Id: SelectOne_OptionListTag.java,v 1.3 2001/12/20 22:26:42 ofung Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 // SelectOne_OptionListTag.java
@@ -41,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.2 2001/12/13 00:15:59 rogerk Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.3 2001/12/20 22:26:42 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

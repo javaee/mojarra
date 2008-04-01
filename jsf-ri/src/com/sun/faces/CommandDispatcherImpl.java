@@ -1,3 +1,12 @@
+/*
+ * $Id: CommandDispatcherImpl.java,v 1.3 2001/12/20 22:26:38 ofung Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 package com.sun.faces;
 
 import org.mozilla.util.Assert;
@@ -30,7 +39,7 @@ import javax.faces.CommandFailedException;
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.2 2001/12/10 18:17:59 visvan Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.3 2001/12/20 22:26:38 ofung Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent

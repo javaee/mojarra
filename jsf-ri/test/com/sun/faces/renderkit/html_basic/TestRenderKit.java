@@ -1,15 +1,10 @@
 /*
- * $Id: TestRenderKit.java,v 1.5 2001/12/14 00:54:57 rogerk Exp $
- *
- * Copyright 2000-2001 by Sun Microsystems, Inc.,
- * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
- * All rights reserved.
- *
- * This software is the confidential and proprietary information
- * of Sun Microsystems, Inc. ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Sun.
+ * $Id: TestRenderKit.java,v 1.6 2001/12/20 22:26:44 ofung Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 // TestRenderKit.java
@@ -34,7 +29,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.5 2001/12/14 00:54:57 rogerk Exp $
+ * @version $Id: TestRenderKit.java,v 1.6 2001/12/20 22:26:44 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

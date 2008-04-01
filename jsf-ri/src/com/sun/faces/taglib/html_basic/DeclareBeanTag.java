@@ -1,15 +1,10 @@
 /*
- * $Id: DeclareBeanTag.java,v 1.1 2001/12/12 19:43:53 edburns Exp $
- *
- * Copyright 2000-2001 by Sun Microsystems, Inc.,
- * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
- * All rights reserved.
- *
- * This software is the confidential and proprietary information
- * of Sun Microsystems, Inc. ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Sun.
+ * $Id: DeclareBeanTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 // DeclareBeanTag.java
@@ -38,7 +33,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DeclareBeanTag.java,v 1.1 2001/12/12 19:43:53 edburns Exp $
+ * @version $Id: DeclareBeanTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
  * @author Jayashri Visvanathan
  * 
  *

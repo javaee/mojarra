@@ -1,16 +1,11 @@
+/*
+ * $Id: HtmlBasicRenderContext.java,v 1.9 2001/12/20 22:26:39 ofung Exp $
+ */
+
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.8 2001/12/08 00:33:52 rogerk Exp $
- *
- * Copyright 2000-2001 by Sun Microsystems, Inc.,
- * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
- * All rights reserved.
- *
- * This software is the confidential and proprietary information
- * of Sun Microsystems, Inc. ("Confidential Information").  You
- * shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Sun.
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 // HtmlBasicRenderContext.java
@@ -39,7 +34,7 @@ import java.util.Stack;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.8 2001/12/08 00:33:52 rogerk Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.9 2001/12/20 22:26:39 ofung Exp $
  * 
  * @see	Blah
  * @see	Bloo

@@ -1,3 +1,12 @@
+/*
+ * $Id: WForm.java,v 1.7 2001/12/20 22:25:46 ofung Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 package javax.faces;
 
 import java.util.Hashtable;

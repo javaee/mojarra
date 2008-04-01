@@ -1,3 +1,8 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
 <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
