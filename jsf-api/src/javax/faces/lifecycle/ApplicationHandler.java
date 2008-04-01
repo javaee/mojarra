@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationHandler.java,v 1.2 2002/06/03 19:34:27 craigmcc Exp $
+ * $Id: ApplicationHandler.java,v 1.3 2002/06/12 22:02:20 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,7 @@ package javax.faces.lifecycle;
 import java.util.SortedMap;
 import javax.faces.FacesException;         // FIXME - subpackage?
 import javax.faces.context.FacesContext;
-import javax.faces.event.CommandEvent;
-import javax.faces.event.FormEvent;
+import javax.faces.event.FacesEvent;
 
 
 /**
@@ -36,23 +35,16 @@ public interface ApplicationHandler {
     /**
      * <p>Process a command event that has been queued for the application.
      * <strong>FIXME</strong> - does the application need to provide any
-     * feedback to the lifecycle state machine?</p>
+     * feedback to the lifecycle state machine?  Return <code>true</code>
+     * if control should be transferred directly to the <em>Render
+     * Response</em> phase (bypassing any remaining application events that
+     * might have been queued), or <code>false</code> to process any
+     * remaining events normally.</p>
      *
      * @param context FacesContext for the current request
      * @param event CommandEvent to be processed
      */
-    public void commandEvent(FacesContext context, CommandEvent event);
-
-
-    /**
-     * <p>Process a form event that has been queued for the application.
-     * <strong>FIXME</strong> - does the application need to provide any
-     * feedback to the lifecycle state machine?</p>
-     *
-     * @param context FacesContext for the current request
-     * @param event FormEvent to be processed
-     */
-    public void formEvent(FacesContext context, FormEvent event);
+    public boolean processEvent(FacesContext context, FacesEvent event);
 
 
 }
