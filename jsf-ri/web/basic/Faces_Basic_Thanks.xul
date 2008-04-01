@@ -1,0 +1,15 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<page>
+
+<page-url>/Basic_Thanks.jsp</page-url>
+
+<window id="basicForm" formName="basicForm" rendererType="FormRenderer" >
+
+<label id="thanksLabel" value="Thanks for visiting the 'Basic Components Page'" />
+
+<link id="mylink" target="/Faces_Basic.xul" text="Back To Components Page" value="mylink"/>
+
+</window>
+
+</page>

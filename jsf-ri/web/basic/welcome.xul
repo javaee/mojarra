@@ -1,7 +1,13 @@
 <?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
 
+<page>
+
+<page-url>/welcome.jsp</page-url>
+
 <window id="welcomeForm" formName="welcomeForm" rendererType="FormRenderer">
 
 <label id="userLabel" value="Login Successful" />
 
 </window>
+
+</page>

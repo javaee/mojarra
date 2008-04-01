@@ -41,7 +41,7 @@
 
 </menupopup>
 
-<link id="mylink" target="Faces_Basic.xul" text="A Hyperlink" value="mylink" />
+<link id="mylink" target="/Faces_Basic_Thanks.xul" text="A Hyperlink To Thank You Page" value="mylink" />
 
 <button id="login" label="Login" value="myLogin" />
 
