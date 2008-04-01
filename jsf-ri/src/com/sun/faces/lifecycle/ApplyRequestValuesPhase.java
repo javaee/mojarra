@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.1 2002/06/01 00:58:21 eburns Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.2 2002/08/01 15:54:14 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.1 2002/06/01 00:58:21 eburns Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.2 2002/08/01 15:54:14 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#APPLY_REQUEST_VALUES_PHASE
@@ -65,37 +65,13 @@ public ApplyRequestValuesPhase(Lifecycle newDriver, int newId)
 	  new LifecycleCallback() {
 	      public int takeActionOnComponent(FacesContext context,
 					       UIComponent comp) throws FacesException {
-		  String rendererType = comp.getRendererType();
-		  
-		  if (null == rendererType) {
-		      try {
-			  comp.decode(context);
-		      }
-		      catch (IOException e) {
-			  throw new FacesException("Can't decode: " + 
-						   comp.getComponentId(),
-						   e);
-		      }
+                  try {
+		      comp.decode(context);
+		  } catch (IOException e) {
+		      throw new FacesException("Can't decode: " + 
+		          comp.getComponentId(), e);
 		  }
-		  else {
-		      RenderKit renderKit = 
-			  context.getRequestTree().getRenderKit();
-		      Renderer renderer = 
-			  renderKit.getRenderer(rendererType);
-		      if (null == renderer) {
-			  throw new FacesException("Can't get renderer"+
-						   " for: " + 
-						   comp.getComponentId());
-		      }
-		      try {
-			  renderer.decode(context, comp);
-		      }
-		      catch (IOException e) {
-			  throw new FacesException("Can't decode: " + 
-						   comp.getComponentId(),
-						   e);
-		      }
-		  }
+
 		  return Phase.GOTO_NEXT;
 	      }
 	  });
