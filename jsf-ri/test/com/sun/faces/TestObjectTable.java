@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.6 2001/12/01 21:12:00 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.7 2001/12/02 00:52:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -49,7 +49,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.6 2001/12/01 21:12:00 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.7 2001/12/02 00:52:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -258,6 +258,12 @@ public void testNarrowToBroad() {
     getResult = objectTable.get(session, name);
     result = getResult == value;
     System.out.println("test that get on the session, return's the session's put: " + result);
+    assertTrue(result);
+
+    // test that global get on a non-existant object returns null
+    getResult = objectTable.get("non-existant");
+    result = null == getResult;
+    System.out.println("test that global get on a non-existant object returns null: " + result);
     assertTrue(result);
 }
 
