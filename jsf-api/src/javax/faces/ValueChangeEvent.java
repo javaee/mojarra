@@ -1,5 +1,7 @@
 package javax.faces;
 
+import javax.servlet.ServletRequest;
+
 /**
  * The class which encapsulates information associated
  * with a value-change event.  Value-change events are typically

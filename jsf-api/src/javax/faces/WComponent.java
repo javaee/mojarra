@@ -316,7 +316,7 @@ public abstract class WComponent {
 
     /**
      * Invoked after this component and all of it's children are
-     * rendered. By default it will invoke renderEnd() on the renderer 
+     * rendered. By default it will invoke renderComplete() on the renderer 
      * corresponding to the rendererName property of this component. 
      * 
      * @param rc the render context used to render this component

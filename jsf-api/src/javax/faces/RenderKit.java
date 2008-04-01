@@ -1,5 +1,6 @@
 package javax.faces;
 
+import javax.servlet.ServletRequest;
 import java.util.Iterator;
 
 
@@ -42,7 +43,7 @@ public abstract class RenderKit {
      *         by this render kit
      */
     // Aim10-26-01: should we have notion of "default" renderer per type?
-    public abstract Iterator getRendererNamesForComponent(String componentType);
+    public abstract Iterator getRendererNamesForComponent(String componentType) throws FacesException;
 
     /**
      * Returns a renderer corresponding to the specified name.

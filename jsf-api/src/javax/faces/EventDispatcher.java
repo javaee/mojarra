@@ -1,5 +1,6 @@
 package javax.faces;
 
+import java.io.IOException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.util.EventObject;
@@ -18,12 +19,12 @@ public interface EventDispatcher {
     *        request where the associated event was generated
     * @param response the ServletResponse object used to render a response
     *        to the associated request
-    * @param e the Event object being dispatched
+    * @param event the Event object being dispatched
     * @throws IOException if input or output exception occurred
     * @throws FacesException if dispatcher is unable to dispatch the
     *         specified event
     */
     public void dispatch(ServletRequest request, ServletResponse response,
-			 EventObject e) throws IOException, FacesException;
+			 EventObject event) throws IOException, FacesException;
 
 }

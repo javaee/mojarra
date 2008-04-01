@@ -1,5 +1,7 @@
 package javax.faces;
 
+import javax.servlet.ServletRequest;
+
 /**
  * The class which encapsulates information associated
  * with a command event.  Command events are typically generated

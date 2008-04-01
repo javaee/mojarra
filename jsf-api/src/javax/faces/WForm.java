@@ -1,6 +1,7 @@
 package javax.faces;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * Class for representing a form user-interface component. 
@@ -57,5 +58,39 @@ public class WForm extends WComponent {
             ht.put(attributeName,value);
         }
     }
+
+    /**
+     * Registers the specified listener name as a form listener
+     * for this component.  The specified listener name must be registered
+     * in the scoped namespace and it must be a listener which implements
+     * the <code>FormListener</code> interface, else an exception will
+     * be thrown.
+     * @see FormListener
+     * @param listenerName the name of the form listener
+     * @throws FacesException if listenerName is not registered in the
+     *         scoped namespace or if the object referred to by listenerName
+     *         does not implement the <code>FormListener</code> interface.
+     */
+    public void addFormListener(String listenerName) throws FacesException {
+    }
+
+    /**
+     * Removes the specified listener name as a form listener
+     * for this component.  
+     * @param listenerName the name of the form listener
+     * @throws FacesException if listenerName is not registered as a
+     *         form listener for this component.
+     */
+    public void removeFormListener(String listenerName) throws FacesException {
+    }
+
+    /**
+     * @return Iterator containing the FormListener instances registered
+     *         for this component
+     */
+    public Iterator getFormListeners() {
+	return null;
+    }
+
 
 }

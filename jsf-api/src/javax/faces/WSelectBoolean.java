@@ -1,6 +1,7 @@
 package javax.faces;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * Class for representing a user-interface component which allows

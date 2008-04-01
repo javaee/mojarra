@@ -1,5 +1,7 @@
 package javax.faces;
 
+import java.util.Iterator;
+
 /**
  * Class for representing a user-interface component which allows
  * the user to select one value from many.

@@ -1,5 +1,6 @@
 package javax.faces;
 
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -15,9 +16,14 @@ import java.util.Iterator;
  * <p>
  * A renderer advertizes the set of render attributes it supports
  * for each component-type by providing a method which returns an
- * iterator of those attributes given a component type.
+ * iterator of supported attribute names for a given component type.
+ * A renderer provides meta-data by providing methods to obtain
+ * JavaBeans PropertyDescriptor objects corresponding to those
+ * supported attributes.
+ *<p>
+ * A renderer should be stateless, deriving all appropriate 
+ * state for rendering from the WComponent parameter.
  *
- * Aim:11-1-01: need more here...
  */
 
 public interface Renderer {
@@ -41,10 +47,10 @@ public interface Renderer {
     public boolean supportsType(String componentType);
 
     /**
-     * Returns an iterator containing the supported attribute names
-     * for the specified component type.  This attribute list should
-     * contain all attributes used by this renderer during the
-     * rendering process.
+     * Returns an iterator containing the names of this renderer's
+     * supported attributes for the specified component type.  
+     * This attribute list should contain all attributes used by this 
+     * renderer during the rendering process for the component type.
      * @param componentType string representing the type of component
      * @return an iterator containing the Strings representing supported
      *          attribute names
@@ -55,16 +61,40 @@ public interface Renderer {
     public Iterator getSupportedAttributeNames(String componentType) throws FacesException;
 
     /**
+     * Returns an iterator containing PropertyDescriptor objects
+     * corresponding to this renderer's supported attributes
+     * for the specified component type.  This attribute list should 
+     * contain all attributes used by this renderer during the rendering 
+     * process for the component type.
+     * @param componentType string representing the type of component
+     * @return an iterator containing the Strings representing supported
+     *          attribute names
+     * @throws NullPointerException if componentType is null
+     * @throws FacesException if the specified componentType is not
+     *         supported by this renderer
+     */
+    public Iterator getSupportedAttributes(String componentType) throws FacesException;
+
+    /**
+     * Returns a property descriptor for the specified attribute name.
+     * @param attributeName the name of the render attribute
+     * @throws NullPointerException if attributeName is null
+     * @throws FacesException if the specified attributeName is not
+     *         supported by this renderer
+     * @return PropertyDescriptor object describing the named attribute
+     */
+    public PropertyDescriptor getAttributeDescriptor(String attributeName)
+	throws FacesException;
+
+    /**
      * Invoked to render the specified component using the specified 
      * render context.  An attribute value used during rendering
      * is obtained by first looking for a component-specific value
      * using c.getAttribute() and if not set directly on the component,
-     * using the default value of that attribute defined by this =
-renderer. 
+     * using the default value of that attribute defined by this renderer. 
      * @see WComponent#render
      * @see WComponent#getAttribute
-     * @param rc the render context used to render the specified =
-component
+     * @param rc the render context used to render the specified component
      * @param c the WComponent instance representing the component state
      *          being rendered
      * @throws IOException
@@ -87,8 +117,7 @@ component
      * from getPerformsLayout() then this method should do nothing.
      * @see WComponent#renderAll
      * @see WComponent#renderChildren
-     * @param rc the render context used to render the specified =
-component
+     * @param rc the render context used to render the specified component
      * @param c the WComponent instance representing the component state
      *          being rendered
      * @throws IOException
@@ -99,15 +128,14 @@ component
     /**
      * Invoked after all of the specified component's descendents have
      * been rendered. 
-     * @see WComponent#postRender 
-     * @param rc the render context used to render the specified =
-component
+     * @see WComponent#renderComplete
+     * @param rc the render context used to render the specified component
      * @param c the WComponent instance representing the component state
      *          being rendered
      * @throws IOException
      * @throws NullPointerException if rc or c is null
      */
-    public void renderEnd(RenderContext rc, WComponent c) throws IOException, FacesException;
+    public void renderComplete(RenderContext rc, WComponent c) throws IOException, FacesException;
 
  }
 

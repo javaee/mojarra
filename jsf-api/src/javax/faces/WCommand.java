@@ -1,6 +1,7 @@
 package javax.faces;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 
 /**
  * Class for representing a user-interface component which allows
@@ -67,7 +68,7 @@ public class WCommand extends WComponent {
      *         with this component
      */
     public String getCommandName(RenderContext rc) {
-	String commandName = getAttribute(rc, "commandName");
+	String commandName = (String)getAttribute(rc, "commandName");
 	return commandName == null? getName() : commandName;
     }
 
