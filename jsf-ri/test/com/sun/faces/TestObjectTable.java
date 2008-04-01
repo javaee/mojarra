@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.5 2001/12/01 02:30:54 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.6 2001/12/01 21:12:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -19,6 +19,8 @@ package com.sun.faces;
 import junit.framework.TestCase;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 import junit.framework.*;
 import org.apache.cactus.*;
@@ -47,7 +49,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.5 2001/12/01 02:30:54 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.6 2001/12/01 21:12:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -204,6 +206,58 @@ public void testPutGet() {
     result = get1.equals("foo1foo1");
 
     System.out.println("Testing the put with scopeKey as first arg" + result);
+    assertTrue(result);
+}
+
+public void testNarrowToBroad() {
+    System.out.println("testing narrow-to-broad search");
+
+    HttpSession session = request.getSession();
+    String value = "stringInstance";
+    String name = "putInSession";
+    Object getResult;
+    boolean result = false;
+    
+    // Test that putting something in a request's session is correctly
+    // obtainable from the request.
+    objectTable.put(session, name, value);
+    getResult = objectTable.get(request, name);
+    result = getResult == value;
+    System.out.println("put under a request's session accessible from a get on that request: " + result);
+    assertTrue(result);
+
+    // Test that putting something under Global is accessible from a
+    // request
+    name = "putInGlobal";
+    objectTable.put(ObjectTable.GlobalScope, name, value);
+    getResult = objectTable.get(request, name);
+    result = getResult == value;
+    System.out.println("put under Global accessible from a get on that request: " + result);
+    assertTrue(result);
+
+    // Test that putting something under Global is accessible from a
+    // session
+    getResult = objectTable.get(session, name);
+    result = getResult == value;
+    System.out.println("put under Global accessible from a get on session: " + result);
+    assertTrue(result);
+
+    // Test that putting something two different objects under the same
+    // name, one in request and one in the request's session, the
+    // request stored entry is retrieved.
+    name = "sameName";
+    String value2 = "another value";
+    objectTable.put(session, name, value);
+    objectTable.put(request, name, value2);
+    getResult = objectTable.get(request, name);
+    result = getResult != value;
+    System.out.println("put under same name in request and session; get under request returns request's put: " + result);
+    assertTrue(result);
+
+    // test that get on the session, return's the session's put
+    getResult = objectTable.get(session, name);
+    result = getResult == value;
+    System.out.println("test that get on the session, return's the session's put: " + result);
     assertTrue(result);
 }
 
