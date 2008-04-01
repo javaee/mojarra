@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.12 2002/02/06 18:36:45 edburns Exp $
+ * $Id: RadioGroupTag.java,v 1.13 2002/04/05 21:01:04 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.12 2002/02/06 18:36:45 edburns Exp $
+ * @version $Id: RadioGroupTag.java,v 1.13 2002/04/05 21:01:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -51,7 +51,7 @@ public class RadioGroupTag extends FacesTag
 
 // Attribute Instance Variables
 
-    private String selectedValueModel = null;
+    private String selectedModelReference = null;
     private String valueChangeListener = null;
 
 // Relationship Instance Variables
@@ -72,12 +72,12 @@ public RadioGroupTag()
 //
 // General Methods
 //
-    public String getSelectedValueModel() {
-        return selectedValueModel;
+    public String getSelectedModelReference() {
+        return selectedModelReference;
     }
 
-    public void setSelectedValueModel(String newVal) {
-        this.selectedValueModel = newVal;
+    public void setSelectedModelReference(String newVal) {
+        this.selectedModelReference = newVal;
     }
 
     public String getValueChangeListener() {
@@ -101,17 +101,17 @@ public RadioGroupTag()
 	Assert.assert_it(comp instanceof UISelectOne);
 
 	UISelectOne uiSelectOne = (UISelectOne) comp;
-	// assert that model and selectedValueModel are either both
+	// assert that model and selectedModelReference are either both
 	// non-null or both null.
 	Assert.assert_it(
-			 ((null != getModel() && null != getSelectedValueModel()) ? true : false) 
+			 ((null != getModelReference() && null != getSelectedModelReference()) ? true : false) 
 			 ||
-			 ((null == getModel() && null == getSelectedValueModel()) ? true : false)
+			 ((null == getModelReference() && null == getSelectedModelReference()) ? true : false)
 			 );
 			 
-	if ( null != getModel() && null != getSelectedValueModel()) {
-	    uiSelectOne.setModelReference(getModel());
-	    uiSelectOne.setSelectedModelReference(getSelectedValueModel());
+	if ( null != getModelReference() && null != getSelectedModelReference()) {
+	    uiSelectOne.setModelReference(getModelReference());
+	    uiSelectOne.setSelectedModelReference(getSelectedModelReference());
 	} 
 	uiSelectOne.setItems(new java.util.Vector());
     }
@@ -145,7 +145,7 @@ public RadioGroupTag()
 
         super.release();
 	valueChangeListener = null;
-	selectedValueModel = null;
+	selectedModelReference = null;
     }
 
 } // end of class RadioGroupTag

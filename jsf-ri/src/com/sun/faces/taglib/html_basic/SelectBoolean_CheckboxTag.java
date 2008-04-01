@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.22 2002/04/05 19:41:18 jvisvanathan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.23 2002/04/05 21:01:04 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.22 2002/04/05 19:41:18 jvisvanathan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.23 2002/04/05 21:01:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -143,8 +143,8 @@ public class SelectBoolean_CheckboxTag extends FacesTag {
 
         // PENDING ( visvan )
         // make sure that the model object is registered
-        if ( getModel() != null ) {
-            uiSelectBoolean.setModelReference(getModel());
+        if ( getModelReference() != null ) {
+            uiSelectBoolean.setModelReference(getModelReference());
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface ??
@@ -152,10 +152,10 @@ public class SelectBoolean_CheckboxTag extends FacesTag {
             try {
                 ancestor = (FormTag) findAncestorWithClass(this,
 							   FormTag.class);
-		String model_str = ancestor.getModel();
+		String model_str = ancestor.getModelReference();
 		if ( model_str != null ) {
-		    setModel("$" + model_str + "." + getId());
-		    uiSelectBoolean.setModelReference(getModel());
+		    setModelReference("$" + model_str + "." + getId());
+		    uiSelectBoolean.setModelReference(getModelReference());
                }
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null

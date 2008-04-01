@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.22 2002/04/05 19:41:19 jvisvanathan Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.23 2002/04/05 21:01:05 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.22 2002/04/05 19:41:19 jvisvanathan Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.23 2002/04/05 21:01:05 rkitain Exp $
  * 
  *
  */
@@ -64,7 +64,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
     private String rows = null;
     private String cols = null;
     private String wrap = null;
-    private String model = null;
+    private String modelReference = null;
     private String scope = null;
     private String valueChangeListener = null;
 
@@ -210,7 +210,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         rows = null;
         cols = null;
         wrap = null;
-        model = null;
+        modelReference = null;
         scope = null;
         valueChangeListener = null;
     }
@@ -335,20 +335,20 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
     }
 
     /**
-     * Returns the value of the model attribute
+     * Returns the value of the modelReference attribute
      *
-     * @return String value of model attribute
+     * @return String value of modelReference attribute
      */
-    public String getModel() {
-        return this.model;
+    public String getModelReference() {
+        return this.modelReference;
     }
 
     /**
-     * Sets the model attribute
-     * @param model value of model attribute
+     * Sets the modelReference attribute
+     * @param model value of modelReference attribute
      */
-    public void setModel(String model) {
-        this.model = model;
+    public void setModelReference(String modelReference) {
+        this.modelReference = modelReference;
     }
 
 

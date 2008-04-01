@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.7 2002/04/05 19:41:17 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.8 2002/04/05 21:01:04 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import com.sun.faces.renderkit.html_basic.JspOutputMethod;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.7 2002/04/05 19:41:17 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.8 2002/04/05 21:01:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -59,7 +59,7 @@ public abstract class FacesTag extends TagSupport
 // Attribute Instance Variables
 
     private String scope = null;
-    private String model = null;
+    private String modelReference = null;
 
 // Relationship Instance Variables
 
@@ -107,20 +107,20 @@ public FacesTag()
     }
 
     /**
-     * Returns the value of the model attribute
+     * Returns the value of the modelReference attribute
      *
-     * @return String value of model attribute
+     * @return String value of modelReference attribute
      */
-    public String getModel() {
-        return this.model;
+    public String getModelReference() {
+        return this.modelReference;
     }
 
     /**
-     * Sets the model attribute
-     * @param model value of model attribute
+     * Sets the modelReference attribute
+     * @param modelReference value of modelReference attribute
      */
-    public void setModel(String model) {
-        this.model = model;
+    public void setModelReference(String modelReference) {
+        this.modelReference = modelReference;
     }
 
     /**

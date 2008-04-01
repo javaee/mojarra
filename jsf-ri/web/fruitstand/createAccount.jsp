@@ -28,7 +28,7 @@
 
   <faces:Listener id="handleCreateAccount" scope="session" className="fruitstand.CommandListenerImpl" />
 
-  <faces:Form id="CreateAccountForm" model="UserBean" navigationMapId="AccountNavMap" >
+  <faces:Form id="CreateAccountForm" modelReference="UserBean" navigationMapId="AccountNavMap" >
 
   <table width="450">
     <tr> 
@@ -83,8 +83,8 @@
       <td>Credit Card Type</td>
       <td> 
         <faces:SelectOne_OptionList id="creditCardType"
-                   model="$UserBean.items"
-                   selectedValueModel="$UserBean.creditCardType">
+                   modelReference="$UserBean.items"
+                   selectedModelReference="$UserBean.creditCardType">
           <faces:SelectOne_Option value="discover" label="Discover"/>
           <faces:SelectOne_Option value="mastercard" label="Master Card"/>
           <faces:SelectOne_Option value="visa" label="Visa"/>

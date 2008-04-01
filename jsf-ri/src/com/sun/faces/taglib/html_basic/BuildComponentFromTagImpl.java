@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.2 2002/04/05 19:41:18 jvisvanathan Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.3 2002/04/05 21:01:04 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2002/04/05 19:41:18 jvisvanathan Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2002/04/05 21:01:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -143,25 +143,6 @@ protected boolean isSupportedTag(String shortTagName)
 * the attrName.
 
 */
-
-private String mapAttrNameToPropertyName(String attrName) {
-    if (null == attrName) {
-	return attrName;
-    }
-
-    if (attrName.equals("model")) {
-        attrName = "modelReference";
-    }
-
-    if (attrName.equals("converter")) {
-        attrName = "converterReference";
-    }
-
-    if (attrName.equals("selectedValueModel")) {
-        attrName = "selectedModelReference";
-    }
-    return attrName;
-}
 
 private boolean attrRequiresSpecialTreatment(String attrName) {
     boolean result = false;
@@ -394,7 +375,7 @@ public void handleNestedComponentTag(FacesContext facesContext,
 
     attrLen = attrs.getLength();
     for (i = 0; i < attrLen; i++) {
-	attrName = mapAttrNameToPropertyName(attrs.getLocalName(i));
+	attrName = attrs.getLocalName(i);
 	attrValue = attrs.getValue(i);
 
 	if (attrName.equals("value")) {
@@ -434,7 +415,7 @@ public void applyAttributesToComponentInstance(FacesContext facesContext,
 
     attrLen = attrs.getLength();
     for (i = 0; i < attrLen; i++) {
-	attrName = mapAttrNameToPropertyName(attrs.getLocalName(i));
+	attrName = attrs.getLocalName(i);
 	attrValue = attrs.getValue(i);
 
 	// First, try to set it as a bean property

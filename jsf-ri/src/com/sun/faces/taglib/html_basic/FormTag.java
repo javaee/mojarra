@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.25 2002/03/16 00:09:37 eburns Exp $
+ * $Id: FormTag.java,v 1.26 2002/04/05 21:01:04 rkitain Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.25 2002/03/16 00:09:37 eburns Exp $
+ * @version $Id: FormTag.java,v 1.26 2002/04/05 21:01:04 rkitain Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -118,8 +118,8 @@ public class FormTag extends FacesTag
 	Assert.assert_it(comp instanceof UIForm);
         // set render independent attributes
         // make sure that the model object is registered
-        if ( getModel() != null ) {
-            ((UIForm)comp).setModelReference(getModel());
+        if ( getModelReference() != null ) {
+            ((UIForm)comp).setModelReference(getModelReference());
         }   
     }
 

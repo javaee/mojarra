@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.24 2002/04/05 19:41:18 jvisvanathan Exp $
+ * $Id: Output_TextTag.java,v 1.25 2002/04/05 21:01:04 rkitain Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.24 2002/04/05 19:41:18 jvisvanathan Exp $
+ * @version $Id: Output_TextTag.java,v 1.25 2002/04/05 21:01:04 rkitain Exp $
  * 
  *
  */
@@ -93,8 +93,8 @@ public class Output_TextTag extends FacesTag
 	
         // PENDING ( visvan )
         // make sure that the model object is registered
-        if ( getModel() != null ) {
-            out.setModelReference(getModel());
+        if ( getModelReference() != null ) {
+            out.setModelReference(getModelReference());
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface. Also at this point we must ensure that
@@ -105,10 +105,10 @@ public class Output_TextTag extends FacesTag
             try {
                 ancestor = (FormTag) findAncestorWithClass(this,
 							   FormTag.class);
-		String model_str = ancestor.getModel();
+		String model_str = ancestor.getModelReference();
 		if ( model_str != null ) {
-		    setModel("$" + model_str + "." + getId());
-		    out.setModelReference(getModel());
+		    setModelReference("$" + model_str + "." + getId());
+		    out.setModelReference(getModelReference());
 		}
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null

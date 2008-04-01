@@ -91,7 +91,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -388,7 +388,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -414,12 +414,12 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectedValueModel</name>
+      <name>selectedModelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -467,12 +467,12 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectedValueModel</name>
+      <name>selectedModelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -525,7 +525,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -561,7 +561,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -581,7 +581,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>converter</name>
+      <name>converterReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -642,7 +642,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -688,7 +688,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

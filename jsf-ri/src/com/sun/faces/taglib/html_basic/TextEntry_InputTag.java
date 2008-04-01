@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.25 2002/04/05 19:41:19 jvisvanathan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.26 2002/04/05 21:01:05 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.25 2002/04/05 19:41:19 jvisvanathan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.26 2002/04/05 21:01:05 rkitain Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -63,7 +63,7 @@ public class TextEntry_InputTag extends FacesTag
     private String valueChangeListener = null;
     private String maxlength = null;
     private String modelType = null;
-    private String converter = null;
+    private String converterReference = null;
     private String required = null;
     private String format = null;
     private String rangeMinimum = null;
@@ -110,7 +110,7 @@ public class TextEntry_InputTag extends FacesTag
                 uiTextEntry.setAttribute("modelType", modelClass);
             }
         }    
-        uiTextEntry.setAttribute("converterReference", converter);
+        uiTextEntry.setAttribute("converterReference", converterReference);
         // If model attribute is not found get it 
         // from parent form if it exists. If not
         // set text as an attribute so that it can be
@@ -118,8 +118,8 @@ public class TextEntry_InputTag extends FacesTag
 
         // PENDING ( visvan )
         // make sure that the model object is registered
-        if ( getModel() != null ) {
-            uiTextEntry.setModelReference(getModel());
+        if ( getModelReference() != null ) {
+            uiTextEntry.setModelReference(getModelReference());
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface ??
@@ -127,10 +127,10 @@ public class TextEntry_InputTag extends FacesTag
             try {
                 ancestor = (FormTag) findAncestorWithClass(this,
                     FormTag.class);
-               String model_str = ancestor.getModel();
+               String model_str = ancestor.getModelReference();
                if ( model_str != null ) {
-                   setModel("$" + model_str + "." + getId());
-                   uiTextEntry.setModelReference(getModel());
+                   setModelReference("$" + model_str + "." + getId());
+                   uiTextEntry.setModelReference(getModelReference());
                } 
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null
@@ -320,12 +320,12 @@ public class TextEntry_InputTag extends FacesTag
         return modelType;
     }     
     
-    public void setConverter(String converter_id) {
-        converter = converter_id;
+    public void setConverterReference(String converter_id) {
+        converterReference = converter_id;
     }
     
-    public String getConverter() {
-        return converter;
+    public String getConverterReference() {
+        return converterReference;
     }    
     
     public void setRequired( String required ) {

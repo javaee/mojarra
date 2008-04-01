@@ -13,7 +13,7 @@
 <h2><font color="#0000FF"> FruitStand.com </font></h2>
 <hr>
 <font size="4" color="#0000FF">Here are the items you selected.</font>
-<faces:Form id="purchaseConfirm" model="UserBean" navigationMapId="purchaseNavMap" >
+<faces:Form id="purchaseConfirm" modelReference="UserBean" navigationMapId="purchaseNavMap" >
 <table cellpadding="10">
   <th>Item</th>
   <th>Amount(lbs)</th>
@@ -22,35 +22,35 @@
   <tr> 
     <td><faces:Output_Text id="apple_item" value="apple" /></td>
     <td><faces:Output_Text id="apple_amount" 
-                           model="$UserBean.appleQuantity"/></td>
+                           modelReference="$UserBean.appleQuantity"/></td>
     <td><faces:Output_Text id="apple_price" value= "0.29"/></td>
     <td><faces:Output_Text id="apple_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="banana_item" value="banana" /></td>
     <td><faces:Output_Text id="banana_amount" 
-                           model="$UserBean.bananaQuantity"/></td>
+                           modelReference="$UserBean.bananaQuantity"/></td>
     <td><faces:Output_Text id="banana_price" value= "0.29"/></td>
     <td><faces:Output_Text id="banana_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="cantaloupe_item" value="cantaloupe" /></td>
     <td><faces:Output_Text id="cantaloupe_amount" 
-                           model="$UserBean.cantaloupeQuantity"/></td>
+                           modelReference="$UserBean.cantaloupeQuantity"/></td>
     <td><faces:Output_Text id="cantaloupe_price" value= "0.29"/></td>
     <td><faces:Output_Text id="cantaloupe_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="grapefruit_item" value="grapefruit" /></td>
     <td><faces:Output_Text id="grapefruit_amount" 
-                           model="$UserBean.grapefruitQuantity"/></td>
+                           modelReference="$UserBean.grapefruitQuantity"/></td>
     <td><faces:Output_Text id="grapefruit_price" value= "0.29"/></td>
     <td><faces:Output_Text id="grapefruit_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="grape_item" value="grape" /></td>
     <td><faces:Output_Text id="grape_amount" 
-                           model="$UserBean.grapeQuantity"/></td>
+                           modelReference="$UserBean.grapeQuantity"/></td>
     <td><faces:Output_Text id="grape_price" value= "0.29"/></td>
     <td><faces:Output_Text id="grape_total" value= "0.58"/></td>
   </tr>
@@ -68,13 +68,13 @@
 The items listed above will be billed to: <br>
 <br>
 
-<faces:Output_Text id="cust_firstName" model="$UserBean.firstName" /> 
-<faces:Output_Text id="cust_lastName" model="$UserBean.lastName" /> <br>
-<faces:Output_Text id="cust_address" model="$UserBean.address" /><br>
-<faces:Output_Text id="cust_city" model="$UserBean.city" />
-<faces:Output_Text id="cust_state" model="$UserBean.state" />
+<faces:Output_Text id="cust_firstName" modelReference="$UserBean.firstName" /> 
+<faces:Output_Text id="cust_lastName" modelReference="$UserBean.lastName" /> <br>
+<faces:Output_Text id="cust_address" modelReference="$UserBean.address" /><br>
+<faces:Output_Text id="cust_city" modelReference="$UserBean.city" />
+<faces:Output_Text id="cust_state" modelReference="$UserBean.state" />
 <br>
-<faces:Output_Text id="cust_country" model="$UserBean.country" />
+<faces:Output_Text id="cust_country" modelReference="$UserBean.country" />
 
 <faces:NavigationMap id="purchaseNavMap" scope="session" >
 
@@ -93,8 +93,8 @@ The items listed above will be billed to: <br>
 <TABLE>
 <TR>
 <faces:RadioGroup id="shipType"
-                  model="$ShipTypeBean.shipType"
-                  selectedValueModel="$ShipTypeBean.currentShipType">
+                  modelReference="$ShipTypeBean.shipType"
+                  selectedModelReference="$ShipTypeBean.currentShipType">
   <TABLE border="2"><TR><TD>
   <TABLE>
   <TR>

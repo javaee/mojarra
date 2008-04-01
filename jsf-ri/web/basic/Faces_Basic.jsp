@@ -26,7 +26,7 @@
                     targetPath = "error.jsp" />
         </faces:NavigationMap>
 
-        <faces:Form id="basicForm" model="LoginBean" navigationMapId="navMap" >
+        <faces:Form id="basicForm" modelReference="LoginBean" navigationMapId="navMap" >
             <faces:Listener id="loginListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="radioListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="optionListener" scope="session" className="basic.EventHandler" />
@@ -58,8 +58,8 @@
            <table> 
 <TR>
 <faces:RadioGroup id="shipType" 
-                  model="$ShipTypeBean.shipType" 
-                  selectedValueModel="$ShipTypeBean.currentShipType" 
+                  modelReference="$ShipTypeBean.shipType" 
+                  selectedModelReference="$ShipTypeBean.currentShipType" 
                   valueChangeListener="radioListener">
   <TABLE border="2"><TR><TD>
   <TABLE>
