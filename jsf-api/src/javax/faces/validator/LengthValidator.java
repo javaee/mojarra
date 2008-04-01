@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.8 2002/08/29 05:39:13 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.9 2002/08/29 05:52:33 craigmcc Exp $
  */
 
 /*
@@ -64,6 +64,49 @@ public class LengthValidator extends ValidatorBase {
      */
     public static final String MINIMUM_MESSAGE_ID =
         "javax.faces.validator.LengthValidator.MINIMUM";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Construct a {@link Validator} with no preconfigured limits.</p>
+     */
+    public LengthValidator() {
+
+        super();
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limit.</p>
+     *
+     * @param maximum Maximum value to allow
+     */
+    public LengthValidator(int maximum) {
+
+        super();
+        setMaximum(maximum);
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limits.</p>
+     *
+     * @param maximum Maximum value to allow
+     * @param minimum Minimum value to allow
+     */
+    public LengthValidator(int maximum, int minimum) {
+
+        super();
+        setMaximum(maximum);
+        setMinimum(minimum);
+
+    }
 
 
     // ------------------------------------------------------------- Properties

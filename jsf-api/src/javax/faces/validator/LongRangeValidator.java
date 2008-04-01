@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.2 2002/08/29 05:39:13 craigmcc Exp $
+ * $Id: LongRangeValidator.java,v 1.3 2002/08/29 05:52:33 craigmcc Exp $
  */
 
 /*
@@ -74,6 +74,49 @@ public class LongRangeValidator extends ValidatorBase {
      */
     public static final String TYPE_MESSAGE_ID =
         "javax.faces.validator.LongRangeValidator.TYPE";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Construct a {@link Validator} with no preconfigured limits.</p>
+     */
+    public LongRangeValidator() {
+
+        super();
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limit.</p>
+     *
+     * @param maximum Maximum value to allow
+     */
+    public LongRangeValidator(long maximum) {
+
+        super();
+        setMaximum(maximum);
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limits.</p>
+     *
+     * @param maximum Maximum value to allow
+     * @param minimum Minimum value to allow
+     */
+    public LongRangeValidator(long maximum, long minimum) {
+
+        super();
+        setMaximum(maximum);
+        setMinimum(minimum);
+
+    }
 
 
     // ------------------------------------------------------------- Properties

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.7 2002/08/29 05:39:13 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.8 2002/08/29 05:52:32 craigmcc Exp $
  */
 
 /*
@@ -74,6 +74,49 @@ public class DoubleRangeValidator extends ValidatorBase {
      */
     public static final String TYPE_MESSAGE_ID =
         "javax.faces.validator.DoubleRangeValidator.TYPE";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Construct a {@link Validator} with no preconfigured limits.</p>
+     */
+    public DoubleRangeValidator() {
+
+        super();
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limit.</p>
+     *
+     * @param maximum Maximum value to allow
+     */
+    public DoubleRangeValidator(double maximum) {
+
+        super();
+        setMaximum(maximum);
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limits.</p>
+     *
+     * @param maximum Maximum value to allow
+     * @param minimum Minimum value to allow
+     */
+    public DoubleRangeValidator(double maximum, double minimum) {
+
+        super();
+        setMaximum(maximum);
+        setMinimum(minimum);
+
+    }
 
 
     // ------------------------------------------------------------- Properties

@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.5 2002/08/29 05:39:13 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.6 2002/08/29 05:52:33 craigmcc Exp $
  */
 
 /*
@@ -64,6 +64,49 @@ public class StringRangeValidator extends ValidatorBase {
      */
     public static final String MINIMUM_MESSAGE_ID =
         "javax.faces.validator.StringRangeValidator.MINIMUM";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Construct a {@link Validator} with no preconfigured limits.</p>
+     */
+    public StringRangeValidator() {
+
+        super();
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limit.</p>
+     *
+     * @param maximum Maximum value to allow
+     */
+    public StringRangeValidator(String maximum) {
+
+        super();
+        setMaximum(maximum);
+
+    }
+
+
+    /**
+     * <p>Construct a {@link Validator} with the specified preconfigured
+     * limits.</p>
+     *
+     * @param maximum Maximum value to allow
+     * @param minimum Minimum value to allow
+     */
+    public StringRangeValidator(String maximum, String minimum) {
+
+        super();
+        setMaximum(maximum);
+        setMinimum(minimum);
+
+    }
 
 
     // ------------------------------------------------------------- Properties
