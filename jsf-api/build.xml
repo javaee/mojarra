@@ -7,6 +7,12 @@
 -->
 <project name="JSF-API" default="main" basedir=".">
 
+<!-- ************ Per user local properties ******************************* -->
+
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Commons local     -->
+
   <property name="Name" value="jsf-api"/>
   <property name="name" value="jsf-api"/>
   <property name="version" value="0.1"/>
@@ -35,6 +41,15 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${build.classes}"/>
   </path>
+
+  <!-- 
+       ===================================================================
+         Convenience target: cvs update              
+       =================================================================== 
+  -->
+  <target name="cvsupdate">
+    <cvs command="update -d -P"/>
+  </target>
 
   <!-- 
        ===================================================================
