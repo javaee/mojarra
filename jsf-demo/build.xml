@@ -54,6 +54,13 @@
       <param name="demoDir" value="helloDuke"/>
     </antcall>
 
+    <ant target="clean" dir="guessNumber"/>
+    <antcall target="deleteJarsFromDemo">
+      <param name="demoDir" value="guessNumber"/>
+    </antcall>
+
+
+
     <delete> 
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
@@ -70,6 +77,11 @@
     <antcall target="copyJarsToDemo">
       <param name="demoDir" value="helloDuke"/>
     </antcall>
+
+    <antcall target="copyJarsToDemo">
+      <param name="demoDir" value="guessNumber"/>
+    </antcall>
+
 
   </target>
 
@@ -103,6 +115,7 @@
   <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
 
     <ant inheritAll="false" dir="${basedir}/helloDuke"/>
+    <ant inheritAll="false" dir="${basedir}/guessNumber"/>
 
   </target>
 

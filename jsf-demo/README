@@ -32,7 +32,8 @@ Creating a Demo From the Template
 
 A Template demo webapp has been provided to simplify the task of adding
 demos to this repository.  These steps are a guideline, please don't
-follow the steps blindly and expect everything to work.
+follow the steps blindly and expect everything to work.  For example,
+replace helloDuke with your webapp name.
 
 1. cp -r templateDemo helloDuke
 
@@ -43,7 +44,8 @@ follow the steps blindly and expect everything to work.
    Do a manual inspection of helloDuke afterwards to make sure no CVS
    directories have stuck around.
 
-3. copy any images, jsp files, and html files to the root directory
+3. copy any images, jsp files, and html files to the root directory of
+   the webapp.
 
    cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.jsp ./helloDuke
    cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.gif ./helloDuke
@@ -60,17 +62,23 @@ follow the steps blindly and expect everything to work.
    Once your done with this step, the string "templateDemo" should not
    appear in any file, filename, or directory name.
 
+   Make sure to remove WEB-INF/src/templateDemo_JAVA_SOURCE_FILES_GO_HERE
+   and WEB-INF/src/templateDemo/templateDemo_JAVA_SOURCE_FILES_GO_HERE.
+
 6. Copy any java source files into the webapp.
 
    copy *.java helloDuke/WEB-INF/src/helloDuke
 
    Make sure the package names are correct in the java source files.
 
-7. Make any changes to web.xml that need to happen.
+7. Make any changes to web.xml that need to happen.  This may mean
+   changing the servletContextListener to be correct with respect to
+   your package.
 
-8. Modify build.xml in this directory to add to the list of demos.  This
-   is important, since this is how the dependent jar files get copied to
-   your demo.  "+" means lines are added.
+8. Modify build.xml in the directory in which this README file lives to
+   add to the list of demos.  This is important, since this is how the
+   dependent jar files get copied to your demo.  "+" means lines are
+   added.
 
 Index: build.xml
 ===================================================================
@@ -116,7 +124,7 @@ diff -u -r1.4 build.xml
     This will compile your classes, create the helloDuke.war, and deploy
     it to your $JWSDP_HOME/webapps directory.
 
-11. Test it out.  Keep working till it works
+11. Test it out.  Keep working till it works.
 
 12. Add this demo to be built by default.  This is the other side of
     step 8.
@@ -158,10 +166,14 @@ diff -u -r1.4 build.xml
     cat CVS/Root
 
       Use this as the value of CVSROOT
+  
+    cd helloDuke
  
     cvs -d CVSROOT import jsf-demo/helloDuke helloDuke helloDuke2_0
 
-15. Verify that your import worked correctly
+15. Verify that your import worked correctly.  
+
+    cd to the directory with this README.
 
     mv helloDuke helloDuke.orig
 
@@ -175,6 +187,8 @@ diff -u -r1.4 build.xml
    rm -rf helloDuke.orig
 
 16. Check in any remaining work
+
+    cd to the directory with this README.
 
    cvs -n update -d -P 
 
