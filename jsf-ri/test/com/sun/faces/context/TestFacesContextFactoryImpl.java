@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.3 2002/06/21 18:54:38 eburns Exp $
  */
 
 /*
@@ -23,7 +23,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.lifecycle.Lifecycle;
 import javax.faces.context.FacesContext;
+import javax.faces.FactoryFinder;
 import com.sun.faces.context.FacesContextFactoryImpl;
 
 import javax.faces.component.UIComponent;
@@ -37,7 +39,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.3 2002/06/21 18:54:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,25 +92,26 @@ public void testCreateMethods()
     facesContextFactory = new FacesContextFactoryImpl();
     
     try {
-        facesContext = facesContextFactory.createFacesContext(null,null, null);
+        facesContext = facesContextFactory.getFacesContext(null,null, null, 
+							   null);
     } catch ( FacesException fe) {
         gotException = true;
     }
     assertTrue(gotException);
-    
-    gotException = false;
-    ServletContext sc = (request.getSession()).getServletContext();
-    try {
-        facesContext = facesContextFactory.createFacesContext(sc, request, response);
-    } catch (FacesException fe) {
-        gotException = true;
-    }    
-    assertTrue(gotException == false );    
+
+    LifecycleFactory factory = (LifecycleFactory)
+	FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+    assertTrue(null != factory);
+    Lifecycle lifecycle = 
+	factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    assertTrue(null != lifecycle);
     
     gotException = false;
     try {
-        facesContext = facesContextFactory.createFacesContext(sc, request, response,
-                LifecycleFactory.DEFAULT_LIFECYCLE);
+        facesContext = facesContextFactory.getFacesContext(config.getServletContext(), 
+							   request, 
+							   response, 
+							   lifecycle);
     } catch (FacesException fe) {
         gotException = true;
     }    

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.2 2002/06/21 00:31:20 eburns Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.3 2002/06/21 18:54:37 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 
 import org.mozilla.util.ParameterCheck;
-import org.mozilla.util.Assert;
 
 public class FacesContextFactoryImpl extends FacesContextFactory
 {
@@ -76,14 +75,10 @@ public class FacesContextFactoryImpl extends FacesContextFactory
             throw new FacesException("Cannot create FacesContext." + 
                 "One or more input paramters might be null");
         }    
-	Assert.assert_it(false, "PENDING(): fixme");
 
-	/******
         return (new FacesContextImpl(sc, request,
                                      response, lifecycle));
 
-	*********/
-	return null;
     }
 
 
