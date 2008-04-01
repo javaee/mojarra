@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.13 2002/01/12 01:41:17 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.14 2002/01/14 18:23:10 edburns Exp $
  */
 
 
@@ -42,7 +42,7 @@ import com.sun.faces.ObjectAccessorFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.13 2002/01/12 01:41:17 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.14 2002/01/14 18:23:10 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,6 +172,15 @@ public HttpSession getSession() {
 public ServletRequest getRequest() {
     return request;
 }
+
+public void setRequest(ServletRequest newReq) {
+    ParameterCheck.nonNull(newReq);
+    request = newReq;
+    if (request instanceof HttpServletRequest) {
+	session = ((HttpServletRequest)request).getSession();
+    }
+}
+
 
 public UIComponent peekAtAncestor(int level) {
     UIComponent c;

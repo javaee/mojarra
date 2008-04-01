@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.13 2002/01/12 01:41:17 edburns Exp $
+ * $Id: FacesServlet.java,v 1.14 2002/01/14 18:23:10 edburns Exp $
  */
 
 /*
@@ -327,8 +327,9 @@ public class FacesServlet extends HttpServlet {
         // Attempt to get a render context from the object table
         // for the current session.  If one doesn't exist, create one.
         //
+	System.out.println("request: " + req.getRequestURI());
         rc = (RenderContext)objectManager.get(thisSession, 
-					    Constants.REF_RENDERCONTEXT);
+					      Constants.REF_RENDERCONTEXT);
 
         if (rc == null) {
             rcFactory = (RenderContextFactory)
@@ -341,9 +342,20 @@ public class FacesServlet extends HttpServlet {
                 throw new ServletException(e.getMessage());
             }
 	    Assert.assert_it(null != rc); 
-            objectManager.put(thisSession, 
-			    Constants.REF_RENDERCONTEXT, rc);
+            objectManager.put(thisSession, Constants.REF_RENDERCONTEXT, rc);
         }
+	else {
+	    // set the RenderContext to have the correct request
+
+	    // PENDING(edburns): not sure what the lifetime of
+	    // RenderContext is.  Here we re-use the RC by setting its
+	    // request and session.
+	    if (rc instanceof 
+		com.sun.faces.renderkit.html_basic.HtmlBasicRenderContext) {
+		((com.sun.faces.renderkit.html_basic.HtmlBasicRenderContext)rc).
+		    setRequest(req);
+	    }
+	}
 
         // Attempt to get an event queue from the object table
         // for the current session.  If one doesn't exist, create one.
