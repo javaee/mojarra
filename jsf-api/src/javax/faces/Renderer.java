@@ -107,7 +107,7 @@ component
      * @throws IOException
      * @throws NullPointerException if rc or c is null
      */
-    public void renderEnd(RenderContext rc, WComponent c) throws IOException;
+    public void renderEnd(RenderContext rc, WComponent c) throws IOException, FacesException;
 
  }
 
