@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.3 2002/07/31 00:48:13 craigmcc Exp $
+ * $Id: CommandEvent.java,v 1.4 2002/08/15 05:42:34 craigmcc Exp $
  */
 
 /*
@@ -63,6 +63,21 @@ public class CommandEvent extends FacesEvent {
     public String getCommandName() {
 
         return (commandName);
+
+    }
+
+
+    /**
+     * <p>Return a String rendition of this object value.</p>
+     */
+    public String toString() {
+
+        StringBuffer sb = new StringBuffer("CommandEvent[source=");
+        sb.append(getSource());
+        sb.append(",commandName=");
+        sb.append(getCommandName());
+        sb.append("]");
+        return (sb.toString());
 
     }
 

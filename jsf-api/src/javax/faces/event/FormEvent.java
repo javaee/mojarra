@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.4 2002/07/31 00:48:13 craigmcc Exp $
+ * $Id: FormEvent.java,v 1.5 2002/08/15 05:42:34 craigmcc Exp $
  */
 
 /*
@@ -66,6 +66,23 @@ public class FormEvent extends CommandEvent {
     public String getFormName() {
 
         return (formName);
+
+    }
+
+
+    /**
+     * <p>Return a String rendition of this object value.</p>
+     */
+    public String toString() {
+
+        StringBuffer sb = new StringBuffer("FormEvent[source=");
+        sb.append(getSource());
+        sb.append(",formName=");
+        sb.append(getFormName());
+        sb.append(",commandName=");
+        sb.append(getCommandName());
+        sb.append("]");
+        return (sb.toString());
 
     }
 
