@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.2 2002/07/31 19:22:00 jvisvanathan Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.3 2002/08/01 21:09:26 jvisvanathan Exp $
  */
 
 /*
@@ -34,15 +34,13 @@ import java.io.ObjectInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import com.sun.faces.util.DebugUtil;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.2 2002/07/31 19:22:00 jvisvanathan Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.3 2002/08/01 21:09:26 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -63,7 +61,6 @@ public class ReconstituteRequestTreePhase extends GenericPhaseImpl
 // Instance Variables
 //
 private TreeFactory treeFactory = null;
-private RenderKit renderKit = null;
 
 // Attribute Instance Variables
 
@@ -76,10 +73,6 @@ private RenderKit renderKit = null;
 public ReconstituteRequestTreePhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
-    RenderKitFactory factory = (RenderKitFactory)
-            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-    Assert.assert_it(factory != null);
-    renderKit = factory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
     
     treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
@@ -168,7 +161,6 @@ public void restoreTreeFromPage(FacesContext facesContext) {
             System.err.println(iox.getMessage());
         }
     }
-    requestTree.setRenderKit(renderKit);
     facesContext.setRequestTree(requestTree);
     // PENDING(visvan): If we wanted to track time, here is where we'd do it
     // long endTime = System.currentTimeMillis();
@@ -195,7 +187,6 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
         requestTree = treeFactory.getTree(facesContext.getServletContext(),
             treeId);
     } 
-    requestTree.setRenderKit(renderKit);
     facesContext.setRequestTree(requestTree);
     session.removeAttribute(RIConstants.FACES_TREE);
 
