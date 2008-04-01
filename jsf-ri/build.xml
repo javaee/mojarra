@@ -169,8 +169,11 @@
 
     
     <!-- copy all classes from javax.api package -->
-    <copy  file="${jsf-api.jar}" todir="${deploy.home}/WEB-INF/lib"/>
 
+    <!-- PENDING(edburns): FFJ can't debug into jar files, so we unjar
+    into classes directory -->
+    <!-- <copy  file="${jsf-api.jar}" todir="${deploy.home}/WEB-INF/lib"/> -->
+    <unjar src="${jsf-api.jar}" dest="${deploy.home}/WEB-INF/classes"/>
     <!-- copy dependent libs to tomcat/libs -->
   </target>
 
