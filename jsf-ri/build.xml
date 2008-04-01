@@ -135,7 +135,8 @@
     </copy>
     
     <!-- copy all the classes under javax.faces package -->
-    <copy file="${jsf-api.jar}" todir="${dist.home}/${app.name}/WEB-INF/classes"/>
+    <!-- <copy  file="${jsf-api.jar}" todir="${dist.home}/${app.name}/WEB-INF/classes> -->
+    <unjar src="${jsf-api.jar}" dest="${dist.home}/${app.name}/WEB-INF/classes"/>
 
     <!-- copy tld file -->
     <copy file="${conf.share.dir}/html_basic.tld"
