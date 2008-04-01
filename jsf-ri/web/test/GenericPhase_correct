@@ -9,5 +9,6 @@ GenericPhaseImpl: takeActionOnComponent: address
 GenericPhaseImpl: takeActionOnComponent: validUser
 GenericPhaseImpl: takeActionOnComponent: shipType
 GenericPhaseImpl: takeActionOnComponent: appleQuantity
+GenericPhaseImpl: takeActionOnComponent: mylink
 GenericPhaseImpl: takeActionOnComponent: login
 GenericPhaseImpl: takeActionOnComponent: login2

@@ -1,5 +1,9 @@
 <?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
 
+<page>
+
+<page-url>/TestRenderersFromJsp.jsp</page-url>
+
 <window id="basicForm" formName="basicForm">
 
 <label id="userLabel" value="UserName" />
@@ -41,3 +45,5 @@
 <button id="login2" src="duke.gif" value="loginButton" />
 
 </window>
+
+</page>

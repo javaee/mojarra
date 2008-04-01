@@ -77,6 +77,13 @@ attr=componentId : root
     	 value=9 label=9.00 description=null
      }
     ===>Type:javax.faces.component.UICommand
+    id:mylink
+    value=null
+    attr=componentId : mylink
+    attr=parent : javax.faces.component.UIForm
+    attr=target : foo
+    attr=text : This is a hyperlink
+    ===>Type:javax.faces.component.UICommand
     id:login
     value=null
     attr=label : Login
