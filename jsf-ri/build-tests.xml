@@ -287,6 +287,7 @@
 
             <!-- Suite of tests -->
 
+<!--
             <test name="com.sun.faces.TestBeanAccessor"/>
             <test name="com.sun.faces.TestAbstractFactory"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleDriverImpl"/>
@@ -298,6 +299,7 @@
             <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
             <test name="com.sun.faces.TestValidation"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
+-->
         </junit>
 
     </target>
