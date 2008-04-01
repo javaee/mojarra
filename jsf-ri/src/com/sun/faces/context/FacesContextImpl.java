@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.8 2002/06/21 18:57:29 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.9 2002/06/21 22:02:20 eburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.context;
 
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Collections;
 import java.util.Locale;
 import java.lang.reflect.InvocationTargetException;
@@ -36,7 +37,6 @@ import javax.faces.lifecycle.LifecycleFactory;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.BeanUtils;
 
-import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
@@ -67,6 +67,8 @@ public class FacesContextImpl extends FacesContext
     private ResponseWriter responseWriter = null;
     private HttpSession session = null;
     private ArrayList applicationEvents = null;
+    private HashMap requestEvents = null;
+    private int requestEventsCount = 0;
     
     // Attribute Instance Variables
 
@@ -146,38 +148,64 @@ public class FacesContextImpl extends FacesContext
     }
 
     public int getMaximumSeverity() {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return -1;
+	throw new FacesException("UnImplemented");
     }
 
     public Iterator getMessages() {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return null;
+        throw new FacesException("UnImplemented");
     }
 
     public Iterator getMessages(UIComponent component) {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return null;
+        throw new FacesException("UnImplemented");
     }
 
     public Iterator getMessagesAll() {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return null;
+        throw new FacesException("UnImplemented");
     }
 
     public Iterator getRequestEvents(UIComponent component) {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return null;
+	Iterator result = null;
+        ArrayList list = null;
+
+	if (null == component) {
+	    throw new NullPointerException("component is null");
+	}
+
+        if (null == requestEvents) {
+            result = Collections.EMPTY_LIST.iterator();
+        }
+	else {
+	    list = (ArrayList) requestEvents.get(component);
+	    if (null != list) {
+		result = list.iterator();
+	    } else {
+		result = Collections.EMPTY_LIST.iterator();
+	    }
+        }
+
+	return result;
     }
 
     public int getRequestEventsCount() {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return -1;
+	return requestEventsCount;
     }
 
     public int getRequestEventsCount(UIComponent component) {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return -1;
+	int result = 0;
+        ArrayList list = null;
+
+	if (null == component) {
+	    throw new NullPointerException("component is null");
+	}
+
+        if (null != requestEvents) {
+	    list = (ArrayList) requestEvents.get(component);
+	    if (null != list) {
+		result = list.size();
+	    } 
+        }
+	
+	return result;
     }
 
     public int getPhaseId() {
@@ -260,15 +288,32 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void addMessage(Message message) {
-	Assert.assert_it(false, "PENDING(): fixme");
+        throw new FacesException("UnImplemented");
     }
 
     public void addMessage(UIComponent component, Message message) {
-	Assert.assert_it(false, "PENDING(): fixme");
+        throw new FacesException("UnImplemented");
     }
 
     public void addRequestEvent(UIComponent component, FacesEvent event) {
-	Assert.assert_it(false, "PENDING(): fixme");
+        ArrayList list = null;
+
+	if (null == component || null == event) {
+	    throw new NullPointerException("null component or event");
+	}
+
+        if (null == requestEvents) {
+            requestEvents = new HashMap();
+        }
+
+        list = (ArrayList) requestEvents.get(component);
+        if (list == null) {
+            list = new ArrayList();
+            requestEvents.put(component, list);
+        }
+        list.add(event);
+
+	requestEventsCount++;
     }
 
     /**

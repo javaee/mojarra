@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
+ * $Id: FacesTestCaseService.java,v 1.3 2002/06/21 22:02:20 eburns Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ package com.sun.faces;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.faces.FactoryFinder;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -43,7 +45,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.3 2002/06/21 22:02:20 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -86,6 +88,8 @@ protected FacesContextFactory facesContextFactory = null;
 
 protected FacesContext facesContext = null;
 
+protected Lifecycle lifecycle = null;
+
 //
 // Constructors and Initializers    
 //
@@ -124,12 +128,18 @@ public void setUp()
     } else {
 	response = facesTestCase.getResponse();
     }
+
+    LifecycleFactory factory = (LifecycleFactory)
+	FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+    Assert.assert_it(null != factory);
+    lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+    Assert.assert_it(null != lifecycle);
     
     facesContext = 
-	facesContextFactory.createFacesContext(facesTestCase.getConfig().
-					       getServletContext(),
-					       facesTestCase.getRequest(), 
-					       response);
+	facesContextFactory.getFacesContext(facesTestCase.getConfig().
+					    getServletContext(),
+					    facesTestCase.getRequest(), 
+					    response, lifecycle);
     Assert.assert_it(null != facesContext);
         
     if (facesTestCase.sendWriterToFile()){
