@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.2 2002/08/12 23:15:36 eburns Exp $
+ * $Id: DateRenderer.java,v 1.3 2002/08/13 18:09:26 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.2 2002/08/12 23:15:36 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.3 2002/08/13 18:09:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -146,6 +146,7 @@ public class DateRenderer extends HtmlBasicRenderer {
 	catch (ParseException e) {
 	    component.setValue(newValue);
 	    component.setValid(false);
+            addConversionErrorMessage(context, component, e.getMessage()); 
 	    return;
 	}
 	
