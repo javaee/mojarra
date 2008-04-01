@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
+ * $Id: UIComponent.java,v 1.2 2002/01/16 21:02:44 rogerk Exp $
  */
 
 /*
@@ -72,19 +72,19 @@ public abstract class UIComponent {
      * This name should be equivelent to the name used to store the
      * component in the scoped namespace.
      * @see ObjectTable#put
-     * @see #setName
-     * @return String containing the name of this component
+     * @see #setId
+     * @return String containing the id of this component
      */
-    public String getName() {
+    public String getId() {
 	return null;
     }
 
     /**
-     * Sets the name of this component.
-     * @see #getName
-     * @param name String containing the name of the component
+     * Sets the id of this component.
+     * @see #getId
+     * @param id String containing the id of the component
      */
-    public void setName(String name) {
+    public void setId(String id) {
     }
 
     /**
@@ -250,7 +250,7 @@ public abstract class UIComponent {
      * for the specified render context.
      * @param rc the render context used to render this component
      */
-    public Iterator getChildIDs(RenderContext rc) {
+    public Iterator getChildIds(RenderContext rc) {
         return null;
     }
 

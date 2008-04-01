@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
+ * $Id: UICommand.java,v 1.2 2002/01/16 21:02:44 rogerk Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class UICommand extends UIComponent {
 
     /**
      * Returns the commandName property of this component. This
-     * property will default to the name of this component.  The
+     * property will default to the id of this component.  The
      * commandName will be contained in any command events generated
      * by this component.
      * @see #addCommandListener
@@ -41,7 +41,7 @@ public class UICommand extends UIComponent {
      */
     public String getCommandName(RenderContext rc) {
 	String commandName = (String)getAttribute(rc, "commandName");
-	return commandName == null? getName() : commandName;
+	return commandName == null? getId() : commandName;
     }
 
     /**
@@ -61,22 +61,22 @@ public class UICommand extends UIComponent {
      * be thrown.
      * @see CommandListener
      * @see Command
-     * @param listenerName the name of the command listener
-     * @throws FacesException if listenerName is not registered in the
-     *         scoped namespace or if the object referred to by listenerName
+     * @param listenerId the id of the command listener
+     * @throws FacesException if listenerId is not registered in the
+     *         scoped namespace or if the object referred to by listenerId
      *         does not implement the <code>CommandListener</code> interface.
      */
-    public void addCommandListener(String listenerName) throws FacesException {
+    public void addCommandListener(String listenerId) throws FacesException {
     }
 
     /**
      * Removes the specified listener name as a command listener
      * for this component.  
-     * @param listenerName the name of the command listener
+     * @param listenerId the id of the command listener
      * @throws FacesException if listenerName is not registered as a
      *         command listener for this component.
      */
-    public void removeCommandListener(String listenerName) throws FacesException {
+    public void removeCommandListener(String listenerId) throws FacesException {
     }
 
     /**

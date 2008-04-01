@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
+ * $Id: UIForm.java,v 1.2 2002/01/16 21:02:44 rogerk Exp $
  */
 
 /*
@@ -35,29 +35,29 @@ public class UIForm extends UIComponent {
     }
 
     /**
-     * Registers the specified listener name as a form listener
-     * for this component.  The specified listener name must be registered
+     * Registers the specified listener id as a form listener
+     * for this component.  The specified listener id must be registered
      * in the scoped namespace and it must be a listener which implements
      * the <code>FormListener</code> interface, else an exception will
      * be thrown.
      * @see FormListener
-     * @param listenerName the name of the form listener
-     * @throws FacesException if listenerName is not registered in the
-     *         scoped namespace or if the object referred to by listenerName
+     * @param listenerId the id of the form listener
+     * @throws FacesException if listenerId is not registered in the
+     *         scoped namespace or if the object referred to by listenerId
      *         does not implement the <code>FormListener</code> interface.
      */
-    public void addFormListener(ServletRequest req, String listenerName) 
+    public void addFormListener(ServletRequest req, String listenerId) 
             throws FacesException {
     }
 
     /**
-     * Removes the specified listener name as a form listener
+     * Removes the specified listener id as a form listener
      * for this component.  
-     * @param listenerName the name of the form listener
-     * @throws FacesException if listenerName is not registered as a
+     * @param listenerId the id of the form listener
+     * @throws FacesException if listenerId is not registered as a
      *         form listener for this component.
      */
-    public void removeFormListener(String listenerName) throws FacesException {
+    public void removeFormListener(String listenerId) throws FacesException {
     }
 
     /**

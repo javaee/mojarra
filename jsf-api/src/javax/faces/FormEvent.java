@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.3 2002/01/10 22:32:21 edburns Exp $
+ * $Id: FormEvent.java,v 1.4 2002/01/16 21:02:44 rogerk Exp $
  */
 
 /*
@@ -58,20 +58,20 @@ public class FormEvent extends FacesEvent {
     /**
      * Creates a form event
      * @param request the ServletRequest object where this event was generated
-     * @param sourceName a String containing the name of the form component
+     * @param sourceId a String containing the id of the form component
      *        where this event originated
      * @param type an integer value indicating the type of form event which
      *        occurred
      * @param formControlName a String containing the name of the child
      *        component which was added or removed, or null if this is
      *        an INIT or EXIT event type
-     * @throws NullPointerException if sourceName is null
+     * @throws NullPointerException if sourceId is null
      * @throws IllegalParameterException if type isn't either INIT, 
      *         CONTROL_ADDED, CONTROL_REMOVED, or EXIT
      */
-    public FormEvent(ServletRequest request, String sourceName, int type,
+    public FormEvent(ServletRequest request, String sourceId, int type,
 			String formControlName) {
-	super(request, sourceName);
+	super(request, sourceId);
 	this.type = type;
 	this.formControlName = formControlName;
     }

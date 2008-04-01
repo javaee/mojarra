@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeEvent.java,v 1.3 2001/12/20 22:25:46 ofung Exp $
+ * $Id: ValueChangeEvent.java,v 1.4 2002/01/16 21:02:45 rogerk Exp $
  */
 
 /*
@@ -36,15 +36,15 @@ public class ValueChangeEvent extends FacesEvent {
     /**
      * Creates a value-change event.
      * @param request the ServletRequest object where this event was derived
-     * @param sourceName a String containing the name of the component 
+     * @param sourceId a String containing the id of the component 
      *        where this event originated
      * @param commandName a String containing the name of the command
      *        associated with this event
-     * @throws NullPointerException if sourceName or commandName is null
+     * @throws NullPointerException if sourceId or commandName is null
      */
-    public ValueChangeEvent(ServletRequest request, String sourceName, 
+    public ValueChangeEvent(ServletRequest request, String sourceId, 
 			String modelReference, Object newValue) {
-	super(request, sourceName);
+	super(request, sourceId);
 	this.modelReference = modelReference;
 	this.newValue = newValue;
     }
