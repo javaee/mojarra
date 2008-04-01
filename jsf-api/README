@@ -1,0 +1,48 @@
+			     JSR #000127
+		  Java Server Faces 1.0
+
+This README covers the jsf-api and jsf-ri workspaces.
+
+The key goal for the Java Server Faces project is to build a UI
+framework which can easily be embraced by tools in order to draw a
+larger development base to Java server application development.
+
+http://java.sun.com/aboutJava/communityprocess/jsr/jsr_127.html
+http://wspack.sfbay.sun.com/jsf/
+
+This CVS module contains the sources for Java Server Faces 1.0 API.
+
+Milestone 1 Release notes:
+
+At the completion of Milestone 1, we have:
+
+1. An abstract RenderKit framework
+
+2. A concrete implementation of a RenderKit for HTML,
+   with Renderers for WForm, WOutput, WCommand and
+   WSelectBoolean
+
+3. A mechanism for advertising and plugging in this
+   concrete implementation to the abstract framework.
+
+4. WComponent sub-classes for the above
+   Renderers.
+
+What we learned during the construction of M1:
+
+During the construction of this milestone, we encountered some problems
+with the way the JSF-API handled bootstrapping.  These problems were
+resolved by following the pattern used in JAXP for connecting the a JSR
+interface to its implementation in a pluggable way.
+
+We learned how to create a custom tag lib, install it in a web-app.  We
+got a good feel for the problem space.
+
+We came upon a "chicken and egg" problem regarding the construction and
+initialization of the RenderContext: It's not possible to fully
+construct and initialize a RenderContext using the factory method
+without exposing some JSP specific data.  Our solution to this problem
+is to force the user of the RenderContext to create an instance with a
+factory method, then initialize it.  See
+<jsf-ri/src/com/sun/faces/taglib/html_basic/UseFacesTag.java.doStartTag()>.
+This solution may need revisiting.
