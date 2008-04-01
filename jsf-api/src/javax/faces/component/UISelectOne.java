@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.8 2002/06/07 23:31:12 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.9 2002/06/14 21:30:46 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.context.ResponseWriter;
  * radio buttons.</p>
  */
 
-public class UISelectOne extends UIComponentBase {
+public class UISelectOne extends UISelectBase {
 
 
     // ------------------------------------------------------- Static Variables
@@ -50,57 +50,11 @@ public class UISelectOne extends UIComponentBase {
 
 
     /**
-     * <p>Return the available items for this component.</p>
-     */
-    public SelectItem[] getItems() {
-
-        return ((SelectItem[]) getAttribute("items"));
-
-    }
-
-
-    /**
-     * <p>Set the available items for this component.</p>
-     *
-     * @param items The new available items
-     */
-    public void setItems(SelectItem items[]) {
-
-        setAttribute("items", items);
-
-    }
-
-
-    /**
-     * <p>Return the model reference expression for the available items
-     * for this component.</p>
-     */
-    public String getItemsModelReference() {
-
-        return ((String) getAttribute("itemsModelReference"));
-
-    }
-
-
-    /**
-     * <p>Set the model reference expression for the available items
-     * for this component.</p>
-     *
-     * @param itemsModelReference The new model reference expression (if any)
-     */
-    public void setItemsModelReference(String itemsModelReference) {
-
-        setAttribute("itemsModelReference", itemsModelReference);
-
-    }
-
-
-    /**
      * <p>Return the local value of the selected item's value.</p>
      */
-    public String getSelectedValue() {
+    public Object getSelectedValue() {
 
-        return ((String) getAttribute("value"));
+        return (getAttribute("value"));
 
     }
 
@@ -110,7 +64,7 @@ public class UISelectOne extends UIComponentBase {
      *
      * @param selectedValue The new selected item's value
      */
-    public void setSelectedValue(String selectedValue) {
+    public void setSelectedValue(Object selectedValue) {
 
         setAttribute("value", selectedValue);
 
@@ -159,8 +113,9 @@ public class UISelectOne extends UIComponentBase {
         if (oldValue == null) {
             oldValue = "";
         }
-        String value = oldValue.toString();
-        SelectItem items[] = getItems();
+        String value = getAsString(context, "value", "modelReference");
+        SelectItem items[] =
+            getAsItems(context, "items", "itemsModelReference");
         if (items == null) {
             items = (SelectItem[])
                 context.getModelValue(getItemsModelReference());

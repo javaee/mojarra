@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.4 2002/06/14 05:01:39 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.5 2002/06/14 21:30:46 craigmcc Exp $
  */
 
 /*
@@ -963,6 +963,28 @@ public abstract class UIComponentBase implements UIComponent {
             }
         }
         return (result);
+
+    }
+
+
+    /**
+     * <p>If this <code>UIComponent</code> has a non-null
+     * <code>modelReference</code> property, use the
+     * <code>setModelValue()</code> method of the specified
+     * {@link FacesContext} to update the corresponding model data
+     * from the current value of this component.  This method can be
+     * overridden by custom component classes when more complex update
+     * logic is required.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void updateModel(FacesContext context) {
+
+        String modelReference = getModelReference();
+        if (modelReference == null) {
+            return;
+        }
+        context.setModelValue(modelReference, getValue());
 
     }
 

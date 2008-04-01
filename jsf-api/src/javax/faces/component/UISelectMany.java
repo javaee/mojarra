@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.6 2002/06/07 23:31:12 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.7 2002/06/14 21:30:46 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.context.ResponseWriter;
  * checkboxes.</p>
  */
 
-public class UISelectMany extends UIComponentBase {
+public class UISelectMany extends UISelectBase {
 
 
     // ------------------------------------------------------- Static Variables
@@ -50,67 +50,21 @@ public class UISelectMany extends UIComponentBase {
 
 
     /**
-     * <p>Return the available items for this component.</p>
+     * <p>Return the local value of the selected item's values.</p>
      */
-    public SelectItem[] getItems() {
+    public Object[] getSelectedValues() {
 
-        return ((SelectItem[]) getAttribute("items"));
+        return ((Object[]) getAttribute("value"));
 
     }
 
 
     /**
-     * <p>Set the available items for this component.</p>
-     *
-     * @param items The new available items
-     */
-    public void setItems(SelectItem items[]) {
-
-        setAttribute("items", items);
-
-    }
-
-
-    /**
-     * <p>Return the model reference expression for the available items
-     * for this component.</p>
-     */
-    public String getItemsModelReference() {
-
-        return ((String) getAttribute("itemsModelReference"));
-
-    }
-
-
-    /**
-     * <p>Set the model reference expression for the available items
-     * for this component.</p>
-     *
-     * @param itemsModelReference The new model reference expression (if any)
-     */
-    public void setItemsModelReference(String itemsModelReference) {
-
-        setAttribute("itemsModelReference", itemsModelReference);
-
-    }
-
-
-    /**
-     * <p>Return the local value of the selected item's value.</p>
-     */
-    public String[] getSelectedValues() {
-
-        return ((String[]) getAttribute("value"));
-
-    }
-
-
-    /**
-     * <p>Set the local value of the selected item's value.</p>
+     * <p>Set the local value of the selected item's values.</p>
      *
      * @param selectedValues The new selected item's value
      */
-    public void setSelectedValues(String selectedValues[]) {
+    public void setSelectedValues(Object selectedValues[]) {
 
         setAttribute("value", selectedValues);
 
@@ -155,11 +109,9 @@ public class UISelectMany extends UIComponentBase {
         if (context == null) {
             throw new NullPointerException();
         }
-        String values[] = (String[]) currentValue(context);
-        if (values == null) {
-            values = new String[0];
-        }
-        SelectItem items[] = getItems();
+        String values[] = getAsStrings(context, "value", "modelReference");
+        SelectItem items[] =
+            getAsItems(context, "items", "itemsModelReference");
         if (items == null) {
             items = (SelectItem[])
                 context.getModelValue(getItemsModelReference());

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.1 2002/06/04 17:53:24 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.2 2002/06/14 21:30:47 craigmcc Exp $
  */
 
 /*
@@ -103,21 +103,21 @@ public class UISelectManyTestCase extends UIComponentTestCase {
         assertNull("selectedValues2", selectMany.getAttribute("value"));
 
         selectMany.setSelectedValues(new String[] { "foo" });
-        String result3[] = selectMany.getSelectedValues();
+        Object result3[] = selectMany.getSelectedValues();
         assertNotNull("selectedValues3a", result3);
         assertEquals("selectedValues3b", 1, result3.length);
         assertEquals("selectedValues3c", "foo", result3[0]);
-        String result4[] = (String[]) selectMany.getAttribute("value");
+        Object result4[] = (String[]) selectMany.getAttribute("value");
         assertNotNull("selectedValues4a", result4);
         assertEquals("selectedValues4b", 1, result4.length);
         assertEquals("selectedValues4c", "foo", result4[0]);
 
         selectMany.setAttribute("value", new String[] { "bar" });
-        String result5[] = selectMany.getSelectedValues();
+        Object result5[] = selectMany.getSelectedValues();
         assertNotNull("selectedValues5a", result5);
         assertEquals("selectedValues5b", 1, result5.length);
         assertEquals("selectedValues5c", "bar", result5[0]);
-        String result6[] = (String[]) selectMany.getAttribute("value");
+        Object result6[] = (String[]) selectMany.getAttribute("value");
         assertNotNull("selectedValues6a", result6);
         assertEquals("selectedValues6b", 1, result6.length);
         assertEquals("selectedValues6c", "bar", result6[0]);

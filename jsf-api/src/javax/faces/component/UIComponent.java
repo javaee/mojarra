@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.33 2002/06/14 05:01:39 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.34 2002/06/14 21:30:45 craigmcc Exp $
  */
 
 /*
@@ -478,6 +478,20 @@ public interface UIComponent {
      * @param context FacesContext for the request we are processing
      */
     public boolean processEvents(FacesContext context);
+
+
+    /**
+     * <p>If this <code>UIComponent</code> has a non-null
+     * <code>modelReference</code> property, use the
+     * <code>setModelValue()</code> method of the specified
+     * {@link FacesContext} to update the corresponding model data
+     * from the current value of this component.  This method can be
+     * overridden by custom component classes when more complex update
+     * logic is required.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void updateModel(FacesContext context);
 
 
     /**

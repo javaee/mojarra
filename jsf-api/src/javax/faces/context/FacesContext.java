@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.22 2002/06/14 05:01:39 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.23 2002/06/14 21:30:46 craigmcc Exp $
  */
 
 /*
@@ -406,7 +406,7 @@ public abstract class FacesContext {
      * @exception NullPointerException if <code>model</code>
      *  is <code>null</code>
      */
-    public abstract void setModelValue(String model, Object value)
+    public abstract void setModelValue(String modelReference, Object value)
         throws FacesException;
 
 
