@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.4 2002/05/08 01:11:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.5 2002/05/09 21:21:24 craigmcc Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.render.Renderer;
  * <p><strong>UIComponent</strong> is the base class for all user interface
  * components in JavaServer Faces.  The set of <code>UIComponent</code>
  * instances associated with a particular request or response are typically
- * organized into trees (with the root node, and all intervening nodes,
- * being instances of {@link UIContainer}).</p>
+ * organized into trees under a root <code>UIComponent</code> that represents
+ * the entire request or response.</p>
  *
  * <h3>Properties</h3>
  *
@@ -30,7 +30,7 @@ import javax.faces.render.Renderer;
  * <ul>
  * <li><strong>componentId</strong> (java.lang.String) - An identifier for this
  *     component, which must be unique across all children of the parent
- *     {@link UIContainer}.  Identifiers may be composed of letters, digits,
+ *     node in a tree.  Identifiers may be composed of letters, digits,
  *     dashes ('-'), and underscores ('_').  To minimize the size of
  *     responses rendered by JavaServer Faces, it is recommended that
  *     identifiers be as short as possible.</li>
@@ -44,18 +44,19 @@ import javax.faces.render.Renderer;
  * <li><strong>compoundId</strong> (java.lang.String) - A unique (within
  *     the component tree containing this component) identifier for the
  *     current node, which begins with a slash character ('/'), followed by
- *     the <code>id</code> of each parent of the current component (from the
- *     top down) followed by a slash character ('/'), and ending with the
- *     <code>id</code> of this component.  [READ-ONLY]</li>
+ *     the <code>componentId</code> of each parent of the current component
+ *     (from the top down) followed by a slash character ('/'), and ending
+ *     with the <code>componentId</code> of this component.  [READ-ONLY]</li>
  * <li><strong>model</strong> (java.lang.STring) - A symbolic expression
  *     used to attach this component to <em>model</em> data in the underlying
  *     application (typically a JavaBean property).  The syntax of this
  *     expression corresponds to the expression language described in
  *     Appendix A of the <em>JavaServer Pages Standard Tag Library</em>
  *     (version 1.0) specification.</li>
- * <li><strong>parent</strong> (javax.faces.component.UIContainer) - The
- *     parent {@link UIContainer} in which this <code>UIComponent</code> is
- *     nested.  The root {@link UIContainer} will not have a parent.</li>
+ * <li><strong>parent</strong> (javax.faces.component.UIComponent) - The
+ *     parent <code>UIComponent</code> in the tree within which this component
+ *     is nested.  The root node of a component tree will not have a parent.
+ *     </li>
  * <li><strong>rendererType</strong> (java.lang.String) - Logical identifier
  *     of the type of {@link Renderer} to use when rendering this component
  *     to a response.  If not specified, this component must render itself
@@ -80,12 +81,11 @@ import javax.faces.render.Renderer;
  *
  * <h3>Component Trees and Navigation</h3>
  *
- * <p>A component whose implementation class extends {@link UIContainer}
- * instead of <code>UIComponent</code> supports the association of child
- * components with that container.  When applied recursively, a set of
- * related components can be assembled into a <em>tree</em> with a single
- * parent component (which must be a {@link UIContainer} if it has children)
- * and an arbitrary number of child components at each level.</p>
+ * <p>Every <code>UIComponent</code> instance can belong to a tree of
+ * components representing the current request or response.  This is
+ * represented by the existence of a <code>parent</code> property to
+ * represent the parent node, and a set of methods that facilitate
+ * manipulation of the set of children belonging to the current node.</p>
  *
  * <p>Further, a unique (within a component tree) identifier, accessible
  * via the <code>compoundId</code> read-only property, can be calculated
@@ -94,7 +94,7 @@ import javax.faces.render.Renderer;
  * as well as URL schemes that support hierarchical identifiers (such as
  * <code>http</code>), where a leading slash character ('/') identifies
  * the root of the component tree, and subordinate nodes of the tree are
- * selected by their <code>id</code> property followed by a slash.</p>
+ * selected by their <code>componentId</code> property followed by a slash.</p>
  *
  * <p><code>UIComponent</code> supports navigation from one component to
  * another, within the component tree containing this component, using
@@ -191,13 +191,14 @@ public abstract class UIComponent {
     /**
      * <p>Set the identifier of this <code>UIComponent</code>.
      *
-     * @param id The new identifier
+     * @param componentId The new identifier
      *
-     * @exception IllegalArgumentException if <code>id</code> is zero length
-     *  or contains invalid characters
-     * @exception NullPointerException if <code>id</code> is <code>null</code>
+     * @exception IllegalArgumentException if <code>componentId</code>
+     *  is zero length or contains invalid characters
+     * @exception NullPointerException if <code>componentId</code>
+     *  is <code>null</code>
      */
-    public abstract void setComponentId(String id);
+    public abstract void setComponentId(String componentId);
 
 
     /**
@@ -230,20 +231,24 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the parent {@link UIContainer} of this
+     * <p>Return the parent <code>UIComponent</code> of this
      * <code>UIComponent</code>, if any.</p>
      */
-    public abstract UIContainer getParent();
+    public abstract UIComponent getParent();
 
 
     /**
-     * <p>Set the parent {@link UIContainer} of this
+     * <p>Set the parent <code>UIComponent</code> of this
      * <code>UIComponent</code>.</p>
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
+     *
+     * @exception IllegalArgumentException if the <code>id</code> of this
+     *  node is not unique among the set of components that are children
+     *  of the new parent
      */
-    public abstract void setParent(UIContainer parent);
+    public abstract void setParent(UIComponent parent);
 
 
     /**
@@ -278,7 +283,53 @@ public abstract class UIComponent {
     public abstract void setValue(Object value);
 
 
-    // ----------------------------------------------------- Navigation Methods
+    // ------------------------------------------------ Tree Management Methods
+
+
+    /**
+     * <p>Insert the specified {@link UIComponent} at the specified
+     * position in the child list.</p>
+     *
+     * @param index Zero-relative index at which to add this
+     *  {@link UIComponent}
+     * @param component {@link UIComponent} to be added
+     *
+     * @exception IndexOutOfBoundsException if the index is out of range
+     *  ((index < 0) || (index &gt;= size()))
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract void add(int index, UIComponent component);
+
+
+    /**
+     * <p>Append the specified {@link UIComponent} to the end of the
+     * child list.</p>
+     *
+     * @param component {@link UIComponent} to be added
+     *
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract void add(UIComponent component);
+
+
+    /**
+     * <p>Remove all child {@link UIComponent}s from the child list,
+     * recursively performing this operation when a child {@link UIComponent}
+     * also has children.</p>
+     */
+    public abstract void clear();
+
+
+    /**
+     * <p>Return <code>true</code> if the specified {@link UIComponent}
+     * is a direct child of this <code>UIComponent</code>; otherwise,
+     * return <code>false</code>.</p>
+     *
+     * @param component {@link UIComponent} to be checked
+     *
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract boolean contains(UIComponent component);
 
 
     /**
@@ -311,6 +362,75 @@ public abstract class UIComponent {
      */
     public abstract UIComponent findComponent(String expr);
 
+
+
+    /**
+     * <p>Return the {@link UIComponent} at the specified position
+     * in the child list.</p>
+     *
+     * @param index Position of the desired component
+     *
+     * @exception IndexOutOfBoundsException if index is out of range
+     *  ((index &lt; 0) || (index &gt;= size()))
+     */
+    public abstract UIComponent get(int index);
+
+
+    /**
+     * <p>Return the index of the specified {@link UIComponent} in the
+     * child list, or <code>-1</code> if this component is not a child.</p>
+     *
+     * @param component {@link UIComponent} to be checked
+     *
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract int indexOf(UIComponent component);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the child {@link UIComponent}s
+     * of this <code>UIComonent</code> in the proper sequence.</p>
+     */
+    public abstract Iterator iterator();
+
+
+    /**
+     * <p>Remove the child {@link UIComponent} at the specified position
+     * in the child list.</p>
+     *
+     * @param index Position of the desired component
+     *
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract void remove(int index);
+
+
+    /**
+     * <p>Remove the child {@link UIComponent} from the child list.</p>
+     *
+     * @param component {@link UIComponent} to be removed
+     *
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract void remove(UIComponent component);
+
+
+    /**
+     * <p>Replace the child {@link UIComponent} at the specified position
+     * in the child list.</p>
+     *
+     * @param index Position of the desired component
+     * @param component The new component
+     *
+     * @exception NullPointerException if <code>component</code> is null
+     */
+    public abstract void set(int index, UIComponent component);
+
+
+    /**
+     * <p>Return the number of {@link UIComponent}s on the child list.</p>
+     */
+    public abstract int size();
 
 
     // ------------------------------------------- Lifecycle Processing Methods
@@ -374,8 +494,8 @@ public abstract class UIComponent {
      * request processing lifecycle, byt <strong>only</strong> for components
      * that have no value set for the <code>rendererType</code> property.</p>
      *
-     * <p><strong>FIXME</strong> - Not sufficient for components with children,
-     * but that will be defined in {@link UIContainer} instead of here</p>
+     * <p><strong>FIXME</strong> - Not sufficient for components with children.
+     * </p>
      *
      * @param context FacesContext for the current request being processed
      *

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.3 2002/05/08 01:11:46 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.4 2002/05/09 21:21:25 craigmcc Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package javax.faces.context;
 
-import javax.faces.component.UIContainer;
+import javax.faces.component.UIComponent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.servlet.ServletRequest;
@@ -104,19 +104,19 @@ public abstract class FacesContext {
     
 
     /**
-     * <p>Return the {@link UIContainer} that is the root of the component
+     * <p>Return the {@link UIComponent} that is the root of the component
      * tree for the inbound request.</p>
      */
-    public abstract UIContainer getRequestTree();
+    public abstract UIComponent getRequestTree();
 
 
     /**
-     * <p>Set the {@link UIContainer} that is the root of the component tree
+     * <p>Set the {@link UIComponent} that is the root of the component tree
      * for the inbound request.</p>
      *
      * @param root The root of the inbound component tree
      */
-    public abstract void setRequestTree(UIContainer root);
+    public abstract void setRequestTree(UIComponent root);
 
 
     /**
@@ -136,21 +136,21 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the {@link UIContainer} that is the root of the component
+     * <p>Return the {@link UIComponent} that is the root of the component
      * tree for the outbound response.  Unless otherwise specified (by a
      * call to <code>setResponseTree()</code>), this will return the same
      * component tree returned by <code>getRequestTree()</code>.</p>
      */
-    public abstract UIContainer getResponseTree();
+    public abstract UIComponent getResponseTree();
 
 
     /**
-     * <p>Set the {@link UIContainer} that is the root of the component tree
+     * <p>Set the {@link UIComponent} that is the root of the component tree
      * for the outbound response.</p>
      *
      * @param root The root of the outbound component tree
      */
-    public abstract void setResponseTree(UIContainer root);
+    public abstract void setResponseTree(UIComponent root);
 
 
     /**
