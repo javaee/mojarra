@@ -1,5 +1,5 @@
 /*
- * $Id: IntegerRangeValidator.java,v 1.5 2002/07/23 00:19:14 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.1 2002/07/28 23:16:58 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.context.Message;
 
 
 /**
- * <p><strong>IntegerRangeValidator</strong> is a {@link Validator} that checks
+ * <p><strong>LongRangeValidator</strong> is a {@link Validator} that checks
  * the value of the corresponding component against specified minimum and
  * maximum values.  The following algorithm is implemented:</p>
  * <ul>
@@ -25,42 +25,45 @@ import javax.faces.context.Message;
  *     If it is <code>null</code>, exit immediately.  (If null values
  *     should not be allowed, a {@link RequiredValidator} can be configured
  *     to check for this case.)</li>
- * <li>If the current component value is not an <code>Integer</code>,
+ * <li>If the current component value is not an integer type (byte, char,
+ *     short, int, long), or a String that can be converted to a long,
  *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this
  *     request, and skip subsequent checks.</li>
  * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is a Integer, check the component value against
+ *     component, and it is an integer type (or a String that can be
+ *     converted to a long), check the component value against
  *     this limit.  If the component value is greater than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
  * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is a Integer, check the component value against
+ *     component, and it is an integer type (or a String that can be
+ *     converted to a long), check the component value against
  *     this limit.  If the component value is less than the
  *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
  * </ul>
  */
 
-public class IntegerRangeValidator extends ValidatorBase {
+public class LongRangeValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants
 
 
     /**
-     * <p>The attribute name of an <code>Integer</code> representing
+     * <p>The attribute name of an integer value representing
      * the maximum value to check for.</p>
      */
     public static final String MAXIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.IntegerRangeValidator.MAXIMUM";
+        "javax.faces.validator.LongRangeValidator.MAXIMUM";
 
 
     /**
-     * <p>The attribute name of an <code>Integer</code> representing
+     * <p>The attribute name of an integer value representing
      * the minimum value to check for.</p>
      */
     public static final String MINIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.IntegerRangeValidator.MINIMUM";
+        "javax.faces.validator.LongRangeValidator.MINIMUM";
 
 
     /**
@@ -68,7 +71,7 @@ public class IntegerRangeValidator extends ValidatorBase {
      * one of the limit attributes is not of the correct type.</p>
      */
     public static final String LIMIT_MESSAGE_ID =
-        "javax.faces.validator.StringRangeValidator.LIMIT";
+        "javax.faces.validator.LongRangeValidator.LIMIT";
 
 
     /**
@@ -78,7 +81,7 @@ public class IntegerRangeValidator extends ValidatorBase {
      * will be replaced by the configured maximum value.</p>
      */
     public static final String MAXIMUM_MESSAGE_ID =
-        "javax.faces.validator.IntegerRangeValidator.MAXIMUM";
+        "javax.faces.validator.LongRangeValidator.MAXIMUM";
 
 
     /**
@@ -88,7 +91,7 @@ public class IntegerRangeValidator extends ValidatorBase {
      * will be replaced by the configured minimum value.</p>
      */
     public static final String MINIMUM_MESSAGE_ID =
-        "javax.faces.validator.IntegerRangeValidator.MINIMUM";
+        "javax.faces.validator.LongRangeValidator.MINIMUM";
 
 
     /**
@@ -96,7 +99,7 @@ public class IntegerRangeValidator extends ValidatorBase {
      * the current value of this component is not of the correct type.
      */
     public static final String TYPE_MESSAGE_ID =
-        "javax.faces.validator.IntegerRangeValidator.TYPE";
+        "javax.faces.validator.LongRangeValidator.TYPE";
 
 
     // ----------------------------------------------------- Static Initializer
@@ -107,13 +110,13 @@ public class IntegerRangeValidator extends ValidatorBase {
         descriptors.put
             (MAXIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
-                                         Integer.class,
+                                         Long.class,
                                          "maxValue"));
 
         descriptors.put
             (MINIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
-                                         Integer.class,
+                                         Long.class,
                                          "minValue"));
 
     }
@@ -136,10 +139,10 @@ public class IntegerRangeValidator extends ValidatorBase {
         Object value = component.getValue();
         if (value != null) {
             try {
-                Integer converted = (Integer) value;
+                long converted = longValue(value);
                 checkMaximum(context, component, converted);
                 checkMinimum(context, component, converted);
-            } catch (ClassCastException e) {
+            } catch (NumberFormatException e) {
                 context.addMessage(component,
                                    getMessage(context, TYPE_MESSAGE_ID));
                 return;
@@ -161,26 +164,27 @@ public class IntegerRangeValidator extends ValidatorBase {
      * @param value Component value being checked
      */
     private void checkMaximum(FacesContext context, UIComponent component,
-                              Integer value) {
+                              long value) {
 
-        Integer attribute = null;
+        long attribute = 0L;
 	Object attrObj = null;
         try {
 	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
             if (attrObj == null) {
                 return;
             }
-            attribute = new Integer(this.intValue(attrObj));
+            attribute = longValue(attrObj);
         } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
 
-        if (value.compareTo(attribute) > 0) {
+        if (value > attribute) {
             context.addMessage(component,
                                getMessage(context, MAXIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
+                                         new Object[]
+                               { new Long(attribute) }));
         }
 
     }
@@ -195,26 +199,27 @@ public class IntegerRangeValidator extends ValidatorBase {
      * @param value Component value being checked
      */
     private void checkMinimum(FacesContext context, UIComponent component,
-                              Integer value) {
+                              long value) {
 
-        Integer attribute = null;
+        long attribute = 0L;
 	Object attrObj = null;
         try {
 	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
             if (attrObj == null) {
                 return;
             }
-            attribute = new Integer(this.intValue(attrObj));
+            attribute = longValue(attrObj);
         } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
 
-        if (value.compareTo(attribute) < 0) {
+        if (value < attribute) {
             context.addMessage(component,
                                getMessage(context, MINIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
+                                         new Object[]
+                               { new Long(attribute) }));
         }
 
     }

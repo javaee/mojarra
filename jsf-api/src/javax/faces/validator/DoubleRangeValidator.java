@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.5 2002/07/23 00:19:14 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.6 2002/07/28 23:16:57 craigmcc Exp $
  */
 
 /*
@@ -25,16 +25,19 @@ import javax.faces.context.Message;
  *     If it is <code>null</code>, exit immediately.  (If null values
  *     should not be allowed, a {@link RequiredValidator} can be configured
  *     to check for this case.)</li>
- * <li>If the current component value is not a <code>Double</code>,
+ * <li>If the current component value is not a floating point type, or
+ *     a String that is convertible to double,
  *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this
  *     request, and skip subsequent checks.</li>
  * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is a Double, check the component value against
+ *     component, and it is a floating point type (or a String that is
+ *     convertible to double), check the component value against
  *     this limit.  If the component value is greater than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
  * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is a Double, check the component value against
+ *     component, and it is a floating point type (or a String that is
+ *     convertible to double), check the component value against
  *     this limit.  If the component value is less than the
  *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
@@ -136,10 +139,10 @@ public class DoubleRangeValidator extends ValidatorBase {
         Object value = component.getValue();
         if (value != null) {
             try {
-                Double converted = (Double) value;
+                double converted = doubleValue(value);
                 checkMaximum(context, component, converted);
                 checkMinimum(context, component, converted);
-            } catch (ClassCastException e) {
+            } catch (NumberFormatException e) {
                 context.addMessage(component,
                                    getMessage(context, TYPE_MESSAGE_ID));
                 return;
@@ -161,15 +164,16 @@ public class DoubleRangeValidator extends ValidatorBase {
      * @param value Component value being checked
      */
     private void checkMaximum(FacesContext context, UIComponent component,
-                              Double value) {
+                              double value) {
+
+        double attribute = 0.0;
 	Object attrObj = null;
-        Double attribute = null;
         try {
 	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
             if (attrObj == null) {
                 return;
             }
-            attribute = new Double(this.doubleValue(attrObj));
+            attribute = doubleValue(attrObj);
         } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
@@ -177,10 +181,11 @@ public class DoubleRangeValidator extends ValidatorBase {
         } 
 
 
-        if (value.compareTo(attribute) > 0) {
+        if (value > attribute) {
             context.addMessage(component,
                                getMessage(context, MAXIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
+                                         new Object[]
+                               { new Double(attribute) }));
         }
 
     }
@@ -195,26 +200,27 @@ public class DoubleRangeValidator extends ValidatorBase {
      * @param value Component value being checked
      */
     private void checkMinimum(FacesContext context, UIComponent component,
-                              Double value) {
+                              double value) {
 
-        Double attribute = null;
+        double attribute = 0.0;
 	Object attrObj = null;
         try {
 	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
             if (attrObj == null) {
                 return;
             }
-            attribute = new Double(this.doubleValue(attrObj));
+            attribute = doubleValue(attrObj);
         } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
 
-        if (value.compareTo(attribute) < 0) {
+        if (value < attribute) {
             context.addMessage(component,
                                getMessage(context, MINIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
+                                         new Object[]
+                               { new Double(attribute) }));
         }
 
     }

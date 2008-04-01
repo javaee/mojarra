@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.3 2002/07/26 21:53:32 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.4 2002/07/28 23:16:58 craigmcc Exp $
  */
 
 /*
@@ -147,24 +147,45 @@ abstract class ValidatorBase implements Validator {
 
     }
 
-    protected int intValue(Object attributeValue) throws NumberFormatException {
-        if (attributeValue instanceof Integer) {
-            return ( ((Integer) attributeValue).intValue() );
-        } else {
-            return (Integer.parseInt(attributeValue.toString()));
-        }
-    }
 
-    protected double doubleValue(Object attributeValue) throws NumberFormatException {
-        if (attributeValue instanceof Double) {
-            return ( ((Double) attributeValue).intValue() );
+    protected double doubleValue(Object attributeValue)
+        throws NumberFormatException {
+
+        if (attributeValue instanceof Float) {
+            return ( ((Float) attributeValue).doubleValue() );
+        } else if (attributeValue instanceof Double) {
+            return ( ((Double) attributeValue).doubleValue() );
+        } else if (attributeValue instanceof Byte) {
+            return ( ((Byte) attributeValue).doubleValue() );
+        } else if (attributeValue instanceof Short) { 
+            return ( ((Short) attributeValue).doubleValue() );
+        } else if (attributeValue instanceof Integer) {
+            return ( ((Integer) attributeValue).doubleValue() );
+        } else if (attributeValue instanceof Long) {
+            return ( ((Long) attributeValue).doubleValue() );
         } else {
             return (Double.parseDouble(attributeValue.toString()));
         }
+
     }
 
-    
- 
+
+    protected long longValue(Object attributeValue)
+        throws NumberFormatException {
+
+        if (attributeValue instanceof Byte) {
+            return ( ((Byte) attributeValue).longValue() );
+        } else if (attributeValue instanceof Short) { 
+            return ( ((Short) attributeValue).longValue() );
+        } else if (attributeValue instanceof Integer) {
+            return ( ((Integer) attributeValue).longValue() );
+        } else if (attributeValue instanceof Long) {
+            return ( ((Long) attributeValue).longValue() );
+        } else {
+            return (Long.parseLong(attributeValue.toString()));
+        }
+
+    }
 
 
 }

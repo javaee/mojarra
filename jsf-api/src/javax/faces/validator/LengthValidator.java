@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.6 2002/07/23 00:19:14 eburns Exp $
+ * $Id: LengthValidator.java,v 1.7 2002/07/28 23:16:58 craigmcc Exp $
  */
 
 /*
@@ -148,23 +148,24 @@ public class LengthValidator extends ValidatorBase {
     private void checkMaximum(FacesContext context, UIComponent component,
                               String svalue) {
 
-        Integer attribute = null;
+        long attribute = 0L;
 	Object attrObj = null;
         try {
 	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
             if (attrObj == null) {
                 return;
             }
-            attribute = new Integer(this.intValue(attrObj));
+            attribute = longValue(attrObj);
         } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
         } 
-        if (svalue.length() > attribute.intValue()) {
+        if (svalue.length() > attribute) {
             context.addMessage(component,
                                getMessage(context, MAXIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
+                                         new Object[]
+                               { new Long(attribute) }));
         }
 
     }
@@ -181,24 +182,25 @@ public class LengthValidator extends ValidatorBase {
     private void checkMinimum(FacesContext context, UIComponent component,
                               String svalue) {
 
-        Integer attribute = null;
+        long attribute = 0L;
 	Object attrObj = null;
         try {
 	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
             if (attrObj == null) {
                 return;
             }
-            attribute = new Integer(this.intValue(attrObj));
+            attribute = longValue(attrObj);
         } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
         } 
 
-        if (svalue.length() < attribute.intValue()) {
+        if (svalue.length() < attribute) {
             context.addMessage(component,
                                getMessage(context, MINIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
+                                         new Object[]
+                               { new Long(attribute) }));
         }
 
     }
