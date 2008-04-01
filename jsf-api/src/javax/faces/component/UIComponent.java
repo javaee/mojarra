@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.39 2002/07/22 18:28:45 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.40 2002/07/24 01:13:27 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
@@ -32,7 +33,7 @@ import javax.faces.validator.Validator;
  * <code>UIComponent</code> implementations.</p>
  */
 
-public interface UIComponent {
+public interface UIComponent extends Serializable {
 
 
     // ------------------------------------------------------------- Attributes
