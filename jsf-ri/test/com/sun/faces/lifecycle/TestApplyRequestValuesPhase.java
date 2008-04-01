@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 
 import com.sun.faces.ServletFacesTestCase;
 
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,7 +115,7 @@ public void testCallback()
     root = getFacesContext().getRequestTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
-    UITextEntry userName = new UITextEntry();
+    UIInput userName = new UIInput();
     userName.setComponentId("userName");
     root.addChild(basicForm);
     basicForm.addChild(userName);
@@ -127,7 +127,7 @@ public void testCallback()
     
     root = getFacesContext().getRequestTree().getRoot();
     try {
-	userName = (UITextEntry) root.findComponent("/basicForm/userName");
+	userName = (UIInput) root.findComponent("/basicForm/userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

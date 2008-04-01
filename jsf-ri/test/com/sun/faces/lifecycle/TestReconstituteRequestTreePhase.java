@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteRequestTreePhase.java,v 1.3 2002/08/02 19:32:11 jvisvanathan Exp $
+ * $Id: TestReconstituteRequestTreePhase.java,v 1.4 2002/08/08 16:24:56 rkitain Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIComponentBase;
 import com.sun.faces.tree.SimpleTreeImpl;
@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteRequestTreePhase.java,v 1.3 2002/08/02 19:32:11 jvisvanathan Exp $
+ * @version $Id: TestReconstituteRequestTreePhase.java,v 1.4 2002/08/08 16:24:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,7 +141,7 @@ public void testReconstituteRequestSubmit()
     
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
-    UITextEntry userName = new UITextEntry();
+    UIInput userName = new UIInput();
     
     userName.setComponentId("userName");
     root.addChild(basicForm);

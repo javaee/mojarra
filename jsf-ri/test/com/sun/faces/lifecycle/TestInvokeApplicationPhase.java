@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.5 2002/08/02 01:17:40 eburns Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.ApplicationHandler;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.tree.Tree;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FormEvent;
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.5 2002/08/02 01:17:40 eburns Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,7 +93,7 @@ public void testInvokeNormal()
 {
     System.setProperty(DID_COMMAND, EMPTY);
     System.setProperty(DID_FORM, EMPTY);
-    final UITextEntry root = new UITextEntry();
+    final UIInput root = new UIInput();
     Lifecycle life = new LifecycleImpl();
     Tree tree = new XmlTreeImpl(config.getServletContext(),
 				root, "default.xul", "");
@@ -122,7 +122,7 @@ public void testInvokeNormal()
 
 public void testInvokeNoOp()
 {
-    UITextEntry root = new UITextEntry();
+    UIInput root = new UIInput();
     Lifecycle life = new LifecycleImpl();
     Tree tree = new XmlTreeImpl(config.getServletContext(),
 				root, "default.xul", "");

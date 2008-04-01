@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.11 2002/08/02 19:32:12 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.12 2002/08/08 16:24:57 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.tree.Tree;
 
 import com.sun.faces.ServletFacesTestCase;
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.11 2002/08/02 19:32:12 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.12 2002/08/08 16:24:57 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,9 +89,9 @@ public void testUpdateNormal()
 {
     int rc = Phase.GOTO_NEXT;
     UIForm form = null;
-    UITextEntry userName = null;
-    UITextEntry userName1 = null;
-    UITextEntry userName2 = null;
+    UIInput userName = null;
+    UIInput userName1 = null;
+    UIInput userName2 = null;
     Tree tree = null;
     TestBean testBean = (TestBean)
 	(getFacesContext().getHttpSession()).getAttribute("TestBean");
@@ -101,19 +101,19 @@ public void testUpdateNormal()
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
-    userName = new UITextEntry();
+    userName = new UIInput();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${TestBean.one}");
     userName.setValid(true);
     form.addChild(userName);
-    userName1 = new UITextEntry();
+    userName1 = new UIInput();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
     userName1.setModelReference("${TestBean.one}");
     userName1.setValid(true);
     form.addChild(userName1);
-    userName2 = new UITextEntry();
+    userName2 = new UIInput();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
     userName2.setModelReference("${TestBean.one}");
@@ -137,9 +137,9 @@ public void testUpdateFailed()
 {
     int rc = Phase.GOTO_NEXT;
     UIForm form = null;
-    UITextEntry userName = null;
-    UITextEntry userName1 = null;
-    UITextEntry userName2 = null;
+    UIInput userName = null;
+    UIInput userName1 = null;
+    UIInput userName2 = null;
     Tree tree = null;
     String value = null;
     Phase 
@@ -147,19 +147,19 @@ public void testUpdateFailed()
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
     form = new UIForm();
     form.setComponentId("form");
-    userName = new UITextEntry();
+    userName = new UIInput();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setValid(true);
     userName.setModelReference("${UserBean.one}");
     form.addChild(userName);
-    userName1 = new UITextEntry();
+    userName1 = new UIInput();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
     userName1.setValid(true);
     userName1.setModelReference("${TestBean.one}");
     form.addChild(userName1);
-    userName2 = new UITextEntry();
+    userName2 = new UIInput();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
     userName2.setModelReference("${TestBean.one}");

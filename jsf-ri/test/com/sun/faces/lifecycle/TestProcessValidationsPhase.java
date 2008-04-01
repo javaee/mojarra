@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.6 2002/08/05 21:56:46 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.7 2002/08/08 16:24:56 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.6 2002/08/05 21:56:46 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.7 2002/08/08 16:24:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -55,7 +55,7 @@ public class TestProcessValidationsPhase extends ServletFacesTestCase
 public static final String TEST_URI = "/components.jsp";
 
 public static final String DID_VALIDATE = "didValidate";
-public static UITextEntry userName = null;
+public static UIInput userName = null;
 
 //
 // Class Variables
@@ -125,7 +125,7 @@ public void testCallback()
     root = getFacesContext().getRequestTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
-    UITextEntry userName1 = new UITextEntry();
+    UIInput userName1 = new UIInput();
     userName1.setComponentId("userName");
     root.addChild(basicForm);
     basicForm.addChild(userName1);
@@ -134,7 +134,7 @@ public void testCallback()
     System.setProperty(DID_VALIDATE, EMPTY);
 
     try {
-	userName = (UITextEntry) root.findComponent("./basicForm/userName");
+	userName = (UIInput) root.findComponent("./basicForm/userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

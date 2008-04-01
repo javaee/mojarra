@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.8 2002/07/12 23:58:46 rkitain Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.9 2002/08/08 16:24:56 rkitain Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.event.FacesEvent;
 
 import com.sun.faces.ServletFacesTestCase;
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.8 2002/07/12 23:58:46 rkitain Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.9 2002/08/08 16:24:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -170,7 +170,7 @@ public void testCallback()
 * Enqueue value change events
 */
 
-public static class UIValueChangeTextEntry1 extends UITextEntry
+public static class UIValueChangeTextEntry1 extends UIInput
 {
 
 public void decode(FacesContext context) throws IOException 
@@ -207,7 +207,7 @@ public boolean processEvent(FacesContext context, FacesEvent event)
 }
 } // end of class UIValueChangeTextEntry1
 
-public static class UIValueChangeTextEntry2 extends UITextEntry
+public static class UIValueChangeTextEntry2 extends UIInput
 {
 
 public void decode(FacesContext context) throws IOException

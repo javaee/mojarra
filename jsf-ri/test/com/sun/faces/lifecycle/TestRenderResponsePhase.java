@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.12 2002/08/02 19:32:11 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.13 2002/08/08 16:24:57 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
-import javax.faces.component.UITextEntry;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
@@ -52,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.12 2002/08/02 19:32:11 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.13 2002/08/08 16:24:57 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

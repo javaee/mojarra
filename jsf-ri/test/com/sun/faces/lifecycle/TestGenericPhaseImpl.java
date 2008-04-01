@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
-import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 
 import java.util.Iterator;
 
@@ -45,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.6 2002/08/08 16:24:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -132,7 +132,7 @@ public void testExecute()
     UIComponent root = getFacesContext().getRequestTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
-    UITextEntry userName = new UITextEntry();
+    UIInput userName = new UIInput();
     userName.setComponentId("userName");
     root.addChild(basicForm);
     basicForm.addChild(userName);
