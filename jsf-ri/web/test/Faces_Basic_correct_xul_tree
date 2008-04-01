@@ -5,10 +5,11 @@ attr=componentId : root
 attr=rendersChildren : false
   ===>Type:Form
   id:basicForm
-  value=null
+  value=basicForm
   attr=componentId : basicForm
   attr=parent : com.sun.faces.tree.XmlTreeFactoryImpl
   attr=rendersChildren : false
+  attr=value : basicForm
     ===>Type:Output
     id:userLabel
     value=UserName
@@ -53,7 +54,7 @@ attr=rendersChildren : false
     attr=rendersChildren : false
     ===>Type:SelectBoolean
     id:validUser
-    modelReference:${UserBean.validUser}
+    modelReference:${TestBean.boolProp}
     value=false
     attr=model : 
     attr=label : Checker
@@ -63,7 +64,7 @@ attr=rendersChildren : false
     attr=value : false
     ===>Type:SelectOne
     id:shipType
-    modelReference:${UserBean.items}
+    modelReference:${TestBean.prop}
      {
     	 value=nextDay label=Next Day description=null
     	 value=nextWeek label=Next Week description=null
@@ -71,7 +72,7 @@ attr=rendersChildren : false
      }
     ===>Type:SelectOne
     id:appleQuantity
-    modelReference:${UserBean.appleQuantity}
+    modelReference:${TestBean.prop}
      {
     	 value=0 label=0.00 description=null
     	 value=1 label=1.00 description=null

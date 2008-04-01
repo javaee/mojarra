@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.1 2002/06/03 22:09:32 eburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.2 2002/06/07 00:01:14 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.1 2002/06/03 22:09:32 eburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.2 2002/06/07 00:01:14 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,13 +124,13 @@ public void testUpdateFailed()
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
-    userName.setModel("${TestBean.one}");
+    userName.setModel("${UserBean.one}");
     tree = new XmlTreeImpl(config.getServletContext(), userName, 
 			   "updateModel.xul");
     facesContext.setRequestTree(tree);
 
     // This stage will go straight to render, since there is no model
-    // called TestBean.
+    // called UserBean.
     rc = updateModelValues.execute(facesContext);
     assertTrue(Phase.GOTO_RENDER == rc);    
 

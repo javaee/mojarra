@@ -26,6 +26,31 @@ public String getOne()
     return one;
 }
 
+protected String prop = null;
+
+public void setProp(String newProp)
+{
+    prop = newProp;
+}
+
+public String getProp()
+{
+    return prop;
+}
+
+protected boolean boolProp = false;
+
+public void setBoolProp(boolean newBoolProp)
+{
+    boolProp = newBoolProp;
+}
+
+public boolean getBoolProp()
+{
+    return boolProp;
+}
+
+
 protected InnerBean inner = null;
 
 public void setInner(InnerBean newInner)

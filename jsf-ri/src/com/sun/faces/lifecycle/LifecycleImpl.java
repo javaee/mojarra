@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.5 2002/06/05 19:07:23 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.6 2002/06/07 00:01:02 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.5 2002/06/05 19:07:23 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.6 2002/06/07 00:01:02 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -117,8 +117,10 @@ protected void initPhases()
   				        Lifecycle.PROCESS_VALIDATIONS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase(this, 
 				        Lifecycle.UPDATE_MODEL_VALUES_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this, Lifecycle.INVOKE_APPLICATION_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.RENDER_RESPONSE_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this, 
+					 Lifecycle.INVOKE_APPLICATION_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new JspRenderResponsePhase(this, 
+					    Lifecycle.RENDER_RESPONSE_PHASE)));
 }
 
 /**

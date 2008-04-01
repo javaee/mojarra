@@ -1,6 +1,6 @@
 <?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
 
-<window id="basicForm">
+<window id="basicForm" formName="basicForm">
 
 <label id="userLabel" value="UserName" />
 <textbox id="userName" value="default" />
@@ -12,16 +12,16 @@
 <textbox id="address" multiline="true" />
 
 <checkbox id="validUser" label="Checker" 
-          model="${UserBean.validUser}"/>
+          model="${TestBean.boolProp}"/>
 
-<radiogroup id="shipType" model="${UserBean.items}">
+<radiogroup id="shipType" model="${TestBean.prop}">
 
 <radio value="nextDay" label="Next Day" />
 <radio value="nextWeek" label="Next Week" checked="true" />
 <radio value="nextMonth" label="Next Month" />
 </radiogroup>
 
-<menupopup id="appleQuantity" model="${UserBean.appleQuantity}">
+<menupopup id="appleQuantity" model="${TestBean.prop}">
 
 <menuitem value="0" label="0.00"/>
 <menuitem value="1" label="1.00"/>

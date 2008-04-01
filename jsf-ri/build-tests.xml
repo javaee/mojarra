@@ -200,53 +200,11 @@
         <copy file="${cactus.home}/sample/web/test/jspRedirector.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
-        <!-- Copy Unit test (jsp) files. -->
-        <copy file="${basedir}/web/test/treeTest.jsp"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
+        <!-- Copy Unit test static files. -->
 
-        <copy file="${basedir}/web/test/Faces_Basic.jsf"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic_uiml.jsf"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic_xul.jsf"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/testWhile.jsp"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/basic/Faces_Basic.jsp"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic.uiml"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic.xul"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-<!-- Copy over the "correct" files for automated comparison checking -->
-
-        <copy file="${basedir}/web/test/Faces_Basic_correct_jsp"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic_correct_uiml"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic_correct_xul"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/Faces_Basic_correct_xul_tree"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-         <copy file="${basedir}/web/test/CorrectRenderersResponse"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-         <copy file="${basedir}/web/test/CorrectRenderersResponse_2"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
-
-        <copy file="${basedir}/web/test/GenericPhase_correct"
-            todir="${out.tomcat.40.dir}/webapps/test"/>
+        <copy todir="${out.tomcat.40.dir}/webapps/test">
+            <fileset dir="${basedir}/web/test"/>
+        </copy>
 
     </target>
 
@@ -341,6 +299,7 @@
             <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
             <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>

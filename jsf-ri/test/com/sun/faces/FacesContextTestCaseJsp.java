@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextTestCase.java,v 1.3 2002/06/07 00:01:12 eburns Exp $
+ * $Id: FacesContextTestCaseJsp.java,v 1.1 2002/06/07 00:01:12 eburns Exp $
  */
 
 /*
@@ -7,34 +7,37 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// FacesContextTestCase.java
+// FacesContextTestCaseJsp.java
 
 package com.sun.faces;
 
-import org.apache.cactus.ServletTestCase;
+import org.apache.cactus.JspTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+
+import javax.servlet.jsp.PageContext;
 
 /**
  *
- *  <B>FacesContextTestCase</B> is a base class that creates a
+ *  <B>FacesContextTestCaseJsp</B> is a base class that creates a
  *  FacesContextFactory instance in its ctor, and a FacesContext
  *  instance in its setUp();
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FacesContextTestCase.java,v 1.3 2002/06/07 00:01:12 eburns Exp $
+ * @version $Id: FacesContextTestCaseJsp.java,v 1.1 2002/06/07 00:01:12 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
  *
  */
 
-public abstract class FacesContextTestCase extends ServletTestCase
+public abstract class FacesContextTestCaseJsp extends JspTestCase
 {
 //
 // Protected Constants
@@ -60,9 +63,9 @@ protected FacesContext facesContext = null;
 // Constructors and Initializers    
 //
 
-    public FacesContextTestCase() { super("FacesContextTestCase"); }
+    public FacesContextTestCaseJsp() { super("FacesContextTestCaseJsp"); }
 
-    public FacesContextTestCase(String name) { super(name); }
+    public FacesContextTestCaseJsp(String name) { super(name); }
 
 //
 // Class methods
@@ -83,6 +86,8 @@ public void setUp()
     facesContext = 
 	facesContextFactory.createFacesContext(config.getServletContext(),
 					       request, response);
+    pageContext.setAttribute(FacesContext.FACES_CONTEXT_ATTR, facesContext,
+			     PageContext.REQUEST_SCOPE);
     assertTrue(null != facesContext);
     TestBean testBean = new TestBean();
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
@@ -94,4 +99,4 @@ public void tearDown()
     (facesContext.getHttpSession()).removeAttribute("TestBean");
 }
 
-} // end of class FacesContextTestCase
+} // end of class FacesContextTestCaseJsp

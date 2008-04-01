@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.1 2002/06/03 22:09:32 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.2 2002/06/07 00:01:03 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.1 2002/06/03 22:09:32 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.2 2002/06/07 00:01:03 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -94,8 +94,10 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 		int rc = Phase.GOTO_NEXT;
 		String model = null,
 		    message = null;
-		
-		comp.setValue(null);
+
+		if (null != (model = comp.getModel())) {
+		    comp.setValue(null);
+		}
 		return rc;
 	    }
 	};
