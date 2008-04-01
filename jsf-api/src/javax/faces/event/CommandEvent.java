@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.2 2002/07/26 19:02:37 craigmcc Exp $
+ * $Id: CommandEvent.java,v 1.3 2002/07/31 00:48:13 craigmcc Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ public class CommandEvent extends FacesEvent {
     /**
      * <p>Construct a new event object from the specified source component.</p>
      *
-     * @param component Source {@link UIComponent} for this event (if any)
+     * @param component Source {@link UIComponent} for this event
      * @param commandName Command name of the command this event signifies
      *
      * @exception NullPointerException if any of the parameters
@@ -39,6 +39,9 @@ public class CommandEvent extends FacesEvent {
     public CommandEvent(UIComponent source, String commandName) {
 
         super(source);
+        if ((source == null) || (commandName == null)) {
+            throw new NullPointerException();
+        }
         this.commandName = commandName;
 
     }
@@ -50,7 +53,7 @@ public class CommandEvent extends FacesEvent {
     /**
      * <p>The command namd whose selection this event signifies.</p>
      */
-    private String commandName = null;
+    protected String commandName = null;
 
 
     /**
