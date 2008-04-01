@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.7 2002/06/07 20:25:19 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.8 2002/06/08 18:18:55 craigmcc Exp $
  */
 
 /*
@@ -94,7 +94,11 @@ public abstract class FacesTag extends TagSupport {
      */
     public int getDoStartValue() throws JspException {
 
-        return (EVAL_BODY_INCLUDE);
+        if (component.getRendersChildren()) {
+            return (SKIP_BODY);
+        } else {
+            return (EVAL_BODY_INCLUDE);
+        }
 
     }
 
