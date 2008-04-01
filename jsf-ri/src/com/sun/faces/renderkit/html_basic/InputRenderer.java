@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.21 2002/06/12 23:51:06 jvisvanathan Exp $
+ * $Id: InputRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
  */
 
 /*
@@ -39,14 +39,14 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.21 2002/06/12 23:51:06 jvisvanathan Exp $
+ * @version $Id: InputRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class InputRenderer extends Renderer {
+public class InputRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -83,31 +83,6 @@ public class InputRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-    public boolean supportsComponentType(UIComponent c) {
-        if ( c == null ) {
-            return false;
-        }     
-        return supportsComponentType(c.getComponentType());
-    }
-
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
             return false;

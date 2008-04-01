@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.18 2002/06/26 19:20:14 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.19 2002/06/28 22:47:00 eburns Exp $
  */
 
 /*
@@ -37,14 +37,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.18 2002/06/26 19:20:14 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.19 2002/06/28 22:47:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class OptionListRenderer extends Renderer {
+public class OptionListRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -81,28 +81,6 @@ public class OptionListRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-    public boolean supportsComponentType(UIComponent c) {
-        ParameterCheck.nonNull(c);
-        return supportsComponentType(c.getComponentType());
-    }
 
     public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);

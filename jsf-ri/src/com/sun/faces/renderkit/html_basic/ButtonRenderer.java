@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.23 2002/06/12 23:51:05 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.24 2002/06/28 22:46:58 eburns Exp $
  */
 
 /*
@@ -39,14 +39,14 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.23 2002/06/12 23:51:05 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.24 2002/06/28 22:46:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class ButtonRenderer extends Renderer {
+public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -83,30 +83,6 @@ public class ButtonRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-   public boolean supportsComponentType(UIComponent c) {
-        if ( c == null ) {
-            return false;
-        }     
-        return supportsComponentType(c.getComponentType());
-    }
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {

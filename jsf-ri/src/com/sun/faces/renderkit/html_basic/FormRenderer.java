@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.25 2002/06/18 18:23:22 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.26 2002/06/28 22:46:59 eburns Exp $
  */
 
 /*
@@ -41,14 +41,14 @@ import java.net.URLEncoder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.25 2002/06/18 18:23:22 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.26 2002/06/28 22:46:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class FormRenderer extends Renderer {
+public class FormRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -85,30 +85,6 @@ public class FormRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-   public boolean supportsComponentType(UIComponent c) {
-        if ( c == null ) {
-            return false;
-        }     
-        return supportsComponentType(c.getComponentType());
-    }
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {

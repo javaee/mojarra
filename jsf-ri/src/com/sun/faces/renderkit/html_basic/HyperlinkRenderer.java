@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.21 2002/06/21 00:31:23 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
  */
 
 /*
@@ -46,14 +46,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.21 2002/06/21 00:31:23 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class HyperlinkRenderer extends Renderer {
+public class HyperlinkRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -90,29 +90,6 @@ public class HyperlinkRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-    public boolean supportsComponentType(UIComponent c) {
-        ParameterCheck.nonNull(c);
-        return supportsComponentType(c.getComponentType());
-    }
-
     public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         return (componentType.equals(UICommand.TYPE));

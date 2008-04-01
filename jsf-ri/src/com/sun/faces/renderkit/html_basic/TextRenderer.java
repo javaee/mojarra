@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.20 2002/06/12 23:51:09 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.21 2002/06/28 22:47:01 eburns Exp $
  */
 
 /*
@@ -36,14 +36,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.20 2002/06/12 23:51:09 jvisvanathan Exp $
+ * @version $Id: TextRenderer.java,v 1.21 2002/06/28 22:47:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TextRenderer extends Renderer {
+public class TextRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -80,28 +80,6 @@ public class TextRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-    public boolean supportsComponentType(UIComponent c) {
-        ParameterCheck.nonNull(c);
-        return supportsComponentType(c.getComponentType());
-    }
 
     public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);

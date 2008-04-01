@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.29 2002/05/29 20:43:59 rkitain Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.30 2002/06/28 22:46:59 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
+import org.apache.commons.digester.AbstractObjectCreationFactory;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 
@@ -20,6 +21,8 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
+
+import org.xml.sax.Attributes;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -40,7 +43,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.29 2002/05/29 20:43:59 rkitain Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.30 2002/06/28 22:46:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,7 +90,6 @@ public class HtmlBasicRenderKit extends RenderKit
     }
 
 
-
 //
 // Class methods
 //
@@ -120,48 +122,67 @@ public class HtmlBasicRenderKit extends RenderKit
 
     private Digester initConfig() {
         Digester digester = new Digester();
+
         digester.setNamespaceAware(true);
         digester.setValidating(false);
         digester.addCallMethod("*/component", "setRenderers", 1);
         digester.addCallParam("*/component/type", 0);
-        digester.addCallMethod("*/renderer", "setRenderer", 2);
-        digester.addCallParam("*/renderer/type", 0);
-        digester.addCallParam("*/renderer/class", 1);
+        digester.addFactoryCreate("*/renderer", new RendererCreateFactory());
+        digester.addCallMethod("*/renderer/attribute", "registerAttribute", 4);
+        digester.addCallParam("*/renderer/attribute/name", 0);
+        digester.addCallParam("*/renderer/attribute/display-name", 1);
+        digester.addCallParam("*/renderer/attribute/description", 2);
+        digester.addCallParam("*/renderer/attribute/type", 3);
 
         return digester;
     }
 
     /**
-     * This method is invoked through the Digester as an Xml pattern
-     * is encountered.  The renderer type and renderer class name 
-     * from the Xml file are passed in as parameters.
-     *
-     * @param rendererType The renderer type.
-     * @param className The renderer class name (fully qualified).
+     * The factory class which is invoked by the digester to instantiate
+     * a Renderer object.  The digester places the created renderer instance 
+     * on its stack when this method completes, which is necessary to
+     * allow the subsequent digester rules to process the attributes
+     * for the renderer.
      */
-    public void setRenderer(String rendererType, String className) {
-        Renderer renderer = null;
-        try {
-            Class rendererClass = Util.loadClass(className);
-            renderer = (Renderer)rendererClass.newInstance();
-        } catch (ClassNotFoundException cnf) {
-            throw new RuntimeException("Class Not Found:"+cnf.getMessage());
-        } catch (InstantiationException ie) {
-            throw new RuntimeException("Class Instantiation Exception:"+
-                ie.getMessage());
-        } catch (IllegalAccessException ia) {
-            throw new RuntimeException("Illegal Access Exception:"+
-                ia.getMessage());
-        }
-        rendererTable.put(rendererType, renderer);
-        if (renderers == null) {
-            renderers = new ArrayList();
-        }
-        
-        synchronized(renderers) {
-            renderers.add(renderer);
-        }
+    private class RendererCreateFactory extends AbstractObjectCreationFactory {
+	public Object createObject(org.xml.sax.Attributes attributes) {
+
+            String rendererType = attributes.getValue("type");
+	    String rendererClassName = attributes.getValue("classname");
+
+            Assert.assert_it(rendererClassName != null);
+	    Assert.assert_it(rendererType != null);
+
+            Renderer renderer = null;
+
+            try {
+                Class rendererClass = Util.loadClass(rendererClassName);
+                renderer = (Renderer)rendererClass.newInstance();
+
+            } catch (ClassNotFoundException cnf) {
+                throw new RuntimeException("Class Not Found:"+
+                          cnf.getMessage());
+
+            } catch (InstantiationException ie) {
+                throw new RuntimeException("Class Instantiation Exception:"+
+                          ie.getMessage());
+
+            } catch (IllegalAccessException ia) {
+                throw new RuntimeException("Illegal Access Exception:"+
+                          ia.getMessage());
+            }
+
+            rendererTable.put(rendererType, renderer);
+            if (renderers == null) {
+                renderers = new ArrayList();
+            }       
+            synchronized(renderers) {
+                renderers.add(renderer);
+            }
+	    return renderer;
+	}
     }
+
 
     /**
      * This method is invoked through the Digester as an Xml pattern

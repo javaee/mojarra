@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.13 2002/05/29 20:44:02 rkitain Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.14 2002/06/28 22:47:00 eburns Exp $
  */
 
 /*
@@ -29,14 +29,14 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.13 2002/05/29 20:44:02 rkitain Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.14 2002/06/28 22:47:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TextAndGraphicRenderer extends Renderer {
+public class TextAndGraphicRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -73,27 +73,6 @@ public class TextAndGraphicRenderer extends Renderer {
     //
     // Methods From Renderer
     //
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-        return null;
-    }
-
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(UIComponent component) {
-        return null;
-    }
-
-    public Iterator getAttributeNames(String componentType) {
-        return null;
-    }
-
-    public boolean supportsComponentType(UIComponent c) {
-        return false;
-    }
 
     public boolean supportsComponentType(String componentType) {
         return false;

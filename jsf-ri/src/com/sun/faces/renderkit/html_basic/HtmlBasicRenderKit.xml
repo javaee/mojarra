@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 
 <renderkit>
+<!-- FIXME: should type,classname be elements or attributes? -->
 
 <!-- Component Type - Renderer Name Mappings -->
 
     <component>
         <type>javax.faces.component.UIForm</type>
-        <renderer>
+        <renderer type="FormRenderer"
+            classname="com.sun.faces.renderkit.html_basic.FormRenderer">
             <type>FormRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.FormRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -15,19 +17,22 @@
 
     <component>
         <type>javax.faces.component.UIOutput</type>
-        <renderer> 
+        <renderer type="TextRenderer"
+            classname="com.sun.faces.renderkit.html_basic.TextRenderer">
             <type>TextRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
 
-        <renderer>
+        <renderer type="TextAndGraphicRenderer"
+            classname="com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer">
             <type>TextAndGraphicRenderer</type> 
             <class>com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
 
-        <renderer>
+        <renderer type="MessageRenderer"
+            classname="com.sun.faces.renderkit.html_basic.MessageRenderer">
             <type>MessageRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.MessageRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -36,13 +41,26 @@
 
     <component>
         <type>javax.faces.component.UICommand</type>
-        <renderer>
+        <renderer type="ButtonRenderer"
+            classname="com.sun.faces.renderkit.html_basic.ButtonRenderer">
             <type>ButtonRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.ButtonRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
+            <attribute>
+                <name>image</name>
+                <display-name>Image</display-name>
+                <description>The path name of the image displayed in the component</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>label</name>
+                <display-name>Label</display-name>
+                <description>The text label displayed in the button</description>
+                <type>java.lang.String</type>
+            </attribute>
         </renderer>
 
-        <renderer>
+        <renderer type="HyperlinkRenderer"
+            classname="com.sun.faces.renderkit.html_basic.HyperlinkRenderer">
             <type>HyperlinkRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.HyperlinkRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -51,37 +69,87 @@
 
     <component>
         <type>javax.faces.component.UISelectBoolean</type>
-        <renderer>
+        <renderer type="CheckboxRenderer"
+            classname="com.sun.faces.renderkit.html_basic.CheckboxRenderer">
             <type>CheckboxRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
+            <attribute>
+                <name>label</name>
+                <display-name>Label</display-name>
+                <description>The text label displayed for the checkbox</description>
+                <type>java.lang.String</type>
+            </attribute>
         </renderer>
     </component>
 
     <component>
         <type>javax.faces.component.UITextEntry</type>
-        <renderer>
+        <renderer type="InputRenderer"
+            classname="com.sun.faces.renderkit.html_basic.InputRenderer">
             <type>InputRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
+            <attribute>
+                <name>size</name>
+                <display-name>Field Size</display-name>
+                <description>The number of visible characters displayed in the field</description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>maxlength</name>
+                <display-name>Maximum Length</display-name>
+                <description>The maximum number of characters allowed in the field</description>
+                <type>java.lang.Integer</type>
+            </attribute>
         </renderer>
 
-        <renderer>
+        <renderer type="SecretRenderer"
+            classname="com.sun.faces.renderkit.html_basic.SecretRenderer">
             <type>SecretRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
+            <attribute>
+                <name>size</name>
+                <display-name>Field Size</display-name>
+                <description>The number of visible characters displayed in the field</description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>maxlength</name>
+                <display-name>Maximum Length</display-name>
+                <description>The maximum number of characters allowed in the field</description>
+                <type>java.lang.Integer</type>
+            </attribute>
         </renderer>
 
-        <renderer>
+        <renderer type="TextAreaRenderer"
+            classname="com.sun.faces.renderkit.html_basic.TextAreaRenderer">
             <type>TextAreaRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
         <!-- Add Attribute Desc stuff here -->
+            <attribute>
+                <name>rows</name>
+                <display-name>Rows</display-name>
+                <description>The number of rows displayed in the textarea</description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>cols</name>
+                <display-name>Columns</display-name>
+                <description>The number of columns displayed in the textarea</description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>wrap</name>
+                <display-name>Wrap</display-name>
+                <description>Determines whether lines are automatically wrapped when the text fills the row</description>
+                <type>java.lang.Boolean</type>
+            </attribute>
         </renderer>
     </component>
 
     <component>
         <type>javax.faces.component.UISelectOne</type>
-        <renderer>
+        <renderer type="RadioRenderer"
+            classname="com.sun.faces.renderkit.html_basic.RadioRenderer">
             <type>RadioRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.RadioRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -90,32 +158,11 @@
 
     <component>
         <type>OptionList</type>
-        <renderer>
+        <renderer type="OptionListRenderer"
+            classname="com.sun.faces.renderkit.html_basic.OptionListRenderer">
             <type>OptionListRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.OptionListRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
     </component>
-
-    <component>
-        <type>javax.faces.component.UITextEntry</type>
-        <renderer>
-            <type>InputRenderer</type>
-            <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
-        </renderer>
-
-        <renderer>
-            <type>SecretRenderer</type>
-            <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
-        </renderer>
-
-        <renderer>
-            <type>TextAreaRenderer</type>
-            <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
-        </renderer>
-    </component>
-
 </renderkit>

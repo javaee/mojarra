@@ -82,6 +82,10 @@
       <pathelement location="${cactus.jar}"/>
       <pathelement location="${httpclient.jar}"/>
       <pathelement location="${jsf-api.jar}"/>
+      <pathelement location="${commons.beanutils.jar}"/>
+      <pathelement location="${commons.collections.jar}"/>
+      <pathelement location="${commons.digester.jar}"/>
+      <pathelement location="${commons.logging.jar}"/>      
       <pathelement location="${build.home}/classes"/>
       <pathelement location="${xerces.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
@@ -312,6 +316,7 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/> 
             <test name="com.sun.faces.renderkit.html_basic.TestRenderersFromJsp"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
 
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
