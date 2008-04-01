@@ -1,6 +1,6 @@
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.2 2002/09/06 22:11:14 rkitain Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.1 2002/09/06 22:11:14 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,6 +15,7 @@ package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
+import javax.faces.component.UISelectOne;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.taglib.FacesTag;
@@ -25,7 +26,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectMany_MenuTag.java,v 1.2 2002/09/06 22:11:14 rkitain Exp $
+ * @version $Id: SelectOne_MenuTag.java,v 1.1 2002/09/06 22:11:14 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -33,7 +34,7 @@ import com.sun.faces.taglib.FacesTag;
  *
  */
 
-public class SelectMany_MenuTag extends FacesTag
+public class SelectOne_MenuTag extends FacesTag
 {
 //
 // Protected Constants
@@ -55,7 +56,7 @@ public class SelectMany_MenuTag extends FacesTag
 // Constructors and Initializers    
 //
 
-public SelectMany_MenuTag()
+public SelectOne_MenuTag()
 {
     super();
 }
@@ -72,10 +73,10 @@ public SelectMany_MenuTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "SelectManyMenuRenderer"; } 
+    public String getLocalRendererType() { return "SelectOneMenuRenderer"; } 
     
     public UIComponent createComponent() {
-        return (new UISelectMany());
+        return (new UISelectOne());
     }
 
 //
@@ -83,12 +84,13 @@ public SelectMany_MenuTag()
 // 
 
     public int doEndTag() throws JspException {
-	UISelectMany component = (UISelectMany) getComponent();
+	UISelectOne component = (UISelectOne) getComponent();
 
 	int rc = super.doEndTag();
 
 	return rc;
     }
+
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
