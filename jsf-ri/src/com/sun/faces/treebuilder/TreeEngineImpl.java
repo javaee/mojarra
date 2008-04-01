@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngineImpl.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
+ * $Id: TreeEngineImpl.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.UIPage;
 /**
  *
 
- * @version $Id: TreeEngineImpl.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
+ * @version $Id: TreeEngineImpl.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine
 
@@ -53,6 +53,7 @@ public class TreeEngineImpl extends Object implements TreeEngine
 
 private ServletContext servletContext;
 private PreParser preParser = null;
+private BuildComponentFromTag componentBuilder = null;
 
 //
 // Constructors and Initializers    
@@ -63,6 +64,7 @@ public TreeEngineImpl(ServletContext newServletContext)
     ParameterCheck.nonNull(newServletContext);
     servletContext = newServletContext;
     preParser = new PreParser(servletContext);
+    componentBuilder = new com.sun.faces.taglib.html_basic.BuildComponentFromTagImpl();
 }
 
 //
@@ -114,7 +116,8 @@ public TreeNavigator getTreeForURI(RenderContext rc, UIPage root,
     // page each time.  
     if ((null != requestURI) && requestURI.endsWith(".jsp")) {
 	requestURI = fixURI(requestURI);
-	TreeBuilder treeBuilder = new TreeBuilder(rc, root, requestURI);
+	TreeBuilder treeBuilder = new TreeBuilder(componentBuilder, rc, root, 
+						  requestURI);
 	preParser.addJspParseListener(treeBuilder);
 	preParser.preParse(requestURI);
 	preParser.removeJspParseListener(treeBuilder);

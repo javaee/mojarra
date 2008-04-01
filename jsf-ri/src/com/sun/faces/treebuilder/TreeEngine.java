@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngine.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
+ * $Id: TreeEngine.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
  */
 
 /*
@@ -28,12 +28,14 @@ import javax.faces.UIPage;
  *
  * <B>Lifetime And Scope</B> <P>
 
- * There is one instance of this class per webapp. </P>
+ * There is one instance of this class per webapp.  The TreeEngine
+ * instance has a BuildComponentFromTag instance.</P>
  *
- * @version $Id: TreeEngine.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
+ * @version $Id: TreeEngine.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
  * 
  * @see	com.sun.faces.servlet.FacesFilter#init
  * @see	com.sun.faces.treebuilder.TreeBuilder
+ * @see	com.sun.faces.treebuilder.BuildComponentFromTag
 
  *
  */

@@ -1,5 +1,5 @@
 /*
- * $Id: TestTreebuilder.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
+ * $Id: TestTreebuilder.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
  */
 
 /*
@@ -35,6 +35,8 @@ import org.apache.cactus.WebRequest;
 
 import com.sun.faces.treebuilder.TreeEngine;
 import com.sun.faces.treebuilder.TreeBuilder;
+import com.sun.faces.treebuilder.BuildComponentFromTag;
+import com.sun.faces.taglib.html_basic.BuildComponentFromTagImpl;
 import com.sun.faces.util.Util;
 
 import java.util.List;
@@ -49,7 +51,7 @@ import org.apache.jasper_hacked.compiler.JspParseListener;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestTreebuilder.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
+ * @version $Id: TestTreebuilder.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
  * 
  * @see	com.sun.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -78,6 +80,7 @@ public static final String WHILE_URI = "/testWhile.jsp";
 // Relationship Instance Variables
 
 private PreParser preParser = null;
+private BuildComponentFromTag componentBuilder = null;
 
 //
 // Constructors and Initializers    
@@ -136,7 +139,7 @@ public void setUp() {
     super.setUp();
     ServletContext servletContext = config.getServletContext();
     preParser = new PreParser(servletContext);    
-
+    componentBuilder = new TestBuildComponentFromTagImpl();
 }
 
 public void tearDown() {
@@ -178,8 +181,8 @@ public void testTree() {
     root.setId(Util.generateId());
 	
     // simulate the JSP Engine's parsing of the tree
-    JspSimulator jspSim = new JspSimulator(renderContext, root, TEST_URI, 
-					   treeNav);
+    JspSimulator jspSim = new JspSimulator(componentBuilder, renderContext, 
+					   root, TEST_URI, treeNav);
     // Account for the UIPage root
     treeNav.getNextStart();
     preParser.addJspParseListener(jspSim);
@@ -246,16 +249,17 @@ public static class JspSimulator extends TreeBuilder implements JspParseListener
 
 protected TreeNavigator treeNav;
 
-public JspSimulator(RenderContext newRenderContext, UIPage root, 
+public JspSimulator(BuildComponentFromTag newComponentBuilder, 
+		    RenderContext newRenderContext, UIPage root, 
 		    String newRequestURI, TreeNavigator newTreeNav) {
-    super(newRenderContext, root, newRequestURI);
+    super(newComponentBuilder, newRenderContext, root, newRequestURI);
     treeNav = newTreeNav;
 }
 
 protected void compareComponentAndTag(UIComponent comp, Attributes attrs,
 				      String shortTagName) 
 {
-    String className, attrName, id = null;
+    String attrName, id = null;
     boolean result = false;
     int i, attrLen;
 
@@ -271,18 +275,7 @@ protected void compareComponentAndTag(UIComponent comp, Attributes attrs,
     }
     assertTrue(null != id);
 
-    className = comp.getClass().getName();
-    result = className.equals(classMap.get(shortTagName));
-    System.out.println("class from Tree: " + className);
-    System.out.println("\tclass from page: " + classMap.get(shortTagName));
-    System.out.println("\tcorrect: " + result);
-    assertTrue(result);
-
-    result = id.equals(comp.getId());
-    System.out.println("id from Tree: " + comp.getId());
-    System.out.println("\tclass from page: " + id);
-    System.out.println("\tcorrect: " + result);
-    assertTrue(result);
+    ((TestBuildComponentFromTagImpl)this.componentBuilder).testTagCorrespondence(shortTagName, id, comp);
 }
 
 public void handleTagBegin(Attributes attrs, String prefix,
@@ -292,7 +285,7 @@ public void handleTagBegin(Attributes attrs, String prefix,
     if (!prefix.equalsIgnoreCase("faces")) {
 	return;
     }
-    if (!tagHasComponent(shortTagName)) {
+    if (!this.componentBuilder.tagHasComponent(shortTagName)) {
 	return;
     }
     UIComponent comp = treeNav.getNextStart();
@@ -307,7 +300,7 @@ public void handleTagEnd(Attributes attrs, String prefix,
     if (!prefix.equalsIgnoreCase("faces")) {
 	return;
     }
-    if (!tagHasComponent(shortTagName)) {
+    if (!this.componentBuilder.tagHasComponent(shortTagName)) {
 	return;
     }
     UIComponent comp = treeNav.getNextEnd();
@@ -315,7 +308,31 @@ public void handleTagEnd(Attributes attrs, String prefix,
     compareComponentAndTag(comp, attrs, shortTagName);
 }
 
+} // end of class JspSimulator
+
+public static class TestBuildComponentFromTagImpl extends BuildComponentFromTagImpl {
+
+public void testTagCorrespondence(String shortTagName, String id, 
+				  UIComponent comp) 
+{
+    boolean result = false;
+    String className;
+
+    className = comp.getClass().getName();
+    result = className.equals(classMap.get(shortTagName));
+    System.out.println("class from Tree: " + className);
+    System.out.println("\tclass from page: " + classMap.get(shortTagName));
+    System.out.println("\tcorrect: " + result);
+    assertTrue(result);
+
+    result = id.equals(comp.getId());
+    System.out.println("id from Tree: " + comp.getId());
+    System.out.println("\tclass from page: " + id);
+    System.out.println("\tcorrect: " + result);
+    assertTrue(result);
 }
+
+} // end of class TestBuildComponentFromTagImpl
 
 
 } // end of class TestTreebuilder
