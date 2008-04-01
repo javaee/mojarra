@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.28 2002/07/12 19:44:38 eburns Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.29 2002/08/07 23:41:08 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+//import javax.faces.component.UITextEntry;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.28 2002/07/12 19:44:38 eburns Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.29 2002/08/07 23:41:08 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,11 +108,13 @@ public TextEntry_TextAreaTag()
 
     public String getLocalRendererType() { return "TextAreaRenderer"; }
     public UIComponent createComponent() {
-        return (new UITextEntry());
+//        return (new UITextEntry());
+        return null;
     }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
+/*
 	UITextEntry textEntry = (UITextEntry) component;
 	
 	if (null == textEntry.getAttribute("rows")) {
@@ -124,6 +126,7 @@ public TextEntry_TextAreaTag()
 	if (null == textEntry.getAttribute("wrap")) {
 	    textEntry.setAttribute("wrap", getWrap());
 	}
+*/
     }
 //
 // Methods from TagSupport

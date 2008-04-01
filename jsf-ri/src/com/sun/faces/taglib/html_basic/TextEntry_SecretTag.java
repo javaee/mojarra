@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.25 2002/07/12 19:44:38 eburns Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.26 2002/08/07 23:41:07 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -31,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.25 2002/07/12 19:44:38 eburns Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.26 2002/08/07 23:41:07 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

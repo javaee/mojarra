@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.35 2002/07/23 18:04:10 eburns Exp $
+ * $Id: TextEntry_InputTag.java,v 1.36 2002/08/07 23:41:07 rkitain Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+//import javax.faces.component.UITextEntry;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.35 2002/07/23 18:04:10 eburns Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.36 2002/08/07 23:41:07 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,11 +108,13 @@ public TextEntry_InputTag()
     public String getLocalRendererType() { return "InputRenderer"; }
 
     public UIComponent createComponent() {
-        return (new UITextEntry());
+//        return (new UITextEntry());
+        return null;
     }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
+/*
 	UITextEntry textEntry = (UITextEntry) component;
 	
 	if (null == textEntry.getValue()) {
@@ -124,6 +126,7 @@ public TextEntry_InputTag()
 	if (null == textEntry.getAttribute("maxLength")) {
 	    textEntry.setAttribute("maxLength", getMaxLength());
 	}
+*/
     }
 
     
