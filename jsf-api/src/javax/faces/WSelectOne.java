@@ -83,7 +83,6 @@ public class WSelectOne extends WComponent {
 
     public void setItems(RenderContext rc, Collection newItems) {
 	ParameterCheck.nonNull(rc);
-	ParameterCheck.nonNull(newItems);
 	Assert.assert_it(checkModelConsistency());
 	
 	items = newItems;
@@ -173,7 +172,6 @@ public class WSelectOne extends WComponent {
     
     public void setSelectedValue(RenderContext rc, Object value) {
 	ParameterCheck.nonNull(rc);
-	ParameterCheck.nonNull(value);
 	Assert.assert_it(checkModelConsistency());
 	selectedItem = value;
 	
