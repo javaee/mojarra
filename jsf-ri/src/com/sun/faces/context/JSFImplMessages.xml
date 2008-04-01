@@ -76,5 +76,9 @@
   <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Argument Error." >
       <detail>locale argument is null.</detail>
   </message>
+
+  <message messageId="com.sun.faces.SUPPORTS_COMPONENT_ERROR" severity="1" summary="Argument Error." >
+      <detail>Component Type: '{0}' is not supported for this renderer.</detail>
+  </message>
 </messages>
 
