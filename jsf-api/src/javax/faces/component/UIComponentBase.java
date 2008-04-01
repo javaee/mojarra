@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.7 2002/06/24 04:23:14 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.8 2002/06/24 04:34:54 craigmcc Exp $
  */
 
 /*
@@ -1050,6 +1050,30 @@ public abstract class UIComponentBase implements UIComponent {
             }
         }
         return (result);
+
+    }
+
+
+    /**
+     * <p>Perform all validations for this component, by calling the
+     * <code>validate()</code> method of the component itself, followed by
+     * the <code>validate()</code> method of each registered {@link Validator}.
+     * Normally, component writers will not override this method -- it is
+     * primarily available for use by tools.  Component writers should
+     * override the <code>validate()</code> method instead.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void processValidators(FacesContext context) {
+
+        validate(context);
+        if (this.validators != null) {
+            Iterator validators = getValidators();
+            while (validators.hasNext()) {
+                Validator validator = (Validator) validators.next();
+                validator.validate(context, this);
+            }
+        }
 
     }
 
