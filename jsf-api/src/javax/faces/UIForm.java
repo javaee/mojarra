@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.2 2002/01/16 21:02:44 rogerk Exp $
+ * $Id: UIForm.java,v 1.3 2002/01/17 22:25:20 edburns Exp $
  */
 
 /*
@@ -17,12 +17,25 @@ import javax.servlet.ServletRequest;
  * Class for representing a form user-interface component. 
  * A form encapsulates the process of taking a collection of
  * input from the user and submitting it to the application
- * in a single submit operation.  
+ * in a single &quot;submit&quot; operation.  A &quot;form control&quot;
+ * is a user-interface component added as a descendent to the form
+ * for the purpose of:
+ * <ol>
+ * <li>collecting data from the user:
+ * @see UISelectBoolean
+ * @see UISelectOne
+ * @see UITextEntry
+ * <li>displaying form data to the user:
+ * @see UIOutput
+ * <li>executing a form command (submit, navigate, etc):
+ * @see UICommand  
+ * </ol>
  */
 public class UIForm extends UIComponent {
 
     private static String TYPE = "Form";
-    private Object model = null;
+    private String modelReference = null;
+    private String messageModelReference = null;
 
     /** 
      * Returns a String representing the form's type.  
@@ -32,6 +45,32 @@ public class UIForm extends UIComponent {
      */
     public String getType() {
 	return TYPE;
+    }
+
+    /**
+     * The model-reference property for this data-bound component.
+     * This property contains a reference to the object which acts
+     * as the data-source for this component.  If a property on the
+     * associated model object matches the id of one of this form's
+     * controls, the model-reference for that control will be implicitly
+     * hooked up to that property on the form's model object.  If
+     * the model-reference on this form is null, then model-references
+     * on this form's controls must be set explicitly on each control.
+     * @see #setModelReference  
+     * @return String containing the model-reference for this component
+     */
+    public String getModelReference() {
+        return modelReference;
+    }
+
+    /**
+     * Sets the model-reference property on this data-bound component.
+     * @see #getModelReference
+     * @param modelReference the String which contains a reference to the
+     *        object which acts as the data-source for this component
+     */
+    public void setModelReference(String modelReference) {
+        this.modelReference = modelReference;
     }
 
     /**
@@ -65,34 +104,95 @@ public class UIForm extends UIComponent {
      *         for this component
      */
     public Iterator getFormListeners() {
-	return null;
+	return null; //compile
     }
 
     /**
-     * The model property for this data-bound component.
+     * Registers the specified validator id as a validator
+     * for this validatible component.  The specified validator id must be registered
+     * in the scoped namespace, else an exception will be thrown.
+     * @see Validator
+     * @see #removeValidator
+     * @param validatorId the id of the validator
+     * @throws FacesException if validatorId is not registered in the
+     *         scoped namespace or if the object referred to by validatorId
+     *         does not implement the <code>Validator</code> interface.
+     */
+    public void addValidator(String validatorId) {
+    }
+
+    /**
+     * Removes the specified validator id as a validator
+     * for this validatible component.
+     * @see #addValidator  
+     * @param validatorId the id of the validator
+     * @throws FacesException if validatorId is not registered as a
+     *         validator for this component.
+     */
+    public void removeValidator(String validatorId) {
+    }
+
+    /**
+     * @return Iterator containing the Validator instances registered
+     *         for this component
+     */
+    public Iterator getValidators() {
+	return null; //compile
+    }
+
+   /**
+     * The message model-reference property for this validatible component.
      * This property contains a reference to the object which acts
-     * as the data-source for this component.  The supported types
-     * for this reference:
+     * as the store for any validation error messages.  The model-reference
+     * must resolve to an object which implements one of the following types:
      * <ul>
-     * <li>String containing a model-reference in the scoped namespace
-     *     e.g. &quot;user.lastName&quot; refers to an object named
-     *          &quot;user&quot;
-     *          with a property named &quot;lastName&quot;.
-     * </ul>
-     * @return Object describing the data-source for this component
+     * <li><code>java.lang.String</code>
+     * <li><code>java.util.Collection</code> of <code>String</code> objects
+     * </ul>  
+     * @see #setMessageModelReference  
+     * @return String containing the message model-reference for this component
      */
-    public Object getModel() {
-        return model;
+    public String getMessageModelReference() {
+	return messageModelReference;
     }
 
     /**
-     * Sets the model property on this data-bound component.
-     * @param model the Object which contains a reference to the
-     *        object which acts as the data-source for this component
+     * Sets the message model-reference property on this validatible component.
+     * @see #getMessageModelReference
+     * @param modelReference the String which contains a reference to the
+     *        object which acts as the store for any validation error messages
      */
-    public void setModel(Object model) {
-        this.model = model;
+    public void setMessageModelReference(String modelReference) {
+	this.messageModelReference = modelReference;
     }
 
+    /**
+     * The &quot;validState&quot; attribute which describes the current
+     * valid state of this component.  Valid state may be one of the
+     * following:
+     * <ul>
+     * <li><code>Validatible.UNVALIDATED</code>
+     * <li><code>Validatible.VALID</code>
+     * <li><code>Validatible.INVALID</code>
+     * </ul>
+     * @see #setValidState
+     * @return integer containing the current valid state of this
+     *         component
+     */
+    public int getValidState() {
+	Integer valid = (Integer)getAttribute(null, "validState");
+	return valid != null? valid.intValue() : Validatible.UNVALIDATED;
+    }
+
+    /**
+     * Sets the &quot;validState&quot; attribute for this component.
+     * @see #getValidState
+     * @param validState integer containing the valid state of this
+     *        component
+     * @throws IllegalParameterException if validState is not
+     *         UNVALIDATED, VALID, or INVALID
+     */
+    public void setValidState(int validState) {
+    }
 
 }
