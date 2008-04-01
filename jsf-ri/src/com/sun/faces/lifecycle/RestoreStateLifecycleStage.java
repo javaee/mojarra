@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreStateLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * $Id: RestoreStateLifecycleStage.java,v 1.3 2002/03/18 23:52:53 eburns Exp $
  */
 
 /*
@@ -24,6 +24,8 @@ import javax.faces.FacesException;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 
+import com.sun.faces.util.Util;
+
 /**
  *
  *  <B>RestoreStateLifecycleStage</B> 
@@ -31,7 +33,7 @@ import javax.servlet.http.HttpServletRequest;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: RestoreStateLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: RestoreStateLifecycleStage.java,v 1.3 2002/03/18 23:52:53 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -99,7 +101,10 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
     
     if (null != (previousStateTree = 
 		 (TreeNavigator) session.getAttribute(requestURI))) {
-	newStateTree.replaceRoot(previousStateTree);
+	// Only restore state if we're processing a postback.
+	if (Util.hasParameters(request)) {
+	    newStateTree.replaceRoot(previousStateTree);
+	}
 	session.removeAttribute(requestURI);
     }
     return true;
