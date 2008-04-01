@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.4 2001/12/02 01:23:37 edburns Exp $
+ * $Id: FacesServlet.java,v 1.5 2001/12/05 20:29:59 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -152,6 +152,40 @@ public class FacesServlet extends HttpServlet {
         throws IOException, ServletException {
         processRequest(req, res);
     }
+
+    /** 
+
+    * We override this so we can exit the scope for this request.
+
+    * PRECONDITION: init() has been called
+
+    * POSTCONDITION: The Scope for this request has been exited.
+
+    */ 
+    public void service(HttpServletRequest req,
+			HttpServletResponse res) {
+	// We set this attr here so that when ObjectTable.get() comes
+	// around for this request, we pull it out and use it as the
+	// value for the scopeKey.  This is necessary because various
+	// entities modify the HttpServletRequest instance so it's not
+	// suitable for being used as a key
+	req.setAttribute(Constants.REF_REQUESTINSTANCE, req);
+
+	try {
+	    super.service(req, res);
+	}
+	catch (Exception e) {
+	    System.out.println("Caught exception calling super.service: " + 
+			       e.getMessage());
+	}
+	
+	// exit the scope for this request
+	ObjectTable objectTable;
+        objectTable = (ObjectTable) getServletContext().
+	    getAttribute(Constants.REF_OBJECTTABLE);
+	objectTable.exit(req);
+    }
+
 
     /**
      * Process an HTTP request.

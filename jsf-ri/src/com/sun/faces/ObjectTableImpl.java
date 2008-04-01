@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.8 2001/12/01 01:54:08 edburns Exp $
+ * $Id: ObjectTableImpl.java,v 1.9 2001/12/05 20:29:59 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,6 +21,7 @@ import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.ObjectTable;
+import javax.faces.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableImpl.java,v 1.8 2001/12/01 01:54:08 edburns Exp $
+ * @version $Id: ObjectTableImpl.java,v 1.9 2001/12/05 20:29:59 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -157,6 +158,34 @@ private boolean inScope(Object scopeKey) {
     return result;
 }
 
+/**
+
+* Work around these problems: <P>
+
+1) the HttpSession instance is different from request to request, even
+though each instance represents the same logical http session.  <P>
+
+2) Another problem is that the HttpServletRequest one gets by calling
+pageContext.getRequest() from inside a tag's doStartTag() method is
+different from the one passed into the HttpServlet.service() method,
+even though they are logically the same request. <P>
+
+*/
+
+private Object fixScopeKey(Object scopeKey) {
+    Object result = scopeKey;
+    if (scopeKey instanceof HttpSession) {
+	result = ((HttpSession)scopeKey).
+	    getAttribute(Constants.REF_SESSIONINSTANCE);
+    }
+    else if (scopeKey instanceof HttpServletRequest) {
+	result = ((HttpServletRequest)scopeKey).
+		  getAttribute(Constants.REF_REQUESTINSTANCE);
+    }
+    Assert.assert_it(null != scopeKey);
+    return result;
+}
+
 //
 // Methods from Scope
 //
@@ -173,6 +202,7 @@ public void put(Object name, Object value) {
 }
 
 public Object get(Object scopeKey, Object name) {
+    scopeKey = fixScopeKey(scopeKey);
     // lazily enter the scope if neccessary
     if (!inScope(scopeKey)) {
 	enter(scopeKey);
@@ -212,20 +242,22 @@ public Object get(Object scopeKey, Object name) {
 }
 
 public void enter(Object scopeKey) {
+    ParameterCheck.nonNull(scopeKey);
     innerMap.put(scopeKey, new HashMap());
     // Call listeners
 }
     
 public void exit(Object scopeKey) {
     ParameterCheck.nonNull(scopeKey);
+    scopeKey = fixScopeKey(scopeKey);
     // Call listeners
 
     // clear the map
     Map scopeMap = (Map) innerMap.get(scopeKey);
-    Assert.assert_it(null != scopeMap);
-
-    scopeMap.clear();
-    innerMap.remove(scopeKey);
+    if (null != scopeMap) {
+	scopeMap.clear();
+	innerMap.remove(scopeKey);
+    }
 }
 } // end of class ScopeImpl
 

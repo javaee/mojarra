@@ -8,6 +8,9 @@
   <listener>
     <listener-class>fruitstand.HttpSessionListenerImpl</listener-class>
   </listener>
+  <listener>
+    <listener-class>com.sun.faces.servlet.SessionListener</listener-class>
+  </listener>
 
   <servlet>
     <servlet-name>faces</servlet-name>

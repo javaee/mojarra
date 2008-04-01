@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.7 2001/12/02 00:52:00 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.8 2001/12/05 20:30:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -26,6 +26,7 @@ import junit.framework.*;
 import org.apache.cactus.*;
 
 import javax.faces.RenderKit;
+import javax.faces.Constants;
 import javax.servlet.ServletRequest;
 import javax.faces.RenderContextFactory;
 import javax.faces.RenderContext;
@@ -49,7 +50,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.7 2001/12/02 00:52:00 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.8 2001/12/05 20:30:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,6 +102,11 @@ public void setUp() {
 	objectTable = ObjectTable.getInstance();
     } catch (Exception e) {
     }
+    request.setAttribute(Constants.REF_REQUESTINSTANCE, request);
+    HttpSession session = request.getSession();
+
+    session.setAttribute(Constants.REF_SESSIONINSTANCE,
+			 session.getId());
 }
 
 public void tearDown() {
