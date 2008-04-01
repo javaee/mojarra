@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_Input_ValueChangeTag.java,v 1.2 2002/08/09 19:38:11 jvisvanathan Exp $
+ * $Id: TextEntry_Input_ValueChangeTag.java,v 1.3 2002/08/14 19:11:36 rkitain Exp $
  */
 
 /*
@@ -23,19 +23,19 @@ import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
 
-import com.sun.faces.taglib.html_basic.TextEntry_InputTag;
+import com.sun.faces.taglib.html_basic.Input_TextTag;
 
 /**
  *
 
- * @version $Id: TextEntry_Input_ValueChangeTag.java,v 1.2 2002/08/09 19:38:11 jvisvanathan Exp $
+ * @version $Id: TextEntry_Input_ValueChangeTag.java,v 1.3 2002/08/14 19:11:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TextEntry_Input_ValueChangeTag extends TextEntry_InputTag
+public class TextEntry_Input_ValueChangeTag extends Input_TextTag
 {
 //
 // Protected Constants
