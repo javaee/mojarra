@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.5 2002/06/14 21:30:46 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.6 2002/06/24 04:18:15 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEventHandler;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
@@ -745,6 +746,80 @@ public abstract class UIComponentBase implements UIComponent {
             }
         } else {
             throw new IllegalArgumentException("removeChild");
+        }
+
+    }
+
+
+    // ------------------------------------------ Request Event Handler Methods
+
+
+    /**
+     * <p>The set of {@link RequestEventHandler}s associated with this
+     * <code>UIComponent</code>.</p>
+     */
+    private ArrayList handlers = null;
+
+
+    /**
+     * <p>Add a {@link RequestEventHandler} instance to the set associated with
+     * this <code>UIComponent</code>.</p>
+     *
+     * @param handler The {@link RequestEventHandler} to add
+     *
+     * @exception NullPointerException if <code>handler</code>
+     *  is null
+     */
+    public void addRequestEventHandler(RequestEventHandler handler) {
+
+        if (handler == null) {
+            throw new NullPointerException();
+        }
+        if (handlers == null) {
+            handlers = new ArrayList();
+        }
+        handlers.add(handler);
+
+    }
+
+
+    /**
+     * <p>Clear any {@link RequestEventHandler}s that have been registered for
+     * processing by this component.</p>
+     */
+    public void clearRequestEventHandlers() {
+
+        handlers = null;
+
+    }
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link RequestEventHandler}s
+     * associated with this <code>UIComponent</code>.</p>
+     */
+    public Iterator getRequestEventHandlers() {
+
+        if (handlers != null) {
+            return (handlers.iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
+
+
+    /**
+     * <p>Remove a {@link RequestEventHandler} instance from the set associated with
+     * this <code>UIComponent</code>, if it was previously associated.
+     * Otherwise, do nothing.</p>
+     *
+     * @param handler The {@link RequestEventHandler} to remove
+     */
+    public void removeRequestEventHandler(RequestEventHandler handler) {
+
+        if (handlers != null) {
+            handlers.remove(handler);
         }
 
     }

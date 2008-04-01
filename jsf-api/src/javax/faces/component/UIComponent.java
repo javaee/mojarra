@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.34 2002/06/14 21:30:45 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.35 2002/06/24 04:18:15 craigmcc Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEventHandler;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
@@ -326,6 +327,45 @@ public interface UIComponent {
      * @exception NullPointerException if <code>component</code> is null
      */
     public void removeChild(UIComponent component);
+
+
+    // ------------------------------------------ Request Event Handler Methods
+
+
+    /**
+     * <p>Add a {@link RequestEventHandler} instance to the set associated with
+     * this <code>UIComponent</code>.</p>
+     *
+     * @param handler The {@link RequestEventHandler} to add
+     *
+     * @exception NullPointerException if <code>handler</code>
+     *  is null
+     */
+    public void addRequestEventHandler(RequestEventHandler handler);
+
+
+    /**
+     * <p>Clear any {@link RequestEventHandler}s that have been registered for
+     * processing by this component.</p>
+     */
+    public void clearRequestEventHandlers();
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link RequestEventHandler}s
+     * associated with this <code>UIComponent</code>.</p>
+     */
+    public Iterator getRequestEventHandlers();
+
+
+    /**
+     * <p>Remove a {@link RequestEventHandler} instance from the set associated with
+     * this <code>UIComponent</code>, if it was previously associated.
+     * Otherwise, do nothing.</p>
+     *
+     * @param handler The {@link RequestEventHandler} to remove
+     */
+    public void removeRequestEventHandler(RequestEventHandler handler);
 
 
     // ----------------------------------------------------- Validators Methods

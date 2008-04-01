@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.5 2002/06/13 17:48:14 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.6 2002/06/24 04:18:17 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.component;
 
 import java.util.Iterator;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.RequestEventHandler;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
@@ -458,6 +459,22 @@ public class UIComponentTestCase extends TestCase {
 
 
     /**
+     * [3.1.8] RequestEventHandler Queue.
+     */
+    public void testRequestEventHandlerQueue() {
+
+        checkRequestEventHandlerCount(component, 0);
+        component.addRequestEventHandler(new TestRequestEventHandler());
+        checkRequestEventHandlerCount(component, 1);
+        component.addRequestEventHandler(new TestRequestEventHandler());
+        checkRequestEventHandlerCount(component, 2);
+        component.clearRequestEventHandlers();
+        checkRequestEventHandlerCount(component, 0);
+
+    }
+
+
+    /**
      * [3.1] Test the state of an unmodified test component.
      */
     public void testUnmodifiedComponent() {
@@ -503,6 +520,9 @@ public class UIComponentTestCase extends TestCase {
                 fail("Invalid attribute name '" + name + "' found");
             }
         }
+
+        // [3.1.8] RequestEventHandler Processing
+        checkRequestEventHandlerCount(component, 0);
 
         // [3.1.9] Validation Processing
         checkValidatorCount(component, 0);
@@ -550,6 +570,29 @@ public class UIComponentTestCase extends TestCase {
             results++;
         }
         assertEquals("child count", count, results);
+
+    }
+
+
+    /**
+     * Validate that the specified number of request event handlers are
+     * present.
+     *
+     * @param component Component being tested
+     * @param count Expected number of request event handlers
+     */
+    protected void checkRequestEventHandlerCount(UIComponent component,
+                                                 int count) {
+
+        int results = 0;
+        Iterator handlers = component.getRequestEventHandlers();
+        assertNotNull("handlers", handlers);
+        while (handlers.hasNext()) {
+            RequestEventHandler handler =
+                (RequestEventHandler) handlers.next();
+            results++;
+        }
+        assertEquals("request event handler count", count, results);
 
     }
 
