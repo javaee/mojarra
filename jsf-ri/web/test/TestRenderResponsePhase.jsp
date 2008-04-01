@@ -3,6 +3,27 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
+<%@ page import="com.sun.faces.CustomerBean" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+
+<%
+
+  // Construct a preconfigured customer list in session scope
+  List list = (List)
+    pageContext.getAttribute("ListBean", PageContext.SESSION_SCOPE);
+  if (list == null) {
+    list = new ArrayList();
+    list.add(new CustomerBean("123456", "Alpha Beta Company", "ABC", 1234.56));
+    list.add(new CustomerBean("445566", "General Services, Ltd.", "GS", 33.33));
+    list.add(new CustomerBean("654321", "Summa Cum Laude, Inc.", "SCL", 76543.21));
+    list.add(new CustomerBean("333333", "Yabba Dabba Doo", "YDD",  333.33));
+    pageContext.setAttribute("ListBean", list,
+                             PageContext.SESSION_SCOPE);
+  }
+
+%>
+
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
@@ -46,6 +67,31 @@
                 </faces:panel_grid>
              </td>
            </tr>
+
+             <tr><td>
+                 <faces:panel_list id="list2"
+                  border="1" cellpadding="3" cellspacing="3"
+                     summary="List with HTML attributes."
+                     title="List with no stylesheets" >
+
+                  <!-- List Data -->
+
+                  <faces:panel_data    id="listData2" var="customer"
+                       modelReference="ListBean">
+                    <faces:output_text id="accountId2"
+                       modelReference="customer.accountId"/>
+                    <faces:output_text id="name2"
+                       modelReference="customer.name"/>
+                    <faces:output_text id="symbol2"
+                       modelReference="customer.symbol"/>
+                    <faces:output_text id="totalSales2"
+                       modelReference="customer.totalSales"/>
+                  </faces:panel_data>
+
+                 </faces:panel_list> 
+             </td>
+
+            </tr>
 
       <TR>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.1 2002/09/06 18:05:24 jvisvanathan Exp $
+ * $Id: GroupRenderer.java,v 1.2 2002/09/09 23:52:24 visvan Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import com.sun.faces.util.Util;
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.1 2002/09/06 18:05:24 jvisvanathan Exp $
+ * @version $Id: GroupRenderer.java,v 1.2 2002/09/09 23:52:24 visvan Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -99,6 +99,11 @@ public class GroupRenderer extends HtmlBasicRenderer {
         }
     }
 
+    /**
+     * Renders nested children of panel by invoking the encode methods
+     * on the components. This handles components nested inside
+     * panel_group.
+     */
     private void encodeRecursive(FacesContext context, UIComponent component)
         throws IOException {
         component.encodeBegin(context);

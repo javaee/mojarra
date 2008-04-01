@@ -1,5 +1,5 @@
 /*
- * $Id: Output_NumberTag.java,v 1.3 2002/09/03 18:42:31 jvisvanathan Exp $
+ * $Id: Output_NumberTag.java,v 1.4 2002/09/09 23:52:25 visvan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.renderkit.FormatPool;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_NumberTag.java,v 1.3 2002/09/03 18:42:31 jvisvanathan Exp $
+ * @version $Id: Output_NumberTag.java,v 1.4 2002/09/09 23:52:25 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,9 +97,8 @@ public class Output_NumberTag extends FacesTag
      protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIOutput output = (UIOutput) component;
-	// if model property represented by this component has non null value, 
-        // do not call setValue().
-	if (null == output.currentValue(context) && null != getValue()) {
+	// if component has non null value, do not call setValue().
+	if (null == output.getValue() && null != getValue()) {
 	    output.setValue(getValue());
 	}
         if (null == component.getAttribute("numberStyle")) {

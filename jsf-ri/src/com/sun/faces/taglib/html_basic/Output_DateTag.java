@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTag.java,v 1.2 2002/09/03 18:42:30 jvisvanathan Exp $
+ * $Id: Output_DateTag.java,v 1.3 2002/09/09 23:52:25 visvan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_DateTag.java,v 1.2 2002/09/03 18:42:30 jvisvanathan Exp $
+ * @version $Id: Output_DateTag.java,v 1.3 2002/09/09 23:52:25 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,9 +79,8 @@ public Output_DateTag()
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
-	// if model property represented by this component has non null value, 
-        // do not call setValue().
-	if (null == component.currentValue(context) && null != getValue()) {
+	// if component has non null value, do not call setValue().
+        if (null == component.getValue() && null != getValue()) {
 	    component.setValue(getValue());
 	}
     }

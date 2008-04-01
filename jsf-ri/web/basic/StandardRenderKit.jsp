@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>JavaServer Faces 1.0 Standard RenderKit</title>
+    <link rel="stylesheet" type="text/css"
+       href='<%= request.getContextPath() + "/stylesheet.css" %>'>
   </head>
 
   <body>
@@ -10,7 +12,7 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
     <h1>JavaServer Faces 1.0 Standard RenderKit</h1>
-    <h3>$Id: StandardRenderKit.jsp,v 1.12 2002/09/08 22:23:36 eburns Exp $</h3>
+    <h3>$Id: StandardRenderKit.jsp,v 1.13 2002/09/09 23:52:27 visvan Exp $</h3>
 
     <p>The elements in this page should follow the
     StandardRenderKit.html page in the jsf-api.</p>
@@ -20,6 +22,7 @@
                     var="basicBundle"/>
 
      <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
+     <jsp:useBean id="ListBean" class="basic.ListBean" scope="session" />
 
      <faces:usefaces>  
 
@@ -73,6 +76,8 @@
            <%@ include file="selectmany_listbox_row.jsp" %>
 
            <%@ include file="selectmany_checkbox_row.jsp" %>
+
+           <%@ include file="panel_list_row.jsp" %>
 
 <!--           panel_grid_row.jsp -->
 

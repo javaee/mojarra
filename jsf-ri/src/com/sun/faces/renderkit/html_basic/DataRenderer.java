@@ -1,5 +1,5 @@
 /*
- * $Id: DataRenderer.java,v 1.1 2002/09/06 18:05:23 jvisvanathan Exp $
+ * $Id: DataRenderer.java,v 1.2 2002/09/09 23:52:24 visvan Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DataRenderer.java,v 1.1 2002/09/06 18:05:23 jvisvanathan Exp $
+ * @version $Id: DataRenderer.java,v 1.2 2002/09/09 23:52:24 visvan Exp $
  *  
  */
 
@@ -80,6 +80,10 @@ public class DataRenderer extends HtmlBasicRenderer {
     
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
+        // "panel_data" component is just a holder for an Iterator 
+        // over a set of model beans.  It doesn't have any rendering behavior of 
+        // its own -- that responsibility belongs to the surrounding panel.  
+        // See ListRenderer.         
     }   
 
     public void encodeChildren(FacesContext context, UIComponent component)
