@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.4 2002/07/12 00:30:02 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.5 2002/07/23 00:19:14 eburns Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class DoubleRangeValidator extends ValidatorBase {
 
     /**
      * <p>The message identifier of the {@link Message} to be created if
-     * the minimum value check fails.  The message format string for this
+     * the maximum value check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
      * will be replaced by the configured maximum value.</p>
      */
@@ -162,19 +162,20 @@ public class DoubleRangeValidator extends ValidatorBase {
      */
     private void checkMaximum(FacesContext context, UIComponent component,
                               Double value) {
-
+	Object attrObj = null;
         Double attribute = null;
         try {
-            attribute = (Double)
-                component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
+	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
+            if (attrObj == null) {
                 return;
             }
-        } catch (ClassCastException e) {
+            attribute = new Double(this.doubleValue(attrObj));
+        } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
-        }
+        } 
+
 
         if (value.compareTo(attribute) > 0) {
             context.addMessage(component,
@@ -197,13 +198,14 @@ public class DoubleRangeValidator extends ValidatorBase {
                               Double value) {
 
         Double attribute = null;
+	Object attrObj = null;
         try {
-            attribute = (Double)
-                component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
+	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
+            if (attrObj == null) {
                 return;
             }
-        } catch (ClassCastException e) {
+            attribute = new Double(this.doubleValue(attrObj));
+        } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;

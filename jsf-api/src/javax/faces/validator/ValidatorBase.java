@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.1 2002/06/14 22:16:42 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.2 2002/07/23 00:19:14 eburns Exp $
  */
 
 /*
@@ -146,6 +146,25 @@ abstract class ValidatorBase extends Validator {
         return (resources);
 
     }
+
+    protected int intValue(Object attributeValue) throws NumberFormatException {
+        if (attributeValue instanceof Integer) {
+            return ( ((Integer) attributeValue).intValue() );
+        } else {
+            return (Integer.parseInt(attributeValue.toString()));
+        }
+    }
+
+    protected double doubleValue(Object attributeValue) throws NumberFormatException {
+        if (attributeValue instanceof Double) {
+            return ( ((Double) attributeValue).intValue() );
+        } else {
+            return (Double.parseDouble(attributeValue.toString()));
+        }
+    }
+
+    
+ 
 
 
 }

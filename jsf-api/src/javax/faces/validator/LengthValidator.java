@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.5 2002/07/12 00:30:02 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.6 2002/07/23 00:19:14 eburns Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ public class LengthValidator extends ValidatorBase {
      * one of the limit attributes is not of the correct type.</p>
      */
     public static final String LIMIT_MESSAGE_ID =
-        "javax.faces.validator.StringRangeValidator.LIMIT";
+        "javax.faces.validator.LengthValidator.LIMIT";
 
 
     /**
@@ -149,17 +149,18 @@ public class LengthValidator extends ValidatorBase {
                               String svalue) {
 
         Integer attribute = null;
+	Object attrObj = null;
         try {
-            attribute = (Integer)
-                component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
+	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
+            if (attrObj == null) {
                 return;
             }
-        } catch (ClassCastException e) {
+            attribute = new Integer(this.intValue(attrObj));
+        } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
-        }
+        } 
         if (svalue.length() > attribute.intValue()) {
             context.addMessage(component,
                                getMessage(context, MAXIMUM_MESSAGE_ID,
@@ -181,17 +182,19 @@ public class LengthValidator extends ValidatorBase {
                               String svalue) {
 
         Integer attribute = null;
+	Object attrObj = null;
         try {
-            attribute = (Integer)
-                component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
+	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
+            if (attrObj == null) {
                 return;
             }
-        } catch (ClassCastException e) {
+            attribute = new Integer(this.intValue(attrObj));
+        } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
-        }
+        } 
+
         if (svalue.length() < attribute.intValue()) {
             context.addMessage(component,
                                getMessage(context, MINIMUM_MESSAGE_ID,

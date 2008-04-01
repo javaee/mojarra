@@ -1,5 +1,5 @@
 /*
- * $Id: IntegerRangeValidator.java,v 1.4 2002/07/12 00:30:02 craigmcc Exp $
+ * $Id: IntegerRangeValidator.java,v 1.5 2002/07/23 00:19:14 eburns Exp $
  */
 
 /*
@@ -164,13 +164,14 @@ public class IntegerRangeValidator extends ValidatorBase {
                               Integer value) {
 
         Integer attribute = null;
+	Object attrObj = null;
         try {
-            attribute = (Integer)
-                component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
+	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
+            if (attrObj == null) {
                 return;
             }
-        } catch (ClassCastException e) {
+            attribute = new Integer(this.intValue(attrObj));
+        } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
@@ -197,13 +198,14 @@ public class IntegerRangeValidator extends ValidatorBase {
                               Integer value) {
 
         Integer attribute = null;
+	Object attrObj = null;
         try {
-            attribute = (Integer)
-                component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
+	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
+            if (attrObj == null) {
                 return;
             }
-        } catch (ClassCastException e) {
+            attribute = new Integer(this.intValue(attrObj));
+        } catch (NumberFormatException e) {
             context.addMessage(component,
                                getMessage(context, LIMIT_MESSAGE_ID));
             return;
