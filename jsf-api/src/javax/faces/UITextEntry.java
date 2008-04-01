@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.5 2002/01/28 18:30:08 visvan Exp $
+ * $Id: UITextEntry.java,v 1.6 2002/02/14 03:55:53 edburns Exp $
  */
 
 /*
@@ -39,8 +39,6 @@ import java.util.EventObject;
 public class UITextEntry extends UIComponent implements EventDispatcher {
 
     private static String TYPE = "TextEntry";
-    private String modelReference = null;
-    private String text = null;
 
     private Vector valueChangeListeners = null;
 
@@ -55,80 +53,24 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
     }
 
     /**
-     * The model-reference property for this data-bound component.
-     * This property contains a reference to the object which acts
-     * as the data-source for this component.  The model-reference
-     * must resolve to an object which implements one of the following types:
-     * <ul>
-     * <li><code>java.lang.String</code>
-     * </ul>
-     * @see #setModelReference
-     * @return String containing the model-reference for this component
-     */
-    public String getModelReference() {
-        return modelReference;
-    }
-
-    /**
-     * Sets the model-reference property on this data-bound component.
-     * @see #getModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the data-source for this component
-     */
-    public void setModelReference(String modelReference) {
-        this.modelReference = modelReference;
-    }
-
-    /**
-     * Returns the current text value for this component.
-     * If this component's modelReference property is non-null, it will
-     * return the current value contained in the object
-     * referenced by the modelReference property. If the modelReference property
-     * is null, it will return a locally stored value.
+     * This is just a strong type enforcing wrapper around getValue()
      *
-     * @see #getModelReference
+     * @see UIComponent#getValue
      * @param rc the render context used to render this component
      * @return String containing the current text value 
      */
     public String getText(RenderContext rc) { 
-
-        String value = null;
-        if ( modelReference == null )  {
-            return text;
-        }    
-        else { 
-            try {
-                value =(String)rc.getObjectAccessor().getObject(rc.getRequest(), 
-                        (String) modelReference);
-            } catch ( FacesException e ) {
-                // PENDING (visvan) skip this exception ??
-                return text;
-            }
-	    return value;
-        }    
+	return (String) getValue(rc);
     }
 
     /**
-     * Sets the current text value for this component.
-     * If this component's modelReference property is non-null, it will
-     * store the new value in the object referenced by the
-     * modelReference property.  If the modelReference property is null, it 
-     * will store the value locally.
+     * This is just a strong type enforcing wrapper around setValue()
+     * @see UIComponent#setValue
      * @param rc the render context used to render this component
      * @param text String containing the new text value for this component
      */
-    public void setText(RenderContext rc, String text) { 
-        if ( modelReference == null ) {
-            this.text = text;
-        } else {
-            try {
-                rc.getObjectAccessor().setObject(rc.getRequest(), 
-						 (String)modelReference, text);    
-            } catch ( FacesException e ) {
-                // PENDING ( visvan ) skip this exception ??
-                this.text = text;
-            }
-        }    
+    public void setText(String text) { 
+	setValue(text);
     }
 
     /**
@@ -195,9 +137,7 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
                     "Expected ValueChangeEvent");
         }
 
-        String new_value = (String) value_event.getNewValue();
         String srcId = value_event.getSourceId();
-        String modelRef = (String) getModelReference();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );
@@ -210,18 +150,10 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
         RenderContext rc = (RenderContext)ot.get(request,
                 Constants.REF_RENDERCONTEXT);
         // Assert.assert_it( rc != null );
- 
-        // PENDING ( visvan ) according to the latest version of the
-        // spec, value changes will not not pushed to model object
-        // until it is validated. This change will be made along with
-        // model object changes.
-        if ( modelRef == null ) {
-            setText(rc, (String)value_event.getNewValue());
-        } else {
-            rc.getObjectAccessor().setObject(request, modelRef,
-                                             new_value);
-        }
 
+	setText((String) value_event.getNewValue());
+	pushValueToModel(rc);
+	
         // dispatch value change listeners.
         if ( valueChangeListeners == null ) {
             return;

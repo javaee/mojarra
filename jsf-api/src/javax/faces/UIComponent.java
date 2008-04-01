@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.3 2002/01/17 02:15:02 edburns Exp $
+ * $Id: UIComponent.java,v 1.4 2002/02/14 03:55:52 edburns Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ public abstract class UIComponent {
     private Hashtable ht;
     private String id;
     private String rendererType;
+    private String modelReference = null;
 
     public UIComponent() {
         ht = new Hashtable();
@@ -456,5 +457,103 @@ public abstract class UIComponent {
         return true; //compile
     }
 
-}
+    /**
+     * The model-reference property for this data-bound component.
+     * This property contains a reference to the object which acts
+     * as the data-source for this component.  The model-reference
+     * must resolve to an object which implements one of the following types:
+     * <ul>
+     * <li><code>java.lang.String</code>
+     * </ul>
+     * @see #setModelReference
+     * @return String containing the model-reference for this component
+     */
+    public String getModelReference() {
+        return modelReference;
+    }
+
+    /**
+     * Sets the model-reference property on this data-bound component.
+     * @see #getModelReference
+     * @param modelReference the String which contains a reference to the
+     *        object which acts as the data-source for this component
+     */
+    public void setModelReference(String modelReference) {
+        this.modelReference = modelReference;
+    }
+
+    /**
+
+    * If localValue is non-null, we just return it.  Else, if we have a
+    * model reference, we ask it for a value.  If it does, we cache it
+    * in localValue.  Then we return localValue.
+
+    */ 
+
+    public Object getValue(RenderContext rc) {
+	Object result = ht.get(Constants.REF_VALUE);
+	if (null == result) {
+	    result = pullValueFromModel(rc);
+	}
+	return result;
+    }
+    
+    public void setValue(Object newValue) {
+	setAttribute(Constants.REF_VALUE, newValue);
+    }
+
+    /**
+
+    *   If we do not have a modelReference, do nothing.  Else, If
+    *   localValue non-null, try to push localValue into model().  If
+    *   successful, set localValue to null, else leave localValue alone.
+
+    */
+
+    public void pushValueToModel(RenderContext rc) {
+	if (null == modelReference) {
+	    return;
+	}
+	Object localValue = ht.get(Constants.REF_VALUE);
+	
+	if (null != localValue) {
+            try {
+                rc.getObjectAccessor().setObject(rc.getRequest(), 
+						 modelReference, localValue); 
+		setValue(null);
+            } catch ( FacesException e ) {
+		// Don't modify localValue in this case.
+            }
+	}
+    }
+
+    /**
+
+    *   If we do not have a modelReference, do nothing.  If non-null
+    *   value from model, overwrite local value, else do nothing. <P>
+
+    * @return the value from the model
+
+    */
+
+    public Object pullValueFromModel(RenderContext rc) {
+	Object result = null;
+
+	if (null == modelReference) {
+	    return result;
+	}
+
+	try {
+	    result = rc.getObjectAccessor().getObject(rc.getRequest(),
+						      modelReference);
+	    if (null != result) {
+		setValue(result);
+	    }
+	} catch ( FacesException e ) {
+	    // PENDING (visvan) skip this exception ??
+	}
+	return result;
+    }
+
+} // End of class UIComponent
 

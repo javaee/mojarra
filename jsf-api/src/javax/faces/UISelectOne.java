@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.7 2002/02/08 18:26:04 visvan Exp $
+ * $Id: UISelectOne.java,v 1.8 2002/02/14 03:55:53 edburns Exp $
  */
 
 /*
@@ -48,7 +48,6 @@ import javax.servlet.ServletRequest;
 public class UISelectOne extends UIComponent implements EventDispatcher, Validatible {
     private static String TYPE = "SelectOne";
     // PENDING(edburns): don't cast these to Strings all over the place.
-    private String modelReference = null;
     private String selectedModelReference = null;
     private String messageModelReference = null;
 
@@ -62,34 +61,6 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
      */
     public String getType() {
 	return TYPE;
-    }
-
-    /**
-     * The model-reference property for this data-bound component.
-     * This property contains a reference to the object which acts
-     * as the data-source for selectable items on this component.  
-     * The model-reference must resolve to an object which implements 
-     * one of the following types:
-     * <ul>
-     * <li><code>java.lang.Collection</code> of <code>String</code> objects
-     *     corresponding to the item values
-     * </ul>  
-     * @see #setModelReference  
-     * @return String containing the model-reference for this component
-     */
-    public String getModelReference() {
-        return modelReference;
-    }
-
-    /**
-     * Sets the model-reference property on this data-bound component.
-     * @see #getModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the data-source for selectable items
-     *        for this component
-     */
-    public void setModelReference(String modelReference) {
-        this.modelReference = modelReference;
     }
 
     /**
@@ -145,10 +116,10 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
 
         // Otherwise, look to the model
         //
-        } else if (modelReference != null) {
+        } else if (getModelReference() != null) {
             try {
                 coll = (Collection) rc.getObjectAccessor().
-                    getObject(rc.getRequest(), (String) modelReference);
+                    getObject(rc.getRequest(), getModelReference());
 //PENDING(rogerk) at this point, we have a collection of item values
 // (no labels or descriptions).  We would want to get the localized
 // labels and descriptions from a resource bundle given the item value
@@ -329,31 +300,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
      *         if no items are selected
      */
     public String getSelectedValue(RenderContext rc) {
-
-        String result = null;
-
-        result = (String)getAttribute(null, "selectedItem");
-
-        // If the local one is set...
-        //
-        if (result != null) {
-            return result;
-        } else
-        
-        // Get it from the model...
-        //
-        if (null != selectedModelReference) {
-            try {
-                String modelResult = (String)rc.getObjectAccessor().
-                    getObject(rc.getRequest(), 
-                        (String) selectedModelReference);
-                if (modelResult != null) {
-                    return modelResult;
-                }
-            } catch ( FacesException e ) {
-            }
-        }
-        return result;
+        return (String) getValue(rc);
     }
 
     /**
@@ -363,7 +310,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
      * @throws IllegalArgumentException if item does not exist
      */
     public void setSelectedValue(String value) {
-        setAttribute("selectedItem", value);
+        setValue(value);
     }
 
     /**
@@ -433,7 +380,6 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
 
         String new_value = (String) value_event.getNewValue();
         String srcId = value_event.getSourceId();
-        String modelRef = (String) getSelectedModelReference();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );
@@ -447,19 +393,8 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
                 Constants.REF_RENDERCONTEXT);
         // Assert.assert_it( rc != null );
 
-        // PENDING ( visvan ) according to the latest version of the
-        // spec, value changes will not be pushed to  object
-        // until it is validated. This change will be made along with
-        // model object changes.
-        // local value should also updated so that it is cached for
-        // future references.
-        if ( modelRef == null ) {
-            setSelectedValue((String)value_event.getNewValue());
-        } else {
-            setSelectedValue((String)value_event.getNewValue());
-            rc.getObjectAccessor().setObject(request, modelRef,
-                                             new_value);
-        }
+	setSelectedValue((String)value_event.getNewValue());
+	pushValueToModel(rc);
 
         // dispatch value change listeners.
         if ( valueChangeListeners == null ) {

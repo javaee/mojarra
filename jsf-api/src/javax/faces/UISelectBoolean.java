@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.5 2002/01/25 18:35:07 visvan Exp $
+ * $Id: UISelectBoolean.java,v 1.6 2002/02/14 03:55:53 edburns Exp $
  */
 
 /*
@@ -21,9 +21,7 @@ import java.util.EventObject;
 public class UISelectBoolean extends UIComponent implements EventDispatcher {
     private static String TYPE = "SelectBoolean";
 
-    private String modelReference = null;
     private String messageModelReference = null;
-    private boolean selected = false;
 
     private Vector valueChangeListeners = null;
 
@@ -38,31 +36,6 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
     }
 
     /**
-     * The model-reference property for this data-bound component.
-     * This property contains a reference to the object which acts
-     * as the data-source for this component.  The model-reference
-     * must resolve to an object which implements one of the following types:
-     * <ul>
-     * <li><code>java.lang.Boolean</code>
-     * </ul>  
-     * @see #setModelReference  
-     * @return String containing the model-reference for this component
-     */
-    public String getModelReference() {
-        return modelReference;
-    }
-
-    /**
-     * Sets the model-reference property on this data-bound component.
-     * @see #getModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the data-source for this component
-     */
-    public void setModelReference(String modelReference) {
-        this.modelReference = modelReference;
-    }
-
-    /**
      * Returns the current state for this component.
      * If this component's model property is non-null, it will
      * return the current value contained in the object
@@ -74,22 +47,15 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
      * @return boolean containing the current state
      */
     public boolean isSelected(RenderContext rc) {
+        boolean state;
 
-        boolean state = false;
-        if ( modelReference == null )  {
-            return selected;
-        }
-        else {
-            try {
-                String state_str = (String) rc.getObjectAccessor().
-                        getObject(rc.getRequest(), (String) modelReference);
-                state = (Boolean.valueOf(state_str)).booleanValue();
-            } catch ( FacesException e ) {
-                // PENDING (visvan) skip this exception ??
-                return selected;
-            }
-            return state;
-        }
+	if (Boolean.valueOf((String) getValue(rc)).booleanValue()) {
+	    state = true;
+	}
+	else {
+	    state = false;
+	}
+	return state;
     }
 
     /**
@@ -102,19 +68,12 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
      * @param state boolean containing the new state for this component
      */
     public void setSelected(RenderContext rc, boolean state) {
-        if ( modelReference == null ) {
-            selected = state;
-        } else {
-            try {
-                String state_str = String.valueOf( state );
-                rc.getObjectAccessor().setObject(rc.getRequest(),
-						 (String)modelReference,state_str);
-            } catch ( FacesException e ) {
-                // PENDING ( visvan ) skip this exception ??
-                selected = state;
-            }
-        }
-
+	if (state == true) {
+	    setValue("true");
+	}
+	else {
+	    setValue("false");
+	}
     }
 
     /**
@@ -266,7 +225,6 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
 
         String new_value = (String) value_event.getNewValue();
         String srcId = value_event.getSourceId();
-        String modelRef = (String) getModelReference();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );
@@ -280,17 +238,9 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
                 Constants.REF_RENDERCONTEXT);
         // Assert.assert_it( rc != null );
 
-        // PENDING ( visvan ) according to the latest version of the
-        // spec, value changes will not not pushed to model object
-        // until it is validated. This change will be made along with
-        // model object changes.
-        if ( modelRef == null ) {
-            boolean state = (Boolean.valueOf(new_value)).booleanValue();
-            setSelected(rc, state);
-        } else {
-            rc.getObjectAccessor().setObject(request, modelRef,
-                                             new_value);
-        }
+	boolean state = (Boolean.valueOf(new_value)).booleanValue();
+	setSelected(rc, state);
+	pushValueToModel(rc);
 
         // dispatch value change listeners.
         if ( valueChangeListeners == null ) {

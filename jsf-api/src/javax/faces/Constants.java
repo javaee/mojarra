@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.15 2002/01/25 18:35:06 visvan Exp $
+ * $Id: Constants.java,v 1.16 2002/02/14 03:55:52 edburns Exp $
  */
 
 /*
@@ -61,6 +61,11 @@ public class Constants {
      */
     public static final String REF_RENDERCONTEXTFACTORY = 
         "faces.RenderContextFactory";
+
+    /**
+     * The key for the value property 
+     */
+    public static final String REF_VALUE = "faces.Value";
 
     /**
      * The component type name for 'UICommand' components.

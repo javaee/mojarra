@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
+ * $Id: UIForm.java,v 1.5 2002/02/14 03:55:53 edburns Exp $
  */
 
 /*
@@ -35,7 +35,6 @@ import java.util.EventObject;
 public class UIForm extends UIComponent implements EventDispatcher {
 
     private static String TYPE = "Form";
-    private String modelReference = null;
     private String messageModelReference = null;
     
     // PENDING ( visvan ) added per discussion with Amy on NavigationHandler
@@ -49,32 +48,6 @@ public class UIForm extends UIComponent implements EventDispatcher {
      */
     public String getType() {
 	return TYPE;
-    }
-
-    /**
-     * The model-reference property for this data-bound component.
-     * This property contains a reference to the object which acts
-     * as the data-source for this component.  If a property on the
-     * associated model object matches the id of one of this form's
-     * controls, the model-reference for that control will be implicitly
-     * hooked up to that property on the form's model object.  If
-     * the model-reference on this form is null, then model-references
-     * on this form's controls must be set explicitly on each control.
-     * @see #setModelReference  
-     * @return String containing the model-reference for this component
-     */
-    public String getModelReference() {
-        return modelReference;
-    }
-
-    /**
-     * Sets the model-reference property on this data-bound component.
-     * @see #getModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the data-source for this component
-     */
-    public void setModelReference(String modelReference) {
-        this.modelReference = modelReference;
     }
 
     /**
