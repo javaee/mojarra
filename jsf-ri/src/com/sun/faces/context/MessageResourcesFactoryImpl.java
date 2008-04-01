@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesFactoryImpl.java,v 1.1 2002/06/25 20:47:56 jvisvanathan Exp $
+ * $Id: MessageResourcesFactoryImpl.java,v 1.2 2002/07/25 16:36:33 eburns Exp $
  */
 
 /*
@@ -17,11 +17,17 @@ import javax.faces.context.MessageResources;
 import javax.faces.context.MessageResourcesFactory;
 import javax.faces.FacesException;
 
+
 public class MessageResourcesFactoryImpl extends MessageResourcesFactory
 {
     //
     // Protected Constants
     //
+
+    static final String JSF_API_RESOURCE_FILENAME = "JSFMessages";
+
+    static final String JSF_RI_RESOURCE_FILENAME = "JSFImplMessages";
+
 
     //
     // Class Variables
@@ -87,9 +93,20 @@ public class MessageResourcesFactoryImpl extends MessageResourcesFactory
             return ((MessageResources)
                     messageResourcesList.get(messageResourcesId));
         } 
-        // PENDING (visvan) throw FacesException/IllegalArg Exception ??
-        MessageResources messageResource = 
-                new MessageResourcesImpl(messageResourcesId);
+
+        MessageResources messageResource = null;
+	if (messageResourcesId.equals(FACES_API_MESSAGES)) {
+	    messageResource = new MessageResourcesImpl(messageResourcesId,
+						       JSF_API_RESOURCE_FILENAME);
+	}
+	else if (messageResourcesId.equals(FACES_IMPL_MESSAGES)) {
+	    messageResource = new MessageResourcesImpl(messageResourcesId,
+						       JSF_RI_RESOURCE_FILENAME);
+	}
+	else {
+	    throw new IllegalArgumentException("Can't create MessageResources");
+	}
+	
         synchronized ( messageResourcesList ) { 
             messageResourcesList.put(messageResourcesId, messageResource);
         }    

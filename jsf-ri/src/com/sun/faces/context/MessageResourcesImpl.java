@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.2 2002/07/24 19:15:33 jvisvanathan Exp $
+ * $Id: MessageResourcesImpl.java,v 1.3 2002/07/25 16:36:33 eburns Exp $
  */
 
 /*
@@ -26,7 +26,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import java.text.MessageFormat;
 import java.io.IOException;
-import com.sun.faces.RIConstants;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -49,6 +48,7 @@ public class MessageResourcesImpl extends MessageResources
     // Instance Variables
     //
     private String messageResourceId = null;
+    private String resourceFile = null;
     private Digester digester = null;
     
     // The key is a String and formed from resource + language + country + varient.  
@@ -63,9 +63,14 @@ public class MessageResourcesImpl extends MessageResources
     // Constructors and Initializers    
     //
 
-    public MessageResourcesImpl(String messageResourceId) {
+    public MessageResourcesImpl(String newMessageResourceId, 
+				String newResourceFile) throws FacesException {
         super();
-        this.messageResourceId = messageResourceId;
+	ParameterCheck.nonNull(newMessageResourceId);
+	ParameterCheck.nonNull(newResourceFile);
+
+        messageResourceId = newMessageResourceId;
+	resourceFile = newResourceFile;
         digester = initConfig();
         catalogList = new HashMap();
     }
@@ -86,9 +91,8 @@ public class MessageResourcesImpl extends MessageResources
         String[] name = new String[4];
         int i = 3;
         StringBuffer b = new StringBuffer(100);
-        String resource = RIConstants.JSF_RESOURCE_FILENAME;
-        b.append(resource);
-        name[i--] = resource;
+        b.append(resourceFile);
+        name[i--] = resourceFile;
 
         if ( locale.getLanguage().length() > 0 ) {
             b.append('_');
@@ -110,7 +114,7 @@ public class MessageResourcesImpl extends MessageResources
 
         for (int j = i+1; j < name.length; j++) {
             // if catalog does not exist it needs to be loaded from XML file.
-            // start with variant appended to resource file name and iterate
+            // start with variant appended to resourceFile file name and iterate
             // until a catalog is found to match locale.
             synchronized( catalogList ) {
                 cat = (MessageCatalog)catalogList.get(name[j]);

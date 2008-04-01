@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesFactoryImpl.java,v 1.1 2002/06/25 20:48:02 jvisvanathan Exp $
+ * $Id: TestMessageResourcesFactoryImpl.java,v 1.2 2002/07/25 16:36:35 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesFactoryImpl.java,v 1.1 2002/06/25 20:48:02 jvisvanathan Exp $
+ * @version $Id: TestMessageResourcesFactoryImpl.java,v 1.2 2002/07/25 16:36:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +83,9 @@ public class TestMessageResourcesFactoryImpl extends ServletTestCase
         assertTrue(gotException);
         gotException = false;
         
-        MessageResourcesImpl msgResource = new MessageResourcesImpl("TestResources");
+        MessageResourcesImpl msgResource = 
+	    new MessageResourcesImpl("TestResources",
+				     MessageResourcesFactoryImpl.JSF_API_RESOURCE_FILENAME);
         try {
             rf.addMessageResources("TestResources", msgResource);
         } catch ( Exception fe) {
@@ -141,5 +143,19 @@ public class TestMessageResourcesFactoryImpl extends ServletTestCase
         assertTrue( (id2 == (MessageResourcesFactory.FACES_API_MESSAGES)) ||
                 (id2 == (MessageResourcesFactory.FACES_IMPL_MESSAGES)));
     }    
+
+    public void testGetMethodsException() {
+        boolean gotException = false;
+        MessageResourcesFactoryImpl rf = new MessageResourcesFactoryImpl();
+
+	try {
+	    rf.getMessageResources("bogusString");
+	}
+	catch (IllegalArgumentException e) {
+	    gotException = true;
+	}
+	assertTrue(gotException);
+
+    }
 
 } // end of class TestMessageResourcesFactoryImpl
