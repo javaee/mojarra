@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
+ * $Id: UISelectOne.java,v 1.5 2002/01/28 18:30:08 visvan Exp $
  */
 
 /*
@@ -19,13 +19,36 @@ import javax.servlet.ServletRequest;
 /**
  * Class for representing a user-interface component which allows
  * the user to select one value from many.
+ * <p>
+ * A UISelectOne has two pieces of application-specific data:
+ * <ol>
+ * <li>The set of selectable items
+ * <li>The selected item
+ * </ol>
+ * Each of these can either be connected to an application-specific
+ * model object (via the model-reference properties) or set locally
+ * as attributes directly on the component.
+ * <p>
+ * An item is comprised of three pieces of data:
+ * <ol>
+ * <li>id (required): uniquely identifies the item within the set
+ * <li>label (optional): the label which displays the item to the user
+ *     (will default to id)
+ * <li>description (optional): a text description of the item (may
+ *     be used on clients supporting &quot;tooltips&quot; or accessibility
+ *     (defaults to null)
+ * </ol>
+ * If a model-reference is set for the selectable items, it must resolve
+ * to a Collection object containing the ids of the selectable items.
  */
 public class UISelectOne extends UIComponent implements EventDispatcher {
 
     private static String TYPE = "SelectOne";
     // PENDING(edburns): don't cast these to Strings all over the place.
-    private Object modelRef = null;
-    private Object selectedValueModelRef = null;
+    private String modelReference = null;
+    private String selectedModelReference = null;
+    private String messageModelReference = null;
+
     private Collection items;
     private Object selectedItem;
 
@@ -41,25 +64,66 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 	return TYPE;
     }
 
-    public Object getModel() {
-        return modelRef;
+    /**
+     * The model-reference property for this data-bound component.
+     * This property contains a reference to the object which acts
+     * as the data-source for selectable items on this component.
+     * The model-reference must resolve to an object which implements
+     * one of the following types:
+     * <ul>
+     * <li><code>java.lang.Collection</code> of <code>String</code> objects
+     *     corresponding to the item ids
+     * </ul>
+     * @see #setModelReference
+     * @return String containing the model-reference for this component
+     */
+    public String getModelReference() {
+        return modelReference;
     }
 
-    public void setModel(Object newModelRef) {
-	modelRef = newModelRef;
+    /**
+     * Sets the model-reference property on this data-bound component.
+     * @see #getModelReference
+     * @param modelReference the String which contains a reference to the
+     *        object which acts as the data-source for selectable items
+     *        for this component
+     */
+    public void setModelReference(String modelReference) {
+        this.modelReference = modelReference;
     }
 
-    public Object getSelectedValueModel() {
-        return selectedValueModelRef;
+    /**
+     * The selected-model-reference property for this data-bound component.
+     * This property contains a reference to the object which acts
+     * as the data-source for the selected item on this component.
+     * The model-reference must resolve to an object which implements
+     * one of the following types:
+     * <ul>
+     * <li><code>java.lang.String</code> corresponding to the id of the
+     *     selected item
+     * </ul>
+     * @see #setSelectedModelReference
+     * @return String containing the selected-model-reference for this component
+     */
+    public String getSelectedModelReference() {
+        return selectedModelReference;
     }
 
-    public void setSelectedValueModel(Object newSelectedValueModelRef) {
-	selectedValueModelRef = newSelectedValueModelRef;
+    /**
+     * Sets the selected-model-reference property on this data-bound component.
+     * @see #getSelectedModelReference
+     * @param selectedModelReference the String which contains a reference
+     *        to the
+     *        object which acts as the data-source for selectable items
+     *        for this component
+     */
+    public void setSelectedModelReference(String selectedModelReference) {
+        this.selectedModelReference = selectedModelReference;
     }
 
     /**
 
-    * @return true if modelRef and selectedValueModelRef are either both
+    * @return true if modelReference and selectedModelReference are either both
     * null or both non-null.
 
     */
@@ -67,17 +131,17 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
     private boolean checkModelConsistency() {
 	boolean result = false;
 	
-	if (modelRef == null) {
-	    result = (selectedValueModelRef == null);
+	if (modelReference == null) {
+	    result = (selectedModelReference == null);
 	}
-	if (selectedValueModelRef == null) {
-	    result = (modelRef == null);
+	if (selectedModelReference == null) {
+	    result = (modelReference == null);
 	}
-	if (modelRef != null) {
-	    result = (selectedValueModelRef != null);
+	if (modelReference != null) {
+	    result = (selectedModelReference != null);
 	}
-	if (selectedValueModelRef != null) {
-	    result = (modelRef != null);
+	if (selectedModelReference != null) {
+	    result = (modelReference != null);
 	}
 	return result;
     }
@@ -91,12 +155,12 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 	// Assert.assert_it(checkModelConsistency());
 	
 	items = newItems;
-	if (null != modelRef) {
+	if (null != modelReference) {
 	    try {
 		rc.getObjectAccessor().setObject(rc.getRequest(), 
-					       (String) modelRef, items);
+		       (String) modelReference, items);
 		// Set this to null to insure the class invariant of
-		// either having {modelRef, selectedValueModelRef} OR
+		// either having {modelReference, selectedModelReference OR
 		// having ivars {items, selectedItem}
 		// The same holds for the other getters and setters;
 		items = null;
@@ -107,7 +171,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 
     /**
 
-    * PRECONDITION: we have a modelRef specified as a JSTL expression
+    * PRECONDITION: we have a modelReference specified as a JSTL expression
     * string, such as "$ShipTypeBean.shipType".  This means there must
     * be an Object in the ObjectTable under the name "ShipTypeBean" and
     * this bean has a property called "shipType" whose value is a
@@ -128,10 +192,10 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 	Collection modelItems = items;
 
 	// We can't do anything without having a model
-	if (null != modelRef) {
+	if (null != modelReference) {
 	    try {
 		modelItems = (Collection) rc.getObjectAccessor().
-		    getObject(rc.getRequest(), (String) modelRef);
+		    getObject(rc.getRequest(), (String) modelReference);
 		items = null;
 	    } catch ( FacesException e ) {
 	    }
@@ -156,10 +220,10 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 	Object result = selectedItem;
 
 	// We can't do anything without having a model
-	if (null != selectedValueModelRef) {
+	if (null != selectedModelReference) {
 	    try {
 		result = rc.getObjectAccessor().getObject(rc.getRequest(), 
-				  (String) selectedValueModelRef);
+				  (String) selectedModelReference);
 		selectedItem = null;
 	    } catch ( FacesException e ) {
 	    }
@@ -181,11 +245,11 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 	// Assert.assert_it(checkModelConsistency());
 	selectedItem = value;
 	
-	if (null != selectedValueModelRef) {
+	if (null != selectedModelReference) {
 	    try {
 		rc.getObjectAccessor().
 		    setObject(rc.getRequest(),
-			      (String) selectedValueModelRef, value);
+			      (String) selectedModelReference, value);
 		selectedItem = null;
 	    } catch ( FacesException e ) {
 	    }
@@ -259,7 +323,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 
         String new_value = (String) value_event.getNewValue();
         String srcId = value_event.getSourceId();
-        String modelRef = (String) getSelectedValueModel();
+        String modelRef = (String) getSelectedModelReference();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );
@@ -274,7 +338,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
         // Assert.assert_it( rc != null );
 
         // PENDING ( visvan ) according to the latest version of the
-        // spec, value changes will not not pushed to model object
+        // spec, value changes will not not pushed to  object
         // until it is validated. This change will be made along with
         // model object changes.
         if ( modelRef == null ) {

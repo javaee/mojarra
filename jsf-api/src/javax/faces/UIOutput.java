@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.2 2002/01/12 01:38:08 edburns Exp $
+ * $Id: UIOutput.java,v 1.3 2002/01/28 18:30:08 visvan Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ public class UIOutput extends UIComponent {
 
     private static String TYPE = "Output";
     private Object value = null;
-    private Object model = null;
+    private String modelReference;
 
     /** 
      * Returns a String representing the this component type.  
@@ -34,10 +34,10 @@ public class UIOutput extends UIComponent {
 
     /**
      * Returns the current text value for this component.
-     * If this component's model property is non-null, it will
+     * If this component's modelReference property is non-null, it will
      * return the current value contained in the object
-     * referenced by the model property. If the model property
-     * is null, it will return a locally stored value.
+     * referenced by the modelReference property. If the modelReference 
+     * property is null, it will return a locally stored value.
      *
      * @see #getModel
      * @param rc the render context used to render this component
@@ -46,13 +46,13 @@ public class UIOutput extends UIComponent {
     public String getValue(RenderContext rc) {
 
         String label = null;
-        if ( model == null )  {
+        if ( modelReference == null )  {
             return (String) value;
         }
         else {
             try {
                 label = (String) rc.getObjectAccessor().
-                        getObject(rc.getRequest(), (String) model);
+                        getObject(rc.getRequest(), (String) modelReference);
             } catch ( FacesException e ) {
                 // PENDING (visvan) skip this exception ??
                 return (String) value;
@@ -63,20 +63,20 @@ public class UIOutput extends UIComponent {
 
     /**
      * Sets the current text value for this component.
-     * If this component's model property is non-null, it will
+     * If this component's modelReference property is non-null, it will
      * store the new value in the object referenced by the
-     * model property.  If the model property is null, it
+     * modelReference property.  If the modelReference property is null, it
      * will store the value locally.
      * @param rc the render context used to render this component
      * @param text String containing the new text value for this component
      */
     public void setValue(RenderContext rc, String label) {
-        if ( model == null ) {
+        if ( modelReference == null ) {
             value = label;
         } else {
             try {
                 rc.getObjectAccessor().setObject(rc.getRequest(), 
-						 (String)model, label);
+				 (String)modelReference, label);
             } catch ( FacesException e ) {
                 // PENDING ( visvan ) skip this exception ??
                 value = label;
@@ -85,29 +85,29 @@ public class UIOutput extends UIComponent {
     }
 
     /**
-     * The model property for this data-bound component.
+     * The model-reference property for this data-bound component.
      * This property contains a reference to the object which acts
-     * as the data-source for this component.  The supported types
-     * for this reference:
+     * as the data-source for this component.  The model-reference
+     * must resolve to an object which implements one of the following types:
      * <ul>
-     * <li>String containing a model-reference in the scoped namespace
-     *     e.g. &quot;user.lastName&quot; refers to an object named
-     *          &quot;user&quot;
-     *          with a property named &quot;lastName&quot;.
+     * <li><code>java.lang.String</code>
+     * <li><code>java.util.Collection</code> of <code>String</code> objects;
+     *     each element is converted to a separate line of text.
      * </ul>
-     * @return Object describing the data-source for this component
+     * @see #setModelReference
+     * @return String containing the model-reference for this component
      */
-    public Object getModel() {
-        return model;
+    public String getModelReference() {
+        return modelReference;
     }
 
     /**
-     * Sets the model property on this data-bound component.
-     * @param model the Object which contains a reference to the
+     * Sets the model-reference property on this data-bound component.
+     * @see #getModelReference
+     * @param modelReference the String which contains a reference to the
      *        object which acts as the data-source for this component
      */
-    public void setModel(Object model) {
-        this.model = model;
+    public void setModelReference(String modelReference) {
+        this.modelReference = modelReference;
     }
-
 }
