@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.21 2002/08/07 23:31:15 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.22 2002/08/23 22:02:06 craigmcc Exp $
  */
 
 /*
@@ -201,7 +201,9 @@ public abstract class FacesTag extends TagSupport {
 
         // Render the beginning of the component associated with this tag
         try {
-            encodeBegin();
+            if (!isSuppressed()) {
+                encodeBegin();
+            }
         } catch (IOException e) {
             component = null;
             context = null;
@@ -258,10 +260,12 @@ public abstract class FacesTag extends TagSupport {
         // associated with this tag
         boolean rendersChildren = component.getRendersChildren();
         try {
-            if (rendersChildren) {
-                encodeChildren();
+            if (!isSuppressed()) {
+                if (rendersChildren) {
+                    encodeChildren();
+                }
+                encodeEnd();
             }
-            encodeEnd();
         } catch (IOException e) {
             throw new JspException(e);
         } finally {
@@ -456,6 +460,25 @@ public abstract class FacesTag extends TagSupport {
     protected int getDoStartValue() throws JspException {
 
         return (EVAL_BODY_INCLUDE);
+
+    }
+
+
+    /**
+     * <p>Return <code>true</code> if rendering should be suppressed because
+     * some parent component on the stack has been configured with
+     * <code>getRendersChildreN()</code> as true.</p>
+     */
+    protected boolean isSuppressed() {
+
+        int n = componentStack.size() - 1; // Skip ourself
+        for (int i = (n - 1); i >= 0; i--) {
+            UIComponent component = (UIComponent) componentStack.get(i);
+            if (component.getRendersChildren()) {
+                return (true);
+            }
+        }
+        return (false);
 
     }
 
