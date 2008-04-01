@@ -53,8 +53,13 @@
   <!-- Name of ultra-simple web-app -->
   <property name="basic.name"  value="basic"/>
 
+  <!-- Name of cardemo web-app -->
+  <property name="cardemo.name"  value="cardemo"/>
+
   <!-- Directory name to deploy app.name under tomcat -->
   <property name="basic.home"  value="${tomcat.home}/webapps/${basic.name}"/>
+
+  <property name="cardemo.home"  value="${tomcat.home}/webapps/${cardemo.name}"/>
 
 
   <!-- ************ Dependencies **** *************************************** -->
@@ -164,6 +169,7 @@
    description="Clean tomcat of anything we've put in it">
     <delete    dir="${deploy.home}"/>
     <delete    dir="${basic.home}"/>
+    <delete    dir="${cardemo.home}"/>
   </target>
 
 
@@ -249,6 +255,9 @@
     <unjar  src="${dist.home}/basic.war" dest="${basic.home}"/>
   </target>
 
+  <target name="deploy.tomcat.cardemo" depends="build.cardemo.war">
+    <unjar  src="${dist.home}/cardemo.war" dest="${cardemo.home}"/>
+  </target>
 
   <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
    description="Clean and compile all components"/>
@@ -343,6 +352,38 @@
     <copy file="${dist.home}/${dist.war}" toDir="${tomcat.home}/webapps"/>
   </target>
 
+    <!-- builds"cardemo" sample app -->
+    <target name="build.cardemo.war" depends="clean.tomcat,prepare,compile,jars,compile.cardemo.sample" >
+     <!-- name of the war file -->
+     <property name="dist.war"  value="${cardemo.name}.war"/>
+
+     <mkdir  dir="${dist.home}/${cardemo.name}"/>
+
+     <!-- copy cardemo.directory under dist.home -->
+    <copy todir="${dist.home}/${cardemo.name}">
+      <fileset dir="${basedir}/web/${cardemo.name}" />
+    </copy>
+
+    <!-- copy all the classes under cardemo package -->
+    <copy todir="${dist.home}/${cardemo.name}">
+      <fileset dir="${build.home}/${cardemo.name}"/>
+    </copy>
+
+    <!-- copy dependent libs -->
+    <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
+    <copy  file="${commons.collections.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
+    <copy  file="${jasper_hacked.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
+    <copy file="${jsf-api.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
+    <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
+
+    <!-- create a war file for distribution -->
+    <jar jarfile="${dist.home}/${dist.war}"
+         basedir="${dist.home}/${cardemo.name}"/>
+
+    <copy file="${dist.home}/${dist.war}" toDir="${tomcat.home}/webapps"/>
+
+  </target>
+
   <target name="compile.basic.sample"
           description="Compile java files in the sample app named app.name">
     <property name="basic.name"  value="basic"/>
@@ -356,6 +397,23 @@
     </javac>
     <copy todir="${build.home}/${basic.name}/WEB-INF/classes">
         <fileset dir="${basedir}/web/${basic.name}/WEB-INF/src"
+                 includes="**/*.properties"/>
+    </copy>
+  </target>
+
+  <target name="compile.cardemo.sample"
+          description="Compile java files in the sample app named app.name">
+    <property name="cardemo.name"  value="cardemo"/>
+    <mkdir dir="${build.home}/${cardemo.name}/WEB-INF/classes"/>
+    <javac  srcdir="${basedir}/web/${cardemo.name}/WEB-INF/src"
+           destdir="${build.home}/${cardemo.name}/WEB-INF/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+    <copy todir="${build.home}/${cardemo.name}/WEB-INF/classes">
+        <fileset dir="${basedir}/web/${cardemo.name}/WEB-INF/src"
                  includes="**/*.properties"/>
     </copy>
   </target>
