@@ -1,5 +1,5 @@
 /*
- * $Id: Tree.java,v 1.1 2002/05/14 15:02:29 craigmcc Exp $
+ * $Id: Tree.java,v 1.2 2002/05/20 17:17:35 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.tree;
 
 
 import javax.faces.component.UIComponent;
+import javax.faces.render.RenderKit;
 
 
 /**
@@ -26,6 +27,23 @@ public abstract class Tree {
 
 
     // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return the {@link RenderKit} instance (if any) associated with
+     * this <code>Tree</code>.</p>
+     */
+    public abstract RenderKit getRenderKit();
+
+
+    /**
+     * <p>Set the {@link RenderKit} instance (if any) associated with
+     * this <code>Tree</code>.</p>
+     *
+     * @param renderKit The new {@link RenderKit}, or <code>null</code>
+     *  to disassociate this tree with any specific RenderKit instance
+     */
+    public abstract void setRenderKit(RenderKit renderKit);
 
 
     /**

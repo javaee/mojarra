@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.12 2002/05/18 20:33:47 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.13 2002/05/20 17:17:35 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Locale;
 import javax.faces.FacesException;     // FIXME - subpackage?
 import javax.faces.component.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.render.RenderKit;
 import javax.faces.tree.Tree;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
@@ -126,25 +125,6 @@ public abstract class FacesContext {
      * @param phaseId The new phase identifier
      */
     public abstract void setPhaseId(int phaseId);
-
-
-    /**
-     * <p>Return the {@link RenderKit} instance that is used during the
-     * <em>Render Response</em> phase of the request processing lifecycle.</p>
-     */
-    public abstract RenderKit getRenderKit();
-
-
-    /**
-     * <p>Set the {@link RenderKit} instance that is used during the
-     * <em>Render Response</em> phase of the request processing lifecycle.</p>
-     *
-     * @param renderKit The new RenderKit instance
-     *
-     * @exception NullPointerException if <code>renderKit</code>
-     *  is <code>null</code>
-     */
-    public abstract void setRenderKit(RenderKit renderKit);
 
 
     /**
