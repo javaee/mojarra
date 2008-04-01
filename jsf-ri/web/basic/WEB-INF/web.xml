@@ -6,9 +6,6 @@
   
   <display-name>Faces Basic Components Demo</display-name>
   <listener>
-    <listener-class>basic.HttpSessionListenerImpl</listener-class>
-  </listener>
-  <listener>
     <listener-class>com.sun.faces.servlet.SessionListener</listener-class>
   </listener>
 

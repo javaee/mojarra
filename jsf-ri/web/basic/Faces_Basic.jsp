@@ -4,6 +4,11 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <faces:UseFaces>
+        <faces:DeclareBean scope="session" name="LoginBean" 
+                           className="basic.LoginBean"/>
+        <faces:DeclareBean scope="session" name="ShipTypeBean" 
+                           className="basic.LoginBean"/>
+
         <faces:Form name='basicForm' model="LoginBean">
             <faces:Listener name="loginListener" scope="session" className="basic.EventHandler" />
             <faces:Listener name="selectOneListener" scope="session" className="basic.EventHandler" />
