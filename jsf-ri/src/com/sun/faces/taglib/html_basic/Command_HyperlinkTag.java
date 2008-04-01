@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.4 2001/11/17 01:33:00 edburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.5 2001/11/21 17:50:41 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.4 2001/11/17 01:33:00 edburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.5 2001/11/21 17:50:41 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,6 +172,9 @@ public class Command_HyperlinkTag extends TagSupport
         } catch (java.io.IOException e) {
             throw new JspException("Problem rendering component: "+
                 e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem rendering component: "+
+                f.getMessage());
         }
 
         return (EVAL_BODY_INCLUDE);
