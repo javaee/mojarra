@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.26 2002/08/01 23:47:35 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.27 2002/08/02 19:31:59 jvisvanathan Exp $
  */
 
 /*
@@ -34,6 +34,11 @@ import org.apache.commons.beanutils.ConversionException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import javax.faces.event.FormEvent;
+import javax.faces.component.UICommand;
+import com.sun.faces.RIConstants;
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  *
@@ -41,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.26 2002/08/01 23:47:35 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.27 2002/08/02 19:31:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,6 +103,37 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+        
+        // Was our command the one that caused this submission?
+        Object value = component.currentValue(context);
+        String commandName = null;
+        if (value != null) {
+            commandName = value.toString();
+            if (context.getServletRequest().getParameter(commandName) == null) {
+                return;
+            }
+        } else {
+            return;
+        }
+
+        // Does the extra path info on this request identify a form submit?
+        String pathInfo = (String) context.getServletRequest().getAttribute
+          ("javax.servlet.include.path_info");
+        if (pathInfo == null) {
+          pathInfo =
+            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
+        }
+        if (pathInfo == null) {
+            return;
+        }
+        if (!pathInfo.startsWith(RIConstants.FORM_PREFIX)) {
+            return;
+        }
+        String formName = pathInfo.substring(RIConstants.FORM_PREFIX.length() + 1);
+
+        // Enqueue a form event to the application
+        context.addApplicationEvent
+            (new FormEvent(component, formName, commandName));            
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -105,7 +141,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
     }
     
     public void encodeChildren(FacesContext context, UIComponent component) {

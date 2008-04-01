@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.23 2002/08/02 00:11:03 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.24 2002/08/02 19:32:00 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.23 2002/08/02 00:11:03 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.24 2002/08/02 19:32:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,8 +123,9 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         Object convertedValue = null;
         try {
             convertedValue = ConvertUtils.convert(newValue, modelType);
+            component.setValid(true);
         } catch (ConversionException ce ) {
-            //PENDING - FIXME - add error message to messageList
+           addConversionErrorMessage( context, component, ce.getMessage()); 
         }
 
         // PENDING(rogerk) store failed conversion value in other

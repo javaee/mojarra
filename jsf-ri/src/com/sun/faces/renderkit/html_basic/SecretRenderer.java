@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.23 2002/08/01 23:47:37 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.24 2002/08/02 19:32:01 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.23 2002/08/01 23:47:37 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.24 2002/08/02 19:32:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,8 +127,9 @@ public class SecretRenderer extends HtmlBasicRenderer {
         Object convertedValue = null;
         try {
             convertedValue = ConvertUtils.convert(newValue, modelType);
+            component.setValid(true);
         } catch (ConversionException ce ) {
-            //PENDING (rogerk) add error message to messageList
+            addConversionErrorMessage( context, component, ce.getMessage()); 
         }
 
         if ( convertedValue == null ) {

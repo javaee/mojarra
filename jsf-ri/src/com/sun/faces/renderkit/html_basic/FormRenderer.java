@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.32 2002/08/01 23:47:35 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.33 2002/08/02 19:31:59 jvisvanathan Exp $
  */
 
 /*
@@ -22,8 +22,6 @@ import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.FacesException;
-import javax.faces.event.FormEvent;
-import javax.faces.component.UICommand;
 import com.sun.faces.RIConstants;
 
 import org.mozilla.util.Assert;
@@ -42,7 +40,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.32 2002/08/01 23:47:35 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.33 2002/08/02 19:31:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,83 +97,14 @@ public class FormRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
-        // Does the extra path info on this request identify a form submit
-        // for this UIForm component?
-        String pathInfo = 
-            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
-       
-        if (pathInfo == null) {
-            return;
-        }
-        if (!pathInfo.startsWith(RIConstants.FORM_PREFIX)) {
-            return;
-        }
-        String formName = pathInfo.substring(RIConstants.FORM_PREFIX.length());
-        int slash = formName.indexOf('/');
-        if (slash >= 0) {
-            formName = formName.substring(0, slash);
-        }
-        if (!formName.equals(component.currentValue(context))) {
-            return;
-        }
-
-        // Which of our nested UICommand children triggered this submit?
-        // PENDING(visvan)- assumes commandName won't have name clash 
-        // with components!
-        String commandName =
-            extract(context, context.getServletRequest(), component);
-        // Enqueue a form event to the application
-        context.addApplicationEvent
-            (new FormEvent(component, formName, commandName));
     }
     
-    /**
-     * <p>Extract the command name of the child {@link UICommand} that
-     * caused this form to be submitted.  The specified component, and
-     * all of its children, are to be checked.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param request ServletRequest we are processing
-     * @param component Component to be checked
-     */
-    private String extract(FacesContext context, ServletRequest request,
-                           UIComponent component) {
-
-        // Check the current component
-        if ((component.getComponentType()).equals(UICommand.TYPE)) {
-            Object value = component.currentValue(context);
-            if (value != null) {
-                String commandName = value.toString();
-                if (request.getParameter(commandName) != null) {
-                    return (commandName);
-                } else if (request.getParameter(commandName+".x") != null &&
-                    request.getParameter(commandName+".y") != null) {
-                    return (commandName);
-                }
-            }
-        }
-
-        // Check the children of the current component
-        Iterator kids = component.getChildren();
-        while (kids.hasNext()) {
-            String commandName =
-                extract(context, request, (UIComponent) kids.next());
-            if (commandName != null) {
-                return (commandName);
-            }
-        }
-
-        // No matching command name was found
-        return (null);
-    }
-
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-       
+      
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
         

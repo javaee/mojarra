@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.24 2002/08/02 00:11:03 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.25 2002/08/02 19:32:00 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.24 2002/08/02 00:11:03 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.25 2002/08/02 19:32:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,8 +133,9 @@ public class RadioRenderer extends HtmlBasicRenderer {
         
         try {
             convertedValue = ConvertUtils.convert(newValue, modelType);
+            component.setValid(true);
         } catch (ConversionException ce ) {
-            //PENDING (visvan) add error message to messageList
+            addConversionErrorMessage( context, component, ce.getMessage()); 
         }    
             
         if ( convertedValue == null ) {

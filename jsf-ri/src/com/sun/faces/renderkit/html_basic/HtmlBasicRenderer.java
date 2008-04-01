@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.2 2002/08/01 23:47:36 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.3 2002/08/02 19:32:00 jvisvanathan Exp $
  */
 
 /*
@@ -21,6 +21,9 @@ import java.util.NoSuchElementException;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.render.Renderer;
+import javax.faces.context.Message;
+import javax.faces.context.MessageResources;
+import javax.faces.context.FacesContext;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -147,6 +150,19 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }     
         return supportsComponentType(component.getComponentType());
+    }
+    
+    public void addConversionErrorMessage( FacesContext facesContext, 
+            UIComponent comp, String errorMessage ) {
+        Object[] params = new Object[3];
+        params[0] = comp.getValue();
+        params[1] = comp.getModelReference();
+        params[2] = errorMessage; 
+        MessageResources resources = Util.getMessageResources();
+        Assert.assert_it( resources != null );
+        Message msg = resources.getMessage(facesContext, 
+                Util.CONVERSION_ERROR_MESSAGE_ID,params);
+        facesContext.addMessage(comp, msg);
     }
 
 } // end of class HtmlBasicRenderer

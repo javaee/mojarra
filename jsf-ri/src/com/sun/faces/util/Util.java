@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.18 2002/08/02 01:43:12 eburns Exp $
+ * $Id: Util.java,v 1.19 2002/08/02 19:32:10 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.18 2002/08/02 01:43:12 eburns Exp $
+ * @version $Id: Util.java,v 1.19 2002/08/02 19:32:10 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -68,6 +68,13 @@ public class Util extends Object
      */
     public static final String CONVERSION_ERROR_MESSAGE_ID =
         "com.sun.faces.TYPECONVERSION_ERROR";
+    
+    /**
+     * The message identifier of the {@link Message} to be created if
+     * there is model update failure.
+     */
+    public static final String MODEL_UPDATE_ERROR_MESSAGE_ID =
+        "com.sun.faces.MODELUPDATE_ERROR";
 
     public static final String FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID = 
 	"com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR";

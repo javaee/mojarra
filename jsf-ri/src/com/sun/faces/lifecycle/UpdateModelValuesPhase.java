@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.10 2002/08/01 20:51:30 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.11 2002/08/02 19:31:57 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.10 2002/08/01 20:51:30 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.11 2002/08/02 19:31:57 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -72,28 +72,26 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 					     UIComponent comp) throws FacesException {
 		int rc = Phase.GOTO_NEXT;
 		String model = null,
-		    message = null;
+		message = null;
 		
-		if (null != (model = comp.getModelReference())) {
-		    try {
-			facesContext.setModelValue(model, comp.getValue());
-		    }
-		    catch (Throwable e) {
-                        Object[] params = new Object[3];
-                        params[0] = comp.getValue();
-                        params[1] = model;
-                        params[2] = e.getMessage(); 
-			MessageResources resources = Util.getMessageResources();
-                        Assert.assert_it( resources != null );
-                        Message msg = resources.getMessage(facesContext, 
-                                Util.CONVERSION_ERROR_MESSAGE_ID,params);
-			facesContext.addMessage(comp, msg);
-                    }
-		}
-		
-		return rc;
-	    }
-	};
+		try {
+                    comp.updateModel(facesContext);
+                }
+                catch (Throwable e) {
+                    Object[] params = new Object[3];
+                    params[0] = comp.getValue();
+                    params[1] = model;
+                    params[2] = e.getMessage(); 
+                    MessageResources resources = Util.getMessageResources();
+                    Assert.assert_it( resources != null );
+                    Message msg = resources.getMessage(facesContext, 
+                            Util.MODEL_UPDATE_ERROR_MESSAGE_ID,params);
+                    facesContext.addMessage(comp, msg);
+                }
+                return rc;
+            }
+	   
+	 };
     clearValues = new LifecycleCallback() {
 	    public int takeActionOnComponent(FacesContext facesContext,
 					     UIComponent comp) throws FacesException {

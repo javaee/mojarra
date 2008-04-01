@@ -20,6 +20,9 @@
   <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
       <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
   </message>
+  <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Model Update failure." >
+      <detail>Error updating value {0} for model {1} : Exception: [2].</detail>
+  </message>
 
   <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Construction Error." >
       <detail>Cannot create FacesContext.  One or more input paramters might be null.</detail>

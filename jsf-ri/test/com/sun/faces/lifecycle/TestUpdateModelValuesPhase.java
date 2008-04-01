@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.10 2002/08/02 01:17:41 eburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.11 2002/08/02 19:32:12 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.10 2002/08/02 01:17:41 eburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.11 2002/08/02 19:32:12 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,16 +105,19 @@ public void testUpdateNormal()
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${TestBean.one}");
+    userName.setValid(true);
     form.addChild(userName);
     userName1 = new UITextEntry();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
     userName1.setModelReference("${TestBean.one}");
+    userName1.setValid(true);
     form.addChild(userName1);
     userName2 = new UITextEntry();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
     userName2.setModelReference("${TestBean.one}");
+    userName2.setValid(true);
     form.addChild(userName2);
 
     tree = new XmlTreeImpl(config.getServletContext(), form, 
@@ -147,17 +150,20 @@ public void testUpdateFailed()
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
+    userName.setValid(true);
     userName.setModelReference("${UserBean.one}");
     form.addChild(userName);
     userName1 = new UITextEntry();
     userName1.setComponentId("userName1");
     userName1.setValue("one");
+    userName1.setValid(true);
     userName1.setModelReference("${TestBean.one}");
     form.addChild(userName1);
     userName2 = new UITextEntry();
     userName2.setComponentId("userName2");
     userName2.setValue("one");
     userName2.setModelReference("${TestBean.one}");
+    userName2.setValid(true);
     form.addChild(userName2);
 
     tree = new XmlTreeImpl(config.getServletContext(), form,

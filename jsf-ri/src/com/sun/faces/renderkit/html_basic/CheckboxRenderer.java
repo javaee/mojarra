@@ -1,5 +1,6 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.27 2002/08/01 23:47:35 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.28 2002/08/02 19:31:59 jvisvanathan Exp $
+ *
  */
 
 /*
@@ -39,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.27 2002/08/01 23:47:35 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.28 2002/08/02 19:31:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -137,8 +138,9 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         Object convertedValue = null;
         try {
             convertedValue = ConvertUtils.convert(newValue, modelType);
+            component.setValid(true);
         } catch (ConversionException ce ) {
-            //PENDING - FIXME - add error message to messageList
+            addConversionErrorMessage( context, component, ce.getMessage()); 
         }
 
         // PENDING(rogerk) store failed conversion value in other

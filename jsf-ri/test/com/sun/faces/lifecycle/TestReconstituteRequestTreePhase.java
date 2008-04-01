@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteRequestTreePhase.java,v 1.2 2002/08/02 01:17:40 eburns Exp $
+ * $Id: TestReconstituteRequestTreePhase.java,v 1.3 2002/08/02 19:32:11 jvisvanathan Exp $
  */
 
 /*
@@ -32,6 +32,7 @@ import com.sun.faces.RIConstants;
 
 import com.sun.faces.ServletFacesTestCase;
 import javax.servlet.http.HttpSession;
+import javax.faces.render.RenderKitFactory;
 import java.util.Locale;
 
 /**
@@ -40,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteRequestTreePhase.java,v 1.2 2002/08/02 01:17:40 eburns Exp $
+ * @version $Id: TestReconstituteRequestTreePhase.java,v 1.3 2002/08/02 19:32:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,7 +116,9 @@ public void testReconstituteRequestInitial()
     assertTrue(null != getFacesContext().getRequestTree());
     assertTrue(getFacesContext().getRequestTree() == 
 	       getFacesContext().getResponseTree());
-    assertTrue(null != getFacesContext().getRequestTree().getRenderKitId());
+    assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
+            getFacesContext().getRequestTree().getRenderKitId());
+
     assertTrue(null != getFacesContext().getRequestTree().getRoot());
     assertTrue(null != getFacesContext().getLocale());
     
@@ -169,7 +172,9 @@ public void testReconstituteRequestSubmit()
     assertTrue(null != getFacesContext().getRequestTree());
     assertTrue(getFacesContext().getRequestTree() == 
 	       getFacesContext().getResponseTree());
-    assertTrue(null != getFacesContext().getRequestTree().getRenderKitId());
+    assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
+            getFacesContext().getRequestTree().getRenderKitId());
+
     assertTrue(null != getFacesContext().getRequestTree().getRoot());
     assertTrue(locale == getFacesContext().getLocale());
     
