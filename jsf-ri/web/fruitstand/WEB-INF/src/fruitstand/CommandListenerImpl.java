@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.5 2002/03/07 23:45:08 eburns Exp $
+ * $Id: CommandListenerImpl.java,v 1.6 2002/03/08 00:24:51 jvisvanathan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -51,7 +51,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.5 2002/03/07 23:45:08 eburns Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.6 2002/03/08 00:24:51 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -267,6 +267,10 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
             }
         }
     }
+}
+
+public boolean requiresValidation(CommandEvent ce) {
+    return false;
 }
 
 

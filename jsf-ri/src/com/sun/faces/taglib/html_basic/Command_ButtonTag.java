@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.20 2002/02/05 18:57:03 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.21 2002/03/08 00:24:50 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.20 2002/02/05 18:57:03 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.21 2002/03/08 00:24:50 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,6 +135,11 @@ public class Command_ButtonTag extends FacesTag {
 	ParameterCheck.nonNull(comp);
         comp.setAttribute("image", getImage());
         comp.setAttribute("label", getLabel());
+        if ( commandName == null ) {
+            comp.setAttribute("commandName", getId());
+        } else {
+            comp.setAttribute("commandName", getCommandName());
+        }    
     }
 
     public String getRendererType() {

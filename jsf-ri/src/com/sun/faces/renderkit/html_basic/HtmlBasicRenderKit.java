@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.21 2002/03/07 23:45:07 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.22 2002/03/08 00:24:49 jvisvanathan Exp $
  */
 
 /*
@@ -40,15 +40,13 @@ import javax.faces.UISelectOne;
 import javax.faces.EventContext;
 import javax.faces.ObjectManager;
 
-import com.sun.faces.util.Util;
-
 /**
  *
  *  <B>HtmlBasicRenderKit</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.21 2002/03/07 23:45:07 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.22 2002/03/08 00:24:49 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -174,7 +172,7 @@ public Renderer getRenderer(String name) throws FacesException {
     Assert.assert_it(null != className);
 
     try {
-	rendererClass = Util.loadClass(className);
+	rendererClass = Class.forName(className);
 	result = (Renderer) rendererClass.newInstance();
     }
     catch (IllegalAccessException e) {
@@ -251,62 +249,32 @@ public void queueEvents(EventContext eventContext) {
             int name_idx = Constants.REF_HIDDENCHECKBOX.length();
             param_name = param_name.substring(name_idx);
         }
-
-        // PENDING ( visvan ) type of the component and model should be
-        // encoded as a hidden field so that it need not be obtained
-        // from the ObjectManager since the component may not exist in
-        // the pool. Also value should also be encoded as a hidden
-        // field so that change in values can be detected without UIComponent.
-
         c = (UIComponent)(objectManager.get(request,param_name));
         // if the component is not found then it might not have been a
         // faces component or it was not stored in OBJECTMANAGER because of the scope.
         if ( c == null ) {
             continue;
         }
-
-        // add value change events first. Because they should
-        // be processed before command events.
-        if ( c instanceof UITextEntry || c instanceof UISelectBoolean ||
-	     c instanceof UISelectOne) {
-             String old_value = null;
-             String model_str = null;
-             // check in for Component types will be removed
-             // once we support encoding of types using 
-             /// hidden fields.	
-            if ( c instanceof UITextEntry ) {
-                UITextEntry te = (UITextEntry) c;
-                old_value = te.getText(rc);
-                model_str = (String) te.getModelReference();
-            } else if (c instanceof UISelectBoolean) {
-                UISelectBoolean sb = (UISelectBoolean) c;
-                boolean old_state = sb.isSelected(rc);
-                old_value = String.valueOf(old_state);
-                model_str = (String) sb.getModelReference();
-            } else if (c instanceof UISelectOne) {
-		UISelectOne so = (UISelectOne) c;
-		old_value = (String) so.getSelectedValue(rc);
-		model_str = (String) so.getSelectedModelReference();
-	    }
-
-            // construct value changed event objects and put in the queue.
-            ValueChangeEvent e =  new ValueChangeEvent(eventContext, c, 
-						       param_value);
-            if ( old_value != null && old_value.compareTo(param_value) != 0 ) {
+        // if value changed, update the local value in the component's 
+        // attribute set and create valueChangeEvent to add to eventQueue
+        if ( ! (c instanceof UICommand ) ) {
+            String old_value = (String) c.getValue(rc);
+            if ( old_value == null || !(old_value.equals(param_value))) {
+                ValueChangeEvent e =  new ValueChangeEvent(eventContext,
+                        c, param_value);
                 eventQueue.add(e);
-            } else if ( old_value == null ) {
-                eventQueue.add(e);
-            }
-	} else if ( c instanceof UICommand) {
-            CommandEvent e =  new CommandEvent(eventContext, c, param_value);
-            cmd_events.add(e);
+                c.setValue(param_value);
+            }    
+	} else { 
+            CommandEvent cmd_event =  new CommandEvent(eventContext, c, 
+					       param_value);
+            cmd_events.add(cmd_event);
         }
-
     }
     // add command events to the end of the queue
     for ( int i = 0; i < cmd_events.size(); ++i ) {
-        CommandEvent e = (CommandEvent) cmd_events.elementAt(i);
-        eventQueue.add(e);
+        CommandEvent cmd_event = (CommandEvent) cmd_events.elementAt(i);
+        eventQueue.add(cmd_event);
     }
 }
 									

@@ -14,6 +14,9 @@
         <faces:DeclareBean scope="session" id="ShipTypeBean" 
                            className="basic.ShipTypeBean"/>
 
+         <faces:DeclareBean scope="session" id="DateValidator"
+                           className="basic.DateValidator"/>
+
         <faces:NavigationMap id="navMap" scope="session" >
             <faces:outcome commandName="login" outcome="success" targetAction="forward"
                     targetPath = "welcome.jsp" />
@@ -26,11 +29,36 @@
             <faces:Listener id="loginListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="radioListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="optionListener" scope="session" className="basic.EventHandler" />
-
-           <table> 
+           
+            <table> 
             <tr> 
               <td> <faces:Output_Text id="userLabel"  value="UserName" /> </td>
-              <td> <faces:TextEntry_Input id="userName" size="20" maxlength="26" value="default" valueChangeListener="loginListener" />  </td>
+              <td> <faces:TextEntry_Input id="userName" 
+                                          value="default" 
+                                          valueChangeListener="loginListener"  
+                                          required = "true"
+                                          lengthMinimum="1"
+                                          lengthMaximum="15" />
+              </td>
+            </tr>
+
+            <tr>
+              <td> <faces:Output_Text id="pinLabel"  value="Pin Number" /> </td>
+              <td> <faces:TextEntry_Input id="pin"
+                                          required = "true"
+                                          modelType ="java.lang.Integer"
+                                          rangeMinimum="1"
+                                          rangeMaximum="1000" />
+              </td>
+            </tr>
+
+            <tr>
+              <td> <faces:Output_Text id="dobLabel"  value="Date of Birth" /> </td>
+
+              <td> <faces:TextEntry_Input id="dob"
+                                          required = "true"
+                                          converter="DateValidator" />
+              </td>
             </tr>
 
              <tr>

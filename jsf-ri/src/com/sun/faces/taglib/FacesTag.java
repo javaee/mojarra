@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.3 2002/02/06 20:05:52 edburns Exp $
+ * $Id: FacesTag.java,v 1.4 2002/03/08 00:24:50 jvisvanathan Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.RenderContext;
 import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.taglib.html_basic.FormTag;
 
 /**
  *
@@ -32,7 +33,7 @@ import com.sun.faces.util.Util;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.3 2002/02/06 20:05:52 edburns Exp $
+ * @version $Id: FacesTag.java,v 1.4 2002/03/08 00:24:50 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,7 +62,7 @@ public abstract class FacesTag extends TagSupport
 // Relationship Instance Variables
 
     protected RenderContext renderContext = null;
-
+    protected ObjectManager objectManager = null;
 //
 // Constructors and Initializers    
 //
@@ -131,6 +132,23 @@ public FacesTag()
         // scope. This should be fixed later.
         objectManager.put(pageContext.getSession(), getId(), c);
     }
+    
+    public void addToParent(UIComponent c, ObjectManager objectManager ) {
+        // get the UIForm component which is the parent
+        // of this component.
+        FormTag ancestor = null;
+        try {
+            ancestor = (FormTag) findAncestorWithClass(this,
+                    FormTag.class);
+            String formId  = ancestor.getId();
+            UIComponent parentForm = (UIComponent) objectManager.get(pageContext.getRequest(),
+                    formId);
+            Assert.assert_it ( parentForm != null );
+            parentForm.add(c);
+        } catch ( Exception e ) {
+            // If form tag cannot be found then model is null
+        }
+    }   
 
 // 
 // Methods to be overridden by subclass
@@ -191,6 +209,8 @@ public abstract String getRendererType();
 
 public void addListeners(UIComponent comp) throws JspException {}
 
+public void addValidators(UIComponent comp) throws JspException {}
+
 //
 // Methods from TagSupport
 // 
@@ -201,7 +221,8 @@ public void addListeners(UIComponent comp) throws JspException {}
      */
     public int doStartTag() throws JspException {
 	String rendererType = null;
-        ObjectManager objectManager = (ObjectManager) pageContext.getServletContext().getAttribute(Constants.REF_OBJECTMANAGER);
+        objectManager = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
         renderContext = (RenderContext)objectManager.get(pageContext.getSession(),
@@ -223,16 +244,22 @@ public void addListeners(UIComponent comp) throws JspException {}
 						      getId());
         if ( uiComponent == null ) {
             uiComponent = newComponentInstance();
+            // Id should be set before adding the component to the tree.
+            uiComponent.setId(getId());
             addToScope(uiComponent, objectManager);
-        }
-
-        uiComponent.setId(getId());
-
-	// Call subclass methods
-	setAttributes(uiComponent);
-	addListeners(uiComponent);
-
-        // 3. Render the component, if it has a renderer
+            addToParent(uiComponent, objectManager);
+            // listeners and validators should be added only at the time the 
+            // component is created.
+            addListeners(uiComponent);
+            addValidators(uiComponent);
+         }
+        
+         // Call subclass methods
+         // PENDING ( visvan ) attributes should be set only the first except
+         // for optionList and Radio Tags ??
+	 setAttributes(uiComponent);
+         
+	 // 3. Render the component, if it has a renderer
         //
 	if (null != (rendererType = getRendererType())) {
 	    try {

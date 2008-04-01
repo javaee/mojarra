@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.11 2002/01/24 00:35:23 rogerk Exp $
+ * $Id: InputRenderer.java,v 1.12 2002/03/08 00:24:49 jvisvanathan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.11 2002/01/24 00:35:23 rogerk Exp $
+ * @version $Id: InputRenderer.java,v 1.12 2002/03/08 00:24:49 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,6 +149,15 @@ public class InputRenderer extends Object implements Renderer
             output.append("\"");
         }
         output.append(">");
+        // PENDING ( visvan ) this should go away once we integrate
+        // Gary's proposal. This is temporary solution to display
+        // error messages that come out of validation although
+        // calling setAttibutes() from renderer is a bad thing to do. 
+        String errorMessage = (String)textField.getAttribute(rc, "errorMessage");
+        if ( errorMessage != null ) {
+            output.append(errorMessage);
+            textField.setAttribute("errorMessage", null);
+        }    
         outputMethod.writeText(output.toString());
         outputMethod.flush();
             

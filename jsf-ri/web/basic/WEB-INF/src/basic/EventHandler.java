@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.6 2002/03/07 23:45:08 eburns Exp $
+ * $Id: EventHandler.java,v 1.7 2002/03/08 00:24:51 jvisvanathan Exp $
  */
 
 /*
@@ -56,5 +56,8 @@ public class EventHandler implements CommandListener,ValueChangeListener{
        System.out.println("ValueChangeEvent processing successful");
     }
 
+    public boolean requiresValidation(CommandEvent e ) {
+        return true;
+    }
     
 }

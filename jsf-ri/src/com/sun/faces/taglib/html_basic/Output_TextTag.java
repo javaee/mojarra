@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.22 2002/02/14 03:57:40 edburns Exp $
+ * $Id: Output_TextTag.java,v 1.23 2002/03/08 00:24:50 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.22 2002/02/14 03:57:40 edburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.23 2002/03/08 00:24:50 jvisvanathan Exp $
  * 
  *
  */
@@ -114,7 +114,7 @@ public class Output_TextTag extends FacesTag
                 // If form tag cannot be found then model is null
             }
         }
-        if ( value != null ) {
+        if ( out.getValue(renderContext) == null && value != null ) {
             out.setValue(value);
         }
     }

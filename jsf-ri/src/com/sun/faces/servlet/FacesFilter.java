@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.3 2002/01/25 18:45:17 visvan Exp $
+ * $Id: FacesFilter.java,v 1.4 2002/03/08 00:24:49 jvisvanathan Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import com.sun.faces.ObjectAccessorFactory;
 import com.sun.faces.ObjectManagerFactory;
 import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.util.Util;
+import com.sun.faces.ConverterManagerFactory;
 
 import javax.faces.Constants;
 import javax.faces.EventContext;
@@ -35,6 +36,7 @@ import javax.faces.UISelectOne;
 import javax.faces.UITextEntry;
 import javax.faces.UISelectBoolean;
 import javax.faces.NavigationHandler;
+import javax.faces.ConverterManager;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -101,6 +103,7 @@ public class FacesFilter implements Filter {
         EventContextFactory ecFactory;
         ObjectAccessorFactory oaFactory;
         NavigationHandlerFactory nhFactory;
+        ConverterManager converterManager = null;
 
         ServletContext servletContext = config.getServletContext();
         Assert.assert_it(null != servletContext);
@@ -196,6 +199,24 @@ public class FacesFilter implements Filter {
         Assert.assert_it(null != nhFactory);
         objectManager.put(servletContext,
                         Constants.REF_NAVIGATIONHANDLERFACTORY, nhFactory);
+
+        // Step 7 create an instance of ConverterManager
+        // and put it in Application scope.
+        converterManager = (ConverterManager)objectManager.get(
+            Constants.REF_CONVERTERMANAGER);
+
+        // The converterManager must not exist at this point.  It is an
+        // error if it does exist.
+        // PENDING(visvan)  ConverterManager should be request scoped
+        // to avoid threading issues. 
+        Assert.assert_it(null == converterManager);
+
+        ConverterManagerFactory cmFactory = ConverterManagerFactory.newInstance();
+        Assert.assert_it(null != cmFactory);
+
+        converterManager = cmFactory.newConverterManager(servletContext);
+        objectManager.put(servletContext,
+                        Constants.REF_CONVERTERMANAGER, converterManager);
     }
 
     /**
@@ -399,6 +420,7 @@ public class FacesFilter implements Filter {
         }
         int targetAction = nh.getTargetAction();
         String targetPath = nh.getTargetPath();
+        System.out.println("targetPath " + targetPath);
         // if targetAction is pass or undefined, continue with rendering
         // without navigation.
         if ( targetPath != null && (targetAction != NavigationHandler.UNDEFINED ||
