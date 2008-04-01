@@ -214,7 +214,17 @@
 
       </TR>
 
+      <TR>
 
+        <TD>InputTime: 
+        </TD>
+
+	<TD><faces:input_time id="date6" 
+                          value="12:31:31 PM"
+                          timeStyle="MEDIUM" />
+	</TD>
+
+      </TR>
 
   <TABLE>
 

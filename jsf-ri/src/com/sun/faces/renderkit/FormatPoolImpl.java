@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.6 2002/08/17 00:57:02 jvisvanathan Exp $
+ * $Id: FormatPoolImpl.java,v 1.7 2002/08/17 21:57:10 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.6 2002/08/17 00:57:02 jvisvanathan Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.7 2002/08/17 21:57:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -55,6 +55,7 @@ public class FormatPoolImpl extends Object implements FormatPool
 
     static final int DATEINSTANCE = 0;
     static final int DATETIMEINSTANCE = 1;
+    static final int TIMEINSTANCE = 2;
 
 //
 // Class Variables
@@ -185,7 +186,7 @@ public FormatPoolImpl()
 	formatPattern = (String) component.getAttribute("formatPattern");
 	
 	hashKey = locale.toString() + dateStyle + timeStyle + timezone + 
-	    formatPattern;
+	    formatPattern + formatVariety;
 	
 	// Look in the formatters map
 	if (null == (dateFormat = (DateFormat) formatters.get(hashKey))) {
@@ -200,6 +201,9 @@ public FormatPoolImpl()
 		dateFormat = DateFormat.getDateTimeInstance(dateStyleInt, 
 							    timeStyleInt,
 							    locale);
+		break;
+	    case TIMEINSTANCE:
+		dateFormat = DateFormat.getTimeInstance(timeStyleInt, locale);
 		break;
 	    default:
 		Assert.assert_it(false);
@@ -332,7 +336,28 @@ public FormatPoolImpl()
 	result = dateTimeFormat.parse(date);
 	return result;
     }
+
+    public synchronized String timeFormat_format(FacesContext context, 
+						 UIComponent component, 
+						 Date date) {
+	String result = null;
+	DateFormat timeFormat = getDateFormat(context, component,
+					      TIMEINSTANCE);
+	
+	result = timeFormat.format(date);
+	return result;
+    }
     
+    public synchronized Date timeFormat_parse(FacesContext context, 
+					      UIComponent component, 
+					      String date) throws ParseException {
+	Date result = null;
+	DateFormat timeFormat = getDateFormat(context, component,
+					      TIMEINSTANCE);
+	
+	result = timeFormat.parse(date);
+	return result;
+    }
 
     
     public synchronized String numberFormat_format(FacesContext context, 

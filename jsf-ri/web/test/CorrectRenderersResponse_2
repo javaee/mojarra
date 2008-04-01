@@ -8,9 +8,9 @@
 	<OPTION VALUE="Yellow">Yellow</OPTION>
 </SELECT>
 <input type="password" name="/my_secret" value="">
-<input type="text" name="/my_input_text" value="text"><input type="text" name="/my_input_date" value="Jan 12, 1952"><input type="text" name="/my_input_date2" value="Sat, Jan 12, 1952 AD at 12:31:31 PM">Jan 12, 1952Sat, Jan 12, 1952 AD at 12:31:31 PMinvalidDate
+<input type="text" name="/my_input_text" value="text"><input type="text" name="/my_input_date" value="Jan 12, 1952"><input type="text" name="/my_input_time" value="12:31:31 PM"><input type="text" name="/my_input_date2" value="Sat, Jan 12, 1952 AD at 12:31:31 PM">Jan 12, 1952Sat, Jan 12, 1952 AD at 12:31:31 PMinvalidDate
 <textarea  name="/my_textarea"> TextAreaRenderer</TEXTAREA>
 <input type="text" name="/my_number" value="47%"><input type="text" name="/my_number2" value="1999.877">
 99%
 999.000
-<img src="">
+<img src=";jsessionid=5204D252E563F074B585C1E59888D747">

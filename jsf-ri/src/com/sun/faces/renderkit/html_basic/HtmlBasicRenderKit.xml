@@ -1266,6 +1266,203 @@
                 <type>java.lang.String</type>
             </attribute>
         </renderer>
+
+        <renderer>
+            <type>TimeRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.TimeRenderer</class>
+            <attribute>
+                <name>class</name>
+                <display-name>Class Name</display-name>
+                <description>Class Name for this element
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>style</name>
+                <display-name>Style</display-name>
+                <description>Style information for this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>lang</name>
+                <display-name>Language</display-name>
+                <description>
+                    Base language of element's attribute values and content.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+             <attribute>
+                <name>tabindex</name>
+                <display-name>Tab Index</display-name>
+                <description>
+                    Position of this element in the tabbing order.  
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>title</name>
+                <display-name>Title</display-name>
+                <description>
+                    Tool Tip for this element 
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>timeStyle</name>
+                <display-name>Time Style</display-name>
+                <description>
+                    The style to be used to format and parse this dateTime.  See java.text.DateFormat.  Default is MEDIUM
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>timezone</name>
+                <display-name>Timezone</display-name>
+                <description>
+                    The timezone used to format and parse this date.  See java.text.DateFormat.  Default is null.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>disabled</name>
+                <display-name>Disabled</display-name>
+                <description>
+                    If true, this component should be rendered as disabled.
+                </description>
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>readonly</name>
+                <display-name>Read Only</display-name>
+                <description>
+                    If true, this component should be rendered as read only.
+                </description>
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>size</name>
+                <display-name>Size</display-name>
+                <description>
+                    The number of columns in this DateRenderer.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>maxlength</name>
+                <display-name>Max Length</display-name>
+                <description>
+                    The maximum number of characters in this DateRenderer.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>alt</name>
+                <display-name>Alt Text</display-name>
+                <description> The alt text for this component.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>accesskey</name>
+                <display-name>Access Key</display-name>
+                <description>Accessibility key character</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+                <description>The element got the focus.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+                <description>The element lost the focus.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onselect</name>
+                <display-name>On Select</display-name>
+                <description>Some text was selected.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onchange</name>
+                <display-name>On Change</display-name>
+                <description>The element value was changed.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onclick</name>
+                <display-name>On Click</display-name>
+                <description>The element was clicked.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>ondblclick</name>
+                <display-name>On Double Click</display-name>
+                <description>The element was double clicked.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeydown</name>
+                <display-name>On Key Down</display-name>
+                <description>
+                    Key was pressed down over this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeypress</name>
+                <display-name>On Key Press</display-name>
+                <description>
+                    Key was pressed and released over this element 
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeyup</name>
+                <display-name>On Key Up</display-name>
+                <description>
+                    Key was released over this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmousedown</name>
+                <display-name>On Mouse Down</display-name>
+                <description>
+                    Mouse was pressed over this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmousemove</name>
+                <display-name>On Mouse Move</display-name>
+                <description>Mouse was moved over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseout</name>
+                <display-name>On Mouse Out</display-name>
+                <description>
+                    Mouse was moved away from this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseover</name>
+                <display-name>On Mouse Over</display-name>
+                <description>Mouse was moved into this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseup</name>
+                <display-name>On Mouse Up</display-name>
+                <description>Mouse was released over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+        </renderer>
  
         <renderer>
             <type>NumberRenderer</type>
