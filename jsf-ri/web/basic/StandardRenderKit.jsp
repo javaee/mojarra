@@ -10,7 +10,7 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
     <h1>JavaServer Faces 1.0 Standard RenderKit</h1>
-    <h3>$Id: StandardRenderKit.jsp,v 1.2 2002/08/20 20:00:57 eburns Exp $</h3>
+    <h3>$Id: StandardRenderKit.jsp,v 1.3 2002/08/22 00:01:28 rkitain Exp $</h3>
 
     <p>The elements in this page should follow the
     StandardRenderKit.html page in the jsf-api.</p>
@@ -46,6 +46,10 @@
            <%@ include file="graphic_image_row.jsp" %>
 
            <%@ include file="input_date_row.jsp" %>
+
+           <%@ include file="input_text_row.jsp" %>
+
+           <%@ include file="input_secret_row.jsp" %>
 
          </table>
 
