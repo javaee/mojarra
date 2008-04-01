@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.11 2002/07/15 18:02:55 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.12 2002/07/26 03:26:07 craigmcc Exp $
  */
 
 /*
@@ -91,6 +91,7 @@ public class UISelectOne extends UISelectBase {
         String value =
             context.getServletRequest().getParameter(getCompoundId());
         setValue(value);
+        setValid(true);
 
     }
 

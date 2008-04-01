@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.9 2002/07/15 18:02:55 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.10 2002/07/26 03:26:06 craigmcc Exp $
  */
 
 /*
@@ -91,6 +91,7 @@ public class UISelectMany extends UISelectBase {
         String values[] =
             context.getServletRequest().getParameterValues(getCompoundId());
         setValue(values);
+        setValid(true);
 
     }
 

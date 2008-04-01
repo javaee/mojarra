@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.11 2002/07/22 18:28:45 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.12 2002/07/26 03:26:06 craigmcc Exp $
  */
 
 /*
@@ -360,6 +360,45 @@ public abstract class UIComponentBase implements UIComponent {
     public boolean getRendersSelf() {
 
         return (false);
+
+    }
+
+
+    /**
+     * <p>Return <code>true</code> if the <code>decode()</code> method,
+     * called during the <em>Apply Request Values</em> phase of the
+     * request processing lifecycle, was successful in converting the
+     * incoming request parameters into an updated local <code>value</code>.
+     * If conversion was unsuccessful, return <code>false</code>.
+     */
+    public boolean isValid() {
+
+        Boolean valid = (Boolean) getAttribute("valid");
+        if (valid != null) {
+            return (valid.booleanValue());
+        } else {
+            return (false);
+
+        }
+
+    }
+
+
+    /**
+     * <p>Define the value to be returned by the <code>isValid()</code>
+     * method.  This method should only be called from the
+     * <code>decode()</code> method of a {@link Renderer} instance to which
+     * decoding has been delegated for this component.</p>
+     *
+     * @param valid The new <code>valid</code> value
+     */
+    public void setValid(boolean valid) {
+
+        if (valid) {
+            setAttribute("valid", Boolean.TRUE);
+        } else {
+            setAttribute("valid", Boolean.FALSE);
+        }
 
     }
 

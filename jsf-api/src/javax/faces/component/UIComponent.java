@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.40 2002/07/24 01:13:27 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.41 2002/07/26 03:26:06 craigmcc Exp $
  */
 
 /*
@@ -169,6 +169,27 @@ public interface UIComponent extends Serializable {
      * this method to do so.</p>
      */
     public boolean getRendersSelf();
+
+
+    /**
+     * <p>Return <code>true</code> if the <code>decode()</code> method,
+     * called during the <em>Apply Request Values</em> phase of the
+     * request processing lifecycle, was successful in converting the
+     * incoming request parameters into an updated local <code>value</code>.
+     * If conversion was unsuccessful, return <code>false</code>.
+     */
+    public boolean isValid();
+
+
+    /**
+     * <p>Define the value to be returned by the <code>isValid()</code>
+     * method.  This method should only be called from the
+     * <code>decode()</code> method of a {@link Renderer} instance to which
+     * decoding has been delegated for this component.</p>
+     *
+     * @param valid The new <code>valid</code> value
+     */
+    public void setValid(boolean valid);
 
 
     /**

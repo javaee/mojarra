@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.9 2002/07/22 18:28:46 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.10 2002/07/26 03:26:08 craigmcc Exp $
  */
 
 /*
@@ -244,6 +244,18 @@ public class UIComponentTestCase extends TestCase {
                      ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
         assertEquals("rendersSelf1", component.getRendersSelf(),
                      ((Boolean) component.getAttribute("rendersSelf")).booleanValue());
+
+        // valid
+        assertTrue("valid1", !component.isValid());
+        assertNull("valid2", component.getAttribute("valid"));
+        component.setValid(true);
+        assertTrue("valid3", component.isValid());
+        assertTrue("valid4",
+                   ((Boolean) component.getAttribute("valid")).booleanValue());
+        component.setAttribute("valid", Boolean.FALSE);
+        assertTrue("valid5", !component.isValid());
+        assertTrue("valid6",
+                   !((Boolean) component.getAttribute("valid")).booleanValue());
 
         // value
         assertNull("value1", component.getValue());
@@ -627,6 +639,7 @@ public class UIComponentTestCase extends TestCase {
         checkRequestEventHandlerCount(component, 0);
 
         // [3.1.9] Validation Processing
+        assertTrue("valid", !component.isValid());
         checkValidatorCount(component, 0);
 
         // [3.1.10] Decoding and Encoding

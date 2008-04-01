@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.8 2002/07/15 18:08:24 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.9 2002/07/26 03:26:07 craigmcc Exp $
  */
 
 /*
@@ -88,6 +88,7 @@ public class UITextEntry extends UIComponentBase {
         String newValue =
             context.getServletRequest().getParameter(getCompoundId());
         setValue(newValue);
+        setValid(true);
 
     }
 
