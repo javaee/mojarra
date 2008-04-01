@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.3 2002/05/17 05:06:13 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.4 2002/05/21 02:11:09 craigmcc Exp $
  */
 
 /*
@@ -34,15 +34,6 @@ import javax.faces.component.UIComponent;
  */
 
 public abstract class RenderKit {
-
-
-    /**
-     * <p>Return the logical name of this <code>RenderKit</code>.  The
-     * default <code>RenderKit</code> instance for a given JavaServer Faces
-     * implementation shall return
-     * <code>RenderKitFactory.DEFAULT_RENDER_KIT</code></p>
-     */
-    public abstract String getRenderKitId();
 
 
     /**

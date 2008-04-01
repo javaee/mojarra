@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.7 2002/05/20 18:01:58 craigmcc Exp $
+ * $Id: Renderer.java,v 1.8 2002/05/21 02:11:10 craigmcc Exp $
  */
 
 /*
@@ -41,19 +41,6 @@ import javax.faces.context.FacesContext;
  */
 
 public abstract class Renderer {
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the logical name of the type of <code>Renderer</code>
-     * for this instance.  This is used as a lookup key when mapping
-     * {@link UIComponent}s to the corresponding {@link Renderer} instances
-     * during the <em>Render Response</em> phase of the request processing
-     * lifecycle.</p>
-     */
-    public abstract String getRendererType();
 
 
     // ------------------------------------------------------- Metadata Methods

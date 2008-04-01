@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.3 2002/05/17 05:00:30 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.4 2002/05/21 02:11:09 craigmcc Exp $
  */
 
 /*
@@ -50,15 +50,16 @@ public abstract class RenderKitFactory {
      * <p>Register a new {@link RenderKit} instance that is immediately
      * available via this factory instance.</p>
      *
+     * @param renderKitId Identifier of the new RenderKit
      * @param renderKit RenderKit instance that we are registering
      *
      * @exception IllegalArgumentException if the render kit identifier
      *  of the new render kit is either the reserved default value, or
      *  is already registered
-     * @exception NullPointerException if <code>renderKit</code>
-     *  is <code>null</code>
+     * @exception NullPointerException if <code>renderKitId</code> or
+     *  <code>renderKit</code> is <code>null</code>
      */
-    public abstract void addRenderKit(RenderKit renderKit);
+    public abstract void addRenderKit(String renderKitId, RenderKit renderKit);
 
 
     /**
