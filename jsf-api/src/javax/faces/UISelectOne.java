@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.13 2002/04/02 01:24:39 jvisvanathan Exp $
+ * $Id: UISelectOne.java,v 1.14 2002/04/05 19:40:19 jvisvanathan Exp $
  */
 
 /*
@@ -100,13 +100,13 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
      * resolved and an Iterator containing UISelectOne.Item objects
      * corresponding to that jmodel is returned, else null is returned.
      * @see #setItems
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to FacesContext this component
      * @return Iterator containing UISelectOne.Item objects corresponding
      *         to the selectable items
      */
-    public Iterator getItems(RenderContext rc) {
+    public Iterator getItems(FacesContext fc) {
 
-        List selectItems = (List)getAttribute(rc, "items");
+        List selectItems = (List)getAttribute(fc, "items");
         Collection coll = null;
 
         // If we've got a local
@@ -118,8 +118,8 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
         //
         } else if (getModelReference() != null) {
             try {
-                coll = (Collection) rc.getObjectAccessor().
-                    getObject(rc.getRequest(), getModelReference());
+                coll = (Collection) fc.getObjectAccessor().
+                    getObject(fc.getRequest(), getModelReference());
 //PENDING(rogerk) at this point, we have a collection of item values
 // (no labels or descriptions).  We would want to get the localized
 // labels and descriptions from a resource bundle given the item value
@@ -138,18 +138,18 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 
     /**
      * Returns the item corresponding to the specified index.
-     * This method will use the Locale contained in the render context 
+     * This method will use the Locale contained in the faces context 
      * to look up localized values for the item's label and description
      * properties.  For each property, if a localized value found, it
      * will be set in the Item object returned from this method.
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @param index integer containing index of item
      * @throws IndexOutOfBoundsException if index < 0 or index >= itemCount
      * @return UISelectOne.Item object representing the item at the specified index
      */
-    public UISelectOne.Item getItem(RenderContext rc, int index) 
+    public UISelectOne.Item getItem(FacesContext fc, int index) 
         throws IndexOutOfBoundsException {
-        List selectItems = (List)getAttribute(rc, "items");
+        List selectItems = (List)getAttribute(fc, "items");
         if (selectItems == null) {
             return null;
         }
@@ -295,12 +295,12 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
      * resolved and the associated model object is returned, 
      * else <code>null</code> is returned.
      * @see #setSelectedValue
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @return String containing the value of the selected item, or null
      *         if no items are selected
      */
-    public String getSelectedValue(RenderContext rc) {
-        return (String) getValue(rc);
+    public String getSelectedValue(FacesContext fc) {
+        return (String) getValue(fc);
     }
 
     /**
@@ -380,20 +380,20 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 
         String new_value = (String) value_event.getNewValue();
 
-        EventContext eventContext = value_event.getEventContext();
-        // Assert.assert_it( eventContext != null );
+        FacesContext facesContext = value_event.getFacesContext();
+        // Assert.assert_it( facesContext != null );
 
-        ObjectManager ot = eventContext.getObjectManager();
+        ObjectManager ot = facesContext.getObjectManager();
         // Assert.assert_it( ot != null );
 
-        ServletRequest request = eventContext.getRequest();
+        ServletRequest request = facesContext.getRequest();
 
-        RenderContext rc = (RenderContext)ot.get(request,
-                Constants.REF_RENDERCONTEXT);
-        // Assert.assert_it( rc != null );
+        FacesContext fc = (FacesContext)ot.get(request,
+                Constants.REF_FACESCONTEXT);
+        // Assert.assert_it( fc != null );
 
 	setSelectedValue((String)value_event.getNewValue());
-	pushValueToModel(rc);
+	pushValueToModel(fc);
 
         // dispatch value change listeners.
         if ( valueChangeListeners == null ) {
@@ -544,18 +544,18 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
     * successful, set localValue to null, else leave localValue alone.
     *
     * PENDING(aim): should be moved to ValueComponent subclass(?)
-    * @param rc the render context used to render this component
+    * @param fc the faces context used to render this component
     */
 
-    public void pushValueToModel(RenderContext rc) {
+    public void pushValueToModel(FacesContext fc) {
 
-        Object localValue = getValue(rc);
+        Object localValue = getValue(fc);
         if (null == selectedModelReference) {
             return;
         }
         if (null != localValue) {
             try {
-                rc.getObjectAccessor().setObject(rc.getRequest(),
+                fc.getObjectAccessor().setObject(fc.getRequest(),
                                            selectedModelReference, localValue);
                 setValue(null);
             } catch ( FacesException e ) {
@@ -570,14 +570,14 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
     * @return the value from the model
     */
 
-    public Object pullValueFromModel(RenderContext rc) {
+    public Object pullValueFromModel(FacesContext fc) {
         Object result = null;
         if (null == selectedModelReference) {
             return result;
         }
 
         try {
-            result = rc.getObjectAccessor().getObject(rc.getRequest(),
+            result = fc.getObjectAccessor().getObject(fc.getRequest(),
                                  selectedModelReference);
             if (null != result) {
                 // convert the object to string for rendering purpose.

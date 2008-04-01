@@ -1,5 +1,5 @@
 /*
- * $Id: MessageList.java,v 1.1 2002/03/15 20:49:22 jvisvanathan Exp $
+ * $Id: MessageList.java,v 1.2 2002/04/05 19:40:16 jvisvanathan Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -28,7 +28,7 @@ import javax.faces.FactoryFinder.ConfigurationError;
  * there could be a file called JSFMessages_zh_CN.xml.
  * 
  * <p>There is one central message list for each request. This message list
- * is setup by the JSF framework. It is available from the EventContext.
+ * is setup by the JSF framework. It is available from the FacesContext.
  * It is also available from the ObjectManager with the key
  * MessageList.MESSAGE_LIST_ID. This message list is associated with the locale
  * of the request that caused it to be created. In addition to this centralized
@@ -56,10 +56,6 @@ import javax.faces.FactoryFinder.ConfigurationError;
  */
 public abstract class MessageList
 {
-	/** A reserved ObjectManager id that can be used to the retrieve the
-	 * central message list for the request. */
-	public final static String MESSAGE_LIST_ID = "javax.faces.MessageList";
-	
 	protected MessageList(){};
 	
 	/**

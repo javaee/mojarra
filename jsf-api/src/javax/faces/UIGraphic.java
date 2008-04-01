@@ -29,8 +29,8 @@ public class UIGraphic extends UIComponent {
      * @see #getImagePath
      * @return String containing the path to the image file or url
      */
-    public String getImagePath(RenderContext rc) {
-	return (String) getValue(rc);
+    public String getImagePath(FacesContext fc) {
+	return (String) getValue(fc);
     }
 
     /**

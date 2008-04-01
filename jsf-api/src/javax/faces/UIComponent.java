@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.12 2002/04/02 01:24:39 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.13 2002/04/05 19:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -86,7 +86,7 @@ import java.io.OutputStream; //temporary
  * lifecycle stages where appropriate, however the above stages
  * are required.
  *
- * PENDING(aim): in the next rev, all RenderContext params should
+ * PENDING(aim): in the next rev, all FacesContext params should
  * be replaced with FacesContext
  */
 public abstract class UIComponent {
@@ -194,12 +194,12 @@ public abstract class UIComponent {
     /**
      * Returns an iterator containing all the attribute names
      * corresponding to attributes set specifically on this
-     * component within the specified render context.
+     * component within the specified faces context.
      *
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @return an Iteration of attribute names on this component
      */   
-    public Iterator getAttributeNames(RenderContext rc) {
+    public Iterator getAttributeNames(FacesContext fc) {
         Set set = ht.keySet();
         if (set.isEmpty()) {
             return null;
@@ -210,15 +210,15 @@ public abstract class UIComponent {
 
     /**
      * Returns the component attribute with the given name
-     * within the specified render context or null if the
+     * within the specified faces context or null if the
      * specified attribute is not set on this component.
      *
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @param attributeName a String specifying the name of the attribute
      * @return the Object bound to the attribute name, or null if the
      *          attribute does not exist.
      */
-    public Object getAttribute(RenderContext rc, String attributeName) {
+    public Object getAttribute(FacesContext fc, String attributeName) {
         return ht.get(attributeName);
     }
 
@@ -315,22 +315,22 @@ public abstract class UIComponent {
 
     /**
      * Returns an iterator containing all the children of this component
-     * for the specified render context.  
-     * @param rc the render context used to render this component, or null
+     * for the specified faces context.  
+     * @param fc the  context used to render this component, or null
      */
-    public Iterator getChildren(RenderContext rc) {
+    public Iterator getChildren(FacesContext fc) {
         lazilyCreateChildren();
         return children.iterator();
     }
 
     /**
      * Returns an iterator containing Strings representing the ids
-     * of all children of this component for the specified render context.
-     * @param rc the render context used to render this component, or null
+     * of all children of this component for the specified faces context.
+     * @param fc the faces context used to render this component, or null
      */
-    public Iterator getChildIds(RenderContext rc) {
+    public Iterator getChildIds(FacesContext fc) {
         Vector childIds = new Vector();
-        Iterator iterator = getChildren(rc);
+        Iterator iterator = getChildren(fc);
         while ( iterator.hasNext() ) {
             UIComponent child = (UIComponent) iterator.next();
             childIds.add(child.getId());
@@ -340,21 +340,21 @@ public abstract class UIComponent {
 
     /**
      * Returns an iterator containing child marker objects associated with
-     * children of this component for the specified render context.
-     * @param rc the render context used to render this component, or null
+     * children of this component for the specified faces context.
+     * @param fc the faces context used to render this component, or null
      */
-    public Iterator getChildMarkers(RenderContext rc) {
+    public Iterator getChildMarkers(FacesContext fc) {
         return null; //compile
     }
 
     /**
      * Returns the child at the specified index in this component
-     * for the specified render context.
-     * @param rc the render context used to render this component, or null
+     * for the specified faces context.
+     * @param fc the faces context used to render this component, or null
      * @param index the integer indicating the index of the child
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount-1
      */
-    public UIComponent getChild(RenderContext rc, int index) {
+    public UIComponent getChild(FacesContext fc, int index) {
         UIComponent child = null;
         return (UIComponent)children.elementAt(index);
     }
@@ -362,13 +362,13 @@ public abstract class UIComponent {
     /**
      * Returns the child with the specified id, or null if no child
      * with that id exists.
-     * @param rc the render context used to render this component, or null
+     * @param fc the faces context used to render this component, or null
      * @param id a String containing the id of the child being retrieved
      * @throws NullPointerException if id is null
      */
-    public UIComponent getChild(RenderContext rc, String id) {
+    public UIComponent getChild(FacesContext fc, String id) {
         UIComponent child = null;
-        Iterator iterator = getChildren(rc);
+        Iterator iterator = getChildren(fc);
         while ( iterator.hasNext() ) {
             child = (UIComponent) iterator.next();
             if ( child.getId().equals( id )) {
@@ -380,12 +380,12 @@ public abstract class UIComponent {
 
     /**
      * Returns the number of children in this component for the
-     * specified render context.
-     * @param rc the render context used to render this component, or null
+     * specified faces context.
+     * @param fc the faces context used to faces this component, or null
      * @return an integer indicating the number of children in this
      *          component.
      */
-    public int getChildCount(RenderContext rc) {
+    public int getChildCount(FacesContext fc) {
         int size = 0;
         if ( children != null ) {
             size = children.size();
@@ -477,12 +477,12 @@ public abstract class UIComponent {
      * by default.  A concrete subclass which supports the ability to
      * drive the layout and rendering of children should override this
      * method to return <code>true</code>.
-     * @param rc the render context used to render this component, or null
+     * @param fc the faces context used to render this component, or null
      * @return boolean value indicating whether or not this component
      *         takes responsibility for laying out and rendering its
      *         children.
      */
-    public boolean getRendersChildren(RenderContext rc) {
+    public boolean getRendersChildren(FacesContext fc) {
 	return false;
     }
 
@@ -494,7 +494,7 @@ public abstract class UIComponent {
     *         and its descendents should be rendered during the
     *         &quot;render&quot; lifecycle phase
     */
-    public boolean getShouldRender(RenderContext rc) {
+    public boolean getShouldRender(FacesContext fc) {
 	return true;
     }
 
@@ -517,12 +517,12 @@ public abstract class UIComponent {
      * component branch.
      * A branch is renderable if this component and all it's ancestors
      * have shouldRender set to <code>true</code>.
-     * @param rc the render context used to render this component
-     * @throws NullPointerException if rc is null
+     * @param fc the faces context used to render this component
+     * @throws NullPointerException if fc is null
      * @return boolean value indicating whether or not this component is in
      *         a renderable hierarchy
      */
-    public boolean isRenderable(RenderContext rc) {
+    public boolean isRenderable(FacesContext fc) {
 	return true;
     }
 
@@ -544,12 +544,12 @@ public abstract class UIComponent {
      * branch (i.e. no interleaved presentation markup).
      *
      * @see #getRendersChildren
-     * @param rc the render context used to render this component
-     * @throws NullPointerException if rc is null
+     * @param fc the faces context used to render this component
+     * @throws NullPointerException if fc is null
      * @throws FacesException if rendersChildren is <code>false</code>
      * @throws IOException if input or output exception occurred
      */
-    public void renderAll(RenderContext rc) throws IOException {}
+    public void renderAll(FacesContext fc) throws IOException {}
 
     /**
      * Invoked during the &quot;render&quot; lifecycle phase.
@@ -560,23 +560,23 @@ public abstract class UIComponent {
      * is null, the concrete subclass must take responsibility for
      * rendering the component from this method.
      * @see #getRendererType
-     * @param rc the render context used to render this component
-     * @throws NullPointerException if rc is null
+     * @param fc the faces context used to render this component
+     * @throws NullPointerException if fc is null
      * @throws FacesException if rendererType is not set to a valid renderer
-     *         in the render context's render kit
+     *         in the faces context's render kit
      * @throws IOException if input or output exception occurred
      */
-    public void render(RenderContext rc) throws IOException,
+    public void render(FacesContext fc) throws IOException,
         FacesException {
 
-        RenderKit rk = rc.getRenderKit();
+        RenderKit rk = fc.getRenderKit();
         String rendererType = getRendererType();
         if (rendererType == null) {
             throw new FacesException("Renderer Type Not Set.");
         }
         Renderer r = rk.getRenderer(rendererType);
-        rc.pushChild(this);
-        r.renderStart(rc, this);
+        fc.pushChild(this);
+        r.renderStart(fc, this);
     }
 
     /**
@@ -595,11 +595,11 @@ public abstract class UIComponent {
      * for invoking rendering for each child.
      * @see #renderAll
      * @see #getRendersChildren
-     * @param rc the render context used to render this component
-     * @throws NullPointerException if rc is null
+     * @param fc the faces context used to render this component
+     * @throws NullPointerException if fc is null
      * @throws IOException if input or output exception occurred
      */
-    public void renderChildren(RenderContext rc) throws IOException {}
+    public void renderChildren(FacesContext fc) throws IOException {}
 
     /**
      * Invoked during the &quot;render&quot; lifecycle phase after 
@@ -610,19 +610,19 @@ public abstract class UIComponent {
      * is null, the concrete subclass must take responsibility for
      * completion rendering (i.e. end tags) from this method. 
      * 
-     * @param rc the render context used to render this component
-     * @throws NullPointerException if rc is null
+     * @param fc the faces context used to render this component
+     * @throws NullPointerException if fc is null
      * @throws IOException if input or output exception occurred
      */
-    public void renderComplete(RenderContext rc) throws IOException {
-        RenderKit rk = rc.getRenderKit();
+    public void renderComplete(FacesContext fc) throws IOException {
+        RenderKit rk = fc.getRenderKit();
         String rendererType = getRendererType();
         if (rendererType == null) {
             throw new FacesException("Renderer Type Not Set.");
         }
         Renderer r = rk.getRenderer(rendererType);
-        r.renderComplete(rc, this);
-        rc.popChild();
+        r.renderComplete(fc, this);
+        fc.popChild();
     }
 
     /**
@@ -635,24 +635,20 @@ public abstract class UIComponent {
      * components are invalid).
      * @see #isValid
      * @see Validatible 
-     * @param ec
+     * @param fc
      */
-    public void validateAll(EventContext ec) {
-        ObjectManager ot = ec.getObjectManager();
-        ServletRequest request = ec.getRequest();
-        RenderContext rc = (RenderContext)ot.get(request,
-                        Constants.REF_RENDERCONTEXT);
+    public void validateAll(FacesContext fc) {
         UIComponent child = null;
-        Iterator iterator = getChildren(rc);
+        Iterator iterator = getChildren(fc);
         while (iterator.hasNext()) {
             child = (UIComponent) iterator.next();
             if ( child != null) {
-                child.validateAll(ec);
+                child.validateAll(fc);
             }
          }
          // all the children have been validated at this point 
          if (this instanceof Validatible ) {
-             ((Validatible)this).doValidate(ec);
+             ((Validatible)this).doValidate(fc);
          }   
     }
 
@@ -661,27 +657,22 @@ public abstract class UIComponent {
     * to model. Right we do this only for validatible components. 
     * For others, values get pushed during their dispatch method.
     *
-    * @param ec EventContext object representing the event-processing
+    * @param fc FacesContext object representing the event-processing
     *           phase of this request 
     */
     //PENDING (visvan) check method name with Aim.
-    public void pushAllValuesToModel(EventContext ec) {
-
-	ObjectManager ot = ec.getObjectManager();
-        ServletRequest request = ec.getRequest();
-        RenderContext rc = (RenderContext)ot.get(request,
-                        Constants.REF_RENDERCONTEXT);
+    public void pushAllValuesToModel(FacesContext fc) {
         UIComponent child = null;
-        Iterator iterator = getChildren(rc);
+        Iterator iterator = getChildren(fc);
         while (iterator.hasNext()) {
             child = (UIComponent) iterator.next();
             if ( child != null) {
-                child.pushAllValuesToModel(ec);
+                child.pushAllValuesToModel(fc);
             }
          }
          // values have been pushed to model for children at this point. 
          if (this instanceof Validatible ) {
-             this.pushValueToModel(rc);
+             this.pushValueToModel(fc);
          }
     }
 
@@ -696,21 +687,16 @@ public abstract class UIComponent {
      * @return boolean value indicating whether this branch of the UI
      *         component tree is valid
      */
-    public boolean isValid(EventContext ec ) {
+    public boolean isValid(FacesContext fc ) {
 
         boolean valid = true;
-
-        ObjectManager ot = ec.getObjectManager();
-        ServletRequest request = ec.getRequest();
-        RenderContext rc = (RenderContext)ot.get(request,
-                        Constants.REF_RENDERCONTEXT);
-
         UIComponent child = null;
-        Iterator iterator = getChildren(rc);
+        
+        Iterator iterator = getChildren(fc);
         while (iterator.hasNext()) {
             child = (UIComponent) iterator.next();
             if ( child != null) {
-                valid = child.isValid(ec);
+                valid = child.isValid(fc);
                 if ( !valid ) {
                     valid = false;
                     return valid;
@@ -760,10 +746,10 @@ public abstract class UIComponent {
      * PENDING(aim): this should be moved to ValueComponent subclass.
     */ 
 
-    public Object getValue(RenderContext rc) {
+    public Object getValue(FacesContext fc) {
 	Object result = ht.get(Constants.REF_VALUE);
 	if (null == result) {
-	    result = pullValueFromModel(rc);
+	    result = pullValueFromModel(fc);
 	}
         return result;
     }
@@ -783,18 +769,18 @@ public abstract class UIComponent {
     * PENDING(aim): should be moved to ValueComponent subclass(?)
     *
     */
-    public void pushValueToModel(RenderContext rc) {
+    public void pushValueToModel(FacesContext fc) {
       
         Object localValue = ht.get(Constants.REF_VALUE); 
 	if (null == modelReference) {
             return;
 	}
-        Object validatedValue = getAttribute(rc, "validatedValue");
+        Object validatedValue = getAttribute(fc, "validatedValue");
         if ( validatedValue == null ) {
-            validatedValue = getValue(rc);
+            validatedValue = getValue(fc);
         }
         try {
-            rc.getObjectAccessor().setObject(rc.getRequest(), 
+            fc.getObjectAccessor().setObject(fc.getRequest(), 
 	        modelReference, validatedValue); 
 	    setValue(null);
         } catch ( FacesException e ) {
@@ -815,14 +801,14 @@ public abstract class UIComponent {
     * @return the value from the model
     */
 
-    public Object pullValueFromModel(RenderContext rc) {
+    public Object pullValueFromModel(FacesContext fc) {
 	Object result = null;
         if (null == modelReference) {
 	    return result;
 	}
 
 	try {
-            result = rc.getObjectAccessor().getObject(rc.getRequest(),
+            result = fc.getObjectAccessor().getObject(fc.getRequest(),
 						      modelReference);
 
             if (null != result) {
@@ -832,9 +818,9 @@ public abstract class UIComponent {
                 // Use the following code once Converters take FacesContext.
                 // currently they take eventContext,but we don't have acess
                 // to that here.
-               /* Converter converterObj = getConverter(rc);
+               /* Converter converterObj = getConverter(fc);
                 if (converterObj != null ) {
-                    setValue(converterObj.convertObjectToString(rc,this,result));    
+                    setValue(converterObj.convertObjectToString(fc,this,result));    
                 } */
 	    }
 	} catch ( FacesException e ) {
@@ -850,11 +836,11 @@ public abstract class UIComponent {
      * Local value with is of String type should be converted to
      * correct Java type before validation.
      */ 
-    protected Converter getConverter(RenderContext rc) {
+    protected Converter getConverter(FacesContext fc) {
         
         Converter converterObj = null;
-        ObjectManager objectManager = rc.getObjectManager();
-        ServletRequest request = rc.getRequest();
+        ObjectManager objectManager = fc.getObjectManager();
+        ServletRequest request = fc.getRequest();
         // Assert.assert_it( objectManager != null );
 
         // if the converterReference is set, then get the converter directly

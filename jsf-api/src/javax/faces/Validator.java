@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.3 2002/03/16 00:09:04 eburns Exp $
+ * $Id: Validator.java,v 1.4 2002/04/05 19:40:20 jvisvanathan Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import java.util.Iterator;
  * Interface for implementing objects which can perform
  * validation on value objects and configure appropriate error
  * messages.
- * PENDING(aim): EventContext will become FacesContext in next rev
  */
 public interface Validator {
 
@@ -34,13 +33,13 @@ public interface Validator {
     public Iterator getSupportedAttributeNames();
 
     /**
-     * @param ec EventContext object representing the event-processing 
+     * @param fc FacesContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void validate(EventContext ec, UIComponent component, Object value) throws 
+    public void validate(FacesContext fc, UIComponent component, Object value) throws 
             ValidationException;
 
 }

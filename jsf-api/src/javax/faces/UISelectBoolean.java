@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.8 2002/03/16 00:09:03 eburns Exp $
+ * $Id: UISelectBoolean.java,v 1.9 2002/04/05 19:40:19 jvisvanathan Exp $
  */
 
 /*
@@ -43,13 +43,13 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
      * is null, it will return a locally stored value.
      *
      * @see #getModel
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @return boolean containing the current state
      */
-    public boolean isSelected(RenderContext rc) {
+    public boolean isSelected(FacesContext fc) {
         boolean state;
 
-	if (Boolean.valueOf((String) getValue(rc)).booleanValue()) {
+	if (Boolean.valueOf((String) getValue(fc)).booleanValue()) {
 	    state = true;
 	}
 	else {
@@ -64,10 +64,10 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
      * store the new value in the object referenced by the
      * model property.  If the model property is null, it
      * will store the value locally.
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to facesContext this component
      * @param state boolean containing the new state for this component
      */
-    public void setSelected(RenderContext rc, boolean state) {
+    public void setSelected(FacesContext fc, boolean state) {
 	if (state == true) {
 	    setValue("true");
 	}
@@ -181,7 +181,7 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
     public void setValidState(int validState) {
     }
 
-    public void doValidate(EventContext ctx) {
+    public void doValidate(FacesContext ctx) {
     }
 
     /**
@@ -202,21 +202,21 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
 
         String new_value = (String) value_event.getNewValue();
 
-        EventContext eventContext = value_event.getEventContext();
-        // Assert.assert_it( eventContext != null );
+        FacesContext facesContext = value_event.getFacesContext();
+        // Assert.assert_it( facesContext != null );
 
-        ObjectManager ot = eventContext.getObjectManager();
+        ObjectManager ot = facesContext.getObjectManager();
         // Assert.assert_it( ot != null );
 
-        ServletRequest request = eventContext.getRequest();
+        ServletRequest request = facesContext.getRequest();
 
-        RenderContext rc = (RenderContext)ot.get(request,
-                Constants.REF_RENDERCONTEXT);
-        // Assert.assert_it( rc != null );
+        FacesContext fc = (FacesContext)ot.get(request,
+                Constants.REF_FACESCONTEXT);
+        // Assert.assert_it( fc != null );
 
 	boolean state = (Boolean.valueOf(new_value)).booleanValue();
-	setSelected(rc, state);
-	pushValueToModel(rc);
+	setSelected(fc, state);
+	pushValueToModel(fc);
 
         // dispatch value change listeners.
         if ( valueChangeListeners == null ) {

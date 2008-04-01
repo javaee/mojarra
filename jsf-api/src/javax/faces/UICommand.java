@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.10 2002/04/02 01:24:39 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.11 2002/04/05 19:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -125,15 +125,15 @@ public class UICommand extends UIComponent implements EventDispatcher {
                     "Expected CommandEvent");
         }
 
-        EventContext eventContext = ((FacesEvent)cmd_event).getEventContext();
-        // Assert.assert_it( eventContext != null );
+        FacesContext facesContext = ((FacesEvent)cmd_event).getFacesContext();
+        // Assert.assert_it( facesContext != null );
       
-        NavigationHandler nh = eventContext.getNavigationHandler();
+        NavigationHandler nh = facesContext.getNavigationHandler();
         // Assert.assert_it( nh != null );
 
-        ObjectManager ot = eventContext.getObjectManager();
+        ObjectManager ot = facesContext.getObjectManager();
         //Assert.assert_it( ot != null );
-        ServletRequest request = eventContext.getRequest();
+        ServletRequest request = facesContext.getRequest();
 
         Iterator listeners = getCommandListeners();
         // Assert.assert_it( listeners != null);
@@ -159,14 +159,14 @@ public class UICommand extends UIComponent implements EventDispatcher {
             boolean reqValidation = cl.requiresValidation(cmd_event);
 
             if ( reqValidation && !doneValidation ) {
-                 root.validateAll(eventContext);
-                 valid = root.isValid(eventContext);     
+                 root.validateAll(facesContext);
+                 valid = root.isValid(facesContext);     
             }
 
             // if validation is not required or validation succeeded,
             // push values to model.
             if ( (!reqValidation || valid) && (!doneValidation) ) {
-                root.pushAllValuesToModel(eventContext);
+                root.pushAllValuesToModel(facesContext);
                 doneValidation = true;
             }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.19 2002/03/13 17:59:32 eburns Exp $
+ * $Id: Constants.java,v 1.20 2002/04/05 19:40:15 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ public class Constants {
      * The Faces object which contains resources used for rendering 
      * user interface components.
      */ 
-    public static final String REF_RENDERCONTEXT = "faces.RenderContext";
+    public static final String REF_FACESCONTEXT = "faces.FacesContext";
 
     /**
      * The key stored in the servlet request attributes that enables 
@@ -59,7 +59,7 @@ public class Constants {
     /**
      * The factory used to create the render context.
      */
-    public static final String REF_RENDERCONTEXTFACTORY = 
+    public static final String REF_FACESCONTEXTFACTORY = 
         "faces.RenderContextFactory";
 
     /**
@@ -109,11 +109,6 @@ public class Constants {
     public static final String REF_REDIRECT = "redirect";
     public static final String REF_PASS = "pass";
     
-    /**
-     * Name for EventContextFactory
-     */
-    public static final String REF_EVENTCONTEXTFACTORY = "eventContextFactory";
-
     /**
      * Name for ConverterManager
      */
@@ -185,6 +180,14 @@ public class Constants {
      * Failure indicator after validation processing.
      */
     public static final String OUTCOME_VALIDATION_FAILED = "validationFailed"; 
-   
-    
+  
+    /**
+     * Name for MessageFactory
+     */ 
+    public final static String DEFAULT_MESSAGE_FACTORY_ID = "faces.DefaultMessageFactory"; 
+
+    /** A reserved ObjectManager id that can be used to the retrieve the
+     * central message list for the request. 
+     */
+     public final static String MESSAGE_LIST_ID = "faces.MessageList";
 }

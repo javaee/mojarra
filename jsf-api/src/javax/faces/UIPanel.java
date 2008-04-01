@@ -23,12 +23,12 @@ public class UIPanel extends UIComponent {
     /**
      * The rendersChildren attribute.  Returns <code>true</code>.
      * 
-     * @param rc the render context used to render this component, or null
+     * @param rc the faces context used to render this component, or null
      * @return boolean value indicating whether or not this component
      *         takes responsibility for laying out and rendering its
      *         children.
      */
-    public boolean getRendersChildren(RenderContext rc) {
+    public boolean getRendersChildren(FacesContext fc) {
 	return true;
     }
 }

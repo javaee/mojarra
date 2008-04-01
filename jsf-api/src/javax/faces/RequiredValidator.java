@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.4 2002/03/16 00:09:03 eburns Exp $
+ * $Id: RequiredValidator.java,v 1.5 2002/04/05 19:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -38,18 +38,18 @@ public class RequiredValidator implements Validator {
      * Verifies that the specified value object is non-null.
      * If the value object is a String, an empty string (&quot;&quot;)
      * will be treated as a null value and return an error message. 
-     * @param ec EventContext object representing the event-processing 
+     * @param fc FacesContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
      * @throws ValidationException if validation failed
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void validate(EventContext ec, UIComponent component, Object value) 
+    public void validate(FacesContext fc, UIComponent component, Object value) 
             throws ValidationException {
 
 	if (value == null || (value instanceof String && value.equals(""))) {
-            MessageList msgList = ec.getMessageList();
+            MessageList msgList = fc.getMessageList();
             msgList.addMessage("MSG0003", component.getId(), value);
 	    throw new ValidationException("");
         } 

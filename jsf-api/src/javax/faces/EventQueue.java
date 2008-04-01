@@ -1,5 +1,5 @@
 /*
- * $Id: EventQueue.java,v 1.4 2002/03/16 00:09:02 eburns Exp $
+ * $Id: EventQueue.java,v 1.5 2002/04/05 19:40:15 jvisvanathan Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import java.util.Iterator;
  * <p>
  * There is generally one EventQueue instance per session and
  * is available from the event context object.
- * @see EventContext#getEventQueue
+ * @see FacesContext#getEventQueue
  * <p>
  * During the event-processing phase of a request cycle in that session, 
  * any events which are encoded in the request (i.e. originated on 

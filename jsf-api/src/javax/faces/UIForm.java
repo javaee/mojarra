@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.9 2002/04/02 01:24:39 jvisvanathan Exp $
+ * $Id: UIForm.java,v 1.10 2002/04/05 19:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -74,18 +74,18 @@ public class UIForm extends UIComponent {
     }  
     
     /** 
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @return NavigationMap instance represented by navigationMapId.
      */
-    public NavigationMap getNavigationMap(RenderContext rc) {
+    public NavigationMap getNavigationMap(FacesContext fc) {
         
-        // ParameterCheck.nonNull(rc);
+        // ParameterCheck.nonNull(fc);
         
-        ObjectManager objectManager = rc.getObjectManager();
+        ObjectManager objectManager = fc.getObjectManager();
         // Assert.assert_it( objectManager != null );
         
         NavigationMap navMap = (NavigationMap) 
-                        objectManager.get(rc.getRequest(), navigationMapId);
+                        objectManager.get(fc.getRequest(), navigationMapId);
         return navMap;
     }
 
@@ -159,14 +159,14 @@ public class UIForm extends UIComponent {
 
     */
 
-    public Object pullValueFromModel(RenderContext rc) {
+    public Object pullValueFromModel(FacesContext fc) {
 	Object result = null;
         if (null == getModelReference()) {
 	    return result;
 	}
 
 	try {
-            result = rc.getObjectAccessor().getObject(rc.getRequest(),
+            result = fc.getObjectAccessor().getObject(fc.getRequest(),
 						      getModelReference());
 	} catch ( FacesException e ) {
             // PENDING (visvan) skip this exception ??

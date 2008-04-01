@@ -1,5 +1,5 @@
 /*
- * $Id: BeanAccessor.java,v 1.2 2002/01/25 22:42:42 visvan Exp $
+ * $Id: BeanAccessor.java,v 1.3 2002/04/05 19:40:15 jvisvanathan Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import java.lang.SecurityException;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -42,16 +42,16 @@ public class BeanAccessor implements ObjectAccessor {
 
 // Relationship Instance Variables
 
-private RenderContext renderContext;
+private FacesContext facesContext;
 
 //
 // Constructors and Initializers    
 //
 
-public BeanAccessor(RenderContext yourRenderContext)
+public BeanAccessor(FacesContext yourFacesContext)
 {
     super();
-    renderContext = yourRenderContext;
+    facesContext = yourFacesContext;
 }
 
 
@@ -65,7 +65,7 @@ public BeanAccessor(RenderContext yourRenderContext)
      * is identified by the model reference string.  The model bean
      * with the new value is put back into the ObjectManager.
      *
-     * @param rc The RenderContext containing the current session.
+     * @param request ServletRequest object representing the client request
      * @param modelReference A string referencing a bean's property.
      * @param value The value of the property to be set.
      *
@@ -78,13 +78,13 @@ public BeanAccessor(RenderContext yourRenderContext)
 
         // ParameterCheck.nonNull(request);
         // ParameterCheck.nonNull(objectReference);
-	// Assert.assert_it(null != renderContext);
+	// Assert.assert_it(null != facesContext);
 
         String expression = null;
         String property = null;
         String baseName = null;
         Object object = null;
-        ObjectManager objectManager = renderContext.getObjectManager();
+        ObjectManager objectManager = facesContext.getObjectManager();
         // Assert.assert_it(null != objectManager);
 
         // If the reference string begins with a "$" (ex:
@@ -124,8 +124,9 @@ public BeanAccessor(RenderContext yourRenderContext)
                     "' not found in ObjectManager.");
             }
             object = value;
-            objectManager.put(renderContext.getSession(), 
-			      objectReference, object); 
+            javax.servlet.http.HttpServletRequest httpRequest = 
+                    (javax.servlet.http.HttpServletRequest) request;
+            objectManager.put(httpRequest.getSession(),objectReference,object); 
         }
     }
 
@@ -138,7 +139,7 @@ public BeanAccessor(RenderContext yourRenderContext)
      * POSTCONDITION: An object is returned as identified by  
      * the model reference string.
      *
-     * @param rc The RenderContext containing the current session.
+     * @param request ServletRequest object representing the client request
      * @param objectReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
@@ -149,14 +150,14 @@ public BeanAccessor(RenderContext yourRenderContext)
 			    String objectReference) throws FacesException {
         // ParameterCheck.nonNull(request);
 	// ParameterCheck.nonNull(objectReference);
-	// Assert.assert_it(null != renderContext);
+	// Assert.assert_it(null != facesContext);
 	
         String expression = null;
         String property = null;
         String baseName = null;
         Object object = null;
         Object returnObject = null;
-        ObjectManager objectManager = renderContext.getObjectManager();
+        ObjectManager objectManager = facesContext.getObjectManager();
 	// Assert.assert_it(null != objectManager);
 
         if (objectReference.startsWith("$")) {

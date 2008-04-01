@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.10 2002/03/16 00:09:03 eburns Exp $
+ * $Id: Renderer.java,v 1.11 2002/04/05 19:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -103,26 +103,26 @@ public interface Renderer {
 
     /**
      * Invoked to render the specified component using the specified 
-     * render context.  An attribute value used during rendering
+     * faces context.  An attribute value used during rendering
      * is obtained by first looking for a component-specific value
      * using <code>getAttribute</code> and if not set directly on the component,
      * using the default value of that attribute defined by this renderer. 
      * @see UIComponent#render
      * @see UIComponent#getAttribute
-     * @param rc the render context used to render the specified component
+     * @param fc the faces context used to render the specified component
      * @param c the UIComponent instance representing the component state
      *          being rendered
      * @throws IOException
      * @throws FacesException if the specified componentType is not
      *         supported by this renderer
-     * @throws NullPointerException if rc or c is null
+     * @throws NullPointerException if fc or c is null
      */
-    public void renderStart(RenderContext rc, UIComponent c) 
+    public void renderStart(FacesContext fc, UIComponent c) 
         throws IOException, FacesException;
 
     /**
      * Invoked to render the children of the specified component using
-     * the specified render context.  If this renderer supports rendering
+     * the specified faces context.  If this renderer supports rendering
      * of a component type which returns <code>true</code> from the
      * <code>rendersChildren</code>, it must generate output required to
      * layout the children of the specified component, as well as drive
@@ -132,25 +132,25 @@ public interface Renderer {
      *  then this method should do nothing.
      * @see UIComponent#renderAll
      * @see UIComponent#renderChildren
-     * @param rc the render context used to render the specified component
+     * @param fc the faces context used to render the specified component
      * @param c the UIComponent instance representing the component state
      *          being rendered
      * @throws IOException
-     * @throws NullPointerException if rc or c is null
+     * @throws NullPointerException if fc or c is null
      */ 
-    public void renderChildren(RenderContext rc, UIComponent c) throws IOException;
+    public void renderChildren(FacesContext fc, UIComponent c) throws IOException;
 
     /**
      * Invoked after all of the specified component's descendents have
      * been rendered. 
      * @see UIComponent#renderComplete
-     * @param rc the render context used to render the specified component
+     * @param fc the faces context used to render the specified component
      * @param c the UIComponent instance representing the component state
      *          being rendered
      * @throws IOException
-     * @throws NullPointerException if rc or c is null
+     * @throws NullPointerException if fc or c is null
      */
-    public void renderComplete(RenderContext rc, UIComponent c) throws IOException, FacesException;
+    public void renderComplete(FacesContext fc, UIComponent c) throws IOException, FacesException;
 
  }
 

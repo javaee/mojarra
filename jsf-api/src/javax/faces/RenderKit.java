@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.13 2002/03/13 17:59:33 eburns Exp $
+ * $Id: RenderKit.java,v 1.14 2002/04/05 19:40:17 jvisvanathan Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public abstract class RenderKit {
      * @param ec the event context used for the event processing phase of
      *           the request
      */
-    public abstract void queueEvents(EventContext ec);
+    public abstract void queueEvents(FacesContext ec);
 
     public abstract void applyNewValuesToTree(FacesContext ctx, 
 					      TreeNavigator tree);

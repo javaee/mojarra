@@ -1,5 +1,5 @@
 /*
- * $Id: Validatible.java,v 1.4 2002/03/16 00:09:04 eburns Exp $
+ * $Id: Validatible.java,v 1.5 2002/04/05 19:40:19 jvisvanathan Exp $
  */
 
 /*
@@ -92,12 +92,12 @@ public interface Validatible {
 
     /**
      * Performs validation on the component's current value.
-     * @param ec EventContext object representing the event-processing 
+     * @param fc FacesContext object representing the event-processing 
      *           phase of this request
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void doValidate(EventContext ec);
+    public void doValidate(FacesContext fc);
 
 }
 

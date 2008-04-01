@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.11 2002/04/02 01:24:39 jvisvanathan Exp $
+ * $Id: UITextEntry.java,v 1.12 2002/04/05 19:40:19 jvisvanathan Exp $
  */
 
 /*
@@ -58,17 +58,17 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
      * This is just a strong type enforcing wrapper around getValue()
      *
      * @see UIComponent#getValue
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @return String containing the current text value 
      */
-    public String getText(RenderContext rc) { 
-        return (String) getValue(rc);
+    public String getText(FacesContext fc) { 
+        return (String) getValue(fc);
     }
 
     /**
      * This is just a strong type enforcing wrapper around setValue()
      * @see UIComponent#setValue
-     * @param rc the render context used to render this component
+     * @param fc the faces context used to render this component
      * @param text String containing the new text value for this component
      */
     public void setText(String text) { 
@@ -139,17 +139,17 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
                     "Expected ValueChangeEvent");
         }
 
-        EventContext eventContext = value_event.getEventContext();
-        // Assert.assert_it( eventContext != null );
+        FacesContext facesContext = value_event.getFacesContext();
+        // Assert.assert_it( facesContext != null );
 
-        ObjectManager ot = eventContext.getObjectManager();
+        ObjectManager ot = facesContext.getObjectManager();
         // Assert.assert_it( ot != null );
 
-        ServletRequest request = eventContext.getRequest();
+        ServletRequest request = facesContext.getRequest();
 
-        RenderContext rc = (RenderContext)ot.get(request,
-                Constants.REF_RENDERCONTEXT);
-        // Assert.assert_it( rc != null );
+        FacesContext fc = (FacesContext)ot.get(request,
+                Constants.REF_FACESCONTEXT);
+        // Assert.assert_it( fc != null );
 
 	setText((String) value_event.getNewValue());
 	
@@ -249,26 +249,26 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
      * Performs validation on the specified value object. 
      * Subclasses must override this method to perform appropriate
      * validation.
-     * @param ec EventContext object representing the event-processing 
+     * @param fc FacesContext object representing the event-processing 
      *           phase of this request
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void doValidate(EventContext eventContext) {
+    public void doValidate(FacesContext facesContext) {
         Converter converterObj = null;
         Object obj = null;
     
-        ObjectManager objectManager = eventContext.getObjectManager();
-        ServletRequest request = eventContext.getRequest();
-        RenderContext rc = (RenderContext)objectManager.get(request,
-                        Constants.REF_RENDERCONTEXT);
+        ObjectManager objectManager = facesContext.getObjectManager();
+        ServletRequest request = facesContext.getRequest();
+        FacesContext fc = (FacesContext)objectManager.get(request,
+                        Constants.REF_FACESCONTEXT);
         // Assert.assert_it( objectManager != null );
        
-        converterObj = getConverter(rc);
+        converterObj = getConverter(fc);
         if ( converterObj != null ) {
             try {
-                obj = converterObj.convertStringToObject(eventContext, this, 
-                        (String) getValue(rc));
+                obj = converterObj.convertStringToObject(facesContext, this, 
+                        (String) getValue(fc));
                 setAttribute("validatedValue", obj);
             } catch ( ValidationException ce ) {
                 // if conversion failed don't proceed to validation
@@ -293,10 +293,10 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
                 // if there is no converter set, then use the local value for
                 // validation.
                 if ( obj == null ) {
-                    obj = getValue(rc);
+                    obj = getValue(fc);
                 }    
                 try {
-                    validator.validate(eventContext, this,obj);
+                    validator.validate(facesContext, this,obj);
                     setValidState ( Validatible.VALID);
                     // cache the validated value in a new attribute. Don't
                     // overwrite the localValue. This is because if

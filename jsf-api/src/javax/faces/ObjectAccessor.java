@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectAccessor.java,v 1.3 2002/02/01 00:52:48 edburns Exp $
+ * $Id: ObjectAccessor.java,v 1.4 2002/04/05 19:40:16 jvisvanathan Exp $
  */
 
 /*
@@ -25,8 +25,7 @@ import javax.servlet.ServletRequest;
  * The UIComponent classes obtain an ObjectAccessor instance from the
  * appropriate context object.
  *
- * @see EventContext#getObjectAccessor
- * @see RenderContext#getObjectAccessor 
+ * @see FacesContext#getObjectAccessor 
  * 
  */ 
 public interface ObjectAccessor {

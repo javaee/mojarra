@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.7 2002/03/07 23:44:03 eburns Exp $
+ * $Id: CommandEvent.java,v 1.8 2002/04/05 19:40:15 jvisvanathan Exp $
  */
 
 /*
@@ -34,16 +34,16 @@ public class CommandEvent extends FacesEvent {
 
     /**
      * Creates a command event.
-     * @param ec EventContext object representing the event-processing
+     * @param fc FacesContext object representing the event-processing
      *           phase of the request where this event originated
      * @param sourceComponent the component where this event originated
      * @param commandName a String containing the name of the command
      *        associated with this event
      * @throws NullPointerException if sourceComponent or commandName is null
      */
-    public CommandEvent(EventContext ec, UIComponent sourceComponent, 
+    public CommandEvent(FacesContext fc, UIComponent sourceComponent, 
 			String commandName) {
-        super(ec, sourceComponent);
+        super(fc, sourceComponent);
         this.commandName = commandName;
     }
 

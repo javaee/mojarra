@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.4 2002/03/16 00:09:02 eburns Exp $
+ * $Id: FormatValidator.java,v 1.5 2002/04/05 19:40:16 jvisvanathan Exp $
  */
 
 /*
@@ -56,18 +56,18 @@ public class FormatValidator implements Validator {
      * Verifies that the specified String value's format matches the
      * format described in the &quot;formatMask&quot; attribute on
      * the specified component.
-     * @param ec EventContext object representing the event-processing 
+     * @param fc FacesContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
      * @throws ValidationException if validation failed
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void validate(EventContext ec, UIComponent component, 
+    public void validate(FacesContext fc, UIComponent component, 
             Object value) throws ValidationException {
         // PENDING (visvan) not yet implemented. Look at Swing's
         // JFormattedTextField.
-        MessageList msgList = ec.getMessageList();
+        MessageList msgList = fc.getMessageList();
 
 	if (value == null || !(value instanceof String)) {
             msgList.addMessage("MSG0007", component.getId(), value);

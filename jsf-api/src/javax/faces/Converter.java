@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.2 2002/03/15 20:49:21 jvisvanathan Exp $
+ * $Id: Converter.java,v 1.3 2002/04/05 19:40:15 jvisvanathan Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ public interface Converter {
      * Converts the String value of the specified component
      * to an object of the type specified by this converter.
      * @param 
-     *   ctx the EventContext object used to process the current request
+     *   ctx the FacesContext object used to process the current request
      * @param component 
      *   the UIComponent whose value is being converted
      * @param componentValue
@@ -60,7 +60,7 @@ public interface Converter {
      *   if the converter was unable to convert the value  
      * @return Object containing the converted value
      */
-    Object convertStringToObject(EventContext ctx,
+    Object convertStringToObject(FacesContext ctx,
                                        UIComponent component,
                                        String componentValue)
       throws ValidationException;
@@ -69,7 +69,7 @@ public interface Converter {
      * Converts the object value of this converter's type
      * to a String value for the specified component.
      * @param ctx 
-     *   the EventContext object used to process the current request
+     *   the FacesContext object used to process the current request
      * @param component 
      *   the UIComponent whose value is being converted
      * @param modelValue
@@ -78,7 +78,7 @@ public interface Converter {
      *   if the converter was unable to convert the value  
      * @return String containing the converted value
      */
-    String convertObjectToString(EventContext ctx,
+    String convertObjectToString(FacesContext ctx,
                                        UIComponent component,
                                        Object modelValue)
       throws ValidationException;
