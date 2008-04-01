@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.2 2002/05/30 22:23:50 rkitain Exp $
+ * $Id: XmlXulRuleSet.java,v 1.3 2002/06/08 20:42:12 rkitain Exp $
  */
 
 /*
@@ -80,6 +80,9 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addObjectCreate("*/button", "javax.faces.component.UICommand");
         digester.addSetNext("*/button", "addChild", "javax.faces.component.UIComponent");
 
+        digester.addFactoryCreate("*/uicomponent", new UIComponentFactory());
+        digester.addSetNext("*/uicomponent", "addChild", "javax.faces.component.UIComponent");
+
         ComponentRule cRule = new ComponentRule();
         cRule.setBuildComponent(buildComponent);
         digester.addRule("window", cRule);
@@ -96,6 +99,40 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addRule("*/menuitem", cnRule);
     }
 
+}
+
+final class UIComponentFactory extends AbstractObjectCreationFactory {
+
+    public Object createObject(Attributes attributes) {
+        Class cClass = null;
+        UIComponent c = null;
+
+        // Identify the name of the class to instantiate
+        String className = attributes.getValue("class");
+        Assert.assert_it(className != null);
+        String id = attributes.getValue("id");
+        Assert.assert_it(id != null);
+        String value = attributes.getValue("value");
+        
+        // Instantiate the new object and return it
+        try {
+            cClass = Util.loadClass(className);
+            c = (UIComponent)cClass.newInstance();
+        } catch (ClassNotFoundException cnf) {
+            throw new RuntimeException("Class Not Found:"+ cnf.getMessage());
+        } catch (InstantiationException ie) {
+            throw new RuntimeException("Class Instantiation Exception:"+
+                ie.getMessage());
+        } catch (IllegalAccessException ia) {
+            throw new RuntimeException("Illegal Access Exception:"+
+            ia.getMessage());
+        }
+
+        c.setComponentId(id);
+        c.setValue(value);
+
+        return c;
+    }
 }
 
 final class ComponentRule extends Rule {

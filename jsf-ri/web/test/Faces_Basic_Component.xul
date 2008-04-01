@@ -1,0 +1,7 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<window id="basicForm" formName="basicForm">
+
+<uicomponent class="javax.faces.component.UIOutput" id="myOutput" />
+
+</window>
