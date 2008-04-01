@@ -1,5 +1,5 @@
 /*
- * $Id: Message.java,v 1.2 2002/06/14 00:00:04 craigmcc Exp $
+ * $Id: Message.java,v 1.3 2002/07/26 22:04:52 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -17,7 +17,7 @@ package javax.faces.context;
  * the request component tree.</p>
  */
 
-public abstract class Message {
+public interface Message {
 
 
     // ------------------------------------------------ Message Severity Levels
@@ -59,13 +59,13 @@ public abstract class Message {
      * understand the context of the problem, and offer suggestions for
      * approaches to correcting it.</p>
      */
-    public abstract String getDetail();
+    public String getDetail();
 
 
     /**
      * <p>Return the severity level of this <code>Message</code>.</p>
      */
-    public abstract int getSeverity();
+    public int getSeverity();
 
 
     /**
@@ -73,7 +73,7 @@ public abstract class Message {
      * This should be the text that would normally be displayed to a user
      * to identify the problem that needs to be corrected.</p>
      */
-    public abstract String getSummary();
+    public String getSummary();
 
 
 }

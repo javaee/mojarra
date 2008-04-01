@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.3 2002/06/14 00:00:04 craigmcc Exp $
+ * $Id: MessageImpl.java,v 1.4 2002/07/26 22:04:52 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -20,7 +20,7 @@ import java.io.Serializable;
  * {@link Message} implementations.</p>
  */
 
-public class MessageImpl extends Message implements Serializable {
+public class MessageImpl implements Message, Serializable {
 
 
     // ----------------------------------------------------------- Constructors
