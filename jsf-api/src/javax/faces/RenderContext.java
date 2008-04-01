@@ -26,7 +26,10 @@ import java.util.Locale;
  * that particular client, then render context creation will fail
  * and a FacesException will be thrown.
  */
-public class RenderContext {
+public abstract class RenderContext {
+
+    public static final String DEFAULT_RENDERCONTEXT_PROPERTY_NAME = 
+        "FACES_DEFAULT_RENDERCONTEXT";
 
     /**
      * Returns a RenderContext object configured for rendering all
@@ -40,7 +43,30 @@ public class RenderContext {
      *         to the specified request
      */
     public static RenderContext getRenderContext(ServletRequest request) throws FacesException {
-	return null;
+        String defaultRenderContextName;
+        RenderContext result = null;
+    
+        defaultRenderContextName = System.getProperty(DEFAULT_RENDERCONTEXT_PROPERTY_NAME);
+
+        if (null == defaultRenderContextName) {
+            return null;
+        }
+        result = (RenderContext)RenderKit.createInstanceFromSystemProperty(defaultRenderContextName);
+
+        return result;
+    }
+
+    protected RenderContext() {
+    }
+
+    /**
+     * Internal constructor which initializes a <code>RenderContext</code>,
+     * the <code>ClientCapabilities</code>, <code>Locale</code> based on
+     * information in the request.
+     * @throws FacesException if any of these objects could not be
+     *         created.
+     */
+    private RenderContext(ServletRequest request) throws FacesException {
     }
 
     /**
@@ -57,9 +83,7 @@ public class RenderContext {
      * @return RenderKit object used to render components for the
      *         associated request
      */
-    public RenderKit getRenderKit(){
-	return null;
-    }
+    public abstract RenderKit getRenderKit();
 
     /**
      * The current value of the locale object.
@@ -74,9 +98,14 @@ public class RenderContext {
      * @return OutputMethod object to be used to write all rendering 
      *         of user-interface components for the associated request.
      */
-    public OutputMethod getOutputMethod(){
-	return null;
-    }
+    public abstract OutputMethod getOutputMethod();
+
+    /**
+     * Set the current value of the OutputMethod object.
+     * @param OutputMethod object to be used to write all rendering
+     *        of user-interface components for the associated request.
+     */
+    public abstract void setOutputMethod(OutputMethod outputMethod);
 
     /**
      * Returns the ancestor of the component currently at the top
@@ -90,7 +119,7 @@ public class RenderContext {
      *         specified number of levels
      */
     public WComponent peekAtAncestor(int level) {
-	return null;
+        return null;
     }
 
     /**
@@ -101,6 +130,7 @@ public class RenderContext {
      * @throws NullPointerException if c is null
      */
     public void pushChild(WComponent c){
+    
     }
 
     /**
@@ -112,7 +142,7 @@ public class RenderContext {
      *         which was most recently rendered from this render context
      */
     public WComponent popChild() {
-	return null;
+        return null;
     }
 
 

@@ -4,13 +4,13 @@ import java.util.Iterator;
 
 
 /**
- * The base class for defining rendering capabilities targeted for
- * a specific client.  This class defines:
+ * The base class for defining rendering capabilities targeted fo
+ * a specific client.  This class defines
  * <ol>
- * <li>The list of component types it supports
- * <li>For each supported component type, a set of one or more
- *     renderers
- * </ol>
+ * <li>The list of component types it support
+ * <li>For each supported component type, a set of one or mor
+ *     renderer
+ * </ol
  */
 public abstract class RenderKit {
 
@@ -34,34 +34,50 @@ public static final String DEFAULT_RENDERKIT_PROPERTY_NAME = "FACES_DEFAULT_REND
      */
     public static RenderKit getRenderKitForClient(ClientCapabilities client) {
 	String defaultRenderKitName;
-	Class renderKitClass;
 	RenderKit result = null;
 	
 	defaultRenderKitName = System.getProperty(DEFAULT_RENDERKIT_PROPERTY_NAME);
 	if (null == defaultRenderKitName) {
 	    return null;
 	}
-	try {
-	    renderKitClass = Class.forName(defaultRenderKitName);
-	    result = (RenderKit) renderKitClass.newInstance();
-	}
-	catch (IllegalAccessException e) {
-	    System.out.println("Can't create instance for " + 
-			       defaultRenderKitName + ": " + e.getMessage());
-	}
-	catch (InstantiationException e) {
-	    System.out.println("Can't create instance for " + 
-			       defaultRenderKitName + ": " + e.getMessage());
-	}
-	catch (ClassNotFoundException e) {
-	    System.out.println("Can't find class for " + 
-			       defaultRenderKitName + ": " + e.getMessage());
-	}
+        result = (RenderKit)createInstanceFromSystemProperty(defaultRenderKitName);
 	return result;
     }
 
     /**
-     * Returns a String representing the name of this render kit.
+     * This method creates an instance of class whose fully qualified
+     * class name is the value of the given system property.
+     * This class must have a public no-arg constructor.
+     * <p>This is a temporary solution to the problem of instantiating
+     * "ri" objects from the api.
+     * @param propName The system propety name used to instantiate the
+     *        class.
+     * @return The object instance (or null) if not found.
+     */
+    static Object createInstanceFromSystemProperty(String propName) {
+        Class renderKitClass;
+        Object result = null;
+        
+        try {
+            renderKitClass = Class.forName(propName);
+            result = renderKitClass.newInstance();
+        }
+        catch (IllegalAccessException e) {
+            System.out.println("Can't create instance for " + 
+                               propName+ ": " + e.getMessage());
+        }
+        catch (InstantiationException e) {
+            System.out.println("Can't create instance for " + 
+                               propName+ ": " + e.getMessage());
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println("Can't find class for " + 
+                               propName+ ": " + e.getMessage());
+        }
+        return result;
+    }
+    /*
+     * Returns a String representing the name of this render kit
      * Concrete subclasses must override this method and return a
      * descriptive name.
      * @return A String corresponding to the name of this render kit
