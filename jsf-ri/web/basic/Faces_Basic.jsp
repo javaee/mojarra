@@ -36,6 +36,11 @@
                   </td>
              </tr>
 
+
+          </table>
+
+	  <TABLE>
+
       <TR>
 
 	<TD>
@@ -124,7 +129,7 @@
 	<TD>
 
 	      <faces:command_button id="login" label="Login" 
-				    commandname="login"/>
+				    commandName="login"/>
 
 	</TD>
 
@@ -136,7 +141,7 @@
 	<TD>
 
 	      <faces:command_button id="imageButton" image="/basic/duke.gif"
-				    commandname="login"/>
+				    commandName="login"/>
 
                Image button that does the same thing
 
@@ -145,7 +150,8 @@
       </TR>
 
 
-          </table>
+
+	  </TABLE>
 
         </faces:form>
        </faces:usefaces>

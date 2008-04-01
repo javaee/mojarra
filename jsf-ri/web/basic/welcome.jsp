@@ -17,7 +17,7 @@
 
 <P>
 	      <faces:command_button id="back" label="Back" 
-				    commandname="back"/>
+				    commandName="back"/>
 </P>
 
         </faces:form>
