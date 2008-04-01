@@ -1,5 +1,5 @@
 /*
- * $Id: RenderContext.java,v 1.11 2002/01/12 01:38:08 edburns Exp $
+ * $Id: RenderContext.java,v 1.12 2002/03/16 00:09:03 eburns Exp $
  */
 
 /*
@@ -107,7 +107,8 @@ public abstract class RenderContext {
 
     * PENDING(edburns): Amy, not sure if a RenderContext should have an
     * HttpSession.
-
+    * PENDING(aim): we definitely don't want to bake in the HTTP dependency -
+    *               we'll need to resolve why you need it...
 
     */
 
@@ -120,7 +121,8 @@ public abstract class RenderContext {
 
     * PENDING(edburns): Amy, not sure if a RenderContext should have an
     * ServletRequest.
-
+    * PENDING(aim): I agree we may need the request/response on the
+    *               context objects; we'll see.
 
     */
 

@@ -1,5 +1,5 @@
 /*
- * $Id: RangeValidator.java,v 1.3 2002/03/15 20:49:22 jvisvanathan Exp $
+ * $Id: RangeValidator.java,v 1.4 2002/03/16 00:09:03 eburns Exp $
  */
 
 /*
@@ -9,10 +9,12 @@
 
 package javax.faces;
 
+import java.util.Iterator;
+
 /**
  * Class which implements a validator object which will verify
  * that a value object's value is a numeric value within a specified
- * range: minimum >= value <= maximum.
+ * range: rangeMinimum >= value <= rangeMaximum.
  */
 public class RangeValidator implements Validator {
 
@@ -29,13 +31,33 @@ public class RangeValidator implements Validator {
     }
 
     /**
-     * Verifies that the specified value object is numeric and
-     * within the range defined by this object's minimum and maximum
-     * properties.
+     * Returns an iterator containing the names of this validator's
+     * supported attributes. Validator attributes are set on a UI
+     * component to control how the validator performs validation.
+     * <p>
+     * This validator supports the following attributes:
+     * <ul>
+     * <li>&quot;rangeMinimum&quot;
+     * <li>&quot;rangeMaximum&quot;
+     * </ul>
+     * @return an iterator containing the Strings representing supported
+     *          attribute names
+     */
+    public Iterator getSupportedAttributeNames() {
+	return null; //compile
+    }
+
+    /**
+     * Verifies that the specified numeric value object is
+     * within the range defined by the specified component's
+     * &quot;rangeMinimum&quot; and &quot;rangeMaximum&quot;
+     * attributes.
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
      * @throws ValidationException if validation failed
+     * @return String containing a message describing why validation
+     *         failed, or null if validation succeeded
      */
     public void validate(EventContext ec, UIComponent component, Object value) 
             throws ValidationException {

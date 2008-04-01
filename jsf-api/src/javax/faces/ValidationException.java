@@ -1,5 +1,5 @@
 /*
- * $Id: ValidationException.java,v 1.1 2002/03/08 00:22:09 jvisvanathan Exp $
+ * $Id: ValidationException.java,v 1.2 2002/03/16 00:09:04 eburns Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ public class ValidationException extends FacesException {
     * Constructs a ValidationException with a detailed message.
     *
     * @param message
-    *   Detailed message for this exception.
+    *   String containing the detailed message for this exception.
     */
     public ValidationException(String message) {
         super(message);

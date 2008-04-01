@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.7 2002/03/07 23:44:04 eburns Exp $
+ * $Id: UISelectBoolean.java,v 1.8 2002/03/16 00:09:03 eburns Exp $
  */
 
 /*
@@ -152,32 +152,6 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
 	return null; //compile
     }
 
-   /**
-     * The message model-reference property for this validatible component.
-     * This property contains a reference to the object which acts
-     * as the store for any validation error messages.  The model-reference
-     * must resolve to an object which implements one of the following types:
-     * <ul>
-     * <li><code>java.lang.String</code>
-     * <li><code>java.util.Collection</code> of <code>String</code> objects
-     * </ul>  
-     * @see #setMessageModelReference  
-     * @return String containing the message model-reference for this component
-     */
-    public String getMessageModelReference() {
-	return messageModelReference;
-    }
-
-    /**
-     * Sets the message model-reference property on this validatible component.
-     * @see #getMessageModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the store for any validation error messages
-     */
-    public void setMessageModelReference(String modelReference) {
-	this.messageModelReference = modelReference;
-    }
-
     /**
      * The &quot;validState&quot; attribute which describes the current
      * valid state of this component.  Valid state may be one of the
@@ -205,6 +179,9 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
      *         UNVALIDATED, VALID, or INVALID
      */
     public void setValidState(int validState) {
+    }
+
+    public void doValidate(EventContext ctx) {
     }
 
     /**

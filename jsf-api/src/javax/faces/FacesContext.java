@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.1 2002/03/13 17:59:32 eburns Exp $
+ * $Id: FacesContext.java,v 1.2 2002/03/16 00:09:02 eburns Exp $
  */
 
 /*
@@ -9,12 +9,14 @@
 
 package javax.faces;
 
+import javax.servlet.ServletRequest;
+import java.util.Locale;
 
 /**
-
- * TEMPORARY Class to ease migration to uniform FacesContext class.
-
-
+ * The class which defines an object representing all contextual
+ * information required for processing a Faces request.
+ * PENDING(aim): all EventContext & RenderContext params should
+ * be replaced with this class in the next rev.
  */
 public class FacesContext {
 

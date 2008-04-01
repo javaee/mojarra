@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.9 2002/03/15 20:49:23 jvisvanathan Exp $
+ * $Id: UITextEntry.java,v 1.10 2002/03/16 00:09:04 eburns Exp $
  */
 
 /*
@@ -43,7 +43,6 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
 
     private Vector valueChangeListeners = null;
     private Vector validators = null;
-    private String messageModelReference = null;
     
     /** 
      * Returns a String representing the this component type.  
@@ -122,32 +121,6 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
      */
     public Iterator getValueChangeListeners() {
          return valueChangeListeners == null? null : valueChangeListeners.iterator();
-    }
-    
-    /**
-     * The message model-reference property for this validatible component.
-     * This property contains a reference to the object which acts
-     * as the store for any validation error messages.  The model-reference
-     * must resolve to an object which implements one of the following types:
-     * <ul>
-     * <li><code>java.lang.String</code>
-     * <li><code>java.util.Collection</code> of <code>String</code> objects
-     * </ul>  
-     * @see #setMessageModelReference  
-     * @return String containing the message model-reference for this component
-     */
-    public String getMessageModelReference() {
-	return messageModelReference;
-    }
-
-    /**
-     * Sets the message model-reference property on this validatible component.
-     * @see #getMessageModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the store for any validation error messages
-     */
-    public void setMessageModelReference(String modelReference) {
-	this.messageModelReference = modelReference;
     }
 
     /**
@@ -281,7 +254,7 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void validate(EventContext eventContext) {
+    public void doValidate(EventContext eventContext) {
         Converter converterObj = null;
         Object obj = null;
      

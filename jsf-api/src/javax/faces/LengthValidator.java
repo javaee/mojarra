@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.3 2002/03/15 20:49:21 jvisvanathan Exp $
+ * $Id: LengthValidator.java,v 1.4 2002/03/16 00:09:02 eburns Exp $
  */
 
 /*
@@ -8,6 +8,9 @@
  */
 
 package javax.faces;
+
+import java.util.Iterator;
+
 
 /**
  * Class which implements a validator object which will verify
@@ -32,13 +35,33 @@ public class LengthValidator implements Validator {
     }
 
     /**
-     * Verifies that the specified String object's length (in characters) is
-     * within the range defined by this object's minimumChars and maximumChars
-     * properties.
+     * Returns an iterator containing the names of this validator's
+     * supported attributes. Validator attributes are set on a UI
+     * component to control how the validator performs validation.
+     * <p>
+     * This validator supports the following attributes:
+     * <ul>
+     * <li>&quot;lengthMinimum&quot;
+     * <li>&quot;lengthMaximum&quot;
+     * </ul>
+     * @return an iterator containing the Strings representing supported
+     *          attribute names
+     */
+    public Iterator getSupportedAttributeNames() {
+	return null; //compile
+    }
+
+    /**
+     * Verifies that the specified String value's length (in characters) is
+     * within the range defined by the specified component's
+     * &quot;lengthMinimum&quot; and &quot;lengthMaximum&quot;
+     * attributes.
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
      * @throws ValidationException if validation failed
+     * @return String containing a message describing why validation
+     *         failed, or null if validation succeeded
      */
     public void validate(EventContext ec, UIComponent component, Object value) 
             throws ValidationException {

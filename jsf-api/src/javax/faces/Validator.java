@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.2 2002/03/08 00:22:09 jvisvanathan Exp $
+ * $Id: Validator.java,v 1.3 2002/03/16 00:09:04 eburns Exp $
  */
 
 /*
@@ -9,25 +9,38 @@
 
 package javax.faces;
 
+import java.util.Iterator;
+
 /**
  * Interface for implementing objects which can perform
- * validation on value objects and return an appropriate
- * error message if validation fails.
+ * validation on value objects and configure appropriate error
+ * messages.
+ * PENDING(aim): EventContext will become FacesContext in next rev
  */
 public interface Validator {
 
     /**
      * @return String identifying the type of validator
      */
-    String getType();
+    public String getType();
+
+    /**
+     * Returns an iterator containing the names of the validator's
+     * supported attributes. Validator attributes are set on a UI
+     * component to control how the validator performs validation.
+     * @return an iterator containing the Strings representing supported
+     *          attribute names
+     */
+    public Iterator getSupportedAttributeNames();
 
     /**
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
-     * @throws ValidationException if validation failed
+     * @return String containing a message describing why validation
+     *         failed, or null if validation succeeded
      */
-    void validate(EventContext ec, UIComponent component, Object value) throws 
+    public void validate(EventContext ec, UIComponent component, Object value) throws 
             ValidationException;
 
 }

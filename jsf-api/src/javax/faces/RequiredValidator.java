@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.3 2002/03/15 20:49:22 jvisvanathan Exp $
+ * $Id: RequiredValidator.java,v 1.4 2002/03/16 00:09:03 eburns Exp $
  */
 
 /*
@@ -8,6 +8,8 @@
  */
 
 package javax.faces;
+
+import java.util.Iterator;
 
 /**
  * Class which implements a validator object which will verify
@@ -27,6 +29,11 @@ public class RequiredValidator implements Validator {
 	return TYPE;
     }
 
+    public Iterator getSupportedAttributeNames() {
+	return null;
+    }
+
+
     /**
      * Verifies that the specified value object is non-null.
      * If the value object is a String, an empty string (&quot;&quot;)
@@ -35,6 +42,8 @@ public class RequiredValidator implements Validator {
      *           phase of this request
      * @param value Object containing the value to be validated
      * @throws ValidationException if validation failed
+     * @return String containing a message describing why validation
+     *         failed, or null if validation succeeded
      */
     public void validate(EventContext ec, UIComponent component, Object value) 
             throws ValidationException {

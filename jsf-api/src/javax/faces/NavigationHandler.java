@@ -11,12 +11,13 @@ import javax.servlet.ServletResponse;
  * request. 
  * <p>
  * A NavigationHandler instance is obtained from the event context.
- * @see EventContext#getNavigationHandler
+ * @see javax.faces.EventContext#getNavigationHandler
  * <p>
  * It is also passed directly to the <code>doCommand</code> method
  * on <code>CommandListener</code>.
  * Command listeners should configure the NavigationHandler object
  * appropriately during command processing.
+ * @see javax.faces.EventContext#getNavigationHandler
  */
 public interface NavigationHandler {
 

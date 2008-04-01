@@ -1,3 +1,12 @@
+/*
+ * $Id: Validatible.java,v 1.4 2002/03/16 00:09:04 eburns Exp $
+ */
+
+/*
+ * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ */
+
 package javax.faces;
 
 import java.util.Iterator;
@@ -31,6 +40,7 @@ public interface Validatible {
      * Registers the specified validator id as a validator
      * for this validatible component.  The specified validator id must be registered
      * in the scoped namespace, else an exception will be thrown.
+     * PENDING(aim): this should take a Validator instance, not an ID
      * @see Validator
      * @param validatorId the id of the validator
      * @throws FacesException if validatorId is not registered in the
@@ -41,7 +51,8 @@ public interface Validatible {
 
     /**
      * Removes the specified validator id as a validator
-     * for this validatible component.  
+     * for this validatible component.
+     * PENDING(aim): this should take a Validator instance, not an ID  
      * @param validatorId the id of the validator
      * @throws FacesException if validatorId is not registered as a
      *         validator for this component.
@@ -53,28 +64,6 @@ public interface Validatible {
      *         for this component
      */
     public Iterator getValidators();
-
-   /**
-     * The message model-reference property for this validatible component.
-     * This property contains a reference to the object which acts
-     * as the store for any validation error messages.  The model-reference
-     * must resolve to an object which implements one of the following types:
-     * <ul>
-     * <li><code>java.lang.String</code>
-     * <li><code>java.util.Collection</code> of <code>String</code> objects
-     * </ul>  
-     * @see #setMessageModelReference  
-     * @return String containing the message model-reference for this component
-     */
-    public String getMessageModelReference();
-
-    /**
-     * Sets the message model-reference property on this validatible component.
-     * @see #getMessageModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the store for any validation error messages
-     */
-    public void setMessageModelReference(String modelReference);
 
     /**
      * The &quot;validState&quot; attribute which describes the current
@@ -102,15 +91,13 @@ public interface Validatible {
     public void setValidState(int validState);
 
     /**
-     * Performs validation on the specified value object. 
-     * Subclasses must override this method to perform appropriate
-     * validation.
+     * Performs validation on the component's current value.
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    public void validate(EventContext ec);
+    public void doValidate(EventContext ec);
 
 }
 

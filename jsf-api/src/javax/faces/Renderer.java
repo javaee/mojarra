@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.9 2002/01/12 18:53:35 edburns Exp $
+ * $Id: Renderer.java,v 1.10 2002/03/16 00:09:03 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ public interface Renderer {
      * @return a boolean value indicating whether or not the specified
      *         component type can be rendered by this renderer
      */
-    public boolean supportsType(UIComponent c);
+    public boolean supportsComponentType(UIComponent c);
 
     /**
      * Returns whether or not the specified
@@ -57,13 +57,15 @@ public interface Renderer {
      * @return a boolean value indicating whether or not the specified
      *         component type can be rendered by this renderer
      */
-    public boolean supportsType(String componentType);
+    public boolean supportsComponentType(String componentType);
 
     /**
      * Returns an iterator containing the names of this renderer's
      * supported attributes for the specified component type.  
      * This attribute list should contain all attributes used by this 
-     * renderer during the rendering process for the component type.
+     * renderer during the rendering process for the component type,
+     * including any render-independent attributes defined directly
+     * on the component's class.
      * @param componentType String containing the type of component
      * @return an iterator containing the Strings representing supported
      *          attribute names

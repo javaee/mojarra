@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.7 2002/03/15 23:29:21 eburns Exp $
+ * $Id: UIForm.java,v 1.8 2002/03/16 00:09:03 eburns Exp $
  */
 
 /*
@@ -22,20 +22,19 @@ import java.util.EventObject;
  * is a user-interface component added as a descendent to the form
  * for the purpose of:
  * <ol>
- * <li>collecting data from the user:
+ * <li>collecting data from the user
+ * <li>displaying form data to the user
+ * <li>executing a form command (submit, navigate, etc):
+ * </ol>
  * @see UISelectBoolean
  * @see UISelectOne
  * @see UITextEntry
- * <li>displaying form data to the user:
  * @see UIOutput
- * <li>executing a form command (submit, navigate, etc):
  * @see UICommand  
- * </ol>
  */
-public class UIForm extends UIComponent implements EventDispatcher, Validatible {
+public class UIForm extends UIComponent implements Validatible  {
 
     private static String TYPE = "Form";
-    private String messageModelReference = null;
     
     // PENDING ( visvan ) added per discussion with Amy on NavigationHandler
     private String navigationMapId = null;
@@ -48,47 +47,6 @@ public class UIForm extends UIComponent implements EventDispatcher, Validatible 
      */
     public String getType() {
 	return TYPE;
-    }
-
-    /**
-     * Registers the specified listener id as a form listener
-     * for this component.  The specified listener id must be registered
-     * in the scoped namespace and it must be a listener which implements
-     * the <code>FormListener</code> interface, else an exception will
-     * be thrown.
-     * @see FormListener
-     * @param listenerId the id of the form listener
-     * @throws FacesException if listenerId is not registered in the
-     *         scoped namespace or if the object referred to by listenerId
-     *         does not implement the <code>FormListener</code> interface.
-     */
-    public void addFormListener(String listenerId) 
-            throws FacesException {
-    }
-
-    /**
-     * Removes the specified listener id as a form listener
-     * for this component.  
-     * @param listenerId the id of the form listener
-     * @throws FacesException if listenerId is not registered as a
-     *         form listener for this component.
-     */
-    public void removeFormListener(String listenerId) throws FacesException {
-    }
-
-    /**
-     * @return Iterator containing the FormListener instances registered
-     *         for this component
-     */
-    public Iterator getFormListeners() {
-	return null; //compile
-    }
-
-    /**
-     * Dispatches the specified event to any registered listeners.
-     * @param e the object describing the event
-     */
-    public void dispatch(EventObject e) throws FacesException {
     }
     
     /**
@@ -164,32 +122,6 @@ public class UIForm extends UIComponent implements EventDispatcher, Validatible 
 	return null; //compile
     }
 
-   /**
-     * The message model-reference property for this validatible component.
-     * This property contains a reference to the object which acts
-     * as the store for any validation error messages.  The model-reference
-     * must resolve to an object which implements one of the following types:
-     * <ul>
-     * <li><code>java.lang.String</code>
-     * <li><code>java.util.Collection</code> of <code>String</code> objects
-     * </ul>  
-     * @see #setMessageModelReference  
-     * @return String containing the message model-reference for this component
-     */
-    public String getMessageModelReference() {
-	return messageModelReference;
-    }
-
-    /**
-     * Sets the message model-reference property on this validatible component.
-     * @see #getMessageModelReference
-     * @param modelReference the String which contains a reference to the
-     *        object which acts as the store for any validation error messages
-     */
-    public void setMessageModelReference(String modelReference) {
-	this.messageModelReference = modelReference;
-    }
-
     /**
      * The &quot;validState&quot; attribute which describes the current
      * valid state of this component.  Valid state may be one of the
@@ -246,7 +178,7 @@ public class UIForm extends UIComponent implements EventDispatcher, Validatible 
     // Methods from Validatible
     //
 
-    public void validate(EventContext ec) {}
+    public void doValidate(EventContext ec) {}
 
  
 }
