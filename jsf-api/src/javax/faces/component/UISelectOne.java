@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.10 2002/06/25 22:46:33 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.11 2002/07/15 18:02:55 craigmcc Exp $
  */
 
 /*
@@ -104,7 +104,7 @@ public class UISelectOne extends UISelectBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encodeBegin(FacesContext context) throws IOException {
+    public void encodeEnd(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
