@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.11 2002/06/07 20:13:15 craigmcc Exp $
+ * $Id: UICommand.java,v 1.12 2002/06/07 23:03:10 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.CommandEvent;
@@ -152,10 +153,10 @@ public class UICommand extends UIComponent {
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces?action=command&name=");
-        sb.append(currentValue(context)); // FIXME - null handling?
-        sb.append("&tree=");
-        sb.append(context.getResponseTree().getTreeId());
+        sb.append("/faces/command/");
+        sb.append(URLEncoder.encode(currentValue(context).toString())); // FIXME - null handling?
+        sb.append("/");
+        sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
         return (response.encodeURL(sb.toString()));
 
     }

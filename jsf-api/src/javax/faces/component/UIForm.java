@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.8 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UIForm.java,v 1.9 2002/06/07 23:03:10 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.FormEvent;
@@ -175,11 +176,11 @@ public class UIForm extends UIComponent {
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces?action=form&name=");
-        sb.append(currentValue(context)); // FIXME - null handling?
-        sb.append("&tree=");
-        sb.append(context.getResponseTree().getTreeId());
-        return (response.encodeURL(sb.toString()));
+        sb.append("/faces/form/");
+        sb.append(URLEncoder.encode(currentValue(context).toString())); // FIXME - null handling?
+        sb.append("/");
+        sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
+        return (response.encodeURL(URLEncoder.encode(sb.toString())));
 
     }
 
