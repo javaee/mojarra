@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<renderkit-config>
+
+<!-- RenderKit Id - RenderKit Class Name Mappings -->
+
+    <renderkit>
+        <renderkit-id>DEFAULT</renderkit-id>
+        <class>com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit</class>
+    </renderkit>
+
+</renderkit-config>

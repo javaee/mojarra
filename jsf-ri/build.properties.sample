@@ -12,3 +12,4 @@ httpclient.jar = D:\\cactus-23-1.2\\lib\\httpclient.jar
 commons.beanutils.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-beanutils.jar
 commons.collections.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-collections.jar
 commons.logging.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-logging.jar
+commons.digester.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-digester.jar

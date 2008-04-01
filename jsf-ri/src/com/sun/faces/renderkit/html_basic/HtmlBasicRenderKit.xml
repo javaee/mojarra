@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<renderkit>
+
+<!-- Component Type - Renderer Name Mappings -->
+
+    <component>
+        <type>Form</type>
+        <renderer>
+            <type>FormRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.FormRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>Output</type>
+        <renderer> 
+            <type>TextRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>TextAndGraphicRenderer</type> 
+            <class>com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>MessageRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.MessageRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>Command</type>
+        <renderer>
+            <type>ButtonRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.ButtonRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>HyperlinkRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.HyperlinkRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>SelectBoolean</type>
+        <renderer>
+            <type>CheckboxRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>TextEntry</type>
+        <renderer>
+            <type>InputRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>SecretRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>TextAreaRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>SelectOne</type>
+        <renderer>
+            <type>RadioRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.RadioRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>OptionList</type>
+        <renderer>
+            <type>OptionListRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.OptionListRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+    <component>
+        <type>TextEntry</type>
+        <renderer>
+            <type>InputRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>SecretRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+
+        <renderer>
+            <type>TextAreaRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
+        <!-- Add Attribute Desc stuff here -->
+        </renderer>
+    </component>
+
+</renderkit>
