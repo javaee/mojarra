@@ -944,6 +944,23 @@
     </attribute>
   </tag>
 
+  <tag>
+      <name>output_label</name>
+      <tagclass>com.sun.faces.taglib.html_basic.Output_LabelTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+      <attribute>
+        <name>id</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>for</name>
+        <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+  </tag>
+
+
 <!-- PENDING(rogerk) "parameter" tag will be moved into "api" taglib -->
 
   <tag>

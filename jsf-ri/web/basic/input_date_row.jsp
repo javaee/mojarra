@@ -1,9 +1,10 @@
            <tr>
 
              <td>
-
+               <faces:output_label id="date1id" for="input_date1">
                <faces:output_text id="input_date1_label" 
                      value="input_date MEDIUM readonly"/>
+               </faces:output_label>
 
              </td>
 

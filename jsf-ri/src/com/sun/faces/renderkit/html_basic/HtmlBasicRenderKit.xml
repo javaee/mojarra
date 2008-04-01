@@ -197,6 +197,22 @@
             <!-- The attributes come from the DateRenderer declaration in
                  UIInput -->
         </renderer>
+
+        <renderer>
+            <type>LabelRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.LabelRenderer</class>
+            <attribute>
+                <name>for</name>
+                <display-name>for</display-name>
+
+                <description>The componentId to which this label
+                applies.  Either an absolute path, beginning with "/",
+                or a relative path, possibly containing "../.."
+                chars. </description>
+
+                <type>java.lang.String</type>
+            </attribute>
+        </renderer>
     </component>
 
     <component>

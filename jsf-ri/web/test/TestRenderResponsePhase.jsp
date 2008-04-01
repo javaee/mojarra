@@ -20,6 +20,10 @@
                      commandName="push" disabled = "true" >
                  <faces:output_text id="buttonLabel" value="This is a push button " />
                  <faces:graphic_image id="buttonImage" url="/duke.gif" />
+                 <!-- this isn't valid HTML, but it works for our label case -->
+                 <faces:output_label id="pushButtonLabel" for="../pushButton">
+                 Label for PushButon
+                 </faces:output_label>
              </faces:command_button>
 	</TD>
 
