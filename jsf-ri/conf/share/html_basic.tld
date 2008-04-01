@@ -974,7 +974,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
-
+    <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <!-- HTML 4.0 Attributes  -->
     <attribute>
       <name>value</name>
@@ -1092,6 +1096,11 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+      <name>dir</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>class</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -1123,6 +1132,11 @@
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
+    <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <!-- HTML 4.0 Attributes  -->
     <attribute>
       <name>value</name>
@@ -1145,7 +1159,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>maxLength</name>
+      <name>maxlength</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1240,6 +1254,11 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+      <name>dir</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>class</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -1271,12 +1290,17 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
-    <!-- HTML 4.0 Attributes  -->
+    <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <attribute>
       <name>value</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <!-- HTML 4.0 Attributes  -->
     <attribute>
       <name>disabled</name>
       <required>false</required>
@@ -1384,6 +1408,11 @@
     </attribute>
     <attribute>
       <name>onmouseup</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>dir</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
