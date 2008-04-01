@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.8 2002/06/12 21:51:28 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.9 2002/06/14 04:32:02 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,8 @@ package javax.faces.render;
 
 
 import java.util.Iterator;
-import javax.faces.FacesException;     // FIXME - subpackage?
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -78,6 +79,27 @@ public abstract class RenderKitFactory {
      *  is <code>null</code>
      */
     public abstract RenderKit getRenderKit(String renderKitId)
+        throws FacesException;
+
+
+    /**
+     * <p>Create (if needed) and return a {@link RenderKit} instance
+     * for the specified render kit identifier, possibly customized based
+     * on dynamic characteristics of the specified {@link FacesContext}.
+     * The set of available render kit identifiers is available via the
+     * <code>getRenderKitIds()</code> method.</p>
+     *
+     * @param renderKitId Render kit identifier of the requested
+     *  {@link RenderKit} instance
+     * @param contxt FacesContext for the request currently being processed
+     *
+     * @exception FacesException if a {@link RenderKit} instance cannot be
+     *  constructed
+     * @exception NullPointerException if <code>renderKitId</code>
+     *  is <code>null</code>
+     */
+    public abstract RenderKit getRenderKit(String renderKitId,
+                                           FacesContext context)
         throws FacesException;
 
 

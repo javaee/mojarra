@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationHandler.java,v 1.3 2002/06/12 22:02:20 craigmcc Exp $
+ * $Id: ApplicationHandler.java,v 1.4 2002/06/14 04:32:01 craigmcc Exp $
  */
 
 /*
@@ -9,8 +9,7 @@
 
 package javax.faces.lifecycle;
 
-import java.util.SortedMap;
-import javax.faces.FacesException;         // FIXME - subpackage?
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.11 2002/06/14 00:00:06 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.12 2002/06/14 04:32:01 craigmcc Exp $
  */
 
 /*
@@ -127,8 +127,36 @@ public abstract class Lifecycle {
      * lifecycle.</p>
      *
      * @param handler The new {@link ApplicationHandler} instance
+     *
+     * @exception IllegalStateException if this method is called after at least
+     *  one request has been processed by this <code>Lifecycle</code> instance
+     * @exception NullPointerException if <code>handler</code>
+     *  is <code>null</code>
      */
     public abstract void setApplicationHandler(ApplicationHandler handler);
+
+
+    /**
+     * <p>Return the {@link ViewHandler} instance that will be utilized
+     * during the <em>Render Response</em> phase of the request processing
+     * lifecycle.</p>
+     */
+    public abstract ViewHandler getViewHandler();
+
+
+    /**
+     * <p>Set the {@link ViewHandler} instance that will be utilized
+     * during the <em>Render Response</em> phase of the request processing
+     * lifecycle.</p>
+     *
+     * @param handler The new {@link ViewHandler} instance
+     *
+     * @exception IllegalStateException if this method is called after at least
+     *  one request has been processed by this <code>Lifecycle</code> instance
+     * @exception NullPointerException if <code>handler</code>
+     *  is <code>null</code>
+     */
+    public abstract void setViewHandler(ViewHandler handler);
 
 
     // --------------------------------------------------------- Public Methods
@@ -150,29 +178,6 @@ public abstract class Lifecycle {
      *  from its <code>execute()</code> method
      */
     public abstract void execute(FacesContext context) throws FacesException;
-
-
-    /**
-     * <p>Register a new {@link PhaseListener} that will receive notification
-     * before and after the execution of each {@link Phase} of the request
-     * processing lifecycle for this request.</p>
-     *
-     * <p><strong>FIXME</strong> - Should this registration perhaps be on
-     * {@link LifecycleFactory} instead, keyed to the logical lifecycle id?</p>
-     *
-     * @param listener The {@link PhaseListener} instance to be added
-     */
-    public abstract void addPhaseListener(PhaseListener listener);
-
-
-    /**
-     * <p>Deregister a {@link PhaseListener} that was receiving notification
-     * before and after the execution of each {@link Phase} of the request
-     * processing lifecycle for this request.</p>
-     *
-     * @param listener The {@link PhaseListener} instance to be removed
-     */
-    public abstract void removePhaseListener(PhaseListener listener);
 
 
 }
