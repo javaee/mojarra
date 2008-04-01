@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.1 2002/06/05 22:29:56 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.2 2002/06/05 23:00:07 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.1 2002/06/05 22:29:56 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.2 2002/06/05 23:00:07 rkitain Exp $
  * 
  *
  */
@@ -66,8 +66,6 @@ public class TestRenderers_2 extends ServletTestCase
 
    public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
         "CorrectRenderersResponse_2";
-
-    public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 
     //
     // Class Variables
