@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.7 2002/06/14 21:30:46 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.8 2002/06/25 22:46:33 craigmcc Exp $
  */
 
 /*
@@ -109,9 +109,9 @@ public class UISelectMany extends UISelectBase {
         if (context == null) {
             throw new NullPointerException();
         }
-        String values[] = getAsStrings(context, "value", "modelReference");
+        String values[] = getAsStrings(context, "value", getModelReference());
         SelectItem items[] =
-            getAsItems(context, "items", "itemsModelReference");
+            getAsItems(context, "items", getItemsModelReference());
         if (items == null) {
             items = (SelectItem[])
                 context.getModelValue(getItemsModelReference());

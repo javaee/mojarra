@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.9 2002/06/14 21:30:46 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.10 2002/06/25 22:46:33 craigmcc Exp $
  */
 
 /*
@@ -113,9 +113,9 @@ public class UISelectOne extends UISelectBase {
         if (oldValue == null) {
             oldValue = "";
         }
-        String value = getAsString(context, "value", "modelReference");
+        String value = getAsString(context, "value", getModelReference());
         SelectItem items[] =
-            getAsItems(context, "items", "itemsModelReference");
+            getAsItems(context, "items", getItemsModelReference());
         if (items == null) {
             items = (SelectItem[])
                 context.getModelValue(getItemsModelReference());
