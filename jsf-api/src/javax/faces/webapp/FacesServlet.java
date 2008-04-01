@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.1 2002/05/31 00:12:50 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.1 2002/06/03 16:56:37 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces;
+package javax.faces.webapp;
 
 
 import java.io.IOException;
