@@ -1,5 +1,5 @@
 /*
- * $Id: EventDispatcherFactoryImpl.java,v 1.2 2001/12/20 22:26:38 ofung Exp $
+ * $Id: EventDispatcherFactoryImpl.java,v 1.3 2002/01/10 22:20:09 edburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.EventObject;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventDispatcherFactoryImpl.java,v 1.2 2001/12/20 22:26:38 ofung Exp $
+ * @version $Id: EventDispatcherFactoryImpl.java,v 1.3 2002/01/10 22:20:09 edburns Exp $
  * 
  * @see javax.faces.EventDispatcherFactory
  * @see	javax.faces.EventDispatcher
@@ -61,10 +61,6 @@ public class EventDispatcherFactoryImpl extends EventDispatcherFactory
     {
        super();
     }
-
-    //
-    // Methods from ObjectTableFactory
-    //
 
     //
     // Class methods

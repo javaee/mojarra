@@ -1,5 +1,5 @@
 /*
- * $Id: DeclareBeanTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ * $Id: DeclareBeanTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import java.util.EventListener;
 import javax.faces.Constants;
 
@@ -33,7 +33,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DeclareBeanTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: DeclareBeanTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -88,10 +88,10 @@ public class DeclareBeanTag extends TagSupport
     public int doStartTag() throws JspException{
 
         // PENDING(visvan) use tagext class to validate attributes.
-        // get ObjectTable from ServletContext.
+        // get ObjectManager from ServletContext.
         Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
+        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
 	Class beanClass;
 	
@@ -108,22 +108,22 @@ public class DeclareBeanTag extends TagSupport
         return(EVAL_BODY_INCLUDE);
     }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param el Listener object to be stored in namescope
-     * @param ot ObjectTable Table that stores the components
+     * @param ot ObjectManager Table that stores the components
      */
-    public void addToScope(Class beanClass, ObjectTable ot) {
+    public void addToScope(Class beanClass, ObjectManager objectManager) {
         
         if ("request".equals(scope)) {
-            ot.put(ObjectTable.RequestScope, name, beanClass); 
+            objectManager.bind(ObjectManager.RequestScope, name, beanClass); 
         }    
         else if ("session".equals(scope)) {
-	    ot.put(ObjectTable.SessionScope, name, beanClass);
+	    objectManager.bind(ObjectManager.SessionScope, name, beanClass);
         }
         else if ("application".equals(scope)){
-	    ot.put(ObjectTable.GlobalScope, name, beanClass);
+	    objectManager.bind(ObjectManager.GlobalScope, name, beanClass);
         } 
     }
 

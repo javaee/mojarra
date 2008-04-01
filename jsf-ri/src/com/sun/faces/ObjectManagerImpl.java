@@ -1,48 +1,47 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.11 2001/12/20 22:26:38 ofung Exp $
+ * $Id: ObjectManagerImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
  */
 
 /*
  * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-// ObjectTableImpl.java
+
+// ObjectManagerImpl.java
 
 package com.sun.faces;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-
-
 /**
  *
- *  <B>ObjectTableImpl</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ObjectTableImpl.java,v 1.11 2001/12/20 22:26:38 ofung Exp $
+ *  <B>ObjectManagerImpl</B> is a class ...
+
+ * <B>Lifetime And Scope</B> <P> This instance is created by the
+ * FacesServlet in its init method.
+
+ * @version $Id: ObjectManagerImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
  * 
- * @see	Blah
- * @see	Bloo
+ * @see	javax.faces.ObjectManager
  *
  */
 
-public class ObjectTableImpl extends ObjectTable
+public class ObjectManagerImpl extends ObjectManager
 {
 //
 // Protected Constants
@@ -66,7 +65,7 @@ private ArrayList scopes = null;
 // Constructors and Initializers    
 //
 
-public ObjectTableImpl()
+public ObjectManagerImpl()
 {
     super();
     if (null == scopes) {
@@ -80,16 +79,17 @@ public ObjectTableImpl()
 	    scopes.add(GlobalScope);
 	}
     }
-    // PENDING(edburns): see ObjectTable.setInstance()
-    ObjectTable.setInstance(this);
+    // PENDING(edburns): see ObjectManager.setInstance()
+    ObjectManager.setInstance(this);
 }
+
 
 //
 // Class methods
 //
 
 //
-// Methods from ObjectTable
+// Methods from ObjectManager
 //
 
 public List getScopes() {
@@ -116,7 +116,7 @@ public void setScopes(List newScopes) {
 // Inner interfaces and classes
 // 
 
-protected static class ScopeImpl implements ObjectTable.Scope {
+protected static class ScopeImpl extends ObjectManager.Scope {
 
 // Relationship Instance Variables
 
@@ -207,9 +207,19 @@ public boolean isA(Object scopeKey) {
     return scopeClass.isInstance(scopeKey);
 }
 
-public void put(Object name, Object value) {
+public void bind(Object name, LazyValue value) {
     outerMap.put(name, value);
 }
+
+public void bind(Object name, ActiveValue value) {
+    outerMap.put(name, value);
+}
+
+    /*
+     *public void bind(Object name, Object value) {
+     *    outerMap.put(name, value);
+     *}
+     */
 
 public void put(Object scopeKey, Object name, Object value) {
     scopeKey = fixScopeKey(scopeKey);
@@ -293,4 +303,7 @@ public void exit(Object scopeKey) {
 }
 } // end of class ScopeImpl
 
-} // end of class ObjectTableImpl
+// The testcase for this class is TestObjectManager.java 
+
+
+} // end of class ObjectManagerImpl

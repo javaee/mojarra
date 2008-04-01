@@ -1,5 +1,5 @@
 /*
- * $Id: SessionListener.java,v 1.3 2001/12/20 22:26:40 ofung Exp $
+ * $Id: SessionListener.java,v 1.4 2002/01/10 22:20:10 edburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSession;
 
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.Constants;
 
 /**
@@ -28,7 +28,7 @@ import javax.faces.Constants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SessionListener.java,v 1.3 2001/12/20 22:26:40 ofung Exp $
+ * @version $Id: SessionListener.java,v 1.4 2002/01/10 22:20:10 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,23 +86,21 @@ protected void init()
 
 /**
 
-* @see com.sun.faces.ObjectTableImpl#fixScopeKey
+* @see com.sun.faces.ObjectManagerImpl#fixScopeKey
 
 */
 
 public void sessionCreated(HttpSessionEvent sce) {
-    ObjectTable ot = ObjectTable.getInstance();
-    Assert.assert_it(null != ot);
     HttpSession session = sce.getSession();
     String sessionId = session.getId();
 
-    // The below code is because the ObjectTable cannot safely use an
+    // The below code is because the ObjectManager cannot safely use an
     // actual HttpSession instance as a hash key, because the servlet
     // container doesn't guarantee the same actual Object instance
     // representing the Session will be given to us each time.  Rather,
     // the container can wrap the Session with another instance that
     // implements HttpSession.  This new instance will have a different
-    // hashCode(), so entries in the ObjectTable that should be found
+    // hashCode(), so entries in the ObjectManager that should be found
     // will not be found.
 
     // Store it in the session's attr set so the case where the
@@ -126,19 +124,22 @@ public void sessionCreated(HttpSessionEvent sce) {
 
 * PRECONDITION: none <P>
 
-* POSTCONDITION: The ObjectTable's scope for this session, has been
+* POSTCONDITION: The ObjectManager's scope for this session, has been
 * exited.
 
 */
 
 public void sessionDestroyed(HttpSessionEvent sce) {
-    ObjectTable ot = ObjectTable.getInstance();
-    Assert.assert_it(null != ot);
     HttpSession session = sce.getSession();
     String sessionId = session.getId();
+
+    ObjectManager objectManager;
+    objectManager = (ObjectManager) session.getServletContext().
+	getAttribute(Constants.REF_OBJECTMANAGER);
+    Assert.assert_it(null != objectManager);
     
     // exit the scope for this session
-    ot.exit(session);
+    objectManager.exit(session);
     session.getServletContext().removeAttribute(sessionId);
 }
 

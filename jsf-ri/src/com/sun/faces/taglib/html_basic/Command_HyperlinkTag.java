@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.10 2001/12/20 22:26:41 ofung Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.11 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WCommand;
 import javax.faces.WForm;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -34,7 +34,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.10 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.11 2002/01/10 22:20:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,29 +115,29 @@ public class Command_HyperlinkTag extends TagSupport
     public int doStartTag() throws JspException {
 
         Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
-        Assert.assert_it( ot != null );
+        ObjectManager objectManager = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it( objectManager != null );
         RenderContext renderContext = 
-            (RenderContext)ot.get(pageContext.getSession(),
+            (RenderContext)objectManager.get(pageContext.getSession(),
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
         // PENDING shouldn't hyperlink have a name attribute. For now
-        // using target as name to put in the objectTable.
+        // using target as name to put in the objectManager.
         if (target != null) {
 
             // 1. Get or create the component instance.
             //
             WCommand wCommand = 
-                (WCommand) ot.get(pageContext.getRequest(), target);
+                (WCommand) objectManager.get(pageContext.getRequest(), target);
             if ( wCommand == null ) {
                 wCommand = new WCommand();
             }
             wCommand.setAttribute(renderContext, "target", getTarget());
             wCommand.setAttribute(renderContext, "image", getImage());
             wCommand.setAttribute(renderContext, "text", getText());
-            ot.put(pageContext.getRequest(), target, wCommand);
+            objectManager.put(pageContext.getRequest(), target, wCommand);
 
             // 2. Render the component.
             //
@@ -161,19 +161,19 @@ public class Command_HyperlinkTag extends TagSupport
     public int doEndTag() throws JspException{
 
         Assert.assert_it( pageContext != null );
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTTABLE);
-        Assert.assert_it( ot != null );
+        // get ObjectManager from ServletContext.
+        ObjectManager objectManager = (ObjectManager)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it( objectManager != null );
         RenderContext renderContext = 
-            (RenderContext)ot.get(pageContext.getSession(),
+            (RenderContext)objectManager.get(pageContext.getSession(),
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WCommand wCommand = (WCommand) ot.get(pageContext.getRequest(), target);
+        WCommand wCommand = (WCommand) objectManager.get(pageContext.getRequest(), target);
         Assert.assert_it( wCommand != null );
 
         // Complete the rendering process

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.13 2001/12/20 22:26:39 ofung Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.14 2002/01/10 22:20:10 edburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.faces.Constants;
 import javax.faces.WSelectBoolean;
 import javax.faces.WSelectOne;
 
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 
 /**
  *
@@ -46,7 +46,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.13 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.14 2002/01/10 22:20:10 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -197,18 +197,18 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
     String cmdName = null;
     WComponent c = null;
     Vector cmd_events = new Vector();
-    ObjectTable ot = null;
+    ObjectManager objectManager = null;
     RenderContext rc = null;
  
     Enumeration param_names = request.getParameterNames();
 
     if ( param_names.hasMoreElements() ) {
-        // get ObjectTable
-        ot = ObjectTable.getInstance();
-        Assert.assert_it(ot != null );
+        // get ObjectManager
+        objectManager = ObjectManager.getInstance();
+        Assert.assert_it(objectManager != null );
 
         // get renderContext
-        rc = (RenderContext)ot.get(request,
+        rc = (RenderContext)objectManager.get(request,
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
     }
@@ -242,13 +242,13 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
 
         // PENDING ( visvan ) type of the component and model should be
         // encoded as a hidden field so that it need not be obtained
-        // from the ObjectTable since the component may not exist in
+        // from the ObjectManager since the component may not exist in
         // the pool. Also value should also be encoded as a hidden
         // field so that change in values can be detected without WComponent.
 
-        c = (WComponent)(ot.get(request,param_name));
+        c = (WComponent)(objectManager.get(request,param_name));
         // if the component is not found then it might not have been a
-        // faces component or it was not stored in OT because of the scope.
+        // faces component or it was not stored in OBJECTMANAGER because of the scope.
         if ( c == null ) {
             continue;
         }

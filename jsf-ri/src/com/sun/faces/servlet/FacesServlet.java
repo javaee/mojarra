@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.10 2002/01/03 05:36:31 edburns Exp $
+ * $Id: FacesServlet.java,v 1.11 2002/01/10 22:20:10 edburns Exp $
  */
 
 /*
@@ -15,8 +15,8 @@ import javax.faces.Constants;
 import javax.faces.EventQueue;
 import javax.faces.EventQueueFactory;
 import javax.faces.FacesException;
-import javax.faces.ObjectTable;
-import javax.faces.ObjectTableFactory;
+import javax.faces.ObjectManager;
+import com.sun.faces.ObjectManagerFactory;
 import javax.faces.RenderContext;
 import javax.faces.RenderContextFactory;
 import javax.servlet.http.HttpServlet;
@@ -87,8 +87,8 @@ public class FacesServlet extends HttpServlet {
      * PRECONDITION: Nothing, this is to be called at the very beginning of
      * the Faces app instance.
      *
-     * POSTCONDITION: ObjectTable instance created using Factory.  Instance
-     * put in ServletContext.  ObjectTable global scope contains
+     * POSTCONDITION: ObjectManager instance created using Factory.  Instance
+     * put in ServletContext.  ObjectManager global scope contains
      * RenderContextFactory, EventQueueFactory.
      *
      * @param config The Servlet configuration object which contains
@@ -105,8 +105,8 @@ public class FacesServlet extends HttpServlet {
 	// you go in the debugger and un-hang it.
 	// com.sun.faces.util.DebugUtil.waitForDebugger();
 
-        ObjectTable objectTable;
-        ObjectTableFactory otFactory;
+        ObjectManager objectManager;
+        ObjectManagerFactory omFactory;
         EventQueueFactory eqFactory;
         RenderContextFactory rcFactory;
         EventDispatcherFactory edFactory;
@@ -114,33 +114,33 @@ public class FacesServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         Assert.assert_it(null != servletContext);
 
-	// Step 1: Create the singleton ObjectTable instance and put it
+	// Step 1: Create the singleton ObjectManager instance and put it
 	// in the servletContext.
 
-        objectTable = (ObjectTable) servletContext.getAttribute(
-            Constants.REF_OBJECTTABLE);
-	// The objectTable must not exist at this point.  It is an error
+        objectManager = (ObjectManager) servletContext.getAttribute(
+            Constants.REF_OBJECTMANAGER);
+	// The objectManager must not exist at this point.  It is an error
 	// if it does exist.
-	Assert.assert_it(null == objectTable);
+	Assert.assert_it(null == objectManager);
 
-	// create the ObjectTable
+	// create the ObjectManager
 	try {
-	    otFactory = ObjectTableFactory.newInstance();
-	    objectTable = otFactory.newObjectTable();
+	    omFactory = ObjectManagerFactory.newInstance();
+	    objectManager = omFactory.newObjectManager();
 	} catch (FacesException e) {
 	    throw new ServletException(e.getMessage());
 	}
-        Assert.assert_it(null != objectTable);
+        Assert.assert_it(null != objectManager);
 
-        // Store the Object Table in the servlet context 
+        // Store the ObjectManager in the servlet context 
         // (application scope).
         //
-        servletContext.setAttribute(Constants.REF_OBJECTTABLE, objectTable);
+        servletContext.setAttribute(Constants.REF_OBJECTMANAGER, objectManager);
 
 	// Step 2: Create the EventQueueFactory and put it in the
-	// ObjectTable in Global Scope.
+	// ObjectManager in Global Scope.
 
-        eqFactory = (EventQueueFactory)objectTable.get(
+        eqFactory = (EventQueueFactory)objectManager.get(
             Constants.REF_EVENTQUEUEFACTORY);
 
 	// The EventQueueFactory must not exist at this point.  It is an
@@ -149,13 +149,13 @@ public class FacesServlet extends HttpServlet {
 
 	eqFactory = EventQueueFactory.newInstance();
         Assert.assert_it(null != eqFactory);
-	objectTable.put(ObjectTable.GlobalScope,
+	objectManager.put(ObjectManager.GlobalScope,
 			Constants.REF_EVENTQUEUEFACTORY, eqFactory);
 
 	// Step 3: Create the RenderContextFactory and put it in the
-	// ObjectTable in GlobalScope
+	// ObjectManager in GlobalScope
 
-        rcFactory = (RenderContextFactory)objectTable.get(
+        rcFactory = (RenderContextFactory)objectManager.get(
             Constants.REF_RENDERCONTEXTFACTORY);
 	// The RenderContextFactory must not exist at this point.  It is an
 	// error if it does exist.
@@ -163,13 +163,13 @@ public class FacesServlet extends HttpServlet {
 
 	rcFactory = RenderContextFactory.newInstance();
         Assert.assert_it(null != rcFactory);
-	objectTable.put(ObjectTable.GlobalScope,
+	objectManager.put(ObjectManager.GlobalScope,
 			Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
 
         // Step 4: Create the EventDispatcherFactory and put it in the
-        // ObjectTable in GlobalScope
+        // ObjectManager in GlobalScope
 
-        edFactory = (EventDispatcherFactory)objectTable.get(
+        edFactory = (EventDispatcherFactory)objectManager.get(
             Constants.REF_EVENTDISPATCHERFACTORY);
         // The EventDispatcherFactory must not exist at this point.  It is an
         // error if it does exist.
@@ -177,8 +177,22 @@ public class FacesServlet extends HttpServlet {
 
         edFactory = EventDispatcherFactory.newInstance();
         Assert.assert_it(null != edFactory);
-        objectTable.put(ObjectTable.GlobalScope,
+        objectManager.put(ObjectManager.GlobalScope,
                         Constants.REF_EVENTDISPATCHERFACTORY, edFactory);
+    }
+
+    /**
+       
+    * PRECONDITION: The faces app is to be taken out of service
+
+    * POSTCONDITION: ObjectManager is de-populated.  Any attributes we
+    * put in the ServletContext are removed.
+    
+    */
+
+    public void destroy() {
+	// PENDING(edburns): clear out the ObjectManager
+	getServletContext().removeAttribute(Constants.REF_OBJECTMANAGER);
     }
 
     /**
@@ -222,7 +236,7 @@ public class FacesServlet extends HttpServlet {
     */ 
     public void service(HttpServletRequest req,
 			HttpServletResponse res) {
-	// We set this attr here so that when ObjectTable.get() comes
+	// We set this attr here so that when ObjectManager.get() comes
 	// around for this request, we pull it out and use it as the
 	// value for the scopeKey.  This is necessary because various
 	// entities modify the HttpServletRequest instance so it's not
@@ -239,21 +253,21 @@ public class FacesServlet extends HttpServlet {
 	} 
 	
 	// exit the scope for this request
-	ObjectTable objectTable;
-        objectTable = (ObjectTable) getServletContext().
-	    getAttribute(Constants.REF_OBJECTTABLE);
-	objectTable.exit(req);
+	ObjectManager objectManager;
+        objectManager = (ObjectManager) getServletContext().
+	    getAttribute(Constants.REF_OBJECTMANAGER);
+	objectManager.exit(req);
     } 
 
 
     /**
      * Process an HTTP request.
      *
-     * PRECONDITION: ObjectTable exists in ServletContext.  
-     * ObjectTable global scope contains RenderContextFactory, 
+     * PRECONDITION: ObjectManager exists in ServletContext.  
+     * ObjectManager global scope contains RenderContextFactory, 
      * EventQueueFactory.
      *
-     * POSTCONDITION: ObjectTable contains RenderContext and
+     * POSTCONDITION: ObjectManager contains RenderContext and
      * EventQueue instances in session scope.
      *
      * @param request The servlet request we are processing
@@ -274,19 +288,19 @@ public class FacesServlet extends HttpServlet {
 
 	HttpSession thisSession = req.getSession();
 
-        ObjectTable objectTable = (ObjectTable)getServletContext().
-            getAttribute(Constants.REF_OBJECTTABLE);
-        Assert.assert_it(null != objectTable); 
+        ObjectManager objectManager = (ObjectManager)getServletContext().
+            getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it(null != objectManager); 
 
         // Attempt to get a render context from the object table
         // for the current session.  If one doesn't exist, create one.
         //
-        rc = (RenderContext)objectTable.get(thisSession, 
+        rc = (RenderContext)objectManager.get(thisSession, 
 					    Constants.REF_RENDERCONTEXT);
 
         if (rc == null) {
             rcFactory = (RenderContextFactory)
-		objectTable.get(Constants.REF_RENDERCONTEXTFACTORY);
+		objectManager.get(Constants.REF_RENDERCONTEXTFACTORY);
 	    
             Assert.assert_it(null != rcFactory);
             try {
@@ -295,18 +309,18 @@ public class FacesServlet extends HttpServlet {
                 throw new ServletException(e.getMessage());
             }
 	    Assert.assert_it(null != rc); 
-            objectTable.put(thisSession, 
+            objectManager.put(thisSession, 
 			    Constants.REF_RENDERCONTEXT, rc);
         }
 
         // Attempt to get an event queue from the object table
         // for the current session.  If one doesn't exist, create one.
          
-        eq = (EventQueue)objectTable.get(thisSession, 
+        eq = (EventQueue)objectManager.get(thisSession, 
 					 Constants.REF_EVENTQUEUE);
         if (eq == null) {
             eqFactory = (EventQueueFactory)
-		objectTable.get(Constants.REF_EVENTQUEUEFACTORY);
+		objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
             Assert.assert_it(null != eqFactory);
             try {
                 eq = eqFactory.newEventQueue();
@@ -314,7 +328,7 @@ public class FacesServlet extends HttpServlet {
                 throw new ServletException(e.getMessage());
             }
 	    Assert.assert_it(null != eq); 
-            objectTable.put(thisSession, Constants.REF_EVENTQUEUE, eq);
+            objectManager.put(thisSession, Constants.REF_EVENTQUEUE, eq);
         }
 
         // If there are no events in the queue, simply forward to the target.
@@ -340,7 +354,7 @@ public class FacesServlet extends HttpServlet {
 	    
 	    if (!eq.isEmpty()) {
 		edFactory = (EventDispatcherFactory)
-		    objectTable.get(Constants.REF_EVENTDISPATCHERFACTORY);
+		    objectManager.get(Constants.REF_EVENTDISPATCHERFACTORY);
 		Assert.assert_it(edFactory != null );
 		
 		while (!eq.isEmpty()) {

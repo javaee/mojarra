@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.5 2001/12/20 22:26:42 ofung Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.6 2002/01/10 22:20:12 edburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WForm;
 import javax.faces.WSelectOne;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -35,7 +35,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.5 2001/12/20 22:26:42 ofung Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.6 2002/01/10 22:20:12 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,8 +120,8 @@ protected void init()
      * @exception JspException if a JSP exception has occurred
      */
 public int doStartTag() throws JspException {
-    ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-	getAttribute(Constants.REF_OBJECTTABLE);
+    ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+	getAttribute(Constants.REF_OBJECTMANAGER);
     Assert.assert_it( ot != null );
     RenderContext renderContext = 
 	(RenderContext)ot.get(pageContext.getSession(),
@@ -190,9 +190,9 @@ public int doStartTag() throws JspException {
     public int doEndTag() throws JspException{
 
         Assert.assert_it( pageContext != null );
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTTABLE);
+        // get ObjectManager from ServletContext.
+        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext renderContext =
             (RenderContext)ot.get(pageContext.getSession(),

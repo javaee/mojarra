@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.9 2001/12/20 22:26:42 ofung Exp $
+ * $Id: UseFacesTag.java,v 1.10 2002/01/10 22:20:12 edburns Exp $
  */
 
 /*
@@ -23,10 +23,8 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.RenderContextFactory;
-import javax.faces.ObjectTable;
-import javax.faces.ObjectTableFactory;
+import javax.faces.ObjectManager;
 import javax.faces.RenderKit;
-import javax.faces.ObjectTable;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
@@ -39,7 +37,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UseFacesTag.java,v 1.9 2001/12/20 22:26:42 ofung Exp $
+ * @version $Id: UseFacesTag.java,v 1.10 2002/01/10 22:20:12 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,22 +87,21 @@ public UseFacesTag()
  */
 public int doStartTag() throws JspException {
 
-    ObjectTable objectTable;
-    ObjectTableFactory otf;
+    ObjectManager objectManager;
     ServletContext servletContext = pageContext.getServletContext();
 
-    // Try to get the ObjectTable from the ServletContext
+    // Try to get the ObjectManager from the ServletContext
     //
-    objectTable = (ObjectTable) servletContext.getAttribute(
-        Constants.REF_OBJECTTABLE);
-    Assert.assert_it(null != objectTable);
+    objectManager = (ObjectManager) servletContext.getAttribute(
+        Constants.REF_OBJECTMANAGER);
+    Assert.assert_it(null != objectManager);
 
-    // Get the RenderContext from the ObjectTable (session scope).  
+    // Get the RenderContext from the ObjectManager (session scope).  
     //
     RenderContextFactory rcf = null;
     RenderContext renderContext = null;
 
-    renderContext = (RenderContext)objectTable.get(pageContext.getSession(),
+    renderContext = (RenderContext)objectManager.get(pageContext.getSession(),
         Constants.REF_RENDERCONTEXT);
     Assert.assert_it(null != renderContext);
 
@@ -112,11 +109,9 @@ public int doStartTag() throws JspException {
     outputMethod.setPageContext(pageContext);
     renderContext.setOutputMethod(outputMethod);
 
-    objectTable.put(pageContext.getSession(), Constants.REF_RENDERCONTEXT, 
+    objectManager.put(pageContext.getSession(), Constants.REF_RENDERCONTEXT, 
         renderContext); 
 
-    servletContext.setAttribute(Constants.REF_OBJECTTABLE, objectTable);
-    
     return EVAL_BODY_INCLUDE;
 }
 

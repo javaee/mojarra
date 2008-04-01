@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.9 2001/12/20 22:26:39 ofung Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.10 2002/01/10 22:20:10 edburns Exp $
  */
 
 
@@ -17,13 +17,16 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.Constants;
 import javax.faces.OutputMethod;
+import javax.faces.ObjectManager;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
 import javax.faces.WComponent;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
 
 import java.util.Locale;
 import java.util.Stack;
@@ -34,7 +37,7 @@ import java.util.Stack;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.9 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.10 2002/01/10 22:20:10 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,6 +70,8 @@ public class HtmlBasicRenderContext extends RenderContext {
 
     private Stack stack;
 
+    private ObjectManager objectManager = null;
+
 //
 // Constructors and Initializers    
 //
@@ -93,6 +98,24 @@ public HtmlBasicRenderContext(ServletRequest req) {
 //
 public RenderKit getRenderKit() {
     return renderKit;
+}
+
+public Locale getLocale(){
+    return null;
+}
+
+public ObjectManager getObjectManager() {
+    if (null == objectManager) {
+	Assert.assert_it(null != session);
+	// The per-app ObjectManager instance is created in the
+	// FacesServlet.init() method, and stored in the
+	// ServletContext's attr set.
+	objectManager = (ObjectManager) session.getServletContext().
+	    getAttribute(Constants.REF_OBJECTMANAGER);
+	Assert.assert_it(null != objectManager, 
+			 "ObjectManager cannot be null.  Should already be created.");
+    }
+    return objectManager;
 }
 
 public OutputMethod getOutputMethod() {

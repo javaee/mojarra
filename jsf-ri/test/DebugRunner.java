@@ -1,5 +1,5 @@
 /*
- * $Id: DebugRunner.java,v 1.4 2001/12/20 22:26:43 ofung Exp $
+ * $Id: DebugRunner.java,v 1.5 2002/01/10 22:20:12 edburns Exp $
  */
 
 /*
@@ -15,7 +15,7 @@
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugRunner.java,v 1.4 2001/12/20 22:26:43 ofung Exp $
+ * @version $Id: DebugRunner.java,v 1.5 2002/01/10 22:20:12 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,7 +93,7 @@ private static void startTomcat() {
 	System.setProperty("catalina.home", "D:\\tomcat4.0");
     }
     if (null == (serverXml = System.getProperty("server.xml"))) {
-	serverXml = "D:\\Projects\\J2EE\\workareas\\jsf-ea1\\jsf-ri\\build\\test\\servers\\tomcat40\\conf\\server.xml";
+	serverXml = "D:\\Projects\\J2EE\\workareas\\jsf-trunk\\jsf-ri\\build\\test\\servers\\tomcat40\\conf\\server.xml";
     }
     final String [] args = {"-config", serverXml, "start"};
     Thread runner = new Thread(new Runnable() {

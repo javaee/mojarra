@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.12 2001/12/20 22:26:41 ofung Exp $
+ * $Id: Command_ButtonTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WCommand;
 import javax.faces.WForm;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 
 import java.util.Vector;
 import javax.servlet.jsp.JspException;
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.12 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -189,11 +189,11 @@ public class Command_ButtonTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
-        Assert.assert_it( ot != null );
+        ObjectManager objectManager = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it( objectManager != null );
         RenderContext renderContext = 
-            (RenderContext)ot.get(pageContext.getSession(),
+            (RenderContext)objectManager.get(pageContext.getSession(),
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
@@ -202,10 +202,10 @@ public class Command_ButtonTag extends TagSupport {
             // 1. Get or create the component instance.
             //
             WCommand wCommand = 
-                (WCommand) ot.get(pageContext.getRequest(), name);
+                (WCommand) objectManager.get(pageContext.getRequest(), name);
             if ( wCommand == null ) {
                 wCommand = new WCommand();
-                addToScope(wCommand, ot);
+                addToScope(wCommand, objectManager);
             }
             wCommand.setAttribute(renderContext, "name", getName());
             wCommand.setAttribute(renderContext, "image", getImage());
@@ -234,19 +234,19 @@ public class Command_ButtonTag extends TagSupport {
     public int doEndTag() throws JspException{
 
         Assert.assert_it( pageContext != null );
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTTABLE);
-        Assert.assert_it( ot != null );
+        // get ObjectManager from ServletContext.
+        ObjectManager objectManager = (ObjectManager)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTMANAGER);
+        Assert.assert_it( objectManager != null );
         RenderContext renderContext = 
-            (RenderContext)ot.get(pageContext.getSession(),
+            (RenderContext)objectManager.get(pageContext.getSession(),
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
 //PENDING(rogerk)can we eliminate this extra get if wCommand is instance
 //variable? If so, threading issue?
 //
-        WCommand wCommand = (WCommand) ot.get(pageContext.getRequest(), name);
+        WCommand wCommand = (WCommand) objectManager.get(pageContext.getRequest(), name);
         Assert.assert_it( wCommand != null );
 
         // Complete the rendering process
@@ -280,13 +280,13 @@ public class Command_ButtonTag extends TagSupport {
         command = null;
     }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param c WComponent to be stored in namescope
-     * @param ot Object pool
+     * @param objectManager Object pool
      */
-    public void addToScope(WCommand c, ObjectTable ot) {
+    public void addToScope(WCommand c, ObjectManager objectManager) {
    
         Vector listeners = null; 
         // PENDING ( visvan ) right now, we are not saving the state of the
@@ -294,26 +294,28 @@ public class Command_ButtonTag extends TagSupport {
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), name, c);
+        objectManager.put(pageContext.getSession(), name, c);
   
         if ( commandListener != null ) {
             String lis_name = name.concat(Constants.REF_COMMANDLISTENERS);
-            listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
+            listeners = (Vector) objectManager.get(pageContext.getRequest(), 
+						   lis_name);
             if ( listeners == null) {
                 listeners = new Vector();
             }    
             // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectTable.
+            // listener itself is stored in the objectManager.
             listeners.add(commandListener);
-            ot.put(pageContext.getSession(),lis_name, listeners);
+            objectManager.put(pageContext.getSession(),lis_name, listeners);
         }
 
         if ( command != null ) {
-            // put the "Command" listener in the objectTable
+            // put the "Command" listener in the objectManager
             String cmd_name = name.concat(Constants.REF_COMMAND);
-            String cmd = (String) ot.get(pageContext.getRequest(), cmd_name);
+            String cmd = (String) objectManager.get(pageContext.getRequest(), 
+						    cmd_name);
             if ( cmd == null) {
-                ot.put(pageContext.getSession(),cmd_name, command);
+                objectManager.put(pageContext.getSession(),cmd_name, command);
             }
         }
     }

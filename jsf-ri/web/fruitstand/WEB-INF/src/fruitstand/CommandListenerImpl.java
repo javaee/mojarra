@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.1 2002/01/04 01:11:18 edburns Exp $
+ * $Id: CommandListenerImpl.java,v 1.2 2002/01/10 22:20:14 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -22,7 +22,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.CommandListener;
 import javax.faces.CommandEvent;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.CommandFailedException;
 import javax.faces.AbstractCommand;
 
@@ -48,7 +48,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.1 2002/01/04 01:11:18 edburns Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.2 2002/01/10 22:20:14 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,7 +149,7 @@ private void serializeBean(UserBean user) {
 /**
 
 * Take the argument userBean and de-serialize the user, then call copy
-* on the user from the objectTable.
+* on the user from the objectManager.
 
 */
 
@@ -195,7 +195,7 @@ private void validateLogin(UserBean user) throws CommandFailedException {
 public void doCommand(CommandEvent e)  throws CommandFailedException
 {
     String sourceName = e.getSourceName();
-    ObjectTable ot = ObjectTable.getInstance();
+    ObjectManager ot = ObjectManager.getInstance();
     HttpServletRequest req = (HttpServletRequest) e.getRequest();
     UserBean user = (UserBean) ot.get(req, "UserBean");
     servletContext = req.getSession().getServletContext();

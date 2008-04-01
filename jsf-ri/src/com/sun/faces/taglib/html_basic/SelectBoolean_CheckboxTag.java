@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.12 2001/12/20 22:26:41 ofung Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WForm;
 import javax.faces.WSelectBoolean;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import java.util.Vector;
 
 import javax.servlet.jsp.JspException;
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.12 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -177,8 +177,8 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
+        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext renderContext = 
             (RenderContext)ot.get(pageContext.getSession(),
@@ -219,9 +219,9 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     public int doEndTag() throws JspException{
 
         Assert.assert_it( pageContext != null );
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTTABLE);
+        // get ObjectManager from ServletContext.
+        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext renderContext =
             (RenderContext)ot.get(pageContext.getSession(),
@@ -314,13 +314,13 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         return wSelectBoolean;
     }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param c WComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WSelectBoolean c, ObjectTable ot) {
+    public void addToScope(WSelectBoolean c, ObjectManager ot) {
    
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -336,7 +336,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
                 listeners = new Vector();
             }
             // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectTable. We do this
+            // listener itself is stored in the objectManager. We do this
             // because if the listeners are stored in the components, then
             // they have to exist for the event listeners to be dispatched
             // at the time we process the events.

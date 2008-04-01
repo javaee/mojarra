@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.15 2001/12/20 22:26:41 ofung Exp $
+ * $Id: FormTag.java,v 1.16 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.WForm;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import java.util.Vector;
 
 /**
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.15 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: FormTag.java,v 1.16 2002/01/10 22:20:11 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -93,10 +93,10 @@ public class FormTag extends TagSupport
     public int doStartTag() throws JspException{
 
         // PENDING(visvan) use tagext class to validate attributes.
-        // get ObjectTable from ServletContext.
+        // get ObjectManager from ServletContext.
         Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
+        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
                 Constants.REF_RENDERCONTEXT);
@@ -131,13 +131,13 @@ public class FormTag extends TagSupport
         return(EVAL_BODY_INCLUDE);
     }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param c WComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WForm c, ObjectTable ot) {
+    public void addToScope(WForm c, ObjectManager ot) {
    
         Vector listeners = null; 
         // PENDING ( visvan ) right now, we are not saving the state of the
@@ -156,7 +156,7 @@ public class FormTag extends TagSupport
                 listeners = new Vector();
             }    
             // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectTable.
+            // listener itself is stored in the objectManager.
             listeners.add(formListener);
             ot.put(pageContext.getSession(),lis_name, listeners);
         }
@@ -258,9 +258,9 @@ public class FormTag extends TagSupport
     public int doEndTag() throws JspException{
 
         Assert.assert_it( pageContext != null );
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTTABLE);
+        // get ObjectManager from ServletContext.
+        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
                 Constants.REF_RENDERCONTEXT);

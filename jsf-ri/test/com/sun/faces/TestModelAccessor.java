@@ -1,5 +1,5 @@
 /*
- * $Id: TestModelAccessor.java,v 1.2 2001/12/20 22:26:43 ofung Exp $
+ * $Id: TestModelAccessor.java,v 1.3 2002/01/10 22:20:13 edburns Exp $
  */
 
 /*
@@ -13,21 +13,20 @@ package com.sun.faces;
 
 import junit.framework.TestCase;
 
-import junit.framework.*;
-import org.apache.cactus.*;
-
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.ModelAccessor;
-import javax.faces.ObjectTable;
-import javax.faces.ObjectTableFactory;
+import javax.faces.ObjectManager;
 import javax.faces.RenderContext;
 import javax.faces.RenderContextFactory;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
+
+import com.sun.faces.servlet.FacesServlet;
 
 /**
  *
@@ -35,14 +34,14 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestModelAccessor.java,v 1.2 2001/12/20 22:26:43 ofung Exp $
+ * @version $Id: TestModelAccessor.java,v 1.3 2002/01/10 22:20:13 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestModelAccessor extends ServletTestCase {
+public class TestModelAccessor extends FacesTestCase {
     //
     // Protected Constants
     //
@@ -51,7 +50,6 @@ public class TestModelAccessor extends ServletTestCase {
     // Class Variables
     //
 
-    private static final int INITIAL_NUM_SCOPES = 3;
 
     //
     // Instance Variables
@@ -63,7 +61,6 @@ public class TestModelAccessor extends ServletTestCase {
 
     private User user = null;
     private Address address = null;
-    private ObjectTable objectTable = null;
 
     //
     // Constructors and Initializers    
@@ -79,36 +76,13 @@ public class TestModelAccessor extends ServletTestCase {
     // Methods from TestCase
     //
 
-    public void setUp() {
-        ObjectTableFactory otf = ObjectTableFactory.newInstance();
-
-        try {
-	    otf = ObjectTableFactory.newInstance();
-	    otf.newObjectTable();
-	    objectTable = ObjectTable.getInstance();
-        } catch (Exception e) {
-        }
-        request.setAttribute(Constants.REF_REQUESTINSTANCE, request);
-        HttpSession session = request.getSession();
-
-        session.setAttribute(Constants.REF_SESSIONINSTANCE,
-                         session.getId());
-    }
-
-    public void tearDown() {
-        objectTable = null;
-    }
-
     //
     // General Methods
     //
 
     public void testSetGetModelObject() {
-
         boolean result;
 
-        RenderContext context;
-        RenderContextFactory factory;
         HttpSession session;
         String modelReference;
         String value;
@@ -119,15 +93,10 @@ public class TestModelAccessor extends ServletTestCase {
             // use this for debugging
             //com.sun.faces.util.DebugUtil.waitForDebugger();
 
-            factory = RenderContextFactory.newInstance();
-            context = factory.newRenderContext(request);
-            result = null != context.getSession();
+            result = null != (session = renderContext.getSession());
             assertTrue(result);
 
-            session = context.getSession();
-            objectTable.put(objectTable.GlobalScope, "user", User.class);
-            session.getServletContext().setAttribute(Constants.REF_OBJECTTABLE,
-                objectTable);        
+            objectManager.bind(ObjectManager.GlobalScope, "user", User.class);
     
             // 1. Use model reference string with '$' format
        
@@ -138,12 +107,12 @@ public class TestModelAccessor extends ServletTestCase {
 
             // Set the model object value
             //
-            ModelAccessor.setModelObject(context, modelReference, value);
+            ModelAccessor.setModelObject(renderContext, modelReference, value);
             System.out.println("Model Property Set.");
 
             // Get the model object value
             //
-            object = ModelAccessor.getModelObject(context, modelReference); 
+            object = ModelAccessor.getModelObject(renderContext, modelReference); 
             System.out.println("Returned Object:"+object);
     
             result = value == object;
@@ -161,12 +130,13 @@ public class TestModelAccessor extends ServletTestCase {
 
             // Set the model object value
             //
-            ModelAccessor.setModelObject(context, modelReference, value);
+            ModelAccessor.setModelObject(renderContext, modelReference, value);
             System.out.println("Model Property Set.");
 
             // Get the model object value
             //
-            object = ModelAccessor.getModelObject(context, modelReference); 
+            object = ModelAccessor.getModelObject(renderContext, 
+						  modelReference); 
             System.out.println("Returned Object:"+object);
 
             result = value == object;
@@ -175,6 +145,7 @@ public class TestModelAccessor extends ServletTestCase {
 
         } catch (Exception e) {
             System.out.println("EXCEPTION:"+e.getMessage());
+	    assertTrue(false);
         }
     }
 }

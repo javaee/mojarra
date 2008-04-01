@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ * $Id: CommandTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.Command;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.Constants;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: CommandTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -94,10 +94,10 @@ public class CommandTag extends TagSupport
     public int doStartTag() throws JspException{
 
         // PENDING(visvan) use tagext class to validate attributes.
-        // get ObjectTable from ServletContext.
+        // get ObjectManager from ServletContext.
         Assert.assert_it( pageContext != null );
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
+        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         
         if ( name != null ) {
@@ -111,24 +111,24 @@ public class CommandTag extends TagSupport
         return(EVAL_BODY_INCLUDE);
     }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param cmd Command object to be stored in namescope
-     * @param ot ObjectTable Table that stores the components
+     * @param ot ObjectManager Table that stores the components
      */
-    public void addToScope(Command cmd, ObjectTable ot) {
+    public void addToScope(Command cmd, ObjectManager objectManager) {
         
         if ("request".equals(scope)) {
-            ot.put(pageContext.getRequest(), name, cmd); 
+            objectManager.put(pageContext.getRequest(), name, cmd); 
         }    
         else if ("session".equals(scope)) {
-          ot.put(pageContext.getSession(),name, cmd);
+          objectManager.put(pageContext.getSession(),name, cmd);
         }
         else if ("application".equals(scope)){
-             ot.put(ObjectTable.GlobalScope,name, cmd);
+             objectManager.put(ObjectManager.GlobalScope,name, cmd);
         } else {
-            ot.put(pageContext.getRequest(), name, cmd);
+            objectManager.put(pageContext.getRequest(), name, cmd);
         }
     }
 

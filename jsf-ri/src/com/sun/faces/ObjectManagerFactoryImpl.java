@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableFactoryImpl.java,v 1.2 2001/12/20 22:26:38 ofung Exp $
+ * $Id: ObjectManagerFactoryImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// ObjectTableFactoryImpl.java
+// ObjectManagerFactoryImpl.java
 
 package com.sun.faces;
 
@@ -16,25 +16,23 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import javax.servlet.ServletRequest;
-import javax.faces.ObjectTableFactory;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.FacesException;
 
 /**
  *
- *  <B>ObjectTableFactoryImpl</B> is a class ...
+ *  <B>ObjectManagerFactoryImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableFactoryImpl.java,v 1.2 2001/12/20 22:26:38 ofung Exp $
+ * @version $Id: ObjectManagerFactoryImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class ObjectTableFactoryImpl extends ObjectTableFactory
+public class ObjectManagerFactoryImpl extends ObjectManagerFactory
 {
 //
 // Protected Constants
@@ -56,21 +54,21 @@ public class ObjectTableFactoryImpl extends ObjectTableFactory
 // Constructors and Initializers    
 //
 
-public ObjectTableFactoryImpl()
+public ObjectManagerFactoryImpl()
 {
     super();
 }
 
 //
-// Methods from ObjectTableFactory
+// Methods from ObjectManagerFactory
 //
 
 //
 // Class methods
 //
 
-public ObjectTable newObjectTable() throws FacesException {
-    ObjectTable result = new ObjectTableImpl();
+public ObjectManager newObjectManager() throws FacesException {
+    ObjectManager result = new ObjectManagerImpl();
     return result;
 }
 
@@ -78,4 +76,4 @@ public ObjectTable newObjectTable() throws FacesException {
 // General Methods
 //
 
-} // end of class ObjectTableFactoryImpl
+} // end of class ObjectManagerFactoryImpl

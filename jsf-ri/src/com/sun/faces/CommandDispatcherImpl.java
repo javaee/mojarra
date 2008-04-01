@@ -1,5 +1,5 @@
 /*
- * $Id: CommandDispatcherImpl.java,v 1.4 2002/01/03 05:36:30 edburns Exp $
+ * $Id: CommandDispatcherImpl.java,v 1.5 2002/01/10 22:20:08 edburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.CommandListener;
 import java.util.Vector;
 import javax.faces.Command;
 import javax.faces.Constants;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.servlet.ServletException;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.4 2002/01/03 05:36:30 edburns Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.5 2002/01/10 22:20:08 edburns Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent
@@ -66,7 +66,7 @@ public class CommandDispatcherImpl extends CommandDispatcher {
         ParameterCheck.nonNull(response);
         ParameterCheck.nonNull(event);
 
-        ObjectTable ot = ObjectTable.getInstance();
+        ObjectManager ot = ObjectManager.getInstance();
         Assert.assert_it( ot != null );
         
         CommandEvent cmd_event = null;

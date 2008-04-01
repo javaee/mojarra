@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeDispatcherImpl.java,v 1.5 2001/12/20 22:26:39 ofung Exp $
+ * $Id: ValueChangeDispatcherImpl.java,v 1.6 2002/01/10 22:20:10 edburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.ValueChangeEvent;
 import javax.faces.ValueChangeListener;
 import java.util.Vector;
 import javax.faces.Constants;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.WTextEntry;
@@ -37,7 +37,7 @@ import javax.faces.ModelAccessor;
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.5 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.6 2002/01/10 22:20:10 edburns Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
@@ -52,7 +52,7 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
         ParameterCheck.nonNull(response);
         ParameterCheck.nonNull(event);
 
-        ObjectTable ot = ObjectTable.getInstance();
+        ObjectManager ot = ObjectManager.getInstance();
         Assert.assert_it( ot != null );
        
         RenderContext rc = (RenderContext)ot.get(request,
@@ -100,7 +100,7 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
      * @param ot      Object pool
      */ 
     public void dispatchListeners(ServletRequest request,ValueChangeEvent e, 
-            ObjectTable ot ) { 
+            ObjectManager ot ) { 
 
         String srcName = e.getSourceName();
         String lis_name = srcName + Constants.REF_VALUECHANGELISTENERS;

@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ * $Id: RadioGroupTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WSelectOne;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.2 2001/12/20 22:26:41 ofung Exp $
+ * @version $Id: RadioGroupTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,13 +160,13 @@ protected WSelectOne createComponent(RenderContext renderContext)
     return wSelectOne;
 }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param c WComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WSelectOne c, ObjectTable ot) {
+    public void addToScope(WSelectOne c, ObjectManager ot) {
    
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -182,7 +182,7 @@ protected WSelectOne createComponent(RenderContext renderContext)
                 listeners = new Vector();
             }
             // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectTable. We do this
+            // listener itself is stored in the objectManager. We do this
             // because if the listeners are stored in the components, then
             // they have to exist for the event listeners to be dispatched
             // at the time we process the events.
@@ -202,8 +202,8 @@ protected WSelectOne createComponent(RenderContext renderContext)
  * @exception JspException if a JSP exception has occurred
  */
 public int doStartTag() throws JspException {
-    ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-	getAttribute(Constants.REF_OBJECTTABLE);
+    ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+	getAttribute(Constants.REF_OBJECTMANAGER);
     Assert.assert_it( ot != null );
     RenderContext renderContext = 
 	(RenderContext)ot.get(pageContext.getSession(),
@@ -226,8 +226,8 @@ public int doStartTag() throws JspException {
      * End Tag Processing
      */
 public int doEndTag() throws JspException{
-    ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-	getAttribute(Constants.REF_OBJECTTABLE);
+    ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+	getAttribute(Constants.REF_OBJECTMANAGER);
     Assert.assert_it( ot != null );
     RenderContext renderContext = 
 	(RenderContext)ot.get(pageContext.getSession(),

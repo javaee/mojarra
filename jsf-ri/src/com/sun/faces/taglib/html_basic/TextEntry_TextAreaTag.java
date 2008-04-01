@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.11 2001/12/20 22:26:42 ofung Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.12 2002/01/10 22:20:12 edburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WTextEntry;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import java.util.Vector;
 
 import javax.servlet.http.*;
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.11 2001/12/20 22:26:42 ofung Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.12 2002/01/10 22:20:12 edburns Exp $
  * 
  *
  */
@@ -98,9 +98,9 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
 
         Assert.assert_it( pageContext != null );
         // PENDING(visvan) use tagext class to validate attributes.
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
+        // get ObjectManager from ServletContext.
+        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
                 Constants.REF_RENDERCONTEXT);
@@ -132,13 +132,13 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         return(EVAL_BODY_INCLUDE);
     }
 
-    /** Adds the component and listener to the ObjectTable
+    /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
      * @param c WComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WTextEntry c, ObjectTable ot) {
+    public void addToScope(WTextEntry c, ObjectManager ot) {
 
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -154,7 +154,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
                 listeners = new Vector();
             }
             // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectTable.
+            // listener itself is stored in the objectManager.
             listeners.add(valueChangeListener);
             ot.put(pageContext.getSession(),lis_name, listeners);
         }
@@ -167,8 +167,8 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
 
         Assert.assert_it( pageContext != null );
     
-        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTTABLE);
+        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
+                getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
                 Constants.REF_RENDERCONTEXT);
@@ -189,9 +189,9 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
     public int doEndTag() throws JspException{
 
         Assert.assert_it( pageContext != null );
-        // get ObjectTable from ServletContext.
-        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTTABLE);
+        // get ObjectManager from ServletContext.
+        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
+                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
                 Constants.REF_RENDERCONTEXT);
