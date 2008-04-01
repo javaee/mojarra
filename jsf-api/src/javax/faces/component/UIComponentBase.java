@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.19 2002/08/30 20:11:20 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.20 2002/08/31 22:59:47 craigmcc Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
@@ -1209,9 +1210,10 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Perform all validations for this component, by performing the
-     * following algorithm.</p>
+     * <p>Perform all validations for this component, as follows.</p>
      * <ul>
+     * <li>Skip validation processing if the current <code>valid</code>
+     *     property of this component is <code>false</code>.</p>
      * <li>Call the <code>validate()</code> method on this component,
      *     to perform any self-validation that has been defined.</li>
      * <li>Call the <code>validate()</code> method on each registered
@@ -1219,8 +1221,6 @@ public abstract class UIComponentBase implements UIComponent {
      * <li>If any of the calls to a <code>validate()</code> method performed
      *     in the preceding steps returns <code>false</code>, set the
      *     <code>valid</code> property of this component to <code>false</code>.
-     *     Otherwise, set the <code>valid</code> property of this component
-     *     to <code>true</code>.</li>
      * <ul>
      *
      * <p>Normally, component writers will not overwrite this method -- it is
@@ -1229,13 +1229,20 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * @param context FacesContext for the request we are processing
      *
+     * @return <code>true</code> if no <code>validate()</code> methods were
+     *  called, or none of the called <code>validate()</code> methods
+     *  returned <code>false</code>; otherwise, return <code>false</code>
+     *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void processValidators(FacesContext context) {
+    public boolean processValidators(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+        if (!isValid()) {
+            return (true);
         }
         boolean result = true;
         if (!validate(context)) {
@@ -1251,18 +1258,23 @@ public abstract class UIComponentBase implements UIComponent {
             }
         }
         setValid(result);
+        return (result);
 
     }
 
 
     /**
      * <p>If this <code>UIComponent</code> has a non-null
-     * <code>modelReference</code> property, use the
-     * <code>setModelValue()</code> method of the specified
+     * <code>modelReference</code> property, and the current
+     * <code>valid</code> property of this component is <code>true</code>,
+     * use the <code>setModelValue()</code> method of the specified
      * {@link FacesContext} to update the corresponding model data
-     * from the current value of this component.  This method can be
-     * overridden by custom component classes when more complex update
-     * logic is required.</p>
+     * from the current value of this component.  If an error occurs
+     * during the update processing, set the <code>valid</code> property
+     * of this component to <code>false</code>.</p>
+     *
+     * <p>This method can be overridden by custom component classes when
+     * more complex update logic is required.</p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -1285,7 +1297,18 @@ public abstract class UIComponentBase implements UIComponent {
         if (modelReference == null) {
             return;
         }
-        context.setModelValue(modelReference, getValue());
+        try {
+            context.setModelValue(modelReference, getValue());
+        } catch (FacesException e) {
+            setValid(false);
+            throw e;
+        } catch (IllegalArgumentException e) {
+            setValid(false);
+            throw e;
+        } catch (Exception e) {
+            setValid(false);
+            throw new FacesException(e);
+        }
 
     }
 

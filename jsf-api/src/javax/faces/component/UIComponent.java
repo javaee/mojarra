@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.47 2002/08/30 20:11:19 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.48 2002/08/31 22:59:47 craigmcc Exp $
  */
 
 /*
@@ -578,18 +578,17 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Perform all validations for this component, by performing the
-     * following algorithm.</p>
+     * <p>Perform all validations for this component, as follows.</p>
      * <ul>
+     * <li>Skip validation processing if the current <code>valid</code>
+     *     property of this component is <code>false</code>.</p>
      * <li>Call the <code>validate()</code> method on this component,
      *     to perform any self-validation that has been defined.</li>
      * <li>Call the <code>validate()</code> method on each registered
-     *     {@link Validator} for this component.</li>
+     *     {@link Validator} instance for this component.</li>
      * <li>If any of the calls to a <code>validate()</code> method performed
      *     in the preceding steps returns <code>false</code>, set the
      *     <code>valid</code> property of this component to <code>false</code>.
-     *     Otherwise, set the <code>valid</code> property of this component
-     *     to <code>true</code>.</li>
      * <ul>
      *
      * <p>Normally, component writers will not overwrite this method -- it is
@@ -601,17 +600,21 @@ public interface UIComponent extends Serializable {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void processValidators(FacesContext context);
+    public boolean processValidators(FacesContext context);
 
 
     /**
      * <p>If this <code>UIComponent</code> has a non-null
-     * <code>modelReference</code> property, use the
-     * <code>setModelValue()</code> method of the specified
+     * <code>modelReference</code> property, and the current
+     * <code>valid</code> property of this component is <code>true</code>,
+     * use the <code>setModelValue()</code> method of the specified
      * {@link FacesContext} to update the corresponding model data
-     * from the current value of this component.  This method can be
-     * overridden by custom component classes when more complex update
-     * logic is required.</p>
+     * from the current value of this component.  If an error occurs
+     * during the update processing, set the <code>valid</code> property
+     * of this component to <code>false</code>.</p>
+     *
+     * <p>This method can be overridden by custom component classes when
+     * more complex update logic is required.</p>
      *
      * @param context FacesContext for the request we are processing
      *
