@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.21 2002/03/13 18:04:24 eburns Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.22 2002/04/05 19:41:19 jvisvanathan Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.Constants;
 import javax.faces.FacesException;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.UIComponent;
@@ -39,7 +39,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.21 2002/03/13 18:04:24 eburns Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.22 2002/04/05 19:41:19 jvisvanathan Exp $
  * 
  *
  */
@@ -102,19 +102,19 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
 	String rendererType = null;
 	TreeNavigator treeNav = null;
         ObjectManager objectManager = null;
-	RenderContext renderContext = null;
+	FacesContext facesContext = null;
 
 	objectManager = (ObjectManager) pageContext.getServletContext().
 	    getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
-        renderContext = 
-	    (RenderContext)objectManager.get(pageContext.getSession(),
-					     Constants.REF_RENDERCONTEXT);
-        Assert.assert_it(null != renderContext);
+        facesContext = 
+	    (FacesContext)objectManager.get(pageContext.getRequest(),
+			     Constants.REF_FACESCONTEXT);
+        Assert.assert_it(null != facesContext);
         
-	treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
-					   Constants.REF_TREENAVIGATOR);
+	treeNav = (TreeNavigator)objectManager.get(facesContext.getRequest(), 
+			   Constants.REF_TREENAVIGATOR);
 	Assert.assert_it(null!= treeNav);
 	
         UIComponent uiComponent = treeNav.getNextStart();
@@ -124,7 +124,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         //
 	try {
 	    uiComponent.setRendererType("TextAreaRenderer");
-	    uiComponent.render(renderContext);
+	    uiComponent.render(facesContext);
 	} catch (java.io.IOException e) {
 	    throw new JspException("Problem rendering component: "+
 				   e.getMessage());
@@ -145,8 +145,8 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         ObjectManager ot = (ObjectManager) pageContext.getServletContext().
                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
-        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
-                Constants.REF_RENDERCONTEXT);
+        FacesContext rc = (FacesContext)ot.get(pageContext.getRequest(),
+                Constants.REF_FACESCONTEXT);
         Assert.assert_it( rc != null );
 
         UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), id);
@@ -165,18 +165,18 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
 	String rendererType = null;
 	TreeNavigator treeNav = null;
         ObjectManager objectManager = null;
-	RenderContext renderContext = null;
+	FacesContext facesContext = null;
 	
 	objectManager = (ObjectManager) pageContext.getServletContext().
 	    getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
-        renderContext = 
-	    (RenderContext)objectManager.get(pageContext.getSession(),
-					     Constants.REF_RENDERCONTEXT);
-        Assert.assert_it(null != renderContext);
+        facesContext = 
+	    (FacesContext)objectManager.get(pageContext.getRequest(),
+			   Constants.REF_FACESCONTEXT);
+        Assert.assert_it(null != facesContext);
         
-	treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+	treeNav = (TreeNavigator)objectManager.get(facesContext.getRequest(), 
 					   Constants.REF_TREENAVIGATOR);
 	Assert.assert_it(null!= treeNav);
 	
@@ -186,7 +186,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         // Complete the rendering process
         //
 	try {
-	    uiComponent.renderComplete(renderContext);
+	    uiComponent.renderComplete(facesContext);
 	} catch (java.io.IOException e) {
 	    throw new JspException("Problem completing rendering: "+
 				   e.getMessage());

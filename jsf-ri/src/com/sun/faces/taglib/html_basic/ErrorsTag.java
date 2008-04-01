@@ -2,7 +2,11 @@ package com.sun.faces.taglib.html_basic;
 
 import java.util.Iterator;
 
-import javax.faces.*;
+import javax.faces.Constants;
+import javax.faces.MessageList;
+import javax.faces.UIOutput;
+import javax.faces.Message;
+import javax.faces.UIComponent;
 
 import com.sun.faces.taglib.FacesTag;
 
@@ -12,7 +16,7 @@ import com.sun.faces.taglib.FacesTag;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsTag.java,v 1.1 2002/03/15 20:58:03 jvisvanathan Exp $
+ * @version $Id: ErrorsTag.java,v 1.2 2002/04/05 19:41:18 jvisvanathan Exp $
  * 
  *
  */
@@ -39,14 +43,14 @@ public class ErrorsTag extends FacesTag
      * Creates a Form component and sets renderer specific
      * properties.
      *
-     * @param rc renderContext
+     * @param rc facesContext
      */
 
     public UIComponent newComponentInstance() 
     {
         UIOutput o = new UIOutput();
-        MessageList ml = (MessageList)renderContext.getObjectManager()
-        	.get(renderContext.getRequest(), MessageList.MESSAGE_LIST_ID);
+        MessageList ml = (MessageList)facesContext.getObjectManager()
+        	.get(facesContext.getRequest(), Constants.MESSAGE_LIST_ID);
         if (ml == null)
         {
         	System.err.println("No message list objet in the request");
@@ -96,4 +100,4 @@ public class ErrorsTag extends FacesTag
         this.value = value;
     }
 
-} // end of class Output_TextTag
+} // end of class ErrorsTag

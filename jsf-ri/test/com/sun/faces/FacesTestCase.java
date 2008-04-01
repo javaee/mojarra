@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
+ * $Id: FacesTestCase.java,v 1.6 2002/04/05 19:41:20 jvisvanathan Exp $
  */
 
 /*
@@ -22,20 +22,16 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
-import javax.faces.RenderContextFactory;
+import javax.faces.FacesContextFactory;
 import javax.faces.Constants;
 import javax.faces.FacesException;
-import javax.faces.EventContext;
 import javax.faces.FacesContext;
-
-import com.sun.faces.EventContextFactory;
-
 import com.sun.faces.Page;
 
 /**
@@ -46,7 +42,7 @@ import com.sun.faces.Page;
  *  faces testing more useful.  Extend this testcase to test faces.
 
  *
- * @version $Id: FacesTestCase.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
+ * @version $Id: FacesTestCase.java,v 1.6 2002/04/05 19:41:20 jvisvanathan Exp $
  * 
  * @see	setUp
  * @see	tearDown
@@ -74,9 +70,10 @@ public void _jspService(HttpServletRequest request,
 
 public FacesContext testCallCreateFacesContext(ObjectManager objectManager, 
 					       HttpServletRequest req, 
-					       HttpServletResponse res) throws ServletException
-{	
-    return createFacesContext(objectManager, req, res);
+					       HttpServletResponse res,
+                                             ServletContext sc ) throws ServletException
+{
+    return createFacesContext(objectManager, req, res, sc);
 }
 } // end of class FacesTestCasePage
 
@@ -90,8 +87,6 @@ public FacesContext testCallCreateFacesContext(ObjectManager objectManager,
 
 public FacesTestCasePage page = null;
 public ObjectManager objectManager = null;
-public RenderContext renderContext = null;
-public EventContext eventContext = null;
 public FacesContext facesContext = null;
 
 //
@@ -118,9 +113,7 @@ protected FacesTestCase(String name)
 * POSTCONDITION: Some of the stuff that happens in service() is
 * completed:  <P>
 
-* renderContext is a valid renderContext for this TestCase's request.
-* eventContext is a valid eventContext for this TestCase's request.
-* facesContext is a valid FacesContext for this TestCase's request.
+* facesContext is a valid facesContext for this TestCase's request.
 * the REQUESTINSTANCE has been set in the Request's attr set.
 
 */
@@ -136,13 +129,11 @@ public void simulateService() {
     assertTrue(null != tempObjectManager);
 
     try {
+        ServletContext sc = config.getServletContext();
 	facesContext = page.testCallCreateFacesContext(tempObjectManager,
-						       request, response);
-	renderContext = facesContext.getRenderContext();
-	eventContext = facesContext.getEventContext();
+						       request, response, sc);
 	assertTrue(null != facesContext);
-	assertTrue(null != renderContext);
-	assertTrue(null != eventContext);
+	
     }
     catch (Throwable e) {
 	e.printStackTrace();
@@ -200,8 +191,7 @@ public void simulateSessionDestroyed() {
 * PRECONDITION: none
 
 * POSTCONDITION: filter is a FacesFilter, objectManager is a valid
-* ObjectManager, renderContext is a valid RenderContext, eventContext is
-* a valid EventContext.
+* ObjectManager, facesContext is a valid FacesContext
 
 */
 
@@ -223,7 +213,7 @@ public void setUp() {
     simulateSessionCreated();
     simulateService();
 
-    objectManager = renderContext.getObjectManager();
+    objectManager = facesContext.getObjectManager();
 
 }
 
@@ -232,7 +222,7 @@ public void tearDown() {
     page.destroy();
     simulateSessionDestroyed();
     objectManager = null;
-    renderContext = null;
+    facesContext = null;
     page = null;
 }
 

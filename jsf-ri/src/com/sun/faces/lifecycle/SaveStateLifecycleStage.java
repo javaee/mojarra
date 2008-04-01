@@ -1,5 +1,5 @@
 /*
- * $Id: SaveStateLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * $Id: SaveStateLifecycleStage.java,v 1.3 2002/04/05 19:41:14 jvisvanathan Exp $
  */
 
 /*
@@ -15,8 +15,6 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesContext;
-import javax.faces.RenderContext;
-import javax.faces.EventContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
 import javax.faces.FacesException;
@@ -31,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: SaveStateLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: SaveStateLifecycleStage.java,v 1.3 2002/04/05 19:41:14 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -85,10 +83,10 @@ public SaveStateLifecycleStage(LifecycleDriverImpl newDriver, String newName)
 
 */
 
-public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesException
+public boolean execute(FacesContext facesContext, TreeNavigator root) 
+        throws FacesException
 {
-    RenderContext renderContext = ctx.getRenderContext();
-    HttpServletRequest request =(HttpServletRequest)renderContext.getRequest();
+    HttpServletRequest request =(HttpServletRequest)facesContext.getRequest();
     HttpSession session = request.getSession();
     String requestURI = request.getRequestURI();
     

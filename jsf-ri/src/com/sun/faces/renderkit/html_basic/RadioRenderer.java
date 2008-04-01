@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.12 2002/03/16 00:09:36 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.13 2002/04/05 19:41:17 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIComponent;
 import javax.faces.UISelectOne;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.12 2002/03/16 00:09:36 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.13 2002/04/05 19:41:17 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,19 +116,19 @@ public class RadioRenderer extends Object implements Renderer {
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c) 
+    public void renderStart(FacesContext fc, UIComponent c) 
         throws IOException, FacesException {
         return;
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
         throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 
         UISelectOne uiSelectOne = null;
@@ -143,20 +143,20 @@ public class RadioRenderer extends Object implements Renderer {
         String radioId = uiSelectOne.getId();
         Assert.assert_it(null != radioId);
 
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
 
-        String selectedValue = (String) uiSelectOne.getSelectedValue(rc);
+        String selectedValue = (String) uiSelectOne.getSelectedValue(fc);
 
 	// We require a way to tell which item in the UISelectOne's
 	// collection maps to this tag instance.  We do this by sticking
 	// an Iterator in the component's attribute set.
-	itemsIter = (Iterator) uiSelectOne.getAttribute(rc, "curValue");
+	itemsIter = (Iterator) uiSelectOne.getAttribute(fc, "curValue");
 	if (null == itemsIter) {
 	    // this must be the first one.
-	    itemsIter = uiSelectOne.getItems(rc);
+	    itemsIter = uiSelectOne.getItems(fc);
 	    // Store the item iter in the attr set, for the next RadioTag.
 	    uiSelectOne.setAttribute("curValue", itemsIter);
 	}
@@ -193,7 +193,7 @@ public class RadioRenderer extends Object implements Renderer {
         return;
     }
 
-    public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
+    public boolean getCanRenderChildren(FacesContext fc, UIComponent c) {
         return false;
     }
 

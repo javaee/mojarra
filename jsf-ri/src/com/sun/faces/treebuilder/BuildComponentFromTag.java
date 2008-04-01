@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.1 2002/03/19 19:25:01 eburns Exp $
+ * $Id: BuildComponentFromTag.java,v 1.2 2002/04/05 19:41:20 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@
 package com.sun.faces.treebuilder;
 
 import javax.faces.UIComponent;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import org.xml.sax.Attributes;
 
 /**
@@ -28,7 +28,7 @@ import org.xml.sax.Attributes;
  * Has the same scope as the TreeEngine instance.  The TreeEngine has a
  * BuildComponentFromTag instance. <P>
  *
- * @version $Id: BuildComponentFromTag.java,v 1.1 2002/03/19 19:25:01 eburns Exp $
+ * @version $Id: BuildComponentFromTag.java,v 1.2 2002/04/05 19:41:20 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *
@@ -43,11 +43,11 @@ public boolean tagHasComponent(String shortTagName);
 
 public boolean isNestedComponentTag(String shortTagName);
 
-public void handleNestedComponentTag(RenderContext renderContext,
+public void handleNestedComponentTag(FacesContext facesContext,
 				     UIComponent parent, 
 				     String shortTagName, Attributes attrs);
     
-public void applyAttributesToComponentInstance(RenderContext renderContext,
+public void applyAttributesToComponentInstance(FacesContext facesContext,
 					       UIComponent child, 
 					       Attributes attrs);
 

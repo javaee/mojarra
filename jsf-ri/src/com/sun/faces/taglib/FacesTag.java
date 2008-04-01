@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.6 2002/03/18 21:24:00 eburns Exp $
+ * $Id: FacesTag.java,v 1.7 2002/04/05 19:41:17 jvisvanathan Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import javax.faces.UIComponent;
 import javax.faces.ObjectManager;
 import javax.faces.Constants;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.TreeNavigator;
 
@@ -35,7 +35,7 @@ import com.sun.faces.renderkit.html_basic.JspOutputMethod;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.6 2002/03/18 21:24:00 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.7 2002/04/05 19:41:17 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,7 +65,7 @@ public abstract class FacesTag extends TagSupport
 
 // PENDING(edburns): not sure if it is safe to have ivars like this
 
-    protected RenderContext renderContext = null;
+    protected FacesContext facesContext = null;
 
     /** The UIComponent mapped to this tag
      */
@@ -225,7 +225,7 @@ public void addListeners(UIComponent comp) throws JspException {}
 public UIComponent getComponentFromStart(ObjectManager objectManager) {
     UIComponent result = null;
     TreeNavigator treeNav = null;
-    treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+    treeNav = (TreeNavigator)objectManager.get(facesContext.getRequest(), 
 					       Constants.REF_TREENAVIGATOR);
     Assert.assert_it(null!= treeNav);
     
@@ -237,7 +237,7 @@ public UIComponent getComponentFromStart(ObjectManager objectManager) {
 public UIComponent getComponentFromEnd(ObjectManager objectManager) {
     UIComponent result = null;
     TreeNavigator treeNav = null;
-    treeNav = (TreeNavigator)objectManager.get(renderContext.getRequest(), 
+    treeNav = (TreeNavigator)objectManager.get(facesContext.getRequest(), 
 					       Constants.REF_TREENAVIGATOR);
     Assert.assert_it(null!= treeNav);
     
@@ -262,14 +262,14 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
 	    getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
-        renderContext = 
-	    (RenderContext)objectManager.get(pageContext.getSession(),
-					     Constants.REF_RENDERCONTEXT);
-        Assert.assert_it(null != renderContext);
-	if (null == renderContext.getOutputMethod()) {
+        facesContext = 
+	    (FacesContext)objectManager.get(pageContext.getRequest(),
+					     Constants.REF_FACESCONTEXT);
+        Assert.assert_it(null != facesContext);
+	if (null == facesContext.getOutputMethod()) {
 	    JspOutputMethod outputMethod = new JspOutputMethod();
 	    outputMethod.setPageContext(pageContext);
-	    renderContext.setOutputMethod(outputMethod);
+	    facesContext.setOutputMethod(outputMethod);
 	}
         
         uiComponent = getComponentFromStart(objectManager);
@@ -279,7 +279,7 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
 	if (null != (rendererType = getRendererType())) {
 	    try {
 		uiComponent.setRendererType(rendererType);
-		uiComponent.render(renderContext);
+		uiComponent.render(facesContext);
 	    } catch (java.io.IOException e) {
 		throw new JspException("Problem rendering component: "+
 				       e.getMessage());
@@ -288,7 +288,7 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
 				       f.getMessage());
 	    }
 	}
-	renderContext = null;
+	facesContext = null;
         return (getStartCode());
     }
     
@@ -303,10 +303,10 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
 	    getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
-        renderContext = 
-	    (RenderContext)objectManager.get(pageContext.getSession(),
-					     Constants.REF_RENDERCONTEXT);
-        Assert.assert_it(null != renderContext);
+        facesContext = 
+	    (FacesContext)objectManager.get(pageContext.getRequest(),
+					     Constants.REF_FACESCONTEXT);
+        Assert.assert_it(null != facesContext);
         
         uiComponent = getComponentFromEnd(objectManager);
 
@@ -314,7 +314,7 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
         //
 	if (null != (rendererType = getRendererType())) {
 	    try {
-		uiComponent.renderComplete(renderContext);
+		uiComponent.renderComplete(facesContext);
 	    } catch (java.io.IOException e) {
 		throw new JspException("Problem completing rendering: "+
 				       e.getMessage());
@@ -323,7 +323,7 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
 				       f.getMessage());
 	    }
 	}
-	renderContext = null;
+	facesContext = null;
 	uiComponent = null;
         return getEndCode();
     }

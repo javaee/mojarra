@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.4 2002/03/19 00:50:18 jvisvanathan Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.5 2002/04/05 19:41:13 jvisvanathan Exp $
  */
 
 /*
@@ -22,7 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.sun.faces.EventContextFactory;
 import com.sun.faces.ObjectAccessorFactory;
 import com.sun.faces.ObjectManagerFactory;
 import com.sun.faces.NavigationHandlerFactory;
@@ -33,12 +32,10 @@ import com.sun.faces.treebuilder.TreeEngine;
 import javax.faces.Constants;
 import javax.faces.ObjectManager;
 import javax.faces.EventQueueFactory;
-import javax.faces.RenderContextFactory;
+import javax.faces.FacesContextFactory;
 import javax.faces.FacesException;
 import javax.faces.ConverterManager;
 import javax.faces.LifecycleDriver;
-import javax.faces.RenderContext;
-import javax.faces.EventContext;
 import javax.faces.FacesContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
@@ -54,7 +51,7 @@ import javax.faces.UIComponent;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.4 2002/03/19 00:50:18 jvisvanathan Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.5 2002/04/05 19:41:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,8 +126,7 @@ Constants.REF_TREEENGINE application
 protected void initFactories(ObjectManager objectManager)
 {
     EventQueueFactory eqFactory;
-    RenderContextFactory rcFactory;
-    EventContextFactory ecFactory;
+    FacesContextFactory fcFactory;
     ObjectAccessorFactory oaFactory;
     NavigationHandlerFactory nhFactory;
     ConverterManagerFactory cmFactory;
@@ -153,32 +149,19 @@ protected void initFactories(ObjectManager objectManager)
     objectManager.put(servletContext,
 		      Constants.REF_EVENTQUEUEFACTORY, eqFactory);
     
-    // Step 3: Create the RenderContextFactory and put it in the
+    // Step 4: Create the FacesContextFactory and put it in the
     // ObjectManager in GlobalScope
     
-    rcFactory = (RenderContextFactory)objectManager.get(
-							Constants.REF_RENDERCONTEXTFACTORY);
+    fcFactory = (FacesContextFactory)objectManager.get(
+				Constants.REF_FACESCONTEXTFACTORY);
     // The RenderContextFactory must not exist at this point.  It is an
     // error if it does exist.
-    Assert.assert_it(null == rcFactory);
+    Assert.assert_it(null == fcFactory);
     
-    rcFactory = RenderContextFactory.newInstance();
-    Assert.assert_it(null != rcFactory);
+    fcFactory = FacesContextFactory.newInstance();
+    Assert.assert_it(null != fcFactory);
     objectManager.put(servletContext,
-		      Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
-    
-    // Step 4: Create the EventContextFactory and put it in the
-    // ObjectManager in GlobalScope
-    ecFactory = (EventContextFactory)objectManager.get(
-						       Constants.REF_EVENTCONTEXTFACTORY);
-    // The EventContextFactory must not exist at this point.  It is an
-    // error if it does exist.
-    Assert.assert_it(null == ecFactory);
-    
-    ecFactory = EventContextFactory.newInstance();
-    Assert.assert_it(null != ecFactory);
-    objectManager.put(servletContext,
-		      Constants.REF_EVENTCONTEXTFACTORY, ecFactory);
+		      Constants.REF_FACESCONTEXTFACTORY, fcFactory);
     
     // Step 5: Create the ObjectAccessorFactory and put it in the
     // ObjectManager in GlobalScope
@@ -237,7 +220,7 @@ protected void initFactories(ObjectManager objectManager)
     javax.faces.MessageFactory mf = javax.faces.MessageFactory.newInstance();
     mf.setClassLoader(this.getClass().getClassLoader());
     objectManager.put(servletContext,
-            com.sun.faces.MessageListImpl.DEFAULT_MESSAGE_FACTORY_ID, mf);
+            Constants.DEFAULT_MESSAGE_FACTORY_ID, mf);
 
 }
 
@@ -343,28 +326,27 @@ public void destroy()
 
 */
 
-public TreeNavigator wireUp(FacesContext ctx, UIPage root) throws IOException
+public TreeNavigator wireUp(FacesContext facesContext, UIPage root) throws IOException
 {
     TreeNavigator result = null;
-    RenderContext renderContext = ctx.getRenderContext();
-    ObjectManager objectManager = renderContext.getObjectManager();
-    HttpServletRequest request =(HttpServletRequest)renderContext.getRequest();
+    ObjectManager objectManager = facesContext.getObjectManager();
+    HttpServletRequest request =(HttpServletRequest)facesContext.getRequest();
     String requestURI = request.getRequestURI();
     TreeEngine treeEng = (TreeEngine) 
 	objectManager.get(Constants.REF_TREEENGINE);
     Assert.assert_it(null != treeEng);
 
-    result = treeEng.getTreeForURI(renderContext, root, requestURI);
+    result = treeEng.getTreeForURI(facesContext, root, requestURI);
     if (null == result) {
 	throw new IOException("Can't get tree for: " + requestURI);
     }
-    objectManager.put(renderContext.getRequest(), 
+    objectManager.put(facesContext.getRequest(), 
 		      Constants.REF_TREENAVIGATOR, result);
 
     return result;
 }
 
-public void executeLifecycle(FacesContext ctx, 
+public void executeLifecycle(FacesContext facesContext, 
 			     TreeNavigator treeNav) throws FacesException, IOException
 {
     Iterator life = stages.iterator();
@@ -373,17 +355,17 @@ public void executeLifecycle(FacesContext ctx,
     try {
 	while (keepGoing && life.hasNext()) {
 	    treeNav.reset();
-	    keepGoing = ((LifecycleStage)life.next()).execute(ctx, treeNav);
+	    keepGoing = ((LifecycleStage)life.next()).execute(facesContext, treeNav);
 	}
     }
     finally {
 	treeNav.reset();
-	disposeStage.execute(ctx, treeNav);
+	disposeStage.execute(facesContext, treeNav);
     }
 	    
 }
 
-boolean traverseTreeInvokingMethod(FacesContext ctx, TreeNavigator treeNav,
+boolean traverseTreeInvokingMethod(FacesContext facesContext, TreeNavigator treeNav,
 				String cycleName)
 {
     boolean result = true;
@@ -391,11 +373,11 @@ boolean traverseTreeInvokingMethod(FacesContext ctx, TreeNavigator treeNav,
 
     while (null != (next = treeNav.getNextStart())) {
         if (cycleName.equals("init")) {
-            next.init(ctx);
+            next.init(facesContext);
         } else if (cycleName.equals("preRender")) {
-            next.preRender(ctx);
+            next.preRender(facesContext);
         } else if (cycleName.equals("dispose")) {
-            next.dispose(ctx);
+            next.dispose(facesContext);
         } 
     }
     treeNav.reset();

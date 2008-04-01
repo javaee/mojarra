@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessEventsLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * $Id: ProcessEventsLifecycleStage.java,v 1.3 2002/04/05 19:41:14 jvisvanathan Exp $
  */
 
 /*
@@ -15,8 +15,6 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesContext;
-import javax.faces.RenderContext;
-import javax.faces.EventContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
 import javax.faces.RenderKit;
@@ -43,7 +41,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: ProcessEventsLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: ProcessEventsLifecycleStage.java,v 1.3 2002/04/05 19:41:14 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -93,13 +91,13 @@ public ProcessEventsLifecycleStage(LifecycleDriverImpl newDriver,
  * @return true if we navigated away from the current page
  */
 
-private boolean doNavigation(EventContext eventContext) 
+private boolean doNavigation(FacesContext facesContext) 
     throws ServletException, IOException {
     boolean navigate = false;
-    HttpServletRequest req = (HttpServletRequest) eventContext.getRequest();
-    HttpServletResponse res = (HttpServletResponse) eventContext.getResponse();
-    
-    NavigationHandler nh = eventContext.getNavigationHandler();
+    HttpServletRequest req = (HttpServletRequest) facesContext.getRequest();
+    HttpServletResponse res = (HttpServletResponse) facesContext.getResponse();
+   
+    NavigationHandler nh = facesContext.getNavigationHandler();
     // navigationHandler will be null if NavigationMap does not
     // exist. 
     if ( nh == null ) {
@@ -107,12 +105,12 @@ private boolean doNavigation(EventContext eventContext)
     }
     int targetAction = nh.getTargetAction();
     String targetPath = nh.getTargetPath();
+
     // if targetAction is pass or undefined, continue with rendering
     // without navigation.
     if ( targetPath != null && (targetAction != NavigationHandler.UNDEFINED ||
 				targetAction != NavigationHandler.PASS)) {
 	navigate = true;
-	
 	if ( targetAction == NavigationHandler.FORWARD) {
 	    HttpServletRequest request;
 	    String newRequestURI = req.getContextPath() + "/" + 
@@ -148,37 +146,35 @@ private boolean doNavigation(EventContext eventContext)
 
 */
 
-public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesException
+public boolean execute(FacesContext facesContext, TreeNavigator root) throws FacesException
 {
     boolean result = false;
-    RenderContext renderContext = ctx.getRenderContext();
     HttpServletRequest request = 
-	(HttpServletRequest) renderContext.getRequest();
+	(HttpServletRequest) facesContext.getRequest();
 
     // if there are no params, just continue to next stage.
     if (!Util.hasParameters(request)) {
 	return true;
     }
 
-    RenderKit renderKit = renderContext.getRenderKit();
-    EventContext eventContext = ctx.getEventContext();
+    RenderKit renderKit = facesContext.getRenderKit();
     EventQueue eq;
     Assert.assert_it(renderKit != null);
 
     //
     // queue events
     //
-    renderKit.queueEvents(eventContext);
+    renderKit.queueEvents(facesContext);
 
     //
     // dispatch events
     //
-    eq = eventContext.getEventQueue();
+    eq = facesContext.getEventQueue();
     Assert.assert_it(null != eq);
     while (!eq.isEmpty()) {
 	EventObject e = (EventObject) eq.getNext();
 	try {
-	    EventDispatcher src=eventContext.getEventDispatcher(e);
+	    EventDispatcher src=facesContext.getEventDispatcher(e);
 	    Assert.assert_it ( src != null );
 	    src.dispatch ( e );
 	} catch ( Throwable fe ) {
@@ -196,7 +192,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
     // do navigation
     //
     try {
-	result = !doNavigation(eventContext);
+	result = !doNavigation(facesContext);
     }
     catch (Throwable e) {
 	throw new FacesException(e.getMessage());

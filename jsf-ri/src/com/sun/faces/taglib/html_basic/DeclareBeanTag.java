@@ -1,5 +1,5 @@
 /*
- * $Id: DeclareBeanTag.java,v 1.5 2002/02/26 21:24:48 eburns Exp $
+ * $Id: DeclareBeanTag.java,v 1.6 2002/04/05 19:41:18 jvisvanathan Exp $
  */
 
 /*
@@ -17,9 +17,6 @@ import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
-import javax.faces.RenderContext;
-import javax.faces.Renderer;
-import javax.faces.RenderKit;
 import javax.faces.ObjectManager;
 import java.util.EventListener;
 import javax.faces.Constants;
@@ -35,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DeclareBeanTag.java,v 1.5 2002/02/26 21:24:48 eburns Exp $
+ * @version $Id: DeclareBeanTag.java,v 1.6 2002/04/05 19:41:18 jvisvanathan Exp $
  * @author Jayashri Visvanathan
  * 
  *

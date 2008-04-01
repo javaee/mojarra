@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectAccessorFactory.java,v 1.1 2002/01/12 01:41:16 edburns Exp $
+ * $Id: ObjectAccessorFactory.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.FactoryConfigurationError;
 import javax.faces.ObjectAccessor;
 import javax.faces.FacesException;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 
 /**
  *
@@ -40,7 +40,7 @@ import javax.faces.RenderContext;
     
     try {
 	factory = ObjectAccessorFactory.newInstance();
-	context = factory.newObjectAccessor(renderContext);
+	context = factory.newObjectAccessor(facesContext);
 	kit = context.getRenderKit();
     }
     catch (Exception e) {
@@ -50,7 +50,7 @@ import javax.faces.RenderContext;
 </PRE></CODE>
 
  *
- * @version $Id: ObjectAccessorFactory.java,v 1.1 2002/01/12 01:41:16 edburns Exp $
+ * @version $Id: ObjectAccessorFactory.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
  * 
  * @see	javax.faces.ObjectAccessor
  *
@@ -110,6 +110,7 @@ public static ObjectAccessorFactory newInstance() throws FactoryConfigurationErr
   *         created.
   */
 
-public abstract ObjectAccessor newObjectAccessor(RenderContext renderContext) throws FacesException;
+public abstract ObjectAccessor newObjectAccessor(FacesContext facesContext) 
+        throws FacesException;
 
 } // end of class ObjectAccessorFactory

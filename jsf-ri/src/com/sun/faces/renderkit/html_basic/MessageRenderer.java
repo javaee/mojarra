@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.2 2002/03/16 00:09:36 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.3 2002/04/05 19:41:16 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIOutput;
 import javax.faces.UIComponent;
@@ -37,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.2 2002/03/16 00:09:36 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.3 2002/04/05 19:41:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,10 +104,10 @@ public class MessageRenderer extends Object implements Renderer
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c )
+    public void renderStart(FacesContext fc, UIComponent c )
         throws IOException, FacesException { 
 
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 
         UIOutput label = null;
@@ -116,11 +116,11 @@ public class MessageRenderer extends Object implements Renderer
         } else {
             throw new FacesException("Invalid component type. Expected UIOutput");
         }
-        ObjectManager om = rc.getObjectManager();
+        ObjectManager om = fc.getObjectManager();
         Assert.assert_it(om != null );
 
-        MessageList ml = (MessageList)om.get(rc.getRequest(),
-                 MessageList.MESSAGE_LIST_ID);
+        MessageList ml = (MessageList)om.get(fc.getRequest(),
+                 Constants.MESSAGE_LIST_ID);
         if ( ml == null ) { 
             return;
         }
@@ -139,18 +139,18 @@ public class MessageRenderer extends Object implements Renderer
         if (first) {
             text.append("</ul>");
         }
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
         outputMethod.writeText(text.toString());
         outputMethod.flush();
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
             throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }

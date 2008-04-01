@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectAccessor.java,v 1.1 2002/01/12 01:41:18 edburns Exp $
+ * $Id: TestObjectAccessor.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.ObjectAccessor;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectAccessor.java,v 1.1 2002/01/12 01:41:18 edburns Exp $
+ * @version $Id: TestObjectAccessor.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,8 +75,8 @@ private static final int INITIAL_NUM_SCOPES = 3;
         Object object = null;
 	ObjectAccessor objectAccessor = null;
 
-	result = null != (objectAccessor = renderContext.getObjectAccessor());
-	System.out.println("Get an objectAccessor from the renderContext: " + 
+	result = null != (objectAccessor = facesContext.getObjectAccessor());
+	System.out.println("Get an objectAccessor from the facesContext: " + 
 			   result);
 	assertTrue(result);
  

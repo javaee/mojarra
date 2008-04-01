@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
+ * $Id: TestLifecycleDriverImpl.java,v 1.4 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -34,10 +34,9 @@ import javax.faces.TreeNavigator;
 import javax.faces.MessageFactory;
 
 import javax.faces.EventQueueFactory;
-import javax.faces.RenderContextFactory;
+import javax.faces.FacesContextFactory;
 import javax.faces.FacesContext;
 import javax.faces.UIPage;
-import com.sun.faces.EventContextFactory;
 import com.sun.faces.ObjectAccessorFactory;
 import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.lifecycle.RenderWrapper;
@@ -49,7 +48,7 @@ import com.sun.faces.treebuilder.TreeEngine;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
+ * @version $Id: TestLifecycleDriverImpl.java,v 1.4 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	javax.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -125,8 +124,7 @@ public void commenceRendering(FacesContext ctx, TreeNavigator treeNav) throws Se
 public void testInit() 
 {
     EventQueueFactory eqf = null;
-    RenderContextFactory rcf = null;
-    EventContextFactory ecf = null;
+    FacesContextFactory fcf = null;
     ObjectAccessorFactory oaf = null;
     NavigationHandlerFactory nhf = null;
     ConverterManager cm = null;
@@ -149,11 +147,8 @@ public void testInit()
     eqf = (EventQueueFactory) objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
     assertTrue(null != eqf);
 
-    rcf = (RenderContextFactory) objectManager.get(Constants.REF_RENDERCONTEXTFACTORY);
-    assertTrue(null != rcf);
-
-    ecf = (EventContextFactory) objectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
-    assertTrue(null != ecf);
+    fcf = (FacesContextFactory) objectManager.get(Constants.REF_FACESCONTEXTFACTORY);
+    assertTrue(null != fcf);
 
     oaf = (ObjectAccessorFactory) objectManager.get(Constants.REF_OBJECTACCESSORFACTORY);
     assertTrue(null != oaf);
@@ -168,7 +163,7 @@ public void testInit()
     assertTrue(null != te);
     System.out.println(" true.");
 
-    mf = (MessageFactory) objectManager.get(com.sun.faces.MessageListImpl.DEFAULT_MESSAGE_FACTORY_ID);
+    mf = (MessageFactory) objectManager.get(Constants.DEFAULT_MESSAGE_FACTORY_ID);
     assertTrue(null != mf);
 }
 
@@ -205,8 +200,9 @@ public void testLifecycle()
     page = new FacesTestCasePage();
 
     try {
+        ServletContext sc = config.getServletContext();
 	facesContext = page.testCallCreateFacesContext(objectManager, wrapped, 
-						       response);
+						       response, sc);
 	assertTrue(null != facesContext);
 	UIPage root = new UIPage();
 	root.setId(Util.generateId());

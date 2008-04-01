@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.11 2002/03/13 18:04:24 eburns Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.12 2002/04/05 19:41:18 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.11 2002/03/13 18:04:24 eburns Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.12 2002/04/05 19:41:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -139,7 +139,7 @@ public SelectOne_OptionTag()
 
     public void setAttributes(UIComponent comp) {
         ParameterCheck.nonNull(comp);
-        Assert.assert_it(null != renderContext);
+        Assert.assert_it(null != facesContext);
         Assert.assert_it(comp instanceof UISelectOne);
 
         UISelectOne uiSelectOne = (UISelectOne) comp;
@@ -150,7 +150,7 @@ public SelectOne_OptionTag()
         // we should update selectedValue only if it is null
         // in the model bean otherwise we would be overwriting
         // the value in model bean, losing any earlier updates. 
-        if ( uiSelectOne.getSelectedValue(renderContext) == null &&
+        if ( uiSelectOne.getSelectedValue(facesContext) == null &&
                 getSelected() != null ) {
             uiSelectOne.setSelectedValue(getValue());
         }

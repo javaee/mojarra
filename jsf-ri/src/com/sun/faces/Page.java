@@ -1,5 +1,5 @@
 /*
- * $Id: Page.java,v 1.2 2002/03/15 23:29:47 eburns Exp $
+ * $Id: Page.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
  */
 
 /*
@@ -29,9 +29,8 @@ import javax.servlet.ServletResponse;
 
 import javax.faces.Constants;
 import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
-import javax.faces.RenderContextFactory;
-import javax.faces.EventContext;
+import javax.faces.FacesContext;
+import javax.faces.FacesContextFactory;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.TreeNavigator;
@@ -39,7 +38,6 @@ import javax.faces.UIPage;
 
 import com.sun.faces.lifecycle.LifecycleDriverImpl;
 import com.sun.faces.lifecycle.RenderWrapper;
-import com.sun.faces.EventContextFactory;
 import com.sun.faces.util.Util;
 
 /**
@@ -49,7 +47,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Page.java,v 1.2 2002/03/15 23:29:47 eburns Exp $
+ * @version $Id: Page.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,61 +119,25 @@ private void outputException(HttpServletResponse resp,
 
 protected FacesContext createFacesContext(ObjectManager objectManager, 
 					  HttpServletRequest req, 
-					  HttpServletResponse res) throws ServletException {
-    FacesContext result;
-    RenderContext rc;
-    EventContext eventContext;
-    HttpSession thisSession = req.getSession();
-    RenderContextFactory rcFactory;
-    EventContextFactory ecFactory;
-    
-    // Attempt to get a render context from the object manager 
-    // for the current session.  If one doesn't exist, create one.
-    //
-    rc = (RenderContext)objectManager.get(thisSession, 
-					  Constants.REF_RENDERCONTEXT);
-    if (rc == null) {
-	rcFactory = (RenderContextFactory)
-	    objectManager.get(Constants.REF_RENDERCONTEXTFACTORY);
-	
-	Assert.assert_it(null != rcFactory);
-	try {
-	    rc = rcFactory.newRenderContext(req);
-	} catch (FacesException e) {
-	    throw new ServletException(e.getMessage());
-	}
-	Assert.assert_it(null != rc);
-	objectManager.put(thisSession,
-			  Constants.REF_RENDERCONTEXT, rc);
-    } else {
-	// set the RenderContext to have the correct request
-	
-	// PENDING(edburns): not sure what the lifetime of
-	// RenderContext is.  Here we re-use the RC by setting its
-	// request and session.
-	if (rc instanceof
-	    com.sun.faces.renderkit.html_basic.HtmlBasicRenderContext) {
-	    ((com.sun.faces.renderkit.html_basic.HtmlBasicRenderContext)rc).
-		setRequest(req);
-	}
-    }
+					  HttpServletResponse res,
+                                          ServletContext sc) 
+                                          throws ServletException {
+    FacesContext fc;
+    FacesContextFactory fcFactory;
+   
+    // create a new instance of facesContext for every request. 
+    fcFactory = (FacesContextFactory)
+            objectManager.get(Constants.REF_FACESCONTEXTFACTORY);
 
-    // create the EventContext
-    ecFactory = (EventContextFactory)
-	objectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
-    Assert.assert_it(ecFactory != null );
-    
-    // eventContext is request scope meaning created per
-    // request, hence need not be put in ObjectManager
+    Assert.assert_it(null != fcFactory);
     try {
-	eventContext = ecFactory.newEventContext(rc, req, res);
-    } catch ( FacesException fe ) {
-	throw new ServletException("Cannot create EventContext " +
-				   fe.getMessage() );
+        fc = fcFactory.newFacesContext(req, res, sc );
+    } catch (FacesException e) {
+        throw new ServletException(e.getMessage());
     }
-    
-    result = new FacesContext(rc, eventContext);
-    return result;
+    Assert.assert_it(null != fc);
+    objectManager.put(req, Constants.REF_FACESCONTEXT, fc);
+    return fc;
 }
     
 //
@@ -251,7 +213,8 @@ final public void service(ServletRequest req, ServletResponse res) throws Servle
     // Put the RenderWrapper in the OM request scope
     objectManager.put(request, Constants.REF_RENDERWRAPPER, this);
     
-    facesContext = createFacesContext(objectManager, request, response);
+    facesContext = createFacesContext(objectManager, request, response, 
+            servletContext);
 
     // Rather than this class extending UIPage, we create a new one each
     // time.  This prevents problems with knowing when it is safe to
@@ -311,9 +274,8 @@ abstract public void _jspService(HttpServletRequest request,
 
 public void commenceRendering(FacesContext ctx, 
 			      TreeNavigator treeNav) throws ServletException, IOException {
-    EventContext eventContext = ctx.getEventContext();
-    HttpServletResponse response = (HttpServletResponse) eventContext.getResponse();
-    HttpServletRequest request =(HttpServletRequest) eventContext.getRequest();
+    HttpServletResponse response = (HttpServletResponse) ctx.getResponse();
+    HttpServletRequest request =(HttpServletRequest) ctx.getRequest();
 
     // Beacuse the tree is rooted at UIPage, and there is no tag
     // that matches UIPage, we have to prime the treeNav here.

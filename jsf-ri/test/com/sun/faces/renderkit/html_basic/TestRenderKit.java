@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.9 2002/03/15 23:29:50 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.10 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -17,10 +17,12 @@ import javax.servlet.http.HttpSession;
 
 import javax.faces.RenderKit;
 import javax.servlet.ServletRequest;
-import javax.faces.RenderContextFactory;
-import javax.faces.RenderContext;
+import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
+import javax.faces.FacesContextFactory;
+import javax.faces.FacesContext;
 import javax.faces.FacesException;
-
+import com.sun.faces.FacesTestCase;
 
 /**
  *
@@ -28,7 +30,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.9 2002/03/15 23:29:50 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.10 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,27 +71,26 @@ public class TestRenderKit extends FacesTestCase
 
 public void testFactory() {
     RenderKit kit = null;
-    RenderContext context;
-    RenderContextFactory factory;
+    FacesContext context;
+    FacesContextFactory factory;
     javax.faces.Renderer renderer;
     java.util.Iterator typeIt, rendererIt = null;
     String type, rendererName;
     boolean result = false;
     
     try {
-	factory = RenderContextFactory.newInstance();
-	System.out.println("HtmlBasicRenderContextFactory: got factory: " + 
+	factory = FacesContextFactory.newInstance();
+	System.out.println("HtmlBasicFacesContextFactory: got factory: " + 
 			   factory);
-	context = factory.newRenderContext(request);
-	System.out.println("HtmlBasicRenderContextFactory: got context: " + 
-			   context);
-	result = null != context.getSession();
-	assertTrue(result);
 
+        ServletContext sc = config.getServletContext();
+	context = factory.newFacesContext(request, response, sc);
+	System.out.println("HtmlBasicFacesContextFactory: got context: " + 
+			   context);
 	// PENDING(edburns): test for context's clientCaps, and locale.
 
 	kit = context.getRenderKit();
-	System.out.println("HtmlBasicRenderContextFactory: got renderKit: " + 
+	System.out.println("HtmlBasicFacesContextFactory: got renderKit: " + 
 			   kit);
     }
     catch (Exception e) {

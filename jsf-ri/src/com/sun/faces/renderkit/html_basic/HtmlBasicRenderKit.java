@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.25 2002/04/02 01:26:20 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.26 2002/04/05 19:41:16 jvisvanathan Exp $
  */
 
 /*
@@ -30,16 +30,11 @@ import javax.faces.ClientCapabilities;
 import javax.faces.EventQueue;
 import javax.faces.UIComponent;
 import javax.faces.UICommand;
-import javax.faces.UITextEntry;
 import javax.faces.CommandEvent;
 import javax.faces.ValueChangeEvent;
-import javax.faces.RenderContext;
-import javax.faces.Constants;
-import javax.faces.UISelectBoolean;
-import javax.faces.UISelectOne;
-import javax.faces.EventContext;
-import javax.faces.ObjectManager;
 import javax.faces.FacesContext;
+import javax.faces.Constants;
+import javax.faces.ObjectManager;
 import javax.faces.TreeNavigator;
 
 import com.sun.faces.util.Util;
@@ -50,7 +45,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.25 2002/04/02 01:26:20 jvisvanathan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.26 2002/04/05 19:41:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -194,7 +189,7 @@ public Renderer getRenderer(String name) throws FacesException {
     return result;
 }
 
-public void queueEvents(EventContext eventContext) {
+public void queueEvents(FacesContext facesContext) {
 
     String param_name = null;
     String param_value = null;
@@ -202,28 +197,28 @@ public void queueEvents(EventContext eventContext) {
     UIComponent c = null;
     Vector cmd_events = new Vector();
     ObjectManager objectManager = null;
-    RenderContext rc = null;
+    FacesContext rc = null;
     EventQueue eventQueue = null;
     ServletRequest request = null; 
  
     // getServletRequest 
-    request = eventContext.getRequest();
+    request = facesContext.getRequest();
     Assert.assert_it(request != null );
 
     Enumeration param_names = request.getParameterNames();
 
     if ( param_names.hasMoreElements() ) {
         // get eventQueue
-        eventQueue = eventContext.getEventQueue(); 
+        eventQueue = facesContext.getEventQueue(); 
         Assert.assert_it(eventQueue != null);
  
         // getObjectManager
-        objectManager = eventContext.getObjectManager();
+        objectManager = facesContext.getObjectManager();
         Assert.assert_it(objectManager != null );
 
         // get renderContext
-        rc = (RenderContext)objectManager.get(request,
-                Constants.REF_RENDERCONTEXT);
+        rc = (FacesContext)objectManager.get(request,
+                Constants.REF_FACESCONTEXT);
         Assert.assert_it( rc != null );
     }
 
@@ -264,14 +259,14 @@ public void queueEvents(EventContext eventContext) {
 
             if ( (old_value != null && !(old_value.equals(param_value))) || 
                 (old_value == null && param_value != null )) {
-                ValueChangeEvent e =  new ValueChangeEvent(eventContext,
+                ValueChangeEvent e =  new ValueChangeEvent(facesContext,
                         c, param_value);
                 eventQueue.add(e);
                 c.setValue(param_value);
             }    
 	} else { 
             String command_name = ((UICommand)c).getCommandName();
-            CommandEvent cmd_event =  new CommandEvent(eventContext, c, 
+            CommandEvent cmd_event =  new CommandEvent(facesContext, c, 
 					       command_name);
             cmd_events.add(cmd_event);
         }

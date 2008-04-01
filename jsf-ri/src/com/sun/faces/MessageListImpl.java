@@ -2,12 +2,16 @@ package com.sun.faces;
 
 import java.util.*;
 
-import javax.faces.*;
+import javax.faces.Constants;
+import javax.faces.MessageList;
+import javax.faces.ObjectManager;
+import javax.faces.Message;
+import javax.faces.FacesException;
+import javax.faces.MessageFactory;
 
 public class MessageListImpl extends MessageList 
 {
-	public final static String DEFAULT_MESSAGE_FACTORY_ID = "javax.faces.DefaultMessageFactory";
-	private String _factoryId = DEFAULT_MESSAGE_FACTORY_ID;
+	private String _factoryId = Constants.DEFAULT_MESSAGE_FACTORY_ID;
 	
 	private	Locale	_locale;
 	

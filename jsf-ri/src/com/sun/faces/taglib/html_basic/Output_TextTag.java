@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.23 2002/03/08 00:24:50 jvisvanathan Exp $
+ * $Id: Output_TextTag.java,v 1.24 2002/04/05 19:41:18 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.23 2002/03/08 00:24:50 jvisvanathan Exp $
+ * @version $Id: Output_TextTag.java,v 1.24 2002/04/05 19:41:18 jvisvanathan Exp $
  * 
  *
  */
@@ -72,7 +72,7 @@ public class Output_TextTag extends FacesTag
      * Creates a Form component and sets renderer specific
      * properties.
      *
-     * @param rc renderContext
+     * @param rc facesContext
      */
 
     public UIComponent newComponentInstance() {
@@ -114,7 +114,7 @@ public class Output_TextTag extends FacesTag
                 // If form tag cannot be found then model is null
             }
         }
-        if ( out.getValue(renderContext) == null && value != null ) {
+        if ( out.getValue(facesContext) == null && value != null ) {
             out.setValue(value);
         }
     }

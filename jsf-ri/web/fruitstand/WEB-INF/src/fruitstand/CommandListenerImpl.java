@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.8 2002/03/19 19:32:33 jvisvanathan Exp $
+ * $Id: CommandListenerImpl.java,v 1.9 2002/04/05 19:41:22 jvisvanathan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -26,7 +26,6 @@ import javax.faces.ObjectManager;
 import javax.faces.CommandFailedException;
 import javax.faces.NavigationHandler;
 import javax.faces.FacesEvent;
-import javax.faces.EventContext;
 import javax.faces.UIComponent;
 
 import javax.servlet.ServletRequest;
@@ -51,7 +50,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.8 2002/03/19 19:32:33 jvisvanathan Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.9 2002/04/05 19:41:22 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -198,9 +197,9 @@ public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFaile
     String cmdName = e.getCommandName();
     ObjectManager ot = ObjectManager.getInstance();
     FacesEvent fe = (FacesEvent) e;
-    HttpServletRequest req = (HttpServletRequest) ((fe.getEventContext()).getRequest());
+    HttpServletRequest req = (HttpServletRequest) ((fe.getFacesContext()).getRequest());
     UserBean user = (UserBean) ot.get(req, "UserBean");
-    servletContext = req.getSession().getServletContext();
+    servletContext = (fe.getFacesContext()).getServletContext();
 
     Assert.assert_it(null != sourceId);
     Assert.assert_it(null != ot);

@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.10 2002/03/16 00:09:36 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.11 2002/04/05 19:41:16 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIComponent;
 import javax.faces.UISelectOne;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.10 2002/03/16 00:09:36 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.11 2002/04/05 19:41:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,10 +116,10 @@ public class OptionListRenderer extends Object implements Renderer {
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c) 
+    public void renderStart(FacesContext fc, UIComponent c) 
         throws IOException, FacesException {
 
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
  
         UISelectOne uiSelectOne = null;
@@ -133,7 +133,7 @@ public class OptionListRenderer extends Object implements Renderer {
         String optionListId = uiSelectOne.getId();
         Assert.assert_it(null != optionListId);
 
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
@@ -144,14 +144,14 @@ public class OptionListRenderer extends Object implements Renderer {
         outputMethod.flush();
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
         throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 	
         UISelectOne uiSelectOne = null;
@@ -161,17 +161,17 @@ public class OptionListRenderer extends Object implements Renderer {
             throw new FacesException("Invalid component type. " +
 				     "Expected UISelectOne");
         }
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
 
-        String selectedValue = (String) uiSelectOne.getSelectedValue(rc);
+        String selectedValue = (String) uiSelectOne.getSelectedValue(fc);
 
         // Iterate over the components items collection and
         // build the rendering string.
         //
-        Iterator itemsIter = uiSelectOne.getItems(rc);
+        Iterator itemsIter = uiSelectOne.getItems(fc);
         while (itemsIter.hasNext()) {
             UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
             String itemLabel = item.getLabel(); 
@@ -194,7 +194,7 @@ public class OptionListRenderer extends Object implements Renderer {
 
     }
 
-    public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
+    public boolean getCanRenderChildren(FacesContext fc, UIComponent c) {
         return false;
     }
 

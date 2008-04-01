@@ -1,5 +1,5 @@
 /*
- * $Id: TestTreebuilder.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
+ * $Id: TestTreebuilder.java,v 1.5 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.servlet.jsp.tagext.TagLibraryInfo;
 
 import javax.faces.Constants;
 import javax.faces.UIComponent;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.ObjectManager;
 import javax.faces.TreeNavigator;
 import javax.faces.UIPage;
@@ -51,7 +51,7 @@ import org.apache.jasper_hacked.compiler.JspParseListener;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestTreebuilder.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
+ * @version $Id: TestTreebuilder.java,v 1.5 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -109,10 +109,10 @@ public void getTreeForURI(ObjectManager objectManager,
     // we have save state.
     if (null == (treeNav = 
 		 (TreeNavigator) session.getAttribute(requestURI))) {
-	RenderContext rc;
-	rc = (RenderContext)objectManager.get(req,
-					      Constants.REF_RENDERCONTEXT);
-	assertTrue(null != rc);
+	FacesContext fc;
+	fc = (FacesContext)objectManager.get(req,
+					      Constants.REF_FACESCONTEXT);
+	assertTrue(null != fc);
 	
 	TreeEngine treeEng = (TreeEngine) 
 	    objectManager.get(Constants.REF_TREEENGINE);
@@ -120,7 +120,7 @@ public void getTreeForURI(ObjectManager objectManager,
 	UIPage root = new UIPage();
 	root.setId(Util.generateId());
 	
-	treeNav = treeEng.getTreeForURI(rc, root, requestURI);
+	treeNav = treeEng.getTreeForURI(fc, root, requestURI);
 	// stick this here so we can have access to it on the postback.
 	if (null != treeNav) {
 	    session.setAttribute(requestURI, treeNav);
@@ -155,9 +155,8 @@ public void testTree() {
     ParamBlockingRequestWrapper wrapped = 
 	new ParamBlockingRequestWrapper(request);
 
-    // put the rc in the session
-    HttpSession session = request.getSession();
-    objectManager.put(session, Constants.REF_RENDERCONTEXT, renderContext);
+    // put the fc in request
+    objectManager.put(request, Constants.REF_FACESCONTEXT, facesContext);
 
     TreeNavigator treeNav = null;
 
@@ -181,7 +180,7 @@ public void testTree() {
     root.setId(Util.generateId());
 	
     // simulate the JSP Engine's parsing of the tree
-    JspSimulator jspSim = new JspSimulator(componentBuilder, renderContext, 
+    JspSimulator jspSim = new JspSimulator(componentBuilder, facesContext, 
 					   root, TEST_URI, treeNav);
     // Account for the UIPage root
     treeNav.getNextStart();
@@ -211,9 +210,9 @@ public void testWhile() {
     ParamBlockingRequestWrapper wrapped = 
 	new ParamBlockingRequestWrapper(request);
 
-    // put the rc in the session
+    // put the fc in the session
     HttpSession session = request.getSession();
-    objectManager.put(session, Constants.REF_RENDERCONTEXT, renderContext);
+    objectManager.put(session, Constants.REF_FACESCONTEXT, facesContext);
 
     TreeNavigator treeNav = null;
 
@@ -250,9 +249,9 @@ public static class JspSimulator extends TreeBuilder implements JspParseListener
 protected TreeNavigator treeNav;
 
 public JspSimulator(BuildComponentFromTag newComponentBuilder, 
-		    RenderContext newRenderContext, UIPage root, 
+		    FacesContext newFacesContext, UIPage root, 
 		    String newRequestURI, TreeNavigator newTreeNav) {
-    super(newComponentBuilder, newRenderContext, root, newRequestURI);
+    super(newComponentBuilder, newFacesContext, root, newRequestURI);
     treeNav = newTreeNav;
 }
 

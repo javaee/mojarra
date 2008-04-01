@@ -1,5 +1,5 @@
 /*
- * $Id: DateConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
+ * $Id: DateConverter.java,v 1.3 2002/04/05 19:41:11 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package com.sun.faces;
 import javax.faces.Converter;
 import javax.faces.ValidationException;
 import javax.faces.UIComponent;
-import javax.faces.EventContext;
+import javax.faces.FacesContext;
 import javax.faces.MessageList;
 
 import org.mozilla.util.Assert;
@@ -30,7 +30,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
+ * @version $Id: DateConverter.java,v 1.3 2002/04/05 19:41:11 jvisvanathan Exp $
  *
  * @see javax.faces.Converter
  *
@@ -38,7 +38,7 @@ import java.text.ParseException;
 
 public class DateConverter implements Converter {
 
-    public Object convertStringToObject(EventContext ctx,
+    public Object convertStringToObject(FacesContext ctx,
                                        UIComponent component,
                                        String componentValue)
             throws ValidationException {
@@ -61,7 +61,7 @@ public class DateConverter implements Converter {
         return date;
     }
 
-   public String convertObjectToString(EventContext ctx,
+   public String convertObjectToString(FacesContext ctx,
                                        UIComponent component,
                                        Object modelValue)
            throws ValidationException {
@@ -71,7 +71,7 @@ public class DateConverter implements Converter {
       return df.format( modelValue);
    }
 
-   protected void setErrorMessage(EventContext ctx, String compId, 
+   protected void setErrorMessage(FacesContext ctx, String compId, 
            String componentValue) {
        MessageList msgList = ctx.getMessageList();
        Assert.assert_it(msgList != null);

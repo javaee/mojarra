@@ -289,11 +289,12 @@
             <test name="com.sun.faces.lifecycle.TestLifecycleDriverImpl"/>
             <test name="com.sun.faces.treebuilder.TestTreebuilder"/>
             <test name="com.sun.faces.TestObjectManager"/>
-            <test name="com.sun.faces.TestEventContext"/>
+            <test name="com.sun.faces.TestFacesContext"/>
             <test name="com.sun.faces.TestObjectAccessor"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
             <test name="com.sun.faces.TestValidation"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
         </junit>
 
     </target>
@@ -313,7 +314,6 @@
 
             <!-- Suite of tests -->
             <test name="com.sun.faces.TestNavigationMap"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
             <test name="com.sun.faces.TestEventQueue"/>
         </junit>
 

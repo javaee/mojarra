@@ -1,5 +1,5 @@
 /*
- * $Id: BooleanConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
+ * $Id: BooleanConverter.java,v 1.3 2002/04/05 19:41:11 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.Converter;
 import javax.faces.ValidationException;
 import javax.faces.UIComponent;
-import javax.faces.EventContext;
+import javax.faces.FacesContext;
 
 /**
  *
@@ -25,7 +25,7 @@ import javax.faces.EventContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BooleanConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
+ * @version $Id: BooleanConverter.java,v 1.3 2002/04/05 19:41:11 jvisvanathan Exp $
  *
  * @see javax.faces.Converter
  *
@@ -33,14 +33,14 @@ import javax.faces.EventContext;
 
 public class BooleanConverter implements Converter{
 
-    public Object convertStringToObject(EventContext ctx,
+    public Object convertStringToObject(FacesContext ctx,
                                        UIComponent component,
                                        String componentValue)
             throws ValidationException {
         return Boolean.valueOf(componentValue);
    }
 
-   public String convertObjectToString(EventContext ctx,
+   public String convertObjectToString(FacesContext ctx,
                                        UIComponent component,
                                        Object modelValue)
            throws ValidationException {

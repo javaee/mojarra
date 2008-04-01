@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.10 2002/03/16 00:09:37 eburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.11 2002/04/05 19:41:17 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import java.beans.PropertyDescriptor;
 
 import javax.faces.Constants;
 import javax.faces.FacesException;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIComponent;
 
@@ -32,7 +32,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.10 2002/03/16 00:09:37 eburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.11 2002/04/05 19:41:17 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,20 +106,20 @@ public boolean supportsComponentType(String componentType) {
     }
 
 
-public void renderStart(RenderContext rc, UIComponent c) 
+public void renderStart(FacesContext fc, UIComponent c) 
     throws IOException, FacesException {
     return;
 }
 
-public void renderChildren(RenderContext rc, UIComponent c) throws IOException {
+public void renderChildren(FacesContext fc, UIComponent c) throws IOException {
     return;
 }
 
-public void renderComplete(RenderContext rc, UIComponent c) throws IOException {
+public void renderComplete(FacesContext fc, UIComponent c) throws IOException {
     return;
 }
 
-public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
+public boolean getCanRenderChildren(FacesContext fc, UIComponent c) {
     return false;
 }
 

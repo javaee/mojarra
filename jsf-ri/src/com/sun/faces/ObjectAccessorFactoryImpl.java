@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectAccessorFactoryImpl.java,v 1.1 2002/01/12 01:41:17 edburns Exp $
+ * $Id: ObjectAccessorFactoryImpl.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.ObjectAccessor;
 import javax.faces.BeanAccessor;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.FacesException;
 
 /**
@@ -27,7 +27,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectAccessorFactoryImpl.java,v 1.1 2002/01/12 01:41:17 edburns Exp $
+ * @version $Id: ObjectAccessorFactoryImpl.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,8 +69,8 @@ public ObjectAccessorFactoryImpl()
 // Class methods
 //
 
-public ObjectAccessor newObjectAccessor(RenderContext rc) throws FacesException {
-    ObjectAccessor result = new BeanAccessor(rc);
+public ObjectAccessor newObjectAccessor(FacesContext fc) throws FacesException {
+    ObjectAccessor result = new BeanAccessor(fc);
     return result;
 }
 

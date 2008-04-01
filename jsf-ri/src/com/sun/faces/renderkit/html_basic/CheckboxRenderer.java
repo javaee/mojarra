@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.17 2002/03/16 00:09:35 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.18 2002/04/05 19:41:14 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIComponent;
 import javax.faces.UISelectBoolean;
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.17 2002/03/16 00:09:35 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.18 2002/04/05 19:41:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -117,10 +117,10 @@ public class CheckboxRenderer extends Object implements Renderer {
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c) 
+    public void renderStart(FacesContext fc, UIComponent c) 
         throws IOException, FacesException {
 
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
  
         UISelectBoolean wSelectBoolean = null;
@@ -134,13 +134,13 @@ public class CheckboxRenderer extends Object implements Renderer {
         String cbId = wSelectBoolean.getId();
         Assert.assert_it(null != cbId);
 
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
 
         output.append("<INPUT TYPE=\"CHECKBOX\" ");
-        if (wSelectBoolean.isSelected(rc)) {
+        if (wSelectBoolean.isSelected(fc)) {
             output.append(" CHECKED ");
         }
 
@@ -154,9 +154,9 @@ public class CheckboxRenderer extends Object implements Renderer {
         output.append("onClick=\"" + clickScript + "\" ");
 
         output.append(">");
-        if (wSelectBoolean.getAttribute(rc, "label") != null) {
+        if (wSelectBoolean.getAttribute(fc, "label") != null) {
             output.append(" ");
-            output.append(wSelectBoolean.getAttribute(rc, "label"));
+            output.append(wSelectBoolean.getAttribute(fc, "label"));
         }
 
         // render a hiddenField to track the state of the checkbox
@@ -169,17 +169,17 @@ public class CheckboxRenderer extends Object implements Renderer {
         outputMethod.flush();
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
         throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }
 
-    public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
+    public boolean getCanRenderChildren(FacesContext fc, UIComponent c) {
         return false;
     }
 

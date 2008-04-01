@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.18 2002/03/16 00:09:36 eburns Exp $
+ * $Id: FormRenderer.java,v 1.19 2002/04/05 19:41:15 jvisvanathan Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIForm;
 import javax.faces.UIComponent;
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.18 2002/03/16 00:09:36 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.19 2002/04/05 19:41:15 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,14 +124,14 @@ public class FormRenderer extends Object implements Renderer
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c ) 
+    public void renderStart(FacesContext fc, UIComponent c ) 
         throws IOException, FacesException {
 
         // render the form
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
         
         UIForm form = null; 
@@ -148,7 +148,7 @@ public class FormRenderer extends Object implements Renderer
         out.append("<FORM METHOD=\"POST\" ACTION=\"");
 	// We need the action to be the same as this page so the tree
 	// can be correctly loaded for event processing.
-	String requestURI = ((HttpServletRequest)rc.getRequest()).getRequestURI();
+	String requestURI = ((HttpServletRequest)fc.getRequest()).getRequestURI();
 	out.append(requestURI + "\" ");
         out.append("NAME=\"" + formId + "\"");
         out.append(">");
@@ -156,17 +156,18 @@ public class FormRenderer extends Object implements Renderer
         outputMethod.flush();
     }
 
-    public void renderChildren(RenderContext rc, 
+    public void renderChildren(FacesContext fc, 
             UIComponent c) throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c )
+    public void renderComplete(FacesContext fc, UIComponent c )
             throws IOException, FacesException {
         // render the form
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         StringBuffer out = new StringBuffer();
-	HttpSession session = rc.getSession();
+        HttpServletRequest httpRequest = (HttpServletRequest) fc.getRequest();
+	HttpSession session = httpRequest.getSession();
 	
 	// Add a transaction token
         if (session != null) {

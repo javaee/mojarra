@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.1 2002/03/19 19:25:01 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.2 2002/04/05 19:41:18 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.faces.LengthValidator;
 import javax.faces.RequiredValidator;
 import javax.faces.UIForm;
 import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 
 import org.xml.sax.Attributes;
 
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.1 2002/03/19 19:25:01 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2002/04/05 19:41:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -182,10 +182,10 @@ private boolean attrRequiresSpecialTreatment(String attrName) {
     return result;
 }
 
-private void handleSpecialAttr(RenderContext renderContext,
+private void handleSpecialAttr(FacesContext facesContext,
 			       UIComponent child, String attrName,
 			       String attrValue) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
-    ParameterCheck.nonNull(renderContext);
+    ParameterCheck.nonNull(facesContext);
     ParameterCheck.nonNull(child);
     ParameterCheck.nonNull(attrName);
     ParameterCheck.nonNull(attrValue);
@@ -195,10 +195,10 @@ private void handleSpecialAttr(RenderContext renderContext,
     Class [] stringArg = { String.class };
     Method attrMethod = null;
 
-    ObjectManager objectManager = renderContext.getObjectManager();
+    ObjectManager objectManager = facesContext.getObjectManager();
     Assert.assert_it(objectManager != null );
 
-    HttpServletRequest request =(HttpServletRequest)renderContext.getRequest();
+    HttpServletRequest request =(HttpServletRequest)facesContext.getRequest();
 
     // PENDING(visvan): We put the validator instances in session scope
     // UNTIL they are no longer in the ObjectManager.  That is, when we
@@ -364,7 +364,7 @@ public boolean isNestedComponentTag(String shortTagName)
     return result;
 }
 
-public void handleNestedComponentTag(RenderContext renderContext,
+public void handleNestedComponentTag(FacesContext facesContext,
 				     UIComponent parent, 
 				     String shortTagName, Attributes attrs)
 {
@@ -416,21 +416,21 @@ public void handleNestedComponentTag(RenderContext renderContext,
     // we should update selectedValue only if it is null
     // in the model bean otherwise we would be overwriting
     // the value in model bean, losing any earlier updates. 
-    if (checked && null == uiSelectOne.getSelectedValue(renderContext)) {
+    if (checked && null == uiSelectOne.getSelectedValue(facesContext)) {
 	uiSelectOne.setSelectedValue(itemValue);
     }
 }
 
-public void applyAttributesToComponentInstance(RenderContext renderContext,
+public void applyAttributesToComponentInstance(FacesContext facesContext,
 					       UIComponent child, 
 					       Attributes attrs)
 {
-    ParameterCheck.nonNull(renderContext);
+    ParameterCheck.nonNull(facesContext);
     ParameterCheck.nonNull(child);
     ParameterCheck.nonNull(attrs);
     int attrLen, i = 0;
     String attrName, attrValue;
-    ServletRequest request = renderContext.getRequest();
+    ServletRequest request = facesContext.getRequest();
 
     attrLen = attrs.getLength();
     for (i = 0; i < attrLen; i++) {
@@ -445,7 +445,7 @@ public void applyAttributesToComponentInstance(RenderContext renderContext,
 	    // treatment
 	    try {
 		if (attrRequiresSpecialTreatment(attrName)) {
-		    handleSpecialAttr(renderContext, child, attrName, 
+		    handleSpecialAttr(facesContext, child, attrName, 
 				      attrValue);
 		}
 		else {

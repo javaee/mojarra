@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.6 2002/03/16 00:09:37 eburns Exp $
+ * $Id: TestRenderer.java,v 1.7 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -15,11 +15,12 @@ import junit.framework.TestCase;
 import java.io.IOException;
 import javax.faces.RenderKit;
 import javax.servlet.ServletRequest;
-import javax.faces.RenderContextFactory;
-import javax.faces.RenderContext;
+import javax.faces.FacesContextFactory;
+import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.*;
 import com.sun.faces.renderkit.html_basic.*;
+import com.sun.faces.FacesTestCase;
 
 /**
  *
@@ -27,14 +28,14 @@ import com.sun.faces.renderkit.html_basic.*;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderer.java,v 1.6 2002/03/16 00:09:37 eburns Exp $
+ * @version $Id: TestRenderer.java,v 1.7 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRenderer extends TestCase
+public class TestRenderer extends FacesTestCase
 {
     //
     // Protected Constants
@@ -47,8 +48,6 @@ public class TestRenderer extends TestCase
     //
     // Instance Variables
     //
-    RenderContext context;
-    RenderContextFactory factory;
     javax.faces.Renderer rendererObj;
     java.util.Iterator typeIt;
     String type, rendererName;
@@ -63,21 +62,6 @@ public class TestRenderer extends TestCase
 
     public TestRenderer(String name) {
         super(name);
-    }
-
-    public void setUp() {
-        // create renderContext
-        try {
-            factory = RenderContextFactory.newInstance();
-            System.out.println("HtmlBasicRenderContextFactory: got factory: " +
-                           factory);
-            context = factory.newRenderContext(null);
-            System.out.println("HtmlBasicRenderContextFactory: got context: " +
-                           context);
-        }
-        catch (Exception e) {
-            System.out.println("Exception getting factory!!! " + e.getMessage());
-        }
     }
 
     //
@@ -157,7 +141,7 @@ public class TestRenderer extends TestCase
 	gotException = false;
         if ( ! comp_name.equals("UIOutput") ) {
             try {
-                renderer.renderStart(context,output);
+                renderer.renderStart(facesContext,output);
             } catch ( Exception e ) {
 	       gotException = true;
                 System.out.println("Expected exception: " + e.getMessage());

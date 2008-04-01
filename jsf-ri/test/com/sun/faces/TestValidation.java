@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidation.java,v 1.1 2002/03/19 22:19:05 jvisvanathan Exp $
+ * $Id: TestValidation.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidation.java,v 1.1 2002/03/19 22:19:05 jvisvanathan Exp $
+ * @version $Id: TestValidation.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,7 +86,7 @@ public void testValidators()
     System.out.println("Testing BooleanConverter");
     input.setValue("test");
     input.setAttribute("modelType", "java.lang.Boolean");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.VALID);
  
@@ -94,7 +94,7 @@ public void testValidators()
     System.out.println("Testing DateConverter");
     input.setValue("06/27/1990");
     input.setAttribute("modelType", "java.util.Date");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.VALID);
     
@@ -102,7 +102,7 @@ public void testValidators()
     System.out.println("Testing DateConverter");
     input.setValue("test");
     input.setAttribute("modelType", "java.util.Date");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.INVALID);
 
@@ -113,7 +113,7 @@ public void testValidators()
     String reqValidatorId = Util.generateId();
     objectManager.put( session, reqValidatorId, reqValidator);
     input.addValidator(reqValidatorId);
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.INVALID);
 
@@ -121,7 +121,7 @@ public void testValidators()
     System.out.println("Testing IntegerConverter");
     input.setValue("test");
     input.setAttribute("modelType", "java.lang.Integer");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.INVALID);
 
@@ -129,7 +129,7 @@ public void testValidators()
     System.out.println("Testing IntegerConverter");
     input.setValue("999");
     input.setAttribute("modelType", "java.lang.Integer");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.VALID);
 
@@ -142,14 +142,14 @@ public void testValidators()
     String rangeValidatorId = Util.generateId();
     objectManager.put( session, rangeValidatorId, rangeValidator);
     input.addValidator(rangeValidatorId);
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.VALID);
 
     // Test RangeValidator
     System.out.println("Testing RangeValidator");
     input.setValue("1001");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.INVALID);
 
@@ -165,14 +165,14 @@ public void testValidators()
     String lengthValidatorId = Util.generateId();
     objectManager.put( session, lengthValidatorId, lengthValidator);
     input.addValidator(lengthValidatorId);
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.INVALID);
 
     // Test LengthValidator
     System.out.println("Testing LengthValidator");
     input.setValue("Test");
-    input.doValidate(eventContext);
+    input.doValidate(facesContext);
     state = input.getValidState();
     assertTrue(state == Validatible.VALID);
 }

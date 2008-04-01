@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.13 2002/03/16 00:09:36 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.14 2002/04/05 19:41:17 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UITextEntry;
 import javax.faces.UIComponent;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.13 2002/03/16 00:09:36 eburns Exp $
+ * @version $Id: SecretRenderer.java,v 1.14 2002/04/05 19:41:17 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,10 +101,10 @@ public class SecretRenderer extends Object implements Renderer
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c )
+    public void renderStart(FacesContext fc, UIComponent c )
         throws IOException, FacesException { 
 
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 
         UITextEntry textField = null;
@@ -118,7 +118,7 @@ public class SecretRenderer extends Object implements Renderer
         String textFieldId = textField.getId();
         Assert.assert_it(null != textFieldId);
 
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
@@ -129,21 +129,21 @@ public class SecretRenderer extends Object implements Renderer
         output.append("\"");
 
         // render default text specified
-        String textField_value = textField.getText(rc);
+        String textField_value = textField.getText(fc);
         if ( textField_value != null ) {
             output.append(" VALUE=\"");
             output.append(textField_value);
             output.append("\"");
         }
         //render size if specified
-        String textField_size = (String)textField.getAttribute(rc, "size");
+        String textField_size = (String)textField.getAttribute(fc, "size");
         if ( textField_size != null ) {
             output.append(" SIZE=\"");
             output.append(textField_size);
             output.append("\"");
         }
         //render maxlength if specified 
-        String textField_ml = (String)textField.getAttribute(rc, "maxlength");
+        String textField_ml = (String)textField.getAttribute(fc, "maxlength");
         if ( textField_ml != null ) {
             output.append(" MAXLENGTH=\"");
             output.append(textField_ml);
@@ -155,12 +155,12 @@ public class SecretRenderer extends Object implements Renderer
         return;
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
             throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }

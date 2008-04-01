@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.22 2002/04/05 19:41:18 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.22 2002/04/05 19:41:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,7 +121,7 @@ public class SelectBoolean_CheckboxTag extends FacesTag {
      * Creates a Form component and sets renderer specific
      * properties.
      *
-     * @param rc renderContext
+     * @param rc facesContext
      */
 
     public UIComponent newComponentInstance() {
@@ -163,7 +163,7 @@ public class SelectBoolean_CheckboxTag extends FacesTag {
         }
         if ( checked != null ) {
              boolean state = (Boolean.valueOf(checked)).booleanValue();
-             uiSelectBoolean.setSelected(renderContext, state);
+             uiSelectBoolean.setSelected(facesContext, state);
         }
     }
 

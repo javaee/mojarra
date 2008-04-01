@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.13 2002/03/16 00:09:36 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.14 2002/04/05 19:41:16 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UICommand;
 import javax.faces.UIComponent;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.13 2002/03/16 00:09:36 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.14 2002/04/05 19:41:16 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,9 +115,9 @@ public class HyperlinkRenderer extends Object implements Renderer {
 	return null;
     }
 
-    public void renderStart(RenderContext rc, UIComponent c) 
+    public void renderStart(FacesContext fc, UIComponent c) 
         throws IOException, FacesException {
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 
         UICommand wCommand = null;
@@ -128,20 +128,20 @@ public class HyperlinkRenderer extends Object implements Renderer {
                       "Expected UICommand");
         }
 
-        OutputMethod outputMethod = rc.getOutputMethod();
+        OutputMethod outputMethod = fc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
  
         StringBuffer output = new StringBuffer();
         output.append("<A HREF=\"");
-        output.append(wCommand.getAttribute(rc, "target"));
+        output.append(wCommand.getAttribute(fc, "target"));
         output.append("\">");
-        if (wCommand.getAttribute(rc, "image") != null) {
+        if (wCommand.getAttribute(fc, "image") != null) {
             output.append("<IMAGE SRC=\"");
-            output.append(wCommand.getAttribute(rc, "image"));
+            output.append(wCommand.getAttribute(fc, "image"));
             output.append("\">");
         }
-        if (wCommand.getAttribute(rc, "text") != null) {
-            output.append(wCommand.getAttribute(rc, "text"));
+        if (wCommand.getAttribute(fc, "text") != null) {
+            output.append(wCommand.getAttribute(fc, "text"));
         }
         output.append("</A>");
 
@@ -149,17 +149,17 @@ public class HyperlinkRenderer extends Object implements Renderer {
         outputMethod.flush(); 
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
         throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }
 
-    public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
+    public boolean getCanRenderChildren(FacesContext fc, UIComponent c) {
         return false;
     }
 

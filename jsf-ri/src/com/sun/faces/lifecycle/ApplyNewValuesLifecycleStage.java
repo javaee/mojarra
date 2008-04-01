@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyNewValuesLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * $Id: ApplyNewValuesLifecycleStage.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
  */
 
 /*
@@ -15,8 +15,6 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesContext;
-import javax.faces.RenderContext;
-import javax.faces.EventContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
 import javax.faces.RenderKit;
@@ -33,7 +31,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: ApplyNewValuesLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: ApplyNewValuesLifecycleStage.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -86,13 +84,13 @@ public ApplyNewValuesLifecycleStage(LifecycleDriverImpl newDriver,
 
 */
 
-public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesException
+public boolean execute(FacesContext facesContext, TreeNavigator root) 
+        throws FacesException
 {
-    RenderContext renderContext = ctx.getRenderContext();
-    RenderKit renderKit = renderContext.getRenderKit();
+    RenderKit renderKit = facesContext.getRenderKit();
     Assert.assert_it(renderKit != null);
     HttpServletRequest request = 
-	(HttpServletRequest) renderContext.getRequest();
+	(HttpServletRequest) facesContext.getRequest();
 
     // if we have a transaction token, see if it is valid
     if (Util.hasParameters(request)) {
@@ -103,7 +101,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
     }
     Util.resetToken(request);
 
-    renderKit.applyNewValuesToTree(ctx, root);
+    renderKit.applyNewValuesToTree(facesContext, root);
     return true;
 }
 

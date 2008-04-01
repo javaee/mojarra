@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenerateId.java,v 1.1 2002/01/24 00:38:14 rogerk Exp $
+ * $Id: TestGenerateId.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -22,9 +22,9 @@ import java.io.IOException;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
-import javax.faces.RenderContextFactory;
 import javax.faces.UIForm;
+import javax.faces.FacesContext;
+import javax.faces.FacesContextFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,7 +39,7 @@ import com.sun.faces.taglib.html_basic.FormTag;
  *  <B>TestGenerateId</B> is a class which tests the unique id
  *     generation used in component Faces JSP tags.
  *
- * @version $Id: TestGenerateId.java,v 1.1 2002/01/24 00:38:14 rogerk Exp $
+ * @version $Id: TestGenerateId.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
  *
  * @see setUp 
  * @see tearDown 
@@ -66,8 +66,8 @@ public class TestGenerateId extends JspTestCase
 
     private FormTag formTag;
     private ObjectManagerFactory omFactory;
-    private RenderContextFactory rcFactory;
-    private RenderContext rc = null;
+    private FacesContextFactory rcFactory;
+    private FacesContext fc = null;
 
     private FacesTestCase fCase = null;
 //
@@ -105,10 +105,10 @@ public class TestGenerateId extends JspTestCase
         try {
             omFactory = ObjectManagerFactory.newInstance();
             om = omFactory.newObjectManager(this.pageContext.getServletContext());
-            rcFactory = RenderContextFactory.newInstance();
-            rc = rcFactory.newRenderContext(this.pageContext.getRequest());
+            rcFactory = FacesContextFactory.newInstance();
+            fc = rcFactory.newFacesContext(this.pageContext.getRequest());
             om.put(pageContext.getSession(), Constants.REF_RENDERCONTEXT,
-                rc);
+                fc);
         } catch (FacesException e) {
             System.out.println("Exception:"+ e.getMessage());
         }

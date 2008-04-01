@@ -1,5 +1,5 @@
 /*
- * $Id: GenericLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * $Id: GenericLifecycleStage.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
  */
 
 /*
@@ -15,8 +15,6 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesContext;
-import javax.faces.RenderContext;
-import javax.faces.EventContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
 import javax.faces.FacesException;
@@ -28,7 +26,7 @@ import javax.faces.FacesException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: GenericLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: GenericLifecycleStage.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -94,9 +92,10 @@ public String getName()
 
 */
 
-public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesException
+public boolean execute(FacesContext facesContext, TreeNavigator root) 
+        throws FacesException
 {
-    return lifecycleDriver.traverseTreeInvokingMethod(ctx, root, getName());
+    return lifecycleDriver.traverseTreeInvokingMethod(facesContext, root, getName());
 }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.24 2002/03/13 18:04:24 eburns Exp $
+ * $Id: TextEntry_InputTag.java,v 1.25 2002/04/05 19:41:19 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.24 2002/03/13 18:04:24 eburns Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.25 2002/04/05 19:41:19 jvisvanathan Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -136,7 +136,7 @@ public class TextEntry_InputTag extends FacesTag
                 // If form tag cannot be found then model is null
             }
         }
-        if ( uiTextEntry.getValue(renderContext) == null && value != null ) {
+        if ( uiTextEntry.getValue(facesContext) == null && value != null ) {
             uiTextEntry.setText(value);
         }
     }
@@ -169,7 +169,7 @@ public class TextEntry_InputTag extends FacesTag
 	Assert.assert_it(comp instanceof UITextEntry);
 	UITextEntry uiTextEntry = (UITextEntry) comp;
         Assert.assert_it( objectManager != null );
-        Assert.assert_it( renderContext != null );
+        Assert.assert_it( facesContext != null );
          
         // create validators and put it in objectManager.
         if ( required != null && required.equals("true")) {

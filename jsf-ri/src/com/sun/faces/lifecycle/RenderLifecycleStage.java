@@ -1,5 +1,5 @@
 /*
- * $Id: RenderLifecycleStage.java,v 1.3 2002/03/18 21:24:00 eburns Exp $
+ * $Id: RenderLifecycleStage.java,v 1.4 2002/04/05 19:41:14 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import javax.faces.Constants;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.ObjectManager;
-import javax.faces.EventContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
 import javax.faces.RenderKit;
@@ -41,7 +40,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: RenderLifecycleStage.java,v 1.3 2002/03/18 21:24:00 eburns Exp $
+ * @version $Id: RenderLifecycleStage.java,v 1.4 2002/04/05 19:41:14 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -94,13 +93,13 @@ public RenderLifecycleStage(LifecycleDriverImpl newDriver,
 
 */
 
-public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesException
+public boolean execute(FacesContext facesContext, TreeNavigator root) 
+        throws FacesException
 {
     boolean result = false;
-    EventContext eventContext = ctx.getEventContext();
-    ServletRequest request = eventContext.getRequest();
-    HttpServletResponse response = (HttpServletResponse) eventContext.getResponse();
-    ObjectManager objectManager = eventContext.getObjectManager();
+    ServletRequest request = facesContext.getRequest();
+    HttpServletResponse response = (HttpServletResponse) facesContext.getResponse();
+    ObjectManager objectManager = facesContext.getObjectManager();
     RenderWrapper renderWrapper = (RenderWrapper) objectManager.get(request, 
 					    Constants.REF_RENDERWRAPPER);
 
@@ -116,7 +115,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
     response.addHeader("Expires:", "1");
 
     try {
-	renderWrapper.commenceRendering(ctx, root);
+	renderWrapper.commenceRendering(facesContext, root);
 	result = true;
     }
     catch (Throwable e) {

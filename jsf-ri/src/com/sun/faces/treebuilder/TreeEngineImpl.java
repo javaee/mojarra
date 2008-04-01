@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngineImpl.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
+ * $Id: TreeEngineImpl.java,v 1.5 2002/04/05 19:41:20 jvisvanathan Exp $
  */
 
 /*
@@ -19,14 +19,14 @@ import javax.servlet.ServletContext;
 import org.apache.jasper_hacked.compiler.PreParser;
 
 import javax.faces.UIComponent;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.TreeNavigator;
 import javax.faces.UIPage;
 
 /**
  *
 
- * @version $Id: TreeEngineImpl.java,v 1.4 2002/03/19 19:25:02 eburns Exp $
+ * @version $Id: TreeEngineImpl.java,v 1.5 2002/04/05 19:41:20 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine
 
@@ -104,9 +104,9 @@ public String fixURI(String requestURI) {
 // General Methods
 //
 
-public TreeNavigator getTreeForURI(RenderContext rc, UIPage root,
+public TreeNavigator getTreeForURI(FacesContext fc, UIPage root,
 				   String requestURI) {
-    ParameterCheck.nonNull(rc);
+    ParameterCheck.nonNull(fc);
     ParameterCheck.nonNull(root);
     ParameterCheck.nonNull(requestURI);
 
@@ -116,7 +116,7 @@ public TreeNavigator getTreeForURI(RenderContext rc, UIPage root,
     // page each time.  
     if ((null != requestURI) && requestURI.endsWith(".jsp")) {
 	requestURI = fixURI(requestURI);
-	TreeBuilder treeBuilder = new TreeBuilder(componentBuilder, rc, root, 
+	TreeBuilder treeBuilder = new TreeBuilder(componentBuilder, fc, root, 
 						  requestURI);
 	preParser.addJspParseListener(treeBuilder);
 	preParser.preParse(requestURI);

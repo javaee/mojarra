@@ -1,5 +1,5 @@
 /*
- * $Id: TreeBuilder.java,v 1.6 2002/03/19 19:25:02 eburns Exp $
+ * $Id: TreeBuilder.java,v 1.7 2002/04/05 19:41:20 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import org.apache.jasper_hacked.compiler.JspParseListener;
 import javax.faces.UIComponent;
 import javax.faces.UIPage;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 
 import javax.servlet.jsp.tagext.TagInfo;
 import javax.servlet.jsp.tagext.TagLibraryInfo;
@@ -44,7 +44,7 @@ import java.io.PrintStream;
 
  *
  *
- * @version $Id: TreeBuilder.java,v 1.6 2002/03/19 19:25:02 eburns Exp $
+ * @version $Id: TreeBuilder.java,v 1.7 2002/04/05 19:41:20 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *
@@ -66,7 +66,7 @@ public class TreeBuilder extends Object implements JspParseListener
 
 // Relationship Instance Variables
 
-private RenderContext renderContext;
+private FacesContext facesContext;
 private String requestURI;
 private UIPage root = null;
 
@@ -82,15 +82,15 @@ private int curDepth = 0;
 //
 
 public TreeBuilder(BuildComponentFromTag newComponentBuilder,
-		   RenderContext newRenderContext, UIPage newRoot, 
+		   FacesContext newFacesContext, UIPage newRoot, 
 		   String newRequestURI)
 {
     ParameterCheck.nonNull(newComponentBuilder);
-    ParameterCheck.nonNull(newRenderContext);
+    ParameterCheck.nonNull(newFacesContext);
     ParameterCheck.nonNull(newRoot);
     ParameterCheck.nonNull(newRequestURI);
     componentBuilder = newComponentBuilder;
-    renderContext = newRenderContext;
+    facesContext = newFacesContext;
     requestURI = newRequestURI;
     root = newRoot;
     curDepth = 0;
@@ -123,7 +123,7 @@ public void printTree(UIComponent root, PrintStream out) {
     }
     out.print(root.getId());
     if (root instanceof javax.faces.UISelectOne) {
-	Iterator it = ((javax.faces.UISelectOne)root).getItems(renderContext);
+	Iterator it = ((javax.faces.UISelectOne)root).getItems(facesContext);
 	out.print(" {\n");
 	while (it.hasNext()) {
 	    for (i = 0; i < curDepth; i++) {
@@ -144,10 +144,10 @@ public void printTree(UIComponent root, PrintStream out) {
 	out.print(" }\n");
     }
     else {
-	out.print(" value=" + root.getValue(renderContext) + "\n");
+	out.print(" value=" + root.getValue(facesContext) + "\n");
     }
     curDepth++;
-    Iterator it = root.getChildren(renderContext);
+    Iterator it = root.getChildren(facesContext);
     while (it.hasNext()) {
 	printTree((UIComponent) it.next(), out);
     }
@@ -173,12 +173,12 @@ public void handleTagBegin(Attributes attrs, String prefix,
 	// This isn't a tag that has a component.  See if it is a tag
 	// that has a nested relationship to a component, such as
 	// SelectOne
-	componentBuilder.handleNestedComponentTag(renderContext, parent, 
+	componentBuilder.handleNestedComponentTag(facesContext, parent, 
 						  shortTagName, attrs);
 	return;
     }
 
-    componentBuilder.applyAttributesToComponentInstance(renderContext, 
+    componentBuilder.applyAttributesToComponentInstance(facesContext, 
 							child, attrs);
     
     if (componentBuilder.tagHasComponent(shortTagName)) {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestEventContext.java,v 1.4 2002/03/07 23:45:08 eburns Exp $
+ * $Id: TestFacesContext.java,v 1.1 2002/04/05 19:41:21 jvisvanathan Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TestEventContext.java
+// TestFacesContext.java
 
 package com.sun.faces;
 
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
 
 import javax.faces.ObjectManager;
 import javax.faces.EventQueue;
@@ -32,18 +33,18 @@ import com.sun.faces.NavigationMapImpl;
 
 /**
  *
- *  <B>TestEventContext</B> is a class ...
+ *  <B>TestFacesContext</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestEventContext.java,v 1.4 2002/03/07 23:45:08 eburns Exp $
+ * @version $Id: TestFacesContext.java,v 1.1 2002/04/05 19:41:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestEventContext extends FacesTestCase
+public class TestFacesContext extends FacesTestCase
 {
 //
 // Protected Constants
@@ -65,8 +66,8 @@ public class TestEventContext extends FacesTestCase
 // Constructors and Initializers    
 //
 
-    public TestEventContext() {super("TestEventContext");}
-    public TestEventContext(String name) {super(name);}
+    public TestFacesContext() {super("TestFacesContext");}
+    public TestFacesContext(String name) {super(name);}
 //
 // Class methods
 //
@@ -90,28 +91,34 @@ public void testAccessors()
     ClientCapabilities caps = null;
     NavigationHandler nav = null;
     ObjectAccessor objectAccessor = null;
+    ServletContext sc = null;
 
-    caps = eventContext.getClientCapabilities();
+    caps = facesContext.getClientCapabilities();
     result = null == caps; // PENDING(edburns): should not be null
     System.out.println("Testing getEventQueue: " + result);
     assertTrue(result);
 
-    req = eventContext.getRequest();
+    req = facesContext.getRequest();
     result = null != req;
     System.out.println("Testing getRequest: " + result);
     assertTrue(result);
 
-    resp = eventContext.getResponse();
+    resp = facesContext.getResponse();
     result = null != resp;
     System.out.println("Testing getResponse: " + result);
     assertTrue(result);
 
-    eq = eventContext.getEventQueue();
+    sc = facesContext.getServletContext();
+    result = null != sc;
+    System.out.println("Testing getServletContext: " + result);
+    assertTrue(result);
+    
+    eq = facesContext.getEventQueue();
     result = null != eq;
     System.out.println("Testing getEventQueue: " + result);
     assertTrue(result);
 
-    objectManager = eventContext.getObjectManager();
+    objectManager = facesContext.getObjectManager();
     result = null != objectManager;
     System.out.println("Testing getObjectManager: " + result);
     assertTrue(result);
@@ -124,9 +131,9 @@ public void testAccessors()
     input.setId("source");
     objectManager.put( request, "source", input);
 
-    ValueChangeEvent valueChange = new ValueChangeEvent(eventContext, input, 
+    ValueChangeEvent valueChange = new ValueChangeEvent(facesContext, input, 
 							"value");
-    eventDispatcher = eventContext.getEventDispatcher(valueChange);
+    eventDispatcher = facesContext.getEventDispatcher(valueChange);
     result = null != eventDispatcher;
     System.out.println("Testing getEventDispatcher for valueChange: " + 
 		       result);
@@ -136,8 +143,8 @@ public void testAccessors()
 		       "UITextEntry: " + result);
     assertTrue(result);
     
-    CommandEvent command = new CommandEvent (eventContext, uiCommand, "value");
-    eventDispatcher = eventContext.getEventDispatcher(command);
+    CommandEvent command = new CommandEvent (facesContext, uiCommand, "value");
+    eventDispatcher = facesContext.getEventDispatcher(command);
     result = null != eventDispatcher;
     System.out.println("Testing getEventDispatcher for command: " + 
 		       result);
@@ -167,15 +174,15 @@ public void testAccessors()
     String form_id = (String) request.getParameter(Constants.REF_UIFORMID);
     System.out.println("FORMID " + form_id);
 
-    nav = eventContext.getNavigationHandler();
+    nav = facesContext.getNavigationHandler();
     result = null != nav;
     System.out.println("Testing getNavigationHandler: " + result);
     assertTrue(result); */
     
-    objectAccessor = eventContext.getObjectAccessor();
+    objectAccessor = facesContext.getObjectAccessor();
     result = null != objectAccessor; 
     System.out.println("Testing getObjectAccessor: " + result);
     assertTrue(result);
 }
 
-} // end of class TestEventContext
+} // end of class TestFacesContext

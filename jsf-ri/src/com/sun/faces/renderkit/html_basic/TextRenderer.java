@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.14 2002/03/16 00:09:37 eburns Exp $
+ * $Id: TextRenderer.java,v 1.15 2002/04/05 19:41:17 jvisvanathan Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.beans.PropertyDescriptor;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
+import javax.faces.FacesContext;
 import javax.faces.Renderer;
 import javax.faces.UIOutput;
 import javax.faces.UIComponent;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.14 2002/03/16 00:09:37 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.15 2002/04/05 19:41:17 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,10 +101,10 @@ public class TextRenderer extends Object implements Renderer
     }
 
 
-    public void renderStart(RenderContext rc, UIComponent c )
+    public void renderStart(FacesContext fc, UIComponent c )
         throws IOException, FacesException { 
 
-        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(fc);
         ParameterCheck.nonNull(c);
 
         UIOutput label = null;
@@ -113,9 +113,9 @@ public class TextRenderer extends Object implements Renderer
         } else {
             throw new FacesException("Invalid component type. Expected UIOutput");
         }
-        String text = (String) label.getValue(rc);
+        String text = (String) label.getValue(fc);
         if ( text != null ) { 
-            OutputMethod outputMethod = rc.getOutputMethod();
+            OutputMethod outputMethod = fc.getOutputMethod();
             Assert.assert_it(outputMethod != null );
             StringBuffer out = new StringBuffer();
             out.append(text);
@@ -125,12 +125,12 @@ public class TextRenderer extends Object implements Renderer
         return;
     }
 
-    public void renderChildren(RenderContext rc, UIComponent c) 
+    public void renderChildren(FacesContext fc, UIComponent c) 
             throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, UIComponent c) 
+    public void renderComplete(FacesContext fc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }

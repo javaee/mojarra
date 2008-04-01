@@ -1,5 +1,5 @@
 /*
- * $Id: DateValidator.java,v 1.2 2002/03/15 20:58:04 jvisvanathan Exp $
+ * $Id: DateValidator.java,v 1.3 2002/04/05 19:41:22 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package basic;
 import javax.faces.Converter;
 import javax.faces.ValidationException;
 import javax.faces.UIComponent;
-import javax.faces.EventContext;
+import javax.faces.FacesContext;
 
 import java.util.Date;
 import java.text.DateFormat;
@@ -20,7 +20,7 @@ import java.text.ParseException;
 
 public class DateValidator implements Converter {
 
-    public Object convertStringToObject(EventContext ctx,
+    public Object convertStringToObject(FacesContext ctx,
                                        UIComponent component,
                                        String componentValue)
             throws ValidationException {
@@ -46,7 +46,7 @@ public class DateValidator implements Converter {
 
     }
 
-   public String convertObjectToString(EventContext ctx,
+   public String convertObjectToString(FacesContext ctx,
                                        UIComponent component,
                                        Object modelValue)
            throws ValidationException {

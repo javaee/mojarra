@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.6 2002/03/15 20:58:03 jvisvanathan Exp $
+ * $Id: FacesFilter.java,v 1.7 2002/04/05 19:41:17 jvisvanathan Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.EventObject;
 
-import com.sun.faces.EventContextFactory;
 import com.sun.faces.ObjectAccessorFactory;
 import com.sun.faces.ObjectManagerFactory;
 import com.sun.faces.NavigationHandlerFactory;
@@ -21,15 +20,14 @@ import com.sun.faces.util.Util;
 import com.sun.faces.ConverterManagerFactory;
 
 import javax.faces.Constants;
-import javax.faces.EventContext;
 import javax.faces.EventDispatcher;
 import javax.faces.EventQueue;
 import javax.faces.EventQueueFactory;
 import javax.faces.FacesEvent;
 import javax.faces.FacesException;
 import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
-import javax.faces.RenderContextFactory;
+import javax.faces.FacesContext;
+import javax.faces.FacesContextFactory;
 import javax.faces.RenderKit;
 import javax.faces.UICommand;
 import javax.faces.UISelectOne;
@@ -37,6 +35,7 @@ import javax.faces.UITextEntry;
 import javax.faces.UISelectBoolean;
 import javax.faces.NavigationHandler;
 import javax.faces.ConverterManager;
+import javax.faces.FacesContextFactory;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -81,7 +80,7 @@ public class FacesFilter implements Filter {
      *
      * POSTCONDITION: ObjectManager instance created using Factory.  Instance
      * put in ServletContext.  ObjectManager global scope contains
-     * RenderContextFactory, EventQueueFactory.
+     * FacesContextFactory, EventQueueFactory.
      *
      * @param config The Filter configuration object which contains
      *        parameters for this filter.
@@ -99,8 +98,7 @@ public class FacesFilter implements Filter {
         ObjectManager objectManager;
         ObjectManagerFactory omFactory;
         EventQueueFactory eqFactory;
-        RenderContextFactory rcFactory;
-        EventContextFactory ecFactory;
+        FacesContextFactory fcFactory;
         ObjectAccessorFactory oaFactory;
         NavigationHandlerFactory nhFactory;
         ConverterManager converterManager = null;
@@ -146,34 +144,21 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_EVENTQUEUEFACTORY, eqFactory);
 
-        // Step 3: Create the RenderContextFactory and put it in the
+        // Step 3: Create the FacesContextFactory and put it in the
         // ObjectManager in GlobalScope
 
-        rcFactory = (RenderContextFactory)objectManager.get(
-            Constants.REF_RENDERCONTEXTFACTORY);
-        // The RenderContextFactory must not exist at this point.  It is an
+        fcFactory = (FacesContextFactory)objectManager.get(
+            Constants.REF_FACESCONTEXTFACTORY);
+        // The FacesContextFactory must not exist at this point.  It is an
         // error if it does exist.
-        Assert.assert_it(null == rcFactory);
+        Assert.assert_it(null == fcFactory);
 
-        rcFactory = RenderContextFactory.newInstance();
-        Assert.assert_it(null != rcFactory);
+        fcFactory = FacesContextFactory.newInstance();
+        Assert.assert_it(null != fcFactory);
         objectManager.put(servletContext,
-                        Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
+                        Constants.REF_FACESCONTEXTFACTORY, fcFactory);
 
-        // Step 4: Create the EventContextFactory and put it in the
-        // ObjectManager in GlobalScope
-        ecFactory = (EventContextFactory)objectManager.get(
-            Constants.REF_EVENTCONTEXTFACTORY);
-        // The EventContextFactory must not exist at this point.  It is an
-        // error if it does exist.
-        Assert.assert_it(null == ecFactory);
-
-        ecFactory = EventContextFactory.newInstance();
-        Assert.assert_it(null != ecFactory);
-        objectManager.put(servletContext,
-                        Constants.REF_EVENTCONTEXTFACTORY, ecFactory);
-
-        // Step 5: Create the ObjectAccessorFactory and put it in the
+        // Step 4: Create the ObjectAccessorFactory and put it in the
         // ObjectManager in GlobalScope
         oaFactory = (ObjectAccessorFactory)objectManager.get(
             Constants.REF_OBJECTACCESSORFACTORY);
@@ -186,7 +171,7 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_OBJECTACCESSORFACTORY, oaFactory);
 
-        // Step 6 create an instance of navigationHandlerFactory
+        // Step 5 create an instance of navigationHandlerFactory
         // and put it in Application scope.
         nhFactory = (NavigationHandlerFactory)objectManager.get(
             Constants.REF_NAVIGATIONHANDLERFACTORY);
@@ -200,7 +185,7 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_NAVIGATIONHANDLERFACTORY, nhFactory);
 
-        // Step 7 create an instance of ConverterManager
+        // Step 6 create an instance of ConverterManager
         // and put it in Application scope.
         converterManager = (ConverterManager)objectManager.get(
             Constants.REF_CONVERTERMANAGER);
@@ -218,21 +203,21 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_CONVERTERMANAGER, converterManager);
 
-        // Step 8 create a default Message Factory and put it in Global scope
+        // Step 7 create a default Message Factory and put it in Global scope
         javax.faces.MessageFactory mf = javax.faces.MessageFactory.newInstance();
         mf.setClassLoader(this.getClass().getClassLoader());
         objectManager.put(servletContext,
-                com.sun.faces.MessageListImpl.DEFAULT_MESSAGE_FACTORY_ID, mf);
+                Constants.DEFAULT_MESSAGE_FACTORY_ID, mf);
     }
 
     /**
      * Process a request.
      *
      * PRECONDITION: ObjectManager exists in ServletContext.
-     * ObjectManager global scope contains RenderContextFactory,
+     * ObjectManager global scope contains FacesContextFactory,
      * EventQueueFactory.
      *
-     * POSTCONDITION: ObjectManager contains RenderContext and
+     * POSTCONDITION: ObjectManager contains FacesContext and
      * EventQueue instances in session scope.
      *
      * @param request The servlet request we are processing
@@ -245,11 +230,10 @@ public class FacesFilter implements Filter {
         ServletResponse res, FilterChain chain) 
         throws IOException, ServletException {
 
-        RenderContext rc;
-        RenderContextFactory rcFactory;
+        FacesContext fc;
+        FacesContextFactory fcFactory;
         EventQueue eq;
         EventQueueFactory eqFactory;
-        EventContextFactory ecFactory;
 
         ServletContext servletContext = filterConfig.getServletContext();
 
@@ -279,37 +263,19 @@ public class FacesFilter implements Filter {
             (ObjectManager)servletContext.getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it(null != objectManager);
 
-        // Attempt to get a render context from the object manager 
-        // for the current session.  If one doesn't exist, create one.
-        //
-        rc = (RenderContext)objectManager.get(thisSession,
-                                            Constants.REF_RENDERCONTEXT);
-        if (rc == null) {
-            rcFactory = (RenderContextFactory)
-                objectManager.get(Constants.REF_RENDERCONTEXTFACTORY);
+        // create a new instance of facesContext for every request.
+        fcFactory = (FacesContextFactory)
+            objectManager.get(Constants.REF_FACESCONTEXTFACTORY);
 
-            Assert.assert_it(null != rcFactory);
-            try {
-                rc = rcFactory.newRenderContext(req);
-            } catch (FacesException e) {
-                throw new ServletException(e.getMessage());
-            }
-            Assert.assert_it(null != rc);
-            objectManager.put(thisSession,
-                            Constants.REF_RENDERCONTEXT, rc);
-        } else {
-            // set the RenderContext to have the correct request
-
-            // PENDING(edburns): not sure what the lifetime of
-            // RenderContext is.  Here we re-use the RC by setting its
-            // request and session.
-            if (rc instanceof
-                com.sun.faces.renderkit.html_basic.HtmlBasicRenderContext) {
-                ((com.sun.faces.renderkit.html_basic.HtmlBasicRenderContext)rc).
-                    setRequest(req);
-            }
+        Assert.assert_it(null != fcFactory);
+        try {
+            fc = fcFactory.newFacesContext(req, res, servletContext );
+        } catch (FacesException e) {
+            throw new ServletException(e.getMessage());
         }
-        
+        Assert.assert_it(null != fc);
+        objectManager.put(req, Constants.REF_FACESCONTEXT, fc);
+ 
         // If there are no events in the queue, simply forward to the target.
         //
         boolean dispatched = false;
@@ -329,20 +295,17 @@ public class FacesFilter implements Filter {
             }
             Util.resetToken(request);
       
-            RenderKit rk = rc.getRenderKit();
+            RenderKit rk = fc.getRenderKit();
             Assert.assert_it(rk != null);
 
-            EventContext eventContext = createEventContext(objectManager, 
-                    rc, req, res );
-            Assert.assert_it(eventContext != null);
-            rk.queueEvents(eventContext);
+            rk.queueEvents(fc);
 
-            eq = eventContext.getEventQueue();
+            eq = fc.getEventQueue();
             Assert.assert_it(eq != null ); 
             while (!eq.isEmpty()) {
                 EventObject e = (EventObject) eq.getNext();
                 try {
-                    EventDispatcher src=eventContext.getEventDispatcher(e);
+                    EventDispatcher src=fc.getEventDispatcher(e);
                     Assert.assert_it ( src != null );
                     src.dispatch ( e );
                 } catch ( FacesException fe ) {
@@ -356,7 +319,7 @@ public class FacesFilter implements Filter {
             }
             // all the events were processed successfully. Lookup the
             // navigation handler to find out where to go next.
-            boolean result = doNavigation(eventContext, req, res );
+            boolean result = doNavigation(fc, req, res );
             if ( result ) {
                 dispatched = true;
             }
@@ -383,42 +346,16 @@ public class FacesFilter implements Filter {
     }
 
     /**
-     * Gets the eventContextFactory from the objectManager and creates
-     * an instance of eventContext.
-     */
-    private EventContext createEventContext ( ObjectManager objectManager, 
-        RenderContext rc, ServletRequest req, ServletResponse res ) 
-               throws ServletException {
-
-        EventContext eventContext = null;
-
-        // create the EventContext
-        EventContextFactory ecFactory = (EventContextFactory)
-                objectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
-        Assert.assert_it(ecFactory != null );
-
-        // eventContext is request scope meaning created per
-        // request, hence need not be put in ObjectManager
-        try {
-            eventContext = ecFactory.newEventContext(rc, req, res);
-        } catch ( FacesException fe ) {
-            throw new ServletException("Cannot create EventContext " +
-                                       fe.getMessage() );
-        }
-        return eventContext;
-    }
-
-    /**
      * Navigates to the specified URL specifed by the targetPath
      * based on targetAction attribute
      */
-    private boolean doNavigation(EventContext eventContext, 
+    private boolean doNavigation(FacesContext facesContext, 
         ServletRequest req, ServletResponse res ) 
                 throws ServletException, IOException {
 
         boolean navigate = false;
 
-        NavigationHandler nh = eventContext.getNavigationHandler();
+        NavigationHandler nh = facesContext.getNavigationHandler();
         // navigationHandler will be null if NavigationMap does not
         // exist. 
         if ( nh == null ) {
