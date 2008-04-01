@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.42 2002/07/26 21:53:30 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.43 2002/07/26 22:01:13 craigmcc Exp $
  */
 
 /*
@@ -539,6 +539,9 @@ public interface UIComponent extends Serializable {
      *
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
+     *
+     * @exception NullPointerException if <code>context</code> or
+     *  <code>event</code> is <code>null</code>
      */
     public boolean processEvent(FacesContext context, FacesEvent event);
 

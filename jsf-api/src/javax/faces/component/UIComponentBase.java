@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.13 2002/07/26 21:53:31 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.14 2002/07/26 22:01:13 craigmcc Exp $
  */
 
 /*
@@ -1025,6 +1025,9 @@ public abstract class UIComponentBase implements UIComponent {
      */
     public void encodeBegin(FacesContext context) throws IOException {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         ; // Default implementation does nothing
 
     }
@@ -1044,6 +1047,9 @@ public abstract class UIComponentBase implements UIComponent {
      */
     public void encodeChildren(FacesContext context) throws IOException {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         ; // Default implementation does nothing
 
     }
@@ -1063,6 +1069,9 @@ public abstract class UIComponentBase implements UIComponent {
      */
     public void encodeEnd(FacesContext context) throws IOException {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         ; // Default implementation does nothing
 
     }
@@ -1078,9 +1087,15 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
+     *
+     * @exception NullPointerException if <code>context</code> or
+     *  <code>event</code> is <code>null</code>
      */
     public boolean processEvent(FacesContext context, FacesEvent event) {
 
+        if ((context == null) || (event == null)) {
+            throw new NullPointerException();
+        }
         return (false); // Default implementation does nothing
 
     }
