@@ -258,7 +258,7 @@
                      accesskey="N" tabindex="20" >
 
 		<faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-		<faces:selectitem  itemValue="1" itemLabel="1" title="One" modelReference="${LoginBean.userName}" />
+		<faces:selectitem  itemValue="1" itemLabel="1" title="One" />
 		<faces:selectitem  itemValue="2" itemLabel="2" title="Two" />
 		<faces:selectitem  itemValue="3" itemLabel="3" title="Three" />
 		<faces:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
@@ -346,16 +346,20 @@
 
         <TD>
 
-             <faces:command_button id="pushButton" label="This is a push button"
-                                 type="button" commandName="push" disabled = "true" />
-
+             <faces:command_button id="pushButton" type="button" 
+                     commandName="push" disabled = "true" >
+                 <faces:output_text id="buttonLabel" value="This is a push button " />       
+                 <faces:graphic_image id="buttonImage" url="/duke.gif" />
+             </faces:command_button>
         </TD>
 
         <TD>
 
              <faces:command_button id="resetButton"  title="Click to reset form"
-                                key="resetButton" type="reset"
-                                bundle="${basicBundle}" commandName="reset"/>
+                                   commandName="reset" type="reset" >
+                <faces:output_text id="resetLabel" key="resetButton" 
+                                bundle="${basicBundle}" />
+             </faces:command_button>
 
         </TD>
 
@@ -365,9 +369,10 @@
 
 	<TD>
 
-             <faces:command_button id="login" label="Login" 
-                                key="loginButton"
-                                bundle="${basicBundle}" commandName="login"/>
+            <faces:command_button id="login" type="submit" 
+                     commandName="login" >
+                 <faces:output_text id="submitLabel" key="loginButton" bundle="${basicBundle}" />       
+             </faces:command_button>
 
 	</TD>
 
@@ -377,9 +382,10 @@
       <TR>
 
 	<TD>
-
-             <faces:command_button id="imageButton" image="/basic/duke.gif"
-                                   commandName="login"/>
+           <faces:command_button id="imageOnlyButton" type="submit" 
+                     commandName="login"  >
+                 <faces:graphic_image id="buttonImage1" url="/duke.gif" />
+             </faces:command_button>
 
                Image button that does the same thing
 

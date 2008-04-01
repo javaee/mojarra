@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.28 2002/08/20 20:43:13 jvisvanathan Exp $
+ * $Id: Command_ButtonTag.java,v 1.29 2002/08/30 00:14:05 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.28 2002/08/20 20:43:13 jvisvanathan Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.29 2002/08/30 00:14:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -40,42 +40,40 @@ import com.sun.faces.taglib.FacesTag;
 
 public class Command_ButtonTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-    protected String label = null;
     protected String commandname = null;
-    protected String image = null;
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Command_ButtonTag()
-{
-    super();
-}
+    public Command_ButtonTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
     public String getCommandName() { return commandname; }
     public void setCommandName(String newCommandname) { 
@@ -83,18 +81,6 @@ public Command_ButtonTag()
 	commandname = newCommandname;
     }
 
-    public String getLabel() { return label; }
-    public void setLabel(String newLabel) { 
-	label = newLabel;
-    }
-
-    public void setImage(String newImage) {
-	image = newImage;
-    }
-
-    public String getImage() {
-	return image;
-    }
 
     public void setType(String buttonType) {
         type = buttonType;
@@ -104,9 +90,9 @@ public Command_ButtonTag()
         return type;
     }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
     public String getLocalRendererType() { return "ButtonRenderer"; }
     
@@ -121,21 +107,15 @@ public Command_ButtonTag()
 	if (null == button.getCommandName()) {
 	    button.setCommandName(getCommandName());
 	}
-	if (null == button.getAttribute("label")) {
-	    button.setAttribute("label", getLabel());
-	}
-	if (null == button.getAttribute("image")) {
-	    button.setAttribute("image", getImage());
-	}
-        if (null == button.getAttribute("type")) {
+	if (null == button.getAttribute("type")) {
             button.setAttribute("type", getType());
         }
     }
 
 
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class Command_ButtonTag

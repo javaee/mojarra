@@ -14,7 +14,7 @@
 
             <table> 
             <tr> 
-              <td> <faces:output_text id="thanksLabel" text="Thanks for using the Basic Application..." /> </td>
+              <td> <faces:output_text id="thanksLabel" value="Thanks for using the Basic Application..." /> </td>
             </tr>
 
           </TR>

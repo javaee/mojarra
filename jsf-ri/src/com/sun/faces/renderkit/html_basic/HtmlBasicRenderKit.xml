@@ -205,18 +205,6 @@
             <type>ButtonRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.ButtonRenderer</class>
             <attribute>
-                <name>image</name>
-                <display-name>Image</display-name>
-                <description>The path name of the image displayed in the component</description>
-                <type>java.lang.String</type>
-            </attribute>
-            <attribute>
-                <name>label</name>
-                <display-name>Label</display-name>
-                <description>The text label displayed in the button</description>
-                <type>java.lang.String</type>
-            </attribute>
-             <attribute>
                 <name>class</name>
                 <display-name>Class Name</display-name>
                 <description>Class Name for this element

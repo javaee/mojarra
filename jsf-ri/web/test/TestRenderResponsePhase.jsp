@@ -16,9 +16,11 @@
 
 	<TD>
 
-	      <faces:command_button id="login" label="Login" 
-				    commandName="login"/>
-
+            <faces:command_button id="pushButton" type="button"
+                     commandName="push" disabled = "true" >
+                 <faces:output_text id="buttonLabel" value="This is a push button " />
+                 <faces:graphic_image id="buttonImage" url="/duke.gif" />
+             </faces:command_button>
 	</TD>
 
       </TR>
@@ -28,9 +30,10 @@
 
 	<TD>
 
-	      <faces:command_button id="imageButton" image="duke.gif"
-				    commandName="login"/>
-
+            <faces:command_button id="imageOnlyButton" type="submit"
+                     commandName="login"  >
+                 <faces:graphic_image id="buttonImage1" url="/duke.gif" />
+             </faces:command_button>
 	</TD>
 
       </TR>

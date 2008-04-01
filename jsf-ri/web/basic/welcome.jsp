@@ -16,8 +16,10 @@
               <faces:output_text id="userLabel" value="Welcome!" />  </P>
 
 <P>
-	      <faces:command_button id="back" label="Back" 
-				    commandName="back"/>
+              <faces:command_button id="back" commandName="back" type="submit">
+                 <faces:output_text id="backlabel" value="Back"/>
+
+             </faces:command_button>
 </P>
 
         </faces:form>

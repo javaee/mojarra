@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.22 2002/07/19 22:44:25 rkitain Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.23 2002/08/30 00:14:05 jvisvanathan Exp $
  */
 
 /*
@@ -31,50 +31,52 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.22 2002/07/19 22:44:25 rkitain Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.23 2002/08/30 00:14:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class Command_HyperlinkTag extends Command_ButtonTag
+public class Command_HyperlinkTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
     protected String target = null;
+    protected String label = null;
+    protected String commandname = null;
+    protected String image = null;
 
+    // Relationship Instance Variables
 
-// Relationship Instance Variables
+    //
+    // Constructors and Initializers    
+    //
 
-//
-// Constructors and Initializers    
-//
+    public Command_HyperlinkTag()
+    {
+        super();
+    }
 
-public Command_HyperlinkTag()
-{
-    super();
-}
+    //
+    // Class methods
+    //
 
-//
-// Class methods
-//
-
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
     public String getCommandName() { return commandname; }
     public void setCommandName(String newCommandname) {
         ParameterCheck.nonNull(newCommandname);
@@ -87,6 +89,19 @@ public Command_HyperlinkTag()
 
     public String getTarget() {
 	return target;
+    }
+    
+    public String getLabel() { return label; }
+    public void setLabel(String newLabel) { 
+        label = newLabel;
+    }
+ 
+    public void setImage(String newImage) {
+        image = newImage;
+    }
+
+    public String getImage() {
+        return image;
     }
 
 //
@@ -102,9 +117,17 @@ public Command_HyperlinkTag()
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UICommand link = (UICommand) component;
-
-	if (null == link.getAttribute("target")) {
-	    link.setAttribute("target", getTarget());
+        if (null == link.getCommandName()) {
+	    link.setCommandName(getCommandName());
+	}
+        if (null == component.getAttribute("label")) {
+            component.setAttribute("label", getLabel());
+        }
+        if (null == component.getAttribute("image")) {
+            component.setAttribute("image", getImage());
+        }
+	if (null == component.getAttribute("target")) {
+	    component.setAttribute("target", getTarget());
 	}
     }
 

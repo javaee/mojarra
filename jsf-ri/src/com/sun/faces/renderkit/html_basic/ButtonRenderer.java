@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.31 2002/08/29 19:38:00 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.32 2002/08/30 00:14:04 jvisvanathan Exp $
  */
 
 /*
@@ -22,8 +22,10 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+
 import javax.faces.component.UIForm;
-import javax.faces.event.CommandEvent;
+import javax.faces.event.FormEvent;
+import javax.faces.component.UIForm;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -48,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.31 2002/08/29 19:38:00 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.32 2002/08/30 00:14:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,167 +104,117 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	return label;
     }
 
-    /**
-
-    * @return the image src if this component is configured to display
-    * an image label, null otherwise.
-
-    */
-
-    protected String getImageSrc(FacesContext context, 
-				 UIComponent component) {
-	String result = null;
-	try {
-	    result = getKeyAndLookupInBundle(context, component, "imageKey");
-	}
-	catch (MissingResourceException e) {
-	    // Do nothing since the absence of a resource is not an
-	    // error.
-	}
-	if (null == result) {
-	    result = (String) component.getAttribute("image");
-	}
-	return result;
-    }
-
-    protected String getLabel(FacesContext context, 
-			      UIComponent component) throws IOException {
-	String result = null;
-
-	try {
-	    result = getKeyAndLookupInBundle(context, component, "key");
-	}
-	catch (MissingResourceException e) {
-	    // Do nothing since the absence of a resource is not an
-	    // error.
-	}
-	if (null == result) {
-	    result = (String) component.getAttribute("label");
-	}
-	return result;
-    }
-
+    
     //
     // Methods From Renderer
     //
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UICommand.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+       if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
+
         // Was our command the one that caused this submission?
-        Object value = component.currentValue(context);
-        String 
-	    formName = null,
-	    commandName = null;
-        if (value != null) {
-            commandName = value.toString();
-            // to handle image buttons, check for x and y parameters.
-            if ((context.getServletRequest().getParameter(commandName) == null) &&
-                (context.getServletRequest().getParameter(commandName+".x") == null &&
-                context.getServletRequest().getParameter(commandName+".y") == null)) {
-                return;
-            }
-        } else {
+        // we don' have to worry about getting the value from request parameter
+        // because we just need to know if this command caused the submission. We
+        // can get the command name by calling currentValue. This way we can 
+        // get around the IE bug.
+        component.setValid(true);
+        String value = context.getServletRequest().
+                getParameter(component.getCompoundId());
+        if (value == null) {
             return;
         }
 
-        // Does the extra path info on this request identify a form submit?
-        String pathInfo = (String) context.getServletRequest().getAttribute
-          ("javax.servlet.include.path_info");
-        if (pathInfo == null) {
-          pathInfo =
-            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
-        }
-        if (pathInfo == null) {
+        String type = (String) component.getAttribute("type");
+        if ((type == null) || (type.toLowerCase().equals("reset")) ) {
             return;
         }
+
+        // Construct and enqueue a FormEvent for the application
+        String commandName = (String) component.currentValue(context);
+        String formName = null;
         UIComponent parent = component.getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {
-                formName = ((UIForm)parent).getFormName();
+                formName = (String) parent.currentValue(context);
                 break;
             }
             parent = parent.getParent();
         }
-
-        // Enqueue a form event to the application
-        context.addApplicationEvent
-            (new FormEvent(component, formName, commandName));            
+        if (formName == null) {
+            // PENDING (visvan) log error
+            //log.error("Button[" + component.getCompoundId() +
+            //          "] not nested in a form");
+            return;
+        }
+        FormEvent formEvent =
+            new FormEvent(component, formName, commandName);
+        context.addApplicationEvent(formEvent);
     }
     
-    public void encodeBegin(FacesContext context, UIComponent component) 
+     public void encodeBegin(FacesContext context, UIComponent component) 
+             throws IOException  {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
+        // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
+        String type = (String) component.getAttribute("type");
+        if (type == null) {
+            type = "SUBMIT";
+        }
+
+        // Render the beginning of this button
+        ResponseWriter writer = context.getResponseWriter();
+        // PENDING (visvan) we need to change the '/' chars to
+        // something else in the rendered name and id attributes. As
+        // per HTML 4.0, "/" cannot be used as part of id.
+        writer.write("<button id=\"");
+        writer.write(component.getCompoundId());
+        writer.write("\" name=\"");
+        writer.write(component.getCompoundId());
+        writer.write("\" type=\"");
+        writer.write(type.toLowerCase());
+        writer.write("\" value=\"");
+        writer.write(type.toLowerCase());
+        writer.write("\"");
+        // PENDING (visvan) how to pad label now that its not rendered here ??
+        // render HTML 4.0 attributes if any.
+        writer.write(Util.renderPassthruAttributes(context, component));
+	writer.write(Util.renderBooleanPassthruAttributes(context, component));
+        writer.write(">");
+    }
+    
+    public void encodeChildren(FacesContext context, UIComponent component)
             throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-    
-    public void encodeChildren(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
        
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
-        
-        //can commandName be null ?
-        String label= null, imageSrc = null,
-	    cmdName = (String) component.currentValue(context);
-        Assert.assert_it(cmdName != null);
-        
-        String buttonType = (String)component.getAttribute("type");
-        if ( buttonType == null ) {
-            buttonType = "submit";
-        }    
-        // PENDING (visvan) IE has a bug in HTML 4.0 Button implementation.
-        // with nested label and graphic tags, the values don't get submitted
-        // correctly. So we decided not to render as HTML 4.0 BUTTON element.
-        // label attribute will go away once we move to nested tags.
-        writer.write("<input type=");
-	imageSrc = getImageSrc(context, component);
-	label = getLabel(context, component);
-        if (null != imageSrc) {
-            writer.write("\"image\" src=\"");
-            writer.write(imageSrc);
-            writer.write("\"");
-            writer.write(" name=\"");
-            writer.write(cmdName);
-            writer.write("\"");
-        } else {
-            writer.write("\"");
-            writer.write(buttonType);
-            writer.write("\"");
-            writer.write(" name=\"");
-            writer.write(cmdName);
-            writer.write("\"");
-            writer.write(" value=\"");
-            if ( label == null ) {
-                label = cmdName;
-            }    
-	    writer.write(padLabel(label));
-	    writer.write("\"");
-        }
-        // render HTML 4.0 attributes if any.
-        writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
-        writer.write(">");
+        writer.write("</button>\n");
     }
 
 } // end of class ButtonRenderer
