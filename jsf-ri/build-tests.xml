@@ -315,9 +315,8 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/> 
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
-<!-- put non-running testcases here
-
             <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
+<!-- put non-running testcases here
 
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
 
