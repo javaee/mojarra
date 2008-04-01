@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.21 2002/07/15 23:48:32 eburns Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.22 2002/07/19 23:57:58 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.21 2002/07/15 23:48:32 eburns Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.22 2002/07/19 23:57:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,13 +106,13 @@ public SelectOne_OptionListTag()
 // 
 
     public int doEndTag() throws JspException {
-	int rc = super.doEndTag();
 	UISelectOne component = (UISelectOne) getComponent();
 
 	// This makes sure the no more SelectItems get added to this
 	// selectOne instance.
 	component.setAttribute(RIConstants.SELECTITEMS_CONFIGURED, 
 			       RIConstants.SELECTITEMS_CONFIGURED);
+	int rc = super.doEndTag();
 
 	return rc;
     }
