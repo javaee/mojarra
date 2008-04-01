@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.14 2002/01/16 21:06:36 rogerk Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.15 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.14 2002/01/16 21:06:36 rogerk Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.15 2002/01/17 02:17:04 edburns Exp $
  * 
  *
  */
@@ -119,7 +119,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
             // 2. Render the component.
             //
             try {
-                c.setRendererName(rc, "TextAreaRenderer");
+                c.setRendererType("TextAreaRenderer");
                 c.render(rc);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
@@ -243,10 +243,10 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
     protected UITextEntry createComponent(RenderContext rc) {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
-        c.setAttribute(rc, "id", id);
-        c.setAttribute(rc, "rows", rows);
-        c.setAttribute(rc, "cols", cols);
-        c.setAttribute(rc, "wrap", wrap);
+        c.setAttribute("id", id);
+        c.setAttribute("rows", rows);
+        c.setAttribute("cols", cols);
+        c.setAttribute("wrap", wrap);
 
         // If model attribute is not found get it
         // from parent form if it exists. If not

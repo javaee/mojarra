@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.14 2002/01/16 21:06:36 rogerk Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.15 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.14 2002/01/16 21:06:36 rogerk Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.15 2002/01/17 02:17:04 edburns Exp $
  * 
  *
  */
@@ -118,7 +118,7 @@ public class TextEntry_SecretTag extends TagSupport
             // 2. Render the component.
             //
             try {
-                c.setRendererName(rc, "SecretRenderer");
+                c.setRendererType("SecretRenderer");
                 c.render(rc);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
@@ -190,9 +190,9 @@ public class TextEntry_SecretTag extends TagSupport
     protected UITextEntry createComponent(RenderContext rc) {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
-        c.setAttribute(rc, "id", id);
-        c.setAttribute(rc, "size", size);
-        c.setAttribute(rc, "maxlength", maxlength);
+        c.setAttribute("id", id);
+        c.setAttribute("size", size);
+        c.setAttribute("maxlength", maxlength);
 
         // set render independent attributes 
         // If model attribute is not found get it

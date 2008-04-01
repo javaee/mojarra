@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.14 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: Output_TextTag.java,v 1.15 2002/01/17 02:17:03 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.14 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: Output_TextTag.java,v 1.15 2002/01/17 02:17:03 edburns Exp $
  * 
  *
  */
@@ -116,7 +116,7 @@ public class Output_TextTag extends TagSupport
             // 2. Render the component.
             //
             try {
-                c.setRendererName(rc, "TextRenderer");
+                c.setRendererType("TextRenderer");
                 c.render(rc);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
@@ -215,7 +215,7 @@ public class Output_TextTag extends TagSupport
     protected UIOutput createComponent(RenderContext rc) {
         UIOutput c = new UIOutput();
         // set renderer specific properties 
-        c.setAttribute(rc, "id", id);
+        c.setAttribute("id", id);
 
         // set render independent attributes 
         // If model attribute is not found get it

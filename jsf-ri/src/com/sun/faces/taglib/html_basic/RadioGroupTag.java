@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.5 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: RadioGroupTag.java,v 1.6 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.5 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: RadioGroupTag.java,v 1.6 2002/01/17 02:17:04 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,7 +149,7 @@ protected UISelectOne createComponent(RenderContext renderContext)
     UISelectOne wSelectOne = new UISelectOne();
     
     // set renderer specific properties
-    wSelectOne.setAttribute(renderContext, "id", getId());
+    wSelectOne.setAttribute("id", getId());
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {

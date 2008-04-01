@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.15 2002/01/16 21:06:36 rogerk Exp $
+ * $Id: TextEntry_InputTag.java,v 1.16 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.15 2002/01/16 21:06:36 rogerk Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.16 2002/01/17 02:17:04 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -121,7 +121,7 @@ public class TextEntry_InputTag extends TagSupport
             // 2. Render the component.
             //
             try {
-                c.setRendererName(rc, "InputRenderer");
+                c.setRendererType("InputRenderer");
                 c.render(rc);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
@@ -230,9 +230,9 @@ public class TextEntry_InputTag extends TagSupport
             JspException {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
-        c.setAttribute(rc, "id", id);
-        c.setAttribute(rc, "size", size);
-        c.setAttribute(rc, "maxlength", maxlength);
+        c.setAttribute("id", id);
+        c.setAttribute("size", size);
+        c.setAttribute("maxlength", maxlength);
         
         // If model attribute is not found get it 
         // from parent form if it exists. If not

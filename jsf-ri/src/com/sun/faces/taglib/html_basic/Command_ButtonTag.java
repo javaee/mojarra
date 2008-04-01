@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.15 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: Command_ButtonTag.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.15 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -207,14 +207,14 @@ public class Command_ButtonTag extends TagSupport {
                 wCommand = new UICommand();
                 addToScope(wCommand, objectManager);
             }
-            wCommand.setAttribute(renderContext, "id", getId());
-            wCommand.setAttribute(renderContext, "image", getImage());
-            wCommand.setAttribute(renderContext, "label", getLabel());
+            wCommand.setAttribute("id", getId());
+            wCommand.setAttribute("image", getImage());
+            wCommand.setAttribute("label", getLabel());
             
             // 2. Render the component.
             //
             try {
-                wCommand.setRendererName(renderContext, "ButtonRenderer");
+                wCommand.setRendererType("ButtonRenderer");
                 wCommand.render(renderContext);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+

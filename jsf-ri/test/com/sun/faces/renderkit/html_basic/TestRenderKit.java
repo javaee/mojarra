@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.7 2002/01/15 02:17:32 rogerk Exp $
+ * $Id: TestRenderKit.java,v 1.8 2002/01/17 02:17:05 edburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.7 2002/01/15 02:17:32 rogerk Exp $
+ * @version $Id: TestRenderKit.java,v 1.8 2002/01/17 02:17:05 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +109,7 @@ public void testFactory() {
     while (typeIt.hasNext()) {
 	type = (String) typeIt.next();
 	try {
-	    rendererIt = kit.getRendererNamesForComponent(type);
+	    rendererIt = kit.getRendererTypesForComponent(type);
 	}
 	catch (FacesException e) {
 	    System.out.println("FacesException!!! " + e.getMessage());

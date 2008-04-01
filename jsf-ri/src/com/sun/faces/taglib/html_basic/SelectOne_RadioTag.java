@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.8 2002/01/16 21:06:36 rogerk Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.9 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.8 2002/01/16 21:06:36 rogerk Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.9 2002/01/17 02:17:04 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -153,9 +153,9 @@ public int doStartTag() throws JspException {
     
     // These over-write the values from "the last time around", but
     // its ok, since we just use it for rendering.
-    wSelectOne.setAttribute(renderContext, "checked", getChecked());
-    wSelectOne.setAttribute(renderContext, "value", getValue());
-    wSelectOne.setAttribute(renderContext, "label", getLabel());
+    wSelectOne.setAttribute("checked", getChecked());
+    wSelectOne.setAttribute("value", getValue());
+    wSelectOne.setAttribute("label", getLabel());
 
     // Add this value to the Collection
     ancestor.getItems().add(getValue());
@@ -167,7 +167,7 @@ public int doStartTag() throws JspException {
     // 2. Render the component.
     //
     try {
-        wSelectOne.setRendererName(renderContext, "RadioRenderer");
+        wSelectOne.setRendererType("RadioRenderer");
         wSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
         throw new JspException("Problem rendering component: "+
@@ -177,9 +177,9 @@ public int doStartTag() throws JspException {
             f.getMessage());
     }
 
-    wSelectOne.setAttribute(renderContext, "checked", null);
-    wSelectOne.setAttribute(renderContext, "value", null);
-    wSelectOne.setAttribute(renderContext, "label", null);
+    wSelectOne.setAttribute("checked", null);
+    wSelectOne.setAttribute("value", null);
+    wSelectOne.setAttribute("label", null);
 
     return (EVAL_BODY_INCLUDE);
 }

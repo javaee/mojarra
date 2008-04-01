@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.13 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.14 2002/01/17 02:17:03 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.13 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.14 2002/01/17 02:17:03 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,15 +134,15 @@ public class Command_HyperlinkTag extends TagSupport
             if ( wCommand == null ) {
                 wCommand = new UICommand();
             }
-            wCommand.setAttribute(renderContext, "target", getTarget());
-            wCommand.setAttribute(renderContext, "image", getImage());
-            wCommand.setAttribute(renderContext, "text", getText());
+            wCommand.setAttribute("target", getTarget());
+            wCommand.setAttribute("image", getImage());
+            wCommand.setAttribute("text", getText());
             objectManager.put(pageContext.getRequest(), target, wCommand);
 
             // 2. Render the component.
             //
             try {
-                wCommand.setRendererName(renderContext, "HyperlinkRenderer");
+                wCommand.setRendererType("HyperlinkRenderer");
                 wCommand.render(renderContext);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+

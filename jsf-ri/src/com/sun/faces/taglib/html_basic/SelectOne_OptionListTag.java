@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.6 2002/01/16 21:06:36 rogerk Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.7 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.6 2002/01/16 21:06:36 rogerk Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.7 2002/01/17 02:17:04 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,7 +176,7 @@ protected UISelectOne createComponent(RenderContext renderContext)
     UISelectOne wSelectOne = new UISelectOne();
     
     // set renderer specific properties
-    wSelectOne.setAttribute(renderContext, "id", getId());
+    wSelectOne.setAttribute("id", getId());
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {
@@ -249,7 +249,7 @@ public int doStartTag() throws JspException {
     // 2. Render the component.
     //
     try {
-        wSelectOne.setRendererName(renderContext,
+        wSelectOne.setRendererType(
             "OptionListRenderer");
         wSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
@@ -292,7 +292,7 @@ public int doEndTag() throws JspException {
 //sharing same attribute list (renderer name is set in attributeList of
 //UIComponent.
 //
-        wSelectOne.setRendererName(renderContext,
+        wSelectOne.setRendererType(
             "OptionListRenderer");
         wSelectOne.renderComplete(renderContext);
     } catch (java.io.IOException e) {

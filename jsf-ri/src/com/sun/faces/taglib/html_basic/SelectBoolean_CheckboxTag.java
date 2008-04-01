@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.15 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.16 2002/01/17 02:17:04 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.15 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.16 2002/01/17 02:17:04 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -199,7 +199,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             // 2. Render the component.
             //
             try {
-                wSelectBoolean.setRendererName(renderContext,
+                wSelectBoolean.setRendererType(
                     "CheckboxRenderer");
                 wSelectBoolean.render(renderContext);
             } catch (java.io.IOException e) {
@@ -278,9 +278,9 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         UISelectBoolean wSelectBoolean = new UISelectBoolean();
 
         // set renderer specific properties
-        wSelectBoolean.setAttribute(renderContext, "id", getId());
-        wSelectBoolean.setAttribute(renderContext, "value", getValue());
-        wSelectBoolean.setAttribute(renderContext, "label", getLabel());
+        wSelectBoolean.setAttribute("id", getId());
+        wSelectBoolean.setAttribute("value", getValue());
+        wSelectBoolean.setAttribute("label", getLabel());
 
         // If model attribute is not found get it
         // from parent form if it exists. If not

@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.18 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: FormTag.java,v 1.19 2002/01/17 02:17:03 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.18 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: FormTag.java,v 1.19 2002/01/17 02:17:03 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -115,7 +115,7 @@ public class FormTag extends TagSupport
             // 2. Render the component.
             //
             try {
-                c.setRendererName(rc, "FormRenderer");
+                c.setRendererType("FormRenderer");
                 c.render(rc);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
@@ -173,7 +173,7 @@ public class FormTag extends TagSupport
         UIForm c = new UIForm();
 
         // set renderer specific properties 
-        c.setAttribute(rc, "id", id);
+        c.setAttribute("id", id);
 
         // set render independent attributes
         // make sure that the model object is registered

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.15 2002/01/10 22:32:48 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.15 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -154,7 +154,7 @@ public Iterator getSupportedComponentTypes() {
     return t;
 }
 
-public Iterator getRendererNamesForComponent(String componentType) {
+public Iterator getRendererTypesForComponent(String componentType) {
     ParameterCheck.nonNull(componentType);
     Assert.assert_it(null != props);
     
