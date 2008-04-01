@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.2 2001/11/13 23:17:55 edburns Exp $
+ * $Id: ObjectTable.java,v 1.3 2001/11/16 20:21:42 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -19,6 +19,7 @@ package javax.faces;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,7 +30,7 @@ import javax.servlet.http.HttpSession;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTable.java,v 1.2 2001/11/13 23:17:55 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.3 2001/11/16 20:21:42 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,27 +74,60 @@ public abstract class ObjectTable
 
     public static Scope GlobalScope = null;
 
-private static Scope keyToScope(Object scopeKey) {
+/**
+  *
+
+  *  get the List of Scope instances and iterate over it until you find
+  *  an instance for which the isA() method returns true for the
+  *  argument object.
+
+
+  * @see ObjectTable.get()
+
+  * @param scopeKey The instance for which a Scope should be found.
+  * Usually something like an HttpServletRequest or HttpSession
+  * instance, but could be any object.
+
+  * @return	The Scope, if found, or null, if not found.
+ 
+  */
+
+
+private Scope keyToScope(Object scopeKey) {
     Scope result = null;
-    // PENDING(edburns): can we use Scope.isA() here?
-    if (scopeKey instanceof HttpServletRequest) {
-	result = RequestScope;
+    Iterator iter;
+    List scopes = getScopes();
+
+    if (null == scopes) {
+	return result;
     }
-    else if (scopeKey instanceof HttpSession) {
-	result = SessionScope;
-    }
-    else {
-	result = GlobalScope;
+
+    iter = scopes.iterator();
+    while (iter.hasNext()) {
+	result = (Scope) iter.next();
+	if (result.isA(scopeKey)) {
+	    break;
+	}
+	else {
+	    result = null;
+	}
     }
     return result;
 }
 
-    public static void put(Scope scope, Object name, Object value) {
+    public void put(Object scopeKey, Object name, Object value) {
+	Scope s = keyToScope(scopeKey);
+	if (null != s) {
+	    put(s, name, value);
+	}
+    }
+
+    public void put(Scope scope, Object name, Object value) {
 	scope.put(name, value);
     }
 
 
-    public static void put(Scope scope, Object name, Class value) {
+    public void put(Scope scope, Object name, Class value) {
 	final Class finalValue = value;
 	Object createValue = new LazyValue() {
 	    public Object getValue(Scope scope, Object scopeKey, Object name) {
@@ -111,24 +145,26 @@ private static Scope keyToScope(Object scopeKey) {
     }
 
 
-    public static Object get(Object scopeKey, Object name) {
+    public Object get(Object scopeKey, Object name) {
 	Scope scope = keyToScope(scopeKey);
-	return scope.get(scopeKey, name);
+	if (null != scope) {
+	    return scope.get(scopeKey, name);
+	}
+	return null;
     }
 
 
-    public static Object get(Object name) {
+    public Object get(Object name) {
 	return GlobalScope.get("global", name);
     }
 
-    // PENDING(edburns): why does ObjectTable itself have enter and exit?
-    public static void enter(Object scopeKey) {
+    public void enter(Object scopeKey) {
 	Scope scope = keyToScope(scopeKey);
 	scope.enter(scopeKey);
     }
 
 
-    public static void exit(Object scopeKey) {
+    public void exit(Object scopeKey) {
 	Scope scope = keyToScope(scopeKey);
 	scope.exit(scopeKey);
     }
