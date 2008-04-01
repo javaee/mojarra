@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.1 2001/11/22 01:39:57 visvan Exp $
+ * $Id: TestRenderer.java,v 1.2 2001/11/27 00:06:36 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -32,7 +32,7 @@ import com.sun.faces.renderkit.html_basic.*;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderer.java,v 1.1 2001/11/22 01:39:57 visvan Exp $
+ * @version $Id: TestRenderer.java,v 1.2 2001/11/27 00:06:36 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,6 +107,7 @@ public class TestRenderer extends TestCase
         rendererObj = new FormRenderer();
         c = new WForm();
         verifyRendererMethods(rendererObj,c, "WForm");
+        verifyRenderEnd(rendererObj,c, "WForm");
 
         System.out.println("Testing InputRenderer");
         rendererObj = new InputRenderer();
@@ -122,6 +123,7 @@ public class TestRenderer extends TestCase
         rendererObj = new TextAreaRenderer();
         c = new WTextEntry();
         verifyRendererMethods(rendererObj,c, "WTextEntry");
+        verifyRenderEnd(rendererObj,c, "WTextEntry");
 
         System.out.println("Testing ButtonRenderer"); 
         rendererObj = new ButtonRenderer();
@@ -157,7 +159,6 @@ public class TestRenderer extends TestCase
         }
 	assertTrue(gotException);
 
-
 	gotException = false;
         if ( ! comp_name.equals("WOutput") ) {
             try {
@@ -176,19 +177,6 @@ public class TestRenderer extends TestCase
             System.out.println("Expected exception: in Renderer.renderChildren()");
         } */
   
-        // PENDING (visvan) some renderers don't have renderEnd 
-        // methods. Fix this later 
-        /* System.out.println("Testing renderEnd()"); 
-        // test renderEnd method
-	gotException = false;
-        try {
-            renderer.renderEnd(null, null);    
-        } catch ( Exception e ) {
-	    gotException = true;
-            System.out.println("Expected exception in Renderer.renderEnd()");
-        }
-	assertTrue(gotException); */
-
         System.out.println("Testing supportType()");
         // test supportTypes method.
         boolean result = renderer.supportsType(c); 
@@ -202,5 +190,28 @@ public class TestRenderer extends TestCase
                 " returned " + result);
         System.out.println();
     }
+
+    /**
+     * This method tests the renderEnd method of renderers.
+     * Some HTML elements don't have end tags. So this method
+     * is separated out so that it can be invoked only for
+     * renderers that implement renderEnd method. 
+     */
+    protected void verifyRenderEnd(Renderer renderer, WComponent c,
+            String comp_name) {
+
+        // test renderEnd method
+        System.out.println("Testing renderEnd()");
+        boolean gotException = false;
+        try {
+            renderer.renderEnd(null, null);
+        } catch ( Exception e ) {
+            gotException = true;
+            System.out.println("Expected exception in Renderer.renderEnd()");
+        }
+        assertTrue(gotException);
+        System.out.println();
+    }
+
 
 } // end of class TestRenderKit
