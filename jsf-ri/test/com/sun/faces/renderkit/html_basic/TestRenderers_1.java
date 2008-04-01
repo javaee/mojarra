@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.2 2002/06/04 00:11:25 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.3 2002/06/04 21:21:50 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.FileOutputResponseWrapper;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.2 2002/06/04 00:11:25 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.3 2002/06/04 21:21:50 eburns Exp $
  * 
  *
  */
@@ -107,7 +107,7 @@ public class TestRenderers_1 extends ServletTestCase
     }
 
     public void beginRenderers(WebRequest theRequest) {
-        theRequest.addParameter("/root/input_userName", "JavaServerFaces");
+        theRequest.addParameter("/input_userName", "JavaServerFaces");
     } 
     
     //
@@ -149,10 +149,15 @@ public class TestRenderers_1 extends ServletTestCase
                     EXPECTED_OUTPUT_FILENAME, null);
             } catch (Exception e ) {
                 System.out.println(e.getMessage());
+		System.out.flush();
                 result = false;
             }
-            assertTrue(result);
-        }
+            assertTrue("Error comparing files: diff -u "+
+		       EXPECTED_OUTPUT_FILENAME +
+		       " " + 
+		       FileOutputResponseWrapper.FACES_RESPONSE_FILENAME, 
+		       result);
+	 }
         catch (Throwable e) {
             e.printStackTrace();
             assertTrue(false);

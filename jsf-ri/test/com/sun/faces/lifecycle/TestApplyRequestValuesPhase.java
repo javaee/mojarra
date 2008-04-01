@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.1 2002/06/01 00:58:22 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.2 2002/06/04 21:21:50 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.FacesContextTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.1 2002/06/01 00:58:22 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.2 2002/06/04 21:21:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,7 +82,7 @@ public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 public void beginCallback(WebRequest theRequest)
 {
     theRequest.addParameter("tree", TEST_URI_XUL);
-    theRequest.addParameter("/root/basicForm/userName", "jerry");
+    theRequest.addParameter("/basicForm/userName", "jerry");
 }
 
 public void testCallback()
