@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.4 2002/05/25 22:35:38 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.5 2002/05/29 19:54:06 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.tree;
 
 import java.util.Iterator;
 import javax.faces.FacesException;    // FIXME - subpackage?
+import javax.servlet.ServletContext;
 
 
 /**
@@ -43,13 +44,15 @@ public abstract class TreeFactory {
      * components (and associated properties) for the metadata associated
      * with the specified tree identifier.</p>
      *
+     * @param context ServletContext for this web application
      * @param treeId Tree identifier of the tree to be constructed and
      *  returned
      *
      * @exception FacesException if a {@link Tree} cannot be
      *  constructed for the specified parameters
      */
-    public abstract Tree createTree(String treeId) throws FacesException;
+    public abstract Tree createTree(ServletContext context,
+                                    String treeId) throws FacesException;
 
 
     /**
@@ -58,8 +61,10 @@ public abstract class TreeFactory {
      * for this web application.
      * If no trees are supported, an empty <code>Iterator</code> must be
      * returned.</p>
+     *
+     * @param context ServletContext for this web application
      */
-    public abstract Iterator getTreeIds();
+    public abstract Iterator getTreeIds(ServletContext context);
 
 
 }
