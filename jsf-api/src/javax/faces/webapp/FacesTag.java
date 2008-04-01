@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.18 2002/07/29 00:33:24 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.19 2002/07/31 00:27:47 craigmcc Exp $
  */
 
 /*
@@ -74,6 +74,13 @@ public abstract class FacesTag extends TagSupport {
     protected FacesContext context = null;
 
 
+    /**
+     * <p>Was a new component instance dynamically created when our
+     * <code>findComponent()</code> method was called.</p>
+     */
+    protected boolean created = false;
+
+
     // ------------------------------------------------------------- Properties
 
 
@@ -89,6 +96,18 @@ public abstract class FacesTag extends TagSupport {
         return (this.component);
 
     }
+
+
+    /**
+     * <p>Return <code>true</code> if we dynamically created a new component
+     * instance during our <code>doStartTag()</code> method.</p>
+     */
+    public boolean getCreated() {
+
+        return (this.created);
+
+    }
+
 
 
     /**
@@ -283,6 +302,7 @@ public abstract class FacesTag extends TagSupport {
         super.release();
         this.id = null;
         this.modelReference = null;
+        this.created = false;
 
     }
 
@@ -301,7 +321,8 @@ public abstract class FacesTag extends TagSupport {
      * <p>Find and return the component, from the response component tree,
      * that corresponds to the relative identifier defined by the
      * <code>id</code> attribute of this tag.  If no such component can
-     * be found, create an appropriate instance.</p>
+     * be found, create an appropriate instance.  Set the <code>created</code>
+     * property to reflect whether or now we created an instance.</p>
      *
      * @exception JspException if the specified component cannot be located
      */
@@ -324,6 +345,7 @@ public abstract class FacesTag extends TagSupport {
         while (children.hasNext()) {
             child = (UIComponent) children.next();
             if (id.equals(child.getComponentId())) {
+                created = false;
                 return (child);
             }
         }
@@ -332,6 +354,7 @@ public abstract class FacesTag extends TagSupport {
         child = createComponent();
         child.setComponentId(id);
         parent.addChild(child);
+        created = true;
         return (child);
 
     }

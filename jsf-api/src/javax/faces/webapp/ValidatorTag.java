@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.1 2002/07/16 23:48:37 craigmcc Exp $
+ * $Id: ValidatorTag.java,v 1.2 2002/07/31 00:27:47 craigmcc Exp $
  */
 
 /*
@@ -82,6 +82,21 @@ public final class ValidatorTag extends TagSupport {
 
         try {
 
+            // Locate our parent FacesTag
+            Tag tag = getParent();
+            while ((tag != null) && !(tag instanceof FacesTag)) {
+                tag = tag.getParent();
+            }
+            if (tag == null) { // FIXME - i18n
+                throw new JspException("Not nested in a FacesTag");
+            }
+            FacesTag facesTag = (FacesTag) tag;
+
+            // Nothing to do unless this tag created a component
+            if (!facesTag.getCreated()) {
+                return (SKIP_BODY);
+            }
+
             // Create a new instance of the specified class
             ClassLoader classLoader =
                 Thread.currentThread().getContextClassLoader();
@@ -92,14 +107,7 @@ public final class ValidatorTag extends TagSupport {
             Validator validator = (Validator) clazz.newInstance();
 
             // Register this instance with the appropriate component
-            Tag tag = getParent();
-            while ((tag != null) && !(tag instanceof FacesTag)) {
-                tag = tag.getParent();
-            }
-            if (tag == null) { // FIXME - i18n
-                throw new JspException("Not nested in a FacesTag");
-            }
-            ((FacesTag) tag).getComponent().addValidator(validator);
+            facesTag.getComponent().addValidator(validator);
             return (SKIP_BODY);
 
         } catch (Exception e) {
