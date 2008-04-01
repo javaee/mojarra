@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.24 2002/06/04 02:31:06 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.25 2002/06/04 17:53:23 craigmcc Exp $
  */
 
 /*
@@ -783,13 +783,30 @@ public abstract class UIComponent {
      * of the request processing lifecycle.</p>
      *
      * @param event The event to be added
+     *
+     * @exception NullPointerException if <code>event</code>
+     *  is null
      */
     public void addEvent(FacesEvent event) {
 
+        if (event == null) {
+            throw new NullPointerException();
+        }
         if (events == null) {
             events = new ArrayList();
         }
         events.add(event);
+
+    }
+
+
+    /**
+     * <p>Clear any {@link FacesEvent}s that have been queued for
+     * processing by this component.</p>
+     */
+    public void clearEvents() {
+
+        events = null;
 
     }
 
@@ -830,10 +847,24 @@ public abstract class UIComponent {
      */
     public void addValidator(Validator validator) {
 
+        if (validator == null) {
+            throw new NullPointerException();
+        }
         if (validators == null) {
             validators = new ArrayList();
         }
         validators.add(validator);
+
+    }
+
+
+    /**
+     * <p>Clear any {@link Validator}s that have been registered for
+     * processing by this component.</p>
+     */
+    public void clearValidators() {
+
+        validators = null;
 
     }
 

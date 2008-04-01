@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.6 2002/05/22 21:37:02 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.7 2002/06/04 17:53:23 craigmcc Exp $
  */
 
 /*
@@ -24,11 +24,26 @@ import javax.faces.context.FacesContext;
 public class UISelectBoolean extends UIComponent {
 
 
+    // ------------------------------------------------------------ Constructor
+
+
+    /**
+     * <p>Construct a new <code>UISelectBoolean</code> with a default
+     * <code>selected</code> property of <code>false</code>.</p>
+     */
+    public UISelectBoolean() {
+
+        super();
+        setSelected(false);
+
+    }
+
+
     // ------------------------------------------------------- Static Variables
 
 
     /**
-     * The component type of this {@link UIComponent} subclass.
+     * <p>The component type of this {@link UIComponent} subclass.</p>
      */
     public static final String TYPE = "SelectBoolean";
 

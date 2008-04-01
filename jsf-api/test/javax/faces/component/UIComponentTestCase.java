@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.1 2002/06/04 02:31:07 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.2 2002/06/04 17:53:23 craigmcc Exp $
  */
 
 /*
@@ -247,6 +247,12 @@ public class UIComponentTestCase extends TestCase {
         assertEquals("test1 by index", test1, component.getChild(0));
         assertEquals("test2 by index", test2, component.getChild(1));
 
+        // Remove children tests
+        test2.removeChild(0);
+        checkChildCount(test2, 0);
+        component.removeChild(test1);
+        checkChildCount(component, 1);
+
         // Clear children and review conditions
         component.clearChildren();
         checkChildCount(component, 0);
@@ -388,6 +394,22 @@ public class UIComponentTestCase extends TestCase {
 
 
     /**
+     * [3.1.8] Event Queue.
+     */
+    public void testEventQueue() {
+
+        checkEventCount(component, 0);
+        component.addEvent(new FacesEvent(component));
+        checkEventCount(component, 1);
+        component.addEvent(new FacesEvent(component));
+        checkEventCount(component, 2);
+        component.clearEvents();
+        checkEventCount(component, 0);
+
+    }
+
+
+    /**
      * [3.1] Invalid setter arguments.
      */
     public void testInvalidSetters() {
@@ -429,6 +451,22 @@ public class UIComponentTestCase extends TestCase {
             ; // Expected result
         }
 
+        // [3.1.8] addEvent()
+        try {
+            component.addEvent(null);
+            fail("addEvent did not throw NPE");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+
+        // [3.1.9] addValidator()
+        try {
+            component.addValidator(null);
+            fail("addValidator did not throw NPE");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+
     }
 
 
@@ -466,7 +504,11 @@ public class UIComponentTestCase extends TestCase {
         assertNull("model", component.getModel());
 
         // [3.1.6] Local Values
-        assertNull("value", component.getValue());
+        if (component instanceof UISelectBoolean) {
+            assertNotNull("value", component.getValue());
+        } else {
+            assertNull("value", component.getValue());
+        }
         // FIXME - assertNull("currentValue", component.currentValue(context));
 
         // [3.1.7] Generic Attributes
@@ -496,6 +538,22 @@ public class UIComponentTestCase extends TestCase {
 
     }
 
+
+
+    /**
+     * [3.1.9] Validator Queue.
+     */
+    public void testValidatorQueue() {
+
+        checkValidatorCount(component, 0);
+        component.addValidator(new TestValidator());
+        checkValidatorCount(component, 1);
+        component.addValidator(new TestValidator());
+        checkValidatorCount(component, 2);
+        component.clearValidators();
+        checkValidatorCount(component, 0);
+
+    }
 
 
     // -------------------------------------------------------- Support Methods

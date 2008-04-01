@@ -136,6 +136,9 @@
                 test.UIGraphic,
                 test.UIOutput,
                 test.UIPanel,
+                test.UISelectBoolean,
+                test.UISelectMany,
+                test.UISelectOne,
                 test.UITextEntry">
   </target>
 
@@ -189,6 +192,33 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <arg value="javax.faces.component.UIPanelTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectBoolean" depends="build.test">
+    <echo message="Running UISelectBoolean tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UISelectBooleanTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectMany" depends="build.test">
+    <echo message="Running UISelectMany tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UISelectManyTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UISelectOne" depends="build.test">
+    <echo message="Running UISelectOne tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UISelectOneTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
