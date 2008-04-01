@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.3 2002/05/14 15:02:29 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.4 2002/05/15 01:03:52 craigmcc Exp $
  */
 
 /*
@@ -39,6 +39,15 @@ import javax.faces.context.FacesContext;
  * replaces the Faces-provided {@link Phase} implementation for a standard
  * phase, it is the application's responsibility to perform the functionality
  * described for that standard phase, in addition to its own.</p>
+ *
+ * <p>Several of the standard phases involve walking down the component
+ * tree for the current request (in top-down, left-to-right order), and
+ * calling an appropriate event handling method.  In each case, the
+ * underlying components have the option to delegate event handling to an
+ * external object, referenced by the <code>lifecycleHandler</code> property
+ * of the component.  If a particular component has no registered
+ * <code>lifecycleHandler</code>, the corresponding method on the component
+ * itself must be called instead.</p>
  *
  * <p><strong>FIXME</strong> - Representation of phase ids
  * as integers?</p>
@@ -268,6 +277,20 @@ public abstract class Lifecycle {
 
 
     /**
+     * <p>Deregister an existing {@link Phase} instance for its defined phase
+     * identifier.</p>
+     *
+     * <p><strong>FIXME</strong> - does this method need to be public?</p>
+     *
+     * @param phase Existing {@link Phase} instance to be deregistered
+     *
+     * @exception NullPointerException if <code>phase</code>
+     *  is <code>null</code>
+     */
+    public abstract void deregister(Phase phase);
+
+
+    /**
      * <p>Look up and return the {@link Phase} instance for the specified
      * phase identifier, if any; otherwise, return <code>null</code>.</p>
      *
@@ -296,22 +319,21 @@ public abstract class Lifecycle {
 
 
     /**
-     * <p>Register a new {@link Phase} instance for the specified phase
+     * <p>Register a new {@link Phase} instance for its defined phase
      * identifier, replacing any previously registered instance.</p>
      *
      * <p><strong>FIXME</strong> - does this method need to be public?
      * Should this registration perhaps be on {@link LifecycleFactory}
      * instead, keyed to the logical lifecycle id?</p>
      *
-     * @param phaseId Phase identifier for the phase to be registered
-     * @param phase New {@link Phase} instance to be registered, or
-     *  <code>null</code> to deregister any existing instance for this
-     *  phase identifier
+     * @param phase New {@link Phase} instance to be registered
      *
      * @exception IllegalArgumentException if one of the special phase
      *  identifiers (EXIT_PHASE, NEXT_PHASE) is requested
+     * @exception NullPointerException if <code>phase</code>
+     *  is <code>null</code>
      */
-    public abstract void register(int phaseId, Phase phase);
+    public abstract void register(Phase phase);
 
 
     // -------------------------------------------------- PhaseListener Support
