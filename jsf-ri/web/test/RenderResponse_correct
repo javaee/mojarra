@@ -9,27 +9,187 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-        <form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=0893D474A94104F7215275E1A385C4D8">
+<FORM METHOD="post" ACTION="%2Ftest%2Ffaces%2Fform%2FbasicForm%2FTestRenderResponsePhase.jsp;jsessionid=80E0636212B5916924E002B6076365E7">
+  <TABLE BORDER="1">
 
-            <input type="text" name="/basicForm/userName" value="default">
 
-            <input type="submit">
+      <TR>
 
-	    <!-- <input type="submit"> -->
+	<TD>
 
-            UserName
+	      <INPUT TYPE="text" NAME="/basicForm/userName" VALUE="Default_username">
 
-            <input type="checkbox" name="/basicForm/validUser">
+	</TD>
 
-            <select name="/basicForm/appleQuantity"><option value="0">0.00</option><option value="1">1.00</option><option value="2">2.00</option><option value="3">3.00</option><option value="4" selected="selected">4.00</option><option value="5">5.00</option><option value="6">6.00</option><option value="7">7.00</option><option value="8">8.00</option><option value="9">9.00</option></select>
+      </TR>
 
-            <select name="/basicForm/shipType"><option value="nextDay">Next Day</option><option value="nextWeek" selected="selected">Next Week</option><option value="nextMonth">Next Month</option></select>
+      <TR>
 
-            <input type="text" name="/basicForm/password" value="">
+	<TD>
 
-            <input type="text" name="/basicForm/address" value="">
+	      <INPUT TYPE="PASSWORD" NAME="/basicForm/password" VALUE="Default_password">
 
-        </form>
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <INPUT TYPE="SUBMIT" NAME="login" VALUE="Login">
+
+	</TD>
+
+      </TR>
+
+
+      <TR>
+
+	<TD>
+
+	      <INPUT TYPE="IMAGE" SRC="duke.gif" NAME="login">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <A HREF="hello.html">link text</A>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <A HREF="hello.html"><IMAGE SRC="duke.gif"></A>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      Output Text
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <INPUT TYPE="CHECKBOX"  NAME="/basicForm/validUser" CHECKED > Valid User
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	      <SELECT NAME="/basicForm/appleQuantity">	<OPTION VALUE="0">0</OPTION>
+	<OPTION VALUE="1">1</OPTION>
+	<OPTION VALUE="2">2</OPTION>
+	<OPTION VALUE="3">3</OPTION>
+	<OPTION VALUE="4" selected="selected">4</OPTION>
+	<OPTION VALUE="5">5</OPTION>
+	<OPTION VALUE="6">6</OPTION>
+	<OPTION VALUE="7">7</OPTION>
+	<OPTION VALUE="8">8</OPTION>
+	<OPTION VALUE="9">9</OPTION>
+</SELECT>
+
+              Option List
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      
+
+		
+		
+		
+
+              <TABLE BORDER="0">
+	<TR>
+<TD><INPUT TYPE="RADIO" NAME="/basicForm/shipType" VALUE="nextDay"> Next Day</TD>
+<TD><INPUT TYPE="RADIO" CHECKED NAME="/basicForm/shipType" VALUE="nextWeek"> Next Week</TD>
+<TD><INPUT TYPE="RADIO" NAME="/basicForm/shipType" VALUE="nextMonth"> Next Month</TD>
+	</TR>
+</TABLE>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+		
+
+  		
+		
+		
+
+                <TABLE BORDER="1">
+	<TR>
+<TD><INPUT TYPE="RADIO" CHECKED NAME="/basicForm/verticalRadio" VALUE="nextDay"> Next Day</TD>
+	<TR>
+	<TR>
+<TD><INPUT TYPE="RADIO" NAME="/basicForm/verticalRadio" VALUE="nextWeek"> Next Week</TD>
+	<TR>
+	<TR>
+<TD><INPUT TYPE="RADIO" NAME="/basicForm/verticalRadio" VALUE="nextMonth"> Next Month</TD>
+	<TR>
+</TABLE>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <TEXTAREA  NAME="/basicForm/address" ROWS="10" COLS="10"> Hi There</TEXTAREA>
+
+	</TD>
+
+      </TR>
+
+  <TABLE>
+
+</FORM>
+
 
     </BODY>
 </HTML>

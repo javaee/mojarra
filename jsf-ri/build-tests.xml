@@ -136,6 +136,7 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
+            includes="com/sun/faces/lifecycle/TestRenderResponsePhase.java,com/sun/faces/lifecycle/TestReconstituteRequestTreePhase.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -290,6 +291,9 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <test name="com.sun.faces.lifecycle.TestReconstituteRequestTreePhase"/>
+<!-- put non-running testcases here
             <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
@@ -300,11 +304,9 @@
             <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
             <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
 
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
-            <test name="com.sun.faces.tree.TestComponentFromXul"/>
 
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
@@ -319,7 +321,6 @@
 
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
-<!-- put non-running testcases here
 -->
         </junit>
 

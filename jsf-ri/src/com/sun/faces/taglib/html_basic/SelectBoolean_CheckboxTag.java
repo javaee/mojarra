@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.29 2002/07/10 17:57:25 jvisvanathan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.30 2002/07/12 19:44:37 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.29 2002/07/10 17:57:25 jvisvanathan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.30 2002/07/12 19:44:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,10 @@ public class SelectBoolean_CheckboxTag extends FacesTag
 
 // Attribute Instance Variables
 
+    protected String selected = null;
+    protected String label = null;
+
+
 // Relationship Instance Variables
 
 //
@@ -73,6 +77,22 @@ public SelectBoolean_CheckboxTag()
 // Accessors
 //
 
+    public void setSelected(String newSelected) {
+	selected = newSelected;
+    }
+
+    public String getSelected() {
+	return selected;
+    }
+
+    public void setLabel(String newLabel) {
+	label = newLabel;
+    }
+
+    public String getLabel() {
+	return label;
+    }
+
 //
 // General Methods
 //
@@ -81,6 +101,25 @@ public SelectBoolean_CheckboxTag()
 
     public UIComponent createComponent() {
         return (new UISelectBoolean());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UISelectBoolean checkbox = (UISelectBoolean) component;
+	
+	// Non-null implies this UISelectBooleanInstance has a value.
+	// In that case, we don't set a value.
+	if (null != checkbox.getAttribute("value")) {
+	    if (null != getSelected()) {
+		checkbox.setSelected(true);
+	    }
+	    else {
+		checkbox.setSelected(false);
+	    }
+	}
+	if (null == checkbox.getAttribute("label")) {
+	    checkbox.setAttribute("label", getLabel());
+	}
     }
     
 //

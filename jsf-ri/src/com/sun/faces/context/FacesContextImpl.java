@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.13 2002/06/25 20:47:55 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.14 2002/07/12 19:44:31 eburns Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class FacesContextImpl extends FacesContext
         this.locale = request.getLocale();
         if (this.request instanceof HttpServletRequest) {
             this.session =
-                ((HttpServletRequest) request).getSession(false);
+                ((HttpServletRequest) request).getSession();
         }
         this.lifecycle = lifecycle; 
     }

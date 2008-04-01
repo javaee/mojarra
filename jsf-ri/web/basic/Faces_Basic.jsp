@@ -10,7 +10,7 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
 
-        <faces:form id="/basicForm" >
+        <faces:form id="basicForm" >
 
             <table> 
             <tr> 

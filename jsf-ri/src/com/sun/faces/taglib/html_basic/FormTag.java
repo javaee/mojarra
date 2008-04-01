@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.30 2002/07/10 17:57:24 jvisvanathan Exp $
+ * $Id: FormTag.java,v 1.31 2002/07/12 19:44:36 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.30 2002/07/10 17:57:24 jvisvanathan Exp $
+ * @version $Id: FormTag.java,v 1.31 2002/07/12 19:44:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,8 @@ public class FormTag extends FacesTag
 
 // Attribute Instance Variables
 
+    public String formName = null;
+
 // Relationship Instance Variables
 
 //
@@ -73,6 +75,11 @@ public FormTag()
 // Accessors
 //
 
+    public String getFormName() { return formName; }
+    public void setFormName(String newFormName) { 
+	formName = newFormName;
+    }
+
 //
 // General Methods
 //
@@ -81,6 +88,15 @@ public FormTag()
 
     public UIComponent createComponent() {
         return (new UIForm());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UIForm form = (UIForm) component;
+
+	if (null == form.getFormName()) {
+	    form.setFormName(getFormName());
+	}
     }
     
 //

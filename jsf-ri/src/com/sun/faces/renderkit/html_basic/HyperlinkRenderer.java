@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.23 2002/07/10 17:57:21 jvisvanathan Exp $
+ * $Id: HyperlinkRenderer.java,v 1.24 2002/07/12 19:44:33 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.23 2002/07/10 17:57:21 jvisvanathan Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.24 2002/07/12 19:44:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -179,7 +179,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             writer.write(image);
             writer.write("\">");
         }
-        String text = (String)component.getAttribute("text");
+        String text = (String)component.getAttribute("label");
         if (text != null) {
             writer.write(text);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.18 2002/07/10 17:57:25 jvisvanathan Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.19 2002/07/12 19:44:37 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.18 2002/07/10 17:57:25 jvisvanathan Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.19 2002/07/12 19:44:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,8 @@ public class SelectOne_OptionListTag extends FacesTag
 
 // Attribute Instance Variables
 
+    protected String itemsmodelreference = null;
+
 // Relationship Instance Variables
 
 //
@@ -73,6 +75,14 @@ public SelectOne_OptionListTag()
 // Accessors
 //
 
+    public void setItemsmodelreference(String newItemsmodelreference) {
+	itemsmodelreference = newItemsmodelreference;
+    }
+
+    public String getItemsmodelreference() {
+	return itemsmodelreference;
+    }
+
 //
 // General Methods
 //
@@ -80,6 +90,15 @@ public SelectOne_OptionListTag()
     public String getLocalRendererType() { return "OptionListRenderer"; }
     public UIComponent createComponent() {
         return (new UISelectOne());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UISelectOne selectOne = (UISelectOne) component;
+	
+	if (null == selectOne.getItemsModelReference()) {
+	    selectOne.setItemsModelReference(getItemsmodelreference());
+	}
     }
 //
 // Methods from TagSupport

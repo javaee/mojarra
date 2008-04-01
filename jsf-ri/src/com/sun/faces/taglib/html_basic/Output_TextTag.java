@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.31 2002/07/10 17:57:25 jvisvanathan Exp $
+ * $Id: Output_TextTag.java,v 1.32 2002/07/12 19:44:36 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_TextTag.java,v 1.31 2002/07/10 17:57:25 jvisvanathan Exp $
+ * @version $Id: Output_TextTag.java,v 1.32 2002/07/12 19:44:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,9 @@ public class Output_TextTag extends FacesTag
 
 // Attribute Instance Variables
 
+    protected String text = null;
+
+
 // Relationship Instance Variables
 
 //
@@ -73,6 +76,14 @@ public Output_TextTag()
 // Accessors
 //
 
+    public void setText(String newText) {
+	text = newText;
+    }
+
+    public String getText() {
+	return text;
+    }
+
 //
 // General Methods
 //
@@ -81,6 +92,15 @@ public Output_TextTag()
 
     public UIComponent createComponent() {
         return (new UIOutput());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UIOutput textEntry = (UIOutput) component;
+	
+	if (null == textEntry.getText()) {
+	    textEntry.setText(getText());
+	}
     }
     
 //

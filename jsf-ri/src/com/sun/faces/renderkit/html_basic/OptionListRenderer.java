@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.20 2002/07/10 17:57:22 jvisvanathan Exp $
+ * $Id: OptionListRenderer.java,v 1.21 2002/07/12 19:44:33 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.20 2002/07/10 17:57:22 jvisvanathan Exp $
+ * @version $Id: OptionListRenderer.java,v 1.21 2002/07/12 19:44:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,6 +136,15 @@ public class OptionListRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component) 
+        throws IOException {
+
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) 
+        throws IOException {
         String currentValue = null;
         ResponseWriter writer = null;
 
@@ -178,7 +187,7 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         writer.write(component.getCompoundId());
         writer.write("\">");
         for (int i = 0; i < items.length; i++) {
-            writer.write("<OPTION VALUE=\"");
+            writer.write("\t<OPTION VALUE=\"");
             writer.write((String) items[i].getValue());
             writer.write("\"");
             if (currentValue.equals(items[i].getValue())) {
@@ -186,19 +195,9 @@ public class OptionListRenderer extends HtmlBasicRenderer {
             }
             writer.write(">");
             writer.write(items[i].getLabel());
-            writer.write("</OPTION>");
+            writer.write("</OPTION>\n");
         }
         writer.write("</SELECT>");
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) 
-        throws IOException {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
-
     }
 
 } // end of class OptionListRenderer

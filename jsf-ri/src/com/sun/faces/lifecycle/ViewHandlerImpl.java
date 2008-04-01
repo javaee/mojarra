@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.1 2002/06/25 21:08:39 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.2 2002/07/12 19:44:32 eburns Exp $ 
  */ 
 
 
@@ -30,13 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletException; 
 import javax.servlet.RequestDispatcher; 
 
-
-import com.sun.faces.tree.XmlTreeImpl; 
-
-
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.1 2002/06/25 21:08:39 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.2 2002/07/12 19:44:32 eburns Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -69,12 +65,7 @@ public class ViewHandlerImpl implements ViewHandler {
 
 
         try { 
-            //PENDING(rogerk) do we want to add "getPageUrl" method to 
-            //javax.faces.tree.Tree class (in which case, we won;t have 
-            //to cast?? - probably not, since the concept of the tree 
-            //(in this sense) is going away... 
-            // 
-            String requestURI = ((XmlTreeImpl)tree).getPageUrl(); 
+            String requestURI = context.getResponseTree().getTreeId();
             requestDispatcher = request.getRequestDispatcher(requestURI); 
             requestDispatcher.forward(request, context.getServletResponse()); 
         } catch (IOException e) { 

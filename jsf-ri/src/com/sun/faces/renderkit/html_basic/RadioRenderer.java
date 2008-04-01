@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.21 2002/06/28 22:47:00 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.22 2002/07/12 19:44:33 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.21 2002/06/28 22:47:00 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.22 2002/07/12 19:44:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -147,9 +147,22 @@ public class RadioRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component) {
+
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) throws IOException 
+    {
         String currentValue = null;
         ResponseWriter writer = null;
         UISelectOne uiSelectOne = null;
+	String alignStr = null;
+	String borderStr = null;
+	boolean alignVertical = false;
+	int border = 0;
+
         
         if ( context == null ) {
             throw new NullPointerException("FacesContext is null");
@@ -188,9 +201,30 @@ public class RadioRenderer extends HtmlBasicRenderer {
         
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
+
+	if (null != (alignStr = (String) uiSelectOne.getAttribute("align"))) {
+	    alignVertical = alignStr.equalsIgnoreCase("vertical") ? 
+		true : false;
+	}
+	if (null != (borderStr = (String) uiSelectOne.getAttribute("border"))){
+	    try {
+		border = Integer.valueOf(borderStr).intValue();
+	    }
+	    catch (Throwable e) {
+		border = 0;
+	    }
+	}
+
+	writer.write("<TABLE BORDER=\"" + border + "\">\n");
+	if (!alignVertical) {
+	    writer.write("\t<TR>\n");
+	}
         
         for (int i = 0; i < items.length; i++) {
-            writer.write("<INPUT TYPE=\"RADIO\"");
+	    if (alignVertical) {
+		writer.write("\t<TR>\n");
+	    }
+            writer.write("<TD><INPUT TYPE=\"RADIO\"");
             if (currentValue != null && 
                     (currentValue.equals(items[i].getValue()))){
                 writer.write(" CHECKED");
@@ -205,15 +239,17 @@ public class RadioRenderer extends HtmlBasicRenderer {
                 writer.write(" ");
                 writer.write(itemLabel);
             }
-            writer.write("\n");
+            writer.write("</TD>\n");
+	    if (alignVertical) {
+		writer.write("\t<TR>\n");
+	    }
         }
-    }
 
-    public void encodeChildren(FacesContext context, UIComponent component) {
+	if (!alignVertical) {
+	    writer.write("\t</TR>\n");
+	}
+	writer.write("</TABLE>");
 
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) {
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.26 2002/06/28 22:46:59 eburns Exp $
+ * $Id: FormRenderer.java,v 1.27 2002/07/12 19:44:33 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.net.URLEncoder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.26 2002/06/28 22:46:59 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.27 2002/07/12 19:44:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -202,9 +202,8 @@ public class FormRenderer extends HtmlBasicRenderer {
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(( RIConstants.URL_PREFIX + RIConstants.FORM_PREFIX));
         sb.append(form.currentValue(context).toString());
-        sb.append("/");
         sb.append(context.getResponseTree().getTreeId());
-        return (response.encodeURL(sb.toString())); 
+        return (response.encodeURL(URLEncoder.encode(sb.toString())));
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {

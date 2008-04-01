@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioGroupTag.java,v 1.3 2002/07/10 17:57:25 jvisvanathan Exp $
+ * $Id: SelectOne_RadioGroupTag.java,v 1.4 2002/07/12 19:44:37 eburns Exp $
  */
 
 /*
@@ -31,14 +31,14 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_RadioGroupTag.java,v 1.3 2002/07/10 17:57:25 jvisvanathan Exp $
+ * @version $Id: SelectOne_RadioGroupTag.java,v 1.4 2002/07/12 19:44:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectOne_RadioGroupTag extends FacesTag
+public class SelectOne_RadioGroupTag extends SelectOne_OptionListTag
 {
 //
 // Protected Constants
@@ -53,6 +53,10 @@ public class SelectOne_RadioGroupTag extends FacesTag
 //
 
 // Attribute Instance Variables
+
+    protected String align = null;
+    protected String border = null;
+
 
 // Relationship Instance Variables
 
@@ -73,6 +77,23 @@ public SelectOne_RadioGroupTag()
 // Accessors
 //
 
+    public void setAlign(String newAlign) {
+	align = newAlign;
+    }
+
+    public String getAlign() {
+	return align;
+    }
+
+    public void setBorder(String newBorder) {
+	border = newBorder;
+    }
+
+    public String getBorder() {
+	return border;
+    }
+
+
 //
 // General Methods
 //
@@ -80,6 +101,18 @@ public SelectOne_RadioGroupTag()
     public String getLocalRendererType() { return "RadioRenderer"; }
     public UIComponent createComponent() {
         return (new UISelectOne());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UISelectOne uiSelectOne = (UISelectOne) component;
+	
+	if (null == uiSelectOne.getAttribute("align")) {
+	    uiSelectOne.setAttribute("align", getAlign());
+	}
+	if (null == uiSelectOne.getAttribute("border")) {
+	    uiSelectOne.setAttribute("border", getBorder());
+	}
     }
 //
 // Methods from TagSupport

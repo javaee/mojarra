@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.12 2002/07/10 17:57:23 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.13 2002/07/12 19:44:35 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.12 2002/07/10 17:57:23 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.13 2002/07/12 19:44:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -56,6 +56,8 @@ public abstract class FacesTag extends javax.faces.webapp.FacesTag
 //
 
 // Attribute Instance Variables
+
+    protected UIComponent componentForTag = null;
 
 // Relationship Instance Variables
 
@@ -113,6 +115,11 @@ public FacesTag()
 
 public abstract String getLocalRendererType();
 
+public UIComponent getComponent() 
+{
+    return componentForTag;
+}
+
 //
 // Methods from Superclass
 // 
@@ -127,6 +134,12 @@ public final String getRendererType()
     }
     
     return getLocalRendererType();
+}
+
+protected UIComponent findComponent() throws JspException
+{
+    componentForTag = super.findComponent();
+    return componentForTag;
 }
 	
 public abstract UIComponent createComponent();

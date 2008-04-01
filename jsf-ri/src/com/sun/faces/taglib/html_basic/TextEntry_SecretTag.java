@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.24 2002/07/10 17:57:26 jvisvanathan Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.25 2002/07/12 19:44:38 eburns Exp $
  */
 
 /*
@@ -31,14 +31,14 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.24 2002/07/10 17:57:26 jvisvanathan Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.25 2002/07/12 19:44:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TextEntry_SecretTag extends FacesTag
+public class TextEntry_SecretTag extends TextEntry_InputTag
 {
 //
 // Protected Constants
@@ -78,9 +78,7 @@ public TextEntry_SecretTag()
 //
 
     public String getLocalRendererType() { return "SecretRenderer"; }
-    public UIComponent createComponent() {
-        return (new UITextEntry());
-    }
+
 //
 // Methods from TagSupport
 // 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.27 2002/07/10 17:57:26 jvisvanathan Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.28 2002/07/12 19:44:38 eburns Exp $
  */
 
 /*
@@ -31,14 +31,14 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.27 2002/07/10 17:57:26 jvisvanathan Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.28 2002/07/12 19:44:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TextEntry_TextAreaTag extends FacesTag
+public class TextEntry_TextAreaTag extends TextEntry_InputTag
 {
 //
 // Protected Constants
@@ -53,6 +53,11 @@ public class TextEntry_TextAreaTag extends FacesTag
 //
 
 // Attribute Instance Variables
+
+    protected String rows = null;
+    protected String cols = null;
+    protected String wrap = null;
+
 
 // Relationship Instance Variables
 
@@ -73,6 +78,30 @@ public TextEntry_TextAreaTag()
 // Accessors
 //
 
+    public void setRows(String newRows) {
+	rows = newRows;
+    }
+
+    public String getRows() {
+	return rows;
+    }
+
+    public void setCols(String newCols) {
+	cols = newCols;
+    }
+
+    public String getCols() {
+	return cols;
+    }
+
+    public void setWrap(String newWrap) {
+	wrap = newWrap;
+    }
+
+    public String getWrap() {
+	return wrap;
+    }
+
 //
 // General Methods
 //
@@ -80,6 +109,21 @@ public TextEntry_TextAreaTag()
     public String getLocalRendererType() { return "TextAreaRenderer"; }
     public UIComponent createComponent() {
         return (new UITextEntry());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UITextEntry textEntry = (UITextEntry) component;
+	
+	if (null == textEntry.getAttribute("rows")) {
+	    textEntry.setAttribute("rows", getRows());
+	}
+	if (null == textEntry.getAttribute("cols")) {
+	    textEntry.setAttribute("cols", getCols());
+	}
+	if (null == textEntry.getAttribute("wrap")) {
+	    textEntry.setAttribute("wrap", getWrap());
+	}
     }
 //
 // Methods from TagSupport

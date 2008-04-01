@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.32 2002/07/10 17:57:25 jvisvanathan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.33 2002/07/12 19:44:38 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.32 2002/07/10 17:57:25 jvisvanathan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.33 2002/07/12 19:44:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,10 @@ public class TextEntry_InputTag extends FacesTag
 
 // Attribute Instance Variables
 
+    protected String size = null;
+    protected String maxlength = null;
+    protected String text = null;
+
 // Relationship Instance Variables
 
 //
@@ -73,6 +77,30 @@ public TextEntry_InputTag()
 // Accessors
 //
 
+    public void setSize(String newSize) {
+	size = newSize;
+    }
+
+    public String getSize() {
+	return size;
+    }
+
+    public void setMaxlength(String newMaxlength) {
+	maxlength = newMaxlength;
+    }
+
+    public String getMaxlength() {
+	return maxlength;
+    }
+
+    public void setText(String newText) {
+	text = newText;
+    }
+
+    public String getText() {
+	return text;
+    }
+
 //
 // General Methods
 //
@@ -82,6 +110,22 @@ public TextEntry_InputTag()
     public UIComponent createComponent() {
         return (new UITextEntry());
     }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UITextEntry textEntry = (UITextEntry) component;
+	
+	if (null == textEntry.getText()) {
+	    textEntry.setText(getText());
+	}
+	if (null == textEntry.getAttribute("size")) {
+	    textEntry.setAttribute("size", getSize());
+	}
+	if (null == textEntry.getAttribute("maxlength")) {
+	    textEntry.setAttribute("maxlength", getMaxlength());
+	}
+    }
+
     
 //
 // Methods from TagSupport

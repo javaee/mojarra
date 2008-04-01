@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.25 2002/07/10 17:57:24 jvisvanathan Exp $
+ * $Id: Command_ButtonTag.java,v 1.26 2002/07/12 19:44:36 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.25 2002/07/10 17:57:24 jvisvanathan Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.26 2002/07/12 19:44:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,10 @@ public class Command_ButtonTag extends FacesTag
 
 // Attribute Instance Variables
 
+    protected String label = null;
+    protected String commandname = null;
+    protected String image = null;
+
 // Relationship Instance Variables
 
 //
@@ -73,6 +77,27 @@ public Command_ButtonTag()
 // Accessors
 //
 
+    public String getCommandname() { return commandname; }
+    public void setCommandname(String newCommandname) { 
+	ParameterCheck.nonNull(newCommandname);
+	commandname = newCommandname;
+    }
+
+    public String getLabel() { return label; }
+    public void setLabel(String newLabel) { 
+	label = newLabel;
+    }
+
+    public void setImage(String newImage) {
+	image = newImage;
+    }
+
+    public String getImage() {
+	return image;
+    }
+
+
+
 //
 // General Methods
 //
@@ -82,6 +107,22 @@ public Command_ButtonTag()
     public UIComponent createComponent() {
         return(new UICommand());
     }    
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UICommand button = (UICommand) component;
+
+	if (null == button.getCommandName()) {
+	    button.setCommandName(getCommandname());
+	}
+	if (null == button.getAttribute("label")) {
+	    button.setAttribute("label", getLabel());
+	}
+	if (null == button.getAttribute("image")) {
+	    button.setAttribute("image", getImage());
+	}
+    }
+
 
 //
 // Methods from TagSupport

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.7 2002/06/26 19:20:17 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.8 2002/07/12 19:44:42 eburns Exp $
  */
 
 /*
@@ -23,10 +23,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.UITextEntry;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
+
+import com.sun.faces.tree.SimpleTreeImpl;
 
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
@@ -49,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.7 2002/06/26 19:20:17 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.8 2002/07/12 19:44:42 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -62,15 +64,14 @@ public class TestRenderResponsePhase extends JspFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/components.xul";
-public static final String TEST_URI = "/components.jsp";
+public static final String TEST_URI = "/TestRenderResponsePhase.jsp";
 
 public String getExpectedOutputFilename() {
     return "RenderResponse_correct";
 }
 
 public static final String ignore[] = {
-    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=0893D474A94104F7215275E1A385C4D8\">"
+    "<FORM METHOD=\"post\" ACTION=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2FTestRenderResponsePhase.jsp;jsessionid=80E0636212B5916924E002B6076365E7\">"
 };
     
 public String [] getLinesToIgnore() {
@@ -115,26 +116,33 @@ public boolean sendResponseToFile()
 //
 
 
-public void beginRender(WebRequest theRequest)
+public void beginHtmlBasicRenderKit(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
    // theRequest.addParameter("tree", TEST_URI_XUL);
 }
 
-public void testRender()
+public void testHtmlBasicRenderKit()
 {
+    System.setProperty(RIConstants.DISABLE_RENDERERS, "");
+
     boolean result = false;
     int rc = Phase.GOTO_NEXT;
-    UIComponent root = null;
+    UIComponentBase root = null;
     String value = null;
+    SimpleTreeImpl tree = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
-	createTree = new CreateRequestTreePhase(lifecycle, 
-					Lifecycle.CREATE_REQUEST_TREE_PHASE),
 	renderResponse = new JspRenderResponsePhase(lifecycle, 
 				       Lifecycle.RENDER_RESPONSE_PHASE);
-    rc = createTree.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    root = new UIComponentBase() {
+	    public String getComponentType() { return "Root"; }
+	};
+    root.setComponentId("root");
+    
+    tree = new SimpleTreeImpl(config.getServletContext(), root, 
+			      TEST_URI);
+    getFacesContext().setRequestTree(tree);
 
     rc = renderResponse.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
