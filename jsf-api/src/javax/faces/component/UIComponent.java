@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.30 2002/06/07 23:31:11 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.31 2002/06/13 17:48:13 craigmcc Exp $
  */
 
 /*
@@ -328,36 +328,6 @@ public interface UIComponent {
     public void removeChild(UIComponent component);
 
 
-    // --------------------------------------------------------- Events Methods
-
-
-    /**
-     * <p>Add a {@link FacesEvent} representing an event to be processed
-     * by this component during the <em>Handle Request Events</em> phase
-     * of the request processing lifecycle.</p>
-     *
-     * @param event The event to be added
-     *
-     * @exception NullPointerException if <code>event</code>
-     *  is null
-     */
-    public void addEvent(FacesEvent event);
-
-
-    /**
-     * <p>Clear any {@link FacesEvent}s that have been queued for
-     * processing by this component.</p>
-     */
-    public void clearEvents();
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link FacesEvent}s
-     * for the events queued to this <code>UIComponent</code>.</p>
-     */
-    public Iterator getEvents();
-
-
     // ----------------------------------------------------- Validators Methods
 
 
@@ -416,7 +386,9 @@ public interface UIComponent {
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
-     * by (<strong>FIXME</strong> - specify mechanism).</p>
+     * (by this component or some other component),  by calling
+     * <code>addRequestEvent()</code> on the associated {@link FacesContext}.
+     * </p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -489,7 +461,7 @@ public interface UIComponent {
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
      */
-    public boolean event(FacesContext context, FacesEvent event);
+    public boolean processEvent(FacesContext context, FacesEvent event);
 
 
     /**

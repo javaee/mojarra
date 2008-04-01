@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.19 2002/06/12 21:51:26 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.20 2002/06/13 17:48:14 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,8 @@ package javax.faces.context;
 
 import java.util.Iterator;
 import java.util.Locale;
-import javax.faces.FacesException;     // FIXME - subpackage?
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
@@ -81,6 +82,13 @@ public abstract class FacesContext {
 
 
     /**
+     * <p>Return the number of {@link FacesEvent}s that have been queued
+     * tot he application, or zero if no such events have been queued.</p>
+     */
+    public abstract int getApplicationEventsCount();
+
+
+    /**
      * <p>Return the <code>HttpSession</code> instance for the session
      * associated with the current request (if any); otherwise, return
      * <code>null</code>.</p>
@@ -137,6 +145,30 @@ public abstract class FacesContext {
      * @param phaseId The new phase identifier
      */
     public abstract void setPhaseId(int phaseId);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link FacesEvent}s for
+     * events that have been queued for the specified {@link UIComponent},
+     * which must be a component in the request component tree.
+     * If no such events have been queued, an empty <code>Iterator</code>
+     * is returned.</p>
+     *
+     * @param component The {@link UIComponent} for which queued events
+     *  are requested
+     *
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>null</code>
+     */
+    public abstract Iterator getRequestEvents(UIComponent component);
+
+
+    /**
+     * <p>Return the total number of request events that have been queued
+     * for any {@link UIComponent} in the request component tree, or zero
+     * if no request events have been queued.</p>
+     */
+    public abstract int getRequestEventsCount();
 
 
     /**
@@ -249,8 +281,27 @@ public abstract class FacesContext {
      * phase of the request processing lifecycle.</p>
      *
      * @param event The event to be appended
+     *
+     * @exception NullPointerException if <code>event</code>
+     *  is <code>null</code>
      */
     public abstract void addApplicationEvent(FacesEvent event);
+
+
+    /**
+     * <p>Append a {@link FacesEvent} to the set of events that should be
+     * processed by the specified {@link UIComponent} during the <em>Handle
+     * Request Events</em> phase of the request processing lifecycle.</p>
+     *
+     * @param component Component that should handle this event, which
+     *  must be a component in the request component tree
+     * @param event The event to be appended
+     *
+     * @exception NullPointerException if <code>component</code> or
+     *  <code>event</code> is <code>null</code>
+     */
+    public abstract void addRequestEvent(UIComponent component,
+                                         FacesEvent event);
 
 
     /**

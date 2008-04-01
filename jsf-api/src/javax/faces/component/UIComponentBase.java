@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.1 2002/06/07 23:31:11 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.2 2002/06/13 17:48:14 craigmcc Exp $
  */
 
 /*
@@ -750,65 +750,6 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // --------------------------------------------------------- Events Methods
-
-
-    /**
-     * <p>The set of {@link FacesEvent}s for the events queued to this
-     * <code>UIComponent</code>.</p>
-     */
-    private ArrayList events = null;
-
-
-    /**
-     * <p>Add a {@link FacesEvent} representing an event to be processed
-     * by this component during the <em>Handle Request Events</em> phase
-     * of the request processing lifecycle.</p>
-     *
-     * @param event The event to be added
-     *
-     * @exception NullPointerException if <code>event</code>
-     *  is null
-     */
-    public void addEvent(FacesEvent event) {
-
-        if (event == null) {
-            throw new NullPointerException();
-        }
-        if (events == null) {
-            events = new ArrayList();
-        }
-        events.add(event);
-
-    }
-
-
-    /**
-     * <p>Clear any {@link FacesEvent}s that have been queued for
-     * processing by this component.</p>
-     */
-    public void clearEvents() {
-
-        events = null;
-
-    }
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link FacesEvent}s
-     * for the events queued to this <code>UIComponent</code>.</p>
-     */
-    public Iterator getEvents() {
-
-        if (events != null) {
-            return (events.iterator());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-    }
-
-
     // ----------------------------------------------------- Validators Methods
 
 
@@ -991,7 +932,7 @@ public abstract class UIComponentBase implements UIComponent {
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
      */
-    public boolean event(FacesContext context, FacesEvent event) {
+    public boolean processEvent(FacesContext context, FacesEvent event) {
 
         return (false); // Default implementation does nothing
 

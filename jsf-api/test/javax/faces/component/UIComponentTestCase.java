@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.4 2002/06/07 20:57:51 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.5 2002/06/13 17:48:14 craigmcc Exp $
  */
 
 /*
@@ -388,22 +388,6 @@ public class UIComponentTestCase extends TestCase {
 
 
     /**
-     * [3.1.8] Event Queue.
-     */
-    public void testEventQueue() {
-
-        checkEventCount(component, 0);
-        component.addEvent(new FacesEvent(component));
-        checkEventCount(component, 1);
-        component.addEvent(new FacesEvent(component));
-        checkEventCount(component, 2);
-        component.clearEvents();
-        checkEventCount(component, 0);
-
-    }
-
-
-    /**
      * [3.1] Invalid setter arguments.
      */
     public void testInvalidSetters() {
@@ -449,14 +433,6 @@ public class UIComponentTestCase extends TestCase {
             component.setAttribute("rendersChildren", Boolean.FALSE); // Read-only prop
             fail("setAttribute did not throw IAE");
         } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-
-        // [3.1.8] addEvent()
-        try {
-            component.addEvent(null);
-            fail("addEvent did not throw NPE");
-        } catch (NullPointerException e) {
             ; // Expected result
         }
 
@@ -528,9 +504,6 @@ public class UIComponentTestCase extends TestCase {
             }
         }
 
-        // [3.1.8] Request Event Processing
-        checkEventCount(component, 0);
-
         // [3.1.9] Validation Processing
         checkValidatorCount(component, 0);
 
@@ -577,26 +550,6 @@ public class UIComponentTestCase extends TestCase {
             results++;
         }
         assertEquals("child count", count, results);
-
-    }
-
-
-    /**
-     * Validate that the specified number of events are present.
-     *
-     * @param component Component being tested
-     * @param count Expected number of events
-     */
-    protected void checkEventCount(UIComponent component, int count) {
-
-        int results = 0;
-        Iterator events = component.getEvents();
-        assertNotNull("events", events);
-        while (events.hasNext()) {
-            FacesEvent event = (FacesEvent) events.next();
-            results++;
-        }
-        assertEquals("event count", count, results);
 
     }
 
