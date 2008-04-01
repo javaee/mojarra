@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.4 2002/08/14 19:11:25 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.5 2002/08/23 18:42:38 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.4 2002/08/14 19:11:25 eburns Exp $
+ * @version $Id: SelectItemTag.java,v 1.5 2002/08/23 18:42:38 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -56,8 +56,8 @@ public class SelectItemTag extends FacesTag
 // Attribute Instance Variables
 
     public String selected = null;
-    public String value = null;
-    public String label = null;
+    public String itemValue = null;
+    public String itemLabel = null;
     public String description = null;
 
 
@@ -88,24 +88,24 @@ public SelectItemTag()
         this.selected = selected;
     }
 
-    public String getValue() {
-        return value;
+    public String getItemValue() {
+        return itemValue;
     }
 
     public String getId() {
-        return getValue();
+        return getItemValue();
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setItemValue(String value) {
+        this.itemValue = value;
     }
 
-    public String getLabel() {
-        return label;
+    public String getItemLabel() {
+        return itemLabel;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setItemLabel(String label) {
+        this.itemLabel = label;
     }
 
     public String getDescription() {
@@ -135,10 +135,10 @@ public SelectItemTag()
 	UISelectOne selectOne = (UISelectOne) selectItem.getParent();
 	
 	if (null == selectItem.getItemValue()) {
-	    selectItem.setItemValue(getValue());
+	    selectItem.setItemValue(getItemValue());
 	}
 	if (null == selectItem.getItemLabel()) {
-	    selectItem.setItemLabel(getLabel());
+	    selectItem.setItemLabel(getItemLabel());
 	}
 	if (null == selectItem.getItemDescription()) {
 	    selectItem.setItemDescription(getDescription());

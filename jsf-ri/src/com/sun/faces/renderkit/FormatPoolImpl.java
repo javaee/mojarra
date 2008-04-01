@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.7 2002/08/17 21:57:10 eburns Exp $
+ * $Id: FormatPoolImpl.java,v 1.8 2002/08/23 18:42:33 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.7 2002/08/17 21:57:10 eburns Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.8 2002/08/23 18:42:33 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -381,7 +381,7 @@ public FormatPoolImpl()
         result = numberFormat.parse(number, ps);
         // PENDING (visvan) localize
         if ( ps.getIndex() != number.length()) {
-            throw new ParseException("Unparsable number", ps.getIndex());
+            throw new ParseException("Characters not allowed", ps.getIndex());
         }    
         return result;
     }

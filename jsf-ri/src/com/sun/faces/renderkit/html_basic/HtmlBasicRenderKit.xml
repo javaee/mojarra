@@ -357,13 +357,6 @@
         <renderer>
             <type>CheckboxRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
-             <attribute>
-                <name>label</name>
-                <display-name>Label</display-name>
-                <description>Text displayed next to Checkbox.
-                </description>
-                <type>java.lang.String</type>
-            </attribute>
             <attribute>
                 <name>class</name>
                 <display-name>Class Name</display-name>

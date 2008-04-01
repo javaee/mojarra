@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=510134F0A0F2C1A437B0149073A539D0">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=31C6005799C5E200C9A60815F9075512">
   <TABLE BORDER="1">
 
       <TR>
@@ -67,8 +67,10 @@
 
 	<TD>
 
-	      <input type="checkbox"  name="/basicForm/validUser" checked >
+            
 
+                  
+                  <input type="checkbox"  name="/basicForm/validUser"><label for="validUser">Valid user ? </label>
 	</TD>
 
       </TR>
@@ -77,55 +79,39 @@
 
 	<TD>
 
-	      
+	     
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
-	      <select name="/basicForm/appleQuantity">	<option value="0">0</option>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4" selected="selected">4</option>
-	<option value="5">5</option>
-	<option value="6">6</option>
-	<option value="7">7</option>
-	<option value="8">8</option>
-	<option value="9">9</option>
-</select>
+                
 
-              Option List
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      
-
-		
-		
-		
-
-              <table border="0">
-	<tr>
-<td><input type="radio" name="/basicForm/shipType" value="nextDay"> Next Day</td>
-<td><input type="radio" checked name="/basicForm/shipType" value="nextWeek"> Next Week</td>
-<td><input type="radio" name="/basicForm/shipType" value="nextMonth"> Next Month</td>
-	</tr>
+              <table>
+<label for="appleQuantity"><tr><td>
+Option list from JSP </td></tr>
+</label><tr><td>
+<select name="/basicForm/appleQuantity" accesskey="N" size="6" tabindex="20" title="Select Quantity" >	<option value="0" disabled >0</option>
+	<option value="1" title="One" >1</option>
+	<option value="2" title="Two" >2</option>
+	<option value="3" title="Three" >3</option>
+	<option value="4" selected="selected" title="Four" >4</option>
+	<option value="5" title="Five" >5</option>
+	<option value="6" title="Six" >6</option>
+	<option value="7" title="Seven" >7</option>
+	<option value="8" title="Eight" >8</option>
+	<option value="9" title="nine" >9</option>
+</select></td></tr>
 </table>
 
+
 	</TD>
 
       </TR>
@@ -133,13 +119,44 @@
       <TR>
 
 	<TD>
-		
 
-  		
-		
-		
+	    
 
-                <table border="1">
+                
+                
+                
+
+                
+
+              <table>
+<label for="shipType"><tr><td>
+Radio laid out horizontally </td></tr>
+</label><tr><td>
+<table border="0">
+	<tr>
+<td><input type="radio" name="/basicForm/shipType" value="nextDay" tabindex="30" title="Next day shipment" > Next Day</td>
+<td><input type="radio" checked name="/basicForm/shipType" value="nextWeek" tabindex="40" title="Next week shipment" > Next Week</td>
+<td><input type="radio" name="/basicForm/shipType" value="nextMonth" tabindex="50" title="Next month shipment" > Next Month</td>
+	</tr>
+</table></td></tr>
+</table>
+
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+            
+
+                
+                
+                
+
+                
+           <label for="verticalRadio">Radio laid out vertically </label><table border="1">
 	<tr>
 <td><input type="radio" checked name="/basicForm/verticalRadio" value="nextDay"> Next Day</td>
 	<tr>
@@ -188,9 +205,10 @@
 
 
       <tr>
-         <td> NUMBER-INPUT-PATTERN </td>
-             <td>
-                   <input type="text" name="/basicForm/testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" >
+          <td>
+                   
+                      
+                   <label for="testPattern">NUMBER-INPUT-PATTERN </label><input type="text" name="/basicForm/testPattern" id="testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" >
               </td>
 
       </tr>

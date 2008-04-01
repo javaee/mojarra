@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.28 2002/08/22 00:28:48 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.29 2002/08/23 18:42:35 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.28 2002/08/22 00:28:48 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.29 2002/08/23 18:42:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,7 +133,6 @@ public class RadioRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException 
     {
         String currentValue = null;
-        ResponseWriter writer = null;
         UISelectOne uiSelectOne = null;
 	String alignStr = null;
 	String borderStr = null;
@@ -168,9 +167,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
             return;
         }
         
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-	
+        StringBuffer buffer = new StringBuffer();
 	if (null != (alignStr = (String) uiSelectOne.getAttribute("layout"))) {
 	    alignVertical = alignStr.equalsIgnoreCase("vertical") ? 
 		true : false;
@@ -184,51 +181,56 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	    }
 	}
 	
-	writer.write("<table border=\"" + border + "\">\n");
+	buffer.append("<table border=\"" + border + "\">\n");
 	if (!alignVertical) {
-	    writer.write("\t<tr>\n");
+	    buffer.append("\t<tr>\n");
 	}
         // PENDING (visvan) handle nested labels
 	while (items.hasNext()) {
 	    curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
 	    if (alignVertical) {
-		writer.write("\t<tr>\n");
+		buffer.append("\t<tr>\n");
 	    }
-            writer.write("<td><input type=\"radio\"");
+            buffer.append("<td><input type=\"radio\"");
             if (null != curItem.getValue() &&
 		curItem.getValue().equals(currentValue)){
-                writer.write(" checked");
+                buffer.append(" checked");
             }
-            writer.write(" name=\"");
-            writer.write(uiSelectOne.getCompoundId());
-            writer.write("\" value=\"");
-            writer.write((String) curItem.getValue());
-            writer.write("\"");
+            buffer.append(" name=\"");
+            buffer.append(uiSelectOne.getCompoundId());
+            buffer.append("\" value=\"");
+            buffer.append((String) curItem.getValue());
+            buffer.append("\"");
             // render HTML 4.0 attributes if any for radi tag.
-            writer.write(Util.renderPassthruAttributes(context, 
+            buffer.append(Util.renderPassthruAttributes(context, 
                     curItemWrapper.getUISelectItem()));
-	    writer.write(Util.renderBooleanPassthruAttributes(context, 
+	    buffer.append(Util.renderBooleanPassthruAttributes(context, 
                     curItemWrapper.getUISelectItem()));
-            writer.write(">");
+            buffer.append(">");
             
             String itemLabel = curItem.getLabel();
             if (itemLabel != null) {
-                writer.write(" ");
-                writer.write(itemLabel);
+                buffer.append(" ");
+                buffer.append(itemLabel);
             }
-            writer.write("</td>\n");
+            buffer.append("</td>\n");
 	    if (alignVertical) {
-		writer.write("\t<tr>\n");
+		buffer.append("\t<tr>\n");
 	    }
         }
 
 	if (!alignVertical) {
-	    writer.write("\t</tr>\n");
+	    buffer.append("\t</tr>\n");
 	}
-	writer.write("</table>");
-
-
+	buffer.append("</table>");
+        
+        currentValue = this.renderWithLabel(context,component,buffer.toString());
+        
+        ResponseWriter writer = null;
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+	writer.write(currentValue);
     }
 
 } // end of class RadioRenderer

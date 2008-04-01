@@ -299,7 +299,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
      <attribute>
-        <name>label</name>
+        <name>labelAlign</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -323,6 +323,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    
     <!-- HTML 4.0 Attributes  -->
     <attribute>
       <name>value</name>
@@ -351,6 +352,11 @@
     </attribute>
     <attribute>
       <name>lang</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+      <attribute>
+      <name>dir</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -475,6 +481,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+      <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
  </tag>
   
   <tag>
@@ -492,12 +503,12 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>value</name>
+      <name>itemValue</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>label</name>
+        <name>itemLabel</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -744,6 +755,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+      <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
     <attribute>
       <name>disabled</name>
       <required>false</required>
@@ -860,38 +876,6 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
-
-  <!--
-  <tag>
-    <name>selectone_option</name>
-    <tagclass>com.sun.faces.taglib.html_basic.SelectOne_OptionTag</tagclass>
-    <bodycontent>JSP</bodycontent>
-      <attribute>
-        <name>id</name>
-        <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-      </attribute>
-    <attribute>
-        <name>selected</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>value</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>label</name>
-        <required>true</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>description</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-  </tag> -->
 
   <tag>
       <name>graphic_image</name>
@@ -2257,6 +2241,11 @@
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
       <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+      <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>

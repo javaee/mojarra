@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.31 2002/08/20 20:43:11 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.32 2002/08/23 18:42:34 jvisvanathan Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.31 2002/08/20 20:43:11 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.32 2002/08/23 18:42:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -137,8 +137,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
-        ResponseWriter writer = null;
-
+       
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
@@ -147,40 +146,27 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         if (value == null) {
             value = Boolean.FALSE;
         }
-        
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-        writer.write("<input type=\"checkbox\" ");
-        writer.write(" name=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\"");
+      
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<input type=\"checkbox\" ");
+        buffer.append(" name=\"");
+        buffer.append(component.getCompoundId());
+        buffer.append("\"");
 
         UISelectBoolean boolComp = (UISelectBoolean)component;
         if (value.booleanValue()) {
-            writer.write(" checked ");
+            buffer.append(" checked ");
         }
-        writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
-        writer.write(">");
-        String label = null;
-
-        // PENDING (visvan) remove label attribute once we handle nested
-        // label tags.
-	try {
-	    label = getKeyAndLookupInBundle(context, component, "key");
-	}
-	catch (java.util.MissingResourceException e) {
-	    // Do nothing since the absence of a resource is not an
-	    // error.
-	}
-	if (null == label) {
-	    label = (String)component.getAttribute("label");
-	}
-
-        if (label != null) {
-            writer.write(" ");
-            writer.write(label);
-        }  
+        buffer.append(Util.renderPassthruAttributes(context, component));
+	buffer.append(Util.renderBooleanPassthruAttributes(context, component));
+        buffer.append(">");
+        
+        String currentValue = this.renderWithLabel(context,component,buffer.toString());
+        
+        ResponseWriter writer = null;
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+	writer.write(currentValue);
     }
 
 } // end of class CheckboxRenderer

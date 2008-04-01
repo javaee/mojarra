@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.30 2002/08/22 00:00:21 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.31 2002/08/23 18:42:36 jvisvanathan Exp $
  */
 
 /*
@@ -19,6 +19,9 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.component.UISelectOne;
+import javax.faces.component.UISelectMany;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -39,7 +42,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.30 2002/08/22 00:00:21 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.31 2002/08/23 18:42:36 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -186,12 +189,15 @@ public class TextRenderer extends HtmlBasicRenderer {
                 }
             }
 
-	    // find out if we're nested inside a UIInput
+	    // find out if we're nested inside a UIInput, UISelectOne, UISelectMany
+            // UISelectBoolean.
             // if we are, set the RENDERED_CONTENT attribute which will 
             // be written out (assembled) in the super class (HtmlBasicRenderer)
             // if we are not nested, then simply write out the info...
-        
-	    if (component.getParent().getComponentType() == UIInput.TYPE) {
+            if (component.getParent().getComponentType() == UIInput.TYPE ||
+                component.getParent().getComponentType() == UISelectBoolean.TYPE
+                || component.getParent().getComponentType() == UISelectOne.TYPE
+                || component.getParent().getComponentType() == UISelectMany.TYPE){
 	        // if so, save our content in the
 	        // RIConstants.RENDERED_CONTENT attribute
 	        component.setAttribute(RIConstants.RENDERED_CONTENT, 

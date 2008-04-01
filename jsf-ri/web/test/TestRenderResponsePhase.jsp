@@ -71,8 +71,36 @@
 
 	<TD>
 
-	      <faces:selectboolean_checkbox id="validUser" 
-					    selected="true" />
+            <faces:selectboolean_checkbox id="validUser" labelAlign="LINE_END">
+
+                  <faces:output_text id="checkLabel" value="Valid user ?" />
+                  </faces:selectboolean_checkbox>
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	     <faces:selectone_optionlist id="appleQuantity" size="6"
+                     labelAlign="PAGE_START" title="Select Quantity"
+                     accesskey="N" tabindex="20" >
+
+                <faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
+                <faces:selectitem  itemValue="1" itemLabel="1" title="One"/>
+                <faces:selectitem  itemValue="2" itemLabel="2" title="Two" />
+                <faces:selectitem  itemValue="3" itemLabel="3" title="Three" />
+                <faces:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <faces:selectitem  itemValue="5" itemLabel="5" title="Five" />
+                <faces:selectitem  itemValue="6" itemLabel="6" title="Six" />
+                <faces:selectitem  itemValue="7" itemLabel="7" title="Seven" />
+                <faces:selectitem  itemValue="8" itemLabel="8" title="Eight" />
+                <faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
+
+                <faces:output_text id="quantityLabel" value="Option list from JSP" />
+
+              </faces:selectone_optionlist>
 
 	</TD>
 
@@ -82,37 +110,17 @@
 
 	<TD>
 
-	      <faces:selectone_optionlist id="appleQuantity">
+	    <faces:selectone_radiogroup id="shipType" layout="horizontal"
+                     labelAlign="PAGE_START">
 
-		<faces:selectitem  value="0" label="0"/>
-		<faces:selectitem  value="1" label="1"/>
-		<faces:selectitem  value="2" label="2"/>
-		<faces:selectitem  value="3" label="3"/>
-		<faces:selectitem  value="4" label="4" selected="true"/>
-		<faces:selectitem  value="5" label="5"/>
-		<faces:selectitem  value="6" label="6"/>
-		<faces:selectitem  value="7" label="7"/>
-		<faces:selectitem  value="8" label="8"/>
-		<faces:selectitem  value="9" label="9"/>
+                <faces:selectitem itemValue="nextDay" itemLabel="Next Day"
+                      tabindex="30" title="Next day shipment"/>
+                <faces:selectitem itemValue="nextWeek" itemLabel="Next Week" title="Next week shipment"
+                                  tabindex="40" selected="true" />
+                <faces:selectitem itemValue="nextMonth" itemLabel="Next Month"
+                        tabindex="50" title="Next month shipment"/>
 
-	      </faces:selectone_optionlist>
-
-              Option List
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <faces:selectone_radiogroup id="shipType" layout="horizontal">
-
-		<faces:selectitem value="nextDay" label="Next Day" />
-		<faces:selectitem value="nextWeek" label="Next Week" 
-                                  selected="true" />
-		<faces:selectitem value="nextMonth" label="Next Month" />
+                <faces:output_text id="shipmentLabel" value="Radio laid out horizontally" />
 
               </faces:selectone_radiogroup>
 
@@ -123,15 +131,16 @@
       <TR>
 
 	<TD>
-		<faces:selectone_radiogroup id="verticalRadio" 
+            <faces:selectone_radiogroup id="verticalRadio" labelAlign="LINE_START"
                                             layout="vertical" border="1" >
 
-  		<faces:selectitem value="nextDay" label="Next Day" 
+                <faces:selectitem itemValue="nextDay" itemLabel="Next Day"
                                   selected="true" />
-		<faces:selectitem value="nextWeek" label="Next Week"  />
-		<faces:selectitem value="nextMonth" label="Next Month" />
+                <faces:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
+                <faces:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
-                </faces:selectone_radiogroup>
+                <faces:output_text id="verticalLabel" value="Radio laid out vertically" />
+           </faces:selectone_radiogroup>
 
 	</TD>
 
@@ -175,10 +184,11 @@
 
 
       <tr>
-         <td> <faces:output_text id="patternLabel" value="NUMBER-INPUT-PATTERN" /> </td>
-             <td>
-                   <faces:input_number id="testPattern" formatPattern="####"
-                        value="9999.98765" size="3" maxlength="20" tabindex="2" accesskey="D"/>
+          <td>
+                   <faces:input_number labelAlign="LINE_START" id="testPattern" formatPattern="####"
+                        value="9999.98765" size="3" maxlength="20" tabindex="2" accesskey="D">
+                      <faces:output_text id="patternLabel" value="NUMBER-INPUT-PATTERN" />
+                   </faces:input_number>
               </td>
 
       </tr>

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.7 2002/08/20 20:00:52 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.8 2002/08/23 18:42:35 jvisvanathan Exp $
  */
 
 /*
@@ -20,6 +20,10 @@ import java.util.NoSuchElementException;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
+import javax.faces.component.UISelectItems;
+import javax.faces.component.UIOutput;
+
 import javax.faces.render.Renderer;
 import javax.faces.context.Message;
 import javax.faces.context.MessageResources;
@@ -250,16 +254,22 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public String renderWithLabel(FacesContext context, UIComponent component,
 				String renderedContent) {
 	StringBuffer buffer = new StringBuffer();
-
-	// If we have child components, we must deal with the labelAlign
+        // If we have child components, we must deal with the labelAlign
 	// attribute.
 	if (0 < component.getChildCount()) {
 	    Iterator children = component.getChildren();
+            // make sure there is atleast one child of type UIOutput. Otherwise
+            // label gets rendered empty because type checking happens
+            // only after the label is rendered. 
+            // PENDING (visvan) should we process children only if type is UIOutput ?
+            boolean hasLabel = hasNestedLabel(component);
+            if ( !hasLabel ) {
+                return renderedContent;
+            } 
 	    UIComponent curChild = null;
 	    String childContent = null, labelAlign = null;
 	    String forValue = component.getComponentId();
-
-	    if (null == (labelAlign = (String) 
+            if (null == (labelAlign = (String) 
 			 component.getAttribute("labelAlign"))) {
 		labelAlign = RIConstants.LINE_START;
 	    }
@@ -271,10 +281,18 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			// Put the label(s) to the left of the component
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
+                            // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                          
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            }    
 			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
-			    Assert.assert_it(null != childContent);
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
+                            Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
 			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
@@ -287,9 +305,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append(renderedContent);
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -302,9 +327,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("<table>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -327,9 +359,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("</td></tr>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -347,10 +386,17 @@ public abstract class HtmlBasicRenderer extends Renderer {
 		    if (labelAlign.equals(RIConstants.LINE_END)) {
 			// Put the label(s) to the left of the component
 			buffer.append("<label for=\"" + forValue + "\">");
-			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+                        while (children.hasNext()) {
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -364,9 +410,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append(renderedContent);
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -379,9 +432,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("<table>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -404,9 +464,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("</td></tr>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -427,9 +494,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			// Put the label(s) to the left of the component
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -443,9 +517,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append(renderedContent);
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -458,9 +539,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("<table>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -483,9 +571,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("</td></tr>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -504,9 +599,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			// Put the label(s) to the left of the component
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -520,9 +622,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append(renderedContent);
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append(childContent + " ");
 			    // Make sure to clear the attribute, for better GC
@@ -535,9 +644,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("<table>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -560,9 +676,16 @@ public abstract class HtmlBasicRenderer extends Renderer {
 			buffer.append("</td></tr>\n");
 			buffer.append("<label for=\"" + forValue + "\">");
 			while (children.hasNext()) {
-			    childContent = (String) 
-				(curChild = (UIComponent)children.next()).
-				getAttribute(RIConstants.RENDERED_CONTENT);
+			    // do not process UISelectItem and UISelectItems
+                            // because the are processed when we get item list.
+                            curChild = (UIComponent)children.next();
+                            Assert.assert_it(null != curChild);
+                            if ( curChild instanceof UISelectItem || 
+                                    curChild instanceof UISelectItems) {
+                                continue;
+                            } 
+                            childContent = (String) 
+				curChild.getAttribute(RIConstants.RENDERED_CONTENT);
 			    Assert.assert_it(null != childContent);
 			    buffer.append("<tr><td>\n");
 			    buffer.append(childContent + " ");
@@ -585,5 +708,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	// At this point, buffer contains the text we should render
 	return buffer.toString();
     }
-
+    
+    protected boolean hasNestedLabel(UIComponent component) {
+        Iterator children = component.getChildren();
+        while ( children.hasNext()) {
+            UIComponent child = (UIComponent) children.next();
+            if ( child.getComponentType() == UIOutput.TYPE) {
+                return true;
+            }
+        }     
+        return false;
+    }    
 } // end of class HtmlBasicRenderer

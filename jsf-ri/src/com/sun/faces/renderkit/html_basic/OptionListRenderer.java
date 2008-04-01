@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.27 2002/08/22 00:28:48 jvisvanathan Exp $
+ * $Id: OptionListRenderer.java,v 1.28 2002/08/23 18:42:35 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.27 2002/08/22 00:28:48 jvisvanathan Exp $
+ * @version $Id: OptionListRenderer.java,v 1.28 2002/08/23 18:42:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,7 +128,6 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         String currentValue = null;
         UISelectOne selectOne = null;
         
-        ResponseWriter writer = null;
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -151,42 +150,46 @@ public class OptionListRenderer extends HtmlBasicRenderer {
             selectOne = (UISelectOne) component;
         }
        
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-
-        // PENDING (visvan) handle nested labels
-        writer.write("<select name=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\"");
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<select name=\"");
+        buffer.append(component.getCompoundId());
+        buffer.append("\"");
        
         // render HTML 4.0 attributes if any for select tag
-        writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
+        buffer.append(Util.renderPassthruAttributes(context, component));
+	buffer.append(Util.renderBooleanPassthruAttributes(context, component));
         
-        writer.write(">");
+        buffer.append(">");
         Iterator items = Util.getSelectItemWrappers(context, selectOne);
 	SelectItem curItem = null;
         SelectItemWrapper curItemWrapper = null;
         while (items.hasNext()) {
 	    curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
-            writer.write("\t<option value=\"");
-            writer.write((String) curItem.getValue());
-            writer.write("\"");
+            buffer.append("\t<option value=\"");
+            buffer.append((String) curItem.getValue());
+            buffer.append("\"");
             if (null != curItem.getValue() &&
 		curItem.getValue().equals(currentValue)) {
-                writer.write(" selected=\"selected\"");
+                buffer.append(" selected=\"selected\"");
             }
             // render HTML 4.0 attributes if any for option tag
-            writer.write(Util.renderPassthruAttributes(context, 
+            buffer.append(Util.renderPassthruAttributes(context, 
                     curItemWrapper.getUISelectItem()));
-	    writer.write(Util.renderBooleanPassthruAttributes(context, 
+	    buffer.append(Util.renderBooleanPassthruAttributes(context, 
                     curItemWrapper.getUISelectItem()));
-            writer.write(">");
-            writer.write(curItem.getLabel());
-            writer.write("</option>\n");
+            buffer.append(">");
+            buffer.append(curItem.getLabel());
+            buffer.append("</option>\n");
         }
-        writer.write("</select>");
+        buffer.append("</select>");
+        
+        currentValue = this.renderWithLabel(context,component,buffer.toString());
+        
+        ResponseWriter writer = null;
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+	writer.write(currentValue);
     }
 
 } // end of class OptionListRenderer

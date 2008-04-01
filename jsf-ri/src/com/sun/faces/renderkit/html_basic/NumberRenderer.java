@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.4 2002/08/20 20:43:12 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.5 2002/08/23 18:42:35 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.4 2002/08/20 20:43:12 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.5 2002/08/23 18:42:35 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -211,8 +211,9 @@ public class NumberRenderer extends HtmlBasicRenderer {
             throws IOException {
                 
         String currentValue = null;
-        ResponseWriter writer = null;
-	FormatPool formatPool = (FormatPool)
+        boolean isInput = UIInput.TYPE == component.getComponentType();
+       
+        FormatPool formatPool = (FormatPool)
 	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
 	Assert.assert_it(null != formatPool);
         
@@ -236,27 +237,36 @@ public class NumberRenderer extends HtmlBasicRenderer {
 	    currentValue = "";
 	}
         
+        if (isInput) {
+	    StringBuffer buffer = new StringBuffer();
+	    
+	    buffer.append("<input type=\"text\"");
+	    buffer.append(" name=\"");
+	    buffer.append(component.getCompoundId());
+	    buffer.append("\"");
+	    // deal with HTML 4.0 LABEL element
+	    buffer.append(" id=\"");
+	    buffer.append(component.getComponentId());
+	    buffer.append("\"");
+	    
+	    // render default text specified
+	    if ( currentValue != null ) {
+		buffer.append(" value=\"");
+		buffer.append(currentValue);
+		buffer.append("\"");
+	    }
+	    buffer.append(Util.renderPassthruAttributes(context, component));
+	    buffer.append(Util.renderBooleanPassthruAttributes(context, component));
+	    buffer.append(">");
+	    // overwrite currentValue
+	    currentValue = this.renderWithLabel(context, component, 
+						buffer.toString());
+	}
+
+        ResponseWriter writer = null;
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-        
-        if (component instanceof UIOutput ) {
-            writer.write(currentValue);
-            return;
-        }    
-        writer.write("<input type=\"text\"");
-        writer.write(" name=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\"");
-
-        // render default text specified
-        if ( currentValue != null ) {
-            writer.write(" value=\"");
-            writer.write(currentValue);
-            writer.write("\"");
-        }
-	writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
-        writer.write(">");                   
+	writer.write(currentValue);                 
     }
     
     // The testcase for this class is TestRenderers_2.java 
