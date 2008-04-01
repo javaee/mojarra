@@ -1,5 +1,5 @@
 /*
- * $Id: FacesException.java,v 1.5 2001/12/20 22:25:44 ofung Exp $
+ * $Id: FacesException.java,v 1.6 2002/01/18 21:56:21 edburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces;
 /**
  * The class which encapsulates general JavaServer Faces exceptions.
  */
-public class FacesException extends Exception {
+public class FacesException extends RuntimeException {
 
     protected String xcptMessage;
 
