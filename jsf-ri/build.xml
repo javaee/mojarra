@@ -338,9 +338,11 @@
     </copy>
 
     <!-- copy all the classes under basic package -->
+<!-- No classes for now
     <copy todir="${dist.home}/${basic.name}">
       <fileset dir="${build.home}/${basic.name}"/>
     </copy>
+-->
 
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
@@ -397,6 +399,7 @@
   <target name="compile.basic.sample"
           description="Compile java files in the sample app named app.name">
     <property name="basic.name"  value="basic"/>
+<!-- No classes for now 
     <mkdir dir="${build.home}/${basic.name}/WEB-INF/classes"/>
     <javac  srcdir="${basedir}/web/${basic.name}/WEB-INF/src"
            destdir="${build.home}/${basic.name}/WEB-INF/classes"
@@ -409,6 +412,7 @@
         <fileset dir="${basedir}/web/${basic.name}/WEB-INF/src"
                  includes="**/*.properties"/>
     </copy>
+-->
   </target>
 
   <target name="compile.cardemo.sample"
