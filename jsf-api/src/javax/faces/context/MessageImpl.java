@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.1 2002/06/08 02:57:55 craigmcc Exp $
+ * $Id: MessageImpl.java,v 1.2 2002/06/13 19:31:01 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -11,13 +11,16 @@
 package javax.faces.context;
 
 
+import java.io.Serializable;
+
+
 /**
  * <p><strong>MessageImpl</strong> is a concrete class that implements
  * {@link Message}, and is a convenient base class for other
  * {@link Message} implementations.</p>
  */
 
-public class MessageImpl extends Message {
+public class MessageImpl extends Message implements Serializable {
 
 
     // ----------------------------------------------------------- Constructors
