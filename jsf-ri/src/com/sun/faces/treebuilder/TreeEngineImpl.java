@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngineImpl.java,v 1.6 2002/04/25 22:42:21 eburns Exp $
+ * $Id: TreeEngineImpl.java,v 1.7 2002/04/25 23:27:30 eburns Exp $
  */
 
 /*
@@ -22,19 +22,11 @@ import javax.faces.UIComponent;
 import javax.faces.FacesContext;
 import javax.faces.TreeNavigator;
 import javax.faces.UIPage;
-import javax.faces.FacesFactory;
-import javax.faces.FacesException;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletContext;
-
-import java.util.Map;
 
 /**
  *
 
- * @version $Id: TreeEngineImpl.java,v 1.6 2002/04/25 22:42:21 eburns Exp $
+ * @version $Id: TreeEngineImpl.java,v 1.7 2002/04/25 23:27:30 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine
 
@@ -107,7 +99,7 @@ public String fixURI(String requestURI) {
     }
     return result;
 }
-
+    
 //
 // General Methods
 //
@@ -135,36 +127,6 @@ public TreeNavigator getTreeForURI(FacesContext fc, UIPage root,
 	}
     }
     return result;
-}
-
-public static class TreeEngineFactory extends Object implements FacesFactory
-{
-
-//
-// Methods from FacesFactory
-//
-
-public Object newInstance(String facesName, ServletRequest req, ServletResponse res) throws FacesException
-{
-    throw new FacesException("Can't create TreeEngine from request and response.");
-}
-
-public Object newInstance(String facesName, ServletContext ctx) throws FacesException
-{
-    return new TreeEngineImpl(ctx);
-}
-
-public Object newInstance(String facesName) throws FacesException
-{
-    throw new FacesException("Can't create TreeEngine from nothing.");
-}
-
-public Object newInstance(String facesName, Map args) throws FacesException
-{
-    throw new FacesException("Can't create TreeEngine from map.");
-}
-
-
 }
 
 // The testcase for this class is TestTreebuilder.java 

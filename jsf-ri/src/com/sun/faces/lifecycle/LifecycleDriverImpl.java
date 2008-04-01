@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.8 2002/04/25 22:42:20 eburns Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.9 2002/04/25 23:27:29 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.UIComponent;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.8 2002/04/25 22:42:20 eburns Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.9 2002/04/25 23:27:29 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -132,8 +132,8 @@ protected void initFactories(ObjectManager objectManager)
             Constants.REF_CONVERTERMANAGER, converterManager);
     
     // Step 2, put the treeEngine in the OM ApplicationScope
-    TreeEngine treeEngine = (TreeEngine)
-	abstractFactory.newInstance(Constants.REF_TREEENGINE, servletContext);
+    TreeEngine treeEngine = 
+	new com.sun.faces.treebuilder.TreeEngineImpl(servletContext);
     Assert.assert_it(null != treeEngine);
     objectManager.put(servletContext, Constants.REF_TREEENGINE, 
 		      treeEngine);
@@ -214,9 +214,7 @@ public void init(ServletContext newServletContext) throws ServletException
     abstractFactory = new AbstractFactory();
     Assert.assert_it(null != abstractFactory);
 
-    // put any additional knowledge into the factory
-    abstractFactory.addFactoryForFacesName(new com.sun.faces.treebuilder.TreeEngineImpl.TreeEngineFactory(),
-					   Constants.REF_TREEENGINE);
+    
     // create the ObjectManager
     try {
 	objectManager = (ObjectManager)
