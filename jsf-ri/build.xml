@@ -281,6 +281,7 @@
 
     <!-- Handle the top level files -->
     <copy file="README" todir="${dist.home}"/>
+    <copy file="ReleaseNotes.html" todir="${dist.home}"/>
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>

@@ -1,0 +1,319 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.79C-CCK-MCD  [en] (X11; U; SunOS 5.8 sun4u) [Netscape]">
+</head>
+<body bgcolor="#FFFFFF">
+
+<center>
+<h1>
+JavaServer<sup><font size=-1>TM</font></sup> Faces (JSF) 1.0 EA1<br>
+Release Notes</h1></center>
+
+<hr>
+<br><a NAME="14145"></a>Revised:08/20/2002
+<p><a NAME="13552"></a>The purpose of this release is to introduce you
+to the JavaServer Faces framework and to provide you with an opportunity
+to give us feedback on the work we've done so far.
+<p>This Early Access release of JavaServer Faces provides an early alpha
+version of the JSF technology which is currently being developed under
+the JCP as <a href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>. The
+expert group is actively working on the specification. This alpha release
+reflects a very early snapshot of a draft specification which has evolved
+significantly since the code freeze for this EA release.&nbsp; This means
+that the APIs and designs contained in this release do not necessarily
+match what will be released in the upcoming releases of the specification.&nbsp;
+This should be kept in mind when experimenting with this JSF technology.
+<h1>
+&nbsp;Contents</h1>
+
+<ul>
+<li>
+<a href="#operating_systems">Supported Operating Systems</a></li>
+
+<li>
+<a href="#required_software">Required Software</a></li>
+
+<li>
+<a href="#release_includes">What This Release Includes</a></li>
+
+<li>
+<a href="#current_limitations">Current Limitations</a></li>
+
+<li>
+<a href="#issues">Known Issues</a></li>
+
+<li>
+<a href="#known_bugs">Known Bugs</a></li>
+</ul>
+<a NAME="operating_systems"></a>
+<h1>
+Supported Operating Systems</h1>
+
+<ul>
+<li>
+Solaris 8</li>
+
+<li>
+Solaris 9</li>
+
+<li>
+Windows 2000</li>
+
+<li>
+Windows XP</li>
+
+<li>
+Linux (Red Hat 7.2)</li>
+</ul>
+<a NAME="required_software"></a>
+<h1>
+Required Software</h1>
+This release requires that you install the software listed in the following
+table. Only those versions listed in the table have been tested and are
+supported.
+<br>&nbsp;
+<br>&nbsp;
+<table BORDER=3 >
+<caption>TABLE 1 Required Software</caption>
+
+<tr>
+<th>Software</th>
+
+<th>Version
+<p>&nbsp;</th>
+</tr>
+
+<tr>
+<td>Java Development Kit&nbsp;</td>
+
+<td>version 1.3 or later&nbsp;</td>
+</tr>
+
+<tr>
+<td>Java Web Services Developer Pack</td>
+
+<td>version 1.0_01</td>
+</tr>
+
+<tr>
+<td>Microsoft Internet Explorer or Netscape Navigator&nbsp;</td>
+
+<td>version 6 (IE)
+<br>version 7 (Netscape)</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td></td>
+</tr>
+</table>
+
+<p><a NAME="release_includes"></a>
+<h1>
+What This Release Includes</h1>
+
+<ul>&nbsp;
+<li>
+html_basic.tld: A JSP custom tag library for building JSF applications
+that render to an HTML client.</li>
+
+<li>
+An API and reference implementation that provide tag handling, object management,
+rendering, and event processing.</li>
+
+<li>
+<a href="http://java.sun.com/j2ee/javaserverfaces/docs/tutorial.html">JavaServer
+Faces</a>, a tutorial to help you get started.</li>
+</ul>
+<a NAME="current_limitations"></a>
+<h1>
+Current Limitations</h1>
+This release is limited to the following pieces of JSF functionality:
+<ul>
+<li>
+UI Components (Form, Command, SelectBoolean, SelectOne, TextEntry, Output)</li>
+
+<li>
+JSP Tag Library for building JSF applications</li>
+
+<li>
+i18N</li>
+
+<li>
+Application Lifecycle Events</li>
+
+<li>
+Validation</li>
+
+<li>
+Page Navigation (this will likely change in a subsequent release)</li>
+
+<li>
+Rendering Model (and concrete RenderKit for standard HTML rendering)</li>
+</ul>
+The following pieces of functionality will be part of the JSF specification
+but are *not* included in this release:
+<ul>
+<li>
+Some UI Components (Graphic, Panel, DataGrid, DataHierarchy)</li>
+
+<li>
+A Standard RenderKit</li>
+
+<li>
+Object Management</li>
+
+<li>
+Event Model</li>
+</ul>
+
+<h1>
+<a NAME="issues"></a>Known Issues With This Release</h1>
+
+<ul>
+<li>
+Due to a bug in JSTL 1.0, you must have the jstl.jar and standard.jar in
+your WEB-INF/lib directory of each webapp.&nbsp; It is not sufficient to
+place these jars in your tomcat/common/lib directory.</li>
+
+<li>
+When saving tree in session, we don't support multiple concurrent&nbsp;
+requests to faces app from one client.</li>
+
+<li>
+SaveState in page option cannot be used if your web app has event handlers
+and validators because they are not serializable currently.</li>
+
+<li>
+Component type is hard coded in component subclasses (ex: UICommand) as
+fully qualfied class names (ex: javax.faces.component.UICommand). However,
+a component's type is configurable in the renderkit's xml configuration
+file (HtmlBasicRenderKit.xml).</li>
+
+<li>
+AttributeDescriptor support happens all the time, even though it's only
+used at design time.</li>
+
+<li>
+HyperLink tags don't work as expected in sample "Basic" application.&nbsp;
+This is because once the response tree is set to target, we need to jump
+to render response phase which we are unable to do at this time.</li>
+</ul>
+Additionally, in the areas of functionality released in the EA, there are
+already significant changes in progress in the specification. Therefore,
+only experimental code should be developed against this release since it
+will not be compatibile with subsequent releases.
+<p><a NAME="known_bugs"></a>
+<h1>
+Known Bugs</h1>
+<a NAME="14607"></a>
+<table BORDER=3 >
+<caption><a NAME="18558"></a>TABLE 2 Known Bugs for This Release</caption>
+
+<tr>
+<th>Bug ID</th>
+
+<th>Description
+<p>&nbsp;</th>
+</tr>
+
+<tr>
+<td>4619153...</td>
+
+<td>ModelAccessor should be an interface in the API...&nbsp;</td>
+</tr>
+
+<tr>
+<td>4619266...</td>
+
+<td>SelectOne_OptionList Tag Hander should render all options...&nbsp;</td>
+</tr>
+
+<tr>
+<td>4614601</td>
+
+<td>&lt;faces:Form> tag doesn't support method attribute</td>
+</tr>
+
+<tr>
+<td>4658872</td>
+
+<td>A Faces Command Button with the "image" attribute doesn't work</td>
+</tr>
+
+<tr>
+<td>4658880</td>
+
+<td>Validation error messages cannot be placed where relevant</td>
+</tr>
+
+<tr>
+<td>4658869</td>
+
+<td>Images don't have models</td>
+</tr>
+</table>
+
+<p>
+<hr>
+<p>Copyright &copy; 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa
+<br>Clara, California 95054, U.S.A. All rights reserved.
+<p>Sun Microsystems, Inc. has intellectual property rights relating to
+<br>technology embodied in this product. In particular, and without
+<br>limitation, these intellectual property rights may include one or more
+<br>of the U.S. patents listed at http://www.sun.com/patents and one or
+more
+<br>additional patents or pending patent applications in the U.S. and other
+<br>countries.
+<p>This product is distributed under licenses restricting its use, copying
+<br>distribution, and decompilation. No part of this product may be
+<br>reproduced in any form by any means without prior written authorization
+<br>of Sun and its licensors, if any.
+<p>Third-party software, including font technology, is copyrighted and
+<br>licensed from Sun suppliers.
+<p>Sun, Sun Microsystems, the Sun logo, the Java Coffee Cup logo,
+<br>JavaServer, and Java are trademarks or registered trademarks of Sun
+<br>Microsystems, Inc. in the U.S. and other countries.
+<p>Federal Acquisitions: Commercial Software - Government Users Subject
+to
+<br>Standard License Terms and Conditions.
+<p>
+<hr WIDTH="100%">
+<p>Copyright &copy; 2002 Sun Microsystems, Inc., 4150 Network Circle,
+<br>Santa Clara, California 95054, Etats-Unis. Tous droits r&eacute;serv&eacute;s.
+<p>Sun Microsystems, Inc. a les droits de propri&eacute;t&eacute; intellectuels
+relatants
+<br>&agrave; la technologie incorpor&eacute;e dans ce produit. En particulier,
+et sans la
+<br>limitation, ces droits de propri&eacute;t&eacute; intellectuels peuvent
+inclure un ou
+<br>plus des brevets am&eacute;ricains &eacute;num&eacute;r&eacute;s &agrave;
+http://www.sun.com/patents et un
+<br>ou les brevets plus suppl&eacute;mentaires ou les applications de brevet
+en
+<br>attente dans les Etats - Unis et les autres pays.
+<p>Ce produit ou document est prot&eacute;g&eacute; par un copyright et
+distribu&eacute; avec
+<br>des licences qui en restreignent l'utilisation, la copie, la
+<br>distribution, et la d&eacute;compilation. Aucune partie de ce produit
+ou
+<br>document ne peut &ecirc;tre reproduite sous aucune forme, par quelque
+moyen
+<br>que ce soit, sans l'autorisation pr&eacute;alable et &eacute;crite
+de Sun et de ses
+<br>bailleurs de licence, s'il y ena.
+<p>Le logiciel d&eacute;tenu par des tiers, et qui comprend la technologie
+<br>relative aux polices de caract&egrave;res, est prot&eacute;g&eacute;
+par un copyright et
+<br>licenci&eacute; par des fournisseurs de Sun.
+<p>Sun, Sun Microsystems, le logo Sun, le logo Java Coffee Cup, JavaServer,
+<br>et Java sont des marques de fabrique ou des marques d&eacute;pos&eacute;es
+de Sun
+<br>Microsystems, Inc. aux Etats-Unis et dans d'autres pays.
+<br>&nbsp;
+<br><i><font size=-1><a href="../.dt/tmp/Copyright.html"></a></font></i>&nbsp;
+</body>
+</html>
