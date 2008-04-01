@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.6 2002/05/25 22:35:38 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.7 2002/06/03 16:29:14 craigmcc Exp $
  */
 
 /*
@@ -48,7 +48,8 @@ public abstract class RenderKitFactory {
 
     /**
      * <p>Register a new {@link RenderKit} instance that is immediately
-     * available via this factory instance.</p>
+     * available from this factory instance via a call to
+     * <code>createRenderKit()</code> for the same render kit identifier.</p>
      *
      * @param renderKitId Identifier of the new RenderKit
      * @param renderKit RenderKit instance that we are registering
