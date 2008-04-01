@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.3 2002/05/14 15:02:29 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.4 2002/05/20 17:59:11 craigmcc Exp $
  */
 
 /*
@@ -43,10 +43,6 @@ public abstract class FacesContextFactory {
      * utilizing the standard {@link Lifecycle} implementation for this
      * web application.</p>
      *
-     * <p><strong>FIXME</strong> - Do we need to pass in the
-     * <code>ServletContext</code>, or can we assume that the initialization
-     * of the factory instance has already acquired a reference to this?</p>
-     *
      * @param context The <code>ServletContext</code> that is associated
      *  with this web application
      * @param request The <code>ServletRequest</code> that is to be
@@ -68,10 +64,6 @@ public abstract class FacesContextFactory {
      * for the processing of the specified request and response objects,
      * utilizing the specified {@link Lifecycle} implementation for this
      * web application.</p>
-     *
-     * <p><strong>FIXME</strong> - Do we need to pass in the
-     * <code>ServletContext</code>, or can we assume that the initialization
-     * of the factory instance has already acquired a reference to this?</p>
      *
      * @param context The <code>ServletContext</code> that is associated
      *  with this web application
