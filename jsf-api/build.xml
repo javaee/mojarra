@@ -318,4 +318,28 @@
    description="Compile API classes and build JAR file"/>
 
 
+  <!-- 
+       =================================================================== 
+         Issues list
+       =================================================================== 
+  -->
+  <target name="issues"
+   description="Generate outstanding issues list">
+    <style basedir="doc"
+           destdir="${build.dir}"
+         extension=".html"
+             style="doc/OutstandingIssuesDetail.xsl"
+          includes="OutstandingIssues.xml"/>
+    <move     file="${build.dir}/OutstandingIssues.html"
+            tofile="${build.dir}/OutstandingIssuesDetail.html"/>
+    <style basedir="doc"
+           destdir="${build.dir}"
+         extension=".html"
+             style="doc/OutstandingIssuesSummary.xsl"
+          includes="OutstandingIssues.xml"/>
+    <move     file="${build.dir}/OutstandingIssues.html"
+            tofile="${build.dir}/OutstandingIssuesSummary.html"/>
+  </target>
+
+
 </project>

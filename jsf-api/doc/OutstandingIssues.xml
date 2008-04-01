@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+
+<!-- Informal DTD for contents of "issue" subelements:
+
+  id                Unique issue identifier
+  originator        EG member (or public comment) that originated the issue
+  summary           Summary one-line description
+  description       Full (multiline) description of the issue
+  resolution        Full (multiline) description of resolution
+  status            OPEN, CLOSED, LATER
+  date              Date on which status was last changed
+
+-->
+
+<issues>
+
+
+<issue>
+  <id>ObjectManager-1</id>
+  <originator>Craig</originator>
+  <summary>Re-introduce Object Manager Functionality</summary>
+  <description>
+    <p>Currently, it is inconvenient to use request scope beans in
+    model reference expressions, because the corresponding object
+    is not created automatically.  This was one of the features provided
+    in the <em>Object Manager</em> functionality that was present in
+    version .03 of the JSF Spec, but has been absent since.</p>
+  </description>
+  <resolution>
+    <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>OutputMethods-2</id>
+  <originator>Craig</originator>
+  <summary>Consider refactoring OutputMethod from ResponseWriter</summary>
+  <description>
+    <p>Currently, the extended methods for writing elements and attributes
+    (proposed by Adam) are defined on <code>ResponseWriter</code> directly.
+    The current implementation of <code>javax.faces.webapp.FacesTag</code>
+    requires a concrete implementation of <code>JspResponseWriter()</code>
+    to be in the API classes, which is undesireable for something as
+    detailed as these methods.  Options to consider:</p>
+    <ul>
+    <li>Modify <code>FacesTag</code> so that it can look up an
+        implementation of <code>JspResponseWriter</code> somehow.</li>
+    <li>Extract the element and attribute methods into a wrapper API
+        around a ResponseWriter (analogous to the way that
+        <code>java.io.FilterWriter</code> can wrap a Writer.  (Still
+        need a generic discovery mechanism though).</li>
+    </ul>
+  </description>
+  <resolution>
+    <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>Listeners-3</id>
+  <originator>Craig</originator>
+  <summary>Review Event Listener Architecture</summary>
+  <description>
+    <p>Need to review how the event listener mechanism is currently
+    architected in light of real world component development.  In
+    particular:</p>
+    <ul>
+    <li>Registering listeners on a receiving component (versus globally).</li>
+    <li>Directing events to a particular component (versus a global
+        "this thing happened" approach).</li>
+    </ul>
+  </description>
+  <resolution>
+    <p><em>04 Sep 2002</em> - Craig to present writeup to EG.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>NamedChild-4</id>
+  <originator>Adam</originator>
+  <summary>Reintroduce "Named Child" Concept for UIComponents</summary>
+  <description>
+    <p>Introduce a concept similar to what JSP 2.0 has introduced with
+    <code>&lt;jsp:attribute&gt;</code> and the JspFragment class, in
+    order to facilitate building complex UI components.</p>
+  </description>
+  <resolution>
+    <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>StateSaving-5</id>
+  <originator>Adam</originator>
+  <summary>Re-evaluate Question of State Saving Volume/Location</summary>
+  <description>
+    <p>We currently put the onus for this on the JSP <code>use_faces</code>
+    tag, which is not sufficiently generalized to support non-JSP uses.</p>
+  </description>
+  <resolution>
+    <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ServletDependencies-6</id>
+  <originator>Adam</originator>
+  <summary>Servlet API Dependencies</summary>
+  <description>
+    <p>To what extent do we wish to abstract away the current dependencies
+    on the servlet API?  This may be necessary for the Portlet JSR, and
+    it would be necessary for using JSF to create content outside of
+    servlets.</p>
+  </description>
+  <resolution>
+    <p><em>04 Sep 2002</em> - Adam to present writeup to EG.</p>
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>JspDependencies-7</id>
+  <originator>Hans</originator>
+  <summary>JSP API Dependencies</summary>
+  <description>
+    <p>Although there are many who suggest we base JSF on JSP 1.2 for
+    immediate acceptance reasons, it forces us to do any custm tag
+    implementation classes based on the JSP 1.2 Tag and BodyTag APIs.
+    Can we avoid creating a dependency like this that ties us to this
+    API (which could potentially be deprecated in some future JSP spec)?</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ELDependencies-8</id>
+  <originator>Hans</originator>
+  <summary>JSP EL API Dependencies</summary>
+  <description>
+    <p>Basing JSF on JSP 1.2 means we must specify our version of the EL
+    language being used for model references in the JSF specification (or
+    perhaps point at the non-normative one in JSTL 1.0), since we would
+    not want to tie ourselves to the JSP 2.0 formal definition of the
+    language.  Is this acceptable?  Can we deal with it in a different
+    way?</p>
+
+    <p>In addition, we currently need a feature that is not supported by
+    the JSTL 1.0 or JSP 2.0 versions of the EL -- model object
+    <em>setting</em> as well as getting.  We're going to need to address
+    the syntax and semantics of this no matter what JSP version we choose
+    to depend on.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>TreeCreation-9</id>
+  <originator>Jeff</originator>
+  <summary>Component Tree Creation in Render Response</summary>
+  <description>
+    <p>Our current design uses a pass through <em>Render Response</em> to
+    initially create the component tree in most cases, which makes for
+    interesting design decisions on some complex rendering scenarios.  It
+    would be useful to re-investigate creating the component tree from a
+    static analysis of the JSP page source.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ComponentNamespace-10</id>
+  <originator>Jeff</originator>
+  <summary>Component Identifier Namespace</summary>
+  <description>
+    <p>We currently use a hierarchical namespace for components, both
+    in the tree itself and in the rendered page.  Among other things,
+    this causes a problem with rendering <code>id</code> attributes on
+    the output HTML elements, because '/' is not a valid IDREF character.
+    Should we go to a flat namespace for components (at least in the
+    rendered output, and perhaps in addition to hierarchical names)?</p>
+
+    <p>We will also need a way for components to predict what the rendered
+    <code>id</code> attribute for a component was (if it has been rendered)
+    or will be (if it has not been rendered yet) in order to generate
+    corresponding JavaScript.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ApplicationHandler-11</id>
+  <originator>Public</originator>
+  <summary>Rethink ApplicationHandler</summary>
+  <description>
+    <p>Please rethink this ApplicationHandler business.  Application
+    handlers are going to wind up having a processEvent method that's
+    a huge switch statement that switches off the event type and forces
+    casting, thereby committing three Cardinal OO sins.  Another huge
+    drawback to this design is that the application handler accesses
+    tree ids directly, which will increase the maintenance burden if you
+    happen to change the name of a JSP page that the application handler
+    forwards to.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>ModelReferences-12</id>
+  <originator>Public</originator>
+  <summary>Are modelReference attributes required?</summary>
+  <description>
+    <p>Must I really specify a modelReference attribute for every component?
+    That really increases the verbosity of my JSP pages -- for those like me
+    that suffer from RSI its a real pain.  It certainly also painful for those
+    that don't suffer from RSI.</p>
+
+    <p>Can't the association be done with reflection?  Can't the form beans
+    be specified in a configuration file?  Please?</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>XmlModel-13</id>
+  <originator>Public</originator>
+  <summary>Please include support for an XML Model</summary>
+  <description>
+    <p>Great work on this JSR.  I think it will debunk the claim that
+    Visual Studio .NET is "easier to use" than J2EE development products.</p>
+
+    <p>What you are missing here is support for an XML model rather than
+    JavaBeans.  JSTL has excellent support for rendering an XML model and
+    I am surprised to find this lacking in JSR-127.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>CommandHyperlink-14</id>
+  <originator>RI Team</originator>
+  <summary>Cannot implement command_hyperlink as specified</summary>
+  <description>
+    <p>The decode behavior of the <code>Hyperlink</code> Renderer is
+    currently specified as "send a CommandEvent to the application."
+    However, the current definition of phase switching does not provide
+    a path from <em>Process Request Events</em> to <em>Invoke
+    Application</em> without going through validations and model updates.
+    These phases are inappropriate in a CommandEvent scenario, because
+    a form (and the corresponding input fields) did not get submitted.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>UserAgent-15</id>
+  <originator>Craig</originator>
+  <summary>Do we need a UserAgent classification scheme?</summary>
+  <description>
+    <p>So far during the development of the Standard HTML RenderKit,
+    it has not been necessary to emit any browser-specific code.  Such
+    a need might come in the future, and will certainly be necessary
+    for user-created components that create complex DHTML and/or JavaScript
+    code that depends on the DOM of the browser being targeted.</p>
+
+    <p>Making applications parse the <code>User-Agent</code> header seems
+    like something we might want to abstract away.  Because not all
+    RenderKits will target web browsers, it's not just a matter of
+    identifying what browser type is in use.  Perhaps a UserAgentClassifier
+    plug-in interface that is part of the RenderKit?</p>
+
+    <p>If we ever do start emitting browser-dependent code from the
+    standard RenderKit, it's also important to understand how caches
+    can negatively affect application behavior by caching the content
+    for one browser and serving it to another.  This only happens if the
+    request URL is identical, which is something to avoid.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+</issues>
