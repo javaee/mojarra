@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.23 2002/06/03 19:34:26 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.24 2002/06/04 02:31:06 craigmcc Exp $
  */
 
 /*
@@ -37,6 +37,20 @@ import javax.faces.validator.Validator;
  */
 
 public abstract class UIComponent {
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Construct a <code>UIComponent</code> with default properties
+     * and no component identifier.</p>
+     */
+    public UIComponent() {
+
+        setRendersChildren(false);
+
+    }
 
 
     // ------------------------------------------------------------- Attributes
@@ -155,6 +169,8 @@ public abstract class UIComponent {
             throw new IllegalArgumentException(name);
         }
 
+        // FIXME - special cases for setComponentId and setModel values
+
         // Set or remove the specified value
         if (value != null) {
             getAttributes().put(name, value);
@@ -228,8 +244,12 @@ public abstract class UIComponent {
         StringBuffer sb = new StringBuffer();
         int n = list.size();
         for (int i = 0; i < n; i++) {
-            sb.append(EXPR_SEPARATOR);
-            sb.append((String) list.get(i));
+            if (i != 1) {
+                sb.append(EXPR_SEPARATOR);
+            }
+            if (i > 0) {
+                sb.append((String) list.get(i));
+            }
         }
         return (sb.toString());
 

@@ -45,10 +45,9 @@
   <property name="test.failonerror" value="true"/>
   <property name="test.runner"      value="junit.textui.TestRunner"/>
 
-
   <path id="test.classpath">
     <pathelement location="${build.classes}"/>
-    <pathelement location="${test.classes}"/>
+    <pathelement location="${build.test}"/>
     <pathelement location="${junit.jar}"/>
     <pathelement location="${servlet.jar}"/>
   </path>
@@ -123,13 +122,24 @@
        =================================================================== 
   -->
 
+  <!-- FIXME - Need test cases for
+       UISelectBoolean, UISelectMany, UISelectOne
+  -->
 
-  <target name="test" depends="build.test"
+
+  <target name="test"
    description="Run all JUnit test cases"
-       depends="test.uicomponent">
+       depends="build.test,
+                test.UIComponent,
+                test.UICommand,
+                test.UIForm,
+                test.UIGraphic,
+                test.UIOutput,
+                test.UIPanel,
+                test.UITextEntry">
   </target>
 
-  <target name="test.uicomponent" depends="build.test">
+  <target name="test.UIComponent" depends="build.test">
     <echo message="Running UIComponent tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
@@ -138,15 +148,59 @@
     </java>
   </target>
 
-
-<!--
-  <target name="test-finder" depends="build" 
-   description="Run the factory test">
-    <java classname="javax.faces.FactoryFinder" fork="yes">
-      <classpath refid="compile.classpath" />
+  <target name="test.UICommand" depends="build.test">
+    <echo message="Running UICommand tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UICommandTestCase"/>
+      <classpath refid="test.classpath"/>
     </java>
   </target>
--->
+
+  <target name="test.UIForm" depends="build.test">
+    <echo message="Running UIForm tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIFormTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIGraphic" depends="build.test">
+    <echo message="Running UIGraphic tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIGraphicTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIOutput" depends="build.test">
+    <echo message="Running UIOutput tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIOutputTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIPanel" depends="build.test">
+    <echo message="Running UIPanel tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIPanelTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UITextEntry" depends="build.test">
+    <echo message="Running UITextEntry tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UITextEntryTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
 
   
   <!-- 
