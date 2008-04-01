@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.10 2001/12/05 05:06:07 edburns Exp $
+ * $Id: ObjectTable.java,v 1.11 2001/12/20 21:04:08 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -81,7 +81,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
   VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.10 2001/12/05 05:06:07 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.11 2001/12/20 21:04:08 edburns Exp $
  * 
  * @see	javax.faces.RenderContext#getObjectTable
  *
@@ -109,6 +109,16 @@ public abstract class ObjectTable
         public boolean isA(Object scopeKey);
 
 	public void put(Object name, Object value);
+
+	/**
+
+	* This version put is used for putting a specific instance of an
+	* object into the specified scopeKey.  This is not what is
+	* called at "declarative put".
+
+	*/
+
+	public void put(Object scopeKey, Object name, Object value);
 
 	public Object get(Object scopeKey, Object name);
 
@@ -193,9 +203,9 @@ private Object getEnclosingScopeKey(Object scopeKey) {
 }
 
     public void put(Object scopeKey, Object name, Object value) {
-	Scope s = keyToScope(scopeKey);
-	if (null != s) {
-	    put(s, name, value);
+	Scope scope = keyToScope(scopeKey);
+	if (null != scope) {
+	    scope.put(scopeKey, name, value);
 	}
     }
 

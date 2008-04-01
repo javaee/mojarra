@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.6 2001/12/13 00:06:59 rogerk Exp $
+ * $Id: Constants.java,v 1.7 2001/12/20 21:04:08 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -114,5 +114,19 @@ public class Constants {
      * Starting string for hidden checkbox field
      */
      public static final String REF_HIDDENCHECKBOX = "facesCheckbox";
+
+    /**
+     * The session attributes key under which our transaction token is
+     * stored, if it is used.  Taken from Struts, by Craig McClanahan.
+     */
+    public static final String TRANSACTION_TOKEN_KEY_SESSION =
+        "javax.faces.TOKEN";
+
+    /**
+     * The reequest attr under which our transaction token is stored and
+     * retrieved.  Taken from Struts, by Craig McClanahan.
+     */
+    public static final String REQUEST_TOKEN_KEY = "javax.faces.REQUEST_TOKEN";
+
     
 }
