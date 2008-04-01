@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.2 2002/02/06 18:36:45 edburns Exp $
+ * $Id: FacesTag.java,v 1.3 2002/02/06 20:05:52 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.2 2002/02/06 18:36:45 edburns Exp $
+ * @version $Id: FacesTag.java,v 1.3 2002/02/06 20:05:52 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -55,7 +55,6 @@ public abstract class FacesTag extends TagSupport
 
 // Attribute Instance Variables
 
-    private String id = null;
     private String scope = null;
     private String model = null;
 
@@ -79,14 +78,6 @@ public FacesTag()
 // 
 // Accessors
 //
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     /**
      * Returns the value of the scope attribute

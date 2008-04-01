@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.20 2002/01/28 18:31:14 visvan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
  */
 
 /*
@@ -11,24 +11,16 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.taglib.FacesTag;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.Constants;
 import javax.faces.FacesException;
-import javax.faces.RenderContext;
-import javax.faces.Renderer;
-import javax.faces.RenderKit;
 import javax.faces.UITextEntry;
-import javax.faces.ObjectManager;
+import javax.faces.UIComponent;
 
-import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  *
@@ -36,13 +28,13 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.20 2002/01/28 18:31:14 visvan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
  */
 
-public class TextEntry_InputTag extends TagSupport
+public class TextEntry_InputTag extends FacesTag
 {
     //
     // Protected Constants
@@ -57,11 +49,8 @@ public class TextEntry_InputTag extends TagSupport
     //
 
     // Attribute Instance Variables
-    private String id = null;
     private String value = null;
     private String size = null;
-    private String model = null;
-    private String scope = null;
     private String valueChangeListener = null;
     private String maxlength = null;
     
@@ -74,15 +63,76 @@ public class TextEntry_InputTag extends TagSupport
     public TextEntry_InputTag()
     {
         super();
-        // ParameterCheck.nonNull();
-        this.init();
     }
 
-    protected void init()
-    {
-        // super.init();
+//
+// Methods from FacesTag
+//
+
+    public UIComponent newComponentInstance() {
+        return new UITextEntry();
     }
 
+    public void setAttributes(UIComponent comp) {
+	ParameterCheck.nonNull(comp);
+	Assert.assert_it(comp instanceof UITextEntry);
+
+	UITextEntry uiTextEntry = (UITextEntry) comp;
+
+        uiTextEntry.setAttribute("size", size);
+        uiTextEntry.setAttribute("maxlength", maxlength);
+
+        // If model attribute is not found get it 
+        // from parent form if it exists. If not
+        // set text as an attribute so that it can be
+        // used during rendering.
+
+        // PENDING ( visvan )
+        // make sure that the model object is registered
+        if ( getModel() != null ) {
+            uiTextEntry.setModelReference(getModel());
+        } else {
+            // PENDING ( visvan ) all tags should implement a common
+            // interface ??
+            FormTag ancestor = null;
+            try {
+                ancestor = (FormTag) findAncestorWithClass(this,
+                    FormTag.class);
+               String model_str = ancestor.getModel();
+               if ( model_str != null ) {
+                   setModel("$" + model_str + "." + getId());
+                   uiTextEntry.setModelReference(getModel());
+               } 
+            } catch ( Exception e ) {
+                // If form tag cannot be found then model is null
+            }
+        }
+        if ( value != null ) {
+            uiTextEntry.setText(renderContext, value);
+        }
+    }
+
+    public String getRendererType() {
+	return "InputRenderer";
+    }
+
+    public void addListeners(UIComponent comp) throws JspException {
+	ParameterCheck.nonNull(comp);
+	
+	if (null == valueChangeListener) {
+	    return;
+	}
+
+	Assert.assert_it(comp instanceof UITextEntry);
+	UITextEntry uiTextEntry = (UITextEntry) comp;
+	try {
+	    uiTextEntry.addValueChangeListener(valueChangeListener);    
+	} catch (FacesException fe) {
+	    throw new JspException("Listener + " + valueChangeListener +
+				   " does not exist or does not implement valueChangeListener " + 
+				   " interface" );
+	}
+    }    
     
     //
     // Class methods
@@ -93,187 +143,16 @@ public class TextEntry_InputTag extends TagSupport
     //
 
     /**
-     * Renders TextEntry_InputTag's start tag and its attributes.
-     */
-    public int doStartTag() throws JspException{
-  
-        Assert.assert_it( pageContext != null ); 
-
-        // PENDING(visvan) use tagext class to validate attributes.
-        // get ObjectManager from ServletContext.
-        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-
-        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
-                Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( rc != null );
-        
-        UITextEntry c = null;
-        // 1. if we don't have an "id" generate one
-        //
-        if (id == null) {
-            String gId = Util.generateId();
-            setId(gId);
-        }
-
-        // 2. Get or create the component instance.
-        //
-        c = (UITextEntry) ot.get(pageContext.getRequest(), getId());
-        if (c == null) {
-            c = createComponent(rc);
-            addToScope(c, ot);
-        }
-
-        // 3. Render the component.
-        //
-        try {
-            c.setRendererType("InputRenderer");
-            c.render(rc);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem rendering component: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem rendering component: "+
-                f.getMessage());
-        }
-        return(EVAL_BODY_INCLUDE);
-    }
-    
-    /**
-     * End Tag Processing
-     */
-    public int doEndTag() throws JspException{
-
-        Assert.assert_it( pageContext != null );
-        // get ObjectManager from ServletContext.
-        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-        RenderContext rc =
-            (RenderContext)ot.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( rc != null );
-
-//PENDING(rogerk)can we eliminate this extra get if component is instance
-//variable? If so, threading issue?
-//
-        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), id);
-        Assert.assert_it( c != null );
-
-        // Complete the rendering process
-        //
-        try {
-            c.renderComplete(rc);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem completing rendering: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem completing rendering: "+
-                f.getMessage());
-        }
-
-        return EVAL_PAGE;
-    }
-
-    /**
      * Tag cleanup method.
      */
     public void release() {
 
         super.release();
 
-        id = null;
         value = null;
         size = null;
         maxlength = null;
-        model = null;
-        scope = null;
         valueChangeListener = null;
-    }
-
-    /** Adds the component and listener to the ObjectManager
-     * in the appropriate scope
-     *
-     * @param c UIComponent to be stored in namescope
-     * @param ot Object pool
-     */
-    public void addToScope(UITextEntry c, ObjectManager ot) {
-    
-        // PENDING ( visvan ) right now, we are not saving the state of the
-        // components. So if the scope is specified as reques, when the form
-        // is resubmitted we would't be able to retrieve the state of the
-        // components. So to get away with that we are storing in session
-        // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), id, c);
-    }
-    
-    /**
-     * Creates a TextEntry component and sets renderer specific
-     * properties.
-     *
-     * @param rc renderContext client information
-     */
-    protected UITextEntry createComponent(RenderContext rc) throws
-            JspException {
-        UITextEntry c = new UITextEntry();
-        // set renderer specific properties 
-        c.setId(getId());
-        c.setAttribute("size", size);
-        c.setAttribute("maxlength", maxlength);
-    
-        try {
-            c.addValueChangeListener(valueChangeListener);    
-        } catch (FacesException fe) {
-            throw new JspException("Listener + " + valueChangeListener +
-            " doesn't exist or doesn't implement valueChangeListener interface");
-        }
-        // If model attribute is not found get it 
-        // from parent form if it exists. If not
-        // set text as an attribute so that it can be
-        // used during rendering.
-
-        // PENDING ( visvan )
-        // make sure that the model object is registered
-        if ( model != null ) {
-            c.setModelReference(model);
-        } else {
-            // PENDING ( visvan ) all tags should implement a common
-            // interface ??
-            FormTag ancestor = null;
-            try {
-                ancestor = (FormTag) findAncestorWithClass(this,
-                    FormTag.class);
-               String model_str = ancestor.getModel();
-               if ( model_str != null ) {
-                   model = "$" + model_str + "." + id;
-                   c.setModelReference(model);
-               } 
-            } catch ( Exception e ) {
-                // If form tag cannot be found then model is null
-            }
-        }
-        if ( value != null ) {
-            c.setText(rc,value);
-        }
-        return c;
-    }
-
-    /**
-     * Returns the value of the "id" attribute
-     *
-     * @return String value of "id" attribute
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
-     * Sets the "id" attribute
-     * @param id value of "id" attribute 
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**
@@ -343,40 +222,5 @@ public class TextEntry_InputTag extends TagSupport
     public void setValueChangeListener(String change_listener) {
         this.valueChangeListener = change_listener;
     }
-
-    /**
-     * Returns the value of the scope attribute
-     *
-     * @return String value of scope attribute
-     */
-    public String getScope() {
-        return this.scope;
-    }
-
-    /**
-     * Sets scope attribute
-     * @param scope value of scope attribute
-     */
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    /**
-     * Returns the value of the model attribute
-     *
-     * @return String value of model attribute
-     */
-    public String getModel() {
-        return this.model;
-    }
-
-    /**
-     * Sets the model attribute
-     * @param model value of model attribute
-     */
-    public void setModel(String model) {
-        this.model = model;
-    }
-
 
 } // end of class TextEntry_InputTag

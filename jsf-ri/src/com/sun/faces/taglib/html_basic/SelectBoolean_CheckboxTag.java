@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.20 2002/01/25 18:45:19 visvan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
  */
 
 /*
@@ -11,24 +11,16 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import com.sun.faces.util.Util;
+import com.sun.faces.taglib.FacesTag;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.Constants;
 import javax.faces.FacesException;
-import javax.faces.RenderContext;
-import javax.faces.Renderer;
-import javax.faces.RenderKit;
-import javax.faces.UIForm;
 import javax.faces.UISelectBoolean;
-import javax.faces.ObjectManager;
+import javax.faces.UIComponent;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  *
@@ -36,14 +28,14 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.20 2002/01/25 18:45:19 visvan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectBoolean_CheckboxTag extends TagSupport {
+public class SelectBoolean_CheckboxTag extends FacesTag {
     //
     // Protected Constants
     //
@@ -59,11 +51,8 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     // Attribute Instance Variables
 
     private String checked = null;
-    private String id = null;
     private String value = null;
     private String label = null;
-    private String model = null;
-    private String scope = null;
     private String valueChangeListener = null;
 
     // Relationship Instance Variables
@@ -74,12 +63,6 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
 
     public SelectBoolean_CheckboxTag() {
         super();
-        // ParameterCheck.nonNull();
-        this.init();
-    }
-
-    protected void init() {
-        // super.init();
     }
 
     //
@@ -95,13 +78,6 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
 
     public void setChecked(String checked) {
         this.checked = checked;
-    }
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id; 
     }
 
     public String getValue() {
@@ -137,123 +113,85 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         this.valueChangeListener = change_listener;
     }
 
-    /**
-     * Returns the value of the scope attribute
-     *
-     * @return String value of scope attribute
-     */
-    public String getScope() {
-        return this.scope;
-    }
-
-    /**
-     * Sets scope attribute
-     * @param scope value of scope attribute
-     */
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    /**
-     * Returns the value of the model attribute
-     *
-     * @return String value of model attribute
-     */
-    public String getModel() {
-        return this.model;
-    }
-
-    /**
-     * Sets the model attribute
-     * @param model value of model attribute
-     */
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    /**
-     * Process the start of this tag.
-     * @exception JspException if a JSP exception has occurred
-     */
-    public int doStartTag() throws JspException {
-
-        Assert.assert_it( pageContext != null );
-        ObjectManager ot = (ObjectManager) pageContext.getServletContext().
-                getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-        RenderContext renderContext = 
-            (RenderContext)ot.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
-
-        // 1. if we don't have an "id" generate one
-        //
-        if (id == null) {
-            String gId = Util.generateId();
-            setId(gId);
-        }
-
-        // 2. Get or create the component instance.
-        //
-        UISelectBoolean uiSelectBoolean = null;
-        uiSelectBoolean = (UISelectBoolean) ot.get(pageContext.getRequest(), 
-                getId());
-        if ( uiSelectBoolean == null ) {
-            uiSelectBoolean = createComponent(renderContext);
-            addToScope(uiSelectBoolean, ot);
-        }
-
-        // 3. Render the component.
-        //
-        try {
-            uiSelectBoolean.setRendererType("CheckboxRenderer");
-            uiSelectBoolean.render(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem rendering component: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem rendering component: "+
-                f.getMessage());
-        }
-        return (EVAL_BODY_INCLUDE);
-    }
-
-    /**
-     * End Tag Processing
-     */
-    public int doEndTag() throws JspException{
-
-        Assert.assert_it( pageContext != null );
-        // get ObjectManager from ServletContext.
-        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-        RenderContext renderContext =
-            (RenderContext)ot.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
-
-//PENDING(rogerk)can we eliminate this extra get if component is instance
-//variable? If so, threading issue?
 //
-        UISelectBoolean wSelectBoolean =
-            (UISelectBoolean) ot.get(pageContext.getRequest(), id);
-        Assert.assert_it( wSelectBoolean != null );
+// Methods from FacesTag
+//
 
-        // Complete the rendering process
-        //
-        try {
-            wSelectBoolean.renderComplete(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem completing rendering: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem completing rendering: "+
-                f.getMessage());
-        }
+    /**
+     * Creates a Form component and sets renderer specific
+     * properties.
+     *
+     * @param rc renderContext
+     */
 
-        return EVAL_PAGE;
+    public UIComponent newComponentInstance() {
+        return new UISelectBoolean();
     }
+
+    public void setAttributes(UIComponent comp) {
+	ParameterCheck.nonNull(comp);
+	Assert.assert_it(comp instanceof UISelectBoolean);
+
+	UISelectBoolean uiSelectBoolean = (UISelectBoolean) comp;
+
+        uiSelectBoolean.setAttribute("value", getValue());
+        uiSelectBoolean.setAttribute("label", getLabel());
+        // If model attribute is not found get it
+        // from parent form if it exists. If not
+        // set text as an attribute so that it can be
+        // used during rendering.
+
+        // PENDING ( visvan )
+        // make sure that the model object is registered
+        if ( getModel() != null ) {
+            uiSelectBoolean.setModelReference(getModel());
+        } else {
+            // PENDING ( visvan ) all tags should implement a common
+            // interface ??
+            FormTag ancestor = null;
+            try {
+                ancestor = (FormTag) findAncestorWithClass(this,
+							   FormTag.class);
+		String model_str = ancestor.getModel();
+		if ( model_str != null ) {
+		    setModel("$" + model_str + "." + getId());
+		    uiSelectBoolean.setModelReference(getModel());
+               }
+            } catch ( Exception e ) {
+                // If form tag cannot be found then model is null
+            }
+        }
+        if ( checked != null ) {
+             boolean state = (Boolean.valueOf(checked)).booleanValue();
+             uiSelectBoolean.setSelected(renderContext, state);
+        }
+    }
+
+    public String getRendererType() {
+	return "CheckboxRenderer";
+    }
+
+    public void addListeners(UIComponent comp) throws JspException {
+	ParameterCheck.nonNull(comp);
+	
+	if (null == valueChangeListener) {
+	    return;
+	}
+
+	Assert.assert_it(comp instanceof UISelectBoolean);
+	UISelectBoolean uiSelectBoolean = (UISelectBoolean) comp;
+	try {
+	    uiSelectBoolean.addValueChangeListener(valueChangeListener);    
+	} catch (FacesException fe) {
+	    throw new JspException("Listener + " + valueChangeListener +
+				   " does not exist or does not implement valueChangeListener " + 
+				   " interface" );
+	}
+    }    
+
+    //
+    // General Methods
+    //
 
     /**
      * Tag cleanup method.
@@ -263,84 +201,9 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         super.release();
 
         checked = null;
-        id = null;
         value = null;
         label = null;
-        model = null;
-        scope = null;
         valueChangeListener = null;
-    }
-
-    /**
-     * Creates a TextEntry component and sets renderer specific
-     * properties.
-     *
-     * @param rc renderContext client information
-     */
-    protected UISelectBoolean createComponent(RenderContext renderContext) 
-            throws JspException {
-
-        UISelectBoolean wSelectBoolean = new UISelectBoolean();
-
-        // set renderer specific properties
-        wSelectBoolean.setId(getId());
-        wSelectBoolean.setAttribute("value", getValue());
-        wSelectBoolean.setAttribute("label", getLabel());
-
-        
-        try {
-            wSelectBoolean.addValueChangeListener(valueChangeListener);    
-        } catch (FacesException fe) {
-            throw new JspException("Listener + " + valueChangeListener +
-                " doesn not exist or does not implement valueChangeListener " + 
-                " interface" );
-        }
-        // If model attribute is not found get it
-        // from parent form if it exists. If not
-        // set text as an attribute so that it can be
-        // used during rendering.
-
-        // PENDING ( visvan )
-        // make sure that the model object is registered
-        if ( model != null ) {
-            wSelectBoolean.setModelReference(model);
-        } else {
-            // PENDING ( visvan ) all tags should implement a common
-            // interface ??
-            FormTag ancestor = null;
-            try {
-                ancestor = (FormTag) findAncestorWithClass(this,
-                    FormTag.class);
-               String model_str = ancestor.getModel();
-               if ( model_str != null ) {
-                   model = "$" + model_str + "." + id;
-                   wSelectBoolean.setModelReference(model);
-               }
-            } catch ( Exception e ) {
-                // If form tag cannot be found then model is null
-            }
-        }
-        if ( checked != null ) {
-             boolean state = (Boolean.valueOf(checked)).booleanValue();
-             wSelectBoolean.setSelected(renderContext, state);
-        }
-        return wSelectBoolean;
-    }
-
-    /** Adds the component and listener to the ObjectManager
-     * in the appropriate scope
-     *
-     * @param c UIComponent to be stored in namescope
-     * @param ot Object pool
-     */
-    public void addToScope(UISelectBoolean c, ObjectManager ot) {
-   
-        // PENDING ( visvan ) right now, we are not saving the state of the
-        // components. So if the scope is specified as reques, when the form
-        // is resubmitted we would't be able to retrieve the state of the
-        // components. So to get away with that we are storing in session
-        // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), id, c);
     }
 
 } // end of class SelectBoolean_CheckboxTag
