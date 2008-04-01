@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectManager.java,v 1.1 2002/01/10 22:20:13 edburns Exp $
+ * $Id: TestObjectManager.java,v 1.2 2002/01/12 01:41:18 edburns Exp $
  */
 
 /*
@@ -11,10 +11,7 @@
 
 package com.sun.faces;
 
-import junit.framework.TestCase;
-
 import javax.servlet.http.HttpSession;
-import javax.servlet.ServletException;
 
 import javax.faces.ObjectManager;
 import javax.faces.ObjectManager.Scope;
@@ -32,7 +29,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectManager.java,v 1.1 2002/01/10 22:20:13 edburns Exp $
+ * @version $Id: TestObjectManager.java,v 1.2 2002/01/12 01:41:18 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

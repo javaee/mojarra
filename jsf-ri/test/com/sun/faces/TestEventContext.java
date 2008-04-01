@@ -1,5 +1,5 @@
 /*
- * $Id: TestEventContext.java,v 1.1 2002/01/11 20:06:00 edburns Exp $
+ * $Id: TestEventContext.java,v 1.2 2002/01/12 01:41:17 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.faces.NavigationHandler;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestEventContext.java,v 1.1 2002/01/11 20:06:00 edburns Exp $
+ * @version $Id: TestEventContext.java,v 1.2 2002/01/12 01:41:17 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -143,7 +143,7 @@ public void testAccessors()
     assertTrue(result);
 
     objectAccessor = eventContext.getObjectAccessor();
-    result = null == objectAccessor; // PENDING(edburns): should not be null
+    result = null != objectAccessor; 
     System.out.println("Testing getObjectAccessor: " + result);
     assertTrue(result);
 }

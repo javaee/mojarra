@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeDispatcherImpl.java,v 1.7 2002/01/10 22:32:48 edburns Exp $
+ * $Id: ValueChangeDispatcherImpl.java,v 1.8 2002/01/12 01:41:17 edburns Exp $
  */
 
 /*
@@ -25,19 +25,20 @@ import javax.faces.ValueChangeListener;
 import java.util.Vector;
 import javax.faces.Constants;
 import javax.faces.ObjectManager;
+import javax.faces.ObjectAccessor;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.UITextEntry;
 import javax.faces.UISelectOne;
 import javax.faces.UISelectBoolean;
 import javax.faces.UIComponent;
-import javax.faces.ModelAccessor;
+
 
 /**
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.7 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.8 2002/01/12 01:41:17 edburns Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
@@ -85,7 +86,8 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
                 se.setSelected(rc, state);
             }	
         } else {
-            ModelAccessor.setModelObject(rc, modelRef, new_value);
+            rc.getObjectAccessor().setObject(rc.getRequest(), modelRef, 
+					     new_value);
         }
         // components can have listeners without model
         dispatchListeners(request, value_event,ot);

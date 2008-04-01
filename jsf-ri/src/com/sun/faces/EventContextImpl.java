@@ -1,5 +1,5 @@
 /*
- * $Id: EventContextImpl.java,v 1.1 2002/01/11 20:05:59 edburns Exp $
+ * $Id: EventContextImpl.java,v 1.2 2002/01/12 01:41:16 edburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.faces.EventDispatcherFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventContextImpl.java,v 1.1 2002/01/11 20:05:59 edburns Exp $
+ * @version $Id: EventContextImpl.java,v 1.2 2002/01/12 01:41:16 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -213,7 +213,7 @@ public ObjectManager getObjectManager() {
  *         objects
  */
 public ObjectAccessor getObjectAccessor() {
-    return null; //compile
+    return renderContext.getObjectAccessor();
 }
 
 // The testcase for this class is TestEventContext.java 

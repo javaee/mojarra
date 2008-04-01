@@ -1,5 +1,5 @@
 /*
- * $Id: TestModelAccessor.java,v 1.3 2002/01/10 22:20:13 edburns Exp $
+ * $Id: TestObjectAccessor.java,v 1.1 2002/01/12 01:41:18 edburns Exp $
  */
 
 /*
@@ -7,94 +7,83 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TestModelAccessor.java
+// TestObjectAccessor.java
 
 package com.sun.faces;
 
-import junit.framework.TestCase;
-
-import javax.faces.Constants;
-import javax.faces.FacesException;
-import javax.faces.ModelAccessor;
-import javax.faces.ObjectManager;
-import javax.faces.RenderContext;
-import javax.faces.RenderContextFactory;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpServletRequest;
 
-import com.sun.faces.servlet.FacesServlet;
+import javax.faces.ObjectManager;
+import javax.faces.ObjectAccessor;
 
 /**
  *
- *  <B>TestModelAccessor</B> is a class ...
+ *  <B>TestObjectAccessor</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestModelAccessor.java,v 1.3 2002/01/10 22:20:13 edburns Exp $
+ * @version $Id: TestObjectAccessor.java,v 1.1 2002/01/12 01:41:18 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestModelAccessor extends FacesTestCase {
-    //
-    // Protected Constants
-    //
+public class TestObjectAccessor extends FacesTestCase
+{
+//
+// Protected Constants
+//
 
-    //
-    // Class Variables
-    //
+//
+// Class Variables
+//
 
+private static final int INITIAL_NUM_SCOPES = 3;
 
-    //
-    // Instance Variables
-    //
+//
+// Instance Variables
+//
 
-    // Attribute Instance Variables
+// Attribute Instance Variables
 
-    // Relationship Instance Variables
+// Relationship Instance Variables
 
-    private User user = null;
-    private Address address = null;
+//
+// Constructors and Initializers    
+//
 
-    //
-    // Constructors and Initializers    
-    //
+    public TestObjectAccessor() {super("TestObjectAccessor");}
+    public TestObjectAccessor(String name) {super(name);}
+//
+// Class methods
+//
 
-    public TestModelAccessor() {super("TestModelAccessor");}
-    public TestModelAccessor(String name) {super(name);}
-    //
-    // Class methods
-    //
+//
+// Methods from TestCase
+//
 
-    //
-    // Methods from TestCase
-    //
+//
+// General Methods
+//
 
-    //
-    // General Methods
-    //
-
-    public void testSetGetModelObject() {
+    public void testSetGetObject() {
         boolean result;
 
-        HttpSession session;
         String modelReference;
         String value;
         Object object = null;
+	ObjectAccessor objectAccessor = null;
+
+	result = null != (objectAccessor = renderContext.getObjectAccessor());
+	System.out.println("Get an objectAccessor from the renderContext: " + 
+			   result);
+	assertTrue(result);
  
         try {
 
             // use this for debugging
             //com.sun.faces.util.DebugUtil.waitForDebugger();
-
-            result = null != (session = renderContext.getSession());
-            assertTrue(result);
 
             objectManager.bind(ObjectManager.GlobalScope, "user", User.class);
     
@@ -107,12 +96,12 @@ public class TestModelAccessor extends FacesTestCase {
 
             // Set the model object value
             //
-            ModelAccessor.setModelObject(renderContext, modelReference, value);
+            objectAccessor.setObject(request, modelReference, value);
             System.out.println("Model Property Set.");
 
             // Get the model object value
             //
-            object = ModelAccessor.getModelObject(renderContext, modelReference); 
+            object = objectAccessor.getObject(request, modelReference); 
             System.out.println("Returned Object:"+object);
     
             result = value == object;
@@ -130,13 +119,12 @@ public class TestModelAccessor extends FacesTestCase {
 
             // Set the model object value
             //
-            ModelAccessor.setModelObject(renderContext, modelReference, value);
+            objectAccessor.setObject(request, modelReference, value);
             System.out.println("Model Property Set.");
 
             // Get the model object value
             //
-            object = ModelAccessor.getModelObject(renderContext, 
-						  modelReference); 
+            object = objectAccessor.getObject(request, modelReference); 
             System.out.println("Returned Object:"+object);
 
             result = value == object;
@@ -148,4 +136,5 @@ public class TestModelAccessor extends FacesTestCase {
 	    assertTrue(false);
         }
     }
-}
+
+} // end of class TestObjectAccessor

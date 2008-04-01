@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.12 2002/01/11 20:05:59 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.13 2002/01/12 01:41:17 edburns Exp $
  */
 
 
@@ -20,9 +20,12 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.Constants;
 import javax.faces.OutputMethod;
 import javax.faces.ObjectManager;
+import javax.faces.ObjectAccessor;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
 import javax.faces.UIComponent;
+import javax.faces.FacesException;
+
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletRequest;
@@ -31,13 +34,15 @@ import javax.servlet.ServletContext;
 import java.util.Locale;
 import java.util.Stack;
 
+import com.sun.faces.ObjectAccessorFactory;
+
 /**
  *
  *  <B>HtmlBasicRenderContext</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.12 2002/01/11 20:05:59 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.13 2002/01/12 01:41:17 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,6 +82,15 @@ public class HtmlBasicRenderContext extends RenderContext {
     */
 
     private ObjectManager objectManager = null;
+
+    /** 
+
+    * This is the owning reference to the ObjectAccessor
+
+    */
+
+    private ObjectAccessor objectAccessor = null;
+
 
 //
 // Constructors and Initializers    
@@ -124,6 +138,24 @@ public ObjectManager getObjectManager() {
     return objectManager;
 }
 
+public ObjectAccessor getObjectAccessor() {
+    if (null == objectAccessor) {
+	getObjectManager();  // Make sure our lazy objectManager is there
+	Assert.assert_it(null != objectManager);
+
+	ObjectAccessorFactory oaFactory = (ObjectAccessorFactory)
+	    objectManager.get(Constants.REF_OBJECTACCESSORFACTORY);
+	Assert.assert_it(null != oaFactory);
+	try {
+	    objectAccessor = oaFactory.newObjectAccessor(this);
+	} catch ( FacesException fe ) {
+	    // PENDING(edburns): log message
+	}    
+    }
+    return objectAccessor;
+}
+
+
 public OutputMethod getOutputMethod() {
     return outputMethod;
 }
@@ -135,6 +167,10 @@ public void setOutputMethod(OutputMethod om) {
 
 public HttpSession getSession() {
     return session;
+}
+
+public ServletRequest getRequest() {
+    return request;
 }
 
 public UIComponent peekAtAncestor(int level) {

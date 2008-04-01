@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.12 2002/01/11 20:06:00 edburns Exp $
+ * $Id: FacesServlet.java,v 1.13 2002/01/12 01:41:17 edburns Exp $
  */
 
 /*
@@ -41,6 +41,7 @@ import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.EventContextFactory;
+import com.sun.faces.ObjectAccessorFactory;
 
 public class FacesServlet extends HttpServlet {
 
@@ -113,6 +114,7 @@ public class FacesServlet extends HttpServlet {
         RenderContextFactory rcFactory;
         EventDispatcherFactory edFactory;
         EventContextFactory ecFactory;
+        ObjectAccessorFactory oaFactory;
 
         ServletContext servletContext = getServletContext();
         Assert.assert_it(null != servletContext);
@@ -195,6 +197,19 @@ public class FacesServlet extends HttpServlet {
         Assert.assert_it(null != ecFactory);
         objectManager.put(ObjectManager.GlobalScope,
                         Constants.REF_EVENTCONTEXTFACTORY, ecFactory);
+
+        // Step 6: Create the ObjectAccessorFactory and put it in the
+        // ObjectManager in GlobalScope
+        oaFactory = (ObjectAccessorFactory)objectManager.get(
+            Constants.REF_OBJECTACCESSORFACTORY);
+        // The ObjectAccessorFactory must not exist at this point.  It is an
+        // error if it does exist.
+        Assert.assert_it(null == oaFactory);
+
+        oaFactory = ObjectAccessorFactory.newInstance();
+        Assert.assert_it(null != oaFactory);
+        objectManager.put(ObjectManager.GlobalScope,
+                        Constants.REF_OBJECTACCESSORFACTORY, oaFactory);
     }
 
     /**
