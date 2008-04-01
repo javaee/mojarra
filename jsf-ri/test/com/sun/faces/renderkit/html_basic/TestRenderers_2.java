@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.13 2002/08/13 18:29:54 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.14 2002/08/13 22:57:45 rkitain Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.13 2002/08/13 18:29:54 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.14 2002/08/13 22:57:45 rkitain Exp $
  * 
  *
  */
@@ -129,7 +129,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         // for TextEntry_Secret
         theRequest.addParameter("/my_secret", "secret");
         // for Text
-        theRequest.addParameter("/my_text", "text");
+        theRequest.addParameter("/my_input_text", "text");
 
         // for Text - NumberFormat
         theRequest.addParameter("/my_number", "47%");
@@ -139,6 +139,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_input_date2", DATE_STR_LONG);
         theRequest.addParameter("/my_output_date", DATE_STR);
         theRequest.addParameter("/my_output_date2", DATE_STR_LONG);
+        theRequest.addParameter("/my_output_text", "text");
+
+        theRequest.addParameter("/my_textarea", "TextAreaRenderer");
     } 
 
     public void testRenderers() {
@@ -153,16 +156,16 @@ public class TestRenderers_2 extends JspFacesTestCase
             testCheckboxRenderer(root);
             testHyperlinkRenderer(root);
             testOptionListRenderer(root);
-	    /**
-	       PENDING(rogerk): test the text renderers
             testSecretRenderer(root);
-            testTextRenderer(root);
-	    **/
+            testInputTextRenderer(root);
+            testOutputTextRenderer(root);
 	    testInputDateRenderer(root);
 	    testInputDateRendererWithPattern(root);
 
             testOutputDateRenderer(root);
 	    testOutputDateRendererWithPattern(root);
+
+            testTextAreaRenderer(root);
 
             testInputNumberRenderer(root);
 	    testInputNumberRendererWithPattern(root);
@@ -375,11 +378,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
-    public void testTextRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing TextRenderer");
-        UIOutput text = new UIOutput();
+    public void testInputTextRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing InputTextRenderer");
+        UIInput text = new UIInput();
         text.setValue(null);
-        text.setComponentId("my_text");
+        text.setComponentId("my_input_text");
         root.addChild(text);
 
         TextRenderer textRenderer = new TextRenderer();
@@ -389,6 +392,38 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing decode method...");
         textRenderer.decode(getFacesContext(), text);
         assertTrue(((String)text.getValue()).equals("text"));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        textRenderer.encodeBegin(getFacesContext(), text);
+        textRenderer.encodeEnd(getFacesContext(), text);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = textRenderer.supportsComponentType("javax.faces.component.UIInput");
+        assertTrue(result);
+        result = textRenderer.supportsComponentType(text);
+        assertTrue(result);
+        result = textRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+
+    public void testOutputTextRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing OutputTextRenderer");
+        UIOutput text = new UIOutput();
+        text.setValue(null);
+        text.setComponentId("my_output_text");
+        root.addChild(text);
+
+        TextRenderer textRenderer = new TextRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        textRenderer.decode(getFacesContext(), text);
 
         // test encode method
 
@@ -489,6 +524,38 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
+    public void testTextAreaRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing TextAreaRenderer");
+        UIInput textEntry = new UIInput();
+        textEntry.setValue(null);
+        textEntry.setComponentId("my_textarea");
+        root.addChild(textEntry);
+
+        TextAreaRenderer textAreaRenderer = new TextAreaRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        textAreaRenderer.decode(getFacesContext(), textEntry);
+        assertTrue(((String)textEntry.getValue()).equals("TextAreaRenderer"));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
+        textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
+        getFacesContext().getResponseWriter().write("\n");
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = textAreaRenderer.supportsComponentType("javax.faces.component.UIInput");
+        assertTrue(result);
+        result = textAreaRenderer.supportsComponentType(textEntry);
+        assertTrue(result);
+        result = textAreaRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
     
     public void testInputNumberRenderer(UIComponent root) throws IOException {
         System.out.println("Testing NumberRenderer for UIInput ");

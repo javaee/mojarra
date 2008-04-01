@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.15 2002/08/08 16:25:55 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.16 2002/08/13 22:57:45 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import javax.faces.FacesException;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.component.UIInput;
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
@@ -34,10 +33,8 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.tree.XmlTreeImpl;
 
-import com.sun.faces.renderkit.html_basic.InputRenderer;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
-import com.sun.faces.renderkit.html_basic.TextAreaRenderer;
 import com.sun.faces.renderkit.html_basic.RadioRenderer;
 
 /**
@@ -46,7 +43,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.15 2002/08/08 16:25:55 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.16 2002/08/13 22:57:45 rkitain Exp $
  * 
  *
  */
@@ -119,8 +116,6 @@ public class TestRenderers_1 extends JspFacesTestCase
 
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
        // theRequest.addParameter("name", "FormRenderer");
-        theRequest.addParameter("/input_renderer", "InputRenderer");
-        theRequest.addParameter("/textarea_renderer", "TextAreaRenderer");
         //theRequest.addParameter("action", "form");
         theRequest.addParameter("/radio_renderer", "Two");
         theRequest.addParameter("name", "ButtonRenderer");
@@ -137,8 +132,6 @@ public class TestRenderers_1 extends JspFacesTestCase
 	    };
             root.setComponentId("root");
             verifyFormRenderer(root);
-            verifyInputRenderer(root);
-            verifyTextAreaRenderer(root);
             verifyRadioRenderer(root);
             verifyButtonRenderer(root);
 
@@ -149,66 +142,6 @@ public class TestRenderers_1 extends JspFacesTestCase
             assertTrue(false);
             return;
         }
-    }
-    
-    public void verifyInputRenderer(UIComponent root) throws IOException {
-         boolean result = false;
-         
-        // Test inputRenderer.
-        System.out.println("Testing InputRenderer");
-        UIComponent textEntry = new UIInput();
-        textEntry.setComponentId("input_renderer");
-        root.addChild(textEntry);
-
-        InputRenderer inputRenderer = new InputRenderer();
-        // test decode method
-        System.out.println("Testing decode method");
-        inputRenderer.decode(getFacesContext(), textEntry);
-        assertTrue(((String)textEntry.getValue()).equals("InputRenderer"));
-
-        // test encode method
-        System.out.println("Testing encode method");
-        inputRenderer.encodeBegin(getFacesContext(), textEntry);
-        inputRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().write("\n");
-      
-        // test supportComponentType method
-        System.out.println("Testing supportsComponentType method"); 
-        result = inputRenderer.supportsComponentType("javax.faces.component.Form"); 
-        assertTrue(!result);
-
-        result = inputRenderer.supportsComponentType(textEntry); 
-        assertTrue(result);
-    }
-    
-    public void verifyTextAreaRenderer(UIComponent root) throws IOException {
-         boolean result = false;
-         
-        // Test TextAreaRenderer.
-        System.out.println("Testing InputRenderer");
-        UIComponent textEntry = new UIInput();
-        textEntry.setComponentId("textarea_renderer");
-        root.addChild(textEntry);
-
-        TextAreaRenderer textAreaRenderer = new TextAreaRenderer();
-        // test decode method
-        System.out.println("Testing decode method");
-        textAreaRenderer.decode(getFacesContext(), textEntry);
-        assertTrue(((String)textEntry.getValue()).equals("TextAreaRenderer"));
-
-        // test encode method
-        System.out.println("Testing encode method");
-        textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
-        textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().write("\n");
-       
-        // test supportComponentType method
-        System.out.println("Testing supportsComponentType method"); 
-        result = textAreaRenderer.supportsComponentType("Form"); 
-        assertTrue(!result);
-
-        result = textAreaRenderer.supportsComponentType(textEntry); 
-        assertTrue(result);
     }
     
     public void verifyFormRenderer(UIComponent root) throws IOException {
