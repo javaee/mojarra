@@ -18,7 +18,7 @@
 <td WIDTH="820">
 <table BORDER=0 CELLSPACING=0 CELLPADDING=0 WIDTH="100%" BGCOLOR="#FFFFFF" >
 <tr>
-<td VALIGN=TOP WIDTH="100%"><img SRC="cardemo.jpg" BORDER=0 height=60 width=660 align=BOTTOM></td>
+<td VALIGN=TOP WIDTH="100%"><img SRC="pictures/cardemo.jpg" BORDER=0 height=60 width=660 align=BOTTOM></td>
 </tr>
 
 <tr>

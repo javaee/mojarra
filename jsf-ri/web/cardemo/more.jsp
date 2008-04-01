@@ -30,7 +30,7 @@
 					<TD WIDTH="820">
 						<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" BGCOLOR="white">
 							<TR>
-								<TD WIDTH="100%" VALIGN="TOP"><IMG SRC="cardemo.jpg" WIDTH="660" HEIGHT="60" ALIGN="BOTTOM" BORDER="0"></TD>
+								<TD WIDTH="100%" VALIGN="TOP"><IMG SRC="pictures/cardemo.jpg" WIDTH="660" HEIGHT="60" ALIGN="BOTTOM" BORDER="0"></TD>
 							</TR>
 							<TR>
 								<TD WIDTH="100%"><IMG SRC="pictures/current.gif" ALIGN="LEFT" BORDER="0"><B><FONT SIZE="4" COLOR="#330066"
