@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.3 2002/06/09 01:49:09 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.3 2002/06/09 01:49:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -62,7 +62,7 @@ public class TestRenderResponsePhase extends FacesContextTestCaseJsp
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/Faces_Basic.xul";
+public static final String TEST_URI_XUL = "/components.xul";
 
 public static final String TEST_URI = "/components.jsp";
 

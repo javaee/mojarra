@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderersFromJsp.java,v 1.1 2002/06/07 23:29:16 eburns Exp $
+ * $Id: TestRenderersFromJsp.java,v 1.2 2002/06/09 01:49:09 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderersFromJsp.java,v 1.1 2002/06/07 23:29:16 eburns Exp $
+ * @version $Id: TestRenderersFromJsp.java,v 1.2 2002/06/09 01:49:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -58,7 +58,7 @@ public class TestRenderersFromJsp extends FacesContextTestCaseJsp
 //
 
 public static final String TEST_URI_XUL = "/TestRenderersFromJsp.xul";
-public static final String TEST_URI = "/components.jsp";
+public static final String TEST_URI = "/TestRenderersFromJsp.jsp";
 
 public static final String EXPECTED_OUTPUT_FILENAME = 
     FileOutputResponseWrapper.FACES_RESPONSE_ROOT + 
