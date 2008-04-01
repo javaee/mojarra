@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.4 2002/07/31 18:32:07 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.5 2002/08/01 23:45:41 rkitain Exp $
  */
 
 /*
@@ -67,11 +67,14 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      * @param renderKitId The RenderKit identifier for the RenderKit
      *        that will be added.
      * @param renderKit The RenderKit instance that will be added.
+     * @exception NullPointerException if <code>renderKitId</code>
+     *  or <code>renderKit</code> arguments are <code>null</code>
      */
     public void addRenderKit(String renderKitId, RenderKit renderKit) {
 
-        ParameterCheck.nonNull(renderKitId);
-        ParameterCheck.nonNull(renderKit);
+        if (renderKitId == null || renderKit == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
         if (RenderKitFactory.DEFAULT_RENDER_KIT.equals(renderKitId)) {
             throw new IllegalArgumentException(renderKitId);
@@ -91,10 +94,14 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      *
      * @param renderKitId A RenderKit identifier.
      * @returns RenderKit A RenderKit instance.
+     * @exception NullPointerException if <code>renderKitId</code>
+     *  argument is <code>null</code>
      */ 
     public RenderKit getRenderKit(String renderKitId) {
 
-        ParameterCheck.nonNull(renderKitId);
+        if (renderKitId == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
         RenderKit renderKit = null;
         this.renderKitId = renderKitId;
@@ -152,7 +159,13 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     }
 
     public RenderKit getRenderKit(String renderKitId, FacesContext context) {
+
 	Assert.assert_it(false, "PENDING(): fixme");
+
+        if (renderKitId == null || context == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
 	return null;
     }
 
