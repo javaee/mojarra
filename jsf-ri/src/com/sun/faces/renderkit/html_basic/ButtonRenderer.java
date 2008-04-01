@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.28 2002/08/05 21:22:39 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.29 2002/08/06 20:01:38 jvisvanathan Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.28 2002/08/05 21:22:39 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.29 2002/08/06 20:01:38 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -163,7 +163,10 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         String commandName = null;
         if (value != null) {
             commandName = value.toString();
-            if (context.getServletRequest().getParameter(commandName) == null) {
+            // to handle image buttons, check for x and y parameters.
+            if ((context.getServletRequest().getParameter(commandName) == null) &&
+                (context.getServletRequest().getParameter(commandName+".x") == null &&
+                context.getServletRequest().getParameter(commandName+".y") == null)) {
                 return;
             }
         } else {
