@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.1 2002/07/11 20:33:20 jvisvanathan Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.2 2002/07/31 19:22:00 jvisvanathan Exp $
  */
 
 /*
@@ -20,22 +20,29 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
-
+import java.util.Iterator;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Base64;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import com.sun.faces.util.DebugUtil;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.1 2002/07/11 20:33:20 jvisvanathan Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.2 2002/07/31 19:22:00 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -55,8 +62,8 @@ public class ReconstituteRequestTreePhase extends GenericPhaseImpl
 //
 // Instance Variables
 //
-private RenderKit renderKit = null;
 private TreeFactory treeFactory = null;
+private RenderKit renderKit = null;
 
 // Attribute Instance Variables
 
@@ -69,11 +76,11 @@ private TreeFactory treeFactory = null;
 public ReconstituteRequestTreePhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
-    
     RenderKitFactory factory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
     Assert.assert_it(factory != null);
     renderKit = factory.getRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT);
+    
     treeFactory = (TreeFactory)
          FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
     Assert.assert_it(treeFactory != null);
@@ -104,30 +111,91 @@ public ReconstituteRequestTreePhase(Lifecycle newDriver, int newId)
 public int execute(FacesContext facesContext) throws FacesException
 {
     if (null == facesContext) {
+        // PENDING (visvan) localize
 	throw new FacesException("null FacesContext");
     }
 
     // Create the requested component tree
     int rc = Phase.GOTO_NEXT;
+    Tree requestTree = null;
+    
+    // look up saveStateInClient parameter to check whether to restore
+    // state of tree from client or server. Default is server.
+    String saveState = facesContext.getServletContext().getInitParameter
+            (RIConstants.SAVESTATE_INITPARAM);
+    if ( saveState != null ) {
+        Assert.assert_it (saveState.equalsIgnoreCase("true") || 
+            saveState.equalsIgnoreCase("false"));
+    }     
+    if (saveState == null || saveState.equalsIgnoreCase("false")) {
+        restoreTreeFromSession(facesContext);
+    } else {
+        restoreTreeFromPage(facesContext);           
+    }
+    return rc;
+}    
+        
+public void restoreTreeFromPage(FacesContext facesContext) {
+    Tree requestTree = null;
+    //long beginTime = System.currentTimeMillis();
+   
+    // reconstitute tree from page. 
+    HttpServletRequest request = (HttpServletRequest)
+            facesContext.getServletRequest();
+    String treeId = (String) 
+               request.getAttribute("javax.servlet.include.path_info");
+    if (treeId == null) {
+        treeId = request.getPathInfo();
+    }
+    
+    String treeRootString = request.getParameter(RIConstants.FACES_TREE);
+    if ( treeRootString == null ) {
+        requestTree = treeFactory.getTree(facesContext.getServletContext(),
+                                          treeId);
+    } else {    
+        byte[] bytes  = Base64.decode(treeRootString.getBytes());
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            requestTree = (Tree) ois.readObject();
+            ois.close();
+            // DebugUtil.printTree(root, System.out);
+        } catch (java.io.OptionalDataException ode) {
+            // PENDING (visvan) log error
+            System.err.println(ode.getMessage());
+        } catch (java.lang.ClassNotFoundException cnfe) {
+            System.err.println(cnfe.getMessage());
+        } catch (java.io.IOException iox) {
+            System.err.println(iox.getMessage());
+        }
+    }
+    requestTree.setRenderKit(renderKit);
+    facesContext.setRequestTree(requestTree);
+    // PENDING(visvan): If we wanted to track time, here is where we'd do it
+    // long endTime = System.currentTimeMillis();
+    // System.out.println("Time to reconstitute tree " + (endTime-beginTime));
+}
 
+protected void restoreTreeFromSession(FacesContext facesContext) {
+    Tree requestTree = null;
+    
     // PENDING(visvan) - will not deal with simultaneous requests
     // for the same session
     HttpSession session = facesContext.getHttpSession();
 
     // Reconstitute or create the request tree
-    Tree requestTree = (Tree) session.getAttribute(RIConstants.FACES_TREE);
-    if (requestTree == null) {
-        HttpServletRequest request = (HttpServletRequest)
+    HttpServletRequest request = (HttpServletRequest)
             facesContext.getServletRequest();
-        String treeId = (String) 
+    String treeId = (String) 
                request.getAttribute("javax.servlet.include.path_info");
-        if (treeId == null) {
-            treeId = request.getPathInfo();
-        }
+    if (treeId == null) {
+        treeId = request.getPathInfo();
+    }
+    requestTree = (Tree) session.getAttribute(RIConstants.FACES_TREE);
+    if (requestTree == null) {
         requestTree = treeFactory.getTree(facesContext.getServletContext(),
-                                          treeId);
-        requestTree.setRenderKit(renderKit);
-    }   
+            treeId);
+    } 
+    requestTree.setRenderKit(renderKit);
     facesContext.setRequestTree(requestTree);
     session.removeAttribute(RIConstants.FACES_TREE);
 
@@ -138,7 +206,6 @@ public int execute(FacesContext facesContext) throws FacesException
     }
     facesContext.setLocale(locale);
     session.removeAttribute(RIConstants.REQUEST_LOCALE);
-    return rc;
 }
 
 // The testcase for this class is TestReconstituteRequestTreePhase.java

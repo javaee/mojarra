@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.10 2002/07/15 23:48:34 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.11 2002/07/31 19:22:04 jvisvanathan Exp $
  */
 
 /*
@@ -28,8 +28,6 @@ import javax.faces.component.UITextEntry;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
-import com.sun.faces.tree.SimpleTreeImpl;
-
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.RIConstants;
@@ -43,6 +41,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ArrayList;
 
+import javax.faces.tree.Tree;
+import javax.faces.tree.TreeFactory;
+
 import javax.servlet.jsp.PageContext;
 
 /**
@@ -51,7 +52,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.10 2002/07/15 23:48:34 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.11 2002/07/31 19:22:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,7 +131,6 @@ public void testHtmlBasicRenderKit()
     int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
-    SimpleTreeImpl tree = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase 
 	renderResponse = new JspRenderResponsePhase(lifecycle, 
@@ -139,10 +139,13 @@ public void testHtmlBasicRenderKit()
 	    public String getComponentType() { return "Root"; }
 	};
     root.setComponentId("root");
-    
-    tree = new SimpleTreeImpl(config.getServletContext(), root, 
-			      TEST_URI);
-    getFacesContext().setRequestTree(tree);
+ 
+    TreeFactory treeFactory = (TreeFactory)
+         FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
+    Assert.assert_it(treeFactory != null);
+    Tree requestTree = treeFactory.getTree(getFacesContext().getServletContext(),
+            TEST_URI );
+    getFacesContext().setRequestTree(requestTree);
 
     rc = renderResponse.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);

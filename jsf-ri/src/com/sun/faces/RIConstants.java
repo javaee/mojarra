@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.11 2002/07/25 16:36:31 eburns Exp $
+ * $Id: RIConstants.java,v 1.12 2002/07/31 19:22:00 jvisvanathan Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ public class RIConstants {
     
     public final static String FACES_TREE = "com.sun.faces.TREE";
     public final static String REQUEST_LOCALE = "com.sun.faces.LOCALE";
-
+   
     /**
 
     * The presence of this UIComponent attribute with the value the same
@@ -69,4 +69,7 @@ public class RIConstants {
     */ 
 
     public final static String SELECTITEMS_CONFIGURED = "com.sun.faces.SELECTITEMS_CONFIGURED";
+    
+    public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
+    public static final String SAVESTATE_INITPARAM = "saveStateInClient";
 }

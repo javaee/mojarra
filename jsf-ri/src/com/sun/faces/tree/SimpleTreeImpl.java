@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTreeImpl.java,v 1.2 2002/07/11 20:33:22 jvisvanathan Exp $
+ * $Id: SimpleTreeImpl.java,v 1.3 2002/07/31 19:22:03 jvisvanathan Exp $
  */
 
 /*
@@ -31,13 +31,13 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeImpl.java,v 1.2 2002/07/11 20:33:22 jvisvanathan Exp $
+ * @version $Id: SimpleTreeImpl.java,v 1.3 2002/07/31 19:22:03 jvisvanathan Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
  */
 
-public class SimpleTreeImpl extends Tree
+public class SimpleTreeImpl extends Tree 
 {
 //
 // Protected Constants
@@ -57,12 +57,18 @@ protected String treeId = null;
 
 // Relationship Instance Variables
 
-protected RenderKit renderKit = null;
+// PENDING (visvan) once we migrate to the next version of the API,
+// we don't have to make renderkit transient, since Tree no longer
+// will store the renderkitId instead of instance.
+protected transient RenderKit renderKit = null;
 protected UIComponent root = null;
 
 //
 // Constructors and Initializers    
 //
+public SimpleTreeImpl() {
+    super();
+}
 
 /**
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.30 2002/07/22 16:58:01 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.31 2002/07/31 19:22:01 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.net.URLEncoder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.30 2002/07/22 16:58:01 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.31 2002/07/31 19:22:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -222,6 +222,12 @@ public class FormRenderer extends HtmlBasicRenderer {
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
+        // if we are saving state in page, insert a marker into buffer so that 
+        // UseFaces tag can replace it state information.
+        if ( (context.getServletContext()).
+                getAttribute(RIConstants.SAVESTATE_INITPARAM) != null ) {
+            writer.write(RIConstants.SAVESTATE_MARKER);
+        }    
         writer.write("</FORM>");
     }
 
