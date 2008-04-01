@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.13 2002/04/05 19:40:18 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.14 2002/04/15 20:10:39 jvisvanathan Exp $
  */
 
 /*
@@ -814,18 +814,14 @@ public abstract class UIComponent {
             if (null != result) {
                 // convert the object to string for rendering purpose.
                 setValue(result.toString());
-                // PENDING(visvan)
-                // Use the following code once Converters take FacesContext.
-                // currently they take eventContext,but we don't have acess
-                // to that here.
-               /* Converter converterObj = getConverter(fc);
+                Converter converterObj = getConverter(fc);
                 if (converterObj != null ) {
                     setValue(converterObj.convertObjectToString(fc,this,result));    
-                } */
+                }
 	    }
 	} catch ( FacesException e ) {
             // System.out.println(e.getMessage());
-            // PENDING (visvan) skip this exception ??
+            // PENDING (visvan) log message.
 	}
         return result;
     }

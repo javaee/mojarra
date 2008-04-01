@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractFactory.java,v 1.2 2002/04/12 23:15:46 eburns Exp $
+ * $Id: AbstractFactory.java,v 1.3 2002/04/15 20:10:38 jvisvanathan Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ import javax.servlet.ServletContext;
  * FactoryFinder could be folded into AbstractFactoryBase. <P>
 
  *
- * @version $Id: AbstractFactory.java,v 1.2 2002/04/12 23:15:46 eburns Exp $
+ * @version $Id: AbstractFactory.java,v 1.3 2002/04/15 20:10:38 jvisvanathan Exp $
  * 
  * @see	javax.faces.FacesFactory
  * @see	javax.faces.FactoryFinder#find
@@ -170,6 +170,12 @@ public class AbstractFactory extends AbstractFactoryBase
 		       "com.sun.faces.MessageListImpl");
 	factoryMap.put(Constants.REF_EVENTQUEUE,
 		       "com.sun.faces.EventQueueFactoryImpl");
+        factoryMap.put(Constants.REF_OBJECTACCESSOR,
+		       "com.sun.faces.ObjectAccessorFactoryImpl");
+        factoryMap.put(Constants.REF_NAVIGATIONHANDLER,
+		       "com.sun.faces.NavigationHandlerFactoryImpl");
+        factoryMap.put(Constants.REF_CONVERTERMANAGER,
+		       "com.sun.faces.ConverterManagerFactoryImpl");
     }
 
 //
@@ -237,7 +243,26 @@ public class AbstractFactory extends AbstractFactoryBase
 	return (FacesContext) newInstance(Constants.REF_FACESCONTEXT, req, 
 					  resp);
     }
-
+    
+    public final NavigationHandler newNavigationHandler(NavigationMap navMap ) 
+            throws FactoryConfigurationError, FacesException {
+        HashMap argMap = new HashMap();        
+        argMap.put(Constants.REF_NAVIGATIONMAP, navMap);            
+        return (NavigationHandler) newInstance(Constants.REF_NAVIGATIONHANDLER, argMap);
+    }
+    
+    public final ConverterManager newConverterManager(ServletContext sc)
+            throws FactoryConfigurationError, FacesException {
+	return (ConverterManager) newInstance(Constants.REF_CONVERTERMANAGER, sc);
+    }
+    
+    public final ObjectAccessor newObjectAccessor(FacesContext fc)
+            throws FactoryConfigurationError, FacesException {
+        HashMap argMap = new HashMap();
+        argMap.put(Constants.REF_FACESCONTEXT, fc);        
+	return (ObjectAccessor) newInstance(Constants.REF_OBJECTACCESSOR, argMap);
+    }
+    
     // 
     // General methods
     //

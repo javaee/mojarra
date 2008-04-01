@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.21 2002/04/11 22:51:20 eburns Exp $
+ * $Id: Constants.java,v 1.22 2002/04/15 20:10:39 jvisvanathan Exp $
  */
 
 /*
@@ -122,19 +122,22 @@ public class Constants {
     /**
      * Name for ObjectAccessorFactory
      */
-    public static final String REF_OBJECTACCESSORFACTORY = "objectAccessorFactory";
+    public static final String REF_OBJECTACCESSOR = "objectAccessor";
 
     /**
      * Name for NavigationHandlerFactory
      */
-    public static final String REF_NAVIGATIONHANDLERFACTORY = 
-            "navigationHandlerFactory";
-
+    public static final String REF_NAVIGATIONHANDLER = "navigationHandler";
+    
+     /**
+     * Name for NavigationMap
+     */
+    public static final String REF_NAVIGATIONMAP = "navigationMap";
+    
     /**
      * Name for TreeEngine
      */
-    public static final String REF_TREEENGINE = 
-            "faces.treeEngine";
+    public static final String REF_TREEENGINE = "faces.treeEngine";
     
     /**
      * The name of a Renderer.
