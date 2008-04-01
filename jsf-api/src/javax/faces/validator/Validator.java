@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.4 2002/07/26 21:53:31 craigmcc Exp $
+ * $Id: Validator.java,v 1.5 2002/08/29 05:39:13 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.validator;
 
 
+import java.io.Serializable;
 import java.util.Iterator;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
@@ -41,29 +42,7 @@ import javax.faces.context.Message;
  * robust user interfaces for configuring them.</p>
  */
 
-public interface Validator {
-
-
-    /**
-     * <p>Return an {@link AttributeDescriptor} for the specified attribute
-     * name that is supported by this <code>Validator</code>.</p>
-     *
-     * @param name The requested attribute name
-     *
-     * @exception IllegalArgumentException if this attribute is not
-     *  supported by this <code>Validator</code>.
-     * @exception NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     */
-    public AttributeDescriptor getAttributeDescriptor(String name);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of the supported
-     * attributes for this <code>Validator</code>.  If no attributes are
-     * supported, an empty <code>Iterator</code> is returned.</p>
-     */
-    public Iterator getAttributeNames();
+public interface Validator extends Serializable {
 
 
     /**
@@ -82,9 +61,13 @@ public interface Validator {
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
      *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
+     *
      * @exception NullPointerException if any parameter is <code>null</code>
      */
-    public void validate(FacesContext context, UIComponent component);
+    public boolean validate(FacesContext context, UIComponent component);
 
 
 }

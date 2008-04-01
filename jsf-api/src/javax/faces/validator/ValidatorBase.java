@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.5 2002/08/09 21:31:39 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.6 2002/08/29 05:39:14 craigmcc Exp $
  */
 
 /*
@@ -31,56 +31,7 @@ import javax.faces.context.MessageResourcesFactory;
 abstract class ValidatorBase implements Validator {
 
 
-    // ------------------------------------------------------- Static Variables
-
-
-    /**
-     * <p>The set of {@link AttributeDescriptor}s for the attributes supported
-     * by this {@link Validator}.</p>
-     */
-    protected static HashMap descriptors = new HashMap();
-
-
     // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Return an {@link AttributeDescriptor} for the specified attribute
-     * name that is supported by this <code>Validator</code>.</p>
-     *
-     * @param name The requested attribute name
-     *
-     * @exception IllegalArgumentException if this attribute is not
-     *  supported by this <code>Validator</code>.
-     * @exception NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     */
-    public AttributeDescriptor getAttributeDescriptor(String name) {
-
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        AttributeDescriptor descriptor =
-            (AttributeDescriptor) descriptors.get(name);
-        if (descriptor != null) {
-            return (descriptor);
-        } else {
-            throw new IllegalArgumentException(name);
-        }
-
-    }
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of the supported
-     * attributes for this <code>Validator</code>.  If no attributes are
-     * supported, an empty <code>Iterator</code> is returned.</p>
-     */
-    public Iterator getAttributeNames() {
-
-        return (descriptors.keySet().iterator());
-
-    }
 
 
     /**
@@ -91,8 +42,13 @@ abstract class ValidatorBase implements Validator {
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
+     *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
      */
-    public abstract void validate(FacesContext context, UIComponent component);
+    public abstract boolean validate(FacesContext context,
+                                     UIComponent component);
 
 
     // ------------------------------------------------------ Protected Methods
@@ -148,6 +104,14 @@ abstract class ValidatorBase implements Validator {
     }
 
 
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>double</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     *
+     * @exception NumberFormatException if conversion is not possible
+     */
     protected double doubleValue(Object attributeValue)
         throws NumberFormatException {
 
@@ -170,6 +134,14 @@ abstract class ValidatorBase implements Validator {
     }
 
 
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>long</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     *
+     * @exception NumberFormatException if conversion is not possible
+     */
     protected long longValue(Object attributeValue)
         throws NumberFormatException {
 
@@ -187,6 +159,25 @@ abstract class ValidatorBase implements Validator {
             return ( ((Float) attributeValue).longValue() );
         } else {
             return (Long.parseLong(attributeValue.toString()));
+        }
+
+    }
+
+
+    /**
+     * <p>Return the specified attribute value, converted to a
+     * <code>String</code>.</p>
+     *
+     * @param attributeValue The attribute value to be converted
+     */
+    protected String stringValue(Object attributeValue) {
+
+        if (attributeValue == null) {
+            return (null);
+        } else if (attributeValue instanceof String) {
+            return ((String) attributeValue);
+        } else {
+            return (attributeValue.toString());
         }
 
     }

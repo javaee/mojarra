@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.7 2002/07/28 23:16:58 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.8 2002/08/29 05:39:13 craigmcc Exp $
  */
 
 /*
@@ -27,15 +27,15 @@ import javax.faces.context.Message;
  *     to check for this case.)</li>
  * <li>Convert the value to a String, if necessary, by calling its
  *     <code>toString()</code> method.</li>
- * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is an Integer, check the length of the converted
- *     String against this limit.  If the String length is less than the
- *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
- *     {@link FacesContext} for this request.</li>
- * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is an Integer, check the length of the converted
+ * <li>If a <code>maximum</code> property has been configured on this
+ *     {@link Validator}, check the length of the converted
  *     String against this limit.  If the String length is larger than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
+ *     {@link FacesContext} for this request.</li>
+ * <li>If a <code>minimum</code> property has been configured on this
+ *     {@link Validator}, check the length of the converted
+ *     String against this limit.  If the String length is less than the
+ *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
  * </ul>
  */
@@ -44,30 +44,6 @@ public class LengthValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants
-
-
-    /**
-     * <p>The attribute name of an <code>Integer</code> value representing
-     * the maximum length to check for.</p>
-     */
-    public static final String MAXIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.LengthValidator.MAXIMUM";
-
-
-    /**
-     * <p>The attribute name of an <code>Integer</code> value representing
-     * the minimum length to check for.</p>
-     */
-    public static final String MINIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.LengthValidator.MINIMUM";
-
-
-    /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * one of the limit attributes is not of the correct type.</p>
-     */
-    public static final String LIMIT_MESSAGE_ID =
-        "javax.faces.validator.LengthValidator.LIMIT";
 
 
     /**
@@ -90,22 +66,99 @@ public class LengthValidator extends ValidatorBase {
         "javax.faces.validator.LengthValidator.MINIMUM";
 
 
-    // ----------------------------------------------------- Static Initializer
+    // ------------------------------------------------------------- Properties
 
 
-    static { // FIXME - i18n !!!
+    /**
+     * <p>The maximum length to be enforced by this {@link Validator}, if
+     * <code>maximumSet</code> is <code>true</code>.</p>
+     */
+    private int maximum = 0;
 
-        descriptors.put
-            (MAXIMUM_ATTRIBUTE_NAME,
-             new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
-                                         Integer.class,
-                                         "maxLength"));
 
-        descriptors.put
-            (MINIMUM_ATTRIBUTE_NAME,
-             new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
-                                         Integer.class,
-                                         "minLength"));
+    /**
+     * <p>Return the maximum length to be enforced by this {@link Validator},
+     * if <code>isMaximumSet()</code> returns <code>true</code>.</p>
+     */
+    public int getMaximum() {
+
+        return (this.maximum);
+
+    }
+
+
+    /**
+     * <p>Set the maximum length to be enforced by this {@link Validator}.</p>
+     *
+     * @param maximum The new maximum value
+     */
+    public void setMaximum(int maximum) {
+
+        this.maximum = maximum;
+        this.maximumSet = true;
+
+    }
+
+
+    /**
+     * <p>Flag indicating whether a maximum length has been set.</p>
+     */
+    private boolean maximumSet = false;
+
+
+    /**
+     * <p>Return a flag indicating whether a maximum length has been set.</p>
+     */
+    public boolean isMaximumSet() {
+
+        return (this.maximumSet);
+
+    }
+
+
+    /**
+     * <p>The minimum length to be enforced by this {@link Validator}, if
+     * <code>minimumSet</code> is <code>true</code>.</p>
+     */
+    private int minimum = 0;
+
+
+    /**
+     * <p>Return the minimum length to be enforced by this {@link Validator},
+     * if <code>isMinimumSet()</code> returns <code>true</code>.</p>
+     */
+    public int getMinimum() {
+
+        return (this.minimum);
+
+    }
+
+
+    /**
+     * <p>Set the minimum length to be enforced by this {@link Validator}.</p>
+     *
+     * @param minimum The new minimum value
+     */
+    public void setMinimum(int minimum) {
+
+        this.minimum = minimum;
+        this.minimumSet = true;
+
+    }
+
+
+    /**
+     * <p>Flag indicating whether a minimum length has been set.</p>
+     */
+    private boolean minimumSet = false;
+
+
+    /**
+     * <p>Return a flag indicating whether a minimum limit has been set.</p>
+     */
+    public boolean isMinimumSet() {
+
+        return (this.minimumSet);
 
     }
 
@@ -121,87 +174,37 @@ public class LengthValidator extends ValidatorBase {
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
+     *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
      */
-    public void validate(FacesContext context, UIComponent component) {
+    public boolean validate(FacesContext context, UIComponent component) {
 
+        boolean result = true;
         Object value = component.getValue();
         if (value != null) {
-            String svalue = value.toString();
-            checkMaximum(context, component, svalue);
-            checkMinimum(context, component, svalue);
-        }
-
-    }
-
-
-    // -------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Check the specified value against the maximum length constraint
-     * (if any).</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     * @param svalue String version of the component value to be checked
-     */
-    private void checkMaximum(FacesContext context, UIComponent component,
-                              String svalue) {
-
-        long attribute = 0L;
-	Object attrObj = null;
-        try {
-	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
-            if (attrObj == null) {
-                return;
+            String converted = stringValue(value);
+            if (isMaximumSet() &&
+                (converted.length() > maximum)) {
+                context.addMessage(component,
+                                   getMessage(context,
+                                              MAXIMUM_MESSAGE_ID,
+                                              new Object[] {
+                                       new Integer(maximum) } ));
+                result = false;
             }
-            attribute = longValue(attrObj);
-        } catch (NumberFormatException e) {
-            context.addMessage(component,
-                               getMessage(context, LIMIT_MESSAGE_ID));
-            return;
-        } 
-        if (svalue.length() > attribute) {
-            context.addMessage(component,
-                               getMessage(context, MAXIMUM_MESSAGE_ID,
-                                         new Object[]
-                               { new Long(attribute) }));
-        }
-
-    }
-
-
-    /**
-     * <p>Check the specified value against the minimum length constraint
-     * (if any).</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     * @param svalue String version of the component value to be checked
-     */
-    private void checkMinimum(FacesContext context, UIComponent component,
-                              String svalue) {
-
-        long attribute = 0L;
-	Object attrObj = null;
-        try {
-	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
-            if (attrObj == null) {
-                return;
+            if (isMinimumSet() &&
+                (converted.length() < minimum)) {
+                context.addMessage(component,
+                                   getMessage(context,
+                                              MINIMUM_MESSAGE_ID,
+                                              new Object[] {
+                                       new Integer(minimum) } ));
+                result = false;
             }
-            attribute = longValue(attrObj);
-        } catch (NumberFormatException e) {
-            context.addMessage(component,
-                               getMessage(context, LIMIT_MESSAGE_ID));
-            return;
-        } 
-
-        if (svalue.length() < attribute) {
-            context.addMessage(component,
-                               getMessage(context, MINIMUM_MESSAGE_ID,
-                                         new Object[]
-                               { new Long(attribute) }));
         }
+        return (result);
 
     }
 

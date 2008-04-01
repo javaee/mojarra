@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.4 2002/06/14 22:16:42 craigmcc Exp $
+ * $Id: RequiredValidator.java,v 1.5 2002/08/29 05:39:13 craigmcc Exp $
  */
 
 /*
@@ -52,14 +52,21 @@ public class RequiredValidator extends ValidatorBase {
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
+     *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
      */
-    public void validate(FacesContext context, UIComponent component) {
+    public boolean validate(FacesContext context, UIComponent component) {
 
+        boolean result = true;
         Object value = component.getValue();
         if (value == null) {
             context.addMessage(component,
                                getMessage(context, FAILED_MESSAGE_ID));
+            result = false;
         }
+        return (result);
 
     }
 

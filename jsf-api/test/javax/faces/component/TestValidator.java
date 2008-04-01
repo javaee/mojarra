@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.2 2002/07/26 21:53:33 craigmcc Exp $
+ * $Id: TestValidator.java,v 1.3 2002/08/29 05:39:16 craigmcc Exp $
  */
 
 /*
@@ -25,16 +25,8 @@ import javax.faces.validator.Validator;
 public class TestValidator implements Validator {
 
 
-    public AttributeDescriptor getAttributeDescriptor(String name) {
-        return (null);
-    }
-
-    public Iterator getAttributeNames() {
-        return (Collections.EMPTY_LIST.iterator());
-    }
-
-    public void validate(FacesContext context, UIComponent component) {
-        ; // No action taken
+    public boolean validate(FacesContext context, UIComponent component) {
+        return (true); // No action taken
     }
 
 

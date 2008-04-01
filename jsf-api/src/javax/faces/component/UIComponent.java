@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.45 2002/08/04 20:46:27 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.46 2002/08/29 05:39:11 craigmcc Exp $
  */
 
 /*
@@ -591,6 +591,11 @@ public interface UIComponent extends Serializable {
      *     to perform any self-validation that has been defined.</li>
      * <li>Call the <code>validate()</code> method on each registered
      *     {@link Validator} for this component.</li>
+     * <li>If any of the calls to a <code>validate()</code> method performed
+     *     in the preceding steps returns <code>false</code>, set the
+     *     <code>valid</code> property of this component to <code>false</code>.
+     *     Otherwise, set the <code>valid</code> property of this component
+     *     to <code>true</code>.</li>
      * <ul>
      *
      * <p>Normally, component writers will not overwrite this method -- it is
@@ -637,10 +642,14 @@ public interface UIComponent extends Serializable {
      *
      * @param context FacesContext for the request we are processing
      *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
+     *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void validate(FacesContext context);
+    public boolean validate(FacesContext context);
 
 
 }

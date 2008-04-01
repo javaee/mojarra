@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.1 2002/07/28 23:16:58 craigmcc Exp $
+ * $Id: LongRangeValidator.java,v 1.2 2002/08/29 05:39:13 craigmcc Exp $
  */
 
 /*
@@ -25,19 +25,17 @@ import javax.faces.context.Message;
  *     If it is <code>null</code>, exit immediately.  (If null values
  *     should not be allowed, a {@link RequiredValidator} can be configured
  *     to check for this case.)</li>
- * <li>If the current component value is not an integer type (byte, char,
- *     short, int, long), or a String that can be converted to a long,
+ * <li>If the current component value is not a floating point type, or
+ *     a String that is convertible to long,
  *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this
  *     request, and skip subsequent checks.</li>
- * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is an integer type (or a String that can be
- *     converted to a long), check the component value against
+ * <li>If a <code>maximum</code> property has been configured on this
+ *     {@link Validator}, check the component value against
  *     this limit.  If the component value is greater than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
- * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is an integer type (or a String that can be
- *     converted to a long), check the component value against
+ * <li>If a <code>minimum</code> property has been configured on this
+ *     {@link Validator}, check the component value against
  *     this limit.  If the component value is less than the
  *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
@@ -48,30 +46,6 @@ public class LongRangeValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants
-
-
-    /**
-     * <p>The attribute name of an integer value representing
-     * the maximum value to check for.</p>
-     */
-    public static final String MAXIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.LongRangeValidator.MAXIMUM";
-
-
-    /**
-     * <p>The attribute name of an integer value representing
-     * the minimum value to check for.</p>
-     */
-    public static final String MINIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.LongRangeValidator.MINIMUM";
-
-
-    /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * one of the limit attributes is not of the correct type.</p>
-     */
-    public static final String LIMIT_MESSAGE_ID =
-        "javax.faces.validator.LongRangeValidator.LIMIT";
 
 
     /**
@@ -102,22 +76,99 @@ public class LongRangeValidator extends ValidatorBase {
         "javax.faces.validator.LongRangeValidator.TYPE";
 
 
-    // ----------------------------------------------------- Static Initializer
+    // ------------------------------------------------------------- Properties
 
 
-    static { // FIXME - i18n !!!
+    /**
+     * <p>The maximum value to be enforced by this {@link Validator}, if
+     * <code>maximumSet</code> is <code>true</code>.</p>
+     */
+    private long maximum = 0;
 
-        descriptors.put
-            (MAXIMUM_ATTRIBUTE_NAME,
-             new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
-                                         Long.class,
-                                         "maxValue"));
 
-        descriptors.put
-            (MINIMUM_ATTRIBUTE_NAME,
-             new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
-                                         Long.class,
-                                         "minValue"));
+    /**
+     * <p>Return the maximum value to be enforced by this {@link Validator},
+     * if <code>isMaximumSet()</code> returns <code>true</code>.</p>
+     */
+    public long getMaximum() {
+
+        return (this.maximum);
+
+    }
+
+
+    /**
+     * <p>Set the maximum value to be enforced by this {@link Validator}.</p>
+     *
+     * @param maximum The new maximum value
+     */
+    public void setMaximum(long maximum) {
+
+        this.maximum = maximum;
+        this.maximumSet = true;
+
+    }
+
+
+    /**
+     * <p>Flag indicating whether a maximum limit has been set.</p>
+     */
+    private boolean maximumSet = false;
+
+
+    /**
+     * <p>Return a flag indicating whether a maximum limit has been set.</p>
+     */
+    public boolean isMaximumSet() {
+
+        return (this.maximumSet);
+
+    }
+
+
+    /**
+     * <p>The minimum value to be enforced by this {@link Validator}, if
+     * <code>minimumSet</code> is <code>true</code>.</p>
+     */
+    private long minimum = 0;
+
+
+    /**
+     * <p>Return the minimum value to be enforced by this {@link Validator},
+     * if <code>isMinimumSet()</code> returns <code>true</code>.</p>
+     */
+    public long getMinimum() {
+
+        return (this.minimum);
+
+    }
+
+
+    /**
+     * <p>Set the minimum value to be enforced by this {@link Validator}.</p>
+     *
+     * @param minimum The new minimum value
+     */
+    public void setMinimum(long minimum) {
+
+        this.minimum = minimum;
+        this.minimumSet = true;
+
+    }
+
+
+    /**
+     * <p>Flag indicating whether a minimum limit has been set.</p>
+     */
+    private boolean minimumSet = false;
+
+
+    /**
+     * <p>Return a flag indicating whether a minimum limit has been set.</p>
+     */
+    public boolean isMinimumSet() {
+
+        return (this.minimumSet);
 
     }
 
@@ -133,94 +184,43 @@ public class LongRangeValidator extends ValidatorBase {
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
+     *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
      */
-    public void validate(FacesContext context, UIComponent component) {
+    public boolean validate(FacesContext context, UIComponent component) {
 
+        boolean result = true;
         Object value = component.getValue();
         if (value != null) {
             try {
                 long converted = longValue(value);
-                checkMaximum(context, component, converted);
-                checkMinimum(context, component, converted);
+                if (isMaximumSet() &&
+                    (converted > maximum)) {
+                    context.addMessage(component,
+                                       getMessage(context,
+                                                  MAXIMUM_MESSAGE_ID,
+                                                  new Object[] {
+                                           new Long(maximum) }));
+                    result = false;
+                }
+                if (isMinimumSet() &&
+                    (converted < minimum)) {
+                    context.addMessage(component,
+                                       getMessage(context,
+                                                  MINIMUM_MESSAGE_ID,
+                                                  new Object[] {
+                                           new Long(minimum) }));
+                    result = false;
+                }
             } catch (NumberFormatException e) {
                 context.addMessage(component,
                                    getMessage(context, TYPE_MESSAGE_ID));
-                return;
+                result = false;
             }
         }
-
-    }
-
-
-    // -------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Check the specified value against the maximum constraint
-     * (if any).</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     * @param value Component value being checked
-     */
-    private void checkMaximum(FacesContext context, UIComponent component,
-                              long value) {
-
-        long attribute = 0L;
-	Object attrObj = null;
-        try {
-	    attrObj = component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
-            if (attrObj == null) {
-                return;
-            }
-            attribute = longValue(attrObj);
-        } catch (NumberFormatException e) {
-            context.addMessage(component,
-                               getMessage(context, LIMIT_MESSAGE_ID));
-            return;
-        }
-
-        if (value > attribute) {
-            context.addMessage(component,
-                               getMessage(context, MAXIMUM_MESSAGE_ID,
-                                         new Object[]
-                               { new Long(attribute) }));
-        }
-
-    }
-
-
-    /**
-     * <p>Check the specified value against the minimum constraint
-     * (if any).</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     * @param value Component value being checked
-     */
-    private void checkMinimum(FacesContext context, UIComponent component,
-                              long value) {
-
-        long attribute = 0L;
-	Object attrObj = null;
-        try {
-	    attrObj = component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
-            if (attrObj == null) {
-                return;
-            }
-            attribute = longValue(attrObj);
-        } catch (NumberFormatException e) {
-            context.addMessage(component,
-                               getMessage(context, LIMIT_MESSAGE_ID));
-            return;
-        }
-
-        if (value < attribute) {
-            context.addMessage(component,
-                               getMessage(context, MINIMUM_MESSAGE_ID,
-                                         new Object[]
-                               { new Long(attribute) }));
-        }
+        return (result);
 
     }
 

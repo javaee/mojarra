@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.17 2002/08/04 20:46:27 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.18 2002/08/29 05:39:11 craigmcc Exp $
  */
 
 /*
@@ -1208,6 +1208,11 @@ public abstract class UIComponentBase implements UIComponent {
      *     to perform any self-validation that has been defined.</li>
      * <li>Call the <code>validate()</code> method on each registered
      *     {@link Validator} for this component.</li>
+     * <li>If any of the calls to a <code>validate()</code> method performed
+     *     in the preceding steps returns <code>false</code>, set the
+     *     <code>valid</code> property of this component to <code>false</code>.
+     *     Otherwise, set the <code>valid</code> property of this component
+     *     to <code>true</code>.</li>
      * <ul>
      *
      * <p>Normally, component writers will not overwrite this method -- it is
@@ -1224,14 +1229,20 @@ public abstract class UIComponentBase implements UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        validate(context);
+        boolean result = true;
+        if (!validate(context)) {
+            result = false;
+        }
         if (this.validators != null) {
             Iterator validators = getValidators();
             while (validators.hasNext()) {
                 Validator validator = (Validator) validators.next();
-                validator.validate(context, this);
+                if (!validator.validate(context, this)) {
+                    result = false;
+                }
             }
         }
+        setValid(result);
 
     }
 
@@ -1282,15 +1293,19 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * @param context FacesContext for the request we are processing
      *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
+     *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void validate(FacesContext context) {
+    public boolean validate(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        ; // Default implementation does nothing
+        return (true); // Default implementation simply returns true
 
     }
 

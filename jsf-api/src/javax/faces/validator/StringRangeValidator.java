@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.4 2002/07/12 00:30:03 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.5 2002/08/29 05:39:13 craigmcc Exp $
  */
 
 /*
@@ -25,16 +25,15 @@ import javax.faces.context.Message;
  *     If it is <code>null</code>, exit immediately.  (If null values
  *     should not be allowed, a {@link RequiredValidator} can be configured
  *     to check for this case.)</li>
- * <li>If the current component value is not a <code>String</code>,
- *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this
- *     request, and skip subsequent checks.</li>
- * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is a String, check the component value against
+ * <li>Convert the current component value to String, if necessary,
+ *     by calling <code>toString()</code>.</p>
+ * <li>If a <code>maximum</code> property has been configured on this
+ *     {@link Validator}, check the component value against
  *     this limit.  If the component value is greater than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
- * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
- *     component, and it is a String, check the component value against
+ * <li>If a <code>minimum</code> property has been configured on this
+ *     {@link Validator}, check the component value against
  *     this limit.  If the component value is less than the
  *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
  *     {@link FacesContext} for this request.</li>
@@ -48,32 +47,8 @@ public class StringRangeValidator extends ValidatorBase {
 
 
     /**
-     * <p>The attribute name of a <code>String</code> representing
-     * the maximum value to check for.</p>
-     */
-    public static final String MAXIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.StringRangeValidator.MAXIMUM";
-
-
-    /**
-     * <p>The attribute name of a <code>String</code> representing
-     * the minimum value to check for.</p>
-     */
-    public static final String MINIMUM_ATTRIBUTE_NAME =
-        "javax.faces.validator.StringRangeValidator.MINIMUM";
-
-
-    /**
      * <p>The message identifier of the {@link Message} to be created if
-     * one of the limit attributes is not of the correct type.</p>
-     */
-    public static final String LIMIT_MESSAGE_ID =
-        "javax.faces.validator.StringRangeValidator.LIMIT";
-
-
-    /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * the minimum value check fails.  The message format string for this
+     * the maximum value check fails.  The message format string for this
      * message may optionally include a <code>{0}</code> placeholder, which
      * will be replaced by the configured maximum value.</p>
      */
@@ -91,30 +66,99 @@ public class StringRangeValidator extends ValidatorBase {
         "javax.faces.validator.StringRangeValidator.MINIMUM";
 
 
+    // ------------------------------------------------------------- Properties
+
+
     /**
-     * <p>The message identifier of the {@link Message} to be created if
-     * the current value of this component is not of the correct type.
+     * <p>The maximum value to be enforced by this {@link Validator}, if
+     * <code>maximumSet</code> is <code>true</code>.</p>
      */
-    public static final String TYPE_MESSAGE_ID =
-        "javax.faces.validator.StringRangeValidator.TYPE";
+    private String maximum = null;
 
 
-    // ----------------------------------------------------- Static Initializer
+    /**
+     * <p>Return the maximum value to be enforced by this {@link Validator},
+     * if <code>isMaximumSet()</code> returns <code>true</code>.</p>
+     */
+    public String getMaximum() {
+
+        return (this.maximum);
+
+    }
 
 
-    static { // FIXME - i18n !!!
+    /**
+     * <p>Set the maximum value to be enforced by this {@link Validator}.</p>
+     *
+     * @param maximum The new maximum value
+     */
+    public void setMaximum(String maximum) {
 
-        descriptors.put
-            (MAXIMUM_ATTRIBUTE_NAME,
-             new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
-                                         String.class,
-                                         "maxValue"));
+        this.maximum = maximum;
+        this.maximumSet = true;
 
-        descriptors.put
-            (MINIMUM_ATTRIBUTE_NAME,
-             new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
-                                         String.class,
-                                         "minValue"));
+    }
+
+
+    /**
+     * <p>Flag indicating whether a maximum limit has been set.</p>
+     */
+    private boolean maximumSet = false;
+
+
+    /**
+     * <p>Return a flag indicating whether a maximum limit has been set.</p>
+     */
+    public boolean isMaximumSet() {
+
+        return (this.maximumSet);
+
+    }
+
+
+    /**
+     * <p>The minimum value to be enforced by this {@link Validator}, if
+     * <code>minimumSet</code> is <code>true</code>.</p>
+     */
+    private String minimum = null;
+
+
+    /**
+     * <p>Return the minimum value to be enforced by this {@link Validator},
+     * if <code>isMinimumSet()</code> returns <code>true</code>.</p>
+     */
+    public String getMinimum() {
+
+        return (this.minimum);
+
+    }
+
+
+    /**
+     * <p>Set the minimum value to be enforced by this {@link Validator}.</p>
+     *
+     * @param minimum The new minimum value
+     */
+    public void setMinimum(String minimum) {
+
+        this.minimum = minimum;
+        this.minimumSet = true;
+
+    }
+
+
+    /**
+     * <p>Flag indicating whether a minimum limit has been set.</p>
+     */
+    private boolean minimumSet = false;
+
+
+    /**
+     * <p>Return a flag indicating whether a minimum limit has been set.</p>
+     */
+    public boolean isMinimumSet() {
+
+        return (this.minimumSet);
 
     }
 
@@ -130,90 +174,37 @@ public class StringRangeValidator extends ValidatorBase {
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
+     *
+     * @return <code>true</code> if all validations performed by this
+     *  method passed successfully, or <code>false</code> if one or more
+     *  validations performed by this method failed
      */
-    public void validate(FacesContext context, UIComponent component) {
+    public boolean validate(FacesContext context, UIComponent component) {
 
+        boolean result = true;
         Object value = component.getValue();
         if (value != null) {
-            try {
-                String converted = (String) value;
-                checkMaximum(context, component, converted);
-                checkMinimum(context, component, converted);
-            } catch (ClassCastException e) {
+            String converted = stringValue(value);
+            if (isMaximumSet() &&
+                (converted.compareTo(maximum) > 0)) {
                 context.addMessage(component,
-                                   getMessage(context, TYPE_MESSAGE_ID));
-                return;
+                                   getMessage(context,
+                                              MAXIMUM_MESSAGE_ID,
+                                              new Object[] {
+                                       new String(maximum) }));
+                result = false;
+            }
+            if (isMinimumSet() &&
+                (converted.compareTo(minimum) < 0)) {
+                context.addMessage(component,
+                                   getMessage(context,
+                                              MINIMUM_MESSAGE_ID,
+                                              new Object[] {
+                                       new String(minimum) }));
+                result = false;
             }
         }
-
-    }
-
-
-    // -------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Check the specified value against the maximum constraint
-     * (if any).</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     * @param value Component value being checked
-     */
-    private void checkMaximum(FacesContext context, UIComponent component,
-                              String value) {
-
-        String attribute = null;
-        try {
-            attribute = (String)
-                component.getAttribute(MAXIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
-                return;
-            }
-        } catch (ClassCastException e) {
-            context.addMessage(component,
-                               getMessage(context, LIMIT_MESSAGE_ID));
-            return;
-        }
-
-        if (value.compareTo(attribute) > 0) {
-            context.addMessage(component,
-                               getMessage(context, MAXIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
-        }
-
-    }
-
-
-    /**
-     * <p>Check the specified value against the minimum constraint
-     * (if any).</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     * @param value Component value being checked
-     */
-    private void checkMinimum(FacesContext context, UIComponent component,
-                              String value) {
-
-        String attribute = null;
-        try {
-            attribute = (String)
-                component.getAttribute(MINIMUM_ATTRIBUTE_NAME);
-            if (attribute == null) {
-                return;
-            }
-        } catch (ClassCastException e) {
-            context.addMessage(component,
-                               getMessage(context, LIMIT_MESSAGE_ID));
-            return;
-        }
-
-        if (value.compareTo(attribute) < 0) {
-            context.addMessage(component,
-                               getMessage(context, MINIMUM_MESSAGE_ID,
-                                         new Object[] { attribute }));
-        }
+        return (result);
 
     }
 
