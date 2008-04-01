@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.7 2002/06/21 00:31:20 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.8 2002/06/21 18:57:29 eburns Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ public class FacesContextImpl extends FacesContext
     private ResponseStream responseStream = null;
     private ResponseWriter responseWriter = null;
     private HttpSession session = null;
-    private ArrayList events = null;
+    private ArrayList applicationEvents = null;
     
     // Attribute Instance Variables
 
@@ -76,14 +76,14 @@ public class FacesContextImpl extends FacesContext
     // Constructors and Initializers    
     // 
     public FacesContextImpl(ServletContext sc, ServletRequest request,
-                     ServletResponse response, String lifecycleId)
+			    ServletResponse response, Lifecycle lifecycle)
         throws FacesException {
         
         try {
             ParameterCheck.nonNull(sc);
             ParameterCheck.nonNull(request);
             ParameterCheck.nonNull(response);
-            ParameterCheck.nonNull(lifecycleId);
+            ParameterCheck.nonNull(lifecycle);
         } catch (Exception e ) {
             throw new FacesException("Cannot create FacesContext." + 
                 "One or more input paramters might be null");
@@ -97,10 +97,7 @@ public class FacesContextImpl extends FacesContext
             this.session =
                 ((HttpServletRequest) request).getSession(false);
         }
-        LifecycleFactory lifecycleFactory = (LifecycleFactory)
-            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Assert.assert_it(lifecycleFactory != null);
-        this.lifecycle = lifecycleFactory.getLifecycle(lifecycleId); 
+        this.lifecycle = lifecycle; 
     }
 
     //
@@ -115,16 +112,18 @@ public class FacesContextImpl extends FacesContext
     // Methods from FacesContext
     //
     public Iterator getApplicationEvents() {
-        if (events != null) {
-            return (events.iterator());
+        if (applicationEvents != null) {
+            return (applicationEvents.iterator());
         } else {
             return (Collections.EMPTY_LIST.iterator());
         }
     }
 
     public int getApplicationEventsCount() {
-	Assert.assert_it(false, "PENDING(): fixme");
-	return -1;
+	if (null == applicationEvents) {
+	    return 0;
+	}
+	return applicationEvents.size();
     }
 
 
@@ -254,10 +253,10 @@ public class FacesContextImpl extends FacesContext
 
     public void addApplicationEvent(FacesEvent event) {
         ParameterCheck.nonNull(event);
-        if (events == null) {
-            events = new ArrayList();
+        if (applicationEvents == null) {
+            applicationEvents = new ArrayList();
         }
-        events.add(event);
+        applicationEvents.add(event);
     }
 
     public void addMessage(Message message) {
