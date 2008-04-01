@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.23 2002/08/20 20:00:56 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.24 2002/08/30 17:53:53 rkitain Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import javax.faces.component.UICommand;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UIGraphic;
@@ -51,7 +52,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.23 2002/08/20 20:00:56 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.24 2002/08/30 17:53:53 rkitain Exp $
  * 
  *
  */
@@ -154,6 +155,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_graphic_image", "graphicimage");
 
         theRequest.addParameter("/my_output_errors", "outputerrors");
+
+        theRequest.addParameter("/my_output_message", "outputmessage");
     } 
 
     public void testRenderers() {
@@ -190,6 +193,8 @@ public class TestRenderers_2 extends JspFacesTestCase
             testGraphicImageRenderer(root);
 
             testOutputErrorsRenderer(root);
+
+            testOutputMessageRenderer(root);
             
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
@@ -526,6 +531,45 @@ public class TestRenderers_2 extends JspFacesTestCase
         result = errorsRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
+
+    public void testOutputMessageRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing OutputMessageRenderer");
+        UIOutput output = new UIOutput();
+        output.setComponentId("my_output_message");
+        output.setValue("My name is {0} {1}");
+        UIParameter param1, param2 = null;
+        param1 = new UIParameter();
+        param1.setComponentId("p1");
+        param2 = new UIParameter();
+        param2.setComponentId("p2");
+        param1.setValue("Bobby");
+        param2.setValue("Orr");
+        output.addChild(param1);
+        output.addChild(param2);
+        root.addChild(output);
+
+        MessageRenderer messageRenderer = new MessageRenderer();
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+
+        messageRenderer.encodeBegin(getFacesContext(), output);
+        messageRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = messageRenderer.supportsComponentType(
+            "javax.faces.component.UIOutput");
+        assertTrue(result);
+        result = messageRenderer.supportsComponentType(output);
+        assertTrue(result);
+        result = messageRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+        
 
     public void testInputDateRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Input_DateRenderer");
