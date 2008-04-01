@@ -13,10 +13,20 @@ Release Notes</h1></center>
 
 <hr>
 <br><a NAME="14145"></a>Revised:01/03/2002
-<p><a NAME="13552"></a>This JavaServer Faces release is based on the <a href="http://jcp.org/jsr/detail/127.jsp">JavaServer
-Faces JSR.</a>
-<br>
-<h1>
+<p><a NAME="13552"></a>The purpose of this release is to introduce you to the JavaServer Faces
+framework and to provide you with an opportunity to give us feedback on
+the work we've done so far.
+<p>This Early Access release of JavaServer Faces provides an early
+alpha version of the JSF technology which is currently being
+developed under the JCP as <a href="http://jcp.org/jsr/detail/127.jsp">JSR127</a>.
+The expert group is actively working on the specification and has
+not yet released the Community or Public drafts.
+This alpha release reflects a very early snapshot of a draft specification
+which has evolved significantly since the code freeze for this EA
+release.&nbsp; This means that the APIs and designs contained in this
+release do not necessarily match what will be released in the
+upcoming Community and Public drafts of the specification.&nbsp; This
+should be kept in mind when experimenting with this JSF technology.<h1>
 Contents</h1>
 
 <ul>
@@ -64,33 +74,25 @@ supported.
 <br>&nbsp;
 <br>&nbsp;
 <table BORDER=3 >
-<caption><a NAME="19036"></a>TABLE 1 Required Software
-<br>&nbsp;</caption>
+<caption>TABLE 1 Required Software</caption>
 
 <tr>
-<th>Software
-<br>&nbsp;</th>
+<th>Software</th>
 
 <th>Version
 <p>&nbsp;</th>
 </tr>
 
 <tr>
-<td>Java Development Kit ...</td>
+<td>Java Development Kit&nbsp;</td>
 
-<td>version 1.3 or later ...&nbsp;</td>
+<td>version 1.3 or later&nbsp;</td>
 </tr>
 
 <tr>
-<td>Tomcat Servlet Engine ...</td>
+<td>Tomcat Servlet Engine&nbsp;</td>
 
-<td>version 4.1 ...&nbsp;</td>
-</tr>
-
-<tr>
-<td><a NAME="19052"></a>...</td>
-
-<td><a NAME="19054"></a>...&nbsp;</td>
+<td>version 4.1&nbsp;</td>
 </tr>
 </table>
 
@@ -106,48 +108,72 @@ What This Release Includes</h1>
 
 <ul>&nbsp;
 <li>
-html_basic.tld: An custom tag library for representing components</li>
+html_basic.tld: A JSP custom tag library for building JSF applications
+that render to an HTML client.</li>
 
 <li>
-javax.faces: An API for representing component state and handling events</li>
-
-<li>
-A reference implementation that implements tag handling, object management,
+An API and reference implementation that provide tag handling, object management,
 rendering, and event processing.</li>
 
 <li>
-<a href="../docs/tutorial/doc/JSF.html">JavaServer Faces</a>, a tutorial
-to help you get started.</li>
+<a href="tutorial/doc/JSF.html">JavaServer Faces</a>, a tutorial to help
+you get started.</li>
 </ul>
 <a NAME="current_limitations"></a>
 <h1>
 Current Limitations</h1>
-The purpose of this release is to introduce you to the JavaServer Faces
-framework and to provide you with an opportunity to give us feedback on
-the work we've done so far. This release has several limitations.
-<ul>&nbsp;
-<li>
-Amy Fowler will&nbsp; write this part. by 01/04/02.</li>
 
-<br>&nbsp;
-<p>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;</ul>
-<a NAME="known_bugs"></a>
+<p>This release is limited to the following pieces of JSF functionality:
+<ul>
+<li>
+UI Components (Form, Command, SelectBoolean, SelectOne, TextEntry, Output)</li>
+
+<li>
+JSP Tag Library for building JSF applications</li>
+
+<li>
+ObjectTable for managing objects in scoped namespace</li>
+
+<li>
+Rendering Model (and concrete RenderKit for standard HTML rendering)</li>
+
+<li>
+Event Model</li>
+</ul>
+
+<p><br>The following pieces of functionality will be part
+of the JSF specification but are *not* included in this release:
+<ul>
+<li>
+Some UI Components (Graphic, Panel, DataGrid, DataHierarchy)</li>
+
+<li>
+Validation</li>
+
+<li>
+Page Flow &amp; Error Handling</li>
+
+<li>
+I18N</li>
+
+<li>
+Application lifecycle events</li>
+</ul>
+
+<p>Additionally, in the areas of functionality released in the EA,
+there are already significant changes in the specification with respect
+to the component classes, model object management, and the event model.
+Therefore, only experimental code should be developed against this
+release since it will not be compatibile with subsequent releases.
+<p><a NAME="known_bugs"></a>
 <h1>
 Known Bugs</h1>
 <a NAME="14607"></a>
 <table BORDER=3 >
-<caption><a NAME="18558"></a>TABLE 2 Known Bugs for This Release
-<br>&nbsp;</caption>
+<caption><a NAME="18558"></a>TABLE 2 Known Bugs for This Release</caption>
 
 <tr>
-<th>Bug ID
-<br>&nbsp;</th>
+<th>Bug ID</th>
 
 <th>Description
 <p>&nbsp;</th>
