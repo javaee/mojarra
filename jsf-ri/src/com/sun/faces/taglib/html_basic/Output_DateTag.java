@@ -1,5 +1,5 @@
 /*
- * $Id: Input_DateTag.java,v 1.4 2002/08/17 02:32:50 eburns Exp $
+ * $Id: Output_DateTag.java,v 1.1 2002/08/17 02:32:50 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_DateTag.java
+// Output_DateTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -25,14 +25,14 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Input_DateTag.java,v 1.4 2002/08/17 02:32:50 eburns Exp $
+ * @version $Id: Output_DateTag.java,v 1.1 2002/08/17 02:32:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class Input_DateTag extends InputTag
+public class Output_DateTag extends com.sun.faces.taglib.FacesTag
 {
 //
 // Protected Constants
@@ -54,7 +54,7 @@ public class Input_DateTag extends InputTag
 // Constructors and Initializers    
 //
 
-public Input_DateTag()
+public Output_DateTag()
 {
     super();
 }
@@ -71,12 +71,20 @@ public Input_DateTag()
 //
 // General Methods
 //
-
     public String getLocalRendererType() { return "DateRenderer"; }
 
     public UIComponent createComponent() {
-        return (new UIInput());
+        return (new UIOutput());
     }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	
+	if (null == component.getValue() && null != getValue()) {
+	    component.setValue(getValue());
+	}
+    }
+
 
 //
 // Methods from TagSupport
@@ -84,4 +92,4 @@ public Input_DateTag()
     
 
 
-} // end of class Input_DateTag
+} // end of class Output_DateTag

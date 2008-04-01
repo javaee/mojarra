@@ -310,6 +310,7 @@
 
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
@@ -323,7 +324,6 @@
             -->
 
 <!-- put non-running testcases here
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>

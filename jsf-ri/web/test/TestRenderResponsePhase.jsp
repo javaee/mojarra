@@ -191,6 +191,30 @@
               </td>
       </tr>
 
+      <TR>
+
+        <TD>OutputDate: 
+        </TD>
+
+	<TD><faces:output_date id="date4" value="Wed, Jul 10, 1996"
+                              dateStyle="LONG" />
+	</TD>
+
+      </TR>
+
+      <TR>
+
+        <TD>OutputDateTime: 
+        </TD>
+
+	<TD><faces:output_datetime id="date5" 
+                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM"
+                          formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a" />
+	</TD>
+
+      </TR>
+
+
 
   <TABLE>
 

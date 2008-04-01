@@ -168,6 +168,14 @@
                  UIInput -->
         </renderer>
 
+        <renderer>
+            <type>DateTimeRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.DateTimeRenderer</class>
+            <!-- The attributes come from the DateRenderer declaration in
+                 UIInput -->
+        </renderer>
+
+
     </component>
 
     <component>

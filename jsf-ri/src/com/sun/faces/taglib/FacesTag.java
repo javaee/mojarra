@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.19 2002/08/17 00:57:04 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.20 2002/08/17 02:32:49 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.19 2002/08/17 00:57:04 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.20 2002/08/17 02:32:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,6 +64,7 @@ protected String bundle = null;
 protected String formatStyle = null;
 protected String dateStyle = null;
 protected String timeStyle = null;
+protected String timezone = null;
 protected String formatPattern = null;
 
 protected String accept = null;
@@ -202,6 +203,16 @@ public FacesTag()
     public void setTimeStyle(String newTimeStyle)
     {
 	timeStyle = newTimeStyle;
+    }
+
+    public String getTimezone()
+    {
+	return timezone;
+    }
+    
+    public void setTimezone(String newTimezone)
+    {
+	timezone = newTimezone;
     }
     
     public String getFormatPattern()
@@ -995,6 +1006,15 @@ protected void overrideProperties(UIComponent component)
     }
     if (null == component.getAttribute("formatPattern")) {
 	component.setAttribute("formatPattern", getFormatPattern());
+    }
+    if (null == component.getAttribute("dateStyle")) {
+	component.setAttribute("dateStyle", getDateStyle());
+    }
+    if (null == component.getAttribute("timeStyle")) {
+	component.setAttribute("timeStyle", getTimeStyle());
+    }
+    if (null == component.getAttribute("timezone")) {
+	component.setAttribute("timezone", getTimezone());
     }
     
     if ( component instanceof UIOutput) {

@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=A2E2E1E1A5B5A45544B8A063005509B3">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=73F062D28313C4C936E6642616C20459">
   <TABLE BORDER="1">
 
       <TR>
@@ -201,6 +201,27 @@
                    45%
               </td>
       </tr>
+
+      <TR>
+
+        <TD>OutputDate: 
+        </TD>
+
+	<TD>Wed, Jul 10, 1996
+	</TD>
+
+      </TR>
+
+      <TR>
+
+        <TD>OutputDateTime: 
+        </TD>
+
+	<TD>Wed, Jul 10, 1996 AD at 12:31:31 PM
+	</TD>
+
+      </TR>
+
 
 
   <TABLE>

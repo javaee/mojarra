@@ -22,6 +22,18 @@
 
             <table> 
 
+      <TR>
+
+        <TD>OutputDateTime: 
+        </TD>
+
+	<TD><faces:output_datetime id="date3" 
+                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM"
+                          formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a" />
+	</TD>
+
+      </TR>
+
             <tr>
 
              <td><FONT COLOR="RED">Custom</FONT></TD>
