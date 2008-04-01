@@ -1,5 +1,5 @@
 /*
- * $Id: JspRenderResponsePhase.java,v 1.8 2002/07/17 22:34:02 jvisvanathan Exp $
+ * $Id: JspRenderResponsePhase.java,v 1.9 2002/07/23 05:17:01 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: JspRenderResponsePhase.java,v 1.8 2002/07/17 22:34:02 jvisvanathan Exp $
+ * @version $Id: JspRenderResponsePhase.java,v 1.9 2002/07/23 05:17:01 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -90,9 +90,9 @@ public int execute(FacesContext facesContext) throws FacesException
     try { 
 	lifecycleDriver.getViewHandler().renderView(facesContext); 
     } catch (IOException e) { 
-	throw new FacesException("Can't forward", e);
+	throw new FacesException(e.getMessage(), e);
     } catch (ServletException e) { 
-	throw new FacesException("Can't forward", e);
+	throw new FacesException(e.getMessage(), e);
     }
     return rc;
 }
