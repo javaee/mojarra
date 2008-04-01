@@ -8,7 +8,7 @@
 
 <!-- ************ JSF build file ************************************** -->
 
-<project name="JSF-RI" default="build-all" basedir=".">
+<project name="jsf-demo" default="build-all" basedir=".">
 
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
