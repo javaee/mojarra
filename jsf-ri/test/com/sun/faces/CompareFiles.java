@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.3 2002/05/31 19:34:14 jvisvanathan Exp $
+ * $Id: CompareFiles.java,v 1.4 2002/07/15 23:48:33 eburns Exp $
  */
 
 /*
@@ -38,8 +38,8 @@ public class CompareFiles {
 
 	String newLine, oldLine;
 
-	newLine = newReader.readLine();
-	oldLine = oldReader.readLine();
+	newLine = newReader.readLine().trim();
+	oldLine = oldReader.readLine().trim();
 
 	// if one of the lines is null, but not the other
 	if (((null == newLine) && (null != oldLine)) ||
@@ -56,8 +56,8 @@ public class CompareFiles {
 		    Iterator ignoreLines = oldLinesToIgnore.iterator();
 		    boolean foundMatch = false;
 		    while (ignoreLines.hasNext()) {
-			if (oldLine.equalsIgnoreCase((String) 
-						     ignoreLines.next())) {
+			String newTrim = ((String) ignoreLines.next()).trim();
+			if (oldLine.equalsIgnoreCase(newTrim)) {
 			    foundMatch = true;
 			    break;
 			}
@@ -83,6 +83,12 @@ public class CompareFiles {
 		((null != newLine) && (null == oldLine))) {
 		same = false;
 		break;
+	    }
+	    if (null != newLine) {
+		newLine = newLine.trim();
+	    }
+	    if (null != oldLine) {
+		oldLine = oldLine.trim();
 	    }
 	}
 

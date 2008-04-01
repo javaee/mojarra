@@ -13,7 +13,12 @@
         <faces:form id="welcomeForm" formName="welcomeForm" >
 
              <p>
-              <faces:output_text id="userLabel" text="userLabel" />  </P>
+              <faces:output_text id="userLabel" text="Welcome!" />  </P>
+
+<P>
+	      <faces:command_button id="back" label="Back" 
+				    commandname="back"/>
+</P>
 
         </faces:form>
      </faces:usefaces>

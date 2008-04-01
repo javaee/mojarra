@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.9 2002/07/11 20:33:18 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.10 2002/07/15 23:48:31 eburns Exp $
  */
 
 /*
@@ -61,4 +61,14 @@ public class RIConstants {
     
     public final static String FACES_TREE = "com.sun.faces.TREE";
     public final static String REQUEST_LOCALE = "com.sun.faces.LOCALE";
+
+    /**
+
+    * The presence of this UIComponent attribute with the value the same
+    * as its name indicates that the UIComponent instance has already
+    * had its SelectItem "children" configured.
+
+    */ 
+
+    public final static String SELECTITEMS_CONFIGURED = "com.sun.faces.SELECTITEMS_CONFIGURED";
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: BasicApplicationHandler.java,v 1.3 2002/07/12 22:25:00 eburns Exp $
+ * $Id: BasicApplicationHandler.java,v 1.4 2002/07/15 23:48:36 eburns Exp $
  */
 
 /*
@@ -30,6 +30,8 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.RIConstants;
+
 public class BasicApplicationHandler implements ApplicationHandler{
 
     public boolean processEvent(FacesContext context, FacesEvent facesEvent) {
@@ -37,8 +39,16 @@ public class BasicApplicationHandler implements ApplicationHandler{
 	if (!(facesEvent instanceof FormEvent)) {
 	    return false;
 	}
+	FormEvent formEvent = (FormEvent) facesEvent;
+        String treeId = null;
+
+	if (formEvent.getCommandName().equals("login")) {
+	    treeId = "/welcome.jsp"; 
+	}
+	else if (formEvent.getCommandName().equals("back")) {
+	    treeId = "/Faces_Basic.jsp";
+	}
         
-        String treeId = "/welcome.jsp";
         TreeFactory treeFactory = (TreeFactory)
 	FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
         Assert.assert_it(null != treeFactory);

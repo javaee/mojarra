@@ -53,7 +53,7 @@
 	<TD>
 
 	      <faces:command_hyperlink id="imageLink" target="index.html"
-				       image="duke.gif"/>
+				       image="/basic/duke.gif"/>
               Image Link to index
 
 	</TD>
@@ -135,7 +135,7 @@
 
 	<TD>
 
-	      <faces:command_button id="imageButton" image="duke.gif"
+	      <faces:command_button id="imageButton" image="/basic/duke.gif"
 				    commandname="login"/>
 
                Image button that does the same thing

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.1 2002/07/12 19:44:37 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.2 2002/07/15 23:48:32 eburns Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.RIConstants;
 
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -31,7 +32,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.1 2002/07/12 19:44:37 eburns Exp $
+ * @version $Id: SelectItemTag.java,v 1.2 2002/07/15 23:48:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,6 +129,14 @@ public SelectItemTag()
 
 	uiSelectOne = (UISelectOne) parent.getComponent();
 	Assert.assert_it(null != uiSelectOne);
+
+	// If the SelectItems have already been configured for this tag
+	if (null !=uiSelectOne.getAttribute(RIConstants.SELECTITEMS_CONFIGURED)
+	    &&
+	    ((String)uiSelectOne.getAttribute(RIConstants.SELECTITEMS_CONFIGURED)).equals(RIConstants.SELECTITEMS_CONFIGURED)) {
+	    // do nothing.
+	    return EVAL_BODY_INCLUDE;
+	}
 
 	SelectItem [] oldItems = (SelectItem []) uiSelectOne.getItems();
 	SelectItem [] newItems = null;

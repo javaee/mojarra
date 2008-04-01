@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.20 2002/07/15 22:30:02 jvisvanathan Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.21 2002/07/15 23:48:32 eburns Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.FacesException;
 import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
+import com.sun.faces.RIConstants;
 
 /**
  *
@@ -31,7 +32,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.20 2002/07/15 22:30:02 jvisvanathan Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.21 2002/07/15 23:48:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,6 +104,18 @@ public SelectOne_OptionListTag()
 //
 // Methods from TagSupport
 // 
+
+    public int doEndTag() throws JspException {
+	int rc = super.doEndTag();
+	UISelectOne component = (UISelectOne) getComponent();
+
+	// This makes sure the no more SelectItems get added to this
+	// selectOne instance.
+	component.setAttribute(RIConstants.SELECTITEMS_CONFIGURED, 
+			       RIConstants.SELECTITEMS_CONFIGURED);
+
+	return rc;
+    }
 
 
 } // end of class SelectOne_OptionListTag
