@@ -72,5 +72,9 @@
   <message messageId="com.sun.faces.NULL_CONTEXT_ERROR" severity="1" summary="Argument Error." >
       <detail>context argument is null.</detail>
   </message>
+
+  <message messageId="com.sun.faces.NULL_LOCALE_ERROR" severity="1" summary="Argument Error." >
+      <detail>locale argument is null.</detail>
+  </message>
 </messages>
 
