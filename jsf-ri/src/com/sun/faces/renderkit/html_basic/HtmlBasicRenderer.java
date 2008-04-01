@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.3 2002/08/02 19:32:00 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.4 2002/08/02 22:21:58 rkitain Exp $
  */
 
 /*
@@ -124,6 +124,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
 
+        String componentType = component.getComponentType();
+        if (!supportsComponentType(componentType)) {
+            Object [] params = {componentType}; 
+            throw new IllegalArgumentException(Util.getExceptionMessage(
+                Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
+        }
+
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
     }
 
@@ -131,6 +138,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         if (componentType == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
+        if (!supportsComponentType(componentType)) {
+            Object [] params = {componentType};
+            throw new IllegalArgumentException(Util.getExceptionMessage(
+                Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
         }
 
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
