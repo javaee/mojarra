@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.16 2002/08/15 23:23:04 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.17 2002/08/16 23:28:20 rkitain Exp $
  */
 
 /*
@@ -32,6 +32,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UIGraphic;
 import javax.faces.component.UIInput;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
@@ -49,7 +50,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.16 2002/08/15 23:23:04 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.17 2002/08/16 23:28:20 rkitain Exp $
  * 
  *
  */
@@ -142,6 +143,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_output_text", "text");
 
         theRequest.addParameter("/my_textarea", "TextAreaRenderer");
+
+        theRequest.addParameter("/my_graphic_image", "graphicimage");
     } 
 
     public void testRenderers() {
@@ -172,6 +175,8 @@ public class TestRenderers_2 extends JspFacesTestCase
             
             testOutputNumberRenderer(root);
 	    testOutputNumberRendererWithPattern(root);
+
+            testGraphicImageRenderer(root);
             
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
@@ -439,6 +444,38 @@ public class TestRenderers_2 extends JspFacesTestCase
         result = textRenderer.supportsComponentType(text);
         assertTrue(result);
         result = textRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+
+    public void testGraphicImageRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing GraphicImageRenderer");
+        UIGraphic img = new UIGraphic();
+        img.setValue(null);
+        img.setComponentId("my_graphic_image");
+        root.addChild(img);
+
+        ImageRenderer imageRenderer = new ImageRenderer();
+
+        // test decode method
+
+        System.out.println("    Testing decode method...");
+        imageRenderer.decode(getFacesContext(), img);
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        imageRenderer.encodeBegin(getFacesContext(), img);
+        imageRenderer.encodeEnd(getFacesContext(), img);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = imageRenderer.supportsComponentType("javax.faces.component.UIGraphic");
+        assertTrue(result);
+        result = imageRenderer.supportsComponentType(img);
+        assertTrue(result);
+        result = imageRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
 
