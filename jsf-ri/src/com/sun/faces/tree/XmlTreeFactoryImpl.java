@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.2 2002/05/30 22:23:50 rkitain Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ import java.net.URL;
 
 import org.apache.commons.digester.RuleSetBase;
 import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.impl.SimpleLog;
 
 /**
  *
@@ -38,7 +39,7 @@ import org.apache.commons.digester.Digester;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.2 2002/05/30 22:23:50 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -182,7 +183,17 @@ public Tree createTree(ServletContext servletContext,
     // ivar?
 
     Digester digester = new Digester();
-    digester.setDebug(0);
+
+    // SimpleLog implements the Log interface (from commons.logging).
+    // This replaces deprecated "Digester.setDebug" method.
+    // PENDING(rogerk) Perhaps the logging level should be configurable..
+    // For debugging, you can set the log level to 
+    // "SimpleLog.LOG_LEVEL_DEBUG". 
+    //
+    SimpleLog sLog = new SimpleLog("digesterLog");
+    sLog.setLevel(SimpleLog.LOG_LEVEL_ERROR);
+    digester.setLogger(sLog);
+
     digester.setNamespaceAware(true);
     
     digester.setValidating(validate);

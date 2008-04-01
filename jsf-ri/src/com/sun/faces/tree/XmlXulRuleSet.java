@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * $Id: XmlXulRuleSet.java,v 1.2 2002/05/30 22:23:50 rkitain Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addObjectCreate("*/button", "javax.faces.component.UICommand");
         digester.addSetNext("*/button", "addChild", "javax.faces.component.UIComponent");
 
-        ComponentRule cRule = new ComponentRule(digester);
+        ComponentRule cRule = new ComponentRule();
         cRule.setBuildComponent(buildComponent);
         digester.addRule("window", cRule);
         digester.addRule("*/label", cRule);
@@ -90,7 +90,7 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addRule("*/menupopup", cRule);
         digester.addRule("*/button", cRule);
 
-        ComponentNestedRule cnRule = new ComponentNestedRule(digester);
+        ComponentNestedRule cnRule = new ComponentNestedRule();
         cnRule.setBuildComponent(buildComponent);
         digester.addRule("*/radio", cnRule);
         digester.addRule("*/menuitem", cnRule);
@@ -102,8 +102,8 @@ final class ComponentRule extends Rule {
 
     private BuildComponentFromTag bc;
 
-    public ComponentRule(Digester digester) {
-        super(digester);
+    public ComponentRule() {
+        super();
     }
 
     /**
@@ -137,8 +137,8 @@ final class ComponentNestedRule extends Rule {
 
     private BuildComponentFromTag bc;
 
-    public ComponentNestedRule(Digester digester) {
-        super(digester);
+    public ComponentNestedRule() {
+        super();
     }
 
     /**
