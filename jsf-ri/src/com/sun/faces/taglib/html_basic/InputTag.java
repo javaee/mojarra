@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
+ * $Id: InputTag.java,v 1.3 2002/09/03 18:42:30 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.taglib.FacesTag;
 
 /**
  *
- * @version $Id: InputTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
+ * @version $Id: InputTag.java,v 1.3 2002/09/03 18:42:30 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,8 +88,7 @@ public abstract class InputTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIInput input = (UIInput) component;
-	
-	if (null == input.getValue() && null != getValue()) {
+        if (null == input.currentValue(context) && null != getValue()) {
 	    input.setValue(getValue());
 	}
         if (null == input.getAttribute("readonly")) {

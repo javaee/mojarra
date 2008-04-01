@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.34 2002/08/13 22:55:29 rkitain Exp $
+ * $Id: Output_TextTag.java,v 1.35 2002/09/03 18:42:31 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_TextTag.java,v 1.34 2002/08/13 22:55:29 rkitain Exp $
+ * @version $Id: Output_TextTag.java,v 1.35 2002/09/03 18:42:31 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,8 +89,9 @@ public Output_TextTag()
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIOutput textOutput = (UIOutput) component;
-	
-	if (null == textOutput.getValue()) {
+	// if model property represented by this component has non null value, 
+        // do not call setValue().
+	if (null == textOutput.currentValue(context)) {
 	    textOutput.setValue(getValue());
 	}
     }

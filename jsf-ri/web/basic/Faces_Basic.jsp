@@ -52,7 +52,8 @@
                                       bundle="${basicBundle}"/> </td>
               <td> 
 
-                   <faces:input_text id="userName" modelReference="${LoginBean.userName}">
+                   <faces:input_text id="userName" modelReference="${LoginBean.userName}"
+                       value="JavaServerFaces" >
 
 		     <faces:validator className="javax.faces.validator.LengthValidator"/>
 		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
@@ -191,7 +192,8 @@
              </tr>
 
               <tr>
-             <td> <faces:selectboolean_checkbox id="validUser" /> 
+             <td> <faces:selectboolean_checkbox id="validUser"
+                       modelReference="${LoginBean.validUser}"/> 
                   <faces:output_text id="checkLabel" 
                                      key="validUserLabel"
                                                 bundle="${basicBundle}"/>

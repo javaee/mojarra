@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.33 2002/08/29 01:28:17 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.34 2002/09/03 18:42:29 jvisvanathan Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.33 2002/08/29 01:28:17 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.34 2002/09/03 18:42:29 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,6 +118,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
             newValue = "true";
         }
         component.setValue(Boolean.valueOf(newValue));
+        component.setValid(true);
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.6 2002/08/29 01:28:18 eburns Exp $
+ * $Id: NumberRenderer.java,v 1.7 2002/09/03 18:42:29 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.6 2002/08/29 01:28:18 eburns Exp $
+ * @version $Id: NumberRenderer.java,v 1.7 2002/09/03 18:42:29 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -159,7 +159,9 @@ public class NumberRenderer extends HtmlBasicRenderer {
         
         if ( (modelType.getName()).equals("java.lang.Character") ||
                 (modelType.getName()).equals("char")) {
-            component.setValue(new Character((char)parsedValue.intValue()));
+            // 36 is the maximum value allowed for radix.
+            char charvalue = Character.forDigit(parsedValue.intValue(),36);
+            component.setValue(new Character(charvalue));
         } else {
             convertedValue = convertToModelType(modelType, parsedValue);
             component.setValue(convertedValue);
@@ -229,14 +231,14 @@ public class NumberRenderer extends HtmlBasicRenderer {
 		currentValue = formatPool.numberFormat_format(context, component,
 	                (Number) curValue);
 	    }
-	    else if (curValue instanceof String) {
-		currentValue = (String) curValue;
+	    else  {
+                // if it is "Character" type, just convert it to string.
+		currentValue = curValue.toString();
 	    }
 	}
 	else {
 	    currentValue = "";
 	}
-        
         if (isInput) {
 	    StringBuffer buffer = new StringBuffer();
 	    

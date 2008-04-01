@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.34 2002/08/28 17:04:18 rkitain Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.35 2002/09/03 18:42:31 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.34 2002/08/28 17:04:18 rkitain Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.35 2002/09/03 18:42:31 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,9 +87,9 @@ public class SelectBoolean_CheckboxTag extends FacesTag
 	super.overrideProperties(component);
 	UISelectBoolean checkbox = (UISelectBoolean) component;
 	
-        // Non-null implies this UISelectBooleanInstance has a value.
+        // Non-null implies this UISelectBooleanInstance has a model value.
         // In that case, we don't set a value.
-        if (null == checkbox.getAttribute("value")) {
+        if (null == checkbox.currentValue(context)) {
             if (null != getChecked()) {
                 checkbox.setSelected(true);
             } else {

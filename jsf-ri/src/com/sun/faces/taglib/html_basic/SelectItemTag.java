@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.5 2002/08/23 18:42:38 jvisvanathan Exp $
+ * $Id: SelectItemTag.java,v 1.6 2002/09/03 18:42:31 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.5 2002/08/23 18:42:38 jvisvanathan Exp $
+ * @version $Id: SelectItemTag.java,v 1.6 2002/09/03 18:42:31 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -145,7 +145,7 @@ public SelectItemTag()
 	}
 	// If this SelectItemTag instance is selected and
 	// there is no selected item in our UISelectOne...
-	if (null != getSelected() && null == selectOne.getSelectedValue()) {
+	if (null != getSelected() && null == selectOne.currentValue(context)) {
 	    selectOne.setSelectedValue(selectItem.getItemValue());
 	}
     }

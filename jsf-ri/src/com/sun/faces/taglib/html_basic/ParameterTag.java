@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.1 2002/08/30 17:52:56 rkitain Exp $
+ * $Id: ParameterTag.java,v 1.2 2002/09/03 18:42:31 jvisvanathan Exp $
  */
 
 /*
@@ -76,7 +76,9 @@ public class ParameterTag extends FacesTag {
         if ((getName() != null) && (parameter.getName() == null)) {
             parameter.setName(name);
         }
-        if ((getValue() != null) && (parameter.getValue() == null)) {
+        // if model property represented by this component has non null value, 
+        // do not call setValue().
+        if ((getValue() != null) && (parameter.currentValue(context) == null)) {
             parameter.setValue(value);
         }
     }

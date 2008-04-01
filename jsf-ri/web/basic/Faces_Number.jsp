@@ -122,9 +122,9 @@
 
             <tr>
                 <td>
-                <faces:command_button id="numberlogin" label="Login"
-                                key="loginButton"
-                                bundle="${basicBundle}" commandName="login"/>
+                <faces:command_button id="numberlogin" commandName="login">
+                    <faces:output_text id="buttonLabel" value="Login" />
+                </faces:command_button>
 
                 </td> 
             </tr>
