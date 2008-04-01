@@ -1,5 +1,5 @@
 /*
- * $Id: MessageListImpl.java,v 1.3 2002/06/12 23:51:04 jvisvanathan Exp $
+ * $Id: MessageListImpl.java,v 1.4 2002/06/13 23:18:45 jvisvanathan Exp $
  */
 
 /*
@@ -150,7 +150,7 @@ public class MessageListImpl extends MessageList
         while(it.hasNext()) {
             Message m = (Message)it.next();
             String comp_id = m.getReference();
-            if ( comp_id != null && (comp_id.equals(m.getReference())) &&
+            if ( comp_id != null && (comp_id.equals(reference)) &&
                 (m.getSeverity() > max)) {
                 max = m.getSeverity();
             }    

@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageListImpl.java,v 1.1 2002/06/07 22:55:33 jvisvanathan Exp $
+ * $Id: TestMessageListImpl.java,v 1.2 2002/06/13 23:18:45 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageListImpl.java,v 1.1 2002/06/07 22:55:33 jvisvanathan Exp $
+ * @version $Id: TestMessageListImpl.java,v 1.2 2002/06/13 23:18:45 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,6 +125,17 @@ public class TestMessageListImpl extends FacesContextTestCase
         String detail = msg.getDetail();
         System.out.println(messageId + ":detail " + detail);
         assertTrue(detail.equals("Value should be between 1000 and 10000.")); 
+        
+        int severity = messageList.getMaximumSeverity();
+        assertTrue(severity == 40);
+        int size = messageList.size();
+        assertTrue(size == 3);
+        
+        severity = messageList.getMaximumSeverity("userName");
+        assertTrue(severity == 30);
+        size = messageList.size("userId");
+        assertTrue(size == 2);
+        
     }
 
 } // end of class TestMessageListImpl
