@@ -1,5 +1,5 @@
 /*
- * $Id: RequestEventHandler.java,v 1.1 2002/06/24 04:18:16 craigmcc Exp $
+ * $Id: RequestEventHandler.java,v 1.2 2002/07/26 19:02:37 craigmcc Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import javax.faces.context.FacesContext;
  * <p>A <strong>RequestEventHandler</strong> is a class that can receive
  * and process request events for a {@link UIComponent}, but is external
  * to the component class itself.  Zero or more
- * <code>RequestEventHandler</code>s can be assocaited with each
+ * <code>RequestEventHandler</code>s can be associated with each
  * {@link UIComponent} in the request tree, and are called during the
  * <em>Handle Request Events Phase</em>.</p>
  */
@@ -35,6 +35,9 @@ public abstract class RequestEventHandler {
      * @param context FacesContext for the request we are processing
      * @param component {@link UIComponent} which received this event
      * @param event Event to be processed against this component
+     *
+     * @exception NullPointerException if any of the parameters
+     *  are <code>null</code>
      */
     public abstract boolean processEvent(FacesContext context,
                                          UIComponent component,

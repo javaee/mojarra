@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeDescriptor.java,v 1.6 2002/07/12 00:30:01 craigmcc Exp $
+ * $Id: AttributeDescriptor.java,v 1.7 2002/07/26 19:02:35 craigmcc Exp $
  */
 
 /*
@@ -62,6 +62,9 @@ public abstract class AttributeDescriptor {
      * specified <code>Locale</code>.</p>
      *
      * @param locale Locale for which to retrieve a display name
+     *
+     * @exception NullPointerException if <code>locale</code>
+     *  is <code>null</code>
      */
     public abstract String getDisplayName(Locale locale);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.9 2002/06/14 04:32:02 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.10 2002/07/26 19:02:39 craigmcc Exp $
  */
 
 /*
@@ -96,7 +96,7 @@ public abstract class RenderKitFactory {
      * @exception FacesException if a {@link RenderKit} instance cannot be
      *  constructed
      * @exception NullPointerException if <code>renderKitId</code>
-     *  is <code>null</code>
+     *  or <code>context</code> is <code>null</code>
      */
     public abstract RenderKit getRenderKit(String renderKitId,
                                            FacesContext context)

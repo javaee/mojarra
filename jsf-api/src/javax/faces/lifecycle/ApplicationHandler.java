@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationHandler.java,v 1.4 2002/06/14 04:32:01 craigmcc Exp $
+ * $Id: ApplicationHandler.java,v 1.5 2002/07/26 19:02:38 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,9 @@ public interface ApplicationHandler {
      * remaining events normally.</p>
      *
      * @param context FacesContext for the current request
-     * @param event CommandEvent to be processed
+     * @param event FacesEvent to be processed
+     *
+     * @exception NullPointerException if any parameter is <code>null</code>
      */
     public boolean processEvent(FacesContext context, FacesEvent event);
 

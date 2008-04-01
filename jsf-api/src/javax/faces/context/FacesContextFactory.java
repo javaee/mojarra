@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.8 2002/06/14 00:10:34 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.9 2002/07/26 19:02:36 craigmcc Exp $
  */
 
 /*
@@ -54,6 +54,8 @@ public abstract class FacesContextFactory {
      *
      * @exception FacesException if a {@link FacesContext} cannot be
      *  constructed for the specified parameters
+     * @exception NullPointerException if any of the parameters
+     *  are <code>null</code>
      */
     public abstract FacesContext getFacesContext
         (ServletContext context, ServletRequest request,

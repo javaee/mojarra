@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.26 2002/07/26 04:20:27 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.27 2002/07/26 19:02:36 craigmcc Exp $
  */
 
 /*
@@ -219,9 +219,9 @@ public abstract class FacesContext {
 
     /**
      * <p>Set the {@link Tree} that is associated with the inbound request.
+     * The {@link Tree} associated with the current response is set to the
+     * same {@link Tree} instance.</p>
      * </p>
-     *
-     * <p><strong>FIXME</strong> - Does this method need to be public?</p>
      *
      * @param tree The new inbound request tree
      *
@@ -247,6 +247,9 @@ public abstract class FacesContext {
      * direct their binary output.
      *
      * @param responseStream The new ResponseStream for this response
+     *
+     * @exception NullPointerException if <code>responseStream</code>
+     *  is <code>null</code>
      */
     public abstract void setResponseStream(ResponseStream responseStream);
 
@@ -286,6 +289,9 @@ public abstract class FacesContext {
      * direct their character-based output.
      *
      * @param responseWriter The new ResponseWriter for this response
+     *
+     * @exception NullPointerException if <code>responseWriter</code>
+     *  is <code>null</code>
      */
     public abstract void setResponseWriter(ResponseWriter responseWriter);
 
@@ -330,11 +336,16 @@ public abstract class FacesContext {
     /**
      * <p>Append a {@link Message} to the set of messages associated with
      * the specified {@link UIComponent}, if <code>component</code> is
-     * not <code>null</code>.</p>
+     * not <code>null</code>.  If <code>component</code> is <code>null</code>,
+     * this {@link Message} is assumed to not be associated with any
+     * specific component instance.</p>
      *
      * @param component The component with which this message is associated
      *  (if any)
      * @param message The message to be appended
+     *
+     * @exception NullPointerException if <code>message</code>
+     *  is <code>null</code>
      */
     public abstract void addMessage(UIComponent component, Message message);
 
@@ -366,7 +377,7 @@ public abstract class FacesContext {
      *  evaluation
      * @exception IllegalArgumentException if the model reference
      *  expression is invalid
-     * @exception NullPointerException if <code>model</code>
+     * @exception NullPointerException if <code>modelReference</code>
      *  is <code>null</code>
      */
     public abstract Class getModelType(String modelReference)
@@ -384,7 +395,7 @@ public abstract class FacesContext {
      *  evaluation
      * @exception IllegalArgumentException if the model reference
      *  expression is invalid
-     * @exception NullPointerException if <code>model</code>
+     * @exception NullPointerException if <code>modelReference</code>
      *  is <code>null</code>
      */
     public abstract Object getModelValue(String modelReference)
@@ -403,7 +414,7 @@ public abstract class FacesContext {
      *  evaluation
      * @exception IllegalArgumentException if the model reference
      *  expression is invalid
-     * @exception NullPointerException if <code>model</code>
+     * @exception NullPointerException if <code>modelReference</code>
      *  is <code>null</code>
      */
     public abstract void setModelValue(String modelReference, Object value)

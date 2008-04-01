@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.2 2002/06/08 00:35:50 craigmcc Exp $
+ * $Id: FormEvent.java,v 1.3 2002/07/26 19:02:37 craigmcc Exp $
  */
 
 /*
@@ -33,6 +33,9 @@ public class FormEvent extends FacesEvent {
      *
      * @param component Source {@link UIComponent} for this event (if any)
      * @param formName Form name of the form this event signifies
+     *
+     * @exception NullPointerException if any of the parameters
+     *  are <code>null</code>
      */
     public FormEvent(UIComponent source, String formName) {
 
@@ -48,6 +51,9 @@ public class FormEvent extends FacesEvent {
      * @param formName Form name of the form this event signifies
      * @param commandName Command name of the submit button that caused this
      *  form to be submitted (if any)
+     *
+     * @exception NullPointerException if <code>source</code> or
+     *  <code>formName</code> is <code>null</code>
      */
     public FormEvent(UIComponent source, String formName, String commandName) {
 

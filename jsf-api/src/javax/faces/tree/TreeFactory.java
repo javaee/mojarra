@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.8 2002/07/26 03:44:24 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.9 2002/07/26 19:02:40 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package javax.faces.tree;
 
 import java.util.Iterator;
-import javax.faces.FacesException;    // FIXME - subpackage?
+import javax.faces.FacesException;
 import javax.servlet.ServletContext;
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.14 2002/07/08 23:49:54 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.15 2002/07/26 19:02:39 craigmcc Exp $
  */
 
 /*
@@ -165,6 +165,8 @@ public abstract class Lifecycle {
      *  state change value from the <code>execute()</code> method
      * @exception FacesException if a {@link Phase} threw such an exception
      *  from its <code>execute()</code> method
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public abstract void execute(FacesContext context) throws FacesException;
 
@@ -180,6 +182,8 @@ public abstract class Lifecycle {
      *
      * @exception FacesException if thrown by the <code>execute()</code>
      *  method of the {@link Phase} that was executed
+     * @exception IllegalStateException if a {@link Phase} returned an invalid
+     *  state change value from the <code>execute()</code> method
      * @exception NullPointerException if <code>context</code> or
      *  <code>phase</code> is <code>null</code>
      */

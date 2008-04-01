@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.1 2002/06/03 19:34:26 craigmcc Exp $
+ * $Id: CommandEvent.java,v 1.2 2002/07/26 19:02:37 craigmcc Exp $
  */
 
 /*
@@ -32,6 +32,9 @@ public class CommandEvent extends FacesEvent {
      *
      * @param component Source {@link UIComponent} for this event (if any)
      * @param commandName Command name of the command this event signifies
+     *
+     * @exception NullPointerException if any of the parameters
+     *  are <code>null</code>
      */
     public CommandEvent(UIComponent source, String commandName) {
 

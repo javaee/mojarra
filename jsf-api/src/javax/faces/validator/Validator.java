@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.2 2002/06/14 00:00:09 craigmcc Exp $
+ * $Id: Validator.java,v 1.3 2002/07/26 19:02:41 craigmcc Exp $
  */
 
 /*
@@ -74,6 +74,8 @@ public abstract class Validator {
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
+     *
+     * @exception NullPointerException if any parameter is <code>null</code>
      */
     public abstract void validate(FacesContext context, UIComponent component);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.10 2002/06/14 00:00:06 craigmcc Exp $
+ * $Id: Renderer.java,v 1.11 2002/07/26 19:02:39 craigmcc Exp $
  */
 
 /*
@@ -121,6 +121,9 @@ public abstract class Renderer {
      *
      * @param component {@link UIComponent} whose implementation class is
      *  checked for compatibility
+     *
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>null</code>
      */
     public abstract boolean supportsComponentType(UIComponent component);
 
@@ -133,6 +136,9 @@ public abstract class Renderer {
      *
      * @param componentType Canonical name of the component type to be tested
      *  for compatibility
+     *
+     * @exception NullPointerException if <code>componentType</code>
+     *  is <code>null</code>
      */
     public abstract boolean supportsComponentType(String componentType);
 
@@ -202,7 +208,7 @@ public abstract class Renderer {
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     *  or <code>component</code> is <code>null</code>
      */
     public abstract void encodeChildren(FacesContext context,
                                         UIComponent component)
@@ -220,7 +226,7 @@ public abstract class Renderer {
      *
      * @exception IOException if an input/output error occurs while rendering
      * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     *  or <code>component</code> is <code>null</code>
      */
     public abstract void encodeEnd(FacesContext context,
                                    UIComponent component)
