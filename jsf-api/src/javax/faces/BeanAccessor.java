@@ -1,5 +1,5 @@
 /*
- * $Id: BeanAccessor.java,v 1.3 2002/04/05 19:40:15 jvisvanathan Exp $
+ * $Id: BeanAccessor.java,v 1.4 2002/04/15 23:07:30 eburns Exp $
  */
 
 /*
@@ -171,7 +171,8 @@ public BeanAccessor(FacesContext yourFacesContext)
                     "' not found in ObjectManager.");
             }
             try {
-                returnObject = BeanUtils.getNestedProperty(object, property);
+                returnObject = PropertyUtils.getNestedProperty(object, 
+							       property);
             } catch (IllegalAccessException iae) {
                 throw new FacesException(iae.getMessage());
             } catch (InvocationTargetException ite) {
@@ -190,4 +191,6 @@ public BeanAccessor(FacesContext yourFacesContext)
 
         return returnObject;
     }
+
+    // The testcase for this class is com.sun.faces.TestBeanAccessor
 }
