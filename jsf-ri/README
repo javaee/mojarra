@@ -8,29 +8,21 @@ jsf-api-spec for this implementation: JSF_20020607.pdf
 Major changes/features in this release:
 =======================================
 
-* A "page-url" element has been added to ".xul" files which refers to uri for jsp page.
+* A "page-url" element has been added to ".xul" files which refers to
+  uri for jsp page.
 
-* Faces_Basic webapp has a link and submit button that navigates to another page
-  upon click.
+* Faces_Basic webapp has a link and submit button that navigates to
+  another page upon click.
 
 * Change to a completely "path info" based URI scheme.
 
 Known Issues With This Release
 ==============================
 
-1. Components are instantiated on each request.
+*  Components are instantiated on each request.
    Fix:
 
-2. Components don't get their RendererType property set until renderering
-   time, which implies that the default decode() is used, but the
-   RenderKit's encode is used.
-   Fix:
-
-3. The unit tests could use some refactoring
-   Fix:
-
-
-4. It's impossible to use the same tree on different jsp pages since the
+*  It's impossible to use the same tree on different jsp pages since the
    filename of the XUL tree must be the same as the filename of the JSP
    page, with different extensions of course.  For example: login.xul and
    login.jsp.  This restriction will be lifted when we have a better idea
@@ -45,7 +37,7 @@ Known Issues With This Release
    maintaining a seperate "xul" file, as well as "jsp" page.  We 
    still will have a component tree, but it may be built automatically.
 
-5. For hyperlink event processing, where the destination "target" is another
+*  For hyperlink event processing, where the destination "target" is another
    Faces page ("target" will refer to the "xul" file of the destination
    page), we need to set the response tree to this "target" attribute value. 
 
@@ -74,14 +66,15 @@ Known Issues With This Release
    for hyperlinks, is go to the "rendering" phase.
 
 
-6. Component type is hard coded in component subclasses (ex: UICommand)
+*  Component type is hard coded in component subclasses (ex: UICommand)
    as fully qualfied class names (ex: javax.faces.component.UICommand).
    However, a component's type is configurable in the renderkit's xml 
    configuration file (HtmlBasicRenderKit.xml).
 
-7. Since Phase ids are not consecutive anymore, phaseid cannot be used as an index to 
-   locate a particular phase. Since Phase doesn't have accessor methods for Id, 
-   we have to cast to RI implementation class GenericPhaseImpl.
+*  Since Phase ids are not consecutive anymore, phaseid cannot be used as
+   an index to locate a particular phase. Since Phase doesn't have
+   accessor methods for Id, we have to cast to RI implementation class
+   GenericPhaseImpl.
 
-8. There is no way to register validators in XUL.
+*  There is no way to register validators in XUL.
 
