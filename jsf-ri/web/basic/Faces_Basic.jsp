@@ -92,8 +92,7 @@
 
                <td> 
 
-                    <faces:input_text id="double"
-                                  modelReference="${LoginBean.double}"> 
+                    <faces:input_number id="double">
 
 		     <faces:validator 
                        className="javax.faces.validator.DoubleRangeValidator"/>
@@ -106,7 +105,7 @@
                          name="javax.faces.validator.DoubleRangeValidator.MAXIMUM"
                          value="3.9"/>
 
-                    </faces:input_text>
+                    </faces:input_number>
 
                </td>
 
@@ -121,8 +120,7 @@
 
                <td> 
 
-                    <faces:input_text id="integer"
-                                  modelReference="${LoginBean.int}"> 
+                    <faces:input_number id="integer">
 
 		     <faces:validator 
                        className="javax.faces.validator.LongRangeValidator"/>
@@ -135,7 +133,7 @@
                          name="javax.faces.validator.LongRangeValidator.MAXIMUM"
                          value="10"/>
 
-                    </faces:input_text>
+                    </faces:input_number>
 
                </td>
 
@@ -320,6 +318,16 @@
 
 ======= end
 
+      <TR>
+        <TD><faces:output_text id="graphicLabel" value="Graphic Image: " /></TD>
+        <TD><faces:graphic_image id="graphicImage" url="/duke.gif" /></TD>
+      </TR>
+      <TR>
+        <TD><faces:output_text id="graphicLabel1" value="Graphic Image (url From Resource Bundle): " /></TD>
+        <TD><faces:graphic_image id="graphicImage1" key="imageurl"
+                bundle="${basicBundle}" /></TD>
+      </TR>
+      
       <TR>
 
 	<TD>
