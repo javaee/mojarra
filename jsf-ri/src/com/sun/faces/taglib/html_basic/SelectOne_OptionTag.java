@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.9 2002/02/07 04:31:34 rogerk Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.10 2002/02/08 18:26:42 visvan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.9 2002/02/07 04:31:34 rogerk Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.10 2002/02/08 18:26:42 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -145,7 +145,12 @@ public SelectOne_OptionTag()
         uiSelectOne.addItem(getValue(), getLabel(), getDescription());
 
         // if it is selected, make sure the model knows about it.
-        if (null != getSelected()) {
+
+        // we should update selectedValue only if it is null
+        // in the model bean otherwise we would be overwriting
+        // the value in model bean, losing any earlier updates. 
+        if ( uiSelectOne.getSelectedValue(renderContext) == null &&
+                getSelected() != null ) {
             uiSelectOne.setSelectedValue(getValue());
         }
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.9 2002/02/06 18:36:45 edburns Exp $
+ * $Id: RadioRenderer.java,v 1.10 2002/02/08 18:26:41 visvan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.9 2002/02/06 18:36:45 edburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.10 2002/02/08 18:26:41 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,7 +165,7 @@ public class RadioRenderer extends Object implements Renderer {
 		String itemLabel = item.getLabel();
 		output.append("<INPUT TYPE=\"RADIO\"");
 		if ((null != selectedValue) &&
-		    selectedValue.equals(item)) {
+		    selectedValue.equals(item.getValue())) {
 		    output.append(" CHECKED");
 		}
 		output.append(" NAME=\"");

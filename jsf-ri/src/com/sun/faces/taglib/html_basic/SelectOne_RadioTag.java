@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.11 2002/02/06 18:36:45 edburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.12 2002/02/08 18:26:42 visvan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.11 2002/02/06 18:36:45 edburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.12 2002/02/08 18:26:42 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -153,7 +153,11 @@ public SelectOne_RadioTag()
 	uiSelectOne.setAttribute("curValue", getValue());
 
 	// if it is checked, make sure the model knows about it.
-	if (null != getChecked()) {
+        // we should update selectedValue only if it is null
+        // in the model bean otherwise we would be overwriting
+        // the value in model bean, losing any earlier updates. 
+        if ( uiSelectOne.getSelectedValue(renderContext) == null && 
+                getChecked() != null ) {
 	    uiSelectOne.setSelectedValue(getValue());
 	}
 	
