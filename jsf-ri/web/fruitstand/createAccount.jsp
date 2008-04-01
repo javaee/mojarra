@@ -134,7 +134,7 @@
     <tr> 
       <td> 
         <faces:Command_Button id="createAccount" label="Create Account" 
-                              commandListener="handleCreateAccount"/>
+                       commandListener="handleCreateAccount" commandName="Create Account"/>
       </td>
       <td>&nbsp;</td>
     </tr>

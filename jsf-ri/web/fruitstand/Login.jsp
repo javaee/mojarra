@@ -26,10 +26,10 @@
 
   <faces:NavigationMap id="LoginNavMap" scope="session" >
 
-        <faces:outcome commandName="login" outcome="success" targetAction="forward"
+        <faces:outcome commandName="Login" outcome="success" targetAction="forward"
                 targetPath = "StoreFront.jsp" />
 
-        <faces:outcome commandName="login" outcome="failure" targetAction="forward"
+        <faces:outcome commandName="Login" outcome="failure" targetAction="forward"
                 targetPath = "Login.jsp" />
 
    </faces:NavigationMap>

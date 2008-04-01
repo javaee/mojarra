@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.22 2002/03/08 00:24:49 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.23 2002/03/11 23:25:34 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.22 2002/03/08 00:24:49 jvisvanathan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.23 2002/03/11 23:25:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -266,8 +266,9 @@ public void queueEvents(EventContext eventContext) {
                 c.setValue(param_value);
             }    
 	} else { 
+            String command_name = ((UICommand)c).getCommandName();
             CommandEvent cmd_event =  new CommandEvent(eventContext, c, 
-					       param_value);
+					       command_name);
             cmd_events.add(cmd_event);
         }
     }

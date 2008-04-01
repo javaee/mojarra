@@ -77,10 +77,10 @@ The items listed above will be billed to: <br>
 
 <faces:NavigationMap id="purchaseNavMap" scope="session" >
 
-        <faces:outcome commandName="Purchase Items Listed Above" outcome="success" targetAction="forward"
+        <faces:outcome commandName="confirm" outcome="success" targetAction="forward"
                 targetPath = "purchaseAction.jsp" />
 
-        <faces:outcome commandName="Purchase Items Listed Above" outcome="failure" targetAction="forward"
+        <faces:outcome commandName="confirm" outcome="failure" targetAction="forward"
                 targetPath = "StoreFront.jsp" />
 
 </faces:NavigationMap>

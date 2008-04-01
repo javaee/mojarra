@@ -206,7 +206,7 @@ and vegetables.</font></font>
 <br>&nbsp;
 <br>
 <faces:Command_Button id="checkout" label="Checkout" 
-                      commandListener="handleCheckout"/>
+                      commandListener="handleCheckout" commandName="Checkout"/>
 </faces:Form>
 </faces:UseFaces>
 </body>
