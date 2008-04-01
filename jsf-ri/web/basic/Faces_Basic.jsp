@@ -183,7 +183,6 @@
 
               <tr>
              <td> <faces:selectboolean_checkbox id="validUser" 
-                                                label="Valid User" 
                                                 key="validUserLabel" 
                                                 bundle="${basicBundle}"/>
                   </td>

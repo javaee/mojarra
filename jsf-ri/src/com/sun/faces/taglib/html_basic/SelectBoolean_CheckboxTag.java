@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.30 2002/07/12 19:44:37 eburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.31 2002/08/14 22:01:36 jvisvanathan Exp $
  */
 
 /*
@@ -22,7 +22,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
-
 import com.sun.faces.taglib.FacesTag;
 
 /**
@@ -31,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.30 2002/07/12 19:44:37 eburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.31 2002/08/14 22:01:36 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -40,62 +39,43 @@ import com.sun.faces.taglib.FacesTag;
 
 public class SelectBoolean_CheckboxTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
+    
+    // Relationship Instance Variables
 
-    protected String selected = null;
-    protected String label = null;
+    //
+    // Constructors and Initializers    
+    //
 
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-
-public SelectBoolean_CheckboxTag()
-{
-    super();
-}
-
-//
-// Class methods
-//
-
-// 
-// Accessors
-//
-
-    public void setSelected(String newSelected) {
-	selected = newSelected;
+    public SelectBoolean_CheckboxTag()
+    {
+        super();
     }
 
-    public String getSelected() {
-	return selected;
-    }
+    //
+    // Class methods
+    //
 
-    public void setLabel(String newLabel) {
-	label = newLabel;
-    }
+    // 
+    // Accessors
+    //
 
-    public String getLabel() {
-	return label;
-    }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
     public String getLocalRendererType() { return "CheckboxRenderer"; }
 
@@ -107,18 +87,49 @@ public SelectBoolean_CheckboxTag()
 	super.overrideProperties(component);
 	UISelectBoolean checkbox = (UISelectBoolean) component;
 	
-	// Non-null implies this UISelectBooleanInstance has a value.
-	// In that case, we don't set a value.
-	if (null != checkbox.getAttribute("value")) {
-	    if (null != getSelected()) {
-		checkbox.setSelected(true);
-	    }
-	    else {
-		checkbox.setSelected(false);
-	    }
+        // Non-null implies this UISelectBooleanInstance has a value.
+        // In that case, we don't set a value.
+        // PENDING (visvan) check for null case instead of non null.
+        if (null != checkbox.getAttribute("value")) {
+            if (null != getSelected()) {
+                checkbox.setSelected(true);
+            } else {
+                checkbox.setSelected(false);
+            }
+        }
+        
+	if (null == checkbox.getAttribute("size")) {
+	    checkbox.setAttribute("size", getSize());
 	}
-	if (null == checkbox.getAttribute("label")) {
-	    checkbox.setAttribute("label", getLabel());
+        if (null == checkbox.getAttribute("disabled")) {
+	    checkbox.setAttribute("disabled", getDisabled());
+	}
+	if (null == checkbox.getAttribute("readonly")) {
+	    checkbox.setAttribute("readonly", getReadonly());
+	}
+	if (null == checkbox.getAttribute("alt")) {
+	    checkbox.setAttribute("alt", getAlt());
+	}
+	if (null == checkbox.getAttribute("lang")) {
+	    checkbox.setAttribute("lang", getLang());
+	}
+	if (null == checkbox.getAttribute("tabindex")) {
+	    checkbox.setAttribute("tabindex", getTabindex());
+	}
+	if (null == checkbox.getAttribute("accesskey")) {
+	    checkbox.setAttribute("accesskey", getAccesskey());
+	}
+	if (null == checkbox.getAttribute("onfocus")) {
+	    checkbox.setAttribute("onfocus", getOnfocus());
+	}
+	if (null == checkbox.getAttribute("onblur")) {
+	    checkbox.setAttribute("onblur", getOnblur());
+	}
+	if (null == checkbox.getAttribute("onselect")) {
+	    checkbox.setAttribute("onselect", getOnselect());
+	}
+	if (null == checkbox.getAttribute("onchange")) {
+	    checkbox.setAttribute("onchange", getOnchange());
 	}
     }
     

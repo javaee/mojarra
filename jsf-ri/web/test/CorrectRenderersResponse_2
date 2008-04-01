@@ -1,6 +1,6 @@
-<INPUT TYPE="CHECKBOX"  NAME="/my_checkbox" CHECKED >
-<INPUT TYPE="CHECKBOX"  NAME="/my_checkbox">
-<INPUT TYPE="CHECKBOX"  NAME="/my_checkbox"> Foo
+<input type="checkbox"  name="/my_checkbox" checked >
+<input type="checkbox"  name="/my_checkbox">
+<input type="checkbox"  name="/my_checkbox">
 <A HREF=""></A>
 <SELECT NAME="/my_optionlist">	<OPTION VALUE="Red">Red</OPTION>
 	<OPTION VALUE="Blue" selected="selected">Blue</OPTION>

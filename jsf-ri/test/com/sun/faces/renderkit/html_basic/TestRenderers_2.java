@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.14 2002/08/13 22:57:45 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.15 2002/08/14 22:01:36 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.14 2002/08/13 22:57:45 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.15 2002/08/14 22:01:36 jvisvanathan Exp $
  * 
  *
  */
@@ -249,7 +249,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked with label");
-        selectBoolean.setAttribute("label", "Foo");
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().write("\n");

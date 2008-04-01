@@ -80,9 +80,78 @@
             <type>CheckboxRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
             <attribute>
-                <name>label</name>
-                <display-name>Label</display-name>
-                <description>The text label displayed for the checkbox</description>
+                <name>disabled</name>
+                <display-name>Disabled</display-name>
+
+                <description>If true, this component should be rendered
+                as disabled.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>readonly</name>
+                <display-name>Read Only</display-name>
+
+                <description>If true, this component should be rendered
+                as read only.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>size</name>
+                <display-name>Size</display-name>
+
+                <description>The number of columns in this
+                DateRenderer.</description>
+
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>alt</name>
+                <display-name>Alt Text</display-name>
+
+                <description>The alt text for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>accesskey</name>
+                <display-name>Access Key</display-name>
+
+                <description>Accessibility key character</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+
+                <description>The element got the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+
+                <description>The element lost the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onselect</name>
+                <display-name>On Select</display-name>
+
+                <description>Some text was selected.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onchange</name>
+                <display-name>On Change</display-name>
+
+                <description>The element value was changed.</description>
+
                 <type>java.lang.String</type>
             </attribute>
         </renderer>

@@ -71,7 +71,7 @@
 
 	<TD>
 
-	      <faces:selectboolean_checkbox id="validUser" label="Valid User"
+	      <faces:selectboolean_checkbox id="validUser" 
 					    selected="true" />
 
 	</TD>

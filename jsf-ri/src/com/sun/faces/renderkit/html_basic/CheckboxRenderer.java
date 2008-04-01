@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.29 2002/08/05 21:22:39 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.30 2002/08/14 22:01:34 jvisvanathan Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.29 2002/08/05 21:22:39 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.30 2002/08/14 22:01:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -117,40 +117,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
             newValue.equalsIgnoreCase("true")) {
             newValue = "true";
         }
-
-        // if there is no model,.. 
-
-        if (modelRef == null) {
-            component.setValue(Boolean.valueOf(newValue));
-            return;
-        } 
-
-        // if there is a model, then convert to the model type.
-
-        Class modelType = null;
-        try {
-            modelType = context.getModelType(modelRef);
-        } catch (FacesException fe ) {
-            //PENDING(rogerk) log error
-        }
-        Assert.assert_it(modelType != null );
-
-        Object convertedValue = null;
-        try {
-            convertedValue = ConvertUtils.convert(newValue, modelType);
-            component.setValid(true);
-        } catch (ConversionException ce ) {
-            addConversionErrorMessage( context, component, ce.getMessage()); 
-        }
-
-        // PENDING(rogerk) store failed conversion value in other
-        // "localstate" attribute??
-        //
-        if ( convertedValue == null ) {
-            component.setAttribute("localState", newValue);
-        } else {
-            component.setValue(convertedValue);
-        }        
+        component.setValue(Boolean.valueOf(newValue));
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -170,45 +137,34 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
-        String currentValue = null;
         ResponseWriter writer = null;
 
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        // Use "localState" (if it's set - indicating conversion
-        // failure)
-        //
-        Object localState = component.getAttribute("localState");
-        if ( localState != null ) {
-            currentValue = (String) localState;
-        } else {
-            Object currentObj = component.currentValue(context);
-            if ( currentObj != null) {
-                currentValue = ConvertUtils.convert(currentObj);
-            }
+        Boolean value = (Boolean) component.currentValue(context);
+        if (value == null) {
+            value = Boolean.FALSE;
         }
-
-        if (currentValue == null) {
-            return;
-        }
-
+        
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-        writer.write("<INPUT TYPE=\"CHECKBOX\" ");
-        writer.write(" NAME=\"");
+        writer.write("<input type=\"checkbox\" ");
+        writer.write(" name=\"");
         writer.write(component.getCompoundId());
         writer.write("\"");
 
         UISelectBoolean boolComp = (UISelectBoolean)component;
-        if (boolComp.isSelected()) {
-            writer.write(" CHECKED ");
+        if (value.booleanValue()) {
+            writer.write(" checked ");
         }
-
+        writer.write(Util.renderPassthruAttributes(context, component));
+	writer.write(Util.renderBooleanPassthruAttributes(context, component));
         writer.write(">");
         String label = null;
 
+        /* PENDING (visvan) handle nested label tag and remove code below.
 	try {
 	    label = getKeyAndLookupInBundle(context, component, "key");
 	}
@@ -223,8 +179,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         if (label != null) {
             writer.write(" ");
             writer.write(label);
-        }        
-
+        }  */
     }
 
 } // end of class CheckboxRenderer

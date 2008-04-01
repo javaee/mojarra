@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.1 2002/08/13 18:29:50 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.2 2002/08/14 22:01:34 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.1 2002/08/13 18:29:50 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.2 2002/08/14 22:01:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,40 +130,12 @@ public class NumberRenderer extends HtmlBasicRenderer {
         try {
             convertedValue = formatPool.numberFormat_parse(context, component, newValue);
             component.setValid(true);
+            component.setValue(convertedValue);
         } catch (ParseException pe ) {
             component.setValue(newValue);
             component.setValid(false);
             addConversionErrorMessage( context, component, pe.getMessage()); 
         }    
-     
-        String modelRef = component.getModelReference();
-	if (null != modelRef) {
-	    try {
-		modelType = context.getModelType(modelRef);
-	    } catch (FacesException fe ) {
-	        throw new IOException(
-                    Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
-	    }    
-	    Assert.assert_it(modelType != null );
-	    
-	    // Verify the modelType is one of the supported types
-	    if (modelType.isAssignableFrom(Double.class)) {
-		component.setValue((Double) convertedValue);
-	    }	    
-	    else if (modelType.isAssignableFrom(Long.class)) {
-		component.setValue((Long)convertedValue);
-	    }
-	    else if (modelType.isAssignableFrom(Integer.class)) {
-                component.setValue((Integer) convertedValue);
-	    }
-	    else {
-		component.setValue(convertedValue);
-	    }
-	}
-	else {
-	    component.setValue(convertedValue);
-	}
-	component.setValid(true);
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 

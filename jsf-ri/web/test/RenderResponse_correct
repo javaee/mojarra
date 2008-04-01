@@ -67,7 +67,7 @@
 
 	<TD>
 
-	      <INPUT TYPE="CHECKBOX"  NAME="/basicForm/validUser" CHECKED > Valid User
+	      <input type="checkbox"  name="/basicForm/validUser" checked > 
 
 	</TD>
 

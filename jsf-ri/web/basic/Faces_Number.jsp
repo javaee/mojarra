@@ -21,25 +21,25 @@
             <table>
 
             <tr>
-              <td> <faces:output_text id="outputLabel" text="DISPLAY-ONLY" /> </td>
+              <td> <faces:output_text id="outputLabel" value="DISPLAY-ONLY" /> </td>
               <td> <faces:output_number id="outputNumber" formatPattern="####.##"
                        value="9989.456987"/> </td>
             </tr> 
 
             <tr>
-              <td> <faces:output_text id="numberLabel" text="NUMBER" /> </td>
+              <td> <faces:output_text id="numberLabel" value="NUMBER" /> </td>
               <td> <faces:input_number id="testNumber" formatStyle="NUMBER"
                        value="1239989.6079"/> </td>
             </tr>
 
             <tr> 
-              <td> <faces:output_text id="currLabel" text="CURRENCY" /> </td>
+              <td> <faces:output_text id="currLabel" value="CURRENCY" /> </td>
               <td> <faces:input_number id="testcurrency" formatStyle="CURRENCY"  
                        value="$1234789.60"/> </td>
             </tr>
 
              <tr>
-              <td> <faces:output_text id="percentLabel" text="PERCENT" /> </td>
+              <td> <faces:output_text id="percentLabel" value="PERCENT" /> </td>
               <td> 
                    <faces:input_number id="testPercent" formatStyle="PERCENT" 
                         value="45%"/>
@@ -48,7 +48,7 @@
             </tr>
 
             <tr>
-              <td> <faces:output_text id="patternLabel" text="PATTERN" /> </td>
+              <td> <faces:output_text id="patternLabel" value="PATTERN" /> </td>
               <td>
                    <faces:input_number id="testPattern" formatPattern="####"
                         value="9999.98765"/>
