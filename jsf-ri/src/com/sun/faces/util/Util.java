@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.22 2002/08/05 21:22:42 eburns Exp $
+ * $Id: Util.java,v 1.23 2002/08/08 23:40:53 eburns Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Locale;
 
 /**
  *
@@ -49,7 +50,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.22 2002/08/05 21:22:42 eburns Exp $
+ * @version $Id: Util.java,v 1.23 2002/08/08 23:40:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -334,6 +335,67 @@ private Util()
         }
         return (list.iterator());
 
+    }
+
+    /**
+
+    * Return a Locale instance using the following algorithm: <P>
+
+     	<UL>
+
+	<LI>
+
+	If this component instance has an attribute named "bundle",
+	interpret it as a model reference to a LocalizationContext
+	instance accessible via FacesContext.getModelValue().
+
+	</LI>
+
+	<LI>
+
+	If FacesContext.getModelValue() returns a LocalizationContext
+	instance, return its Locale.
+
+	</LI>
+
+	<LI>
+
+	If FacesContext.getModelValue() doesn't return a
+	LocalizationContext, return the FacesContext's Locale.
+
+	</LI>
+
+	</UL>
+
+
+
+    */
+
+    public static Locale 
+	getLocaleFromContextOrComponent(FacesContext context,
+					UIComponent component) {
+	Locale result = null;
+	String bundleName = null, bundleAttr = "bundle";
+	
+	ParameterCheck.nonNull(context);
+	ParameterCheck.nonNull(component);
+	
+	// verify our component has the proper attributes for bundle.
+	if (null != (bundleName = (String)component.getAttribute(bundleAttr))){
+	    // verify there is a Locale for this modelReference
+	    javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
+	    if (null != (locCtx = 
+			 (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
+			 context.getModelValue(bundleName))) {
+		result = locCtx.getLocale();
+		Assert.assert_it(null != result);
+	    }
+	}
+	if (null == result) {
+	    result = context.getLocale();
+	}
+
+	return result;
     }
 
 //

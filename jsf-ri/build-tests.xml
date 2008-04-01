@@ -92,6 +92,7 @@
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
       <pathelement location="${jasper_hacked.jar}"/>
+      <pathelement location="${jstl.jar}"/>
     </path>
 
 <!-- ========== Executable Targets ======================================== -->
@@ -307,6 +308,7 @@
 
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
+            <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
 
             <!-- To run the following tests, comment above tests, uncomment
