@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.4 2002/07/30 22:51:36 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.5 2002/08/04 20:52:38 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>UISelectItem</strong></p> is a component that may be nested
+ * <p><strong>UISelectItem</strong> is a component that may be nested
  * inside a {@link UISelectMany} or {@link UISelectOne} component, and
  * causes the addition of a {@link SelectItem} instance, constructed based
  * on the values of the <code>itemValue</code>, <code>itemLabel</code>, and
