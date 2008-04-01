@@ -1,6 +1,6 @@
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.3 2001/11/10 01:09:21 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.4 2001/11/13 23:20:04 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -17,16 +17,19 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import javax.faces.OutputMethod;
-import javax.faces.RenderContext;
-import javax.faces.RenderKit;
-import javax.servlet.ServletRequest;
-import java.util.Locale;
-
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
+
+import javax.faces.OutputMethod;
+import javax.faces.RenderContext;
+import javax.faces.RenderKit;
+import javax.faces.ObjectTable;
+
+import javax.servlet.ServletRequest;
+
+import java.util.Locale;
 
 /**
  *
@@ -34,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.3 2001/11/10 01:09:21 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.4 2001/11/13 23:20:04 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,6 +64,7 @@ public class HtmlBasicRenderContext extends RenderContext {
 
     private RenderKit renderKit;
     private OutputMethod outputMethod;
+    private ObjectTable objectTable;
 
 //
 // Constructors and Initializers    
@@ -68,6 +72,7 @@ public class HtmlBasicRenderContext extends RenderContext {
 
 public HtmlBasicRenderContext() {
     renderKit = new HtmlBasicRenderKit();
+    objectTable = new com.sun.faces.ObjectTableImpl();
 }
 
 //
@@ -82,6 +87,11 @@ public HtmlBasicRenderContext() {
 public RenderKit getRenderKit() {
     return renderKit;
 }
+
+public ObjectTable getObjectTable() {
+    return objectTable;
+}
+
 
 public OutputMethod getOutputMethod() {
     return outputMethod;
@@ -107,7 +117,7 @@ public static void main(String [] args)
     HtmlBasicRenderContext me = new HtmlBasicRenderContext();
     Log.setApplicationName("HtmlBasicRenderContext");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderContext.java,v 1.3 2001/11/10 01:09:21 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: HtmlBasicRenderContext.java,v 1.4 2001/11/13 23:20:04 edburns Exp $");
     
 }
 
