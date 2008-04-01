@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.15 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.15 2002/01/16 21:06:35 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -58,7 +58,7 @@ public class Command_ButtonTag extends TagSupport {
     // Attribute Instance Variables
 
     private String image = null;
-    private String name = null;
+    private String id = null;
     private String label = null;
     private String commandName = null;
     private String scope = null;
@@ -90,12 +90,12 @@ public class Command_ButtonTag extends TagSupport {
     //
     // General Methods
     //
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name= name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImage() {
@@ -197,17 +197,17 @@ public class Command_ButtonTag extends TagSupport {
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
-        if (name != null) {
+        if (id != null) {
 
             // 1. Get or create the component instance.
             //
             UICommand wCommand = 
-                (UICommand) objectManager.get(pageContext.getRequest(), name);
+                (UICommand) objectManager.get(pageContext.getRequest(), id);
             if ( wCommand == null ) {
                 wCommand = new UICommand();
                 addToScope(wCommand, objectManager);
             }
-            wCommand.setAttribute(renderContext, "name", getName());
+            wCommand.setAttribute(renderContext, "id", getId());
             wCommand.setAttribute(renderContext, "image", getImage());
             wCommand.setAttribute(renderContext, "label", getLabel());
             
@@ -246,7 +246,7 @@ public class Command_ButtonTag extends TagSupport {
 //PENDING(rogerk)can we eliminate this extra get if wCommand is instance
 //variable? If so, threading issue?
 //
-        UICommand wCommand = (UICommand) objectManager.get(pageContext.getRequest(), name);
+        UICommand wCommand = (UICommand) objectManager.get(pageContext.getRequest(), id);
         Assert.assert_it( wCommand != null );
 
         // Complete the rendering process
@@ -272,7 +272,7 @@ public class Command_ButtonTag extends TagSupport {
         super.release();
 
         image = null;
-        name = null;
+        id = null;
         label = null;
         commandName = null;
         scope = null;
@@ -294,10 +294,10 @@ public class Command_ButtonTag extends TagSupport {
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
-        objectManager.put(pageContext.getSession(), name, c);
+        objectManager.put(pageContext.getSession(), id, c);
   
         if ( commandListener != null ) {
-            String lis_name = name.concat(Constants.REF_COMMANDLISTENERS);
+            String lis_name = id.concat(Constants.REF_COMMANDLISTENERS);
             listeners = (Vector) objectManager.get(pageContext.getRequest(), 
 						   lis_name);
             if ( listeners == null) {
@@ -311,7 +311,7 @@ public class Command_ButtonTag extends TagSupport {
 
         if ( command != null ) {
             // put the "Command" listener in the objectManager
-            String cmd_name = name.concat(Constants.REF_COMMAND);
+            String cmd_name = id.concat(Constants.REF_COMMAND);
             String cmd = (String) objectManager.get(pageContext.getRequest(), 
 						    cmd_name);
             if ( cmd == null) {

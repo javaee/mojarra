@@ -17,34 +17,34 @@
 <p><font color="#0000FF"><font size=+2>Please Login.  Demo userid:password is <CODE>default:default</CODE></font></font>
 <hr>
 <faces:UseFaces>
-  <faces:DeclareBean scope="session" name="UserBean" 
+  <faces:DeclareBean scope="session" id="UserBean" 
                      className="fruitstand.UserBean"/>
-  <faces:DeclareBean scope="session" name="ShipTypeBean" 
+  <faces:DeclareBean scope="session" id="ShipTypeBean" 
                      className="fruitstand.ShipTypeBean"/>
 
-  <faces:Command name="handleLogin" scope="session" 
+  <faces:Command id="handleLogin" scope="session" 
                  className="fruitstand.CommandListenerImpl" 
                  onCompletion="StoreFront.jsp" 
                  onError="Login.jsp"/>
 
-  <faces:Form name="LoginForm" model="UserBean">
+  <faces:Form id="LoginForm" model="UserBean">
 
     <table>
     <tr>
-    <td><faces:Output_Text name="name_label" value="Name:" /></td>
+    <td><faces:Output_Text id="name_label" value="Name:" /></td>
 
-    <td> <faces:TextEntry_Input name="userName" model="$UserBean.userName" /> </td>
+    <td> <faces:TextEntry_Input id="userName" model="$UserBean.userName" /> </td>
     </tr>
 
     <tr>
-    <td><faces:Output_Text name="passwd_label" value="Password:" /></td>
+    <td><faces:Output_Text id="passwd_label" value="Password:" /></td>
 
-    <td> <faces:TextEntry_Secret name="password" model="$UserBean.password" 
+    <td> <faces:TextEntry_Secret id="password" model="$UserBean.password" 
                           size="10"/></td>
     </tr>
     </table>
 
-<p> <faces:Command_Button name="Login" label="login" command="handleLogin" /> 
+<p> <faces:Command_Button id="Login" label="login" command="handleLogin" /> 
 <p><font color="#000000">click&nbsp;</font> <faces:Command_Hyperlink target="createAccount.jsp" text="here"/> to open new account
 <hr WIDTH="100%">
 <p><img SRC="duke.gif" height=55 width=49 align=ABSCENTER> Thanks

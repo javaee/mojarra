@@ -1,5 +1,5 @@
 /*
- * $Id: ListenerTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
+ * $Id: ListenerTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListenerTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: ListenerTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -54,7 +54,7 @@ public class ListenerTag extends TagSupport
     //
 
     // Attribute Instance Variables
-    private String name = null;
+    private String id = null;
     private String scope = null;
     private String className = null;
 
@@ -94,9 +94,9 @@ public class ListenerTag extends TagSupport
                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         
-        if ( name != null ) {
+        if ( id != null ) {
             EventListener el = (EventListener) ot.get(pageContext.getRequest(), 
-                    name);
+                    id);
             if (el == null) {
                 el = createComponent();
                 addToScope(el, ot);    
@@ -114,15 +114,15 @@ public class ListenerTag extends TagSupport
     public void addToScope(EventListener el, ObjectManager objectManager) {
         
         if ("request".equals(scope)) {
-            objectManager.put(pageContext.getRequest(), name, el); 
+            objectManager.put(pageContext.getRequest(), id, el); 
         }    
         else if ("session".equals(scope)) {
-          objectManager.put(pageContext.getSession(),name, el);
+          objectManager.put(pageContext.getSession(),id, el);
         }
         else if ("application".equals(scope)){
-             objectManager.put(ObjectManager.GlobalScope,name, el);
+             objectManager.put(ObjectManager.GlobalScope,id, el);
         } else {
-            objectManager.put(pageContext.getRequest(),name, el);
+            objectManager.put(pageContext.getRequest(),id, el);
         }
     }
 
@@ -151,20 +151,20 @@ public class ListenerTag extends TagSupport
     }
 
     /**
-     * Returns the value of "name" attribute
+     * Returns the value of "id" attribute
      *
-     * @return String value of "name" attribute
+     * @return String value of "id" attribute
      */
-    public String getName() {
-        return this.name;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Sets the "name" attribute
-     * @param name value of "name" attribute 
+     * Sets the "id" attribute
+     * @param id value of "id" attribute 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

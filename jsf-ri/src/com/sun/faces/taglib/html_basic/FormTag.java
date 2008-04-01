@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.17 2002/01/10 22:32:50 edburns Exp $
+ * $Id: FormTag.java,v 1.18 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.17 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: FormTag.java,v 1.18 2002/01/16 21:06:35 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -55,7 +55,7 @@ public class FormTag extends TagSupport
     //
 
     // Attribute Instance Variables
-    private String name = null;
+    private String id = null;
     private String model = null;
     private String scope = null;
     private String formListener = null;
@@ -102,11 +102,11 @@ public class FormTag extends TagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
-        if ( name != null ) {
+        if ( id != null ) {
 
             // 1. Get or create the component instance.
             //
-            UIForm c = (UIForm) ot.get(pageContext.getRequest(), name);
+            UIForm c = (UIForm) ot.get(pageContext.getRequest(), id);
             if ( c == null ) {
                 c = createComponent(rc);
                 addToScope(c, ot);
@@ -145,12 +145,12 @@ public class FormTag extends TagSupport
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), name, c);
+        ot.put(pageContext.getSession(), id, c);
 
         // PENDING ( visvan ) this should be done in Component's 
         // addListener method. 
         if ( formListener != null ) {
-            String lis_name = name.concat(Constants.REF_FORMLISTENERS);
+            String lis_name = id.concat(Constants.REF_FORMLISTENERS);
             listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
             if ( listeners == null) {
                 listeners = new Vector();
@@ -173,7 +173,7 @@ public class FormTag extends TagSupport
         UIForm c = new UIForm();
 
         // set renderer specific properties 
-        c.setAttribute(rc, "name", name);
+        c.setAttribute(rc, "id", id);
 
         // set render independent attributes
         // make sure that the model object is registered
@@ -184,20 +184,20 @@ public class FormTag extends TagSupport
     }
 
     /**
-     * Returns the value of the "name" attribute
+     * Returns the value of the "id" attribute
      *
-     * @return String value of "name" attribute
+     * @return String value of "id" attribute
      */
-    public String getName() {
-        return this.name;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Sets the "name" attribute
-     * @param name value of "name" attribute 
+     * Sets the "id" attribute
+     * @param id value of "id" attribute 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -269,7 +269,7 @@ public class FormTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        UIForm c = (UIForm) ot.get(pageContext.getRequest(), name);
+        UIForm c = (UIForm) ot.get(pageContext.getRequest(), id);
         Assert.assert_it( c != null );
 
         // Complete the rendering process
@@ -294,7 +294,7 @@ public class FormTag extends TagSupport
 
         super.release();
 
-        name = null;
+        id = null;
         model = null;
         scope = null;
         formListener = null;

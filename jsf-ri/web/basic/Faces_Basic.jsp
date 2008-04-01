@@ -9,41 +9,41 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <faces:UseFaces>
-        <faces:DeclareBean scope="session" name="LoginBean" 
+        <faces:DeclareBean scope="session" id="LoginBean" 
                            className="basic.LoginBean"/>
-        <faces:DeclareBean scope="session" name="ShipTypeBean" 
+        <faces:DeclareBean scope="session" id="ShipTypeBean" 
                            className="basic.ShipTypeBean"/>
 
-        <faces:Form name="basicForm" model="LoginBean">
-            <faces:Listener name="loginListener" scope="session" className="basic.EventHandler" />
-            <faces:Listener name="radioListener" scope="session" className="basic.EventHandler" />
-            <faces:Listener name="optionListener" scope="session" className="basic.EventHandler" />
-            <faces:Command name="handleLogin" scope="session" className="basic.EventHandler" onCompletion="welcome.jsp" onError="error.jsp"/>
+        <faces:Form id="basicForm" model="LoginBean">
+            <faces:Listener id="loginListener" scope="session" className="basic.EventHandler" />
+            <faces:Listener id="radioListener" scope="session" className="basic.EventHandler" />
+            <faces:Listener id="optionListener" scope="session" className="basic.EventHandler" />
+            <faces:Command id="handleLogin" scope="session" className="basic.EventHandler" onCompletion="welcome.jsp" onError="error.jsp"/>
 
            <table> 
             <tr> 
-              <td> <faces:Output_Text name="userLabel"  value="UserName" /> </td>
-              <td> <faces:TextEntry_Input name="userName" size="20" maxlength="26" value="default" valueChangeListener="loginListener" />  </td>
+              <td> <faces:Output_Text id="userLabel"  value="UserName" /> </td>
+              <td> <faces:TextEntry_Input id="userName" size="20" maxlength="26" value="default" valueChangeListener="loginListener" />  </td>
             </tr>
 
              <tr>
-                <td> <faces:Output_Text name="pwdLabel"  value="Password" /> </td>
-                <td> <faces:TextEntry_Secret name="password" size="20" maxlength="26" valueChangeListener ="loginListener"/> </td>
+                <td> <faces:Output_Text id="pwdLabel"  value="Password" /> </td>
+                <td> <faces:TextEntry_Secret id="password" size="20" maxlength="26" valueChangeListener ="loginListener"/> </td>
              </tr>
        
              <tr>
-                <td> <faces:Output_Text name="addrLabel"  value="Address" /> </td>
-                <td> <faces:TextEntry_TextArea name="address" cols="150" rows="10" valueChangeListener="loginListener" /> </td>
+                <td> <faces:Output_Text id="addrLabel"  value="Address" /> </td>
+                <td> <faces:TextEntry_TextArea id="address" cols="150" rows="10" valueChangeListener="loginListener" /> </td>
              </tr>
 
               <tr>
-             <td> <faces:SelectBoolean_Checkbox name="validUser" value="Checker" valueChangeListener="loginListener" label="Check this" />
+             <td> <faces:SelectBoolean_Checkbox id="validUser" value="Checker" valueChangeListener="loginListener" label="Check this" />
                   </td>
              </tr>
 <tr>
            <table> 
 <TR>
-<faces:RadioGroup name="shipType" 
+<faces:RadioGroup id="shipType" 
                   model="$ShipTypeBean.shipType" 
                   selectedValueModel="$ShipTypeBean.currentShipType" 
                   valueChangeListener="radioListener">
@@ -60,7 +60,7 @@
 
 </TR>
 <TR>Options: 
-    <faces:SelectOne_OptionList name="appleQuantity"
+    <faces:SelectOne_OptionList id="appleQuantity"
                    valueChangeListener="optionListener">
         <faces:SelectOne_Option value="0" label="0.00"/>
         <faces:SelectOne_Option value="1" label="1.00"/>
@@ -78,15 +78,15 @@
           </table>
 </tr>
              <tr> 
-             <td><faces:Command_Button name="login" label="login" command="handleLogin" /></td>
+             <td><faces:Command_Button id="login" label="login" command="handleLogin" /></td>
              </tr>
 
           </table>
 
             <P></P>
-            <faces:Command_Button name="Login" image="duke.gif"/>
+            <faces:Command_Button id="Login" image="duke.gif"/>
             <P></P>
-            <faces:SelectBoolean_Checkbox name="Checkbox" value="Checker" label="Check this"/>
+            <faces:SelectBoolean_Checkbox id="Checkbox" value="Checker" label="Check this"/>
             <P></P>
             <faces:Command_Hyperlink target="Faces_Basic.jsp" text="Hello World"/>
             <P></P>

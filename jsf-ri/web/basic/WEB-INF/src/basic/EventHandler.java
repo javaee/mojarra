@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.3 2002/01/10 22:32:51 edburns Exp $
+ * $Id: EventHandler.java,v 1.4 2002/01/16 21:06:37 rogerk Exp $
  */
 
 /*
@@ -36,12 +36,12 @@ public class EventHandler extends AbstractCommand implements CommandListener,Val
     }
 
     public void doCommand(CommandEvent e)  throws CommandFailedException {
-       System.out.println("Name of UIComponent that generated event " + e.getSourceName());
+       System.out.println("Name of UIComponent that generated event " + e.getSourceId());
        System.out.println("CommandEvent processing successful");
     }
 
     public void handleValueChange(ValueChangeEvent e) {
-       System.out.println("Name of UIComponent that generated event " + e.getSourceName());
+       System.out.println("Name of UIComponent that generated event " + e.getSourceId());
        System.out.println("New Value " + e.getNewValue());
        System.out.println("CommandEvent processing successful");
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: DeclareBeanTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
+ * $Id: DeclareBeanTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DeclareBeanTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: DeclareBeanTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -55,7 +55,7 @@ public class DeclareBeanTag extends TagSupport
 
     // Attribute Instance Variables
     private String scope = null;
-    private String name = null;
+    private String id = null;
     private String className = null;
 
     // Relationship Instance Variables
@@ -117,31 +117,31 @@ public class DeclareBeanTag extends TagSupport
     public void addToScope(Class beanClass, ObjectManager objectManager) {
         
         if ("request".equals(scope)) {
-            objectManager.bind(ObjectManager.RequestScope, name, beanClass); 
+            objectManager.bind(ObjectManager.RequestScope, id, beanClass); 
         }    
         else if ("session".equals(scope)) {
-	    objectManager.bind(ObjectManager.SessionScope, name, beanClass);
+	    objectManager.bind(ObjectManager.SessionScope, id, beanClass);
         }
         else if ("application".equals(scope)){
-	    objectManager.bind(ObjectManager.GlobalScope, name, beanClass);
+	    objectManager.bind(ObjectManager.GlobalScope, id, beanClass);
         } 
     }
 
     /**
-     * Returns the value of "name" attribute
+     * Returns the value of "id" attribute
      *
-     * @return String value of "name" attribute
+     * @return String value of "id" attribute
      */
-    public String getName() {
-        return this.name;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Sets the "name" attribute
-     * @param name value of "name" attribute 
+     * Sets the "id" attribute
+     * @param id value of "id" attribute 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

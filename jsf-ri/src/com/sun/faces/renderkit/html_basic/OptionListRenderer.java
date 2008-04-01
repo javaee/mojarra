@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.3 2002/01/10 22:32:49 edburns Exp $
+ * $Id: OptionListRenderer.java,v 1.4 2002/01/16 21:06:34 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.3 2002/01/10 22:32:49 edburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.4 2002/01/16 21:06:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,7 +135,7 @@ public class OptionListRenderer extends Object implements Renderer {
 
         StringBuffer output = new StringBuffer();
         output.append("<SELECT NAME=\"");
-        output.append(wSelectOne.getAttribute(rc, "name"));
+        output.append(wSelectOne.getAttribute(rc, "id"));
         output.append("\">");
         outputMethod.writeText(output.toString());
         outputMethod.flush();

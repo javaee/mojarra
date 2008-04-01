@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.13 2002/01/10 22:32:50 edburns Exp $
+ * $Id: Output_TextTag.java,v 1.14 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.13 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.14 2002/01/16 21:06:35 rogerk Exp $
  * 
  *
  */
@@ -55,7 +55,7 @@ public class Output_TextTag extends TagSupport
     //
 
     // Attribute Instance Variables
-    private String name = null;
+    private String id = null;
     private String value = null;
     private String scope = null;
     private String valueChangeListener = null;
@@ -103,11 +103,11 @@ public class Output_TextTag extends TagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
-        if ( name != null ) {
+        if ( id != null ) {
 
             // 1. Get or create the component instance.
             //
-            UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), name);
+            UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), id);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot);
@@ -143,10 +143,10 @@ public class Output_TextTag extends TagSupport
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), name, c);
+        ot.put(pageContext.getSession(), id, c);
 
         if ( valueChangeListener != null ) {
-            String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
+            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
             Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
             if ( listeners == null) {
                 listeners = new Vector();
@@ -176,7 +176,7 @@ public class Output_TextTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), name);
+        UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), id);
         Assert.assert_it( c != null );
 
         // Complete the rendering process
@@ -201,7 +201,7 @@ public class Output_TextTag extends TagSupport
 
         super.release();
 
-        name = null;
+        id = null;
         value = null;
         scope = null;
         valueChangeListener = null;
@@ -215,7 +215,7 @@ public class Output_TextTag extends TagSupport
     protected UIOutput createComponent(RenderContext rc) {
         UIOutput c = new UIOutput();
         // set renderer specific properties 
-        c.setAttribute(rc, "name", name);
+        c.setAttribute(rc, "id", id);
 
         // set render independent attributes 
         // If model attribute is not found get it
@@ -230,7 +230,7 @@ public class Output_TextTag extends TagSupport
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface. Also at this point we must ensure that
-            // the bean has a property with this name and has 
+            // the bean has a property with this id and has 
             // accessor methods for it. Need to figure out an
             // efficient way to do that. 
             FormTag ancestor = null;
@@ -239,7 +239,7 @@ public class Output_TextTag extends TagSupport
                     FormTag.class);
                String model_str = ancestor.getModel();
                if ( model_str != null ) {
-                   model = "$" + model_str + "." + name;
+                   model = "$" + model_str + "." + id;
                    c.setModel(model);
                }
             } catch ( Exception e ) {
@@ -253,20 +253,20 @@ public class Output_TextTag extends TagSupport
     }
 
     /**
-     * Returns the value of the "name" attribute
+     * Returns the value of the "id" attribute
      *
-     * @return String value of "name" attribute
+     * @return String value of "id" attribute
      */
-    public String getName() {
-        return this.name;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Sets the "name" attribute
-     * @param name value of "name" attribute 
+     * Sets the "id" attribute
+     * @param id value of "id" attribute 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.5 2002/01/10 22:32:50 edburns Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.6 2002/01/16 21:06:36 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.5 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.6 2002/01/16 21:06:36 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,7 +165,7 @@ public int doStartTag() throws JspException {
     try {
 	ancestor = (SelectOne_OptionListTag) 
 	    findAncestorWithClass(this, SelectOne_OptionListTag.class);
-	parentName = ancestor.getName();
+	parentName = ancestor.getId();
     } catch ( Exception e ) {
 	throw new JspException("Option must be enclosed in a SelectOne_Option tag");
     }
@@ -229,7 +229,7 @@ public int doEndTag() throws JspException{
     try {
         ancestor = (SelectOne_OptionListTag)
             findAncestorWithClass(this, SelectOne_OptionListTag.class);
-        parentName = ancestor.getName();
+        parentName = ancestor.getId();
     } catch ( Exception e ) {
         throw new JspException("Option must be enclosed in a SelectOne_Option tag");
     }

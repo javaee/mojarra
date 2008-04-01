@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.4 2002/01/10 22:32:50 edburns Exp $
+ * $Id: RadioGroupTag.java,v 1.5 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.4 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: RadioGroupTag.java,v 1.5 2002/01/16 21:06:35 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -59,7 +59,7 @@ public class RadioGroupTag extends TagSupport
 
 // Attribute Instance Variables
 
-    private String name = null;
+    private String id = null;
     private String model = null;
     private String selectedValueModel = null;
     private String valueChangeListener = null;
@@ -91,12 +91,12 @@ protected void init()
 //
 // General Methods
 //
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getModel() {
@@ -149,7 +149,7 @@ protected UISelectOne createComponent(RenderContext renderContext)
     UISelectOne wSelectOne = new UISelectOne();
     
     // set renderer specific properties
-    wSelectOne.setAttribute(renderContext, "name", getName());
+    wSelectOne.setAttribute(renderContext, "id", getId());
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {
@@ -173,10 +173,10 @@ protected UISelectOne createComponent(RenderContext renderContext)
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), name, c);
+        ot.put(pageContext.getSession(), id, c);
 
         if ( valueChangeListener != null ) {
-            String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
+            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
             Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
             if ( listeners == null) {
                 listeners = new Vector();
@@ -213,7 +213,7 @@ public int doStartTag() throws JspException {
     // 1. Get or create the component instance.
     //
     UISelectOne wSelectOne = (UISelectOne) 
-	ot.get(pageContext.getRequest(), name);
+	ot.get(pageContext.getRequest(), id);
     if (wSelectOne == null) {
 	wSelectOne = createComponent(renderContext);
 	addToScope(wSelectOne, ot);
@@ -234,7 +234,7 @@ public int doEndTag() throws JspException{
 			      Constants.REF_RENDERCONTEXT);
     Assert.assert_it( renderContext != null );
     
-    UISelectOne wSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), name);
+    UISelectOne wSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), id);
     Assert.assert_it(null != wSelectOne);
     
     // The magic method: setting the collection into the component

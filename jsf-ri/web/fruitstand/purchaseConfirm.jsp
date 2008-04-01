@@ -19,39 +19,39 @@
   <th>Price/lb.($)</th>
   <th>Total($)</th>
   <tr> 
-    <td><faces:Output_Text name="apple_item" value="apple" /></td>
-    <td><faces:Output_Text name="apple_amount" 
+    <td><faces:Output_Text id="apple_item" value="apple" /></td>
+    <td><faces:Output_Text id="apple_amount" 
                            model="$UserBean.appleQuantity"/></td>
-    <td><faces:Output_Text name="apple_price" value= "0.29"/></td>
-    <td><faces:Output_Text name="apple_total" value= "0.58"/></td>
+    <td><faces:Output_Text id="apple_price" value= "0.29"/></td>
+    <td><faces:Output_Text id="apple_total" value= "0.58"/></td>
   </tr>
   <tr> 
-    <td><faces:Output_Text name="banana_item" value="banana" /></td>
-    <td><faces:Output_Text name="banana_amount" 
+    <td><faces:Output_Text id="banana_item" value="banana" /></td>
+    <td><faces:Output_Text id="banana_amount" 
                            model="$UserBean.bananaQuantity"/></td>
-    <td><faces:Output_Text name="banana_price" value= "0.29"/></td>
-    <td><faces:Output_Text name="banana_total" value= "0.58"/></td>
+    <td><faces:Output_Text id="banana_price" value= "0.29"/></td>
+    <td><faces:Output_Text id="banana_total" value= "0.58"/></td>
   </tr>
   <tr> 
-    <td><faces:Output_Text name="cantaloupe_item" value="cantaloupe" /></td>
-    <td><faces:Output_Text name="cantaloupe_amount" 
+    <td><faces:Output_Text id="cantaloupe_item" value="cantaloupe" /></td>
+    <td><faces:Output_Text id="cantaloupe_amount" 
                            model="$UserBean.cantaloupeQuantity"/></td>
-    <td><faces:Output_Text name="cantaloupe_price" value= "0.29"/></td>
-    <td><faces:Output_Text name="cantaloupe_total" value= "0.58"/></td>
+    <td><faces:Output_Text id="cantaloupe_price" value= "0.29"/></td>
+    <td><faces:Output_Text id="cantaloupe_total" value= "0.58"/></td>
   </tr>
   <tr> 
-    <td><faces:Output_Text name="grapefruit_item" value="grapefruit" /></td>
-    <td><faces:Output_Text name="grapefruit_amount" 
+    <td><faces:Output_Text id="grapefruit_item" value="grapefruit" /></td>
+    <td><faces:Output_Text id="grapefruit_amount" 
                            model="$UserBean.grapefruitQuantity"/></td>
-    <td><faces:Output_Text name="grapefruit_price" value= "0.29"/></td>
-    <td><faces:Output_Text name="grapefruit_total" value= "0.58"/></td>
+    <td><faces:Output_Text id="grapefruit_price" value= "0.29"/></td>
+    <td><faces:Output_Text id="grapefruit_total" value= "0.58"/></td>
   </tr>
   <tr> 
-    <td><faces:Output_Text name="grape_item" value="grape" /></td>
-    <td><faces:Output_Text name="grape_amount" 
+    <td><faces:Output_Text id="grape_item" value="grape" /></td>
+    <td><faces:Output_Text id="grape_amount" 
                            model="$UserBean.grapeQuantity"/></td>
-    <td><faces:Output_Text name="grape_price" value= "0.29"/></td>
-    <td><faces:Output_Text name="grape_total" value= "0.58"/></td>
+    <td><faces:Output_Text id="grape_price" value= "0.29"/></td>
+    <td><faces:Output_Text id="grape_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td colspan="4"><hr /></td>
@@ -59,7 +59,7 @@
   </tr>
   <tr>
     <td colspan="3">Total</td>
-    <td> <faces:Output_Text name="total_price" value="6.14" /></td>
+    <td> <faces:Output_Text id="total_price" value="6.14" /></td>
   </tr>
 </table>
 <br>
@@ -67,16 +67,16 @@
 The items listed above will be billed to: <br>
 <br>
 
-<faces:Output_Text name="cust_firstName" model="$UserBean.firstName" /> 
-<faces:Output_Text name="cust_lastName" model="$UserBean.lastName" /> <br>
-<faces:Output_Text name="cust_address" model="$UserBean.address" /><br>
-<faces:Output_Text name="cust_city" model="$UserBean.city" />
-<faces:Output_Text name="cust_state" model="$UserBean.state" />
+<faces:Output_Text id="cust_firstName" model="$UserBean.firstName" /> 
+<faces:Output_Text id="cust_lastName" model="$UserBean.lastName" /> <br>
+<faces:Output_Text id="cust_address" model="$UserBean.address" /><br>
+<faces:Output_Text id="cust_city" model="$UserBean.city" />
+<faces:Output_Text id="cust_state" model="$UserBean.state" />
 <br>
-<faces:Output_Text name="cust_country" model="$UserBean.country" />
+<faces:Output_Text id="cust_country" model="$UserBean.country" />
 
-<faces:Form name="purchaseConfirm" model="UserBean">
-      <faces:Command name="handleConfirm" scope="session" 
+<faces:Form id="purchaseConfirm" model="UserBean">
+      <faces:Command id="handleConfirm" scope="session" 
                    className="fruitstand.CommandListenerImpl" 
                    onCompletion="purchaseAction.jsp" 
                    onError="StoreFront.jsp"/>
@@ -84,7 +84,7 @@ The items listed above will be billed to: <br>
 <TABLE border="2"><TR><TD>
 <TABLE>
 <TR>
-<faces:RadioGroup name="shipType"
+<faces:RadioGroup id="shipType"
                   model="$ShipTypeBean.shipType"
                   selectedValueModel="$ShipTypeBean.currentShipType">
   <TABLE border="2"><TR><TD>
@@ -102,19 +102,19 @@ The items listed above will be billed to: <br>
 <TR>
 <TD>Select Extras
 </TD>
-<TD><faces:SelectBoolean_Checkbox name="giftWrap" value="giftWrap" 
+<TD><faces:SelectBoolean_Checkbox id="giftWrap" value="giftWrap" 
                                   label="Gift Wrapped"/>
 </TD>
-<TD><faces:SelectBoolean_Checkbox name="giftCard" value="giftCard" 
+<TD><faces:SelectBoolean_Checkbox id="giftCard" value="giftCard" 
                                   label="Gift Card"/>
 </TD>
-<TD><faces:SelectBoolean_Checkbox name="scented" value="scented" 
+<TD><faces:SelectBoolean_Checkbox id="scented" value="scented" 
                                   label="Scented"/>
 </TD>
 </TR>
 <TR>
 <TD>
-  <faces:Command_Button name="confirm" label="Purchase Items Listed Above" 
+  <faces:Command_Button id="confirm" label="Purchase Items Listed Above" 
                       command="handleConfirm"/>
 </TD>
 </TR>

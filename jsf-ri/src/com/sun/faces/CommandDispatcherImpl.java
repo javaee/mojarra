@@ -1,5 +1,5 @@
 /*
- * $Id: CommandDispatcherImpl.java,v 1.7 2002/01/10 23:14:11 rogerk Exp $
+ * $Id: CommandDispatcherImpl.java,v 1.8 2002/01/16 21:06:34 rogerk Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.7 2002/01/10 23:14:11 rogerk Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.8 2002/01/16 21:06:34 rogerk Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent
@@ -77,10 +77,10 @@ public class CommandDispatcherImpl extends CommandDispatcher {
                     "Expected CommandEvent");
         }
         // invoke the doCommand on all listeners
-        String srcName = cmd_event.getSourceName();  
-        Assert.assert_it(srcName != null );
+        String srcId = cmd_event.getSourceId();  
+        Assert.assert_it(srcId != null );
  
-        String lis_name = srcName + Constants.REF_COMMANDLISTENERS;
+        String lis_name = srcId + Constants.REF_COMMANDLISTENERS;
         Vector lis_list = (Vector) ot.get(request, lis_name);
         if ( lis_list != null && lis_list.size() > 0 ) {
             for ( int i = 0; i < lis_list.size(); ++i) {
@@ -101,7 +101,7 @@ public class CommandDispatcherImpl extends CommandDispatcher {
         }
     
         // process commands if any
-        String cmd_ref_name = srcName + Constants.REF_COMMAND;
+        String cmd_ref_name = srcId + Constants.REF_COMMAND;
         String cmd_name = (String) ot.get(request, cmd_ref_name);
         if (cmd_name != null ) {
             Command cmd = (Command)  ot.get(request, cmd_name);

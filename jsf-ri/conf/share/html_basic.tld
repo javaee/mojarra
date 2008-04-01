@@ -71,7 +71,7 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -221,7 +221,7 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>name</name>
+        <name>id</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -272,7 +272,7 @@ Configuring UI Components
       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -398,7 +398,7 @@ Configuring UI Components
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-        <name>name</name>
+        <name>id</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -434,7 +434,7 @@ Configuring UI Components
     <tagclass>com.sun.faces.taglib.html_basic.RadioGroupTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
-        <name>name</name>
+        <name>id</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -482,7 +482,7 @@ Configuring UI Components
     <tagclass>com.sun.faces.taglib.html_basic.SelectOne_OptionListTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
-        <name>name</name>
+        <name>id</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -536,7 +536,7 @@ Configuring UI Components
       <tagclass>com.sun.faces.taglib.html_basic.Output_TextTag</tagclass>
       <bodycontent>JSP</bodycontent>
       <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -567,7 +567,7 @@ Configuring UI Components
       <tagclass>com.sun.faces.taglib.html_basic.TextEntry_InputTag</tagclass>
       <bodycontent>JSP</bodycontent>
       <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -608,7 +608,7 @@ Configuring UI Components
       <tagclass>com.sun.faces.taglib.html_basic.TextEntry_SecretTag</tagclass>
       <bodycontent>JSP</bodycontent>
       <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -649,7 +649,7 @@ Configuring UI Components
       <tagclass>com.sun.faces.taglib.html_basic.TextEntry_TextAreaTag</tagclass>
       <bodycontent>JSP</bodycontent>
       <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -695,7 +695,7 @@ Configuring UI Components
       <tagclass>com.sun.faces.taglib.html_basic.ListenerTag</tagclass>
       <bodycontent>JSP</bodycontent>
       <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -716,7 +716,7 @@ Configuring UI Components
       <tagclass>com.sun.faces.taglib.html_basic.CommandTag</tagclass>
       <bodycontent>JSP</bodycontent>
       <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -752,7 +752,7 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
    <attribute>
-      <name>name</name>
+      <name>id</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

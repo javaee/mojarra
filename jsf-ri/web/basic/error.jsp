@@ -9,9 +9,9 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <faces:UseFaces>
-        <faces:Form name='basicForm' >
+        <faces:Form id='basicForm' >
 
-            <faces:Output_Text name='hello_label' value='Login Failed' />
+            <faces:Output_Text id='hello_label' value='Login Failed' />
              <P></P>
         </faces:Form>
     </faces:UseFaces>

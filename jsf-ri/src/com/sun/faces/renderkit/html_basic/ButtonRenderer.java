@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.13 2002/01/10 22:32:48 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.14 2002/01/16 21:06:34 rogerk Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.13 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.14 2002/01/16 21:06:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -175,12 +175,12 @@ public class ButtonRenderer extends Object implements Renderer
             output.append(wCommand.getAttribute(rc, "image"));
             output.append("\"");
             output.append(" NAME=\"");
-            output.append(wCommand.getAttribute(rc, "name"));
+            output.append(wCommand.getAttribute(rc, "id"));
             output.append("\"");
         } else {
             String label = (String)wCommand.getAttribute(rc, "label");
             output.append("\"SUBMIT\" NAME=\"");
-            output.append(wCommand.getAttribute(rc, "name"));
+            output.append(wCommand.getAttribute(rc, "id"));
             output.append("\"");
             output.append(" value=\"");
 	    // Follow the UE Spec for Button:

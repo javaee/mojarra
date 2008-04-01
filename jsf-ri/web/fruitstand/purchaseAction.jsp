@@ -19,7 +19,7 @@
 Thank you for your purchase. 
 <br>
 <br>
-<faces:Output_Text name='confirmOrder' value='Your order will be shipped on 01/11/2001' />
+<faces:Output_Text id='confirmOrder' value='Your order will be shipped on 01/11/2001' />
 </font>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>

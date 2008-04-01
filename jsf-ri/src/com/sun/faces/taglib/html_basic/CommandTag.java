@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
+ * $Id: CommandTag.java,v 1.4 2002/01/16 21:06:34 rogerk Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandTag.java,v 1.3 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: CommandTag.java,v 1.4 2002/01/16 21:06:34 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -58,7 +58,7 @@ public class CommandTag extends TagSupport
     //
 
     // Attribute Instance Variables
-    private String name = null;
+    private String id = null;
     private String scope = null;
     private String onCompletion = null;
     private String onError = null;
@@ -100,9 +100,9 @@ public class CommandTag extends TagSupport
                 getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( ot != null );
         
-        if ( name != null ) {
+        if ( id != null ) {
             Command cmd = (Command) ot.get(pageContext.getRequest(), 
-                    name);
+                    id);
             if (cmd == null) {
                 cmd = createComponent();
                 addToScope(cmd, ot);    
@@ -120,15 +120,15 @@ public class CommandTag extends TagSupport
     public void addToScope(Command cmd, ObjectManager objectManager) {
         
         if ("request".equals(scope)) {
-            objectManager.put(pageContext.getRequest(), name, cmd); 
+            objectManager.put(pageContext.getRequest(), id, cmd); 
         }    
         else if ("session".equals(scope)) {
-          objectManager.put(pageContext.getSession(),name, cmd);
+          objectManager.put(pageContext.getSession(),id, cmd);
         }
         else if ("application".equals(scope)){
-             objectManager.put(ObjectManager.GlobalScope,name, cmd);
+             objectManager.put(ObjectManager.GlobalScope,id, cmd);
         } else {
-            objectManager.put(pageContext.getRequest(), name, cmd);
+            objectManager.put(pageContext.getRequest(), id, cmd);
         }
     }
 
@@ -150,42 +150,42 @@ public class CommandTag extends TagSupport
             cmd_obj = (Command) cmd_cons.newInstance(initargs);
         } catch (IllegalAccessException e) {
             throw new JspException("Can't create instance for " +
-                                 name + ": " + e.getMessage());
+                                 id + ": " + e.getMessage());
         }
         catch (InstantiationException e) {
             throw new JspException("Can't create instance for " +
-                                 name + ": " + e.getMessage());
+                                 id + ": " + e.getMessage());
         }
         catch (ClassNotFoundException e) {
             throw new JspException("Can't find class for " +
-                                 name + ": " + e.getMessage());
+                                 id + ": " + e.getMessage());
         }
         catch (NoSuchMethodException e) {
             throw new JspException("Can't find class for " +
-                                 name + ": " + e.getMessage());
+                                 id + ": " + e.getMessage());
         }
         catch (InvocationTargetException e) {
             throw new JspException("Can't find class for " +
-                                 name + ": " + e.getMessage());
+                                 id + ": " + e.getMessage());
         }
         return cmd_obj;
     }
 
     /**
-     * Returns the value of "name" attribute
+     * Returns the value of "id" attribute
      *
-     * @return String value of "name" attribute
+     * @return String value of "id" attribute
      */
-    public String getName() {
-        return this.name;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Sets the "name" attribute
-     * @param name value of "name" attribute 
+     * Sets the "id" attribute
+     * @param id value of "id" attribute 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

@@ -16,9 +16,9 @@
 <font size="4" color="#0000FF">Open a New Account </font><body bgcolor="#FFFFFF" text="#000000"> 
 
 <faces:UseFaces>
-  <faces:Form name="CreateAccountForm" model="UserBean">
+  <faces:Form id="CreateAccountForm" model="UserBean">
 
-    <faces:Command name="handleCreateAccount" scope="session" 
+    <faces:Command id="handleCreateAccount" scope="session" 
                    className="fruitstand.CommandListenerImpl" 
                    onCompletion="Login.jsp" 
                    onError="createAccount.jsp"/>
@@ -30,43 +30,43 @@
     <tr> 
       <td>First Name</td>
       <td> 
-        <faces:TextEntry_Input name="firstName" />
+        <faces:TextEntry_Input id="firstName" />
       </td>
     </tr>
     <tr> 
       <td>Last Name</td>
       <td> 
-           <faces:TextEntry_Input name="lastName" />
+           <faces:TextEntry_Input id="lastName" />
       </td>
     </tr>
     <tr> 
       <td>Address</td>
       <td> 
-          <faces:TextEntry_Input name="address" />
+          <faces:TextEntry_Input id="address" />
       </td>
     </tr>
     <tr> 
       <td>City</td>
       <td> 
-         <faces:TextEntry_Input name="city" />
+         <faces:TextEntry_Input id="city" />
       </td>
     </tr>
     <tr> 
       <td>State</td>
       <td> 
-         <faces:TextEntry_Input name="state" />
+         <faces:TextEntry_Input id="state" />
       </td>
     </tr>
     <tr> 
       <td> Country</td>
       <td> 
-         <faces:TextEntry_Input name="country" />
+         <faces:TextEntry_Input id="country" />
       </td>
     </tr>
     <tr> 
       <td>Phone Number</td>
       <td> 
-        <faces:TextEntry_Input name="phone" />
+        <faces:TextEntry_Input id="phone" />
       </td>
     </tr>
     <tr> 
@@ -75,7 +75,7 @@
     <tr> 
       <td>Credit Card Type</td>
       <td> 
-        <faces:SelectOne_OptionList name="creditCardType"
+        <faces:SelectOne_OptionList id="creditCardType"
                    model="$UserBean.items"
                    selectedValueModel="$UserBean.creditCardType">
           <faces:SelectOne_Option value="discover" label="Discover"/>
@@ -87,13 +87,13 @@
     <tr> 
       <td>Card Number</td>
       <td> 
-        <faces:TextEntry_Input name="creditCardNumber" />
+        <faces:TextEntry_Input id="creditCardNumber" />
       </td>
     </tr>
     <tr> 
       <td>Expiration Date</td>
       <td> 
-        <faces:TextEntry_Input name="creditCardExpr" />
+        <faces:TextEntry_Input id="creditCardExpr" />
       </td>
     </tr>
     <tr> 
@@ -102,30 +102,30 @@
     <tr> 
       <td >User Name</td>
       <td> 
-        <faces:TextEntry_Input name="userName" />
+        <faces:TextEntry_Input id="userName" />
       </td>
     </tr>
     <tr> 
       <td>Password</td>
       <td> 
-        <faces:TextEntry_Input name="password" />
+        <faces:TextEntry_Input id="password" />
       </td>
     </tr>
     <tr> 
       <td>Confirm Password</td>
       <td> 
-        <faces:TextEntry_Input name="pwdConfirm" />
+        <faces:TextEntry_Input id="pwdConfirm" />
       </td>
     </tr>
     <tr> 
       <td>Password Hint</td>
       <td> 
-        <faces:TextEntry_Input name="pwdHint" />
+        <faces:TextEntry_Input id="pwdHint" />
       </td>
     </tr>
     <tr> 
       <td> 
-        <faces:Command_Button name="createAccount" label="Create Account" 
+        <faces:Command_Button id="createAccount" label="Create Account" 
                               command="handleCreateAccount"/>
       </td>
       <td>&nbsp;</td>

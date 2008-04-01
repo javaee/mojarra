@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeDispatcherImpl.java,v 1.8 2002/01/12 01:41:17 edburns Exp $
+ * $Id: ValueChangeDispatcherImpl.java,v 1.9 2002/01/16 21:06:34 rogerk Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import javax.faces.UIComponent;
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.8 2002/01/12 01:41:17 edburns Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.9 2002/01/16 21:06:34 rogerk Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
@@ -69,11 +69,11 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
         }
 
         String new_value = (String) value_event.getNewValue();
-        String srcName = value_event.getSourceName();
+        String srcId = value_event.getSourceId();
         String modelRef = value_event.getModelReference();
 
         if ( modelRef == null ) {
-	    UIComponent c = (UIComponent) ot.get(request, srcName);
+	    UIComponent c = (UIComponent) ot.get(request, srcId);
 	    if (c instanceof UITextEntry) {
 		UITextEntry te = (UITextEntry) c;
 		te.setText(rc, (String)value_event.getNewValue());
@@ -104,8 +104,8 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
     public void dispatchListeners(ServletRequest request,ValueChangeEvent e, 
             ObjectManager ot ) { 
 
-        String srcName = e.getSourceName();
-        String lis_name = srcName + Constants.REF_VALUECHANGELISTENERS;
+        String srcId = e.getSourceId();
+        String lis_name = srcId + Constants.REF_VALUECHANGELISTENERS;
         Vector lis_list = (Vector) ot.get(request, lis_name);
         if ( lis_list != null && lis_list.size() > 0 ) {
             for ( int i = 0; i < lis_list.size(); ++i) {

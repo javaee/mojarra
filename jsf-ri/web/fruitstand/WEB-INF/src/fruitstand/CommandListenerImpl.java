@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.2 2002/01/10 22:20:14 edburns Exp $
+ * $Id: CommandListenerImpl.java,v 1.3 2002/01/16 21:06:37 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -48,7 +48,7 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.2 2002/01/10 22:20:14 edburns Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.3 2002/01/16 21:06:37 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -194,24 +194,24 @@ private void validateLogin(UserBean user) throws CommandFailedException {
 
 public void doCommand(CommandEvent e)  throws CommandFailedException
 {
-    String sourceName = e.getSourceName();
+    String sourceId = e.getSourceId();
     ObjectManager ot = ObjectManager.getInstance();
     HttpServletRequest req = (HttpServletRequest) e.getRequest();
     UserBean user = (UserBean) ot.get(req, "UserBean");
     servletContext = req.getSession().getServletContext();
 
-    Assert.assert_it(null != sourceName);
+    Assert.assert_it(null != sourceId);
     Assert.assert_it(null != ot);
     Assert.assert_it(null != req);
     Assert.assert_it(null != user);
 
-    if (sourceName.equals("createAccount")) {
+    if (sourceId.equals("createAccount")) {
 	// serialize the user bean
 	synchronized(servletContext) {
 	    serializeBean(user);
 	}
     }
-    else if (sourceName.equals("Login")) {
+    else if (sourceId.equals("Login")) {
 	synchronized(servletContext) {
 	    validateLogin(user);
 	}

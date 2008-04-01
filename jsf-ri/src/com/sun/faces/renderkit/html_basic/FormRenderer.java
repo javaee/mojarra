@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.12 2002/01/10 22:32:48 edburns Exp $
+ * $Id: FormRenderer.java,v 1.13 2002/01/16 21:06:34 rogerk Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.12 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: FormRenderer.java,v 1.13 2002/01/16 21:06:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -142,7 +142,7 @@ public class FormRenderer extends Object implements Renderer
         StringBuffer out = new StringBuffer();
         out.append("<FORM METHOD=\"POST\" ");
 
-        String form_name = (String) form.getAttribute(rc, "name");
+        String form_name = (String) form.getAttribute(rc, "id");
         if (form_name != null) {
             out.append("NAME=\"" + form_name + "\"");
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
+ * $Id: TextEntry_InputTag.java,v 1.15 2002/01/16 21:06:36 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.15 2002/01/16 21:06:36 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -56,7 +56,7 @@ public class TextEntry_InputTag extends TagSupport
     //
 
     // Attribute Instance Variables
-    private String name = null;
+    private String id = null;
     private String value = null;
     private String size = null;
     private String model = null;
@@ -108,11 +108,11 @@ public class TextEntry_InputTag extends TagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
-        if ( name != null ) {
+        if ( id != null ) {
 
             // 1. Get or create the component instance.
             //
-            UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
+            UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), id);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot); 
@@ -153,7 +153,7 @@ public class TextEntry_InputTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
+        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), id);
         Assert.assert_it( c != null );
 
         // Complete the rendering process
@@ -178,7 +178,7 @@ public class TextEntry_InputTag extends TagSupport
 
         super.release();
 
-        name = null;
+        id = null;
         value = null;
         size = null;
         maxlength = null;
@@ -200,10 +200,10 @@ public class TextEntry_InputTag extends TagSupport
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
-        ot.put(pageContext.getSession(), name, c);
+        ot.put(pageContext.getSession(), id, c);
 
         if ( valueChangeListener != null ) {
-            String lis_name = name.concat(Constants.REF_VALUECHANGELISTENERS);
+            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
             Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
             if ( listeners == null) {
                 listeners = new Vector();
@@ -230,7 +230,7 @@ public class TextEntry_InputTag extends TagSupport
             JspException {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
-        c.setAttribute(rc, "name", name);
+        c.setAttribute(rc, "id", id);
         c.setAttribute(rc, "size", size);
         c.setAttribute(rc, "maxlength", maxlength);
         
@@ -252,7 +252,7 @@ public class TextEntry_InputTag extends TagSupport
                     FormTag.class);
                String model_str = ancestor.getModel();
                if ( model_str != null ) {
-                   model = "$" + model_str + "." + name;
+                   model = "$" + model_str + "." + id;
                    c.setModel(model);
                } 
             } catch ( Exception e ) {
@@ -266,20 +266,20 @@ public class TextEntry_InputTag extends TagSupport
     }
 
     /**
-     * Returns the value of the "name" attribute
+     * Returns the value of the "id" attribute
      *
-     * @return String value of "name" attribute
+     * @return String value of "id" attribute
      */
-    public String getName() {
-        return this.name;
+    public String getId() {
+        return this.id;
     }
 
     /**
-     * Sets the "name" attribute
-     * @param name value of "name" attribute 
+     * Sets the "id" attribute
+     * @param id value of "id" attribute 
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

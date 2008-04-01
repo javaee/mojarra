@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.12 2002/01/10 22:32:50 edburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.13 2002/01/16 21:06:35 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.12 2002/01/10 22:32:50 edburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.13 2002/01/16 21:06:35 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,8 +123,8 @@ public class Command_HyperlinkTag extends TagSupport
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
-        // PENDING shouldn't hyperlink have a name attribute. For now
-        // using target as name to put in the objectManager.
+        // PENDING shouldn't hyperlink have an id attribute. For now
+        // using target as id to put in the objectManager.
         if (target != null) {
 
             // 1. Get or create the component instance.
