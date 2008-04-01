@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.8 2002/02/05 00:56:16 rogerk Exp $
+ * $Id: OptionListRenderer.java,v 1.9 2002/02/07 04:31:33 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.8 2002/02/05 00:56:16 rogerk Exp $
+ * @version $Id: OptionListRenderer.java,v 1.9 2002/02/07 04:31:33 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -180,7 +180,7 @@ public class OptionListRenderer extends Object implements Renderer {
             output.append("\"");
 
             if ((selectedValue != null) &&
-                selectedValue.equals(itemLabel)) {
+                selectedValue.equals(item.getValue())) {
                 output.append(" SELECTED");
             }
             output.append(">");

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.8 2002/01/31 20:38:55 rogerk Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.9 2002/02/07 04:31:34 rogerk Exp $
  */
 
 /*
@@ -11,23 +11,15 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import com.sun.faces.taglib.FacesTag;
+
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.Constants;
-import javax.faces.FacesException;
-import javax.faces.RenderContext;
-import javax.faces.Renderer;
-import javax.faces.RenderKit;
-import javax.faces.UIForm;
+import javax.faces.UIComponent;
 import javax.faces.UISelectOne;
-import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
-import java.util.Collection;
 
 /**
  *
@@ -35,15 +27,14 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.8 2002/01/31 20:38:55 rogerk Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.9 2002/02/07 04:31:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectOne_OptionTag extends TagSupport
-{
+public class SelectOne_OptionTag extends FacesTag {
 //
 // Protected Constants
 //
@@ -62,6 +53,7 @@ public class SelectOne_OptionTag extends TagSupport
     private String value = null;
     private String label = null;
     private String description = null;
+    private String parentId = null;
 
 // Relationship Instance Variables
 
@@ -72,13 +64,6 @@ public class SelectOne_OptionTag extends TagSupport
 public SelectOne_OptionTag()
 {
     super();
-    // ParameterCheck.nonNull();
-    this.init();
-}
-
-protected void init()
-{
-    // super.init();
 }
 
 //
@@ -121,87 +106,56 @@ protected void init()
     }
 
     /**
-     * Returns the appropriate renderer for the tag
-     *
-     * @param rc RenderContext to obtain renderkit
+     * We override getId to return the parent's Id.
      */
-    public Renderer getRenderer(RenderContext rc ) throws JspException{
+    public String getId() {
+        if (null == parentId) {
+            SelectOne_OptionListTag ancestor = null;
 
-        Renderer renderer = null;
-        RenderKit renderKit = rc.getRenderKit();
-        if (renderKit == null) {
-            throw new JspException("Can't determine RenderKit!");
+            // get the UISelectOne that is our component.
+            try {
+                ancestor = (SelectOne_OptionListTag)
+                    findAncestorWithClass(this, SelectOne_OptionListTag.class);
+                parentId = ancestor.getId();
+            } catch ( Exception e ) {
+                throw new IllegalStateException("Option must be enclosed in a SelectOne_Option tag");
+            }
         }
-        try {
-            String class_name = "com.sun.faces.renderkit.html_basic.OptionRenderer";
-            renderer = renderKit.getRenderer(class_name);
-        } catch (FacesException e) {
-            e.printStackTrace();
-            throw new JspException("FacesException " + e.getMessage());
-        }
-
-        if (renderer == null) {
-            throw new JspException(
-                "Could not determine renderer for TextEntry component");
-        }
-        return renderer;	
+        return parentId;
     }
 
+    public void setId(String id) {
+    }
 
 //
-// Methods from TagSupport
+// Methods from FacesTag
 //
 
-    /**
-     * Process the start of this tag.
-     * @exception JspException if a JSP exception has occurred
-     */
-public int doStartTag() throws JspException {
-    ObjectManager ot = (ObjectManager) pageContext.getServletContext().
-	getAttribute(Constants.REF_OBJECTMANAGER);
-    Assert.assert_it( ot != null );
-    RenderContext renderContext = 
-	(RenderContext)ot.get(pageContext.getSession(),
-			      Constants.REF_RENDERCONTEXT);
-    Assert.assert_it( renderContext != null );
-    
-    // Ascend the tag hierarchy to get the RadioGroup tag
-    SelectOne_OptionListTag ancestor = null;
-    UISelectOne uiSelectOne = null;
-    String parentName = null;
-    
-    // get the UISelectOne that is our component.
-    try {
-	ancestor = (SelectOne_OptionListTag) 
-	    findAncestorWithClass(this, SelectOne_OptionListTag.class);
-	parentName = ancestor.getId();
-    } catch ( Exception e ) {
-	throw new JspException("Option must be enclosed in a SelectOne_Option tag");
+    public UIComponent newComponentInstance() {
+        Assert.assert_it(false, "This shouldn't be called, the UISelectOne is already in the OM");
+        return null;
     }
-    Assert.assert_it(null != ancestor);
-    Assert.assert_it(null != parentName);
-    
-    // by virtue of being inside a RadioGroup there must be a
-    // UISelectOne instance under the name.
-    uiSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-    Assert.assert_it(null != uiSelectOne);
-    
-    uiSelectOne.addItem(getValue(), getLabel(), getDescription());
 
-    if (null != getSelected()) {
-	uiSelectOne.setSelectedValue(getLabel());
+    public void setAttributes(UIComponent comp) {
+        ParameterCheck.nonNull(comp);
+        Assert.assert_it(null != renderContext);
+        Assert.assert_it(comp instanceof UISelectOne);
+
+        UISelectOne uiSelectOne = (UISelectOne) comp;
+        uiSelectOne.addItem(getValue(), getLabel(), getDescription());
+
+        // if it is selected, make sure the model knows about it.
+        if (null != getSelected()) {
+            uiSelectOne.setSelectedValue(getValue());
+        }
     }
-    
-    return (EVAL_BODY_INCLUDE);
-}
 
-/**
- * End Tag Processing
- */
-public int doEndTag() throws JspException{
+    public String getRendererType() {
+        return null;
+    }
 
-    return EVAL_PAGE;
-}
+    public void addListeners(UIComponent comp) throws JspException {
+    }
 
     /**
      * Tag cleanup method.
