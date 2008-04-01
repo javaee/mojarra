@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.11 2002/07/15 18:08:24 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.12 2002/07/26 03:30:23 craigmcc Exp $
  */
 
 /*
@@ -111,6 +111,7 @@ public class UISelectBoolean extends UIComponentBase {
             newValue = Boolean.TRUE;
         }
         setValue(newValue);
+        setValid(true);
 
     }
 
