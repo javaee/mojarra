@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.2 2002/06/03 19:34:27 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.3 2002/06/03 22:30:11 craigmcc Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ public final class FacesServlet extends HttpServlet {
         // Acquire our FacesContextFactory instance
         try {
             facesContextFactory = (FacesContextFactory)
-                FactoryFinder.createFactory
+                FactoryFinder.getFactory
                 (FactoryFinder.FACES_CONTEXT_FACTORY);
         } catch (FacesException e) {
             Throwable rootCause = e.getRootCause();
@@ -78,7 +78,7 @@ public final class FacesServlet extends HttpServlet {
 
         // Acquire our LifecycleFactory instance
         try {
-            lifecycleFactory = (LifecycleFactory) FactoryFinder.createFactory
+            lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory
                 (FactoryFinder.LIFECYCLE_FACTORY);
         } catch (FacesException e) {
             Throwable rootCause = e.getRootCause();

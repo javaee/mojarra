@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.7 2002/05/25 22:35:38 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.8 2002/06/03 22:30:11 craigmcc Exp $
  */
 
 /*
@@ -50,9 +50,6 @@ import java.util.Properties;
  *
  * <p>Factory implementation classes MUST include a zero-arguments
  * constructor in order to be successfully instantiated.</p>
- *
- * <p><strong>FIXME</strong></p> - Rename to FactoryFinder once this no
- * longer creates any conflict?</p>
  */
 
 public final class FactoryFinder {
@@ -154,7 +151,7 @@ public final class FactoryFinder {
      * @exception NullPointerException if <code>factoryname</code>
      *  is null
      */
-    public static Object createFactory(String factoryName)
+    public static Object getFactory(String factoryName)
         throws FacesException {
 
         // Validate the requested factory name
