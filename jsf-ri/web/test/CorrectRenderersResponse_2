@@ -2,7 +2,7 @@
 <input type="checkbox"  name="/my_checkbox">
 <input type="checkbox"  name="/my_checkbox">
 <a href=""></A>
-<select name="/my_optionlist">	<option value="Red">Red</option>
+<select name="/my_listbox">	<option value="Red">Red</option>
 	<option value="Blue" selected="selected">Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>

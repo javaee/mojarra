@@ -22,7 +22,7 @@
 
             <faces:selectboolean_checkbox id="validUser" />
 
-            <faces:selectone_optionlist id="appleQuantity" />
+            <faces:selectone_listbox id="appleQuantity" />
 
             <faces:selectone_radiogroup id="shipType" />
 

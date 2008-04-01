@@ -236,15 +236,15 @@
 
          <TD>
 
-	      <faces:selectone_optionlist id="OptionList" 
+	      <faces:selectone_listbox id="Listbox" 
                              modelReference="${LoginBean.currentOption}">
 
-		<faces:selectitems id="optionListOptions"
+		<faces:selectitems id="listboxOptions"
                                    modelReference="${LoginBean.options}"/>
 
-	      </faces:selectone_optionlist>
+	      </faces:selectone_listbox>
                 <faces:output_text id="optionLabel" 
-                   value="OptionList with Kinds of Beans from Model Object" />
+                   value="Listbox with Kinds of Beans from Model Object" />
 
 	</TD>
 
@@ -255,7 +255,7 @@
       
 	<TD>
 
-	      <faces:selectone_optionlist id="appleQuantity" size="6"
+	      <faces:selectone_listbox id="appleQuantity" size="6"
                      title="Select Quantity" 
                      accesskey="N" tabindex="20" >
 
@@ -270,7 +270,7 @@
 		<faces:selectitem  itemValue="8" itemLabel="8" title="Eight" />
 		<faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-	      </faces:selectone_optionlist>
+	      </faces:selectone_listbox>
 
                <faces:output_text id="quantityLabel" value="Option list from JSP" />
 	</TD>
@@ -323,7 +323,7 @@
                        modelReference="${LoginBean.currentOption}"
                        layout="LINE_DIRECTION" >
 
-		<faces:selectitems id="optionListOptions"
+		<faces:selectitems id="listboxOptions"
                                    title="options come from model" 
                                    modelReference="${LoginBean.options}"/>
 

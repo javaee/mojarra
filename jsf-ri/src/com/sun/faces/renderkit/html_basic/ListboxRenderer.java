@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.30 2002/09/07 16:35:59 eburns Exp $
+ * $Id: ListboxRenderer.java,v 1.1 2002/09/08 21:30:53 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// OptionListRenderer.java
+// ListboxRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
 
@@ -37,18 +37,18 @@ import org.mozilla.util.ParameterCheck;
 
 /**
  *
- *  <B>OptionListRenderer</B> is a class ...
+ *  <B>ListboxRenderer</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.30 2002/09/07 16:35:59 eburns Exp $
+ * @version $Id: ListboxRenderer.java,v 1.1 2002/09/08 21:30:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class OptionListRenderer extends HtmlBasicRenderer {
+public class ListboxRenderer extends HtmlBasicRenderer {
     //
     // Protected Constants
     //
@@ -70,7 +70,7 @@ public class OptionListRenderer extends HtmlBasicRenderer {
     // Constructors and Initializers    
     //
 
-    public OptionListRenderer() {
+    public ListboxRenderer() {
         super();
     }
 
@@ -200,4 +200,4 @@ public class OptionListRenderer extends HtmlBasicRenderer {
 	writer.write(buffer.toString());
     }
 
-} // end of class OptionListRenderer
+} // end of class ListboxRenderer

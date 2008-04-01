@@ -10,7 +10,7 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
     <h1>JavaServer Faces 1.0 Standard RenderKit</h1>
-    <h3>$Id: StandardRenderKit.jsp,v 1.9 2002/09/06 22:13:16 rkitain Exp $</h3>
+    <h3>$Id: StandardRenderKit.jsp,v 1.10 2002/09/08 21:31:00 eburns Exp $</h3>
 
     <p>The elements in this page should follow the
     StandardRenderKit.html page in the jsf-api.</p>
@@ -62,7 +62,7 @@
 
            <%@ include file="selectboolean_checkbox_row.jsp" %>
 
-           <%@ include file="selectone_optionlist_row.jsp" %>
+           <%@ include file="selectone_listbox_row.jsp" %>
 
 <!--           <%@ include file="selectone_menu_row.jsp" %> -->
 

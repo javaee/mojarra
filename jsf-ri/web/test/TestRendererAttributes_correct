@@ -4859,7 +4859,7 @@ SelectManyMenuRenderer
 
 		class java.lang.String
 
-OptionListRenderer
+ListboxRenderer
 	accesskey
 
 		Accessibility key character

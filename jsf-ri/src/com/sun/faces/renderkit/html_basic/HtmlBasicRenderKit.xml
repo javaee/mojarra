@@ -863,8 +863,8 @@
     <component>
         <type>javax.faces.component.UISelectOne</type>
         <renderer>
-            <type>OptionListRenderer</type>
-            <class>com.sun.faces.renderkit.html_basic.OptionListRenderer</class>
+            <type>ListboxRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.ListboxRenderer</class>
              <!-- HTML 4.0 attributes -->
             <attribute>
                 <name>inputClass</name>

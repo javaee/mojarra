@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.6 2002/08/02 00:11:06 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.7 2002/09/08 21:30:58 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.6 2002/08/02 00:11:06 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.7 2002/09/08 21:30:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,7 +113,7 @@ private void initializeClassMap()
     classMap.put("SelectBoolean_Checkbox", "javax.faces.component.UISelectBoolean");
     classMap.put("RadioGroup", "javax.faces.component.UISelectOne");
     classMap.put("SelectOne_Radio", PARENT_SELECTONE);
-    classMap.put("SelectOne_OptionList", "javax.faces.component.UISelectOne");
+    classMap.put("SelectOne_Listbox", "javax.faces.component.UISelectOne");
     classMap.put("SelectOne_Option", PARENT_SELECTONE);
     classMap.put("Output_Text", "javax.faces.component.UIOutput");
     classMap.put("TextEntry_Input", "javax.faces.component.UITextEntry");

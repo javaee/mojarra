@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioGroupTag.java,v 1.5 2002/08/21 19:26:05 jvisvanathan Exp $
+ * $Id: SelectOne_RadioGroupTag.java,v 1.6 2002/09/08 21:30:57 eburns Exp $
  */
 
 /*
@@ -31,14 +31,14 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_RadioGroupTag.java,v 1.5 2002/08/21 19:26:05 jvisvanathan Exp $
+ * @version $Id: SelectOne_RadioGroupTag.java,v 1.6 2002/09/08 21:30:57 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectOne_RadioGroupTag extends SelectOne_OptionListTag
+public class SelectOne_RadioGroupTag extends SelectOne_ListboxTag
 {
     //
     // Protected Constants

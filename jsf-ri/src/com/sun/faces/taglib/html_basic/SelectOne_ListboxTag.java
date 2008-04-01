@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.24 2002/08/21 19:26:05 jvisvanathan Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.1 2002/09/08 21:30:55 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// SelectOne_OptionListTag.java
+// SelectOne_ListboxTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -32,14 +32,14 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.24 2002/08/21 19:26:05 jvisvanathan Exp $
+ * @version $Id: SelectOne_ListboxTag.java,v 1.1 2002/09/08 21:30:55 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectOne_OptionListTag extends FacesTag
+public class SelectOne_ListboxTag extends FacesTag
 {
 //
 // Protected Constants
@@ -61,7 +61,7 @@ public class SelectOne_OptionListTag extends FacesTag
 // Constructors and Initializers    
 //
 
-public SelectOne_OptionListTag()
+public SelectOne_ListboxTag()
 {
     super();
 }
@@ -78,7 +78,7 @@ public SelectOne_OptionListTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "OptionListRenderer"; }
+    public String getLocalRendererType() { return "ListboxRenderer"; }
     public UIComponent createComponent() {
         return (new UISelectOne());
     }
@@ -114,4 +114,4 @@ public SelectOne_OptionListTag()
     }
 
 
-} // end of class SelectOne_OptionListTag
+} // end of class SelectOne_ListboxTag

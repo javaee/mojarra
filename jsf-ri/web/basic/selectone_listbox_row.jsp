@@ -7,7 +7,7 @@
 
 
              <td>
-                 <faces:selectone_optionlist id="appleQuantity" size="6"
+                 <faces:selectone_listbox id="appleQuantity" size="6"
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -22,7 +22,7 @@
                 <faces:selectitem  itemValue="8" itemLabel="8" title="Eight" />
                 <faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-              </faces:selectone_optionlist>
+              </faces:selectone_listbox>
 
              </td>
 
@@ -32,19 +32,19 @@
 
              <td>
                  <faces:output_text id="optionLabel"
-                   value="OptionList with Kinds of Beans from Model Object" />
+                   value="Listbox with Kinds of Beans from Model Object" />
 
              </td>
 
 
              <td>
-                <faces:selectone_optionlist id="OptionList"
+                <faces:selectone_listbox id="Listbox"
                              modelReference="${LoginBean.currentOption}">
 
-                <faces:selectitems id="optionListOptions"
+                <faces:selectitems id="listboxOptions"
                                    modelReference="${LoginBean.options}"/>
 
-              </faces:selectone_optionlist>
+              </faces:selectone_listbox>
 
              </td>
 

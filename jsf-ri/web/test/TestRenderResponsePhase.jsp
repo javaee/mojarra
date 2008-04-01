@@ -128,7 +128,7 @@
 
 	<TD>
 
-	     <faces:selectone_optionlist id="appleQuantity" size="6"
+	     <faces:selectone_listbox id="appleQuantity" size="6"
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -143,7 +143,7 @@
                 <faces:selectitem  itemValue="8" itemLabel="8" title="Eight" />
                 <faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-              </faces:selectone_optionlist>
+              </faces:selectone_listbox>
 
 	</TD>
 

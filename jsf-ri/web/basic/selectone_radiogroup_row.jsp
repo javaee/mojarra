@@ -60,7 +60,7 @@
                        modelReference="${LoginBean.currentOption}"
                        layout="LINE_DIRECTION" >
 
-                <faces:selectitems id="optionListOptions"
+                <faces:selectitems id="listboxOptions"
                                    title="options come from model"
                                    modelReference="${LoginBean.options}"/>
 

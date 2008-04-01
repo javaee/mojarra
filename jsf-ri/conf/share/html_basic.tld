@@ -671,8 +671,8 @@
   </tag>
 
   <tag>
-    <name>selectone_optionlist</name>
-    <tagclass>com.sun.faces.taglib.html_basic.SelectOne_OptionListTag</tagclass>
+    <name>selectone_listbox</name>
+    <tagclass>com.sun.faces.taglib.html_basic.SelectOne_ListboxTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
       <name>id</name>

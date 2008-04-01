@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.25 2002/09/07 16:36:06 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.26 2002/09/08 21:30:59 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.25 2002/09/07 16:36:06 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.26 2002/09/08 21:30:59 eburns Exp $
  * 
  *
  */
@@ -132,8 +132,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         // for HyperlinkRenderer
         theRequest.addParameter("action", "command");
         theRequest.addParameter("name", "HyperlinkRenderer");
-        // for OptionList
-        theRequest.addParameter("/my_optionlist", "Blue");
+        // for Listbox
+        theRequest.addParameter("/my_listbox", "Blue");
         // for TextEntry_Secret
         theRequest.addParameter("/my_secret", "secret");
         // for Text
@@ -171,7 +171,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
             testCheckboxRenderer(root);
             testHyperlinkRenderer(root);
-            testOptionListRenderer(root);
+            testListboxRenderer(root);
             testSecretRenderer(root);
             testInputTextRenderer(root);
             testOutputTextRenderer(root);
@@ -324,12 +324,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         
     }
 
-    public void testOptionListRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing OptionListRenderer");
+    public void testListboxRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing ListboxRenderer");
         UISelectOne selectOne = new UISelectOne();
 	UISelectItems uiSelectItems = new UISelectItems();
         selectOne.setValue(null);
-        selectOne.setComponentId("my_optionlist");
+        selectOne.setComponentId("my_listbox");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
         SelectItem item3 = new SelectItem("Green", "Green", null);
@@ -340,31 +340,31 @@ public class TestRenderers_2 extends JspFacesTestCase
 	selectOne.addChild(uiSelectItems);
         root.addChild(selectOne);
 
-        OptionListRenderer optionlistRenderer = new OptionListRenderer();
+        ListboxRenderer listboxRenderer = new ListboxRenderer();
 
         // test decode method
 
         System.out.println("    Testing decode method... ");
-        optionlistRenderer.decode(getFacesContext(), selectOne);
+        listboxRenderer.decode(getFacesContext(), selectOne);
         assertTrue(((String)selectOne.getValue()).equals("Blue"));
 
         // test encode method
 
         System.out.println("    Testing encode method... ");
-        selectOne.setComponentId("my_optionlist");
+        selectOne.setComponentId("my_listbox");
         selectOne.setValue("Blue");
-        optionlistRenderer.encodeBegin(getFacesContext(), selectOne);
-        optionlistRenderer.encodeEnd(getFacesContext(), selectOne);
+        listboxRenderer.encodeBegin(getFacesContext(), selectOne);
+        listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = optionlistRenderer.supportsComponentType("javax.faces.component.UISelectOne");
+        result = listboxRenderer.supportsComponentType("javax.faces.component.UISelectOne");
         assertTrue(result);
-        result = optionlistRenderer.supportsComponentType(selectOne);
+        result = listboxRenderer.supportsComponentType(selectOne);
         assertTrue(result);
-        result = optionlistRenderer.supportsComponentType("FooBar");
+        result = listboxRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
 
