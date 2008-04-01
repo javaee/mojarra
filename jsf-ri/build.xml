@@ -45,7 +45,7 @@
   <property name="ant.home" value="${basedir}/lib"/>
 
   <!-- Application name to deploy under tomcat -->
-  <property name="app.name"       value="basic"/>
+  <property name="app.name"       value="fruitstand"/>
 
   <!-- ************ Dependencies **** *************************************** -->
 
