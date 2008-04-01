@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.6 2002/05/25 22:35:38 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.7 2002/06/12 21:51:27 craigmcc Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.ServletResponse;
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   FacesContextFactory factory = (FacesContextFactory)
- *    FactoryFinder.createFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+ *    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
  * </pre>
  */
 
@@ -53,7 +53,7 @@ public abstract class FacesContextFactory {
      * @exception FacesException if a {@link FacesContext} cannot be
      *  constructed for the specified parameters
      */
-    public abstract FacesContext createFacesContext
+    public abstract FacesContext getFacesContext
         (ServletContext context, ServletRequest request,
          ServletResponse response)
         throws FacesException;
@@ -77,7 +77,7 @@ public abstract class FacesContextFactory {
      * @exception FacesException if a {@link FacesContext} cannot be
      *  constructed for the specified parameters
      */
-    public abstract FacesContext createFacesContext
+    public abstract FacesContext getFacesContext
         (ServletContext context, ServletRequest request,
          ServletResponse response, String lifecycleId)
         throws FacesException;

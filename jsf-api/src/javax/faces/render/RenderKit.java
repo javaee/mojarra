@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.4 2002/05/21 02:11:09 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.5 2002/06/12 21:51:28 craigmcc Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UIComponent;
  *
  * <p>A typical JavaServer Faces implementation will configure one or more
  * <code>RenderKit</code> instances at web application startup.  They are
- * made available through calls to the <code>createRenderKit()</code> methods
+ * made available through calls to the <code>getRenderKit()</code> methods
  * of {@link RenderKitFactory}.  At least one <code>RenderKit</code>
  * implementation must be provided as the default.</p>
  */

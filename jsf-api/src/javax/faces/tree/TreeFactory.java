@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.6 2002/06/07 22:21:25 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.7 2002/06/12 21:51:28 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.ServletContext;
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   TreeFactory factory = (TreeFactory)
- *    FactoryFinder.createFactory(FactoryFinder.TREE_FACTORY);
+ *    FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
  * </pre>
  */
 
@@ -51,8 +51,8 @@ public abstract class TreeFactory {
      * @exception FacesException if a {@link Tree} cannot be
      *  constructed for the specified parameters
      */
-    public abstract Tree createTree(ServletContext context,
-                                    String treeId) throws FacesException;
+    public abstract Tree getTree(ServletContext context,
+                                 String treeId) throws FacesException;
 
 
 }

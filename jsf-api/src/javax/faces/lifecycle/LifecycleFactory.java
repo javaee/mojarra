@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.6 2002/05/25 22:35:38 craigmcc Exp $
+ * $Id: LifecycleFactory.java,v 1.7 2002/06/12 21:51:27 craigmcc Exp $
  */
 
 /*
@@ -26,12 +26,12 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   LifecycleFactory factory = (LifecycleFactory)
- *    FactoryFinder.createFactory(FactoryFinder.LIFECYCLE_FACTORY);
+ *    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
  * </pre>
  *
  * <p>A <code>LifecycleFactory</code> instance MUST return the same
  * {@link Lifecycle} instance for all calls to the
- * <code>createLifecycle()</code> method with the same lifecycle identifier
+ * <code>getLifecycle()</code> method with the same lifecycle identifier
  * value, from within the same web application.</p>
  *
  * <p>It is possible for an application to customize the set of {@link Phase}s
@@ -39,7 +39,7 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * <code>registerBefore()</code> or <code>registerAfter()</code> method,
  * passing the lifecycle identifier to be customized and the {@link Phase}
  * instance to be inserted.  However, these calls MUST be completed before
- * <code>createLifecycle()</code> is called the first time for that lifecycle
+ * <code>getLifecycle()</code> is called the first time for that lifecycle
  * identifier.  Subsequent attempts to customize the configured {@link Phase}s
  * will throw <code>IllegalStateException</code>.</p>
  */
@@ -68,7 +68,7 @@ public abstract class LifecycleFactory {
      * @exception NullPointerException if <code>lifecycleId</code>
      *  is <code>null</code>
      */
-    public abstract Lifecycle createLifecycle(String lifecycleId)
+    public abstract Lifecycle getLifecycle(String lifecycleId)
         throws FacesException;
 
 
@@ -97,7 +97,7 @@ public abstract class LifecycleFactory {
      *  not contain one of the standard phase identifiers defined in
      *  {@link Lifecycle}
      * @exception IllegalStateException if an attempt is made to register
-     *  a new {@link Phase} after <code>createLifecycle()</code> has been
+     *  a new {@link Phase} after <code>getLifecycle()</code> has been
      *  successfully called for this lifecycle identifier
      * @exception NullPointerException if <code>lifecycleId</code>
      *  or <code>phase</code> are null
@@ -122,7 +122,7 @@ public abstract class LifecycleFactory {
      *  not contain one of the standard phase identifiers defined in
      *  {@link Lifecycle}
      * @exception IllegalStateException if an attempt is made to register
-     *  a new {@link Phase} after <code>createLifecycle()</code> has been
+     *  a new {@link Phase} after <code>getLifecycle()</code> has been
      *  successfully called for this lifecycle identifier
      * @exception NullPointerException if <code>lifecycleId</code>
      *  or <code>phase</code> are null

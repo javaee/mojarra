@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.4 2002/06/04 22:56:51 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.5 2002/06/12 21:51:29 craigmcc Exp $
  */
 
 /*
@@ -140,12 +140,12 @@ public final class FacesServlet implements Servlet {
         // response.setContentType("text/html");  // FIXME - when/how to call?
 
         // Create and cache the FacesContext instance for this request
-        FacesContext context = facesContextFactory.createFacesContext
+        FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response);
         request.setAttribute(FacesContext.FACES_CONTEXT_ATTR, context);
 
         // Look up the Lifecycle instance for this request
-        Lifecycle lifecycle = lifecycleFactory.createLifecycle
+        Lifecycle lifecycle = lifecycleFactory.getLifecycle
             (LifecycleFactory.DEFAULT_LIFECYCLE); // FIXME - how to choose?
         // lifecycle.setApplicationHandler(this); // FIXME - when/how to call?
 

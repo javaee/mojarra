@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.7 2002/06/03 16:29:14 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.8 2002/06/12 21:51:28 craigmcc Exp $
  */
 
 /*
@@ -27,11 +27,11 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   RenderKitFactory factory = (RenderKitFactory)
- *    RenderKitFactory.createFactory(RenderKitFactory.RENDER_KIT_FACTORY);
+ *    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
  * </pre>
  *
  * <p>The factory instance MUST return the same {@link RenderKit} instance
- * for all calls to the <code>createRenderKit()</code> method with the
+ * for all calls to the <code>getRenderKit()</code> method with the
  * same render kit identifier value, from within the same web application.
  * </p>
  */
@@ -49,7 +49,7 @@ public abstract class RenderKitFactory {
     /**
      * <p>Register a new {@link RenderKit} instance that is immediately
      * available from this factory instance via a call to
-     * <code>createRenderKit()</code> for the same render kit identifier.</p>
+     * <code>getRenderKit()</code> for the same render kit identifier.</p>
      *
      * @param renderKitId Identifier of the new RenderKit
      * @param renderKit RenderKit instance that we are registering
@@ -77,7 +77,7 @@ public abstract class RenderKitFactory {
      * @exception NullPointerException if <code>renderKitId</code>
      *  is <code>null</code>
      */
-    public abstract RenderKit createRenderKit(String renderKitId)
+    public abstract RenderKit getRenderKit(String renderKitId)
         throws FacesException;
 
 

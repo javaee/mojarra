@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.2 2002/05/15 23:49:30 craigmcc Exp $
+ * $Id: Phase.java,v 1.3 2002/06/12 21:51:27 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
  * <p>Individual <code>Phase</code> instances must be instantiated and
  * associated with a particular {@link Lifecycle} instance in the
  * {@link LifecycleFactory} instance for this web application, prior to
- * return from <code>createLifecycle()</code>.  Each <code>Phase</code>
+ * return from <code>getLifecycle()</code>.  Each <code>Phase</code>
  * instance will be associated with exactly one {@link Lifecycle} instance,
  * but must be programmed in a thread-safe manner because it will be used
  * to process simultaneous requests on multiple threads.</p>

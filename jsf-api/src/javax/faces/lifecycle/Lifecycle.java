@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.9 2002/06/08 17:28:09 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.10 2002/06/12 21:51:27 craigmcc Exp $
  */
 
 /*
@@ -23,9 +23,9 @@ import javax.faces.context.FacesContext;
  * directed by the value returned by execution of each {@link Phase}.</p>
  *
  * <p>An instance of <code>Lifecycle</code> is created by calling the
- * <code>createLifecycle()</code> method of {@link LifecycleFactory}, for
+ * <code>getLifecycle()</code> method of {@link LifecycleFactory}, for
  * a specified lifecycle identifier.  Subsequent calls to
- * <code>createLifecycle()</code> will return the same instance (i.e.
+ * <code>getLifecycle()</code> will return the same instance (i.e.
  * it is a per-web-application Singleton.  Because this instance is
  * shared across multiple simultaneous requests, it must be implemented
  * in a thread-safe manner.</p>
@@ -33,7 +33,7 @@ import javax.faces.context.FacesContext;
  * <p>The set of {@link Phase} instances associated with a particular
  * <code>Lifecycle</code> instance, as well as the order that they are
  * executed in, must be configured during execution of the
- * <code>createLifecycle()</code> method in {@link LifecycleFactory}.  For
+ * <code>getLifecycle()</code> method in {@link LifecycleFactory}.  For
  * each standard phase identifier, a JavaServer Faces implementation will
  * provide a default {@link Phase} instance that implements the
  * required behavior of that phase.  In addition, it is possible for an
@@ -42,7 +42,7 @@ import javax.faces.context.FacesContext;
  * by calling the <code>registerBefore()</code> or <code>registerAfter()</code>
  * methods of {@link LifecycleFactory}.  Note that registration of custom
  * {@link Phase} instances must be completed before the call to
- * <code>createLifecycle()</code> that creates this <code>Lifecycle</code>
+ * <code>getLifecycle()</code> that creates this <code>Lifecycle</code>
  * instance.</p>
  *
  * <p>The <code>execute()</code> method of <code>Lifecycle</code> is run

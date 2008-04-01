@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.18 2002/06/08 02:24:17 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.19 2002/06/12 21:51:26 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpSession;
  *
  * <p>A <code>FacesContext</code> instance is associated with a particular
  * request at the beginning of request processing, by a call to the
- * <code>createFacesContext()</code> method of the {@link FacesContextFactory}
+ * <code>getFacesContext()</code> method of the {@link FacesContextFactory}
  * instance associated with the current web application.  The instance
  * remains active until its <code>release()</code> method is called, after
  * which no further references to this instance are allowed.  While a
@@ -42,7 +42,7 @@ import javax.servlet.http.HttpSession;
  * </p>
  *
  * <p><strong>FIXME</strong> - Specify starting contents of all properties
- * when returned from <code>FacesContextFactory.createFacesContext()</code>,
+ * when returned from <code>FacesContextFactory.getFacesContext()</code>,
  * versus what changes are expected in each phase of the request processing
  * lifecycle.</p>
  *
