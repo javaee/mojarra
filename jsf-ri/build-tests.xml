@@ -81,6 +81,7 @@
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
+      <pathelement location="${jasper_hacked.jar}"/>
     </path>
 
 <!-- ========== Executable Targets ======================================== -->
@@ -150,6 +151,8 @@
         <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.beanutils.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${jasper_hacked.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>
 
         <war warfile="${out.test.dir}/test.war"
              webxml="${conf.test.dir}/web.xml">
@@ -190,6 +193,11 @@
         <copy file="${cactus.home}/sample/web/test/jspRedirector.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
+        <!-- Copy Unit test (jsp) file. -->
+        <copy file="${basedir}/web/test/treeTest.jsp"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
+
     </target>
 
 <!--
@@ -219,7 +227,7 @@
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
             <!-- uncomment this to attach the debugger to the tomcat vm -->
-            <!-- <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/> -->
+            <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/>
 
             <arg value="-config"/>
             <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
@@ -270,12 +278,12 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.treebuilder.TestTreebuilder"/>
             <test name="com.sun.faces.TestObjectManager"/>
             <test name="com.sun.faces.TestEventContext"/>
             <test name="com.sun.faces.TestObjectAccessor"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
-
         </junit>
 
     </target>

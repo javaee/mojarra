@@ -60,6 +60,7 @@
   <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
+  <property name="jasper_hacked.jar" value="${lib.home}/jasper_hacked.jar"/>
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
   <property name="jsf-api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
@@ -78,8 +79,10 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
+    <pathelement location="${commons.beanutils.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${jasper_hacked.jar}"/>
   </path>
 
 
@@ -200,6 +203,9 @@
            todir="${dist.home}/${app.name}/WEB-INF/lib"/>
     <copy  file="${build.home}/lib/${name}.jar"
            todir="${dist.home}/${app.name}/WEB-INF/lib"/>
+    <copy  file="${jasper_hacked.jar}"
+           todir="${dist.home}/${app.name}/WEB-INF/lib"/>
+
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
@@ -229,6 +235,9 @@
            todir="${deploy.home}/WEB-INF/lib"/>
     <copy  file="${build.home}/lib/${name}.jar"  
            todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${jasper_hacked.jar}"
+	  todir="${deploy.home}/WEB-INF/lib"/>
+
   </target>
 
   <target name="deploy.tomcat.basic" depends="build.basic.war">
@@ -289,7 +298,7 @@
     </target>
 
 
-    <target name="run.cactus.test" depends="compile.test"
+    <target name="run.cactus.test" depends="compile.test,jars"
      description="Run unit tests requiring cactus">
 
         <ant antfile="build-tests.xml" target="test.tomcat.40"/>
@@ -316,6 +325,9 @@
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${jasper_hacked.jar}"
+	  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+
     <copy  file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 

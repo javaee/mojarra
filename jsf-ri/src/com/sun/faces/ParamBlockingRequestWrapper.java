@@ -1,5 +1,5 @@
 /*
- * $Id: ParamBlockingRequestWrapper.java,v 1.2 2002/01/03 05:36:30 edburns Exp $
+ * $Id: ParamBlockingRequestWrapper.java,v 1.3 2002/03/08 22:16:08 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.util.NoSuchElementException;
  * is kept to this instance and we rely on automatic garbage collection. <P>
 
  *
- * @version $Id: ParamBlockingRequestWrapper.java,v 1.2 2002/01/03 05:36:30 edburns Exp $
+ * @version $Id: ParamBlockingRequestWrapper.java,v 1.3 2002/03/08 22:16:08 eburns Exp $
  * 
  * @see	com.sun.faces.CommandDispatcherImpl#dispatch
  *
@@ -77,7 +77,7 @@ public class ParamBlockingRequestWrapper extends HttpServletRequestWrapper
 
 */
 
-ParamBlockingRequestWrapper(HttpServletRequest toWrap)
+public ParamBlockingRequestWrapper(HttpServletRequest toWrap)
 {
     super(toWrap);
 }
