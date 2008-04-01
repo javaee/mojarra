@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.2 2001/11/08 02:33:52 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,6 +21,16 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+
+import javax.faces.FacesException;
+import javax.faces.RenderContext;
+import javax.faces.Renderer;
+import javax.faces.RenderKit;
+import javax.faces.WForm;
+import javax.faces.WSelectBoolean;
+
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -29,71 +39,169 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.2 2001/11/08 02:33:52 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectBoolean_CheckboxTag extends TagSupport
-{
-//
-// Protected Constants
-//
+public class SelectBoolean_CheckboxTag extends TagSupport {
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    private String checked = null;
+    private String name = null;
+    private String value = null;
+    private String label = null;
 
-//
-// Constructors and Initializers    
-//
+    // Relationship Instance Variables
 
-public SelectBoolean_CheckboxTag()
-{
-    super();
-    // ParameterCheck.nonNull();
-    this.init();
-}
+    //
+    // Constructors and Initializers    
+    //
 
-protected void init()
-{
-    // super.init();
-}
+    public SelectBoolean_CheckboxTag() {
+        super();
+        // ParameterCheck.nonNull();
+        this.init();
+    }
 
-//
-// Class methods
-//
+    protected void init() {
+        // super.init();
+    }
 
-//
-// General Methods
-//
+    //
+    // Class methods
+    //
 
-// ----VERTIGO_TEST_START
+    //
+    // General Methods
+    //
+    public String getChecked() {
+        return checked;
+    }
 
-//
-// Test methods
-//
+    public void setChecked(String checked) {
+        this.checked = checked;
+    }
+    public String getName() {
+        return name;
+    }
 
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    SelectBoolean_CheckboxTag me = new SelectBoolean_CheckboxTag();
-    Log.setApplicationName("SelectBoolean_CheckboxTag");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: SelectBoolean_CheckboxTag.java,v 1.1 2001/10/29 19:48:50 edburns Exp $");
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * Process the start of this tag.
+     * @exception JspException if a JSP exception has occurred
+     */
+    public int doStartTag() throws JspException {
+        // Get the RenderContext from the session. It was set there
+        // in the BeginTag.
+        //
+        RenderContext renderContext;
+        renderContext = (RenderContext)pageContext.getSession().
+            getAttribute("renderContext");
+
+        // 1. get an instance of "WSelectBoolean"
+        // Normally, this would be retrieved from some instance pool,
+        // but for now, we will just instantiate one..
+        //
+        WSelectBoolean wSelectBoolean = new WSelectBoolean();
+
+        // 2. set tag attributes into the instance..
+        //
+        wSelectBoolean.setAttribute(renderContext, "checked", getChecked());
+        wSelectBoolean.setAttribute(renderContext, "name", getName());
+        wSelectBoolean.setAttribute(renderContext, "value", getValue());
+        wSelectBoolean.setAttribute(renderContext, "label", getLabel());
+
+        // 3. find the parent (WForm), and add WSelectBoolean instance as
+        // a child.
+        // wForm.add(...
+        //
+
+        // 4. place back in namespace..
+        //
+
+        // 5. Obtain "Renderer" instance from the "RenderKit
+        //
+        Renderer renderer = null;
+
+        RenderKit renderKit = renderContext.getRenderKit();
+        if (renderKit == null) {
+            throw new JspException("Can't determine RenderKit!");
+        }
+
+        try {
+            renderer = renderKit.getRenderer(
+                "com.sun.faces.renderkit.html_basic.CheckboxRenderer");
+        } catch (FacesException e) {
+            throw new JspException(
+                "FacesException!!! " + e.getMessage());
+        }
+
+        if (renderer == null) {
+            throw new JspException(
+                "Could not determine 'renderer' for component");
+        }
+
+        // 6. Render the good stuff...
+        //
+        try {
+            renderer.renderStart(renderContext, wSelectBoolean);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        }
+
+        return (EVAL_BODY_INCLUDE);
+    }
+
+    // ----VERTIGO_TEST_START
+
+    //
+    // Test methods
+    //
+
+    public static void main(String [] args) {
+        Assert.setEnabled(true);
+        SelectBoolean_CheckboxTag me = new SelectBoolean_CheckboxTag();
+        Log.setApplicationName("SelectBoolean_CheckboxTag");
+        Log.setApplicationVersion("0.0");
+        Log.setApplicationVersionDate("$Id: SelectBoolean_CheckboxTag.java,v 1.2 2001/11/08 02:33:52 rogerk Exp $");
     
-}
+    }
 
-// ----VERTIGO_TEST_END
+    // ----VERTIGO_TEST_END
 
 } // end of class SelectBoolean_CheckboxTag
