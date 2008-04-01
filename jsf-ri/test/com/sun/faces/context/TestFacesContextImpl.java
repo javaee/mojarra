@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.3 2002/06/05 17:00:58 jvisvanathan Exp $
  */
 
 /*
@@ -23,12 +23,20 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import javax.faces.lifecycle.LifecycleFactory;
 import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.tree.XmlTreeImpl;
+
 import javax.faces.component.UICommand;
+import javax.faces.component.UIForm;
+
 import javax.faces.event.FacesEvent;
+import javax.faces.event.CommandEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.context.MessageList;
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+import com.sun.faces.RIConstants;
+import javax.faces.render.RenderKit;
 
 import java.util.Locale;
 import java.util.Iterator;
@@ -39,7 +47,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.2 2002/06/03 20:08:18 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.3 2002/06/05 17:00:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +91,7 @@ private FacesContextImpl facesContext = null;
 // General Methods
 //
     
-public void createFacesContext() {
+public void setUp() {
     
     boolean gotException = false;
     try {
@@ -102,6 +110,13 @@ public void createFacesContext() {
     } catch ( FacesException fe) {
     }
     assertTrue(facesContext != null);
+    
+    RenderKit renderKit = new HtmlBasicRenderKit();
+    sc.setAttribute(RIConstants.DEFAULT_RENDER_KIT, renderKit);
+}    
+
+public void tearDown() {
+    config.getServletContext().removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
 }    
 
 public void testAccessors() 
@@ -110,8 +125,7 @@ public void testAccessors()
     ServletRequest req = null;
     ServletResponse resp = null;
     ServletContext sc = null;
-
-    createFacesContext();    
+    
     req = facesContext.getServletRequest();
     result = null != req;
     System.out.println("Testing getRequest: " + result);
@@ -127,27 +141,16 @@ public void testAccessors()
     System.out.println("Testing getServletContext: " + result);
     assertTrue(result);
     
-    // this method it not implemented yet. Make sure the result fails.
-    try {
-        Iterator it = facesContext.getApplicationEvents();
-        result = false;
-        System.out.println("Testing getApplicationEvent: " + result);
-    } catch (FacesException fe) {
-        result = true;    
-    }    
-    assertTrue(result);
-
+    
     HttpSession session = facesContext.getHttpSession();
     result = null != session;
     System.out.println("Testing getHttpSession: " + result);
     assertTrue(result);
     
-    // PENDING (visvan) update test case once integrated tests are
-    // completed.
     Lifecycle lc = facesContext.getLifecycle();
     result = null != lc;
     System.out.println("Testing getLifeCyle: " + result);
-    assertTrue(result == false);
+    assertTrue(result);
     
     Locale locale = facesContext.getLocale();
     result = null != locale;
@@ -159,29 +162,29 @@ public void testAccessors()
     System.out.println("Testing getMessageList: " + result);
     assertTrue(result);
     
-    // PENDING (visvan) update test case once integrated tests are
-    // completed.
+    facesContext.setRequestTree( new XmlTreeImpl(config.getServletContext(),
+                new UIForm(),"treeId"));
     Tree requestTree = facesContext.getRequestTree();
     result = null != requestTree;
     System.out.println("Testing getRequestTree: " + result);
-    assertTrue(result == false);
+    assertTrue(result);
     
-    // PENDING (visvan) update test case once integrated tests are
-    // completed.
     Tree responseTree = facesContext.getResponseTree();
     result = null != responseTree;
     System.out.println("Testing getResponseTree: " + result);
-    assertTrue(result== false);
-    
-    // this method it not implemented yet. Make sure the result fails.
-    try {
-        facesContext.addApplicationEvent(new FacesEvent(new UICommand()));
-        result = false;
-        System.out.println("Testing addApplicationEvent: " + result);
-    } catch (FacesException fe) {
-        result = true;    
-    }    
     assertTrue(result);
+    
+    facesContext.addApplicationEvent(new CommandEvent(new UICommand(), 
+            "cmdName"));
+    System.out.println("Testing addApplicationEvent: " );
+   
+    Iterator it = facesContext.getApplicationEvents();
+    result = null != it;
+    System.out.println("Testing getApplicationEvent: " + result);
+    assertTrue(result);
+    
+    FacesEvent event = (FacesEvent) it.next();
+    assertTrue(event instanceof CommandEvent);
     
     // this method it not implemented yet. Make sure the result fails.
     try {

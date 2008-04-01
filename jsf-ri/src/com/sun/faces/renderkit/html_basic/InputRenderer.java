@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.18 2002/05/31 19:34:14 jvisvanathan Exp $
+ * $Id: InputRenderer.java,v 1.19 2002/06/05 17:00:58 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UITextEntry;
 import javax.faces.FacesException;
 
 import org.mozilla.util.Assert;
@@ -38,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.18 2002/05/31 19:34:14 jvisvanathan Exp $
+ * @version $Id: InputRenderer.java,v 1.19 2002/06/05 17:00:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,28 +102,37 @@ public class InputRenderer extends Renderer {
     }
 
     public boolean supportsComponentType(UIComponent c) {
-        return false;
+        if ( c == null ) {
+            return false;
+        }     
+        return supportsComponentType(c.getComponentType());
     }
 
     public boolean supportsComponentType(String componentType) {
-        return false;
+        if ( componentType == null ) {
+            return false;
+        }    
+        return (componentType.equals(UITextEntry.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) {
+    public void decode(FacesContext context, UIComponent component) 
+            throws IOException {
         Object convertedValue = null;
         Class modelType = null;
         
-        ParameterCheck.nonNull(context);
+        if ( context == null ) {
+            throw new NullPointerException("FacesContext is null");
+        }    
         ParameterCheck.nonNull(component);
         
         // PENDING (visvan) should we call supportsType to double check
-        // compoenentType ??
+        // componentType ??
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
         String modelRef = component.getModel();
-        
+       
         // If modelReference String is null or newValue is null, type
         // conversion is not necessary. This is because default type
         // for UITextEntry component is String. Simply set local value.
@@ -149,7 +159,6 @@ public class InputRenderer extends Renderer {
             // since conversion failed, don't modify the localValue.
             // set the value temporarily in an attribute so that encode can 
             // use this local state instead of local value.
-            // PENDING (visvan) confirm with Craig ??
             component.setAttribute("localState", newValue);
         } else {
             // conversion successful, set converted value as the local value.
@@ -158,11 +167,14 @@ public class InputRenderer extends Renderer {
         
     }
 
-    public void encodeBegin(FacesContext context, UIComponent component) {
+    public void encodeBegin(FacesContext context, UIComponent component) 
+            throws IOException {
         String currentValue = null;
         PrintWriter writer = null;
         
-        ParameterCheck.nonNull(context);
+        if ( context == null ) {
+            throw new NullPointerException("FacesContext is null");
+        }
         ParameterCheck.nonNull(component);
         
         // if localState attribute is set, then conversion failed, so use
@@ -176,13 +188,11 @@ public class InputRenderer extends Renderer {
             if ( currentObj != null) {
                 currentValue = ConvertUtils.convert(currentObj);
             }    
-        }    
-        try {
-            writer = context.getServletResponse().getWriter();
-        } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
         }
+        
+        writer = context.getServletResponse().getWriter();
         Assert.assert_it(writer != null );
+        
         writer.print("<INPUT TYPE=\"text\"");
         writer.print(" NAME=\"");
         writer.print(component.getCompoundId());
@@ -215,8 +225,8 @@ public class InputRenderer extends Renderer {
 
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) {
-
+    public void encodeEnd(FacesContext context, UIComponent component) 
+            throws IOException {
     }
     
     // The testcase for this class is TestRenderers_1.java 

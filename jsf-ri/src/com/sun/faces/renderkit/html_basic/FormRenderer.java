@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.21 2002/05/29 20:43:59 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.22 2002/06/05 17:00:58 jvisvanathan Exp $
  */
 
 /*
@@ -17,11 +17,20 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
+import javax.faces.FacesException;
+import javax.faces.event.FormEvent;
+
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -29,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.21 2002/05/29 20:43:59 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.22 2002/06/05 17:00:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,28 +100,98 @@ public class FormRenderer extends Renderer {
         return null;
     }
 
-    public boolean supportsComponentType(UIComponent c) {
-        return false;
+   public boolean supportsComponentType(UIComponent c) {
+        if ( c == null ) {
+            return false;
+        }     
+        return supportsComponentType(c.getComponentType());
     }
 
     public boolean supportsComponentType(String componentType) {
-        return false;
+        if ( componentType == null ) {
+            return false;
+        }    
+        return (componentType.equals(UIForm.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) {
+    public void decode(FacesContext context, UIComponent component) 
+            throws IOException{
+        if ( context == null ) {
+            throw new NullPointerException("FacesContext is null");
+        }    
+        ParameterCheck.nonNull(component);    
+        
+        // action parameter must have the value "form"
+        String action = context.getServletRequest().getParameter("action");
+        if (!"form".equals(action)) {
+            return;
+        }
+        
+        // name parameter must have a value equal to currentValue.
+        String formName = context.getServletRequest().getParameter("name");
+        if (formName == null) {
+            return;
+        }
+        
+        if (!formName.equals(component.currentValue(context))) {
+            return;
+        }
 
+        // queue form event to be processed during Invoke Applications phase.
+        context.addApplicationEvent(new FormEvent(component, formName));
     }
 
-    public void encodeBegin(FacesContext context, UIComponent component) {
-
+    public void encodeBegin(FacesContext context, UIComponent component) 
+             throws IOException{
+        if ( context == null ) {
+            throw new NullPointerException("FacesContext is null");
+        }    
+        ParameterCheck.nonNull(component);             
+       
+        PrintWriter writer = context.getServletResponse().getWriter();
+        Assert.assert_it( writer != null );
+        
+        writer.print("<FORM METHOD=\"post\" ACTION=\"");
+        writer.print(getActionStr(context, component));
+        writer.print("\">");
     }
+    
+    /**
+     * <p>Return the value to be rendered as the <code>action</code> attribute
+     * of the form generated for this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     * @param form UIComponent representing form that's being processed.
+     */
+    private String getActionStr(FacesContext context, UIComponent form) {
+
+         HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+        HttpServletResponse response =
+            (HttpServletResponse) context.getServletResponse();
+        StringBuffer sb = new StringBuffer(request.getContextPath());
+        sb.append("/faces?action=form&name=");
+        sb.append(form.currentValue(context)); 
+        sb.append("&tree=");
+        sb.append(context.getResponseTree().getTreeId());
+        return (response.encodeURL(sb.toString()));
+    }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {
 
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) {
-
+    public void encodeEnd(FacesContext context, UIComponent component) 
+             throws IOException{
+        if ( context == null ) {
+            throw new NullPointerException("FacesContext is null");
+        }    
+        ParameterCheck.nonNull(component);
+        
+        // Render the end tag for form
+        PrintWriter writer = context.getServletResponse().getWriter();
+        Assert.assert_it(writer != null);
+        writer.print("</FORM>");
     }
 
 } // end of class FormRenderer

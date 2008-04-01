@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.3 2002/06/03 20:08:18 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.4 2002/06/05 17:00:57 jvisvanathan Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 package com.sun.faces.context;
 
 import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 import java.lang.reflect.InvocationTargetException;
 
@@ -60,7 +62,8 @@ public class FacesContextImpl extends FacesContext
     private ServletResponse response = null;
     private Tree responseTree = null;
     private HttpSession session = null;
-
+    private ArrayList events = null;
+    
     // Attribute Instance Variables
 
     // Relationship Instance Variables
@@ -90,12 +93,10 @@ public class FacesContextImpl extends FacesContext
             this.session =
                 ((HttpServletRequest) request).getSession(false);
         }
-        // set lifecyle.
-        /* PENDING (visvan) set lifecyle once it is implemented
-         LifecycleFactory lFactory = (LifecycleFactory)
-             FactoryFinder.createFactory
-             ("javax.faces.lifecycle.LifecycleFactory");
-         this.lifecycle = lFactory.createLifecycle(lifecycleId); */
+        LifecycleFactory lifecycleFactory = (LifecycleFactory)
+            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+        Assert.assert_it(lifecycleFactory != null);
+        this.lifecycle = lifecycleFactory.createLifecycle(lifecycleId); 
     }
 
     //
@@ -110,7 +111,11 @@ public class FacesContextImpl extends FacesContext
     // Methods from FacesContext
     //
     public Iterator getApplicationEvents() {
-        throw new FacesException("UnImplemented");
+        if (events != null) {
+            return (events.iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
     }
 
 
@@ -191,7 +196,11 @@ public class FacesContextImpl extends FacesContext
 
 
     public void addApplicationEvent(FacesEvent event) {
-        throw new FacesException("UnImplemented");
+        ParameterCheck.nonNull(event);
+        if (events == null) {
+            events = new ArrayList();
+        }
+        events.add(event);
     }
 
     /**

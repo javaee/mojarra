@@ -1,1 +1,9 @@
-<INPUT TYPE="text" NAME="/input_userName" VALUE="JavaServerFaces">
+<FORM METHOD="post" ACTION="/test/faces;jsessionid=92F1C50409C42051E825E4A1F3B6B856?action=form&name=FormRenderer&tree=treeId">
+</FORM>
+<INPUT TYPE="text" NAME="/input_renderer" VALUE="InputRenderer">
+<TEXTAREA  NAME="/textarea_renderer"> TextAreaRenderer
+<INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="One"> One
+<INPUT TYPE="RADIO" CHECKED NAME="/radio_renderer" VALUE="Two"> Two
+<INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="Three"> Three
+
+<INPUT TYPE="SUBMIT" NAME="ButtonRenderer" VALUE="Login">
