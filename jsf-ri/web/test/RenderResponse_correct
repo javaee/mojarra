@@ -176,7 +176,20 @@
 
       </TR>
 
+      <tr>
+         <td> NUMBER-INPUT-PATTERN </td>
+             <td>
+                   <input type="text" name="/basicForm/testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" >
+              </td>
 
+      </tr>
+
+      <tr>
+          <td> OUTPUT-PERCENT </td>
+              <td>
+                   45%
+              </td>
+      </tr>
 
 
   <TABLE>

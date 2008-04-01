@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPool.java,v 1.2 2002/08/09 00:00:52 eburns Exp $
+ * $Id: FormatPool.java,v 1.3 2002/08/13 18:29:48 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ Date date = formatPool.dateFormat_parse(getFacesContext(), input, result);
 
  * We'll add methods to this interface/implementation as needed. <P>
 
- * @version $Id: FormatPool.java,v 1.2 2002/08/09 00:00:52 eburns Exp $
+ * @version $Id: FormatPool.java,v 1.3 2002/08/13 18:29:48 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,6 +64,12 @@ public interface FormatPool
 
     public Date dateFormat_parse(FacesContext context, 
 				 UIComponent component, String date) throws ParseException;
+    
+    public String numberFormat_format(FacesContext context, 
+				    UIComponent component, Number number);
+
+    public Number numberFormat_parse(FacesContext context, 
+				 UIComponent component, String number) throws ParseException;
 
 
 } // end of interface FormatPool

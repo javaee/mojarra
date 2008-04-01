@@ -1,5 +1,5 @@
 /*
- * $Id: Input_DateTag.java,v 1.2 2002/08/12 23:15:38 eburns Exp $
+ * $Id: Input_DateTag.java,v 1.3 2002/08/13 18:29:51 jvisvanathan Exp $
  */
 
 /*
@@ -23,18 +23,16 @@ import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
 
-import com.sun.faces.taglib.FacesTag;
-
 /**
  *
- * @version $Id: Input_DateTag.java,v 1.2 2002/08/12 23:15:38 eburns Exp $
+ * @version $Id: Input_DateTag.java,v 1.3 2002/08/13 18:29:51 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class Input_DateTag extends FacesTag
+public class Input_DateTag extends InputTag
 {
 //
 // Protected Constants
@@ -49,8 +47,7 @@ public class Input_DateTag extends FacesTag
 //
 
 // Attribute Instance Variables
-
-    protected String timezone = null;
+protected String timezone = null;
 
 // Relationship Instance Variables
 
@@ -96,47 +93,8 @@ public void setTimezone(String newTimezone)
 	super.overrideProperties(component);
 	UIInput input = (UIInput) component;
 	
-	if (null == input.getValue() && null != getValue()) {
-	    input.setValue(getValue());
-	}
 	if (null == input.getAttribute("timezone")) {
 	    input.setAttribute("timezone", getTimezone());
-	}
-	if (null == input.getAttribute("disabled")) {
-	    input.setAttribute("disabled", getDisabled());
-	}
-	if (null == input.getAttribute("readonly")) {
-	    input.setAttribute("readonly", getReadonly());
-	}
-	if (null == input.getAttribute("size")) {
-	    input.setAttribute("size", getSize());
-	}
-	if (null == input.getAttribute("maxlength")) {
-	    input.setAttribute("maxlength", getMaxlength());
-	}
-	if (null == input.getAttribute("alt")) {
-	    input.setAttribute("alt", getAlt());
-	}
-	if (null == input.getAttribute("lang")) {
-	    input.setAttribute("lang", getLang());
-	}
-	if (null == input.getAttribute("tabindex")) {
-	    input.setAttribute("tabindex", getTabindex());
-	}
-	if (null == input.getAttribute("accesskey")) {
-	    input.setAttribute("accesskey", getAccesskey());
-	}
-	if (null == input.getAttribute("onfocus")) {
-	    input.setAttribute("onfocus", getOnfocus());
-	}
-	if (null == input.getAttribute("onblur")) {
-	    input.setAttribute("onblur", getOnblur());
-	}
-	if (null == input.getAttribute("onselect")) {
-	    input.setAttribute("onselect", getOnselect());
-	}
-	if (null == input.getAttribute("onchange")) {
-	    input.setAttribute("onchange", getOnchange());
 	}
     }
 

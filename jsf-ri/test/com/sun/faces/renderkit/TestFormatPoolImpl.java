@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.3 2002/08/09 21:01:50 eburns Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.4 2002/08/13 18:29:53 jvisvanathan Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 
 import javax.faces.context.FacesContext;
@@ -36,7 +37,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.3 2002/08/09 21:01:50 eburns Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.4 2002/08/13 18:29:53 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -332,6 +333,122 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	assertTrue(null !=
 		   getFacesContext().getServletContext().
 		   getAttribute(RIConstants.FORMAT_POOL));
+    }
+    
+    public void testNumberFormat() {
+
+	String result = null;
+	FormatPool formatPool = new FormatPoolImpl();
+	UIInput input = new UIInput();
+	input.setComponentId("input");
+	Number testNum = new Double(1239989.60);
+        Number resultNum = null;
+	String formatStr = null;
+        
+        FacesContext context = getFacesContext();
+	// style == NUMBER, format method
+        input.setAttribute("formatStyle", "NUMBER");
+	getFacesContext().setLocale(Locale.US);
+        formatStr = formatPool.numberFormat_format(context, input,
+                testNum);
+        
+	// style == NUMBER, parse method
+        try {
+	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
+	}
+	catch (ParseException e) {
+	    assertTrue(false);
+	}
+        assertTrue( formatStr.equals("1,239,989.6"));
+        assertTrue(testNum.doubleValue() == resultNum.doubleValue());
+        
+        // style == PERCENT, format method
+        testNum = new Double(.99);
+        input.setAttribute("formatStyle", "PERCENT");
+	formatStr = formatPool.numberFormat_format(context, input,testNum);
+        assertTrue(formatStr.equals("99%"));
+        
+        // style == PERCENT, parse method
+        try {
+	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
+	}
+	catch (ParseException e) {
+	    assertTrue(false);
+	}
+        assertTrue( testNum.equals(resultNum ));
+        
+         // style == CURRENCY, format method
+        testNum = new Double(1234789.60);
+        input.setAttribute("formatStyle", "CURRENCY");
+	formatStr = formatPool.numberFormat_format(context, input, testNum);
+        assertTrue( formatStr.equals("$1,234,789.60"));
+        
+        // style == PERCENT, parse method
+        try {
+	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
+	}
+	catch (ParseException e) {
+	    assertTrue(false);
+	}
+        assertTrue( testNum.equals(resultNum));
+        
+         // pattern="####.000", format method
+        testNum = new Double(9999.988);
+        input.setAttribute("formatPattern", "####.000");
+        formatStr = formatPool.numberFormat_format(context, input, testNum);
+        assertTrue(formatStr.equals("9999.988"));
+        
+        // style == PERCENT, parse method
+        try {
+	    resultNum = formatPool.numberFormat_parse(context, input,formatStr);
+	}
+	catch (ParseException e) {
+	    assertTrue(false);
+	}
+        assertTrue( testNum.equals(resultNum ));
+    }
+    
+    public void testNumberFormat_hashMap() {
+	UIInput input1, input2;
+	NumberFormat numberFormat1, numberFormat2;
+	FormatPoolImpl formatPool = new FormatPoolImpl();
+
+
+	input1 = new UIInput();
+	input1.setComponentId("input1");
+	input2 = new UIInput();
+	input2.setComponentId("input2");
+
+	// style == PERCENT, get Locale from FacesContext
+	getFacesContext().setLocale(Locale.US);
+	input1.setAttribute("formatStyle", "PERCENT");
+	input2.setAttribute("formatStyle", "PERCENT");
+	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);
+	numberFormat2 = formatPool.getNumberFormat(getFacesContext(), input2);
+	assertTrue(numberFormat1.equals(numberFormat2));
+
+        //style="PERCENT", get locale from attribute.
+        LocalizationContext locCtx = 
+	    new LocalizationContext(null, Locale.FRANCE);
+	getFacesContext().getHttpSession().setAttribute("basicBundle", locCtx);
+	
+	input1.setAttribute("bundle", "basicBundle");
+	input2.setAttribute("bundle", "basicBundle");
+	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);
+	assertTrue(!(numberFormat1.equals(numberFormat2)));
+	numberFormat2 = formatPool.getNumberFormat(getFacesContext(), input2);
+	assertTrue(numberFormat1.equals(numberFormat2));  
+        
+	// pattern="####",  get Locale from FacesContext
+	getFacesContext().setLocale(Locale.US);
+        input1.setAttribute("formatStyle", null);
+	input2.setAttribute("formatStyle", null);
+	input1.setAttribute("formatPattern", "####");
+	input2.setAttribute("formatPattern", "####");
+	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);
+	assertTrue((!numberFormat1.equals(numberFormat2)));
+	numberFormat2 = formatPool.getNumberFormat(getFacesContext(), input2);
+	assertTrue(numberFormat1.equals(numberFormat2));
     }
 
 

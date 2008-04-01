@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.12 2002/08/12 23:15:39 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.13 2002/08/13 18:29:54 jvisvanathan Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
+import com.sun.faces.renderkit.html_basic.NumberRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.tree.XmlTreeImpl;
 
@@ -20,6 +21,8 @@ import java.util.Iterator;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
@@ -46,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.12 2002/08/12 23:15:39 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.13 2002/08/13 18:29:54 jvisvanathan Exp $
  * 
  *
  */
@@ -59,7 +62,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public static String DATE_STR = "Jan 12, 1952";
     public static String DATE_STR_LONG = "Sat, Jan 12, 1952";
-
+    
+   public static String NUMBER_STR = "47%";
+   public static String NUMBER_STR_PATTERN = "1999.8765432";
+        
     public boolean sendWriterToFile() {
         return true;
     }    
@@ -124,6 +130,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_secret", "secret");
         // for Text
         theRequest.addParameter("/my_text", "text");
+
+        // for Text - NumberFormat
+        theRequest.addParameter("/my_number", "47%");
+        theRequest.addParameter("/my_number2", "1999.8769432");
+
         theRequest.addParameter("/my_input_date", DATE_STR);
         theRequest.addParameter("/my_input_date2", DATE_STR_LONG);
         theRequest.addParameter("/my_output_date", DATE_STR);
@@ -150,9 +161,15 @@ public class TestRenderers_2 extends JspFacesTestCase
 	    testInputDateRenderer(root);
 	    testInputDateRendererWithPattern(root);
 
-	    testOutputDateRenderer(root);
+            testOutputDateRenderer(root);
 	    testOutputDateRendererWithPattern(root);
 
+            testInputNumberRenderer(root);
+	    testInputNumberRendererWithPattern(root);
+            
+            testOutputNumberRenderer(root);
+	    testOutputNumberRendererWithPattern(root);
+            
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
             t.printStackTrace();
@@ -472,6 +489,132 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
+    
+    public void testInputNumberRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing NumberRenderer for UIInput ");
+        UIInput input = new UIInput();
+        input.setValue(null);
+        input.setComponentId("my_number");
+	input.setAttribute("formatStyle", "PERCENT");
+        root.addChild(input);
+
+        NumberRenderer numberRenderer = new NumberRenderer();
+	Number number = null;
+	NumberFormat formatter = 
+	    NumberFormat.getPercentInstance(getFacesContext().getLocale());
+	
+        // test decode method
+	
+        System.out.println("    Testing decode method...");
+
+        numberRenderer.decode(getFacesContext(), input);
+	number = (Number) input.getValue();
+	assertTrue(null != number);
+	assertTrue(NUMBER_STR.equals(formatter.format(number)));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        numberRenderer.encodeBegin(getFacesContext(), input);
+        numberRenderer.encodeEnd(getFacesContext(), input);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = numberRenderer.supportsComponentType("javax.faces.component.UIInput");
+        assertTrue(result);
+        result = numberRenderer.supportsComponentType(input);
+        assertTrue(result);
+        result = numberRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+    
+    public void testInputNumberRendererWithPattern(UIComponent root) 
+            throws IOException {
+        System.out.println("Testing NumberRenderer With Pattern for UIInput ");
+	String formatPattern = "####.000";
+        UIInput input = new UIInput();
+        input.setValue(null);
+        input.setComponentId("my_number2");
+	input.setAttribute("formatPattern", formatPattern);
+        root.addChild(input);
+
+        NumberRenderer numberRenderer = new NumberRenderer();
+	Number number = null;
+	DecimalFormat formatter = new DecimalFormat(formatPattern);
+	
+        // test decode method
+	
+        System.out.println("    Testing decode method...");
+
+        numberRenderer.decode(getFacesContext(), input);
+	number= (Number) input.getValue();
+	assertTrue(null != number);
+	assertTrue("1999.877".equals(formatter.format(number)));
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        numberRenderer.encodeBegin(getFacesContext(), input);
+        numberRenderer.encodeEnd(getFacesContext(), input);
+        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().flush();
+    }    
+
+    public void testOutputNumberRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing NumberRenderer for UIOutput");
+        UIOutput output = new UIOutput();
+        output.setValue(new Double(.99));
+        output.setComponentId("my_number3");
+	output.setAttribute("formatStyle", "PERCENT");
+        root.addChild(output);
+
+        NumberRenderer numberRenderer = new NumberRenderer();
+	Number number = null;
+	NumberFormat formatter = 
+	    NumberFormat.getPercentInstance(getFacesContext().getLocale());
+	
+        // test encode method
+        System.out.println("    Testing encode method...");
+        numberRenderer.encodeBegin(getFacesContext(), output);
+        numberRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println(" Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = numberRenderer.supportsComponentType("javax.faces.component.UIInput");
+        assertTrue(result);
+        result = numberRenderer.supportsComponentType(output);
+        assertTrue(result);
+        result = numberRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+    
+    public void testOutputNumberRendererWithPattern(UIComponent root) throws IOException {
+        System.out.println("Testing NumberRenderer With Pattern for UIOutput");
+	String formatPattern = "####.000";
+        UIOutput output = new UIOutput();
+        output.setValue(new Double(999));
+        output.setComponentId("my_number4");
+	output.setAttribute("formatPattern", formatPattern);
+        root.addChild(output);
+
+        NumberRenderer numberRenderer = new NumberRenderer();
+	Number number = null;
+	DecimalFormat formatter = new DecimalFormat(formatPattern);
+	
+        // test encode method
+        System.out.println("    Testing encode method...");
+        numberRenderer.encodeBegin(getFacesContext(), output);
+        numberRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().flush();
+    }  
+
+
     public void testOutputDateRenderer(UIComponent root) throws IOException {
         System.out.println("Testing Output_DateRenderer");
         UIOutput output = new UIOutput();
@@ -551,6 +694,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         dateRenderer.encodeBegin(getFacesContext(), output);
         dateRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().write("\n");
         getFacesContext().getResponseWriter().flush();
 	assertTrue(!output.isValid());
 	

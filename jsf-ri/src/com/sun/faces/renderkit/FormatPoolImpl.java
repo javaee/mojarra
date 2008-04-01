@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.2 2002/08/09 21:01:49 eburns Exp $
+ * $Id: FormatPoolImpl.java,v 1.3 2002/08/13 18:29:48 jvisvanathan Exp $
  */
 
 /*
@@ -22,6 +22,8 @@ import java.util.Locale;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -34,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.2 2002/08/09 21:01:49 eburns Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.3 2002/08/13 18:29:48 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,8 +162,8 @@ public FormatPoolImpl()
 	    dateFormat = DateFormat.getDateInstance(formatStyleInt, locale);
 	    if (null != formatPattern) {
 		if (dateFormat instanceof SimpleDateFormat) {
-		    ((SimpleDateFormat)dateFormat).applyPattern(formatPattern);
-		}
+                    ((SimpleDateFormat)dateFormat).applyPattern(formatPattern);
+                }
 		else {
 		    dateFormat = new SimpleDateFormat(formatPattern, locale);
 		}
@@ -179,10 +181,66 @@ public FormatPoolImpl()
         
 	return dateFormat;
     }
+    
+    protected NumberFormat getNumberFormat(FacesContext context, 
+            UIComponent component) {
+	String pattern = null;
+	String formatStyle = null;
+        String hashKey = null;
+        
+        NumberFormat numberFormat = null;
+	Locale locale = Util.getLocaleFromContextOrComponent(context,component);
+        // get the pattern, null is ok
+        formatStyle = (String) component.getAttribute("formatStyle");
+	pattern = (String) component.getAttribute("formatPattern");
+        
+        // build hashKey
+	hashKey = locale.toString() + formatStyle + pattern;
+	
+	// Look in the formatters map
+	if (null == (numberFormat = (NumberFormat) formatters.get(hashKey))) {
+	    // we need to create a NumberFormat instance based on style or
+            // pattern
+	    if ( pattern != null ) {
+                numberFormat =  NumberFormat.getInstance(locale);
+                if (numberFormat instanceof DecimalFormat) {
+                    ((DecimalFormat)numberFormat).applyLocalizedPattern(pattern);
+                   
+                } else {
+                    try {
+                        numberFormat = new DecimalFormat(pattern);
+                    } catch (IllegalArgumentException iae) {
+                        numberFormat = NumberFormat.getInstance();
+                    }    
+                }     
+	    } else {
+                if ( formatStyle == null ) {
+                    numberFormat = NumberFormat.getNumberInstance(locale);
+                }    
+                else if (formatStyle.equalsIgnoreCase("CURRENCY")) {
+                    numberFormat = NumberFormat.getCurrencyInstance(locale);
+	        }
+	        else if (formatStyle.equalsIgnoreCase("PERCENT")) {
+		    numberFormat = NumberFormat.getPercentInstance(locale);
+                }
+	        else {
+                    // PENDING (visvan) should INTEGER be treated separately ?
+                    // doesn't seem it is necessary because there is no specific
+                    // method in API to support that.
+                    numberFormat = NumberFormat.getNumberInstance(locale);
+	        }
+            }    
+            // and store it
+	    formatters.put(hashKey, numberFormat);
+        }
+	Assert.assert_it(null != numberFormat);
+        return numberFormat;
+    }
 
-//
-// Methods from FormatPool
-//
+
+    //
+    // Methods from FormatPool
+    //
 
     public synchronized String dateFormat_format(FacesContext context, 
 						 UIComponent component, 
@@ -201,6 +259,27 @@ public FormatPoolImpl()
 	DateFormat dateFormat = getDateFormat(context, component);
 
 	result = dateFormat.parse(date);
+	return result;
+    }
+    
+    public synchronized String numberFormat_format(FacesContext context, 
+						 UIComponent component, 
+						 Number number) {
+	String result = null;
+	NumberFormat numberFormat = getNumberFormat(context, component);
+        result = numberFormat.format(number);
+        return result;
+    }
+
+    public synchronized Number numberFormat_parse(FacesContext context, 
+					      UIComponent component, 
+					      String number) throws ParseException {
+	Number result = null;
+        if ( number != null ) {
+            number = number.trim();
+        }    
+	NumberFormat numberFormat = getNumberFormat(context, component);
+        result = numberFormat.parse(number);
 	return result;
     }
 

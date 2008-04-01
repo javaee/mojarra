@@ -246,6 +246,7 @@
             <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
             <arg value="start"/>
             <classpath>
+              <pathelement location="${jstl.jar}"/>
               <pathelement location="${java.home}/../lib/tools.jar"/>
               <fileset dir="${tomcat.home.40}">
                   <include name="bin/bootstrap.jar"/>
