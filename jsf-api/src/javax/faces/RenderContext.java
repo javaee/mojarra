@@ -49,8 +49,6 @@ public abstract class RenderContext {
      */
     public abstract RenderKit getRenderKit();
 
-    public abstract ObjectTable getObjectTable();
-
     /**
      * The current value of the locale object.
      * return Locale object respresenting client's locale
