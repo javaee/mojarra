@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.8 2002/01/31 20:38:54 rogerk Exp $
+ * $Id: RadioRenderer.java,v 1.9 2002/02/06 18:36:45 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.8 2002/01/31 20:38:54 rogerk Exp $
+ * @version $Id: RadioRenderer.java,v 1.9 2002/02/06 18:36:45 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -138,6 +138,7 @@ public class RadioRenderer extends Object implements Renderer {
             throw new FacesException("Invalid component type. " +
                                      "Expected UISelectOne");
         }
+	String curValue;
         String radioId = uiSelectOne.getId();
         Assert.assert_it(null != radioId);
 
@@ -152,27 +153,36 @@ public class RadioRenderer extends Object implements Renderer {
         // build the rendering string.
         //
         Iterator itemsIter = uiSelectOne.getItems(rc);
+	curValue = (String) uiSelectOne.getAttribute(rc, "curValue");
+
+	Assert.assert_it(null != curValue);
+
         while (itemsIter.hasNext()) {
             UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
-            String itemLabel = item.getLabel();
-            output.append("<INPUT TYPE=\"RADIO\"");
-            if ((null != selectedValue) &&
-                selectedValue.equals(item)) {
-                output.append(" CHECKED");
-            }
-            output.append(" NAME=\"");
-            output.append(radioId);
-            output.append("\" VALUE=\"");
-            output.append(item);
-            output.append("\">");
-            if (itemLabel != null) {
-                output.append(" ");
-                output.append(itemLabel);
-            }
-        }
-        outputMethod.writeText(output.toString());
-        outputMethod.flush();
-
+	    // Only print out the current value from the collection, as
+	    // set in the Tag.
+	    if (curValue.equals(item.getValue())) {
+		String itemLabel = item.getLabel();
+		output.append("<INPUT TYPE=\"RADIO\"");
+		if ((null != selectedValue) &&
+		    selectedValue.equals(item)) {
+		    output.append(" CHECKED");
+		}
+		output.append(" NAME=\"");
+		output.append(radioId);
+		output.append("\" VALUE=\"");
+		output.append(item.getValue());
+		output.append("\">");
+		if (itemLabel != null) {
+		    output.append(" ");
+		    output.append(itemLabel);
+		}
+	    }
+	}
+	
+	outputMethod.writeText(output.toString());
+	outputMethod.flush();
+	
         return;
     }
 

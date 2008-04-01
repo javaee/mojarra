@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.10 2002/01/31 20:38:55 rogerk Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.11 2002/02/06 18:36:45 edburns Exp $
  */
 
 /*
@@ -11,24 +11,15 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import com.sun.faces.taglib.FacesTag;
+
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.Constants;
-import javax.faces.FacesException;
-import javax.faces.RenderContext;
-import javax.faces.Renderer;
-import javax.faces.RenderKit;
-import javax.faces.UIForm;
 import javax.faces.UISelectOne;
-import javax.faces.ObjectManager;
+import javax.faces.UIComponent;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.TagSupport;
-
-import java.util.Collection;
-import java.util.Vector;
 
 /**
  *
@@ -36,14 +27,14 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.10 2002/01/31 20:38:55 rogerk Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.11 2002/02/06 18:36:45 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectOne_RadioTag extends TagSupport
+public class SelectOne_RadioTag extends FacesTag
 {
 //
 // Protected Constants
@@ -63,6 +54,7 @@ public class SelectOne_RadioTag extends TagSupport
     private String value = null;
     private String label = null;
     private String description = null;
+    private String parentId = null;
 
 // Relationship Instance Variables
 
@@ -73,13 +65,6 @@ public class SelectOne_RadioTag extends TagSupport
 public SelectOne_RadioTag()
 {
     super();
-    // ParameterCheck.nonNull();
-    this.init();
-}
-
-protected void init()
-{
-    // super.init();
 }
 
 //
@@ -121,124 +106,64 @@ protected void init()
         this.description = description;
     }
 
-//
-// Methods from TagSupport
-//
-
     /**
-     * Process the start of this tag.
-     * @exception JspException if a JSP exception has occurred
-     */
-public int doStartTag() throws JspException {
-    ObjectManager ot = (ObjectManager) pageContext.getServletContext().
-	getAttribute(Constants.REF_OBJECTMANAGER);
-    Assert.assert_it( ot != null );
-    RenderContext renderContext = 
-	(RenderContext)ot.get(pageContext.getSession(),
-			      Constants.REF_RENDERCONTEXT);
-    Assert.assert_it( renderContext != null );
-    
-    // Ascend the tag hierarchy to get the RadioGroup tag
-    RadioGroupTag ancestor = null;
-    UISelectOne uiSelectOne = null;
-    String parentName = null;
-    
-    // get the UISelectOne that is our component.
-    try {
-	ancestor = (RadioGroupTag) 
-	    findAncestorWithClass(this, RadioGroupTag.class);
-	parentName = ancestor.getId();
-    } catch ( Exception e ) {
-	throw new JspException("Option must be enclosed in a SelectOne_Option tag");
-    }
-    Assert.assert_it(null != ancestor);
-    Assert.assert_it(null != parentName);
-    
-    // 1. Set up the component
-    //
-    // by virtue of being inside a RadioGroup there must be a
-    // UISelectOne instance under the name.
-    uiSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-    Assert.assert_it(null != uiSelectOne);
-    
-    uiSelectOne.setItems(new Vector());
-    uiSelectOne.addItem(getValue(), getLabel(), getDescription());
 
-//PENDING(rogerk) not necessary...
-    // Add this value to the Collection
-//    ancestor.getItems().add(getValue());
+    * We override getId to return the parent's Id.
 
-    // if it is checked, make sure the model knows about it.
-    if (null != getChecked()) {
-	uiSelectOne.setSelectedValue(getValue());
-    }
-    
-    // 2. Render the component.
-    //
-    try {
-        uiSelectOne.setRendererType("RadioRenderer");
-        uiSelectOne.render(renderContext);
-    } catch (java.io.IOException e) {
-        throw new JspException("Problem rendering component: "+
-            e.getMessage());
-    } catch (FacesException f) {
-        throw new JspException("Problem rendering component: "+
-            f.getMessage());
+    */
+
+    public String getId() {
+	if (null == parentId) {
+	    RadioGroupTag ancestor = null;
+	    
+	    // get the UISelectOne that is our component.
+	    try {
+		ancestor = (RadioGroupTag) 
+		    findAncestorWithClass(this, RadioGroupTag.class);
+		parentId = ancestor.getId();
+	    } catch ( Exception e ) {
+		throw new IllegalStateException("Option must be enclosed in a SelectOne_Option tag");
+	    }
+	}
+	return parentId;
     }
 
-    return (EVAL_BODY_INCLUDE);
-}
+    public void setId(String id) {
+    }
 
-    /**
-     * End Tag Processing
-     */
-    public int doEndTag() throws JspException{
 
-        Assert.assert_it( pageContext != null );
-        // get ObjectManager from ServletContext.
-        ObjectManager ot = (ObjectManager)pageContext.getServletContext().
-                 getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it( ot != null );
-        RenderContext renderContext =
-            (RenderContext)ot.get(pageContext.getSession(),
-            Constants.REF_RENDERCONTEXT);
-        Assert.assert_it( renderContext != null );
-
-        // get the UISelectOne that is our component.
-        String parentName = null;
-        RadioGroupTag ancestor = null;
-        try {
-            ancestor = (RadioGroupTag)
-                findAncestorWithClass(this, RadioGroupTag.class);
-            parentName = ancestor.getId();
-        } catch ( Exception e ) {
-            throw new JspException("Option must be enclosed in a SelectOne_Option tag");
-        }
-        Assert.assert_it(null != ancestor);
-        Assert.assert_it(null != parentName);
-
-        // by virtue of being inside a RadioGroup there must be a
-        // UISelectOne instance under the name.
-//PENDING(rogerk)can we eliminate this extra get if component is instance
-//variable? If so, threading issue?
 //
-        UISelectOne uiSelectOne = 
-            (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-        Assert.assert_it(null != uiSelectOne);
+// Methods from FacesTag
+//
 
-        // Complete the rendering process
-        //
-        try {
-            uiSelectOne.renderComplete(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem completing rendering: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem completing rendering: "+
-                f.getMessage());
-        }
+    public UIComponent newComponentInstance() {
+        Assert.assert_it(false, "This shouldn't be called, the UISelectOne is already in the OM");
+	return null;
+    }
 
-        return EVAL_PAGE;
+    public void setAttributes(UIComponent comp) {
+	ParameterCheck.nonNull(comp);
+	Assert.assert_it(null != renderContext);
+	Assert.assert_it(comp instanceof UISelectOne);
+
+	UISelectOne uiSelectOne = (UISelectOne) comp;
+	uiSelectOne.addItem(getValue(), getLabel(), getDescription());
+	// PENDING(edburns): hack, this is how the renderer knows what is
+	// the current radio button.
+	uiSelectOne.setAttribute("curValue", getValue());
+
+	// if it is checked, make sure the model knows about it.
+	if (null != getChecked()) {
+	    uiSelectOne.setSelectedValue(getValue());
+	}
+	
+    }
+
+    public String getRendererType() {
+	return "RadioRenderer";
+    }
+
+    public void addListeners(UIComponent comp) throws JspException {
     }
 
     /**

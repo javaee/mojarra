@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.1 2002/02/05 18:57:03 edburns Exp $
+ * $Id: FacesTag.java,v 1.2 2002/02/06 18:36:45 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.1 2002/02/05 18:57:03 edburns Exp $
+ * @version $Id: FacesTag.java,v 1.2 2002/02/06 18:36:45 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -183,6 +183,13 @@ public int getEndCode() {
 
 public void setAttributes(UIComponent comp) {}
 
+    /**
+
+    * @return the String for this renderer type, or null, if this tag
+    * does not have a renderer.
+
+    */
+
 public abstract String getRendererType();
 
 /**
@@ -202,6 +209,7 @@ public void addListeners(UIComponent comp) throws JspException {}
      * @exception JspException if a JSP exception has occurred
      */
     public int doStartTag() throws JspException {
+	String rendererType = null;
         ObjectManager objectManager = (ObjectManager) pageContext.getServletContext().getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it( objectManager != null );
 	
@@ -233,18 +241,20 @@ public void addListeners(UIComponent comp) throws JspException {}
 	setAttributes(uiComponent);
 	addListeners(uiComponent);
 
-        // 3. Render the component.
+        // 3. Render the component, if it has a renderer
         //
-        try {
-            uiComponent.setRendererType(getRendererType());
-            uiComponent.render(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem rendering component: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem rendering component: "+
-                f.getMessage());
-        }
+	if (null != (rendererType = getRendererType())) {
+	    try {
+		uiComponent.setRendererType(rendererType);
+		uiComponent.render(renderContext);
+	    } catch (java.io.IOException e) {
+		throw new JspException("Problem rendering component: "+
+				       e.getMessage());
+	    } catch (FacesException f) {
+		throw new JspException("Problem rendering component: "+
+				       f.getMessage());
+	    }
+	}
 	renderContext = null;
         return (getStartCode());
     }
@@ -253,7 +263,7 @@ public void addListeners(UIComponent comp) throws JspException {}
      * End Tag Processing
      */
     public int doEndTag() throws JspException {
-
+	String rendererType = null;
         // get ObjectManager from ServletContext.
         ObjectManager objectManager = (ObjectManager)pageContext.getServletContext().
 	    getAttribute(Constants.REF_OBJECTMANAGER);
@@ -272,16 +282,17 @@ public void addListeners(UIComponent comp) throws JspException {}
 
         // Complete the rendering process
         //
-        try {
-            wComponent.renderComplete(renderContext);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem completing rendering: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem completing rendering: "+
-                f.getMessage());
-        }
-
+	if (null != (rendererType = getRendererType())) {
+	    try {
+		wComponent.renderComplete(renderContext);
+	    } catch (java.io.IOException e) {
+		throw new JspException("Problem completing rendering: "+
+				       e.getMessage());
+	    } catch (FacesException f) {
+		throw new JspException("Problem completing rendering: "+
+				       f.getMessage());
+	    }
+	}
 	renderContext = null;
         return getEndCode();
     }
