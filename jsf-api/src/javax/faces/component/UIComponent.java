@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.19 2002/05/22 17:47:26 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.20 2002/05/25 00:45:10 craigmcc Exp $
  */
 
 /*
@@ -517,20 +517,12 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Remove all child <code>UIComponent</code>s from the child list,
-     * recursively performing this operation when a child
-     * <code>UIComponent</code> also has children.</p>
+     * <p>Remove all child <code>UIComponent</code>s from the child list.
      */
     public void clearChildren() {
 
         if (!isChildrenAllocated()) {
             return;
-        }
-        Iterator kids = getChildList().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            kid.clearChildren();
-            kid.setParent(null);
         }
         children.clear();
 
@@ -549,22 +541,6 @@ public abstract class UIComponent {
     public boolean containsChild(UIComponent component) {
 
         return (component.getParent() == this);
-
-    }
-
-
-    /**
-     * <p>Return the <code>UIComponent</code> at the specified position
-     * in the child list for this component.</p>
-     *
-     * @param index Position of the desired component
-     *
-     * @exception IndexOutOfBoundsException if index is out of range
-     *  ((index &lt; 0) || (index &gt;= size()))
-     */
-    public UIComponent findChild(int index) {
-
-        return ((UIComponent) getChildList().get(index));
 
     }
 
@@ -678,6 +654,22 @@ public abstract class UIComponent {
 
 
     /**
+     * <p>Return the <code>UIComponent</code> at the specified position
+     * in the child list for this component.</p>
+     *
+     * @param index Position of the desired component
+     *
+     * @exception IndexOutOfBoundsException if index is out of range
+     *  ((index &lt; 0) || (index &gt;= size()))
+     */
+    public UIComponent getChild(int index) {
+
+        return ((UIComponent) getChildList().get(index));
+
+    }
+
+
+    /**
      * <p>Return the number of <code>UIComponent</code>s on the child list
      * for this component.</p>
      */
@@ -721,7 +713,7 @@ public abstract class UIComponent {
      */
     public void removeChild(int index) {
 
-        UIComponent kid = findChild(index);
+        UIComponent kid = getChild(index);
         getChildList().remove(index);
         kid.setParent(null);
 
@@ -834,6 +826,22 @@ public abstract class UIComponent {
             return (validators.iterator());
         } else {
             return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
+
+
+    /**
+     * <p>Remove a {@link Validator} instance from the set associated with
+     * this <code>UIComponent</code>, if it was previously associated.
+     * Otherwise, do nothing.</p>
+     *
+     * @param validator The {@link Validator} to remove
+     */
+    public void removeValidator(Validator validator) {
+
+        if (validators != null) {
+            validators.remove(validator);
         }
 
     }

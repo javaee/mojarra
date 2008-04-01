@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.2 2002/05/22 17:55:48 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.3 2002/05/25 00:45:10 craigmcc Exp $
  */
 
 /*
@@ -54,7 +54,8 @@ public abstract class TreeFactory {
 
     /**
      * <p>Return an <code>Iterator</code> over the set of tree identifiers
-     * of all {@link Tree} instances that can be created by this factory.
+     * of all {@link Tree} instances that can be created by this factory,
+     * for this web application.
      * If no trees are supported, an empty <code>Iterator</code> must be
      * returned.</p>
      */
