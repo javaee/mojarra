@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.5 2002/05/14 00:44:04 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.6 2002/05/14 15:02:28 craigmcc Exp $
  */
 
 /*
@@ -11,9 +11,9 @@ package javax.faces.context;
 
 
 import javax.faces.FacesException;     // FIXME - subpackage?
-import javax.faces.component.UIComponent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
+import javax.faces.tree.Tree;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletResponse;
@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
  * <p><strong>FacesContext</strong> contains all of the per-request state
  * information related to the processing of a single JavaServer Faces request,
  * and the rendering of the corresponding response.  It is passed to, and
- * potentially modified by, each stage of the request processing lifecycle.</p>
+ * potentially modified by, each phase of the request processing lifecycle.</p>
  *
  * <h3>Lifecycle</h3>
  *
@@ -88,71 +88,39 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the logical page identifier associated with the inbound
-     * request.  Typically, this will be the same as the page identifier
-     * of the JavaServer Pages response that rendered the page from which
-     * this request was submitted.</p>
+     * <p>Return the {@link Tree} that is associated with the inbound request.
+     * </p>
      */
-    public abstract String getRequestPageId();
+    public abstract Tree getRequestTree();
 
 
     /**
-     * <p>Set the logical page identifier of the associated with the
-     * inbound request.</p>
+     * <p>Set the {@link Tree} that is associated with the inbound request.
+     * </p>
      *
-     * @param pageId The new request page identifier
-     */
-    public abstract void setRequestPageId(String pageId);
-    
-
-    /**
-     * <p>Return the {@link UIComponent} that is the root of the component
-     * tree for the inbound request.</p>
-     */
-    public abstract UIComponent getRequestTree();
-
-
-    /**
-     * <p>Set the {@link UIComponent} that is the root of the component tree
-     * for the inbound request.</p>
+     * <p><strong>FIXME</strong> - Does this method need to be public?</p>
      *
-     * @param root The root of the inbound component tree
+     * @param tree The new inbound request tree
      */
-    public abstract void setRequestTree(UIComponent root);
+    public abstract void setRequestTree(Tree tree);
 
 
     /**
-     * <p>Return the logical page identifier associated with the outbound
-     * response.</p>
+     * <p>Return the {@link Tree} that is associated with the outbound
+     * response.  Unless otherwise specified (by a call to
+     * <code>setResponseTree()</code>, this will return the same
+     * {@link Tree} returned by <code>getRequestTree()</code>.</p>
      */
-    public abstract String getResponsePageId();
+    public abstract Tree getResponseTree();
 
 
     /**
-     * <p>Set the logical page identifier associated with the outbound
-     * response.</p>
+     * <p>Set the {@link Tree} that is the associated with the
+     * outbound response.</p>
      *
-     * @param pageId The new response page identifier
+     * @param tree The new outbound response tree
      */
-    public abstract void setResponsePageId(String pageId);
-
-
-    /**
-     * <p>Return the {@link UIComponent} that is the root of the component
-     * tree for the outbound response.  Unless otherwise specified (by a
-     * call to <code>setResponseTree()</code>), this will return the same
-     * component tree returned by <code>getRequestTree()</code>.</p>
-     */
-    public abstract UIComponent getResponseTree();
-
-
-    /**
-     * <p>Set the {@link UIComponent} that is the root of the component tree
-     * for the outbound response.</p>
-     *
-     * @param root The root of the outbound component tree
-     */
-    public abstract void setResponseTree(UIComponent root);
+    public abstract void setResponseTree(Tree tree);
 
 
     /**
@@ -186,12 +154,14 @@ public abstract class FacesContext {
      *
      * @param model Model reference expression to be evaluated
      *
+     * @exception FacesException if an error occurs during expression
+     *  evaluation
      * @exception IllegalArgumentException if the model reference
      *  expression is invalid
      * @exception NullPointerException if <code>model</code>
      *  is <code>null</code>
      */
-    public abstract Class getModelType(String model);
+    public abstract Class getModelType(String model) throws FacesException;
 
 
     /**

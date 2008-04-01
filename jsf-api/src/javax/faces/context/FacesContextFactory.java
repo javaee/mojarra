@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.2 2002/05/14 00:44:04 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.3 2002/05/14 15:02:29 craigmcc Exp $
  */
 
 /*
@@ -47,6 +47,8 @@ public abstract class FacesContextFactory {
      * <code>ServletContext</code>, or can we assume that the initialization
      * of the factory instance has already acquired a reference to this?</p>
      *
+     * @param context The <code>ServletContext</code> that is associated
+     *  with this web application
      * @param request The <code>ServletRequest</code> that is to be
      *  processed
      * @param response The <code>ServletResponse</code> that is to be
@@ -56,7 +58,8 @@ public abstract class FacesContextFactory {
      *  constructed for the specified parameters
      */
     public abstract FacesContext createFacesContext
-        (ServletRequest request, ServletResponse response)
+        (ServletContext context, ServletRequest request,
+         ServletResponse response)
         throws FacesException;
 
 
@@ -70,6 +73,8 @@ public abstract class FacesContextFactory {
      * <code>ServletContext</code>, or can we assume that the initialization
      * of the factory instance has already acquired a reference to this?</p>
      *
+     * @param context The <code>ServletContext</code> that is associated
+     *  with this web application
      * @param request The <code>ServletRequest</code> that is to be
      *  processed
      * @param response The <code>ServletResponse</code> that is to be
@@ -81,7 +86,8 @@ public abstract class FacesContextFactory {
      *  constructed for the specified parameters
      */
     public abstract FacesContext createFacesContext
-        (ServletRequest request, ServletResponse response, String lifecycleId)
+        (ServletContext context, ServletRequest request,
+         ServletResponse response, String lifecycleId)
         throws FacesException;
 
 

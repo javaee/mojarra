@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFactory.java,v 1.1 2002/05/14 00:44:04 craigmcc Exp $
+ * $Id: FactoryFactory.java,v 1.2 2002/05/14 15:02:28 craigmcc Exp $
  */
 
 /*
@@ -94,6 +94,7 @@ public final class FactoryFactory {
         "javax.faces.context.FacesContextFactory",
         "javax.faces.lifecycle.LifecycleFactory",
         "javax.faces.render.RenderKitFactory",
+        "javax.faces.tree.TreeFactory",
     };
 
 

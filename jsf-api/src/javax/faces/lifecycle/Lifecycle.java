@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.2 2002/05/08 01:11:46 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.3 2002/05/14 15:02:29 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.lifecycle;
 
 import java.util.SortedMap;
 import javax.faces.FacesException;     // FIXME - subpackage?
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 
