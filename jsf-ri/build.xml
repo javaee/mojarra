@@ -41,6 +41,9 @@
   <!-- Application name to deploy under tomcat -->
   <property name="app.name"       value="fruitstand"/>
 
+  <!-- Directory name to deploy under tomcat -->
+  <property name="deploy.home"  value="${tomcat.home}/webapps/${app.name}"/>
+
   <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
@@ -109,7 +112,7 @@
 
     </target>
 
-  <target name="clean"
+  <target name="clean" depends="clean.tomcat"
    description="Clean build and distribution directories">
     <delete    dir="${build.home}"/>
     <delete    dir="${dist.home}"/>
@@ -119,7 +122,29 @@
     </delete>
   </target>
 
-  <target name="build.war" depends="clean,prepare,compile" >
+  <target name="clean.tomcat"
+   description="Clean tomcat of anything we've put in it">
+    <delete    dir="${deploy.home}"/>
+  </target>
+
+
+  <target name="compile.sample" 
+	  description="Compile java files in the sample app named app.name">
+    <mkdir dir="${build.home}/${app.name}/WEB-INF/classes"/>
+    <javac  srcdir="${basedir}/web/${app.name}/WEB-INF/src"
+           destdir="${build.home}/${app.name}/WEB-INF/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+    <copy todir="${build.home}/${app.name}/WEB-INF/classes">
+        <fileset dir="${basedir}/web/${app.name}/WEB-INF/src" 
+                 includes="**/*.properties"/>
+    </copy>
+  </target>
+
+  <target name="build.war" depends="clean,prepare,compile,compile.sample" >
      <!-- name of the war file -->
      <property name="dist.war"  value="${app.name}.war"/>
      <mkdir  dir="${dist.home}/${app.name}"/>
@@ -127,6 +152,11 @@
      <!-- copy app.name directory under dist.home -->
     <copy todir="${dist.home}/${app.name}">
       <fileset dir="${basedir}/web/${app.name}" />
+    </copy>
+
+    <!-- copy all the classes under ${app.name} package -->
+    <copy todir="${dist.home}/${app.name}">
+      <fileset dir="${build.home}/${app.name}"/>
     </copy>
 
     <!-- copy all the classes under com.sun.faces package -->
@@ -150,14 +180,16 @@
   <!-- deploy the web-app under tomcat. tomcat_home needs to be set prior
        to running this target -->
 
-  <target name="deploy.tomcat" depends="prepare,compile">
-
-    <!-- Directory name to deploy under tomcat -->
-    <property name="deploy.home"  value="${tomcat.home}/webapps/${app.name}"/>
+  <target name="deploy.tomcat" depends="prepare,compile,compile.sample">
 
     <!-- copy app.name directory to tomcat/webapps -->
     <copy todir="${deploy.home}">
       <fileset dir="${basedir}/web/${app.name}" />
+    </copy>
+
+    <!-- copy all the classes under ${app.name} package -->
+    <copy todir="${deploy.home}">
+      <fileset dir="${build.home}/${app.name}"/>
     </copy>
 
     <mkdir dir="${deploy.home}/WEB-INF/classes" />

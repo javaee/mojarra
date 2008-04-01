@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.3 2001/11/29 01:54:35 rogerk Exp $
+ * $Id: FacesServlet.java,v 1.4 2001/12/02 01:23:37 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -24,6 +24,7 @@ import javax.faces.ObjectTableFactory;
 import javax.faces.RenderContext;
 import javax.faces.RenderContextFactory;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.RequestDispatcher;
@@ -56,6 +57,10 @@ public class FacesServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
 
         super.init(config);
+	
+	// Uncomment this to cause the program to hang forever, until
+	// you go in the debugger and un-hang it.
+	// com.sun.faces.util.DebugUtil.waitForDebugger();
 
         ObjectTable objectTable;
         ObjectTableFactory otFactory;
@@ -65,55 +70,57 @@ public class FacesServlet extends HttpServlet {
         ServletContext servletContext = getServletContext();
         Assert.assert_it(null != servletContext);
 
-// PENDING(rogerk): standardize the name of the ObjectTable attribute
-// names.
+	// Step 1: Create the singleton ObjectTable instance and put it
+	// in the servletContext.
 
-        // Try to get the ObjectTable from the servlet context.
-        // If it doesn't exist, create one and store it in the
-        // servlet context.
-        //
         objectTable = (ObjectTable) servletContext.getAttribute(
             Constants.REF_OBJECTTABLE);
-        if (objectTable == null) {
-            try {
-                otFactory = ObjectTableFactory.newInstance();
-                objectTable = otFactory.newObjectTable();
-            } catch (FacesException e) {
-                throw new ServletException(e.getMessage());
-            }
-        }
+	// The objectTable must not exist at this point.  It is an error
+	// if it does exist.
+	Assert.assert_it(null == objectTable);
+
+	// create the ObjectTable
+	try {
+	    otFactory = ObjectTableFactory.newInstance();
+	    objectTable = otFactory.newObjectTable();
+	} catch (FacesException e) {
+	    throw new ServletException(e.getMessage());
+	}
         Assert.assert_it(null != objectTable);
-
-        // Try to get the EventQueueFactory from the Object Table
-        // (Global Scope).  If it doesn't exist, create it and stash it.
-        //
-        eqFactory = (EventQueueFactory)objectTable.get(
-            Constants.REF_EVENTQUEUEFACTORY);
-
-        if (eqFactory == null) {
-            eqFactory = EventQueueFactory.newInstance();
-            objectTable.put(ObjectTable.GlobalScope, 
-                Constants.REF_EVENTQUEUEFACTORY, eqFactory);
-        }
-        Assert.assert_it(null != eqFactory);
-
-        // Try to get the RenderContextFactory from the Object Table
-        // (Global Scope).  If it doesn't exist, create it and stash it.
-        //
-        rcFactory = (RenderContextFactory)objectTable.get(
-            Constants.REF_RENDERCONTEXTFACTORY);
-
-        if (rcFactory == null) {
-            rcFactory = RenderContextFactory.newInstance();
-            objectTable.put(ObjectTable.GlobalScope, 
-                Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
-        }
-        Assert.assert_it(null != rcFactory);
 
         // Store the Object Table in the servlet context 
         // (application scope).
         //
         servletContext.setAttribute(Constants.REF_OBJECTTABLE, objectTable);
+
+	// Step 2: Create the EventQueueFactory and put it in the
+	// ObjectTable in Global Scope.
+
+        eqFactory = (EventQueueFactory)objectTable.get(
+            Constants.REF_EVENTQUEUEFACTORY);
+
+	// The EventQueueFactory must not exist at this point.  It is an
+	// error if it does exist.
+	Assert.assert_it(null == eqFactory);
+
+	eqFactory = EventQueueFactory.newInstance();
+        Assert.assert_it(null != eqFactory);
+	objectTable.put(ObjectTable.GlobalScope,
+			Constants.REF_EVENTQUEUEFACTORY, eqFactory);
+
+	// Step 3: Create the RenderContextFactory and put it in the
+	// ObjectTable in GlobalScope
+
+        rcFactory = (RenderContextFactory)objectTable.get(
+            Constants.REF_RENDERCONTEXTFACTORY);
+	// The RenderContextFactory must not exist at this point.  It is an
+	// error if it does exist.
+	Assert.assert_it(null == rcFactory);
+
+	rcFactory = RenderContextFactory.newInstance();
+        Assert.assert_it(null != rcFactory);
+	objectTable.put(ObjectTable.GlobalScope,
+			Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
     }
 
     /**
@@ -170,6 +177,7 @@ public class FacesServlet extends HttpServlet {
         RenderContextFactory rcFactory;
         EventQueue eq;
         EventQueueFactory eqFactory;
+	HttpSession thisSession = req.getSession();
 
         ObjectTable objectTable = (ObjectTable)getServletContext().
             getAttribute(Constants.REF_OBJECTTABLE);
@@ -178,42 +186,41 @@ public class FacesServlet extends HttpServlet {
         // Attempt to get a render context from the object table
         // for the current session.  If one doesn't exist, create one.
         //
-        rc = (RenderContext)objectTable.get(
-            ObjectTable.SessionScope, Constants.REF_RENDERCONTEXT);
+        rc = (RenderContext)objectTable.get(thisSession, 
+					    Constants.REF_RENDERCONTEXT);
 
         if (rc == null) {
-            rcFactory = (RenderContextFactory)objectTable.get(
-                ObjectTable.GlobalScope, 
-                Constants.REF_RENDERCONTEXTFACTORY);
-
+            rcFactory = (RenderContextFactory)
+		objectTable.get(Constants.REF_RENDERCONTEXTFACTORY);
+	    
             Assert.assert_it(null != rcFactory);
             try {
                 rc = rcFactory.newRenderContext(req);
             } catch (FacesException e) {
                 throw new ServletException(e.getMessage());
             }
-            objectTable.put(req.getSession(), 
-                Constants.REF_RENDERCONTEXT, rc);
+	    Assert.assert_it(null != rc); 
+            objectTable.put(thisSession, 
+			    Constants.REF_RENDERCONTEXT, rc);
         }
-        Assert.assert_it(null != rc); 
 
         // Attempt to get an event queue from the object table
         // for the current session.  If one doesn't exist, create one.
         //
-        eq = (EventQueue)objectTable.get(
-            ObjectTable.SessionScope, Constants.REF_EVENTQUEUE);
+        eq = (EventQueue)objectTable.get(thisSession, 
+					 Constants.REF_EVENTQUEUE);
         if (eq == null) {
-            eqFactory = (EventQueueFactory)objectTable.get(
-                ObjectTable.GlobalScope, Constants.REF_EVENTQUEUEFACTORY);
+            eqFactory = (EventQueueFactory)
+		objectTable.get(Constants.REF_EVENTQUEUEFACTORY);
             Assert.assert_it(null != eqFactory);
             try {
                 eq = eqFactory.newEventQueue();
             } catch (FacesException e) {
                 throw new ServletException(e.getMessage());
             }
-            objectTable.put(req.getSession(), Constants.REF_EVENTQUEUE, eq);
+	    Assert.assert_it(null != eq); 
+            objectTable.put(thisSession, Constants.REF_EVENTQUEUE, eq);
         }
-        Assert.assert_it(null != eq); 
 
 // PENDING (rogerk) plug in event handling helper class
 // invocations here.
