@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.31 2002/08/21 19:26:06 jvisvanathan Exp $
+ * $Id: Util.java,v 1.32 2002/08/22 00:28:51 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.31 2002/08/21 19:26:06 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.32 2002/08/22 00:28:51 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -344,7 +344,7 @@ private Util()
     }
 			 
     /**
-     * <p>Return an Iterator over {@link SelectItem} instances representing the
+     * <p>Return an Iterator over {@link SelectItemWrppaer} instances representing the
      * available options for this component, assembled from the set of
      * {@link UISelectItem} and/or {@link UISelectItems} components that are
      * direct children of this component.  If there are no such children, a
@@ -356,7 +356,7 @@ private Util()
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public static Iterator getSelectItems(FacesContext context,
+    public static Iterator getSelectItemWrappers(FacesContext context,
 					  UIComponent component) {
 
         ArrayList list = new ArrayList();
@@ -365,22 +365,24 @@ private Util()
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
                 UISelectItem item = (UISelectItem) kid;
-                list.add(new SelectItem(item.getItemValue(),
+                list.add(new SelectItemWrapper( kid, 
+                                        new SelectItem(item.getItemValue(),
                                         item.getItemLabel(),
-                                        item.getItemDescription()));
+                                        item.getItemDescription())));
             } else if (kid instanceof UISelectItems && null != context) {
                 Object value = kid.currentValue(context);
-                if (value instanceof UISelectItem) {
-                    list.add(value);
+                if (value instanceof SelectItem) {
+                    SelectItem item = (SelectItem) kid;
+                    list.add(new SelectItemWrapper( kid, item));
                 } else if (value instanceof SelectItem[]) {
                     SelectItem items[] = (SelectItem[]) value;
                     for (int i = 0; i < items.length; i++) {
-                        list.add(items[i]);
+                        list.add(new SelectItemWrapper(kid, items[i]));
                     }
                 } else if (value instanceof Collection) {
                     Iterator elements = ((Collection) value).iterator();
                     while (elements.hasNext()) {
-                        list.add((SelectItem) elements.next());
+                        list.add(new SelectItemWrapper(kid, (SelectItem) elements.next()));
                     }
                 } else if (value instanceof Map) {
                     Iterator keys = ((Map) value).keySet().iterator();
@@ -393,8 +395,8 @@ private Util()
                         if (val == null) {
                             continue;
                         }
-                        list.add(new SelectItem(val.toString(), key.toString(),
-                                                null));
+                        list.add(new SelectItemWrapper( kid, 
+                            new SelectItem(val.toString(), key.toString(),null)));
                     }
                 }
             }

@@ -475,14 +475,39 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
-    <!-- HTML 4.0 attributes -->
+ </tag>
+  
+  <tag>
+    <name>selectitem</name>
+    <tagclass>com.sun.faces.taglib.html_basic.SelectItemTag</tagclass>
+    <bodycontent>JSP</bodycontent>
     <attribute>
-      <name>disabled</name>
-      <required>false</required>
+        <name>modelReference</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>selected</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>value</name>
+      <required>true</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>size</name>
+        <name>label</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>description</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>disabled</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -508,16 +533,6 @@
     </attribute>
     <attribute>
       <name>onblur</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>onselect</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>onchange</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -592,37 +607,6 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
-  
-  <tag>
-    <name>selectitem</name>
-    <tagclass>com.sun.faces.taglib.html_basic.SelectItemTag</tagclass>
-    <bodycontent>JSP</bodycontent>
-    <attribute>
-        <name>modelReference</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>selected</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>value</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>label</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-        <name>description</name>
-        <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
-    </attribute>
-  </tag>
 
   <tag>
     <name>selectitems</name>
@@ -636,6 +620,112 @@
     <attribute>
       <name>modelReference</name>
       <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <!-- HTML 4.0 attributes -->
+    <attribute>
+      <name>disabled</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>size</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>lang</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>tabindex</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>accesskey</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onfocus</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onblur</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onclick</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>ondblclick</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onkeydown</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onkeypress</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onkeyup</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onmousedown</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onmousemove</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onmouseout</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onmouseover</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>onmouseup</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>class</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>dir</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+   <attribute>
+      <name>title</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>style</name>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
@@ -771,6 +861,7 @@
     </attribute>
   </tag>
 
+  <!--
   <tag>
     <name>selectone_option</name>
     <tagclass>com.sun.faces.taglib.html_basic.SelectOne_OptionTag</tagclass>
@@ -800,7 +891,7 @@
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
-  </tag>
+  </tag> -->
 
   <tag>
       <name>graphic_image</name>

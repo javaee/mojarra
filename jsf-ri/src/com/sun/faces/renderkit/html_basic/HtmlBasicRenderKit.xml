@@ -1899,18 +1899,6 @@
                 <type>java.lang.String</type>
             </attribute>
             <attribute>
-                <name>onselect</name>
-                <display-name>On Select</display-name>
-                <description>Some text was selected.</description>
-                <type>java.lang.String</type>
-            </attribute>
-            <attribute>
-                <name>onchange</name>
-                <display-name>On Change</display-name>
-                <description>The element value was changed.</description>
-                <type>java.lang.String</type>
-            </attribute>
-            <attribute>
                 <name>onclick</name>
                 <display-name>On Click</display-name>
                 <description>The element was clicked.</description>
@@ -2059,18 +2047,6 @@
                 <name>onblur</name>
                 <display-name>On Blur</display-name>
                 <description>The element lost the focus.</description>
-                <type>java.lang.String</type>
-            </attribute>
-            <attribute>
-                <name>onselect</name>
-                <display-name>On Select</display-name>
-                <description>Some text was selected.</description>
-                <type>java.lang.String</type>
-            </attribute>
-            <attribute>
-                <name>onchange</name>
-                <display-name>On Change</display-name>
-                <description>The element value was changed.</description>
                 <type>java.lang.String</type>
             </attribute>
             <attribute>

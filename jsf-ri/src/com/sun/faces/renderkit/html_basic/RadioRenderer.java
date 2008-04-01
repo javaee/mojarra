@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.27 2002/08/21 19:26:03 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.28 2002/08/22 00:28:48 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
 
 import com.sun.faces.util.Util;
-
+import com.sun.faces.util.SelectItemWrapper;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.ConversionException;
 
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.27 2002/08/21 19:26:03 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.28 2002/08/22 00:28:48 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -161,8 +161,9 @@ public class RadioRenderer extends HtmlBasicRenderer {
             uiSelectOne = (UISelectOne) component;
         }    
 
-        Iterator items = Util.getSelectItems(context, uiSelectOne);
+        Iterator items = Util.getSelectItemWrappers(context, uiSelectOne);
 	SelectItem curItem = null;
+        SelectItemWrapper curItemWrapper = null;
         if ( items == null ) {
             return;
         }
@@ -189,7 +190,8 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	}
         // PENDING (visvan) handle nested labels
 	while (items.hasNext()) {
-	    curItem = (SelectItem) items.next();
+	    curItemWrapper = (SelectItemWrapper) items.next();
+            curItem = curItemWrapper.getSelectItem();
 	    if (alignVertical) {
 		writer.write("\t<tr>\n");
 	    }
@@ -203,12 +205,11 @@ public class RadioRenderer extends HtmlBasicRenderer {
             writer.write("\" value=\"");
             writer.write((String) curItem.getValue());
             writer.write("\"");
-            // render HTML 4.0 attributes if any
-            // PENDING (visvan) render HTML 4.0 attributes for each checkbox tag.
-            // can't do this right now,  because SelectItem doesn't store
-            // attributes, UISelectItem does.
-           // writer.write(Util.renderPassthruAttributes(context, component));
-	   // writer.write(Util.renderBooleanPassthruAttributes(context, component));
+            // render HTML 4.0 attributes if any for radi tag.
+            writer.write(Util.renderPassthruAttributes(context, 
+                    curItemWrapper.getUISelectItem()));
+	    writer.write(Util.renderBooleanPassthruAttributes(context, 
+                    curItemWrapper.getUISelectItem()));
             writer.write(">");
             
             String itemLabel = curItem.getLabel();

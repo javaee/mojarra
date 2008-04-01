@@ -258,16 +258,16 @@
 	      <faces:selectone_optionlist id="appleQuantity" size="6"
                       title="Select Quantity" accesskey="N" tabindex="20" >
 
-		<faces:selectitem  value="0" label="0"/>
-		<faces:selectitem  value="1" label="1"/>
-		<faces:selectitem  value="2" label="2"/>
-		<faces:selectitem  value="3" label="3"/>
-		<faces:selectitem  value="4" label="4" selected="true"/>
-		<faces:selectitem  value="5" label="5"/>
-		<faces:selectitem  value="6" label="6"/>
-		<faces:selectitem  value="7" label="7"/>
-		<faces:selectitem  value="8" label="8"/>
-		<faces:selectitem  value="9" label="9"/>
+		<faces:selectitem  disabled="true" value="0" label="0"/>
+		<faces:selectitem  value="1" label="1" title="One"/>
+		<faces:selectitem  value="2" label="2" title="Two" />
+		<faces:selectitem  value="3" label="3" title="Three" />
+		<faces:selectitem  value="4" label="4" title="Four" selected="true"/>
+		<faces:selectitem  value="5" label="5" title="Five" />
+		<faces:selectitem  value="6" label="6" title="Six" />
+		<faces:selectitem  value="7" label="7" title="Seven" />
+		<faces:selectitem  value="8" label="8" title="Eight" />
+		<faces:selectitem  value="9" label="9" title="nine" />
 
 	      </faces:selectone_optionlist>
 
@@ -279,13 +279,14 @@
 
 	<TD>
 
-	      <faces:selectone_radiogroup id="shipType" layout="horizontal"
-                      tabindex="30" title="Ship details" accesskey="S" >
+	      <faces:selectone_radiogroup id="shipType" layout="horizontal">
 
-		<faces:selectitem value="nextDay" label="Next Day" />
-		<faces:selectitem value="nextWeek" label="Next Week" 
-                                  selected="true" />
-		<faces:selectitem value="nextMonth" label="Next Month" />
+		<faces:selectitem value="nextDay" label="Next Day" 
+                      tabindex="30" title="Next day shipment"/>
+		<faces:selectitem value="nextWeek" label="Next Week" title="Next week shipment"
+                                  tabindex="40" selected="true" />
+		<faces:selectitem value="nextMonth" label="Next Month" 
+                        tabindex="50" title="Next month shipment"/>
 
               </faces:selectone_radiogroup>
 
@@ -321,6 +322,7 @@
                        layout="horizontal">
 
 		<faces:selectitems id="optionListOptions"
+                                   title="options come from model" 
                                    modelReference="${LoginBean.options}"/>
 
               </faces:selectone_radiogroup>

@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.26 2002/08/21 19:26:03 jvisvanathan Exp $
+ * $Id: OptionListRenderer.java,v 1.27 2002/08/22 00:28:48 jvisvanathan Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 
 import com.sun.faces.util.Util;
-
+import com.sun.faces.util.SelectItemWrapper;
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.ConvertUtils;
 
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.26 2002/08/21 19:26:03 jvisvanathan Exp $
+ * @version $Id: OptionListRenderer.java,v 1.27 2002/08/22 00:28:48 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -159,16 +159,17 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         writer.write(component.getCompoundId());
         writer.write("\"");
        
-        // render HTML 4.0 attributes if any
+        // render HTML 4.0 attributes if any for select tag
         writer.write(Util.renderPassthruAttributes(context, component));
 	writer.write(Util.renderBooleanPassthruAttributes(context, component));
         
         writer.write(">");
-        Iterator items = Util.getSelectItems(context, selectOne);
+        Iterator items = Util.getSelectItemWrappers(context, selectOne);
 	SelectItem curItem = null;
-
+        SelectItemWrapper curItemWrapper = null;
         while (items.hasNext()) {
-	    curItem = (SelectItem) items.next();
+	    curItemWrapper = (SelectItemWrapper) items.next();
+            curItem = curItemWrapper.getSelectItem();
             writer.write("\t<option value=\"");
             writer.write((String) curItem.getValue());
             writer.write("\"");
@@ -176,9 +177,11 @@ public class OptionListRenderer extends HtmlBasicRenderer {
 		curItem.getValue().equals(currentValue)) {
                 writer.write(" selected=\"selected\"");
             }
-            // PENDING (visvan) render HTML 4.0 attributes for Option tag.
-            // can't do this right now,  because SelectItem doesn't store
-            // attributes, UISelectItem does.
+            // render HTML 4.0 attributes if any for option tag
+            writer.write(Util.renderPassthruAttributes(context, 
+                    curItemWrapper.getUISelectItem()));
+	    writer.write(Util.renderBooleanPassthruAttributes(context, 
+                    curItemWrapper.getUISelectItem()));
             writer.write(">");
             writer.write(curItem.getLabel());
             writer.write("</option>\n");
