@@ -175,7 +175,12 @@
                  UIInput -->
         </renderer>
 
-
+        <renderer>
+            <type>TimeRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.TimeRenderer</class>
+            <!-- The attributes come from the DateRenderer declaration in
+                 UIInput -->
+        </renderer>
     </component>
 
     <component>

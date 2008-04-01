@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=E151B552D0908181F3C0B8D0F067A355">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=F7B369C6C9843433B159E91344935476">
   <TABLE BORDER="1">
 
       <TR>
@@ -231,6 +231,17 @@
 	</TD>
 
       </TR>
+
+      <TR>
+
+        <TD>OutputTime: 
+        </TD>
+
+	<TD>12:31:31 PM
+	</TD>
+
+      </TR>
+
 
   <TABLE>
 

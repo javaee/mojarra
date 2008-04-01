@@ -226,6 +226,19 @@
 
       </TR>
 
+      <TR>
+
+        <TD>OutputTime: 
+        </TD>
+
+	<TD><faces:output_time id="date7" 
+                          value="12:31:31 PM"
+                          timeStyle="MEDIUM" />
+	</TD>
+
+      </TR>
+
+
   <TABLE>
 
 </faces:form>

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.20 2002/08/17 21:57:14 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.21 2002/08/17 22:20:30 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.20 2002/08/17 21:57:14 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.21 2002/08/17 22:20:30 eburns Exp $
  * 
  *
  */
@@ -80,7 +80,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         String[] lines =  {
 	    "<a href=\"/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId\">HyperlinkRenderer</a>",
 	    "<img src=\"\">",
-	    "<img src=\";jsessionid=5204D252E563F074B585C1E59888D747\">"
+	    "<img src=\";jsessionid=B8A2F36244E285B6547574B70269E9F5\">"
+
 };
         return lines;
     }   
@@ -143,6 +144,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_input_date2", DATE_STR_LONG);
         theRequest.addParameter("/my_output_date", DATE_STR);
         theRequest.addParameter("/my_input_time", TIME_STR);
+        theRequest.addParameter("/my_output_time", TIME_STR);
         theRequest.addParameter("/my_output_date2", DATE_STR_LONG);
         theRequest.addParameter("/my_output_text", "text");
 
@@ -171,6 +173,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 	    testInputDateTimeRendererWithPattern(root);
 
             testOutputDateRenderer(root);
+            testOutputTimeRenderer(root);
 	    testOutputDateTimeRendererWithPattern(root);
 
             testTextAreaRenderer(root);
@@ -800,6 +803,44 @@ public class TestRenderers_2 extends JspFacesTestCase
         result = dateRenderer.supportsComponentType(output);
         assertTrue(result);
         result = dateRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+
+    public void testOutputTimeRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing Output_TimeRenderer");
+        UIOutput output = new UIOutput();
+        output.setComponentId("my_output_time");
+	output.setAttribute("timeStyle", "MEDIUM");
+	output.setValue(TIME_STR);
+        root.addChild(output);
+
+        TimeRenderer timeRenderer = new TimeRenderer();
+	Date date = null;
+	DateFormat formatter = 
+	    DateFormat.getTimeInstance(DateFormat.MEDIUM,
+				       getFacesContext().getLocale());
+	
+        // test decode method
+	
+        System.out.println("    Testing decode method...");
+
+        timeRenderer.decode(getFacesContext(), output);
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        timeRenderer.encodeBegin(getFacesContext(), output);
+        timeRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = timeRenderer.supportsComponentType("javax.faces.component.UIOutput");
+        assertTrue(result);
+        result = timeRenderer.supportsComponentType(output);
+        assertTrue(result);
+        result = timeRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
 
