@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.2 2002/08/14 22:01:34 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.3 2002/08/17 00:57:03 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.2 2002/08/14 22:01:34 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.3 2002/08/17 00:57:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,6 +106,7 @@ public class NumberRenderer extends HtmlBasicRenderer {
         }
                  
         Number convertedValue = null;
+        Number parsedValue = null;
         Class modelType = null;
        
         if (context == null || component == null) {
@@ -128,16 +129,68 @@ public class NumberRenderer extends HtmlBasicRenderer {
 	Assert.assert_it(null != formatPool);
         
         try {
-            convertedValue = formatPool.numberFormat_parse(context, component, newValue);
+            parsedValue = formatPool.numberFormat_parse(context, component, newValue);
             component.setValid(true);
-            component.setValue(convertedValue);
         } catch (ParseException pe ) {
             component.setValue(newValue);
             component.setValid(false);
-            addConversionErrorMessage( context, component, pe.getMessage()); 
+            addConversionErrorMessage( context, component, pe.getMessage());
+            return;
+        }
+        // if modelReference is null, store value as Number.
+        String modelRef = component.getModelReference();
+        if ( modelRef == null ) {
+             component.setValue(parsedValue);
+             return;
+             
         }    
+        // convert the parsed value to model property type.
+        try {
+            modelType = context.getModelType(modelRef);
+	} catch (FacesException fe ) {
+            throw new IOException(Util.getExceptionMessage(
+                Util.CONVERSION_ERROR_MESSAGE_ID));
+	}    
+        Assert.assert_it(modelType != null);
+	Assert.assert_it(parsedValue != null);
+        
+        if ( (modelType.getName()).equals("java.lang.Character") ||
+                (modelType.getName()).equals("char")) {
+            component.setValue(new Character((char)parsedValue.intValue()));
+        } else {
+            convertedValue = convertToModelType(modelType, parsedValue);
+            component.setValue(convertedValue);
+        }    
+        
     }
     
+    protected Number convertToModelType(Class modelType, Number parsedValue) {
+      
+        Assert.assert_it(parsedValue != null);
+        
+        // PENDING (visvan) If it comes to rounding should we throw
+        // an exception
+        if ( (modelType.getName()).equals("java.lang.Byte") || 
+                (modelType.getName()).equals("byte")) {
+            return (new Byte(parsedValue.byteValue()));
+        } else if ( (modelType.getName()).equals("java.lang.Double") ||
+                (modelType.getName()).equals("double")) {
+            return (new Double(parsedValue.doubleValue()));  
+        } else if ( (modelType.getName()).equals("java.lang.Float") || 
+                (modelType.getName()).equals("float") ) {
+            return (new Float(parsedValue.floatValue()));
+        } else if ( (modelType.getName()).equals("java.lang.Integer") || 
+               (modelType.getName()).equals("int")) {
+            return (new Integer(parsedValue.intValue()));
+        } else if ( (modelType.getName()).equals("java.lang.Short") || 
+                (modelType.getName()).equals("short") ) {
+            return (new Short(parsedValue.shortValue()));
+        } else if ( (modelType.getName()).equals("java.lang.Long") || 
+                (modelType.getName()).equals("long")) {
+            return (new Long(parsedValue.longValue()));
+        }     
+        return parsedValue;
+    }    
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         if (context == null || component == null) {

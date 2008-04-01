@@ -1,5 +1,5 @@
 /*
- * $Id: Output_NumberTag.java,v 1.1 2002/08/13 18:29:52 jvisvanathan Exp $
+ * $Id: Output_NumberTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.renderkit.FormatPool;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_NumberTag.java,v 1.1 2002/08/13 18:29:52 jvisvanathan Exp $
+ * @version $Id: Output_NumberTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -54,6 +54,7 @@ public class Output_NumberTag extends FacesTag
     //
     // Instance Variables
     //
+    protected String numberStyle = null;
     
     // Attribute Instance Variables
 
@@ -75,6 +76,13 @@ public class Output_NumberTag extends FacesTag
     // 
     // Accessors
     //
+    public String getNumberStyle() {
+	return numberStyle;
+    }
+    
+    public void setNumberStyle(String newFormatStyle) {
+	numberStyle = newFormatStyle;
+    }
 
     //
     // General Methods
@@ -93,6 +101,9 @@ public class Output_NumberTag extends FacesTag
 	if (null == output.getValue() && null != getValue()) {
 	    output.setValue(getValue());
 	}
+        if (null == component.getAttribute("numberStyle")) {
+	    component.setAttribute("numberStyle", getNumberStyle());
+        }
      }   
     
     

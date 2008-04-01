@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.17 2002/08/16 23:28:20 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.18 2002/08/17 00:57:08 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.17 2002/08/16 23:28:20 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.18 2002/08/17 00:57:08 jvisvanathan Exp $
  * 
  *
  */
@@ -598,7 +598,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIInput input = new UIInput();
         input.setValue(null);
         input.setComponentId("my_number");
-	input.setAttribute("formatStyle", "PERCENT");
+	input.setAttribute("numberStyle", "PERCENT");
         root.addChild(input);
 
         NumberRenderer numberRenderer = new NumberRenderer();
@@ -670,7 +670,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UIOutput output = new UIOutput();
         output.setValue(new Double(.99));
         output.setComponentId("my_number3");
-	output.setAttribute("formatStyle", "PERCENT");
+	output.setAttribute("numberStyle", "PERCENT");
         root.addChild(output);
 
         NumberRenderer numberRenderer = new NumberRenderer();

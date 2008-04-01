@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.32 2002/08/15 17:55:44 jvisvanathan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.33 2002/08/17 00:57:05 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.32 2002/08/15 17:55:44 jvisvanathan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.33 2002/08/17 00:57:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,29 +100,11 @@ public class SelectBoolean_CheckboxTag extends FacesTag
 	if (null == checkbox.getAttribute("size")) {
 	    checkbox.setAttribute("size", getSize());
 	}
-        if (null == checkbox.getAttribute("disabled")) {
-	    checkbox.setAttribute("disabled", getDisabled());
-	}
-	if (null == checkbox.getAttribute("readonly")) {
+        if (null == checkbox.getAttribute("readonly")) {
 	    checkbox.setAttribute("readonly", getReadonly());
 	}
 	if (null == checkbox.getAttribute("alt")) {
 	    checkbox.setAttribute("alt", getAlt());
-	}
-	if (null == checkbox.getAttribute("lang")) {
-	    checkbox.setAttribute("lang", getLang());
-	}
-	if (null == checkbox.getAttribute("tabindex")) {
-	    checkbox.setAttribute("tabindex", getTabindex());
-	}
-	if (null == checkbox.getAttribute("accesskey")) {
-	    checkbox.setAttribute("accesskey", getAccesskey());
-	}
-	if (null == checkbox.getAttribute("onfocus")) {
-	    checkbox.setAttribute("onfocus", getOnfocus());
-	}
-	if (null == checkbox.getAttribute("onblur")) {
-	    checkbox.setAttribute("onblur", getOnblur());
 	}
 	if (null == checkbox.getAttribute("onselect")) {
 	    checkbox.setAttribute("onselect", getOnselect());

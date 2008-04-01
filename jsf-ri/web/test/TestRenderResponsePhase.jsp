@@ -186,7 +186,7 @@
       <tr>
           <td> <faces:output_text id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
-                   <faces:output_number id="testPercent" formatStyle="PERCENT"
+                   <faces:output_number id="testPercent" numberStyle="PERCENT"
                         value="45%"/>
               </td>
       </tr>

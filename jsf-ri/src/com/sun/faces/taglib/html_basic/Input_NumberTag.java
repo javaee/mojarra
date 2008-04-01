@@ -1,5 +1,5 @@
 /*
- * $Id: Input_NumberTag.java,v 1.1 2002/08/13 18:29:52 jvisvanathan Exp $
+ * $Id: Input_NumberTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import com.sun.faces.util.Util;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Input_NumberTag.java,v 1.1 2002/08/13 18:29:52 jvisvanathan Exp $
+ * @version $Id: Input_NumberTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -49,6 +49,7 @@ public class Input_NumberTag extends InputTag
     //
     // Instance Variables
     //
+    protected String numberStyle = null;
     
     // Attribute Instance Variables
 
@@ -70,6 +71,13 @@ public class Input_NumberTag extends InputTag
     // 
     // Accessors
     //
+    public String getNumberStyle() {
+	return numberStyle;
+    }
+    
+    public void setNumberStyle(String newFormatStyle) {
+	numberStyle = newFormatStyle;
+    }
 
     //
     // General Methods
@@ -80,6 +88,14 @@ public class Input_NumberTag extends InputTag
     public UIComponent createComponent() {
         return (new UIInput());
     }
+    
+    protected void overrideProperties(UIComponent component) {
+    super.overrideProperties(component);
+    
+    if (null == component.getAttribute("numberStyle")) {
+	component.setAttribute("numberStyle", getNumberStyle());
+    }
+}
     
     //
     // Methods from TagSupport

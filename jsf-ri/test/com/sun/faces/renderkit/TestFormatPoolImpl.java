@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.5 2002/08/15 23:23:03 eburns Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.6 2002/08/17 00:57:07 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.5 2002/08/15 23:23:03 eburns Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.6 2002/08/17 00:57:07 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -356,7 +356,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         
         FacesContext context = getFacesContext();
 	// style == NUMBER, format method
-        input.setAttribute("formatStyle", "NUMBER");
+        input.setAttribute("numberStyle", "NUMBER");
 	getFacesContext().setLocale(Locale.US);
         formatStr = formatPool.numberFormat_format(context, input,
                 testNum);
@@ -373,7 +373,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         
         // style == PERCENT, format method
         testNum = new Double(.99);
-        input.setAttribute("formatStyle", "PERCENT");
+        input.setAttribute("numberStyle", "PERCENT");
 	formatStr = formatPool.numberFormat_format(context, input,testNum);
         assertTrue(formatStr.equals("99%"));
         
@@ -388,7 +388,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         
          // style == CURRENCY, format method
         testNum = new Double(1234789.60);
-        input.setAttribute("formatStyle", "CURRENCY");
+        input.setAttribute("numberStyle", "CURRENCY");
 	formatStr = formatPool.numberFormat_format(context, input, testNum);
         assertTrue( formatStr.equals("$1,234,789.60"));
         
@@ -430,8 +430,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	// style == PERCENT, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
-	input1.setAttribute("formatStyle", "PERCENT");
-	input2.setAttribute("formatStyle", "PERCENT");
+	input1.setAttribute("numberStyle", "PERCENT");
+	input2.setAttribute("numberStyle", "PERCENT");
 	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);
 	numberFormat2 = formatPool.getNumberFormat(getFacesContext(), input2);
 	assertTrue(numberFormat1.equals(numberFormat2));
@@ -450,8 +450,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         
 	// pattern="####",  get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
-        input1.setAttribute("formatStyle", null);
-	input2.setAttribute("formatStyle", null);
+        input1.setAttribute("numberStyle", null);
+	input2.setAttribute("numberStyle", null);
 	input1.setAttribute("formatPattern", "####");
 	input2.setAttribute("formatPattern", "####");
 	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);

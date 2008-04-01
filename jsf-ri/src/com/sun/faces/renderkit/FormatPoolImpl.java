@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.5 2002/08/15 23:22:59 eburns Exp $
+ * $Id: FormatPoolImpl.java,v 1.6 2002/08/17 00:57:02 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
+import java.text.ParsePosition;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -36,7 +37,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.5 2002/08/15 23:22:59 eburns Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.6 2002/08/17 00:57:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -235,7 +236,7 @@ public FormatPoolImpl()
         NumberFormat numberFormat = null;
 	Locale locale = Util.getLocaleFromContextOrComponent(context,component);
         // get the pattern, null is ok
-        formatStyle = (String) component.getAttribute("formatStyle");
+        formatStyle = (String) component.getAttribute("numberStyle");
 	pattern = (String) component.getAttribute("formatPattern");
         
         // build hashKey
@@ -267,12 +268,14 @@ public FormatPoolImpl()
 	        else if (formatStyle.equalsIgnoreCase("PERCENT")) {
 		    numberFormat = NumberFormat.getPercentInstance(locale);
                 }
-	        else {
-                    // PENDING (visvan) should INTEGER be treated separately ?
-                    // doesn't seem it is necessary because there is no specific
-                    // method in API to support that.
+	        else if (formatStyle.equalsIgnoreCase("INTEGER")) {
+                    // PENDING (visvan) use Integer instance once we migrate
+                    // to JDK 1.4
                     numberFormat = NumberFormat.getNumberInstance(locale);
-	        }
+                    numberFormat.setMaximumFractionDigits(0);
+                } else {
+                    numberFormat = NumberFormat.getNumberInstance(locale);
+                }    
             }    
             // and store it
 	    formatters.put(hashKey, numberFormat);
@@ -348,9 +351,14 @@ public FormatPoolImpl()
         if ( number != null ) {
             number = number.trim();
         }    
+        ParsePosition ps = new ParsePosition(0);
 	NumberFormat numberFormat = getNumberFormat(context, component);
-        result = numberFormat.parse(number);
-	return result;
+        result = numberFormat.parse(number, ps);
+        // PENDING (visvan) localize
+        if ( ps.getIndex() != number.length()) {
+            throw new ParseException("Unparsable number", ps.getIndex());
+        }    
+        return result;
     }
 
 // The testcase for this class is TestFormatPoolImpl.java 

@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.1 2002/08/13 18:29:51 jvisvanathan Exp $
+ * $Id: InputTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.taglib.FacesTag;
 
 /**
  *
- * @version $Id: InputTag.java,v 1.1 2002/08/13 18:29:51 jvisvanathan Exp $
+ * @version $Id: InputTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,10 +92,7 @@ public abstract class InputTag extends FacesTag
 	if (null == input.getValue() && null != getValue()) {
 	    input.setValue(getValue());
 	}
-	if (null == input.getAttribute("disabled")) {
-	    input.setAttribute("disabled", getDisabled());
-	}
-	if (null == input.getAttribute("readonly")) {
+        if (null == input.getAttribute("readonly")) {
 	    input.setAttribute("readonly", getReadonly());
 	}
 	if (null == input.getAttribute("size")) {
@@ -107,22 +104,7 @@ public abstract class InputTag extends FacesTag
 	if (null == input.getAttribute("alt")) {
 	    input.setAttribute("alt", getAlt());
 	}
-	if (null == input.getAttribute("lang")) {
-	    input.setAttribute("lang", getLang());
-	}
-	if (null == input.getAttribute("tabindex")) {
-	    input.setAttribute("tabindex", getTabindex());
-	}
-	if (null == input.getAttribute("accesskey")) {
-	    input.setAttribute("accesskey", getAccesskey());
-	}
-	if (null == input.getAttribute("onfocus")) {
-	    input.setAttribute("onfocus", getOnfocus());
-	}
-	if (null == input.getAttribute("onblur")) {
-	    input.setAttribute("onblur", getOnblur());
-	}
-	if (null == input.getAttribute("onselect")) {
+        if (null == input.getAttribute("onselect")) {
 	    input.setAttribute("onselect", getOnselect());
 	}
 	if (null == input.getAttribute("onchange")) {

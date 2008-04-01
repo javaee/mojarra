@@ -1373,7 +1373,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>formatStyle</name>
+      <name>dateStyle</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1488,7 +1488,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>formatStyle</name>
+      <name>numberStyle</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1653,7 +1653,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>formatStyle</name>
+      <name>numberStyle</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

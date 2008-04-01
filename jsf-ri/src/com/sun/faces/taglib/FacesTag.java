@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.18 2002/08/15 23:23:02 eburns Exp $
+ * $Id: FacesTag.java,v 1.19 2002/08/17 00:57:04 jvisvanathan Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.ServletRequest;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
@@ -34,7 +35,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.18 2002/08/15 23:23:02 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.19 2002/08/17 00:57:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -992,8 +993,74 @@ protected void overrideProperties(UIComponent component)
     if (null == component.getAttribute("bundle")) {
 	component.setAttribute("bundle", getBundle());
     }
-    if (null == component.getAttribute("formatStyle")) {
-	component.setAttribute("formatStyle", getFormatStyle());
+    if (null == component.getAttribute("formatPattern")) {
+	component.setAttribute("formatPattern", getFormatPattern());
+    }
+    
+    if ( component instanceof UIOutput) {
+        return;
+    }    
+    // HTML 4.0 event handlers common to most BODY-content elements.
+    if (null == component.getAttribute("onclick")) {
+	component.setAttribute("onclick", getOnclick());
+    }
+    if (null == component.getAttribute("ondblclick")) {
+	component.setAttribute("ondblclick", getOndblclick());
+    }
+
+    if (null == component.getAttribute("onkeydown")) {
+	component.setAttribute("onkeydown", getOnkeydown());
+    }
+    if (null == component.getAttribute("onkeypress")) {
+	component.setAttribute("onkeypress", getOnkeypress());
+    }
+    if (null == component.getAttribute("onkeyup")) {
+	component.setAttribute("onkeyup", getOnkeyup());
+    }
+    if (null == component.getAttribute("onmousedown")) {
+	component.setAttribute("onmousedown", getOnmousedown());
+    }
+    if (null == component.getAttribute("onmousemove")) {
+	component.setAttribute("onmousemove", getOnmousemove());
+    }
+    if (null == component.getAttribute("onmouseout")) {
+	component.setAttribute("onmouseout", getOnmouseout());
+    }
+    if (null == component.getAttribute("onmouseover")) {
+	component.setAttribute("onmouseover", getOnmouseover());
+    }
+    if (null == component.getAttribute("onmouseup")) {
+	component.setAttribute("onmouseup", getOnmouseup());
+    }
+    if (null == component.getAttribute("onfocus")) {
+        component.setAttribute("onfocus", getOnfocus()); 
+    }
+    if (null == component.getAttribute("onblur")) {
+        component.setAttribute("onblur", getOnblur());
+    }
+    
+    // common HTML 4.0 attributes.
+    // PENDING (visvan) id attribute clashes with faces id attribute
+    if (null == component.getAttribute("title")) {
+	component.setAttribute("title", getTitle());
+    }
+    if (null == component.getAttribute("disabled")) {
+	component.setAttribute("disabled", getDisabled());
+    }
+    if (null == component.getAttribute("tabindex")) {
+	component.setAttribute("tabindex", getTabindex());
+    }
+    if (null == component.getAttribute("accesskey")) {
+	component.setAttribute("accesskey", getAccesskey());
+    }
+    if (null == component.getAttribute("lang")) {
+	component.setAttribute("lang", getLang());
+    }
+    if (null == component.getAttribute("class")) {
+	component.setAttribute("class", getHtmlClass());
+    }
+    if (null == component.getAttribute("style")) {
+	component.setAttribute("style", getStyle());
     }
     if (null == component.getAttribute("dateStyle")) {
 	component.setAttribute("dateStyle", getDateStyle());
@@ -1001,10 +1068,7 @@ protected void overrideProperties(UIComponent component)
     if (null == component.getAttribute("timeStyle")) {
 	component.setAttribute("timeStyle", getTimeStyle());
     }
-    if (null == component.getAttribute("formatPattern")) {
-	component.setAttribute("formatPattern", getFormatPattern());
-    }
-
+    
 }
 
 // 

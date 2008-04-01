@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.7 2002/08/14 19:11:27 eburns Exp $
+ * $Id: LoginBean.java,v 1.8 2002/08/17 00:57:09 jvisvanathan Exp $
  */
 
 /*
@@ -108,10 +108,70 @@ public class LoginBean {
     {
 	return intVal;
     }
-    
+
     public void setInt(int newIntVal)
     {
 	intVal = newIntVal;
+    }
+
+    protected float floatVal;
+
+    public float getFloat()
+    {
+        return floatVal;
+    }
+
+    public void setFloat(int newFloatVal)
+    {
+        floatVal = newFloatVal;
+    }
+
+    protected short shortVal;
+
+    public short getShort()
+    {
+        return shortVal;
+    }
+
+    public void setShort(short newShortVal)
+    {
+        shortVal = newShortVal;
+    }
+
+    protected long longVal;
+
+    public long getLong()
+    {
+        return longVal;
+    }
+
+    public void setLong(long newLongVal)
+    {
+        longVal = newLongVal;
+    }
+
+    protected char charVal;
+
+    public char getChar()
+    {
+        return charVal;
+    }
+
+    public void setChar(char newCharVal)
+    {
+        charVal = newCharVal;
+    }
+
+    protected byte byteVal;
+
+    public byte getByte()
+    {
+        return byteVal;
+    }
+
+    public void setByte(byte newByteVal)
+    {
+        byteVal = newByteVal;
     }
 
     protected String stringVal;
