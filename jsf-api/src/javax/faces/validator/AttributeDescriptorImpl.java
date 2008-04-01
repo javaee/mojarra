@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeDescriptorImpl.java,v 1.2 2002/07/12 00:30:02 craigmcc Exp $
+ * $Id: AttributeDescriptorImpl.java,v 1.3 2002/08/04 20:09:42 craigmcc Exp $
  */
 
 /*
@@ -93,6 +93,9 @@ final class AttributeDescriptorImpl extends AttributeDescriptor {
      */
     public String getDescription(Locale locale) {
 
+        if (locale == null) {
+            throw new NullPointerException();
+        }
         return (getMessage(descriptionKey, locale));
 
     }
@@ -117,9 +120,15 @@ final class AttributeDescriptorImpl extends AttributeDescriptor {
      * specified <code>Locale</code>.</p>
      *
      * @param locale Locale for which to retrieve a display name
+     *
+     * @exception NullPointerException if <code>locale</code>
+     *  is <code>null</code>
      */
     public String getDisplayName(Locale locale) {
 
+        if (locale == null) {
+            throw new NullPointerException();
+        }
         return (getMessage(displayNameKey, locale));
 
     }
