@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.25 2002/08/02 19:32:00 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.26 2002/08/14 19:11:24 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.25 2002/08/02 19:32:00 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.26 2002/08/14 19:11:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -228,7 +228,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	    }
             writer.write("<TD><INPUT TYPE=\"RADIO\"");
             if (null != curItem.getValue() &&
-		curItem.getValue().equals(uiSelectOne.getSelectedValue())){
+		curItem.getValue().equals(currentValue)){
                 writer.write(" CHECKED");
             }
             writer.write(" NAME=\"");

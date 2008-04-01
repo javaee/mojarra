@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.6 2002/07/23 18:04:13 eburns Exp $
+ * $Id: LoginBean.java,v 1.7 2002/08/14 19:11:27 eburns Exp $
  */
 
 /*
@@ -9,6 +9,11 @@
 
 package basic;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.faces.component.SelectItem;
+
 public class LoginBean {
 
     String userName = null;
@@ -17,8 +22,24 @@ public class LoginBean {
     String validUser = null;
     Integer pin = null;
 
+    String defaultOptions[] = {
+	"pinto",
+	"black",
+	"garbanzo",
+	"green",
+	"string",
+	"coffee",
+	"baked"
+    };
+
     public LoginBean () {
         System.out.println("Model Object Created");
+	options = new ArrayList(defaultOptions.length);
+	int i = 0;
+	for (i = 0; i < defaultOptions.length; i++) {
+	    options.add(new SelectItem(defaultOptions[i], defaultOptions[i], 
+				       defaultOptions[i]));
+	}
     }
   
     public void setUserName(String user_name) {
@@ -104,8 +125,26 @@ public class LoginBean {
     {
 	stringVal = newStringVal;
     }
-    
 
+    protected ArrayList options = null;
+    protected Object currentOption = defaultOptions[4];
+    
+    public Collection getOptions() {
+	return options;
+    }
+
+    public void setOptions(Collection newOptions) {
+	options = new ArrayList(newOptions);
+    }
+
+    public Object getCurrentOption() {
+	return currentOption;
+    }
+
+    public void setCurrentOption(Object newCurrentOption)
+    {
+	currentOption = newCurrentOption;
+    }
 
 
 

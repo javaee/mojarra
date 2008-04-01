@@ -222,6 +222,29 @@
 
       <TR>
 
+            <TD> OptionList with Kinds of Beans from Model Object
+
+            </TD>	
+
+            <TD>
+
+	      <faces:selectone_optionlist id="OptionList" 
+                             modelReference="${LoginBean.currentOption}">
+
+		<faces:selectitems id="optionListOptions"
+                                   modelReference="${LoginBean.options}"/>
+
+	      </faces:selectone_optionlist>
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+        <TD> Option list from JSP
+        </TD>
+
 	<TD>
 
 	      <faces:selectone_optionlist id="appleQuantity">
@@ -238,8 +261,6 @@
 		<faces:selectitem  value="9" label="9"/>
 
 	      </faces:selectone_optionlist>
-
-              Option List
 
 	</TD>
 
@@ -278,6 +299,27 @@
 	</TD>
 
       </TR>
+<<<<<<< variant A
+>>>>>>> variant B
+
+      <TR>
+
+	<TD>
+
+	      <faces:selectone_radiogroup id="radioFromModel" 
+                       modelReference="${LoginBean.currentOption}"
+                       align="horizontal">
+
+		<faces:selectitems id="optionListOptions"
+                                   modelReference="${LoginBean.options}"/>
+
+              </faces:selectone_radiogroup>
+
+	</TD>
+
+      </TR>
+
+======= end
 
       <TR>
 

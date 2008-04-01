@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.24 2002/08/02 19:32:00 jvisvanathan Exp $
+ * $Id: OptionListRenderer.java,v 1.25 2002/08/14 19:11:24 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.24 2002/08/02 19:32:00 jvisvanathan Exp $
+ * @version $Id: OptionListRenderer.java,v 1.25 2002/08/14 19:11:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -194,7 +194,7 @@ public class OptionListRenderer extends HtmlBasicRenderer {
             writer.write((String) curItem.getValue());
             writer.write("\"");
             if (null != curItem.getValue() &&
-		curItem.getValue().equals(selectOne.getSelectedValue())) {
+		curItem.getValue().equals(currentValue)) {
                 writer.write(" selected=\"selected\"");
             }
             writer.write(">");

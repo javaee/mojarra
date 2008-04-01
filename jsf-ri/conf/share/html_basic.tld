@@ -212,6 +212,11 @@
     <tagclass>com.sun.faces.taglib.html_basic.SelectItemTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
+        <name>modelReference</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
         <name>selected</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
@@ -230,6 +235,22 @@
         <name>description</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>
+
+  <tag>
+    <name>selectitems</name>
+    <tagclass>com.sun.faces.taglib.html_basic.SelectItemsTag</tagclass>
+    <bodycontent>JSP</bodycontent>
+    <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>modelReference</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.3 2002/08/13 18:09:26 eburns Exp $
+ * $Id: DateRenderer.java,v 1.4 2002/08/14 19:11:24 eburns Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import com.sun.faces.util.Util;
 import java.util.Iterator;
 import java.util.TimeZone;
 import java.util.Date;
-import java.util.Calendar;
 import java.lang.Long;
 
 import javax.faces.component.AttributeDescriptor;
@@ -52,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.3 2002/08/13 18:09:26 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.4 2002/08/14 19:11:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -164,11 +163,6 @@ public class DateRenderer extends HtmlBasicRenderer {
 	    }	    
 	    else if (modelType.isAssignableFrom(Long.class)) {
 		component.setValue(new Long(newDateValue.getTime()));
-	    }
-	    else if (modelType.isAssignableFrom(Calendar.class)) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(newDateValue);
-		component.setValue(calendar);
 	    }
 	    else {
 		throw new IOException(Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
