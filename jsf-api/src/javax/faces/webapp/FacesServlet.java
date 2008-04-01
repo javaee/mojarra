@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.3 2002/06/03 22:30:11 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.4 2002/06/04 22:56:51 craigmcc Exp $
  */
 
 /*
@@ -19,10 +19,11 @@ import javax.faces.event.CommandEvent;
 import javax.faces.event.FormEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 
 /**
@@ -31,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  * Faces to construct the user interface.</p>
  */
 
-public final class FacesServlet extends HttpServlet {
+public final class FacesServlet implements Servlet {
 
 
     /**
@@ -47,12 +48,39 @@ public final class FacesServlet extends HttpServlet {
 
 
     /**
+     * <p>The <code>ServletConfig</code> instance for this servlet.</p>
+     */
+    private ServletConfig servletConfig = null;
+
+
+    /**
      * <p>Release all resources acquired at startup time.</p>
      */
     public void destroy() {
 
         facesContextFactory = null;
         lifecycleFactory = null;
+        servletConfig = null;
+
+    }
+
+
+    /**
+     * <p>Return the <code>ServletConfig</code> instance for this servlet.</p>
+     */
+    public ServletConfig getServletConfig() {
+
+        return (this.servletConfig);
+
+    }
+
+
+    /**
+     * <p>Return information about this Servlet.</p>
+     */
+    public String getServletInfo() {
+
+        return (this.getClass().getName());
 
     }
 
@@ -60,7 +88,10 @@ public final class FacesServlet extends HttpServlet {
     /**
      * <p>Acquire the factory instances we will require.</p>
      */
-    public void init() throws ServletException {
+    public void init(ServletConfig servletConfig) throws ServletException {
+
+        // Save our ServletConfig instance
+        this.servletConfig = servletConfig;
 
         // Acquire our FacesContextFactory instance
         try {
@@ -93,7 +124,8 @@ public final class FacesServlet extends HttpServlet {
 
 
     /**
-     * <p>Process an incoming GET request.</p>
+     * <p>Process an incoming request, and create the corresponding
+     * response, by executing the request processing lifecycle.</p>
      *
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating
@@ -101,51 +133,15 @@ public final class FacesServlet extends HttpServlet {
      * @exception IOException if an input/output error occurs during processing
      * @exception ServletException if a servlet error occurs during processing
      */
-    public void doGet(HttpServletRequest request,
-                      HttpServletResponse response)
-        throws IOException, ServletException {
-
-        process(request, response);
-
-    }
-
-
-    /**
-     * <p>Process an incoming POST request.</p>
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     *
-     * @exception IOException if an input/output error occurs during processing
-     * @exception ServletException if a servlet error occurs during processing
-     */
-    public void doPost(HttpServletRequest request,
-                       HttpServletResponse response)
-        throws IOException, ServletException {
-
-        process(request, response);
-
-    }
-
-
-    /**
-     * <p>Process an incoming request for any supported HTTP method.</p>
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     *
-     * @exception IOException if an input/output error occurs during processing
-     * @exception ServletException if a servlet error occurs during processing
-     */
-    private void process(HttpServletRequest request,
-                         HttpServletResponse response)
+    public void service(ServletRequest request,
+                        ServletResponse response)
         throws IOException, ServletException {
 
         // response.setContentType("text/html");  // FIXME - when/how to call?
 
         // Create and cache the FacesContext instance for this request
         FacesContext context = facesContextFactory.createFacesContext
-            (getServletContext(), request, response);
+            (servletConfig.getServletContext(), request, response);
         request.setAttribute(FacesContext.FACES_CONTEXT_ATTR, context);
 
         // Look up the Lifecycle instance for this request
