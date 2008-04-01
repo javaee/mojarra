@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.4 2002/07/17 22:34:02 jvisvanathan Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.5 2002/08/01 22:59:57 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // LifecycleFactoryImpl.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -28,7 +30,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.4 2002/07/17 22:34:02 jvisvanathan Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.5 2002/08/01 22:59:57 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -136,6 +138,10 @@ Lifecycle verifyRegisterArgs(String lifecycleId,
 
 public void addLifecycle(String lifecycleId, Lifecycle lifecycle)
 {
+    if (lifecycleId == null || lifecycle == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+    }
+
     lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));
 }
 
@@ -145,7 +151,7 @@ public Lifecycle getLifecycle(String lifecycleId) throws FacesException
     LifecycleWrapper wrapper = null;
 
     if (null == lifecycleId) {
-	throw new NullPointerException("null lifecycleId");
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
     }
     
     try {

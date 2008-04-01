@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.11 2002/07/11 20:33:20 jvisvanathan Exp $
+ * $Id: LifecycleImpl.java,v 1.12 2002/08/01 22:59:57 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // LifecycleImpl.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.11 2002/07/11 20:33:20 jvisvanathan Exp $
+ * @version $Id: LifecycleImpl.java,v 1.12 2002/08/01 22:59:57 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -201,6 +203,11 @@ public ApplicationHandler getApplicationHandler()
 
 public void setApplicationHandler(ApplicationHandler handler)
 {
+    if (handler == null) {
+        throw new NullPointerException(Util.getExceptionMessage(
+            Util.NULL_HANDLER_ERROR_MESSAGE_ID));
+    }
+
     applicationHandler = handler;
 }
 
@@ -214,13 +221,21 @@ public ViewHandler getViewHandler()
 
 public void setViewHandler(ViewHandler handler)
 {
-    ParameterCheck.nonNull(handler);
+    if (handler == null) {
+        throw new NullPointerException(Util.getExceptionMessage(
+            Util.NULL_HANDLER_ERROR_MESSAGE_ID));
+    }
 
     viewHandler = handler;
 }
 
 public void execute(FacesContext context) throws FacesException
 {
+    if (context == null) {
+        throw new NullPointerException(Util.getExceptionMessage(
+            Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
+    }
+
     PhaseWrapper wrapper = null;
     Phase curPhase = null;
     Iterator phaseIter = phaseWrappers.iterator();
@@ -264,7 +279,7 @@ public void execute(FacesContext context) throws FacesException
 public int executePhase(FacesContext context, Phase phase) throws FacesException
 {
     if (null == context || null == phase) { 
-	throw new NullPointerException("Null FacesContext"); 
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
     } 
     
     return phase.execute(context); 

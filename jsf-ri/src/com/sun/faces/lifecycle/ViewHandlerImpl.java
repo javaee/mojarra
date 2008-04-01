@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.5 2002/07/23 05:17:01 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.6 2002/08/01 22:59:58 rkitain Exp $ 
  */ 
 
 
@@ -12,6 +12,8 @@
 // ViewHandlerImpl.java 
 
 package com.sun.faces.lifecycle; 
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert; 
 import org.mozilla.util.ParameterCheck; 
@@ -29,7 +31,7 @@ import javax.servlet.RequestDispatcher;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.5 2002/07/23 05:17:01 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.6 2002/08/01 22:59:58 rkitain Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -38,9 +40,12 @@ public class ViewHandlerImpl implements ViewHandler {
 
     public void renderView(FacesContext context) throws IOException, 
              ServletException { 
+
         if (context == null) { 
-            throw new NullPointerException("Null FacesContext"); 
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         } 
+
         HttpServletRequest request = (HttpServletRequest) 
             context.getServletRequest(); 
         RequestDispatcher requestDispatcher = null; 
