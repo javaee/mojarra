@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.3 2002/06/05 03:01:55 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.4 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ public class UISelectMany extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "SelectMany";
+    public static final String TYPE = "javax.faces.component.UISelectMany";
 
 
     // ------------------------------------------------------------- Properties

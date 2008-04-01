@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.5 2002/06/05 03:01:55 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.6 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ public class UISelectOne extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "SelectOne";
+    public static final String TYPE = "javax.faces.component.UISelectOne";
 
 
     // ------------------------------------------------------------- Properties

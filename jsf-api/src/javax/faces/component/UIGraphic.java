@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.7 2002/06/05 03:01:54 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.8 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ public class UIGraphic extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "Graphic";
+    public static final String TYPE = "javax.faces.component.UIGraphic";
 
 
     // ------------------------------------------------------------- Properties

@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.3 2002/05/22 21:37:02 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.4 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ public class UIPanel extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "Panel";
+    public static final String TYPE = "javax.faces.component.UIPanel";
 
 
     // ----------------------------------------------------------- Constructors

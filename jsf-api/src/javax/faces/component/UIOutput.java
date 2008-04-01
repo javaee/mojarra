@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.8 2002/06/05 03:01:54 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.9 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ public class UIOutput extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "Output";
+    public static final String TYPE = "javax.faces.component.UIOutput";
 
 
     // ------------------------------------------------------------- Properties

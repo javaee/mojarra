@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.10 2002/06/05 03:01:54 craigmcc Exp $
+ * $Id: UICommand.java,v 1.11 2002/06/07 20:13:15 craigmcc Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ public class UICommand extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "Command";
+    public static final String TYPE = "javax.faces.component.UICommand";
 
 
     // ------------------------------------------------------------- Properties

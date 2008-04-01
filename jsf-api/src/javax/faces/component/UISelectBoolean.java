@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.8 2002/06/05 03:01:55 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.9 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ public class UISelectBoolean extends UIComponent {
     /**
      * <p>The component type of this {@link UIComponent} subclass.</p>
      */
-    public static final String TYPE = "SelectBoolean";
+    public static final String TYPE = "javax.faces.component.UISelectBoolean";
 
 
     // ------------------------------------------------------------- Properties

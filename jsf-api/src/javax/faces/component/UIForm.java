@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.7 2002/06/05 03:01:54 craigmcc Exp $
+ * $Id: UIForm.java,v 1.8 2002/06/07 20:13:16 craigmcc Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ public class UIForm extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "Form";
+    public static final String TYPE = "javax.faces.component.UIForm";
 
 
     // ------------------------------------------------------------- Properties
