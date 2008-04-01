@@ -1,5 +1,5 @@
 /*
- * $Id: TestXmlTreeFactoryImpl.java,v 1.6 2002/06/20 01:34:27 eburns Exp $
+ * $Id: TestXmlTreeFactoryImpl.java,v 1.7 2002/06/26 19:59:27 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.FileOutputResponseWrapper;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestXmlTreeFactoryImpl.java,v 1.6 2002/06/20 01:34:27 eburns Exp $
+ * @version $Id: TestXmlTreeFactoryImpl.java,v 1.7 2002/06/26 19:59:27 eburns Exp $
  * 
  * @see	com.sun.faces.tree.XULTreeFactoryImpl
  *
@@ -94,7 +94,7 @@ public void testCreate()
     File file = null;
     FileOutputStream fs = null;
 
-    tree = factory.createTree(config.getServletContext(), TEST_URI_XUL);
+    tree = factory.getTree(config.getServletContext(), TEST_URI_XUL);
     assertTrue(null != tree);
 
     String pageUrl = ((XmlTreeImpl)tree).getPageUrl();
@@ -136,7 +136,7 @@ public void testCreateNull()
     TreeFactory factory = new XmlTreeFactoryImpl();
     UIComponent root = null;
 
-    tree = factory.createTree(config.getServletContext(), null);
+    tree = factory.getTree(config.getServletContext(), null);
     assertTrue(null != tree);
 
     String pageUrl = ((XmlTreeImpl)tree).getPageUrl();
@@ -158,7 +158,7 @@ public void testCreateBogus()
     boolean exceptionThrown = false;
 
     try {
-	tree = factory.createTree(config.getServletContext(), "aoeuaoeuaoeu");
+	tree = factory.getTree(config.getServletContext(), "aoeuaoeuaoeu");
     }
     catch (FacesException e) {
 	exceptionThrown = true;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.1 2002/05/29 20:46:48 rkitain Exp $
+ * $Id: TestRenderKitFactory.java,v 1.2 2002/06/26 19:59:27 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.1 2002/05/29 20:46:48 rkitain Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.2 2002/06/26 19:59:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,8 +75,8 @@ public class TestRenderKitFactory extends ServletTestCase {
         // 1. Verify "createRenderKit" returns the same RenderKit instance
         //    if called multiple times with the same identifier.
         //  
-        RenderKit renderKit1 = renderKitFactory.createRenderKit("DEFAULT");
-        RenderKit renderKit2 = renderKitFactory.createRenderKit("DEFAULT");
+        RenderKit renderKit1 = renderKitFactory.getRenderKit("DEFAULT");
+        RenderKit renderKit2 = renderKitFactory.getRenderKit("DEFAULT");
         assertTrue(renderKit1 == renderKit2);
 
         // 2. Verify "addRenderKit" adds instances.. /
@@ -119,7 +119,7 @@ public class TestRenderKitFactory extends ServletTestCase {
         //
         boolean thrown = false;
         try {
-            rKit = renderKitFactory.createRenderKit(
+            rKit = renderKitFactory.getRenderKit(
                 RenderKitFactory.DEFAULT_RENDER_KIT);
             renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
                 rKit);
