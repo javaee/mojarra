@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.19 2002/08/15 20:12:27 craigmcc Exp $
+ * $Id: UICommand.java,v 1.20 2002/08/26 15:41:27 craigmcc Exp $
  */
 
 /*
@@ -103,9 +103,6 @@ public class UICommand extends UIComponentBase {
         setValid(true);
         String value = context.getServletRequest().
             getParameter(getCompoundId());
-        if (!"submit".equals(value)) {
-            return;
-        }
 
         // Construct and enqueue a FormEvent for the application
         String commandName = (String) currentValue(context);
