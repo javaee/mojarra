@@ -1,5 +1,5 @@
 /*
- * $Id: ModelAccessor.java,v 1.1 2001/12/06 01:31:26 rogerk Exp $
+ * $Id: ModelAccessor.java,v 1.2 2001/12/12 00:12:48 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -62,7 +62,7 @@ public class ModelAccessor {
      *     or the property value could not be set.
      */
     public static void setModelObject(RenderContext rc, 
-        String modelReference, String value) throws FacesException {
+        String modelReference, Object value) throws FacesException {
 
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(modelReference);
