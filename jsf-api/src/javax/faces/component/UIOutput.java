@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.9 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.10 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.context.ResponseWriter;
  * is the responsibility of the application.</p>
  */
 
-public class UIOutput extends UIComponent {
+public class UIOutput extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables

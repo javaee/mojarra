@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.5 2002/06/07 20:36:06 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.6 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.context.ResponseWriter;
  * checkboxes.</p>
  */
 
-public class UISelectMany extends UIComponent {
+public class UISelectMany extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables

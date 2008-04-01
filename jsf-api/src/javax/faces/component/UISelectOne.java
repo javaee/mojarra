@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.7 2002/06/07 20:36:06 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.8 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.context.ResponseWriter;
  * radio buttons.</p>
  */
 
-public class UISelectOne extends UIComponent {
+public class UISelectOne extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables

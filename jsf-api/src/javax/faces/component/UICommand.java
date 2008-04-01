@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.12 2002/06/07 23:03:10 craigmcc Exp $
+ * $Id: UICommand.java,v 1.13 2002/06/07 23:31:11 craigmcc Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * typically rendered as a push button, a menu item, or a hyperlink.</p>
  */
 
-public class UICommand extends UIComponent {
+public class UICommand extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables

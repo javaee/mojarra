@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.6 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.7 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.context.ResponseWriter;
  * either a single-line text field or a multi-line text box.</p>
  */
 
-public class UITextEntry extends UIComponent {
+public class UITextEntry extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables

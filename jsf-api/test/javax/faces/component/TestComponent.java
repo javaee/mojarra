@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.1 2002/06/04 02:31:06 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.2 2002/06/07 23:31:13 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package javax.faces.component;
  * <p>Test <code>UIComponent</code> for unit tests.</p>
  */
 
-public class TestComponent extends UIComponent {
+public class TestComponent extends UIComponentBase {
 
 
     public TestComponent() {

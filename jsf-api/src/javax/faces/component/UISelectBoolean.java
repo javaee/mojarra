@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.9 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.10 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.context.ResponseWriter;
  * It is most commonly rendered as a checkbox.</p>
  */
 
-public class UISelectBoolean extends UIComponent {
+public class UISelectBoolean extends UIComponentBase {
 
 
     // ------------------------------------------------------------ Constructor

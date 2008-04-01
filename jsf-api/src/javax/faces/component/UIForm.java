@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.9 2002/06/07 23:03:10 craigmcc Exp $
+ * $Id: UIForm.java,v 1.10 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
  * submitted.</p>
  */
 
-public class UIForm extends UIComponent {
+public class UIForm extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables

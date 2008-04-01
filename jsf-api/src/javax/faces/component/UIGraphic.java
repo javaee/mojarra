@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.8 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.9 2002/06/07 23:31:12 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * it is for display purposes only.</p>
  */
 
-public class UIGraphic extends UIComponent {
+public class UIGraphic extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables
