@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFactory.java,v 1.2 2002/05/14 15:02:28 craigmcc Exp $
+ * $Id: FactoryFactory.java,v 1.3 2002/05/18 02:09:11 craigmcc Exp $
  */
 
 /*
@@ -248,7 +248,7 @@ public final class FactoryFactory {
             Class clazz = classLoader.loadClass(implementationName);
             return (clazz.newInstance());
         } catch (Exception e) {
-            throw new FacesException(e);
+            throw new FacesException(implementationName, e);
         }
 
     }

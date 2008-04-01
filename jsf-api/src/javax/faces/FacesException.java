@@ -1,5 +1,5 @@
 /*
- * $Id: FacesException.java,v 1.7 2002/03/16 00:09:02 eburns Exp $
+ * $Id: FacesException.java,v 1.8 2002/05/18 02:09:11 craigmcc Exp $
  */
 
 /*
@@ -77,4 +77,12 @@ public class FacesException extends RuntimeException {
     public String getMessage() {
         return xcptMessage;
     }
+
+    /**
+     * Returns the root cause of this exception.
+     */
+    public Throwable getRootCause() {
+        return rootCause;
+    }
+
 }

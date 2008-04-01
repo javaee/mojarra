@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.15 2002/05/17 02:24:14 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.16 2002/05/18 02:09:11 craigmcc Exp $
  */
 
 /*
@@ -213,8 +213,6 @@ public abstract class UIComponent {
             return (getComponentType());
         } else if ("compoundId".equals(name)) {
             return (getCompoundId());
-        } else if ("value".equals(name)) {
-            return (getValue());
         }
 
         // Return the selected attribute value
@@ -604,6 +602,7 @@ public abstract class UIComponent {
 
         checkComponentId(component.getComponentId());
         getChildList().add(component);
+        component.setParent(this);
 
     }
 
