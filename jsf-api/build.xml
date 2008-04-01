@@ -36,10 +36,16 @@
   <property name="lib.home" value="${basedir}/lib"/>
 
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
+  <property name="commons-beanutils.jar" value="${lib.home}/commons-beanutils.jar"/>
+  <property name="commons-collections.jar" value="${lib.home}/commons-collections.jar"/>
+  <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
 
   <path id="classpath">
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${build.classes}"/>
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${mozutil.jar}"/>
   </path>
 
   <!-- 
