@@ -1600,7 +1600,7 @@
 
   <tag>
     <name>input_datetime</name>
-    <tagclass>com.sun.faces.taglib.html_basic.Input_DateTag</tagclass>
+    <tagclass>com.sun.faces.taglib.html_basic.Input_DateTimeTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <!-- Faces Attributes -->  
     <attribute>
@@ -1631,6 +1631,11 @@
     </attribute>
     <attribute>
       <name>formatPattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>labelAlign</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1770,7 +1775,7 @@
 
   <tag>
     <name>input_time</name>
-    <tagclass>com.sun.faces.taglib.html_basic.Input_DateTag</tagclass>
+    <tagclass>com.sun.faces.taglib.html_basic.Input_TimeTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <!-- Faces Attributes -->  
     <attribute>
@@ -1791,6 +1796,11 @@
     </attribute>
     <attribute>
       <name>timezone</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>labelAlign</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1964,7 +1974,7 @@
 
   <tag>
     <name>output_datetime</name>
-    <tagclass>com.sun.faces.taglib.html_basic.Output_DateTag</tagclass>
+    <tagclass>com.sun.faces.taglib.html_basic.Output_DateTimeTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <!-- Faces Attributes -->  
     <attribute>
@@ -2007,7 +2017,7 @@
 
   <tag>
     <name>output_time</name>
-    <tagclass>com.sun.faces.taglib.html_basic.Output_DateTag</tagclass>
+    <tagclass>com.sun.faces.taglib.html_basic.Output_TimeTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <!-- Faces Attributes -->  
     <attribute>
