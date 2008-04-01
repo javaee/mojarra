@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.13 2002/05/20 17:17:35 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.14 2002/05/29 22:42:56 craigmcc Exp $
  */
 
 /*
@@ -54,6 +54,18 @@ import javax.servlet.http.HttpSession;
  */
 
 public abstract class FacesContext {
+
+
+    // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * <p>The name of the request attribute under which the
+     * <code>FacesContext</code> instance for the current request will
+     * be stored.</p>
+     */
+    public static final String FACES_CONTEXT_ATTR =
+        "javax.faces.context.FacesContext";
 
 
     // ------------------------------------------------------------- Properties
