@@ -1,5 +1,5 @@
 /*
- * $Id: MessageListImpl.java,v 1.1 2002/05/28 18:20:39 jvisvanathan Exp $
+ * $Id: MessageListImpl.java,v 1.2 2002/06/07 22:55:32 jvisvanathan Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import javax.faces.context.MessageList;
 import javax.faces.context.Message;
 import javax.faces.context.FacesContext;
 
+import java.util.Locale;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
@@ -34,6 +35,7 @@ public class MessageListImpl extends MessageList
     //
     private ArrayList messageList = new ArrayList();
     private FacesContext facesContext = null;
+    private MessageLoader messageLoader = null;
     
     // Attribute Instance Variables
 
@@ -45,6 +47,7 @@ public class MessageListImpl extends MessageList
 
     public MessageListImpl(FacesContext fc) {
         this.facesContext = fc;
+        messageLoader = new MessageLoader();
     }
 
     //
@@ -74,11 +77,16 @@ public class MessageListImpl extends MessageList
 
 
     public void add(String messageId, String reference, Object params[]) {
-        if (messageList != null ) {
+        ParameterCheck.nonNull(messageId);
+        ParameterCheck.nonNull(reference);
+        
+        if (messageList == null ) {
             messageList = new ArrayList();
         }
-        // PENDING (visvan) clean up after the Message API gets final. 
-        Message msg = new MessageImpl(this,messageId, reference, params);
+        Locale locale = facesContext.getLocale();
+        Message msg = messageLoader.getMessage(messageId, reference,locale,
+                params);
+        Assert.assert_it(msg != null);
         messageList.add(msg);
     }
 

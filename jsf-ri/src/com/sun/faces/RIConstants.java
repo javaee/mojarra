@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.4 2002/06/07 22:47:36 eburns Exp $
+ * $Id: RIConstants.java,v 1.5 2002/06/07 22:55:30 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,8 @@ public class RIConstants {
 
     public final static String DEFAULT_RENDER_KIT = FACES_PREFIX +
 	RenderKitFactory.DEFAULT_RENDER_KIT;
+    
+    public static final String JSF_RESOURCE_FILENAME = "JSFMessages";
 
     public final static String DISABLE_RENDERERS = FACES_PREFIX +
 	"DisableRenderers";

@@ -1,0 +1,18 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message messageId="MSG0001" severity="30" summary="{0} is not a valid number.">
+  	<detail>Please re-enter a valid number.</detail>
+  </message>
+  <message messageId="MSG0002" severity="10" summary="{0} is not a valid date." >
+      <detail>Please re-enter date in mm/dd/yy format.</detail>
+  </message>
+  <message messageId="MSG0003" severity="10" summary="{0} field cannot be empty." />
+  <message messageId="MSG0004" severity="10" summary="{0} out of range." >
+      <detail>Value should be between {1} and {2}.</detail>
+  </message>
+</messages>
+

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.1 2002/05/28 18:20:39 jvisvanathan Exp $
+ * $Id: MessageImpl.java,v 1.2 2002/06/07 22:55:32 jvisvanathan Exp $
  */
 
 /*
@@ -11,7 +11,12 @@ package com.sun.faces.context;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
-import javax.faces.context.MessageList;
+
+import java.text.MessageFormat;
+import java.util.HashMap;
+
+import org.mozilla.util.Assert;
+import org.mozilla.util.ParameterCheck;
 
 public class MessageImpl extends Message
 {
@@ -26,11 +31,12 @@ public class MessageImpl extends Message
     //
     // Instance Variables
     //
-    private String messageId = null;
-    private MessageList messageList = null;
-    private Object params[] = null;
+    private Object params[];
     private String reference = null;
-
+    private String summary = null;
+    private String detail = null;
+    private MessageTemplate template = null;
+    
     // Attribute Instance Variables
 
     // Relationship Instance Variables
@@ -39,11 +45,13 @@ public class MessageImpl extends Message
     // Constructors and Initializers    
     //
 
-    public MessageImpl(MessageList messageList, String messageId,
-                String reference, Object params[]) {
-
-        this.messageList = messageList;
-        this.messageId = messageId;
+    public MessageImpl(MessageTemplate template, String reference, 
+            Object params[]) {
+                
+        ParameterCheck.nonNull(template);
+        ParameterCheck.nonNull(reference);
+       
+        this.template = template;
         this.reference = reference;
         this.params = params;
     }
@@ -60,12 +68,25 @@ public class MessageImpl extends Message
     // Methods from Message
     //
     public String getDetail() {
-        // PENDING (visvan) 
-        return null;
+        if (detail == null) {
+            if (template.getDetail() == null) {
+                return null;
+            }
+            else {
+                StringBuffer b = new StringBuffer(100);
+                MessageFormat mf = new MessageFormat(template.getDetail());
+                if (template.getLocale() != null) {
+                    mf.setLocale(template.getLocale());
+                    b.append(mf.format(params));
+                    detail = b.toString();
+                }
+            }
+        }    
+        return detail;
     }    
 
     public String getMessageId() {
-        return this.messageId;
+        return template.getMessageId();
     }
     
     public String getReference() {
@@ -73,16 +94,26 @@ public class MessageImpl extends Message
     }    
 
     public int getSeverity() {
-        // PENDING (visvan) 
-        return Message.SEVERITY_INFO;
+        return template.getSeverity();
     }    
 
     public String getSummary() {
-        // PENDING (visvan) 
-        return null;
+        if (summary == null) {
+            if ( template.getSummary() == null ) {
+                return null;
+            }    
+            StringBuffer b = new StringBuffer(100);
+            MessageFormat mf = new MessageFormat(template.getSummary());
+            if (template.getLocale() != null) {
+                mf.setLocale(template.getLocale());
+                b.append(mf.format(params));
+                summary = b.toString();
+            }    
+        }
+        return summary;
     }    
     
-    // The testcase for this class is TestclassName.java 
+    // The testcase for this class is TestMessageListImpl.java 
 
 
 } // end of class MessageImpl

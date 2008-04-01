@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.2 2002/06/07 00:01:03 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.3 2002/06/07 22:55:33 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.2 2002/06/07 00:01:03 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.3 2002/06/07 22:55:33 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -75,12 +75,15 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 			facesContext.setModelValue(model, comp.getValue());
 		    }
 		    catch (Throwable e) {
-			message = "Exception caught during setModelValue for " +
+                        // PENDING (visvan) only validation and conversion erros should be put
+                        // in messageList. remove this after confirming with Ed/Craig.
+                        // PENDING (visvan) log error.
+			/*message = "Exception caught during setModelValue for " +
 			    comp.getCompoundId() + "\nThrowable " +
 			    e.toString() + ": " + e.getMessage();
 			facesContext.getMessageList().add(message,
 							  comp.getCompoundId(),
-							  null);
+							  null); */
 			rc = Phase.GOTO_RENDER;
 		    }
 		}
