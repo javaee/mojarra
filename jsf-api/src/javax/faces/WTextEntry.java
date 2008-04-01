@@ -84,7 +84,7 @@ public class WTextEntry extends WComponent {
      * @return String containing the current text value 
      */
     public String getText(RenderContext rc) {
-	return null;
+	return (String) model;
     }
 
     /**
@@ -97,6 +97,7 @@ public class WTextEntry extends WComponent {
      * @param text String containing the new text value for this component
      */
     public void setText(RenderContext rc, String text) {
+	model = text;
     }
 
     /**
