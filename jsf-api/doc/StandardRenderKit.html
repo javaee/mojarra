@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.4 2002/08/13 16:53:12 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.5 2002/08/13 17:17:11 craigmcc Exp $</h3>
 </div>
 
 
@@ -132,8 +132,8 @@
 
   <p>Any child components nested inside this component will be rendered
   in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>label</code> attribute (NORTH,
-  SOUTH, EAST, WEST).
+  component, aligned based on the <code>label</code> attribute (PAGE_START,
+  PAGE_END, LINE_START, LINE_END).
   </p>
 </div>
 
@@ -208,7 +208,7 @@
       convert as necessary, and store.
     </td>
     <td>
-      Get current value, convert to double or long (as appropriate), create
+      Get current value, convert to numeric (as appropriate), create
       localized DecimalFormat based on formatPattern, render formatted result
       as text input field.
     </td>
@@ -224,10 +224,16 @@
       convert as necessary, and store.
     </td>
     <td>
-      Get current value, convert to double or long (as appropriate), create
+      <p>Get current value, convert to numeric (as appropriate), create
       localized NumberFormat instance based on style (CURRENCY,
       INTEGER, NUMBER, PERCENT), render formatted result as
-      text input field.
+      text input field.</p>
+
+      <p><strong>FIXME</strong> - When <code>formatStyle</code> is set to
+      <code>CURRENCY</code>, we need to specify <code>currencyCode</code>
+      and <code>currencySymbol</code> optional attributes, like the
+      JSTL <code>&lt;fmt:formatNumber&gt;</code> tag allows.  It's probably
+      worth having a separate <code>rendererType</code> for this.</p>
     </td>
   </tr>
 
@@ -398,9 +404,13 @@
       &nbsp;
     </td>
     <td>
-      Get current value, convert to String, treat as MessageFormat pattern
+      <p>Get current value, convert to String, treat as MessageFormat pattern
       (nested UIParameter components for parameter substitution), render
-      formatted result.
+      formatted result.</p>
+
+      <p><strong>FIXME</strong> - Consider specifying optimizations for reuse
+      of MessageFormat instances, bypassing them in some cases (i.e. no
+      "{" character in string and/or no arguments provided).</p>
     </td>
   </tr>
 
@@ -413,9 +423,13 @@
       &nbsp;
     </td>
     <td>
-      Get localized resource from resource bundle, convert to String, treat
+      <p>Get localized resource from resource bundle, convert to String, treat
       as a MessageFormat pattern (nested UIParameter components for
-      parameter substitution), render formatted result.
+      parameter substitution), render formatted result.</p>
+
+      <p><strong>FIXME</strong> - Consider specifying optimizations for reuse
+      of MessageFormat instances, bypassing them in some cases (i.e. no
+      "{" character in string and/or no arguments provided).</p>
     </td>
   </tr>
 
@@ -428,7 +442,7 @@
       &nbsp;
     </td>
     <td>
-      Get current value, convert to double or long (as appropriate), create
+      Get current value, convert to numeric (as appropriate), create
       localized DecimalFormat based on formatPattern, render formatted result.
     </td>
   </tr>
@@ -442,9 +456,15 @@
       &nbsp;
     </td>
     <td>
-      Get current value, convert to double or long (as appropriate), create
+      <p>Get current value, convert to numeric (as appropriate), create
       localized NumberFormat instance based on formatStyle (CURRENCY,
-      INTEGER, NUMBER, PERCENT), render formatted result.
+      INTEGER, NUMBER, PERCENT), render formatted result.</p>
+
+      <p><strong>FIXME</strong> - When <code>formatStyle</code> is set to
+      <code>CURRENCY</code>, we need to specify <code>currencyCode</code>
+      and <code>currencySymbol</code> optional attributes, like the
+      JSTL <code>&lt;fmt:formatNumber&gt;</code> tag allows.  It's probably
+      worth having a separate <code>rendererType</code> for this.</p>
     </td>
   </tr>
 
@@ -485,8 +505,8 @@
 
   <p>Any child components nested inside this component will be rendered
   in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>label</code> attribute (NORTH,
-  SOUTH, EAST, WEST).
+  component, aligned based on the <code>label</code> attribute (PAGE_START,
+  PAGE_END, LINE_START, LINE_END).
   </p>
 </div>
 
@@ -522,10 +542,11 @@
 <div align="center">
   <h2>Component Class:  UISelectMany</h2>
 
-  <p>Any child components nested inside this component will be rendered
+  <p>Any child components (except UISelectItem and UISelectOne instances)
+  nested inside this component will be rendered
   in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>label</code> attribute (NORTH,
-  SOUTH, EAST, WEST).
+  component, aligned based on the <code>label</code> attribute (PAGE_START,
+  PAGE_END, LINE_START, LINE_END).
   </p>
 </div>
 
@@ -552,8 +573,8 @@
       Get current value, get available items from nested child
       <code>UISelectItem</code> and <code>UISelectItems</code>
       components, render as a series of checkboxes laid out
-      according to the <code>layout</code> attribute (VERTICAL,
-      HORIZONTAL).
+      according to the <code>layout</code> attribute (PAGE_DIRECTION,
+      LINE_DIRECTION).
     </td>
   </tr>
 
@@ -598,10 +619,11 @@
 <div align="center">
   <h2>Component Class:  UISelectOne</h2>
 
-  <p>Any child components nested inside this component will be rendered
+  <p>Any child components (except UISelectItem and UISelectOne instances)
+  nested inside this component will be rendered
   in an HTML <code>&lt;label&gt;</code> element associated with this
-  component, aligned based on the <code>label</code> attribute (NORTH,
-  SOUTH, EAST, WEST).
+  component, aligned based on the <code>label</code> attribute (PAGE_START,
+  PAGE_END, LINE_START, LINE_END).
   </p>
 </div>
 
@@ -662,8 +684,8 @@
       Get current value, get available items from nested child
       <code>UISelectItem</code> and <code>UISelectItems</code>
       components, render as a series of radio buttons laid out
-      according to the <code>layout</code> attribute (VERTICAL,
-      HORIZONTAL).
+      according to the <code>layout</code> attribute (PAGE_DIRECTION,
+      LINE_DIRECTION).
     </td>
   </tr>
 
