@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.9 2002/06/10 18:15:06 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.10 2002/06/10 18:19:39 craigmcc Exp $
  */
 
 /*
@@ -94,7 +94,11 @@ public abstract class FacesTag extends TagSupport {
      */
     public int getDoStartValue() throws JspException {
 
-        return (EVAL_BODY_INCLUDE);
+        if (component.getRendersChildren()) {
+            return (SKIP_BODY);
+        } else {
+            return (EVAL_BODY_INCLUDE);
+        }
 
     }
 
@@ -103,15 +107,15 @@ public abstract class FacesTag extends TagSupport {
      * <p>An override for the model reference expression associated with our
      * {@link UIComponent}, if not <code>null</code>.</p>
      */
-    protected String model = null;
+    protected String modelReference = null;
 
 
     /**
      * <p>Return the override for the model reference expression.</p>
      */
-    public String getModel() {
+    public String getModelReference() {
 
-        return (this.model);
+        return (this.modelReference);
 
     }
 
@@ -119,11 +123,11 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Set an override for the model reference expression.</p>
      *
-     * @param model The new model reference expression
+     * @param modelReference The new model reference expression
      */
-    public void setModel(String model) {
+    public void setModelReference(String model) {
 
-        this.model = model;
+        this.modelReference = modelReference;
 
     }
 
@@ -143,7 +147,7 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Render the beginning of the {@link UIComponent} that is associated
      * with this tag (via the <code>id</code> attribute), by following these
-     * steps:</p>
+     * steps.</p>
      * <ul>
      * <li>Ensure that an appropriate {@link ResponseWriter} is associated
      *     with the current {@link FacesContext}.  This ensures that encoded
@@ -289,7 +293,7 @@ public abstract class FacesTag extends TagSupport {
 
         super.release();
         this.id = null;
-        this.model = null;
+        this.modelReference = null;
 
     }
 
@@ -385,8 +389,8 @@ public abstract class FacesTag extends TagSupport {
         component.setRendererType(getRendererType());
 
         // Override other properties as required
-        if (model != null) {
-            component.setModel(model);
+        if (modelReference != null) {
+            component.setModelReference(modelReference);
         }
 
     }
