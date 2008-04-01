@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.2 2002/06/01 00:58:23 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.3 2002/06/05 19:07:23 eburns Exp $
  */
 
 /*
@@ -21,6 +21,8 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.PhaseListener;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+import javax.faces.event.FormEvent;
+import javax.faces.event.CommandEvent;
 
 import java.util.Iterator;
 
@@ -32,7 +34,7 @@ import com.sun.faces.FacesContextTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.2 2002/06/01 00:58:23 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.3 2002/06/05 19:07:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -74,8 +76,12 @@ public class TestLifecycleImpl extends FacesContextTestCase
 
 public void testApplicationHandler()
 {
-    ApplicationHandler app = null;
-
+    ApplicationHandler result = null, app = new ApplicationHandler() {
+	    public void commandEvent(FacesContext context, CommandEvent event){
+	    }
+	    public void formEvent(FacesContext context, FormEvent event) {}
+	};
+    
     LifecycleImpl life = new LifecycleImpl();
     boolean exceptionThrown = false;
 
@@ -85,16 +91,17 @@ public void testApplicationHandler()
     catch (FacesException e) {
 	exceptionThrown = true;
     }
-    assertTrue(exceptionThrown);
+    assertTrue(!exceptionThrown);
 
     exceptionThrown = false;
     try {
-	life.getApplicationHandler();
+	result = life.getApplicationHandler();
     }
     catch (FacesException e) {
 	exceptionThrown = true;
     }
-    assertTrue(exceptionThrown);
+    assertTrue(!exceptionThrown);
+    assertTrue(result == app);
 }
 
 public void testExtraPhases()

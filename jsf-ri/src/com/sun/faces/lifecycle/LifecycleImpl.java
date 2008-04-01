@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.4 2002/06/03 22:09:31 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.5 2002/06/05 19:07:23 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.4 2002/06/03 22:09:31 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.5 2002/06/05 19:07:23 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -69,6 +69,8 @@ protected ArrayList phaseWrappers;
 protected ArrayList phaseListeners;
 
 protected Object lock = null;
+
+protected ApplicationHandler applicationHandler = null;
 
 //
 // Constructors and Initializers    
@@ -115,7 +117,7 @@ protected void initPhases()
   				        Lifecycle.PROCESS_VALIDATIONS_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase(this, 
 				        Lifecycle.UPDATE_MODEL_VALUES_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.INVOKE_APPLICATION_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this, Lifecycle.INVOKE_APPLICATION_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.RENDER_RESPONSE_PHASE)));
 }
 
@@ -224,12 +226,12 @@ protected void callExitingListeners(FacesContext context, int curPhaseId,
 
 public ApplicationHandler getApplicationHandler()
 {
-    throw new FacesException("Unimplemented.");
+    return applicationHandler;
 }
 
 public void setApplicationHandler(ApplicationHandler handler)
 {
-    throw new FacesException("Unimplemented.");
+    applicationHandler = handler;
 }
 
 public void execute(FacesContext context) throws FacesException
