@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.12 2002/07/26 03:26:06 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.13 2002/07/26 21:53:31 craigmcc Exp $
  */
 
 /*
@@ -973,18 +973,21 @@ public abstract class UIComponentBase implements UIComponent {
      * request contained in the specified {@link FacesContext}, and attempt
      * to convert this state information into an object of the required type
      * for this component.  If conversion is successful, save the resulting
-     * object via a call to <code>getValue()</code>.  If conversion is not
-     * successful:</p>
+     * object via a call to <code>getValue()</code>, and call
+     * <code>setValid(true)</code>.  If conversion is not successful:</p>
      * <ul>
      * <li>Save the state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
+     * <li>Call <code>setValid(false)</code> on this component.</li>
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
-     * by (<strong>FIXME</strong> - specify mechanism).</p>
+     * (by this component or some other component),  by calling
+     * <code>addRequestEvent()</code> on the associated {@link FacesContext}.
+     * </p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -994,7 +997,10 @@ public abstract class UIComponentBase implements UIComponent {
      */
     public void decode(FacesContext context) throws IOException {
 
-        ; // Default implementation does nothing
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        setValid(true);
 
     }
 
@@ -1094,9 +1100,15 @@ public abstract class UIComponentBase implements UIComponent {
      * return <code>false</code>.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public boolean processEvents(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         boolean result = false;
         Iterator events = context.getRequestEvents(this);
         while (events.hasNext()) {
@@ -1121,17 +1133,29 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Perform all validations for this component, by calling the
-     * <code>validate()</code> method of the component itself, followed by
-     * the <code>validate()</code> method of each registered {@link Validator}.
-     * Normally, component writers will not override this method -- it is
+     * <p>Perform all validations for this component, by performing the
+     * following algorithm.</p>
+     * <ul>
+     * <li>Call the <code>validate()</code> method on this component,
+     *     to perform any self-validation that has been defined.</li>
+     * <li>Call the <code>validate()</code> method on each registered
+     *     {@link Validator} for this component.</li>
+     * <ul>
+     *
+     * <p>Normally, component writers will not overwrite this method -- it is
      * primarily available for use by tools.  Component writers should
      * override the <code>validate()</code> method instead.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public void processValidators(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         validate(context);
         if (this.validators != null) {
             Iterator validators = getValidators();
@@ -1154,9 +1178,15 @@ public abstract class UIComponentBase implements UIComponent {
      * logic is required.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public void updateModel(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         String modelReference = getModelReference();
         if (modelReference == null) {
             return;
@@ -1172,13 +1202,19 @@ public abstract class UIComponentBase implements UIComponent {
      * {@link Validator}s registered on this component, during the
      * <em>Process Validations</em> phase of the request processing lifecycle.
      * If errors are encountered, appropriate <code>Message</code> instances
-     * should be added to the {@link FacesContext} for the current request.
-     * </p>
+     * should be added to the {@link FacesContext} for the current request,
+     * and <code>setValid(false)</code> should be called.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public void validate(FacesContext context) {
 
+        if (context == null) {
+            throw new NullPointerException();
+        }
         ; // Default implementation does nothing
 
     }

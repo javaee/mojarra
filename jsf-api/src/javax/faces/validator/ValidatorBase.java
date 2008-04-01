@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.2 2002/07/23 00:19:14 eburns Exp $
+ * $Id: ValidatorBase.java,v 1.3 2002/07/26 21:53:32 craigmcc Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.context.MessageResourcesFactory;
  * API of JavaServer Faces.</p>
  */
 
-abstract class ValidatorBase extends Validator {
+abstract class ValidatorBase implements Validator {
 
 
     // ------------------------------------------------------- Static Variables

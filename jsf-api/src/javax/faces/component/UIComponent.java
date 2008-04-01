@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.41 2002/07/26 03:26:06 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.42 2002/07/26 21:53:30 craigmcc Exp $
  */
 
 /*
@@ -453,14 +453,15 @@ public interface UIComponent extends Serializable {
      * request contained in the specified {@link FacesContext}, and attempt
      * to convert this state information into an object of the required type
      * for this component.  If conversion is successful, save the resulting
-     * object via a call to <code>getValue()</code>.  If conversion is not
-     * successful:</p>
+     * object via a call to <code>getValue()</code>, and call
+     * <code>setValid(true)</code>.  If conversion is not successful:</p>
      * <ul>
      * <li>Save the state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
+     * <li>Call <code>setValid(false)</code> on this component.</li>
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
@@ -556,19 +557,31 @@ public interface UIComponent extends Serializable {
      * return <code>false</code>.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public boolean processEvents(FacesContext context);
 
 
     /**
-     * <p>Perform all validations for this component, by calling the
-     * <code>validate()</code> method of the component itself, followed by
-     * the <code>validate()</code> method of each registered {@link Validator}.
-     * Normally, component writers will not override this method -- it is
+     * <p>Perform all validations for this component, by performing the
+     * following algorithm.</p>
+     * <ul>
+     * <li>Call the <code>validate()</code> method on this component,
+     *     to perform any self-validation that has been defined.</li>
+     * <li>Call the <code>validate()</code> method on each registered
+     *     {@link Validator} for this component.</li>
+     * <ul>
+     *
+     * <p>Normally, component writers will not overwrite this method -- it is
      * primarily available for use by tools.  Component writers should
      * override the <code>validate()</code> method instead.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public void processValidators(FacesContext context);
 
@@ -583,6 +596,9 @@ public interface UIComponent extends Serializable {
      * logic is required.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public void updateModel(FacesContext context);
 
@@ -593,10 +609,13 @@ public interface UIComponent extends Serializable {
      * {@link Validator}s registered on this component, during the
      * <em>Process Validations</em> phase of the request processing lifecycle.
      * If errors are encountered, appropriate <code>Message</code> instances
-     * should be added to the {@link FacesContext} for the current request.
-     * </p>
+     * should be added to the {@link FacesContext} for the current request,
+     * and <code>setValid(false)</code> should be called.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
     public void validate(FacesContext context);
 

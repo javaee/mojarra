@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.1 2002/06/04 17:53:23 craigmcc Exp $
+ * $Id: TestValidator.java,v 1.2 2002/07/26 21:53:33 craigmcc Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.validator.Validator;
  * <p>Test implementation of {@link Validator}.</p>
  */
 
-public class TestValidator extends Validator {
+public class TestValidator implements Validator {
 
 
     public AttributeDescriptor getAttributeDescriptor(String name) {

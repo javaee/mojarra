@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.3 2002/07/26 19:02:41 craigmcc Exp $
+ * $Id: Validator.java,v 1.4 2002/07/26 21:53:31 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.context.Message;
  * robust user interfaces for configuring them.</p>
  */
 
-public abstract class Validator {
+public interface Validator {
 
 
     /**
@@ -55,7 +55,7 @@ public abstract class Validator {
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public abstract AttributeDescriptor getAttributeDescriptor(String name);
+    public AttributeDescriptor getAttributeDescriptor(String name);
 
 
     /**
@@ -63,21 +63,28 @@ public abstract class Validator {
      * attributes for this <code>Validator</code>.  If no attributes are
      * supported, an empty <code>Iterator</code> is returned.</p>
      */
-    public abstract Iterator getAttributeNames();
+    public Iterator getAttributeNames();
 
 
     /**
      * <p>Perform the correctness checks implemented by this
      * <code>Validator</code> against the specified {@link UIComponent}.
      * Add {@link Message}s describing any correctness violations to the
-     * specified {@link FacesContext}.</p>
+     * specified {@link FacesContext}.  If any violations are found:</p>
+     * <ul>
+     * <li>Add zero or more {@link Message}s to the specified
+     *     {@link FacesContext}, specifying this {@link UIComponent} as
+     *     associated with the message, describing the nature of the
+     *     violation(s) encountered.</li>
+     * <li>Call <code>setValid(false)</code> on the {@link UIComponent}.</li>
+     * </ul>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
      *
      * @exception NullPointerException if any parameter is <code>null</code>
      */
-    public abstract void validate(FacesContext context, UIComponent component);
+    public void validate(FacesContext context, UIComponent component);
 
 
 }
