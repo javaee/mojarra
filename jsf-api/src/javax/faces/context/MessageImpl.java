@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.2 2002/06/13 19:31:01 craigmcc Exp $
+ * $Id: MessageImpl.java,v 1.3 2002/06/14 00:00:04 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -40,18 +40,16 @@ public class MessageImpl extends Message implements Serializable {
      * <p>Construct a new {@link Message} with the specified initial values.
      * </p>
      *
-     * @param messageId Message identifier (if any)
-     * @param reference Component reference of this {@link Message}
      * @param severity Severity level of this {@link Message}
      * @param summary Localized summary message text
      * @param detail Localized detail message text
+     *
+     * @exception IllegalArgumentException if the specified severity level
+     *  is not one of the supported values
      */
-    public MessageImpl(String messageId, String reference, int severity,
-                       String summary, String detail) {
+    public MessageImpl(int severity, String summary, String detail) {
 
         super();
-        setMessageId(messageId);
-        setReference(reference);
         setSeverity(severity);
         setSummary(summary);
         setDetail(detail);
@@ -62,8 +60,6 @@ public class MessageImpl extends Message implements Serializable {
     // ----------------------------------------------------- Instance Variables
 
 
-    private String messageId = null;
-    private String reference = null;
     private int severity = Message.SEVERITY_INFO;
     private String summary = null;
     private String detail = null;
@@ -98,51 +94,6 @@ public class MessageImpl extends Message implements Serializable {
 
 
     /**
-     * <p>Return the message identifier of this <code>Message</code>.</p>
-     */
-    public String getMessageId() {
-
-        return (this.messageId);
-
-    }
-
-
-    /**
-     * <p>Set the message identifier.</p>
-     *
-     * @param messageId The new message identifier
-     */
-    public void setMessageId(String messageId) {
-
-        this.messageId = messageId;
-
-    }
-
-
-    /**
-     * <p>Return the component reference of this <code>Message</code>
-     * (if any).</p>
-     */
-    public String getReference() {
-
-        return (this.reference);
-
-    }
-
-
-    /**
-     * <p>Set the component reference.</p>
-     *
-     * @param reference The new component reference
-     */
-    public void setReference(String reference) {
-
-        this.reference = reference;
-
-    }
-
-
-    /**
      * <p>Return the severity level of this <code>Message</code>.</p>
      */
     public int getSeverity() {
@@ -156,9 +107,15 @@ public class MessageImpl extends Message implements Serializable {
      * <p>Set the severity level.</p>
      *
      * @param severity The new severity level
+     *
+     * @exception IllegalArgumentException if the specified severity level
+     *  is not one of the supported values
      */
     public void setSeverity(int severity) {
 
+        if ((severity < SEVERITY_INFO) || (severity > SEVERITY_FATAL)) {
+            throw new IllegalArgumentException("" + severity);
+        }
         this.severity = severity;
 
     }
@@ -177,7 +134,7 @@ public class MessageImpl extends Message implements Serializable {
 
 
     /**
-     * <p>SEt the localized summary text.</p>
+     * <p>Set the localized summary text.</p>
      *
      * @param summary The new localized summary text
      */

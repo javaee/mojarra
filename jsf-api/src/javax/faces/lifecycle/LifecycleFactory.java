@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.7 2002/06/12 21:51:27 craigmcc Exp $
+ * $Id: LifecycleFactory.java,v 1.8 2002/06/14 00:00:06 craigmcc Exp $
  */
 
 /*
@@ -33,15 +33,6 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * {@link Lifecycle} instance for all calls to the
  * <code>getLifecycle()</code> method with the same lifecycle identifier
  * value, from within the same web application.</p>
- *
- * <p>It is possible for an application to customize the set of {@link Phase}s
- * that will be configured in a {@link Lifecycle} instance by calling the
- * <code>registerBefore()</code> or <code>registerAfter()</code> method,
- * passing the lifecycle identifier to be customized and the {@link Phase}
- * instance to be inserted.  However, these calls MUST be completed before
- * <code>getLifecycle()</code> is called the first time for that lifecycle
- * identifier.  Subsequent attempts to customize the configured {@link Phase}s
- * will throw <code>IllegalStateException</code>.</p>
  */
 
 public abstract class LifecycleFactory {
@@ -52,6 +43,28 @@ public abstract class LifecycleFactory {
      * for this JavaServer Faces implementation.</p>
      */
     public static final String DEFAULT_LIFECYCLE = "DEFAULT";
+
+
+    /**
+     * <p>Register a new {@link Lifecycle} instance, associated with
+     * the specified <code>lifecycleId</code>, to be supported by this
+     * <code>LifecycleFactory</code>.  This method may be called at
+     * any time, and makes the corresponding {@link Lifecycle} instance
+     * available throughout the remaining lifetime of this web application.
+     * </p>
+     *
+     * @param lifecycleId Lifecycle identifier under which the new
+     *  {@link Lifecycle} instance should be registered
+     * @param lifecycle The {@link Lifecycle} instance that is
+     *  being registered
+     *
+     * @exception IllegalArgumentException if <code>lifecycleId</code>
+     *  is already registered in this <code>LifecycleFactory</code>
+     * @exception NullPointerException if <code>lifecycleId</code>
+     *  or <code>lifecycle</code> is <code>null</code>
+     */
+    public abstract void addLifecycle(String lifecycleId,
+                                      Lifecycle lifecycle);
 
 
     /**
@@ -79,56 +92,6 @@ public abstract class LifecycleFactory {
      * </p>
      */
     public abstract Iterator getLifecycleIds();
-
-
-    /**
-     * <p>Register a custom {@link Phase} instance that will be invoked
-     * <strong>after</strong> the Faces-implementation-provided standard
-     * instance, and after any phases previously registered via
-     * <code>registerAfter()</code>, for the specified phase identifier.
-     *
-     * @param lifecycleId Lifecycle identifier of the {@link Lifecycle}
-     *  implementation instance to be configured
-     * @param phaseId Phase identifier of the Faces lifecycle phase to
-     *  which this new {@link Phase} instance is being appended
-     * @param phase Phase instance to be appended
-     *
-     * @exception IllegalArgumentException if <code>phaseId</code> does
-     *  not contain one of the standard phase identifiers defined in
-     *  {@link Lifecycle}
-     * @exception IllegalStateException if an attempt is made to register
-     *  a new {@link Phase} after <code>getLifecycle()</code> has been
-     *  successfully called for this lifecycle identifier
-     * @exception NullPointerException if <code>lifecycleId</code>
-     *  or <code>phase</code> are null
-     */
-    public abstract void registerAfter(String lifecycleId,
-                                       int phaseId, Phase phase);
-
-
-    /**
-     * <p>Register a custom {@link Phase} instance that will be invoked
-     * <strong>before</strong> the Faces-implementation-provided standard
-     * instance, and before any phases previously registered via
-     * <code>registerBefore()</code>, for the specified phase identifier.
-     *
-     * @param lifecycleId Lifecycle identifier of the {@link Lifecycle}
-     *  implementation instance to be configured
-     * @param phaseId Phase identifier of the Faces lifecycle phase to
-     *  which this new {@link Phase} instance is being prefixed
-     * @param phase Phase instance to be prefixed
-     *
-     * @exception IllegalArgumentException if <code>phaseId</code> does
-     *  not contain one of the standard phase identifiers defined in
-     *  {@link Lifecycle}
-     * @exception IllegalStateException if an attempt is made to register
-     *  a new {@link Phase} after <code>getLifecycle()</code> has been
-     *  successfully called for this lifecycle identifier
-     * @exception NullPointerException if <code>lifecycleId</code>
-     *  or <code>phase</code> are null
-     */
-    public abstract void registerBefore(String lifecycleId,
-                                        int phaseId, Phase phase);
 
 
 }

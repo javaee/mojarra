@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.1 2002/06/03 19:27:27 craigmcc Exp $
+ * $Id: Validator.java,v 1.2 2002/06/14 00:00:09 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
-import javax.faces.context.MessageList;
 
 
 /**
@@ -27,11 +26,10 @@ import javax.faces.context.MessageList;
  *
  * <p>Individual <code>Validator</code>s should examine the component that
  * they are passed, and add {@link Message} instances to the
- * {@link MessageList} associated with the specified {@link FacesContext}
- * for any failures to conform to the required rules.  In general, such
- * messages should be configured with the <code>compoundId</code> of the
- * specified component as the <code>reference</code> property of the message.
- * </p>
+ * {@link FacesContext} for the current request, documenting
+ * any failures to conform to the required rules.  In general, such
+ * messages should be associated with the {@link UIComponent} on which
+ * the validation failure occurred.</p>
  *
  * <p>For maximum generality, <code>Validator</code> instances should be
  * configurable based on attribute values associated with the
@@ -72,8 +70,7 @@ public abstract class Validator {
      * <p>Perform the correctness checks implemented by this
      * <code>Validator</code> against the specified {@link UIComponent}.
      * Add {@link Message}s describing any correctness violations to the
-     * {@link MessageList} associated with the specified {@link FacesContext}.
-     * </p>
+     * specified {@link FacesContext}.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness

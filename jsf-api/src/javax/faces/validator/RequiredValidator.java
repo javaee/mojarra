@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.2 2002/06/03 22:24:30 craigmcc Exp $
+ * $Id: RequiredValidator.java,v 1.3 2002/06/14 00:00:08 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
-import javax.faces.context.MessageList;
 
 
 /**
@@ -49,8 +48,7 @@ public final class RequiredValidator extends ValidatorImpl {
      * <p>Perform the correctness checks implemented by this
      * <code>Validator</code> against the specified {@link UIComponent}.
      * Add {@link Message}s describing any correctness violations to the
-     * {@link MessageList} associated with the specified {@link FacesContext}.
-     * </p>
+     * specified {@link FacesContext}.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
@@ -59,8 +57,8 @@ public final class RequiredValidator extends ValidatorImpl {
 
         Object value = component.getValue();
         if (value == null) {
-            context.getMessageList().add(FAILED_MESSAGE_ID,
-                                         component.getCompoundId());
+            context.addMessage(component,
+                               getMessage(context, FAILED_MESSAGE_ID));
         }
 
     }

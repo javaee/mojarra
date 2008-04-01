@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.1 2002/06/03 22:24:30 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.2 2002/06/14 00:00:09 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
-import javax.faces.context.MessageList;
 
 
 /**
@@ -27,18 +26,18 @@ import javax.faces.context.MessageList;
  *     should not be allowed, a {@link RequiredValidator} can be configured
  *     to check for this case.)</li>
  * <li>If the current component value is not a <code>String</code>,
- *     add a TYPE_MESSAGE_ID message to the {@link MessageList} for this
+ *     add a TYPE_MESSAGE_ID message to the {@link FacesContext} for this
  *     request, and skip subsequent checks.</li>
  * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
  *     component, and it is a String, check the component value against
  *     this limit.  If the component value is greater than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
- *     {@link MessageList} for this request.</li>
+ *     {@link FacesContext} for this request.</li>
  * <li>If a MINIMUM_ATTRIBUTE_NAME attribute has been configured on this
  *     component, and it is a String, check the component value against
  *     this limit.  If the component value is less than the
  *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
- *     {@link MessageList} for this request.</li>
+ *     {@link FacesContext} for this request.</li>
  * </ul>
  */
 
@@ -129,8 +128,7 @@ public final class StringRangeValidator extends ValidatorImpl {
      * <p>Perform the correctness checks implemented by this
      * <code>Validator</code> against the specified {@link UIComponent}.
      * Add {@link Message}s describing any correctness violations to the
-     * {@link MessageList} associated with the specified {@link FacesContext}.
-     * </p>
+     * specified {@link FacesContext}.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
@@ -144,8 +142,8 @@ public final class StringRangeValidator extends ValidatorImpl {
                 checkMaximum(context, component, converted);
                 checkMinimum(context, component, converted);
             } catch (ClassCastException e) {
-                context.getMessageList().add(TYPE_MESSAGE_ID,
-                                             component.getCompoundId());
+                context.addMessage(component,
+                                   getMessage(context, TYPE_MESSAGE_ID));
                 return;
             }
         }
@@ -175,15 +173,15 @@ public final class StringRangeValidator extends ValidatorImpl {
                 return;
             }
         } catch (ClassCastException e) {
-            context.getMessageList().add(LIMIT_MESSAGE_ID,
-                                         component.getCompoundId());
+            context.addMessage(component,
+                               getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
 
         if (value.compareTo(attribute) > 0) {
-            context.getMessageList().add(MAXIMUM_MESSAGE_ID,
-                                         component.getCompoundId(),
-                                         new Object[] { attribute });
+            context.addMessage(component,
+                               getMessage(context, MAXIMUM_MESSAGE_ID,
+                                         new Object[] { attribute }));
         }
 
     }
@@ -208,15 +206,15 @@ public final class StringRangeValidator extends ValidatorImpl {
                 return;
             }
         } catch (ClassCastException e) {
-            context.getMessageList().add(LIMIT_MESSAGE_ID,
-                                         component.getCompoundId());
+            context.addMessage(component,
+                               getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
 
         if (value.compareTo(attribute) < 0) {
-            context.getMessageList().add(MINIMUM_MESSAGE_ID,
-                                         component.getCompoundId(),
-                                         new Object[] { attribute });
+            context.addMessage(component,
+                               getMessage(context, MINIMUM_MESSAGE_ID,
+                                         new Object[] { attribute }));
         }
 
     }

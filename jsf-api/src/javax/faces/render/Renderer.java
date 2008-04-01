@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.9 2002/05/23 17:45:31 craigmcc Exp $
+ * $Id: Renderer.java,v 1.10 2002/06/14 00:00:06 craigmcc Exp $
  */
 
 /*
@@ -153,7 +153,7 @@ public abstract class Renderer {
      *     that encoding can reproduce the previous input
      *     (even though it was syntactically or semantically incorrect).</li>
      * <li>Add an appropriate conversion failure error message by calling
-     *     <code>context.getMessageList().add()</code>.</li>
+     *     <code>context.addMessage()</code>.</li>
      * </ul>
      *
      * @param context FacesContext for the request we are processing

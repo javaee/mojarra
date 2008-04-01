@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.2 2002/06/13 17:48:14 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.3 2002/06/14 00:00:03 craigmcc Exp $
  */
 
 /*
@@ -839,7 +839,7 @@ public abstract class UIComponentBase implements UIComponent {
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
-     *     <code>context.getMessageList().add()</code>.</li>
+     *     <code>context.addMessage()</code>.</li>
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
@@ -945,8 +945,7 @@ public abstract class UIComponentBase implements UIComponent {
      * {@link Validator}s registered on this component, during the
      * <em>Process Validations</em> phase of the request processing lifecycle.
      * If errors are encountered, appropriate <code>Message</code> instances
-     * should be added to the <code>MessageList</code> associated with the
-     * {@link FacesContext} for the current request.
+     * should be added to the {@link FacesContext} for the current request.
      * </p>
      *
      * @param context FacesContext for the request we are processing

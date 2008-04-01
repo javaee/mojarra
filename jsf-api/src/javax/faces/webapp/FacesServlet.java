@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.5 2002/06/12 21:51:29 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.6 2002/06/14 00:00:09 craigmcc Exp $
  */
 
 /*
@@ -30,9 +30,27 @@ import javax.servlet.ServletResponse;
  * <p><strong>FacesServlet</strong> is a servlet that manages the request
  * processing lifecycle for web applications that are utilizing JavaServer
  * Faces to construct the user interface.</p>
+ *
+ * <p>This servlet recognizes the following context initialization
+ * parameters:</p>
+ * <ul>
+ * <li><strong>javax.faces.lifecycle.LIFECYCLE_ID</strong> - Lifecycle
+ *     identifier of the {@link Lifecycle} instance to be used when
+ *     processing JSF requests in this web application.  If not specified,
+ *     the default instance, identified by
+ *     <code>LifecycleFactory.DEFAULT_LIFECYCLE</code>, will be used.</li>
+ * </ul>
  */
 
 public final class FacesServlet implements Servlet {
+
+
+    /**
+     * <p>Context initialization parameter name for the lifecycle identifier
+     * of the {@link Lifecycle} instance to be utilized.</p>
+     */
+    private static final String LIFECYCLE_ID_ATTR =
+        "javax.faces.lifecycle.LIFECYCLE_ID";
 
 
     /**
@@ -42,9 +60,9 @@ public final class FacesServlet implements Servlet {
 
 
     /**
-     * <p>Factory for {@link Lifecycle} instances.</p>
+     * <p>The {@link Lifecycle} instance to use for request processing.</p>
      */
-    private LifecycleFactory lifecycleFactory = null;
+    private Lifecycle lifecycle = null;
 
 
     /**
@@ -59,7 +77,7 @@ public final class FacesServlet implements Servlet {
     public void destroy() {
 
         facesContextFactory = null;
-        lifecycleFactory = null;
+        lifecycle = null;
         servletConfig = null;
 
     }
@@ -107,10 +125,17 @@ public final class FacesServlet implements Servlet {
             }
         }
 
-        // Acquire our LifecycleFactory instance
+        // Acquire our Lifecycle instance
         try {
-            lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory
-                (FactoryFinder.LIFECYCLE_FACTORY);
+            LifecycleFactory lifecycleFactory = (LifecycleFactory)
+                FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+            String lifecycleId =
+                servletConfig.getServletContext().getInitParameter
+                (LIFECYCLE_ID_ATTR);
+            if (lifecycleId == null) {
+                lifecycleId = LifecycleFactory.DEFAULT_LIFECYCLE;
+            }
+            lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
         } catch (FacesException e) {
             Throwable rootCause = e.getRootCause();
             if (rootCause == null) {
@@ -137,17 +162,10 @@ public final class FacesServlet implements Servlet {
                         ServletResponse response)
         throws IOException, ServletException {
 
-        // response.setContentType("text/html");  // FIXME - when/how to call?
-
-        // Create and cache the FacesContext instance for this request
+        // Acquire and cache the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response);
         request.setAttribute(FacesContext.FACES_CONTEXT_ATTR, context);
-
-        // Look up the Lifecycle instance for this request
-        Lifecycle lifecycle = lifecycleFactory.getLifecycle
-            (LifecycleFactory.DEFAULT_LIFECYCLE); // FIXME - how to choose?
-        // lifecycle.setApplicationHandler(this); // FIXME - when/how to call?
 
         // Execute the request processing lifecycle for this request
         try {
@@ -156,7 +174,7 @@ public final class FacesServlet implements Servlet {
             throw new ServletException(e.getMessage(), e);
         }
 
-        // Release the FacesContext instance for this request
+        // Remove and release the FacesContext instance for this request
         request.removeAttribute(FacesContext.FACES_CONTEXT_ATTR);
         context.release();
         

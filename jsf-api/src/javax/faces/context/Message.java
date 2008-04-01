@@ -1,5 +1,5 @@
 /*
- * $Id: Message.java,v 1.1 2002/05/16 18:28:48 craigmcc Exp $
+ * $Id: Message.java,v 1.2 2002/06/14 00:00:04 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -13,27 +13,8 @@ package javax.faces.context;
 
 /**
  * <p><strong>Message</strong> represents a single validation (or other)
- * message, which is optionally associated with a particular component in
- * the request tree.  <code>Message</code> instances are accumulated into
- * a {@link MessageList}, which is made available via the
- * <code>getMessageList()</code> method of {@link FacesContext}.</p>
- *
- * <p><code>Message</code> instances have the following JavaBean properties:
- * </p>
- * <ul>
- * <li><em>detail</em> (String) - Localized version of the detailed text
- *     to be displayed for this <code>Message</code> (if any).</li>
- * <li><em>messageId</em> (String) - Identifier used to look up the
- *     detailed information related to this error.</li>
- * <li><em>reference</em> (String) - Compound identifier of the
- *     <code>UIComponent</code>, in the request tree, with which this
- *     <code>Message</code> is associated (if any).</li>
- * <li><em>severity</em> (int) - Indicator of the seriousness of the
- *     situation represented by this <code>Message</code>.  Must be one of
- *     the manifest constants described below.</li>
- * <li><em>summary</em> (String) - Localized version of the summary text
- *     to be displayed for this <code>Message</code>.</li>
- * </ul>
+ * message, which is typically associated with a particular component in
+ * the request component tree.</p>
  */
 
 public abstract class Message {
@@ -79,19 +60,6 @@ public abstract class Message {
      * approaches to correcting it.</p>
      */
     public abstract String getDetail();
-
-
-    /**
-     * <p>Return the message identifier of this <code>Message</code>.</p>
-     */
-    public abstract String getMessageId();
-
-
-    /**
-     * <p>Return the component reference of this <code>Message</code>
-     * (if any).</p>
-     */
-    public abstract String getReference();
 
 
     /**

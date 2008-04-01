@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.2 2002/06/03 22:24:30 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.3 2002/06/14 00:00:08 craigmcc Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
-import javax.faces.context.MessageList;
 
 
 /**
@@ -32,12 +31,12 @@ import javax.faces.context.MessageList;
  *     component, and it is an Integer, check the length of the converted
  *     String against this limit.  If the String length is less than the
  *     specified minimum, add a MINIMUM_MESSAGE_ID message to the
- *     {@link MessageList} for this request.</li>
+ *     {@link FacesContext} for this request.</li>
  * <li>If a MAXIMUM_ATTRIBUTE_NAME attribute has been configured on this
  *     component, and it is an Integer, check the length of the converted
  *     String against this limit.  If the String length is larger than the
  *     specified minimum, add a MAXIMUM_MESSAGE_ID message to the
- *     {@link MessageList} for this request.</li>
+ *     {@link FacesContext} for this request.</li>
  * </ul>
  */
 
@@ -122,8 +121,7 @@ public final class LengthValidator extends ValidatorImpl {
      * <p>Perform the correctness checks implemented by this
      * <code>Validator</code> against the specified {@link UIComponent}.
      * Add {@link Message}s describing any correctness violations to the
-     * {@link MessageList} associated with the specified {@link FacesContext}.
-     * </p>
+     * specified {@link FacesContext}.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
@@ -162,14 +160,14 @@ public final class LengthValidator extends ValidatorImpl {
                 return;
             }
         } catch (ClassCastException e) {
-            context.getMessageList().add(LIMIT_MESSAGE_ID,
-                                         component.getCompoundId());
+            context.addMessage(component,
+                               getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
         if (svalue.length() > attribute.intValue()) {
-            context.getMessageList().add(MAXIMUM_MESSAGE_ID,
-                                         component.getCompoundId(),
-                                         new Object[] { attribute });
+            context.addMessage(component,
+                               getMessage(context, MAXIMUM_MESSAGE_ID,
+                                         new Object[] { attribute }));
         }
 
     }
@@ -194,14 +192,14 @@ public final class LengthValidator extends ValidatorImpl {
                 return;
             }
         } catch (ClassCastException e) {
-            context.getMessageList().add(LIMIT_MESSAGE_ID,
-                                         component.getCompoundId());
+            context.addMessage(component,
+                               getMessage(context, LIMIT_MESSAGE_ID));
             return;
         }
         if (svalue.length() < attribute.intValue()) {
-            context.getMessageList().add(MINIMUM_MESSAGE_ID,
-                                         component.getCompoundId(),
-                                         new Object[] { attribute });
+            context.addMessage(component,
+                               getMessage(context, MINIMUM_MESSAGE_ID,
+                                         new Object[] { attribute }));
         }
 
     }

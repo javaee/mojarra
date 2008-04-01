@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.20 2002/06/13 17:48:14 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.21 2002/06/14 00:00:04 craigmcc Exp $
  */
 
 /*
@@ -28,8 +28,6 @@ import javax.servlet.http.HttpSession;
  * information related to the processing of a single JavaServer Faces request,
  * and the rendering of the corresponding response.  It is passed to, and
  * potentially modified by, each phase of the request processing lifecycle.</p>
- *
- * <h3>Lifecycle</h3>
  *
  * <p>A <code>FacesContext</code> instance is associated with a particular
  * request at the beginning of request processing, by a call to the
@@ -122,29 +120,46 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the {@link MessageList} instance containing validation (and
-     * other) messages that have been accumulated during the processing of
-     * the current request.</p>
+     * <p>Return the maximum severity level recorded on any {@link Message}s
+     * that has been queued, whether or not they are associated with any
+     * specific {@link UIComponent}.  If no such messages have been queued,
+     * return a value less than <code>Message.SEVERITY_INFO</code>.</p>
      */
-    public abstract MessageList getMessageList();
+    public abstract int getMaximumSeverity();
 
 
     /**
-     * <p>Return the phase identifier representing the current phase in the
-     * request processing lifecycle.</p>
+     * <p>Return an <code>Iterator</code> over the {@link Message}s that have
+     * been queued that are <strong>not</strong> associated with any specific
+     * {@link UIComponent}.  If no such messages have been queued, return an
+     * empty <code>Iterator</code>.</p>
      */
-    public abstract int getPhaseId();
+    public abstract Iterator getMessages();
 
 
     /**
-     * <p>Set the phase identifier representing the current phase in the
-     * request processing lifecycle.  This should only be called by the
-     * <code>execute()</code> method of the {@link Lifecycle} instance that
-     * is processing the current request.
+     * <p>Return an <code>Iterator</code> over the {@link Message}s that have
+     * been queued that are associated with the specified {@link UIComponent},
+     * which must exist in the request component tree.
+     * If no such messages have been queued, return an empty
+     * <code>Iterator</code>.</p>
      *
-     * @param phaseId The new phase identifier
+     * @param component The {@link UIComponent} for which messages are
+     *  requested
+     *
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>null</code>
      */
-    public abstract void setPhaseId(int phaseId);
+    public abstract Iterator getMessages(UIComponent component);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link Message}s that have
+     * been queued, whether or not they are associated with any specific
+     * {@link UIComponent}.  If no such messages have been queued, return an
+     * empty <code>Iterator</code>.</p>
+     */
+    public abstract Iterator getMessagesAll();
 
 
     /**
@@ -286,6 +301,31 @@ public abstract class FacesContext {
      *  is <code>null</code>
      */
     public abstract void addApplicationEvent(FacesEvent event);
+
+
+    /**
+     * <p>Append a {@link Message} to the set of messages not associated with
+     * any specific {@link UIComponent}.</p>
+     *
+     * @param message The message to be appended
+     *
+     * @exception NullPointerException if <code>message</code>
+     *  is <code>null</code>
+     */
+    public abstract void addMessage(Message message);
+
+
+    /**
+     * <p>Append a {@link Message} to the set of messages associated with
+     * the specified {@link UIComponent}.</p>
+     *
+     * @param component The component with which this message is associated
+     * @param message The message to be appended
+     *
+     * @exception NullPointerException if <code>component</code> or
+     *  <code>message</code> is <code>null</code>
+     */
+    public abstract void addMessage(UIComponent component, Message message);
 
 
     /**

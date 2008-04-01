@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorImpl.java,v 1.1 2002/06/03 22:24:30 craigmcc Exp $
+ * $Id: ValidatorImpl.java,v 1.2 2002/06/14 00:00:09 craigmcc Exp $
  */
 
 /*
@@ -13,9 +13,13 @@ package javax.faces.validator;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Iterator;
+import javax.faces.FactoryFinder;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Message;
+import javax.faces.context.MessageResources;
+import javax.faces.context.MessageResourcesFactory;
 
 
 /**
@@ -83,13 +87,65 @@ abstract class ValidatorImpl extends Validator {
      * <p>Perform the correctness checks implemented by this
      * <code>Validator</code> against the specified {@link UIComponent}.
      * Add {@link Message}s describing any correctness violations to the
-     * {@link MessageList} associated with the specified {@link FacesContext}.
-     * </p>
+     * specified {@link FacesContext}.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent we are checking for correctness
      */
     public abstract void validate(FacesContext context, UIComponent component);
+
+
+    // ------------------------------------------------------ Protected Methods
+
+
+    /**
+     * <p>Return a {@link Message} for the specified parameters.</p>
+     *
+     * @param context The {@link FacesContext} associated with the request
+     *  being processed
+     * @param messageId Message identifier of the requested message
+     */
+    protected Message getMessage(FacesContext context, String messageId) {
+
+        return (getMessageResources().getMessage(context, messageId));
+
+    }
+
+
+    /**
+     * <p>Return a {@link Message} for the specified parameters.</p>
+     *
+     * @param context The {@link FacesContext} associated with the request
+     *  being processed
+     * @param messageId Message identifier of the requested message
+     * @param params Substitution parameters for this message
+     */
+    protected Message getMessage(FacesContext context, String messageId,
+                                 Object params[]) {
+
+        return (getMessageResources().getMessage(context, messageId, params));
+
+    }
+
+
+    private MessageResources resources = null;
+
+    /**
+     * <p>Return the {@link MessageResources} instance for the message
+     * resources defined by the JavaServer Faces Specification.
+     */
+    protected synchronized MessageResources getMessageResources() {
+
+        if (resources == null) {
+            MessageResourcesFactory factory = (MessageResourcesFactory)
+                FactoryFinder.getFactory
+                (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
+            resources = factory.getMessageResources
+                (MessageResourcesFactory.FACES_API_MESSAGES);
+        }
+        return (resources);
+
+    }
 
 
 }
