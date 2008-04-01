@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.1 2002/06/04 02:31:07 craigmcc Exp $
+ * $Id: UIOutputTestCase.java,v 1.2 2002/07/28 22:07:59 craigmcc Exp $
  */
 
 /*
@@ -98,21 +98,6 @@ public class UIOutputTestCase extends UIComponentTestCase {
 
         super.testAttributePropertyTransparency();
         UIOutput output = (UIOutput) component;
-
-        // outputName
-        assertNull("text1", output.getText());
-        assertNull("text2", output.getAttribute("value"));
-        output.setText("foo");
-        assertEquals("text3", "foo", output.getText());
-        assertEquals("text4", "foo",
-                     (String) output.getAttribute("value"));
-        output.setAttribute("value", "bar");
-        assertEquals("text5", "bar", output.getText());
-        assertEquals("text6", "bar",
-                     (String) output.getAttribute("value"));
-        output.setAttribute("value", null);
-        assertNull("text7", output.getText());
-        assertNull("text8", output.getAttribute("value"));
 
     }
 

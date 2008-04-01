@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.12 2002/07/15 18:08:24 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.13 2002/07/28 22:07:58 craigmcc Exp $
  */
 
 /*
@@ -18,8 +18,11 @@ import javax.faces.context.ResponseWriter;
 /**
  * <p><strong>UIOutput</strong> is a {@link UIComponent} that displays
  * output to the user.  The user cannot manipulate this component; it is
- * for display purposes only.  Any localization of the text to be rendered
- * is the responsibility of the application.</p>
+ * for display purposes only.  There are no restrictions on the data type
+ * of the local value, or the object referenced by the model reference
+ * expression (if any); however, individual <code>Renderer</code>s will
+ * generally impose restrictions on the type of data they know how to
+ * display.
  */
 
 public class UIOutput extends UIComponentBase {
@@ -43,28 +46,6 @@ public class UIOutput extends UIComponentBase {
     public String getComponentType() {
 
         return (TYPE);
-
-    }
-
-
-    /**
-     * <p>Return the local value of the text to be displayed.</p>
-     */
-    public String getText() {
-
-        return ((String) getAttribute("value"));
-
-    }
-
-
-    /**
-     * <p>Set the local value of the text to be displayed.</p>
-     *
-     * @param text The new text
-     */
-    public void setText(String text) {
-
-        setAttribute("value", text);
 
     }
 
