@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.15 2002/07/29 00:26:08 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.16 2002/08/01 23:38:29 craigmcc Exp $
  */
 
 /*
@@ -1124,7 +1124,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKit renderKit = rkFactory.getRenderKit
                 (context.getResponseTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
-            renderer.encodeChildren(context, this);
+            renderer.encodeEnd(context, this);
         }
 
     }
@@ -1254,6 +1254,9 @@ public abstract class UIComponentBase implements UIComponent {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+        if (!isValid()) {
+            return;
         }
         String modelReference = getModelReference();
         if (modelReference == null) {
