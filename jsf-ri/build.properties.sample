@@ -1,0 +1,10 @@
+# Make these values be correct on your system, then rename to
+# build.properties.  On win32, make sure to preserve the \\ syntax
+# for escaping backslashes.  
+
+tomcat.home = D:\\tomcat4.0
+compile.deprecation = true
+junit.jar = D:\\junit3.7\\junit.jar
+cactus.jar = D:\\cactus-23-1.2\\lib\\cactus.jar
+cactus.ant.jar = D:\\cactus-23-1.2\\lib\\cactus-ant.jar
+httpclient.jar = D:\\cactus-23-1.2\\lib\\httpclient.jar

@@ -76,6 +76,15 @@
 
 <!-- ************ Executable Targets ************************************** -->
 
+  <!-- 
+       ===================================================================
+         Convenience target: cvs update              
+       =================================================================== 
+  -->
+  <target name="cvsupdate">
+    <cvs command="update -d -P"/>
+  </target>
+
 
   <target name="init"
    description="Initialize and evaluate conditionals">
