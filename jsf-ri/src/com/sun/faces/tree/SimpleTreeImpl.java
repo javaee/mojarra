@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTreeImpl.java,v 1.3 2002/07/31 19:22:03 jvisvanathan Exp $
+ * $Id: SimpleTreeImpl.java,v 1.4 2002/08/01 00:30:37 jvisvanathan Exp $
  */
 
 /*
@@ -16,11 +16,9 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
-
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletContext;
 
 import com.sun.faces.RIConstants;
@@ -31,7 +29,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeImpl.java,v 1.3 2002/07/31 19:22:03 jvisvanathan Exp $
+ * @version $Id: SimpleTreeImpl.java,v 1.4 2002/08/01 00:30:37 jvisvanathan Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -57,10 +55,7 @@ protected String treeId = null;
 
 // Relationship Instance Variables
 
-// PENDING (visvan) once we migrate to the next version of the API,
-// we don't have to make renderkit transient, since Tree no longer
-// will store the renderkitId instead of instance.
-protected transient RenderKit renderKit = null;
+protected String renderKitId = null;
 protected UIComponent root = null;
 
 //
@@ -94,23 +89,7 @@ public SimpleTreeImpl(ServletContext context, UIComponent newRoot,
     }
     setRoot(newRoot);
     setTreeId(newTreeId);
-
-    renderKit = (RenderKit) 
-	context.getAttribute(RIConstants.DEFAULT_RENDER_KIT);
-    if (null == renderKit) {
-	// create and store the default RenderKit
-	RenderKitFactory renderKitFactory = (RenderKitFactory)
-	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-	Assert.assert_it(null != renderKitFactory);
-	
-	renderKit = 
-	    renderKitFactory.getRenderKit(RIConstants.DEFAULT_RENDER_KIT);
-	Assert.assert_it(null != renderKit);
-	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, renderKit);
-    }
-	
-    Assert.assert_it(null != renderKit);
-    
+    setRenderKitId(RenderKitFactory.DEFAULT_RENDER_KIT);
 }
 
 //
@@ -137,16 +116,15 @@ void setTreeId(String newTreeId)
 // Methods from Tree
 //
 
-public RenderKit getRenderKit()
+public String getRenderKitId()
 {
-    return renderKit;
+    return renderKitId;
 }
 
-public void setRenderKit(RenderKit newRenderKit)
+public void setRenderKitId(String newRenderKitId)
 {
-    ParameterCheck.nonNull(newRenderKit);
-
-    renderKit = newRenderKit;
+    ParameterCheck.nonNull(newRenderKitId);
+    renderKitId = newRenderKitId;
 }
 
 public UIComponent getRoot()
@@ -157,13 +135,6 @@ public UIComponent getRoot()
 public String getTreeId()
 {
     return treeId;
-}
-
-public void release()
-{
-    root = null;
-    treeId = null;
-    renderKit = null;
 }
 
 } // end of class SimpleTreeImpl
