@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.1 2001/11/17 01:33:01 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.2 2001/11/21 00:23:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -24,6 +24,7 @@ import javax.faces.RenderContextFactory;
 import javax.faces.RenderContext;
 import javax.faces.FacesException;
 import javax.faces.ObjectTable;
+import javax.faces.ObjectTableFactory;
 import javax.faces.ObjectTable.Scope;
 
 import com.sun.faces.ObjectTableImpl.ScopeImpl;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.1 2001/11/17 01:33:01 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.2 2001/11/21 00:23:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +84,13 @@ private ObjectTable objectTable = null;
 //
 
 public void setUp() {
-    objectTable = new ObjectTableImpl();
+    ObjectTableFactory otf = ObjectTableFactory.newInstance();
+
+    try {
+	otf = ObjectTableFactory.newInstance();
+	objectTable = otf.newObjectTable();
+    } catch (Exception e) {
+    }
 }
 
 public void tearDown() {
