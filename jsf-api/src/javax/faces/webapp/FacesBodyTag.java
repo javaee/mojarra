@@ -1,5 +1,5 @@
 /*
- * $Id: FacesBodyTag.java,v 1.1 2002/06/04 22:16:03 craigmcc Exp $
+ * $Id: FacesBodyTag.java,v 1.2 2002/08/07 17:04:59 craigmcc Exp $
  */
 
 /*
@@ -40,19 +40,6 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
 
 
     /**
-     * <p>Default processing after body evaluation is to skip any further
-     * iterations over this tag's body.</p>
-     *
-     * @exception JspException if an error is encountered
-     */
-    public int doAfterBody() throws JspException {
-
-        return (Tag.SKIP_BODY);
-
-    }
-
-
-    /**
      * <p>Prepare for evaluation of the body.  This method is invoked by the
      * JSP page implementation object after <code>setBodyContent()</code>
      * and before the first time the body is to be evaluated.  This method
@@ -65,19 +52,6 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
     public void doInitBody() throws JspException {
 
         ; // Default implementation does nothing
-
-    }
-
-
-    /**
-     * <p>Default processing of the start tag returns
-     * <code>EVAL_BODY_BUFFERED</code>.</p>
-     *
-     * @exception JspException if an error is encountered
-     */
-    public int doStartTag() throws JspException {
-
-        return BodyTag.EVAL_BODY_BUFFERED;
 
     }
 
@@ -130,6 +104,24 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
     public JspWriter getPreviousOut() {
 
         return (this.bodyContent.getEnclosingWriter());
+
+    }
+
+
+    // ------------------------------------------------------ Protected Methods
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doStart()</code> method when it is called.  Subclasses
+     * may override this method to return the appropriate value.</p>
+     *
+     * @exception JspException to cause <code>doStart()</code> to
+     *  throw an exception
+     */
+    protected int getDoStartValue() throws JspException {
+
+        return (EVAL_BODY_BUFFERED);
 
     }
 

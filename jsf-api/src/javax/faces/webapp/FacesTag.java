@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.19 2002/07/31 00:27:47 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.20 2002/08/07 17:04:59 craigmcc Exp $
  */
 
 /*
@@ -111,36 +111,6 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
-     * <p>Return the flag value that should be returned from the
-     * <code>doEnd()</code> method when it is called.  Subclasses
-     * May override this method to return the appropriate value.</p>
-     *
-     * @exception JspException to cause <code>doEnd()</code> to
-     *  throw an exception
-     */
-    public int getDoEndValue() throws JspException {
-
-        return (EVAL_PAGE);
-
-    }
-
-
-    /**
-     * <p>Return the flag value that should be returned from the
-     * <code>doStart()</code> method when it is called.  Subclasses
-     * may override this method to return the appropriate value.</p>
-     *
-     * @exception JspException to cause <code>doStart()</code> to
-     *  throw an exception
-     */
-    public int getDoStartValue() throws JspException {
-
-        return (EVAL_BODY_INCLUDE);
-
-    }
-
-
-    /**
      * <p>An override for the model reference expression associated with our
      * {@link UIComponent}, if not <code>null</code>.</p>
      */
@@ -242,6 +212,22 @@ public abstract class FacesTag extends TagSupport {
 
         // Return the appropriate control value
         return (getDoStartValue());
+
+    }
+
+
+    /**
+     * <p>Handle the ending of the nested body content for a tag that
+     * implements <code>javax.servlet.jsp.tagext.IterationTag</code>,
+     * as all subclasses of this class do.  The default implementation
+     * simply calls <code>getDoAfterBodyValue()</code> to retrieve the
+     * flag value to be returned.</p>
+     *
+     * @exception JspException if an error occurs
+     */
+    public int doAfterBody() throws JspException {
+
+        return (getDoAfterBodyValue());
 
     }
 
@@ -377,6 +363,51 @@ public abstract class FacesTag extends TagSupport {
                                      PageContext.REQUEST_SCOPE);
         }
         return (componentStack);
+
+    }
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doAfterBody()</code> method when it is called.  Subclasses
+     * may override this method to return the appropriate value.</p>
+     *
+     * @exception JspException to cause <code>doAfterBody()</code>
+     *  to throw an exception
+     */
+    protected int getDoAfterBodyValue() throws JspException {
+
+        return (SKIP_BODY);
+
+    }
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doEnd()</code> method when it is called.  Subclasses
+     * may override this method to return the appropriate value.</p>
+     *
+     * @exception JspException to cause <code>doEnd()</code> to
+     *  throw an exception
+     */
+    protected int getDoEndValue() throws JspException {
+
+        return (EVAL_PAGE);
+
+    }
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doStart()</code> method when it is called.  Subclasses
+     * may override this method to return the appropriate value.</p>
+     *
+     * @exception JspException to cause <code>doStart()</code> to
+     *  throw an exception
+     */
+    protected int getDoStartValue() throws JspException {
+
+        return (EVAL_BODY_INCLUDE);
 
     }
 
