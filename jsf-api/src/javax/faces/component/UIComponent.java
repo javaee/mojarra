@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.1 2002/05/07 05:18:56 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.2 2002/05/07 19:30:57 craigmcc Exp $
  */
 
 /*
@@ -27,9 +27,10 @@ import javax.faces.context.FacesContext;
  * <ul>
  * <li><strong>compoundId</strong> (java.lang.String) - A unique (within
  *     the component tree containing this component) identifier for the
- *     current node, consisting of the <code>id</code> of each component from
- *     the top of the tree down to (and including) the current node, separated
- *     by slash ('/') characters.  [READ-ONLY]</li>
+ *     current node, which begins with a slash character ('/'), followed by
+ *     the <code>id</code> of each parent of the current component (from the
+ *     top down) followed by a slash character ('/'), and ending with the
+ *     <code>id</code> of this component.  [READ-ONLY]</li>
  * <li><strong>id</strong> (java.lang.String) - An identifier for this
  *     component, which must be unique across all children of the parent
  *     {@link UIContainer}.  Identifiers may be composed of letters, digits,
@@ -45,9 +46,6 @@ import javax.faces.context.FacesContext;
  * <li><strong>parent</strong> (javax.faces.component.UIContainer) - The
  *     parent {@link UIContainer} in which this <code>UIComponent</code> is
  *     nested.  The root {@link UIContainer} will not have a parent.</li>
- * <li><strong>root</strong> (javax.faces.component.UIContainer) - The
- *     root {@link UIContainer} of the tree in which this component
- *     is nested.  [READ-ONLY]</li>
  * <li><strong>type</strong> - The canonical name of the component type
  *     represented by this <code>UIComponent</code> instance.  For all
  *     standard component types, this value is represented by a manifest
@@ -71,6 +69,32 @@ import javax.faces.context.FacesContext;
  * introspected (for example, by development tools), through a call to the
  * <code>getAttributeNames()</code> and <code>getAttributeDescriptor</code>
  * methods.</p>
+ *
+ * <h3>Component Trees and Navigation</h3>
+ *
+ * <p>A component whose implementation class extends {@link UIContainer}
+ * instead of <code>UIComponent</code> supports the association of child
+ * components with that container.  When applied recursively, a set of
+ * related components can be assembled into a <em>tree</em> with a single
+ * parent component (which must be a {@link UIContainer} if it has children)
+ * and an arbitrary number of child components at each level.</p>
+ *
+ * <p>Further, a unique (within a component tree) identifier, accessible
+ * via the <code>compoundId</code> read-only property, can be calculated
+ * for each component in the tree.  The syntax and semantics of compound
+ * identifiers match the corresponding notions in operating system filesystems,
+ * as well as URL schemes that support hierarchical identifiers (such as
+ * <code>http</code>), where a leading slash character ('/') identifies
+ * the root of the component tree, and subordinate nodes of the tree are
+ * selected by their <code>id</code> property followed by a slash.</p>
+ *
+ * <p><code>UIComponent</code> supports navigation from one component to
+ * another, within the component tree containing this component, using
+ * absolute and relative path expressions.  See
+ * <a href="#findComponent(java.lang.String)">findComponent()</a> for
+ * more information.</p>
+ *
+ * <h3>Other Stuff</h3>
  *
  * <p><strong>FIXME</strong> - Lots more about lifecycle, etc.</p>
  */
@@ -205,13 +229,6 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the root {@link UIContainer} of the tree in which this
-     * <code>UIComponent</code> is a member.</p>
-     */
-    public abstract UIContainer getRoot();
-
-
-    /**
      * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
     public abstract String getType();
@@ -229,6 +246,41 @@ public abstract class UIComponent {
      * @param value The new local value
      */
     public abstract void setValue(Object value);
+
+
+    // ----------------------------------------------------- Navigation Methods
+
+
+    /**
+     * <p>Find a related component in the current component tree by evaluating
+     * the specified navigation expression (which may be absolute or relative)
+     * to locate the requested component, which is then returned.
+     * Valid expression values are:</p>
+     * <ul>
+     * <li><em>Absolute Path</em> (<code>/a/b/c</code>) - Expressions that
+     *     start with a slash begin at the root component of the current tree,
+     *     and match exactly against the <code>compoundId</code> of the
+     *     selected component.</li>
+     * <li><em>Root Component</em> - (<code>/</code>) - An expression with
+     *     only a slash selects the root component of the current tree.</li>
+     * <li><em>Relative Path</em> - (<code>a/b</code>) - Start at the current
+     *     component (rather than the root), and navigate downward.</li>
+     * <li><em>Special Path Elements</em> - A path element with a single
+     *     period (".") selects the current component, while a path with two
+     *     periods ("..") selects the parent of the current node.</li>
+     * </ul>
+     *
+     * @param expr Navigation expression to interpret
+     *
+     * @exception IllegalArgumentException if the syntax of <code>expr</code>
+     *  is invalid
+     * @exception IllegalArgumentException if <code>expr</code> attempts to
+     *  cause navigation to a component that does not exist
+     * @exception NullPointerException if <code>expr</code>
+     *  is <code>null</code>
+     */
+    public abstract UIComponent findComponent(String expr);
+
 
 
     // ------------------------------------------- Lifecycle Processing Methods
