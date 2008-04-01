@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.27 2002/07/26 19:02:36 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.28 2002/07/26 22:20:04 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,8 @@ import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
-import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.ApplicationHandler;
+import javax.faces.lifecycle.ViewHandler;
 import javax.faces.tree.Tree;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
@@ -46,10 +47,6 @@ import javax.servlet.http.HttpSession;
  * lifecycle.</p>
  *
  * <p><strong>FIXME</strong> - ObjectManager et. al.</p>
- *
- * <p><strong>FIXME</strong> - Do we need direct access to the
- * output stream or writer associated with our response so it can be cached?
- * </p>
  */
 
 public abstract class FacesContext {
@@ -87,6 +84,14 @@ public abstract class FacesContext {
 
 
     /**
+     * <p>Return the {@link ApplicationHandler} instance to be utilized during
+     * the <em>Invoke Application</em> phase of the request processing
+     * lifecycle.</p>
+     */
+    public abstract ApplicationHandler getApplicationHandler();
+
+
+    /**
      * <p>Return the <code>HttpSession</code> instance for the session
      * associated with the current request (if any); otherwise, return
      * <code>null</code>.</p>
@@ -111,14 +116,6 @@ public abstract class FacesContext {
      *  current request
      */
     public abstract HttpSession getHttpSession(boolean create);
-
-
-    /**
-     * <p>Return the {@link Lifecycle} instance that is managing the
-     * processing of the request represented by this <code>FacesContext</code>
-     * instance.</p>
-     */
-    public abstract Lifecycle getLifecycle();
 
 
     /**
@@ -315,6 +312,14 @@ public abstract class FacesContext {
      * current response that is being rendered.</p>
      */
     public abstract ServletResponse getServletResponse();
+
+
+    /**
+     * <p>Return the {@link ViewHandler} instance to be utilized during
+     * the <em>Render Response</em> phase of the request processing
+     * lifecycle.</p>
+     */
+    public abstract ViewHandler getViewHandler();
 
 
     // --------------------------------------------------------- Public Methods
