@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.8 2002/02/14 03:55:53 edburns Exp $
+ * $Id: UISelectOne.java,v 1.9 2002/03/02 00:14:44 eburns Exp $
  */
 
 /*
@@ -237,7 +237,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
         if (selectItems == null) {
             selectItems = new Vector();
             selectItems.add(selectItem);
-            setAttribute("items", selectItem);
+            setAttribute("items", selectItems);
         } else {
             selectItems.add(selectItem);
         }
