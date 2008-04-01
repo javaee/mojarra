@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.16 2002/06/05 03:01:55 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.17 2002/06/07 20:43:42 craigmcc Exp $
  */
 
 /*
@@ -250,7 +250,7 @@ public abstract class FacesContext {
      * expected type of the corresponding value, if it can be determined;
      * otherwise, return <code>null</code>.</p>
      *
-     * @param model Model reference expression to be evaluated
+     * @param modelReference Model reference expression to be evaluated
      *
      * @exception FacesException if an error occurs during expression
      *  evaluation
@@ -259,7 +259,8 @@ public abstract class FacesContext {
      * @exception NullPointerException if <code>model</code>
      *  is <code>null</code>
      */
-    public abstract Class getModelType(String model) throws FacesException;
+    public abstract Class getModelType(String modelReference)
+        throws FacesException;
 
 
     /**
@@ -267,7 +268,7 @@ public abstract class FacesContext {
      * corresponding data value (which may be null).  No data type conversion
      * is performed.</p>
      *
-     * @param model Model reference to be evaluated
+     * @param modelReference Model reference to be evaluated
      *
      * @exception FacesException if an error occurs during expression
      *  evaluation
@@ -276,13 +277,17 @@ public abstract class FacesContext {
      * @exception NullPointerException if <code>model</code>
      *  is <code>null</code>
      */
-    public abstract Object getModelValue(String model) throws FacesException;
+    public abstract Object getModelValue(String modelReference)
+        throws FacesException;
 
 
     /**
      * <p>Evaluate the specified model reference expression, and set the
      * corresponding data value (which may be null).  No data type conversion
      * is performed.</p>
+     *
+     * @param modelReference Model reference to be evaluated
+     * @param value New model data to be stored in the model
      *
      * @exception FacesException if an error occurs during expression
      *  evaluation
