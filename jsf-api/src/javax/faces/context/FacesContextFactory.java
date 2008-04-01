@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.4 2002/05/20 17:59:11 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.5 2002/05/23 00:19:10 craigmcc Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.ServletResponse;
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   FacesContextFactory factory = (FacesContextFactory)
- *    FactoryFactory.createFactory("javax.faces.context.FacesContextFactory");
+ *    FactoryFactory.createFactory(FactoryFactory.FACES_CONTEXT_FACTORY);
  * </pre>
  */
 

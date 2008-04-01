@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.4 2002/05/21 02:11:09 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.5 2002/05/23 00:19:11 craigmcc Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   RenderKitFactory factory = (RenderKitFactory)
- *    FactoryFactory.createFactory("javax.faces.render.RenderKitFactory");
+ *    FactoryFactory.createFactory(FactoryFactory.RENDER_KIT_FACTORY);
  * </pre>
  *
  * <p>The factory instance MUST return the same {@link RenderKit} instance
