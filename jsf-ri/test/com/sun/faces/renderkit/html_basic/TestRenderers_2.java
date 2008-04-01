@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.15 2002/08/14 22:01:36 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.16 2002/08/15 23:23:04 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.15 2002/08/14 22:01:36 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.16 2002/08/15 23:23:04 eburns Exp $
  * 
  *
  */
@@ -61,7 +61,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     //
 
     public static String DATE_STR = "Jan 12, 1952";
-    public static String DATE_STR_LONG = "Sat, Jan 12, 1952";
+    public static String DATE_STR_LONG = "Sat, Jan 12, 1952 AD at 12:31:31 PM";
     
    public static String NUMBER_STR = "47%";
    public static String NUMBER_STR_PATTERN = "1999.8765432";
@@ -160,10 +160,10 @@ public class TestRenderers_2 extends JspFacesTestCase
             testInputTextRenderer(root);
             testOutputTextRenderer(root);
 	    testInputDateRenderer(root);
-	    testInputDateRendererWithPattern(root);
+	    testInputDateTimeRendererWithPattern(root);
 
             testOutputDateRenderer(root);
-	    testOutputDateRendererWithPattern(root);
+	    testOutputDateTimeRendererWithPattern(root);
 
             testTextAreaRenderer(root);
 
@@ -483,16 +483,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
-    public void testInputDateRendererWithPattern(UIComponent root) throws IOException {
+    public void testInputDateTimeRendererWithPattern(UIComponent root) throws IOException {
         System.out.println("Testing Input_DateRenderer With Pattern");
-	String formatPattern = "EEE, MMM d, yyyy";
+	String formatPattern = "EEE, MMM d, yyyy G 'at' hh:mm:ss a";
         UIInput input = new UIInput();
         input.setValue(null);
         input.setComponentId("my_input_date2");
 	input.setAttribute("formatPattern", formatPattern);
         root.addChild(input);
 
-        DateRenderer dateRenderer = new DateRenderer();
+        DateTimeRenderer dateTimeRenderer = new DateTimeRenderer();
 	Date date = null;
 	SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);
 	
@@ -500,7 +500,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 	
         System.out.println("    Testing decode method...");
 
-        dateRenderer.decode(getFacesContext(), input);
+        dateTimeRenderer.decode(getFacesContext(), input);
 	date = (Date) input.getValue();
 	assertTrue(null != date);
 	assertTrue(DATE_STR_LONG.equals(formatter.format(date)));
@@ -508,18 +508,18 @@ public class TestRenderers_2 extends JspFacesTestCase
         // test encode method
 
         System.out.println("    Testing encode method...");
-        dateRenderer.encodeBegin(getFacesContext(), input);
-        dateRenderer.encodeEnd(getFacesContext(), input);
+        dateTimeRenderer.encodeBegin(getFacesContext(), input);
+        dateTimeRenderer.encodeEnd(getFacesContext(), input);
         getFacesContext().getResponseWriter().flush();
 
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = dateRenderer.supportsComponentType("javax.faces.component.UIInput");
+        result = dateTimeRenderer.supportsComponentType("javax.faces.component.UIInput");
         assertTrue(result);
-        result = dateRenderer.supportsComponentType(input);
+        result = dateTimeRenderer.supportsComponentType(input);
         assertTrue(result);
-        result = dateRenderer.supportsComponentType("FooBar");
+        result = dateTimeRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
 
@@ -719,15 +719,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
-    public void testOutputDateRendererWithPattern(UIComponent root) throws IOException {
+    public void testOutputDateTimeRendererWithPattern(UIComponent root) throws IOException {
         System.out.println("Testing DateRenderer With Pattern");
-	String formatPattern = "EEE, MMM d, yyyy";
+	String formatPattern = "EEE, MMM d, yyyy G 'at' hh:mm:ss a";
         UIOutput output = new UIOutput();
         output.setValue(DATE_STR_LONG);
         output.setComponentId("my_output_date2");
 	output.setAttribute("formatPattern", formatPattern);
         root.addChild(output);
 
+	// PENDING(edburns): change this to datetime
         DateRenderer dateRenderer = new DateRenderer();
 	Date date = null;
 	SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.17 2002/08/12 19:57:36 eburns Exp $
+ * $Id: FacesTag.java,v 1.18 2002/08/15 23:23:02 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.17 2002/08/12 19:57:36 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.18 2002/08/15 23:23:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,6 +61,8 @@ protected String key = null;
 protected String imageKey = null;
 protected String bundle = null;
 protected String formatStyle = null;
+protected String dateStyle = null;
+protected String timeStyle = null;
 protected String formatPattern = null;
 
 protected String accept = null;
@@ -179,6 +181,26 @@ public FacesTag()
     public void setFormatStyle(String newFormatStyle)
     {
 	formatStyle = newFormatStyle;
+    }
+    
+    public String getDateStyle()
+    {
+	return dateStyle;
+    }
+    
+    public void setDateStyle(String newDateStyle)
+    {
+	dateStyle = newDateStyle;
+    }
+    
+    public String getTimeStyle()
+    {
+	return timeStyle;
+    }
+    
+    public void setTimeStyle(String newTimeStyle)
+    {
+	timeStyle = newTimeStyle;
     }
     
     public String getFormatPattern()
@@ -972,6 +994,12 @@ protected void overrideProperties(UIComponent component)
     }
     if (null == component.getAttribute("formatStyle")) {
 	component.setAttribute("formatStyle", getFormatStyle());
+    }
+    if (null == component.getAttribute("dateStyle")) {
+	component.setAttribute("dateStyle", getDateStyle());
+    }
+    if (null == component.getAttribute("timeStyle")) {
+	component.setAttribute("timeStyle", getTimeStyle());
     }
     if (null == component.getAttribute("formatPattern")) {
 	component.setAttribute("formatPattern", getFormatPattern());

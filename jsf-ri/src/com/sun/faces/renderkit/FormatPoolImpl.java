@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.4 2002/08/13 22:01:06 eburns Exp $
+ * $Id: FormatPoolImpl.java,v 1.5 2002/08/15 23:22:59 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.4 2002/08/13 22:01:06 eburns Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.5 2002/08/15 23:22:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -51,6 +51,9 @@ public class FormatPoolImpl extends Object implements FormatPool
 
     protected static final String DEFAULT_DATE_STYLE = "MEDIUM";
     protected static final int DEFAULT_DATE_STYLE_INT = DateFormat.MEDIUM;
+
+    static final int DATEINSTANCE = 0;
+    static final int DATETIMEINSTANCE = 1;
 
 //
 // Class Variables
@@ -109,13 +112,17 @@ public FormatPoolImpl()
 
     */
 
-    DateFormat getDateFormat(FacesContext context, UIComponent component) {
+    DateFormat getDateFormat(FacesContext context, UIComponent component,
+			     int formatVariety) {
 	String 
 	    formatPattern = null, 
-	    formatStyle = null, 
+	    dateStyle = null, 
+	    timeStyle = null, 
 	    timezone = null, 
 	    hashKey = null;
-	int formatStyleInt = DEFAULT_DATE_STYLE_INT;
+	int 
+	    dateStyleInt = DEFAULT_DATE_STYLE_INT,
+	    timeStyleInt = DEFAULT_DATE_STYLE_INT;
 	DateFormat dateFormat = null;
 	Locale locale = Util.getLocaleFromContextOrComponent(context, 
 							     component);
@@ -123,27 +130,50 @@ public FormatPoolImpl()
 	// build the hashKey
 	//
 
-	// get the formatStyle
-	if (null == (formatStyle = (String) component.getAttribute("formatStyle"))) {
-	    formatStyle = DEFAULT_DATE_STYLE;
-	    formatStyleInt = DEFAULT_DATE_STYLE_INT;
+	// get the dateStyle
+	if (null ==(dateStyle =(String) component.getAttribute("dateStyle"))) {
+	    dateStyle = DEFAULT_DATE_STYLE;
+	    dateStyleInt = DEFAULT_DATE_STYLE_INT;
 	}
 	else {
-	    if (formatStyle.equals("SHORT")) {
-		formatStyleInt = DateFormat.SHORT;
+	    if (dateStyle.equals("SHORT")) {
+		dateStyleInt = DateFormat.SHORT;
 	    }
-	    else if (formatStyle.equals("MEDIUM")) {
-		formatStyleInt = DateFormat.MEDIUM;
+	    else if (dateStyle.equals("MEDIUM")) {
+		dateStyleInt = DateFormat.MEDIUM;
 	    }
-	    else if (formatStyle.equals("LONG")) {
-		formatStyleInt = DateFormat.LONG;
+	    else if (dateStyle.equals("LONG")) {
+		dateStyleInt = DateFormat.LONG;
 	    }
-	    else if (formatStyle.equals("FULL")) {
-		formatStyleInt = DateFormat.FULL;
+	    else if (dateStyle.equals("FULL")) {
+		dateStyleInt = DateFormat.FULL;
 	    }
 	    else {
-		formatStyle = DEFAULT_DATE_STYLE;
-		formatStyleInt = DEFAULT_DATE_STYLE_INT;
+		dateStyle = DEFAULT_DATE_STYLE;
+		dateStyleInt = DEFAULT_DATE_STYLE_INT;
+	    }
+	}
+	// get the timeStyle
+	if (null ==(timeStyle =(String) component.getAttribute("timeStyle"))) {
+	    timeStyle = DEFAULT_DATE_STYLE;
+	    timeStyleInt = DEFAULT_DATE_STYLE_INT;
+	}
+	else {
+	    if (timeStyle.equals("SHORT")) {
+		timeStyleInt = DateFormat.SHORT;
+	    }
+	    else if (timeStyle.equals("MEDIUM")) {
+		timeStyleInt = DateFormat.MEDIUM;
+	    }
+	    else if (timeStyle.equals("LONG")) {
+		timeStyleInt = DateFormat.LONG;
+	    }
+	    else if (timeStyle.equals("FULL")) {
+		timeStyleInt = DateFormat.FULL;
+	    }
+	    else {
+		timeStyle = DEFAULT_DATE_STYLE;
+		timeStyleInt = DEFAULT_DATE_STYLE_INT;
 	    }
 	}
 	
@@ -153,13 +183,27 @@ public FormatPoolImpl()
 	// get the formatPattern, null is ok
 	formatPattern = (String) component.getAttribute("formatPattern");
 	
-	hashKey = locale.toString() + formatStyle + timezone + formatPattern;
+	hashKey = locale.toString() + dateStyle + timeStyle + timezone + 
+	    formatPattern;
 	
 	// Look in the formatters map
 	if (null == (dateFormat = (DateFormat) formatters.get(hashKey))) {
 	    
 	    // if not present, create one
-	    dateFormat = DateFormat.getDateInstance(formatStyleInt, locale);
+	    switch (formatVariety) {
+	    case DATEINSTANCE:
+		dateFormat = DateFormat.getDateInstance(dateStyleInt, 
+							locale);
+		break;
+	    case DATETIMEINSTANCE:
+		dateFormat = DateFormat.getDateTimeInstance(dateStyleInt, 
+							    timeStyleInt,
+							    locale);
+		break;
+	    default:
+		Assert.assert_it(false);
+		break;
+	    }
 	    if (null != formatPattern) {
 		if (dateFormat instanceof SimpleDateFormat) {
                     ((SimpleDateFormat)dateFormat).applyLocalizedPattern(formatPattern);
@@ -246,7 +290,8 @@ public FormatPoolImpl()
 						 UIComponent component, 
 						 Date date) {
 	String result = null;
-	DateFormat dateFormat = getDateFormat(context, component);
+	DateFormat dateFormat = getDateFormat(context, component, 
+					      DATEINSTANCE);
 
 	result = dateFormat.format(date);
 	return result;
@@ -256,11 +301,36 @@ public FormatPoolImpl()
 					      UIComponent component, 
 					      String date) throws ParseException {
 	Date result = null;
-	DateFormat dateFormat = getDateFormat(context, component);
+	DateFormat dateFormat = getDateFormat(context, component, 
+					      DATEINSTANCE);
 
 	result = dateFormat.parse(date);
 	return result;
     }
+
+    public synchronized String dateTimeFormat_format(FacesContext context, 
+						 UIComponent component, 
+						 Date date) {
+	String result = null;
+	DateFormat dateTimeFormat = getDateFormat(context, component,
+						  DATETIMEINSTANCE);
+
+	result = dateTimeFormat.format(date);
+	return result;
+    }
+
+    public synchronized Date dateTimeFormat_parse(FacesContext context, 
+					      UIComponent component, 
+					      String date) throws ParseException {
+	Date result = null;
+	DateFormat dateTimeFormat = getDateFormat(context, component,
+						  DATETIMEINSTANCE);
+
+	result = dateTimeFormat.parse(date);
+	return result;
+    }
+    
+
     
     public synchronized String numberFormat_format(FacesContext context, 
 						 UIComponent component, 

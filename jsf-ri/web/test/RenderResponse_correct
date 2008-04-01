@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=39A3078211B5B9053763A4B225D271A3">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=A2E2E1E1A5B5A45544B8A063005509B3">
   <TABLE BORDER="1">
 
       <TR>
@@ -67,7 +67,7 @@
 
 	<TD>
 
-	      <input type="checkbox"  name="/basicForm/validUser" checked > 
+	      <input type="checkbox"  name="/basicForm/validUser" checked >
 
 	</TD>
 
@@ -175,6 +175,17 @@
 	</TD>
 
       </TR>
+
+      <TR>
+
+        <TD>DateTime: 
+        </TD>
+
+	<TD><input type="text" name="/basicForm/date3" value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
+	</TD>
+
+      </TR>
+
 
       <tr>
          <td> NUMBER-INPUT-PATTERN </td>

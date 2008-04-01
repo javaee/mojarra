@@ -143,7 +143,7 @@
         </TD>
 
 	<TD><faces:input_date id="date1" value="Wed, Jul 10, 1996"
-                              formatPattern="EEE, MMM d, yyyy" />
+                              dateStyle="LONG" />
 	</TD>
 
       </TR>
@@ -155,11 +155,24 @@
         </TD>
 
 	<TD><faces:input_date id="date2" value="Thu, Jul 11, 1996"
-                        formatPattern="EEE, MMM d, yyyy" disabled="true"
+                        dateStyle="LONG" disabled="true"
                         size="3" maxlength="20" tabindex="1" accesskey="D"/>
 	</TD>
 
       </TR>
+
+      <TR>
+
+        <TD>DateTime: 
+        </TD>
+
+	<TD><faces:input_datetime id="date3" 
+                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM"
+                          formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a" />
+	</TD>
+
+      </TR>
+
 
       <tr>
          <td> <faces:output_text id="patternLabel" value="NUMBER-INPUT-PATTERN" /> </td>

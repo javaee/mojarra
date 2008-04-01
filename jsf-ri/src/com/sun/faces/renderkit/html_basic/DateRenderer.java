@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.4 2002/08/14 19:11:24 eburns Exp $
+ * $Id: DateRenderer.java,v 1.5 2002/08/15 23:23:00 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.4 2002/08/14 19:11:24 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.5 2002/08/15 23:23:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,6 +94,25 @@ public class DateRenderer extends HtmlBasicRenderer {
     // General Methods
     //
 
+    protected Date parseDate(FacesContext context, 
+			  UIComponent component, String newValue) throws ParseException {
+	FormatPool formatPool = null;
+	formatPool = (FormatPool)
+	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+	Assert.assert_it(null != formatPool);
+	return formatPool.dateFormat_parse(context, component, newValue);
+    }
+
+    protected String formatDate(FacesContext context, 
+			     UIComponent component, Date dateValue) {
+	FormatPool formatPool = null;
+	formatPool = (FormatPool)
+	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+	Assert.assert_it(null != formatPool);
+	return formatPool.dateFormat_format(context, component, dateValue);
+    }
+	
+
     //
     // Methods From Renderer
     //
@@ -112,7 +131,6 @@ public class DateRenderer extends HtmlBasicRenderer {
         String newValue = null;
         String modelRef = null;
         String compoundId = null;
-	FormatPool formatPool = null;
 	Date newDateValue = null;
 
         if (context == null || component == null) {
@@ -133,14 +151,10 @@ public class DateRenderer extends HtmlBasicRenderer {
 	}
 	
         modelRef = component.getModelReference();
-	formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
-	Assert.assert_it(null != formatPool);
 	
 	// Try to get the newValue as a Date
 	try {
-	    newDateValue = formatPool.dateFormat_parse(context, component, 
-						       newValue);
+	    newDateValue = this.parseDate(context, component, newValue);
 	}
 	catch (ParseException e) {
 	    component.setValue(newValue);
@@ -192,9 +206,6 @@ public class DateRenderer extends HtmlBasicRenderer {
 	boolean isInput = component instanceof UIInput;
         String currentValue = null;
         ResponseWriter writer = null;
-	FormatPool formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
-	Assert.assert_it(null != formatPool);
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -204,8 +215,7 @@ public class DateRenderer extends HtmlBasicRenderer {
 
 	if (null != (curValue = component.currentValue(context))) {
 	    if (curValue instanceof Date) {
-		currentValue = formatPool.dateFormat_format(context, component,
-							    (Date) curValue);
+		currentValue = formatDate(context, component, (Date) curValue);
 	    }
 	    else if (curValue instanceof String) {
 		currentValue = (String) curValue;
