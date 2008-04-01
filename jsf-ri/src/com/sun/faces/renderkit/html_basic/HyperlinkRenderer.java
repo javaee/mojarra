@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
+ * $Id: HyperlinkRenderer.java,v 1.27 2002/08/01 23:47:36 rkitain Exp $
  */
 
 /*
@@ -12,10 +12,9 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UICommand;
@@ -46,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.27 2002/08/01 23:47:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,7 +91,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
     //
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UICommand.TYPE));
     }
@@ -100,10 +99,9 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
     public void decode(FacesContext context, UIComponent component) 
         throws IOException {
 
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
 
         String pathInfo =
             ((HttpServletRequest) context.getServletRequest()).getPathInfo();
@@ -130,19 +128,24 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 
         throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
-        if ( context == null ) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
 
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
@@ -182,10 +185,6 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
     }
 
     private String href(FacesContext context, UIComponent component) {
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
-        }
-        ParameterCheck.nonNull(component);
 
         HttpServletRequest request =
             (HttpServletRequest) context.getServletRequest();

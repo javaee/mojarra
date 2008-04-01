@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.1 2002/06/28 22:46:59 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.2 2002/08/01 23:47:36 rkitain Exp $
  */
 
 /*
@@ -97,19 +97,39 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     public AttributeDescriptor getAttributeDescriptor(
         UIComponent component, String name) {
+
+        if (component == null || name == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
 	return (AttributeDescriptor)(attributeTable != null? attributeTable.get(name) : null); 
     }
 
     public AttributeDescriptor getAttributeDescriptor(
         String componentType, String name) {
+
+        if (componentType == null || name == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
 	return (AttributeDescriptor)(attributeTable != null? attributeTable.get(name) : null); 
     }
 
     public Iterator getAttributeNames(UIComponent component) {
+
+        if (component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
+        }
+
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
     }
 
     public Iterator getAttributeNames(String componentType) {
+
+        if (componentType == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
 
     }
@@ -122,11 +142,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    };
     }
 
-    public boolean supportsComponentType(UIComponent c) {
-        if ( c == null ) {
-            return false;
+    public boolean supportsComponentType(UIComponent component) {
+        if ( component == null ) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }     
-        return supportsComponentType(c.getComponentType());
+        return supportsComponentType(component.getComponentType());
     }
 
 } // end of class HtmlBasicRenderer

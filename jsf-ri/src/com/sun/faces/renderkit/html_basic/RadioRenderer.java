@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.22 2002/07/12 19:44:33 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.23 2002/08/01 23:47:36 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // RadioRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
@@ -42,7 +44,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.22 2002/07/12 19:44:33 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.23 2002/08/01 23:47:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,7 +91,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UISelectOne.TYPE));
     }
@@ -99,10 +101,9 @@ public class RadioRenderer extends HtmlBasicRenderer {
         Object convertedValue = null;
         Class modelType = null;
         
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
-        }    
-        ParameterCheck.nonNull(component);
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         
         // PENDING (visvan) should we call supportsType to double check
         // componentType ??
@@ -147,10 +148,15 @@ public class RadioRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
-
+        if (context == null || component == null) {
+            throw new NullPointerException("context or component argument is null.");
+        }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException 
@@ -163,11 +169,9 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	boolean alignVertical = false;
 	int border = 0;
 
-        
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
         
         // if localState attribute is set, then conversion failed, so use
         // that to reproduce the incorrect value. Otherwise use the current value

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.23 2002/07/22 16:58:02 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.24 2002/08/01 23:47:37 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // TextRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -36,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.23 2002/07/22 16:58:02 jvisvanathan Exp $
+ * @version $Id: TextRenderer.java,v 1.24 2002/08/01 23:47:37 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,17 +85,16 @@ public class TextRenderer extends HtmlBasicRenderer {
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         return (componentType.equals(UIOutput.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
         throws IOException {
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
 
         // PENDING (rogerk) should we call supportsType to double check
         // component Type ??
@@ -144,11 +145,16 @@ public class TextRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
-        
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }        
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 
         throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException("context or component argument is null.");
+        }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
@@ -156,10 +162,9 @@ public class TextRenderer extends HtmlBasicRenderer {
         String currentValue = null;
         ResponseWriter writer = null;
 
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
 
         // if localState attribute is set, then conversion failed, so use
         // that to reproduce the incorrect value. Otherwise use the 

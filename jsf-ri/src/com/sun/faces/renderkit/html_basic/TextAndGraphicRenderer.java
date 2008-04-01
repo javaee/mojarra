@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.15 2002/07/20 00:21:42 eburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.16 2002/08/01 23:47:37 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // TextAndGraphicRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
@@ -29,7 +31,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.15 2002/07/20 00:21:42 eburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.16 2002/08/01 23:47:37 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,23 +77,38 @@ public class TextAndGraphicRenderer extends HtmlBasicRenderer {
     //
 
     public boolean supportsComponentType(String componentType) {
-	// PENDING(roger): This shouldn't just return false, right?
+
+        if (componentType == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         return false;
     }
 
     public void decode(FacesContext context, UIComponent component) {
-
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.7 2002/07/20 00:21:42 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.8 2002/08/01 23:47:36 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // MessageRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
@@ -29,7 +31,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.7 2002/07/20 00:21:42 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.8 2002/08/01 23:47:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,24 +77,34 @@ public class MessageRenderer extends HtmlBasicRenderer {
     //
 
     public boolean supportsComponentType(String componentType) {
-	// PENDING(roger) this shouldn't just return false, right?
+        if (componentType == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         return false;
     }
 
     public void decode(FacesContext context, UIComponent component) {
-
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) {
-
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
-
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) {
-
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
 } // end of class MessageRenderer

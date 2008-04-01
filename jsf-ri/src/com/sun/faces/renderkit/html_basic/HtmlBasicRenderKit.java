@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.33 2002/07/31 18:32:07 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.34 2002/08/01 23:47:36 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.33 2002/07/31 18:32:07 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.34 2002/08/01 23:47:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -315,6 +315,10 @@ public class HtmlBasicRenderKit extends RenderKit
 //
 
     public void addComponentClass(Class componentClass) {
+        if (componentClass == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
 	if (!uiComponentClass.isAssignableFrom(componentClass)) {
 	    throw new IllegalArgumentException(componentClass.getName() + 
 					       " does not implement UIComponent");
@@ -324,6 +328,10 @@ public class HtmlBasicRenderKit extends RenderKit
 
 
     public void addRenderer(String rendererType, Renderer renderer) {
+        if (rendererType == null || renderer == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
 	if (null != renderersByRendererType.get(rendererType)) {
 	    throw new IllegalArgumentException("Renderer for " + rendererType +
 					       " already exists");
@@ -345,7 +353,10 @@ public class HtmlBasicRenderKit extends RenderKit
      */
     public Renderer getRenderer(String rendererType) {
 
-        ParameterCheck.nonNull(rendererType);
+        if (rendererType == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
         Assert.assert_it(renderersByRendererType != null);
 
         Renderer renderer = (Renderer)renderersByRendererType.get(rendererType);
@@ -370,6 +381,10 @@ public class HtmlBasicRenderKit extends RenderKit
     }
 
     public Iterator getRendererTypes(String componentType) {
+        if (componentType == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
 	Iterator result = null;
 	Set rendererTypeKeySet = renderersByRendererType.keySet();
 
@@ -442,6 +457,10 @@ public class HtmlBasicRenderKit extends RenderKit
     }
 
     public Iterator getRendererTypes(UIComponent component) {
+        if (component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
 	String componentType = component.getComponentType();
 	return this.getRendererTypes(componentType);
     }

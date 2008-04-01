@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.27 2002/08/01 23:47:35 rkitain Exp $
  */
 
 /*
@@ -12,6 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.27 2002/08/01 23:47:35 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,18 +86,16 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 
     public boolean supportsComponentType(String componentType) {
         if (componentType == null) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         return (componentType.equals(UISelectBoolean.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
         throws IOException {
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        ParameterCheck.nonNull(component);
 
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
@@ -154,10 +153,16 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 
         throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
     }
 
@@ -166,11 +171,9 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         String currentValue = null;
         ResponseWriter writer = null;
 
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        ParameterCheck.nonNull(component);
 
         // Use "localState" (if it's set - indicating conversion
         // failure)

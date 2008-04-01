@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.25 2002/07/22 16:58:00 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.26 2002/08/01 23:47:35 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // ButtonRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
@@ -39,7 +41,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.25 2002/07/22 16:58:00 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.26 2002/08/01 23:47:35 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,29 +88,37 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UICommand.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
     
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         
     }
     
     public void encodeChildren(FacesContext context, UIComponent component) {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
-        }    
-        ParameterCheck.nonNull(component);             
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
        
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );

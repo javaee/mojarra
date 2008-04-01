@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.21 2002/07/12 19:44:33 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.22 2002/08/01 23:47:36 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // OptionListRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -37,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.21 2002/07/12 19:44:33 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.22 2002/08/01 23:47:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,17 +86,16 @@ public class OptionListRenderer extends HtmlBasicRenderer {
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         return (componentType.equals(UISelectOne.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
         throws IOException {
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
 
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
@@ -136,22 +137,25 @@ public class OptionListRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 
         throws IOException {
-
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
         ResponseWriter writer = null;
-
-        if (context == null) {
-            throw new NullPointerException("Null FacesContext");
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
 
         UISelectOne selectOne = (UISelectOne)component;
 

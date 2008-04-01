@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.31 2002/07/31 19:22:01 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.32 2002/08/01 23:47:35 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // FormRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
+
+import com.sun.faces.util.Util;
 
 import java.util.Iterator;
 
@@ -33,7 +35,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletRequest;
-import java.net.URLEncoder;
 
 /**
  *
@@ -41,7 +42,7 @@ import java.net.URLEncoder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.31 2002/07/31 19:22:01 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.32 2002/08/01 23:47:35 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,17 +89,16 @@ public class FormRenderer extends HtmlBasicRenderer {
 
     public boolean supportsComponentType(String componentType) {
         if ( componentType == null ) {
-            return false;
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UIForm.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException{
-        if (context == null) {
-            throw new NullPointerException();
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ParameterCheck.nonNull(component);
         
         // Does the extra path info on this request identify a form submit
         // for this UIForm component?
@@ -172,10 +172,9 @@ public class FormRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
-        }    
-        ParameterCheck.nonNull(component);             
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
        
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
@@ -209,15 +208,17 @@ public class FormRenderer extends HtmlBasicRenderer {
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
 
     }
 
     public void encodeEnd(FacesContext context, UIComponent component) 
              throws IOException{
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
-        }    
-        ParameterCheck.nonNull(component);
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
