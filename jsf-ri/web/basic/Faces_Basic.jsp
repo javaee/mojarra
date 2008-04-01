@@ -63,6 +63,9 @@
 
 	  </TR>
 
+          </TR>
+            <td><faces:command_hyperlink id="mylink" /></td>
+          </TR>
 
 
 

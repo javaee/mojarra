@@ -1,5 +1,9 @@
 <?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
 
+<page>
+
+<page-url>/Faces_Basic.jsp</page-url>
+
 <window id="basicForm" formName="basicForm">
 
 <label id="userLabel" value="UserName" />
@@ -37,7 +41,10 @@
 
 </menupopup>
 
+<link id="mylink" target="Faces_Basic.xul" text="A Hyperlink" value="mylink" />
 
 <button id="login" label="Login" value="myLogin" />
 
 </window>
+
+</page>
