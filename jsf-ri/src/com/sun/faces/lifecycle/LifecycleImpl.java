@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.7 2002/06/12 23:51:04 jvisvanathan Exp $
+ * $Id: LifecycleImpl.java,v 1.8 2002/06/21 00:31:22 eburns Exp $
  */
 
 /*
@@ -17,8 +17,8 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
-import javax.faces.lifecycle.PhaseListener;
 import javax.faces.lifecycle.ApplicationHandler;
+import javax.faces.lifecycle.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.7 2002/06/12 23:51:04 jvisvanathan Exp $
+ * @version $Id: LifecycleImpl.java,v 1.8 2002/06/21 00:31:22 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -65,8 +65,6 @@ public class LifecycleImpl extends Lifecycle
 
 protected ArrayList phaseWrappers;
 
-
-protected ArrayList phaseListeners;
 
 protected Object lock = null;
 
@@ -212,40 +210,11 @@ protected int executeRender(FacesContext context) throws FacesException
 protected void callEnteringListeners(FacesContext context, int curPhaseId, 
 				     Phase curPhase)
 {
-    Iterator listeners = null;
-    PhaseListener curListener = null;
-    // This is synchronized so no one can modify the set of
-    // listeners during processing.
-    synchronized (lock) {
-	if (null == phaseListeners) {
-	    return;
-	}
-	listeners = phaseListeners.iterator();
-	while (listeners.hasNext()) {
-	    curListener = (PhaseListener) listeners.next();
-	    curListener.entering(context, curPhaseId, curPhase);
-	}
-    }
 }
 
 protected void callExitingListeners(FacesContext context, int curPhaseId, 
 				    Phase curPhase, int stateChange)
 {
-    Iterator listeners = null;
-    PhaseListener curListener = null;
-    // This is synchronized so no one can modify the set of
-    // listeners during processing.
-    synchronized (lock) {
-	if (null == phaseListeners) {
-	    return;
-	}
-	listeners = phaseListeners.iterator();
-	while (listeners.hasNext()) {
-	    curListener = (PhaseListener) listeners.next();
-	    curListener.exiting(context, curPhaseId, curPhase, 
-				stateChange);
-	}
-    }
 }
 
 //
@@ -260,6 +229,17 @@ public ApplicationHandler getApplicationHandler()
 public void setApplicationHandler(ApplicationHandler handler)
 {
     applicationHandler = handler;
+}
+
+public ViewHandler getViewHandler()
+{
+    Assert.assert_it(false, "PENDING(): fixme");
+    return null;
+}
+
+public void setViewHandler(ViewHandler handler)
+{
+    Assert.assert_it(false, "PENDING(): fixme");
 }
 
 public void execute(FacesContext context) throws FacesException
@@ -306,33 +286,12 @@ public void execute(FacesContext context) throws FacesException
     }
 }
 
-public void addPhaseListener(PhaseListener listener)
+public int executePhase(FacesContext context, Phase phase) throws FacesException
 {
-    if (null == listener) {
-	throw new NullPointerException("listener is null");
-    }
-
-    synchronized (lock) {
-	if (null == phaseListeners) {
-	    phaseListeners = new ArrayList();
-	}
-	phaseListeners.add(listener);
-    }
+    Assert.assert_it(false, "PENDING():");
+    return -1;
 }
 
-public void removePhaseListener(PhaseListener listener)
-{
-    if (null == listener) {
-	throw new NullPointerException("listener is null");
-    }
-
-    synchronized (lock) {
-	if (null == phaseListeners) {
-	    return;
-	}
-	phaseListeners.remove(listener);
-    }
-}
 
 //
 // Helper classes

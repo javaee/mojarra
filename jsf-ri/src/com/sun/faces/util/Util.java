@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.11 2002/06/07 21:42:13 eburns Exp $
+ * $Id: Util.java,v 1.12 2002/06/21 00:31:25 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.11 2002/06/07 21:42:13 eburns Exp $
+ * @version $Id: Util.java,v 1.12 2002/06/21 00:31:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,7 +127,7 @@ private Util()
 	Assert.assert_it(null != facesContextFactory);
 
 	defaultRenderKit = 
-	    renderKitFactory.createRenderKit(RIConstants.DEFAULT_RENDER_KIT);
+	    renderKitFactory.getRenderKit(RIConstants.DEFAULT_RENDER_KIT);
 	Assert.assert_it(null != defaultRenderKit);
 	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, 
 			     defaultRenderKit);

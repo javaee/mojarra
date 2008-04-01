@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.3 2002/06/13 23:18:45 jvisvanathan Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.4 2002/06/21 00:31:22 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.3 2002/06/13 23:18:45 jvisvanathan Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.4 2002/06/21 00:31:22 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE
@@ -92,14 +92,21 @@ public ProcessValidationsPhase(Lifecycle newDriver, int newId)
 public int execute(FacesContext facesContext) throws FacesException
 {
     int rc = Phase.GOTO_NEXT;
+    Iterator messageIter = null;
 
     rc = traverseTreeInvokingCallback(facesContext);
     if (rc != Phase.GOTO_NEXT) {
 	return rc;
     }
 
-    // Proceed based on the number of errors present
-    if (facesContext.getMessageList().size() > 0) {
+    Assert.assert_it(false, "PENDING(): fixme");
+
+    messageIter = facesContext.getMessages();
+
+    Assert.assert_it(null != messageIter);
+
+    if (messageIter.hasNext()) {
+	// Proceed based on the number of errors present
 	rc = Phase.GOTO_RENDER;
     }
     return rc;

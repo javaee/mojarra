@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeImpl.java,v 1.4 2002/06/18 04:56:32 rkitain Exp $
+ * $Id: XmlTreeImpl.java,v 1.5 2002/06/21 00:31:24 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeImpl.java,v 1.4 2002/06/18 04:56:32 rkitain Exp $
+ * @version $Id: XmlTreeImpl.java,v 1.5 2002/06/21 00:31:24 eburns Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -90,7 +90,7 @@ public XmlTreeImpl(ServletContext context, UIComponent newRoot,
 	Assert.assert_it(null != renderKitFactory);
 	
 	renderKit = 
-	    renderKitFactory.createRenderKit(RIConstants.DEFAULT_RENDER_KIT);
+	    renderKitFactory.getRenderKit(RIConstants.DEFAULT_RENDER_KIT);
 	Assert.assert_it(null != renderKit);
 	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, renderKit);
     }

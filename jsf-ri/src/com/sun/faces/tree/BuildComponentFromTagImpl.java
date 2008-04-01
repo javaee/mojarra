@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.2 2002/06/21 00:31:24 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.1 2002/05/30 01:42:08 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.2 2002/06/21 00:31:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -344,6 +344,10 @@ public void handleNestedComponentTag(UIComponent parent,
 	    checked = true;
 	}
     }
+
+    Assert.assert_it(false, "PENDING(): fixme");
+
+    /**********
     SelectItem [] oldItems = uiSelectOne.getItems();
     SelectItem [] newItems = null;
 
@@ -366,6 +370,8 @@ public void handleNestedComponentTag(UIComponent parent,
     if (checked && null == uiSelectOne.getSelectedValue()) {
 	uiSelectOne.setSelectedValue(itemValue);
     }
+
+    ************/
 }
 
 public void applyAttributesToComponentInstance(UIComponent child, 

@@ -1,5 +1,5 @@
 /*
- * $Id: GenericPhaseImpl.java,v 1.3 2002/06/03 19:18:16 eburns Exp $
+ * $Id: GenericPhaseImpl.java,v 1.4 2002/06/21 00:31:21 eburns Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
-import javax.faces.lifecycle.PhaseListener;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 
@@ -32,7 +31,7 @@ import com.sun.faces.tree.TreeNavigatorImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: GenericPhaseImpl.java,v 1.3 2002/06/03 19:18:16 eburns Exp $
+ * @version $Id: GenericPhaseImpl.java,v 1.4 2002/06/21 00:31:21 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Phase

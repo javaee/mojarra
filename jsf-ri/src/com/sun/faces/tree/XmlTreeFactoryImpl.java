@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.5 2002/06/18 04:56:32 rkitain Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.6 2002/06/21 00:31:24 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.apache.commons.logging.impl.SimpleLog;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.5 2002/06/18 04:56:32 rkitain Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.6 2002/06/21 00:31:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -150,8 +150,8 @@ protected Iterator getTreeIdsFromSuffix(ServletContext servletContext,
 // Methods from TreeFactory
 //
 
-public Tree createTree(ServletContext servletContext,
-		       String treeId) throws FacesException
+public Tree getTree(ServletContext servletContext,
+		    String treeId) throws FacesException
 {
     Tree result = null;
     InputStream treeInput = null;

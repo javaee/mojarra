@@ -1,5 +1,5 @@
 /*
- * $Id: CreateRequestTreePhase.java,v 1.4 2002/06/18 18:23:22 jvisvanathan Exp $
+ * $Id: CreateRequestTreePhase.java,v 1.5 2002/06/21 00:31:21 eburns Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.Phase;
-import javax.faces.lifecycle.PhaseListener;
 import javax.faces.context.FacesContext;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
@@ -35,7 +34,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: CreateRequestTreePhase.java,v 1.4 2002/06/18 18:23:22 jvisvanathan Exp $
+ * @version $Id: CreateRequestTreePhase.java,v 1.5 2002/06/21 00:31:21 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -116,13 +115,13 @@ public int execute(FacesContext facesContext) throws FacesException
     Assert.assert_it(null != treeFactory);
     
     // PENDING(edburns): deal with possibly null treeId
-    facesContext.setRequestTree(treeFactory.createTree(servletContext,treeId));
+    facesContext.setRequestTree(treeFactory.getTree(servletContext,treeId));
     
     if (renderKitId != null) {
 	renderKitFactory = (RenderKitFactory)
 	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	Assert.assert_it(null != renderKitFactory);
-	renderKit = renderKitFactory.createRenderKit(renderKitId);
+	renderKit = renderKitFactory.getRenderKit(renderKitId);
 	if (renderKit != null) {
 	    facesContext.getRequestTree().setRenderKit(renderKit);
 	}

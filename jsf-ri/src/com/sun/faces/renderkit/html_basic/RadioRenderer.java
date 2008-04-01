@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.18 2002/06/12 23:51:07 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.19 2002/06/21 00:31:23 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.18 2002/06/12 23:51:07 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.19 2002/06/21 00:31:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -197,6 +197,10 @@ public class RadioRenderer extends Renderer {
         if ( supportsComponentType(component)) {
             uiSelectOne = (UISelectOne) component;
         }    
+
+	Assert.assert_it(false, "PENDING(): Fix this");
+
+	/************
         SelectItem items[] = uiSelectOne.getItems();
         if (items == null) {
             String itemsModel = uiSelectOne.getItemsModelReference();
@@ -230,6 +234,8 @@ public class RadioRenderer extends Renderer {
             }
             writer.write("\n");
         }
+
+	**************/
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {

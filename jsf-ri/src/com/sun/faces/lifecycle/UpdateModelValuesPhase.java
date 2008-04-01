@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.5 2002/06/18 18:47:00 rkitain Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.6 2002/06/21 00:31:22 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.5 2002/06/18 18:47:00 rkitain Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.6 2002/06/21 00:31:22 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -79,8 +79,12 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
                         params[0] = comp.getValue();
                         params[1] = model;
                         params[2] = e.getMessage(); 
+			Assert.assert_it(false, "PENDING(): fixme");
+			/*********
 			facesContext.getMessageList().add("MSG0005", 
                             comp.getComponentId(),params);
+
+			***********/
 		    }
 		}
 		
@@ -117,12 +121,19 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 public int execute(FacesContext facesContext) throws FacesException
 {
     int rc = Phase.GOTO_NEXT;
+    Iterator messageIter = null;
     callback = pushValues;
     rc = traverseTreeInvokingCallback(facesContext);
 
-    // If we have gotten one or more errors, go to render phase.
-    //
-    if (facesContext.getMessageList().size() > 0) {
+    Assert.assert_it(false, "PENDING(): fixme");
+    
+    messageIter = facesContext.getMessages();
+    
+    Assert.assert_it(null != messageIter);
+    
+    if (messageIter.hasNext()) {
+	// If we have gotten one or more errors, go to render phase.
+	//
         rc = Phase.GOTO_RENDER;
     }
     if (Phase.GOTO_NEXT == rc) {

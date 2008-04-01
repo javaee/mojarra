@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.2 2002/06/20 20:20:10 jvisvanathan Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.3 2002/06/21 00:31:22 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.2 2002/06/20 20:20:10 jvisvanathan Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.3 2002/06/21 00:31:22 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#INVOKE_APPLICATION_PHASE
@@ -85,15 +85,7 @@ public int execute(FacesContext facesContext) throws FacesException
     Iterator events = facesContext.getApplicationEvents();
     while (events.hasNext()) {
         FacesEvent event = (FacesEvent) events.next();
-        if (event instanceof CommandEvent) {
-            handler.commandEvent(facesContext, 
-                                 (CommandEvent) event);
-        } else if (event instanceof FormEvent) {
-            handler.formEvent(facesContext, (FormEvent) event);
-        } else {
-            throw new IllegalArgumentException("Invalid event type " +
-                                               event);
-        }
+	handler.processEvent(facesContext, event);
     }
     return rc;
 }

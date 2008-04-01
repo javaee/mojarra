@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.6 2002/06/12 18:24:06 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.7 2002/06/21 00:31:20 eburns Exp $
  */
 
 /*
@@ -25,9 +25,10 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
+import javax.faces.context.Message;
+import javax.faces.component.UIComponent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
-import javax.faces.context.MessageList;
 import javax.faces.FactoryFinder;
 import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -57,7 +58,6 @@ public class FacesContextImpl extends FacesContext
     private ServletContext servletContext = null;
     private Lifecycle lifecycle = null;
     private Locale locale = null;
-    private MessageList messageList = null;
     private int phaseId = 0;
     private ServletRequest request = null;
     private Tree requestTree = null;
@@ -100,7 +100,7 @@ public class FacesContextImpl extends FacesContext
         LifecycleFactory lifecycleFactory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         Assert.assert_it(lifecycleFactory != null);
-        this.lifecycle = lifecycleFactory.createLifecycle(lifecycleId); 
+        this.lifecycle = lifecycleFactory.getLifecycle(lifecycleId); 
     }
 
     //
@@ -122,6 +122,11 @@ public class FacesContextImpl extends FacesContext
         }
     }
 
+    public int getApplicationEventsCount() {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return -1;
+    }
+
 
     public HttpSession getHttpSession() {
         return (this.session);
@@ -141,14 +146,41 @@ public class FacesContextImpl extends FacesContext
         this.locale = locale;
     }
 
-
-    public MessageList getMessageList() {
-        if ( messageList == null ) {
-            messageList = new MessageListImpl(this);
-        }
-        return messageList;
+    public int getMaximumSeverity() {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return -1;
     }
-    
+
+    public Iterator getMessages() {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return null;
+    }
+
+    public Iterator getMessages(UIComponent component) {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return null;
+    }
+
+    public Iterator getMessagesAll() {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return null;
+    }
+
+    public Iterator getRequestEvents(UIComponent component) {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return null;
+    }
+
+    public int getRequestEventsCount() {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return -1;
+    }
+
+    public int getRequestEventsCount(UIComponent component) {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return -1;
+    }
+
     public int getPhaseId() {
         return (this.phaseId);
     }
@@ -226,6 +258,18 @@ public class FacesContextImpl extends FacesContext
             events = new ArrayList();
         }
         events.add(event);
+    }
+
+    public void addMessage(Message message) {
+	Assert.assert_it(false, "PENDING(): fixme");
+    }
+
+    public void addMessage(UIComponent component, Message message) {
+	Assert.assert_it(false, "PENDING(): fixme");
+    }
+
+    public void addRequestEvent(UIComponent component, FacesEvent event) {
+	Assert.assert_it(false, "PENDING(): fixme");
     }
 
     /**

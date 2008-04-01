@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.2 2002/05/31 20:26:44 rkitain Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.3 2002/06/21 00:31:22 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import java.util.Iterator;
 import javax.faces.FacesException;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
+import javax.faces.context.FacesContext;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
@@ -55,7 +56,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         super();
         digester = initConfig();
         renderKits = new HashMap();
-        RenderKit renderKit = createRenderKit(
+        RenderKit renderKit = getRenderKit(
             RenderKitFactory.DEFAULT_RENDER_KIT);
         renderKits.put(RenderKitFactory.DEFAULT_RENDER_KIT, renderKit);
     }
@@ -91,7 +92,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
      * @param renderKitId A RenderKit identifier.
      * @returns RenderKit A RenderKit instance.
      */ 
-    public RenderKit createRenderKit(String renderKitId) {
+    public RenderKit getRenderKit(String renderKitId) {
 
         ParameterCheck.nonNull(renderKitId);
 
@@ -148,6 +149,11 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         }
 
         return renderKit;
+    }
+
+    public RenderKit getRenderKit(String renderKitId, FacesContext context) {
+	Assert.assert_it(false, "PENDING(): fixme");
+	return null;
     }
 
     /** 

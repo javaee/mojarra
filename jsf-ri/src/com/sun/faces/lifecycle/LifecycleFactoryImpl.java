@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactoryImpl.java,v 1.1 2002/05/28 20:52:01 eburns Exp $
+ * $Id: LifecycleFactoryImpl.java,v 1.2 2002/06/21 00:31:22 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.util.HashMap;
  *  in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleFactoryImpl.java,v 1.1 2002/05/28 20:52:01 eburns Exp $
+ * @version $Id: LifecycleFactoryImpl.java,v 1.2 2002/06/21 00:31:22 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.LifecycleFactory
  *
@@ -85,11 +85,6 @@ public LifecycleFactoryImpl()
 // General Methods
 //
 
-void addLifecycle(String lifecycleId, LifecycleImpl lifecycle)
-{
-    lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));
-}
-
 /**
 
 * @return true iff lifecycleId was already created
@@ -109,11 +104,11 @@ boolean alreadyCreated(String lifecycleId)
 
 */
 
-LifecycleImpl verifyRegisterArgs(String lifecycleId, 
-					int phaseId, Phase phase)
+Lifecycle verifyRegisterArgs(String lifecycleId, 
+			     int phaseId, Phase phase)
 {
     LifecycleWrapper wrapper = null;
-    LifecycleImpl result = null;
+    Lifecycle result = null;
     if (null == lifecycleId || null == phase) {
 	throw new NullPointerException("null lifecycleId || null phase");
     }
@@ -140,7 +135,12 @@ LifecycleImpl verifyRegisterArgs(String lifecycleId,
 // Methods from LifecycleFactory
 //
 
-public Lifecycle createLifecycle(String lifecycleId) throws FacesException
+public void addLifecycle(String lifecycleId, Lifecycle lifecycle)
+{
+    lifecycleMap.put(lifecycleId, new LifecycleWrapper(lifecycle, false));
+}
+
+public Lifecycle getLifecycle(String lifecycleId) throws FacesException
 {
     Lifecycle result = null;
     LifecycleWrapper wrapper = null;
@@ -168,18 +168,29 @@ public Iterator getLifecycleIds()
 
 public void registerAfter(String lifecycleId, int phaseId, Phase phase)
 {
-    LifecycleImpl life =verifyRegisterArgs(lifecycleId, phaseId, phase);
+
+    Assert.assert_it(false, "PENDING(): fixme");
+    
+    /**********
+    Lifecycle life =verifyRegisterArgs(lifecycleId, phaseId, phase);
     synchronized (lock) {
 	life.registerAfter(phaseId, phase);
     }
+    *********/
 }
 
 public void registerBefore(String lifecycleId, int phaseId, Phase phase)
 {
-    LifecycleImpl life =verifyRegisterArgs(lifecycleId, phaseId, phase);
+
+    Assert.assert_it(false, "PENDING(): fixme");
+    /********
+
+    Lifecycle life =verifyRegisterArgs(lifecycleId, phaseId, phase);
     synchronized (lock) {
 	life.registerBefore(phaseId, phase);
     }
+
+    ********/
 }
 
 //
@@ -190,10 +201,10 @@ static class LifecycleWrapper extends Object
 {
 
 
-LifecycleImpl instance = null;
+Lifecycle instance = null;
 boolean created = false;
 
-LifecycleWrapper(LifecycleImpl newInstance, boolean newCreated)
+LifecycleWrapper(Lifecycle newInstance, boolean newCreated)
 {
     instance = newInstance;
     created = newCreated;

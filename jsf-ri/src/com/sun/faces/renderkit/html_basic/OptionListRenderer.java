@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.16 2002/06/12 23:51:07 jvisvanathan Exp $
+ * $Id: OptionListRenderer.java,v 1.17 2002/06/21 00:31:23 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.16 2002/06/12 23:51:07 jvisvanathan Exp $
+ * @version $Id: OptionListRenderer.java,v 1.17 2002/06/21 00:31:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -182,6 +182,10 @@ public class OptionListRenderer extends Renderer {
         if (currentValue == null) {
             currentValue = "";
         }
+
+	Assert.assert_it(false, "PENDING(): fixme");
+
+	/******************
         SelectItem items[] = selectOne.getItems();
         if (items == null) {
             items = (SelectItem[]) context.getModelValue(
@@ -208,6 +212,8 @@ public class OptionListRenderer extends Renderer {
             writer.write("</OPTION>");
         }
         writer.write("</SELECT>");
+
+	***************/
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.20 2002/06/20 22:11:45 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.21 2002/06/21 00:31:23 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.20 2002/06/20 22:11:45 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.21 2002/06/21 00:31:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -156,7 +156,7 @@ public class HyperlinkRenderer extends Renderer {
                 FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
             Assert.assert_it(null != treeFactory);
             ServletContext sc = context.getServletContext();
-            context.setResponseTree(treeFactory.createTree(sc, target));
+            context.setResponseTree(treeFactory.getTree(sc, target));
         }
 
         // Enqueue a command event to the application

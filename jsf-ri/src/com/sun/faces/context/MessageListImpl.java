@@ -1,5 +1,5 @@
 /*
- * $Id: MessageListImpl.java,v 1.5 2002/06/18 18:48:09 rkitain Exp $
+ * $Id: MessageListImpl.java,v 1.6 2002/06/21 00:31:20 eburns Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package com.sun.faces.context;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.faces.context.MessageList;
 import javax.faces.context.Message;
 import javax.faces.context.FacesContext;
 
@@ -20,7 +19,7 @@ import java.util.Locale;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
-public class MessageListImpl extends MessageList
+public class MessageListImpl extends Object
 {
     //
     // Protected Constants
@@ -102,9 +101,13 @@ public class MessageListImpl extends MessageList
     	Iterator it = iterator();
     	while(it.hasNext()) {
     	    Message m = (Message)it.next();
+	    Assert.assert_it(false, "PENDING(): fixme");
+
+	    /***
     	    if (m.getReference() != null && reference.equals(m.getReference())){
                 list.add(m);
             }
+	    ***/
     	}
     	return list.iterator();    
     }
@@ -134,9 +137,14 @@ public class MessageListImpl extends MessageList
     	Iterator it = iterator();
     	while(it.hasNext()) {
     	    Message m = (Message)it.next();
+
+	    Assert.assert_it(false, "PENDING(): fixme");
+
+	    /******
     	    if (m.getReference() != null && reference.equals(m.getReference())){
                     size++;
             }    
+	    ********/
         }
     	return size;
     }
@@ -148,11 +156,17 @@ public class MessageListImpl extends MessageList
         Iterator it = iterator();
         while(it.hasNext()) {
             Message m = (Message)it.next();
+
+	    Assert.assert_it(false, "PENDING(): fixme");
+
+	    /*****
+
             String comp_id = m.getReference();
             if ( comp_id != null && (comp_id.equals(reference)) &&
                 (m.getSeverity() > max)) {
                 max = m.getSeverity();
             }    
+	    ******/
         }
         return max;
     }

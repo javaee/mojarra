@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.1 2002/05/28 18:20:39 jvisvanathan Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.2 2002/06/21 00:31:20 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 
 import org.mozilla.util.ParameterCheck;
+import org.mozilla.util.Assert;
 
 public class FacesContextFactoryImpl extends FacesContextFactory
 {
@@ -60,34 +61,29 @@ public class FacesContextFactoryImpl extends FacesContextFactory
     //
     // Methods from FacesContextFactory
     //
-    public FacesContext createFacesContext(ServletContext sc,
-                                           ServletRequest request,
-                                           ServletResponse response)
-        throws FacesException {
-
-        return (createFacesContext(sc, request, response,
-                                   LifecycleFactory.DEFAULT_LIFECYCLE));
-
-    }
-
-
-    public FacesContext createFacesContext(ServletContext sc,
-                                           ServletRequest request,
-                                           ServletResponse response,
-                                           String lifecycleId)
+    public FacesContext getFacesContext(ServletContext sc,
+					ServletRequest request,
+					ServletResponse response,
+					Lifecycle lifecycle)
         throws FacesException {
 
         try {
             ParameterCheck.nonNull(sc);
             ParameterCheck.nonNull(request);
             ParameterCheck.nonNull(response);
-            ParameterCheck.nonNull(lifecycleId);
+            ParameterCheck.nonNull(lifecycle);
         } catch (Exception e ) {
             throw new FacesException("Cannot create FacesContext." + 
                 "One or more input paramters might be null");
         }    
+	Assert.assert_it(false, "PENDING(): fixme");
+
+	/******
         return (new FacesContextImpl(sc, request,
-                                     response, lifecycleId));
+                                     response, lifecycle));
+
+	*********/
+	return null;
     }
 
 
