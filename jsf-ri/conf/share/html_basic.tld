@@ -111,6 +111,11 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute> 
+      <attribute>
+        <name>commandName</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
   </tag>
 
   <tag>
