@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.5 2002/02/14 03:55:53 edburns Exp $
+ * $Id: UIForm.java,v 1.6 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -217,6 +217,7 @@ public class UIForm extends UIComponent implements EventDispatcher {
      *         UNVALIDATED, VALID, or INVALID
      */
     public void setValidState(int validState) {
+        setAttribute("validState", new Integer(validState));
     }
-
+ 
 }

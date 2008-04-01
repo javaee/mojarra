@@ -100,5 +100,17 @@ public interface Validatible {
      *         UNVALIDATED, VALID, or INVALID
      */
     void setValidState(int validState);
+
+    /**
+     * Performs validation on the specified value object. 
+     * Subclasses must override this method to perform appropriate
+     * validation.
+     * @param ec EventContext object representing the event-processing 
+     *           phase of this request
+     * @return String containing a message describing why validation
+     *         failed, or null if validation succeeded
+     */
+    void validate(EventContext ec);
+
 }
 

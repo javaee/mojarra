@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.7 2002/03/07 23:44:04 eburns Exp $
+ * $Id: UITextEntry.java,v 1.8 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -36,12 +36,15 @@ import java.util.EventObject;
  * which interact with the model object under the covers.
  *
  */
-public class UITextEntry extends UIComponent implements EventDispatcher {
+public class UITextEntry extends UIComponent implements EventDispatcher, 
+        Validatible{
 
     private static String TYPE = "TextEntry";
 
     private Vector valueChangeListeners = null;
-
+    private Vector validators = null;
+    private String messageModelReference = null;
+    
     /** 
      * Returns a String representing the this component type.  
      *
@@ -60,7 +63,7 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
      * @return String containing the current text value 
      */
     public String getText(RenderContext rc) { 
-	return (String) getValue(rc);
+        return (String) getValue(rc);
     }
 
     /**
@@ -120,6 +123,32 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
     public Iterator getValueChangeListeners() {
          return valueChangeListeners == null? null : valueChangeListeners.iterator();
     }
+    
+    /**
+     * The message model-reference property for this validatible component.
+     * This property contains a reference to the object which acts
+     * as the store for any validation error messages.  The model-reference
+     * must resolve to an object which implements one of the following types:
+     * <ul>
+     * <li><code>java.lang.String</code>
+     * <li><code>java.util.Collection</code> of <code>String</code> objects
+     * </ul>  
+     * @see #setMessageModelReference  
+     * @return String containing the message model-reference for this component
+     */
+    public String getMessageModelReference() {
+	return messageModelReference;
+    }
+
+    /**
+     * Sets the message model-reference property on this validatible component.
+     * @see #getMessageModelReference
+     * @param modelReference the String which contains a reference to the
+     *        object which acts as the store for any validation error messages
+     */
+    public void setMessageModelReference(String modelReference) {
+	this.messageModelReference = modelReference;
+    }
 
     /**
      * Dispatches the specified event to any registered listeners.
@@ -150,9 +179,8 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
         // Assert.assert_it( rc != null );
 
 	setText((String) value_event.getNewValue());
-	pushValueToModel(rc);
 	
-        // dispatch value change listeners.
+	// dispatch value change listeners.
         if ( valueChangeListeners == null ) {
             return;
         }    
@@ -168,5 +196,175 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
             vcl.handleValueChange(value_event);
         }
     }
+    
+    /**
+     * Registers the specified validator id as a validator
+     * for this validatible component.  The specified validator id must be registered
+     * in the scoped namespace, else an exception will be thrown.
+     * @see Validator
+     * @see #removeValidator
+     * @param validatorId the id of the validator
+     * @throws FacesException if validatorId is not registered in the
+     *         scoped namespace or if the object referred to by validatorId
+     *         does not implement the <code>Validator</code> interface.
+     */
+    public void addValidator(String validatorId) {
+        // PENDING ( visvan ) if validator does not implement
+        // validator interface or if it doesn't exist
+        // throw FacesException
+        if ( validatorId != null ) {
+             if ( validators == null ) {
+                 validators = new Vector();
+             }
+             validators.add(validatorId);
+         }
+    }
 
+    /**
+     * Removes the specified validator id as a validator
+     * for this validatible component.
+     * @see #addValidator  
+     * @param validatorId the id of the validator
+     * @throws FacesException if validatorId is not registered as a
+     *         validator for this component.
+     */
+    public void removeValidator(String validatorId) {
+        if ( validatorId != null ) {
+           validators.remove(validatorId);
+        }
+    }
+
+    /**
+     * @return Iterator containing the Validator instances registered
+     *         for this component
+     */
+    public Iterator getValidators() {
+	return validators == null? null : validators.iterator();
+    }
+    
+    /**
+     * The &quot;validState&quot; attribute which describes the current
+     * valid state of this component.  Valid state may be one of the
+     * following:
+     * <ul>
+     * <li><code>Validatible.UNVALIDATED</code>
+     * <li><code>Validatible.VALID</code>
+     * <li><code>Validatible.INVALID</code>
+     * </ul>
+     * @see #setValidState
+     * @return integer containing the current valid state of this
+     *         component
+     */
+    public int getValidState() {
+	Integer valid = (Integer)getAttribute(null, "validState");
+	return valid != null? valid.intValue() : Validatible.UNVALIDATED;
+    }
+
+    /**
+     * Sets the &quot;validState&quot; attribute for this component.
+     * @see #getValidState
+     * @param validState integer containing the valid state of this
+     *        component
+     * @throws IllegalParameterException if validState is not
+     *         UNVALIDATED, VALID, or INVALID
+     */
+    public void setValidState(int validState) {
+         setAttribute("validState", new Integer(validState));
+    }
+    
+    /**
+     * Performs validation on the specified value object. 
+     * Subclasses must override this method to perform appropriate
+     * validation.
+     * @param ec EventContext object representing the event-processing 
+     *           phase of this request
+     * @return String containing a message describing why validation
+     *         failed, or null if validation succeeded
+     */
+    public void validate(EventContext eventContext) {
+        Converter converterObj = null;
+        Object obj = null;
+        
+        // PENDING ( visvan ) not sure if the error message should be set here
+        // or in validator.
+        ObjectManager objectManager = eventContext.getObjectManager();
+        ServletRequest request = eventContext.getRequest();
+        RenderContext rc = (RenderContext)objectManager.get(request,
+                        Constants.REF_RENDERCONTEXT);
+        // Assert.assert_it( objectManager != null );
+
+        // if the converterReference is set, then get the converter directly
+        // from ObjectManager. If not based on modelType, get the converter from
+        // converterManager. If modelType is null or of type String, no conversion is done.
+        String converterReference = (String) getAttribute(null, "converterReference");
+
+        if ( converterReference != null ) {
+            converterObj = (Converter)objectManager.get(request, converterReference);
+        } else if ( (getAttribute(null, "modelType")) != null ){
+            // if modelType is String, need not obtain converter
+            Class converterClass = (Class)getAttribute(null, "modelType");
+            String converterClassName = converterClass.getName();
+            if ( ! converterClassName.equals("java.lang.String") ) {
+                // get converter from converterManager.
+                ConverterManager cm = (ConverterManager)
+                    objectManager.get(Constants.REF_CONVERTERMANAGER);
+                converterObj = cm.getConverter((Class)getAttribute(null, "modelType"));
+            }
+        }
+        if ( converterObj != null ) {
+            try {
+                obj = converterObj.convertStringToObject(rc, this, 
+                        (String) getValue(rc));
+            } catch ( ValidationException ce ) {
+                // if conversion failed don't proceed to validation
+                setErrorMessage(rc, ce.getMessage(), obj);
+                return;
+            }    
+        }
+        // PENDING ( visvan )
+        // if no converters are found and the model Type is not set
+        // as String, should it be an error ? Currently it is lenient.
+        // if no validators are set
+        if ( validators == null ) {
+            setValidState( Validatible.VALID);
+            return;
+        }    
+        Iterator iterator = getValidators();
+        while ( iterator.hasNext() ) {
+            String validatorName = (String) iterator.next();
+            // Assert.assert_it( validatorName != null );
+            Validator validator = (Validator)objectManager.get(request,
+                    validatorName);
+            // Assert.assert_it ( vcl != null );
+            if ( validator != null ) {
+                // if there is no converter set, then use the local value for
+                // validation.
+                if ( obj == null ) {
+                    obj = getValue(rc);
+                }    
+                try {
+                    validator.validate(eventContext, this,obj);
+                    setValidState ( Validatible.VALID);
+                    // cache the validated value
+                    setValue(obj);
+                } catch ( ValidationException ve ) {
+                    setErrorMessage(rc, ve.getMessage(), obj);    
+                }
+            }
+        }    
+    }
+   
+    /**
+     * Sets error message and state
+     */ 
+    protected void setErrorMessage (RenderContext rc, String errorMessage,
+            Object obj) {
+        
+        // set error message in the message model object
+        setValidState ( Validatible.INVALID);
+        // PENDING ( visvan ) this should go away once we integrate
+        // Gary's proposal. This is temporary solution to check in
+        // validation work.
+        setAttribute("errorMessage", errorMessage);
+    }             
 }

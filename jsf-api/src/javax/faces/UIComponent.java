@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.5 2002/03/01 22:03:33 eburns Exp $
+ * $Id: UIComponent.java,v 1.6 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -48,13 +48,13 @@ public abstract class UIComponent {
 
     public UIComponent() {
         ht = new Hashtable();
-	children = null;
+        children = null;
     }
 
     private void lazilyCreateChildren() {
-	if (null == children) {
-	    children = new Vector();
-	}
+        if (null == children) {
+            children = new Vector();
+        }
     }
 
     /** 
@@ -175,8 +175,8 @@ public abstract class UIComponent {
      * @throws NullPointerException if child is null
      */
     public void add(UIComponent child) {
-	lazilyCreateChildren();
-	children.add(child);
+        lazilyCreateChildren();
+        children.add(child);
     }
 
     /**
@@ -189,8 +189,8 @@ public abstract class UIComponent {
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount
      */
     public void add(UIComponent child, int index) {
-	lazilyCreateChildren();
-	children.insertElementAt(child, index);
+        lazilyCreateChildren();
+        children.insertElementAt(child, index);
     }
 
    /**
@@ -213,7 +213,9 @@ public abstract class UIComponent {
      *        removed 
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount-1
      */ 
-    public void remove(int index) {}
+    public void remove(int index) {
+        children.removeElementAt(index);
+    }
 
     /** 
      * Removes any child components which are associated with a childMarker
@@ -227,7 +229,9 @@ public abstract class UIComponent {
     /**
      * Removes all child components from this component.
      */
-    public void removeAll() {}
+    public void removeAll() {
+        children.removeAllElements();
+    }
 
     /**
      * Sets the child components on this component to be the specified 
@@ -237,7 +241,16 @@ public abstract class UIComponent {
      * @param kids the array containing the components to add as children
      * @throws NullPointerException if kids is null
      */
-    public void setChildren(UIComponent[] kids) {}
+    public void setChildren(UIComponent[] kids) {
+        if ( children != null ) {
+            removeAll();
+        } else {
+            lazilyCreateChildren();
+        }    
+        for ( int i = 0; i < kids.length; ++i ) {
+            children.add(kids[i]);
+        }    
+    }
 
     /**
      * Returns an iterator containing all the children of this component
@@ -245,8 +258,8 @@ public abstract class UIComponent {
      * @param rc the render context used to render this component, or null
      */
     public Iterator getChildren(RenderContext rc) {
-	lazilyCreateChildren();
-        return children.iterator(); 
+        lazilyCreateChildren();
+        return children.iterator();
     }
 
     /**
@@ -255,7 +268,13 @@ public abstract class UIComponent {
      * @param rc the render context used to render this component, or null
      */
     public Iterator getChildIds(RenderContext rc) {
-        return null; //compile
+        Vector childIds = new Vector();
+        Iterator iterator = getChildren(rc);
+        while ( iterator.hasNext() ) {
+            UIComponent child = (UIComponent) iterator.next();
+            childIds.add(child.getId());
+        }
+        return childIds.iterator();
     }
 
     /**
@@ -275,7 +294,8 @@ public abstract class UIComponent {
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount-1
      */
     public UIComponent getChild(RenderContext rc, int index) {
-        return null; //compile
+        UIComponent child = null;
+        return (UIComponent)children.elementAt(index);
     }
 
     /**
@@ -286,7 +306,15 @@ public abstract class UIComponent {
      * @throws NullPointerException if id is null
      */
     public UIComponent getChild(RenderContext rc, String id) {
-        return null; //compile
+        UIComponent child = null;
+        Iterator iterator = getChildren(rc);
+        while ( iterator.hasNext() ) {
+            child = (UIComponent) iterator.next();
+            if ( child.getId().equals( id )) {
+                break;
+            }
+        }
+        return child;
     }
 
     /**
@@ -314,7 +342,11 @@ public abstract class UIComponent {
      *          component.
      */
     public int getChildCount(RenderContext rc) {
-        return 0;
+        int size = 0;
+        if ( children != null ) {
+            size = children.size();
+        }
+        return size;
     }
 
     /**
@@ -456,7 +488,52 @@ public abstract class UIComponent {
     /**
      * Will recursively validate all components in this hierarchy.
      */
-    public void validateAll() {
+    public void validateAll(EventContext ec) {
+        // PENDING ( visvan )
+        // is it possible to avoid traversing the tree so many times.
+        ObjectManager ot = ec.getObjectManager();
+        javax.servlet.ServletRequest request = ec.getRequest();
+        RenderContext rc = (RenderContext)ot.get(request,
+                        Constants.REF_RENDERCONTEXT);
+        UIComponent child = null;
+        Iterator iterator = getChildren(rc);
+        while (iterator.hasNext()) {
+            child = (UIComponent) iterator.next();
+            if ( child != null && child instanceof Validatible ) {
+                ((Validatible)child).validate(ec);
+            }    
+        }
+        if ( isValid()) {
+            // validation succeeded, push values to model
+            iterator = getChildren(rc);
+            while ( iterator.hasNext() ) {
+                child = (UIComponent) iterator.next();
+                if ( child instanceof Validatible ) {
+                    child.pushValueToModel(rc);
+                    ((Validatible)child).setValidState(Validatible.UNVALIDATED);
+                }    
+            }
+        } else {
+            // PENDING ( visvan ) hack to store the validation state.
+            // If validation fails, UICommand object has to stop
+            // processing listeners and set outcome in NavigationHandler.
+            // when validateAll returns it resets the state to UNVALIDATED
+            // so isValid() will always return false whether validation
+            // succeeded or not. How to get around this ??
+            setAttribute("valid", "false");
+            
+            // convert the objects back to String for rendering. Otherwise
+            // it will cause ClassCastExceptions while rendering and processing
+            // events and set valid state to unvalidated for all components
+            iterator = getChildren(rc);
+            while ( iterator.hasNext() ) {
+                child = (UIComponent) iterator.next();
+                if ( child instanceof Validatible && child.getValue(rc) != null ) {
+                    child.setValue(child.getValue(rc).toString());
+                    ((Validatible)child).setValidState(Validatible.UNVALIDATED);
+                }    
+            }    
+        }    
     }
 
     /**
@@ -470,7 +547,24 @@ public abstract class UIComponent {
      *         is valid or not
      */
     public boolean isValid() {
-        return true; //compile
+        boolean valid = false;
+        UIComponent child = null;
+        Iterator iterator = getChildren(null);
+        while ( iterator.hasNext() ) {
+            child = (UIComponent) iterator.next();
+            if ( child instanceof Validatible ) {
+                if (((Validatible)child).getValidState() == Validatible.INVALID
+                    || ((Validatible)child).getValidState() == Validatible.UNVALIDATED) {
+                    valid = false;
+                    break;
+                } else {
+                    valid = true;
+                }    
+            } else {
+                valid = true;
+            }    
+        }
+        return valid;
     }
 
     /**
@@ -511,7 +605,7 @@ public abstract class UIComponent {
 	if (null == result) {
 	    result = pullValueFromModel(rc);
 	}
-	return result;
+        return result;
     }
     
     public void setValue(Object newValue) {
@@ -527,6 +621,7 @@ public abstract class UIComponent {
     */
 
     public void pushValueToModel(RenderContext rc) {
+        
 	if (null == modelReference) {
 	    return;
 	}
@@ -538,7 +633,9 @@ public abstract class UIComponent {
 						 modelReference, localValue); 
 		setValue(null);
             } catch ( FacesException e ) {
-		// Don't modify localValue in this case.
+		// local value should be converted to String for rendering
+                // purposes
+                setValue(localValue.toString());
             }
 	}
     }
@@ -554,19 +651,19 @@ public abstract class UIComponent {
 
     public Object pullValueFromModel(RenderContext rc) {
 	Object result = null;
-
-	if (null == modelReference) {
+        if (null == modelReference) {
 	    return result;
 	}
 
 	try {
-	    result = rc.getObjectAccessor().getObject(rc.getRequest(),
+            result = rc.getObjectAccessor().getObject(rc.getRequest(),
 						      modelReference);
-	    if (null != result) {
-		setValue(result);
+            if (null != result) {
+                // convert the value to String for rendering purposes.
+                setValue(result.toString());
 	    }
 	} catch ( FacesException e ) {
-	    // PENDING (visvan) skip this exception ??
+            // PENDING (visvan) skip this exception ??
 	}
 	return result;
     }

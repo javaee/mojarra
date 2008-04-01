@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.1 2002/01/18 21:56:21 edburns Exp $
+ * $Id: FormatValidator.java,v 1.2 2002/03/08 00:22:07 jvisvanathan Exp $
  */
 
 /*
@@ -16,55 +16,26 @@ package javax.faces;
  * The format mask is specified as follows:
  * TBD.
  */
-public class FormatValidator extends AbstractValidator {
+public class FormatValidator implements Validator {
 
     private static String TYPE = "FormatValidator";
 
+    // PENDING (visvan) these messages have to be localized. Revisit while
+    // integrating Gary's validation proposal.
     public final static String VALUE_NOT_STRING_MESSAGE_KEY = "javax.faces.valueNotStringMessage";
     public final static String INVALID_FORMAT_MESSAGE_KEY = "javax.faces.invalidFormatMessage";
-
-    private String formatMask;
 
     /**
      * Instantiates a format validator object with a null format mask;
      */
     public FormatValidator() {
     }
-
-    /**
-     * Creates a format validator object with the specified formatMask
-     * property.
-     * @param formatMask String containing the mask used to verify a value's format
-     */
-    public FormatValidator(String formatMask) {
-	this.formatMask = formatMask;
-    }
-
+   
     /**
      * @return String containing &quot;FormatValidator&quot;
-     */
+     */ 
     public String getType() {
 	return TYPE;
-    }
-
-    /**
-     * The &quot;formatMask&quot; property.  Value object Strings must
-     * match this format to be considered valid.
-     * @see #setFormatMask
-     * @return String containing the mask used to verify a value's format
-     */
-    public String getFormatMask() {
-	return formatMask;
-    }
-
-    /**
-     * Sets the &quot;formatMask&quot; property.
-     * @see #getFormatMask
-     * @param formatMask String containing the mask used to verify a value's format
-     * @throws NullPointerException if formatMask is null
-     */
-    public void setFormatMask(String formatMask) {
-	this.formatMask = formatMask;
     }
 
     /**
@@ -73,13 +44,14 @@ public class FormatValidator extends AbstractValidator {
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
-     * @return String containing a message describing why validation
-     *         failed, or null if validation succeeded
+     * @throws ValidationException if validation failed
      */
-    public String validate(EventContext ec, Object value) {
+    public void validate(EventContext ec, UIComponent component, 
+            Object value) throws ValidationException {
+        // PENDING (visvan) not yet implemented. Look at Swing's
+        // JFormattedTextField.
 	if (value == null || !(value instanceof String)) {
-	    return getMessage(ec, VALUE_NOT_STRING_MESSAGE_KEY);
+	    throw new ValidationException( VALUE_NOT_STRING_MESSAGE_KEY);
 	}
-	return null; //compile
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.4 2002/01/25 18:35:07 visvan Exp $
+ * $Id: UICommand.java,v 1.5 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -109,7 +109,8 @@ public class UICommand extends UIComponent implements EventDispatcher {
      * @param e the object describing the event
      */
     public void dispatch(EventObject e) throws FacesException {
-   
+         boolean doneValidation = false;
+         boolean valid = false;
         // ParameterCheck.nonNull(e);
 
         // if there are no listeners to dispatch just return
@@ -129,6 +130,7 @@ public class UICommand extends UIComponent implements EventDispatcher {
 
         ObjectManager ot = eventContext.getObjectManager();
         //Assert.assert_it( ot != null );
+        ServletRequest request = eventContext.getRequest();
 
         Iterator listeners = getCommandListeners();
         // Assert.assert_it( listeners != null);
@@ -137,23 +139,73 @@ public class UICommand extends UIComponent implements EventDispatcher {
             String listenerName = (String) listeners.next();
             // Assert.assert_it( listenerName != null );
 
-            ServletRequest request = eventContext.getRequest();
             CommandListener cl = (CommandListener)ot.get(request, listenerName);
             // Assert.assert_it ( cl != null );
             // Out come of the command execution will be set inside
             // the commandListener.
-            try {
-                NavigationHandler nh = eventContext.getNavigationHandler();
-                // PENDING ( visvan ) what if there is no navigationMap
-                // defined, then the handler will be null. revisit this.
-                // For now comment out assertion.
-                // Assert.assert_it( nh != null );
-                cl.doCommand(cmd_event, nh);
-            } catch ( CommandFailedException cfe ) {
-                throw new FacesException ("CommandListener" + listenerName
-                        + " execution unsuccessful");
+            // if requiresValidation is true, perform validation.
+            if ( cl == null ) {
+                continue;
             }
+            // if requiresValidation is true, perform validation.
+            // To do this, we need the component hierarchy, which can be obtained.
+            // Makes sure validation is done only once.
+            boolean reqValidation = cl.requiresValidation(cmd_event);
+            System.out.println("validation req " + reqValidation);
+
+            if ( reqValidation && !doneValidation ) {
+                System.out.println("doing validation");
+                doneValidation = true;
+                // if validation did not succed, stop processing listeners
+                // and set the outcome in NavigationHandler.
+                valid = performValidation(eventContext);
+                if ( !valid ) {
+                    break;
+                }    
+            }
+            if ((!reqValidation) || valid ) {
+                System.out.println("set nav handler");
+                try {
+                    NavigationHandler nh = eventContext.getNavigationHandler();
+                    cl.doCommand(cmd_event, nh);
+                } catch ( CommandFailedException cfe ) {
+                    throw new FacesException ("CommandListener" + listenerName
+                            + " execution unsuccessful");
+                }
+            }    
         }
     }
+   
+    /**
+     * Performs validation on every component in the component tree
+     * and returns status.
+     */ 
+    protected boolean performValidation ( EventContext eventContext ) {
+        ObjectManager ot = eventContext.getObjectManager();
+        ServletRequest request = eventContext.getRequest();
+        String formId = request.getParameter(Constants.REF_UIFORMID);
+        if ( formId != null ) {
+            UIForm formObj = (UIForm ) ot.get( request, formId);
+            formObj.validateAll(eventContext);  
+
+            // if validation failed set the outcome in navigationHandler.
+            // By default, this would result in current page being redisplayed
+            // since there is no targetPath
+            // PENDING ( visvan ) get rid of this once the bug is fixed.
+            String valid = (String) formObj.getAttribute(null, "valid");
+            if ( valid != null ) {
+                formObj.setAttribute("valid", null);
+                NavigationHandler nh = eventContext.getNavigationHandler();
+                String cmd_name = (String) getAttribute(null,"commandName");
+                if ( nh != null ) {
+                    nh.handleCommandOutcome(cmd_name, 
+                        Constants.OUTCOME_VALIDATION_FAILED);
+                }
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }    
 	
 }

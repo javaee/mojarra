@@ -1,5 +1,5 @@
 /*
- * $Id: RangeValidator.java,v 1.1 2002/01/18 21:56:22 edburns Exp $
+ * $Id: RangeValidator.java,v 1.2 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -18,28 +18,12 @@ public class RangeValidator extends RequiredValidator {
 
     private static String TYPE = "RangeValidator";
 
-    public final static String NON_NUMERIC_MESSAGE_KEY = "javax.faces.nonNumericMessage";
-    public final static String OUT_OF_RANGE_MESSAGE_KEY = "javax.faces.outOfRangeMessage";
+    // PENDING ( visvan ) these messages have to be localized. Revisit while
+    // integrating Gary's validation proposal.
+    public final static String NON_NUMERIC_MESSAGE_KEY = "Invalid Type";
+    public final static String OUT_OF_RANGE_MESSAGE_KEY = "Value out of range";
 
-    private int minimum = 0;
-    private int maximum = 0;
-
-    /**
-     * Instantiates a range validator object with 
-     * minimum = 0 and maximum = 0;
-     */
     public RangeValidator() {
-    }
-
-    /**
-     * Creates a range validator object with the specified minimum
-     * and maximum properties.
-     * @param minimum integer defining the minimum value
-     * @param maximum integer defining the maximum value
-     */
-    public RangeValidator(int minimum, int maximum) {
-	this.minimum = minimum;
-	this.maximum = maximum;
     }
 
     /**
@@ -50,74 +34,50 @@ public class RangeValidator extends RequiredValidator {
     }
 
     /**
-     * The &quot;minimum&quot; property.  Values must be
-     * greater or equal to this value to be considered valid.
-     * @see #setMinimum
-     * @return integer containing the minimum value
-     */
-    public int getMinimum() {
-	return minimum;
-    }
-
-    /**
-     * Sets the &quot;minimum&quot; property.
-     * @see #getMinimum
-     * @param minimum integer defining the minimum value
-     */
-    public void setMinimum(int minimum) {
-	this.minimum = minimum;
-    }
-
-    /**
-     * The &quot;maximum&quot; property.  Values must be
-     * less-than or equal to this value to be considered valid.
-     * @see #setMaximum
-     * @return integer containing the maximum value
-     */
-    public int getMaximum() {
-	return maximum;
-    }
-
-    /**
-     * Sets the &quot;maximum&quot; property.
-     * @see #getMaximum
-     * @param maximum integer defining the maximum value
-     */
-    public void setMaximum(int maximum) {
-	this.maximum = maximum;
-    }
-
-    /**
      * Verifies that the specified value object is numeric and
      * within the range defined by this object's minimum and maximum
      * properties.
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
-     * @return String containing a message describing why validation
-     *         failed, or null if validation succeeded
+     * @throws ValidationException if validation failed
      */
-    public String validate(EventContext ec, Object value) {
-	String result = super.validate(ec, value); // RequiredValidator:validate()
-	if (result != null) {
-	    return result; // null value
-	} else { // non null value
-	    int intValue = -1;
-	    if (value instanceof Integer) {
-		intValue = ((Integer)value).intValue();
-	    } else if (value instanceof String) {
-	        try {
-		    intValue = Integer.parseInt((String)value);
-		} catch (NumberFormatException e) {
-		    return getMessage(ec, NON_NUMERIC_MESSAGE_KEY);
-		}
-	    } else {
-		return getMessage(ec, NON_NUMERIC_MESSAGE_KEY);
-	    }
-	    if (intValue < minimum || intValue > maximum) {
-		return getMessage(ec, OUT_OF_RANGE_MESSAGE_KEY);
-	    }
+    public void validate(EventContext ec, UIComponent component, Object value) 
+            throws ValidationException {
+
+        // PENDING (visvan) RangeValidator need not invoke requiredValidator
+        // because if the value is null, it will be caught during conversion.
+        // so RangeValidator need not extend from RequiredValidator. Check before
+        // changing the API.
+        /*try {         
+	    super.validate(ec, component, value); // RequiredValidator:validate()
+        } catch (ValidationException ve ) {
+            throw ve;
+        } */ 
+   
+        int intValue = -1;
+	if (value instanceof Integer) {
+            intValue = ((Integer)value).intValue();
+	} else if (value instanceof String) {
+	    try {
+                intValue = Integer.parseInt((String)value);
+            } catch (NumberFormatException e) {
+                throw new ValidationException(NON_NUMERIC_MESSAGE_KEY);
+	     }
+	} else {
+            throw new ValidationException(NON_NUMERIC_MESSAGE_KEY);
 	}
-	return null;
+
+        Integer minValue = (Integer) component.getAttribute(null, "rangeMinimum");
+        Integer maxValue =  (Integer) component.getAttribute(null, "rangeMaximum");
+
+        if ( minValue == null || maxValue == null ) {
+            throw new ValidationException(OUT_OF_RANGE_MESSAGE_KEY);
+        }    
+        int minimum = ((Integer)minValue).intValue();
+        int maximum = ((Integer)maxValue).intValue();
+	if (intValue < minimum || intValue > maximum) {
+            throw new ValidationException(OUT_OF_RANGE_MESSAGE_KEY);
+	}
     }
 }

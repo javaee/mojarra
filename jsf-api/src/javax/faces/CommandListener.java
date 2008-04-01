@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListener.java,v 1.4 2002/01/25 18:35:06 visvan Exp $
+ * $Id: CommandListener.java,v 1.5 2002/03/08 00:22:07 jvisvanathan Exp $
  */
 
 /*
@@ -30,4 +30,16 @@ public interface CommandListener extends EventListener {
      */
     void doCommand(CommandEvent event, NavigationHandler nh) throws
             CommandFailedException;
+    
+    /**
+     * Returns whether or not the form hierarchy of the component
+     * which generated the associated command event should be
+     * validated before <code>doCommand</code> is invoked on this
+     * listener.
+     * @see Validator
+     * @see Validatible
+     * @return boolean value indicating whether or not the form should
+     *         be validated before the command is invoked
+     */
+    boolean requiresValidation(CommandEvent event);
 }

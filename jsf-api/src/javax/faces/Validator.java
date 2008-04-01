@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.1 2002/01/18 21:56:22 edburns Exp $
+ * $Id: Validator.java,v 1.2 2002/03/08 00:22:09 jvisvanathan Exp $
  */
 
 /*
@@ -25,9 +25,9 @@ public interface Validator {
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
-     * @return String containing a message describing why validation
-     *         failed, or null if validation succeeded
+     * @throws ValidationException if validation failed
      */
-    String validate(EventContext ec, Object value);
+    void validate(EventContext ec, UIComponent component, Object value) throws 
+            ValidationException;
 
 }

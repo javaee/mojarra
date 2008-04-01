@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.1 2002/01/18 21:56:22 edburns Exp $
+ * $Id: RequiredValidator.java,v 1.2 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -13,16 +13,19 @@ package javax.faces;
  * Class which implements a validator object which will verify
  * that a value object is non-null.
  */
-public class RequiredValidator extends AbstractValidator {
+public class RequiredValidator implements Validator {
 
     private static String TYPE = "RequiredValidator";
 
-    public final static String NULL_VALUE_MESSAGE_KEY = "javax.faces.nullValueMessage";
+    // PENDING ( visvan ) these messages have to be localized. Revisit while
+    // integrating Gary's validation proposal.
+    public final static String NULL_VALUE_MESSAGE_KEY = "Value cannot be empty";
+
+    public RequiredValidator() {
+    }
 
     /**
-     * Subclass must override this method and return an appropriate
-     * type String.
-     * @return String identifying the type of validator
+     * @return String containing &quot;RequiredValidator&quot;
      */
     public String getType() {
 	return TYPE;
@@ -35,15 +38,17 @@ public class RequiredValidator extends AbstractValidator {
      * @param ec EventContext object representing the event-processing 
      *           phase of this request
      * @param value Object containing the value to be validated
-     * @return String containing a message describing why validation
-     *         failed, or null if validation succeeded
+     * @throws ValidationException if validation failed
      */
-    public String validate(EventContext ec, Object value) {
-	if (value != null && 
-	    (value instanceof String && !value.equals(""))) {
-	    return null;
-	}
-	return getMessage(ec, NULL_VALUE_MESSAGE_KEY);
-    }
+    public void validate(EventContext ec, UIComponent component, Object value) 
+            throws ValidationException {
 
+        // PENDING (visvan)
+        // only String values need to be validated because "required" checking
+        // for other data types will be taken care of by converters.
+	if (value == null || (value instanceof String && value.equals(""))) {
+	    throw new ValidationException(NULL_VALUE_MESSAGE_KEY);
+        } 
+        return;
+    }    
 }

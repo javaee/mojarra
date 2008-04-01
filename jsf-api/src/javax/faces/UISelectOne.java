@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.10 2002/03/07 23:44:04 eburns Exp $
+ * $Id: UISelectOne.java,v 1.11 2002/03/08 00:22:08 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.servlet.ServletRequest;
  * The selected value corresponds to the value property of the currently
  * selected item.
  */
-public class UISelectOne extends UIComponent implements EventDispatcher, Validatible {
+public class UISelectOne extends UIComponent implements EventDispatcher {
     private static String TYPE = "SelectOne";
     // PENDING(edburns): don't cast these to Strings all over the place.
     private String selectedModelReference = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.16 2002/02/14 03:55:52 edburns Exp $
+ * $Id: Constants.java,v 1.17 2002/03/08 00:22:07 jvisvanathan Exp $
  */
 
 /*
@@ -115,6 +115,11 @@ public class Constants {
     public static final String REF_EVENTCONTEXTFACTORY = "eventContextFactory";
 
     /**
+     * Name for ConverterManager
+     */
+    public static final String REF_CONVERTERMANAGER = "converterManager";
+
+    /**
      * Name for ObjectAccessorFactory
      */
     public static final String REF_OBJECTACCESSORFACTORY = "objectAccessorFactory";
@@ -157,6 +162,11 @@ public class Constants {
      * Failure indicator after command processing.
      */
     public static final String OUTCOME_FAILURE = "failure";
-
+    
+    /**
+     * Failure indicator after validation processing.
+     */
+    public static final String OUTCOME_VALIDATION_FAILED = "validationFailed"; 
+   
     
 }
