@@ -30,8 +30,6 @@ public class CarListener implements CommandListener{
     
     public void doCommand(CommandEvent e, NavigationHandler nh )
     throws CommandFailedException {
-        String gifName1 = "crop_civic_regular.gif";
-        String gifName2 = "current.gif";
         
         UIComponent source = e.getSourceComponent();
         String sourceId = source.getId();
@@ -65,10 +63,13 @@ public class CarListener implements CommandListener{
                      */
                     // nasty, nasty, nasty hack
                     int data = 0;
-                    File fin = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "crop_honda_civic_regular.gif");
-                    File fout = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "current.gif");
+                    File fin = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator +
+                    "crop_honda_civic_regular.gif");
+                    File fout = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator + "current.gif");
                     
                     FileInputStream fis = null;
                     FileOutputStream fos = null;
@@ -128,10 +129,13 @@ public class CarListener implements CommandListener{
                     }
                     */
                     int data = 0;
-                    File fin = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "crop_acura_sport_regular.gif");
-                    File fout = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "current.gif");
+                    File fin = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator +
+                    "crop_acura_sport_regular.gif");
+                    File fout = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator + "current.gif");
                     
                     FileInputStream fis = null;
                     FileOutputStream fos = null;
@@ -189,10 +193,13 @@ public class CarListener implements CommandListener{
                     }
                     */
                     int data = 0;
-                    File fin = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "crop_lexus_regular.gif");
-                    File fout = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "current.gif");
+                    File fin = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator +
+                    "crop_lexus_regular.gif");
+                    File fout = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator + "current.gif");
                     
                     FileInputStream fis = null;
                     FileOutputStream fos = null;
@@ -250,10 +257,13 @@ public class CarListener implements CommandListener{
                     }
                     */
                     int data = 0;
-                    File fin = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "crop_ford_explorer_regular.gif");
-                    File fout = new File(servletContext.getRealPath("pictures") +
-                        File.separator + "current.gif");
+                    File fin = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator +
+                    "crop_ford_explorer_regular.gif");
+                    File fout = new File(".." + File.separator + "webapps" +
+                    File.separator + "cardemo" + File.separator +
+                    "pictures" + File.separator + "current.gif");
                     
                     FileInputStream fis = null;
                     FileOutputStream fos = null;
