@@ -44,7 +44,7 @@
       <faces:usefaces>
         <faces:form id="errorForm' formName="errorForm">
 
-            <faces:output_text id="hello_label" text="Login Failed" />
+            <faces:output_text id="hello_label" value="Login Failed" />
              <P></P>
         </faces:form>
        </faces:usefaces>
