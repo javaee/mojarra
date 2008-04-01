@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractFactory.java,v 1.3 2002/04/15 20:10:38 jvisvanathan Exp $
+ * $Id: AbstractFactory.java,v 1.4 2002/05/01 23:32:48 eburns Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ import javax.servlet.ServletContext;
  * FactoryFinder could be folded into AbstractFactoryBase. <P>
 
  *
- * @version $Id: AbstractFactory.java,v 1.3 2002/04/15 20:10:38 jvisvanathan Exp $
+ * @version $Id: AbstractFactory.java,v 1.4 2002/05/01 23:32:48 eburns Exp $
  * 
  * @see	javax.faces.FacesFactory
  * @see	javax.faces.FactoryFinder#find
@@ -277,6 +277,18 @@ public class AbstractFactory extends AbstractFactoryBase
 					 String facesName) {
 	return factoryMap.put(facesName, factory);
     }
+
+    /**
+
+    * @see javax.faces.AbstractFactoryBase
+
+    */
+
+    public Object addFactoryForFacesName(String absoluteClassName,
+					 String facesName) {
+	return factoryMap.put(facesName, absoluteClassName);
+    }
+
 
 } // end of class AbstractFactory
 

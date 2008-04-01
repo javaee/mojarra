@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractFactoryBase.java,v 1.1 2002/04/11 22:51:20 eburns Exp $
+ * $Id: AbstractFactoryBase.java,v 1.2 2002/05/01 23:32:48 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.servlet.ServletContext;
  * HREF="http://whatis.techtarget.com/definition/0,,sid9_gci331590,00.html">thread-safe</A>. 
 
  *
- * @version $Id: AbstractFactoryBase.java,v 1.1 2002/04/11 22:51:20 eburns Exp $
+ * @version $Id: AbstractFactoryBase.java,v 1.2 2002/05/01 23:32:48 eburns Exp $
  * 
  * @see	javax.faces.FacesFactory
  * @see	javax.faces.FactoryFinder#find
@@ -95,6 +95,23 @@ public abstract class AbstractFactoryBase extends Object
     */
 
     public abstract Object addFactoryForFacesName(FacesFactory factory,
+						  String facesName);
+
+    /**
+
+    * This method allows the addition of a new facesName/FacesFactory
+    * association at runtime.  The factory is loaded lazily when an
+    * instance is requested.  The factory is loaded using the algorithm
+    * in FactoryFinder.find(). <P>
+
+    * @return previous FacesFactory associated with specified facesName,
+    * or null if there was no associated FacesFactory for facesName.
+    
+    * @see javax.faces.FactoryFinder#find
+
+    */
+
+    public abstract Object addFactoryForFacesName(String factoyClassName,
 						  String facesName);
 
     public Object newInstance(String facesName) throws FactoryConfigurationError, FacesException {
