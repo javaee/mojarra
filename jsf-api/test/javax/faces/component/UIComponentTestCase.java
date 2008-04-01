@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.11 2002/08/14 22:46:51 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.12 2002/08/30 20:11:24 craigmcc Exp $
  */
 
 /*
@@ -244,18 +244,6 @@ public class UIComponentTestCase extends TestCase {
                      ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
         assertEquals("rendersSelf1", component.getRendersSelf(),
                      ((Boolean) component.getAttribute("rendersSelf")).booleanValue());
-
-        // valid
-        assertTrue("valid1", !component.isValid());
-        assertNull("valid2", component.getAttribute("valid"));
-        component.setValid(true);
-        assertTrue("valid3", component.isValid());
-        assertTrue("valid4",
-                   ((Boolean) component.getAttribute("valid")).booleanValue());
-        component.setAttribute("valid", Boolean.FALSE);
-        assertTrue("valid5", !component.isValid());
-        assertTrue("valid6",
-                   !((Boolean) component.getAttribute("valid")).booleanValue());
 
         // value
         assertNull("value1", component.getValue());

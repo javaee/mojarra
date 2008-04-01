@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.18 2002/08/29 05:39:11 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.19 2002/08/30 20:11:20 craigmcc Exp $
  */
 
 /*
@@ -395,7 +395,7 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * @param valid The new <code>valid</code> value
      */
-    public void setValid(boolean valid) {
+    protected void setValid(boolean valid) {
 
         if (valid) {
             setAttribute("valid", Boolean.TRUE);
@@ -976,15 +976,17 @@ public abstract class UIComponentBase implements UIComponent {
      * request contained in the specified {@link FacesContext}, and attempt
      * to convert this state information into an object of the required type
      * for this component.  If conversion is successful, save the resulting
-     * object via a call to <code>getValue()</code>, and call
-     * <code>setValid(true)</code>.  If conversion is not successful:</p>
+     * object via a call to <code>setValue()</code>, and set the
+     * <code>valid</code> property of this component to <code>true</code>.
+     * If conversion is not successful:</p>
      * <ul>
      * <li>Save the state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
-     * <li>Call <code>setValid(false)</code> on this component.</li>
+     * <li>Set the <code>valid</code> property of this comonent
+     *     to <code>false</code>.</li>
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
@@ -994,15 +996,18 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * <p>The default behavior of this method is to delegate to the
      * associated {@link Renderer} if there is one; otherwise this method
-     * does nothing.</p>
+     * simply returns <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @return <code>true</code> if conversion was successful, or
+     *  <code>false</code> if conversion failed
      *
      * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -1014,9 +1019,12 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKit renderKit = rkFactory.getRenderKit
                 (context.getRequestTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
-            renderer.decode(context, this);
+            boolean result = renderer.decode(context, this);
+            setValid(result);
+            return(result);
         } else {
             setValid(true);
+            return (true);
         }
 
     }

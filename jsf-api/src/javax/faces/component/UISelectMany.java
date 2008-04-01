@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.13 2002/07/30 22:56:18 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.14 2002/08/30 20:11:20 craigmcc Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class UISelectMany extends UISelectBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -92,8 +92,7 @@ public class UISelectMany extends UISelectBase {
 
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
-            super.decode(context);
-            return;
+            return (super.decode(context));
         }
 
         // Perform the default decoding
@@ -101,6 +100,7 @@ public class UISelectMany extends UISelectBase {
             context.getServletRequest().getParameterValues(getCompoundId());
         setValue(values);
         setValid(true);
+        return (true);
 
     }
 

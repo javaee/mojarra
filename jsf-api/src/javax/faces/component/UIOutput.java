@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.16 2002/08/04 23:37:56 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.17 2002/08/30 20:11:20 craigmcc Exp $
  */
 
 /*
@@ -61,10 +61,16 @@ public class UIOutput extends UIComponentBase {
      * @param context FacesContext for the request we are processing
      *
      * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
-        ; // No action required
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        setValid(true);
+        return (true);
 
     }
 

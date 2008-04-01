@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.11 2002/07/26 19:02:39 craigmcc Exp $
+ * $Id: Renderer.java,v 1.12 2002/08/30 20:11:23 craigmcc Exp $
  */
 
 /*
@@ -165,11 +165,15 @@ public abstract class Renderer {
      * @param context FacesContext for the request we are processing
      * @param component UIComponent to be decoded.
      *
+     * @return <code>true</code> if conversion was successful (or if no
+     *  decode processing was required), or
+     *  <code>false</code> if conversion was not successful
+     *
      * @exception IOException if an input/output error occurs while decoding
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
-    public abstract void decode(FacesContext context, UIComponent component)
+    public abstract boolean decode(FacesContext context, UIComponent component)
         throws IOException;
 
 

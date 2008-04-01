@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.46 2002/08/29 05:39:11 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.47 2002/08/30 20:11:19 craigmcc Exp $
  */
 
 /*
@@ -179,17 +179,6 @@ public interface UIComponent extends Serializable {
      * If conversion was unsuccessful, return <code>false</code>.
      */
     public boolean isValid();
-
-
-    /**
-     * <p>Define the value to be returned by the <code>isValid()</code>
-     * method.  This method should only be called from the
-     * <code>decode()</code> method of a {@link Renderer} instance to which
-     * decoding has been delegated for this component.</p>
-     *
-     * @param valid The new <code>valid</code> value
-     */
-    public void setValid(boolean valid);
 
 
     /**
@@ -453,15 +442,17 @@ public interface UIComponent extends Serializable {
      * request contained in the specified {@link FacesContext}, and attempt
      * to convert this state information into an object of the required type
      * for this component.  If conversion is successful, save the resulting
-     * object via a call to <code>getValue()</code>, and call
-     * <code>setValid(true)</code>.  If conversion is not successful:</p>
+     * object via a call to <code>setValue()</code>, and set the
+     * <code>valid</code> property of this component to <code>true</code>.
+     * If conversion is not successful:</p>
      * <ul>
      * <li>Save the state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
-     * <li>Call <code>setValid(false)</code> on this component.</li>
+     * <li>Set the <code>valid</code> property of this comonent
+     *     to <code>false</code>.</li>
      * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
@@ -471,15 +462,18 @@ public interface UIComponent extends Serializable {
      *
      * <p>The default behavior of this method is to delegate to the
      * associated {@link Renderer} if there is one; otherwise this method
-     * does nothing.</p>
+     * simply returns <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @return <code>true</code> if conversion was successful, or
+     *  <code>false</code> if conversion failed
      *
      * @exception IOException if an input/output error occurs during decoding
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException;
+    public boolean decode(FacesContext context) throws IOException;
 
 
     /**

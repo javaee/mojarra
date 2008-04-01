@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.5 2002/08/04 20:52:38 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.6 2002/08/30 20:11:20 craigmcc Exp $
  */
 
 /*
@@ -138,13 +138,13 @@ public class UISelectItem extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
-
-        // No decoding is performed
+        setValid(true);
+        return (true);
 
     }
 

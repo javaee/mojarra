@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.1 2002/08/04 23:15:56 craigmcc Exp $
+ * $Id: UIInput.java,v 1.2 2002/08/30 20:11:20 craigmcc Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ public class UIInput extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -71,8 +71,7 @@ public class UIInput extends UIComponentBase {
 
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
-            super.decode(context);
-            return;
+            return (super.decode(context));
         }
 
         // Perform the default decoding
@@ -80,6 +79,7 @@ public class UIInput extends UIComponentBase {
             context.getServletRequest().getParameter(getCompoundId());
         setValue(newValue);
         setValid(true);
+        return (true);
 
     }
 

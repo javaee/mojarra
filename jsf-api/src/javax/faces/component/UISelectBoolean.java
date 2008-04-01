@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.15 2002/08/14 22:46:51 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.16 2002/08/30 20:11:20 craigmcc Exp $
  */
 
 /*
@@ -99,7 +99,7 @@ public class UISelectBoolean extends UIInput {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -107,8 +107,7 @@ public class UISelectBoolean extends UIInput {
 
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
-            super.decode(context);
-            return;
+            return (super.decode(context));
         }
 
         // Perform the default decoding
@@ -119,6 +118,7 @@ public class UISelectBoolean extends UIInput {
         }
         setValue(newValue);
         setValid(true);
+        return (true);
 
     }
 

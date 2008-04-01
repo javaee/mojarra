@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.15 2002/07/30 22:56:18 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.16 2002/08/30 20:11:21 craigmcc Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class UISelectOne extends UISelectBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void decode(FacesContext context) throws IOException {
+    public boolean decode(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -92,8 +92,7 @@ public class UISelectOne extends UISelectBase {
 
         // Delegate to our associated Renderer if needed
         if (getRendererType() != null) {
-            super.decode(context);
-            return;
+            return (super.decode(context));
         }
 
         // Perform the default decoding
@@ -101,6 +100,7 @@ public class UISelectOne extends UISelectBase {
             context.getServletRequest().getParameter(getCompoundId());
         setValue(value);
         setValid(true);
+        return (true);
 
     }
 
