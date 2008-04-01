@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.13 2002/05/29 20:44:01 rkitain Exp $
+ * $Id: OptionListRenderer.java,v 1.14 2002/06/05 22:29:56 rkitain Exp $
  */
 
 /*
@@ -11,12 +11,20 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
+import javax.faces.component.UIComponent;
+import javax.faces.component.SelectItem;
+import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
-import javax.faces.component.UIComponent;
+import javax.faces.FacesException;
+
+import org.apache.commons.beanutils.ConversionException;
+import org.apache.commons.beanutils.ConvertUtils;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -29,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.13 2002/05/29 20:44:01 rkitain Exp $
+ * @version $Id: OptionListRenderer.java,v 1.14 2002/06/05 22:29:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,26 +100,123 @@ public class OptionListRenderer extends Renderer {
     }
 
     public boolean supportsComponentType(UIComponent c) {
-        return false;
+        ParameterCheck.nonNull(c);
+        return supportsComponentType(c.getComponentType());
     }
 
     public boolean supportsComponentType(String componentType) {
-        return false;
+        ParameterCheck.nonNull(componentType);
+        return (componentType.equals(UISelectOne.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) {
+    public void decode(FacesContext context, UIComponent component) 
+        throws IOException {
+        if (context == null) {
+            throw new NullPointerException("Null FacesContext");
+        }
+        ParameterCheck.nonNull(component);
+
+        String compoundId = component.getCompoundId();
+        Assert.assert_it(compoundId != null );
+
+        String newValue = context.getServletRequest().getParameter(compoundId);
+        String modelRef = component.getModel();
+
+        if (newValue == null || modelRef == null) {
+            component.setValue(newValue);
+            return;
+        }
+
+        // if there is a model, then convert to the model type.
+
+        Class modelType = null;
+        try {
+            modelType = context.getModelType(modelRef);
+        } catch (FacesException fe ) {
+            //PENDING(rogerk) log error
+        }
+        Assert.assert_it(modelType != null );
+
+        Object convertedValue = null;
+        try {
+            convertedValue = ConvertUtils.convert(newValue, modelType);
+        } catch (ConversionException ce ) {
+            //PENDING - FIXME - add error message to messageList
+        }
+
+        // PENDING(rogerk) store failed conversion value in other
+        // "localstate" attribute??
+        //
+        if ( convertedValue == null ) {
+            component.setAttribute("localState", newValue);
+        } else {
+            component.setValue(convertedValue);
+        }
+    }
+
+    public void encodeBegin(FacesContext context, UIComponent component) 
+        throws IOException {
+        String currentValue = null;
+        PrintWriter writer = null;
+
+        if (context == null) {
+            throw new NullPointerException("Null FacesContext");
+        }
+        ParameterCheck.nonNull(component);
+
+        UISelectOne selectOne = (UISelectOne)component;
+
+        // Use "localState" (if it's set - indicating conversion
+        // failure)
+        //
+        Object localState = selectOne.getAttribute("localState");
+        if ( localState != null ) {
+            currentValue = (String) localState;
+        } else {
+            Object currentObj = selectOne.currentValue(context);
+            if ( currentObj != null) {
+                currentValue = ConvertUtils.convert(currentObj);
+            }
+        }
+
+        if (currentValue == null) {
+            currentValue = "";
+        }
+        SelectItem items[] = selectOne.getItems();
+        if (items == null) {
+            items = (SelectItem[]) context.getModelValue(
+                selectOne.getItemsModel());
+        }
+        if (items == null) {
+            items = new SelectItem[0];
+        }
+
+        writer = context.getServletResponse().getWriter();
+        Assert.assert_it(writer != null );
+        writer.print("<SELECT NAME=\"");
+        writer.print(component.getCompoundId());
+        writer.print("\">");
+        for (int i = 0; i < items.length; i++) {
+            writer.print("<OPTION VALUE=\"");
+            writer.print(items[i].getValue());
+            writer.print("\"");
+            if (currentValue.equals(items[i].getValue())) {
+                writer.print(" selected=\"selected\"");
+            }
+            writer.print(">");
+            writer.print(items[i].getLabel());
+            writer.print("</OPTION>");
+        }
+        writer.print("</SELECT>");
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component) 
+        throws IOException {
 
     }
 
-    public void encodeBegin(FacesContext context, UIComponent component) {
-
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) {
+    public void encodeEnd(FacesContext context, UIComponent component) 
+        throws IOException {
 
     }
 

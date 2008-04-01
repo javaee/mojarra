@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.16 2002/05/29 20:44:00 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.17 2002/06/05 22:29:55 rkitain Exp $
  */
 
 /*
@@ -11,12 +11,23 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
-import javax.faces.context.FacesContext;
-import javax.faces.render.Renderer;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.event.CommandEvent;
+import javax.faces.render.Renderer;
+import javax.faces.FacesException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.ConversionException;
+import org.apache.commons.beanutils.ConvertUtils;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -29,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.16 2002/05/29 20:44:00 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.17 2002/06/05 22:29:55 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,26 +103,84 @@ public class HyperlinkRenderer extends Renderer {
     }
 
     public boolean supportsComponentType(UIComponent c) {
-        return false;
+        ParameterCheck.nonNull(c);
+        return supportsComponentType(c.getComponentType());
     }
 
     public boolean supportsComponentType(String componentType) {
-        return false;
+        ParameterCheck.nonNull(componentType);
+        return (componentType.equals(UICommand.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) {
+    public void decode(FacesContext context, UIComponent component) 
+        throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException("Null FacesContext");
+        }
+        ParameterCheck.nonNull(component);
+
+        // Does the command match our own name?
+        String action = context.getServletRequest().getParameter("action");
+        if (!"command".equals(action)) {
+            return;
+        }
+        String name = context.getServletRequest().getParameter("name");
+        if (name == null) {
+            return;
+        }
+        if (!name.equals(component.currentValue(context))) {
+            return;
+        }
+
+        // Enqueue a command event to the application
+        context.addApplicationEvent(new CommandEvent(component, name));
+    }
+
+    public void encodeBegin(FacesContext context, UIComponent component) 
+        throws IOException {
+
+        if ( context == null ) {
+            throw new NullPointerException("Null FacesContext");
+        }
+        ParameterCheck.nonNull(component);
+
+        PrintWriter writer = context.getServletResponse().getWriter();
+        Assert.assert_it( writer != null );
+
+        writer.print("<a href=\"");
+        writer.print(href(context, component));
+        writer.print("\">");
+        writer.print(component.currentValue(context));
+        writer.print("</a>");
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component) 
+        throws IOException {
 
     }
 
-    public void encodeBegin(FacesContext context, UIComponent component) {
+    public void encodeEnd(FacesContext context, UIComponent component) 
+        throws IOException {
 
     }
 
-    public void encodeChildren(FacesContext context, UIComponent component) {
+    private String href(FacesContext context, UIComponent component) {
+        if (context == null) {
+            throw new NullPointerException("Null FacesContext");
+        }
+        ParameterCheck.nonNull(component);
 
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) {
+        HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+        HttpServletResponse response =
+            (HttpServletResponse) context.getServletResponse();
+        StringBuffer sb = new StringBuffer(request.getContextPath());
+        sb.append("/faces?action=command&name=");
+        sb.append(component.currentValue(context)); // FIXME - null handling?
+        sb.append("&tree=");
+        sb.append(context.getResponseTree().getTreeId());
+        return (response.encodeURL(sb.toString()));
 
     }
 

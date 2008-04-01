@@ -1,0 +1,7 @@
+<INPUT TYPE="CHECKBOX"  NAME="/my_checkbox" CHECKED >
+<INPUT TYPE="CHECKBOX"  NAME="/my_checkbox">
+<INPUT TYPE="CHECKBOX"  NAME="/my_checkbox"> Foo
+<a href="/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId">HyperlinkRenderer</a>
+<SELECT NAME="/my_optionlist"><OPTION VALUE="Red">Red</OPTION><OPTION VALUE="Blue" selected="selected">Blue</OPTION><OPTION VALUE="Green">Green</OPTION><OPTION VALUE="Yellow">Yellow</OPTION></SELECT>
+<INPUT TYPE="PASSWORD" NAME="/my_secret" VALUE="secret">
+text

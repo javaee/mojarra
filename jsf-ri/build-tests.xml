@@ -242,6 +242,9 @@
          <copy file="${basedir}/web/test/CorrectRenderersResponse"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
+         <copy file="${basedir}/web/test/CorrectRenderersResponse_2"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
         <copy file="${basedir}/web/test/GenericPhase_correct"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
@@ -341,6 +344,7 @@
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
 <!--
             <test name="com.sun.faces.TestAbstractFactory"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleDriverImpl"/>
