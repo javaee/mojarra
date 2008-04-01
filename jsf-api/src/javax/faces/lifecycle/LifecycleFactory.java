@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.1 2002/05/07 05:18:58 craigmcc Exp $
+ * $Id: LifecycleFactory.java,v 1.2 2002/05/08 01:11:46 craigmcc Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.FacesException;     // FIXME - subpackage?
 /**
  * <p><strong>LifecycleFactory</strong> is a Factory object that creates
  * and returns new {@link Lifecycle} instances.  Implementations of
- * JavaServer Faces MUST provide a default (unnamed) implementation of
+ * JavaServer Faces MUST provide at least a default implementation of
  * {@link Lifecycle}.  Advanced implementations MAY provide additional
  * instances (keyed by logical names) for performing different types of
  * request processing on a per-request basis.</p>
@@ -27,7 +27,7 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  *
  * <p>The factory instance MUST return the same {@link Lifecycle} instance
  * for all calls to the <code>createLifecycle()</code> method with no
- * argument, or for all calls the the <code>createLifecycle</code> method
+ * parameters, or for all calls the the <code>createLifecycle()</code> method
  * with the same logical lifecycle identifier.</p>
  */
 
@@ -68,7 +68,7 @@ public abstract class LifecycleFactory {
     /**
      * <p>Return an <code>Iterator</code> over the set of custom lifecycle
      * identifiers supported by this factory.  If no custom identifiers are
-     * supported, an empty <code>Iterator</code> is returned.
+     * supported, an empty <code>Iterator</code> is returned.</p>
      */
     public abstract Iterator getLifecycleIds();
 

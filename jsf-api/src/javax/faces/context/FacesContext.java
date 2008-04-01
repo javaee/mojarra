@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.2 2002/05/07 20:10:47 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.3 2002/05/08 01:11:46 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.context;
 
 import javax.faces.component.UIContainer;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.render.RenderKit;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletResponse;
@@ -36,11 +37,17 @@ import javax.servlet.http.HttpSession;
  * executing this web application utilizes for the processing of this request.
  * </p>
  *
+ * <p><strong>FIXME</strong> - ObjectManager et. al.</p>
+ *
  * <p><strong>FIXME</strong> - Do we need direct access to the
- * output stream or writer associated with our response?</p>
+ * output stream or writer associated with our response so it can be cached?
+ * </p>
  */
 
 public abstract class FacesContext {
+
+
+    // ------------------------------------------------------------- Properties
 
 
     /**
@@ -60,6 +67,25 @@ public abstract class FacesContext {
 
 
     /**
+     * <p>Return the {@link RenderKit} instance that is used during the
+     * <em>Render Response</em> phase of the request processing lifecycle.</p>
+     */
+    public abstract RenderKit getRenderKit();
+
+
+    /**
+     * <p>Set the {@link RenderKit} instance that is used during the
+     * <em>Render Response</em> phase of the request processing lifecycle.</p>
+     *
+     * @param renderKit The new RenderKit instance
+     *
+     * @exception NullPointerException if <code>renderKit</code>
+     *  is <code>null</code>
+     */
+    public abstract void setRenderKit(RenderKit renderKit);
+
+
+    /**
      * <p>Return the logical page identifier associated with the inbound
      * request.  Typically, this will be the same as the page identifier
      * of the JavaServer Pages response that rendered the page from which
@@ -69,10 +95,28 @@ public abstract class FacesContext {
 
 
     /**
+     * <p>Set the logical page identifier of the associated with the
+     * inbound request.</p>
+     *
+     * @param pageId The new request page identifier
+     */
+    public abstract void setRequestPageId(String pageId);
+    
+
+    /**
      * <p>Return the {@link UIContainer} that is the root of the component
      * tree for the inbound request.</p>
      */
     public abstract UIContainer getRequestTree();
+
+
+    /**
+     * <p>Set the {@link UIContainer} that is the root of the component tree
+     * for the inbound request.</p>
+     *
+     * @param root The root of the inbound component tree
+     */
+    public abstract void setRequestTree(UIContainer root);
 
 
     /**
@@ -83,12 +127,30 @@ public abstract class FacesContext {
 
 
     /**
+     * <p>Set the logical page identifier associated with the outbound
+     * response.</p>
+     *
+     * @param pageId The new response page identifier
+     */
+    public abstract void setResponsePageId(String pageId);
+
+
+    /**
      * <p>Return the {@link UIContainer} that is the root of the component
      * tree for the outbound response.  Unless otherwise specified (by a
      * call to <code>setResponseTree()</code>), this will return the same
      * component tree returned by <code>getRequestTree()</code>.</p>
      */
     public abstract UIContainer getResponseTree();
+
+
+    /**
+     * <p>Set the {@link UIContainer} that is the root of the component tree
+     * for the outbound response.</p>
+     *
+     * @param root The root of the outbound component tree
+     */
+    public abstract void setResponseTree(UIContainer root);
 
 
     /**
@@ -112,6 +174,9 @@ public abstract class FacesContext {
     public abstract ServletResponse getServletResponse();
 
 
+    // --------------------------------------------------------- Public Methods
+
+
     /**
      * <p>Release any resources associated with this <code>FacesContext</code>
      * instance.  Faces implementations may choose to pool instances in the
@@ -119,42 +184,6 @@ public abstract class FacesContext {
      * and garbage collection.</p>
      */
     public abstract void release();
-
-
-    /**
-     * <p>Set the logical page identifier of the associated with the
-     * inbound request.</p>
-     *
-     * @param pageId The new request page identifier
-     */
-    public abstract void setRequestPageId(String pageId);
-    
-
-    /**
-     * <p>Set the {@link UIContainer} that is the root of the component tree
-     * for the inbound request.</p>
-     *
-     * @param root The root of the inbound component tree
-     */
-    public abstract void setRequestTree(UIContainer root);
-
-
-    /**
-     * <p>Set the logical page identifier associated with the outbound
-     * response.</p>
-     *
-     * @param pageId The new response page identifier
-     */
-    public abstract void setResponsePageId(String pageId);
-
-
-    /**
-     * <p>Set the {@link UIContainer} that is the root of the component tree
-     * for the outbound response.</p>
-     *
-     * @param root The root of the outbound component tree
-     */
-    public abstract void setResponseTree(UIContainer root);
 
 
 }

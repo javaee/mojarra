@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.1 2002/05/07 05:18:57 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.2 2002/05/08 01:11:46 craigmcc Exp $
  */
 
 /*
@@ -57,9 +57,6 @@ import javax.faces.context.FacesContext;
  * programmed in a thread-safe manner.  A {@link FacesContext} parameter
  * will be passed to methods as needed, to provide access to the state
  * information for a particular request.</p>
- *
- * <p><strong>FIXME</strong> - Specify discovery and startup-time configuration
- * mechanisms for <code>Lifecycle</code> instances.</p>
  */
 
 public abstract class Lifecycle {
@@ -212,6 +209,18 @@ public abstract class Lifecycle {
      * information fit in?  Is it a separate phase prior to this one?</p>
      */
     public static final int RENDER_RESPONSE_PHASE = 80;
+
+
+    // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return the unique lifecycle identifier for this
+     * <code>Lifecycle</code> instance.  The default <code>Lifecycle</code>
+     * instance for a given JavaServer Faces implementation shall
+     * return a zero-length String.</p>
+     */
+    public abstract String getLifecycleId();
 
 
     // ------------------------------------------------------ Execution Methods

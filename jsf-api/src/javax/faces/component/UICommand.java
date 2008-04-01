@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.1 2002/05/07 05:18:56 craigmcc Exp $
+ * $Id: UICommand.java,v 1.2 2002/05/08 01:11:46 craigmcc Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ public abstract class UICommand extends UIComponent {
      * name has been specified).</p>
      *
      * <p><strong>FIXME</strong> - Should the default value be
-     * just the <code>id</code> property instead?</p>
+     * just the <code>componentId</code> property instead?</p>
      */
     public abstract String getName();
 

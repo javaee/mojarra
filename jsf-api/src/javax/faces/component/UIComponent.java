@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.3 2002/05/07 20:10:47 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.4 2002/05/08 01:11:46 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
-import javax.faces.attribute.AttributeDescriptor;
+import javax.faces.render.AttributeDescriptor;
 import javax.faces.render.Renderer;
 
 
@@ -28,18 +28,25 @@ import javax.faces.render.Renderer;
  * <p>Each <code>UIComponent</code> instance supports the following
  * JavaBean properties to describe its render-independent characteristics:</p>
  * <ul>
+ * <li><strong>componentId</strong> (java.lang.String) - An identifier for this
+ *     component, which must be unique across all children of the parent
+ *     {@link UIContainer}.  Identifiers may be composed of letters, digits,
+ *     dashes ('-'), and underscores ('_').  To minimize the size of
+ *     responses rendered by JavaServer Faces, it is recommended that
+ *     identifiers be as short as possible.</li>
+ * <li><strong>componentType</strong> - The canonical name of the component
+ *     type represented by this <code>UIComponent</code> instance.  For all
+ *     standard component types, this value is represented by a manifest
+ *     constant String named <code>TYPE</code> in the implementation class.
+ *     To facilitate introspection by tools, it is recommended that user
+ *     defined <code>UIComponent</code> subclasses follow the same
+ *     convention.</li>
  * <li><strong>compoundId</strong> (java.lang.String) - A unique (within
  *     the component tree containing this component) identifier for the
  *     current node, which begins with a slash character ('/'), followed by
  *     the <code>id</code> of each parent of the current component (from the
  *     top down) followed by a slash character ('/'), and ending with the
  *     <code>id</code> of this component.  [READ-ONLY]</li>
- * <li><strong>id</strong> (java.lang.String) - An identifier for this
- *     component, which must be unique across all children of the parent
- *     {@link UIContainer}.  Identifiers may be composed of letters, digits,
- *     dashes ('-'), and underscores ('_').  To minimize the size of
- *     responses rendered by JavaServer Faces, it is recommended that
- *     identifiers be as short as possible.</li>
  * <li><strong>model</strong> (java.lang.STring) - A symbolic expression
  *     used to attach this component to <em>model</em> data in the underlying
  *     application (typically a JavaBean property).  The syntax of this
@@ -54,13 +61,6 @@ import javax.faces.render.Renderer;
  *     to a response.  If not specified, this component must render itself
  *     directly in the <a href="#render(javax.faces.context.FacesContext)">
  *     render()</a> method.</li>
- * <li><strong>type</strong> - The canonical name of the component type
- *     represented by this <code>UIComponent</code> instance.  For all
- *     standard component types, this value is represented by a manifest
- *     constant String named <code>TYPE</code> in the implementation class.
- *     To facilitate introspection by tools, it is recommended that user
- *     defined <code>UIComponent</code> subclasses follow the same
- *     convention.</li>
  * <li><strong>value</strong> - The local value of this
  *     <code>UIComponent</code>, which represents a server-side cache of the
  *     value most recently entered by a user.  <strong>FIXME</strong> -
@@ -72,11 +72,11 @@ import javax.faces.render.Renderer;
  *
  * <p>Each <code>UIComponent</code> instance supports a set of dynamically
  * defined <em>attributes</em>, normally used to describe the render-dependent
- * characteristics of the comopnent.  The set of supported attribute names
+ * characteristics of the component.  The set of supported attribute names
  * (and types) for a particular <code>UIComponent</code> subclass can be
  * introspected (for example, by development tools), through a call to the
  * <code>getAttributeNames()</code> and <code>getAttributeDescriptor</code>
- * methods.</p>
+ * methods.  However, if the <code>rendererType</code></p>
  *
  * <h3>Component Trees and Navigation</h3>
  *
@@ -105,6 +105,10 @@ import javax.faces.render.Renderer;
  * <h3>Other Stuff</h3>
  *
  * <p><strong>FIXME</strong> - Lots more about lifecycle, etc.</p>
+ *
+ * <p><strong>FIXME</strong> - Should all standard implementations of
+ * <code>UIComponent</code> be required to be able to render themselves
+ * in the absence of a {@link RenderKit}?  How about custom components?</p>
  */
 
 public abstract class UIComponent {
@@ -179,15 +183,9 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the <em>compound identifier</em> of this component.</p>
-     */
-    public abstract String getCompoundId();
-
-
-    /**
      * <p>Return the identifier of this <code>UIComponent</code>.</p>
      */
-    public abstract String getId();
+    public abstract String getComponentId();
 
 
     /**
@@ -199,7 +197,19 @@ public abstract class UIComponent {
      *  or contains invalid characters
      * @exception NullPointerException if <code>id</code> is <code>null</code>
      */
-    public abstract void setId(String id);
+    public abstract void setComponentId(String id);
+
+
+    /**
+     * <p>Return the component type of this <code>UIComponent</code>.</p>
+     */
+    public abstract String getComponentType();
+
+
+    /**
+     * <p>Return the <em>compound identifier</em> of this component.</p>
+     */
+    public abstract String getCompoundId();
 
 
     /**
@@ -252,12 +262,6 @@ public abstract class UIComponent {
      *  that render themselves
      */
     public abstract void setRendererType(String rendererType);
-
-
-    /**
-     * <p>Return the component type of this <code>UIComponent</code>.</p>
-     */
-    public abstract String getType();
 
 
     /**
