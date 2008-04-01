@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.6 2002/01/24 00:35:23 rogerk Exp $
+ * $Id: OptionListRenderer.java,v 1.7 2002/01/31 20:38:54 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.6 2002/01/24 00:35:23 rogerk Exp $
+ * @version $Id: OptionListRenderer.java,v 1.7 2002/01/31 20:38:54 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,20 +122,19 @@ public class OptionListRenderer extends Object implements Renderer {
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
  
-        UISelectOne wSelectOne = null;
+        UISelectOne uiSelectOne = null;
         if ( supportsType(c)) {
-            wSelectOne = (UISelectOne) c;
+            uiSelectOne = (UISelectOne) c;
         } else {
             throw new FacesException("Invalid component type. " +
                       "Expected UISelectOne");
         }
 
-        String optionListId = wSelectOne.getId();
+        String optionListId = uiSelectOne.getId();
         Assert.assert_it(null != optionListId);
 
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
-	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
 
         StringBuffer output = new StringBuffer();
         output.append("<SELECT NAME=\"");
@@ -155,18 +154,40 @@ public class OptionListRenderer extends Object implements Renderer {
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
 	
-        UISelectOne wSelectOne = null;
+        UISelectOne uiSelectOne = null;
         if ( supportsType(c)) {
-            wSelectOne = (UISelectOne) c;
+            uiSelectOne = (UISelectOne) c;
         } else {
             throw new FacesException("Invalid component type. " +
 				     "Expected UISelectOne");
         }
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
-	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
-	
+
         StringBuffer output = new StringBuffer();
+
+        String selectedValue = (String) uiSelectOne.getSelectedValue(rc);
+
+        // Iterate over the components items collection and
+        // build the rendering string.
+        //
+        Iterator itemsIter = uiSelectOne.getItems(rc);
+        while (itemsIter.hasNext()) {
+            UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
+            String itemLabel = item.getLabel(); 
+            output.append("<OPTION VALUE=\"");
+            output.append(item);    
+            output.append("\"");
+
+            if ((selectedValue != null) &&
+                selectedValue.equals(itemLabel)) {
+                output.append(" SELECTED");
+            }
+            output.append(">");
+            output.append(itemLabel);
+            output.append("</OPTION>");
+        }
+	
         output.append("</SELECT>");
         outputMethod.writeText(output.toString());
         outputMethod.flush();

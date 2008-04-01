@@ -475,6 +475,11 @@ Configuring UI Components
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+        <name>description</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
   </tag>
 
   <tag>
@@ -520,6 +525,11 @@ Configuring UI Components
     <attribute>
         <name>label</name>
         <required>true</required>
+        <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>description</name>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>

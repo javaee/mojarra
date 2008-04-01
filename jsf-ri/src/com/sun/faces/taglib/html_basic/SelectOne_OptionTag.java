@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.7 2002/01/17 02:17:04 edburns Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.8 2002/01/31 20:38:55 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.7 2002/01/17 02:17:04 edburns Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.8 2002/01/31 20:38:55 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,6 +61,7 @@ public class SelectOne_OptionTag extends TagSupport
     private String selected = null;
     private String value = null;
     private String label = null;
+    private String description = null;
 
 // Relationship Instance Variables
 
@@ -111,6 +112,14 @@ protected void init()
         this.label = label;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     /**
      * Returns the appropriate renderer for the tag
      *
@@ -158,7 +167,7 @@ public int doStartTag() throws JspException {
     
     // Ascend the tag hierarchy to get the RadioGroup tag
     SelectOne_OptionListTag ancestor = null;
-    UISelectOne wSelectOne = null;
+    UISelectOne uiSelectOne = null;
     String parentName = null;
     
     // get the UISelectOne that is our component.
@@ -174,37 +183,15 @@ public int doStartTag() throws JspException {
     
     // by virtue of being inside a RadioGroup there must be a
     // UISelectOne instance under the name.
-    wSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-    Assert.assert_it(null != wSelectOne);
+    uiSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
+    Assert.assert_it(null != uiSelectOne);
     
-    // These over-write the values from "the last time around", but
-    // its ok, since we just use it for rendering.
-    wSelectOne.setAttribute("selected", getSelected());
-    wSelectOne.setAttribute("value", getValue());
-    wSelectOne.setAttribute("label", getLabel());
+    uiSelectOne.addItem(getValue(), getLabel(), getDescription());
 
-    // Add this value to the Collection
-    ancestor.getItems().add(getLabel());
-    // if it is selected, make sure the model knows about it.
     if (null != getSelected()) {
-	wSelectOne.setSelectedValue(renderContext, getLabel());
+	uiSelectOne.setSelectedValue(getLabel());
     }
     
-    try {
-        wSelectOne.setRendererType("OptionRenderer");
-        wSelectOne.render(renderContext);
-    } catch (java.io.IOException e) {
-        throw new JspException("Problem rendering component: "+
-            e.getMessage());
-    } catch (FacesException f) {
-        throw new JspException("Problem rendering component: "+
-            f.getMessage());
-    }
-
-    wSelectOne.setAttribute("selected", null);
-    wSelectOne.setAttribute("value", null);
-    wSelectOne.setAttribute("label", null);
-
     return (EVAL_BODY_INCLUDE);
 }
 
@@ -212,49 +199,6 @@ public int doStartTag() throws JspException {
  * End Tag Processing
  */
 public int doEndTag() throws JspException{
-    ObjectManager ot = (ObjectManager) pageContext.getServletContext().
-        getAttribute(Constants.REF_OBJECTMANAGER);
-    Assert.assert_it( ot != null );
-    RenderContext renderContext =
-        (RenderContext)ot.get(pageContext.getSession(),
-                              Constants.REF_RENDERCONTEXT);
-    Assert.assert_it( renderContext != null );
-
-    // Ascend the tag hierarchy to get the RadioGroup tag
-    SelectOne_OptionListTag ancestor = null;
-    UISelectOne wSelectOne = null;
-    String parentName = null;
-
-    // get the UISelectOne that is our component.
-    try {
-        ancestor = (SelectOne_OptionListTag)
-            findAncestorWithClass(this, SelectOne_OptionListTag.class);
-        parentName = ancestor.getId();
-    } catch ( Exception e ) {
-        throw new JspException("Option must be enclosed in a SelectOne_Option tag");
-    }
-    Assert.assert_it(null != ancestor);
-    Assert.assert_it(null != parentName);
-
-    // by virtue of being inside a RadioGroup there must be a
-    // UISelectOne instance under the name.
-//PENDING(rogerk)can we eliminate this extra get if component is instance
-//variable? If so, threading issue?
-//
-    wSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-    Assert.assert_it(null != wSelectOne);
-
-    // Complete the rendering process
-    //
-    try {
-        wSelectOne.renderComplete(renderContext);
-    } catch (java.io.IOException e) {
-        throw new JspException("Problem completing rendering: "+
-            e.getMessage());
-    } catch (FacesException f) {
-        throw new JspException("Problem completing rendering: "+
-            f.getMessage());
-    }
 
     return EVAL_PAGE;
 }

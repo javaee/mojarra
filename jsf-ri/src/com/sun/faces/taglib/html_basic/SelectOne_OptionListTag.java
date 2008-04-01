@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.11 2002/01/28 18:31:14 visvan Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.12 2002/01/31 20:38:55 rogerk Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Vector;
 
 /**
  *
@@ -37,7 +37,7 @@ import java.util.HashSet;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.11 2002/01/28 18:31:14 visvan Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.12 2002/01/31 20:38:55 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -66,8 +66,6 @@ public class SelectOne_OptionListTag extends TagSupport
     private String valueChangeListener = null;
 
 // Relationship Instance Variables
-
-    private Collection items;
 
 //
 // Constructors and Initializers    
@@ -128,13 +126,6 @@ protected void init()
 // Methods called by children tags:
 //
 
-protected Collection getItems() {
-    if (null == items) {
-	items = new HashSet();
-    }
-    return items;
-}
-
 //
 //  Helper Methods for tag methods
 //
@@ -174,12 +165,12 @@ protected Collection getItems() {
      */
 protected UISelectOne createComponent(RenderContext renderContext) 
     throws JspException {
-    UISelectOne wSelectOne = new UISelectOne();
+    UISelectOne uiSelectOne = new UISelectOne();
     
     // set renderer specific properties
-    wSelectOne.setId(getId());
+    uiSelectOne.setId(getId());
     try {
-        wSelectOne.addValueChangeListener(valueChangeListener);    
+        uiSelectOne.addValueChangeListener(valueChangeListener);    
     } catch (FacesException fe) {
         throw new JspException("Listener + " + valueChangeListener +
           " doesn't exist or does not implement valueChangeListener interface");
@@ -187,11 +178,11 @@ protected UISelectOne createComponent(RenderContext renderContext)
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {
-	wSelectOne.setModelReference(model);
-	wSelectOne.setSelectedModelReference(selectedValueModel);
+	uiSelectOne.setModelReference(model);
+	uiSelectOne.setSelectedModelReference(selectedValueModel);
     } 
     
-    return wSelectOne;
+    return uiSelectOne;
 }
 
     /** Adds the component and listener to the ObjectManager
@@ -242,7 +233,10 @@ public int doStartTag() throws JspException {
     if (uiSelectOne == null) {
         uiSelectOne = createComponent(renderContext);
         addToScope(uiSelectOne, ot);
-    }
+    } 
+
+    //PENDING(rogerk) clear out internal component list (reset)
+    uiSelectOne.setItems(new Vector());
 
     // 2. Render the component.
     //
@@ -275,23 +269,13 @@ public int doEndTag() throws JspException {
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-    UISelectOne wSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), id);
-    Assert.assert_it(null != wSelectOne);
+    UISelectOne uiSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), id);
+    Assert.assert_it(null != uiSelectOne);
     
-    // The magic method: setting the collection into the component
-    wSelectOne.setItems(renderContext, items);
-
     // Complete the rendering process
     //
     try {
-//PENDING(rogerk)we need to reset the renderer name for UISelectOne, becuase
-//it is a tag has enclosing component of the same type (UISelectOne) - 
-//sharing same attribute list (renderer name is set in attributeList of
-//UIComponent.
-//
-        wSelectOne.setRendererType(
-            "OptionListRenderer");
-        wSelectOne.renderComplete(renderContext);
+        uiSelectOne.renderComplete(renderContext);
     } catch (java.io.IOException e) {
         throw new JspException("Problem completing rendering: "+
             e.getMessage());

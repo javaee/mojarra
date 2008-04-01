@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.7 2002/01/24 00:35:23 rogerk Exp $
+ * $Id: RadioRenderer.java,v 1.8 2002/01/31 20:38:54 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.7 2002/01/24 00:35:23 rogerk Exp $
+ * @version $Id: RadioRenderer.java,v 1.8 2002/01/31 20:38:54 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,44 +118,7 @@ public class RadioRenderer extends Object implements Renderer {
 
     public void renderStart(RenderContext rc, UIComponent c) 
         throws IOException, FacesException {
-
-        ParameterCheck.nonNull(rc);
-        ParameterCheck.nonNull(c);
- 
-        UISelectOne wSelectOne = null;
-        if ( supportsType(c)) {
-            wSelectOne = (UISelectOne) c;
-        } else {
-            throw new FacesException("Invalid component type. " +
-                      "Expected UISelectOne");
-        }
-
-        String radioId = wSelectOne.getId();
-        Assert.assert_it(null != radioId);
-
-        OutputMethod outputMethod = rc.getOutputMethod();
-        Assert.assert_it(outputMethod != null );
-	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
-
-        StringBuffer output = new StringBuffer();
-        output.append("<INPUT TYPE=\"RADIO\"");
-
-        if ((null != selectedValue) &&
-	    selectedValue.equals(wSelectOne.getAttribute(rc, "value"))) {
-            output.append(" CHECKED");
-        }
-        output.append(" NAME=\"");
-        output.append(radioId);
-        output.append("\" VALUE=\"");
-        output.append(wSelectOne.getAttribute(rc, "value"));
-        output.append("\">");
-        if (wSelectOne.getAttribute(rc, "label") != null) {
-            output.append(" ");
-            output.append(wSelectOne.getAttribute(rc, "label"));
-        }
-
-        outputMethod.writeText(output.toString());
-        outputMethod.flush();
+        return;
     }
 
     public void renderChildren(RenderContext rc, UIComponent c) 
@@ -165,6 +128,51 @@ public class RadioRenderer extends Object implements Renderer {
 
     public void renderComplete(RenderContext rc, UIComponent c) 
             throws IOException,FacesException {
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
+
+        UISelectOne uiSelectOne = null;
+        if ( supportsType(c)) {
+            uiSelectOne = (UISelectOne) c;
+        } else {
+            throw new FacesException("Invalid component type. " +
+                                     "Expected UISelectOne");
+        }
+        String radioId = uiSelectOne.getId();
+        Assert.assert_it(null != radioId);
+
+        OutputMethod outputMethod = rc.getOutputMethod();
+        Assert.assert_it(outputMethod != null );
+
+        StringBuffer output = new StringBuffer();
+
+        String selectedValue = (String) uiSelectOne.getSelectedValue(rc);
+
+        // Iterate over the components items collection and
+        // build the rendering string.
+        //
+        Iterator itemsIter = uiSelectOne.getItems(rc);
+        while (itemsIter.hasNext()) {
+            UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
+            String itemLabel = item.getLabel();
+            output.append("<INPUT TYPE=\"RADIO\"");
+            if ((null != selectedValue) &&
+                selectedValue.equals(item)) {
+                output.append(" CHECKED");
+            }
+            output.append(" NAME=\"");
+            output.append(radioId);
+            output.append("\" VALUE=\"");
+            output.append(item);
+            output.append("\">");
+            if (itemLabel != null) {
+                output.append(" ");
+                output.append(itemLabel);
+            }
+        }
+        outputMethod.writeText(output.toString());
+        outputMethod.flush();
+
         return;
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.10 2002/01/28 18:31:14 visvan Exp $
+ * $Id: RadioGroupTag.java,v 1.11 2002/01/31 20:38:55 rogerk Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashSet;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.10 2002/01/28 18:31:14 visvan Exp $
+ * @version $Id: RadioGroupTag.java,v 1.11 2002/01/31 20:38:55 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -147,13 +147,13 @@ protected Collection getItems() {
      */
 protected UISelectOne createComponent(RenderContext renderContext) 
     throws JspException {
-    UISelectOne wSelectOne = new UISelectOne();
+    UISelectOne uiSelectOne = new UISelectOne();
     
     // set renderer specific properties
-    wSelectOne.setId(getId());
+    uiSelectOne.setId(getId());
     
     try {
-        wSelectOne.addValueChangeListener(valueChangeListener);    
+        uiSelectOne.addValueChangeListener(valueChangeListener);    
     } catch (FacesException fe) {
         throw new JspException("Listener + " + valueChangeListener +
                " does not exist or does not implement valueChangeListener " + 
@@ -162,10 +162,10 @@ protected UISelectOne createComponent(RenderContext renderContext)
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {
-	wSelectOne.setModelReference(model);
-	wSelectOne.setSelectedModelReference(selectedValueModel);
+	uiSelectOne.setModelReference(model);
+	uiSelectOne.setSelectedModelReference(selectedValueModel);
     } 
-    return wSelectOne;
+    return uiSelectOne;
 }
 
     /** Adds the component and listener to the ObjectManager
@@ -234,11 +234,12 @@ public int doEndTag() throws JspException{
 			      Constants.REF_RENDERCONTEXT);
     Assert.assert_it( renderContext != null );
     
-    UISelectOne wSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), id);
-    Assert.assert_it(null != wSelectOne);
+    UISelectOne uiSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), id);
+    Assert.assert_it(null != uiSelectOne);
     
+//PENDING(rogerk) is this really necessary???????
     // The magic method: setting the collection into the component
-    wSelectOne.setItems(renderContext, items);
+//    uiSelectOne.setItems(renderContext, items);
     
     return EVAL_PAGE;
 }

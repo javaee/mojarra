@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.9 2002/01/17 02:17:04 edburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.10 2002/01/31 20:38:55 rogerk Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import java.util.Collection;
+import java.util.Vector;
 
 /**
  *
@@ -35,7 +36,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.9 2002/01/17 02:17:04 edburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.10 2002/01/31 20:38:55 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -61,6 +62,7 @@ public class SelectOne_RadioTag extends TagSupport
     private String checked = null;
     private String value = null;
     private String label = null;
+    private String description = null;
 
 // Relationship Instance Variables
 
@@ -111,6 +113,14 @@ protected void init()
         this.label = label;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 //
 // Methods from TagSupport
 //
@@ -130,7 +140,7 @@ public int doStartTag() throws JspException {
     
     // Ascend the tag hierarchy to get the RadioGroup tag
     RadioGroupTag ancestor = null;
-    UISelectOne wSelectOne = null;
+    UISelectOne uiSelectOne = null;
     String parentName = null;
     
     // get the UISelectOne that is our component.
@@ -148,27 +158,26 @@ public int doStartTag() throws JspException {
     //
     // by virtue of being inside a RadioGroup there must be a
     // UISelectOne instance under the name.
-    wSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-    Assert.assert_it(null != wSelectOne);
+    uiSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
+    Assert.assert_it(null != uiSelectOne);
     
-    // These over-write the values from "the last time around", but
-    // its ok, since we just use it for rendering.
-    wSelectOne.setAttribute("checked", getChecked());
-    wSelectOne.setAttribute("value", getValue());
-    wSelectOne.setAttribute("label", getLabel());
+    uiSelectOne.setItems(new Vector());
+    uiSelectOne.addItem(getValue(), getLabel(), getDescription());
 
+//PENDING(rogerk) not necessary...
     // Add this value to the Collection
-    ancestor.getItems().add(getValue());
+//    ancestor.getItems().add(getValue());
+
     // if it is checked, make sure the model knows about it.
     if (null != getChecked()) {
-	wSelectOne.setSelectedValue(renderContext, getValue());
+	uiSelectOne.setSelectedValue(getValue());
     }
     
     // 2. Render the component.
     //
     try {
-        wSelectOne.setRendererType("RadioRenderer");
-        wSelectOne.render(renderContext);
+        uiSelectOne.setRendererType("RadioRenderer");
+        uiSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
         throw new JspException("Problem rendering component: "+
             e.getMessage());
@@ -176,10 +185,6 @@ public int doStartTag() throws JspException {
         throw new JspException("Problem rendering component: "+
             f.getMessage());
     }
-
-    wSelectOne.setAttribute("checked", null);
-    wSelectOne.setAttribute("value", null);
-    wSelectOne.setAttribute("label", null);
 
     return (EVAL_BODY_INCLUDE);
 }
@@ -217,14 +222,14 @@ public int doStartTag() throws JspException {
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        UISelectOne wSelectOne = 
+        UISelectOne uiSelectOne = 
             (UISelectOne) ot.get(pageContext.getRequest(), parentName);
-        Assert.assert_it(null != wSelectOne);
+        Assert.assert_it(null != uiSelectOne);
 
         // Complete the rendering process
         //
         try {
-            wSelectOne.renderComplete(renderContext);
+            uiSelectOne.renderComplete(renderContext);
         } catch (java.io.IOException e) {
             throw new JspException("Problem completing rendering: "+
                 e.getMessage());
