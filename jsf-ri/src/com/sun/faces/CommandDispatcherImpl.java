@@ -1,5 +1,5 @@
 /*
- * $Id: CommandDispatcherImpl.java,v 1.3 2001/12/20 22:26:38 ofung Exp $
+ * $Id: CommandDispatcherImpl.java,v 1.4 2002/01/03 05:36:30 edburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import java.io.IOException;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.RequestDispatcher;
 
 import javax.faces.CommandDispatcher;
@@ -33,13 +34,15 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.CommandFailedException;
 
+import com.sun.faces.util.Util;
+
 /**
  * A class which dispatches command events to appropriate target 
  * command listener objects.  This command dispatcher implements 
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.3 2001/12/20 22:26:38 ofung Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.4 2002/01/03 05:36:30 edburns Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent
@@ -115,8 +118,16 @@ public class CommandDispatcherImpl extends CommandDispatcher {
             try {
                 HttpServletResponse res = (HttpServletResponse) response;
                 RequestDispatcher reqD = 
-                request.getRequestDispatcher(res.encodeURL(redirectPath));
-                reqD.forward(request, response); 
+                request.getRequestDispatcher(redirectPath);
+		// At this point, we are certain we're forwarding a
+		// request to another JSP page.  We must make it so the
+		// query string is not processed by our code.  We wrap
+		// the request in a special ParamBlockingRequestWrapper.
+		// See bugtraq 4617032.
+                reqD.forward(new 
+			     ParamBlockingRequestWrapper((HttpServletRequest)
+							 request), 
+			     response); 
             } catch ( ServletException se ) {
                 throw new FacesException( se.getMessage());
             }

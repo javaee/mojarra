@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.9 2001/12/20 22:26:40 ofung Exp $
+ * $Id: FacesServlet.java,v 1.10 2002/01/03 05:36:31 edburns Exp $
  */
 
 /*
@@ -322,7 +322,8 @@ public class FacesServlet extends HttpServlet {
         RenderKit rk = rc.getRenderKit();
         Assert.assert_it(rk != null);
 	
-	// Only check for a token if this request has parameters.
+	// Only check for a token and process events if this request has
+	// parameters.
 	if (Util.hasParameters(req)) {
 	    // if we have a transaction token, see if it is valid
 	    if (!Util.isTokenValid(req)) {
@@ -334,30 +335,39 @@ public class FacesServlet extends HttpServlet {
 		throw e;
 	    }
 	    Util.resetToken(req);
-	}
 	
-        rk.queueEvents(req, eq);
+	    rk.queueEvents(req, eq);
+	    
+	    if (!eq.isEmpty()) {
+		edFactory = (EventDispatcherFactory)
+		    objectTable.get(Constants.REF_EVENTDISPATCHERFACTORY);
+		Assert.assert_it(edFactory != null );
+		
+		while (!eq.isEmpty()) {
+		    EventObject e = (EventObject) eq.getNext();
+		    try {
+			
+			EventDispatcher d = edFactory.newEventDispatcher(e);
+			Assert.assert_it ( d != null );
+			
+			d.dispatch(req, res,e);
+		    } catch ( FacesException fe ) {
+			throw new ServletException("Error while dispatching events " +
+						   fe.getMessage() );
+		    }    
+		    eq.remove(e);
+		}    
+	    }
+	}
 
-        if (!eq.isEmpty()) {
-           edFactory = (EventDispatcherFactory)
-                       objectTable.get(Constants.REF_EVENTDISPATCHERFACTORY);
-           Assert.assert_it(edFactory != null );
+	// Make sure the client does not cache the response.
 
-           while (!eq.isEmpty()) {
-               EventObject e = (EventObject) eq.getNext();
-               try {
-                   
-                   EventDispatcher d = edFactory.newEventDispatcher(e);
-                   Assert.assert_it ( d != null );
-
-                   d.dispatch(req, res,e);
-               } catch ( FacesException fe ) {
-                   throw new ServletException("Error while dispatching events " +
-                       fe.getMessage() );
-               }    
-               eq.remove(e);
-           }    
-        }
+	// PENDING(edburns): not sure if this is necessary in all cases.
+	// We probably don't need to specify no cache if the request to
+	// which we're forwarding is not a faces page.
+	res.addHeader("Pragma:", "No-cache");
+	res.addHeader("Cache-control:", "no-cache");
+	res.addHeader("Expires:", "1");
   
         // Get the last portion of the request and use it as an index 
         // into mappings configuration table to get the target url.
