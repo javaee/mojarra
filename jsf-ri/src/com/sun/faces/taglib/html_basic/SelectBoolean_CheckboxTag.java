@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -173,10 +173,16 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
                     "Could not determine 'renderer' for component");
             }
 
-            // 3. Render the component.
+            // 3. Render the component. (Push the component on
+            //    the render stack first).
             //
             try {
+                renderContext.pushChild(wSelectBoolean);
                 renderer.renderStart(renderContext, wSelectBoolean);
+//PENDING(rogerk) complet/pop should be done in doEndTag
+//
+                renderer.renderComplete(renderContext, wSelectBoolean);
+                renderContext.popChild();
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
                     e.getMessage());
@@ -186,6 +192,14 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             }
         }
         return (EVAL_BODY_INCLUDE);
+    }
+
+    /**
+     * End Tag Processing
+     */
+    public int doEndTag() throws JspException{
+
+        return EVAL_PAGE;
     }
 
 

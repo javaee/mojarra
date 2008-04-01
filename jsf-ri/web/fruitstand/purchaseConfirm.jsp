@@ -7,7 +7,7 @@
 <h2><font color="#0000FF"> FruitStand.com </font></h2>
 <hr>
 <font size="4" color="#0000FF">Here are the items you selected.</font>
-<faces:useFaces>
+<faces:UseFaces>
 <table cellpadding="10">
   <th>Item</th>
   <th>Amount(lbs)</th>
@@ -89,4 +89,4 @@ The items listed above will be billed to: <br>
 </font>
 <p>Thanks for shopping with FruitStand.com. </p></html>
 
-</faces:useFaces>
+</faces:UseFaces>

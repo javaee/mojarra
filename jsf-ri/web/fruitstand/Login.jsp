@@ -12,7 +12,7 @@
 <p><font color="#0000FF"><font size=+2>Please Login</font></font>
 <hr><form action="StoreFront.jsp"
 		method='post'>
-<faces:useFaces>
+<faces:UseFaces>
 
 <table>
 <tr>
@@ -28,13 +28,13 @@
 </tr>
 </table>
 
-<p> <faces:command_button name="Login" label="login"/> 
-<p><font color="#000000">click&nbsp;</font> <faces:command_hyperlink target="createAccount.jsp" text="here"/> to open new account
+<p> <faces:Command_Button name="Login" label="login"/> 
+<p><font color="#000000">click&nbsp;</font> <faces:Command_Hyperlink target="createAccount.jsp" text="here"/> to open new account
 <hr WIDTH="100%">
 <p><img SRC="duke.gif" height=55 width=49 align=ABSCENTER> Thanks
 for stopping by.
 <br>
 </form>
-</faces:useFaces>
+</faces:UseFaces>
 </body>
 </html>

@@ -194,8 +194,8 @@
     <unjar src="${jsf-api.jar}" dest="${dist.home}/${app.name}/WEB-INF/classes"/>
 
     <!-- copy dependent libs -->
-    <unjar  src="${commons.beanutils.jar}" dest="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <unjar  src="${commons.collections.jar}" dest="${dist.home}/${app.name}/WEB-INF/classes"/>
+    <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
     <!-- copy tld file -->
     <copy file="${conf.share.dir}/html_basic.tld"
          toDir="${dist.home}/${app.name}/WEB-INF"/>
@@ -236,8 +236,8 @@
     <!-- <copy  file="${jsf-api.jar}" todir="${deploy.home}/WEB-INF/lib"/> -->
     <unjar src="${jsf-api.jar}" dest="${deploy.home}/WEB-INF/classes"/>
     <!-- copy dependent libs to tomcat/libs -->
-    <unjar  src="${commons.beanutils.jar}" dest="${deploy.home}/WEB-INF/classes"/>
-    <unjar  src="${commons.collections.jar}" dest="${deploy.home}/WEB-INF/classes"/>
+    <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
   </target>
 
   <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
@@ -327,8 +327,8 @@
     <unjar src="${jsf-api.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
 
     <!-- copy dependent libs -->
-    <unjar  src="${commons.beanutils.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
-    <unjar  src="${commons.collections.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
+    <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
 
     <!-- copy tld file -->
     <copy file="${conf.share.dir}/html_basic.tld"

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.1 2001/12/04 01:08:30 edburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.2 2001/12/08 00:33:53 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.1 2001/12/04 01:08:30 edburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.2 2001/12/08 00:33:53 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -180,10 +180,16 @@ protected void init()
                     "Could not determine 'renderer' for component");
             }
 
-            // 3. Render the component.
+            // 3. Render the component. (Push the component on
+            //    the render stack first).
             //
             try {
+                renderContext.pushChild(wSelectOne);
                 renderer.renderStart(renderContext, wSelectOne);
+//PENDING(rogerk) complet/pop should be done in doEndTag
+//
+                renderer.renderComplete(renderContext, wSelectOne);
+                renderContext.popChild();
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering component: "+
                     e.getMessage());
@@ -193,6 +199,14 @@ protected void init()
             }
         }
         return (EVAL_BODY_INCLUDE);
+    }
+
+    /**
+     * End Tag Processing
+     */
+    public int doEndTag() throws JspException{
+
+        return EVAL_PAGE;
     }
 
 } // end of class SelectOne_RadioTag

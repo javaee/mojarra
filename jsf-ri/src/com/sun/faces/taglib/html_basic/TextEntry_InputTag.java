@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.8 2001/12/06 22:59:17 visvan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.9 2001/12/08 00:33:53 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.8 2001/12/06 22:59:17 visvan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.9 2001/12/08 00:33:53 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -121,7 +121,12 @@ public class TextEntry_InputTag extends TagSupport
                 addToScope(c, ot); 
             }
             try {
+               rc.pushChild(c);
                renderer.renderStart(rc, c);
+//PENDING(rogerk) complet/pop should be done in doEndTag
+//
+               renderer.renderComplete(rc, c);
+               rc.popChild();
             } catch (java.io.IOException e) {
                 //e.printStackTrace();
                 throw new JspException("Problem rendering Input component: "+
@@ -139,6 +144,14 @@ public class TextEntry_InputTag extends TagSupport
         return(EVAL_BODY_INCLUDE);
     }
     
+    /**
+     * End Tag Processing
+     */
+    public int doEndTag() throws JspException{
+
+        return EVAL_PAGE;
+    }
+
     /** Adds the component and listener to the ObjectTable
      * in the appropriate scope
      *

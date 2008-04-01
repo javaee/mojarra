@@ -8,7 +8,7 @@
 </head>
 <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 
-<faces:useFaces>
+<faces:UseFaces>
 <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 <font color="#0000FF"> <h2> FruitStand.com </h2>
 <hr>
@@ -19,5 +19,5 @@ Thank you for your purchase.
 </font>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>
-</faces:useFaces>
+</faces:UseFaces>
 </html>

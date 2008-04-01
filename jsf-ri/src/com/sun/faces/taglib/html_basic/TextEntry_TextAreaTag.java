@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.8 2001/12/08 00:33:53 rogerk Exp $
  * 
  *
  */
@@ -117,6 +117,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
                 ot.put(pageContext.getRequest(), name, c);
             }
             try {
+               rc.pushChild(c);
                renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering TextArea component: "+
@@ -172,6 +173,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
             Renderer renderer = getRenderer(rc);
             try {
                 renderer.renderComplete(rc, c);
+                rc.popChild();
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering TextArea component: "+
                         e.getMessage());

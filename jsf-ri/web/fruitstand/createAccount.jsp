@@ -7,7 +7,7 @@
 <h2><font color="#0000FF">FruitStand.com</font></h2>
 <hr>
 <font size="4" color="#0000FF">Open a New Account </font><body bgcolor="#FFFFFF" text="#000000"> 
-<faces:useFaces>
+<faces:UseFaces>
 <form name="form1" method="post" action="Login.jsp">
   <table width="450">
     <tr> 
@@ -109,13 +109,13 @@
     </tr>
     <tr> 
       <td> 
-        <faces:command_button name="createAccount" label="Create Account" />
+        <faces:Command_Button name="createAccount" label="Create Account" />
       </td>
       <td>&nbsp;</td>
     </tr>
   </table>
 </form>
-</faces:useFaces>
+</faces:UseFaces>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>
 </body>

@@ -41,7 +41,7 @@ Configuring UI Components
   <!-- ===================== HTML 3.2 basic tags ====================== -->
 
   <tag>
-    <name>form</name>
+    <name>Form</name>
     <tagclass>com.sun.faces.taglib.html_basic.FormTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
@@ -117,7 +117,7 @@ Configuring UI Components
   </tag>
 
   <tag>
-    <name>command_button</name>
+    <name>Command_Button</name>
     <tagclass>com.sun.faces.taglib.html_basic.Command_ButtonTag</tagclass>
     <attribute>
       <name>accessKey</name>
@@ -247,7 +247,7 @@ Configuring UI Components
   </tag>
 
   <tag>
-    <name>command_hyperlink</name>
+    <name>Command_Hyperlink</name>
     <tagclass>com.sun.faces.taglib.html_basic.Command_HyperlinkTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
@@ -414,7 +414,7 @@ Configuring UI Components
   </tag>
 
   <tag>
-      <name>useFaces</name>
+      <name>UseFaces</name>
       <tagclass>com.sun.faces.taglib.html_basic.UseFacesTag</tagclass>
       <bodycontent>JSP</bodycontent>
   </tag>

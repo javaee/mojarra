@@ -8,7 +8,7 @@
 </head>
 <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 <body>
-<faces:useFaces>
+<faces:UseFaces>
 
 <form action="purchaseConfirm.jsp"
             method='post'>
@@ -183,9 +183,9 @@ and vegetables.</font></font>
 
 <br>&nbsp;
 <br>
-<faces:command_button name="checkout"
+<faces:Command_Button name="checkout"
     label="Checkout" />
 </form>
-</faces:useFaces>
+</faces:UseFaces>
 </body>
 </html>

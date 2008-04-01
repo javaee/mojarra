@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.11 2001/12/06 22:59:17 visvan Exp $
+ * $Id: FormTag.java,v 1.12 2001/12/08 00:33:53 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -39,7 +39,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.11 2001/12/06 22:59:17 visvan Exp $
+ * @version $Id: FormTag.java,v 1.12 2001/12/08 00:33:53 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -115,7 +115,8 @@ public class FormTag extends TagSupport
                 addToScope(c, ot);
             }
             try {
-               renderer.renderStart(rc, c);
+                rc.pushChild(c); 
+                renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering Form component: "+
                         e.getMessage());
@@ -295,6 +296,7 @@ public class FormTag extends TagSupport
             Renderer form_renderer = getRenderer(rc);
             try {
                 form_renderer.renderComplete(rc, c);
+                rc.popChild();
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering Form component: "+
                         e.getMessage());

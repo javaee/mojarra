@@ -1,6 +1,6 @@
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.7 2001/12/03 22:47:10 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.8 2001/12/08 00:33:52 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -25,11 +25,13 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
+import javax.faces.WComponent;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletRequest;
 
 import java.util.Locale;
+import java.util.Stack;
 
 /**
  *
@@ -37,7 +39,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.7 2001/12/03 22:47:10 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.8 2001/12/08 00:33:52 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -68,6 +70,8 @@ public class HtmlBasicRenderContext extends RenderContext {
     private HttpSession session = null;
     private ServletRequest request;
 
+    private Stack stack;
+
 //
 // Constructors and Initializers    
 //
@@ -79,6 +83,8 @@ public HtmlBasicRenderContext(ServletRequest req) {
 	session = ((HttpServletRequest)req).getSession();
     }
     renderKit = new HtmlBasicRenderKit();
+
+    stack = new Stack();
 }
 
 //
@@ -105,6 +111,30 @@ public void setOutputMethod(OutputMethod om) {
 
 public HttpSession getSession() {
     return session;
+}
+
+public WComponent peekAtAncestor(int level) {
+    WComponent c;
+    try {
+        c = (WComponent)stack.get(level);
+        return c;
+    } catch (ArrayIndexOutOfBoundsException e) {
+        return null;
+    }
+}
+
+public void pushChild(WComponent c){
+    stack.push(c);
+}
+
+public WComponent popChild() {
+    WComponent c;
+    if (stack.empty()) {
+        return null;
+    } else { 
+        c = (WComponent)stack.pop();
+        return c;
+    }
 }
 
 } // end of class HtmlBasicRenderContext
