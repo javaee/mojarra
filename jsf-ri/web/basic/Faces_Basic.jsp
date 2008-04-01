@@ -18,6 +18,13 @@
             <faces:TextEntry_Secret name="password" value="Hello World" size="20" maxlength="26"/>
             <P></P>
             <faces:TextEntry_TextArea name="textarea" cols="150" rows="10" wrap="OFF"> Hello World </faces:TextEntry_TextArea>
+            <P></P>
+            <faces:command_hyperlink target="Faces_Basic.jsp" text="Hello World"/>
+            <P></P>
+            [A Hyperlink Image:]
+            <faces:command_hyperlink target="Faces_Basic.jsp" image="duke.gif"/>
+            <P></P>
+            <faces:command_hyperlink target="Faces_Basic.jsp" image="duke.gif" text="Hello World`"/>
         </faces:form>
     </faces:useFaces>
 </HTML>
