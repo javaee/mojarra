@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.1 2002/06/04 02:31:08 craigmcc Exp $
+ * $Id: UIPanelTestCase.java,v 1.2 2002/08/04 23:27:27 craigmcc Exp $
  */
 
 /*
@@ -23,13 +23,13 @@ import junit.framework.TestSuite;
  * concrete class.</p>
  */
 
-public class UIPanelTestCase extends UIComponentTestCase {
+public class UIPanelTestCase extends UIOutputTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
 
 
-    // ---------------------------------------------------------- Constructors
+    // ----------------------------------------------------------- Constructors
 
 
     /**
@@ -42,7 +42,7 @@ public class UIPanelTestCase extends UIComponentTestCase {
     }
 
 
-    // -------------------------------------------------- Overall Test Methods
+    // --------------------------------------------------- Overall Test Methods
 
 
     /**

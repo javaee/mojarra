@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.1 2002/06/04 17:53:24 craigmcc Exp $
+ * $Id: UISelectOneTestCase.java,v 1.2 2002/08/04 23:27:28 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  * concrete class.</p>
  */
 
-public class UISelectOneTestCase extends UIComponentTestCase {
+public class UISelectOneTestCase extends UIInputTestCase {
 
 
     // ----------------------------------------------------- Instance Variables

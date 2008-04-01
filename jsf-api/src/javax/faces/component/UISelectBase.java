@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.3 2002/08/04 20:02:47 craigmcc Exp $
+ * $Id: UISelectBase.java,v 1.4 2002/08/04 23:27:26 craigmcc Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.context.ResponseWriter;
  * common behavior of these classes.</p>
  */
 
-abstract class UISelectBase extends UIComponentBase {
+abstract class UISelectBase extends UIInput {
 
 
     // ------------------------------------------------------ Protected Methods

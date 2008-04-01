@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.2 2002/06/14 21:30:47 craigmcc Exp $
+ * $Id: UISelectManyTestCase.java,v 1.3 2002/08/04 23:27:27 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  * concrete class.</p>
  */
 
-public class UISelectManyTestCase extends UIComponentTestCase {
+public class UISelectManyTestCase extends UIInputTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
