@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.10 2002/08/31 17:42:44 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.11 2002/08/31 19:51:28 craigmcc Exp $
  */
 
 /*
@@ -134,6 +134,7 @@ public final class FactoryFinder {
      * discovery mechanism is supported.</p>
      */
     private static String factoryNames[] = {
+        CONVERTER_FACTORY,
         FACES_CONTEXT_FACTORY,
         LIFECYCLE_FACTORY,
         MESSAGE_RESOURCES_FACTORY,
