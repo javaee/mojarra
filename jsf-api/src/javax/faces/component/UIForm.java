@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.3 2002/05/17 22:57:13 craigmcc Exp $
+ * $Id: UIForm.java,v 1.4 2002/05/18 20:33:46 craigmcc Exp $
  */
 
 /*
@@ -41,8 +41,9 @@ import javax.servlet.http.HttpServletRequest;
  * <li><em>decode()</em> - Enqueue a {@link FormEvent} to the application,
  *     to pass the form name that was selected, if the form name
  *     included in the request matches our own.</li>
- * <li><em>encode()</em> - Render an HTML form, with a context-relative
- *     URL of <code>/faces?action=form&name=xxxxx&tree=yyyyy</code>,
+ * <li><em>encodeBegin()</em> and <em>encodeEnd()</em> - Render an HTML form,
+ *     with a context-relative URL of
+ *     <code>/faces?action=form&name=xxxxx&tree=yyyyy</code>,
  *     where "xxxxx" is the form name of this form, and "yyyyy" is
  *     the tree ID of the response tree we are rendering.</li>
  * </ul>
@@ -143,7 +144,7 @@ public class UIForm extends UIComponent {
 
 
     /**
-     * <p>Render the current value of this component.</p>
+     * <p>Render the beginning of the current value of this component.</p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -151,7 +152,7 @@ public class UIForm extends UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
@@ -173,9 +174,26 @@ public class UIForm extends UIComponent {
         writer.print(context.getResponseTree().getTreeId()); // FIXME - URL encode?
         writer.print("\">");
 
-        // FIXME - Render the nested content of this form
+    }
 
-        // FIXME - Render the ending of this form
+
+    /**
+     * <p>Render the ending of the current value of this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeEnd(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Render the ending of this form
+        PrintWriter writer = context.getServletResponse().getWriter();
         writer.print("</form>");
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.3 2002/05/17 04:55:39 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.4 2002/05/18 20:33:46 craigmcc Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.faces.context.FacesContext;
  * <ul>
  * <li><em>decode()</em> - Set this component to true if a request parameter
  *     with our id is included in the request.</li>
- * <li><em>encode()</em> - Create an HTML
+ * <li><em>encodeBegin()</em> - Create an HTML
  *     <code>&lt;input type="checkbox"&gt;</code> element, which will be
  *     checked if <code>currentValue()</code> of this component is
  *     <code>true</code>.</li>
@@ -131,7 +131,7 @@ public class UISelectBoolean extends UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();

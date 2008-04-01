@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.5 2002/05/17 00:33:37 craigmcc Exp $
+ * $Id: Renderer.java,v 1.6 2002/05/18 20:33:47 craigmcc Exp $
  */
 
 /*
@@ -163,7 +163,7 @@ public abstract class Renderer {
      * If conversion is not successful:</p>
      * <ul>
      * <li>Save the state inforamtion (inside the component) in such a way
-     *     that <code>encode()</code> can reproduce the previous input
+     *     that encoding can reproduce the previous input
      *     (even though it was syntactically or semantically incorrect).</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.getMessageList().add()</code>.</li>
@@ -184,10 +184,10 @@ public abstract class Renderer {
 
 
     /**
-     * <p>Render the specified {@link UIComponent} to the output stream or
-     * writer associated with the response we are creating.  If the
-     * conversion attempted in a previous call to <code>decode</code> for
-     * this component failed, the state information saved during execution
+     * <p>Render the beginning specified {@link UIComponent} to the
+     * output stream or writer associated with the response we are creating.
+     * If the conversion attempted in a previous call to <code>decode</code>
+     * for this component failed, the state information saved during execution
      * of <code>decode()</code> should be utilized to reproduce the incorrect
      * input.  If the conversion was successful, or if there was no previous
      * call to <code>decode()</code>, the value to be displayed should be
@@ -203,7 +203,45 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
-    public abstract void encode(FacesContext context, UIComponent component)
+    public abstract void encodeBegin(FacesContext context,
+                                     UIComponent component)
+        throws IOException;
+
+
+    /**
+     * <p>Render the child components of this {@link UIComponent}, following
+     * the rules described for <code>encodeBegin()</code> to acquire the
+     * appropriate value to be rendered.  This method will only be called
+     * if the <code>rendersChildren</code> property of this component
+     * is <code>true</code>.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     * @param component UIComponent whose children are to be rendered
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public abstract void encodeChildren(FacesContext context,
+                                        UIComponent component)
+        throws IOException;
+
+
+    /**
+     * <p>Render the ending of the current state of the specified
+     * {@link UIComponent}, following the rules described for
+     * <code>encodeBegin()</code> to acquire the appropriate value
+     * to be rendered.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     * @param component UIComponent whose children are to be rendered
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public abstract void encodeEnd(FacesContext context,
+                                   UIComponent component)
         throws IOException;
 
 

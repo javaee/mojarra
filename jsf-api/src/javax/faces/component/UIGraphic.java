@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.3 2002/05/17 04:55:39 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.4 2002/05/18 20:33:46 craigmcc Exp $
  */
 
 /*
@@ -39,9 +39,9 @@ import javax.servlet.http.HttpServletRequest;
  * <p>In the absence of a Renderer performing more sophisticated processing,
  * this component supports the following functionality:</p>
  * <ul>
- * <li><em>encode()</em> - Create an HTML <code>&lt;img&gt;</code> element,
- *     with a <code>src</code> attribute based on the current value stored
- *     in the component.</li>
+ * <li><em>encodeBegin()</em> - Create an HTML <code>&lt;img&gt;</code>
+ *     element, with a <code>src</code> attribute based on the current
+ *     value stored in the component.</li>
  * </ul>
  */
 
@@ -104,7 +104,7 @@ public class UIGraphic extends UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();

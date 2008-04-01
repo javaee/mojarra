@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.16 2002/05/18 02:09:11 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.17 2002/05/18 20:33:46 craigmcc Exp $
  */
 
 /*
@@ -70,6 +70,12 @@ import javax.faces.render.Renderer;
  *     to a response.  If not specified, this component must render itself
  *     directly in the <a href="#render(javax.faces.context.FacesContext)">
  *     render()</a> method.</li>
+ * <li><strong>rendersChildren</strong> (java.lang.Boolean) - If set to
+ *     <code>true</code>, this component (or the <code>Renderer</code> to
+ *     which rendering is delegated) takes responsibility for rendering all
+ *     child components.  If set to <code>false</code>, the JavaServer Faces
+ *     implementation will be responsible for calling the rendering methods
+ *     for all child components.</li>
  * <li><strong>value</strong> - The local value of this
  *     <code>UIComponent</code>, which represents a server-side cache of the
  *     value most recently entered by a user.  <strong>FIXME</strong> -
@@ -443,6 +449,39 @@ public abstract class UIComponent {
     public void setRendererType(String rendererType) {
 
         setAttribute("rendererType", rendererType);
+
+    }
+
+
+    /**
+     * <p>Return a flag indicating whether this component is responsible
+     * for rendering its child components.</p>
+     */
+    public boolean getRendersChildren() {
+
+        Boolean value = (Boolean) getAttribute("rendersChildren");
+        if (value != null) {
+            return (value.booleanValue());
+        } else {
+            return (false);
+        }
+
+    }
+
+
+    /**
+     * <p>Set a flag indicating whether this component is responsible for
+     * rendering its child components.</p>
+     *
+     * @param rendersChildren The new flag value
+     */
+    public void setRendersChildren(boolean rendersChildren) {
+
+        if (rendersChildren) {
+            setAttribute("rendersChildren", Boolean.TRUE);
+        } else {
+            setAttribute("rendersChildren", Boolean.FALSE);
+        }
 
     }
 
@@ -929,7 +968,7 @@ public abstract class UIComponent {
      * object via a call to <code>getValue()</code>.  If conversion is not
      * successful:</p>
      * <ul>
-     * <li>Save the state information in such a way that <code>encode()</code>
+     * <li>Save the state information in such a way that encoding
      *     can reproduce the previous input (even though it was syntactically
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
@@ -953,17 +992,16 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Render the current state of this <code>UIComponent</code> to the
-     * response contained in the specified {@link FacesContext}.  If the
-     * conversion attempted in a previous call to <code>decode()</code> for
-     * this component failed, the state information saved during execution
-     * of <code>decode()</code> should be utilized to reproduce the incorrect
-     * input.  If the conversion was successful, or if there was no previous
-     * call to <code>decode()</code>, the value to be displayed should be
-     * acquired by calling <code>currentValue()</code>, and rendering the
-     * value as appropriate.</p>
-     *
-     * <p><strong>FIXME</strong> - Not sufficient for child rendering.</p>
+     * <p>Render the beginning of the current state of this
+     * <code>UIComponent</code> to the response contained in the specified
+     * {@link FacesContext}.  If the conversion attempted in a previous call
+     * to <code>decode()</code> for this component failed, the state
+     * information saved during execution of <code>decode()</code> should be
+     * utilized to reproduce the incorrect input.  If the conversion was
+     * successful, or if there was no previous call to <code>decode()</code>,
+     * the value to be displayed should be acquired by calling
+     * <code>currentValue()</code>, and rendering the value as appropriate.
+     * </p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -971,7 +1009,45 @@ public abstract class UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
+
+        ; // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Render the child components of this component, following the
+     * rules described for <code>encodeBegin()</code> to acquire the
+     * appropriate value to be rendered.  This method will only be called
+     * if the <code>rendersChildren</code> property is <code>true</code>.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeChildren(FacesContext context) throws IOException {
+
+        ; // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Render the ending of the current state of this
+     * <code>UIComponent</code>, following the rules described for
+     * <code>encodeBegin()</code> to acquire the appropriate value
+     * to be rendered.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeEnd(FacesContext context) throws IOException {
 
         ; // Default implementation does nothing
 

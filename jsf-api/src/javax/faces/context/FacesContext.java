@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.11 2002/05/17 02:24:14 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.12 2002/05/18 20:33:47 craigmcc Exp $
  */
 
 /*
@@ -41,6 +41,11 @@ import javax.servlet.http.HttpSession;
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>
+ *
+ * <p><strong>FIXME</strong> - Specify starting contents of all properties
+ * when returned from <code>FacesContextFactory.createFacesContext()</code>,
+ * versus what changes are expected in each phase of the request processing
+ * lifecycle.</p>
  *
  * <p><strong>FIXME</strong> - ObjectManager et. al.</p>
  *

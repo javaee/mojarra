@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.4 2002/05/17 04:55:39 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.5 2002/05/18 20:33:46 craigmcc Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p>In the absence of a Renderer performing more sophisticated processing,
  * this component supports the following functionality:</p>
  * <ul>
- * <li><em>encode()</em> - Render the current value of this component
+ * <li><em>encodeBegin()</em> - Render the current value of this component
  *     directly to the response.</li>
  * </ul>
  */
@@ -101,7 +101,7 @@ public class UIOutput extends UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();

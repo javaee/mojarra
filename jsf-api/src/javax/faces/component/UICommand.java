@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.6 2002/05/17 22:57:12 craigmcc Exp $
+ * $Id: UICommand.java,v 1.7 2002/05/18 20:33:46 craigmcc Exp $
  */
 
 /*
@@ -42,8 +42,9 @@ import javax.servlet.http.HttpServletRequest;
  * <li><em>decode()</em> - Enqueue a {@link CommandEvent} to the application,
  *     to pass the command name that was selected, if the command name
  *     included in the request matches our own.</li>
- * <li><em>encode()</em> - Render an HTML hyperlink, with a context-relative
- *     URL of <code>/faces?action=command&name=xxxxx&tree=yyyyy</code>,
+ * <li><em>encodeBegin()</em> - Render an HTML hyperlink, with a
+ *     context-relative URL of
+ *     <code>/faces?action=command&name=xxxxx&tree=yyyyy</code>,
  *     where "xxxxx" is the command name of this command, and "yyyyy" is
  *     the tree ID of the response tree that we are rendering.</li>
  * </ul>
@@ -155,7 +156,7 @@ public class UICommand extends UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();

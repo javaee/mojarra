@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.1 2002/05/17 04:55:39 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.2 2002/05/18 20:33:47 craigmcc Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletRequest;
  * <li><em>decode()</em> - Copy the value of the request parameter that
  *     corresponds to this field to the local value.  If there is no such
  *     parameter, set the local value to a zero-length String.</li>
- * <li><em>encode()</em> - Render the current value of this component
+ * <li><em>encodeBegin()</em> - Render the current value of this component
  *     as a single-line text field.</li>
  * </ul>
  */
@@ -127,7 +127,7 @@ public class UITextEntry extends UIComponent {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void encode(FacesContext context) throws IOException {
+    public void encodeBegin(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
