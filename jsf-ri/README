@@ -4,6 +4,27 @@ JavaServer (tm) Faces.
 jsf-api cvs tag for this implementation: JSF_API_20020730B
 jsf-api-spec for this implementation: JSF_20020730.pdf
 
+Installation Notes
+==================
+
+JavaServer (tm) Faces is intended to run in a Servlet 2.3, JSP 1.2 web
+container, such as that distributed with Java Web Services Developer
+Pack <http://java.sun.com/webservices/webservicespack.html>.  Please
+follow the instructions for your container and have it working well in
+your environment before continuing with these installation notes.
+
+To deploy the demo webapp to your container, simply copy the file
+example/cardemo.war to the webapps directory in your container.  To view
+the demo webapp, start your container, and visit:
+
+http://<YOUR_CONTAINER_HOST>:<YOUR_CONTAINER_PORT>/cardemo/
+
+in your web browser.
+
+To use JavaServer (tm) Faces in your own webapp, you need to follow the
+online documentation at <http://java.sun.com/j2ee/javaserverfaces/>.
+Make sure to include all the jars in the lib directory of this
+distribution in your WEB-INF/lib directory in your webapp.  
 
 Major changes/features in this release:
 =======================================
@@ -21,15 +42,16 @@ Major changes/features in this release:
 Known Issues With This Release
 ==============================
 
+* Due to a bug in JSTL 1.0, you must have the jstl.jar and standard.jar in
+  your WEB-INF/lib directory of each webapp.  It is not sufficient to
+  place these jars in your tomcat/common/lib directory.
+
 * When saving tree in session, we don't support multiple concurrent
   requests to faces app from one client.
 
 * SaveState in page option cannot be used if your web app has 
   event handlers and validators because they are not serializable 
   currently.
-
-*  Components are instantiated on each request.
-   Fix:
 
 *  Component type is hard coded in component subclasses (ex: UICommand)
    as fully qualfied class names (ex: javax.faces.component.UICommand).
@@ -46,7 +68,8 @@ Known Issues With This Release
 Legal Notice
 ============
 
-Copyright © 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara, California 95054, U.S.A. All rights reserved.
+Copyright © 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa
+Clara, California 95054, U.S.A. All rights reserved.
 
 Sun Microsystems, Inc. has intellectual property rights relating to
 technology embodied in this product. In particular, and without

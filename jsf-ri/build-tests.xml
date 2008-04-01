@@ -91,7 +91,6 @@
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
-      <pathelement location="${jasper_hacked.jar}"/>
       <pathelement location="${jstl.jar}"/>
     </path>
 
@@ -162,7 +161,6 @@
         <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.digester.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.logging.jar}" todir="${out.test.dir}/lib"/>
-        <copy file="${jasper_hacked.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>
 
