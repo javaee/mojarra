@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.49 2002/08/31 23:16:09 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.50 2002/09/01 03:16:00 craigmcc Exp $
  */
 
 /*
@@ -462,7 +462,7 @@ public interface UIComponent extends Serializable {
      *     or semantically incorrect)</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
-     * <li>Set the <code>valid</code> property of this comonent
+     * <li>Set the <code>valid</code> property of this component
      *     to <code>false</code>.</li>
      * </ul>
      *

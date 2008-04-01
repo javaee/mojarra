@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.12 2002/08/30 20:11:23 craigmcc Exp $
+ * $Id: Renderer.java,v 1.13 2002/09/01 03:16:00 craigmcc Exp $
  */
 
 /*
@@ -152,7 +152,8 @@ public abstract class Renderer {
      * from the request contained in the specified {@link FacesContext},
      * and attempt to convert this state information into an object of
      * the type required for this component.  If conversion is successful,
-     * save the resulting object via a call to <code>getValue()</code>.
+     * save the resulting object via a call to <code>setValue()</code>,
+     * and return <code>true</code> to indicate a successful conversion.
      * If conversion is not successful:</p>
      * <ul>
      * <li>Save the state inforamtion (inside the component) in such a way
@@ -160,6 +161,7 @@ public abstract class Renderer {
      *     (even though it was syntactically or semantically incorrect).</li>
      * <li>Add an appropriate conversion failure error message by calling
      *     <code>context.addMessage()</code>.</li>
+     * <li>Return <code>false</code> to indicate unsuccessful conversion.</li>
      * </ul>
      *
      * @param context FacesContext for the request we are processing
