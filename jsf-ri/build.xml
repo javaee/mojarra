@@ -263,7 +263,7 @@
 
   <target name="run-factory" depends="compile" 
    description="Run the factory test">
-    <java classname="com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit">
+    <java classname="com.sun.faces.renderkit.html_basic.HtmlBasicRenderContextFactory">
       <classpath refid="compile.classpath"/>
     </java>
   </target>

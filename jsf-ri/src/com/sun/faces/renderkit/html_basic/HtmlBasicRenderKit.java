@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.3 2001/11/09 23:48:51 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import javax.faces.ClientCapabilities;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.3 2001/11/09 23:48:51 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -194,45 +194,7 @@ public static void main(String [] args)
     Assert.setEnabled(true);
     Log.setApplicationName("HtmlBasicRenderKit");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.2 2001/11/07 00:18:34 rogerk Exp $");
-    System.setProperty(RenderKit.DEFAULT_RENDERKIT_PROPERTY_NAME,
-		       HtmlBasicRenderKit.class.getName());
-
-    RenderKit kit;
-    Renderer renderer;
-    Iterator typeIt, rendererIt;
-    String type, rendererName;
-    kit = RenderKit.getRenderKitForClient(null);
-    
-    if (null == kit) {
-	System.out.println("Can't find default RenderKit!");
-    }
-    System.out.println("Got RenderKit: " + kit.getName());
-    typeIt = kit.getSupportedComponentTypes();
-    Assert.assert_it(null != typeIt);
-    
-    while (typeIt.hasNext()) {
-	type = (String) typeIt.next();
-	rendererIt = kit.getRendererNamesForComponent(type);
-	Assert.assert_it(null != rendererIt);
-
-	while(rendererIt.hasNext()) {
-	    rendererName = (String) rendererIt.next();
-	    Assert.assert_it(null != rendererName);
-	    try {
-		renderer = kit.getRenderer(rendererName);
-		Assert.assert_it(null != renderer);
-		System.out.println("\nFor Component Type \"" + type + 
-				   "\"\n\tRendererName is \"" + 
-				   rendererName + "\"" +
-				   "\"\n\tRender is \"" + 
-				   renderer.toString() + "\"");
-	    }
-	    catch (FacesException e) {
-		System.out.println("FacesException!!! " + e.getMessage());
-	    }
-	}
-    }
+    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.3 2001/11/09 23:48:51 edburns Exp $");
 }
 
 // ----VERTIGO_TEST_END

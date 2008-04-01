@@ -1,6 +1,6 @@
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.1 2001/11/07 00:18:33 rogerk Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.2 2001/11/09 23:48:50 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.1 2001/11/07 00:18:33 rogerk Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.2 2001/11/09 23:48:50 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,7 +67,7 @@ public class HtmlBasicRenderContext extends RenderContext {
 //
 
 public HtmlBasicRenderContext() {
-    renderKit = RenderKit.getRenderKitForClient(null);
+    renderKit = new HtmlBasicRenderKit();
 }
 
 //
@@ -108,7 +108,7 @@ public static void main(String [] args)
     HtmlBasicRenderContext me = new HtmlBasicRenderContext();
     Log.setApplicationName("HtmlBasicRenderContext");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderContext.java,v 1.1 2001/11/07 00:18:33 rogerk Exp $");
+    Log.setApplicationVersionDate("$Id: HtmlBasicRenderContext.java,v 1.2 2001/11/09 23:48:50 edburns Exp $");
     
 }
 
