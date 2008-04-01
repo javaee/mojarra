@@ -112,8 +112,6 @@
     <mkdir dir="${build.home}/library/classes/META-INF/tlds"/>
     <copy file="${conf.share.dir}/html_basic.tld"
          tofile="${build.home}/library/classes/META-INF/html_basic.tld"/>
-    <copy file="${conf.share.dir}/html_basic.tld"
-         tofile="${basedir}/web/${app.name}/WEB-INF/html_basic.tld"/>
   </target>
 
   <target name="compile" depends="prepare"
@@ -176,7 +174,6 @@
 
     <!-- Directory name to deploy under tomcat -->
     <property name="deploy.home"  value="${tomcat.home}/webapps/${app.name}"/>
-    <delete dir="${deploy.home}"/>
 
     <!-- copy app.name directory to tomcat/webapps -->
     <copy todir="${deploy.home}">
@@ -188,6 +185,9 @@
     <copy todir="${deploy.home}/WEB-INF/classes">
       <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
     </copy>
+    <copy file="${conf.share.dir}/html_basic.tld"
+         toDir="${deploy.home}/WEB-INF"/>
+
     
     <!-- copy all classes from javax.api package -->
     <copy   todir="${deploy.home}/WEB-INF/classes">
