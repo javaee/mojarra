@@ -19,9 +19,13 @@
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="../build.properties"/>             <!-- Commons local     -->
+  <property environment="myenv" />
 
 
 <!-- ************ Where are we building into? ***************************** -->
+
+  <!-- the root of our tomcat -->
+  <property name="tomcat.home" value="${myenv.JWSDP_HOME}"/>
 
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
