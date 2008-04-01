@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.3 2002/06/05 19:57:43 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.4 2002/06/05 21:46:55 craigmcc Exp $
  */
 
 /*
@@ -141,7 +141,37 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
-     * <p>Render the beginning of the component associated with this tag.</p>
+     * <p>Render the beginning of the {@link UIComponent} that is associated
+     * with this tag (via the <code>id</code> attribute), by following these
+     * steps:</p>
+     * <ul>
+     * <li>Ensure that an appropriate {@link ResponseWriter} is associated
+     *     with the current {@link FacesContext}.  This ensures that encoded
+     *     output from the components is routed through the
+     *     <code>JspWriter</code> for the current page.</li>
+     * <li>Use the <code>findComponent()</code> method to acquire a reference
+     *     to the {@link UIComponent} associated with this tag.  Save the
+     *     acquired reference in the <code>component</code> instance variable.
+     *     </li>
+     * <li>If the <code>rendererType</code> property of this component is not
+     *     null, acquire a reference to the corresponding {@link Renderer} from
+     *     the {@link RenderKit} associated with this response.  Save the
+     *     acquired reference in the <code>renderer</code> instance variable.
+     *     </li>
+     * <li>Call the <code>encodeBegin()</code> method of the component (if
+     *     <code>rendererType</code> is <code>null</code>) or the
+     *     {@link Renderer} (if <code>rendererType</code> is not
+     *     <code>null</code>).</li>
+     * <li>If the <code>rendersChildren</code> property of this component is
+     *     <code>true</code>, call the <code>encodeChildren()</code> method
+     *     of the component (if <code>rendererType</code> is <code>null</code>)
+     *     or the {@link Renderer} (if <code>rendererType</code> is not
+     *     <code>null</code>).</li>
+     * </ul>
+     *
+     * <p>The flag value to be returned is acquired by calling the
+     * <code>getDoStartValue()</code> method, which tag subclasses may
+     * override if they do not want the default value.</p>
      *
      * @exception JspException if an error occurs
      */
@@ -215,7 +245,18 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
-     * <p>Render the ending of the component associated with this tag.</p>
+     * <p>Render the ending of the {@link UIComponent} that is associated
+     * with this tag (via the <code>id</code> attribute).  This is accomplished
+     * by calling the <code>encodeEnd()</code> method of the
+     * {@link UIComponent} (if its <code>rendererType</code> property is not
+     * set) or the associated {@link Renderer} (if <code>rendererType</code>
+     * was set).  After rendering is complete, release any references to the
+     * {@link UIComponent} and {@link Renderer} saved during execution of
+     * <code>doStart()</code>.</p>
+     *
+     * <p>The flag value to be returned is acquired by calling the
+     * <code>getDoEndValue()</code> method, which tag subclasses may
+     * override if they do not want the default value.</p>
      *
      * @exception JspException if an error occurs
      */
@@ -322,6 +363,23 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Override properties of the specified component if the corresponding
      * properties of this tag handler were explicitly set.</p>
+     *
+     * <p>Tag subclasses that want to support additional override properties
+     * must ensure that the base class <code>overrideProperties()</code>
+     * method is still called.  A typical implementation that supports
+     * extra properties <code>foo</code> and <code>bar</code> would look
+     * something like this:</p>
+     * <pre>
+     * protected void overrideProperties(UIComponent component) {
+     *   super.overrideProperties(component);
+     *   if (foo != null) {
+     *     component.setAttribute("foo", foo);
+     *   }
+     *   if (bar != null) {
+     *     component.setAttribute("bar", bar);
+     *   }
+     * }
+     * </pre>
      */
     protected void overrideProperties(UIComponent component) {
 
