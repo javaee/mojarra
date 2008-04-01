@@ -8,8 +8,13 @@ import javax.faces.ObjectManager;
 import javax.faces.Message;
 import javax.faces.FacesException;
 import javax.faces.MessageFactory;
+import javax.faces.FacesFactory;
 
-public class MessageListImpl extends MessageList 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
+
+public class MessageListImpl extends MessageList implements FacesFactory
 {
 	private String _factoryId = Constants.DEFAULT_MESSAGE_FACTORY_ID;
 	
@@ -17,6 +22,28 @@ public class MessageListImpl extends MessageList
 	
 	/** List of Message's */
 	private	ArrayList	_list = new ArrayList(5);
+
+public Object newInstance(String facesName, ServletRequest req, 
+			  ServletResponse res) throws FacesException
+{
+    throw new FacesException("Can't create MessageList from Request and Response");
+}
+
+public Object newInstance(String facesName, ServletContext ctx) throws FacesException
+{
+    throw new FacesException("Can't create MessageList from ServletContext");
+}
+
+public Object newInstance(String facesName) throws FacesException
+{
+    return new MessageListImpl();
+}
+
+public Object newInstance(String facesName, Map args) throws FacesException
+{
+    throw new FacesException("Can't create MessageList from map");
+}
+
 
 	public void addMessage(Message msg)
 	{

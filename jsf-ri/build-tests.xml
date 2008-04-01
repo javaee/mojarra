@@ -77,6 +77,7 @@
       <pathelement location="${junit.jar}"/>
       <pathelement location="${cactus.jar}"/>
       <pathelement location="${httpclient.jar}"/>
+      <pathelement location="${jsf-api.jar}"/>
       <pathelement location="${build.home}/classes"/>
       <pathelement location="${xerces.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
@@ -91,8 +92,6 @@
         Initialization of custom Ant tasks
 -->
     <target name="init">
-
-      <unjar src="${jsf-api.jar}" dest="${build.home}/classes"/>
 
         <taskdef name="runservertests"
             classname="org.apache.cactus.ant.RunServerTestsTask">
@@ -153,6 +152,7 @@
         <copy file="${commons.beanutils.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jasper_hacked.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>
 
         <war warfile="${out.test.dir}/test.war"

@@ -1,5 +1,5 @@
 /*
- * $Id: TestAbstractFactory.java,v 1.2 2002/04/11 23:14:20 eburns Exp $
+ * $Id: TestAbstractFactory.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
  */
 
 /*
@@ -14,7 +14,9 @@ package com.sun.faces;
 import javax.faces.AbstractFactory;
 import javax.faces.FactoryConfigurationError;
 import javax.faces.MessageFactory;
+import javax.faces.MessageList;
 import javax.faces.FacesContext;
+import javax.faces.EventQueue;
 import javax.faces.FacesException;
 import javax.faces.Constants;
 
@@ -33,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestAbstractFactory.java,v 1.2 2002/04/11 23:14:20 eburns Exp $
+ * @version $Id: TestAbstractFactory.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -161,14 +163,22 @@ public void testFactoryLookup()
 public void testHardCodedMethods()
 {
     MessageFactory messageFactory = null;
+    MessageList messageList = null;
     FacesContext facesContext = null;
+    EventQueue eventQueue = null;
     boolean result;
 
-    facesContext = abstractFactory.newFacesContext(request, response);
-    assertTrue(null != facesContext);
+    eventQueue = abstractFactory.newEventQueue();
+    assertTrue(null != eventQueue);
 
     messageFactory = abstractFactory.newMessageFactory();
     assertTrue(null != messageFactory);
+
+    messageList = abstractFactory.newMessageList();
+    assertTrue(null != messageList);
+
+    facesContext = abstractFactory.newFacesContext(request, response);
+    assertTrue(null != facesContext);
 
 }
 

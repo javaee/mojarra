@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicFacesContext.java,v 1.2 2002/04/11 22:52:41 eburns Exp $
+ * $Id: HtmlBasicFacesContext.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
  */
 
 
@@ -13,8 +13,6 @@
 package com.sun.faces.renderkit.html_basic;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.Constants;
@@ -54,7 +52,7 @@ import com.sun.faces.ObjectAccessorFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicFacesContext.java,v 1.2 2002/04/11 22:52:41 eburns Exp $
+ * @version $Id: HtmlBasicFacesContext.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -223,7 +221,22 @@ public class HtmlBasicFacesContext extends FacesContext {
     {
         if (_messageList == null)
         {
-            _messageList = MessageList.newInstance();
+	    AbstractFactory abstractFactory;
+	    
+	    abstractFactory = (AbstractFactory)
+		getObjectManager().get(Constants.REF_ABSTRACTFACTORY);
+	    Assert.assert_it(null != abstractFactory);
+	    try {
+		_messageList = abstractFactory.newMessageList();
+	    } catch (FactoryConfigurationError e) {
+		// PENDING(edburns): log message
+		System.out.println("Error getEventQueue: " +
+				   e.getMessage());
+		e.printStackTrace();
+		Assert.assert_it(false);
+	    }
+	    Assert.assert_it(null != _messageList);
+
             _messageList.setLocale(request.getLocale());
             getObjectManager().put(request, Constants.MESSAGE_LIST_ID,
                     _messageList);
@@ -291,7 +304,7 @@ public class HtmlBasicFacesContext extends FacesContext {
 	AbstractFactory abstractFactory;
 
         if (null == eventQueue) {
-            eventQueue = (EventQueue)objectManager.get(request,
+            eventQueue = (EventQueue)getObjectManager().get(request,
                                                Constants.REF_EVENTQUEUE);
             if (eventQueue == null) {
                 abstractFactory = (AbstractFactory)
