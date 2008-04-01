@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectAccessor.java,v 1.2 2002/01/12 01:38:08 edburns Exp $
+ * $Id: ObjectAccessor.java,v 1.3 2002/02/01 00:52:48 edburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ public interface ObjectAccessor {
      *        the associated object
      * @param value the Object to be associated with the object-reference in
      *        the scope defined by request
-     * @throws IllegalArgumentException if objectReference is null
+     * @throws NullPointerException if objectReference is null
      * @throws FacesException if the object cannot be set
      */
     void setObject(ServletRequest request, String objectReference, 
@@ -51,7 +51,7 @@ public interface ObjectAccessor {
      *        to be used when resolving the object-reference
      * @param objectReference the String containing the reference used to obtain
      *        the associated object
-     * @throws IllegalArgumentException if objectReference is null
+     * @throws NullPointerException if objectReference is null
      * @throws FacesException if the object cannot be set
      * @return the Object associated with the specified object-reference String.
      */
