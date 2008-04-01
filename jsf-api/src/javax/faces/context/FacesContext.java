@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.25 2002/07/26 04:12:51 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.26 2002/07/26 04:20:27 craigmcc Exp $
  */
 
 /*
@@ -149,7 +149,7 @@ public abstract class FacesContext {
 
     /**
      * <p>Return an <code>Iterator</code> over the {@link Message}s that have
-     * been queued that are <strong>not</strong> associated with any specific
+     * been queued, whether or not they are associated with any specific
      * {@link UIComponent}.  If no such messages have been queued, return an
      * empty <code>Iterator</code>.</p>
      */
@@ -173,15 +173,6 @@ public abstract class FacesContext {
      *  any component
      */
     public abstract Iterator getMessages(UIComponent component);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link Message}s that have
-     * been queued, whether or not they are associated with any specific
-     * {@link UIComponent}.  If no such messages have been queued, return an
-     * empty <code>Iterator</code>.</p>
-     */
-    public abstract Iterator getMessagesAll();
 
 
     /**
@@ -337,26 +328,13 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Append a {@link Message} to the set of messages not associated with
-     * any specific {@link UIComponent}.</p>
-     *
-     * @param message The message to be appended
-     *
-     * @exception NullPointerException if <code>message</code>
-     *  is <code>null</code>
-     */
-    public abstract void addMessage(Message message);
-
-
-    /**
      * <p>Append a {@link Message} to the set of messages associated with
-     * the specified {@link UIComponent}.</p>
+     * the specified {@link UIComponent}, if <code>component</code> is
+     * not <code>null</code>.</p>
      *
      * @param component The component with which this message is associated
+     *  (if any)
      * @param message The message to be appended
-     *
-     * @exception NullPointerException if <code>component</code> or
-     *  <code>message</code> is <code>null</code>
      */
     public abstract void addMessage(UIComponent component, Message message);
 
