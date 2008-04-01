@@ -1,0 +1,5 @@
+# If your jsf-api and jsf-ri directories are not siblings of this
+# directory, you can locate them here.
+
+jsf.api.home=../../jsf-trunk/jsf-api
+jsf.ri.home=../../jsf-trunk/jsf-ri
