@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.2 2002/05/30 01:42:09 eburns Exp $
+ * $Id: CompareFiles.java,v 1.3 2002/05/31 19:34:14 jvisvanathan Exp $
  */
 
 /*
@@ -92,8 +92,7 @@ public class CompareFiles {
         // if same is true and both files have reached eof, then
         // files are identical
         if (same == true) {
-             System.out.println("returned true");
-             return true;  
+            return true;  
         } 
         return false;
     }
