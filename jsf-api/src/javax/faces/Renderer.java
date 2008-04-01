@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.8 2002/01/10 22:32:22 edburns Exp $
+ * $Id: Renderer.java,v 1.9 2002/01/12 18:53:35 edburns Exp $
  */
 
 /*
@@ -38,8 +38,10 @@ import java.util.Iterator;
 public interface Renderer {
 
     /**
-     * This method is used to determine whether or not the component
-     * type of the specified component is supported by this renderer.
+     * Returns whether or not the component type of the specified 
+     * component is supported by this renderer.
+     * @see UIComponent#getType
+     * @param c the UI component
      * @throws NullPointerException if c is null
      * @return a boolean value indicating whether or not the specified
      *         component type can be rendered by this renderer
@@ -47,8 +49,10 @@ public interface Renderer {
     public boolean supportsType(UIComponent c);
 
     /**
-     * This method is used to determine whether or not the specified
+     * Returns whether or not the specified
      * component type is supported by this renderer.
+     * @see UIComponent#getType
+     * @param componentType String containing the type of component
      * @throws NullPointerException if componentType is null
      * @return a boolean value indicating whether or not the specified
      *         component type can be rendered by this renderer
@@ -60,7 +64,7 @@ public interface Renderer {
      * supported attributes for the specified component type.  
      * This attribute list should contain all attributes used by this 
      * renderer during the rendering process for the component type.
-     * @param componentType string representing the type of component
+     * @param componentType String containing the type of component
      * @return an iterator containing the Strings representing supported
      *          attribute names
      * @throws NullPointerException if componentType is null
@@ -75,7 +79,7 @@ public interface Renderer {
      * for the specified component type.  This attribute list should 
      * contain all attributes used by this renderer during the rendering 
      * process for the component type.
-     * @param componentType string representing the type of component
+     * @param componentType String containing the type of component
      * @return an iterator containing the Strings representing supported
      *          attribute names
      * @throws NullPointerException if componentType is null
@@ -99,7 +103,7 @@ public interface Renderer {
      * Invoked to render the specified component using the specified 
      * render context.  An attribute value used during rendering
      * is obtained by first looking for a component-specific value
-     * using c.getAttribute() and if not set directly on the component,
+     * using <code>getAttribute</code> and if not set directly on the component,
      * using the default value of that attribute defined by this renderer. 
      * @see UIComponent#render
      * @see UIComponent#getAttribute
@@ -118,12 +122,12 @@ public interface Renderer {
      * Invoked to render the children of the specified component using
      * the specified render context.  If this renderer supports rendering
      * of a component type which returns <code>true</code> from the
-     * getPerformsLayout() method, it must generate output required to
+     * <code>rendersChildren</code>, it must generate output required to
      * layout the children of the specified component, as well as drive
-     * the render process of those children by invoking renderAll() on
-     * each child.  If the specified component type returns =
-<code>false</code>
-     * from getPerformsLayout() then this method should do nothing.
+     * the render process of those children by invoking 
+     * <code>renderAll</code> on each child.  If the specified component 
+     * type returns <code>false</code> from <code>rendersChildren</code,
+     *  then this method should do nothing.
      * @see UIComponent#renderAll
      * @see UIComponent#renderChildren
      * @param rc the render context used to render the specified component
