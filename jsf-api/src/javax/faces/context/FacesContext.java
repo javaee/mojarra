@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.1 2002/05/07 05:18:57 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.2 2002/05/07 20:10:47 craigmcc Exp $
  */
 
 /*
@@ -35,6 +35,9 @@ import javax.servlet.http.HttpSession;
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>
+ *
+ * <p><strong>FIXME</strong> - Do we need direct access to the
+ * output stream or writer associated with our response?</p>
  */
 
 public abstract class FacesContext {

@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeDescriptor.java,v 1.1 2002/05/07 05:18:56 craigmcc Exp $
+ * $Id: AttributeDescriptor.java,v 1.1 2002/05/07 20:10:48 craigmcc Exp $
  */
 
 /*
@@ -7,12 +7,12 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component;
+package javax.faces.render;
 
 
 /**
  * <p>An <strong>AttributeDescriptor</strong> describes a single characteristic
- * that is supported by a {@link UIComponent} class.  This information is
+ * that is supported by a {@link Renderer} class.  This information is
  * particularly useful in tools that wish to automate the creation of user
  * interfaces based on JavaServer Pages components.</p>
  *

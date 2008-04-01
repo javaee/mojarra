@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.2 2002/05/07 19:30:57 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.3 2002/05/07 20:10:47 craigmcc Exp $
  */
 
 /*
@@ -9,8 +9,11 @@
 
 package javax.faces.component;
 
+import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.context.FacesContext;
+import javax.faces.attribute.AttributeDescriptor;
+import javax.faces.render.Renderer;
 
 
 /**
@@ -46,6 +49,11 @@ import javax.faces.context.FacesContext;
  * <li><strong>parent</strong> (javax.faces.component.UIContainer) - The
  *     parent {@link UIContainer} in which this <code>UIComponent</code> is
  *     nested.  The root {@link UIContainer} will not have a parent.</li>
+ * <li><strong>rendererType</strong> (java.lang.String) - Logical identifier
+ *     of the type of {@link Renderer} to use when rendering this component
+ *     to a response.  If not specified, this component must render itself
+ *     directly in the <a href="#render(javax.faces.context.FacesContext)">
+ *     render()</a> method.</li>
  * <li><strong>type</strong> - The canonical name of the component type
  *     represented by this <code>UIComponent</code> instance.  For all
  *     standard component types, this value is represented by a manifest
@@ -229,6 +237,24 @@ public abstract class UIComponent {
 
 
     /**
+     * <p>Return the {@link Renderer} type for this <code>UIComponent</code>
+     * (if any).</p>
+     */
+    public abstract String getRendererType();
+
+
+    /**
+     * <p>Set the {@link Renderer} type for this <code>UIComponent</code>,
+     * or <code>null</code> for components that render themselves.</p>
+     *
+     * @param rendererType Logical identifier of the type of
+     *  {@link Renderer} to use, or <code>null</code> for components
+     *  that render themselves
+     */
+    public abstract void setRendererType(String rendererType);
+
+
+    /**
      * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
     public abstract String getType();
@@ -336,6 +362,24 @@ public abstract class UIComponent {
      * @param context FacesContext for the current request being processed
      */
     public abstract void processValidations(FacesContext context);
+
+
+    /**
+     * <p>Render this component to the response we are creating.  This
+     * method will be called in the <em>Render Response</em> phase of the
+     * request processing lifecycle, byt <strong>only</strong> for components
+     * that have no value set for the <code>rendererType</code> property.</p>
+     *
+     * <p><strong>FIXME</strong> - Not sufficient for components with children,
+     * but that will be defined in {@link UIContainer} instead of here</p>
+     *
+     * @param context FacesContext for the current request being processed
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public abstract void render(FacesContext context) throws IOException;
 
 
     /**
