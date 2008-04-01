@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.7 2002/07/15 18:09:01 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.8 2002/07/16 17:26:19 craigmcc Exp $
  */
 
 /*
@@ -38,8 +38,8 @@ public abstract class RenderKit {
 
     /**
      * <p>Add a new {@link UIComponent} subclass to the set of component
-     * classes known to be supported by this <code>RenderKit</code> instance
-     * and its constituent {@link Renderer}s.</p>
+     * classes registered with this <code>RenderKit</code> instance
+     * and supported by its constituent {@link Renderer}s.</p>
      *
      * @param componentClass {@link UIComponent} subclass to be supported
      *
@@ -54,7 +54,7 @@ public abstract class RenderKit {
     /**
      * <p>Add a new {@link Renderer} instance, associated with the
      * specified <code>rendererType</code>, to the set of
-     * {@link Renderer}s known to this <code>RenderKit</code>.
+     * {@link Renderer}s registered with this <code>RenderKit</code>.
      *
      * @param rendererType Renderer type of the new {@link Renderer}
      * @param renderer The new {@link Renderer} instance
@@ -69,8 +69,10 @@ public abstract class RenderKit {
 
     /**
      * <p>Return an <code>Iterator</code> of the {@link UIComponent}
-     * classes that are known to be supported by this <code>RenderKit</code>
-     * instance and its constituent {@link Renderer}s.</p>
+     * classes that are registered with this <code>RenderKit</code>
+     * instance and supported by its constituent {@link Renderer}s.  If
+     * there are no such registered component classes, an empty
+     * <code>Iterator</code> is returned.</p>
      */
     public abstract Iterator getComponentClasses();
 
@@ -78,7 +80,7 @@ public abstract class RenderKit {
     /**
      * <p>Create (if necessary) and return a {@link Renderer} instance
      * with the specified renderer type.  Subsequent calls to this method
-     * with the same renderer type should return the same instance.</p>
+     * with the same renderer type must return the same instance.</p>
      *
      * @param rendererType Renderer type to be returned
      *
@@ -91,35 +93,41 @@ public abstract class RenderKit {
 
 
     /**
-     * <p>Return an <code>Iterator</code> of the {@link Renderer} instances
-     * supported by this <code>RenderKit</code> that support components of
-     * the specified {@link UIComponent} subclass.  If no {@link Renderer}
-     * instances support this component class, an empty <code>Iterator</code>
-     * is returned.</p>
-     *
-     * @param component UIComponent whose class is tested for support
+     * <p>Return an <code>Iterator</code> of all the renderer types registered
+     * with this <code>RenderKit</code>.</p>
      */
-    public abstract Iterator getRenderers(UIComponent component);
+    public abstract Iterator getRendererTypes();
 
 
     /**
-     * <p>Return an <code>Iterator</code> of the {@link Renderer} instances
-     * supported by this <code>RenderKit</code> that support components of
-     * the specified {@link UIComponent} subclass.  If no {@link Renderer}
-     * instances support this component class, an empty <code>Iterator</code>
-     * is returned.</p>
+     * <p>Return an <code>Iterator</code> of the renderer types of all
+     * {@link Renderer} instances registered with this <code>RenderKit</code>
+     * that support components of the specified component type.
+     * If no {@link Renderer}s support this component type, an empty
+     * <code>Iterator</code> is returned.</p>
      *
      * @param componentType Canonical name of the component type tested
      *  for support
+     *
+     * @exception NullPointerException if <code>componentType</code>
+     *  is <code>null</code>
      */
     public abstract Iterator getRenderers(String componentType);
 
 
     /**
-     * <p>Return an <code>Iterator</code> of the renderer types supported
-     * by this <code>RenderKit</code>.</p>
+     * <p>Return an <code>Iterator</code> of the renderer types of all
+     * {@link Renderer} instances registered with this <code>RenderKit</code>
+     * that support components of the specified {@link UIComponent} subclass.
+     * If no {@link Renderer}s support this component class, an empty
+     * <code>Iterator</code> is returned.</p>
+     *
+     * @param component UIComponent whose class is tested for support
+     *
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>null</code>
      */
-    public abstract Iterator getRendererTypes();
+    public abstract Iterator getRendererTypes(UIComponent component);
 
 
 }
