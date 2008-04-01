@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.20 2002/08/17 02:32:49 eburns Exp $
+ * $Id: FacesTag.java,v 1.21 2002/08/18 01:51:00 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.servlet.ServletRequest;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIGraphic;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
@@ -35,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.20 2002/08/17 02:32:49 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.21 2002/08/18 01:51:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1017,7 +1018,7 @@ protected void overrideProperties(UIComponent component)
 	component.setAttribute("timezone", getTimezone());
     }
     
-    if ( component instanceof UIOutput) {
+    if ( component instanceof UIOutput && !(component instanceof UIGraphic)) {
         return;
     }    
     // HTML 4.0 event handlers common to most BODY-content elements.

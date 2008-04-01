@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.1 2002/08/16 23:26:23 rkitain Exp $
+ * $Id: ImageRenderer.java,v 1.2 2002/08/18 01:51:00 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.1 2002/08/16 23:26:23 rkitain Exp $
+ * @version $Id: ImageRenderer.java,v 1.2 2002/08/18 01:51:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,8 +116,10 @@ public class ImageRenderer extends HtmlBasicRenderer {
         Assert.assert_it(writer != null );
         
         writer.write("<img src=\"");
-        writer.write(src(context, component));
-        writer.write("\">");
+        writer.write(src(context, component) + "\"");
+	writer.write(Util.renderPassthruAttributes(context, component));
+	writer.write(Util.renderBooleanPassthruAttributes(context, component));
+        writer.write(">");
     }
 
     private String src(FacesContext context, UIComponent component) {

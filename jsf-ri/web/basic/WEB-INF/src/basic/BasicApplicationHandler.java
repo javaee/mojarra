@@ -1,5 +1,5 @@
 /*
- * $Id: BasicApplicationHandler.java,v 1.5 2002/07/19 22:50:09 rkitain Exp $
+ * $Id: BasicApplicationHandler.java,v 1.6 2002/08/18 01:51:04 eburns Exp $
  */
 
 /*
@@ -51,7 +51,10 @@ public class BasicApplicationHandler implements ApplicationHandler{
 	        treeId = "/welcome.jsp"; 
 	    } else if (formEvent.getCommandName().equals("back")) {
 	        treeId = "/Faces_Basic.jsp";
+	    } else if (formEvent.getCommandName().equals("command_button1")) {
+		treeId = "/StandardRenderKit.jsp";
 	    }
+
             returnValue = false;
         } else if (facesEvent instanceof CommandEvent) {
             CommandEvent commandEvent = (CommandEvent)facesEvent;
