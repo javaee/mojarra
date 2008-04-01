@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.2 2002/01/18 21:52:30 edburns Exp $
+ * $Id: FacesFilter.java,v 1.3 2002/01/25 18:45:17 visvan Exp $
  */
 
 /*
@@ -16,12 +16,12 @@ import java.util.EventObject;
 import com.sun.faces.EventContextFactory;
 import com.sun.faces.ObjectAccessorFactory;
 import com.sun.faces.ObjectManagerFactory;
+import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.util.Util;
 
 import javax.faces.Constants;
 import javax.faces.EventContext;
 import javax.faces.EventDispatcher;
-import javax.faces.EventDispatcherFactory;
 import javax.faces.EventQueue;
 import javax.faces.EventQueueFactory;
 import javax.faces.FacesEvent;
@@ -30,6 +30,11 @@ import javax.faces.ObjectManager;
 import javax.faces.RenderContext;
 import javax.faces.RenderContextFactory;
 import javax.faces.RenderKit;
+import javax.faces.UICommand;
+import javax.faces.UISelectOne;
+import javax.faces.UITextEntry;
+import javax.faces.UISelectBoolean;
+import javax.faces.NavigationHandler;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -93,9 +98,9 @@ public class FacesFilter implements Filter {
         ObjectManagerFactory omFactory;
         EventQueueFactory eqFactory;
         RenderContextFactory rcFactory;
-        EventDispatcherFactory edFactory;
         EventContextFactory ecFactory;
         ObjectAccessorFactory oaFactory;
+        NavigationHandlerFactory nhFactory;
 
         ServletContext servletContext = config.getServletContext();
         Assert.assert_it(null != servletContext);
@@ -152,21 +157,7 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
 
-        // Step 4: Create the EventDispatcherFactory and put it in the
-        // ObjectManager in GlobalScope
-
-        edFactory = (EventDispatcherFactory)objectManager.get(
-            Constants.REF_EVENTDISPATCHERFACTORY);
-        // The EventDispatcherFactory must not exist at this point.  It is an
-        // error if it does exist.
-        Assert.assert_it(null == edFactory);
-
-        edFactory = EventDispatcherFactory.newInstance();
-        Assert.assert_it(null != edFactory);
-        objectManager.put(servletContext,
-                        Constants.REF_EVENTDISPATCHERFACTORY, edFactory);
-
-        // Step 5: Create the EventContextFactory and put it in the
+        // Step 4: Create the EventContextFactory and put it in the
         // ObjectManager in GlobalScope
         ecFactory = (EventContextFactory)objectManager.get(
             Constants.REF_EVENTCONTEXTFACTORY);
@@ -179,7 +170,7 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_EVENTCONTEXTFACTORY, ecFactory);
 
-        // Step 6: Create the ObjectAccessorFactory and put it in the
+        // Step 5: Create the ObjectAccessorFactory and put it in the
         // ObjectManager in GlobalScope
         oaFactory = (ObjectAccessorFactory)objectManager.get(
             Constants.REF_OBJECTACCESSORFACTORY);
@@ -191,6 +182,20 @@ public class FacesFilter implements Filter {
         Assert.assert_it(null != oaFactory);
         objectManager.put(servletContext,
                         Constants.REF_OBJECTACCESSORFACTORY, oaFactory);
+
+        // Step 6 create an instance of navigationHandlerFactory
+        // and put it in Application scope.
+        nhFactory = (NavigationHandlerFactory)objectManager.get(
+            Constants.REF_NAVIGATIONHANDLERFACTORY);
+
+        // The NavigationHandlerFactory must not exist at this point.  It is an
+        // error if it does exist.
+        Assert.assert_it(null == nhFactory);
+
+        nhFactory = NavigationHandlerFactory.newInstance();
+        Assert.assert_it(null != nhFactory);
+        objectManager.put(servletContext,
+                        Constants.REF_NAVIGATIONHANDLERFACTORY, nhFactory);
     }
 
     /**
@@ -217,7 +222,6 @@ public class FacesFilter implements Filter {
         RenderContextFactory rcFactory;
         EventQueue eq;
         EventQueueFactory eqFactory;
-        EventDispatcherFactory edFactory;
         EventContextFactory ecFactory;
 
         ServletContext servletContext = filterConfig.getServletContext();
@@ -278,30 +282,9 @@ public class FacesFilter implements Filter {
                     setRequest(req);
             }
         }
-
-        // Attempt to get an event queue from the object manager 
-        // for the current session.  If one doesn't exist, create one.
-        //
-        eq = (EventQueue)objectManager.get(thisSession,
-                                         Constants.REF_EVENTQUEUE);
-        if (eq == null) {
-            eqFactory = (EventQueueFactory)
-                objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
-            Assert.assert_it(null != eqFactory);
-            try {
-                eq = eqFactory.newEventQueue();
-            } catch (FacesException e) {
-                throw new ServletException(e.getMessage());
-            }
-            Assert.assert_it(null != eq);
-            objectManager.put(thisSession, Constants.REF_EVENTQUEUE, eq);
-        }
-
+        
         // If there are no events in the queue, simply forward to the target.
         //
-        RenderKit rk = rc.getRenderKit();
-        Assert.assert_it(rk != null);
-
         boolean dispatched = false;
 
         // Only check for a token and process events if this request has
@@ -318,49 +301,39 @@ public class FacesFilter implements Filter {
                 throw e;
             }
             Util.resetToken(request);
+      
+            RenderKit rk = rc.getRenderKit();
+            Assert.assert_it(rk != null);
 
-            // create the EventContext
-            ecFactory = (EventContextFactory)
-                objectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
-            Assert.assert_it(ecFactory != null );
-            EventContext eventContext = null;
+            EventContext eventContext = createEventContext(objectManager, 
+                    rc, req, res );
+            Assert.assert_it(eventContext != null);
+            rk.queueEvents(eventContext);
 
-            try {
-                eventContext = ecFactory.newEventContext(rc, req, res);
-            } catch ( FacesException fe ) {
-                throw new ServletException("Can't create EventContext " +
-                                           fe.getMessage() );
-            }
-
-            // PENDINC(visvan): Take the eventContext as a a param
-            rk.queueEvents(request, eq);
-
-            if (!eq.isEmpty()) {
-                edFactory = (EventDispatcherFactory)
-                    objectManager.get(Constants.REF_EVENTDISPATCHERFACTORY);
-                Assert.assert_it(edFactory != null );
-
-                while (!eq.isEmpty()) {
-                    EventObject e = (EventObject) eq.getNext();
-                    try {
-
-                        EventDispatcher d = edFactory.newEventDispatcher(e);
-                        Assert.assert_it ( d != null );
-
-                        d.dispatch(request, response, e);
-
-                        //PENDING (rogerk) to indicate we have already
-                        //dispatched(forwarded).
-                        dispatched = true;
-
-                    } catch ( FacesException fe ) {
-                        throw new ServletException("Error while dispatching events " + fe.getMessage() );
-                    }
-                    eq.remove(e);
+            eq = eventContext.getEventQueue();
+            Assert.assert_it(eq != null ); 
+            while (!eq.isEmpty()) {
+                EventObject e = (EventObject) eq.getNext();
+                try {
+                    EventDispatcher src=eventContext.getEventDispatcher(e);
+                    Assert.assert_it ( src != null );
+                    src.dispatch ( e );
+                } catch ( FacesException fe ) {
+                    // abort processing events and lookup the navigation
+                    // handler to find out where to go next.
+                    // PENDING ( visvan ) should eventQueue be emptied here ?
+                    eq.clear();
+                    break;
                 }
+                eq.remove(e);
+            }
+            // all the events were processed successfully. Lookup the
+            // navigation handler to find out where to go next.
+            boolean result = doNavigation(eventContext, req, res );
+            if ( result ) {
+                dispatched = true;
             }
         }
-
         // Make sure the client does not cache the response.
 
         // PENDING(edburns): not sure if this is necessary in all cases.
@@ -380,6 +353,79 @@ public class FacesFilter implements Filter {
 	// just cast to our implementation for now
         ((com.sun.faces.ObjectManagerImpl)objectManager).exit(req);
 
+    }
+
+    /**
+     * Gets the eventContextFactory from the objectManager and creates
+     * an instance of eventContext.
+     */
+    private EventContext createEventContext ( ObjectManager objectManager, 
+        RenderContext rc, ServletRequest req, ServletResponse res ) 
+               throws ServletException {
+
+        EventContext eventContext = null;
+
+        // create the EventContext
+        EventContextFactory ecFactory = (EventContextFactory)
+                objectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
+        Assert.assert_it(ecFactory != null );
+
+        // eventContext is request scope meaning created per
+        // request, hence need not be put in ObjectManager
+        try {
+            eventContext = ecFactory.newEventContext(rc, req, res);
+        } catch ( FacesException fe ) {
+            throw new ServletException("Cannot create EventContext " +
+                                       fe.getMessage() );
+        }
+        return eventContext;
+    }
+
+    /**
+     * Navigates to the specified URL specifed by the targetPath
+     * based on targetAction attribute
+     */
+    private boolean doNavigation(EventContext eventContext, 
+        ServletRequest req, ServletResponse res ) 
+                throws ServletException, IOException {
+
+        boolean navigate = false;
+
+        NavigationHandler nh = eventContext.getNavigationHandler();
+        // navigationHandler will be null if NavigationMap does not
+        // exist. 
+        if ( nh == null ) {
+            return navigate;
+        }
+        int targetAction = nh.getTargetAction();
+        String targetPath = nh.getTargetPath();
+        // if targetAction is pass or undefined, continue with rendering
+        // without navigation.
+        if ( targetPath != null && (targetAction != NavigationHandler.UNDEFINED ||
+                targetAction != NavigationHandler.PASS)) {
+           navigate = true;
+           
+           if ( targetAction == NavigationHandler.FORWARD) {
+               try {
+                   RequestDispatcher reqD =
+                       req.getRequestDispatcher(targetPath);
+                   reqD.forward(req, res);
+               } catch ( IllegalStateException ie ) {
+                   throw new ServletException("couldn't forward to " +
+                           targetPath + ie.getMessage() );
+               }
+           } else if ( targetAction == NavigationHandler.REDIRECT) {
+               try {
+                   HttpServletResponse httpRes = (HttpServletResponse) res;
+                   // PENDING ( visvan ) should URL be encoded ?
+                   httpRes.sendRedirect(httpRes.encodeRedirectURL(targetPath));
+               } catch ( IOException ioe ) {
+                   throw new ServletException("couldn't redirect to " +
+                           targetPath +  ioe.getMessage() );
+               } 
+           }
+        }
+        return navigate;
     }
 
     private void outputException(HttpServletResponse resp,

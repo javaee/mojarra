@@ -1,5 +1,5 @@
 /*
- * $Id: TestEventContext.java,v 1.2 2002/01/12 01:41:17 edburns Exp $
+ * $Id: TestEventContext.java,v 1.3 2002/01/25 18:45:20 visvan Exp $
  */
 
 /*
@@ -22,10 +22,13 @@ import javax.faces.ClientCapabilities;
 import javax.faces.EventDispatcher;
 import javax.faces.ValueChangeEvent;
 import javax.faces.CommandEvent;
-import javax.faces.ValueChangeDispatcher;
-import javax.faces.CommandDispatcher;
+import javax.faces.UITextEntry;
+import javax.faces.UICommand;
+import javax.faces.UIForm;
 import javax.faces.ObjectAccessor;
 import javax.faces.NavigationHandler;
+import javax.faces.Constants;
+import com.sun.faces.NavigationMapImpl;
 
 /**
  *
@@ -33,7 +36,7 @@ import javax.faces.NavigationHandler;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestEventContext.java,v 1.2 2002/01/12 01:41:17 edburns Exp $
+ * @version $Id: TestEventContext.java,v 1.3 2002/01/25 18:45:20 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,40 +111,67 @@ public void testAccessors()
     System.out.println("Testing getEventQueue: " + result);
     assertTrue(result);
 
-    ValueChangeEvent valueChange = new ValueChangeEvent(request, "source", 
-							"modelRef", "value");
-    eventDispatcher = eventContext.getEventDispatcher(valueChange);
-    result = null != eventDispatcher;
-    System.out.println("Testing getEventDispatcher for valueChange: " + 
-		       result);
-    assertTrue(result);
-    result = eventDispatcher instanceof ValueChangeDispatcher;
-    System.out.println("Testing getEventDispatcher for valueChange: isA " +
-		       "ValueChangeDispatcher: " + result);
-    assertTrue(result);
-    
-    CommandEvent command = new CommandEvent(request, "name", 
-					    "value");
-    eventDispatcher = eventContext.getEventDispatcher(command);
-    result = null != eventDispatcher;
-    System.out.println("Testing getEventDispatcher for command: " + 
-		       result);
-    assertTrue(result);
-    result = eventDispatcher instanceof CommandDispatcher;
-    System.out.println("Testing getEventDispatcher for command: isA " +
-		       "CommandDispatcher: " + result);
-    assertTrue(result);
-
-    nav = eventContext.getNavigationHandler();
-    result = null == nav; // PENDING(edburns): should not be null
-    System.out.println("Testing getNavigationHandler: " + result);
-    assertTrue(result);
-    
     objectManager = eventContext.getObjectManager();
     result = null != objectManager;
     System.out.println("Testing getObjectManager: " + result);
     assertTrue(result);
 
+    UICommand uiCommand = new UICommand();
+    uiCommand.setId("name");
+    objectManager.put( request, "name", uiCommand);
+
+    UITextEntry input = new UITextEntry();
+    input.setId("source");
+    objectManager.put( request, "source", input);
+
+    ValueChangeEvent valueChange = new ValueChangeEvent(eventContext, "source", 
+             "value");
+    eventDispatcher = eventContext.getEventDispatcher(valueChange);
+    result = null != eventDispatcher;
+    System.out.println("Testing getEventDispatcher for valueChange: " + 
+		       result);
+    assertTrue(result);
+    result = eventDispatcher instanceof UITextEntry;
+    System.out.println("Testing getEventDispatcher for valueChange: isA " +
+		       "UITextEntry: " + result);
+    assertTrue(result);
+    
+    CommandEvent command = new CommandEvent (eventContext, "name", "value");
+    eventDispatcher = eventContext.getEventDispatcher(command);
+    result = null != eventDispatcher;
+    System.out.println("Testing getEventDispatcher for command: " + 
+		       result);
+    assertTrue(result);
+    result = eventDispatcher instanceof UICommand;
+    System.out.println("Testing getEventDispatcher for command: isA " +
+		       "UICommand: " + result);
+    assertTrue(result);
+
+    // PENDING ( visvan ) couldn't test getNavigationHandler() because
+    // formID could not set as one of the parameters. Using setAttribute()
+    // doesn't help because getParameter() returns null. There is no
+    // setParameter method. Is there any other way to do this ??
+
+    /* To test getNavigationHandler, create an instance of UIForm
+    // navigationMap and put in objectManager.
+
+    UIForm form_obj = new UIForm();
+    form_obj.setId("basicForm");
+    objectManager.put(request, "basicForm", form_obj);
+    request.setAttribute(Constants.REF_UIFORMID, "basicForm");
+
+    NavigationMapImpl navMap = new NavigationMapImpl();
+    objectManager.put(request, "navMap", navMap);
+    form_obj.setNavigationMapId("navMap");
+
+    String form_id = (String) request.getParameter(Constants.REF_UIFORMID);
+    System.out.println("FORMID " + form_id);
+
+    nav = eventContext.getNavigationHandler();
+    result = null != nav;
+    System.out.println("Testing getNavigationHandler: " + result);
+    assertTrue(result); */
+    
     objectAccessor = eventContext.getObjectAccessor();
     result = null != objectAccessor; 
     System.out.println("Testing getObjectAccessor: " + result);

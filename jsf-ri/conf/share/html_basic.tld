@@ -120,6 +120,11 @@ Configuring UI Components
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
+    <attribute>
+      <name>navigationMapId</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute> 
   </tag>
 
   <tag>
@@ -247,11 +252,6 @@ Configuring UI Components
     </attribute>
     <attribute>
       <name>commandName</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>command</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -551,11 +551,6 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>valueChangeListener</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
       <name>scope</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -712,37 +707,6 @@ Configuring UI Components
  </tag>
 
 <tag>
-      <name>Command</name>
-      <tagclass>com.sun.faces.taglib.html_basic.CommandTag</tagclass>
-      <bodycontent>JSP</bodycontent>
-      <attribute>
-      <name>id</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>scope</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>className</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>onCompletion</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>onError</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
- </tag> 
-
-<tag>
       <name>DeclareBean</name>
       <tagclass>com.sun.faces.taglib.html_basic.DeclareBeanTag</tagclass>
       <bodycontent>JSP</bodycontent>
@@ -759,6 +723,53 @@ Configuring UI Components
     <attribute>
       <name>className</name>
       <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+ </tag>
+
+ <tag>
+      <name>NavigationMap</name>
+      <tagclass>com.sun.faces.taglib.html_basic.NavigationMapTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+      <attribute>
+      <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>scope</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>className</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+ </tag>
+
+ <tag>
+      <name>outcome</name>
+      <tagclass>com.sun.faces.taglib.html_basic.OutcomeTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+    <attribute>
+      <name>commandName</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>outcome</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>targetAction</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>targetPath</name>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
  </tag>

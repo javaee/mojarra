@@ -15,11 +15,19 @@
 <body>
 <faces:UseFaces>
 
-  <faces:Form id="purchaseForm" model="UserBean">
-      <faces:Command id="handleCheckout" scope="session" 
-                   className="fruitstand.CommandListenerImpl" 
-                   onCompletion="purchaseConfirm.jsp" 
-                   onError="StoreFront.jsp"/>
+   <faces:NavigationMap id="StoreNavMap" scope="session" >
+
+        <faces:outcome commandName="Checkout" outcome="success" targetAction="forward"
+                targetPath = "purchaseConfirm.jsp" />
+
+        <faces:outcome commandName="Checkout" outcome="failure" targetAction="redirect"
+                targetPath = "StoreFront.jsp" />
+
+   </faces:NavigationMap>
+
+   <faces:Listener id="handleCheckout" scope="session" className="fruitstand.CommandListenerImpl" />
+
+  <faces:Form id="purchaseForm" model="UserBean" navigationMapId = "StoreNavMap" >
 
 <font color="#3333FF"><font size=+2>Welcome to FruitStand.com, <faces:Output_Text id="differentName" model="$UserBean.firstName" /></font></font>
 <hr WIDTH="100%">
@@ -198,7 +206,7 @@ and vegetables.</font></font>
 <br>&nbsp;
 <br>
 <faces:Command_Button id="checkout" label="Checkout" 
-                      command="handleCheckout"/>
+                      commandListener="handleCheckout"/>
 </faces:Form>
 </faces:UseFaces>
 </body>

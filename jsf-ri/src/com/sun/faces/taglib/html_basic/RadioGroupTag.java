@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.8 2002/01/24 00:35:24 rogerk Exp $
+ * $Id: RadioGroupTag.java,v 1.9 2002/01/25 18:45:19 visvan Exp $
  */
 
 /*
@@ -30,7 +30,6 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Vector;
 
 /**
  *
@@ -38,7 +37,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.8 2002/01/24 00:35:24 rogerk Exp $
+ * @version $Id: RadioGroupTag.java,v 1.9 2002/01/25 18:45:19 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -152,13 +151,20 @@ protected UISelectOne createComponent(RenderContext renderContext)
     
     // set renderer specific properties
     wSelectOne.setId(getId());
+    
+    try {
+        wSelectOne.addValueChangeListener(valueChangeListener);    
+    } catch (FacesException fe) {
+        throw new JspException("Listener + " + valueChangeListener +
+               " does not exist or does not implement valueChangeListener " + 
+               " interface" );
+    }
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {
 	wSelectOne.setModel(model);
 	wSelectOne.setSelectedValueModel(selectedValueModel);
     } 
-    
     return wSelectOne;
 }
 
@@ -176,23 +182,6 @@ protected UISelectOne createComponent(RenderContext renderContext)
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         ot.put(pageContext.getSession(), id, c);
-
-        if ( valueChangeListener != null ) {
-            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
-            Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
-            if ( listeners == null) {
-                listeners = new Vector();
-            }
-            // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectManager. We do this
-            // because if the listeners are stored in the components, then
-            // they have to exist for the event listeners to be dispatched
-            // at the time we process the events.
-            // According to the spec, listeners should be dispatched
-            // independent of components.
-            listeners.add(valueChangeListener);
-            ot.put(pageContext.getSession(),lis_name, listeners);
-        }
     }
 
 //

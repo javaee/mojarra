@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.17 2002/01/24 00:35:25 rogerk Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
  */
 
 /*
@@ -27,7 +27,6 @@ import javax.faces.UITextEntry;
 import javax.faces.ObjectManager;
 
 import javax.servlet.http.*;
-import java.util.Vector;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -37,7 +36,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.17 2002/01/24 00:35:25 rogerk Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
  * 
  *
  */
@@ -115,11 +114,9 @@ public class TextEntry_SecretTag extends TagSupport
             String gId = Util.generateId();
             setId(gId);
         }
-
         // 2. Get or create the component instance.
         //
         c = (UITextEntry) ot.get(pageContext.getRequest(), getId());
-
         if (c == null) {
             c = createComponent(rc);
             addToScope(c, ot);
@@ -137,7 +134,6 @@ public class TextEntry_SecretTag extends TagSupport
             throw new JspException("Problem rendering component: "+
                 f.getMessage());
         }
-
         return(EVAL_BODY_INCLUDE);
     }
 
@@ -197,13 +193,20 @@ public class TextEntry_SecretTag extends TagSupport
      * Creates a TextEntry component and sets renderer specific
      * properties.
      */
-    protected UITextEntry createComponent(RenderContext rc) {
+    protected UITextEntry createComponent(RenderContext rc) 
+            throws JspException {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
         c.setId(getId());
         c.setAttribute("size", size);
         c.setAttribute("maxlength", maxlength);
 
+        try {
+            c.addValueChangeListener(valueChangeListener);    
+        } catch (FacesException fe) {
+            throw new JspException("Listener + " + valueChangeListener +
+                   " does not implement valueChangeListener interface" );
+        }
         // set render independent attributes 
         // If model attribute is not found get it
         // from parent form if it exists. If not
@@ -250,24 +253,6 @@ public class TextEntry_SecretTag extends TagSupport
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         ot.put(pageContext.getSession(), id, c);
-
-        // PENDING ( visvan ) as per spec, this shoud be done in
-        // component class. But the API currently accepts only the
-        // listener name as parameter. This should change to accept
-        // scope also to be put in appropriate scope in the 
-        // ObjectManager. This is true for all tags that have listeners. 
-        if ( valueChangeListener != null ) {
-            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
-            Vector listeners = (Vector) ot.get(pageContext.getRequest(), 
-                    lis_name);
-            if ( listeners == null) {
-                listeners = new Vector();
-            }   
-            // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectManager.
-            listeners.add(valueChangeListener);
-            ot.put(pageContext.getSession(),lis_name, listeners);
-        }
     }
 
     /**

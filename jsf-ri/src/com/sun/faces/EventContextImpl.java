@@ -1,5 +1,5 @@
 /*
- * $Id: EventContextImpl.java,v 1.2 2002/01/12 01:41:16 edburns Exp $
+ * $Id: EventContextImpl.java,v 1.3 2002/01/25 18:45:16 visvan Exp $
  */
 
 /*
@@ -16,11 +16,11 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
 import java.util.EventObject;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
 
+import javax.faces.FacesEvent;
 import javax.faces.EventContext;
 import javax.faces.Constants;
 import javax.faces.FacesException;
@@ -31,10 +31,10 @@ import javax.faces.NavigationHandler;
 import javax.faces.ClientCapabilities;
 import javax.faces.ObjectManager;
 import javax.faces.ObjectAccessor;
-
+import com.sun.faces.NavigationHandlerFactory;
 import javax.faces.EventQueueFactory;
-
-import javax.faces.EventDispatcherFactory;
+import javax.faces.UIForm;
+import javax.faces.NavigationMap;
 
 /**
  *
@@ -42,7 +42,7 @@ import javax.faces.EventDispatcherFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventContextImpl.java,v 1.2 2002/01/12 01:41:16 edburns Exp $
+ * @version $Id: EventContextImpl.java,v 1.3 2002/01/25 18:45:16 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -51,171 +51,197 @@ import javax.faces.EventDispatcherFactory;
 
 public class EventContextImpl extends EventContext
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-private RenderContext renderContext = null;
-private ServletRequest request = null;
-private ServletResponse response = null;
+    private RenderContext renderContext = null;
+    private ServletRequest request = null;
+    private ServletResponse response = null;
 
-private EventQueue eventQueue = null;
-
-/**
-
-* Used in getEventDispatcher.
-
-*/ 
-
-private EventDispatcherFactory eventDispatcherFactory = null;
-
-/**
-   
-* Convenience ivar.  Owning reference is in RenderContext implementation.
-
-*/
-
-private ObjectManager objectManager = null;
-
-//
-// Constructors and Initializers    
-//
-
-public EventContextImpl(RenderContext yourRenderContext, 
-			ServletRequest yourRequest,
-			ServletResponse yourResponse)
-{
-    super();
-    renderContext = yourRenderContext;
-    request = yourRequest;
-    response = yourResponse;
-    objectManager = renderContext.getObjectManager();
+    private EventQueue eventQueue = null;
+    private String formId = null;
+    private NavigationHandler navHandler = null;
+    private NavigationHandlerFactory navHandlerFactory = null;
     
-    eventDispatcherFactory = (EventDispatcherFactory)
-	objectManager.get(Constants.REF_EVENTDISPATCHERFACTORY);
-    Assert.assert_it(eventDispatcherFactory != null );
-}
+    /**
 
-//
-// Class methods
-//
+    * Convenience ivar.  Owning reference is in RenderContext implementation.
 
-//
-// General Methods
-//
+    */
 
-// 
-// Methods from RenderContext
-//
+    private ObjectManager objectManager = null;
 
-public ClientCapabilities getClientCapabilities() {
-    return renderContext.getClientCapabilities();
-}
+    //
+    // Constructors and Initializers    
+    //
 
-/**
- * @return ServletRequest object representing the client request
- */
-public ServletRequest getRequest() {
-    return request;
-}
+    public EventContextImpl(RenderContext yourRenderContext, 
+                            ServletRequest yourRequest,
+                            ServletResponse yourResponse)
+    {
+        super();
+        ParameterCheck.nonNull(yourRenderContext);
+        renderContext = yourRenderContext;
+        request = yourRequest;
+        response = yourResponse;
+        objectManager = renderContext.getObjectManager();
+        
+        // get the navigationHandler Factory
+        navHandlerFactory = (NavigationHandlerFactory)
+                    objectManager.get(Constants.REF_NAVIGATIONHANDLERFACTORY);
+        Assert.assert_it(null != navHandlerFactory);
+    }
 
-/**
- * @return ServletResponse object used to write response to the client
- *         request
- */
-public ServletResponse getResponse() {
-    return response;
-}
+    //
+    // Class methods
+    //
 
-/**
+    //
+    // General Methods
+    //
 
-* PRECONDITION: EventQueueFactory is in ObjectManager.
+    // 
+    // Methods from RenderContext
+    //
 
-*
+    public ClientCapabilities getClientCapabilities() {
+        return renderContext.getClientCapabilities();
+    }
 
- * @see javax.faces.EventContext#getEventQueue
- */
-public EventQueue getEventQueue() {
-    EventQueueFactory eventQueueFactory;
+    /**
+     * @return ServletRequest object representing the client request
+     */
+    public ServletRequest getRequest() {
+        return request;
+    }
 
-    if (null == eventQueue) {
-        eventQueue = (EventQueue)objectManager.get(request, 
-						   Constants.REF_EVENTQUEUE);
-        if (eventQueue == null) {
-            eventQueueFactory = (EventQueueFactory)
-		objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
-            Assert.assert_it(null != eventQueueFactory);
-            try {
-                eventQueue = eventQueueFactory.newEventQueue();
-            } catch (FacesException e) {
-                // PENDING(edburns): log message
-		System.out.println("Exception getEventQueue: " + 
-				   e.getMessage());
-		e.printStackTrace();
-		Assert.assert_it(false);
+    /**
+     * @return ServletResponse object used to write response to the client
+     *         request
+     */
+    public ServletResponse getResponse() {
+        return response;
+    }
+
+    /**
+
+    * PRECONDITION: EventQueueFactory is in ObjectManager.
+
+    *
+
+     * @see javax.faces.EventContext#getEventQueue
+     */
+    public EventQueue getEventQueue() {
+        EventQueueFactory eventQueueFactory;
+
+        if (null == eventQueue) {
+            eventQueue = (EventQueue)objectManager.get(request, 
+                                               Constants.REF_EVENTQUEUE);
+            if (eventQueue == null) {
+                eventQueueFactory = (EventQueueFactory)
+                    objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
+                Assert.assert_it(null != eventQueueFactory);
+                try {
+                    eventQueue = eventQueueFactory.newEventQueue();
+                } catch (FacesException e) {
+                    // PENDING(edburns): log message
+                    System.out.println("Exception getEventQueue: " + 
+                                       e.getMessage());
+                    e.printStackTrace();
+                    Assert.assert_it(false);
+                }
+                Assert.assert_it(null != eventQueue); 
+                // PENDING ( visvan ) is EventQueue in request scope ??
+                objectManager.put(request, Constants.REF_EVENTQUEUE, eventQueue);
             }
-	    Assert.assert_it(null != eventQueue); 
-            objectManager.put(request, Constants.REF_EVENTQUEUE, eventQueue);
         }
+        return eventQueue;
     }
-    return eventQueue;
-}
 
-/**
- * @throws NullPointerException if event is null
- * @return EventDispatcher object used to obtain an object which can
- *         dispatched the specified event
- */
-public EventDispatcher getEventDispatcher(EventObject event) {
-    EventDispatcher result = null;
-    try {
-	result = eventDispatcherFactory.newEventDispatcher(event);
+    /**
+     * @throws NullPointerException if event is null
+     * @return EventDispatcher object used to obtain an object which can
+     *         dispatched the specified event
+     */
+    public EventDispatcher getEventDispatcher(EventObject event) {
+
+        ParameterCheck.nonNull(event);
+
+        EventDispatcher result = null;
+        FacesEvent fe = (FacesEvent) event;
+        result = (EventDispatcher) fe.getSource();
+        Assert.assert_it(result != null);
+        return result;
     }
-    catch (FacesException e) {
-	// PENDING(edburns): log message
-	System.out.println("Exception getEventDispatcher: " + e.getMessage());
-	e.printStackTrace();
-	Assert.assert_it(false);
+
+    /**
+     * @return NavigationHandler object used to configure the navigational
+     *         result of processing events originating from this request
+     */
+    public NavigationHandler getNavigationHandler() {
+        
+        if (navHandler != null) {
+            return navHandler;
+        }    
+        // get NavigationMap from ObjectManager
+        // and pass it to constructor. For this we need to look up the
+        // navigationMap id in UIForm. UIForm can be obtained from 
+        // objectManager
+        String formId=(String)request.getParameter(Constants.REF_UIFORMID);
+        if ( formId != null) {
+            UIForm form_obj = (UIForm) objectManager.get(request, formId);
+            // PENDING ( visvan ) Form object should not be null. If it is
+            // request scoped ??
+            if ( form_obj != null ) {
+                NavigationMap navMap = form_obj.getNavigationMap(renderContext); 
+                // if navigationMap is not specifed then the navMap will
+                // null. // PENDING ( visvan ) is that an error ?
+                if ( navMap != null ) { 
+                    try {
+                        navHandler = navHandlerFactory.newNavigationHandler(navMap);
+                    } catch (FacesException e) {
+                        // PENDING(edburns): log message
+                        System.out.println("Exception getEventQueue: " + 
+                                   e.getMessage());
+                        e.printStackTrace();
+                        Assert.assert_it(false);
+                    }   
+                }
+            }    
+        }
+        return navHandler;
     }
-    return result;
-}
 
-/**
- * @return NavigationHandler object used to configure the navigational
- *         result of processing events originating from this request
- */
-public NavigationHandler getNavigationHandler() {
-    return null; //compile
-}
+    /**
+     * @return ObjectManager used to manage application objects in scoped
+     *         namespace
+     */
+    public ObjectManager getObjectManager() {
+        return renderContext.getObjectManager();
+    }
 
-/**
- * @return ObjectManager used to manage application objects in scoped
- *         namespace
- */
-public ObjectManager getObjectManager() {
-    return renderContext.getObjectManager();
-}
-
-/**
- * @return ObjectAccessor used to resolve object-reference Strings to
- *         objects
- */
-public ObjectAccessor getObjectAccessor() {
-    return renderContext.getObjectAccessor();
-}
-
+    /**
+     * @return ObjectAccessor used to resolve object-reference Strings to
+     *         objects
+     */
+    public ObjectAccessor getObjectAccessor() {
+        return renderContext.getObjectAccessor();
+    }
+    
+    
 // The testcase for this class is TestEventContext.java 
 
 

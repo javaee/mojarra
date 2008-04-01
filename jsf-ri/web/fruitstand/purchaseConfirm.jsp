@@ -75,11 +75,19 @@ The items listed above will be billed to: <br>
 <br>
 <faces:Output_Text id="cust_country" model="$UserBean.country" />
 
-<faces:Form id="purchaseConfirm" model="UserBean">
-      <faces:Command id="handleConfirm" scope="session" 
-                   className="fruitstand.CommandListenerImpl" 
-                   onCompletion="purchaseAction.jsp" 
-                   onError="StoreFront.jsp"/>
+<faces:NavigationMap id="purchaseNavMap" scope="session" >
+
+        <faces:outcome commandName="Purchase Items Listed Above" outcome="success" targetAction="forward"
+                targetPath = "purchaseAction.jsp" />
+
+        <faces:outcome commandName="Purchase Items Listed Above" outcome="failure" targetAction="forward"
+                targetPath = "StoreFront.jsp" />
+
+</faces:NavigationMap>
+
+<faces:Listener id="handleConfirm" scope="session" className="fruitstand.CommandListenerImpl" />
+
+<faces:Form id="purchaseConfirm" model="UserBean" navigationMapId="purchaseNavMap" >
 
 <TABLE border="2"><TR><TD>
 <TABLE>
@@ -115,7 +123,7 @@ The items listed above will be billed to: <br>
 <TR>
 <TD>
   <faces:Command_Button id="confirm" label="Purchase Items Listed Above" 
-                      command="handleConfirm"/>
+                      commandListener="handleConfirm"/>
 </TD>
 </TR>
 <TR>

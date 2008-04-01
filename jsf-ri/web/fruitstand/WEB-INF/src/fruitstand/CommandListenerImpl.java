@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListenerImpl.java,v 1.3 2002/01/16 21:06:37 rogerk Exp $
+ * $Id: CommandListenerImpl.java,v 1.4 2002/01/25 18:45:21 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -24,7 +24,9 @@ import javax.faces.CommandListener;
 import javax.faces.CommandEvent;
 import javax.faces.ObjectManager;
 import javax.faces.CommandFailedException;
-import javax.faces.AbstractCommand;
+import javax.faces.NavigationHandler;
+import javax.faces.FacesEvent;
+import javax.faces.EventContext;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -48,14 +50,14 @@ import java.io.OptionalDataException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandListenerImpl.java,v 1.3 2002/01/16 21:06:37 rogerk Exp $
+ * @version $Id: CommandListenerImpl.java,v 1.4 2002/01/25 18:45:21 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class CommandListenerImpl extends AbstractCommand implements CommandListener
+public class CommandListenerImpl implements CommandListener
 {
 //
 // Protected Constants
@@ -85,11 +87,6 @@ private ServletContext servletContext;
 
 public CommandListenerImpl()
 {
-}
-
-public CommandListenerImpl(String completion, String error)
-{
-    super(completion, error);
 }
 
 
@@ -192,11 +189,13 @@ private void validateLogin(UserBean user) throws CommandFailedException {
 // Methods from CommandListener
 //
 
-public void doCommand(CommandEvent e)  throws CommandFailedException
+public void doCommand(CommandEvent e, NavigationHandler nh)  throws CommandFailedException
 {
     String sourceId = e.getSourceId();
+    String cmdName = e.getCommandName();
     ObjectManager ot = ObjectManager.getInstance();
-    HttpServletRequest req = (HttpServletRequest) e.getRequest();
+    FacesEvent fe = (FacesEvent) e;
+    HttpServletRequest req = (HttpServletRequest) ((fe.getEventContext()).getRequest());
     UserBean user = (UserBean) ot.get(req, "UserBean");
     servletContext = req.getSession().getServletContext();
 
@@ -208,15 +207,63 @@ public void doCommand(CommandEvent e)  throws CommandFailedException
     if (sourceId.equals("createAccount")) {
 	// serialize the user bean
 	synchronized(servletContext) {
-	    serializeBean(user);
+            try {
+	        serializeBean(user);
+                if ( nh != null ) {
+                    nh.handleCommandSuccess(cmdName);
+                }
+            } catch ( CommandFailedException ce) {
+                if ( nh != null ) {
+                    nh.handleCommandException (cmdName, ce);
+                }
+                throw ce;
+            }
 	}
     }
     else if (sourceId.equals("Login")) {
 	synchronized(servletContext) {
-	    validateLogin(user);
+            try {
+	        validateLogin(user); 
+                if ( nh != null ) {
+                    nh.handleCommandSuccess(cmdName);
+                }
+            } catch ( CommandFailedException ce ) {
+                if ( nh != null ) {
+                    nh.handleCommandException (cmdName,ce);
+                }
+                throw ce;
+            }
 	}
     }
-	
+
+    else if (sourceId.equals("checkout")) {
+        synchronized(servletContext) {
+            try {
+                if ( nh != null ) {
+                    nh.handleCommandSuccess(cmdName);
+                }
+            } catch ( CommandFailedException ce ) {
+                if ( nh != null ) {
+                    nh.handleCommandException (cmdName,ce);
+                }
+                throw ce;
+            }
+        }
+    }
+    else if (sourceId.equals("confirm")) {
+        synchronized(servletContext) {
+            try {
+                if ( nh != null ) {
+                    nh.handleCommandSuccess(cmdName);
+                }
+            } catch ( CommandFailedException ce ) {
+                if ( nh != null ) {
+                    nh.handleCommandException (cmdName,ce);
+                }
+                throw ce;
+            }
+        }
+    }
 }
 
 

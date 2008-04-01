@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.4 2002/01/16 21:06:37 rogerk Exp $
+ * $Id: EventHandler.java,v 1.5 2002/01/25 18:45:20 visvan Exp $
  */
 
 /*
@@ -13,8 +13,9 @@ import javax.faces.CommandListener;
 import javax.faces.CommandEvent;
 import javax.faces.CommandFailedException;
 import javax.faces.ValueChangeListener;
-import javax.faces.AbstractCommand;
 import javax.faces.ValueChangeEvent;
+import javax.faces.NavigationHandler;
+
 import javax.servlet.http.*;
 import javax.servlet.*;
 
@@ -23,19 +24,22 @@ import javax.servlet.*;
  * An object should implement this interface if it needs
  * to respond to a command event.
  */
-public class EventHandler extends AbstractCommand implements CommandListener,ValueChangeListener{
+public class EventHandler implements CommandListener,ValueChangeListener{
 
-    public EventHandler () {
-    }
-
-    public EventHandler (String cp, String ep ) {
-        super ( cp, ep );
+    public EventHandler ( ) {
+        //super ( cp, ep );
         // System.out.println("Completion path " + cp );
         // System.out.println("Error path " + ep );
         // System.out.println("Event Handler constructor");
     }
 
-    public void doCommand(CommandEvent e)  throws CommandFailedException {
+    public void doCommand(CommandEvent e, NavigationHandler nh )  
+            throws CommandFailedException {
+
+       if ( nh != null ) {
+           System.out.println("Command " + e.getCommandName() + " Execution Successful");
+           nh.handleCommandSuccess(e.getCommandName());
+       } 
        System.out.println("Name of UIComponent that generated event " + e.getSourceId());
        System.out.println("CommandEvent processing successful");
     }
@@ -43,7 +47,7 @@ public class EventHandler extends AbstractCommand implements CommandListener,Val
     public void handleValueChange(ValueChangeEvent e) {
        System.out.println("Name of UIComponent that generated event " + e.getSourceId());
        System.out.println("New Value " + e.getNewValue());
-       System.out.println("CommandEvent processing successful");
+       System.out.println("ValueChangeEvent processing successful");
     }
 
     

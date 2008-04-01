@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.18 2002/01/25 18:45:17 visvan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.faces.RenderContext;
 import javax.faces.Constants;
 import javax.faces.UISelectBoolean;
 import javax.faces.UISelectOne;
-
+import javax.faces.EventContext;
 import javax.faces.ObjectManager;
 
 /**
@@ -46,7 +46,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.18 2002/01/25 18:45:17 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -190,7 +190,7 @@ public Renderer getRenderer(String name) throws FacesException {
     return result;
 }
 
-public void queueEvents(ServletRequest request, EventQueue queue) {
+public void queueEvents(EventContext eventContext) {
 
     String param_name = null;
     String param_value = null;
@@ -199,12 +199,22 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
     Vector cmd_events = new Vector();
     ObjectManager objectManager = null;
     RenderContext rc = null;
+    EventQueue eventQueue = null;
+    ServletRequest request = null; 
  
+    // getServletRequest 
+    request = eventContext.getRequest();
+    Assert.assert_it(request != null );
+
     Enumeration param_names = request.getParameterNames();
 
     if ( param_names.hasMoreElements() ) {
-        // get ObjectManager
-        objectManager = ObjectManager.getInstance();
+        // get eventQueue
+        eventQueue = eventContext.getEventQueue(); 
+        Assert.assert_it(eventQueue != null);
+ 
+        // getObjectManager
+        objectManager = eventContext.getObjectManager();
         Assert.assert_it(objectManager != null );
 
         // get renderContext
@@ -278,15 +288,15 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
 	    }
 
             // construct value changed event objects and put in the queue.
-            ValueChangeEvent e =  new ValueChangeEvent(request, param_name,
-                        model_str, param_value);
+            ValueChangeEvent e =  new ValueChangeEvent(eventContext,
+                        param_name, param_value);
             if ( old_value != null && old_value.compareTo(param_value) != 0 ) {
-                queue.add(e);
+                eventQueue.add(e);
             } else if ( old_value == null ) {
-                queue.add(e);
+                eventQueue.add(e);
             }
 	} else if ( c instanceof UICommand) {
-            CommandEvent e =  new CommandEvent(request, param_name, 
+            CommandEvent e =  new CommandEvent(eventContext, param_name, 
 					       param_value);
             cmd_events.add(e);
         }
@@ -295,7 +305,7 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
     // add command events to the end of the queue
     for ( int i = 0; i < cmd_events.size(); ++i ) {
         CommandEvent e = (CommandEvent) cmd_events.elementAt(i);
-        queue.add(e);
+        eventQueue.add(e);
     }
 }
 									

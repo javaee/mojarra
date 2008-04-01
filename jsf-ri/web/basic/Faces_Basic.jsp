@@ -14,11 +14,18 @@
         <faces:DeclareBean scope="session" id="ShipTypeBean" 
                            className="basic.ShipTypeBean"/>
 
-        <faces:Form id="basicForm" model="LoginBean">
+        <faces:NavigationMap id="navMap" scope="session" >
+            <faces:outcome commandName="login" outcome="success" targetAction="forward"
+                    targetPath = "welcome.jsp" />
+
+            <faces:outcome commandName="login" outcome="failure" targetAction="forward"
+                    targetPath = "error.jsp" />
+        </faces:NavigationMap>
+
+        <faces:Form id="basicForm" model="LoginBean" navigationMapId="navMap" >
             <faces:Listener id="loginListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="radioListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="optionListener" scope="session" className="basic.EventHandler" />
-            <faces:Command id="handleLogin" scope="session" className="basic.EventHandler" onCompletion="welcome.jsp" onError="error.jsp"/>
 
            <table> 
             <tr> 
@@ -78,7 +85,7 @@
           </table>
 </tr>
              <tr> 
-             <td><faces:Command_Button id="login" label="login" command="handleLogin" /></td>
+             <td><faces:Command_Button id="login" label="login" commandListener="loginListener" /></td>
              </tr>
 
           </table>

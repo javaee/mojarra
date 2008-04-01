@@ -297,7 +297,6 @@
             <test name="com.sun.faces.TestNavigationMap"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
             <test name="com.sun.faces.TestEventQueue"/>
-            <test name="com.sun.faces.TestEventDispatcherFactory"/>
         </junit>
 
     </target>

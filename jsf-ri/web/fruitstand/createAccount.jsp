@@ -16,12 +16,20 @@
 <font size="4" color="#0000FF">Open a New Account </font><body bgcolor="#FFFFFF" text="#000000"> 
 
 <faces:UseFaces>
-  <faces:Form id="CreateAccountForm" model="UserBean">
 
-    <faces:Command id="handleCreateAccount" scope="session" 
-                   className="fruitstand.CommandListenerImpl" 
-                   onCompletion="Login.jsp" 
-                   onError="createAccount.jsp"/>
+  <faces:NavigationMap id="AccountNavMap" scope="session" >
+
+        <faces:outcome commandName="Create Account" outcome="success" targetAction="forward"
+                targetPath = "Login.jsp" />
+
+        <faces:outcome commandName="Create Account" outcome="failure" targetAction="forward"
+                targetPath = "createAccount.jsp" />
+
+   </faces:NavigationMap>
+
+  <faces:Listener id="handleCreateAccount" scope="session" className="fruitstand.CommandListenerImpl" />
+
+  <faces:Form id="CreateAccountForm" model="UserBean" navigationMapId="AccountNavMap" >
 
   <table width="450">
     <tr> 
@@ -126,7 +134,7 @@
     <tr> 
       <td> 
         <faces:Command_Button id="createAccount" label="Create Account" 
-                              command="handleCreateAccount"/>
+                              commandListener="handleCreateAccount"/>
       </td>
       <td>&nbsp;</td>
     </tr>

@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.17 2002/01/24 00:35:24 rogerk Exp $
+ * $Id: Output_TextTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.UIOutput;
 import javax.faces.ObjectManager;
-import java.util.Vector;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -37,7 +36,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.17 2002/01/24 00:35:24 rogerk Exp $
+ * @version $Id: Output_TextTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
  * 
  *
  */
@@ -60,7 +59,6 @@ public class Output_TextTag extends TagSupport
     private String id = null;
     private String value = null;
     private String scope = null;
-    private String valueChangeListener = null;
     private String model = null;
 
     // Relationship Instance Variables
@@ -154,18 +152,6 @@ public class Output_TextTag extends TagSupport
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         ot.put(pageContext.getSession(), id, c);
-
-        if ( valueChangeListener != null ) {
-            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
-            Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
-            if ( listeners == null) {
-                listeners = new Vector();
-            }
-            // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectManager.
-            listeners.add(valueChangeListener);
-            ot.put(pageContext.getSession(),lis_name, listeners);
-        }
     }
 
     /**
@@ -214,7 +200,6 @@ public class Output_TextTag extends TagSupport
         id = null;
         value = null;
         scope = null;
-        valueChangeListener = null;
         model = null;
     }
 
@@ -294,23 +279,6 @@ public class Output_TextTag extends TagSupport
      */
     public void setValue(String value) {
         this.value = value;
-    }
-
-    /**
-     * Returns the value of valueChangeListener attribute
-     *
-     * @return String value of valueChangeListener attribute
-     */
-    public String getValueChangeListener() {
-        return this.valueChangeListener;
-    }
-
-    /**
-     * Sets valueChanheListener attribute
-     * @param change_listener value of formListener attribute
-     */
-    public void setValueChangeListener(String change_listener) {
-        this.valueChangeListener = change_listener;
     }
 
     /**

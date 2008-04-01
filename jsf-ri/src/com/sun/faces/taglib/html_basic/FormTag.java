@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.22 2002/01/24 00:35:24 rogerk Exp $
+ * $Id: FormTag.java,v 1.23 2002/01/25 18:45:18 visvan Exp $
  */
 
 /*
@@ -28,7 +28,6 @@ import javax.faces.UIForm;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.faces.ObjectManager;
-import java.util.Vector;
 
 /**
  *
@@ -36,7 +35,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.22 2002/01/24 00:35:24 rogerk Exp $
+ * @version $Id: FormTag.java,v 1.23 2002/01/25 18:45:18 visvan Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -61,7 +60,8 @@ public class FormTag extends TagSupport
     private String model = null;
     private String scope = null;
     private String formListener = null;
-
+    private String navigationMapId = null;
+    
     // Relationship Instance Variables
 
     //
@@ -144,28 +144,13 @@ public class FormTag extends TagSupport
      */
     public void addToScope(UIForm c, ObjectManager ot) {
    
-        Vector listeners = null; 
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         ot.put(pageContext.getSession(), id, c);
-
-        // PENDING ( visvan ) this should be done in Component's 
-        // addListener method. 
-        if ( formListener != null ) {
-            String lis_name = id.concat(Constants.REF_FORMLISTENERS);
-            listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
-            if ( listeners == null) {
-                listeners = new Vector();
-            }    
-            // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectManager.
-            listeners.add(formListener);
-            ot.put(pageContext.getSession(),lis_name, listeners);
-        }
-    }
+    }   
 
     /**
      * Creates a Form component and sets renderer specific
@@ -173,12 +158,21 @@ public class FormTag extends TagSupport
      *
      * @param rc renderContext
      */
-    protected UIForm createComponent(RenderContext rc) {
+    protected UIForm createComponent(RenderContext rc) throws JspException {
         
         UIForm c = new UIForm();
 
         // set renderer specific properties 
         c.setId(getId());
+        try {
+            c.addFormListener(formListener);    
+            if ( navigationMapId != null ) {
+                c.setNavigationMapId(navigationMapId);
+            }    
+        } catch (FacesException fe) {
+            throw new JspException("Listener + " + formListener +
+                " does not implement formListener interface or doesn't exist" );
+        }    
 
         // set render independent attributes
         // make sure that the model object is registered
@@ -203,6 +197,23 @@ public class FormTag extends TagSupport
      */
     public void setId(String id) {
         this.id = id;
+    }
+    
+    /**
+     * Returns the value of the navigationMapId attribute
+     *
+     * @return String value of navigationMapId attribute
+     */
+    public String getNavigationMapId() {
+        return this.navigationMapId;
+    }
+
+    /**
+     * Sets NavigationMapId attribute
+     * @param navMap_id value of navigationMapId attribute 
+     */
+    public void setNavigationMapId(String navMap_id) {
+        this.navigationMapId = navMap_id;
     }
 
     /**

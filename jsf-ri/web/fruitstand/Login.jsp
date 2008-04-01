@@ -22,12 +22,19 @@
   <faces:DeclareBean scope="session" id="ShipTypeBean" 
                      className="fruitstand.ShipTypeBean"/>
 
-  <faces:Command id="handleLogin" scope="session" 
-                 className="fruitstand.CommandListenerImpl" 
-                 onCompletion="StoreFront.jsp" 
-                 onError="Login.jsp"/>
+  <faces:Listener id="handleLogin" scope="session" className="fruitstand.CommandListenerImpl" />
 
-  <faces:Form id="LoginForm" model="UserBean">
+  <faces:NavigationMap id="LoginNavMap" scope="session" >
+
+        <faces:outcome commandName="login" outcome="success" targetAction="forward"
+                targetPath = "StoreFront.jsp" />
+
+        <faces:outcome commandName="login" outcome="failure" targetAction="forward"
+                targetPath = "Login.jsp" />
+
+   </faces:NavigationMap>
+
+  <faces:Form id="LoginForm" model="UserBean" navigationMapId="LoginNavMap" >
 
     <table>
     <tr>
@@ -44,7 +51,8 @@
     </tr>
     </table>
 
-<p> <faces:Command_Button id="Login" label="login" command="handleLogin" /> 
+<p> <faces:Command_Button id="Login" label="login" commandListener="handleLogin" /> 
+
 <p><font color="#000000">click&nbsp;</font> <faces:Command_Hyperlink target="createAccount.jsp" text="here"/> to open new account
 <hr WIDTH="100%">
 <p><img SRC="duke.gif" height=55 width=49 align=ABSCENTER> Thanks

@@ -1,5 +1,5 @@
 /*
- * $Id: ShipTypeBean.java,v 1.2 2001/12/20 22:26:45 ofung Exp $
+ * $Id: ShipTypeBean.java,v 1.3 2002/01/25 18:45:20 visvan Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ShipTypeBean.java,v 1.2 2001/12/20 22:26:45 ofung Exp $
+ * @version $Id: ShipTypeBean.java,v 1.3 2002/01/25 18:45:20 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,6 +84,7 @@ public Object getShipType() {
 }
 
 public void setCurrentShipType(Object curShipType) {
+    System.out.println("set current ship type " + curShipType);
     currentItem = curShipType;
 }
 

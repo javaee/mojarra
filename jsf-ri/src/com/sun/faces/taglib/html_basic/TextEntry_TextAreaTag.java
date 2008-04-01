@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.17 2002/01/24 00:35:25 rogerk Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.UITextEntry;
 import javax.faces.ObjectManager;
-import java.util.Vector;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -37,7 +36,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.17 2002/01/24 00:35:25 rogerk Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
  * 
  *
  */
@@ -120,7 +119,6 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         // 2. Get or create the component instance.
         //
         c = (UITextEntry) ot.get(pageContext.getRequest(), getId());
-
         if (c == null) {
             c = createComponent(rc);
             addToScope(c, ot);
@@ -156,18 +154,6 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         ot.put(pageContext.getSession(), id, c);
-
-        if ( valueChangeListener != null ) {
-            String lis_name = id.concat(Constants.REF_VALUECHANGELISTENERS);
-            Vector listeners = (Vector) ot.get(pageContext.getRequest(), lis_name);
-            if ( listeners == null) {
-                listeners = new Vector();
-            }
-            // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectManager.
-            listeners.add(valueChangeListener);
-            ot.put(pageContext.getSession(),lis_name, listeners);
-        }
     }
 
     /**
@@ -250,7 +236,8 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
      * Creates a TextEntry component and sets renderer specific
      * properties.
      */
-    protected UITextEntry createComponent(RenderContext rc) {
+    protected UITextEntry createComponent(RenderContext rc) 
+            throws JspException {
         UITextEntry c = new UITextEntry();
         // set renderer specific properties 
         c.setId(getId());
@@ -258,6 +245,13 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         c.setAttribute("cols", cols);
         c.setAttribute("wrap", wrap);
 
+       try {
+            c.addValueChangeListener(valueChangeListener);    
+        } catch (FacesException fe) {
+            throw new JspException("Listener + " + valueChangeListener +
+                   " does not implement valueChangeListener interface" );
+        }
+        
         // If model attribute is not found get it
         // from parent form if it exists. If not
         // set text as an attribute so that it can be

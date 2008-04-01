@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.18 2002/01/24 00:35:24 rogerk Exp $
+ * $Id: Command_ButtonTag.java,v 1.19 2002/01/25 18:45:18 visvan Exp $
  */
 
 /*
@@ -24,10 +24,8 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.UICommand;
-import javax.faces.UIForm;
 import javax.faces.ObjectManager;
 
-import java.util.Vector;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -37,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.18 2002/01/24 00:35:24 rogerk Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.19 2002/01/25 18:45:18 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -65,8 +63,7 @@ public class Command_ButtonTag extends TagSupport {
     private String commandName = null;
     private String scope = null;
     private String commandListener = null;
-    private String command = null;
- 
+    
     // Relationship Instance Variables
 
     //
@@ -134,23 +131,6 @@ public class Command_ButtonTag extends TagSupport {
     }
 
     /**
-     * Returns the value of commandListener attribute
-     *
-     * @return String value of commandListener attribute
-     */
-    public String getCommand() {
-        return this.command;
-    }
-
-    /**
-     * Sets command attribute
-     * @param command value of command attribute
-     */
-    public void setCommand(String command) {
-        this.command = command;
-    }
-
-    /**
      * Returns the value of the scope attribute
      *
      * @return String value of scope attribute
@@ -198,7 +178,7 @@ public class Command_ButtonTag extends TagSupport {
             (RenderContext)objectManager.get(pageContext.getSession(),
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
-
+        
         UICommand uiCommand = null;
 
         // 1. if we don't have an "id" generate one
@@ -219,6 +199,14 @@ public class Command_ButtonTag extends TagSupport {
         uiCommand.setId(getId());
         uiCommand.setAttribute("image", getImage());
         uiCommand.setAttribute("label", getLabel());
+        
+        try {
+            uiCommand.addCommandListener(commandListener);    
+        } catch (FacesException fe) {
+            throw new JspException("Listener + " + commandListener +
+                " doesn not exist or does not implement commandListener " + 
+                " interface" );
+        }
 
         // 3. Render the component.
         //
@@ -232,7 +220,6 @@ public class Command_ButtonTag extends TagSupport {
             throw new JspException("Problem rendering component: "+
                 f.getMessage());
         }
-
         return (EVAL_BODY_INCLUDE);
     }
     
@@ -285,7 +272,6 @@ public class Command_ButtonTag extends TagSupport {
         commandName = null;
         scope = null;
         commandListener = null;
-        command = null;
     }
 
     /** Adds the component and listener to the ObjectManager
@@ -296,36 +282,12 @@ public class Command_ButtonTag extends TagSupport {
      */
     public void addToScope(UICommand c, ObjectManager objectManager) {
    
-        Vector listeners = null; 
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
         // is resubmitted we would't be able to retrieve the state of the
         // components. So to get away with that we are storing in session
         // scope. This should be fixed later.
         objectManager.put(pageContext.getSession(), id, c);
-  
-        if ( commandListener != null ) {
-            String lis_name = id.concat(Constants.REF_COMMANDLISTENERS);
-            listeners = (Vector) objectManager.get(pageContext.getRequest(), 
-						   lis_name);
-            if ( listeners == null) {
-                listeners = new Vector();
-            }    
-            // this vector contains only the name of the listeners. The
-            // listener itself is stored in the objectManager.
-            listeners.add(commandListener);
-            objectManager.put(pageContext.getSession(),lis_name, listeners);
-        }
-
-        if ( command != null ) {
-            // put the "Command" listener in the objectManager
-            String cmd_name = id.concat(Constants.REF_COMMAND);
-            String cmd = (String) objectManager.get(pageContext.getRequest(), 
-						    cmd_name);
-            if ( cmd == null) {
-                objectManager.put(pageContext.getSession(),cmd_name, command);
-            }
-        }
     }
 
     

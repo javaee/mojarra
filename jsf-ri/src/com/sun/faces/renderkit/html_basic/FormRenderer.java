@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.15 2002/01/24 00:35:23 rogerk Exp $
+ * $Id: FormRenderer.java,v 1.16 2002/01/25 18:45:17 visvan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.15 2002/01/24 00:35:23 rogerk Exp $
+ * @version $Id: FormRenderer.java,v 1.16 2002/01/25 18:45:17 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -175,6 +175,19 @@ public class FormRenderer extends Object implements Renderer
                 out.append("\">\n");
             }
         }
+        
+        // render the formId as a hidden field. This will be used 
+        // to get the navigationMap object through the navigationMapId
+        // stored in UIForm.
+        String formId = (String) c.getId();
+        Assert.assert_it(null != formId);
+
+        out.append("\n<INPUT TYPE=\"HIDDEN\" NAME=\"");
+        out.append(Constants.REF_UIFORMID);
+        out.append("\" VALUE=\"");
+        out.append(formId);
+        out.append("\">\n");
+                
         out.append("</FORM>");
         outputMethod.writeText(out.toString());
         outputMethod.flush();
