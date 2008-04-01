@@ -1,5 +1,5 @@
 /*
- * $Id: BasicApplicationHandler.java,v 1.1 2002/06/18 18:23:31 jvisvanathan Exp $
+ * $Id: BasicApplicationHandler.java,v 1.2 2002/06/25 18:31:08 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.tree.TreeFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.event.FormEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.CommandEvent;
 
 import javax.servlet.ServletRequest;
@@ -31,28 +32,11 @@ import org.mozilla.util.ParameterCheck;
 
 public class BasicApplicationHandler implements ApplicationHandler{
 
-    
-    /**
-     * <p>Process a command event that has been queued for the application.
-     * <strong>FIXME</strong> - does the application need to provide any
-     * feedback to the lifecycle state machine?</p>
-     *
-     * @param context FacesContext for the current request
-     * @param event CommandEvent to be processed
-     */
-    public void commandEvent(FacesContext context, CommandEvent event) {
-    }    
+    public boolean processEvent(FacesContext context, FacesEvent facesEvent) {
 
-
-    /**
-     * <p>Process a form event that has been queued for the application.
-     * <strong>FIXME</strong> - does the application need to provide any
-     * feedback to the lifecycle state machine?</p>
-     *
-     * @param context FacesContext for the current request
-     * @param event FormEvent to be processed
-     */
-    public void formEvent(FacesContext context, FormEvent event) {
+	if (!(facesEvent instanceof FormEvent)) {
+	    return false;
+	}
         
         String treeId = "/welcome.xul";
         TreeFactory treeFactory = (TreeFactory)
@@ -60,6 +44,7 @@ public class BasicApplicationHandler implements ApplicationHandler{
         Assert.assert_it(null != treeFactory);
         
         ServletContext sc = context.getServletContext();
-        context.setResponseTree(treeFactory.createTree(sc,treeId));  
+        context.setResponseTree(treeFactory.getTree(sc,treeId));  
+	return false;
     }    
 }

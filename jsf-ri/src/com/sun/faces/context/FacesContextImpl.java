@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.10 2002/06/22 00:15:07 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.11 2002/06/25 18:31:08 eburns Exp $
  */
 
 /*
@@ -58,7 +58,6 @@ public class FacesContextImpl extends FacesContext
     private ServletContext servletContext = null;
     private Lifecycle lifecycle = null;
     private Locale locale = null;
-    private int phaseId = 0;
     private ServletRequest request = null;
     private Tree requestTree = null;
     private ServletResponse response = null;
@@ -207,16 +206,6 @@ public class FacesContextImpl extends FacesContext
 	
 	return result;
     }
-
-    public int getPhaseId() {
-        return (this.phaseId);
-    }
-
-
-    public void setPhaseId(int phaseId) {
-        this.phaseId = phaseId;
-    }
-
 
     public Tree getRequestTree() {
         return (this.requestTree);
@@ -500,6 +489,11 @@ public class FacesContextImpl extends FacesContext
         } else {
             throw new FacesException("Expression should start with ${");
         }    
+    }
+
+
+    public void release() {
+        throw new FacesException("UnImplemented");
     }
     
     /**

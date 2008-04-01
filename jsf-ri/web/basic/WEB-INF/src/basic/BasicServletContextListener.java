@@ -1,5 +1,5 @@
 /*
- * $Id: BasicServletContextListener.java,v 1.1 2002/06/18 18:23:32 jvisvanathan Exp $
+ * $Id: BasicServletContextListener.java,v 1.2 2002/06/25 18:31:09 eburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -32,7 +32,7 @@ import javax.faces.lifecycle.ApplicationHandler;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BasicServletContextListener.java,v 1.1 2002/06/18 18:23:32 jvisvanathan Exp $
+ * @version $Id: BasicServletContextListener.java,v 1.2 2002/06/25 18:31:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class BasicServletContextListener implements ServletContextListener
         LifecycleFactory factory = (LifecycleFactory)
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle =
-            factory.createLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+            factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
         lifecycle.setApplicationHandler(handler); 
     }
 
