@@ -1,5 +1,5 @@
 /*
- * $Id: TestAbstractFactory.java,v 1.4 2002/04/15 20:11:03 jvisvanathan Exp $
+ * $Id: TestAbstractFactory.java,v 1.5 2002/05/17 00:14:03 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestAbstractFactory.java,v 1.4 2002/04/15 20:11:03 jvisvanathan Exp $
+ * @version $Id: TestAbstractFactory.java,v 1.5 2002/05/17 00:14:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -248,6 +248,29 @@ public void testNewFactory()
 								widgetMap);
     result = null != widget;
     assertTrue(result);
+}
+
+public void testNewFactoryLazy()
+{
+
+    boolean result;
+    WidgetFactory.Widget widget = null;
+    HashMap widgetMap = new HashMap();
+    final String WIDGET = "WIDGET";
+
+    abstractFactory.addFactoryForFacesName("com.sun.faces.WidgetFactory", 
+					   WIDGET);
+
+    widgetMap.put("paramOne", new Object());
+    widgetMap.put("paramTwo", new Integer(1));
+    widgetMap.put("paramThree", new Boolean(false));
+    widgetMap.put("paramFour", "filename");
+
+    widget = (WidgetFactory.Widget) abstractFactory.newInstance(WIDGET, 
+								widgetMap);
+    result = null != widget;
+    assertTrue(result);
+
 }
 
 
