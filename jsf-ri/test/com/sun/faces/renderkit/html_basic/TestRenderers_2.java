@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.6 2002/06/26 21:25:10 eburns Exp $
  */
 
 /*
@@ -11,17 +11,12 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.CompareFiles;
-import com.sun.faces.FileOutputResponseWriter;
-import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.tree.XmlTreeImpl;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UICommand;
@@ -37,15 +32,9 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.JspTestCase;
+
+import com.sun.faces.JspFacesTestCase;
 
 /**
  *
@@ -53,21 +42,29 @@ import org.apache.cactus.JspTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.6 2002/06/26 21:25:10 eburns Exp $
  * 
  *
  */
 
-public class TestRenderers_2 extends JspTestCase
+public class TestRenderers_2 extends JspFacesTestCase
 {
     //
     // Protected Constants
     //
-   public static final String PATH_ROOT = "./build/test/servers/tomcat40/webapps/test/";
+    public boolean sendWriterToFile() {
+        return true;
+    }    
 
-   public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
-        "CorrectRenderersResponse_2";
+    public String getExpectedOutputFilename() {
+        return "CorrectRenderersResponse_2";
+    }
 
+    public String [] getLinesToIgnore() {
+        String[] lines =  {"<a href=\"/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId\">HyperlinkRenderer</a>"};
+        return lines;
+    }   
+ 
     //
     // Class Variables
     //
@@ -75,9 +72,7 @@ public class TestRenderers_2 extends JspTestCase
     //
     // Instance Variables
     //
-    private FacesContext  facesContext = null;
     private FacesContextFactory  facesContextFactory = null;
-    private FileOutputResponseWriter responseWriter = null;
 
     // Attribute Instance Variables
     // Relationship Instance Variables
@@ -96,38 +91,14 @@ public class TestRenderers_2 extends JspTestCase
     // Methods from TestCase
     //
     public void setUp() {
-        System.setProperty(FactoryFinder.FACES_CONTEXT_FACTORY,
-		       "com.sun.faces.context.FacesContextFactoryImpl");
-        facesContextFactory = (FacesContextFactory) 
-	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        assertTrue(null != facesContextFactory);
-    
-        assertTrue(request != null);
-        assertTrue(response != null);
-        assertTrue(config.getServletContext() != null);
-          
-        facesContext = 
-	facesContextFactory.createFacesContext(config.getServletContext(),
-					       request, response);
-        assertTrue(null != facesContext);
+	super.setUp();
 
-        // this stuff is needed for testing HyperlinkRenderer.encode()
-
-        HtmlBasicRenderKit renderKit = new HtmlBasicRenderKit();
-        config.getServletContext().setAttribute(RIConstants.DEFAULT_RENDER_KIT,
-            renderKit);
-        XmlTreeImpl xmlTree = new XmlTreeImpl(
-            config.getServletContext(), new UICommand(), "treeId", "");
-        facesContext.setResponseTree(xmlTree);
-	responseWriter = new FileOutputResponseWriter();
-	facesContext.setResponseWriter(responseWriter);
-	assertTrue(responseWriter == facesContext.getResponseWriter());
+        XmlTreeImpl xmlTree = 
+	    new XmlTreeImpl(getFacesContext().getServletContext(), 
+			    new UICommand(), "treeId", "");
+        getFacesContext().setResponseTree(xmlTree);
+	assertTrue(null != getFacesContext().getResponseWriter());
     }     
-
-    public void tearDown() {
-        config.getServletContext().removeAttribute(
-            RIConstants.DEFAULT_RENDER_KIT);
-    }
 
     public void beginRenderers(WebRequest theRequest) {
         // for CheckboxRenderer
@@ -160,10 +131,7 @@ public class TestRenderers_2 extends JspTestCase
             testSecretRenderer(root);
             testTextRenderer(root);
 
-            assertTrue("File Comparison failed: diff -u " +
-		       FileOutputResponseWriter.RESPONSE_WRITER_FILENAME + 
-		       " " + EXPECTED_OUTPUT_FILENAME,
-		       filesCompare());
+            assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
             t.printStackTrace();
             assertTrue(false);
@@ -189,7 +157,7 @@ public class TestRenderers_2 extends JspTestCase
         // test decode method
 
         System.out.println("    Testing decode method - no parameter");
-        checkboxRenderer.decode(facesContext, selectBoolean);
+        checkboxRenderer.decode(getFacesContext(), selectBoolean);
         Boolean val = (Boolean)selectBoolean.getValue();
         assertTrue(!val.booleanValue());
 
@@ -200,7 +168,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing decode method - parameter (on)");
         selectBoolean.setComponentId("my_checkbox_on");
         selectBoolean.setValue(null);
-        checkboxRenderer.decode(facesContext, selectBoolean); 
+        checkboxRenderer.decode(getFacesContext(), selectBoolean); 
         val = (Boolean)selectBoolean.getValue();
         assertTrue(val.booleanValue());
         
@@ -210,7 +178,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing decode method - parameter (yes)");
         selectBoolean.setComponentId("my_checkbox_yes");
         selectBoolean.setValue(null);
-        checkboxRenderer.decode(facesContext, selectBoolean);
+        checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
         assertTrue(val.booleanValue());
             
@@ -219,7 +187,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing decode method - parameter (true)");
         selectBoolean.setComponentId("my_checkbox_true");
         selectBoolean.setValue(null);
-        checkboxRenderer.decode(facesContext, selectBoolean);
+        checkboxRenderer.decode(getFacesContext(), selectBoolean);
         val = (Boolean)selectBoolean.getValue();
         assertTrue(val.booleanValue());
             
@@ -228,18 +196,18 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing encode method - rendering checked");
         selectBoolean.setComponentId("my_checkbox");
         selectBoolean.setSelected(true);
-        checkboxRenderer.encodeBegin(facesContext, selectBoolean);
-        responseWriter.write("\n");
+        checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
+        getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked");
         selectBoolean.setSelected(false);
-        checkboxRenderer.encodeBegin(facesContext, selectBoolean);
-        responseWriter.write("\n");
+        checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
+        getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked with label");
         selectBoolean.setAttribute("label", "Foo");
-        checkboxRenderer.encodeBegin(facesContext, selectBoolean);
-        responseWriter.write("\n");
+        checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
+        getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -262,18 +230,18 @@ public class TestRenderers_2 extends JspTestCase
         HyperlinkRenderer hyperlinkRenderer = new HyperlinkRenderer();
 
         System.out.println("    Testing decode method...");
-        hyperlinkRenderer.decode(facesContext, command);
+        hyperlinkRenderer.decode(getFacesContext(), command);
 
         // Verify command event was set for the application..
         System.out.println("    Testing added application event (commandEvent)..");
-        Iterator iter = facesContext.getApplicationEvents();
+        Iterator iter = getFacesContext().getApplicationEvents();
         assertTrue(iter != null); 
 
         // Test encode method
 
         System.out.println("    Testing encode method...");
-        hyperlinkRenderer.encodeBegin(facesContext, command);
-        responseWriter.write("\n");
+        hyperlinkRenderer.encodeBegin(getFacesContext(), command);
+        getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -305,7 +273,7 @@ public class TestRenderers_2 extends JspTestCase
         // test decode method
 
         System.out.println("    Testing decode method... ");
-        optionlistRenderer.decode(facesContext, selectOne);
+        optionlistRenderer.decode(getFacesContext(), selectOne);
         assertTrue(((String)selectOne.getValue()).equals("Blue"));
 
         // test encode method
@@ -313,8 +281,8 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing encode method... ");
         selectOne.setComponentId("my_optionlist");
         selectOne.setValue("Blue");
-        optionlistRenderer.encodeBegin(facesContext, selectOne);
-        responseWriter.write("\n");
+        optionlistRenderer.encodeBegin(getFacesContext(), selectOne);
+        getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -339,14 +307,14 @@ public class TestRenderers_2 extends JspTestCase
         // test decode method
 
         System.out.println("    Testing decode method...");
-        secretRenderer.decode(facesContext, textEntry);
+        secretRenderer.decode(getFacesContext(), textEntry);
         assertTrue(((String)textEntry.getValue()).equals("secret"));
 
         // test encode method
 
         System.out.println("    Testing encode method...");
-        secretRenderer.encodeBegin(facesContext, textEntry);
-        responseWriter.write("\n");
+        secretRenderer.encodeBegin(getFacesContext(), textEntry);
+        getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -371,14 +339,14 @@ public class TestRenderers_2 extends JspTestCase
         // test decode method
 
         System.out.println("    Testing decode method...");
-        textRenderer.decode(facesContext, text);
+        textRenderer.decode(getFacesContext(), text);
         assertTrue(((String)text.getValue()).equals("text"));
 
         // test encode method
 
         System.out.println("    Testing encode method...");
-        textRenderer.encodeBegin(facesContext, text);
-        responseWriter.flush();
+        textRenderer.encodeBegin(getFacesContext(), text);
+        getFacesContext().getResponseWriter().flush();
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -389,24 +357,6 @@ public class TestRenderers_2 extends JspTestCase
         assertTrue(result);
         result = textRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
-    }
-
-    private boolean filesCompare() {
-        boolean result = false;
-        try {
-            String ignoreStr = "<a href=\"/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId\">HyperlinkRenderer</a>";
-            CompareFiles cf = new CompareFiles();
-            ArrayList list = new ArrayList();
-            list.add(ignoreStr);
-            result = 
-                cf.filesIdentical(
-                    FileOutputResponseWriter.RESPONSE_WRITER_FILENAME,
-                    EXPECTED_OUTPUT_FILENAME, list);
-        } catch (Exception e ) {
-            System.out.println(e.getMessage());
-            return false;
-        }     
-        return result;
     }
 
 } // end of class TestRenderers2_

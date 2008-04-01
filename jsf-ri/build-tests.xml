@@ -132,7 +132,6 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/classes"
-            includes="**/TestRenderResponsePhase.java,**/TestViewHandlerImpl.java,**/TestLifecycle*.java,**/TestCreateRequest*.java,**/TestGeneric*.java,**/TestApplyRequestValues*.java,**/TestHandleRequestEvents*.java,**/TestProcessValidations*.java,**/TestUpdateModelValues*.java,**/TestInvokeApplication*.java,**/TestComponentFromXul.java,**/TestXmlTreeFactoryImpl.java,**/TestFacesContext*.java,**/TestRenderKitFactory.java,**/TestRenderKit*.java,**/TestRenderers_1.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -310,13 +309,13 @@
 
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
-
-<!-- put non-running testcases here
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/> 
             <test name="com.sun.faces.renderkit.html_basic.TestRenderersFromJsp"/>
-            <test name="com.sun.faces.context.TestMessageResourceImpl"/>
-            <test name="com.sun.faces.context.TestMessageResourceFactoryImpl"/>
+
+            <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
+            <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
+<!-- put non-running testcases here
 -->
         </junit>
 

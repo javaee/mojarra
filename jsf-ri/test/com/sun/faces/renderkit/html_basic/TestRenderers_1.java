@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.9 2002/06/20 20:20:12 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.10 2002/06/26 21:25:10 eburns Exp $
  */
 
 /*
@@ -13,12 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import org.apache.cactus.WebRequest;
 import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.FacesTestCaseService;
 
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-import javax.faces.context.FacesContextFactory;
-import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
 
 import java.io.IOException;
@@ -43,7 +38,6 @@ import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
 import com.sun.faces.renderkit.html_basic.TextAreaRenderer;
 import com.sun.faces.renderkit.html_basic.RadioRenderer;
-import com.sun.faces.FileOutputResponseWriter;
 
 /**
  *
@@ -51,7 +45,7 @@ import com.sun.faces.FileOutputResponseWriter;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.9 2002/06/20 20:20:12 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.10 2002/06/26 21:25:10 eburns Exp $
  * 
  *
  */
@@ -61,10 +55,6 @@ public class TestRenderers_1 extends JspFacesTestCase
     //
     // Protected Constants
     //
-   public static final String PATH_ROOT = "./build/test/servers/tomcat40/webapps/test/";
-
-   public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
-        "CorrectRenderersResponse";
 
    public static final String TEST_URI = "/faces/form/FormRenderer/";
    
@@ -75,7 +65,6 @@ public class TestRenderers_1 extends JspFacesTestCase
     //
     // Instance Variables
     //
-    private FacesContext facesContext = null;
     
     //
     // Attribute Instance Variables
@@ -101,18 +90,12 @@ public class TestRenderers_1 extends JspFacesTestCase
     
     public void setUp() {
         super.setUp();
-        facesContext = facesService.getFacesContext();
-        assertTrue(facesContext != null);
         
-        if ( facesContext.getResponseTree() == null) {
-            HtmlBasicRenderKit renderKit = new HtmlBasicRenderKit();
-            facesContext.getServletContext().setAttribute(RIConstants.DEFAULT_RENDER_KIT,
-                renderKit);
-            XmlTreeImpl xmlTree = new XmlTreeImpl(
-                facesContext.getServletContext(), new UICommand(), "treeId", "");
-            facesContext.setRequestTree(xmlTree);
-        }
-        assertTrue(facesContext.getResponseWriter() != null);
+	XmlTreeImpl xmlTree = 
+	    new XmlTreeImpl(getFacesContext().getServletContext(),
+			    new UICommand(), "treeId", "");
+	getFacesContext().setRequestTree(xmlTree);
+        assertTrue(getFacesContext().getResponseWriter() != null);
      }     
 
     // Methods from FacesTestCase
@@ -121,7 +104,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     }    
 
     public String getExpectedOutputFilename() {
-        return EXPECTED_OUTPUT_FILENAME;
+        return "CorrectRenderersResponse";
     }    
 
     public String [] getLinesToIgnore() {
@@ -155,12 +138,8 @@ public class TestRenderers_1 extends JspFacesTestCase
             verifyTextAreaRenderer(root);
             verifyRadioRenderer(root);
             verifyButtonRenderer(root);
-            
-            boolean result = verifyExpectedOutput();
-            assertTrue("Error comparing files: diff -u "+
-		       EXPECTED_OUTPUT_FILENAME +
-		       " " + 
-		       FileOutputResponseWriter.RESPONSE_WRITER_FILENAME, result);
+
+            assertTrue(verifyExpectedOutput());
         }
         catch (Throwable e) {
             e.printStackTrace();
@@ -181,13 +160,13 @@ public class TestRenderers_1 extends JspFacesTestCase
         InputRenderer inputRenderer = new InputRenderer();
         // test decode method
         System.out.println("Testing decode method");
-        inputRenderer.decode(facesContext, textEntry);
+        inputRenderer.decode(getFacesContext(), textEntry);
         assertTrue(((String)textEntry.getValue()).equals("InputRenderer"));
 
         // test encode method
         System.out.println("Testing encode method");
-        inputRenderer.encodeBegin(facesContext, textEntry);
-        facesContext.getResponseWriter().write("\n");
+        inputRenderer.encodeBegin(getFacesContext(), textEntry);
+        getFacesContext().getResponseWriter().write("\n");
       
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -210,13 +189,13 @@ public class TestRenderers_1 extends JspFacesTestCase
         TextAreaRenderer textAreaRenderer = new TextAreaRenderer();
         // test decode method
         System.out.println("Testing decode method");
-        textAreaRenderer.decode(facesContext, textEntry);
+        textAreaRenderer.decode(getFacesContext(), textEntry);
         assertTrue(((String)textEntry.getValue()).equals("TextAreaRenderer"));
 
         // test encode method
         System.out.println("Testing encode method");
-        textAreaRenderer.encodeBegin(facesContext, textEntry);
-        facesContext.getResponseWriter().write("\n");
+        textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
+        getFacesContext().getResponseWriter().write("\n");
        
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -241,11 +220,11 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test decode method
         System.out.println("Testing decode method");
         
-        formRenderer.decode(facesContext, uiForm);
+        formRenderer.decode(getFacesContext(), uiForm);
         
         // make sure formEvent was queued.
         System.out.println("Testing getApplicationEvent: ");
-        Iterator it = facesContext.getApplicationEvents();
+        Iterator it = getFacesContext().getApplicationEvents();
         assertTrue(it != null );
         
         /* assertTrue(it.hasNext());
@@ -255,13 +234,13 @@ public class TestRenderers_1 extends JspFacesTestCase
       
         // test encode method
         System.out.println("Testing encode method");
-        formRenderer.encodeBegin(facesContext, uiForm);
-        facesContext.getResponseWriter().write("\n");
+        formRenderer.encodeBegin(getFacesContext(), uiForm);
+        getFacesContext().getResponseWriter().write("\n");
         
         // test encode method
         System.out.println("Testing encodeEnd method");
-        formRenderer.encodeEnd(facesContext, uiForm);
-        facesContext.getResponseWriter().write("\n");
+        formRenderer.encodeEnd(getFacesContext(), uiForm);
+        getFacesContext().getResponseWriter().write("\n");
         
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -287,15 +266,15 @@ public class TestRenderers_1 extends JspFacesTestCase
         ButtonRenderer buttonRenderer = new ButtonRenderer();
         // test decode method
         System.out.println("Testing decode method");
-        buttonRenderer.decode(facesContext, uiCommand);
-        facesContext.getResponseWriter().write("\n");
+        buttonRenderer.decode(getFacesContext(), uiCommand);
+        getFacesContext().getResponseWriter().write("\n");
         
         // test encode method
         System.out.println("Testing encode method");
-        buttonRenderer.encodeBegin(facesContext, uiCommand);
-        facesContext.getResponseWriter().write("\n");
+        buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
+        getFacesContext().getResponseWriter().write("\n");
         try {
-            facesContext.getResponseWriter().flush();
+            getFacesContext().getResponseWriter().flush();
         } catch (Exception e ) {
             throw new FacesException("Exception while flushing buffer");
         } 
@@ -328,12 +307,12 @@ public class TestRenderers_1 extends JspFacesTestCase
         RadioRenderer radioRenderer = new RadioRenderer();
         // test decode method
         System.out.println("Testing decode method");
-        radioRenderer.decode(facesContext, uiSelectOne);
+        radioRenderer.decode(getFacesContext(), uiSelectOne);
         assertTrue(((String)uiSelectOne.getValue()).equals("Two"));
 
         // test encode method
         System.out.println("Testing encode method");
-        radioRenderer.encodeBegin(facesContext, uiSelectOne);
+        radioRenderer.encodeBegin(getFacesContext(), uiSelectOne);
        
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 

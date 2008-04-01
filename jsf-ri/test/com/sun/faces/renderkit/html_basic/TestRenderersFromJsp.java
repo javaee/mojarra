@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderersFromJsp.java,v 1.5 2002/06/20 01:34:27 eburns Exp $
+ * $Id: TestRenderersFromJsp.java,v 1.6 2002/06/26 21:25:10 eburns Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.Phase;
-import javax.faces.lifecycle.PhaseListener;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FormEvent;
@@ -42,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderersFromJsp.java,v 1.5 2002/06/20 01:34:27 eburns Exp $
+ * @version $Id: TestRenderersFromJsp.java,v 1.6 2002/06/26 21:25:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
