@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.9 2002/05/16 17:09:42 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.10 2002/05/16 18:28:47 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.context;
 
 
+import java.util.Locale;
 import javax.faces.FacesException;     // FIXME - subpackage?
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
@@ -66,6 +67,31 @@ public abstract class FacesContext {
      * instance.</p>
      */
     public abstract Lifecycle getLifecycle();
+
+
+    /**
+     * <p>Return the <code>Locale</code> to be used in localizing the
+     * response being created for this <code>FacesContext</code>.</p>
+     */
+    public abstract Locale getLocale();
+
+
+    /**
+     * <p>Set the <code>Locale</code> to be used in localizing the
+     * response being created for this <code>FacesContext</code>.  If not
+     * set, the default Locale for our servlet container will be used.</p>
+     *
+     * @param locale The new localization Locale
+     */
+    public abstract void setLocale(Locale locale);
+
+
+    /**
+     * <p>Return the {@link MessageList} instance containing validation (and
+     * other) messages that have been accumulated during the processing of
+     * the current request.</p>
+     */
+    public abstract MessageList getMessageList();
 
 
     /**
