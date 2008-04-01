@@ -2179,46 +2179,6 @@
  </tag>
 
  <tag>
-   <name>validation_message</name>
-   <tagclass>com.sun.faces.taglib.ValidationMessageTag</tagclass>
-   <bodycontent>JSP</bodycontent>
-
-   <attribute>
-  
-     <name>componentId</name>
-     <!-- If present, be a valid argument for
-     UIComponent.findComponent().  If not present, the UIComponent to
-     which this validation message is bound is assumed to be the first
-     UIComponent ancestor of this tag. -->
-
-     <required>false</required> 
-     <rtexprvalue>false</rtexprvalue>
-   </attribute>
-
-   <attribute>
-  
-     <name>showAll</name>
-
-     <!-- If non-null, show all messages in the message queue.
-     Overrides all other attributes on this tag. -->
-
-     <required>false</required> 
-     <rtexprvalue>false</rtexprvalue>
-   </attribute>
-
-   <attribute>
-  
-     <name>color</name>
-     <required>false</required> 
-     <rtexprvalue>false</rtexprvalue>
-
-   </attribute>
-
-
-
- </tag>
-
- <tag>
    <name>eventhandler</name>
    <tagclass>javax.faces.webapp.EventHandlerTag</tagclass>
    <bodycontent>JSP</bodycontent>
