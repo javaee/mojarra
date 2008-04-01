@@ -1,0 +1,189 @@
+This directory contains demos for JavaServer (tm) Faces.
+
+Setting up your environment
+===========================
+
+0. Make sure JWSDP_HOME is in your environment, and points to the root
+   of your JWSDP or tomcat installation.  It must be the case that
+   $JWSDP_HOME/common/lib exists.
+
+1. Locating the JSF repositories.
+
+   In order to build the demos, must have access to the jsf-api and
+   jsf-ri repositories.  
+
+   If the directory in which this README resides is installed in your
+   hard drive such that ../jsf-api and ../jsf-ri exist and these
+   directories are the correct source repositories for jsf-api and
+   jsf-ri, you are done.
+
+   If not, you must copy build.properties.sample to build.properties and
+   modify the jsf.api.home and jsf.ri.home properties to correctly
+   identify the location of these repositories.
+
+2. Locating the JSTL jars.
+
+   Copy build.properties.sample to build.properties and modify the
+   properties for standard.jar and jstl.jar to correctly locate these
+   jars in your hard drive.
+
+Creating a Demo From the Template
+=================================
+
+A Template demo webapp has been provided to simplify the task of adding
+demos to this repository.  These steps are a guideline, please don't
+follow the steps blindly and expect everything to work.
+
+1. cp -r templateDemo helloDuke
+
+2. Remove the copied "CVS" directories
+
+   find ./helloDuke -name CVS -exec rm {} \; -print
+
+   Do a manual inspection of helloDuke afterwards to make sure no CVS
+   directories have stuck around.
+
+3. copy any images, jsp files, and html files to the root directory
+
+   cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.jsp ./helloDuke
+   cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.gif ./helloDuke
+   cp /Projects/J2EE/jsf1.0ea2/example/helloDuke/*.html ./helloDuke
+
+4. remove the reminder file
+
+   rm templateDemo_JSP_HTML_IMAGES_GO_HERE
+
+5. Change all references to templateDemo to helloDuke.  This includes
+   changes in build.xml, as well as some directory names, for example
+   WEB-INF/src/templateDemo.
+
+   Once your done with this step, the string "templateDemo" should not
+   appear in any file, filename, or directory name.
+
+6. Copy any java source files into the webapp.
+
+   copy *.java helloDuke/WEB-INF/src/helloDuke
+
+   Make sure the package names are correct in the java source files.
+
+7. Make any changes to web.xml that need to happen.
+
+8. Modify build.xml in this directory to add to the list of demos.  This
+   is important, since this is how the dependent jar files get copied to
+   your demo.  "+" means lines are added.
+
+Index: build.xml
+===================================================================
+RCS file: /export/cvs/jsf-demo/build.xml,v
+retrieving revision 1.4
+diff -u -r1.4 build.xml
+--- build.xml	2002/08/30 21:28:42	1.4
++++ build.xml	2002/08/30 21:29:38
+@@ -49,12 +49,21 @@
+       <param name="demoDir" value="templateDemo"/>
+     </antcall>
+ 
++    <ant target="clean" dir="helloDuke"/>
++    <antcall target="deleteJarsFromDemo">
++      <param name="demoDir" value="helloDuke"/>
++    </antcall>
++
+   </target>
+ 
+   <target name="copyJarsToDemos">
+ 
+     <antcall target="copyJarsToDemo">
+       <param name="demoDir" value="templateDemo"/>
++    </antcall>
++
++    <antcall target="copyJarsToDemo">
++      <param name="demoDir" value="helloDuke"/>
+     </antcall>
+ 
+   </target>
+
+   Make sure you add to both the "clean" and "copyJarsToDemos" targets!
+
+9. Run ant copyJarsToDemos in this directory.  This will copy the
+   dependent jars to all webapps known to this build.xml file.
+
+10. build your webapp!
+
+    cd helloDuke
+
+    ant
+
+    This will compile your classes, create the helloDuke.war, and deploy
+    it to your $JWSDP_HOME/webapps directory.
+
+11. Test it out.  Keep working till it works
+
+12. Add this demo to be built by default.  This is the other side of
+    step 8.
+
+@@ -87,6 +96,8 @@
+ 
+ 
+   <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
++
++    <ant inheritAll="false" dir="${basedir}/helloDuke"/>
+ 
+   </target>
+ 
+13. Verify that everything works by doing the following, in this directory
+
+    ant clean
+
+      Verify that there are no ".class" files anywhere in this tree.
+
+      Verify that none of the webapps produced by this tree are in
+      $JWSDP_HOME/webapps
+
+    ant
+
+      Verify that the expected webapps are in $JWSDP_HOME/webapps
+
+      Start the web server and verify that the web-app works as expected
+
+    ant clean
+
+      Verify the same conditions as before.
+
+14. Now you're ready to check in your new webapp to the tree!  Make sure
+    your webapp contains only the files you want to check in.  No more,
+    no less.  Make sure there are no CVS directories in youw webapp!
+
+    cd to the directory with this README
+
+    cat CVS/Root
+
+      Use this as the value of CVSROOT
+ 
+    cvs -d CVSROOT import jsf-demo/helloDuke helloDuke helloDuke2_0
+
+15. Verify that your import worked correctly
+
+    mv helloDuke helloDuke.orig
+
+    cvs update -d -P
+
+      You should get a new copy of helloDuke.  Re-perform the checks in
+      step 13.
+
+      Once everything works ok, remove your pre-import copy
+
+   rm -rf helloDuke.orig
+
+16. Check in any remaining work
+
+   cvs -n update -d -P 
+
+     This will run the update command without actually modifying
+     anything.  That's what the "-n" is for.  Examine the output and
+     make sure that anything marked with a "?" should *not* be checked
+     in.  
+
+   cvs commit.
+
+You're done
+  

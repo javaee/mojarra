@@ -50,9 +50,14 @@
     <pathelement location="${servlet23.jar}"/>
   </path>
 
-  <target name="clean">
+  <target name="clean" depends="clean-dist">
     <delete dir="${build}" />
     <delete file="templateDemo.war" />
+  </target>
+
+  <target name="clean-dist">
+    <delete file="${myenv.JWSDP_HOME}/webapps/templateDemo.war" />
+    <delete dir="${myenv.JWSDP_HOME}/webapps/templateDemo" />
   </target>
 
   <target name="verifyPreconditions">
@@ -99,7 +104,7 @@
 
   </target>
 
-  <target name="prepare" depends="init,verifyPreconditions"
+  <target name="prepare" depends="init,verifyPreconditions,clean-dist"
    description="Create build directories.">
     <mkdir dir="${build}" />
     <mkdir dir="${build}/WEB-INF" />
@@ -114,8 +119,7 @@
 
   <target name="build-app" depends="prepare" 
      description="Compile app Java files and copy HTML and JSP pages" >
-    <javac srcdir="${basedir}/WEB-INF/src/templateDemo" destdir="${build}/WEB-INF/classes">
-    	<include name="**/*.java" />
+    <javac srcdir="${basedir}/WEB-INF/src" destdir="${build}/WEB-INF/classes">
      	<classpath refid="classpath"/>
     </javac>
     <copy todir="${build}/WEB-INF">

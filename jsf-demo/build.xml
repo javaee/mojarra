@@ -49,12 +49,26 @@
       <param name="demoDir" value="templateDemo"/>
     </antcall>
 
+    <ant target="clean" dir="helloDuke"/>
+    <antcall target="deleteJarsFromDemo">
+      <param name="demoDir" value="helloDuke"/>
+    </antcall>
+
+    <delete> 
+      <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+      <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
+    </delete>
+
   </target>
 
   <target name="copyJarsToDemos">
 
     <antcall target="copyJarsToDemo">
       <param name="demoDir" value="templateDemo"/>
+    </antcall>
+
+    <antcall target="copyJarsToDemo">
+      <param name="demoDir" value="helloDuke"/>
     </antcall>
 
   </target>
@@ -87,6 +101,8 @@
 
 
   <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
+
+    <ant inheritAll="false" dir="${basedir}/helloDuke"/>
 
   </target>
 
