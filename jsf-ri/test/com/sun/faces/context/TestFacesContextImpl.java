@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.4 2002/06/06 00:15:02 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.5 2002/06/12 18:24:06 rkitain Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.4 2002/06/06 00:15:02 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.5 2002/06/12 18:24:06 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -170,7 +170,17 @@ public void testAccessors()
     result = null != requestTree;
     System.out.println("Testing getRequestTree: " + result);
     assertTrue(result);
-    
+
+    boolean exceptionThrown = false; 
+    System.out.println("Testing setRequestTree IllegalStateException..."); 
+    try {
+        facesContext.setRequestTree( new XmlTreeImpl(config.getServletContext(),
+            new UIForm(),"treeId"));
+    } catch (IllegalStateException e) {
+        exceptionThrown = true;
+    }
+    assertTrue(exceptionThrown);
+
     Tree responseTree = facesContext.getResponseTree();
     result = null != responseTree;
     System.out.println("Testing getResponseTree: " + result);

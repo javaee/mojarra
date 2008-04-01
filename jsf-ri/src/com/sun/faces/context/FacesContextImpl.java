@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.5 2002/06/06 00:15:01 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.6 2002/06/12 18:24:06 rkitain Exp $
  */
 
 /*
@@ -172,7 +172,13 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void setRequestTree(Tree requestTree) {
-        ParameterCheck.nonNull(requestTree);
+        if (requestTree == null) {
+            throw new NullPointerException("requestTree Argument is Null");
+        }
+        if (this.requestTree != null) {
+            throw new IllegalStateException("Request Tree has already been "+
+                "set for this request");
+        }
         this.requestTree = requestTree;
         if (this.responseTree == null) {
             this.responseTree = this.requestTree;
@@ -185,7 +191,9 @@ public class FacesContextImpl extends FacesContext
 
 
     public void setResponseTree(Tree responseTree) {
-        ParameterCheck.nonNull(responseTree);
+        if (responseTree == null) {
+            throw new NullPointerException("responseTree Argument is Null");
+        }
         this.responseTree = responseTree;
     }
 
