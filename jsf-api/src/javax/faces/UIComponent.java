@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.10 2002/03/19 00:46:56 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.11 2002/03/20 00:34:11 jvisvanathan Exp $
  */
 
 /*
@@ -681,7 +681,7 @@ public abstract class UIComponent {
 	// Assert.assert_it(null != treeNav);
 	UIComponent next;
 	treeNav.reset();
-        if (treeNav.getRoot().isValid()) {
+        if (treeNav.getRoot().isValid(ec)) {
 	    while (null != (next = treeNav.getNextStart())) {
                 if ( (next instanceof Validatible) ) {
                     next.pushValueToModel(rc);
@@ -713,23 +713,31 @@ public abstract class UIComponent {
      * @return boolean value indicating whether this branch of the UI
      *         component tree is valid
      */
-    public boolean isValid() {
+    public boolean isValid(EventContext ec ) {
+
         boolean valid = false;
         UIComponent child = null;
-        Iterator iterator = getChildren(null);
-        while ( iterator.hasNext() ) {
-            child = (UIComponent) iterator.next();
-            if ( child instanceof Validatible ) {
-                if (((Validatible)child).getValidState() == Validatible.INVALID) {
-                    valid = false;
-                    break;
-                } else {
-                    valid = true;
-                }    
+
+        ObjectManager objectManager = ec.getObjectManager();
+        ServletRequest request = ec.getRequest();
+        RenderContext rc = (RenderContext)objectManager.get(request,
+                        Constants.REF_RENDERCONTEXT);
+        TreeNavigator treeNav = (TreeNavigator)
+            objectManager.get(request, Constants.REF_TREENAVIGATOR);
+
+        // Assert.assert_it(null != treeNav);
+        UIComponent next;
+        treeNav.reset();
+        while (null != (child = treeNav.getNextStart())) {
+            if ( child instanceof Validatible && 
+                 ((Validatible)child).getValidState() == Validatible.INVALID) {
+                valid = false;
+                break;
             } else {
                 valid = true;
             }    
-        }
+        }    
+        treeNav.reset();
         return valid;
     }
 

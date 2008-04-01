@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.8 2002/03/15 20:49:22 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.9 2002/03/20 00:34:10 jvisvanathan Exp $
  */
 
 /*
@@ -200,7 +200,7 @@ public class UICommand extends UIComponent implements EventDispatcher {
         treeNav.getRoot().validateAll(eventContext);
         treeNav.reset();
 
-        if ( !treeNav.getRoot().isValid() ) {
+        if ( !treeNav.getRoot().isValid(eventContext) ) {
             // if validation failed set the outcome in navigationHandler.
             // By default, this would result in current page being redisplayed
             // since there is no targetPath
