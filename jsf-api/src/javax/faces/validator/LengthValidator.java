@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.3 2002/06/14 00:00:08 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.4 2002/06/14 22:16:42 craigmcc Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.faces.context.Message;
  * </ul>
  */
 
-public final class LengthValidator extends ValidatorImpl {
+public class LengthValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants

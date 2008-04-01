@@ -1,5 +1,5 @@
 /*
- * $Id: IntegerRangeValidator.java,v 1.2 2002/06/14 00:00:07 craigmcc Exp $
+ * $Id: IntegerRangeValidator.java,v 1.3 2002/06/14 22:16:41 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.context.Message;
  * </ul>
  */
 
-public final class IntegerRangeValidator extends ValidatorImpl {
+public class IntegerRangeValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants

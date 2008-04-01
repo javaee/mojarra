@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.3 2002/06/14 00:00:08 craigmcc Exp $
+ * $Id: RequiredValidator.java,v 1.4 2002/06/14 22:16:42 craigmcc Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.context.Message;
  * this Validator -- which behavior do we want?</p>
  */
 
-public final class RequiredValidator extends ValidatorImpl {
+public class RequiredValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants

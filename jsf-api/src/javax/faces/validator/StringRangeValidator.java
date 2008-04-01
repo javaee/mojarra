@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.2 2002/06/14 00:00:09 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.3 2002/06/14 22:16:42 craigmcc Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.faces.context.Message;
  * </ul>
  */
 
-public final class StringRangeValidator extends ValidatorImpl {
+public class StringRangeValidator extends ValidatorBase {
 
 
     // ----------------------------------------------------- Manifest Constants
