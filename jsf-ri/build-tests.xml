@@ -59,6 +59,10 @@
         generally should NOT be overridden by command line settings
 -->
 
+    <!-- Default value for debugging arguments is no.  Override in
+         build.properties -->
+    <property name="debug.jvm.args" value=""/>
+
     <!-- Source directory for tests -->
     <property name="src.test.dir" value="${basedir}/test"/>
 
@@ -270,7 +274,7 @@
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
             <!-- uncomment this to attach the debugger to the tomcat vm -->
-            <!-- <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/> -->
+            <jvmarg line="${debug.jvm.args}"/>
 
             <arg value="-config"/>
             <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
