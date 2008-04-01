@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.4 2002/07/15 23:48:33 eburns Exp $
+ * $Id: CompareFiles.java,v 1.5 2002/08/12 19:57:38 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ public class CompareFiles {
 	}
 
 	while (null != newLine && null != oldLine) {
-	    if (!newLine.equalsIgnoreCase(oldLine)) {
+	    if (!newLine.equals(oldLine)) {
 
 		if (null != oldLinesToIgnore) {
 		    // go thru the list of oldLinesToIgnore and see if
@@ -57,7 +57,7 @@ public class CompareFiles {
 		    boolean foundMatch = false;
 		    while (ignoreLines.hasNext()) {
 			String newTrim = ((String) ignoreLines.next()).trim();
-			if (oldLine.equalsIgnoreCase(newTrim)) {
+			if (oldLine.equals(newTrim)) {
 			    foundMatch = true;
 			    break;
 			}

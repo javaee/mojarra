@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.2 2002/08/09 20:13:10 eburns Exp $
+ * $Id: TestUtil.java,v 1.3 2002/08/12 19:57:40 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.component.UIInput;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.2 2002/08/09 20:13:10 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.3 2002/08/12 19:57:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,11 +71,36 @@ public class TestUtil extends ServletFacesTestCase
 	input.setComponentId("testRenderPassthruAttributes");
 	input.setAttribute("notPresent", "notPresent");
 	input.setAttribute("onblur", "javascript:f.blur()");
-	String result = Util.renderPassthruAttributes(getFacesContext(),
-						      input);
-	String expectedResult = "onblur=\"javascript:f.blur()\" ";
+	input.setAttribute("onchange", "javascript:h.change()");
+	String result = Util.renderPassthruAttributes(getFacesContext(),input);
+	String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\" ";
 	assertTrue(result.equals(expectedResult));
+
+	// verify no passthru attributes returns empty string
+	input.setAttribute("onblur", null);
+	input.setAttribute("onchange", null);
+	result = Util.renderPassthruAttributes(getFacesContext(), input);
+	assertTrue(0 == result.length());
     }
+
+    public void testRenderBooleanPassthruAttributes() {
+	UIInput input = new UIInput();
+	input.setComponentId("testBooleanRenderPassthruAttributes");
+	input.setAttribute("disabled", "true");
+	input.setAttribute("readonly", "false");
+	String result = Util.renderBooleanPassthruAttributes(getFacesContext(),
+							     input);
+	String expectedResult = " disabled ";
+	assertTrue(result.equals(expectedResult));
+
+	// verify no passthru attributes returns empty string
+	input.setAttribute("disabled", null);
+	input.setAttribute("readonly", null);
+	result = Util.renderBooleanPassthruAttributes(getFacesContext(), 
+						      input);
+	assertTrue(0 == result.length());
+    }
+
 
 
 } // end of class TestUtil

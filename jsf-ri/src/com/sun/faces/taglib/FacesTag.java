@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.16 2002/08/09 19:00:54 rkitain Exp $
+ * $Id: FacesTag.java,v 1.17 2002/08/12 19:57:36 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.16 2002/08/09 19:00:54 rkitain Exp $
+ * @version $Id: FacesTag.java,v 1.17 2002/08/12 19:57:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -60,49 +60,51 @@ public abstract class FacesTag extends javax.faces.webapp.FacesTag
 protected String key = null;
 protected String imageKey = null;
 protected String bundle = null;
+protected String formatStyle = null;
+protected String formatPattern = null;
 
 protected String accept = null;
-protected String acceptCharSet = null;
-protected String accessKey = null;
+protected String acceptcharset = null;
+protected String accesskey = null;
 protected String action = null;
 protected String alt = null;
-protected String charSet = null;
+protected String charset = null;
 protected String checked = null;
 protected String htmlClass = null;
 protected String cols = null;
 protected String coords = null;
 protected String dir = null;
 protected String disabled = null;
-protected String encType = null;
+protected String enctype = null;
 protected String htmlFor = null;
 protected String height = null;
 protected String href = null;
-protected String hrefLang = null;
+protected String hreflang = null;
 protected String hspace = null;
-protected String isMap = null;
+protected String ismap = null;
 protected String label = null;
 protected String lang = null;
-protected String longDesc = null;
-protected String maxLength = null;
+protected String longdesc = null;
+protected String maxlength = null;
 protected String method = null;
 protected String multiple = null;
 protected String name = null;
-protected String onBlur = null;
-protected String onChange = null;
-protected String onClick = null;
-protected String onDblClick = null;
-protected String onFocus = null;
-protected String onKeyDown = null;
-protected String onKeyPress = null;
-protected String onKeyUp = null;
-protected String onMouseDown = null;
-protected String onMouseMove = null;
-protected String onMouseOut = null;
-protected String onMouseOver = null;
-protected String onMouseUp = null;
-protected String onReset = null;
-protected String onSelect = null;
-protected String onSubmit = null;
+protected String onblur = null;
+protected String onchange = null;
+protected String onclick = null;
+protected String ondblclick = null;
+protected String onfocus = null;
+protected String onkeydown = null;
+protected String onkeypress = null;
+protected String onkeyup = null;
+protected String onmousedown = null;
+protected String onmousemove = null;
+protected String onmouseout = null;
+protected String onmouseover = null;
+protected String onmouseup = null;
+protected String onreset = null;
+protected String onselect = null;
+protected String onsubmit = null;
 protected String readonly = null;
 protected String rel = null;
 protected String rev = null;
@@ -112,11 +114,11 @@ protected String shape = null;
 protected String size = null;
 protected String src = null;
 protected String style = null;
-protected String tabIndex = null;
+protected String tabindex = null;
 protected String target = null;
 protected String title = null;
 protected String type = null;
-protected String useMap = null;
+protected String usemap = null;
 protected String value = null;
 
  
@@ -169,6 +171,25 @@ public FacesTag()
 	bundle = newBundle;
     }
 
+    public String getFormatStyle()
+    {
+	return formatStyle;
+    }
+    
+    public void setFormatStyle(String newFormatStyle)
+    {
+	formatStyle = newFormatStyle;
+    }
+    
+    public String getFormatPattern()
+    {
+	return formatPattern;
+    }
+    
+    public void setFormatPattern(String newFormatPattern)
+    {
+	formatPattern = newFormatPattern;
+    }
 
     // List of MIME types for file upload - 
     // For FORM/INPUT HTML elements
@@ -185,27 +206,27 @@ public FacesTag()
 
     // List of supported char sets - For FORM HTML element
 
-    public String getAcceptCharSet()
+    public String getAcceptcharset()
     {
-        return acceptCharSet;
+        return acceptcharset;
     }
 
-    public void setAcceptCharSet(String newAcceptCharSet) 
+    public void setAcceptcharset(String newAcceptcharset) 
     {
-        acceptCharSet = newAcceptCharSet;
+        acceptcharset = newAcceptcharset;
     }
     
     // Accessibility key char -
     // For "A" (Hyperlink)/BUTTON/INPUT/LABEL/TEXTAREA HTML elements
 
-    public String getAccessKey()
+    public String getAccesskey()
     {
-        return accessKey;
+        return accesskey;
     }
 
-    public void setAccessKey(String newAccessKey) 
+    public void setAccesskey(String newAccesskey) 
     {
-        accessKey = newAccessKey;
+        accesskey = newAccesskey;
     }
 
     // Server-side form handler - For FORM HTML element
@@ -235,14 +256,14 @@ public FacesTag()
     // Char encoding for linked resource -
     // For "A" (Hyperlink) HTML element
 
-    public String getCharSet() 
+    public String getCharset() 
     {
-        return charSet;
+        return charset;
     }
 
-    public void setCharSet(String newCharSet) 
+    public void setCharset(String newCharset) 
     {
-        charSet = newCharSet;
+        charset = newCharset;
     }
 
     // For radio buttons and checkboxes - For INPUT element
@@ -323,14 +344,14 @@ public FacesTag()
 
     // For FORM HTML element
 
-    public String getEncType() 
+    public String getEnctype() 
     {
-        return encType;
+        return enctype;
     }
 
-    public void setEncType(String newEncType)
+    public void setEnctype(String newEnctype)
     {
-        encType = newEncType;
+        enctype = newEnctype;
     }
 
     // Matches field "id" value - For LABEL HTML element
@@ -371,14 +392,14 @@ public FacesTag()
 
     // Language Code - For "A" (Hyperlink) HTML element
 
-    public String getHrefLang() 
+    public String getHreflang() 
     {
-        return hrefLang;
+        return hreflang;
     }
 
-    public void setHrefLang(String newHrefLang)
+    public void setHreflang(String newHreflang)
     {
-        hrefLang = newHrefLang;
+        hreflang = newHreflang;
     }
 
     // Horizontal space - For IMG HTML element
@@ -395,14 +416,14 @@ public FacesTag()
 
     // Use server side image map - For IMG/INPUT HTML elements
 
-    public String getIsMap() 
+    public String getIsmap() 
     {
-        return isMap;
+        return ismap;
     }
 
-    public void setIsMap(String newIsMap)
+    public void setIsmap(String newIsmap)
     {
-        isMap = newIsMap;
+        ismap = newIsmap;
     }
 
     // For OPTION/OPTGROUP HTML elements
@@ -431,26 +452,26 @@ public FacesTag()
 
     // Link to long description - For IMG HTML element
 
-    public String getLongDesc()
+    public String getLongdesc()
     {
-        return longDesc;
+        return longdesc;
     }
 
-    public void setLongDesc(String newLongDesc)
+    public void setLongdesc(String newLongdesc)
     {
-        longDesc = newLongDesc;
+        longdesc = newLongdesc;
     }
 
     // Maximum chars for text fields - For INPUT HTML elements
 
-    public String getMaxLength() 
+    public String getMaxlength() 
     {
-        return maxLength;
+        return maxlength;
     }
 
-    public void setMaxLength(String newMaxLength) 
+    public void setMaxlength(String newMaxlength) 
     {
-        maxLength = newMaxLength;
+        maxlength = newMaxlength;
     }
 
     // HTTP method used to submit the form -
@@ -494,203 +515,203 @@ public FacesTag()
     // Element lost focus - For "A" (Hyperlink)/BUTTON/INPUT/
     // LABEL/SELECT/TEXTAREA HTML elements
 
-    public String getOnBlur() 
+    public String getOnblur() 
     {
-        return onBlur;
+        return onblur;
     }
 
-    public void setOnBlur(String newOnBlur)
+    public void setOnblur(String newOnblur)
     {
-        onBlur = newOnBlur;
+        onblur = newOnblur;
     }
 
     // Element value was changed - For INPUT/SELECT/TEXTAREA HTML elements
-    public String getOnChange() 
+    public String getOnchange() 
     {
-        return onChange;
+        return onchange;
     }
 
-    public void setOnChange(String newOnChange)
+    public void setOnchange(String newOnchange)
     {
-        onChange = newOnChange;
+        onchange = newOnchange;
     }
 
     // A pointer button was clicked - For all HTML elements pertaining
     // to Faces
 
-    public String getOnClick() 
+    public String getOnclick() 
     {
-        return onClick;
+        return onclick;
     }
 
-    public void setOnClick(String newOnClick)
+    public void setOnclick(String newOnclick)
     {
-        onClick = newOnClick;
+        onclick = newOnclick;
     }
 
     // A pointer button was double clicked - For all HTML 
     // elements pertaining to Faces
 
-    public String getOnDblClick() 
+    public String getOndblclick() 
     {
-        return onDblClick;
+        return ondblclick;
     }
 
-    public void setOnDblClick(String newOnDblClick)
+    public void setOndblclick(String newOndblclick)
     {
-        onDblClick = newOnDblClick;
+        ondblclick = newOndblclick;
     }
     
     // Element got the focus - For "A" (Hyperlink)/BUTTON/
     // INPUT/LABEL/SELECT/TEXTAREA HTML elements
 
-    public String getOnFocus() 
+    public String getOnfocus() 
     {
-        return onFocus;
+        return onfocus;
     }
 
-    public void setOnFocus(String newOnFocus)
+    public void setOnfocus(String newOnfocus)
     {
-        onFocus = newOnFocus;
+        onfocus = newOnfocus;
     }
 
     // A key was pressed down - For all HTML elements pertaining
     // to Faces
 
-    public String getOnKeyDown() 
+    public String getOnkeydown() 
     {
-        return onKeyDown;
+        return onkeydown;
     }
 
-    public void setOnKeyDown(String newOnKeyDown)
+    public void setOnkeydown(String newOnkeydown)
     {
-        onKeyDown = newOnKeyDown;
+        onkeydown = newOnkeydown;
     }
     
     // A key was pressed and released - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnKeyPress() 
+    public String getOnkeypress() 
     {
-        return onKeyPress;
+        return onkeypress;
     }
 
-    public void setOnKeyPress(String newOnKeyPress)
+    public void setOnkeypress(String newOnkeypress)
     {
-        onKeyPress = newOnKeyPress;
+        onkeypress = newOnkeypress;
     }
 
     // A key was released - For all HTML elements pertaining
     // to Faces
 
-    public String getOnKeyUp() 
+    public String getOnkeyup() 
     {
-        return onKeyUp;
+        return onkeyup;
     }
 
-    public void setOnKeyUp(String newOnKeyUp)
+    public void setOnkeyup(String newOnkeyup)
     {
-        onKeyUp = newOnKeyUp;
+        onkeyup = newOnkeyup;
     }
 
     // A pointer button was pressed down - For all HTML
     // elements pertaining to Faces.
 
-    public String getOnMouseDown() 
+    public String getOnmousedown() 
     {
-        return onMouseDown;
+        return onmousedown;
     }
 
-    public void setOnMouseDown(String newOnMouseDown)
+    public void setOnmousedown(String newOnmousedown)
     {
-        onMouseDown = newOnMouseDown;
+        onmousedown = newOnmousedown;
     }
 
     // A pointer was moved within - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnMouseMove() 
+    public String getOnmousemove() 
     {
-        return onMouseMove;
+        return onmousemove;
     }
 
-    public void setOnMouseMove(String newOnMouseMove)
+    public void setOnmousemove(String newOnmousemove)
     {
-        onMouseMove = newOnMouseMove;
+        onmousemove = newOnmousemove;
     }
 
     // A pointer was moved away - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnMouseOut() 
+    public String getOnmouseout() 
     {
-        return onMouseOut;
+        return onmouseout;
     }
 
-    public void setOnMouseOut(String newOnMouseOut)
+    public void setOnmouseout(String newOnmouseout)
     {
-        onMouseOut = newOnMouseOut;
+        onmouseout = newOnmouseout;
     }
 
     // A pointer was moved onto - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnMouseOver() 
+    public String getOnmouseover() 
     {
-        return onMouseOver;
+        return onmouseover;
     }
 
-    public void setOnMouseOver(String newOnMouseOver)
+    public void setOnmouseover(String newOnmouseover)
     {
-        onMouseOver = newOnMouseOver;
+        onmouseover = newOnmouseover;
     }
 
     // A pointer button was released - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnMouseUp() 
+    public String getOnmouseup() 
     {
-        return onMouseUp;
+        return onmouseup;
     }
 
-    public void setOnMouseUp(String newOnMouseUp)
+    public void setOnmouseup(String newOnmouseup)
     {
-        onMouseUp = newOnMouseUp;
+        onmouseup = newOnmouseup;
     }
 
     // The form was reset - For FORM HTML element
 
-    public String getOnReset() 
+    public String getOnreset() 
     {
-        return onReset;
+        return onreset;
     }
 
-    public void setOnReset(String newOnReset)
+    public void setOnreset(String newOnreset)
     {
-        onReset= newOnReset;
+        onreset= newOnreset;
     }
 
     // Some text was selected - For SELECT HTML element.
 
-    public String getOnSelect() 
+    public String getOnselect() 
     {
-        return onSelect;
+        return onselect;
     }
 
-    public void setOnSelect(String newOnSelect)
+    public void setOnselect(String newOnselect)
     {
-        onSelect = newOnSelect;
+        onselect = newOnselect;
     }
 
     // The form was submitted - For FORM HTML element
 
-    public String getOnSubmit() {
-        return onSubmit;
+    public String getOnsubmit() {
+        return onsubmit;
     }
 
-    public void setOnSubmit(String newOnSubmit)
+    public void setOnsubmit(String newOnsubmit)
     {
-        onSubmit = newOnSubmit;
+        onsubmit = newOnsubmit;
     }
 
     // For TEXTAREA/INPUT HTML elements
@@ -807,14 +828,14 @@ public FacesTag()
     // Position in tabbing order - For "A" (Hyperlink)/
     // BUTTON/INPUT/SELECT/TEXTAREA HTML elements.
 
-    public String getTabIndex() 
+    public String getTabindex() 
     {
-        return tabIndex;
+        return tabindex;
     }
 
-    public void setTabIndex(String newTabIndex)
+    public void setTabindex(String newTabindex)
     {
-        tabIndex = newTabIndex;
+        tabindex = newTabindex;
     }
 
     // Render in this frame - For "A" (Hyperlink)/ FORM
@@ -857,14 +878,14 @@ public FacesTag()
 
     // Use client-side image map - For IMG/INPUT HTML elements.
 
-    public String getUseMap() 
+    public String getUsemap() 
     {
-        return useMap;
+        return usemap;
     }
 
-    public void setUseMap(String newUseMap)
+    public void setUsemap(String newUsemap)
     {
-        useMap = newUseMap;
+        usemap = newUsemap;
     }
 
     // For INPUT/OPTION/BUTTON HTML elements.
@@ -949,6 +970,13 @@ protected void overrideProperties(UIComponent component)
     if (null == component.getAttribute("bundle")) {
 	component.setAttribute("bundle", getBundle());
     }
+    if (null == component.getAttribute("formatStyle")) {
+	component.setAttribute("formatStyle", getFormatStyle());
+    }
+    if (null == component.getAttribute("formatPattern")) {
+	component.setAttribute("formatPattern", getFormatPattern());
+    }
+
 }
 
 // 

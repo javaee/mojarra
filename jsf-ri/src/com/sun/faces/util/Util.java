@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.24 2002/08/09 20:13:09 eburns Exp $
+ * $Id: Util.java,v 1.25 2002/08/12 19:57:37 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.24 2002/08/09 20:13:09 eburns Exp $
+ * @version $Id: Util.java,v 1.25 2002/08/12 19:57:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,7 +131,37 @@ public class Util extends Object
 // Class Variables
 //
 
+    /**
+
+    * This array contains attributes that have a boolean value in JSP,
+    * but have have no value in HTML.  For example "disabled" or
+    * "readonly". <P>
+
+    * @see renderBooleanPassthruAttributes
+
+    */
+
+    private static String booleanPassthruAttributes[] = {
+	"disabled",
+	"readonly"
+    };
+	
+    /**
+
+    * This array contains attributes whose value is just rendered
+    * straight to the content.  This array should only contain
+    * attributes that require no interpretation by the Renderer.  If an
+    * attribute requires interpretation by a Renderer, it should be
+    * removed from this array.<P>
+
+    * @see renderPassthruAttributes
+
+    */
     private static String passthruAttributes[] = {
+	"accesskey",
+	"alt",
+	"lang",
+	"maxlength",
 	"onblur",
 	"onchange",
 	"onclick",
@@ -141,7 +171,6 @@ public class Util extends Object
 	"onkeypress",
 	"onkeyup",
 	"onload",
-	"onload",
 	"onmousedown",
 	"onmousemove",
 	"onmouseout",
@@ -150,7 +179,9 @@ public class Util extends Object
 	"onreset",
 	"onselect",
 	"onsubmit",
-	"onunload"
+	"onunload",
+	"size",
+	"tabindex"
     };
 
 private static long id = 0;
@@ -422,6 +453,40 @@ private Util()
 	return result;
     }
 
+
+    /**
+
+    * Render any boolean "passthru" attributes.  
+    * <P>
+
+    * @see passthruAttributes
+
+    */
+
+    public static String renderBooleanPassthruAttributes(FacesContext context,
+						       UIComponent component) {
+	int i = 0, len = booleanPassthruAttributes.length;
+	String value;
+	boolean thisIsTheFirstAppend = true;
+	StringBuffer renderedText = new StringBuffer();
+
+	for (i = 0; i < len; i++) {
+	    if (null != (value = (String) 
+		      component.getAttribute(booleanPassthruAttributes[i]))) {
+		if (thisIsTheFirstAppend) {
+		    // prepend ' '
+		    renderedText.append(' ');
+		    thisIsTheFirstAppend = false;
+		}
+		if (Boolean.valueOf(value).booleanValue()) {
+		    renderedText.append(booleanPassthruAttributes[i] + ' ');
+		}
+	    }
+	}
+	
+	return renderedText.toString();
+    }
+
     /**
 
     * Render any "passthru" attributes, where we simply just output the
@@ -430,8 +495,8 @@ private Util()
     * all the javascript attributes, alt, rows, cols, etc.  <P>
 
     * @return the rendererd attributes as specified in the component.
-    * If there are no passthru attributes in the component, return the
-    * empty String.
+    * Padded with leading and trailing ' '.  If there are no passthru
+    * attributes in the component, return the empty String.
 
     * @see passthruAttributes
 
@@ -441,15 +506,22 @@ private Util()
 						  UIComponent component) {
 	int i = 0, len = passthruAttributes.length;
 	String value;
+	boolean thisIsTheFirstAppend = true;
 	StringBuffer renderedText = new StringBuffer();
 
 	for (i = 0; i < len; i++) {
 	    if (null != (value = (String) 
 			 component.getAttribute(passthruAttributes[i]))) {
+		if (thisIsTheFirstAppend) {
+		    // prepend ' '
+		    renderedText.append(' ');
+		    thisIsTheFirstAppend = false;
+		}
 		renderedText.append(passthruAttributes[i] + "=\"" + value + 
 				    "\" ");
 	    }
 	}
+	
 	return renderedText.toString();
     }
 

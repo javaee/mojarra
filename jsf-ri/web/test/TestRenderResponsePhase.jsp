@@ -12,27 +12,6 @@
 <faces:form formName="basicForm" id="basicForm">
   <TABLE BORDER="1">
 
-
-      <TR>
-
-	<TD>
-
-	      <faces:textentry_input id="userName" text="Default_username" />
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <faces:textentry_secret id="password" text="Default_password" />
-
-	</TD>
-
-      </TR>
-
       <TR>
 
 	<TD>
@@ -160,14 +139,30 @@
 
       <TR>
 
-	<TD>
+        <TD>Date: 
+        </TD>
 
-	      <faces:textentry_textarea id="address" text="Hi There" 
-                                        rows="10" cols="10"/>
-
+	<TD><faces:input_date id="date1" value="Wed, Jul 10, 1996"
+                              formatPattern="EEE, MMM d, yyyy" />
 	</TD>
 
       </TR>
+
+
+      <TR>
+
+        <TD>Disabled Date: 
+        </TD>
+
+	<TD><faces:input_date id="date2" value="Thu, Jul 11, 1996"
+                        formatPattern="EEE, MMM d, yyyy" disabled="true"
+                        size="3" maxlength="20" tabindex="1" accesskey="D"/>
+	</TD>
+
+      </TR>
+
+
+
 
   <TABLE>
 

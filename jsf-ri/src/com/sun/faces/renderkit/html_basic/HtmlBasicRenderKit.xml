@@ -153,4 +153,136 @@
         <!-- Add Attribute Desc stuff here -->
         </renderer>
     </component>
+
+    <component>
+        <type>javax.faces.component.UIInput</type>
+        <renderer>
+            <type>DateRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.DateRenderer</class>
+            <attribute>
+                <name>formatStyle</name>
+                <display-name>Format Style</display-name>
+
+                <description>The style to be used to format and parse
+                this date.  See java.text.DateFormat.  Default is
+                MEDIUM</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>timezone</name>
+                <display-name>Timezone</display-name>
+
+                <description>The timezone used to format and parse this
+                date.  See java.text.DateFormat.  Default is
+                null.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>formatPattern</name>
+                <display-name>Format Pattern</display-name>
+
+                <description>The format pattern used to format and parse
+                this date.  See java.text.SimpleDateFormat.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>disabled</name>
+                <display-name>Disabled</display-name>
+
+                <description>If true, this component should be rendered
+                as disabled.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>readonly</name>
+                <display-name>Read Only</display-name>
+
+                <description>If true, this component should be rendered
+                as read only.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>size</name>
+                <display-name>Size</display-name>
+
+                <description>The number of columns in this
+                DateRenderer.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>maxlength</name>
+                <display-name>Max Length</display-name>
+
+                <description>The maximum number of characters in this
+                DateRenderer.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>alt</name>
+                <display-name>Alt Text</display-name>
+
+                <description>The alt text for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>lang</name>
+                <display-name>Language</display-name>
+
+                <description>Hint to the user agent about the language
+                for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>accesskey</name>
+                <display-name>Access Key</display-name>
+
+                <description>Accessibility key character</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+
+                <description>The element got the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+
+                <description>The element lost the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onselect</name>
+                <display-name>On Select</display-name>
+
+                <description>Some text was selected.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onchange</name>
+                <display-name>On Change</display-name>
+
+                <description>The element value was changed.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+        </renderer>
+
+    </component>
+
 </renderkit>

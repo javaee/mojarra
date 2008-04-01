@@ -7,5 +7,4 @@
 	<OPTION VALUE="Green">Green</OPTION>
 	<OPTION VALUE="Yellow">Yellow</OPTION>
 </SELECT>
-<INPUT TYPE="PASSWORD" NAME="/my_secret" VALUE="secret">
-text
+<input type="text" name="/my_date" value="Jan 12, 1952"><input type="text" name="/my_date2" value="Sat, Jan 12, 1952">
