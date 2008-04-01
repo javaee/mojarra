@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.2 2002/04/11 22:51:21 eburns Exp $
+ * $Id: MessageFactory.java,v 1.3 2002/04/12 23:15:46 eburns Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -11,8 +11,6 @@
 package javax.faces;
 
 import java.util.Locale;
-
-import javax.faces.FactoryConfigurationError;
 
 /**
  * A class that knows how to create new messages. 

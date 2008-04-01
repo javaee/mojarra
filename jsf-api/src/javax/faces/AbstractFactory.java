@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractFactory.java,v 1.1 2002/04/11 22:51:20 eburns Exp $
+ * $Id: AbstractFactory.java,v 1.2 2002/04/12 23:15:46 eburns Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ import javax.servlet.ServletContext;
  * FactoryFinder could be folded into AbstractFactoryBase. <P>
 
  *
- * @version $Id: AbstractFactory.java,v 1.1 2002/04/11 22:51:20 eburns Exp $
+ * @version $Id: AbstractFactory.java,v 1.2 2002/04/12 23:15:46 eburns Exp $
  * 
  * @see	javax.faces.FacesFactory
  * @see	javax.faces.FactoryFinder#find
@@ -166,6 +166,8 @@ public class AbstractFactory extends AbstractFactoryBase
 		       "com.sun.faces.renderkit.html_basic.HtmlBasicFacesContextFactory");
 	factoryMap.put(Constants.DEFAULT_MESSAGE_FACTORY_ID,
 		       "com.sun.faces.MessageFactoryImpl");
+	factoryMap.put(Constants.MESSAGE_LIST_ID,
+		       "com.sun.faces.MessageListImpl");
 	factoryMap.put(Constants.REF_EVENTQUEUE,
 		       "com.sun.faces.EventQueueFactoryImpl");
     }
@@ -224,6 +226,10 @@ public class AbstractFactory extends AbstractFactoryBase
 
     public final MessageFactory newMessageFactory() throws FactoryConfigurationError, FacesException {
 	return (MessageFactory) newInstance(Constants.DEFAULT_MESSAGE_FACTORY_ID);
+    }
+
+    public final MessageList newMessageList() throws FactoryConfigurationError, FacesException {
+	return (MessageList) newInstance(Constants.MESSAGE_LIST_ID);
     }
 
     public final FacesContext newFacesContext(ServletRequest req, 

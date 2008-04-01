@@ -1,5 +1,5 @@
 /*
- * $Id: MessageList.java,v 1.3 2002/04/11 22:51:21 eburns Exp $
+ * $Id: MessageList.java,v 1.4 2002/04/12 23:15:46 eburns Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -58,20 +58,6 @@ public abstract class MessageList
 {
 	protected MessageList(){};
 	
-	/**
-	 * Answer a new instance of a MessageList. The concrete instance that is
-	 * returned depends on the "javax.faces.MessageList" property.
-	 */
-	public static MessageList newInstance()
-            throws FactoryConfigurationError  
-	{
-            return (MessageList) FactoryFinder.find(
-						    /* The default property name according to the JSFaces spec */
-						    "javax.faces.MessageList",
-						    /* The fallback implementation class name */
-						    "com.sun.faces.MessageListImpl");
-	}
-    
     /**
      * Create a new message and add it to this list. 
      * 
