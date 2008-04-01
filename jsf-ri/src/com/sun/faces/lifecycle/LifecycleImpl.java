@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.10 2002/06/25 21:42:53 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.11 2002/07/11 20:33:20 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.10 2002/06/25 21:42:53 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.11 2002/07/11 20:33:20 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -93,21 +93,8 @@ public LifecycleImpl()
 
 protected void initPhases()
 {
-    phaseWrappers.add(new PhaseWrapper(new CreateRequestTreePhase(this, 
-					Lifecycle.CREATE_REQUEST_TREE_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE,
-                 new LifecycleCallback() {
-		     public int takeActionOnComponent(FacesContext context,
-						      UIComponent component) throws FacesException {
-			 // PENDING(edburns): not sure what to do in
-			 // this phase
-			 // PENDING(edburns): log this
-			 System.out.println("RECONSTITUTE_REQUEST_TREE_PHASE:"+
-					    " " + component.getComponentId());
-			 return Phase.GOTO_NEXT;
-		     }
-		 }
-							    )));
+    phaseWrappers.add(new PhaseWrapper(new ReconstituteRequestTreePhase(this, 
+					Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
                                        Lifecycle.APPLY_REQUEST_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new HandleRequestEventsPhase(this, 
@@ -135,7 +122,6 @@ protected void registerBefore(int phaseId, Phase phase)
     Phase genericPhase = null;
     PhaseWrapper wrapper = null;
    
-    // PENDING (visvan) Ed: please review
     Iterator it = phaseWrappers.iterator();
     while ( it.hasNext() ) {
         wrapper = (PhaseWrapper) it.next();
@@ -164,7 +150,6 @@ protected void registerAfter(int phaseId, Phase phase)
     Phase genericPhase = null;
     PhaseWrapper wrapper = null;
   
-    // PENDING (visvan) Ed: please review
     Iterator it = phaseWrappers.iterator();
     while ( it.hasNext() ) {
         wrapper = (PhaseWrapper) it.next();
@@ -186,8 +171,7 @@ protected int executeRender(FacesContext context) throws FacesException
     int rc = 0;
     Phase renderPhase = null;
     PhaseWrapper wrapper = null;
-    
-    // PENDING (visvan) Ed: please review
+  
     Iterator it = phaseWrappers.iterator();
     while ( it.hasNext() ) {
         wrapper = (PhaseWrapper) it.next();

@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.8 2002/07/10 17:57:19 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.9 2002/07/11 20:33:18 jvisvanathan Exp $
  */
 
 /*
@@ -59,4 +59,6 @@ public class RIConstants {
     public static final String CONVERSION_ERROR_MESSAGE_ID =
         "com.sun.faces.TYPECONVERSION_ERROR";
     
+    public final static String FACES_TREE = "com.sun.faces.TREE";
+    public final static String REQUEST_LOCALE = "com.sun.faces.LOCALE";
 }

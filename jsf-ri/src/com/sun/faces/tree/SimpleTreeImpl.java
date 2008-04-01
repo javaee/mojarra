@@ -1,5 +1,5 @@
 /*
- * $Id: SimpleTreeImpl.java,v 1.1 2002/07/10 22:44:02 eburns Exp $
+ * $Id: SimpleTreeImpl.java,v 1.2 2002/07/11 20:33:22 jvisvanathan Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.tree.Tree;
@@ -30,7 +31,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SimpleTreeImpl.java,v 1.1 2002/07/10 22:44:02 eburns Exp $
+ * @version $Id: SimpleTreeImpl.java,v 1.2 2002/07/11 20:33:22 jvisvanathan Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -70,12 +71,21 @@ protected UIComponent root = null;
 
 */ 
 
+public SimpleTreeImpl(ServletContext servletContext, String newTreeId) {
+    this(servletContext, null, newTreeId);
+}    
+
 public SimpleTreeImpl(ServletContext context, UIComponent newRoot, 
 		   String newTreeId)
 {
     super();
     ParameterCheck.nonNull(context);
 
+    if ( newRoot == null ) {
+        newRoot = new UIComponentBase() {
+        public String getComponentType() { return "root"; }
+        };
+    }
     setRoot(newRoot);
     setTreeId(newTreeId);
 

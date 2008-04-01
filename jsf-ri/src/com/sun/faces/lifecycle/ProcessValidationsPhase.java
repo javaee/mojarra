@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.5 2002/06/25 20:47:58 jvisvanathan Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.6 2002/07/11 20:33:20 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.5 2002/06/25 20:47:58 jvisvanathan Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.6 2002/07/11 20:33:20 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE
@@ -64,14 +64,7 @@ public ProcessValidationsPhase(Lifecycle newDriver, int newId)
 	  new LifecycleCallback() {
 	      public int takeActionOnComponent(FacesContext context,
 					       UIComponent comp) throws FacesException {
-                  comp.validate(context);                                 
-		  Iterator validators = comp.getValidators();
-		  
-		  Assert.assert_it(null != validators);
-		  while (validators.hasNext()) {
-		      ((Validator) validators.next()).validate(context, comp);
-		  }
-
+                  comp.processValidators(context);                                 
 		  return Phase.GOTO_NEXT;
 	      }
 	  });

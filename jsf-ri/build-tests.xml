@@ -295,7 +295,6 @@
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
 
             <test name="com.sun.faces.lifecycle.TestGenericPhaseImpl"/> 
-            <test name="com.sun.faces.lifecycle.TestCreateRequestTreePhase"/>
             <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
             <test name="com.sun.faces.lifecycle.TestHandleRequestEventsPhase"/>
             <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
