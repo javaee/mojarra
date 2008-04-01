@@ -21,7 +21,7 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <!-- The base directory for the JSF APIs -->
-  <property name="jsf.api.home" value ="../jsf-api/"/>
+  <property name="jsf.api.home" value ="../jsf-api"/>
 
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
@@ -52,6 +52,7 @@
   <!-- The locations of necessary jar files -->
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
+  <property name="jsf-api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
 
@@ -67,8 +68,7 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
-    <pathelement location="${jsf.api.home}/build/classes"/>
-    <pathelement location="${mozutil.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${servlet.jar}"/>
   </path>
 
@@ -112,6 +112,10 @@
     <mkdir dir="${build.home}/library/classes/META-INF/tlds"/>
     <copy file="${conf.share.dir}/html_basic.tld"
          tofile="${build.home}/library/classes/META-INF/html_basic.tld"/>
+    <!-- unjar mozutil to classes, so we don't have to expose it -->
+    <exec dir="${build.home}/classes" executable="jar">
+      <arg line="-xf ${mozutil.jar}"/>
+    </exec>
   </target>
 
   <target name="compile" depends="prepare"
@@ -155,16 +159,11 @@
     </copy>
     
     <!-- copy all the classes under javax.faces package -->
-    <copy   todir="${dist.home}/${app.name}/WEB-INF/classes">
-      <fileset dir="${jsf.api.home}/build/classes"  excludes="**/CVS/**" />
-    </copy>
+    <copy file="${jsf-api.jar}" todir="${dist.home}/${app.name}/WEB-INF/classes"/>
 
     <!-- copy tld file -->
     <copy file="${conf.share.dir}/html_basic.tld"
          toDir="${dist.home}/${app.name}/WEB-INF"/>
-
-    <copy file="${mozutil.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib">
-    </copy>
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
@@ -194,13 +193,9 @@
 
     
     <!-- copy all classes from javax.api package -->
-    <copy   todir="${deploy.home}/WEB-INF/classes">
-      <fileset dir="${jsf.api.home}/build/classes"  excludes="**/CVS/**" />
-    </copy>
+    <copy  file="${jsf-api.jar}" todir="${deploy.home}/WEB-INF/lib"/>
 
     <!-- copy dependent libs to tomcat/libs -->
-    <copy file="${mozutil.jar}" todir="${deploy.home}/WEB-INF/lib">
-    </copy>
   </target>
 
   <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
@@ -268,6 +263,13 @@
     </java>
   </target>
 
+  <target name="test-objectmanager" depends="compile" 
+   description="Run the test of ObjectManager">
+    <java classname="com.sun.faces.ObjectTableImpl">
+      <classpath refid="compile.classpath"/>
+    </java>
+  </target>
+
   <target name="run-single-test" if="testcase" depends="compile-tests"
           description="Run a unit test">
     <junit printsummary="no" haltonfailure="yes" fork="true">
@@ -299,6 +301,6 @@
           fork="true" />
   </target>
 
-  <target name="main" depends="compile,prepare,deploy.tomcat"/>
+  <target name="main" depends="prepare,compile"/>
 
 </project>

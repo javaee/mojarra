@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.2 2001/11/13 23:20:03 edburns Exp $
+ * $Id: ObjectTableImpl.java,v 1.3 2001/11/16 21:09:49 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableImpl.java,v 1.2 2001/11/13 23:20:03 edburns Exp $
+ * @version $Id: ObjectTableImpl.java,v 1.3 2001/11/16 21:09:49 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,8 +120,8 @@ protected static class ScopeImpl implements ObjectTable.Scope {
 
 // Relationship Instance Variables
 
-    private Map putMap;
-    private Map keyMap;
+    private Map outerMap;
+    private Map innerMap;
 
 // Attribute Instance Variables
 
@@ -133,8 +133,8 @@ protected static class ScopeImpl implements ObjectTable.Scope {
 
 protected ScopeImpl(Class yourScopeClass) {
     ParameterCheck.nonNull(yourScopeClass);
-    putMap = new HashMap();
-    keyMap = new HashMap();
+    outerMap = new HashMap();
+    innerMap = new HashMap();
     scopeClass = yourScopeClass;
 }
     
@@ -150,7 +150,7 @@ protected ScopeImpl(Class yourScopeClass) {
 
 private boolean inScope(Object scopeKey) {
     boolean result = false;
-    result = (null != keyMap.get(scopeKey));
+    result = (null != innerMap.get(scopeKey));
     return result;
 }
 
@@ -166,8 +166,7 @@ public boolean isA(Object scopeKey) {
 }
 
 public void put(Object name, Object value) {
-    // PENDING(edburns): what is the proper place for this value?
-    putMap.put(name, value);
+    outerMap.put(name, value);
 }
 
 public Object get(Object scopeKey, Object name) {
@@ -176,31 +175,47 @@ public Object get(Object scopeKey, Object name) {
 	enter(scopeKey);
     }
 
-    Object result = ((Map)keyMap.get(scopeKey)).get(name);
-    ActiveValue av;
-    LazyValue lv;
-    // Deal with Active and Lazy values
-    if (result instanceof ActiveValue) {
-	av = (ActiveValue) result;
-	result = av.getValue(this, scopeKey, name);
-    }
-    else if (result instanceof LazyValue) {
-	lv = (LazyValue) result;
-	result = lv.getValue(this, scopeKey, name);
+    // first, look in our innerMap for a Map, ask this map for a value
+    // under name
+    Map second = (Map) innerMap.get(scopeKey);
+    
+    // We must have a secondary map by nature of the lazy scope entrance above
+    Assert.assert_it(null != second);
+    
+    Object result = second.get(name);
+
+    // if not found, this is the first request for this name
+    if (null == result) {
+	// look in the outerMap
+	result = outerMap.get(name);
+	
+	ActiveValue av;
+	LazyValue lv;
+	// Deal with Active and Lazy values
+	if (result instanceof ActiveValue) {
+	    av = (ActiveValue) result;
+	    result = av.getValue(this, scopeKey, name);
+	    // do not put an entry in the inner map
+	}
+	else if (result instanceof LazyValue) {
+	    lv = (LazyValue) result;
+	    result = lv.getValue(this, scopeKey, name);
+	    // put an entry in the inner map.
+	    ((Map)innerMap.get(scopeKey)).put(name, result);
+	}
     }
 
     return result;
 }
 
 public void enter(Object scopeKey) {
-    // PENDING(edburns): I don't think the second arg should be putMap
-    keyMap.put(scopeKey, putMap);
+    innerMap.put(scopeKey, new HashMap());
     // Call listeners
 }
     
 public void exit(Object scopeKey) {
     // Call listeners
-    // keyMap.remove(scopeKey);
+    innerMap.remove(scopeKey);
 }
 } // end of class ScopeImpl
 
@@ -213,26 +228,45 @@ public void exit(Object scopeKey) {
 
 public static void simpleTest(ObjectTable objectTable) {
     String fooName = "fooStr";
-    objectTable.put(ObjectTable.GlobalScope, fooName, StringBuffer.class);
-    StringBuffer foo1 = (StringBuffer)(ObjectTable.get(fooName));
+    objectTable.put(objectTable.GlobalScope, fooName, StringBuffer.class);
+    StringBuffer foo1 = (StringBuffer)(objectTable.get(fooName));
     foo1.append("foo1");
     System.out.println("For name " + fooName + " in GlobalScope, value is : " +
 		       foo1);
-    StringBuffer foo2 = (StringBuffer)(ObjectTable.get(fooName));
+    StringBuffer foo2 = (StringBuffer)(objectTable.get(fooName));
     foo2.append("foo2");
     System.out.println("For name " + fooName + " in GlobalScope, value is : " +
 		       foo2);
+
+    // test extensible scope mechanism
+    Scope stringScope = new ScopeImpl(String.class);
+    List scopes = objectTable.getScopes();
+    scopes.add(stringScope);
+    objectTable.setScopes(scopes);
+    objectTable.put(stringScope, fooName, StringBuffer.class);
+    foo1 = (StringBuffer) objectTable.get("string", fooName);
+    foo1.append("foo1");
+    System.out.println("For name " + fooName + " in StringScope, value is : " +
+		       foo1);
+    // test the put with scopeKey as first arg
+    objectTable.put("string", "foo2", StringBuffer.class);
+    foo1 = (StringBuffer) objectTable.get("string", fooName);
+    foo1.append("foo1");
+    System.out.println("For name " + fooName + " in StringScope, value is : " +
+		       foo1);
 }
 
 public static void scopeTest(ObjectTable objectTable) {
     boolean result;
+    int i;
     // test the isA method
     
     // create a String scope
     Scope stringScope = new ScopeImpl(String.class);
     String str = "String";
     result = stringScope.isA(str);
-    System.out.println("Scope: " + stringScope + " is a: " + str);
+    System.out.println("Scope: " + stringScope + " is a: " + str + ": " +
+		       result);
 
     // test the getScopes method
     List scopes;
@@ -241,9 +275,12 @@ public static void scopeTest(ObjectTable objectTable) {
     System.out.println("ObjectTable: " + objectTable + " has scopes: " + 
 		       scopes);
     iter = scopes.iterator();
+    i = 0;
     while (iter.hasNext()) {
+	i++;
 	System.out.println("\t" + iter.next());
     }
+    System.out.println("Currently has " + i + " scopes.");
 
     // test the setScopes method
     System.out.println("Adding scope: " + stringScope);
@@ -254,9 +291,12 @@ public static void scopeTest(ObjectTable objectTable) {
     System.out.println("ObjectTable: " + objectTable + " has scopes: " + 
 		       scopes);
     iter = scopes.iterator();
+    i = 0;
     while (iter.hasNext()) {
+	i++;
 	System.out.println("\t" + iter.next());
     }
+    System.out.println("Currently has " + i + " scopes.");
     
 }
     
@@ -266,7 +306,7 @@ public static void main(String [] args)
     ObjectTable me = new ObjectTableImpl();
     Log.setApplicationName("ObjectTableImpl");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: ObjectTableImpl.java,v 1.2 2001/11/13 23:20:03 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: ObjectTableImpl.java,v 1.3 2001/11/16 21:09:49 edburns Exp $");
 
     scopeTest(me);
     simpleTest(me);
