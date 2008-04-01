@@ -134,6 +134,7 @@
                 test.UICommand,
                 test.UIForm,
                 test.UIGraphic,
+                test.UIInput,
                 test.UIOutput,
                 test.UIPanel,
                 test.UISelectBoolean,
@@ -175,6 +176,15 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <arg value="javax.faces.component.UIGraphicTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIInput" depends="build.test">
+    <echo message="Running UIInput tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIInputTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
