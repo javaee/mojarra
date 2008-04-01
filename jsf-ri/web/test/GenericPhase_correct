@@ -1,14 +1,3 @@
-GenericPhaseImpl: takeActionOnComponent: root
+GenericPhaseImpl: takeActionOnComponent: null
 GenericPhaseImpl: takeActionOnComponent: basicForm
-GenericPhaseImpl: takeActionOnComponent: userLabel
 GenericPhaseImpl: takeActionOnComponent: userName
-GenericPhaseImpl: takeActionOnComponent: pwdLabel
-GenericPhaseImpl: takeActionOnComponent: password
-GenericPhaseImpl: takeActionOnComponent: addrLabel
-GenericPhaseImpl: takeActionOnComponent: address
-GenericPhaseImpl: takeActionOnComponent: validUser
-GenericPhaseImpl: takeActionOnComponent: shipType
-GenericPhaseImpl: takeActionOnComponent: appleQuantity
-GenericPhaseImpl: takeActionOnComponent: mylink
-GenericPhaseImpl: takeActionOnComponent: login
-GenericPhaseImpl: takeActionOnComponent: login2

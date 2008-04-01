@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.7 2002/06/22 00:15:09 jvisvanathan Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.8 2002/07/12 23:58:46 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.7 2002/06/22 00:15:09 jvisvanathan Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.8 2002/07/12 23:58:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -48,10 +48,12 @@ public class TestHandleRequestEventsPhase extends ServletFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/Faces_Basic.xul";
+public static final String TEST_URI = "/components.jsp";
 
-public static final String DID_DECODE = "didDecode";
-public static final String DID_EVENT = "didEvent";
+public static final String DID_DECODE1 = "didDecode1";
+public static final String DID_EVENT1 = "didEvent1";
+public static final String DID_DECODE2 = "didDecode2";
+public static final String DID_EVENT2 = "didEvent2";
 
 //
 // Class Variables
@@ -87,62 +89,93 @@ public static final String DID_EVENT = "didEvent";
 
 public void beginCallback(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-   // theRequest.addParameter("tree", TEST_URI_XUL);
-    theRequest.addParameter("/valueChange", "jerry");
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+    theRequest.addParameter("/valueChange1", "jerry");
+    theRequest.addParameter("/valueChange2", "robert");
 }
 
+// This method will build a tree, create two components, add them
+// to the tree, apply the new values from the request to these
+// components and invoke HandleRequestEventsPhase.
+// Since the "processEvent" method for each component returns "true",
+// the expected outcome is that the events for both components will
+// be processed, and the next phase will be "render".
+// 
 public void testCallback()
 {
+    // 1. Set the root of the tree ...
+    //
+    Phase reconstituteTree = new ReconstituteRequestTreePhase(null,
+                        Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+    int result = -1;
+    try {
+        result = reconstituteTree.execute(getFacesContext());
+    }
+    catch (Throwable e) {
+        e.printStackTrace();
+        assertTrue(false);
+    }
+    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(null != getFacesContext().getRequestTree());
+
     int rc = Phase.GOTO_NEXT;
-    UIComponent root = null;
-    UIValueChangeTextEntry valueChange = null;
+    UIValueChangeTextEntry1 valueChange1 = null;
+    UIValueChangeTextEntry2 valueChange2 = null;
     String value = null;
     Phase 
 	applyValues = new ApplyRequestValuesPhase(null, 
 					Lifecycle.APPLY_REQUEST_VALUES_PHASE), 
-	createTree = new CreateRequestTreePhase(null, 
-				       Lifecycle.CREATE_REQUEST_TREE_PHASE),
 	handleEvents = new HandleRequestEventsPhase(null, 
                                       Lifecycle.HANDLE_REQUEST_EVENTS_PHASE);
-    rc = createTree.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
-
     // clear the property
-    System.setProperty(DID_DECODE, EMPTY);
-    System.setProperty(DID_EVENT, EMPTY);
+    System.setProperty(DID_DECODE1, EMPTY);
+    System.setProperty(DID_EVENT1, EMPTY);
+    System.setProperty(DID_DECODE2, EMPTY);
+    System.setProperty(DID_EVENT2, EMPTY);
 
-    // Stick in our new component
-    valueChange = new UIValueChangeTextEntry();
-    valueChange.setComponentId("valueChange");
+    // Stick in our new components
+    valueChange1 = new UIValueChangeTextEntry1();
+    valueChange1.setComponentId("valueChange1");
+    valueChange2 = new UIValueChangeTextEntry2();
+    valueChange2.setComponentId("valueChange2");
 
-    root = getFacesContext().getRequestTree().getRoot();
-    root.addChild(valueChange);
+    UIComponent root = getFacesContext().getRequestTree().getRoot();
+    root.addChild(valueChange1);
+    root.addChild(valueChange2);
 
+    // 2. Apply the new values from the request to the components in
+    //    the tree.
+    //
     rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
-    assertTrue(!System.getProperty(DID_DECODE).equals(EMPTY));
+    assertTrue(!System.getProperty(DID_DECODE1).equals(EMPTY));
+    assertTrue(!System.getProperty(DID_DECODE2).equals(EMPTY));
     
+    // 3. Handle request event
+    //    The expected outcome: both events get processed (for each
+    //    component), and the next phase is "render".
+    //
     rc = handleEvents.execute(getFacesContext());
     assertTrue(Phase.GOTO_RENDER == rc);
-    assertTrue(!System.getProperty(DID_EVENT).equals(EMPTY));
+    assertTrue(!System.getProperty(DID_EVENT1).equals(EMPTY));
+    assertTrue(!System.getProperty(DID_EVENT2).equals(EMPTY));
 
-    System.setProperty(DID_DECODE, EMPTY);
-    System.setProperty(DID_EVENT, EMPTY);
+    System.setProperty(DID_DECODE1, EMPTY);
+    System.setProperty(DID_EVENT1, EMPTY);
+    System.setProperty(DID_DECODE2, EMPTY);
+    System.setProperty(DID_EVENT2, EMPTY);
 }
 
 /**
-
-* Enqueue a value change event
-
+* Enqueue value change events
 */
 
-public static class UIValueChangeTextEntry extends UITextEntry
+public static class UIValueChangeTextEntry1 extends UITextEntry
 {
 
 public void decode(FacesContext context) throws IOException 
 {
-    System.setProperty(DID_DECODE, DID_DECODE);
+    System.setProperty(DID_DECODE1, DID_DECODE1);
     if (context == null) {
 	throw new NullPointerException();
     }
@@ -169,13 +202,46 @@ public void decode(FacesContext context) throws IOException
 public boolean processEvent(FacesContext context, FacesEvent event) 
 {
     assertTrue(event.getSource() == this);
-    System.setProperty(DID_EVENT, DID_EVENT);
+    System.setProperty(DID_EVENT1, DID_EVENT1);
     return true;
 }
+} // end of class UIValueChangeTextEntry1
 
+public static class UIValueChangeTextEntry2 extends UITextEntry
+{
 
+public void decode(FacesContext context) throws IOException
+{
+    System.setProperty(DID_DECODE2, DID_DECODE2);
+    if (context == null) {
+        throw new NullPointerException();
+    }
+    String newValue =
+        context.getServletRequest().getParameter(getCompoundId());
+    boolean valueChanged = false;
+    // if the new value is different from the old value
+    if ((null == this.getValue() && null != newValue) ||
+        (null != this.getValue() && null == newValue)) {
+        valueChanged = true;
+    }
+    if ((null != this.getValue()) &&
+        !((String)this.getValue()).equals(newValue)) {
+        valueChanged = true;
+    }
+    if (valueChanged) {
+        context.addRequestEvent(this,new FacesEvent(this));
+    }
 
-} // end of class UIValueChangeTextEntry
+    setValue(newValue);
 
+}
+
+public boolean processEvent(FacesContext context, FacesEvent event)
+{
+    assertTrue(event.getSource() == this);
+    System.setProperty(DID_EVENT2, DID_EVENT2);
+    return true;
+}
+} // end of class UIValueChangeTextEntry2
 
 } // end of class TestHandleRequestEventsPhase

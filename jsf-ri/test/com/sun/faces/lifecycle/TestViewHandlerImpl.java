@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.2 2002/06/26 19:20:17 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.3 2002/07/12 23:58:46 rkitain Exp $ 
  */ 
 
 
@@ -29,7 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory; 
 import javax.faces.lifecycle.Phase; 
 import javax.faces.lifecycle.Lifecycle; 
-import javax.faces.component.UIComponent; 
+import javax.faces.component.UIComponentBase; 
 import javax.faces.component.UITextEntry; 
 import javax.faces.validator.Validator; 
 import javax.faces.component.AttributeDescriptor; 
@@ -38,6 +38,7 @@ import javax.faces.component.AttributeDescriptor;
 import com.sun.faces.JspFacesTestCase; 
 import com.sun.faces.FileOutputResponseWrapper; 
 import com.sun.faces.RIConstants; 
+import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util; 
 import com.sun.faces.CompareFiles; 
 
@@ -61,7 +62,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.2 2002/06/26 19:20:17 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.3 2002/07/12 23:58:46 rkitain Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -76,8 +77,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase
 // 
 
 
-public static final String TEST_URI_XUL = "/components.xul"; 
-public static final String TEST_URI = "/components.jsp"; 
+public static final String TEST_URI = "/TestRenderResponsePhase.jsp";
 
 
 public String getExpectedOutputFilename() { 
@@ -85,9 +85,9 @@ public String getExpectedOutputFilename() {
 } 
 
 
-public static final String ignore[] = { 
-    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=0893D474A94104F7215275E1A385C4D8\">"
-}; 
+public static final String ignore[] = {
+    "<FORM METHOD=\"post\" ACTION=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2FTestRenderResponsePhase.jsp;jsessionid=80E0636212B5916924E002B6076365E7\">"
+};
      
 public String [] getLinesToIgnore() { 
     return ignore; 
@@ -144,7 +144,7 @@ public boolean sendResponseToFile()
 
 public void beginRender(WebRequest theRequest) 
 { 
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null); 
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null); 
    // theRequest.addParameter("tree", TEST_URI_XUL); 
 } 
 
@@ -153,15 +153,18 @@ public void testRender()
 { 
     boolean result = false; 
     int rc = Phase.GOTO_NEXT; 
-    UIComponent root = null; 
+    UIComponentBase root = null; 
     String value = null; 
-    Phase 
-        createTree = new CreateRequestTreePhase(null, 
-                                        Lifecycle.CREATE_REQUEST_TREE_PHASE); 
-    rc = createTree.execute(getFacesContext()); 
-    assertTrue(Phase.GOTO_NEXT == rc); 
+    SimpleTreeImpl tree = null;
+    LifecycleImpl lifecycle = new LifecycleImpl();
 
+    root = new UIComponentBase() {
+        public String getComponentType() { return "Root"; }
+    };
+    root.setComponentId("root");
 
+    tree = new SimpleTreeImpl(config.getServletContext(), root, TEST_URI);
+    getFacesContext().setRequestTree(tree);
     try { 
         ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
         viewHandler.renderView(getFacesContext()); 

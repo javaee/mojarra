@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.4 2002/06/26 19:59:26 eburns Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
  */
 
 /*
@@ -23,6 +23,8 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
+import javax.faces.component.UITextEntry;
 
 import java.util.Iterator;
 
@@ -43,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.4 2002/06/26 19:59:26 eburns Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -56,13 +58,13 @@ public class TestGenericPhaseImpl extends ServletFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/Faces_Basic.xul";
+public static final String TEST_URI = "/components.jsp";
 
-public static final String OUTPUT_FILENAME = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
-    "GenericPhase_out";
+public static final String OUTPUT_FILENAME = 
+    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "GenericPhase_out";
 
-public static final String CORRECT_OUTPUT_FILENAME = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
-    "GenericPhase_correct";
+public static final String CORRECT_OUTPUT_FILENAME = 
+    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "GenericPhase_correct";
 
 //
 // Class Variables
@@ -93,8 +95,8 @@ public static final String CORRECT_OUTPUT_FILENAME = FileOutputResponseWrapper.F
 
 public void beginExecute(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-    //theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+    theRequest.addParameter("/basicForm/userName", "jerry");
 }
 
 public void testExecute()
@@ -104,27 +106,48 @@ public void testExecute()
     File file = null;
     FileOutputStream fs = null;
 
-    Phase createTree = null;
-
     try {
         file = new File ( OUTPUT_FILENAME );
-	fs = new FileOutputStream(file);
+        fs = new FileOutputStream(file);
     } catch ( Exception e ) {
         assertTrue(false);
     }
     out = new PrintStream(fs);
 
-    createTree = new CreateRequestTreePhase(null, 
-					 Lifecycle.CREATE_REQUEST_TREE_PHASE) {
-         public int execute(FacesContext facesContext) throws FacesException {
-	     int rc = -1;
-	     // this builds the tree into the facesContext
-	     rc = super.execute(facesContext);
-	     this.setLifecycleCallback(new LifecycleCallback() {
-		   public int takeActionOnComponent(FacesContext context,
-						     UIComponent component) throws FacesException {
-		       out.println("GenericPhaseImpl: takeActionOnComponent: "+
-				   component.getComponentId());
+    Phase
+        reconstituteTree = new ReconstituteRequestTreePhase(null,
+            Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE);
+    try {
+        result = reconstituteTree.execute(getFacesContext());
+    }
+    catch (Throwable e) {
+        e.printStackTrace();
+        assertTrue(false);
+    }
+    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(null != getFacesContext().getRequestTree());
+
+    // 2. Add components to tree
+    //
+    UIComponent root = getFacesContext().getRequestTree().getRoot();
+    UIForm basicForm = new UIForm();
+    basicForm.setComponentId("basicForm");
+    UITextEntry userName = new UITextEntry();
+    userName.setComponentId("userName");
+    root.addChild(basicForm);
+    basicForm.addChild(userName);
+
+    Phase applyValues = new ApplyRequestValuesPhase(null, 
+        Lifecycle.APPLY_REQUEST_VALUES_PHASE) {
+            public int execute(FacesContext facesContext) 
+                throws FacesException {
+	        int rc = -1;
+	        rc = super.execute(facesContext);
+	        this.setLifecycleCallback(new LifecycleCallback() {
+		    public int takeActionOnComponent(FacesContext context,
+                        UIComponent component) throws FacesException {
+		        out.println("GenericPhaseImpl: takeActionOnComponent: "+
+		            component.getComponentId());
 		       return Phase.GOTO_NEXT;
 		   }
 		 });
@@ -136,7 +159,7 @@ public void testExecute()
 	};
 
     try {
-	result = createTree.execute(getFacesContext());
+	result = applyValues.execute(getFacesContext());
     }
     catch (Throwable e) {
 	System.out.println("Throwable: " + e.getMessage());

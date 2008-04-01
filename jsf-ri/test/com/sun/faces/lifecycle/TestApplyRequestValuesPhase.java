@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.4 2002/06/20 01:34:25 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.component.UITextEntry;
 
 import com.sun.faces.ServletFacesTestCase;
@@ -32,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.4 2002/06/20 01:34:25 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.5 2002/07/12 23:58:46 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -45,7 +46,7 @@ public class TestApplyRequestValuesPhase extends ServletFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/Faces_Basic.xul";
+public static final String TEST_URI = "/components.jsp";
 
 //
 // Class Variables
@@ -81,8 +82,7 @@ public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 
 public void beginCallback(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-    //theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     theRequest.addParameter("/basicForm/userName", "jerry");
 }
 
@@ -90,21 +90,44 @@ public void testCallback()
 {
     int rc = Phase.GOTO_NEXT;
     UIComponent root = null;
-    UITextEntry userName = null;
     String value = null;
     Phase 
+        reconstituteTree = new ReconstituteRequestTreePhase(null,
+            Lifecycle.RECONSTITUTE_REQUEST_TREE_PHASE),
 	applyValues = new ApplyRequestValuesPhase(null, 
-					Lifecycle.APPLY_REQUEST_VALUES_PHASE), 
-	createTree = new CreateRequestTreePhase(null, 
-				       Lifecycle.CREATE_REQUEST_TREE_PHASE);
-    rc = createTree.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+					Lifecycle.APPLY_REQUEST_VALUES_PHASE);
+
+    // 1. Set the root of the tree ...
+    //
+    int result = -1;
+    try {
+        result = reconstituteTree.execute(getFacesContext());
+    }
+    catch (Throwable e) {
+        e.printStackTrace();
+        assertTrue(false);
+    }
+    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(null != getFacesContext().getRequestTree());
+
+    // 2. Add components to tree
+    //
+    root = getFacesContext().getRequestTree().getRoot();
+    UIForm basicForm = new UIForm();
+    basicForm.setComponentId("basicForm");
+    UITextEntry userName = new UITextEntry();
+    userName.setComponentId("userName");
+    root.addChild(basicForm);
+    basicForm.addChild(userName);
+
+    // 3. Apply values
+    //
     rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     
     root = getFacesContext().getRequestTree().getRoot();
     try {
-	userName = (UITextEntry) root.findComponent("./basicForm/userName");
+	userName = (UITextEntry) root.findComponent("/basicForm/userName");
     }
     catch (Throwable e) {
 	System.out.println(e.getMessage());

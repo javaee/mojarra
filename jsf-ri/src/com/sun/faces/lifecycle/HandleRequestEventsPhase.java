@@ -1,5 +1,5 @@
 /*
- * $Id: HandleRequestEventsPhase.java,v 1.4 2002/06/22 00:15:07 jvisvanathan Exp $
+ * $Id: HandleRequestEventsPhase.java,v 1.5 2002/07/12 23:58:07 rkitain Exp $
  */
 
 /*
@@ -21,6 +21,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 
+import com.sun.faces.tree.TreeNavigator;
+import com.sun.faces.tree.TreeNavigatorImpl;
+
 import java.util.Iterator;
 
 
@@ -29,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: HandleRequestEventsPhase.java,v 1.4 2002/06/22 00:15:07 jvisvanathan Exp $
+ * @version $Id: HandleRequestEventsPhase.java,v 1.5 2002/07/12 23:58:07 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#HANDLE_REQUEST_EVENTS_PHASE
@@ -71,6 +74,48 @@ public HandleRequestEventsPhase(Lifecycle newDriver, int newId)
 		  return Phase.GOTO_NEXT;
 	      }
 	  });
+}
+
+// Overridden from GenericPhaseImpl to process all events
+// before either proceedng to Render Response phase or the next
+// phase in the lifecycle.
+//
+
+public int traverseTreeInvokingCallback(FacesContext facesContext)
+    throws FacesException {
+
+    TreeNavigator treeNav = null;
+    UIComponent next = null;
+    int result = Phase.GOTO_NEXT;
+    boolean gotoRender = false;
+
+    // PENDING(edburns): use a factory for the TreeNavigator instance
+    if (Lifecycle.RENDER_RESPONSE_PHASE == id) {
+        treeNav =
+            new TreeNavigatorImpl(facesContext.getResponseTree().getRoot());
+    }
+    else {
+        treeNav =
+            new TreeNavigatorImpl(facesContext.getRequestTree().getRoot());
+    }
+    if (null == treeNav) {
+        throw new FacesException("Can't create TreeNavigator");
+    }
+
+    while (null != (next = treeNav.getNextStart())) {
+        if (null != callback) {
+            result = callback.takeActionOnComponent(facesContext, next);
+            if (Phase.GOTO_NEXT != result) {
+                gotoRender = true;
+            }
+        }
+    }
+    treeNav.reset();
+
+    if (gotoRender) {
+        result = Phase.GOTO_RENDER;
+    }
+    return result;
 }
 
 //
