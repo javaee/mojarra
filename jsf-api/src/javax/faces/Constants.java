@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.8 2001/12/20 22:25:44 ofung Exp $
+ * $Id: Constants.java,v 1.9 2002/01/10 22:16:31 edburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ public class Constants {
      * The Faces data structure used to store Faces objects in
      * specified scopes. 
      */
-    public static final String REF_OBJECTTABLE = "faces.ObjectTable";
+    public static final String REF_OBJECTMANAGER = "faces.ObjectManager";
 
     /**
      * The event queue used to queue Faces events.

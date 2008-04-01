@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.2 2001/12/20 22:25:44 ofung Exp $
+ * $Id: FactoryFinder.java,v 1.3 2002/01/10 22:16:32 edburns Exp $
  */
 
 /*
@@ -28,9 +28,11 @@ import java.lang.reflect.InvocationTargetException;
 
  * This class is a general purpose way of associating an interface or
  * abstract class with an implementation. <P>
+
+ * PENDING(edburns): move this into ri, and make it package private.
  *
  */
-class FactoryFinder {
+public class FactoryFinder {
 
     /**
      * Figure out which ClassLoader to use.  For JDK 1.2 and later use
@@ -131,9 +133,10 @@ class FactoryFinder {
      *
      * @exception FactoryFinder.ConfigurationError
      *
+     // PENDING(edburns): make this package private again.
      * Package private so this code can be shared.
      */
-    static Object find(String factoryId, String fallbackClassName)
+    public static Object find(String factoryId, String fallbackClassName)
         throws ConfigurationError
     {
         ClassLoader classLoader = findClassLoader();
@@ -222,7 +225,8 @@ class FactoryFinder {
         return newInstance(fallbackClassName, classLoader);
     }
 
-    static class ConfigurationError extends Error {
+    // PENDING(edburns): make this package private
+    public static class ConfigurationError extends Error {
         private Exception exception;
 
         /**
@@ -234,7 +238,8 @@ class FactoryFinder {
             this.exception = x;
         }
 
-        Exception getException() {
+	// PENDING(edburns): make this package private
+        public Exception getException() {
             return exception;
         }
     }

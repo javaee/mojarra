@@ -1,5 +1,5 @@
 /*
- * $Id: RenderContext.java,v 1.8 2001/12/20 22:25:45 ofung Exp $
+ * $Id: RenderContext.java,v 1.9 2002/01/10 22:16:33 edburns Exp $
  */
 
 /*
@@ -14,16 +14,18 @@ import java.util.Locale;
 
 /**
  * The class which defines an object representing all contextual
- * information required for rendering user-interface components
- * described by the resource requested by the client.  A render context
- * provides the following:
+ * information required for handling the rendering phase of a request.
+ * A render context provides the following:
  * <ul>
  * <li>information describing the client from which the request
  *     originated, including the client's preferred locale
  * <li>the appropriate render kit to be used to render user-interface
  *     components for the associated client
+ * <li>access to objects managed in the scoped namespace
  * <li>the output object to be used for rendering the user-interface
  *     components in the response
+ * <li>a render-stack for representing the branch of the component
+ *     hierarchy being rendered
  * </ul>
  * <p>
  * In order for a render context to be created, the toolkit must
@@ -51,20 +53,38 @@ public abstract class RenderContext {
 
     /**
      * The current value of the render kit object.
-     * Returns a RenderKit instance targeted for the client described
-     * by the specified ClientCapabilities instance.
-     * @return RenderKit object used to render components for the
-     *         associated request
+     * @return RenderKit object targeted for the client described by
+     *         the ClientCapabilities object
      */
     public abstract RenderKit getRenderKit();
 
     /**
-     * The current value of the locale object.
-     * return Locale object respresenting client's locale
+     * The current value of the locale object.  This may be different
+     * from the Locale object in the ClientCapabiliites object.
+     * @return Locale object respresenting the user's preferred locale
      */
     public Locale getLocale(){
 	return null;
     }
+
+    /**
+     * The current value of the Object manager object.
+     * @return ObjectManager used to manage application objects in scoped
+     *         namespace
+     */
+    public ObjectManager getObjectManager() {
+	return null;
+    }
+
+    /**
+     * The current value of the Object accessor object.
+     * @return ObjectAccessor used to resolve object-reference Strings to
+     *         objects
+     */
+    public ObjectAccessor getObjectAccessor() {
+	return null;
+    }
+
 
     /**
      * The current value of the OutputMethod object.
@@ -109,8 +129,8 @@ public abstract class RenderContext {
 
     /**
      * Pushes the specified component on the render stack.  This
-     * method is invoked just prior to passing this render context
-     * to the render method on the specified component.
+     * method is invoked just prior to invoking rendering processing
+     * on the specified component.
      * @param c the component to be pushed on the render stack
      * @throws NullPointerException if c is null
      */
@@ -120,8 +140,8 @@ public abstract class RenderContext {
 
     /**
      * Pops the current component off the render stack.  This
-     * method is invoked just after this render context is passed
-     * to the postRender method on the specified component.  If
+     * method is invoked after the specified component and all of
+     * its descendents have been rendered.  If
      * there is no component currently on the stack, returns null.
      * @return WComponent object corresponding to the component
      *         which was most recently rendered from this render context

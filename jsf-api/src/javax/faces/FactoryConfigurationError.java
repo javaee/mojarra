@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigurationError.java,v 1.2 2001/12/20 22:25:44 ofung Exp $
+ * $Id: FactoryConfigurationError.java,v 1.3 2002/01/10 22:16:32 edburns Exp $
  */
 
 /*
@@ -13,7 +13,9 @@ package javax.faces;
  * Thrown when a problem with configuration with the Factories
  * exists. This error will typically be thrown when the class of a
  * factory specified in the system properties cannot be found
- * or instantiated.
+ * or instantiated. <P>
+
+ * PENDING(edburns): move into RI
  *
  * @since faces 1.0
  * @version 1.0

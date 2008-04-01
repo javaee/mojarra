@@ -1,5 +1,5 @@
 /*
- * $Id: ModelAccessor.java,v 1.3 2001/12/20 22:25:45 ofung Exp $
+ * $Id: ModelAccessor.java,v 1.4 2002/01/10 22:16:32 edburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.lang.SecurityException;
 
 import javax.faces.Constants;
 import javax.faces.FacesException;
-import javax.faces.ObjectTable;
+import javax.faces.ObjectManager;
 import javax.faces.RenderContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,21 +39,21 @@ import org.mozilla.util.ParameterCheck;
 public class ModelAccessor {
 
     /**
-     * PRECONDITION: ObjectTable exists in Application Scope.  The
+     * PRECONDITION: ObjectManager exists in Application Scope.  The
      * 'model reference' string references a valid model bean instance
-     * existing in the ObjectTable.  Note that for nested beans,
+     * existing in the ObjectManager.  Note that for nested beans,
      * the nested bean is also instantiated inside the container bean.
      *
      * POSTCONDITION: The property value is set, where the property
      * is identified by the model reference string.  The model bean
-     * with the new value is put back into the ObjectTable.
+     * with the new value is put back into the ObjectManager.
      *
      * @param rc The RenderContext containing the current session.
      * @param modelReference A string referencing a bean's property.
      * @param value The value of the property to be set.
      *
      * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the ObjectTable,
+     *     model reference string cannot be found in the ObjectManager,
      *     or the property value could not be set.
      */
     public static void setModelObject(RenderContext rc, 
@@ -66,13 +66,13 @@ public class ModelAccessor {
         String property = null;
         String baseName = null;
         Object object = null;
-        ObjectTable objectTable;
+        ObjectManager objectTable;
 
         HttpSession session = rc.getSession();
         Assert.assert_it(null != session);
 
-        objectTable = (ObjectTable)session.getServletContext()
-            .getAttribute(Constants.REF_OBJECTTABLE);
+        objectTable = (ObjectManager)session.getServletContext()
+            .getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it(null != objectTable);
 
         // If the reference string begins with a "$" (ex:
@@ -87,7 +87,7 @@ public class ModelAccessor {
             object = objectTable.get(session, baseName);
             if (object == null) {
                 throw new FacesException("Named Object: '"+baseName+
-                    "' not found in ObjectTable.");
+                    "' not found in ObjectManager.");
             }
 
             try {
@@ -103,14 +103,14 @@ public class ModelAccessor {
 //PENDING (ROGERK) - Not Sure About This Part (below)....???? 
         // Otherwise, treat the reference string as a 'literal'
         // name for the model bean itself.  There should be 
-        // a model bean existing in the ObjectTable with this
+        // a model bean existing in the ObjectManager with this
         // name.
         //
         } else {
             object = objectTable.get(session, modelReference);
             if (object == null) {
                 throw new FacesException("Named Object: '"+modelReference+
-                    "' not found in ObjectTable.");
+                    "' not found in ObjectManager.");
             }
             object = value;
             objectTable.put(session, modelReference, object); 
@@ -118,9 +118,9 @@ public class ModelAccessor {
     }
 
     /**
-     * PRECONDITION: ObjectTable exists in Application Scope.  The
+     * PRECONDITION: ObjectManager exists in Application Scope.  The
      * 'model reference' string references a valid model bean instance
-     * existing in the ObjectTable.  Note that for nested beans,
+     * existing in the ObjectManager.  Note that for nested beans,
      * the nested bean is also instantiated inside the container bean.
      *
      * POSTCONDITION: An object is returned as identified by  
@@ -130,7 +130,7 @@ public class ModelAccessor {
      * @param modelReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the ObjectTable,
+     *     model reference string cannot be found in the ObjectManager,
      *     or the property value could not be retrieved.
      */
     public static Object getModelObject(RenderContext rc, 
@@ -141,13 +141,13 @@ public class ModelAccessor {
         String baseName = null;
         Object object = null;
         Object returnObject = null;
-        ObjectTable objectTable;
+        ObjectManager objectTable;
 
         HttpSession session = rc.getSession();
         Assert.assert_it(null != session);
 
-        objectTable = (ObjectTable)session.getServletContext()
-            .getAttribute(Constants.REF_OBJECTTABLE);
+        objectTable = (ObjectManager)session.getServletContext()
+            .getAttribute(Constants.REF_OBJECTMANAGER);
         Assert.assert_it(null != objectTable);
 
         if (modelReference.startsWith("$")) {
@@ -158,7 +158,7 @@ public class ModelAccessor {
             object = objectTable.get(session, baseName);
             if (object == null) {
                 throw new FacesException("Named Object: '"+baseName+
-                    "' not found in ObjectTable.");
+                    "' not found in ObjectManager.");
             }
             try {
                 returnObject = BeanUtils.getNestedProperty(object, property);
@@ -174,7 +174,7 @@ public class ModelAccessor {
             returnObject = objectTable.get(session, modelReference);
             if (returnObject == null) {
                 throw new FacesException("Named Object: '"+modelReference+
-                    "' not found in ObjectTable.");
+                    "' not found in ObjectManager.");
             }
         }
 
