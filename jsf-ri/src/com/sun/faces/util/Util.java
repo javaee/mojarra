@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.15 2002/08/01 21:43:10 rkitain Exp $
+ * $Id: Util.java,v 1.16 2002/08/01 23:01:49 rkitain Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import com.sun.faces.context.MessageResourcesImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.15 2002/08/01 21:43:10 rkitain Exp $
+ * @version $Id: Util.java,v 1.16 2002/08/01 23:01:49 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,6 +90,12 @@ public class Util extends Object
 
     public static final String NULL_EVENT_ERROR_MESSAGE_ID = 
 	"com.sun.faces.NULL_EVENT_ERROR";
+
+    public static final String NULL_HANDLER_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_HANDLER_ERROR";
+
+    public static final String NULL_CONTEXT_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_CONTEXT_ERROR";
 //
 // Class Variables
 //
