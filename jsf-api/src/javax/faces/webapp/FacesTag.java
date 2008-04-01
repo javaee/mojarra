@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.1 2002/06/04 22:16:03 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.2 2002/06/05 04:16:24 craigmcc Exp $
  */
 
 /*
@@ -10,8 +10,12 @@
 package javax.faces.webapp;
 
 
+import java.io.IOException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.Renderer;
+import javax.faces.render.RenderKit;
 import javax.faces.tree.Tree;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -36,6 +40,212 @@ import javax.servlet.jsp.tagext.TagSupport;
  */
 
 public abstract class FacesTag extends TagSupport {
+
+
+    // ----------------------------------------------------- Instance Variables
+
+
+    /**
+     * <p>The {@link UIComponent} that is being encoded by this tag,
+     * if any.</p>
+     */
+    protected UIComponent component = null;
+
+
+    /**
+     * <p>The {@link FacesContext} for the request being processed, if any.
+     * </p>
+     */
+    protected FacesContext context = null;
+
+
+    /**
+     * <p>The {@link Renderer} to which we should delegate encoding for
+     * the component associated with this tag, if any.</p>
+     */
+    protected Renderer renderer = null;
+
+
+    // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doEnd()</code> method when it is called.  Subclasses
+     * May override this method to return the appropriate value.</p>
+     *
+     * @exception JspException to cause <code>doEnd()</code> to
+     *  throw an exception
+     */
+    public int getDoEndValue() throws JspException {
+
+        return (EVAL_PAGE);
+
+    }
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doStart()</code> method when it is called.  Subclasses
+     * may override this method to return the appropriate value.</p>
+     *
+     * @exception JspException to cause <code>doStart()</code> to
+     *  throw an exception
+     */
+    public int getDoStartValue() throws JspException {
+
+        return (EVAL_BODY_INCLUDE);
+
+    }
+
+
+    /**
+     * <p>An override for the model reference expression associated with our
+     * {@link UIComponent}, if not <code>null</code>.</p>
+     */
+    protected String model = null;
+
+
+    /**
+     * <p>Return the override for the model reference expression.</p>
+     */
+    public String getModel() {
+
+        return (this.model);
+
+    }
+
+
+    /**
+     * <p>Set an override for the model reference expression.</p>
+     *
+     * @param model The new model reference expression
+     */
+    public void setModel(String model) {
+
+        this.model = model;
+
+    }
+
+
+    /**
+     * <p>Return the <code>rendererType</code> property that selects the
+     * <code>Renderer</code> to be used for encoding this component.
+     * Subclasses must override this method to return the appropriate value.
+     * </p>
+     */
+    public abstract String getRendererType();
+
+
+    // ------------------------------------------------------------ Tag Methods
+
+
+    /**
+     * <p>Render the beginning of the component associated with this tag.</p>
+     *
+     * @exception JspException if an error occurs
+     */
+    public int doStart() throws JspException {
+
+        // Ensure that an appropriate ResponseWriter is available
+        context = (FacesContext)
+            pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
+                                     PageContext.REQUEST_SCOPE);
+        if (context != null) { // FIXME - i18n
+            throw new JspException("Cannot find FacesContext");
+        }
+        ResponseWriter writer = context.getResponseWriter();
+        if ((writer == null) ||
+            !(writer instanceof JspResponseWriter)) {
+            writer = new JspResponseWriter(pageContext.getOut());
+            context.setResponseWriter(writer);
+        }
+
+        // Locate and configure the component that corresponds to this tag
+        component = findComponent();
+        overrideProperties(component);
+
+        // Render the beginning of the component associated with this tag
+        String rendererType = component.getRendererType();
+        if (rendererType == null) {
+            renderer = null;
+            try {
+                component.encodeBegin(context);
+            } catch (IOException e) {
+                component = null;
+                context = null;
+                throw new JspException(e);
+            }
+        } else {
+            RenderKit renderKit = context.getResponseTree().getRenderKit();
+            if (renderKit == null) { // FIXME - i18n
+                throw new JspException("Cannot find RenderKit");
+            }
+            try {
+                renderer = renderKit.getRenderer(rendererType);
+            } catch (IllegalArgumentException e) { // FIXME - i18n
+                component = null;
+                context = null;
+                throw new JspException("Cannot find Renderer '" +
+                                       rendererType + "'");
+            }
+            try {
+                renderer.encodeBegin(context, component);
+            } catch (IOException e) {
+                component = null;
+                context = null;
+                renderer = null;
+                throw new JspException(e);
+            }
+        }
+
+        // FIXME - what about rendersChildren???
+
+        // Return the appropriate control value
+        return (getDoStartValue());
+
+    }
+
+
+    /**
+     * <p>Render the ending of the component associated with this tag.</p>
+     *
+     * @exception JspException if an error occurs
+     */
+    public int doEnd() throws JspException {
+
+        // Render the ending of the component associated with this tag
+        try {
+            if (renderer == null) {
+                component.encodeEnd(context);
+            } else {
+                renderer.encodeEnd(context, component);
+            }
+        } catch (IOException e) {
+            throw new JspException(e);
+        } finally {
+            component = null;
+            context = null;
+            renderer = null;
+        }
+
+        // Return the appropriate control value
+        return (getDoEndValue());
+
+    }
+
+
+    /**
+     * <p>Release any resources allocated during the execution of this
+     * tag handler.</p>
+     */
+    public void release() {
+
+        super.release();
+        this.id = null;
+        this.model = null;
+
+    }
 
 
     // ------------------------------------------------------ Protected Methods
@@ -97,6 +307,23 @@ public abstract class FacesTag extends TagSupport {
             return (component.findComponent(id));
         } catch (IllegalArgumentException e) { // FIXME - i18n
             throw new JspException("Cannot find parent FacesTag component");
+        }
+
+    }
+
+
+    /**
+     * <p>Override properties of the specified component if the corresponding
+     * properties of this tag handler were explicitly set.</p>
+     */
+    protected void overrideProperties(UIComponent component) {
+
+        // The rendererType property is always overridden
+        component.setRendererType(getRendererType());
+
+        // Override other properties as required
+        if (model != null) {
+            component.setModel(model);
         }
 
     }
