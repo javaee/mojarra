@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="pre-EA1"/>
+  <property name="version" value="post-EA2"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -172,6 +172,7 @@
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
     </delete>
+    <delete file="jsf-${version}.zip"/>
   </target>
 
   <target name="clean.tomcat"
@@ -302,6 +303,10 @@
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
 
     <!-- copy the necessary examples -->
+    <!-- PENDING(raj): include cardemo here -->
+
+    <!-- create the zip file -->
+    <zip zipfile="jsf-${version}.zip" basedir="${dist.home}" />
 
   </target>
 
