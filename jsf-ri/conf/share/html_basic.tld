@@ -364,6 +364,26 @@ Configuring UI Components
   </tag>
 
   <tag>
+    <name>SelectOne_Radio</name>
+    <tagclass>com.sun.faces.taglib.html_basic.SelectOne_RadioTag</tagclass>
+    <bodycontent>JSP</bodycontent>
+    <attribute>
+        <name>checked</name>
+    </attribute>
+    <attribute>
+        <name>name</name>
+        <required>true</required>
+    </attribute>
+    <attribute>
+      <name>value</name>
+      <required>true</required>
+    </attribute>
+    <attribute>
+        <name>label</name>
+    </attribute>
+  </tag>
+
+  <tag>
       <name>useFaces</name>
       <tagclass>com.sun.faces.taglib.html_basic.UseFacesTag</tagclass>
       <bodycontent>JSP</bodycontent>

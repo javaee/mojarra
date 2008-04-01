@@ -51,7 +51,38 @@ The items listed above will be billed to: <br>
 <faces:Output_Text name='cust_country' value='USA' />
 
 <form name="form1" method="post" action="purchaseAction.jsp">
+<TABLE border="2"><TR><TD>
+<TABLE>
+<TR>
+<TD>Select Shipping</TD>
+<TD><faces:SelectOne_Radio name="shipType" value="nextDay" label=" Next Day"/></TD>
+<TD><faces:SelectOne_Radio name="shipType" checked="true" value="nextWeek" label="Next Week"/> </TD>
+<TD><faces:SelectOne_Radio name="shipType" value="nextMonth" label="Next Month"/> </TD>
+
+</TR>
+<TR>
+<TD>Select Extras
+</TD>
+<TD><faces:SelectBoolean_Checkbox name="extras" value="giftWrap" 
+                                  label="Gift Wrapped"/>
+</TD>
+<TD><faces:SelectBoolean_Checkbox name="extras" value="giftCard" 
+                                  label="Gift Card"/>
+</TD>
+<TD><faces:SelectBoolean_Checkbox name="extras" value="scented" 
+                                  label="Scented"/>
+</TD>
+</TR>
+<TR>
+<TD>
   <input type="submit" name="Submit" value="Purchase Items Listed Above">
+</TD>
+</TR>
+<TR>
+<TD colspan="4"><HR></TD>
+</TR>
+</TABLE>
+</TD></TR></TABLE>
 </form>
 <hr>
 
