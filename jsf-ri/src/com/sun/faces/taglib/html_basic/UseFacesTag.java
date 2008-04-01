@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.1 2001/11/07 00:18:34 rogerk Exp $
+ * $Id: UseFacesTag.java,v 1.2 2001/11/07 00:23:31 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -27,7 +27,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
-import javax.faces.OutputMethodFactory;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
 
@@ -40,7 +39,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UseFacesTag.java,v 1.1 2001/11/07 00:18:34 rogerk Exp $
+ * @version $Id: UseFacesTag.java,v 1.2 2001/11/07 00:23:31 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,7 +134,7 @@ public static void main(String [] args)
     UseFacesTag me = new UseFacesTag();
     Log.setApplicationName("UseFacesTag");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: UseFacesTag.java,v 1.1 2001/11/07 00:18:34 rogerk Exp $");
+    Log.setApplicationVersionDate("$Id: UseFacesTag.java,v 1.2 2001/11/07 00:23:31 edburns Exp $");
     try {
         me.doStartTag(); 
     } catch (Exception e) {
