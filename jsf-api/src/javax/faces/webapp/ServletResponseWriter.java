@@ -1,5 +1,5 @@
 /*
- * $Id: ServletResponseWriter.java,v 1.1 2002/06/05 03:01:56 craigmcc Exp $
+ * $Id: ServletResponseWriter.java,v 1.2 2002/07/16 21:52:04 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.context.ResponseWriter;
  * <p><strong>FIXME</strong> - Should this implementation be in jsf-api?</p>
  */
 
-public final class ServletResponseWriter extends ResponseWriter {
+public final class ServletResponseWriter extends ResponseWriterBase {
 
 
     // ----------------------------------------------------------- Constructors

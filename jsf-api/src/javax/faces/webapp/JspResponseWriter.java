@@ -1,5 +1,5 @@
 /*
- * $Id: JspResponseWriter.java,v 1.1 2002/06/05 03:01:56 craigmcc Exp $
+ * $Id: JspResponseWriter.java,v 1.2 2002/07/16 21:52:04 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.servlet.jsp.JspWriter;
  * <p><strong>FIXME</strong> - Should this implementation be in jsf-api?</p>
  */
 
-public final class JspResponseWriter extends ResponseWriter {
+public final class JspResponseWriter extends ResponseWriterBase {
 
 
     // ----------------------------------------------------------- Constructors

@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.3 2002/07/16 21:52:03 craigmcc Exp $
+ * $Id: ResponseWriterBase.java,v 1.1 2002/07/16 21:52:04 craigmcc Exp $
  */
 
 /*
@@ -7,23 +7,24 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.context;
+package javax.faces.webapp;
 
 
 import java.io.IOException;
 import java.io.Writer;
+import javax.faces.context.ResponseWriter;
 
 
 /**
- * <p><strong>ResponseWriter</strong> is an abstract class describing an
- * adapter to an underlying output mechanism for character-based output.
- * In addition to the low-level <code>write()</code> methods inherited from
- * <code>java.io>Writer</code>, this class provides utility methods
- * that are useful in producing elements and attributes for markup languages
- * like HTML and XML.</p>
+ * <p>Private abstract base class for {@link JspResponseWriter} and
+ * {@link ServletResponseWriter}.  This class is <strong>NOT</strong>
+ * part of the public API of JavaServer Faces.</p>
+ *
+ * <p>Concrete subclasses must implement the low-level methods inherited
+ * from the <code>java.io.Writer</code> base class.</p>
  */
 
-public abstract class ResponseWriter extends Writer {
+abstract class ResponseWriterBase extends ResponseWriter {
 
 
     /**
@@ -31,7 +32,11 @@ public abstract class ResponseWriter extends Writer {
      *
      * @exception IOException if an input/output error occurs
      */
-    public abstract void startDocument() throws IOException;
+    public void startDocument() throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -41,7 +46,11 @@ public abstract class ResponseWriter extends Writer {
      *
      * @exception IOException if an input/output error occurs
      */
-    public abstract void endDocument() throws IOException;
+    public void endDocument() throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -61,7 +70,11 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public abstract void startElement(String name) throws IOException;
+    public void startElement(String name) throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -74,7 +87,11 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public abstract void endElement(String name) throws IOException;
+    public void endElement(String name) throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -93,8 +110,12 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>name</code> or
      *  <code>value</code> is <code>null</code>
      */
-    public abstract void writeAttribute(String name, Object value)
-        throws IOException;
+    public void writeAttribute(String name, Object value)
+        throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -114,8 +135,12 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>name</code> or
      *  <code>value</code> is <code>null</code>
      */
-    public abstract void writeURIAttribute(String name, Object value)
-        throws IOException;
+    public void writeURIAttribute(String name, Object value)
+        throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -130,7 +155,11 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>comment</code>
      *  is <code>null</code>
      */
-    public abstract void writeComment(Object comment) throws IOException;
+    public void writeComment(Object comment) throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -145,7 +174,11 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
-    public abstract void writeText(Object text) throws IOException;
+    public void writeText(Object text) throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -157,7 +190,11 @@ public abstract class ResponseWriter extends Writer {
      *
      * @exception IOException if an input/output error occurs
      */
-    public abstract void writeText(char text) throws IOException;
+    public void writeText(char text) throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -173,7 +210,11 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
-    public abstract void writeText(char text[]) throws IOException;
+    public void writeText(char text[]) throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
     /**
@@ -192,8 +233,12 @@ public abstract class ResponseWriter extends Writer {
      * @exception NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
-    public abstract void writeText(char text[], int off, int len)
-        throws IOException;
+    public void writeText(char text[], int off, int len)
+        throws IOException {
+
+        throw new UnsupportedOperationException();
+
+    }
 
 
 }
