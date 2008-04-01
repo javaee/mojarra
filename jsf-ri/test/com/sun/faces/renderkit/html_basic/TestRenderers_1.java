@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.1 2002/05/31 19:34:14 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.2 2002/06/04 00:11:25 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.FileOutputResponseWrapper;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.1 2002/05/31 19:34:14 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.2 2002/06/04 00:11:25 eburns Exp $
  * 
  *
  */
@@ -86,7 +86,7 @@ public class TestRenderers_1 extends ServletTestCase
         System.setProperty(FactoryFinder.FACES_CONTEXT_FACTORY,
 		       "com.sun.faces.context.FacesContextFactoryImpl");
         facesContextFactory = (FacesContextFactory) 
-	FactoryFinder.createFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
         assertTrue(null != facesContextFactory);
     
         assertTrue(request != null);

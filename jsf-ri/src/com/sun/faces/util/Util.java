@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.9 2002/06/01 00:58:22 eburns Exp $
+ * $Id: Util.java,v 1.10 2002/06/04 00:11:25 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.9 2002/06/01 00:58:22 eburns Exp $
+ * @version $Id: Util.java,v 1.10 2002/06/04 00:11:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,7 +119,7 @@ private Util()
 	Assert.assert_it(null == 
                        context.getAttribute(FactoryFinder.RENDER_KIT_FACTORY));
 	renderKitFactory = (RenderKitFactory)
-	    FactoryFinder.createFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
 	Assert.assert_it(null != renderKitFactory);
 	context.setAttribute(FactoryFinder.RENDER_KIT_FACTORY, 
 			     renderKitFactory);
@@ -127,7 +127,7 @@ private Util()
 	Assert.assert_it(null == 
                        context.getAttribute(FactoryFinder.LIFECYCLE_FACTORY));
 	lifecycleFactory = (LifecycleFactory)
-	    FactoryFinder.createFactory(FactoryFinder.LIFECYCLE_FACTORY);
+	    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
 	Assert.assert_it(null != lifecycleFactory);
 	context.setAttribute(FactoryFinder.LIFECYCLE_FACTORY, 
 			     lifecycleFactory);
@@ -135,7 +135,7 @@ private Util()
 	Assert.assert_it(null == 
                        context.getAttribute(FactoryFinder.TREE_FACTORY));
 	treeFactory = (TreeFactory)
-	    FactoryFinder.createFactory(FactoryFinder.TREE_FACTORY);
+	    FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
 	Assert.assert_it(null != treeFactory);
 	context.setAttribute(FactoryFinder.TREE_FACTORY, 
 			     treeFactory);
@@ -143,7 +143,7 @@ private Util()
 	Assert.assert_it(null == 
                     context.getAttribute(FactoryFinder.FACES_CONTEXT_FACTORY));
 	facesContextFactory = (FacesContextFactory)
-	    FactoryFinder.createFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
+	    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
 	Assert.assert_it(null != facesContextFactory);
 	context.setAttribute(FactoryFinder.FACES_CONTEXT_FACTORY, 
 			     facesContextFactory);
