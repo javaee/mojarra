@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.4 2002/05/16 21:53:38 craigmcc Exp $
+ * $Id: Renderer.java,v 1.5 2002/05/17 00:33:37 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.render;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.11 2002/05/16 21:53:37 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.12 2002/05/17 00:33:37 craigmcc Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
-import javax.faces.render.AttributeDescriptor;
 import javax.faces.render.Renderer;
 
 
@@ -527,7 +526,7 @@ public abstract class UIComponent {
      * <p>Create (if necessary) and return an iterator over the child
      * components of this component.</p>
      */
-    private List getChildren() {
+    private List getChildList() {
 
         if (children == null) {
             children = new ArrayList();
@@ -565,7 +564,7 @@ public abstract class UIComponent {
     public void add(int index, UIComponent component) {
 
         checkComponentId(component.getComponentId());
-        getChildren().add(index, component);
+        getChildList().add(index, component);
 
     }
 
@@ -581,10 +580,10 @@ public abstract class UIComponent {
      *  this component
      * @exception NullPointerException if <code>component</code> is null
      */
-    public void add(UIComponent component) {
+    public void addChild(UIComponent component) {
 
         checkComponentId(component.getComponentId());
-        getChildren().add(component);
+        getChildList().add(component);
 
     }
 
@@ -594,14 +593,14 @@ public abstract class UIComponent {
      * recursively performing this operation when a child {@link UIComponent}
      * also has children.</p>
      */
-    public void clear() {
+    public void clearChildren() {
 
         if (!isChildrenAllocated()) {
             return;
         }
-        Iterator kids = getChildren().iterator();
+        Iterator kids = getChildList().iterator();
         while (kids.hasNext()) {
-            ((UIComponent) kids.next()).clear();
+            ((UIComponent) kids.next()).clearChildren();
         }
         children.clear();
 
@@ -617,13 +616,29 @@ public abstract class UIComponent {
      *
      * @exception NullPointerException if <code>component</code> is null
      */
-    public boolean contains(UIComponent component) {
+    public boolean containsChild(UIComponent component) {
 
         if (isChildrenAllocated()) {
-            return (getChildren().contains(component));
+            return (getChildList().contains(component));
         } else {
             return (false);
         }
+
+    }
+
+
+    /**
+     * <p>Return the {@link UIComponent} at the specified position
+     * in the child list.</p>
+     *
+     * @param index Position of the desired component
+     *
+     * @exception IndexOutOfBoundsException if index is out of range
+     *  ((index &lt; 0) || (index &gt;= size()))
+     */
+    public UIComponent findChild(int index) {
+
+        return ((UIComponent) getChildList().get(index));
 
     }
 
@@ -714,7 +729,7 @@ public abstract class UIComponent {
                 }
             } else {
                 boolean found = false;
-                Iterator kids = node.iterator();
+                Iterator kids = node.getChildren();
                 while (kids.hasNext()) {
                     node = (UIComponent) kids.next();
                     if (segment.equals(node.getComponentId())) {
@@ -737,32 +752,15 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the {@link UIComponent} at the specified position
-     * in the child list.</p>
-     *
-     * @param index Position of the desired component
-     *
-     * @exception IndexOutOfBoundsException if index is out of range
-     *  ((index &lt; 0) || (index &gt;= size()))
+     * <p>Return the number of {@link UIComponent}s on the child list.</p>
      */
-    public UIComponent get(int index) {
+    public int getChildCount() {
 
-        return ((UIComponent) getChildren().get(index));
-
-    }
-
-
-    /**
-     * <p>Return the index of the specified {@link UIComponent} in the
-     * child list, or <code>-1</code> if this component is not a child.</p>
-     *
-     * @param component {@link UIComponent} to be checked
-     *
-     * @exception NullPointerException if <code>component</code> is null
-     */
-    public int indexOf(UIComponent component) {
-
-        return (getChildren().indexOf(component));
+        if (isChildrenAllocated()) {
+            return (getChildList().size());
+        } else {
+            return (0);
+        }
 
     }
 
@@ -771,10 +769,10 @@ public abstract class UIComponent {
      * <p>Return an <code>Iterator</code> over the child {@link UIComponent}s
      * of this <code>UIComonent</code> in the proper sequence.</p>
      */
-    public Iterator iterator() {
+    public Iterator getChildren() {
 
         if (isChildrenAllocated()) {
-            return (getChildren().iterator());
+            return (getChildList().iterator());
         } else {
             return (Collections.EMPTY_LIST.iterator());
         }
@@ -791,9 +789,9 @@ public abstract class UIComponent {
      * @exception IndexOutOfBoundsException if the index is out of range
      *  ((index < 0) || (index &gt;= size()))
      */
-    public void remove(int index) {
+    public void removeChild(int index) {
 
-        getChildren().remove(index);
+        getChildList().remove(index);
 
     }
 
@@ -805,51 +803,12 @@ public abstract class UIComponent {
      *
      * @exception NullPointerException if <code>component</code> is null
      */
-    public void remove(UIComponent component) {
+    public void removeChild(UIComponent component) {
 
         if (component == null) {
             throw new NullPointerException("remove");
         }
-        getChildren().remove(component);
-
-    }
-
-
-    /**
-     * <p>Replace the child {@link UIComponent} at the specified position
-     * in the child list.</p>
-     *
-     * @param index Position of the desired component
-     * @param component The new component
-     *
-     * @exception IllegalArgumentException if the component identifier
-     *  of the new component is not unique within the children of
-     *  this component
-     * @exception IndexOutOfBoundsException if the index is out of range
-     *  ((index < 0) || (index &gt;= size()))
-     * @exception NullPointerException if <code>component</code> is null
-     */
-    public void set(int index, UIComponent component) {
-
-        UIComponent current = get(index);
-        if (!component.getComponentId().equals(current.getComponentId())) {
-            checkComponentId(component.getComponentId());
-        }
-        getChildren().set(index, component);
-
-    }
-
-
-    /**
-     * <p>Return the number of {@link UIComponent}s on the child list.</p>
-     */
-    public int size() {
-
-        if (isChildrenAllocated()) {
-            return (getChildren().size());
-        } else {
-            return (0);
-        }
+        getChildList().remove(component);
 
     }
 

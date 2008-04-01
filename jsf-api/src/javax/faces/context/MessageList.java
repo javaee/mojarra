@@ -1,5 +1,5 @@
 /*
- * $Id: MessageList.java,v 1.1 2002/05/16 18:28:48 craigmcc Exp $
+ * $Id: MessageList.java,v 1.2 2002/05/17 00:33:37 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -88,6 +88,15 @@ public abstract class MessageList {
      *  are not associated with a specific component
      */
     public abstract Iterator iterator(String reference);
+
+
+    /**
+     * <p>Return the number of messages that have been queued, whether
+     * or not they are for a particular component.  <strong>FIXME</strong> -
+     * add more useful metrics to help the <em>Process Validations</em>
+     * phase decide what to do?</p>
+     */
+    public abstract int size();
 
 
 }
