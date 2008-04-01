@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterManagerImpl.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * $Id: ConverterManagerImpl.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.Converter;
 import javax.faces.ConverterManager;
 import javax.faces.Constants;
 import javax.faces.FacesException;
+import javax.servlet.ServletContext;
 
 import java.util.Properties;
 import java.util.Iterator;
@@ -47,10 +48,9 @@ public class ConverterManagerImpl extends ConverterManager
     // Constructors and Initializers    
     //
 
-    public ConverterManagerImpl()
+    public ConverterManagerImpl(ServletContext sc)
     {
-        super();
-        ConverterManager.setInstance(this);
+        ConverterManager.setInstance(sc,this);
         loadProperties();
     }
 

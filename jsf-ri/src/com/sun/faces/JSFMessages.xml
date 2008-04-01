@@ -1,0 +1,29 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<messages>
+  <message id="MSG0001" severity="30" text="{0} is not a valid number.">
+  	<secondlevel>Please re-enter a valid number.</secondlevel>
+  </message>
+  <message id="MSG0002" severity="10" text="{0} is not a valid date." >
+      <secondlevel>Please re-enter date in mm/dd/yy format.</secondlevel>
+  </message>
+  <message id="MSG0003" severity="10" text="{0} field cannot be empty." />
+  <message id="MSG0004" severity="10" text="{0} out of range. " >
+      <secondlevel>Value should be between {1} and {2}.</secondlevel>
+  </message>
+  <message id="MSG0005" severity="10" text="{0} too long." >   
+      <secondlevel>This field accepts from {1} to {2} characters.</secondlevel>
+  </message> 
+  <message id="MSG0006" severity="10" text="Invalid format" >   
+      <secondlevel>Please re-enter in {0} format.</secondlevel>
+  </message>
+  <message id="MSG0007" severity="30" text="{0} is not a valid string.">
+        <secondlevel>Please re-enter a valid string.</secondlevel>
+  </message> 
+  <message id="MSG0007" severity="30" text="Date cannot be after today's date">
+  </message>
+</messages>
+

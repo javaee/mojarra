@@ -1,5 +1,5 @@
 /*
- * $Id: TreeBuilder.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
+ * $Id: TreeBuilder.java,v 1.4 2002/03/15 20:58:03 jvisvanathan Exp $
  */
 
 /*
@@ -19,11 +19,18 @@ import org.apache.jasper_hacked.compiler.JspParseListener;
 import javax.faces.UIComponent;
 import javax.faces.UISelectOne;
 import javax.faces.RenderContext;
+import javax.faces.ObjectManager;
+import javax.faces.FormatValidator;
+import javax.faces.RangeValidator;
+import javax.faces.LengthValidator;
+import javax.faces.RequiredValidator;
+import javax.faces.UIForm;
 
 import com.sun.faces.util.Util;
 
 import javax.servlet.jsp.tagext.TagInfo;
 import javax.servlet.jsp.tagext.TagLibraryInfo;
+import javax.servlet.ServletRequest;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -56,7 +63,7 @@ import java.lang.reflect.Method;
 
  *
  *
- * @version $Id: TreeBuilder.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
+ * @version $Id: TreeBuilder.java,v 1.4 2002/03/15 20:58:03 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *
@@ -81,6 +88,9 @@ protected static String PARENT_SELECTONE = PARENT + "javax.faces.UISelectOne";
 //
 
 // Attribute Instance Variables
+// stores model value of the form temporarily to support implicit mapping
+// of components to properties in the bean.
+private String formModelRef = null;
 
 // Relationship Instance Variables
 
@@ -195,6 +205,7 @@ private void initializeClassMap()
     classMap.put("TextEntry_Input", "javax.faces.UITextEntry");
     classMap.put("TextEntry_Secret", "javax.faces.UITextEntry");
     classMap.put("TextEntry_TextArea", "javax.faces.UITextEntry");
+    classMap.put("Errors", "javax.faces.UIOutput");
     tagStack = new Stack();
 }
 
@@ -266,7 +277,15 @@ private String mapAttrNameToPropertyName(String attrName) {
     }
 
     if (attrName.equals("model")) {
-	attrName = "modelReference";
+        attrName = "modelReference";
+    }
+
+    if (attrName.equals("converter")) {
+        attrName = "converterReference";
+    }
+
+    if (attrName.equals("selectedValueModel")) {
+        attrName = "selectedModelReference";
     }
     return attrName;
 }
@@ -280,7 +299,11 @@ private boolean attrRequiresSpecialTreatment(String attrName) {
 
     if (attrName.equals("valueChangeListener") ||
 	attrName.equals("commandListener") ||
-	attrName.equals("formListener")) {
+	attrName.equals("formListener") ||
+        attrName.equals("required") || 
+        attrName.equals("format") ||
+        attrName.equals("rangeMaximum") ||
+        attrName.equals("lengthMaximum")) {
 	result = true;
     }
     return result;
@@ -295,8 +318,13 @@ private void handleSpecialAttr(UIComponent child, String attrName,
     Assert.assert_it(attrRequiresSpecialTreatment(attrName));
     
     Class [] stringArg = { String.class };
-    Object [] args = { attrValue };
     Method attrMethod = null;
+
+    ObjectManager objectManager = renderContext.getObjectManager();
+    Assert.assert_it(objectManager != null );
+
+    ServletRequest request = renderContext.getRequest();
+    Assert.assert_it(request != null );
 
     if (attrName.equals("valueChangeListener")) {
 	try {
@@ -329,9 +357,56 @@ private void handleSpecialAttr(UIComponent child, String attrName,
 	}
     }
     else if (attrName.equals("required")) {
-	// PENDING(visvan): deal with validation
+        if ( attrValue.equals("true")) {
+            // create required validator
+            child.setAttribute("required", attrValue);
+
+            RequiredValidator reqValidator = new RequiredValidator();
+            String reqValidatorId = Util.generateId();
+            objectManager.put( request, reqValidatorId, reqValidator);
+
+            attrMethod = child.getClass().getMethod("addValidator", stringArg);
+            attrValue = reqValidatorId;
+        }
     }
 
+    else if (attrName.equals("format")) {
+        // create format validator
+        child.setAttribute("format", attrValue);
+
+        FormatValidator formatValidator = new FormatValidator();
+        String formatValidatorId = Util.generateId();
+        objectManager.put( request, formatValidatorId, formatValidator);
+
+        attrMethod = child.getClass().getMethod("addValidator", stringArg);
+        attrValue = formatValidatorId;
+    }
+
+    else if (attrName.equals("rangeMaximum")) {
+        // create Range validator
+        child.setAttribute("rangeMaximum", attrValue);
+
+        RangeValidator rangeValidator = new RangeValidator();
+        String rangeValidatorId = Util.generateId();
+        objectManager.put( request, rangeValidatorId, rangeValidator);
+
+        attrMethod = child.getClass().getMethod("addValidator", stringArg);
+        attrValue = rangeValidatorId;
+    }
+
+    else if (attrName.equals("lengthMaximum")) {
+        // create length validator
+        child.setAttribute("lengthMaximum", attrValue);
+
+        LengthValidator lengthValidator = new LengthValidator();
+        String lengthValidatorId = Util.generateId();
+        objectManager.put( request, lengthValidatorId, lengthValidator);
+
+        attrMethod = child.getClass().getMethod("addValidator", stringArg);
+        attrValue = lengthValidatorId;
+    }
+
+    Object [] args = { attrValue };
     if (null != attrMethod) {
 	attrMethod.invoke(child, args);
     }
@@ -467,6 +542,17 @@ public void handleTagBegin(Attributes attrs, String prefix,
 	    System.out.println(e.getMessage());
 	    Assert.assert_it(false);
 	}
+        // save Form's modelReference so that the children can get the model
+        // bean if it is not explicitly specified.
+        if ( attrName.equals("modelReference") && child instanceof UIForm ) {
+            formModelRef = attrValue;
+        }
+    }
+    // If model attribute is not set for a component get it from the 
+    // parent form if it exists.
+    if (child.getModelReference() == null && formModelRef != null && 
+            !(child instanceof UIForm) ) {
+       child.setModelReference("$" + formModelRef + "." + child.getId());     
     }   
     
     // cleanup: make sure we have the necessary required attributes
@@ -505,6 +591,10 @@ public void handleTagEnd(Attributes attrs, String prefix,
 	return;
     }
     tagStack.pop();
+    // null out formModelRef once we have finished processing a form.
+    if ( shortTagName.equals("Form")) {
+        formModelRef = null;
+    }
 }
 
 

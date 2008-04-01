@@ -1,5 +1,5 @@
 /*
- * $Id: DateValidator.java,v 1.1 2002/03/08 00:24:50 jvisvanathan Exp $
+ * $Id: DateValidator.java,v 1.2 2002/03/15 20:58:04 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package basic;
 import javax.faces.Converter;
 import javax.faces.ValidationException;
 import javax.faces.UIComponent;
-import javax.faces.RenderContext;
+import javax.faces.EventContext;
 
 import java.util.Date;
 import java.text.DateFormat;
@@ -20,30 +20,33 @@ import java.text.ParseException;
 
 public class DateValidator implements Converter {
 
-    public Object convertStringToObject(RenderContext ctx,
+    public Object convertStringToObject(EventContext ctx,
                                        UIComponent component,
                                        String componentValue)
             throws ValidationException {
 
+        javax.faces.MessageList msgList = ctx.getMessageList();
         Date date = null;
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
         if ( componentValue == null ) {
-            throw new ValidationException ( "Value cannot be empty " ); 
+            msgList.addMessage("MSG0002", component.getId(), componentValue);
+            throw new ValidationException ( "" ); 
         }
         try {
             date = df.parse( componentValue);
         } catch ( ParseException pe ) {
-            throw new ValidationException ( "Could not convert " +
-                    componentValue + " to date ");
+             msgList.addMessage("MSG0002", component.getId(), componentValue);
+            throw new ValidationException ( "" ); 
         }
         if ( date.after(new Date()) ) {
-            throw new ValidationException ( "Date cannot be before Today's date " ); 
+            msgList.addMessage("MSG0008", component.getId(), componentValue);
+            throw new ValidationException ( "" ); 
         } 
         return date;
 
     }
 
-   public String convertObjectToString(RenderContext ctx,
+   public String convertObjectToString(EventContext ctx,
                                        UIComponent component,
                                        Object modelValue)
            throws ValidationException {

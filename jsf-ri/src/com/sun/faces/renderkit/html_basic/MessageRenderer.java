@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.13 2002/03/15 20:58:03 jvisvanathan Exp $
+ * $Id: MessageRenderer.java,v 1.1 2002/03/15 20:58:03 jvisvanathan Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// InputRenderer.java
+// MessageRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
 
@@ -20,8 +20,11 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
-import javax.faces.UITextEntry;
+import javax.faces.UIOutput;
 import javax.faces.UIComponent;
+import javax.faces.ObjectManager;
+import javax.faces.MessageList;
+import javax.faces.Message;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -30,18 +33,18 @@ import org.mozilla.util.ParameterCheck;
 
 /**
  *
- *  <B>InputRenderer</B> is a class ...
+ *  <B>MessageRenderer</B> renders messages in the MessageList.
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.13 2002/03/15 20:58:03 jvisvanathan Exp $
+ * @version $Id: MessageRenderer.java,v 1.1 2002/03/15 20:58:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class InputRenderer extends Object implements Renderer
+public class MessageRenderer extends Object implements Renderer
 {
     //
     // Protected Constants
@@ -63,7 +66,7 @@ public class InputRenderer extends Object implements Renderer
     // Constructors and Initializers    
     //
 
-    public InputRenderer()
+    public MessageRenderer()
     {
         super();
         // ParameterCheck.nonNull();
@@ -100,59 +103,46 @@ public class InputRenderer extends Object implements Renderer
 	return null;
     }
 
+
     public void renderStart(RenderContext rc, UIComponent c )
-            throws IOException, FacesException { 
-        
+        throws IOException, FacesException { 
+
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
 
-        UITextEntry textField = null;
+        UIOutput label = null;
         if ( supportsType(c)) {
-            textField = (UITextEntry) c;
+            label = (UIOutput) c;
         } else {
-            throw new FacesException("Invalid component type. " +
-                     "Expected UITextEntry");
+            throw new FacesException("Invalid component type. Expected UIOutput");
         }
-	
-        String textFieldId = textField.getId();
-        Assert.assert_it(null != textFieldId);
+        ObjectManager om = rc.getObjectManager();
+        Assert.assert_it(om != null );
 
+        MessageList ml = (MessageList)om.get(rc.getRequest(),
+                 MessageList.MESSAGE_LIST_ID);
+        if ( ml == null ) { 
+            return;
+        }
+        Iterator it = ml.iterator();
+        boolean first = true;
+        StringBuffer text = new StringBuffer(300);
+        while(it.hasNext()) {
+            if (first) {
+                text.append("<ul>");
+                first = false;
+            }
+            text.append("<li>");
+            Message msg = (Message) it.next();
+            text.append(msg.toString() + " " + msg.getSecondLevelMessage());
+        }
+        if (first) {
+            text.append("</ul>");
+        }
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
-
-        StringBuffer output = new StringBuffer();
-        output.append("<INPUT TYPE=\"text\"");
-            
-        output.append(" NAME=\"");
-        output.append(textFieldId);
-        output.append("\"");
-
-        // render default text specified
-        String textField_value = textField.getText(rc);
-        if ( textField_value != null ) {
-            output.append(" VALUE=\"");
-            output.append(textField_value);
-            output.append("\"");
-        }
-        //render size if specified
-        String textField_size = (String)textField.getAttribute(rc, "size");
-        if ( textField_size != null ) {
-            output.append(" SIZE=\"");
-            output.append(textField_size);
-            output.append("\"");
-        }
-        //render maxlength if specified 
-        String textField_ml = (String)textField.getAttribute(rc, "maxlength");
-        if ( textField_ml != null ) {
-            output.append(" MAXLENGTH=\"");
-            output.append(textField_ml);
-            output.append("\"");
-        }
-        output.append(">");
-        outputMethod.writeText(output.toString());
+        outputMethod.writeText(text.toString());
         outputMethod.flush();
-            
-        return;
     }
 
     public void renderChildren(RenderContext rc, UIComponent c) 
@@ -168,7 +158,7 @@ public class InputRenderer extends Object implements Renderer
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals(Constants.REF_UITEXTENTRY)) {
+        if ( componentType.equals(Constants.REF_UIOUTPUT)) {
             supports = true;
         }
         return supports;
@@ -177,11 +167,11 @@ public class InputRenderer extends Object implements Renderer
     public boolean supportsType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
-        if ( c instanceof UITextEntry ) {
+        if ( c instanceof UIOutput ) {
             supports = true;
         }
         return supports;
     }
 
 
-} // end of class InputRenderer
+} // end of class MessageRenderer

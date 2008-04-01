@@ -1,5 +1,5 @@
 /*
- * $Id: EventContextImpl.java,v 1.4 2002/03/13 18:04:20 eburns Exp $
+ * $Id: EventContextImpl.java,v 1.5 2002/03/15 20:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -36,6 +36,7 @@ import javax.faces.EventQueueFactory;
 import javax.faces.UIForm;
 import javax.faces.NavigationMap;
 import javax.faces.TreeNavigator;
+import javax.faces.MessageList;
 
 /**
  *
@@ -43,7 +44,7 @@ import javax.faces.TreeNavigator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventContextImpl.java,v 1.4 2002/03/13 18:04:20 eburns Exp $
+ * @version $Id: EventContextImpl.java,v 1.5 2002/03/15 20:58:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,7 +77,7 @@ public class EventContextImpl extends EventContext
     private String formId = null;
     private NavigationHandler navHandler = null;
     private NavigationHandlerFactory navHandlerFactory = null;
-    
+    private MessageList _messageList = null; 
     /**
 
     * Convenience ivar.  Owning reference is in RenderContext implementation.
@@ -244,6 +245,18 @@ public class EventContextImpl extends EventContext
      */
     public ObjectAccessor getObjectAccessor() {
         return renderContext.getObjectAccessor();
+    }
+
+    public MessageList getMessageList()
+    {
+        if (_messageList == null)
+        {
+            _messageList = MessageList.newInstance();
+            _messageList.setLocale(request.getLocale());
+            getObjectManager().put(request, MessageListImpl.MESSAGE_LIST_ID,
+                    _messageList);
+        }
+        return _messageList;
     }
     
     

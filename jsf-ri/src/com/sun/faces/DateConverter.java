@@ -1,5 +1,5 @@
 /*
- * $Id: DateConverter.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * $Id: DateConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,8 @@ package com.sun.faces;
 import javax.faces.Converter;
 import javax.faces.ValidationException;
 import javax.faces.UIComponent;
-import javax.faces.RenderContext;
+import javax.faces.EventContext;
+import javax.faces.MessageList;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -29,7 +30,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateConverter.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * @version $Id: DateConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  *
  * @see javax.faces.Converter
  *
@@ -37,7 +38,7 @@ import java.text.ParseException;
 
 public class DateConverter implements Converter {
 
-    public Object convertStringToObject(RenderContext ctx,
+    public Object convertStringToObject(EventContext ctx,
                                        UIComponent component,
                                        String componentValue)
             throws ValidationException {
@@ -48,18 +49,19 @@ public class DateConverter implements Converter {
         // we should be getting the locale from the renderContext ??
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
         if ( componentValue == null ) {
-            throw new ValidationException ( "Value cannot be empty " ); 
+            setErrorMessage(ctx, component.getId(), componentValue);
+            throw new ValidationException (""); 
         }    
         try {
             date = df.parse( componentValue);
         } catch ( ParseException pe ) {
-            throw new ValidationException ( "Could not convert " + 
-                    componentValue + " to date ");
+            setErrorMessage(ctx, component.getId(), componentValue);
+            throw new ValidationException (""); 
         }  
         return date;
     }
 
-   public String convertObjectToString(RenderContext ctx,
+   public String convertObjectToString(EventContext ctx,
                                        UIComponent component,
                                        Object modelValue)
            throws ValidationException {
@@ -67,6 +69,13 @@ public class DateConverter implements Converter {
       ParameterCheck.nonNull(modelValue);
       DateFormat df = DateFormat.getDateInstance();
       return df.format( modelValue);
+   }
+
+   protected void setErrorMessage(EventContext ctx, String compId, 
+           String componentValue) {
+       MessageList msgList = ctx.getMessageList();
+       Assert.assert_it(msgList != null);
+       msgList.addMessage("MSG0002", compId,componentValue);
    }
 
 }

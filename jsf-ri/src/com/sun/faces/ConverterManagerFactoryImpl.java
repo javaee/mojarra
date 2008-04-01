@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterManagerFactoryImpl.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * $Id: ConverterManagerFactoryImpl.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ConverterManagerFactoryImpl.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * @version $Id: ConverterManagerFactoryImpl.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,7 +71,7 @@ public class ConverterManagerFactoryImpl extends ConverterManagerFactory
 
     public ConverterManager newConverterManager(javax.servlet.ServletContext sc) 
             throws FacesException {
-        ConverterManager result = new ConverterManagerImpl();
+        ConverterManager result = new ConverterManagerImpl(sc);
         return result;
     }
 

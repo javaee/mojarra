@@ -1,5 +1,5 @@
 /*
- * $Id: IntegerConverter.java,v 1.1 2002/03/08 00:24:49 jvisvanathan Exp $
+ * $Id: IntegerConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -12,7 +12,8 @@ package com.sun.faces;
 import javax.faces.Converter;
 import javax.faces.ValidationException;
 import javax.faces.UIComponent;
-import javax.faces.RenderContext;
+import javax.faces.EventContext;
+import javax.faces.MessageList;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -24,7 +25,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: IntegerConverter.java,v 1.1 2002/03/08 00:24:49 jvisvanathan Exp $
+ * @version $Id: IntegerConverter.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
  *
  * @see javax.faces.Converter
  *
@@ -33,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
 public class IntegerConverter implements Converter{
 
     // PENDING ( visvan ) replace with FacesContext
-    public Object convertStringToObject(RenderContext ctx,
+    public Object convertStringToObject(EventContext ctx,
                                        UIComponent component,
                                        String componentValue)
             throws ValidationException {
@@ -44,13 +45,16 @@ public class IntegerConverter implements Converter{
         try {
             intValue = Integer.valueOf( componentValue);
         } catch ( NumberFormatException nfe ) {
-            throw new ValidationException ( "Could not convert " + 
-                    componentValue + " to Integer ");
+            MessageList msgList = ctx.getMessageList();
+            Assert.assert_it(msgList != null);
+            msgList.addMessage("MSG0001", component.getId(),
+                    componentValue);
+            throw new ValidationException("");
         }
         return intValue;
     }
 
-   public String convertObjectToString(RenderContext ctx,
+   public String convertObjectToString(EventContext ctx,
                                        UIComponent component,
                                        Object modelValue)
            throws ValidationException {

@@ -63,6 +63,7 @@
   <property name="jasper_hacked.jar" value="${lib.home}/jasper_hacked.jar"/>
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
+  <property name="xerces.jar" value="${lib.home}/xerces.jar"/>
   <property name="jsf-api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
 
 <!-- ************ Compiler Defaults *************************************** -->
@@ -82,6 +83,7 @@
     <pathelement location="${commons.beanutils.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${xerces.jar}"/>
     <pathelement location="${jasper_hacked.jar}"/>
   </path>
 
@@ -141,6 +143,9 @@
     </javac>
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.properties"/>
+    </copy>
+    <copy todir="${build.home}/classes" flatten="yes">
+        <fileset dir="${source.home}" includes="**/*.xml"/>
     </copy>
 
     </target>
@@ -328,8 +333,8 @@
     <copy  file="${jasper_hacked.jar}"
 	  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
-    <copy  file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"

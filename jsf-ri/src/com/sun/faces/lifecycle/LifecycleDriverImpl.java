@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.1 2002/03/13 18:04:22 eburns Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.faces.LifecycleStage;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.1 2002/03/13 18:04:22 eburns Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -230,6 +230,12 @@ protected void initFactories(ObjectManager objectManager)
     Assert.assert_it(null != treeEngine);
     objectManager.put(servletContext, Constants.REF_TREEENGINE, 
 		      treeEngine);
+
+    // Step 9 create a default Message Factory and put it in Global scope
+    javax.faces.MessageFactory mf = javax.faces.MessageFactory.newInstance();
+    mf.setClassLoader(this.getClass().getClassLoader());
+    objectManager.put(servletContext,
+            com.sun.faces.MessageListImpl.DEFAULT_MESSAGE_FACTORY_ID, mf);
 
 }
 

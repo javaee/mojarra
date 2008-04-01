@@ -823,5 +823,10 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
  </tag>
-
+ <tag>
+      <name>Errors</name>
+      <tagclass>com.sun.faces.taglib.html_basic.ErrorsTag</tagclass>
+      <bodycontent>JSP</bodycontent>
+  </tag>
+ 
 </taglib>

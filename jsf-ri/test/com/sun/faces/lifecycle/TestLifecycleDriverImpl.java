@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleDriverImpl.java,v 1.1 2002/03/13 18:04:25 eburns Exp $
+ * $Id: TestLifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:04 jvisvanathan Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import com.sun.faces.ParamBlockingRequestWrapper;
 import javax.faces.Constants;
 import javax.faces.ObjectManager;
 import javax.faces.TreeNavigator;
+import javax.faces.MessageFactory;
 
 import javax.faces.EventQueueFactory;
 import javax.faces.RenderContextFactory;
@@ -39,14 +40,13 @@ import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.lifecycle.RenderWrapper;
 import javax.faces.ConverterManager;
 import com.sun.faces.treebuilder.TreeEngine;
-
 /**
  *
  *  Exercise LifecycleDriverImpl
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleDriverImpl.java,v 1.1 2002/03/13 18:04:25 eburns Exp $
+ * @version $Id: TestLifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:04 jvisvanathan Exp $
  * 
  * @see	javax.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -128,7 +128,8 @@ public void testInit()
     NavigationHandlerFactory nhf = null;
     ConverterManager cm = null;
     TreeEngine te = null;
-    
+    MessageFactory mf = null;
+ 
     try {
 	lifecycle.init(config.getServletContext());
     }
@@ -163,6 +164,9 @@ public void testInit()
     te = (TreeEngine) objectManager.get(Constants.REF_TREEENGINE);
     assertTrue(null != te);
     System.out.println(" true.");
+
+    mf = (MessageFactory) objectManager.get(com.sun.faces.MessageListImpl.DEFAULT_MESSAGE_FACTORY_ID);
+    assertTrue(null != mf);
 }
 
 public void beginLifecycle(WebRequest theRequest) 

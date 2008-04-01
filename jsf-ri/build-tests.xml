@@ -78,6 +78,7 @@
       <pathelement location="${cactus.jar}"/>
       <pathelement location="${httpclient.jar}"/>
       <pathelement location="${build.home}/classes"/>
+      <pathelement location="${xerces.jar}"/>
       <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
       <!-- For cactus.properties -->
       <pathelement location="${conf.test.dir}"/>
@@ -281,6 +282,7 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            
             <test name="com.sun.faces.lifecycle.TestLifecycleDriverImpl"/>
             <test name="com.sun.faces.treebuilder.TestTreebuilder"/>
             <test name="com.sun.faces.TestObjectManager"/>
@@ -288,6 +290,7 @@
             <test name="com.sun.faces.TestObjectAccessor"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
+            <!-- PENDING(visvan) Test for Validation will be added soon -->
         </junit>
 
     </target>

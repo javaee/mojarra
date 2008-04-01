@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.5 2002/03/08 00:31:00 jvisvanathan Exp $
+ * $Id: FacesFilter.java,v 1.6 2002/03/15 20:58:03 jvisvanathan Exp $
  */
 
 /*
@@ -217,6 +217,12 @@ public class FacesFilter implements Filter {
         converterManager = cmFactory.newConverterManager(servletContext);
         objectManager.put(servletContext,
                         Constants.REF_CONVERTERMANAGER, converterManager);
+
+        // Step 8 create a default Message Factory and put it in Global scope
+        javax.faces.MessageFactory mf = javax.faces.MessageFactory.newInstance();
+        mf.setClassLoader(this.getClass().getClassLoader());
+        objectManager.put(servletContext,
+                com.sun.faces.MessageListImpl.DEFAULT_MESSAGE_FACTORY_ID, mf);
     }
 
     /**

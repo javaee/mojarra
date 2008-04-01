@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.3 2001/12/20 22:26:44 ofung Exp $
+ * $Id: LoginBean.java,v 1.4 2002/03/15 20:58:04 jvisvanathan Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ public class LoginBean {
     String password = null;
     String address = null;
     String validUser = null;
+    Integer pin = null;
 
     public LoginBean () {
         System.out.println("Model Object Created");
@@ -28,6 +29,16 @@ public class LoginBean {
     public String getUserName() {
         System.out.println("get userName " + userName);
         return userName;
+    }
+
+    public void setPin(Integer _pin) {
+        this.pin = _pin;
+        System.out.println("Set pin " + pin);
+    }
+
+    public Integer getPin() {
+        System.out.println("get pin " + pin);
+        return pin;
     }
 
     public void setPassword(String pwd) {
