@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.26 2002/08/13 22:56:18 rkitain Exp $
+ * $Id: Util.java,v 1.27 2002/08/16 23:27:36 rkitain Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.26 2002/08/13 22:56:18 rkitain Exp $
+ * @version $Id: Util.java,v 1.27 2002/08/16 23:27:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -161,6 +161,7 @@ public class Util extends Object
 	"accesskey",
 	"alt",
         "cols",
+        "height",
 	"lang",
 	"maxlength",
 	"onblur",
@@ -183,7 +184,8 @@ public class Util extends Object
 	"onunload",
         "rows",
 	"size",
-	"tabindex"
+	"tabindex",
+        "width"
     };
 
 private static long id = 0;
