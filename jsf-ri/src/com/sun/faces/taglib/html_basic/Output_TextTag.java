@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.2 2001/11/09 22:54:41 visvan Exp $
+ * $Id: Output_TextTag.java,v 1.3 2001/11/10 01:34:37 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,7 +21,6 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -38,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.2 2001/11/09 22:54:41 visvan Exp $
+ * @version $Id: Output_TextTag.java,v 1.3 2001/11/10 01:34:37 edburns Exp $
  * 
  *
  */
@@ -228,7 +227,7 @@ public class Output_TextTag extends TagSupport
         Output_TextTag me = new Output_TextTag();
         Log.setApplicationName("Output_TextTag");
         Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: Output_TextTag.java,v 1.2 2001/11/09 22:54:41 visvan Exp $");
+        Log.setApplicationVersionDate("$Id: Output_TextTag.java,v 1.3 2001/11/10 01:34:37 edburns Exp $");
     
     }
 

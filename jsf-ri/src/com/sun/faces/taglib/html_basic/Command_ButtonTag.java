@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.3 2001/11/08 06:24:19 rogerk Exp $
+ * $Id: Command_ButtonTag.java,v 1.4 2001/11/10 01:34:37 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,8 +21,6 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
-
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -39,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.3 2001/11/08 06:24:19 rogerk Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.4 2001/11/10 01:34:37 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -192,7 +190,7 @@ public class Command_ButtonTag extends TagSupport {
         Command_ButtonTag me = new Command_ButtonTag();
         Log.setApplicationName("Command_ButtonTag");
         Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: Command_ButtonTag.java,v 1.3 2001/11/08 06:24:19 rogerk Exp $");
+        Log.setApplicationVersionDate("$Id: Command_ButtonTag.java,v 1.4 2001/11/10 01:34:37 edburns Exp $");
     
     }
 
