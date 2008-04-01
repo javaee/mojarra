@@ -76,7 +76,6 @@
              filtering="on">
       <fileset dir="${java.dir}">
         <include name="**/version.txt" />
-        <include name="**/defaultManifest.mf" />
       </fileset>
     </copy>
 
@@ -90,8 +89,7 @@
   <target name="jars" depends="build">
 
     <jar jarfile="${build.lib}/${name}.jar" 
-         basedir="${build.classes}" 
-         manifest="${manifest}">
+         basedir="${build.classes}" > 
     </jar>
 
   </target>
