@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.7 2002/01/31 20:38:54 rogerk Exp $
+ * $Id: OptionListRenderer.java,v 1.8 2002/02/05 00:56:16 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.7 2002/01/31 20:38:54 rogerk Exp $
+ * @version $Id: OptionListRenderer.java,v 1.8 2002/02/05 00:56:16 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,7 +176,7 @@ public class OptionListRenderer extends Object implements Renderer {
             UISelectOne.Item item = (UISelectOne.Item)itemsIter.next();
             String itemLabel = item.getLabel(); 
             output.append("<OPTION VALUE=\"");
-            output.append(item);    
+            output.append(item.getValue());    
             output.append("\"");
 
             if ((selectedValue != null) &&
