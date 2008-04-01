@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.2 2002/06/05 04:16:24 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.3 2002/06/05 19:57:43 craigmcc Exp $
  */
 
 /*
@@ -164,6 +164,7 @@ public abstract class FacesTag extends TagSupport {
         // Locate and configure the component that corresponds to this tag
         component = findComponent();
         overrideProperties(component);
+        boolean rendersChildren = component.getRendersChildren();
 
         // Render the beginning of the component associated with this tag
         String rendererType = component.getRendererType();
@@ -171,6 +172,9 @@ public abstract class FacesTag extends TagSupport {
             renderer = null;
             try {
                 component.encodeBegin(context);
+                if (rendersChildren) {
+                    component.encodeChildren(context);
+                }
             } catch (IOException e) {
                 component = null;
                 context = null;
@@ -191,6 +195,9 @@ public abstract class FacesTag extends TagSupport {
             }
             try {
                 renderer.encodeBegin(context, component);
+                if (rendersChildren) {
+                    renderer.encodeChildren(context, component);
+                }
             } catch (IOException e) {
                 component = null;
                 context = null;
