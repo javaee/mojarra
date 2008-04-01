@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.2 2002/07/20 00:21:44 eburns Exp $
+ * $Id: TestRendererAttributes.java,v 1.3 2002/08/02 22:24:07 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.FacesException;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.component.AttributeDescriptor;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 
 import java.util.Iterator;
@@ -37,7 +38,7 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.2 2002/07/20 00:21:44 eburns Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.3 2002/08/02 22:24:07 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,35 +100,71 @@ public static final String CORRECT_OUTPUT_FILENAME =
 
 	RenderKit renderKit = new HtmlBasicRenderKit();
 
-        Iterator rendererTypes = renderKit.getRendererTypes();
-        while (rendererTypes.hasNext()) {
-            String name, rendererType = (String)rendererTypes.next();
-            Renderer renderer = renderKit.getRenderer(rendererType);
-	    AttributeDescriptor attrDesc;
+        Iterator componentClasses = renderKit.getComponentClasses();
+        while (componentClasses.hasNext()) {
+            Class c = (Class)componentClasses.next();
+            UIComponent component = null;
+            try {
+                component = (UIComponent)c.newInstance();
+            } catch (InstantiationException ie) {
+                throw new RuntimeException("Class Instantiation Exception:"+
+                    ie.getMessage());
+            } catch (IllegalAccessException ia) {
+                throw new RuntimeException("Illegal Access Exception:"+
+                    ia.getMessage());
+            } 
+            String componentType = component.getComponentType();
+            Iterator rendererTypes = renderKit.getRendererTypes(
+                componentType);
+            while (rendererTypes.hasNext()) {
+                String name, rendererType = (String)rendererTypes.next();
+                Renderer renderer = renderKit.getRenderer(rendererType);
+	        AttributeDescriptor attrDesc;
 
-	    Iterator attrNames = renderer.getAttributeNames((UIComponent)null);
-	    out.println(rendererType);
-	    while (attrNames.hasNext()) {
-		name = (String) attrNames.next();
-		out.println("\t" + name + "\n");
-		attrDesc = renderer.getAttributeDescriptor((UIComponent)null, 
-							   name);
-		out.println("\t\t" + attrDesc.getDescription() + "\n");
-		out.println("\t\t" + attrDesc.getDisplayName() + "\n");
-		out.println("\t\t" + attrDesc.getName() + "\n");
-		out.println("\t\t" + attrDesc.getType() + "\n");
+	        Iterator attrNames = renderer.getAttributeNames((component));
+	        out.println(rendererType);
+	        while (attrNames.hasNext()) {
+		    name = (String) attrNames.next();
+		    out.println("\t" + name + "\n");
+		    attrDesc = renderer.getAttributeDescriptor(
+                        component, name);
+		    out.println("\t\t" + attrDesc.getDescription() + "\n");
+		    out.println("\t\t" + attrDesc.getDisplayName() + "\n");
+		    out.println("\t\t" + attrDesc.getName() + "\n");
+		    out.println("\t\t" + attrDesc.getType() + "\n");
+                }
 	    }
 	}
 	out.close();
 
 	try {
 	    CompareFiles cf = new CompareFiles();
-	    assertTrue(cf.filesIdentical(OUTPUT_FILENAME, CORRECT_OUTPUT_FILENAME, 
-					 null));
+	    assertTrue(cf.filesIdentical(OUTPUT_FILENAME, CORRECT_OUTPUT_FILENAME, null));
 	} catch (Throwable e ) {
 	    System.out.println("Throwable: " + e.getMessage());
 	    assertTrue(false);
 	}
+
+        // Test IllegalArgument Exceptions
+
+        UICommand u = new UICommand();
+        TextRenderer tr = new TextRenderer();
+        boolean bool = false;
+        try {
+            tr.getAttributeNames(u);
+        }
+        catch (IllegalArgumentException e) {
+            bool = true;
+        }
+        assertTrue(bool);      
+
+        bool = false;
+        try {
+            tr.getAttributeNames(u.getComponentType());
+        }
+        catch (IllegalArgumentException e) {
+            bool = true;
+        }
     }
 
 } // end of class TestRendererAttributes
