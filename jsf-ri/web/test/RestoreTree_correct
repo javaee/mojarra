@@ -1,0 +1,64 @@
+===>Type:root
+id:null
+value=null
+  ===>Type:javax.faces.component.UIForm
+  id:basicForm
+  value=basicForm
+  attr=componentId : basicForm
+  attr=rendererType : FormRenderer
+  attr=parent : com.sun.faces.tree.SimpleTreeImpl
+  attr=value : basicForm
+    ===>Type:javax.faces.component.UITextEntry
+    id:userName
+    value=Default_username
+    attr=componentId : userName
+    attr=rendererType : InputRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : Default_username
+    ===>Type:javax.faces.component.UITextEntry
+    id:password
+    value=Default_password
+    attr=componentId : password
+    attr=rendererType : SecretRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : Default_password
+    ===>Type:javax.faces.component.UICommand
+    id:login
+    value=login
+    attr=componentId : login
+    attr=label : Login
+    attr=rendererType : ButtonRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : login
+    ===>Type:javax.faces.component.UICommand
+    id:link
+    value=null
+    attr=componentId : link
+    attr=label : link text
+    attr=rendererType : HyperlinkRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=target : hello.html
+    ===>Type:javax.faces.component.UIOutput
+    id:userLabel
+    value=Output Text
+    attr=componentId : userLabel
+    attr=rendererType : TextRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : Output Text
+    ===>Type:javax.faces.component.UISelectBoolean
+    id:validUser
+    value=true
+    attr=componentId : validUser
+    attr=label : Valid User
+    attr=rendererType : CheckboxRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : true
+    ===>Type:javax.faces.component.UITextEntry
+    id:address
+    value=Hi There
+    attr=componentId : address
+    attr=rendererType : TextAreaRenderer
+    attr=parent : javax.faces.component.UIForm
+    attr=value : Hi There
+    attr=rows : 10
+    attr=cols : 10

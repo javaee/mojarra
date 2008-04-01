@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.33 2002/08/02 19:31:59 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.34 2002/08/06 18:27:21 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.33 2002/08/02 19:31:59 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.34 2002/08/06 18:27:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,14 +148,14 @@ public class FormRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
         // if we are saving state in page, insert a marker into buffer so that 
         // UseFaces tag can replace it state information.
-        if ( (context.getServletContext()).
-                getAttribute(RIConstants.SAVESTATE_INITPARAM) != null ) {
+        String saveStateParam = (context.getServletContext()).
+                getInitParameter(RIConstants.SAVESTATE_INITPARAM);
+        if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
             writer.write(RIConstants.SAVESTATE_MARKER);
         }    
         writer.write("</FORM>");
