@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.4 2002/05/15 01:03:52 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.5 2002/05/15 23:49:30 craigmcc Exp $
  */
 
 /*
@@ -22,70 +22,44 @@ import javax.faces.context.FacesContext;
  * been registered, in ascending order of phase identifiers, unless otherwise
  * directed by the value returned by execution of each {@link Phase}.</p>
  *
- * <h3>Phase and PhaseListener Implementations</h3>
+ * <p>An instance of <code>Lifecycle</code> is created by calling the
+ * <code>createLifecycle()</code> method of {@link LifecycleFactory}, for
+ * a specified lifecycle identifier.  Subsequent calls to
+ * <code>createLifecycle()</code> will return the same instance (i.e.
+ * it is a per-web-application Singleton.  Because this instance is
+ * shared across multiple simultaneous requests, it must be implemented
+ * in a thread-safe manner.</p>
  *
- * <p>Portable implementations of JavaServer Faces will register
- * {@link Phase} implementations for all of the standard phase identifiers
- * described below.  These {@link Phase} implementations must perform the
- * functionality described for each phase identifier.  Each such implementation
- * should normally return <code>Lifecycle.NEXT_PHASE</code> to request the
- * execution of the next phase in registered identifier sequence.</p>
+ * <p>The set of {@link Phase} instances associated with a particular
+ * <code>Lifecycle</code> instance, as well as the order that they are
+ * executed in, must be configured during execution of the
+ * <code>createLifecycle()</code> method in {@link LifecycleFactory}.  For
+ * each standard phase identifier, a JavaServer Faces implementation will
+ * provide a default {@link Phase} instance that implements the
+ * required behavior of that phase.  In addition, it is possible for an
+ * application to register additional {@link Phase} instances, to be executed
+ * before or after the standard instance, for a particular phase identifier,
+ * by calling the <code>registerBefore()</code> or <code>registerAfter()</code>
+ * methods of {@link LifecycleFactory}.  Note that registration of custom
+ * {@link Phase} instances must be completed before the call to
+ * <code>createLifecycle()</code> that creates this <code>Lifecycle</code>
+ * instance.</p>
  *
- * <p><strong>FIXME</strong> - Move the details of the processing required
- * in each phase to the spec chapter on Request Processing Lifecycle.</p>
- *
- * <p>Applications (and JavaServer Faces implementations) may additionally
- * register custom {@link Phase} implementations.  If such a registration
- * replaces the Faces-provided {@link Phase} implementation for a standard
- * phase, it is the application's responsibility to perform the functionality
- * described for that standard phase, in addition to its own.</p>
- *
- * <p>Several of the standard phases involve walking down the component
- * tree for the current request (in top-down, left-to-right order), and
- * calling an appropriate event handling method.  In each case, the
- * underlying components have the option to delegate event handling to an
- * external object, referenced by the <code>lifecycleHandler</code> property
- * of the component.  If a particular component has no registered
- * <code>lifecycleHandler</code>, the corresponding method on the component
- * itself must be called instead.</p>
- *
- * <p><strong>FIXME</strong> - Representation of phase ids
- * as integers?</p>
- *
- * <h3>Lifecycle</h3>
- *
- * <p>A typical JavaServer Faces implementation will instantiate a single
- * instance of <code>Lifecycle</code> that is utilized to process all requests
- * for a particular web application.  Advanced implementations may choose to
- * utilize different <code>Lifecycle</code> instances for different types of
- * requests -- the choice of which implementation to use is made in the
- * <code>newInstance()</code> method of {@link FacesContextFactory}.  All
- * <code>Lifecycle</code> instances shall be available for the lifetime
- * of the web application.</p>
- *
- * <p>Because <code>Lifecycle</code> instances are shared, they must be
- * programmed in a thread-safe manner.  A {@link FacesContext} parameter
- * will be passed to methods as needed, to provide access to the state
- * information for a particular request.</p>
+ * <p>The <code>execute()</code> method of <code>Lifecycle</code> is run
+ * once per incoming request processed by a Faces application, according
+ * to the following algorithm:</p>
+ * <blockquote>
+ * <p><strong>FIXME</strong> - Describe the algorithm used to identify
+ * which phase instances are called in which order (including transitions
+ * to <em>Render Response</em> starting with custom phases registered to
+ * run before the standard one), and when phase listeners are invoked.</p>
+ * </blockquote>
  */
 
 public abstract class Lifecycle {
 
 
     // ------------------------------------------------------ Phase Identifiers
-
-
-    /**
-     * Phase identifier that indicates processing for the current request
-     * has been completed.
-     */
-    public static final int EXIT_PHASE = -1;
-
-
-    /**
-     * Phase identifier that selects the next phase, in ascending sequence.
-     */
-    public static final int NEXT_PHASE = 0;
 
 
     /**
@@ -103,7 +77,7 @@ public abstract class Lifecycle {
      *     method of {@link FacesContext}.</p>
      * </ul>
      */
-    public static final int CREATE_REQUEST_TREE_PHASE = 10;
+    public static final int CREATE_REQUEST_TREE_PHASE = 0;
 
 
     /**
@@ -116,7 +90,7 @@ public abstract class Lifecycle {
      * typically be deserialized here and used to restore state, along with
      * any state information saved in the user's session.</p>
      */
-    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 20;
+    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 1;
 
 
     /**
@@ -125,7 +99,7 @@ public abstract class Lifecycle {
      * (in top-down, left-to-right order) via a call to the
      * <code>applyRequestValues()</code> method of that component.</p>
      */
-    public static final int APPLY_REQUEST_VALUES_PHASE = 30;
+    public static final int APPLY_REQUEST_VALUES_PHASE = 2;
 
 
     /**
@@ -145,7 +119,7 @@ public abstract class Lifecycle {
      * {@link Phase} should return <code>Lifecycle.NEXT_PHASE</code> in the
      * usual way.</p>
      */
-    public static final int HANDLE_REQUEST_EVENTS_PHASE = 40;
+    public static final int HANDLE_REQUEST_EVENTS_PHASE = 3;
 
 
     /**
@@ -161,7 +135,7 @@ public abstract class Lifecycle {
      * <code>Lifecycle.RENDER_RESPONSE_PHASE</code>, typically to the original
      * input page but optionally elsewhere.</p>
      */
-    public static final int PROCESS_VALIDATIONS_PHASE = 50;
+    public static final int PROCESS_VALIDATIONS_PHASE = 4;
 
 
     /**
@@ -175,7 +149,7 @@ public abstract class Lifecycle {
      * that are encountered here (most of them <em>should</em> have been
      * caught by the conversion attempt during validations, but ...).</p>
      */
-    public static final int UPDATE_MODEL_VALUES_PHASE = 60;
+    public static final int UPDATE_MODEL_VALUES_PHASE = 5;
 
 
     /**
@@ -202,7 +176,7 @@ public abstract class Lifecycle {
      * allow components to queue up several of them?  Is this really just a
      * matter of processing any <code>UICommand</code> event(s)?</p>
      */
-    public static final int INVOKE_APPLICATION_PHASE = 70;
+    public static final int INVOKE_APPLICATION_PHASE = 6;
 
 
     /**
@@ -218,125 +192,26 @@ public abstract class Lifecycle {
      * <p><strong>FIXME</strong> - Where does serializing the current state
      * information fit in?  Is it a separate phase prior to this one?</p>
      */
-    public static final int RENDER_RESPONSE_PHASE = 80;
+    public static final int RENDER_RESPONSE_PHASE = 7;
 
 
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the unique lifecycle identifier for this
-     * <code>Lifecycle</code> instance.  The default <code>Lifecycle</code>
-     * instance for a given JavaServer Faces implementation shall
-     * return a zero-length String.</p>
-     */
-    public abstract String getLifecycleId();
-
-
-    // ------------------------------------------------------ Execution Methods
+    // --------------------------------------------------------- Public Methods
 
 
     /**
      * <p>Execute the {@link Phase}s registered for this <code>Lifecycle</code>
-     * instance, according to the following algorithm.</p>
-     * <ol>
-     * <li>Select the registered {@link Phase} with the lowest phase
-     *     identifier value.</li>
-     * <li>Call the <code>entering()</code> method of each registered
-     *     {@link PhaseListener}.</li>
-     * <li>Call the <code>execute()</code> method of the currently selected
-     *     phase.</li>
-     * <li>Call the <code>exiting()</code> method of each registered
-     *     {@link PhaseListener}.</li>
-     * <li>Evaluate the identifier returned by the <code>execute()</code>
-     *     method of the {@link Phase} that was just executed, and proceed
-     *     as follows:
-     *     <ul>
-     *     <li><em>Phase.EXIT_PHASE</em> - Exit from this method.</li>
-     *     <li><em>Phase.NEXT_PHASE</em> - Select the registered
-     *         {@link Phase} with the next higher phase identifier,
-     *         and return to Step 2.</li>
-     *     <li><em>Any Other Value</em> - Select the {@link Phase}
-     *         specified by the returned identifier (throwing an exception
-     *         if there is no such registered {@link Phase}), and
-     *         proceed to Step 2.</li>
-     *     </ul></li>
-     * </ol>
+     * instance, according to the algorithm described in the class description.
+     * </p>
      *
      * @param context FacesContext for the current request being processed
      *
-     * @exception FacesException if a {@link Phase} returned an invalid
-     *  phase identifier
+     * @exception IllegalStateException if a {@link Phase} returned an invalid
+     *  state change value from the <code>execute()</code> method
      * @exception FacesException if a {@link Phase} threw such an exception
      *  from its <code>execute()</code> method
      */
     public abstract void execute(FacesContext context) throws FacesException;
 
-
-    // ---------------------------------------------------------- Phase Support
-
-
-    /**
-     * <p>Deregister an existing {@link Phase} instance for its defined phase
-     * identifier.</p>
-     *
-     * <p><strong>FIXME</strong> - does this method need to be public?</p>
-     *
-     * @param phase Existing {@link Phase} instance to be deregistered
-     *
-     * @exception NullPointerException if <code>phase</code>
-     *  is <code>null</code>
-     */
-    public abstract void deregister(Phase phase);
-
-
-    /**
-     * <p>Look up and return the {@link Phase} instance for the specified
-     * phase identifier, if any; otherwise, return <code>null</code>.</p>
-     *
-     * <p><strong>FIXME</strong> - does this method need to be public?</p>
-     *
-     * @exception IllegalArgumentException if one of the special phase
-     *  identifiers (EXIT_PHASE, NEXT_PHASE) is requested
-     */
-    public abstract Phase getPhase(int phaseId);
-
-
-    /**
-     * <p>Return a <code>SortedMap</code> of all the {@link Phase} instances
-     * registered for this <code>Lifecycle</code>, keyed by the phase
-     * identifier (wrapped in a <code>java.lang.Integer</code>).  If there are
-     * no registered {@link Phase}s, an empty map is returned.  Because the
-     * returned map is sorted, the order in which the keys are returned by
-     * an iterator over the <code>keySet</code> is the <em>natural order</em>
-     * in which the registered {@link Phase}s will be executed.</p>
-     *
-     * <p><strong>FIXME</strong> - does this method need to be public?</p>
-     *
-     * <p><strong>FIXME</strong> - Should the returned map be immutable?</p>
-     */
-    public abstract SortedMap getPhases();
-
-
-    /**
-     * <p>Register a new {@link Phase} instance for its defined phase
-     * identifier, replacing any previously registered instance.</p>
-     *
-     * <p><strong>FIXME</strong> - does this method need to be public?
-     * Should this registration perhaps be on {@link LifecycleFactory}
-     * instead, keyed to the logical lifecycle id?</p>
-     *
-     * @param phase New {@link Phase} instance to be registered
-     *
-     * @exception IllegalArgumentException if one of the special phase
-     *  identifiers (EXIT_PHASE, NEXT_PHASE) is requested
-     * @exception NullPointerException if <code>phase</code>
-     *  is <code>null</code>
-     */
-    public abstract void register(Phase phase);
-
-
-    // -------------------------------------------------- PhaseListener Support
 
     /**
      * <p>Register a new {@link PhaseListener} that will receive notification

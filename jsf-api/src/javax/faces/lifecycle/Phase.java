@@ -1,5 +1,5 @@
 /*
- * $Id: Phase.java,v 1.1 2002/05/07 05:18:58 craigmcc Exp $
+ * $Id: Phase.java,v 1.2 2002/05/15 23:49:30 craigmcc Exp $
  */
 
 /*
@@ -18,35 +18,63 @@ import javax.faces.context.FacesContext;
  * JavaServer Faces request throughout its entire {@link Lifecycle}.  Each
  * <code>Phase</code> performs the required transitions on the state
  * information in the {@link FacesContext} associated with this request,
- * and returns the phase identifier of the phase that is to be executed
- * next.</p>
+ * and returns one of the specified state change values to determine which
+ * <code>Phase</code> (if any) will be the next one to be processed.</p>
  *
- * <h3>Lifecycle</h3>
- *
- * <p>At application startup time, one or more {@link Lifecycle} instances
- * will be instantiated and configured.  The set of <code>Phase</code>s
- * associated with each {@link Lifecycle} (both standard ones provided by
- * the JavaServer Faces implementation, and any application-specific
- * custom <code>Phase</code>s) will be registered at that time, and will
- * have the same lifetime as the corresponding {@link Lifecycle} instances.
- * </p>
+ * <p>Individual <code>Phase</code> instances must be instantiated and
+ * associated with a particular {@link Lifecycle} instance in the
+ * {@link LifecycleFactory} instance for this web application, prior to
+ * return from <code>createLifecycle()</code>.  Each <code>Phase</code>
+ * instance will be associated with exactly one {@link Lifecycle} instance,
+ * but must be programmed in a thread-safe manner because it will be used
+ * to process simultaneous requests on multiple threads.</p>
  */
 
 public abstract class Phase {
 
 
+    // ---------------------------------------------------- State Change Values
+
+
     /**
-     * <p>Perform all transitions required by the current phase of the
+     * <p>Return value from <code>execute()</code> that terminates execution
+     * of the request processing lifecycle for this request.  This value will
+     * normally be returned only from the <em>Render Response</em> phase, but
+     * might also be returned in abnormal circumstances such as execution of
+     * an HTTP redirect.  In all cases where this value is returned, the
+     * phase implementation must have guaranteed that the
+     * <code>ServletResponse</code> associated with this request has been
+     * completed.</p>
+     */
+    public static final int GOTO_EXIT = -1;
+
+
+    /**
+     * <p>Return value from <code>execute()</code> that requests execution of
+     * the next phase in order.</p>
+     */
+    public static final int GOTO_NEXT = -2;
+
+
+    /**
+     * <p>Return value from <code>execute()</code> that requests execution
+     * to skip intervening lifecycle phases and resume with the
+     * <em>Render Response</em> phase.  Execution will start with the latest
+     * custom phase added (via <code>LifecycleFactory.registerBefore()</code>
+     * for the <em>Render Response</em> phase for our lifecycle instance.</p>
+     */
+    public static final int GOTO_RENDER = -3;
+
+
+    // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>Perform all state transitions required by the current phase of the
      * request processing {@link Lifecycle} for a particular request.
-     * In general, state transitions will be recorded in the
-     * {@link FacesContext} for which our {@link Lifecycle} is performed.
-     * Return the phase identifier of the next phase that should be executed,
-     * <code>Lifecycle.NEXT_PHASE</code> to select the next registered
-     * phase in sequence, or <code>Lifecycle.EXIT_PHASE</code> to indicate
-     * that the processing for this request has been completed.</p>
-     *
-     * <p><strong>FIXME</strong> - Representation of phase ids
-     * as integers?</p>
+     * Return one of the standard state change values (<code>GOTO_EXIT</code>,
+     * <code>GOTO_NEXT</code>, or <code>GOTO_RENDER</code>) to indicate what
+     * the request processing lifecycle should do next.<?p>
      *
      * @param context FacesContext for the current request being processed
      *
@@ -54,28 +82,6 @@ public abstract class Phase {
      *  executing this phase
      */
     public abstract int execute(FacesContext context) throws FacesException;
-
-
-    /**
-     * <p>Return the {@link Lifecycle} with which this <code>Phase</code>
-     * is associated.</p>
-     *
-     * <p><strong>FIXME</strong> - does this method need to be public?</p>
-     */
-    public abstract Lifecycle getLifecycle();
-
-
-    /**
-     * <p>Return the phase identifier of this <code>Phase</code>, which must be
-     * unique among the <code>Phases</code> registered with our associated
-     * {@link Lifecycle}.</p>
-     *
-     * <p><strong>FIXME</strong> - does this method need to be public?</p>
-     *
-     * <p><strong>FIXME<strong> - Representation of phase ids
-     * as integers?</p>
-     */
-    public abstract int getPhaseId();
 
 
 }
