@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.16 2002/07/26 03:44:25 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.17 2002/07/28 22:12:50 craigmcc Exp $
  */
 
 /*
@@ -291,7 +291,7 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Render the ending of the {@link UIComponent} that is associated
      * with this tag (via the <code>id</code> attribute), by following these
-     * steps:</p>
+     * steps.</p>
      * <ul>
      * <li>If the <code>rendersChildren</code> property of this component is
      *     <code>true</code>, call the <code>encodeChildren()</code> method
