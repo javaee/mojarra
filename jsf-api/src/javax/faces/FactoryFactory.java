@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFactory.java,v 1.3 2002/05/18 02:09:11 craigmcc Exp $
+ * $Id: FactoryFactory.java,v 1.4 2002/05/21 02:15:36 craigmcc Exp $
  */
 
 /*
@@ -68,6 +68,37 @@ public final class FactoryFactory {
     }
 
 
+    // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * The property name for the <code>FacesContextFactory</code> class name.
+     */
+    public final static String FACES_CONTEXT_FACTORY =
+        "javax.faces.context.FacesContextFactory";
+
+
+    /**
+     * The property name for the <code>LifecycleFactory</code> class name.
+     */
+    public final static String LIFECYCLE_FACTORY =
+        "javax.faces.lifecycle.LifecycleFactory";
+
+
+    /**
+     * The property name for the <code>RenderKitFactory</code> class name.
+     */
+    public final static String RENDER_KIT_FACTORY =
+        "javax.faces.render.RenderKitFactory";
+
+
+    /**
+     * The property name for the <code>TreeFactory</code> class name.
+     */
+    public final static String TREE_FACTORY =
+        "javax.faces.tree.TreeFactory";
+
+
     // ------------------------------------------------------- Static Variables
 
 
@@ -91,10 +122,10 @@ public final class FactoryFactory {
      * discovery mechanism is supported.</p>
      */
     private static String factoryNames[] = {
-        "javax.faces.context.FacesContextFactory",
-        "javax.faces.lifecycle.LifecycleFactory",
-        "javax.faces.render.RenderKitFactory",
-        "javax.faces.tree.TreeFactory",
+        FACES_CONTEXT_FACTORY,
+        LIFECYCLE_FACTORY,
+        RENDER_KIT_FACTORY,
+        TREE_FACTORY,
     };
 
 
