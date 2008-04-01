@@ -51,7 +51,7 @@
          makes relative references to images and other resources
          required by your servlet more complicated, so defining
          all of your servlets (and defining a mapping to them with
-         a <servlet-mapping> element) is recommended.
+         a "servlet-mapping" element) is recommended.
 
          Servlet initialization parameters can be retrieved in a
          servlet or JSP page by calling:
@@ -63,13 +63,14 @@
          one of these initialization parameters.
 
          You can define any number of servlets, including zero.
+    -->
 
     <servlet>
-      <servlet-name>controller</servlet-name>
+      <servlet-name>faces</servlet-name>
       <description>
         This servlet plays the "controller" role in the MVC architecture
         used in this application.  It is generally mapped to the ".do"
-        filename extension with a <servlet-mapping> element, and all form
+        filename extension with a "servlet-mapping" element, and all form
         submits in the app will be submitted to a request URI like
         "saveCustomer.do", which will therefore be mapped to this servlet.
 
@@ -78,28 +79,17 @@
         filename extension is removed).  The corresponding value is the
         name of the action class that will be used to process this request.
       </description>
-      <servlet-class>com.mycompany.mypackage.ControllerServlet</servlet-class>
+      <servlet-class>com.sun.faces.servlet.FacesServlet</servlet-class>
       <init-param>
-        <param-name>listOrders</paramName>
-        <param-value>com.mycompany.myactions.ListOrdersAction</param-value>
+        <param-name></param-name>
+        <param-value></param-value>
       </init-param>
       <init-param>
-        <param-name>saveCustomer</paramName>
-        <param-value>com.mycompany.myactions.SaveCustomerAction</param-value>
+        <param-name></param-name>
+        <param-value></param-value>
       </init-param>
       <load-on-startup>5</load-on-startup>
     </servlet>
-
-    <servlet>
-      <servlet-name>graph</servlet-name>
-      <description>
-        This servlet produces GIF images that are dynamically generated
-        graphs, based on the input parameters included on the request.
-        It is generally mapped to a specific request URI like "/graph".
-      </description>
-    </servlet>
-    -->
-
 
     <!-- Define mappings that are used by the servlet container to
          translate a particular request URI (context-relative) to a
@@ -118,16 +108,12 @@
          It is also legal to define more than one mapping for the same
          servlet, if you wish to.
 
-    <servlet-mapping>
-      <servlet-name>controller</servlet-name>
-      <url-pattern>*.do</url-pattern>
-    </servlet-mapping>
+    -->
 
     <servlet-mapping>
-      <servlet-name>graph</servlet-name>
-      <url-pattern>/graph</url-pattern>
+      <servlet-name>faces</servlet-name>
+      <url-pattern>*.do</url-pattern>
     </servlet-mapping>
-    -->
 
 
     <!-- Define the default session timeout for your application,
