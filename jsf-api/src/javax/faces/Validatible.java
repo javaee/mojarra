@@ -37,7 +37,7 @@ public interface Validatible {
      *         scoped namespace or if the object referred to by validatorId
      *         does not implement the <code>Validator</code> interface.
      */
-    void addValidator(String validatorId);
+    public void addValidator(String validatorId);
 
     /**
      * Removes the specified validator id as a validator
@@ -46,13 +46,13 @@ public interface Validatible {
      * @throws FacesException if validatorId is not registered as a
      *         validator for this component.
      */
-    void removeValidator(String validatorId);
+    public void removeValidator(String validatorId);
 
     /**
      * @return Iterator containing the Validator instances registered
      *         for this component
      */
-    Iterator getValidators();
+    public Iterator getValidators();
 
    /**
      * The message model-reference property for this validatible component.
@@ -66,7 +66,7 @@ public interface Validatible {
      * @see #setMessageModelReference  
      * @return String containing the message model-reference for this component
      */
-    String getMessageModelReference();
+    public String getMessageModelReference();
 
     /**
      * Sets the message model-reference property on this validatible component.
@@ -74,7 +74,7 @@ public interface Validatible {
      * @param modelReference the String which contains a reference to the
      *        object which acts as the store for any validation error messages
      */
-    void setMessageModelReference(String modelReference);
+    public void setMessageModelReference(String modelReference);
 
     /**
      * The &quot;validState&quot; attribute which describes the current
@@ -89,7 +89,7 @@ public interface Validatible {
      * @return integer containing the current valid state of this
      *         component
      */
-    int getValidState();
+    public int getValidState();
 
     /**
      * Sets the &quot;validState&quot; attribute for this component.
@@ -99,7 +99,7 @@ public interface Validatible {
      * @throws IllegalParameterException if validState is not
      *         UNVALIDATED, VALID, or INVALID
      */
-    void setValidState(int validState);
+    public void setValidState(int validState);
 
     /**
      * Performs validation on the specified value object. 
@@ -110,7 +110,7 @@ public interface Validatible {
      * @return String containing a message describing why validation
      *         failed, or null if validation succeeded
      */
-    void validate(EventContext ec);
+    public void validate(EventContext ec);
 
 }
 

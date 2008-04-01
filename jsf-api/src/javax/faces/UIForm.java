@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.6 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: UIForm.java,v 1.7 2002/03/15 23:29:21 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.EventObject;
  * @see UICommand  
  * </ol>
  */
-public class UIForm extends UIComponent implements EventDispatcher {
+public class UIForm extends UIComponent implements EventDispatcher, Validatible {
 
     private static String TYPE = "Form";
     private String messageModelReference = null;
@@ -219,5 +219,34 @@ public class UIForm extends UIComponent implements EventDispatcher {
     public void setValidState(int validState) {
         setAttribute("validState", new Integer(validState));
     }
+
+    /**
+
+    * We override this because a form's value should not be set as a
+    * local value.
+
+    */
+
+    public Object pullValueFromModel(RenderContext rc) {
+	Object result = null;
+        if (null == getModelReference()) {
+	    return result;
+	}
+
+	try {
+            result = rc.getObjectAccessor().getObject(rc.getRequest(),
+						      getModelReference());
+	} catch ( FacesException e ) {
+            // PENDING (visvan) skip this exception ??
+	}
+	return result;
+    }
+
+    //
+    // Methods from Validatible
+    //
+
+    public void validate(EventContext ec) {}
+
  
 }

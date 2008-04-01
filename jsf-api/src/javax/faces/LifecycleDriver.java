@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriver.java,v 1.1 2002/03/13 17:59:32 eburns Exp $
+ * $Id: LifecycleDriver.java,v 1.2 2002/03/15 23:29:20 eburns Exp $
  */
 
 /*
@@ -12,13 +12,12 @@ package javax.faces;
 import java.io.IOException;
 
 /**
- * The interface to be implemented by a servlet which services
- * a JavaServer Faces page.  This interface separates a request
- * cycle into two distinct phases:
+ * The interface which encapsulates the processing of a JSF request.  
+ * This interface separates a request cycle into two distinct tasks:
  * <ol>
- * <li>wire-up: constructs the UI component tree associated with the page
- * <li>execute-lifecycle: executes the lifecycle on the UI component tree
- *     which ultimately results in sending the response
+ * <li>wireUp: constructs the UI component tree associated with the page
+ * <li>executeLifecycle: executes the lifecycle on the UI component tree
+ *     which ultimately results in generating a response
  * </ol>
  * For a description of lifecycle processing:
  * @see javax.faces.LifecycleStage
@@ -26,16 +25,16 @@ import java.io.IOException;
 public interface LifecycleDriver {
 
     /**
-     * Invoked from the <code>service()</code> method to construct
-     * the UI component tree associated with the request.  When
-     * this method completes, the UI component tree must be fully
-     * instantiated.  
+     * Invoked to construct the UI component tree associated with 
+     * the request.  When this method completes, the UI component 
+     * tree corresponding to the request must be fully instantiated.  
      * @param ctx the FacesContext object used to process this request
+     * @param root the root of the component tree
      * @throws IOException
      * @return TreeNavigator corresponding to the root of the UI
      *         component tree associated with the request
      */
-    public TreeNavigator wireUp(FacesContext ctx) throws IOException;
+    public TreeNavigator wireUp(FacesContext ctx, UIPage root) throws IOException;
 
     /**
      * Invoked from the <code>service()</code> method to execute
