@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.32 2002/06/14 00:00:03 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.33 2002/06/14 05:01:39 craigmcc Exp $
  */
 
 /*
@@ -462,6 +462,22 @@ public interface UIComponent {
      * @param event Event to be processed against this component
      */
     public boolean processEvent(FacesContext context, FacesEvent event);
+
+
+    /**
+     * <p>Process all events queued to this <code>UIComponent</code>, by
+     * calling the <code>processEvent()</code> method for each of them.
+     * Normally, component writers will not override this method -- it is
+     * primarily available for use by tools.  Component writers should
+     * override the <code>processEvent()</code> method instead.</p>
+     *
+     * <p>Return <code>true</code> if the <code>processEvent()</code> method
+     * call for any queued event returned <code>true</code>; otherwise,
+     * return <code>false</code>.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public boolean processEvents(FacesContext context);
 
 
     /**

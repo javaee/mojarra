@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.3 2002/06/14 00:00:03 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.4 2002/06/14 05:01:39 craigmcc Exp $
  */
 
 /*
@@ -935,6 +935,34 @@ public abstract class UIComponentBase implements UIComponent {
     public boolean processEvent(FacesContext context, FacesEvent event) {
 
         return (false); // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Process all events queued to this <code>UIComponent</code>, by
+     * calling the <code>processEvent()</code> method for each of them.
+     * Normally, component writers will not override this method -- it is
+     * primarily available for use by tools.  Component writers should
+     * override the <code>processEvent()</code> method instead.</p>
+     *
+     * <p>Return <code>true</code> if the <code>processEvent()</code> method
+     * call for any queued event returned <code>true</code>; otherwise,
+     * return <code>false</code>.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public boolean processEvents(FacesContext context) {
+
+        boolean result = false;
+        Iterator events = context.getRequestEvents(this);
+        while (events.hasNext()) {
+            FacesEvent event = (FacesEvent) events.next();
+            if (processEvent(context, event)) {
+                result = true;
+            }
+        }
+        return (result);
 
     }
 

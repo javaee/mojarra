@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.21 2002/06/14 00:00:04 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.22 2002/06/14 05:01:39 craigmcc Exp $
  */
 
 /*
@@ -184,6 +184,17 @@ public abstract class FacesContext {
      * if no request events have been queued.</p>
      */
     public abstract int getRequestEventsCount();
+
+
+    /**
+     * <p>Return the total number of request events that have been queued
+     * for the specified {@link UIComponent} in the request component tree,
+     * or zero if no request events have been queued.</p>
+     *
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>null</code>
+     */
+    public abstract int getRequestEventsCount(UIComponent component);
 
 
     /**
