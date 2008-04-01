@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
+ * $Id: TextEntry_InputTag.java,v 1.22 2002/02/14 03:57:41 edburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.22 2002/02/14 03:57:41 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -108,7 +108,7 @@ public class TextEntry_InputTag extends FacesTag
             }
         }
         if ( value != null ) {
-            uiTextEntry.setText(renderContext, value);
+            uiTextEntry.setText(value);
         }
     }
 

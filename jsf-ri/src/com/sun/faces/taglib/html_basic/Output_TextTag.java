@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
+ * $Id: Output_TextTag.java,v 1.22 2002/02/14 03:57:40 edburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.21 2002/02/06 20:05:53 edburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.22 2002/02/14 03:57:40 edburns Exp $
  * 
  *
  */
@@ -115,7 +115,7 @@ public class Output_TextTag extends FacesTag
             }
         }
         if ( value != null ) {
-            out.setValue(renderContext, value);
+            out.setValue(value);
         }
     }
 

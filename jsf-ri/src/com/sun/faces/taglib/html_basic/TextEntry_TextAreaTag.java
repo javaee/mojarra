@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.19 2002/01/28 18:31:15 visvan Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.20 2002/02/14 03:57:41 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.19 2002/01/28 18:31:15 visvan Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.20 2002/02/14 03:57:41 edburns Exp $
  * 
  *
  */
@@ -173,7 +173,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), id);
         if ( c != null ) {
            if ( getBodyContent() != null ) {
-               c.setText(rc, getBodyContent().getString());
+               c.setText(getBodyContent().getString());
            }
         }
         return SKIP_BODY;
