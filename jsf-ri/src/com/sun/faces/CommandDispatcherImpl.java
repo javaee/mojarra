@@ -1,5 +1,5 @@
 /*
- * $Id: CommandDispatcherImpl.java,v 1.6 2002/01/10 22:32:48 edburns Exp $
+ * $Id: CommandDispatcherImpl.java,v 1.7 2002/01/10 23:14:11 rogerk Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.util.Util;
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.6 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.7 2002/01/10 23:14:11 rogerk Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent
@@ -119,15 +119,7 @@ public class CommandDispatcherImpl extends CommandDispatcher {
                 HttpServletResponse res = (HttpServletResponse) response;
                 RequestDispatcher reqD = 
                 request.getRequestDispatcher(redirectPath);
-		// At this point, we are certain we're forwarding a
-		// request to another JSP page.  We must make it so the
-		// query string is not processed by our code.  We wrap
-		// the request in a special ParamBlockingRequestWrapper.
-		// See bugtraq 4617032.
-                reqD.forward(new 
-			     ParamBlockingRequestWrapper((HttpServletRequest)
-							 request), 
-			     response); 
+                reqD.forward(request, response); 
             } catch ( ServletException se ) {
                 throw new FacesException( se.getMessage());
             }
