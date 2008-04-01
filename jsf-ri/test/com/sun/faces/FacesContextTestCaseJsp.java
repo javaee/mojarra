@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextTestCaseJsp.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
+ * $Id: FacesContextTestCaseJsp.java,v 1.3 2002/06/07 22:47:37 eburns Exp $
  */
 
 /*
@@ -17,6 +17,9 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
@@ -30,7 +33,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FacesContextTestCaseJsp.java,v 1.2 2002/06/07 21:42:14 eburns Exp $
+ * @version $Id: FacesContextTestCaseJsp.java,v 1.3 2002/06/07 22:47:37 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -75,6 +78,16 @@ protected FacesContext facesContext = null;
 // General Methods
 //
 
+public HttpServletRequest getRequest() 
+{
+    return request;
+}
+
+public HttpServletResponse getResponse()
+{
+    return response;
+}
+
 public void setUp()
 {
     Util.verifyFactoriesAndInitDefaultRenderKit(config.getServletContext());
@@ -85,7 +98,7 @@ public void setUp()
     
     facesContext = 
 	facesContextFactory.createFacesContext(config.getServletContext(),
-					       request, response);
+					       getRequest(), getResponse());
     pageContext.setAttribute(FacesContext.FACES_CONTEXT_ATTR, facesContext,
 			     PageContext.REQUEST_SCOPE);
     assertTrue(null != facesContext);

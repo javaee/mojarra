@@ -1,0 +1,35 @@
+<!--
+ Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<HTML>
+    <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    
+    <BODY>
+        <H3> JSF Basic Components Test Page </H3>
+
+        <form method="post" action="/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=form&name=basicForm&tree=/Faces_Basic.xul">
+
+            <input type="text" name="/basicForm/userName" value="default">
+
+            <a href="/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul"></a>
+
+	    <!-- <a href="/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul"></a> -->
+
+            UserName
+
+            <input type="checkbox" name="/basicForm/validUser">
+
+            <select name="/basicForm/appleQuantity"><option value="0">0.00</option><option value="1">1.00</option><option value="2">2.00</option><option value="3">3.00</option><option value="4" selected="selected">4.00</option><option value="5">5.00</option><option value="6">6.00</option><option value="7">7.00</option><option value="8">8.00</option><option value="9">9.00</option></select>
+
+            <select name="/basicForm/shipType"><option value="nextDay">Next Day</option><option value="nextWeek" selected="selected">Next Week</option><option value="nextMonth">Next Month</option></select>
+
+            <input type="text" name="/basicForm/password" value="">
+
+            <input type="text" name="/basicForm/address" value="">
+
+        </form>
+
+    </BODY>
+</HTML>

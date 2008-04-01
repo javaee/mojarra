@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.3 2002/06/07 00:01:01 eburns Exp $
+ * $Id: RIConstants.java,v 1.4 2002/06/07 22:47:36 eburns Exp $
  */
 
 /*
@@ -27,4 +27,15 @@ public class RIConstants {
 
     public final static String DISABLE_RENDERERS = FACES_PREFIX +
 	"DisableRenderers";
+
+    /**
+
+    * If the following name=value pair appears in the request query
+    * string, the CreateRequestTreePhase will proceed directly to
+    * RenderResponsePhase.
+
+    */
+
+    public final static String INITIAL_REQUEST_NAME = "initialRequest";
+    public final static String INITIAL_REQUEST_VALUE = "true";
 }

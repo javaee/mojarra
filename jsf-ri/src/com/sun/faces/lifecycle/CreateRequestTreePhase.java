@@ -1,5 +1,5 @@
 /*
- * $Id: CreateRequestTreePhase.java,v 1.2 2002/06/07 21:42:13 eburns Exp $
+ * $Id: CreateRequestTreePhase.java,v 1.3 2002/06/07 22:47:36 eburns Exp $
  */
 
 /*
@@ -27,12 +27,14 @@ import javax.faces.FactoryFinder;
 
 import javax.servlet.ServletContext;
 
+import com.sun.faces.RIConstants;
+
 /**
 
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: CreateRequestTreePhase.java,v 1.2 2002/06/07 21:42:13 eburns Exp $
+ * @version $Id: CreateRequestTreePhase.java,v 1.3 2002/06/07 22:47:36 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -96,12 +98,14 @@ public int execute(FacesContext facesContext) throws FacesException
 
     // Create the requested component tree
     ServletContext servletContext = facesContext.getServletContext();
-    String treeId = facesContext.getServletRequest().getParameter("tree"),
+    String initialRequestParam = null,
+	treeId = facesContext.getServletRequest().getParameter("tree"),
 	renderKitId = facesContext.getServletRequest().getParameter("renderKit");
 
     TreeFactory treeFactory = null;
     RenderKitFactory renderKitFactory = null;
     RenderKit renderKit = null;
+    int rc = Phase.GOTO_NEXT;
 
     treeFactory = (TreeFactory)
 	FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
@@ -121,7 +125,17 @@ public int execute(FacesContext facesContext) throws FacesException
     }
     facesContext.setLocale(facesContext.getServletRequest().getLocale());
 
-    return Phase.GOTO_NEXT;
+    // If the request contained a param of the form
+    // RIConstants.INITIAL_REQUEST_NAME=RIConstants.INITIAL_REQUEST_VALUE
+    // Go straight to render
+    if (null != (initialRequestParam = (String)
+		 facesContext.getServletRequest().getParameter(RIConstants.INITIAL_REQUEST_NAME))
+	&&
+	initialRequestParam.equals(RIConstants.INITIAL_REQUEST_VALUE)) {
+	rc = Phase.GOTO_RENDER;
+    }
+
+    return rc;
 }
 
 
