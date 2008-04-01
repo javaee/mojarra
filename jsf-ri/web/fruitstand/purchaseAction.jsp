@@ -7,7 +7,7 @@
 <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 <font color="#0000FF"> <h2> FruitStand.com </h2>
 <hr>
-Thank you for you purchase. 
+Thank you for your purchase. 
 <br>
 <br>
 <faces:Output_Text name='confirmOrder' value='Your order will be shipped on 01/11/2001' />

@@ -44,11 +44,11 @@ and vegetables.</font></font>
 <center><img SRC="1001.jpg" height=64 width=89></center>
 </td>
 
-<td WIDTH="30">apple</td>
+<td WIDTH="30"><faces:Output_Text name='apple_name' value='apple' /></td>
 
-<td WIDTH="100">Crunchy and sweet</td>
+<td WIDTH="100"><faces:Output_Text name='apple_desc' value='Crunchy and sweet' /></td>
 
-<td>$0.29/lb</td>
+<td><faces:Output_Text name='apple_price' value='0.29' /></td>
 
 <td>
     <select name="appleQuantity">
@@ -72,11 +72,11 @@ and vegetables.</font></font>
 <center><img SRC="1002.jpg" height=64 width=89></center>
 </td>
 
-<td>banana</td>
+<td><faces:Output_Text name='banana_name' value='banana' /></td>
 
-<td>Bananas smell great</td>
+<td><faces:Output_Text name='banana_desc' value='Bananas smell great' /></td>
 
-<td>$0.69/lb</td>
+<td><faces:Output_Text name='banana_price' value='$0.69/lb' /></td>
 
 <td>
     <select name="bananaQuantity">
@@ -100,11 +100,11 @@ and vegetables.</font></font>
 <center><img SRC="1003.jpg" height=64 width=89></center>
 </td>
 
-<td>cantaloupe</td>
+<td><faces:Output_Text name='cantaloupe_name' value='cantaloupe' /></td>
 
-<td>Honey dew melons are better</td>
+<td><faces:Output_Text name='cantaloupe_desc' value='Honey dew melons are better' /></td>
 
-<td>$0.19/lb</td>
+<td><faces:Output_Text name='cantaloupe_price' value='$0.19/lb' /></td>
 
 <td>
     <select name="cantaloupeQuantity">
@@ -128,11 +128,11 @@ and vegetables.</font></font>
 <center><img SRC="1004.jpg" height=64 width=89></center>
 </td>
 
-<td>grapefruit</td>
+<td><faces:Output_Text name='grapefruit_name' value='grapefruit' /></td>
 
-<td>Don't eat with sugar</td>
+<td><faces:Output_Text name='grapefruit_desc' value='Do not eat with sugar' /></td>
 
-<td>$0.49/lb</td>
+<td><faces:Output_Text name='grapefruit_price' value='$0.49/lb' /></td>
 
 <td>
     <select name="grapefruitQuantity">
@@ -156,182 +156,14 @@ and vegetables.</font></font>
 <center><img SRC="1005.jpg" height=64 width=89></center>
 </td>
 
-<td>grapes</td>
+<td><faces:Output_Text name='grapes' value='grapes' /></td>
 
-<td>Purple grapes are all we carry</td>
+<td><faces:Output_Text name='grapes_desc' value='Purple grapes are all we carry' /></td>
 
-<td>$0.79/lb</td>
+<td><faces:Output_Text name='grapes_price' value='$0.79/lb' /></td>
 
 <td>
     <select name="grapeQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><img SRC="1006.jpg" height=64 width=89></center>
-</td>
-
-<td>kiwi</td>
-
-<td>My friend Roy recommends these</td>
-
-<td>$0.99/lb</td>
-
-<td>
-    <select name="kiwiQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><img SRC="1007.jpg" height=64 width=89></center>
-</td>
-
-<td>peach</td>
-
-<td>Come in a can</td>
-
-<td>$0.39/lb</td>
-
-<td>
-    <select name="peachQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><img SRC="1008.jpg" height=64 width=89></center>
-</td>
-
-<td>pear</td>
-
-<td>Pears taste a little weird</td>
-
-<td>$0.69/lb</td>
-
-<td>
-    <select name="pearQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><img SRC="1009.jpg" height=64 width=89></center>
-</td>
-
-<td>pineappple</td>
-
-<td>Pineapple juice is a treat</td>
-
-<td>$0.89/lb</td>
-
-<td>
-    <select name="pineappleQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><img SRC="1010.jpg" height=64 width=89></center>
-</td>
-
-<td>strawberries</td>
-
-<td>Delectable and collectable</td>
-
-<td>$0.69/lb</td>
-
-<td>
-    <select name="strawberriesQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
-</td>
-</tr>
-
-<tr>
-<td>
-<center><img SRC="1011.jpg" height=64 width=89></center>
-</td>
-
-<td>watermelon</td>
-
-<td>The best fruit</td>
-
-<td>$0.79/lb</td>
-
-<td>
-    <select name="watermelonQuantity">
         <option value="0" selected>0.00</option>
         <option value="1">1.00</option>
         <option value="2">2.00</option>
