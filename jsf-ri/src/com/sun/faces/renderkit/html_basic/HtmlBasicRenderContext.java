@@ -1,6 +1,6 @@
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.6 2001/11/21 21:31:32 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.7 2001/12/03 22:47:10 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -25,6 +25,8 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletRequest;
 
 import java.util.Locale;
@@ -35,7 +37,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.6 2001/11/21 21:31:32 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.7 2001/12/03 22:47:10 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -60,14 +62,22 @@ public class HtmlBasicRenderContext extends RenderContext {
 
 // Relationship Instance Variables
 
-    private RenderKit renderKit;
-    private OutputMethod outputMethod;
+    private RenderKit renderKit = null;
+    private OutputMethod outputMethod = null;
+
+    private HttpSession session = null;
+    private ServletRequest request;
 
 //
 // Constructors and Initializers    
 //
 
-public HtmlBasicRenderContext() {
+public HtmlBasicRenderContext(ServletRequest req) {
+    ParameterCheck.nonNull(req);
+    request = req;
+    if (req instanceof HttpServletRequest) {
+	session = ((HttpServletRequest)req).getSession();
+    }
     renderKit = new HtmlBasicRenderKit();
 }
 
@@ -89,12 +99,12 @@ public OutputMethod getOutputMethod() {
 }
 
 public void setOutputMethod(OutputMethod om) {
-//    ParameterCheck.nonNull(om);
+    ParameterCheck.nonNull(om);
     outputMethod = om;
 }
 
-
-
-
+public HttpSession getSession() {
+    return session;
+}
 
 } // end of class HtmlBasicRenderContext

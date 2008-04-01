@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.2 2001/11/29 00:12:34 edburns Exp $
+ * $Id: TestRenderKit.java,v 1.3 2001/12/03 22:47:11 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -17,6 +17,9 @@
 package com.sun.faces.renderkit.html_basic;
 
 import junit.framework.TestCase;
+import org.apache.cactus.ServletTestCase;
+
+import javax.servlet.http.HttpSession;
 
 import javax.faces.RenderKit;
 import javax.servlet.ServletRequest;
@@ -31,14 +34,14 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.2 2001/11/29 00:12:34 edburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.3 2001/12/03 22:47:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRenderKit extends TestCase
+public class TestRenderKit extends ServletTestCase
 {
 //
 // Protected Constants
@@ -77,22 +80,30 @@ public void testFactory() {
     javax.faces.Renderer renderer;
     java.util.Iterator typeIt, rendererIt = null;
     String type, rendererName;
+    boolean result = false;
     
     try {
 	factory = RenderContextFactory.newInstance();
 	System.out.println("HtmlBasicRenderContextFactory: got factory: " + 
 			   factory);
-	context = factory.newRenderContext(null);
+	context = factory.newRenderContext(request);
 	System.out.println("HtmlBasicRenderContextFactory: got context: " + 
 			   context);
+	result = null != context.getSession();
+	assertTrue(result);
+
+	// PENDING(edburns): test for context's clientCaps, and locale.
+
 	kit = context.getRenderKit();
 	System.out.println("HtmlBasicRenderContextFactory: got renderKit: " + 
 			   kit);
     }
     catch (Exception e) {
 	System.out.println("Exception getting factory!!! " + e.getMessage());
+	assertTrue(false);
     }
-    
+    assertTrue(true);
+
     if (null == kit) {
 	System.out.println("Can't find default RenderKit!");
     }
