@@ -1,5 +1,5 @@
 /*
- * $Id: BeanAccessor.java,v 1.1 2002/01/12 01:38:07 edburns Exp $
+ * $Id: BeanAccessor.java,v 1.2 2002/01/25 22:42:42 visvan Exp $
  */
 
 /*
@@ -27,11 +27,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.BeanUtils;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
 
 /**
  * This class incorporates the methods for setting values in
@@ -81,16 +76,16 @@ public BeanAccessor(RenderContext yourRenderContext)
     public void setObject(ServletRequest request, String objectReference,  
 			  Object value) throws FacesException {
 
-        ParameterCheck.nonNull(request);
-        ParameterCheck.nonNull(objectReference);
-	Assert.assert_it(null != renderContext);
+        // ParameterCheck.nonNull(request);
+        // ParameterCheck.nonNull(objectReference);
+	// Assert.assert_it(null != renderContext);
 
         String expression = null;
         String property = null;
         String baseName = null;
         Object object = null;
         ObjectManager objectManager = renderContext.getObjectManager();
-        Assert.assert_it(null != objectManager);
+        // Assert.assert_it(null != objectManager);
 
         // If the reference string begins with a "$" (ex:
         // $user.address.street), then the string is to be 
@@ -152,9 +147,9 @@ public BeanAccessor(RenderContext yourRenderContext)
      */
     public Object getObject(ServletRequest request, 
 			    String objectReference) throws FacesException {
-        ParameterCheck.nonNull(request);
-	ParameterCheck.nonNull(objectReference);
-	Assert.assert_it(null != renderContext);
+        // ParameterCheck.nonNull(request);
+	// ParameterCheck.nonNull(objectReference);
+	// Assert.assert_it(null != renderContext);
 	
         String expression = null;
         String property = null;
@@ -162,7 +157,7 @@ public BeanAccessor(RenderContext yourRenderContext)
         Object object = null;
         Object returnObject = null;
         ObjectManager objectManager = renderContext.getObjectManager();
-	Assert.assert_it(null != objectManager);
+	// Assert.assert_it(null != objectManager);
 
         if (objectReference.startsWith("$")) {
             expression = objectReference.substring(1);
