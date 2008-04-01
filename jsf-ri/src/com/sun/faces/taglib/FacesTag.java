@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.25 2002/09/06 00:25:33 eburns Exp $
+ * $Id: FacesTag.java,v 1.26 2002/09/06 18:05:25 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.25 2002/09/06 00:25:33 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.26 2002/09/06 18:05:25 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,6 +125,16 @@ protected String title = null;
 protected String type = null;
 protected String usemap = null;
 protected String value = null;
+
+// HTML 4.0 table attributes
+protected String summary = null;
+protected String width = null;
+protected String bgcolor = null;
+protected String frame = null;
+protected String rules = null;
+protected String border = null;
+protected String cellspacing = null;
+protected String cellpadding = null;
 
  // Relationship Instance Variables
 
@@ -934,6 +944,65 @@ public FacesTag()
     {
         value = newValue;
     }
+    
+    // HTML 4.0 table attributes
+    
+   public  void setSummary(String newSummary) {
+       this.summary = newSummary;
+   } 
+   public String getSummary() {
+        return summary;
+   } 
+   
+   public  void setWidth(String newWidth) {
+       this.width = newWidth;
+   } 
+   public String getWidth() {
+        return width;
+   }
+   
+   public  void setBgcolor(String newColor) {
+       this.bgcolor = newColor;
+   }
+   public String getBgcolor() {
+        return bgcolor;
+   }
+   
+   public  void setFrame(String newFrame) {
+       this.frame = newFrame;
+   }
+   public String getFrame() {
+        return frame;
+   }
+   
+   public  void setRules(String newRules) {
+       this.rules = newRules;
+   }
+   public String getRules() {
+        return rules;
+   }
+   
+   public  void setBorder(String newBorder) {
+       this.border = newBorder;
+   }
+   public String getBorder() {
+        return border;
+   }
+   
+   public  void setCellspacing(String newCellspacing) {
+       this.cellspacing = newCellspacing;
+   }
+   public String getCellspacing() {
+        return cellspacing;
+   }
+   
+   public  void setCellpadding(String newCellpadding) {
+       this.cellpadding = newCellpadding;
+   }
+   public String getCellpadding() {
+        return cellpadding;
+   }
+
 
     /**
 
@@ -1059,7 +1128,7 @@ protected void overrideProperties(UIComponent component)
     // common HTML 4.0 attributes.
     // PENDING (visvan) id attribute clashes with faces id attribute
     if (null == component.getAttribute("title")) {
-	component.setAttribute("title", getTitle());
+        component.setAttribute("title", getTitle());
     }
     if (null == component.getAttribute("disabled")) {
 	component.setAttribute("disabled", getDisabled());
@@ -1088,7 +1157,7 @@ protected void overrideProperties(UIComponent component)
     if (null == component.getAttribute("timeStyle")) {
 	component.setAttribute("timeStyle", getTimeStyle());
     }
-    
+  
 }
 
 // 

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.33 2002/08/29 01:28:23 eburns Exp $
+ * $Id: Util.java,v 1.34 2002/09/06 18:05:28 jvisvanathan Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.33 2002/08/29 01:28:23 eburns Exp $
+ * @version $Id: Util.java,v 1.34 2002/09/06 18:05:28 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -192,7 +192,14 @@ public class Util extends Object
         "title",
         "style",
         "width",
-        "dir"
+        "dir",
+        "rules",
+        "frame",
+        "border",
+        "cellspacing",
+        "cellpadding",
+        "summary",
+        "bgcolor"
     };
 
 private static long id = 0;

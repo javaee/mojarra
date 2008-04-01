@@ -1937,7 +1937,21 @@
         <renderer>
             <type>RadioRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.RadioRenderer</class>
-        
+            <attribute>
+                <name>layout</name>
+                <display-name>Layout</display-name>
+                <description>Possible values - PAGE_DIRECTION or LINE_DIRECTION
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>border</name>
+                <display-name>Border</display-name>
+                <description>Width of frame around table
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            
             <!-- HTML 4.0 attributes -->
             <attribute>
                 <name>class</name>
@@ -1983,7 +1997,7 @@
             <attribute>
                 <name>size</name>
                 <display-name>Size</display-name>
-                <description>The number of columns in this TextRenderer.</description>
+                <description>Initial width of the control</description>
                 <type>java.lang.Integer</type>
             </attribute>
             <attribute>
@@ -2074,20 +2088,7 @@
         <renderer>
             <type>OptionListRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.OptionListRenderer</class>
-            <attribute>
-                <name>layout</name>
-                <display-name>Layout</display-name>
-                <description>Possible values - VERTICAL or HORIZONTAL
-                </description>
-                <type>java.lang.String</type>
-            </attribute>
-            <attribute>
-                <name>border</name>
-                <display-name>Border</display-name>
-                <description>Width of frame around table
-                </description>
-                <type>java.lang.Integer</type>
-            </attribute>
+            
              <!-- HTML 4.0 attributes -->
             <attribute>
                 <name>class</name>
@@ -2223,6 +2224,251 @@
             </attribute>
         </renderer>
     </component>
+
+    <component>
+        <type>javax.faces.component.UIPanel</type>
+        <renderer>
+            <type>DataRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.DataRenderer</class>
+            <attribute>
+                <name>var</name>
+                <display-name>Var</display-name>
+                <description>
+                Name of a request scope attribute that should be used to expose
+                the current element of the data on each iteration through the
+                implicit loop being performed.  This name will typically be used
+                in model reference expressions on output components for the
+                individual properties.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+        </renderer>
+        <renderer>
+            <type>GroupRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.GroupRenderer</class>
+        </renderer>
+        <renderer>
+            <type>GridRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.GridRenderer</class>
+            <attribute>
+                <name>onclick</name>
+                <display-name>On Click</display-name>
+                <description>The element was clicked.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>ondblclick</name>
+                <display-name>On Double Click</display-name>
+                <description>The element was double clicked.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeydown</name>
+                <display-name>On Key Down</display-name>
+                <description>
+                    Key was pressed down over this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeypress</name>
+                <display-name>On Key Press</display-name>
+                <description>
+                    Key was pressed and released over this element 
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeyup</name>
+                <display-name>On Key Up</display-name>
+                <description>Key was released over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmousedown</name>
+                <display-name>On Mouse Down</display-name>
+                <description>Mouse was pressed over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmousemove</name>
+                <display-name>On Mouse Move</display-name>
+                <description>Mouse was moved over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseout</name>
+                <display-name>On Mouse Out</display-name>
+                <description>
+                    Mouse was moved away from this element.
+               </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseover</name>
+                <display-name>On Mouse Over</display-name>
+                <description>Mouse was moved into this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseup</name>
+                <display-name>On Mouse Up</display-name>
+                <description>Mouse was released over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>dir</name>
+                <display-name>Direction</display-name>
+                <description>Text Direction. Possible values LTR|RTL
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>style</name>
+                <display-name>Style</display-name>
+                <description>Style information for this element.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>lang</name>
+                <display-name>Language</display-name>
+                <description>Base language of element's attribute values and content.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>title</name>
+                <display-name>Title</display-name>
+                <description>Tool Tip for this element
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>width</name>
+                <display-name>Width</display-name>
+                <description>Desired width of the entire table.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>bgcolor</name>
+                <display-name>Background color</display-name>
+                <description>Background color for the table.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>frame</name>
+                <display-name>Frame</display-name>
+                <description> Specifes which sides of the frame that surrounds the table
+                will be visible.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>rules</name>
+                <display-name>Rules</display-name>
+                <description>Specifies which rules will appear between cells 
+                within a table.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>border</name>
+                <display-name>Border</display-name>
+                <description>Width of the frame around the table.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>cellspacing</name>
+                <display-name>Cell Spacing</display-name>
+                <description>Specifies how much space should be left side of the
+                table and left-hand side of the leftmost column, similarly for
+                right, top and bottom of the table.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>cellpadding</name>
+                <display-name>Cell Padding</display-name>
+                <description>Specifies the amount of space between the border of
+                the cell and its contents.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>panelClass</name>
+                <display-name>Panel Class</display-name>
+                <description>  
+                Class name of the CSS style to be used for the entire panel.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+             <attribute>
+                <name>headerClass</name>
+                <display-name>Header Class</display-name>
+                <description>
+                If present, this attribute indicates that the first child component
+                should be treated as a table header, rendered with the specified
+                CSS style, instead of being rendered as a normal grid cell.
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>footerClass</name>
+                <display-name>Footer Class</display-name>
+               <description>
+                If present, this attribute indicates that the last child component
+                should be treated as a table footer, rendered with the specified
+                CSS style, instead of being rendered as a normal grid cell.
+              </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>columnClasses</name>
+                <display-name>Column Classes</display-name>
+                <description>
+                 Comma-delimited list of the class names of the CSS styles to be
+                used for each column.  If the number of class names on this list
+                is less than the value specified for "columns", the pattern will
+                be repeated for the remaining columns of the current row; however,
+                the first column in each row will always use the first style listed.
+
+                Note that these styles are applied only to content rows, not to the
+                header or footer rows (if any).
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>rowClasses</name>
+                <display-name>Row Classes</display-name>
+                <description>
+                Comma-delimited list of the class names of the CSS styles to be
+                used for each row.  These styles should specialize the style
+                specified by panelClass (if any), because CSS cascading is
+                performed.  If the number of class names on this list
+                is less than the actual number of rows over which the list is
+                iterating, the pattern will be repeated as many times as needed.
+
+                Note that these styles are applied only to content rows, not to the
+                header or footer rows (if any).
+                </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>columns</name>
+                <display-name>Columns</display-name>
+                <description> 
+                Number of columns per row to be rendered.  If not specified,
+                the default value is 2.
+                </description>
+                <type>java.lang.Integer</type>
+            </attribute>
+        </renderer>
+        
+    </component>        
 
 	<component>
 		<type>javax.faces.component.UISelectMany</type>
@@ -2682,6 +2928,5 @@
 
 		</renderer>
 	</component>
-
 
 </renderkit>

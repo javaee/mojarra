@@ -12,6 +12,41 @@
 <faces:form formName="basicForm" id="basicForm">
   <TABLE BORDER="1">
 
+      <tr>
+         <td>
+                 <faces:panel_grid id="logonPanel1" columns="2"
+                    border="1" cellpadding="3" cellspacing="3"
+                     summary="Grid with hardcoded data"
+                     title="Grid with hardcoded data" >
+
+                     <faces:panel_group id="form_header2">
+                        <faces:output_text id="A2" value="Logon&nbsp;"/>
+                        <faces:output_text id="B2" value="Form"/>
+                     </faces:panel_group>
+
+                     <!-- Panel data elements -->
+
+                    <faces:output_text id="text1" value="Username:"/>
+
+                    <faces:input_text id="username1" value="JavaServerFaces" />
+
+                    <faces:output_text id="text2" value="Password:"/>
+
+                    <faces:input_secret id="password1" />
+
+                    <faces:command_button id="submit1" type="SUBMIT"
+                             commandName="submit">
+                      <faces:output_text id="submit1_label" value="Login" />
+                    </faces:command_button>
+
+                    <faces:command_button id="reset1" type="RESET" commandName="reset">
+                      <faces:output_text id="reset1_label" value="Reset" />
+                    </faces:command_button>
+
+                </faces:panel_grid>
+             </td>
+           </tr>
+
       <TR>
 
 	<TD>

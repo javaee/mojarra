@@ -9,8 +9,58 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=F311B20611274240E041E26593B075A9">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=D314E6F804010321A38932C38551B0F7">
   <TABLE BORDER="1">
+
+      <tr>
+         <td>
+                 <table title="Grid with hardcoded data" border="1" cellspacing="3" cellpadding="3" summary="Grid with hardcoded data" >
+
+
+                     
+                        
+                        
+                     
+
+                     <!-- Panel data elements -->
+
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                      
+                    
+
+                    
+                      
+                    
+
+                <tr>
+<td>Logon&nbsp;Form</td>
+<td>Username:</td>
+</tr>
+<tr>
+<td><input type="text" name="/basicForm/logonPanel1/username1" value="JavaServerFaces"></td>
+<td>Password:</td>
+</tr>
+<tr>
+<td><input type="password" name="/basicForm/logonPanel1/password1" value=""></td>
+<td><button id="/basicForm/logonPanel1/submit1" name="/basicForm/logonPanel1/submit1" type="submit" value="submit">Login</button>
+</td>
+</tr>
+<tr>
+<td><button id="/basicForm/logonPanel1/reset1" name="/basicForm/logonPanel1/reset1" type="reset" value="reset">Reset</button>
+</td>
+</tr>
+</table>
+
+             </td>
+           </tr>
 
       <TR>
 
@@ -18,7 +68,7 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=F311B20611274240E041E26593B075A9">
+                 <img src="/test/duke.gif;jsessionid=D314E6F804010321A38932C38551B0F7">
                  <!-- this isn't valid HTML, but it works for our label case -->
                  <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt" >
 
@@ -36,7 +86,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=F311B20611274240E041E26593B075A9">
+                 <img src="/test/duke.gif;jsessionid=D314E6F804010321A38932C38551B0F7">
              </button>
 
 	</TD>
