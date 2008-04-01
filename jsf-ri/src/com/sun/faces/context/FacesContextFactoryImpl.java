@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.4 2002/07/31 22:40:07 eburns Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.5 2002/08/01 21:42:28 rkitain Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class FacesContextFactoryImpl extends FacesContextFactory
             ParameterCheck.nonNull(response);
             ParameterCheck.nonNull(lifecycle);
         } catch (Exception e ) {
-            throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }    
 	
         return (new FacesContextImpl(sc, request,

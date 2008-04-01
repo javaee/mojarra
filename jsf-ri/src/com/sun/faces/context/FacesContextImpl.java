@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.17 2002/08/01 20:51:29 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.18 2002/08/01 21:42:29 rkitain Exp $
  */
 
 /*
@@ -296,6 +296,9 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void setResponseStream(ResponseStream newResponseStream) {
+        if (newResponseStream == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_STREAM_ERROR_MESSAGE_ID));
+        }
 	responseStream = newResponseStream;
     }
 
@@ -329,6 +332,9 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void setResponseWriter(ResponseWriter newResponseWriter) {
+        if (newResponseWriter == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_WRITER_ERROR_MESSAGE_ID));
+        }
 	responseWriter = newResponseWriter;
     }
 
@@ -348,7 +354,10 @@ public class FacesContextImpl extends FacesContext
 
 
     public void addApplicationEvent(FacesEvent event) {
-        ParameterCheck.nonNull(event);
+        if (event == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_EVENT_ERROR_MESSAGE_ID));
+        }
         if (applicationEvents == null) {
             applicationEvents = new ArrayList();
         }
@@ -419,12 +428,14 @@ public class FacesContextImpl extends FacesContext
      * @exception FacesException If the model bean identified by the
      *     model reference string cannot be found in the any scope,
      *     or the property value could not be retrieved.
+     * @exception NullPointerException if model argument is <code>null</code>
      */
     public Class getModelType(String model) throws FacesException {
         
-	if ( model == null ) {
-            return null;
+        if (model == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
         String expression = null;
         String property = null;
         String baseName = null;
@@ -483,12 +494,15 @@ public class FacesContextImpl extends FacesContext
      * @exception FacesException If the model bean identified by the
      *     model reference string cannot be found in the any scope,
      *     or the property value could not be retrieved.
+     * @exception NullPointerException if model argument is <code>null</code>
+     *
      */
     public Object getModelValue(String model) throws FacesException {
         
         if (model == null) {
-	    return null;
-        }    
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
         String expression = null;
         String property = null;
         String baseName = null;
@@ -545,13 +559,15 @@ public class FacesContextImpl extends FacesContext
      * @exception FacesException If the model bean identified by the
      *     model reference string cannot be found in the any scope,
      *     or the property value could not be set.
+     * @exception NullPointerException if model argument is <code>null</code>
      */
     public void setModelValue(String model, Object value) 
             throws FacesException {
         
-        if (model == null ) {
-            return;
-        }    
+        if (model == null) {
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+
         String expression = null;
         String property = null;
         String baseName = null;
