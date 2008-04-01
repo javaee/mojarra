@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.1 2002/05/22 21:37:02 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.2 2002/05/23 17:45:31 craigmcc Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package javax.faces.component;
 /**
  * <p><strong>UISelectItem</strong> represents a single <em>item</em> in the
  * list of supported <em>items</em> associated with a {@link UISelectMany}
- * or {@link UISelectOne} component.  It is not itself a {@link UICompoent}.
+ * or {@link UISelectOne} component.  It is not itself a {@link UIComponent}.
  * </p>
  */
 

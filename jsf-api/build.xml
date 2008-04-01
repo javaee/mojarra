@@ -21,7 +21,7 @@
 
   <property name="Name" value="jsf-api"/>
   <property name="name" value="jsf-api"/>
-  <property name="version" value="0.1"/>
+  <property name="version" value="0.4"/>
 
   <property name="debug" value="true" />
   <property name="deprecation" value="false" />
@@ -29,10 +29,7 @@
 
   <property name="src.dir" value="src"/>
   <property name="java.dir" value="${src.dir}"/>
-  <property name="lib.dir" value="lib"/>
   
-  <property name="manifest" value="etc/manifest"/>
-
   <property name="build.dir" value="build"/>
   <property name="build.classes" value="${build.dir}/classes"/>
   <property name="build.lib" value="${build.dir}/lib"/>
@@ -40,36 +37,13 @@
 
   <!-- The base directory for dependent jars -->
   <property name="lib.home" value="${basedir}/lib"/>
-
   <property name="servlet.jar" value="${lib.home}/servlet.jar"/>
-  <property name="commons-beanutils.jar" value="${lib.home}/commons-beanutils.jar"/>
-  <property name="commons-collections.jar" value="${lib.home}/commons-collections.jar"/>
-  <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
 
   <path id="classpath">
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${build.classes}"/>
-    <pathelement location="${commons-beanutils.jar}"/>
-    <pathelement location="${commons-collections.jar}"/>
-    <pathelement location="${mozutil.jar}"/>
   </path>
 
-  <!-- 
-       ===================================================================
-         Convenience target: cvs update              
-       =================================================================== 
-  -->
-  <target name="cvsupdate">
-    <cvs command="update -d -P"/>
-  </target>
-
-  <!-- 
-       ===================================================================
-         Convenience target: pull.clean.build
-       =================================================================== 
-  -->
-  <target name="pull.clean.build" depends="cvsupdate,clean,jars">
-  </target>
 
   <!-- 
        ===================================================================
@@ -79,6 +53,7 @@
   <target name="prepare">
     <tstamp />
   </target>
+
 
   <!-- 
        ===================================================================
@@ -100,22 +75,12 @@
     
     <copy todir="${build.classes}">
       <fileset dir="${java.dir}">
-        <include name="**/*.properties" />
-      </fileset>
-    </copy>
-
-    <filter token="VERSION" value="${version}" />
-    <filter token="DATE" value="${TODAY}" />
-    <filter token="TIME" value="${TSTAMP}" />
-    <copy    todir="${build.classes}" 
-             overwrite="true"
-             filtering="on">
-      <fileset dir="${java.dir}">
-        <include name="**/version.txt" />
+        <exclude name="**/*.java" />
       </fileset>
     </copy>
 
   </target>
+
 
   <!-- 
        =================================================================== 
@@ -123,12 +88,14 @@
        =================================================================== 
   -->
 
+<!--
   <target name="test-finder" depends="build" 
    description="Run the factory test">
     <java classname="javax.faces.FactoryFinder" fork="yes">
       <classpath refid="classpath" />
     </java>
   </target>
+-->
 
   
   <!-- 
@@ -144,18 +111,20 @@
 
   </target>
 
+
   <!--
        ===================================================================
          Clean up build and distribution directories
        ===================================================================
   -->
-  <target name="clean">
+  <target name="clean" description="Clean build directory">
     <delete dir="${build.dir}" />
     <delete> 
       <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
     </delete>
   </target> 
+
 
   <!--
        ===================================================================
@@ -164,6 +133,7 @@
   -->
   <target name="allclean" depends="clean">
   </target> 
+
 
   <!-- 
        ===================================================================
@@ -179,7 +149,7 @@
 
   <target name="javadocs" depends="prepare, javadoc_check" 
           unless="javadoc.notrequired"
-          description="Creates the API documentation">
+          description="Create the JavaDoc API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="javax.*"
              sourcepath="${java.dir}"
@@ -193,11 +163,14 @@
     </javadoc>
   </target>
   
+
   <!-- 
        =================================================================== 
          Main target
        =================================================================== 
   -->
-  <target name="main" depends="jars"/>
+  <target name="main" depends="jars"
+   description="Compile API classes and build JAR file"/>
+
 
 </project>

@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.8 2002/05/21 02:11:10 craigmcc Exp $
+ * $Id: Renderer.java,v 1.9 2002/05/23 17:45:31 craigmcc Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.context.FacesContext;
  * that it recognizes for each supported {@link UIComponent}.</p>
  *
  * <p>Families of <code>Renderer</code>s are packaged as a {@link RenderKit},
- * and together support the rendering of all of the {@link UIComponents} in
+ * and together support the rendering of all of the {@link UIComponent}s in
  * the response tree associated with a {@link FacesContext}.  Within the set
  * of <code>Renderers</code> for a particular {@link RenderKit}, each must be
  * uniquely identified by the <code>rendererType</code> property.</p>
