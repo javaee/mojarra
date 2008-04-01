@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.6 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.7 2002/06/07 20:36:06 craigmcc Exp $
  */
 
 /*
@@ -75,9 +75,9 @@ public class UISelectOne extends UIComponent {
      * <p>Return the model reference expression for the available items
      * for this component.</p>
      */
-    public String getItemsModel() {
+    public String getItemsModelReference() {
 
-        return ((String) getAttribute("itemsModel"));
+        return ((String) getAttribute("itemsModelReference"));
 
     }
 
@@ -86,11 +86,11 @@ public class UISelectOne extends UIComponent {
      * <p>Set the model reference expression for the available items
      * for this component.</p>
      *
-     * @param itemsModel The new model reference expression (if any)
+     * @param itemsModelReference The new model reference expression (if any)
      */
-    public void setItemsModel(String itemsModel) {
+    public void setItemsModelReference(String itemsModelReference) {
 
-        setAttribute("itemsModel", itemsModel);
+        setAttribute("itemsModelReference", itemsModelReference);
 
     }
 
@@ -162,7 +162,8 @@ public class UISelectOne extends UIComponent {
         String value = oldValue.toString();
         SelectItem items[] = getItems();
         if (items == null) {
-            items = (SelectItem[]) context.getModelValue(getItemsModel());
+            items = (SelectItem[])
+                context.getModelValue(getItemsModelReference());
         }
         if (items == null) {
             items = new SelectItem[0];
