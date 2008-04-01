@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.13 2002/01/18 21:51:33 edburns Exp $
+ * $Id: Constants.java,v 1.14 2002/01/24 18:33:33 rogerk Exp $
  */
 
 /*
@@ -139,6 +139,16 @@ public class Constants {
      * retrieved.  Taken from Struts, by Craig McClanahan.
      */
     public static final String REQUEST_TOKEN_KEY = "javax.faces.REQUEST_TOKEN";
+
+    /**
+     * Success indicator after command processing.
+     */
+    public static final String OUTCOME_SUCCESS = "success";
+
+    /**
+     * Failure indicator after command processing.
+     */
+    public static final String OUTCOME_FAILURE = "failure";
 
     
 }

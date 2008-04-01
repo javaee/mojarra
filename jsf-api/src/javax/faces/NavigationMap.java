@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationMap.java,v 1.1 2002/01/18 21:56:22 edburns Exp $
+ * $Id: NavigationMap.java,v 1.2 2002/01/24 18:33:33 rogerk Exp $
  */
 
 /*
@@ -9,93 +9,45 @@
 
 package javax.faces;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-
 /**
- * A class which implements a NavigationHandler object which
- * maps outcome names to specific target actions and paths.
+ * An interface used to define an object which can be used to 
+ * house navigation mappings for an application.  An implementation
+ * of this interface could be used in conjunction with a 
+ * NavigationHandler implementation.  NavigationMap implementations 
+ * may also load data from a configuration file from within the 
+ * implementation's constructor.
  */
-public class NavigationMap implements NavigationHandler {
+public interface NavigationMap {
 
     /**
-     * Outcome name indicating successful command execution.
-     */
-    public static final String OUTCOME_SUCCESS = "Success";
-
-    /**
-     * Outcome name indicating failed command execution.
-     */
-    public static final String OUTCOME_FAILURE = "Failure";
-
-    /**
-     * Associated an outcomeName with a particular navigational action
-     * and path.  When a command listener passes this outcomeName to 
-     * the <code>handleCommandOutcome, handleCommandSuccess,</code> 
-     * or <code>handleCommandException</code>
+     * Associates a commandName and outcomeName with a particular 
+     * navigational action and path.  When a command listener passes 
+     * this outcomeName to the <code>handleCommandOutcome, 
+     * handleCommandSuccess,</code> or <code>handleCommandException</code>
      * methods, the target action and path will be set to those specified
      * in this method.
+     * @param commandName String containing the name of the command.
      * @param outcomeName String containing the name of the command's outcome
      * @param actionCode integer describing the type of action to be taken
      * @param path String containing the path to be associated with the outcome
      *        if the actionCode is either FORWARD or REDIRECT
-     * @throws NullPointerException if outcomeName or actionCode is null
+     * @throws NullPointerException if commandName, outcomeName is null
+     * @throws FacesException if entry already exists
      */
-    public void put(String outcomeName, int actionCode, String path) {
-    }
+    public void put(String commandName, String outcomeName, 
+        int actionCode, String path) throws FacesException;
 
     /**
      * Removes the navigational outcome mapping associated with the specified
-     * outcomeName.
+     * commandName and outcomeName.
+     * @param commandName String containing the name of the command.
      * @param outcomeName String containing the name of the command's outcome
-     * @throws NullPointerException if outcomeName is null
-     * @throws FacesException if outcomeName does not exist in map
+     * @throws NullPointerException if commandName or outcomeName is null
+     * @throws FacesException if commandName, outcomeName 
+     *         combination does not exist in map
      */
-    public void remove(String outcomeName) {
-    } 
-
-    /**
-     * Invoked to associate a particular outcome with the execution of
-     * the command specified by commandName.  
-     * @param commandName String containing the name of the command
-     * @param outcomeName String containing a name which describes the outcome
-     *        of the command
-     */
-    public void handleCommandOutcome(String commandName, String outcomeName) {
-    }
-
-    /**
-     * Invoked to indicate the command specified by commandName 
-     * executed successfully.
-     * @param commandName String containing the name of the command
-     */
-    public void handleCommandSuccess(String commandName) {
-    }
-
-    /**
-     * Invoked to indicate the command specified by commandName 
-     * raised an exception during execution.
-     * @param commandName String containing the name of the command
-     * @param e Exception raised during command execution
-     */
-    public void handleCommandException(String commandName, Exception e) {
-    }
-
-    /**
-     * Invoked to set an explicit navigational result.
-     * <code>actionCode</code> should be one of the following:
-     * <ul>
-     * <li><code>NavigationHandler.REDIRECT</code>
-     * <li><code>NavigationHandler.FORWARD</code>
-     * <li><code>NavigationHandler.PASS</code>
-     * </ul>
-     * @param actionCode integer describing the navigation action to be taken
-     * @param path String containing the navigation path
-     * @throws IllegalParameterException if actionCode isn't REDIRECT,
-     *         FORWARD, or PASS
-     */
-    public void setTarget(int actionCode, String path) {
-    }
+    public void remove(String commandName, String outcomeName) 
+        throws FacesException;
 
     /**
      * Returns the current target action, one of:
@@ -104,27 +56,18 @@ public class NavigationMap implements NavigationHandler {
      * <li><code>NavigationHandler.FORWARD</code>
      * <li><code>NavigationHandler.PASS</code>
      * </ul>
-     * @see #setTarget
+     * @param commandName String containing the name of the command.
+     * @param outcomeName String containing the name of the command's outcome
      * @return integer corresponding to current target action
      */
-    public int getTargetAction() {
-	return 0;
-    }
+    public int getTargetAction(String commandName, String outcomeName);
 
     /**
-     * @see #setTarget
+     * Returns a string containing the current target path.
+     * @param commandName String containing the name of the command.
+     * @param outcomeName String containing the name of the command's outcome
      * @return String containing the current target path.
      */
-    public String getTargetPath() {
-	return null; //compile
-    }
+    public String getTargetPath(String commandName, String outcomeName);
 
-    /**
-     * Processes the request/response pair to effect the current
-     * navigational action for this request.  
-     * @param request ServletRequest object corresponding to this request
-     * @param response ServletResponse object used to write the response
-     */
-    public void service(ServletRequest request, ServletResponse response) {
-    }
 }
