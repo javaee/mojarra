@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.16 2002/08/01 00:28:24 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.17 2002/08/01 20:51:29 eburns Exp $
  */
 
 /*
@@ -75,7 +75,16 @@ public class FacesContextImpl extends FacesContext
     private ArrayList applicationEvents = null;
     private HashMap requestEvents = null;
     private int requestEventsCount = 0;
-    private HashMap messageList = null;
+
+    /**
+
+    * Store mapping of UIComponent instance to ArrayList of Message
+    * instances.  The null key is used to represent Message instances
+    * that are not associated with a UIComponent instance.
+
+    */
+
+    private HashMap messageLists = null;
     private ViewHandler viewHandler = null;
     private ApplicationHandler applicationHandler = null;
     
@@ -103,10 +112,6 @@ public class FacesContextImpl extends FacesContext
         this.request = request;
         this.response = response;
         this.locale = request.getLocale();
-        if (this.request instanceof HttpServletRequest) {
-            this.session =
-                ((HttpServletRequest) request).getSession();
-        }
         this.viewHandler = lifecycle.getViewHandler();
         this.applicationHandler = lifecycle.getApplicationHandler();
         
@@ -142,7 +147,22 @@ public class FacesContextImpl extends FacesContext
     public HttpSession getHttpSession() {
         return (this.session);
     }
-    
+
+    public HttpSession getHttpSession(boolean create) {
+	HttpSession result = null;
+	if (!create) {
+	    result = getHttpSession();
+	}
+	else {
+	    if (this.request instanceof HttpServletRequest && 
+		null == this.session) {
+		this.session = ((HttpServletRequest) request).getSession(true);
+	    }
+	    result = this.session;
+        }
+	return result;
+    }
+
     public Locale getLocale() {
         return (this.locale);
     }
@@ -153,52 +173,44 @@ public class FacesContextImpl extends FacesContext
     }
 
     public int getMaximumSeverity() {
-        Iterator it = null;
+        Iterator outerIter = null, innerIter = null;
         int max = 0;
         ArrayList list = new ArrayList();
         
-        if (null == messageList) {
+        if (null == messageLists) {
              return max;
         }
-	it = messageList.values().iterator();
-        while ( it.hasNext()) {
-            list = (ArrayList) it.next();
-            int severity = getMaximumSeverityForList(list);
-            if ( severity > max ) {
-                max = severity;
-            }    
+	// Get an Iterator over the ArrayList instances
+	outerIter = messageLists.values().iterator();
+        while ( outerIter.hasNext()) {
+            list = (ArrayList) outerIter.next();
+	    // Get an Iterator over the elements of the current
+	    // ArrayList
+	    innerIter = list.iterator();
+	    while(innerIter.hasNext()) {
+		Message msg = (Message)innerIter.next();
+		if (msg.getSeverity() > max) {
+		    max = msg.getSeverity();
+		}    
+	    }
         }
         return max;
     }    
-    
-	
-    protected int getMaximumSeverityForList(ArrayList list ) {
-        Iterator it = null;
-	int max = 0;
-        it = list.iterator();
-        while(it.hasNext()) {
-            Message msg = (Message)it.next();
-            if (msg.getSeverity() > max) {
-                max = msg.getSeverity();
-            }    
-        }
-        return max;
-    }
 
     public Iterator getMessages() {
-        Iterator result = null;
+        Iterator listsIter = null, result = null;
         ArrayList list = new ArrayList();
         
-        if (null == messageList) {
+        if (null == messageLists) {
              return (Collections.EMPTY_LIST.iterator());
         }
-	Iterator it = messageList.keySet().iterator();
-        while ( it.hasNext() ) {
-            UIComponent component = (UIComponent)it.next();
-            if ( component == null ) {
-                list.addAll((ArrayList) messageList.get(component));
-            }
-        }    
+
+	// Get an Iterator over the ArrayList instances
+	listsIter = messageLists.values().iterator();
+        while ( listsIter.hasNext()) {
+	    list.addAll((ArrayList) listsIter.next());
+	}
+
 	if (list.size() > 0 ) {
             result = list.iterator();
 	} else {
@@ -211,41 +223,22 @@ public class FacesContextImpl extends FacesContext
         Iterator result = null;
         ArrayList list = null;
 
-	if (null == component) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
-	}
-
-        if (null == messageList) {
+        if (null == messageLists) {
             result = Collections.EMPTY_LIST.iterator();
         }
 	else {
-	    list = (ArrayList) messageList.get(component);
-	    if (null != list) {
-		result = list.iterator();
-	    } else {
+	    // Look up the ArrayList for this (possibly null) component
+	    if (null != (list = (ArrayList) messageLists.get(component))) {
+		if (list.size() > 0 ) {
+		    result = list.iterator();
+		} else {
+		    result = Collections.EMPTY_LIST.iterator();
+		}
+	    }
+	    else {
 		result = Collections.EMPTY_LIST.iterator();
 	    }
         }
-        return result;
-    }
-
-    public Iterator getMessagesAll() {
-        Iterator result = null;
-        ArrayList list = new ArrayList();
-        
-        if (null == messageList) {
-             return (Collections.EMPTY_LIST.iterator());
-        }
-	Iterator it = messageList.keySet().iterator();
-        while ( it.hasNext() ) {
-            UIComponent component = (UIComponent) it.next();
-            list.addAll((ArrayList) messageList.get(component));
-        }    
-	if (list.size() > 0 ) {
-            result = list.iterator();
-	} else {
-            result = Collections.EMPTY_LIST.iterator();
-	}
         return result;
     }
 
@@ -367,31 +360,31 @@ public class FacesContextImpl extends FacesContext
         if ( message == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_MESSAGE_ERROR_MESSAGE_ID));
         }
-        if (null == messageList) {
-            messageList = new HashMap();
+        if (null == messageLists) {
+            messageLists = new HashMap();
         }
         
-        list = (ArrayList) messageList.get(null);
+        list = (ArrayList) messageLists.get(null);
         if (list == null) {
             list = new ArrayList();
-            messageList.put(null, list);
+            messageLists.put(null, list);
         }
         list.add(message);  
     }
 
     public void addMessage(UIComponent component, Message message) {
         ArrayList list = null;
-        if ( component == null || message == null ) {
+        if ( null == message ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        if (null == messageList) {
-            messageList = new HashMap();
+        if (null == messageLists) {
+            messageLists = new HashMap();
         }
         
-        list = (ArrayList) messageList.get(component);
+        list = (ArrayList) messageLists.get(component);
         if (list == null) {
             list = new ArrayList();
-            messageList.put(component, list);
+            messageLists.put(component, list);
         }
         list.add(message);
     }
@@ -578,7 +571,7 @@ public class FacesContextImpl extends FacesContext
                 }
                 // PENDING (visvan) store model objects in correct scope.
                 object = value;
-                getHttpSession().setAttribute(baseName, object);   
+                getHttpSession(true).setAttribute(baseName, object);   
             } else {
                 property = expression.substring((expression.indexOf(".")+1));
                 baseName = expression.substring(0, expression.indexOf("."));
@@ -615,8 +608,8 @@ public class FacesContextImpl extends FacesContext
         if ( modelObj != null ) {
             return modelObj;
         }
-        if (getHttpSession() != null ) {
-            modelObj = getHttpSession().getAttribute(modelRef);
+        if (getHttpSession(true) != null ) {
+            modelObj = getHttpSession(true).getAttribute(modelRef);
             if ( modelObj != null ) {
                 return modelObj;
             }

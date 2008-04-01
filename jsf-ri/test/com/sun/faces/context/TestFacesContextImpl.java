@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.11 2002/08/01 00:33:12 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.12 2002/08/01 20:51:31 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.11 2002/08/01 00:33:12 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.12 2002/08/01 20:51:31 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,7 +120,7 @@ public void testAccessors()
     assertTrue(result);
     
     
-    HttpSession session = getFacesContext().getHttpSession();
+    HttpSession session = getFacesContext().getHttpSession(true);
     result = null != session;
     System.out.println("Testing getHttpSession: " + result);
     assertTrue(result);
@@ -358,7 +358,7 @@ public void testMessageMethods() {
     System.out.println("Testing get methods");
     assertTrue ( fc.getMaximumSeverity() == 4 );
     
-    Iterator it = fc.getMessagesAll();
+    Iterator it = fc.getMessages();
     while ( it.hasNext() ) {
        Message result = (Message) it.next();
        assertTrue ( result.equals(msg1) || result.equals(msg2) || 

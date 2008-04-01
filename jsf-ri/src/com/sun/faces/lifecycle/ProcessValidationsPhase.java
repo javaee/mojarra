@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.6 2002/07/11 20:33:20 jvisvanathan Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.7 2002/08/01 20:51:29 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.6 2002/07/11 20:33:20 jvisvanathan Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.7 2002/08/01 20:51:29 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#PROCESS_VALIDATIONS_PHASE
@@ -92,7 +92,7 @@ public int execute(FacesContext facesContext) throws FacesException
 	return rc;
     }
     
-    messageIter = facesContext.getMessagesAll();
+    messageIter = facesContext.getMessages();
     Assert.assert_it(null != messageIter);
 
     if (messageIter.hasNext()) {

@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.9 2002/07/31 22:40:09 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.10 2002/08/01 20:51:30 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.9 2002/07/31 22:40:09 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.10 2002/08/01 20:51:30 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -128,7 +128,7 @@ public int execute(FacesContext facesContext) throws FacesException
     callback = pushValues;
     rc = traverseTreeInvokingCallback(facesContext);
 
-    messageIter = facesContext.getMessagesAll();
+    messageIter = facesContext.getMessages();
     Assert.assert_it(null != messageIter);
     
     if (messageIter.hasNext()) {
