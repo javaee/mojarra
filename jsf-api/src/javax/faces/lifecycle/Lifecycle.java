@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.6 2002/05/15 23:57:01 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.7 2002/05/17 23:38:03 craigmcc Exp $
  */
 
 /*
@@ -193,6 +193,27 @@ public abstract class Lifecycle {
      * information fit in?  Is it a separate phase prior to this one?</p>
      */
     public static final int RENDER_RESPONSE_PHASE = 7;
+
+
+    // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return the {@link ApplicationHandler} instance that will be utilized
+     * during the <em>Invoke Application</em> phase of the request processing
+     * lifecycle.</p>
+     */
+    public abstract ApplicationHandler getApplicationHandler();
+
+
+    /**
+     * <p>Set the {@link ApplicationHandler} instance that will be utilized
+     * during the <em>Invoke Application</em> phase of the request processing
+     * lifecycle.</p>
+     *
+     * @param handler The new {@link ApplicationHandler} instance
+     */
+    public abstract void setApplicationHandler(ApplicationHandler handler);
 
 
     // --------------------------------------------------------- Public Methods
