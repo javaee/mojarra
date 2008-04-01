@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.10 2002/07/26 03:26:08 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.11 2002/08/14 22:46:51 craigmcc Exp $
  */
 
 /*
@@ -612,11 +612,7 @@ public class UIComponentTestCase extends TestCase {
         assertNull("modelReference", component.getModelReference());
 
         // [3.1.6] Local Values
-        if (component instanceof UISelectBoolean) {
-            assertNotNull("value", component.getValue());
-        } else {
-            assertNull("value", component.getValue());
-        }
+        assertNull("value", component.getValue());
         // FIXME - assertNull("currentValue", component.currentValue(context));
 
         // [3.1.7] Generic Attributes

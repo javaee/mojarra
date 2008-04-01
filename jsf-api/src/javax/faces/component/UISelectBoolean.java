@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.14 2002/08/04 23:27:26 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.15 2002/08/14 22:46:51 craigmcc Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ public class UISelectBoolean extends UIInput {
     public UISelectBoolean() {
 
         super();
-        setSelected(false);
 
     }
 
