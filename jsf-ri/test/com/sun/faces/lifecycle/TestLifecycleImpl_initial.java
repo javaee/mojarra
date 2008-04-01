@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.2 2002/06/09 01:43:08 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.3 2002/06/11 21:47:17 eburns Exp $
  */
 
 /*
@@ -13,29 +13,15 @@ package com.sun.faces.lifecycle;
 
 import org.apache.cactus.WebRequest;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.PhaseListener;
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
-import javax.faces.event.FormEvent;
-import javax.faces.event.CommandEvent;
-
-import java.util.Iterator;
-import java.util.ArrayList;
-
-import com.sun.faces.FacesContextTestCaseJsp;
-import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.CompareFiles;
 
 import com.sun.faces.RIConstants;
 
-import javax.servlet.http.HttpServletResponse;
+import com.sun.faces.JspFacesTestCase;
 
 /**
  *
@@ -43,14 +29,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.2 2002/06/09 01:43:08 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.3 2002/06/11 21:47:17 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestLifecycleImpl_initial extends FacesContextTestCaseJsp
+public class TestLifecycleImpl_initial extends JspFacesTestCase
 {
 //
 // Protected Constants
@@ -59,9 +45,24 @@ public class TestLifecycleImpl_initial extends FacesContextTestCaseJsp
 public static final String TEST_URI_XUL = "/components.xul";
 public static final String TEST_URI = "/components.jsp";
 
-public static final String EXPECTED_OUTPUT_FILENAME = 
-    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + 
-    "TestLifecycleImpl_initial_correct";
+public String getExpectedOutputFilename() {
+    return "TestLifecycleImpl_initial_correct";
+}
+
+public static final String ignore[] = {
+    "        <form method=\"post\" action=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=form&name=basicForm&tree=/Faces_Basic.xul\">",
+    "            <a href=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul\"></a>",
+    "	    <!-- <a href=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul\"></a> -->"
+};
+
+public String [] getLinesToIgnore() {
+    return ignore;
+}
+
+public boolean sendResponseToFile() 
+{
+    return true;
+}
 
 //
 // Class Variables
@@ -74,8 +75,6 @@ public static final String EXPECTED_OUTPUT_FILENAME =
 // Attribute Instance Variables
 
 // Relationship Instance Variables
-
-protected FileOutputResponseWrapper fileResponse = null;
 
 //
 // Constructors and Initializers    
@@ -92,13 +91,6 @@ protected FileOutputResponseWrapper fileResponse = null;
 // General Methods
 //
 
-public HttpServletResponse getResponse()
-{
-    if (null == fileResponse) {
-	fileResponse = new FileOutputResponseWrapper(super.getResponse());
-    }
-    return fileResponse;
-}
 
 protected void initWebRequest(WebRequest theRequest)
 {
@@ -116,9 +108,6 @@ public void beginExecuteInitial(WebRequest theRequest)
 public void testExecuteInitial()
 {
     boolean result = false;
-    final String ENTER_CALLED = "enterCalled";
-    final String EXIT_CALLED = "exitCalled";
-    final String EMPTY = "empty";
     LifecycleImpl life = new LifecycleImpl();
     System.setProperty(ENTER_CALLED, EMPTY);
     System.setProperty(EXIT_CALLED, EMPTY);
@@ -141,7 +130,7 @@ public void testExecuteInitial()
     life.addPhaseListener(listener);
 
     try {
-	life.execute(facesContext);
+	life.execute(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();
@@ -153,32 +142,7 @@ public void testExecuteInitial()
     System.setProperty(ENTER_CALLED, EMPTY);
     System.setProperty(EXIT_CALLED, EMPTY);
 
-    CompareFiles cf = new CompareFiles();
-    String errorMessage = "File Comparison failed: diff -u " + 
-	FileOutputResponseWrapper.FACES_RESPONSE_FILENAME + " " + 
-	EXPECTED_OUTPUT_FILENAME;
-    try {
-	ArrayList ignoreList = new ArrayList();
-	String ignore[] = {
-	    "        <form method=\"post\" action=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=form&name=basicForm&tree=/Faces_Basic.xul\">",
-	    "            <a href=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul\"></a>",
-	    "	    <!-- <a href=\"/test/faces;jsessionid=C698E8893775F7F980C7F33784789447?action=command&name=null&tree=/Faces_Basic.xul\"></a> -->"
-	};
-	for (int i = 0; i < ignore.length; i++) {
-	    ignoreList.add(ignore[i]);
-	}
-
-	result = 
-	   cf.filesIdentical(FileOutputResponseWrapper.FACES_RESPONSE_FILENAME,
-			     EXPECTED_OUTPUT_FILENAME, ignoreList);
-    }
-    catch (Throwable e) {
-	System.out.println(e.getMessage());
-	e.printStackTrace();
-	assertTrue(false);
-    }
-
-    assertTrue(errorMessage, result);
+    assertTrue(verifyExpectedOutput());
 
 }
 
