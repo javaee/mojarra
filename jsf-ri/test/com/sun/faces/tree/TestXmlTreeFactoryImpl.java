@@ -1,5 +1,5 @@
 /*
- * $Id: TestXmlTreeFactoryImpl.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
+ * $Id: TestXmlTreeFactoryImpl.java,v 1.6 2002/06/20 01:34:27 eburns Exp $
  */
 
 /*
@@ -29,7 +29,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.sun.faces.CompareFiles;
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.FileOutputResponseWrapper;
 
 /**
  *
@@ -37,13 +38,13 @@ import com.sun.faces.FacesContextTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestXmlTreeFactoryImpl.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
+ * @version $Id: TestXmlTreeFactoryImpl.java,v 1.6 2002/06/20 01:34:27 eburns Exp $
  * 
  * @see	com.sun.faces.tree.XULTreeFactoryImpl
  *
  */
 
-public class TestXmlTreeFactoryImpl extends FacesContextTestCase
+public class TestXmlTreeFactoryImpl extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -51,12 +52,10 @@ public class TestXmlTreeFactoryImpl extends FacesContextTestCase
 
 public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 
-public static final String PATH_ROOT = "./build/test/servers/tomcat40/webapps/test/";
-
-public static final String OUTPUT_FILENAME = PATH_ROOT +
+public static final String OUTPUT_FILENAME = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
     "Faces_Basic_tree";
 
-public static final String CORRECT_XUL_FILENAME = PATH_ROOT +
+public static final String CORRECT_XUL_FILENAME = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
     "Faces_Basic_correct_xul_tree";
 
 //
@@ -85,26 +84,6 @@ public TestXmlTreeFactoryImpl(String name) {super(name);}
 //
 // General Methods
 //
-
-   
-public void testIds()
-{
-    /*TreeFactory factory = new XmlTreeFactoryImpl();
-    Iterator treeIds = null;
-    String curId = null;
-    assertTrue(null != factory);
-    boolean found = false;
-
-    assertTrue(null != (treeIds = 
-			factory.getTreeIds(config.getServletContext())));
-    while (treeIds.hasNext()) {
-	curId = (String) treeIds.next();
-	if (-1 != curId.indexOf(TEST_URI_XUL)) {
-	    found = true;
-	}
-    }
-    assertTrue(found); */
-}
 
 public void testCreate()
 {

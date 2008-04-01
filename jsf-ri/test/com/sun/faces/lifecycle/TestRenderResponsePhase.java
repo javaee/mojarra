@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.4 2002/06/18 18:23:26 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.5 2002/06/20 01:34:26 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UITextEntry;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
-import com.sun.faces.FacesContextTestCaseJsp;
+import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
@@ -49,27 +49,41 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.4 2002/06/18 18:23:26 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.5 2002/06/20 01:34:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRenderResponsePhase extends FacesContextTestCaseJsp
+public class TestRenderResponsePhase extends JspFacesTestCase
 {
 //
 // Protected Constants
 //
 
 public static final String TEST_URI_XUL = "/components.xul";
-
 public static final String TEST_URI = "/components.jsp";
 
-public static final String PATH_ROOT = "./build/test/servers/tomcat40/webapps/test/";
+public String getExpectedOutputFilename() {
+    return "RenderResponse_correct";
+}
 
-public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
-        "RenderResponse_correct";
+public static final String ignore[] = {
+    "        <form method=\"post\" action=\"/test/faces;jsessionid=A433F5F10481B2B2D78397146970C253?action=form&name=basicForm&tree=/Faces_Basic.xul\">",
+    "            <a href=\"/test/faces;jsessionid=A433F5F10481B2B2D78397146970C253?action=command&name=null&tree=/Faces_Basic.xul\"></a>",
+    "	    <!-- <a href=\"/test/faces;jsessionid=A433F5F10481B2B2D78397146970C253?action=command&name=null&tree=/Faces_Basic.xul\"></a> -->"
+};
+    
+public String [] getLinesToIgnore() {
+    return ignore;
+}
+
+public boolean sendResponseToFile() 
+{
+    return true;
+}
+
 //
 // Class Variables
 //
@@ -102,26 +116,6 @@ public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
 // General Methods
 //
 
-public void setUp()
-{
-    Util.verifyFactoriesAndInitDefaultRenderKit(config.getServletContext());
-    
-    facesContextFactory = (FacesContextFactory) 
-	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-    assertTrue(null != facesContextFactory);
-    
-    facesContext = 
-	facesContextFactory.createFacesContext(config.getServletContext(),
-					       request, 
-				      new FileOutputResponseWrapper(response));
-    pageContext.setAttribute(FacesContext.FACES_CONTEXT_ATTR, facesContext,
-			     PageContext.REQUEST_SCOPE);
-
-    assertTrue(null != facesContext);
-
-    TestBean testBean = new TestBean();
-    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
-}
 
 public void beginRender(WebRequest theRequest)
 {
@@ -131,50 +125,22 @@ public void beginRender(WebRequest theRequest)
 
 public void testRender()
 {
-    // Make sure we use the default component rendering behavior
-    System.setProperty(RIConstants.DISABLE_RENDERERS, 
-		       RIConstants.DISABLE_RENDERERS);
     boolean result = false;
     int rc = Phase.GOTO_NEXT;
     UIComponent root = null;
-    CompareFiles cf = new CompareFiles();
-    String errorMessage = null, value = null;
+    String value = null;
     Phase 
 	createTree = new CreateRequestTreePhase(null, 
 					Lifecycle.CREATE_REQUEST_TREE_PHASE),
 	renderResponse = new JspRenderResponsePhase(null, 
 				       Lifecycle.RENDER_RESPONSE_PHASE);
-    rc = createTree.execute(facesContext);
+    rc = createTree.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
 
-    rc = renderResponse.execute(facesContext);
+    rc = renderResponse.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
 
-    errorMessage = "File Comparison failed: diff -u " + 
-	FileOutputResponseWrapper.FACES_RESPONSE_FILENAME + " " + 
-	EXPECTED_OUTPUT_FILENAME;
-    try {
-	ArrayList ignoreList = new ArrayList();
-	String ignore[] = {
-	    "        <form method=\"post\" action=\"/test/faces;jsessionid=A433F5F10481B2B2D78397146970C253?action=form&name=basicForm&tree=/Faces_Basic.xul\">",
-	    "            <a href=\"/test/faces;jsessionid=A433F5F10481B2B2D78397146970C253?action=command&name=null&tree=/Faces_Basic.xul\"></a>",
-	    "	    <!-- <a href=\"/test/faces;jsessionid=A433F5F10481B2B2D78397146970C253?action=command&name=null&tree=/Faces_Basic.xul\"></a> -->"
-	};
-	for (int i = 0; i < ignore.length; i++) {
-	    ignoreList.add(ignore[i]);
-	}
-
-	result = 
-	   cf.filesIdentical(FileOutputResponseWrapper.FACES_RESPONSE_FILENAME,
-			     EXPECTED_OUTPUT_FILENAME, ignoreList);
-    }
-    catch (Throwable e) {
-	System.out.println(e.getMessage());
-	e.printStackTrace();
-	assertTrue(false);
-    }
-
-    assertTrue(errorMessage, result);
+    assertTrue(verifyExpectedOutput());
 }
 
 } // end of class TestRenderResponsePhase

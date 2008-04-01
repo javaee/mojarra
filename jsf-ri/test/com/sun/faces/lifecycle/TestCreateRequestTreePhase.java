@@ -1,5 +1,5 @@
 /*
- * $Id: TestCreateRequestTreePhase.java,v 1.2 2002/06/18 18:23:24 jvisvanathan Exp $
+ * $Id: TestCreateRequestTreePhase.java,v 1.3 2002/06/20 01:34:25 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 
 /**
  *
@@ -31,14 +31,14 @@ import com.sun.faces.FacesContextTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCreateRequestTreePhase.java,v 1.2 2002/06/18 18:23:24 jvisvanathan Exp $
+ * @version $Id: TestCreateRequestTreePhase.java,v 1.3 2002/06/20 01:34:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestCreateRequestTreePhase extends FacesContextTestCase
+public class TestCreateRequestTreePhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -101,8 +101,8 @@ public void testExecute()
 
     UIComponent root = null;
 
-    assertTrue(facesContext.getRequestTree().getTreeId().equals(TEST_URI_XUL));
-    root = facesContext.getRequestTree().getRoot();
+    assertTrue(getFacesContext().getRequestTree().getTreeId().equals(TEST_URI_XUL));
+    root = getFacesContext().getRequestTree().getRoot();
     assertTrue(null != root.findComponent("./basicForm/appleQuantity"));
     assertTrue(null != root.findComponent("./basicForm/login"));
     assertTrue(null != root.findComponent("./basicForm/login2"));
@@ -116,19 +116,19 @@ public void testExecteDefaultRequestTree()
     int result = -1;
 
     try {
-	result = createTree.execute(facesContext);
+	result = createTree.execute(getFacesContext());
     }
     catch (Throwable e) {
 	assertTrue(false);
     }
     assertTrue(Phase.GOTO_NEXT == result);
 
-    assertTrue(null != facesContext.getRequestTree());
-    assertTrue(facesContext.getRequestTree() == 
-	       facesContext.getResponseTree());
-    assertTrue(null != facesContext.getRequestTree().getRenderKit());
-    assertTrue(null != facesContext.getRequestTree().getRoot());
-    assertTrue(null != facesContext.getLocale());
+    assertTrue(null != getFacesContext().getRequestTree());
+    assertTrue(getFacesContext().getRequestTree() == 
+	       getFacesContext().getResponseTree());
+    assertTrue(null != getFacesContext().getRequestTree().getRenderKit());
+    assertTrue(null != getFacesContext().getRequestTree().getRoot());
+    assertTrue(null != getFacesContext().getLocale());
 }
 
 

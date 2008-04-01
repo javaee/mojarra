@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageListImpl.java,v 1.3 2002/06/18 18:23:23 jvisvanathan Exp $
+ * $Id: TestMessageListImpl.java,v 1.4 2002/06/20 01:34:24 eburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -27,14 +27,14 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageListImpl.java,v 1.3 2002/06/18 18:23:23 jvisvanathan Exp $
+ * @version $Id: TestMessageListImpl.java,v 1.4 2002/06/20 01:34:24 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestMessageListImpl extends FacesContextTestCase
+public class TestMessageListImpl extends ServletFacesTestCase
 {
     //
     // Protected Constants
@@ -73,9 +73,9 @@ public class TestMessageListImpl extends FacesContextTestCase
     public void testAccessors() {
         boolean result = false;
         
-        Assert.assert_it(facesContext != null );
+        Assert.assert_it(getFacesContext() != null );
         
-        MessageList messageList = facesContext.getMessageList();
+        MessageList messageList = getFacesContext().getMessageList();
         Assert.assert_it(messageList != null);
         
         // PENDING (visvan) add tests to test all add methods.

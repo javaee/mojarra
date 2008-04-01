@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.3 2002/06/18 18:23:23 jvisvanathan Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.4 2002/06/20 01:34:25 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UITextEntry;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 
 /**
  *
@@ -32,14 +32,14 @@ import com.sun.faces.FacesContextTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.3 2002/06/18 18:23:23 jvisvanathan Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.4 2002/06/20 01:34:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestApplyRequestValuesPhase extends FacesContextTestCase
+public class TestApplyRequestValuesPhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -97,12 +97,12 @@ public void testCallback()
 					Lifecycle.APPLY_REQUEST_VALUES_PHASE), 
 	createTree = new CreateRequestTreePhase(null, 
 				       Lifecycle.CREATE_REQUEST_TREE_PHASE);
-    rc = createTree.execute(facesContext);
+    rc = createTree.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
-    rc = applyValues.execute(facesContext);
+    rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     
-    root = facesContext.getRequestTree().getRoot();
+    root = getFacesContext().getRequestTree().getRoot();
     try {
 	userName = (UITextEntry) root.findComponent("./basicForm/userName");
     }

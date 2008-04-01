@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.2 2002/06/18 18:23:24 jvisvanathan Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.3 2002/06/20 01:34:25 eburns Exp $
  */
 
 /*
@@ -27,8 +27,9 @@ import javax.faces.component.UIComponent;
 
 import java.util.Iterator;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.CompareFiles;
+import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.lifecycle.LifecycleCallback;
 
 import java.io.PrintStream;
@@ -43,14 +44,14 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.2 2002/06/18 18:23:24 jvisvanathan Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.3 2002/06/20 01:34:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestGenericPhaseImpl extends FacesContextTestCase
+public class TestGenericPhaseImpl extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -58,12 +59,10 @@ public class TestGenericPhaseImpl extends FacesContextTestCase
 
 public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 
-public static final String PATH_ROOT = "./build/test/servers/tomcat40/webapps/test/";
-
-public static final String OUTPUT_FILENAME = PATH_ROOT +
+public static final String OUTPUT_FILENAME = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
     "GenericPhase_out";
 
-public static final String CORRECT_OUTPUT_FILENAME = PATH_ROOT +
+public static final String CORRECT_OUTPUT_FILENAME = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
     "GenericPhase_correct";
 
 //
@@ -138,7 +137,7 @@ public void testExecute()
 	};
 
     try {
-	result = createTree.execute(facesContext);
+	result = createTree.execute(getFacesContext());
     }
     catch (Throwable e) {
 	System.out.println("Throwable: " + e.getMessage());

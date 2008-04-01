@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.2 2002/06/18 05:02:27 rkitain Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.3 2002/06/20 01:34:26 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.tree.Tree;
 import javax.faces.event.CommandEvent;
 import javax.faces.event.FormEvent;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.tree.XmlTreeImpl;
 
@@ -41,14 +41,14 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.2 2002/06/18 05:02:27 rkitain Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.3 2002/06/20 01:34:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestInvokeApplicationPhase extends FacesContextTestCase
+public class TestInvokeApplicationPhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -56,7 +56,6 @@ public class TestInvokeApplicationPhase extends FacesContextTestCase
 
 public static final String DID_COMMAND = "didCommand";
 public static final String DID_FORM = "didForm";
-public static final String EMPTY = "EMPTY";
 
 //
 // Class Variables
@@ -112,12 +111,12 @@ public void testInvokeNormal()
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
 				      Lifecycle.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;
-    facesContext.setRequestTree(tree);
+    getFacesContext().setRequestTree(tree);
 
     life.setApplicationHandler(appHandler);
-    facesContext.addApplicationEvent(new CommandEvent(root, "command"));
-    facesContext.addApplicationEvent(new FormEvent(root, "form"));
-    rc = invokeApplicationPhase.execute(facesContext);
+    getFacesContext().addApplicationEvent(new CommandEvent(root, "command"));
+    getFacesContext().addApplicationEvent(new FormEvent(root, "form"));
+    rc = invokeApplicationPhase.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     assertTrue(System.getProperty(DID_COMMAND).equals(DID_COMMAND));
     assertTrue(System.getProperty(DID_FORM).equals(DID_FORM));
@@ -132,9 +131,9 @@ public void testInvokeNoOp()
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
 				      Lifecycle.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;
-    facesContext.setRequestTree(tree);
+    getFacesContext().setRequestTree(tree);
 
-    rc = invokeApplicationPhase.execute(facesContext);
+    rc = invokeApplicationPhase.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
 }
 

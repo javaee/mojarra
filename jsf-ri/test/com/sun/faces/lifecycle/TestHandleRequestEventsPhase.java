@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.5 2002/06/18 18:23:24 jvisvanathan Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.6 2002/06/20 01:34:26 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UITextEntry;
 import javax.faces.event.FacesEvent;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 
 import java.io.IOException;
 
@@ -35,14 +35,14 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.5 2002/06/18 18:23:24 jvisvanathan Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.6 2002/06/20 01:34:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestHandleRequestEventsPhase extends FacesContextTestCase
+public class TestHandleRequestEventsPhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -52,7 +52,6 @@ public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 
 public static final String DID_DECODE = "didDecode";
 public static final String DID_EVENT = "didEvent";
-public static final String EMPTY = "empty";
 
 //
 // Class Variables
@@ -106,7 +105,7 @@ public void testCallback()
 				       Lifecycle.CREATE_REQUEST_TREE_PHASE),
 	handleEvents = new HandleRequestEventsPhase(null, 
                                       Lifecycle.HANDLE_REQUEST_EVENTS_PHASE);
-    rc = createTree.execute(facesContext);
+    rc = createTree.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
 
     // clear the property
@@ -117,14 +116,14 @@ public void testCallback()
     valueChange = new UIValueChangeTextEntry();
     valueChange.setComponentId("valueChange");
 
-    root = facesContext.getRequestTree().getRoot();
+    root = getFacesContext().getRequestTree().getRoot();
     root.addChild(valueChange);
 
-    rc = applyValues.execute(facesContext);
+    rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     assertTrue(!System.getProperty(DID_DECODE).equals(EMPTY));
     
-    rc = handleEvents.execute(facesContext);
+    rc = handleEvents.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     assertTrue(!System.getProperty(DID_EVENT).equals(EMPTY));
 

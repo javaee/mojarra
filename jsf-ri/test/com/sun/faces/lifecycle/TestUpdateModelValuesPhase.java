@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.7 2002/06/18 18:49:07 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.8 2002/06/20 01:34:27 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UITextEntry;
 import javax.faces.tree.Tree;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.tree.XmlTreeImpl;
 
@@ -40,14 +40,14 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.7 2002/06/18 18:49:07 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.8 2002/06/20 01:34:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestUpdateModelValuesPhase extends FacesContextTestCase
+public class TestUpdateModelValuesPhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -93,8 +93,8 @@ public void testUpdateNormal()
     UITextEntry userName1 = null;
     UITextEntry userName2 = null;
     Tree tree = null;
-    TestBean testBean = new TestBean();
-    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    TestBean testBean = (TestBean)
+	(getFacesContext().getHttpSession()).getAttribute("TestBean");
     String value = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
@@ -119,15 +119,15 @@ public void testUpdateNormal()
 
     tree = new XmlTreeImpl(config.getServletContext(), form, 
 			   "updateModel.xul", "");
-    facesContext.setRequestTree(tree);
+    getFacesContext().setRequestTree(tree);
 
-    rc = updateModelValues.execute(facesContext);
+    rc = updateModelValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);    
 
     assertTrue(null == userName.getValue());
 
     assertTrue(testBean.getOne().equals("one"));
-    assertTrue(0 == facesContext.getMessageList().size());
+    assertTrue(0 == getFacesContext().getMessageList().size());
 }
 
 public void testUpdateFailed()
@@ -162,15 +162,15 @@ public void testUpdateFailed()
 
     tree = new XmlTreeImpl(config.getServletContext(), form,
                            "updateModel.xul", "");
-    facesContext.setRequestTree(tree);
+    getFacesContext().setRequestTree(tree);
 
     // This stage will go to render, since there was at least one error
     // during component updates... 
-    rc = updateModelValues.execute(facesContext);
+    rc = updateModelValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_RENDER == rc);    
 
     assertTrue(null != userName.getValue());
-    assertTrue(1 == facesContext.getMessageList().size());
+    assertTrue(1 == getFacesContext().getMessageList().size());
     
 }
 

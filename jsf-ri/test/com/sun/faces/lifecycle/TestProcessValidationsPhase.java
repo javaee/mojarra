@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.3 2002/06/18 18:23:26 jvisvanathan Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.4 2002/06/20 01:34:26 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.component.UITextEntry;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 
 import java.io.IOException;
 
@@ -38,14 +38,14 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.3 2002/06/18 18:23:26 jvisvanathan Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.4 2002/06/20 01:34:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestProcessValidationsPhase extends FacesContextTestCase
+public class TestProcessValidationsPhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -54,7 +54,6 @@ public class TestProcessValidationsPhase extends FacesContextTestCase
 public static final String TEST_URI_XUL = "/Faces_Basic.xul";
 
 public static final String DID_VALIDATE = "didValidate";
-public static final String EMPTY = "empty";
 public static UITextEntry userName = null;
 
 //
@@ -111,13 +110,13 @@ public void testCallback()
                                       Lifecycle.HANDLE_REQUEST_EVENTS_PHASE),
 	processValidations = new ProcessValidationsPhase(null, 
                                           Lifecycle.PROCESS_VALIDATIONS_PHASE);
-    rc = createTree.execute(facesContext);
+    rc = createTree.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
 
     // clear the property
     System.setProperty(DID_VALIDATE, EMPTY);
 
-    root = facesContext.getRequestTree().getRoot();
+    root = getFacesContext().getRequestTree().getRoot();
     try {
 	userName = (UITextEntry) root.findComponent("./basicForm/userName");
     }
@@ -142,13 +141,13 @@ public void testCallback()
 	};
     userName.addValidator(validator);
 
-    rc = applyValues.execute(facesContext);
+    rc = applyValues.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
     
-    rc = handleEvents.execute(facesContext);
+    rc = handleEvents.execute(getFacesContext());
     assertTrue(Phase.GOTO_NEXT == rc);
 
-    rc = processValidations.execute(facesContext);
+    rc = processValidations.execute(getFacesContext());
     assertTrue(!System.getProperty(DID_VALIDATE).equals(EMPTY));
     
     System.setProperty(DID_VALIDATE, EMPTY);

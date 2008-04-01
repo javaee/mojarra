@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderersFromJsp.java,v 1.4 2002/06/18 18:23:27 jvisvanathan Exp $
+ * $Id: TestRenderersFromJsp.java,v 1.5 2002/06/20 01:34:27 eburns Exp $
  */
 
 /*
@@ -29,9 +29,7 @@ import javax.faces.event.CommandEvent;
 import java.util.Iterator;
 import java.util.ArrayList;
 
-import com.sun.faces.FacesContextTestCaseJsp;
-import com.sun.faces.FileOutputResponseWrapper;
-import com.sun.faces.CompareFiles;
+import com.sun.faces.JspFacesTestCase;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.lifecycle.LifecycleImpl;
@@ -44,14 +42,14 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderersFromJsp.java,v 1.4 2002/06/18 18:23:27 jvisvanathan Exp $
+ * @version $Id: TestRenderersFromJsp.java,v 1.5 2002/06/20 01:34:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRenderersFromJsp extends FacesContextTestCaseJsp
+public class TestRenderersFromJsp extends JspFacesTestCase
 {
 //
 // Protected Constants
@@ -60,9 +58,23 @@ public class TestRenderersFromJsp extends FacesContextTestCaseJsp
 public static final String TEST_URI_XUL = "/TestRenderersFromJsp.xul";
 public static final String TEST_URI = "/TestRenderersFromJsp.jsp";
 
-public static final String EXPECTED_OUTPUT_FILENAME = 
-    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + 
-    "TestRenderersFromJsp_correct";
+public String getExpectedOutputFilename() {
+    return "TestRenderersFromJsp_correct";
+}
+
+public static final String ignore[] = {
+    "        <FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=form&name=basicForm&tree=/TestRenderersFromJsp.xul\">",
+    "	    <!-- <a href=\"/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=command&name=loginButton&tree=/TestRenderersFromJsp.xul\">loginButton</a> -->"
+};
+
+public String [] getLinesToIgnore() {
+    return ignore;
+}
+
+public boolean sendResponseToFile() 
+{
+    return true;
+}
 
 //
 // Class Variables
@@ -75,8 +87,6 @@ public static final String EXPECTED_OUTPUT_FILENAME =
 // Attribute Instance Variables
 
 // Relationship Instance Variables
-
-protected FileOutputResponseWrapper fileResponse = null;
 
 //
 // Constructors and Initializers    
@@ -92,14 +102,6 @@ protected FileOutputResponseWrapper fileResponse = null;
 //
 // General Methods
 //
-
-public HttpServletResponse getResponse()
-{
-    if (null == fileResponse) {
-	fileResponse = new FileOutputResponseWrapper(super.getResponse());
-    }
-    return fileResponse;
-}
 
 protected void initWebRequest(WebRequest theRequest)
 {
@@ -121,39 +123,14 @@ public void testFromJsp()
     LifecycleImpl life = new LifecycleImpl();
 
     try {
-	life.execute(facesContext);
+	life.execute(getFacesContext());
     }
     catch (Throwable e) {
 	e.printStackTrace();
 	assertTrue(e.getMessage(), false);
     }
 
-    CompareFiles cf = new CompareFiles();
-    String errorMessage = "File Comparison failed: diff -u " + 
-	FileOutputResponseWrapper.FACES_RESPONSE_FILENAME + " " + 
-	EXPECTED_OUTPUT_FILENAME;
-    try {
-	ArrayList ignoreList = new ArrayList();
-	String ignore[] = {
-	    "        <FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=form&name=basicForm&tree=/TestRenderersFromJsp.xul\">",
-	    "	    <!-- <a href=\"/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=command&name=loginButton&tree=/TestRenderersFromJsp.xul\">loginButton</a> -->"
-	};
-	for (int i = 0; i < ignore.length; i++) {
-	    ignoreList.add(ignore[i]);
-	}
-
-	result = 
-	    cf.filesIdentical(FileOutputResponseWrapper.FACES_RESPONSE_FILENAME,
-			      EXPECTED_OUTPUT_FILENAME, ignoreList);
-    }
-    catch (Throwable e) {
-	System.out.println(e.getMessage());
-	e.printStackTrace();
-	assertTrue(false);
-    }
-
-    assertTrue(errorMessage, result);
-
+    assertTrue(verifyExpectedOutput());
 }
 
 

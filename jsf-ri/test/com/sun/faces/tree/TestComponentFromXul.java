@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentFromXul.java,v 1.2 2002/06/18 18:23:28 jvisvanathan Exp $
+ * $Id: TestComponentFromXul.java,v 1.3 2002/06/20 01:34:27 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.FacesContextTestCase;
+import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.CreateRequestTreePhase;
 
 /**
@@ -32,14 +32,14 @@ import com.sun.faces.lifecycle.CreateRequestTreePhase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentFromXul.java,v 1.2 2002/06/18 18:23:28 jvisvanathan Exp $
+ * @version $Id: TestComponentFromXul.java,v 1.3 2002/06/20 01:34:27 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestComponentFromXul extends FacesContextTestCase
+public class TestComponentFromXul extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -82,16 +82,11 @@ public static final String TEST_URI_XUL = "/Faces_Basic_Component.xul";
 public void beginExecute(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-    System.setProperty(FactoryFinder.TREE_FACTORY,
-			"com.sun.faces.tree.XmlTreeFactoryImpl");
 }
 
 public void beginExecteDefaultRequestTree(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-    //theRequest.addParameter("tree", TEST_URI_XUL);
-    System.setProperty(FactoryFinder.TREE_FACTORY,
-			"com.sun.faces.tree.XmlTreeFactoryImpl");
 }
 
 public void testExecute()
@@ -100,8 +95,8 @@ public void testExecute()
 
     UIComponent root = null;
 
-    assertTrue(facesContext.getRequestTree().getTreeId().equals(TEST_URI_XUL));
-    root = facesContext.getRequestTree().getRoot();
+    assertTrue(getFacesContext().getRequestTree().getTreeId().equals(TEST_URI_XUL));
+    root = getFacesContext().getRequestTree().getRoot();
     assertTrue(null != root.findComponent("./basicForm/myOutput"));
 
     assertTrue(null != root.findComponent("./basicForm"));
@@ -116,7 +111,7 @@ public void testExecteDefaultRequestTree()
     int result = -1;
 
     try {
-	result = createTree.execute(facesContext);
+	result = createTree.execute(getFacesContext());
     }
     catch (Throwable e) {
        e.printStackTrace();
@@ -124,12 +119,12 @@ public void testExecteDefaultRequestTree()
     }
     assertTrue(Phase.GOTO_NEXT == result);
 
-    assertTrue(null != facesContext.getRequestTree());
-    assertTrue(facesContext.getRequestTree() == 
-	       facesContext.getResponseTree());
-    assertTrue(null != facesContext.getRequestTree().getRenderKit());
-    assertTrue(null != facesContext.getRequestTree().getRoot());
-    assertTrue(null != facesContext.getLocale());
+    assertTrue(null != getFacesContext().getRequestTree());
+    assertTrue(getFacesContext().getRequestTree() == 
+	       getFacesContext().getResponseTree());
+    assertTrue(null != getFacesContext().getRequestTree().getRenderKit());
+    assertTrue(null != getFacesContext().getRequestTree().getRoot());
+    assertTrue(null != getFacesContext().getLocale());
 }
 
 
