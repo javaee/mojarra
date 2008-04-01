@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandlerTag.java,v 1.2 2002/07/31 00:27:47 craigmcc Exp $
+ * $Id: EventHandlerTag.java,v 1.3 2002/09/02 21:36:35 craigmcc Exp $
  */
 
 /*
@@ -24,46 +24,45 @@ import javax.servlet.jsp.tagext.TagSupport;
  * is a subclass of {@link FacesTag}.  This tag creates no output to the
  * page currently being created.</p>
  *
- * <p>FIXME - should this class be in jsf-api, or just a spec requirement
- * to provide such a tag with a well known name?</p>
+ * <p>This class may be used directly to implement a generic event handler
+ * registration tag (based on the fully qualified Java class name specified
+ * by the <code>type</code> attribute), or as a base class for tag instances
+ * that support specific {@link RequestEventHandler} subclasses.</p>
+ *
+ * <p>Subclasses of this class must implement the
+ * <code>createEventHandler()</code> method, which creates and returns a
+ * {@link RequestEventHandler} instance.  Any configuration properties that
+ * are required by this {@link RequestEventHandler} instance must have been
+ * set by the <code>createEventHandler()</code> method.  Generally, this occurs
+ * by copying corresponding attribute values on the tag instance.</p>
+ *
+ * <p>This tag creates no output to the page currently being created.  It
+ * is used solely for the side effect of {@link RequestEventHandler}
+ * creation.</p>
  */
 
-public final class EventHandlerTag extends TagSupport {
+public class EventHandlerTag extends TagSupport {
 
 
-    // ----------------------------------------------------- Instance Variables
+    // ------------------------------------------------------------- Attributes
 
 
     /**
      * <p>The fully qualified class name of the {@link RequestEventHandler}
      * instance to be created.</p>
      */
-    private String className = null;
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the fully qualified class name of the
-     * {@link RequestEventHandler} instance to be created.
-     */
-    public String getClassName() {
-
-        return (this.className);
-
-    }
+    private String type = null;
 
 
     /**
      * <p>Set the fully qualified class name of the
      * {@link RequestEventHandler} instance to be created.
      *
-     * @param className The new class name
+     * @param type The new class name
      */
-    public void setClassName(String className) {
+    public void setType(String type) {
 
-        this.className = className;
+        this.type = type;
 
     }
 
@@ -74,48 +73,33 @@ public final class EventHandlerTag extends TagSupport {
     /**
      * <p>Create a new instance of the specified {@link RequestEventHandler}
      * class, and register it with the {@link UIComponent} instance associated
-     * with our most immediately surrounding {@link FacesTag} instance.
+     * with our most immediately surrounding {@link FacesTag} instance, if
+     * the {@link UIComponent} instance was created by this execution of the
+     * containing JSP page.</p>
      *
      * @exception JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
 
-        try {
-
-            // Locate our parent FacesTag
-            Tag tag = getParent();
-            while ((tag != null) && !(tag instanceof FacesTag)) {
-                tag = tag.getParent();
-            }
-            if (tag == null) { // FIXME - i18n
-                throw new JspException("Not nested in a FacesTag");
-            }
-            FacesTag facesTag = (FacesTag) tag;
-
-            // Nothing to do unless this tag created a component
-            if (!facesTag.getCreated()) {
-                return (SKIP_BODY);
-            }
-
-            // Create a new instance of the specified class
-            ClassLoader classLoader =
-                Thread.currentThread().getContextClassLoader();
-            if (classLoader == null) {
-                classLoader = this.getClass().getClassLoader();
-            }
-            Class clazz = classLoader.loadClass(className);
-            RequestEventHandler handler = (RequestEventHandler)
-                clazz.newInstance();
-
-            // Register this instance with the appropriate component
-            facesTag.getComponent().addRequestEventHandler(handler);
-            return (SKIP_BODY);
-
-        } catch (Exception e) {
-
-            throw new JspException(e);
-
+        // Locate our parent FacesTag
+        Tag tag = getParent();
+        while ((tag != null) && !(tag instanceof FacesTag)) {
+            tag = tag.getParent();
         }
+        if (tag == null) { // FIXME - i18n
+            throw new JspException("Not nested in a FacesTag");
+        }
+        FacesTag facesTag = (FacesTag) tag;
+
+        // Nothing to do unless this tag created a component
+        if (!facesTag.getCreated()) {
+            return (SKIP_BODY);
+        }
+
+        // Create and register an instance with the appropriate component
+        RequestEventHandler handler = createEventHandler();
+        facesTag.getComponent().addRequestEventHandler(handler);
+        return (SKIP_BODY);
 
     }
 
@@ -125,7 +109,34 @@ public final class EventHandlerTag extends TagSupport {
      */
     public void release() {
 
-        this.className = null;
+        this.type = null;
+
+    }
+
+
+    // ------------------------------------------------------ Protected Methods
+
+
+    /**
+     * <p>Create and return a new {@link RequestEventHandler} to be registered
+     * on our surrounding {@link UIComponent}.</p>
+     *
+     * @exception JspException if a new instance cannot be created
+     */
+    protected RequestEventHandler createEventHandler()
+        throws JspException {
+
+        try {
+            ClassLoader classLoader =
+                Thread.currentThread().getContextClassLoader();
+            if (classLoader == null) {
+                classLoader = this.getClass().getClassLoader();
+            }
+            Class clazz = classLoader.loadClass(type);
+            return ((RequestEventHandler) clazz.newInstance());
+        } catch (Exception e) {
+            throw new JspException(e);
+        }
 
     }
 

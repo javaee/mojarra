@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.1 2002/07/17 00:11:10 craigmcc Exp $
+ * $Id: AttributeTag.java,v 1.2 2002/09/02 21:36:35 craigmcc Exp $
  */
 
 /*
@@ -21,41 +21,18 @@ import javax.servlet.jsp.tagext.TagSupport;
  * and (String) value, if the component does not already contain such
  * an attribute.  This tag creates no output to the page currently
  * being created.</p>
- *
- * <p>FIXME - should this class be in jsf-api, or just a spec requirement
- * to provide such a tag with a well known name?</p>
  */
 
-public final class AttributeTag extends TagSupport {
+public class AttributeTag extends TagSupport {
 
 
-    // ----------------------------------------------------- Instance Variables
+    // ------------------------------------------------------------- Attributes
 
 
     /**
      * <p>The name of the attribute to be created, if not already present.
      */
     private String name = null;
-
-
-    /**
-     * <p>The value to be associated with this attribute, if it is created.</p>
-     */
-    private String value = null;
-
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the attribute name.</p>
-     */
-    public String getName() {
-
-        return (this.name);
-
-    }
 
 
     /**
@@ -71,13 +48,10 @@ public final class AttributeTag extends TagSupport {
 
 
     /**
-     * <p>Return the attribute value.</p>
+     * <p>The value to be associated with this attribute, if it is created.</p>
      */
-    public String getValue() {
+    private String value = null;
 
-        return (this.value);
-
-    }
 
 
     /**

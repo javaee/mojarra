@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.3 2002/08/29 16:24:38 craigmcc Exp $
+ * $Id: ValidatorTag.java,v 1.4 2002/09/02 21:36:36 craigmcc Exp $
  */
 
 /*
@@ -28,6 +28,11 @@ import javax.servlet.jsp.tagext.TagSupport;
  * created (by the owning {@link FacesTag}) during the execution of the
  * current page.</p>
  *
+ * <p>This class may be used directly to implement a generic validator
+ * registration tag (based on the fully qualified Java class name specified
+ * by the <code>type</code> attribute), or as a base class for tag instances
+ * that support specific {@link Validator} subclasses.</p>
+ *
  * <p>Subclasses of this class must implement the
  * <code>createValidator()</code> method, which creates and returns a
  * {@link Validator} instance.  Any configuration properties that specify
@@ -39,7 +44,30 @@ import javax.servlet.jsp.tagext.TagSupport;
  * is used solely for the side effect of {@link Validator} creation.</p>
  */
 
-public abstract class ValidatorTag extends TagSupport {
+public class ValidatorTag extends TagSupport {
+
+
+    // ------------------------------------------------------------- Attributes
+
+
+    /**
+     * <p>The fully qualified class name of the {@link Validator}
+     * instance to be created.</p>
+     */
+    private String type = null;
+
+
+    /**
+     * <p>Set the fully qualified class name of the
+     * {@link Validator} instance to be created.
+     *
+     * @param type The new class name
+     */
+    public void setType(String type) {
+
+        this.type = type;
+
+    }
 
 
     // --------------------------------------------------------- Public Methods
@@ -71,12 +99,20 @@ public abstract class ValidatorTag extends TagSupport {
             return (SKIP_BODY);
         }
 
-        // Create a new instance of the specified Validator
+        // Create and register an instance with the appropriate component
         Validator validator = createValidator();
-
-        // Register this instance with the appropriate component
         facesTag.getComponent().addValidator(validator);
         return (SKIP_BODY);
+
+    }
+
+
+    /**
+     * <p>Release references to any acquired resources.
+     */
+    public void release() {
+
+        this.type = null;
 
     }
 
@@ -85,11 +121,27 @@ public abstract class ValidatorTag extends TagSupport {
 
 
     /**
-     * <p>Create and return a {@link Validator} instance, to be registered
-     * with our surrounding {@link UIComponent}, that has been configured
-     * based on the attributes used on this tag instance.</p>
+     * <p>Create and return a new {@link Validator} to be registered
+     * on our surrounding {@link UIComponent}.</p>
+     *
+     * @exception JspException if a new instance cannot be created
      */
-    protected abstract Validator createValidator();
+    protected Validator createValidator()
+        throws JspException {
+
+        try {
+            ClassLoader classLoader =
+                Thread.currentThread().getContextClassLoader();
+            if (classLoader == null) {
+                classLoader = this.getClass().getClassLoader();
+            }
+            Class clazz = classLoader.loadClass(type);
+            return ((Validator) clazz.newInstance());
+        } catch (Exception e) {
+            throw new JspException(e);
+        }
+
+    }
 
 
 }
