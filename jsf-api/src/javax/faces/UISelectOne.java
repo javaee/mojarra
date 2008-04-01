@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.6 2002/01/31 20:30:22 rogerk Exp $
+ * $Id: UISelectOne.java,v 1.7 2002/02/08 18:26:04 visvan Exp $
  */
 
 /*
@@ -448,12 +448,15 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
         // Assert.assert_it( rc != null );
 
         // PENDING ( visvan ) according to the latest version of the
-        // spec, value changes will not not pushed to  object
+        // spec, value changes will not be pushed to  object
         // until it is validated. This change will be made along with
         // model object changes.
+        // local value should also updated so that it is cached for
+        // future references.
         if ( modelRef == null ) {
             setSelectedValue((String)value_event.getNewValue());
         } else {
+            setSelectedValue((String)value_event.getNewValue());
             rc.getObjectAccessor().setObject(request, modelRef,
                                              new_value);
         }
