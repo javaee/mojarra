@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.3 2001/11/16 20:21:42 edburns Exp $
+ * $Id: ObjectTable.java,v 1.4 2001/11/17 02:08:10 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -26,14 +26,64 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- *  <B>ObjectTable</B> is a class ...
+
+ *  <B>ObjectTable</B> is a class ... <P>
+
+ * <P>This is a very early implementation, based on Hans Muller's
+ * pre-expert-group-posting proposal.</P>
+
+<P>Here is how this implementation differs from the proposal:</P>
+
+	<UL>
+
+	  <LI><P><B>Usage pattern</B> I feel strongly that the usage
+	  pattern for ObjectTable should be like this: There is one
+	  instance of ObjectTable per VM (Hans's proposal has no
+	  instance of ObjectTable, all methods and data are static).
+	  The ObjectTable client obtains the singleton instance from
+	  somewhere, currently RenderContext.getObjectTable().  The
+	  ObjectTable client then uses that instance for all its
+	  ObjectTable needs. </P>
+
+	  <P>This approach has pros(+) and cons(-):</P>
+
+<PRE>
+
++ More amenable to future changes in implementation, by allowing the
+  separation of interface and implementation.
+
++ Allows other Faces implementors the flexability to implement their own
+  ObjectTable, or use the default one.
+
++ Client code using this approach can easily be switched to Hans's
+  approach.
+
+- Slightly Increased complexity and slightly decreased ease of use.
+
+</PRE>
+
+          </LI>
+
+	  <LI><P><B>Static vs. Non-Static Methods and Data</B> Hans's
+  proposal has all ObjectTable methods static. I've moved them to be
+  non-static.</P></LI>
+
+	  <LI><P>I have made Scope be an interface, not a class.
+	  </P></LI>
+
+	</UL>
+
+<P>This implementation will certainly change as we haggle out the
+  details.</P>
+
+
  *
- * <B>Lifetime And Scope</B> <P>
+ * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
+  VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.3 2001/11/16 20:21:42 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.4 2001/11/17 02:08:10 edburns Exp $
  * 
- * @see	Blah
- * @see	Bloo
+ * @see	javax.faces.RenderContext#getObjectTable
  *
  */
 
@@ -82,7 +132,7 @@ public abstract class ObjectTable
   *  argument object.
 
 
-  * @see ObjectTable.get()
+  * @see ObjectTable#get
 
   * @param scopeKey The instance for which a Scope should be found.
   * Usually something like an HttpServletRequest or HttpSession
