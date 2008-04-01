@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.13 2002/05/17 01:27:27 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.14 2002/05/17 01:49:56 craigmcc Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -113,6 +114,17 @@ import javax.faces.render.Renderer;
  * absolute and relative path expressions.  See
  * <a href="#findComponent(java.lang.String)">findComponent()</a> for
  * more information.</p>
+ *
+ * <h3>Events</h3>
+ *
+ * <p>Each component can be the target of zero or more events, which are
+ * typically fired during the <em>Apply Request Values</em> phase of the
+ * request processing lifecycle, by some other component that is processing
+ * a state change that affects the receiving component as well.  During the
+ * <em>Handle Request Events</em> phase, the <code>events()</code> method
+ * of each <code>UIComponent</code> will be called, which can then iterate
+ * through the events queued for this component by calling the
+ * <code>getEvents()</code> method.</p>
  *
  * <h3>Validators</h3>
  *
@@ -822,6 +834,48 @@ public abstract class UIComponent {
     }
 
 
+    // --------------------------------------------------------- Events Methods
+
+
+    /**
+     * <p>The set of {@link EventObject}s for the events queued to this
+     * <code>UIComponent</code>.</p>
+     */
+    private ArrayList events = null;
+
+
+    /**
+     * <p>Add a {@link EventObject} representing an event to be processed
+     * by this component during the <em>Handle Request Events</em> phase
+     * of the request processing lifecycle.</p>
+     *
+     * @param event The event to be added
+     */
+    public void addEvent(EventObject event) {
+
+        if (events == null) {
+            events = new ArrayList();
+        }
+        events.add(event);
+
+    }
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link EventObject}s
+     * for the events queued to this <code>UIComponent</code>.</p>
+     */
+    public Iterator getEvents() {
+
+        if (events != null) {
+            return (events.iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
+
+
     // ----------------------------------------------------- Validators Methods
 
 
@@ -864,7 +918,6 @@ public abstract class UIComponent {
         }
 
     }
-
 
 
     // ------------------------------------------- Lifecycle Processing Methods
@@ -923,6 +976,41 @@ public abstract class UIComponent {
     public void encode(FacesContext context) throws IOException {
 
         ; // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Process an individual event queued to this <code>UIComponent</code>.
+     * The default implementation does nothing, but can be overridden by
+     * subclasses of <code>UIComponent</code>.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     * @param event Event to be processed against this component
+     */
+    protected void event(FacesContext context, EventObject event) {
+
+        ; // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Process each event queued to this <code>UIComponent</code>.  This
+     * method will be called during the <em>Handle Request Events</em> phase
+     * of the request processing lifecycle.</p>
+     *
+     * <p><strong>FIXME</strong> - How can we indicate that our phase should
+     * go directly to rendering, instead of proceeding?</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void events(FacesContext context) {
+
+        Iterator events = getEvents();
+        while (events.hasNext()) {
+            event(context, (EventObject) events.next());
+        }
 
     }
 
