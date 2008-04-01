@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.6 2002/06/18 18:23:27 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.7 2002/06/18 18:49:07 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.6 2002/06/18 18:23:27 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.7 2002/06/18 18:49:07 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,7 +88,7 @@ public class TestUpdateModelValuesPhase extends FacesContextTestCase
 public void testUpdateNormal()
 {
     int rc = Phase.GOTO_NEXT;
-UIForm form = null;
+    UIForm form = null;
     UITextEntry userName = null;
     UITextEntry userName1 = null;
     UITextEntry userName2 = null;
@@ -99,26 +99,24 @@ UIForm form = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
-form = new UIForm();
-form.setComponentId("form");
+    form = new UIForm();
+    form.setComponentId("form");
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${TestBean.one}");
-form.addChild(userName);
-userName1 = new UITextEntry();
-userName1.setComponentId("userName1");
-userName1.setValue("one");
-userName1.setModelReference("${TestBean.one}");
-form.addChild(userName1);
-userName2 = new UITextEntry();
-userName2.setComponentId("userName2");
-userName2.setValue("one");
-userName2.setModelReference("${TestBean.one}");
-form.addChild(userName2);
+    form.addChild(userName);
+    userName1 = new UITextEntry();
+    userName1.setComponentId("userName1");
+    userName1.setValue("one");
+    userName1.setModelReference("${TestBean.one}");
+    form.addChild(userName1);
+    userName2 = new UITextEntry();
+    userName2.setComponentId("userName2");
+    userName2.setValue("one");
+    userName2.setModelReference("${TestBean.one}");
+    form.addChild(userName2);
 
-//    tree = new XmlTreeImpl(config.getServletContext(), userName, 
-//			   "updateModel.xul", "");
     tree = new XmlTreeImpl(config.getServletContext(), form, 
 			   "updateModel.xul", "");
     facesContext.setRequestTree(tree);
@@ -135,35 +133,33 @@ form.addChild(userName2);
 public void testUpdateFailed()
 {
     int rc = Phase.GOTO_NEXT;
-UIForm form = null;
+    UIForm form = null;
     UITextEntry userName = null;
-UITextEntry userName1 = null;
-UITextEntry userName2 = null;
+    UITextEntry userName1 = null;
+    UITextEntry userName2 = null;
     Tree tree = null;
     String value = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
-form = new UIForm();
-form.setComponentId("form");
+    form = new UIForm();
+    form.setComponentId("form");
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${UserBean.one}");
-form.addChild(userName);
-userName1 = new UITextEntry();
-userName1.setComponentId("userName1");
-userName1.setValue("one");
-userName1.setModelReference("${TestBean.one}");
-form.addChild(userName1);
-userName2 = new UITextEntry();
-userName2.setComponentId("userName2");
-userName2.setValue("one");
-userName2.setModelReference("${TestBean.one}");
-form.addChild(userName2);
+    form.addChild(userName);
+    userName1 = new UITextEntry();
+    userName1.setComponentId("userName1");
+    userName1.setValue("one");
+    userName1.setModelReference("${TestBean.one}");
+    form.addChild(userName1);
+    userName2 = new UITextEntry();
+    userName2.setComponentId("userName2");
+    userName2.setValue("one");
+    userName2.setModelReference("${TestBean.one}");
+    form.addChild(userName2);
 
-//    tree = new XmlTreeImpl(config.getServletContext(), userName, 
-//			   "updateModel.xul", "");
     tree = new XmlTreeImpl(config.getServletContext(), form,
                            "updateModel.xul", "");
     facesContext.setRequestTree(tree);
@@ -174,9 +170,7 @@ form.addChild(userName2);
     assertTrue(Phase.GOTO_RENDER == rc);    
 
     assertTrue(null != userName.getValue());
-    // PENDING (visvan) only validation and conversion erros should be put
-    // in messageList. remove this after confirming with Ed/Craig.
-    // assertTrue(1 == facesContext.getMessageList().size());
+    assertTrue(1 == facesContext.getMessageList().size());
     
 }
 
