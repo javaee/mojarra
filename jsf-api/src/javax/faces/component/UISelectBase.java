@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.1 2002/06/14 21:31:14 craigmcc Exp $
+ * $Id: UISelectBase.java,v 1.2 2002/07/30 22:51:36 craigmcc Exp $
  */
 
 /*
@@ -12,8 +12,11 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -27,136 +30,64 @@ import javax.faces.context.ResponseWriter;
 abstract class UISelectBase extends UIComponentBase {
 
 
-    // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Return the available items list for this component.</p>
-     */
-    public Object getItems() {
-
-        return (getAttribute("items"));
-
-    }
-
-
-    /**
-     * <p>Set the available items for this component, which must be one of
-     * the following.</p>
-     * <ul>
-     * <li>Array of {@link SelectItem}</li>
-     * <li>Array of objects (typically Strings)</li>
-     * <li>Array of Java primitive items (such as <code>int[]</code>)</li>
-     * <li>Implementation of <code>java.util.List</code></li>
-     * </ul>
-     *
-     * @param items The new available items
-     *
-     * @exception IllegalArgumentException if the specified items list is
-     *  not one of the valid object types
-     */
-    public void setItems(Object items) {
-
-        // FIXME - type check on the argument
-        setAttribute("items", items);
-
-    }
-
-
-    /**
-     * <p>Return the model reference expression for the available items
-     * for this component.</p>
-     */
-    public String getItemsModelReference() {
-
-        return ((String) getAttribute("itemsModelReference"));
-
-    }
-
-
-    /**
-     * <p>Set the model reference expression for the available items
-     * for this component.</p>
-     *
-     * @param itemsModelReference The new model reference expression (if any)
-     */
-    public void setItemsModelReference(String itemsModelReference) {
-
-        setAttribute("itemsModelReference", itemsModelReference);
-
-    }
-
-
     // ------------------------------------------------------ Protected Methods
 
 
     /**
-     * <p>Return the values of the requested attribute (or the values from
-     * the corresponding model reference expression if the attribute is not
-     * defined), as an array of {@link SelectItem}s.  If no data can be
-     * acquired, return a zero-length array.</p>
+     * <p>Return an Iterator over {@link SelectItem} instances representing the
+     * available options for this component, assembled from the set of
+     * {@link UISelectItem} and/or {@link UISelectItems} components that are
+     * direct children of this component.  If there are no such children, a
+     * zero-length array is returned.</p>
      *
      * @param context The {@link FacesContext} for the current request
-     * @param attributeName Attribute name for the attribute defining the local
-     *  values of the requested data (if any)
-     * @param modelReference Model reference expression defining the external
-     *  source of the requested data (if any)
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
-    protected SelectItem[] getAsItems(FacesContext context,
-                                      String attributeName,
-                                      String modelReference) {
+    protected Iterator getSelectItems(FacesContext context) {
 
-        // Acquire the raw values of the requested data
-        Object values = null;
-        if (attributeName != null) {
-            values = getAttribute(attributeName);
-        }
-        if ((values == null) && (modelReference != null)) {
-            values = context.getModelValue(modelReference);
-        }
-
-        // Special case for array of SelectItem
-        if (values instanceof SelectItem[]) {
-            return ((SelectItem[]) values);
-        }
-
-        // Convert to a SelectItem array as required
-        SelectItem results[] = new SelectItem[0];
-        if (values == null) {
-            ; // No change needed
-        } else if (values instanceof List) {
-            results = new SelectItem[((List) values).size()];
-            Iterator items = ((List) values).iterator();
-            int n = 0;
-            while (items.hasNext()) {
-                Object item = items.next();
-                if (item == null) {
-                    item = "";
-                } else {
-                    item = item.toString();
+        List list = new ArrayList();
+        Iterator kids = getChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid instanceof UISelectItem) {
+                UISelectItem item = (UISelectItem) kid;
+                list.add(new SelectItem(item.getItemValue(),
+                                        item.getItemLabel(),
+                                        item.getItemDescription()));
+            } else if (kid instanceof UISelectItems) {
+                Object value = kid.currentValue(context);
+                if (value instanceof UISelectItem) {
+                    list.add(value);
+                } else if (value instanceof UISelectItem[]) {
+                    UISelectItem items[] = (UISelectItem[]) value;
+                    for (int i = 0; i < items.length; i++) {
+                        list.add(items[i]);
+                    }
+                } else if (value instanceof Collection) {
+                    Iterator elements = ((Collection) value).iterator();
+                    while (elements.hasNext()) {
+                        list.add((SelectItem) elements.next());
+                    }
+                } else if (value instanceof Map) {
+                    Iterator keys = ((Map) value).keySet().iterator();
+                    while (keys.hasNext()) {
+                        Object key = keys.next();
+                        if (key == null) {
+                            continue;
+                        }
+                        Object val = ((Map) value).get(key);
+                        if (val == null) {
+                            continue;
+                        }
+                        list.add(new SelectItem(val.toString(), key.toString(),
+                                                null));
+                    }
                 }
-                results[n++] = new SelectItem((String) item, (String) item,
-                                              null);
             }
-        } else if (values.getClass().isArray()) { // FIXME - primitives???
-            results = new SelectItem[Array.getLength(values)];
-            for (int i = 0; i < results.length; i++) {
-                Object item = Array.get(values, i);
-                if (item == null) {
-                    item = "";
-                } else {
-                    item = item.toString();
-                }
-                results[i] = new SelectItem((String) item, (String) item,
-                                            null);
-            }
-        } else {
-            values = values.toString();
-            results = new SelectItem[1];
-            results[0] = new SelectItem((String) values, (String) values,
-                                        null);
         }
-        return (results);
+        return (list.iterator());
 
     }
 

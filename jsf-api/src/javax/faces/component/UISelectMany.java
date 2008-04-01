@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.11 2002/07/29 00:47:05 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.12 2002/07/30 22:51:36 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -127,27 +128,20 @@ public class UISelectMany extends UISelectBase {
 
         // Perform the default encoding
         String values[] = getAsStrings(context, "value", getModelReference());
-        SelectItem items[] =
-            getAsItems(context, "items", getItemsModelReference());
-        if (items == null) {
-            items = (SelectItem[])
-                context.getModelValue(getItemsModelReference());
-        }
-        if (items == null) {
-            items = new SelectItem[0];
-        }
+        Iterator items = getSelectItems(context);
 
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<select name=\"");
         writer.write(getCompoundId());
         writer.write("\" multiple=\"multiple\">");
-        for (int i = 0; i < items.length; i++) {
+        while (items.hasNext()) {
+            SelectItem item = (SelectItem) items.next();
             writer.write("<option value=\"");
-            writer.write(items[i].getValue());
+            writer.write(item.getValue());
             writer.write("\"");
             boolean match = false;
             for (int j = 0; j < values.length; j++) {
-                if (values[j].equals(items[i].getValue())) {
+                if (values[j].equals(item.getValue())) {
                     match = true;
                     break;
                 }
@@ -156,7 +150,7 @@ public class UISelectMany extends UISelectBase {
                 writer.write(" selected=\"selected\"");
             }
             writer.write(">");
-            writer.write(items[i].getLabel());
+            writer.write(item.getLabel());
             writer.write("</option>");
         }
         writer.write("</select>");

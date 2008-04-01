@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.13 2002/07/29 00:47:05 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.14 2002/07/30 22:51:37 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -131,29 +132,22 @@ public class UISelectOne extends UISelectBase {
             oldValue = "";
         }
         String value = getAsString(context, "value", getModelReference());
-        SelectItem items[] =
-            getAsItems(context, "items", getItemsModelReference());
-        if (items == null) {
-            items = (SelectItem[])
-                context.getModelValue(getItemsModelReference());
-        }
-        if (items == null) {
-            items = new SelectItem[0];
-        }
+        Iterator items = getSelectItems(context);
 
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<select name=\"");
         writer.write(getCompoundId());
         writer.write("\">");
-        for (int i = 0; i < items.length; i++) {
+        while (items.hasNext()) {
+            SelectItem item = (SelectItem) items.next();
             writer.write("<option value=\"");
-            writer.write(items[i].getValue());
+            writer.write(item.getValue());
             writer.write("\"");
-            if (value.equals(items[i].getValue())) {
+            if (value.equals(item.getValue())) {
                 writer.write(" selected=\"selected\"");
             }
             writer.write(">");
-            writer.write(items[i].getLabel());
+            writer.write(item.getLabel());
             writer.write("</option>");
         }
         writer.write("</select>");
