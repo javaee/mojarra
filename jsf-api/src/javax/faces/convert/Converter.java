@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.1 2002/08/31 17:42:44 craigmcc Exp $
+ * $Id: Converter.java,v 1.2 2002/08/31 19:38:49 craigmcc Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ public interface Converter {
      * @exception NullPointerException if <code>context</code> or
      *  <code>component</code> is null
      */
-    public String getAsObject(FacesContext context, UIComponent component,
+    public Object getAsObject(FacesContext context, UIComponent component,
                               String value) throws ConverterException;
 
 
