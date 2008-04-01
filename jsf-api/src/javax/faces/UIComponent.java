@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.4 2002/02/14 03:55:52 edburns Exp $
+ * $Id: UIComponent.java,v 1.5 2002/03/01 22:03:33 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
 /**
  * The base class for representing all state associated with a
@@ -40,12 +41,20 @@ import java.util.Set;
 public abstract class UIComponent {
  
     private Hashtable ht;
+    private Vector children;
     private String id;
     private String rendererType;
     private String modelReference = null;
 
     public UIComponent() {
         ht = new Hashtable();
+	children = null;
+    }
+
+    private void lazilyCreateChildren() {
+	if (null == children) {
+	    children = new Vector();
+	}
     }
 
     /** 
@@ -165,7 +174,10 @@ public abstract class UIComponent {
      * @param child the UIComponent to be added as a child
      * @throws NullPointerException if child is null
      */
-    public void add(UIComponent child) {}
+    public void add(UIComponent child) {
+	lazilyCreateChildren();
+	children.add(child);
+    }
 
     /**
      * Adds the specified component as a child to this component at
@@ -176,7 +188,10 @@ public abstract class UIComponent {
      * @throws NullPointerException if child is null
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount
      */
-    public void add(UIComponent child, int index) {}
+    public void add(UIComponent child, int index) {
+	lazilyCreateChildren();
+	children.insertElementAt(child, index);
+    }
 
    /**
      * Adds the specified component as a child to this component with
@@ -230,7 +245,8 @@ public abstract class UIComponent {
      * @param rc the render context used to render this component, or null
      */
     public Iterator getChildren(RenderContext rc) {
-        return null; //compile
+	lazilyCreateChildren();
+        return children.iterator(); 
     }
 
     /**
