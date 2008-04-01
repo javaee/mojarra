@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.24 2002/07/12 19:44:33 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.25 2002/07/19 22:32:20 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.24 2002/07/12 19:44:33 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.25 2002/07/19 22:32:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,20 +122,6 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         }
         if (!cmdName.equals(component.currentValue(context))) {
             return;
-        }
-
-//PENDING(rogerk) FIXME nasty hack - overwriting the responseTree should 
-// probably be done in the component event handling, but there are unanswered
-//questions - currently the only way to do this would be to put this
-//logic (which is specific to hyperlinks in UICommand.event (messy).
-//
-        String target = (String)component.getAttribute("target");
-        if (target != null) {
-            TreeFactory treeFactory = (TreeFactory)
-                FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-            Assert.assert_it(null != treeFactory);
-            ServletContext sc = context.getServletContext();
-            context.setResponseTree(treeFactory.getTree(sc, target));
         }
 
         // Enqueue a command event to the application

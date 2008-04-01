@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.28 2002/07/12 22:24:57 eburns Exp $
+ * $Id: FormRenderer.java,v 1.29 2002/07/19 22:32:20 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.net.URLEncoder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.28 2002/07/12 22:24:57 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.29 2002/07/19 22:32:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,6 +148,9 @@ public class FormRenderer extends HtmlBasicRenderer {
             if (value != null) {
                 String commandName = value.toString();
                 if (request.getParameter(commandName) != null) {
+                    return (commandName);
+                } else if (request.getParameter(commandName+".x") != null &&
+                    request.getParameter(commandName+".y") != null) {
                     return (commandName);
                 }
             }
