@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextTestCaseJsp.java,v 1.3 2002/06/07 22:47:37 eburns Exp $
+ * $Id: FacesContextTestCaseJsp.java,v 1.4 2002/06/07 23:29:15 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FacesContextTestCaseJsp.java,v 1.3 2002/06/07 22:47:37 eburns Exp $
+ * @version $Id: FacesContextTestCaseJsp.java,v 1.4 2002/06/07 23:29:15 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -104,6 +104,8 @@ public void setUp()
     assertTrue(null != facesContext);
     TestBean testBean = new TestBean();
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    System.setProperty(RIConstants.DISABLE_RENDERERS, 
+		       RIConstants.DISABLE_RENDERERS);
 }
 
 public void tearDown()

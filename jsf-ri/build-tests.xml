@@ -305,16 +305,9 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderersFromJsp"/>
             <test name="com.sun.faces.context.TestMessageListImpl"/>
-<!--
-            <test name="com.sun.faces.TestAbstractFactory"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleDriverImpl"/>
-            <test name="com.sun.faces.treebuilder.TestTreebuilder"/>
-            <test name="com.sun.faces.TestObjectManager"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
-            <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
-            <test name="com.sun.faces.TestValidation"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
+<!-- put non-running testcases here
 -->
         </junit>
 

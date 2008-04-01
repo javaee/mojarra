@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.16 2002/06/07 00:01:09 eburns Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.17 2002/06/07 23:29:14 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.16 2002/06/07 00:01:09 eburns Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.17 2002/06/07 23:29:14 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,7 +76,7 @@ public SelectOne_OptionListTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return null; }
+    public String getLocalRendererType() { return "OptionListRenderer"; }
 
 //
 // Methods from TagSupport

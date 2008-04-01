@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextTestCase.java,v 1.4 2002/06/07 21:42:14 eburns Exp $
+ * $Id: FacesContextTestCase.java,v 1.5 2002/06/07 23:29:15 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 /**
  *
@@ -27,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FacesContextTestCase.java,v 1.4 2002/06/07 21:42:14 eburns Exp $
+ * @version $Id: FacesContextTestCase.java,v 1.5 2002/06/07 23:29:15 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -86,6 +87,8 @@ public void setUp()
     assertTrue(null != facesContext);
     TestBean testBean = new TestBean();
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    System.setProperty(RIConstants.DISABLE_RENDERERS, 
+		       RIConstants.DISABLE_RENDERERS);
 }
 
 public void tearDown()
