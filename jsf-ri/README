@@ -1,31 +1,32 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020621C
-jsf-api-spec for this implementation: JSF_20020621.pdf
+jsf-api cvs tag for this implementation: JSF_API_20020730B
+jsf-api-spec for this implementation: JSF_20020730.pdf
 
 
 Major changes/features in this release:
 =======================================
 
-* XUL file goes away.  The tree is now built during the
-  RenderResponsePhase and saved in the session.
+* Saving the tree can be done either in session (server) or in page by
+  turning off/on context parameter "saveStateInClient". Default is server. 
+  All objects referenced must be serializable if save state in page option 
+  is used.
 
-* CreateRequestTree phase removed.  Lots of action now takes place in
-  ReconstituteRequestTreePhase.
+* Basic L10N support has been enabled by integrating with JSTL
+  <fmt:setBundle> tag. There is a dependency on jstl.jar and standard.jar
+  due to this feature.
 
-* Fixed Bug in HandleRequestEvents where all events wouldn't get
-  processed if any handler returned true.
-
-* Change ProcessValidationsPhase to be spec compliant.
-
-* Changed case of JSP tags and attributes.
 
 Known Issues With This Release
 ==============================
 
-* Saving the tree in the session is a big problem.  Currently we don't
-  support multiple concurrent requests to faces app from one client.
+* When saving tree in session, we don't support multiple concurrent
+  requests to faces app from one client.
+
+* SaveState in page option cannot be used if your web app has 
+  event handlers and validators because they are not serializable 
+  currently.
 
 *  Components are instantiated on each request.
    Fix:
@@ -37,3 +38,7 @@ Known Issues With This Release
 
 *  AttributeDescriptor support happens all the time, even though it's
    only used at design time.
+
+* HyperLink tags don't work as expected in sample "Basic" application. 
+  This is because once the response tree is set to target, we need to
+  jump to render response phase which we are unable to do at this time.
