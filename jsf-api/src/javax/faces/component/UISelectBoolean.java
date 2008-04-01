@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.7 2002/06/04 17:53:23 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.8 2002/06/05 03:01:55 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 
 /**
@@ -133,14 +133,14 @@ public class UISelectBoolean extends UIComponent {
         if (value == null) {
             value = Boolean.FALSE;
         }
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("<input type=\"checkbox\" name=\"");
-        writer.print(getCompoundId());
-        writer.print("\"");
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<input type=\"checkbox\" name=\"");
+        writer.write(getCompoundId());
+        writer.write("\"");
         if (value.booleanValue()) {
-            writer.print(" checked=\"checked\"");
+            writer.write(" checked=\"checked\"");
         }
-        writer.print(">");
+        writer.write(">");
 
     }
 

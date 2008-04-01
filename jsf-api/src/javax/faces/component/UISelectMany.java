@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.2 2002/05/25 22:28:40 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.3 2002/06/05 03:01:55 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 
 /**
@@ -167,14 +167,14 @@ public class UISelectMany extends UIComponent {
             items = new SelectItem[0];
         }
 
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("<select name=\"");
-        writer.print(getCompoundId());
-        writer.print("\" multiple=\"multiple\">");
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<select name=\"");
+        writer.write(getCompoundId());
+        writer.write("\" multiple=\"multiple\">");
         for (int i = 0; i < items.length; i++) {
-            writer.print("<option value=\"");
-            writer.print(items[i].getValue());
-            writer.print("\"");
+            writer.write("<option value=\"");
+            writer.write(items[i].getValue());
+            writer.write("\"");
             boolean match = false;
             for (int j = 0; j < values.length; j++) {
                 if (values[j].equals(items[i].getValue())) {
@@ -183,13 +183,13 @@ public class UISelectMany extends UIComponent {
                 }
             }
             if (match) {
-                writer.print(" selected=\"selected\"");
+                writer.write(" selected=\"selected\"");
             }
-            writer.print(">");
-            writer.print(items[i].getLabel());
-            writer.print("</option>");
+            writer.write(">");
+            writer.write(items[i].getLabel());
+            writer.write("</option>");
         }
-        writer.print("</select>");
+        writer.write("</select>");
 
     }
 

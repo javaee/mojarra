@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.4 2002/05/22 21:37:03 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.5 2002/06/05 03:01:55 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 
 /**
@@ -107,15 +107,14 @@ public class UITextEntry extends UIComponent {
             throw new NullPointerException();
         }
         Object value = currentValue(context);
-        if (value == null) {
-            value = "";
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<input type=\"text\" name=\"");
+        writer.write(getCompoundId());
+        writer.write("\" value=\"");
+        if (value != null) {
+            writer.write(value.toString());
         }
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("<input type=\"text\" name=\"");
-        writer.print(getCompoundId());
-        writer.print("\" value=\"");
-        writer.print(value.toString());
-        writer.print("\">");
+        writer.write("\">");
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.7 2002/05/22 21:37:02 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.8 2002/06/05 03:01:54 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 
 /**
@@ -87,14 +87,10 @@ public class UIOutput extends UIComponent {
             throw new NullPointerException();
         }
         Object value = currentValue(context);
-        if (value == null) {
-            value = "";
+        if (value != null) {
+            ResponseWriter writer = context.getResponseWriter();
+            writer.write(value.toString());
         }
-        if (!(value instanceof String)) {
-            value = value.toString();
-        }
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print((String) value);
 
     }
 

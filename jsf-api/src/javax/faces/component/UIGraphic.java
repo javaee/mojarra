@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.6 2002/05/22 21:37:02 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.7 2002/06/05 03:01:54 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -87,10 +87,10 @@ public class UIGraphic extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("<img src=\"");
-        writer.print(src(context));
-        writer.print("\">");
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<img src=\"");
+        writer.write(src(context));
+        writer.write("\">");
 
     }
 

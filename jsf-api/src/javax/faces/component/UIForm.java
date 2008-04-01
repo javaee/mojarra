@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.6 2002/06/03 19:34:26 craigmcc Exp $
+ * $Id: UIForm.java,v 1.7 2002/06/05 03:01:54 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.event.FormEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,10 +132,10 @@ public class UIForm extends UIComponent {
         if (value == null) {
             throw new NullPointerException();
         }
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("<form method=\"post\" action=\"");
-        writer.print(action(context));
-        writer.print("\">");
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<form method=\"post\" action=\"");
+        writer.write(action(context));
+        writer.write("\">");
 
     }
 
@@ -156,8 +156,8 @@ public class UIForm extends UIComponent {
         }
 
         // Render the ending of this form
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("</form>");
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("</form>");
 
     }
 

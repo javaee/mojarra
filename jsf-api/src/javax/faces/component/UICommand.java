@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.9 2002/06/03 19:34:26 craigmcc Exp $
+ * $Id: UICommand.java,v 1.10 2002/06/05 03:01:54 craigmcc Exp $
  */
 
 /*
@@ -11,8 +11,8 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.event.CommandEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -126,12 +126,15 @@ public class UICommand extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print("<a href=\"");
-        writer.print(href(context));
-        writer.print("\">");
-        writer.print(currentValue(context));
-        writer.print("</a>");
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<a href=\"");
+        writer.write(href(context));
+        writer.write("\">");
+        Object currentValue = currentValue(context);
+        if (currentValue != null) {
+            writer.write(currentValue.toString());
+        }
+        writer.write("</a>");
 
     }
 

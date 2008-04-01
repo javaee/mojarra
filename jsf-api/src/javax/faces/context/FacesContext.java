@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.15 2002/06/03 19:34:26 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.16 2002/06/05 03:01:55 craigmcc Exp $
  */
 
 /*
@@ -158,6 +158,24 @@ public abstract class FacesContext {
 
 
     /**
+     * <p>Return the {@link ResponseStream} to which components should
+     * direct their binary output.  Within a given response, components
+     * can use either the ResponseStream or the ResponseWriter,
+     * but not both.
+     */
+    public abstract ResponseStream getResponseStream();
+
+
+    /**
+     * <p>Set the {@link ResponseStream} to which components should
+     * direct their binary output.
+     *
+     * @param responseStream The new ResponseStream for this response
+     */
+    public abstract void setResponseStream(ResponseStream responseStream);
+
+
+    /**
      * <p>Return the {@link Tree} that is associated with the outbound
      * response.  Unless otherwise specified (by a call to
      * <code>setResponseTree()</code>, this will return the same
@@ -173,6 +191,24 @@ public abstract class FacesContext {
      * @param tree The new outbound response tree
      */
     public abstract void setResponseTree(Tree tree);
+
+
+    /**
+     * <p>Return the {@link ResponseWriter} to which components should
+     * direct their character-based output.  Within a given response,
+     * components can use either the ResponseStream or the ResponseWriter,
+     * but not both.
+     */
+    public abstract ResponseWriter getResponseWriter();
+
+
+    /**
+     * <p>Set the {@link ResponseWriter} to which components should
+     * direct their character-based output.
+     *
+     * @param responseWriter The new ResponseWriter for this response
+     */
+    public abstract void setResponseWriter(ResponseWriter responseWriter);
 
 
     /**
