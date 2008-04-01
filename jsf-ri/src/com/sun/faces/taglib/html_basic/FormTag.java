@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.19 2002/01/17 02:17:03 edburns Exp $
+ * $Id: FormTag.java,v 1.20 2002/01/17 22:27:02 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.19 2002/01/17 02:17:03 edburns Exp $
+ * @version $Id: FormTag.java,v 1.20 2002/01/17 22:27:02 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -178,7 +178,7 @@ public class FormTag extends TagSupport
         // set render independent attributes
         // make sure that the model object is registered
         if ( model != null ) {
-            c.setModel(model);
+            c.setModelReference(model);
         }   
         return c;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.16 2002/01/17 02:17:04 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.16 2002/01/17 02:17:04 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -290,7 +290,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         // PENDING ( visvan )
         // make sure that the model object is registered
         if ( model != null ) {
-            wSelectBoolean.setModel(model);
+            wSelectBoolean.setModelReference(model);
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface ??
@@ -301,7 +301,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
                String model_str = ancestor.getModel();
                if ( model_str != null ) {
                    model = "$" + model_str + "." + id;
-                   wSelectBoolean.setModel(model);
+                   wSelectBoolean.setModelReference(model);
                }
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null

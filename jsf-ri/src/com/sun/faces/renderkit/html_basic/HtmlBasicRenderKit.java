@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.16 2002/01/17 02:17:03 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.17 2002/01/17 22:27:02 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -270,7 +270,7 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
                 UISelectBoolean sb = (UISelectBoolean) c;
                 boolean old_state = sb.isSelected(rc);
                 old_value = String.valueOf(old_state);
-                model_str = (String) sb.getModel();
+                model_str = (String) sb.getModelReference();
             } else if (c instanceof UISelectOne) {
 		UISelectOne so = (UISelectOne) c;
 		old_value = (String) so.getSelectedValue(rc);
