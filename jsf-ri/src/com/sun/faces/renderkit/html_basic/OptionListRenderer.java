@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.5 2002/01/23 00:50:06 edburns Exp $
+ * $Id: OptionListRenderer.java,v 1.6 2002/01/24 00:35:23 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.5 2002/01/23 00:50:06 edburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.6 2002/01/24 00:35:23 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,15 +129,17 @@ public class OptionListRenderer extends Object implements Renderer {
             throw new FacesException("Invalid component type. " +
                       "Expected UISelectOne");
         }
+
+        String optionListId = wSelectOne.getId();
+        Assert.assert_it(null != optionListId);
+
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
 
-	String id = wSelectOne.getId();
-	Assert.assert_it(null != id);
         StringBuffer output = new StringBuffer();
         output.append("<SELECT NAME=\"");
-        output.append(id);
+        output.append(optionListId);
         output.append("\">");
         outputMethod.writeText(output.toString());
         outputMethod.flush();

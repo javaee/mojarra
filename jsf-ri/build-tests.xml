@@ -186,6 +186,9 @@
         <copy file="${conf.test.dir}/tomcat40/server.xml"
             todir="${out.tomcat.40.dir}/conf" filtering="on"/>
 
+        <!-- Copy JspRedirector (jsp) file needed for JSP cactus tests. -->
+        <copy file="${cactus.home}/sample/web/test/jspRedirector.jsp"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
 
     </target>
 

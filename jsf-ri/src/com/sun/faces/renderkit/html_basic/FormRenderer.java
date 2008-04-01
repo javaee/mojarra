@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.14 2002/01/23 00:50:06 edburns Exp $
+ * $Id: FormRenderer.java,v 1.15 2002/01/24 00:35:23 rogerk Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.14 2002/01/23 00:50:06 edburns Exp $
+ * @version $Id: FormRenderer.java,v 1.15 2002/01/24 00:35:23 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -139,14 +139,14 @@ public class FormRenderer extends Object implements Renderer
         } else {
             throw new FacesException("Invalid component type. Expected UIForm");
         }
+
+        String formId = (String) form.getId();
+        Assert.assert_it(null != formId);
+
         StringBuffer out = new StringBuffer();
         out.append("<FORM METHOD=\"POST\" ");
 
-        String form_name = form.getId();
-	Assert.assert_it(null != form_name);
-        if (form_name != null) {
-            out.append("NAME=\"" + form_name + "\"");
-        }
+        out.append("NAME=\"" + formId + "\"");
         out.append(">");
         outputMethod.writeText(out.toString());
         outputMethod.flush();

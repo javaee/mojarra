@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.14 2002/01/23 00:50:06 edburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.15 2002/01/24 00:35:23 rogerk Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.14 2002/01/23 00:50:06 edburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.15 2002/01/24 00:35:23 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,6 +130,10 @@ public class CheckboxRenderer extends Object implements Renderer {
             throw new FacesException("Invalid component type. " +
                       "Expected UISelectBoolean");
         }
+
+        String cbId = wSelectBoolean.getId();
+        Assert.assert_it(null != cbId);
+
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
@@ -145,9 +149,7 @@ public class CheckboxRenderer extends Object implements Renderer {
         // field because HTML doesn't send the status of the check
         // box during form submissions if it is not selected.
 
-        String cb_name = wSelectBoolean.getId();
-	Assert.assert_it(null != cb_name);
-        String hiddenFieldname = Constants.REF_HIDDENCHECKBOX + cb_name;
+        String hiddenFieldname = Constants.REF_HIDDENCHECKBOX + cbId;
         String clickScript = hiddenFieldname + ".value=this.checked";
         output.append("onClick=\"" + clickScript + "\" ");
 

@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.8 2002/01/23 00:50:07 edburns Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.9 2002/01/24 00:35:24 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // SelectOne_OptionListTag.java
 
 package com.sun.faces.taglib.html_basic;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -36,7 +38,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.8 2002/01/23 00:50:07 edburns Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.9 2002/01/24 00:35:24 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -237,21 +239,28 @@ public int doStartTag() throws JspException {
 			      Constants.REF_RENDERCONTEXT);
     Assert.assert_it( renderContext != null );
     
-    // 1. Get or create the component instance.
+    UISelectOne uiSelectOne = null;
+
+    // 1. if we don't have an "id" generate one
     //
-    UISelectOne wSelectOne = (UISelectOne) 
-	ot.get(pageContext.getRequest(), id);
-    if (wSelectOne == null) {
-	wSelectOne = createComponent(renderContext);
-	addToScope(wSelectOne, ot);
+    if (id == null) {
+        String gId = Util.generateId();
+        setId(gId);
+    }
+
+    // 2. Get or create the component instance.
+    //
+    uiSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), getId());
+    if (uiSelectOne == null) {
+        uiSelectOne = createComponent(renderContext);
+        addToScope(uiSelectOne, ot);
     }
 
     // 2. Render the component.
     //
     try {
-        wSelectOne.setRendererType(
-            "OptionListRenderer");
-        wSelectOne.render(renderContext);
+        uiSelectOne.setRendererType("OptionListRenderer");
+        uiSelectOne.render(renderContext);
     } catch (java.io.IOException e) {
         throw new JspException("Problem rendering component: "+
             e.getMessage());

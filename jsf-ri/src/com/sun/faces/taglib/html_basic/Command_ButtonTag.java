@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.17 2002/01/23 00:50:07 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.18 2002/01/24 00:35:24 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // Command_ButtonTag.java
 
 package com.sun.faces.taglib.html_basic;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -35,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.17 2002/01/23 00:50:07 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.18 2002/01/24 00:35:24 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -197,34 +199,40 @@ public class Command_ButtonTag extends TagSupport {
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
-        if (id != null) {
+        UICommand uiCommand = null;
 
-            // 1. Get or create the component instance.
-            //
-            UICommand wCommand = 
-                (UICommand) objectManager.get(pageContext.getRequest(), id);
-            if ( wCommand == null ) {
-                wCommand = new UICommand();
-                addToScope(wCommand, objectManager);
-            }
-            wCommand.setId(getId());
-            wCommand.setAttribute("image", getImage());
-            wCommand.setAttribute("label", getLabel());
-            
-            // 2. Render the component.
-            //
-            try {
-                wCommand.setRendererType("ButtonRenderer");
-                wCommand.render(renderContext);
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering component: "+
-                    e.getMessage());
-            } catch (FacesException f) {
-                throw new JspException("Problem rendering component: "+
-                    f.getMessage());
-            }
+        // 1. if we don't have an "id" generate one
+        //
+        if (id == null) {
+            String gId = Util.generateId();
+            setId(gId);
         }
-         
+
+        // 2. Get or create the component instance.
+        //
+        uiCommand = (UICommand) objectManager.get(pageContext.getRequest(), id);
+        if ( uiCommand == null ) {
+            uiCommand = new UICommand();
+            addToScope(uiCommand, objectManager);
+        }
+
+        uiCommand.setId(getId());
+        uiCommand.setAttribute("image", getImage());
+        uiCommand.setAttribute("label", getLabel());
+
+        // 3. Render the component.
+        //
+        try {
+            uiCommand.setRendererType("ButtonRenderer");
+            uiCommand.render(renderContext);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem rendering component: "+
+                f.getMessage());
+        }
+
         return (EVAL_BODY_INCLUDE);
     }
     

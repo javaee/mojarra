@@ -3,6 +3,7 @@
 # for escaping backslashes.  
 
 tomcat.home = D:\\tomcat4.0
+cactus.home = D:\\cactus-23-1.2
 compile.deprecation = true
 junit.jar = D:\\junit3.7\\junit.jar
 cactus.jar = D:\\cactus-23-1.2\\lib\\cactus.jar

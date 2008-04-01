@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.15 2002/01/23 00:50:05 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.16 2002/01/24 00:35:23 rogerk Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.15 2002/01/23 00:50:05 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.16 2002/01/24 00:35:23 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,24 +165,26 @@ public class ButtonRenderer extends Object implements Renderer
                       "Expected UICommand");
         }
 
+        String commandId = wCommand.getId();
+        Assert.assert_it(null != commandId);
+
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
-	String id = wCommand.getId();
-	Assert.assert_it(null != id);
         StringBuffer output = new StringBuffer();
         output.append("<INPUT TYPE=");
+
         if (wCommand.getAttribute(rc, "image") != null) {
             output.append("\"IMAGE\" SRC=\"");
             output.append(wCommand.getAttribute(rc, "image"));
             output.append("\"");
             output.append(" NAME=\"");
-            output.append(id);
+            output.append(commandId);
             output.append("\"");
         } else {
             String label = (String)wCommand.getAttribute(rc, "label");
             output.append("\"SUBMIT\" NAME=\"");
-            output.append(id);
+            output.append(commandId);
             output.append("\"");
             output.append(" value=\"");
 	    // Follow the UE Spec for Button:

@@ -72,7 +72,7 @@ Configuring UI Components
     </attribute>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -222,7 +222,7 @@ Configuring UI Components
     </attribute>
     <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -399,7 +399,7 @@ Configuring UI Components
     </attribute>
     <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -435,7 +435,7 @@ Configuring UI Components
     <bodycontent>JSP</bodycontent>
     <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -483,7 +483,7 @@ Configuring UI Components
     <bodycontent>JSP</bodycontent>
     <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -537,7 +537,7 @@ Configuring UI Components
       <bodycontent>JSP</bodycontent>
       <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -568,7 +568,7 @@ Configuring UI Components
       <bodycontent>JSP</bodycontent>
       <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -609,7 +609,7 @@ Configuring UI Components
       <bodycontent>JSP</bodycontent>
       <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -650,7 +650,7 @@ Configuring UI Components
       <bodycontent>JSP</bodycontent>
       <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>

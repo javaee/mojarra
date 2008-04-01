@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.11 2002/01/23 00:50:06 edburns Exp $
+ * $Id: SecretRenderer.java,v 1.12 2002/01/24 00:35:23 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.11 2002/01/23 00:50:06 edburns Exp $
+ * @version $Id: SecretRenderer.java,v 1.12 2002/01/24 00:35:23 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,20 +114,20 @@ public class SecretRenderer extends Object implements Renderer
             throw new FacesException("Invalid component type. " +
                      "Expected UITextEntry");
         }
+
+        String textFieldId = textField.getId();
+        Assert.assert_it(null != textFieldId);
+
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
         output.append("<INPUT TYPE=\"PASSWORD\"");
             
-        // render name of the component if specified
-        String textField_name = textField.getId();
-	Assert.assert_it(null != textField_name);
-        if ( textField_name != null ) {
-            output.append(" NAME=\"");
-            output.append(textField_name);
-            output.append("\"");
-        }
+        output.append(" NAME=\"");
+        output.append(textFieldId);
+        output.append("\"");
+
         // render default text specified
         String textField_value = textField.getText(rc);
         if ( textField_value != null ) {

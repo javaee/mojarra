@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.16 2002/01/23 00:50:07 edburns Exp $
+ * $Id: Output_TextTag.java,v 1.17 2002/01/24 00:35:24 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // Output_TextTag.java
 
 package com.sun.faces.taglib.html_basic;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -35,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.16 2002/01/23 00:50:07 edburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.17 2002/01/24 00:35:24 rogerk Exp $
  * 
  *
  */
@@ -103,29 +105,37 @@ public class Output_TextTag extends TagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
-        if ( id != null ) {
+        UIOutput c = null;
 
-            // 1. Get or create the component instance.
-            //
-            UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), id);
-            if (c == null) {
-                c = createComponent(rc);
-                addToScope(c, ot);
-            }
-
-            // 2. Render the component.
-            //
-            try {
-                c.setRendererType("TextRenderer");
-                c.render(rc);
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering component: "+
-                    e.getMessage());
-            } catch (FacesException f) {
-                throw new JspException("Problem rendering component: "+
-                    f.getMessage());
-            }
+        // 1. if we don't have an "id" generate one
+        //
+        if (id == null) {
+            String gId = Util.generateId();
+            setId(gId);
         }
+
+        // 2. Get or create the component instance.
+        //
+        c = (UIOutput) ot.get(pageContext.getRequest(), getId());
+
+        if (c == null) {
+            c = createComponent(rc);
+            addToScope(c, ot);
+        }
+
+        // 3. Render the component.
+        //
+        try {
+            c.setRendererType("TextRenderer");
+            c.render(rc);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem rendering component: "+
+                f.getMessage());
+        }
+
         return(EVAL_BODY_INCLUDE);
     }
 

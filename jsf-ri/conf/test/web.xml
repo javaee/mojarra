@@ -21,4 +21,14 @@
         <url-pattern>/FilterRedirector</url-pattern>
     </filter-mapping>
 
+    <servlet>
+        <servlet-name>JspRedirector</servlet-name>
+        <jsp-file>/jspRedirector.jsp</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JspRedirector</servlet-name>
+        <url-pattern>/JspRedirector</url-pattern>
+    </servlet-mapping>
+
 </web-app>

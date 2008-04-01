@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.3 2002/01/03 05:36:31 edburns Exp $
+ * $Id: Util.java,v 1.4 2002/01/24 00:35:25 rogerk Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.Constants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.3 2002/01/03 05:36:31 edburns Exp $
+ * @version $Id: Util.java,v 1.4 2002/01/24 00:35:25 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -49,6 +49,7 @@ public class Util extends Object
 //
 // Instance Variables
 //
+private static long id = 0;
 
 // Attribute Instance Variables
 
@@ -84,6 +85,20 @@ private Util()
 				 token);
 	return token;
     }
+
+    /**
+     * Generate a new identifier currently used to uniquely identify
+     * components.
+     */
+    public static synchronized String generateId() {
+        if (id == Long.MAX_VALUE) {
+            id = 0;
+        } else { 
+            id++;
+        }
+        return Long.toHexString(id);
+    }
+    
 
     /**
      * Generate a new transaction token, to be used for enforcing a

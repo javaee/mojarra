@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.18 2002/01/23 00:50:07 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.19 2002/01/24 00:35:24 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // SelectBoolean_CheckboxTag.java
 
 package com.sun.faces.taglib.html_basic;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -35,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.18 2002/01/23 00:50:07 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.19 2002/01/24 00:35:24 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -185,30 +187,34 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
-        if (id != null) {
+        UISelectBoolean uiSelectBoolean = null;
 
-            // 1. Get or create the component instance.
-            //
-            UISelectBoolean wSelectBoolean = (UISelectBoolean) 
-                ot.get(pageContext.getRequest(), id);
-            if ( wSelectBoolean == null ) {
-                wSelectBoolean = createComponent(renderContext);
-                addToScope(wSelectBoolean, ot);
-            }
+        // 1. if we don't have an "id" generate one
+        //
+        if (id == null) {
+            String gId = Util.generateId();
+            setId(gId);
+        }
 
-            // 2. Render the component.
-            //
-            try {
-                wSelectBoolean.setRendererType(
-                    "CheckboxRenderer");
-                wSelectBoolean.render(renderContext);
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering component: "+
-                    e.getMessage());
-            } catch (FacesException f) {
-                throw new JspException("Problem rendering component: "+
-                    f.getMessage());
-            }
+        // 2. Get or create the component instance.
+        //
+        uiSelectBoolean = (UISelectBoolean) ot.get(pageContext.getRequest(), getId());
+        if ( uiSelectBoolean == null ) {
+            uiSelectBoolean = createComponent(renderContext);
+            addToScope(uiSelectBoolean, ot);
+        }
+
+        // 3. Render the component.
+        //
+        try {
+            uiSelectBoolean.setRendererType("CheckboxRenderer");
+            uiSelectBoolean.render(renderContext);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem rendering component: "+
+                f.getMessage());
         }
         return (EVAL_BODY_INCLUDE);
     }

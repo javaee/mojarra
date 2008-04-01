@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.14 2002/01/17 02:17:03 edburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.15 2002/01/24 00:35:24 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // Command_HyperlinkTag.java
 
 package com.sun.faces.taglib.html_basic;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -34,7 +36,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.14 2002/01/17 02:17:03 edburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.15 2002/01/24 00:35:24 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,6 +86,14 @@ public class Command_HyperlinkTag extends TagSupport
     //
     // General Methods
     //
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getTarget() {
         return target;
     }
@@ -123,34 +133,39 @@ public class Command_HyperlinkTag extends TagSupport
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
-        // PENDING shouldn't hyperlink have an id attribute. For now
-        // using target as id to put in the objectManager.
-        if (target != null) {
+        UICommand uiCommand = null;
 
-            // 1. Get or create the component instance.
-            //
-            UICommand wCommand = 
-                (UICommand) objectManager.get(pageContext.getRequest(), target);
-            if ( wCommand == null ) {
-                wCommand = new UICommand();
-            }
-            wCommand.setAttribute("target", getTarget());
-            wCommand.setAttribute("image", getImage());
-            wCommand.setAttribute("text", getText());
-            objectManager.put(pageContext.getRequest(), target, wCommand);
+        // 1. if we don't have an "id" generate one
+        //
+        if (id == null) {
+            String gId = Util.generateId(); 
+            setId(gId);
+        }
 
-            // 2. Render the component.
-            //
-            try {
-                wCommand.setRendererType("HyperlinkRenderer");
-                wCommand.render(renderContext);
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering component: "+
-                    e.getMessage());
-            } catch (FacesException f) {
-                throw new JspException("Problem rendering component: "+
-                    f.getMessage());
-            }
+        // 2. Get or create the component instance.
+        //
+        uiCommand = (UICommand) objectManager.get(pageContext.getRequest(), id);
+        if ( uiCommand == null ) {
+            uiCommand = new UICommand();
+            objectManager.put(pageContext.getRequest(), getId(), uiCommand);
+        }
+
+        uiCommand.setId(getId());
+        uiCommand.setAttribute("target", getTarget());
+        uiCommand.setAttribute("image", getImage());
+        uiCommand.setAttribute("text", getText());
+
+        // 3. Render the component.
+        //
+        try {
+            uiCommand.setRendererType("HyperlinkRenderer");
+            uiCommand.render(renderContext);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem rendering component: "+
+                f.getMessage());
         }
         return (EVAL_BODY_INCLUDE);
     }
@@ -173,13 +188,13 @@ public class Command_HyperlinkTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        UICommand wCommand = (UICommand) objectManager.get(pageContext.getRequest(), target);
-        Assert.assert_it( wCommand != null );
+        UICommand uiCommand = (UICommand) objectManager.get(pageContext.getRequest(), getId());
+        Assert.assert_it( uiCommand != null );
 
         // Complete the rendering process
         //
         try {
-            wCommand.renderComplete(renderContext);
+            uiCommand.renderComplete(renderContext);
         } catch (java.io.IOException e) {
             throw new JspException("Problem completing rendering: "+
                 e.getMessage());

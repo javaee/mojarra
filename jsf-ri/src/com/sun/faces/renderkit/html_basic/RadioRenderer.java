@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.6 2002/01/23 00:50:06 edburns Exp $
+ * $Id: RadioRenderer.java,v 1.7 2002/01/24 00:35:23 rogerk Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.6 2002/01/23 00:50:06 edburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.7 2002/01/24 00:35:23 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,12 +129,14 @@ public class RadioRenderer extends Object implements Renderer {
             throw new FacesException("Invalid component type. " +
                       "Expected UISelectOne");
         }
+
+        String radioId = wSelectOne.getId();
+        Assert.assert_it(null != radioId);
+
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
 	String selectedValue = (String) wSelectOne.getSelectedValue(rc);
 
-	String id = wSelectOne.getId();
-	Assert.assert_it(null != id);
         StringBuffer output = new StringBuffer();
         output.append("<INPUT TYPE=\"RADIO\"");
 
@@ -143,7 +145,7 @@ public class RadioRenderer extends Object implements Renderer {
             output.append(" CHECKED");
         }
         output.append(" NAME=\"");
-        output.append(id);
+        output.append(radioId);
         output.append("\" VALUE=\"");
         output.append(wSelectOne.getAttribute(rc, "value"));
         output.append("\">");

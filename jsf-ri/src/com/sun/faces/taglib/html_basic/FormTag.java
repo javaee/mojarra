@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.21 2002/01/23 00:50:07 edburns Exp $
+ * $Id: FormTag.java,v 1.22 2002/01/24 00:35:24 rogerk Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // FormTag.java
 
 package com.sun.faces.taglib.html_basic;
+
+import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -34,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.21 2002/01/23 00:50:07 edburns Exp $
+ * @version $Id: FormTag.java,v 1.22 2002/01/24 00:35:24 rogerk Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -102,32 +104,35 @@ public class FormTag extends TagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
-        if ( id != null ) {
+        UIForm c = null;
 
-            // 1. Get or create the component instance.
-            //
-            UIForm c = (UIForm) ot.get(pageContext.getRequest(), id);
-            if ( c == null ) {
-                c = createComponent(rc);
-                addToScope(c, ot);
-            }
-
-            // 2. Render the component.
-            //
-            try {
-                c.setRendererType("FormRenderer");
-                c.render(rc);
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering component: "+
-                    e.getMessage());
-            } catch (FacesException f) {
-                throw new JspException("Problem rendering component: "+
-                    f.getMessage());
-            }
-
-            // PENDING (visvan) return evaluate body tag again because listener
-            // tags might be nested
+        // 1. if we don't have an "id" generate one
+        //
+        if (id == null) {
+            String gId = Util.generateId();
+            setId(gId);
         }
+        c = (UIForm) ot.get(pageContext.getRequest(), id);
+        if ( c == null ) {
+            c = createComponent(rc);
+            addToScope(c, ot);
+        }
+
+        // 2. Render the component.
+        //
+        try {
+            c.setRendererType("FormRenderer");
+            c.render(rc);
+        } catch (java.io.IOException e) {
+            throw new JspException("Problem rendering component: "+
+                e.getMessage());
+        } catch (FacesException f) {
+            throw new JspException("Problem rendering component: "+
+                f.getMessage());
+        }
+
+        // PENDING (visvan) return evaluate body tag again because listener
+        // tags might be nested
         return(EVAL_BODY_INCLUDE);
     }
 
