@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.5 2002/06/12 21:51:28 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.6 2002/07/12 01:30:56 craigmcc Exp $
  */
 
 /*
@@ -34,6 +34,45 @@ import javax.faces.component.UIComponent;
  */
 
 public abstract class RenderKit {
+
+
+    /**
+     * <p>Add a new {@link UIComponent} subclass to the set of component
+     * classes known to be supported by this <code>RenderKit</code> instance
+     * and its constituent {@link Renderer}s.</p>
+     *
+     * @param componentClass {@link UIComponent} subclass to be supported
+     *
+     * @exception IllegalArgumentException if <code>componentClass</code>
+     *  is not a {@link UIComponent} subclass
+     * @exception NullPointerException if <code>componentClass</code>
+     *  is <code>null</code>
+     */
+    public abstract void addComponentClass(Class componentClass);
+
+
+    /**
+     * <p>Add a new {@link Renderer} instance, associated with the
+     * specified <code>rendererType</code>, to the set of
+     * {@link Renderer}s known to this <code>RenderKit</code>.
+     *
+     * @param rendererType Renderer type of the new {@link Renderer}
+     * @param renderer The new {@link Renderer} instance
+     *
+     * @exception IllegalArgumentException if a {@link Renderer} with the
+     *  specified <code>rendererType</code> has already been registered
+     * @exception NullPointerException if <code>rendererType</code> or
+     *  <code>renderer</code> is null
+     */
+    public abstract void addRenderer(String rendererType, Renderer renderer);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> of the {@lnk UIComponent}
+     * classes that are known to be supported by this <code>RenderKit</code>
+     * instance and its constituent {@link Renderer}s.</p>
+     */
+    public abstract Iterator getComponentClasses();
 
 
     /**
