@@ -9,6 +9,8 @@ import java.util.Iterator;
  */
 public class WSelectBoolean extends WComponent {
     private static String TYPE = "SelectBoolean";
+    private boolean selected;
+    private Object model = null;
 
 //RWK:11-4-2001-kludge using temporarily for storing attributes...
 //setAttribute/getAttribute should work differently...
@@ -42,7 +44,7 @@ public class WSelectBoolean extends WComponent {
      * @return Object which models the value of this component
      */
     public Object getModel() {
-        return null;
+        return model;
     }
 
     /**
@@ -54,21 +56,12 @@ public class WSelectBoolean extends WComponent {
      *
      * @param value the Boolean object containing the true/false value
      * @throws NullPointerException if value is null
-     * @throws FacesException if model is not one of the valid instances
      */
-    public void setModel(Object model) throws FacesException {}
-
-    /**
-     * Returns boolean value indicating whether the state of this
-     * component is selected (true) or unselected (false).  This
-     * component will derive this value from its model object.
-     * @return boolean value representing the selected state of this
-     *         component.
-     */
-    public boolean isSelected() {
-	return false;
+    public void setModel(Object model) {
+        this.model = model;
     }
 
+    
     /**
      * Returns the component attribute with the given name
      * within the specified render context or null if there is the
@@ -129,6 +122,59 @@ public class WSelectBoolean extends WComponent {
      */
     public Iterator getValueChangeListeners() {
 	return null;
+    }
+
+    /**
+     * Returns the current state for this component.
+     * If this component's model property is non-null, it will
+     * return the current value contained in the object
+     * referenced by the model property. If the model property
+     * is null, it will return a locally stored value.
+     *
+     * @see #getModel
+     * @param rc the render context used to render this component
+     * @return boolean containing the current state
+     */
+    public boolean isSelected(RenderContext rc) {
+
+        boolean state = false;
+        if ( model == null )  {
+            return selected;
+        }
+        else {
+            try {
+                String state_str = (String) ModelAccessor.
+                        getModelObject(rc, (String) model);
+                state = Boolean.getBoolean(state_str);
+            } catch ( FacesException e ) {
+                // PENDING (visvan) skip this exception ??
+                return selected;
+            }
+            return state;
+        }
+    }
+
+    /**
+     * Sets the current state for this component.
+     * If this component's model property is non-null, it will
+     * store the new value in the object referenced by the
+     * model property.  If the model property is null, it
+     * will store the value locally.
+     * @param rc the render context used to render this component
+     * @param state boolean containing the new state for this component
+     */
+    public void setSelected(RenderContext rc, boolean state) {
+        if ( model == null ) {
+            selected = state;
+        } else {
+            try {
+                String state_str = String.valueOf( state );
+                ModelAccessor.setModelObject(rc,(String)model,state_str);
+            } catch ( FacesException e ) {
+                // PENDING ( visvan ) skip this exception ??
+                selected = state;
+            }
+        }
     }
 }
 

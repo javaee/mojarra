@@ -113,12 +113,13 @@ public class WTextEntry extends WComponent {
      */
     public void setText(RenderContext rc, String text) { 
         if ( model == null ) {
-            text = text;
+            this.text = text;
         } else {
             try {
                 ModelAccessor.setModelObject(rc, (String)model, text);    
             } catch ( FacesException e ) {
                 // PENDING ( visvan ) skip this exception ??
+                this.text = text;
             }
         }    
     }
