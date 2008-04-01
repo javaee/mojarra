@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.13 2002/08/02 01:17:42 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.14 2002/08/02 01:43:13 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.13 2002/08/02 01:17:42 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.14 2002/08/02 01:43:13 eburns Exp $
  * 
  *
  */
@@ -297,6 +297,7 @@ public class TestRenderers_1 extends JspFacesTestCase
     public void verifyRadioRenderer(UIComponent root) throws IOException {
          boolean result = false;
          
+
         // Test RadioRenderer.
         System.out.println("Testing RadioRenderer");
         UISelectOne uiSelectOne = new UISelectOne();

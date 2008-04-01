@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.17 2002/08/02 00:11:06 eburns Exp $
+ * $Id: Util.java,v 1.18 2002/08/02 01:43:12 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.17 2002/08/02 00:11:06 eburns Exp $
+ * @version $Id: Util.java,v 1.18 2002/08/02 01:43:12 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -286,8 +286,8 @@ private Util()
                 Object value = kid.currentValue(context);
                 if (value instanceof UISelectItem) {
                     list.add(value);
-                } else if (value instanceof UISelectItem[]) {
-                    UISelectItem items[] = (UISelectItem[]) value;
+                } else if (value instanceof SelectItem[]) {
+                    SelectItem items[] = (SelectItem[]) value;
                     for (int i = 0; i < items.length; i++) {
                         list.add(items[i]);
                     }
