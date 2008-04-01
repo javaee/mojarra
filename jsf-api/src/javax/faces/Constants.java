@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.18 2002/03/08 22:13:42 eburns Exp $
+ * $Id: Constants.java,v 1.19 2002/03/13 17:59:32 eburns Exp $
  */
 
 /*
@@ -150,6 +150,12 @@ public class Constants {
      * The tree navigator
      */
      public static final String REF_TREENAVIGATOR = "faces.TreeNavigator";
+
+    /**
+     * The RenderWrapper
+     */
+     public static final String REF_RENDERWRAPPER = "faces.RenderWrapper";
+
 
 
     /**

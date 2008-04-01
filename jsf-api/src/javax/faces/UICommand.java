@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.6 2002/03/08 00:26:38 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.7 2002/03/13 17:59:33 eburns Exp $
  */
 
 /*
@@ -151,8 +151,14 @@ public class UICommand extends UIComponent implements EventDispatcher {
             // To do this, we need the component hierarchy, which can be obtained.
             // Makes sure validation is done only once.
             boolean reqValidation = cl.requiresValidation(cmd_event);
+	    
 
-            if ( reqValidation && !doneValidation ) {
+	    if (!reqValidation) {
+		TreeNavigator treeNav = (TreeNavigator) ot.get(request, 
+					       Constants.REF_TREENAVIGATOR);
+		treeNav.getRoot().hackPushTreeToModels(eventContext);
+	    }
+	    else if ( reqValidation && !doneValidation ) {
                 doneValidation = true;
                 // if validation did not succed, stop processing listeners
                 // and set the outcome in NavigationHandler.

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.6 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.7 2002/03/13 17:59:33 eburns Exp $
  */
 
 /*
@@ -14,6 +14,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
+
+import javax.servlet.ServletRequest;
 
 /**
  * The base class for representing all state associated with a
@@ -492,7 +494,7 @@ public abstract class UIComponent {
         // PENDING ( visvan )
         // is it possible to avoid traversing the tree so many times.
         ObjectManager ot = ec.getObjectManager();
-        javax.servlet.ServletRequest request = ec.getRequest();
+        ServletRequest request = ec.getRequest();
         RenderContext rc = (RenderContext)ot.get(request,
                         Constants.REF_RENDERCONTEXT);
         UIComponent child = null;
@@ -534,6 +536,31 @@ public abstract class UIComponent {
                 }    
             }    
         }    
+    }
+
+    /**
+
+    * PENDING(edburns): not sure if this method is necessary.  Used when
+    * validation is not required, but we still need to push values to
+    * the models.
+
+    */
+
+    public void hackPushTreeToModels(EventContext ec) {
+	ObjectManager objectManager = ec.getObjectManager();
+	ServletRequest request = ec.getRequest();
+        RenderContext rc = (RenderContext)objectManager.get(request,
+                        Constants.REF_RENDERCONTEXT);
+	TreeNavigator treeNav = (TreeNavigator) 
+	    objectManager.get(request, Constants.REF_TREENAVIGATOR);
+
+	// Assert.assert_it(null != treeNav);
+	UIComponent next;
+	treeNav.reset();
+	while (null != (next = treeNav.getNextStart())) {
+	    next.pushValueToModel(rc);
+	}
+	treeNav.reset();
     }
 
     /**

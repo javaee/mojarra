@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.12 2002/01/25 18:35:07 visvan Exp $
+ * $Id: RenderKit.java,v 1.13 2002/03/13 17:59:33 eburns Exp $
  */
 
 /*
@@ -74,6 +74,9 @@ public abstract class RenderKit {
      *           the request
      */
     public abstract void queueEvents(EventContext ec);
+
+    public abstract void applyNewValuesToTree(FacesContext ctx, 
+					      TreeNavigator tree);
  
     /**
      * Invoked when this render kit is first instantiated.  Subclasses
