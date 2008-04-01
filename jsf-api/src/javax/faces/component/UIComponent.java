@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.5 2002/05/09 21:21:24 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.6 2002/05/11 20:25:11 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,12 @@
 package javax.faces.component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.render.AttributeDescriptor;
 import javax.faces.render.Renderer;
@@ -73,11 +78,19 @@ import javax.faces.render.Renderer;
  *
  * <p>Each <code>UIComponent</code> instance supports a set of dynamically
  * defined <em>attributes</em>, normally used to describe the render-dependent
- * characteristics of the component.  The set of supported attribute names
- * (and types) for a particular <code>UIComponent</code> subclass can be
+ * characteristics of the component.  In addition, properties that represent
+ * the render-independent characteristics of the component MUST be gettable
+ * and settable via the attributes access methods as well.</p>
+ *
+ * <p>The set of supported attribute names for the render-independent
+ * characteristics of a particular <code>UIComponent</code> subclass can be
  * introspected (for example, by development tools), through a call to the
- * <code>getAttributeNames()</code> and <code>getAttributeDescriptor</code>
- * methods.  However, if the <code>rendererType</code></p>
+ * <code>getAttributeNames()</code>, and <code>getAttributeDescriptor()</code>
+ * can be called to return the description of each such characteristic.  To
+ * acquire the supported set of render-dependent characteristics, you should
+ * acquire an appropriate <code>Renderer</code> instance (of the type specified
+ * by the <code>rendererType</code> property) and call
+ * <code>getAttributeNames()</code> on that instance.</p>
  *
  * <h3>Component Trees and Navigation</h3>
  *
@@ -124,27 +137,85 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return the value of the attribute with the specified name,
-     * which may be <code>null</code>.</p>
+     * <p>The set of attribute values, keyed by the corresponding attribute
+     * name.</p>
+     *
+     * <p><strong>IMPLEMENTATION NOTE</strong> - The collection for attributes
+     * must be lazily instantiated the first time that it is actually used,
+     * in order to avoid wasted object creations.  This can be done by
+     * calling <code>getAttributes()</code>.</p>
+     *
+     * <p><strong>IMPLEMENTATION NOTE</strong> - It is assumed that components
+     * can only be modified in the context of a single thread.</p>
+     */
+    private HashMap attributes = null;
+
+
+    /**
+     * <p>Create (if necessary) and return the collection to be used for
+     * attributes storage.</p>
+     */
+    private Map getAttributes() {
+
+        if (attributes == null) {
+            attributes = new HashMap();
+        }
+        return (attributes);
+
+    }
+
+
+    /**
+     * <p>Have we allocated a collection for attributes yet?</p>
+     */
+    private boolean isAttributesAllocated() {
+
+        return (attributes != null);
+
+    }
+
+
+    /**
+     * <p>Return the value of the attribute with the specified name
+     * (if any); otherwise, return <code>null</code>.</p>
      *
      * @param name Name of the requested attribute
      *
-     * @exception IllegalArgumentException if <code>name</code> does not
-     *  identify an attribute supported by this component
      * @exception NullPointerException if <code>name</code> is
      *  <code>null</code>
      */
-    public abstract Object getAttribute(String name);
+    public Object getAttribute(String name) {
+
+        // Validate method parameters
+        if (name == null) {
+            throw new NullPointerException("getAttribute");
+        }
+
+        // Special cases for read-only pseudo-attributes
+        if ("componentType".equals(name)) {
+            return (getComponentType());
+        } else if ("compoundId".equals(name)) {
+            return (getCompoundId());
+        }
+
+        // Return the selected attribute value
+        if (!isAttributesAllocated()) {
+            return (null);
+        }
+        return (getAttributes().get(name));
+
+    }
 
 
     /**
      * <p>Return an {@link AttributeDescriptor} describing a
-     * render-dependent attribute that is supported by this component,
+     * render-independent attribute that is supported by this component,
      * or <code>null</code> if no attribute by this name is supported
      * by this component.</p>
      *
      * <p><strong>FIXME</strong> - The set of attributes supported by a
-     * component is dependent on the RenderKit (if any) in use.</p>
+     * component is dependent on the RenderKit (if any) in use,
+     * so does this belong here?  How about the self-rendering case?</p>
      *
      * @param name Name of the requested attribute
      *
@@ -156,10 +227,11 @@ public abstract class UIComponent {
 
     /**
      * <p>Return an <code>Iterator</code> over the names of all
-     * render-dependent attributes supported by this <code>UIComponent</code>.
-     * For each such attribute, descriptive information can be retrieved
-     * via <code>getAttributeDescriptor()</code>, and the current value
-     * can be retrieved via <code>getAttribute()</code>.</p>
+     * render-independent attributes supported by this
+     * <code>UIComponent</code>.  For each such attribute, descriptive
+     * information can be retrieved via <code>getAttributeDescriptor()</code>,
+     * and the current value can be retrieved via <code>getAttribute()</code>.
+     *</p>
      */
     public abstract Iterator getAttributeNames();
 
@@ -169,14 +241,36 @@ public abstract class UIComponent {
      * replacing any existing value for that name.</p>
      *
      * @param name Name of the requested attribute
-     * @param value New value (which may be <code>null</code>)
+     * @param value New value (or <code>null</code> to remove
+     *  any attribute value for the specified name
      *
-     * @exception IllegalArgumentException if <code>name</code> does not
-     *  identify an attribute supported by this component
+     * @exception IllegalArgumentException if <code>name</code> represents
+     *  a read-only property of this component
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public abstract void setAttribute(String name, Object value);
+    public void setAttribute(String name, Object value) {
+
+        // Validate method parameters
+        if (name == null) {
+            throw new NullPointerException("setAttribute");
+        }
+        // FIXME - validate length and contents for componentId
+
+        // Special cases for read-only pseudo-attributes
+        if ("componentType".equals(name) ||
+            "compoundId".equals(name)) {
+            throw new IllegalArgumentException(name);
+        }
+
+        // Set or remove the specified value
+        if (value != null) {
+            getAttributes().put(name, value);
+        } else {
+            getAttributes().remove(name);
+        }
+
+    }
 
 
     // ------------------------------------------------------------- Properties
@@ -185,7 +279,11 @@ public abstract class UIComponent {
     /**
      * <p>Return the identifier of this <code>UIComponent</code>.</p>
      */
-    public abstract String getComponentId();
+    public String getComponentId() {
+
+        return ((String) getAttribute("componentId"));
+
+    }
 
 
     /**
@@ -198,26 +296,62 @@ public abstract class UIComponent {
      * @exception NullPointerException if <code>componentId</code>
      *  is <code>null</code>
      */
-    public abstract void setComponentId(String componentId);
+    public void setComponentId(String componentId) {
+
+        if (componentId == null) {
+            throw new NullPointerException("setComponentId");
+        }
+        // FIXME - validate length>0 and valid characters
+        setAttribute("componentId", componentId);
+
+    }
 
 
     /**
      * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
-    public abstract String getComponentType();
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
 
 
     /**
      * <p>Return the <em>compound identifier</em> of this component.</p>
      */
-    public abstract String getCompoundId();
+    public String getCompoundId() {
+
+        // Accumulate the component identifiers of our ancestors
+        ArrayList list = new ArrayList();
+        list.add(getComponentId());
+        UIComponent parent = getParent();
+        while (parent != null) {
+            list.add(0, parent.getComponentId());
+            parent = parent.getParent();
+        }
+
+        // Render the compound identifier from the top down
+        StringBuffer sb = new StringBuffer();
+        int n = list.size();
+        for (int i = 0; i < n; i++) {
+            sb.append(EXPR_SEPARATOR);
+            sb.append((String) list.get(i));
+        }
+        return (sb.toString());
+
+    }
 
 
     /**
      * <p>Return the symbolic model reference expression of this
      * <code>UIComponent</code>, if any.</p>
      */
-    public abstract String getModel();
+    public String getModel() {
+
+        return ((String) getAttribute("model"));
+
+    }
 
 
     /**
@@ -227,14 +361,22 @@ public abstract class UIComponent {
      * @param model The new symbolic model reference expression, or
      *  <code>null</code> to disconnect this component from any model data
      */
-    public abstract void setModel(String model);
+    public void setModel(String model) {
+
+        setAttribute("model", model);
+
+    }
 
 
     /**
      * <p>Return the parent <code>UIComponent</code> of this
      * <code>UIComponent</code>, if any.</p>
      */
-    public abstract UIComponent getParent();
+    public UIComponent getParent() {
+
+        return ((UIComponent) getAttribute("parent"));
+
+    }
 
 
     /**
@@ -243,19 +385,23 @@ public abstract class UIComponent {
      *
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
-     *
-     * @exception IllegalArgumentException if the <code>id</code> of this
-     *  node is not unique among the set of components that are children
-     *  of the new parent
      */
-    public abstract void setParent(UIComponent parent);
+    public void setParent(UIComponent parent) {
+
+        setAttribute("parent", parent);
+
+    }
 
 
     /**
      * <p>Return the {@link Renderer} type for this <code>UIComponent</code>
      * (if any).</p>
      */
-    public abstract String getRendererType();
+    public String getRendererType() {
+
+        return ((String) getAttribute("rendererType"));
+
+    }
 
 
     /**
@@ -266,13 +412,21 @@ public abstract class UIComponent {
      *  {@link Renderer} to use, or <code>null</code> for components
      *  that render themselves
      */
-    public abstract void setRendererType(String rendererType);
+    public void setRendererType(String rendererType) {
+
+        setAttribute("rendererType", rendererType);
+
+    }
 
 
     /**
      * <p>Return the local value of this <code>UIComponent</code>.</p>
      */
-    public abstract Object getValue();
+    public Object getValue() {
+
+        return (getAttribute("value"));
+
+    }
 
 
     /**
@@ -280,10 +434,77 @@ public abstract class UIComponent {
      *
      * @param value The new local value
      */
-    public abstract void setValue(Object value);
+    public void setValue(Object value) {
+
+        setAttribute("value", value);
+
+    }
 
 
     // ------------------------------------------------ Tree Management Methods
+
+
+    /**
+     * <p>The set of child <code>UIComponent</code>s associated with this
+     * component, in the order specified by how the components were added.</p>
+     *
+     * <p><strong>IMPLEMENTATION NOTE</strong> - The collection for children
+     * must be lazily instantiated the first time that it is actually used,
+     * in order to avoid wasted object creations.</p>
+     *
+     * <p><strong>IMPLEMENTATION NOTE</strong> - It is assumed that components
+     * can only be modified in the context of a single thread.</p>
+     */
+    private ArrayList children = null;
+
+
+    /**
+     * <p>If the specified <code>componentId</code> is already present
+     * in one of our children, throw an exception.</p>
+     *
+     * @param componentId The component identifier to check
+     *
+     * @exception IllegalArgumentException if this component identifier is
+     *  already in use by one of our children
+     */
+    private void checkComponentId(String componentId) {
+
+        if (isChildrenAllocated()) {
+            Iterator kids = children.iterator();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                if (componentId.equals(kid.getComponentId())) {
+                    throw new IllegalArgumentException(componentId);
+                }
+            }
+        }
+
+    }
+            
+
+
+    /**
+     * <p>Create (if necessary) and return the collection to be used for
+     * children storage.</p>
+     */
+    private List getChildren() {
+
+        if (children == null) {
+            children = new ArrayList();
+        }
+        return (children);
+
+    }
+
+
+    /**
+     * <p>Have we allocated a collection for children yet?</p>
+     */
+    private boolean isChildrenAllocated() {
+
+        return (children != null);
+
+    }
 
 
     /**
@@ -294,11 +515,19 @@ public abstract class UIComponent {
      *  {@link UIComponent}
      * @param component {@link UIComponent} to be added
      *
+     * @exception IllegalArgumentException if the component identifier
+     *  of the new component is not unique within the children of
+     *  this component
      * @exception IndexOutOfBoundsException if the index is out of range
      *  ((index < 0) || (index &gt;= size()))
      * @exception NullPointerException if <code>component</code> is null
      */
-    public abstract void add(int index, UIComponent component);
+    public void add(int index, UIComponent component) {
+
+        checkComponentId(component.getComponentId());
+        getChildren().add(index, component);
+
+    }
 
 
     /**
@@ -307,9 +536,17 @@ public abstract class UIComponent {
      *
      * @param component {@link UIComponent} to be added
      *
+     * @exception IllegalArgumentException if the component identifier
+     *  of the new component is not unique within the children of
+     *  this component
      * @exception NullPointerException if <code>component</code> is null
      */
-    public abstract void add(UIComponent component);
+    public void add(UIComponent component) {
+
+        checkComponentId(component.getComponentId());
+        getChildren().add(component);
+
+    }
 
 
     /**
@@ -317,7 +554,18 @@ public abstract class UIComponent {
      * recursively performing this operation when a child {@link UIComponent}
      * also has children.</p>
      */
-    public abstract void clear();
+    public void clear() {
+
+        if (!isChildrenAllocated()) {
+            return;
+        }
+        Iterator kids = getChildren().iterator();
+        while (kids.hasNext()) {
+            ((UIComponent) kids.next()).clear();
+        }
+        children.clear();
+
+    }
 
 
     /**
@@ -329,7 +577,33 @@ public abstract class UIComponent {
      *
      * @exception NullPointerException if <code>component</code> is null
      */
-    public abstract boolean contains(UIComponent component);
+    public boolean contains(UIComponent component) {
+
+        if (isChildrenAllocated()) {
+            return (getChildren().contains(component));
+        } else {
+            return (false);
+        }
+
+    }
+
+
+    /**
+     * Segment separator in navigation expressions.
+     */
+    private static final String EXPR_SEPARATOR = "/";
+
+
+    /**
+     * "This element" selector in navigation expressions.
+     */
+    private static final String EXPR_CURRENT = ".";
+
+
+    /**
+     * "Parent element" selector in navigation expressions.
+     */
+    private static final String EXPR_PARENT = "..";
 
 
     /**
@@ -360,7 +634,65 @@ public abstract class UIComponent {
      * @exception NullPointerException if <code>expr</code>
      *  is <code>null</code>
      */
-    public abstract UIComponent findComponent(String expr);
+    public UIComponent findComponent(String expr) {
+
+        if (expr == null) {
+            throw new NullPointerException("findChildren");
+        }
+
+        // If this is an absolute expression, start at the root node
+        // Otherwise, start at the current node
+        UIComponent node = this;
+        if (expr.startsWith(EXPR_SEPARATOR)) {
+            while (node.getParent() != null) {
+                node = node.getParent();
+            }
+            expr = expr.substring(1);
+        }
+
+        // Parse and process each segment of the path
+        while (expr.length() > 0) {
+
+            // Identify the next segment
+            String segment = null;
+            int separator = expr.indexOf(EXPR_SEPARATOR);
+            if (separator < 0) {
+                segment = expr;
+                expr = "";
+            } else {
+                segment = expr.substring(0, separator);
+                expr = expr.substring(separator + 1);
+            }
+
+            // Process the identified segment
+            if (segment.equals(EXPR_CURRENT)) {
+                ; // node already points here
+            } else if (segment.equals(EXPR_PARENT)) {
+                node = node.getParent();
+                if (node == null) {
+                    throw new IllegalArgumentException(segment);
+                }
+            } else {
+                boolean found = false;
+                Iterator kids = node.iterator();
+                while (kids.hasNext()) {
+                    node = (UIComponent) kids.next();
+                    if (segment.equals(node.getComponentId())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    throw new IllegalArgumentException(segment);
+                }
+            }
+
+        }
+
+        // Return the selected node
+        return (node);
+
+    }
 
 
 
@@ -373,7 +705,11 @@ public abstract class UIComponent {
      * @exception IndexOutOfBoundsException if index is out of range
      *  ((index &lt; 0) || (index &gt;= size()))
      */
-    public abstract UIComponent get(int index);
+    public UIComponent get(int index) {
+
+        return ((UIComponent) getChildren().get(index));
+
+    }
 
 
     /**
@@ -384,14 +720,26 @@ public abstract class UIComponent {
      *
      * @exception NullPointerException if <code>component</code> is null
      */
-    public abstract int indexOf(UIComponent component);
+    public int indexOf(UIComponent component) {
+
+        return (getChildren().indexOf(component));
+
+    }
 
 
     /**
      * <p>Return an <code>Iterator</code> over the child {@link UIComponent}s
      * of this <code>UIComonent</code> in the proper sequence.</p>
      */
-    public abstract Iterator iterator();
+    public Iterator iterator() {
+
+        if (isChildrenAllocated()) {
+            return (getChildren().iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
 
 
     /**
@@ -400,9 +748,14 @@ public abstract class UIComponent {
      *
      * @param index Position of the desired component
      *
-     * @exception NullPointerException if <code>component</code> is null
+     * @exception IndexOutOfBoundsException if the index is out of range
+     *  ((index < 0) || (index &gt;= size()))
      */
-    public abstract void remove(int index);
+    public void remove(int index) {
+
+        getChildren().remove(index);
+
+    }
 
 
     /**
@@ -412,7 +765,14 @@ public abstract class UIComponent {
      *
      * @exception NullPointerException if <code>component</code> is null
      */
-    public abstract void remove(UIComponent component);
+    public void remove(UIComponent component) {
+
+        if (component == null) {
+            throw new NullPointerException("remove");
+        }
+        getChildren().remove(component);
+
+    }
 
 
     /**
@@ -422,15 +782,36 @@ public abstract class UIComponent {
      * @param index Position of the desired component
      * @param component The new component
      *
+     * @exception IllegalArgumentException if the component identifier
+     *  of the new component is not unique within the children of
+     *  this component
+     * @exception IndexOutOfBoundsException if the index is out of range
+     *  ((index < 0) || (index &gt;= size()))
      * @exception NullPointerException if <code>component</code> is null
      */
-    public abstract void set(int index, UIComponent component);
+    public void set(int index, UIComponent component) {
+
+        UIComponent current = get(index);
+        if (!component.getComponentId().equals(current.getComponentId())) {
+            checkComponentId(component.getComponentId());
+        }
+        getChildren().set(index, component);
+
+    }
 
 
     /**
      * <p>Return the number of {@link UIComponent}s on the child list.</p>
      */
-    public abstract int size();
+    public int size() {
+
+        if (isChildrenAllocated()) {
+            return (getChildren().size());
+        } else {
+            return (0);
+        }
+
+    }
 
 
     // ------------------------------------------- Lifecycle Processing Methods
