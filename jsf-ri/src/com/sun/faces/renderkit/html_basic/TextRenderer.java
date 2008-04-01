@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.13 2002/01/10 22:32:49 edburns Exp $
+ * $Id: TextRenderer.java,v 1.14 2002/03/16 00:09:37 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.13 2002/01/10 22:32:49 edburns Exp $
+ * @version $Id: TextRenderer.java,v 1.14 2002/03/16 00:09:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,7 +108,7 @@ public class TextRenderer extends Object implements Renderer
         ParameterCheck.nonNull(c);
 
         UIOutput label = null;
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             label = (UIOutput) c;
         } else {
             throw new FacesException("Invalid component type. Expected UIOutput");
@@ -135,7 +135,7 @@ public class TextRenderer extends Object implements Renderer
         return;
     }
 
-    public boolean supportsType(String componentType) {
+    public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UIOUTPUT)) {
@@ -144,7 +144,7 @@ public class TextRenderer extends Object implements Renderer
         return supports;
     }
     
-    public boolean supportsType(UIComponent c) {
+    public boolean supportsComponentType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
         if ( c instanceof UIOutput ) {

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.12 2002/01/10 22:32:49 edburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.13 2002/03/16 00:09:36 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.12 2002/01/10 22:32:49 edburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.13 2002/03/16 00:09:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class HyperlinkRenderer extends Object implements Renderer {
     // Methods From Renderer
     //
 
-    public boolean supportsType(UIComponent c) { 
+    public boolean supportsComponentType(UIComponent c) { 
         ParameterCheck.nonNull(c);
         boolean supports= false;
         if ( c instanceof UICommand ) {
@@ -93,7 +93,7 @@ public class HyperlinkRenderer extends Object implements Renderer {
         return supports;
     }
 
-    public boolean supportsType(String componentType) { 
+    public boolean supportsComponentType(String componentType) { 
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UICOMMAND)) {
@@ -121,7 +121,7 @@ public class HyperlinkRenderer extends Object implements Renderer {
         ParameterCheck.nonNull(c);
 
         UICommand wCommand = null;
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             wCommand = (UICommand) c;
         } else {
             throw new FacesException("Invalid component type. " +

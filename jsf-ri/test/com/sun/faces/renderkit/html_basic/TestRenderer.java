@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.5 2002/01/10 22:32:51 edburns Exp $
+ * $Id: TestRenderer.java,v 1.6 2002/03/16 00:09:37 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.renderkit.html_basic.*;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderer.java,v 1.5 2002/01/10 22:32:51 edburns Exp $
+ * @version $Id: TestRenderer.java,v 1.6 2002/03/16 00:09:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -174,12 +174,12 @@ public class TestRenderer extends TestCase
   
         System.out.println("Testing supportType()");
         // test supportTypes method.
-        boolean result = renderer.supportsType(c); 
+        boolean result = renderer.supportsComponentType(c); 
         assertTrue(result);
         System.out.println("SupportsType() for component " + comp_name + 
                 " returned " + result);
 
-        result = renderer.supportsType(comp_name);    
+        result = renderer.supportsComponentType(comp_name);    
         assertTrue(result);
         System.out.println("SupportsType() for component " + comp_name + 
                 " returned " + result);

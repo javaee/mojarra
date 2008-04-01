@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.16 2002/01/24 00:35:23 rogerk Exp $
+ * $Id: ButtonRenderer.java,v 1.17 2002/03/16 00:09:35 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.16 2002/01/24 00:35:23 rogerk Exp $
+ * @version $Id: ButtonRenderer.java,v 1.17 2002/03/16 00:09:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -121,7 +121,7 @@ public class ButtonRenderer extends Object implements Renderer
     //
     // Methods From Renderer
     //
-    public boolean supportsType(UIComponent c) {
+    public boolean supportsComponentType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
         if ( c instanceof UICommand ) {
@@ -130,7 +130,7 @@ public class ButtonRenderer extends Object implements Renderer
         return supports;
     }
 
-    public boolean supportsType(String componentType) {
+    public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UICOMMAND)) {
@@ -158,7 +158,7 @@ public class ButtonRenderer extends Object implements Renderer
         ParameterCheck.nonNull(c);
 
         UICommand wCommand = null;
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             wCommand = (UICommand) c;
         } else {
             throw new FacesException("Invalid component type. " +

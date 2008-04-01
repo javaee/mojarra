@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.1 2002/03/15 20:58:03 jvisvanathan Exp $
+ * $Id: MessageRenderer.java,v 1.2 2002/03/16 00:09:36 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.1 2002/03/15 20:58:03 jvisvanathan Exp $
+ * @version $Id: MessageRenderer.java,v 1.2 2002/03/16 00:09:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,7 +111,7 @@ public class MessageRenderer extends Object implements Renderer
         ParameterCheck.nonNull(c);
 
         UIOutput label = null;
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             label = (UIOutput) c;
         } else {
             throw new FacesException("Invalid component type. Expected UIOutput");
@@ -155,7 +155,7 @@ public class MessageRenderer extends Object implements Renderer
         return;
     }
 
-    public boolean supportsType(String componentType) {
+    public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UIOUTPUT)) {
@@ -164,7 +164,7 @@ public class MessageRenderer extends Object implements Renderer
         return supports;
     }
     
-    public boolean supportsType(UIComponent c) {
+    public boolean supportsComponentType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
         if ( c instanceof UIOutput ) {

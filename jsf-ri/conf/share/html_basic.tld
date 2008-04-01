@@ -116,11 +116,6 @@ Configuring UI Components
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>formListener</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
       <name>navigationMapId</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>

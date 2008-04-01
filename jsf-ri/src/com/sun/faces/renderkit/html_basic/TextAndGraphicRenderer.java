@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.9 2002/01/10 22:32:49 edburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.10 2002/03/16 00:09:37 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.9 2002/01/10 22:32:49 edburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.10 2002/03/16 00:09:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,11 +85,11 @@ protected void init()
 // Methods From Renderer
 //
 
-public boolean supportsType(UIComponent c) {
+public boolean supportsComponentType(UIComponent c) {
     return false;
 }
 
-public boolean supportsType(String componentType) {
+public boolean supportsComponentType(String componentType) {
     return false;
 }
     public Iterator getSupportedAttributeNames(String componentType) throws FacesException {

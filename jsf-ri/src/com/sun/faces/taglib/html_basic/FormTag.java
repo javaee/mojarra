@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.24 2002/02/05 18:57:03 edburns Exp $
+ * $Id: FormTag.java,v 1.25 2002/03/16 00:09:37 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.24 2002/02/05 18:57:03 edburns Exp $
+ * @version $Id: FormTag.java,v 1.25 2002/03/16 00:09:37 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -128,18 +128,6 @@ public class FormTag extends FacesTag
     }
 
     public void addListeners(UIComponent comp) throws JspException {
-	ParameterCheck.nonNull(comp);
-	Assert.assert_it(comp instanceof UIForm);
-	UIForm form = (UIForm) comp;
-        try {
-            form.addFormListener(formListener);    
-            if ( navigationMapId != null ) {
-                form.setNavigationMapId(navigationMapId);
-            }    
-        } catch (FacesException fe) {
-            throw new JspException("Listener + " + formListener +
-				   " does not implement formListener interface or doesn't exist" );
-        }    
     }
 
     /**

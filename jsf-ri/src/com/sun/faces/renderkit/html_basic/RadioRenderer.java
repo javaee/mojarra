@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.11 2002/03/13 18:04:24 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.12 2002/03/16 00:09:36 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.11 2002/03/13 18:04:24 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.12 2002/03/16 00:09:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class RadioRenderer extends Object implements Renderer {
     // Methods From Renderer
     //
 
-    public boolean supportsType(UIComponent c) {
+    public boolean supportsComponentType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
         if ( c instanceof UISelectOne ) {
@@ -93,7 +93,7 @@ public class RadioRenderer extends Object implements Renderer {
         return supports;
     }
 
-    public boolean supportsType(String componentType) {
+    public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UISELECTONE)) {
@@ -132,7 +132,7 @@ public class RadioRenderer extends Object implements Renderer {
         ParameterCheck.nonNull(c);
 
         UISelectOne uiSelectOne = null;
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             uiSelectOne = (UISelectOne) c;
         } else {
             throw new FacesException("Invalid component type. " +

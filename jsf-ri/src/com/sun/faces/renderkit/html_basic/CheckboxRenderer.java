@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.16 2002/01/25 18:45:17 visvan Exp $
+ * $Id: CheckboxRenderer.java,v 1.17 2002/03/16 00:09:35 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.16 2002/01/25 18:45:17 visvan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.17 2002/03/16 00:09:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,7 +85,7 @@ public class CheckboxRenderer extends Object implements Renderer {
     // Methods From Renderer
     //
 
-    public boolean supportsType(UIComponent c) {
+    public boolean supportsComponentType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
         if ( c instanceof UISelectBoolean ) {
@@ -94,7 +94,7 @@ public class CheckboxRenderer extends Object implements Renderer {
         return supports;
     }
 
-    public boolean supportsType(String componentType) {
+    public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UISELECTBOOLEAN)) {
@@ -124,7 +124,7 @@ public class CheckboxRenderer extends Object implements Renderer {
         ParameterCheck.nonNull(c);
  
         UISelectBoolean wSelectBoolean = null;
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             wSelectBoolean = (UISelectBoolean) c;
         } else {
             throw new FacesException("Invalid component type. " +

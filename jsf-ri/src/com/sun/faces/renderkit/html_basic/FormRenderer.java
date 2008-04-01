@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.17 2002/03/13 18:04:23 eburns Exp $
+ * $Id: FormRenderer.java,v 1.18 2002/03/16 00:09:36 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.17 2002/03/13 18:04:23 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.18 2002/03/16 00:09:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,7 +104,7 @@ public class FormRenderer extends Object implements Renderer
 	return null;
     }
 
-    public boolean supportsType(String componentType) {
+    public boolean supportsComponentType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
         if ( componentType.equals(Constants.REF_UIFORM)) {
@@ -113,7 +113,7 @@ public class FormRenderer extends Object implements Renderer
         return supports;
     }
 
-    public boolean supportsType(UIComponent c) {
+    public boolean supportsComponentType(UIComponent c) {
 
         ParameterCheck.nonNull(c);
         boolean supports= false;
@@ -135,7 +135,7 @@ public class FormRenderer extends Object implements Renderer
         Assert.assert_it(outputMethod != null );
         
         UIForm form = null; 
-        if ( supportsType(c)) {
+        if ( supportsComponentType(c)) {
             form = (UIForm) c;
         } else {
             throw new FacesException("Invalid component type. Expected UIForm");
