@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.2 2002/08/05 16:54:48 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.3 2002/08/09 21:31:38 craigmcc Exp $</h3>
 </div>
 
 
@@ -152,15 +152,16 @@
     <td>Date</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, style, timezone</td>
+    <td>label, formatStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
     </td>
     <td>
       Get current value, convert to Calendar, create localized DateFormat date
-      instance for the specified style (SHORT, MEDIUM, LONG, FULL),
-      set time zone (if specified), render formatted result as text input field.
+      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL),
+      set time zone (if specified), render formatted result as text input
+      field.
     </td>
   </tr>
 
@@ -168,15 +169,15 @@
     <td>DateTime</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, pattern, timezone</td>
+    <td>label, formatPattern, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
     </td>
     <td>
       Get current value, convert to Calendar, create SimpleDateFormat based
-      on pattern, set time zone (if specified), render formatted result as text
-      input field.
+      on formatPattern, set time zone (if specified), render formatted result
+      as text input field.
     </td>
   </tr>
 
@@ -184,30 +185,15 @@
     <td>DateTime</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, style, timezone</td>
+    <td>label, formatStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary, and store.
     </td>
     <td>
       Get current value, convert to Calendar, create localized DateFormat
-      datetime instance for the specified style (SHORT, MEDIUM, LONG, FULL),
-      set time zone (if specified), render formatted result as text input field.
-    </td>
-  </tr>
-
-  <tr>
-    <td>Number</td>
-    <td>numeric</td>
-    <td>&nbsp;</td>
-    <td>label, pattern</td>
-    <td>
-      Get DecimalFormat as for encoding, parse text input,
-      convert as necessary, and store.
-    </td>
-    <td>
-      Get current value, convert to double or long (as appropriate), create
-      DecimalFormat based on pattern, render formatted result as text
+      datetime instance for the specified formatStyle (SHORT, MEDIUM, LONG,
+      FULL), set time zone (if specified), render formatted result as text
       input field.
     </td>
   </tr>
@@ -216,7 +202,23 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>label, style</td>
+    <td>label, formatPattern</td>
+    <td>
+      Get DecimalFormat as for encoding, parse text input,
+      convert as necessary, and store.
+    </td>
+    <td>
+      Get current value, convert to double or long (as appropriate), create
+      DecimalFormat based on formatPattern, render formatted result as text
+      input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Number</td>
+    <td>numeric</td>
+    <td>&nbsp;</td>
+    <td>label, formatStyle</td>
     <td>
       Get NumberFormat instance as for encoding, parse text input,
       convert as necessary, and store.
@@ -255,7 +257,8 @@
       Convert as necessary and store.
     </td>
     <td>
-      Get current value, convert to String, render literally as text input field.
+      Get current value, convert to String, render literally as text input
+      field.
     </td>
   </tr>
 
@@ -268,7 +271,8 @@
       Convert as necessary and store.
     </td>
     <td>
-      Get current value, convert to String, render literally as text input field.
+      Get current value, convert to String, render literally as text input
+      field.
     </td>
   </tr>
 
@@ -276,14 +280,14 @@
     <td>Time</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, style, timezone</td>
+    <td>label, formatStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
     </td>
     <td>
       Get current value, convert to Calendar, create localized DateFormat time
-      instance for the specified style (SHORT, MEDIUM, LONG, FULL), set
+      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL), set
       time zone (if specified), render formatted result as text input field.
     </td>
   </tr>
@@ -328,13 +332,13 @@
     <td>Date</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>style, timezone</td>
+    <td>formatStyle, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Calendar, create localized DateFormat date
-      instance for the specified style (SHORT, MEDIUM, LONG, FULL),
+      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL),
       set time zone (if specified), render formatted result.
     </td>
   </tr>
@@ -343,13 +347,13 @@
     <td>DateTime</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>pattern, timezone</td>
+    <td>formatPattern, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Calendar, create SimpleDateFormat based
-      on pattern, set time zone (if specified), render formatted result.
+      on formatPattern, set time zone (if specified), render formatted result.
     </td>
   </tr>
 
@@ -357,14 +361,14 @@
     <td>DateTime</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>style, timezone</td>
+    <td>formatStyle, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Calendar, create localized DateFormat
-      datetime instance for the specified style (SHORT, MEDIUM, LONG, FULL),
-      set time zone (if specified), render formatted result.
+      datetime instance for the specified formatStyle (SHORT, MEDIUM, LONG,
+      FULL), set time zone (if specified), render formatted result.
     </td>
   </tr>
 
@@ -418,13 +422,13 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>pattern</td>
+    <td>formatPattern</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to double or long (as appropriate), create
-      DecimalFormat based on pattern, render formatted result.
+      DecimalFormat based on formatPattern, render formatted result.
     </td>
   </tr>
 
@@ -432,13 +436,13 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>style</td>
+    <td>formatStyle</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to double or long (as appropriate), create
-      localized NumberFormat instance based on style (CURRENCY,
+      localized NumberFormat instance based on formatStyle (CURRENCY,
       INTEGER, NUMBER, PERCENT), render formatted result.
     </td>
   </tr>
@@ -460,13 +464,13 @@
     <td>Time</td>
     <td>Calendar, Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>style, timezone</td>
+    <td>formatStyle, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Calendar, create localized DateFormat time
-      instance for the specified style (SHORT, MEDIUM, LONG, FULL), set
+      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL), set
       time zone (if specified), render formatted result.
     </td>
   </tr>

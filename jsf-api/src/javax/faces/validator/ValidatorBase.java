@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.4 2002/07/28 23:16:58 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.5 2002/08/09 21:31:39 craigmcc Exp $
  */
 
 /*
@@ -181,6 +181,10 @@ abstract class ValidatorBase implements Validator {
             return ( ((Integer) attributeValue).longValue() );
         } else if (attributeValue instanceof Long) {
             return ( ((Long) attributeValue).longValue() );
+        } else if (attributeValue instanceof Double) {
+            return ( ((Double) attributeValue).longValue() );
+        } else if (attributeValue instanceof Float) {
+            return ( ((Float) attributeValue).longValue() );
         } else {
             return (Long.parseLong(attributeValue.toString()));
         }
