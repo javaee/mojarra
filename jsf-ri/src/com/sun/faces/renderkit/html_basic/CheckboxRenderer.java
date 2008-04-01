@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.25 2002/06/28 22:46:58 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.25 2002/06/28 22:46:58 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -154,7 +154,15 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+    }
 
+    public void encodeChildren(FacesContext context, UIComponent component) 
+        throws IOException {
+
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) 
+        throws IOException {
         String currentValue = null;
         ResponseWriter writer = null;
 
@@ -198,16 +206,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         if (label != null) {
             writer.write(" ");
             writer.write(label);
-        }
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) 
-        throws IOException {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
+        }        
 
     }
 

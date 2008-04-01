@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.22 2002/07/10 17:57:22 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.23 2002/07/22 16:58:02 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.22 2002/07/10 17:57:22 jvisvanathan Exp $
+ * @version $Id: TextRenderer.java,v 1.23 2002/07/22 16:58:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -144,6 +144,15 @@ public class TextRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+        
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component) 
+        throws IOException {
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) 
+        throws IOException {
         String currentValue = null;
         ResponseWriter writer = null;
 
@@ -176,17 +185,6 @@ public class TextRenderer extends HtmlBasicRenderer {
         if (currentValue != null) {
             writer.write(currentValue);
         } 
-
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) 
-        throws IOException {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
-
     }
 
 } // end of class TextRenderer

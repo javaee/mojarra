@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.24 2002/06/28 22:46:58 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.25 2002/07/22 16:58:00 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.24 2002/06/28 22:46:58 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.25 2002/07/22 16:58:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,6 +97,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
+        
+    }
+    
+    public void encodeChildren(FacesContext context, UIComponent component) {
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) 
+            throws IOException {
         if ( context == null ) {
             throw new NullPointerException("FacesContext is null");
         }    
@@ -146,14 +154,6 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             }
         }
         writer.write(">");
-    }
-    
-    public void encodeChildren(FacesContext context, UIComponent component) {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) {
-
     }
 
 } // end of class ButtonRenderer

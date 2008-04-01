@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.7 2002/07/13 01:21:58 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.8 2002/07/22 16:58:04 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.7 2002/07/13 01:21:58 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.8 2002/07/22 16:58:04 jvisvanathan Exp $
  * 
  *
  */
@@ -199,16 +199,19 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setComponentId("my_checkbox");
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
+        checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked");
         selectBoolean.setSelected(false);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
+        checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked with label");
         selectBoolean.setAttribute("label", "Foo");
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
+        checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
@@ -243,6 +246,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing encode method...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), command);
+         hyperlinkRenderer.encodeEnd(getFacesContext(), command);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
@@ -317,6 +321,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing encode method...");
         secretRenderer.encodeBegin(getFacesContext(), textEntry);
+        secretRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
@@ -349,6 +354,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing encode method...");
         textRenderer.encodeBegin(getFacesContext(), text);
+        textRenderer.encodeEnd(getFacesContext(), text);
         getFacesContext().getResponseWriter().flush();
 
         System.out.println("    Testing supportsComponentType methods..");

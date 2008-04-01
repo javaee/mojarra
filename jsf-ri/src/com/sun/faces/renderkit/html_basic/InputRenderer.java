@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.23 2002/07/15 22:30:01 jvisvanathan Exp $
+ * $Id: InputRenderer.java,v 1.24 2002/07/22 16:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.23 2002/07/15 22:30:01 jvisvanathan Exp $
+ * @version $Id: InputRenderer.java,v 1.24 2002/07/22 16:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -144,6 +144,14 @@ public class InputRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
+    }
+
+    public void encodeChildren(FacesContext context, UIComponent component) {
+
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) 
+            throws IOException {
         String currentValue = null;
         ResponseWriter writer = null;
         
@@ -193,15 +201,7 @@ public class InputRenderer extends HtmlBasicRenderer {
             writer.write(textField_ml);
             writer.write("\"");
         }
-        writer.write(">");
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
+        writer.write(">");            
     }
     
     // The testcase for this class is TestRenderers_1.java 

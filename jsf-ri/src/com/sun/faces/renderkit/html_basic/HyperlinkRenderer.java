@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.25 2002/07/19 22:32:20 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.25 2002/07/19 22:32:20 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.26 2002/07/22 16:58:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,7 +130,15 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
+    }
 
+    public void encodeChildren(FacesContext context, UIComponent component) 
+        throws IOException {
+
+    }
+
+    public void encodeEnd(FacesContext context, UIComponent component) 
+        throws IOException {
         if ( context == null ) {
             throw new NullPointerException("Null FacesContext");
         }
@@ -141,14 +149,14 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 
         writer.write("<A HREF=\"");
 
-//PENDING(rogerk) don't call this if "target" (destination) is
-// a non-faces page.  For non-faces pages, we would simply 
-// include the "target attribute's value.
-// ex: <a href="http://java.sun.com".....
-// For faces pages, we are expecting the "target" attribute to
-// begin with "/faces" (ex: /faces/Faces_Basic.xul).
-//PENDING(rogerk) what if "target" attribute is not set (null)???
-//
+        //PENDING(rogerk) don't call this if "target" (destination) is
+        // a non-faces page.  For non-faces pages, we would simply 
+        // include the "target attribute's value.
+        // ex: <a href="http://java.sun.com".....
+        // For faces pages, we are expecting the "target" attribute to
+        // begin with "/faces" (ex: /faces/Faces_Basic.xul).
+        //PENDING(rogerk) what if "target" attribute is not set (null)???
+        //
         String target = (String)component.getAttribute("target");
         if (target != null) {
             if (target.startsWith(RIConstants.URL_PREFIX)) {
@@ -169,16 +177,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         if (text != null) {
             writer.write(text);
         }
-        writer.write("</A>");
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) 
-        throws IOException {
-
-    }
-
-    public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
+        writer.write("</A>");        
 
     }
 

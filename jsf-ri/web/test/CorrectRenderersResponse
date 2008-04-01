@@ -1,7 +1,7 @@
-<FORM METHOD="post" ACTION="/test/faces/form/FormRenderertreeId;jsessionid=C5366598A51328E62948F964F9447243">
+<FORM METHOD="post" ACTION="/test/faces/form/FormRenderer;jsessionid=C5366598A51328E62948F964F9447243">
 </FORM>
 <INPUT TYPE="text" NAME="/input_renderer" VALUE="InputRenderer">
-<TEXTAREA  NAME="/textarea_renderer"> TextAreaRenderer
+<TEXTAREA  NAME="/textarea_renderer"> TextAreaRenderer</TEXTAREA>
 <TABLE BORDER="0">
 	<TR>
 <TD><INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="One"> One</TD>

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.11 2002/07/13 01:21:58 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.12 2002/07/22 16:58:04 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.11 2002/07/13 01:21:58 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.12 2002/07/22 16:58:04 jvisvanathan Exp $
  * 
  *
  */
@@ -109,7 +109,7 @@ public class TestRenderers_1 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<FORM METHOD=\"post\" ACTION=\"/test/faces/form/FormRenderertreeId;jsessionid=C5366598A51328E62948F964F9447243\">"
+	    "<FORM METHOD=\"post\" ACTION=\"/test/faces/form/FormRenderer;jsessionid=C5366598A51328E62948F964F9447243\">"
 };
         return lines;
     }    
@@ -168,6 +168,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test encode method
         System.out.println("Testing encode method");
         inputRenderer.encodeBegin(getFacesContext(), textEntry);
+        inputRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().write("\n");
       
         // test supportComponentType method
@@ -197,6 +198,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test encode method
         System.out.println("Testing encode method");
         textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
+        textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
         getFacesContext().getResponseWriter().write("\n");
        
         // test supportComponentType method
@@ -274,6 +276,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test encode method
         System.out.println("Testing encode method");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
+        buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().write("\n");
         try {
             getFacesContext().getResponseWriter().flush();
