@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.4 2002/06/05 17:00:59 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.5 2002/06/06 00:15:02 eburns Exp $
  */
 
 /*
@@ -12,11 +12,12 @@
 package com.sun.faces.renderkit.html_basic;
 
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.ServletTestCase;
+import org.apache.cactus.JspTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.webapp.JspResponseWriter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -50,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
 import com.sun.faces.renderkit.html_basic.TextAreaRenderer;
 import com.sun.faces.renderkit.html_basic.RadioRenderer;
-import com.sun.faces.FileOutputResponseWrapper;
+import com.sun.faces.FileOutputResponseWriter;
 import com.sun.faces.tree.XmlTreeImpl;
 
 /**
@@ -59,12 +60,12 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.4 2002/06/05 17:00:59 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.5 2002/06/06 00:15:02 eburns Exp $
  * 
  *
  */
 
-public class TestRenderers_1 extends ServletTestCase
+public class TestRenderers_1 extends JspTestCase
 {
     //
     // Protected Constants
@@ -83,7 +84,7 @@ public class TestRenderers_1 extends ServletTestCase
     //
     private FacesContext  facesContext = null;
     private FacesContextFactory  facesContextFactory = null;
-    private FileOutputResponseWrapper wrappedResponse = null;
+    private FileOutputResponseWriter responseWriter = null;
     
     // Attribute Instance Variables
     // Relationship Instance Variables
@@ -113,13 +114,9 @@ public class TestRenderers_1 extends ServletTestCase
         assertTrue(response != null);
         assertTrue(config.getServletContext() != null);
           
-         // create the wrapper response object that writes output
-         // to a file.
-        wrappedResponse = new FileOutputResponseWrapper(response);
-            
         facesContext = 
 	facesContextFactory.createFacesContext(config.getServletContext(),
-					       request, wrappedResponse);
+					       request, response);
         assertTrue(null != facesContext);
         
         RenderKit renderKit = new HtmlBasicRenderKit();
@@ -127,6 +124,9 @@ public class TestRenderers_1 extends ServletTestCase
     
         facesContext.setResponseTree( new XmlTreeImpl(config.getServletContext(),
                 new UIForm(),"treeId"));
+	responseWriter = new FileOutputResponseWriter();
+	facesContext.setResponseWriter(responseWriter);
+	assertTrue(responseWriter == facesContext.getResponseWriter());
     }     
 
     public void tearDown() {
@@ -167,7 +167,7 @@ public class TestRenderers_1 extends ServletTestCase
                 ArrayList list = new ArrayList();
                 list.add(ignore);
                 result = 
-                cf.filesIdentical(FileOutputResponseWrapper.FACES_RESPONSE_FILENAME,
+                cf.filesIdentical(FileOutputResponseWriter.RESPONSE_WRITER_FILENAME,
                     EXPECTED_OUTPUT_FILENAME, list);
             } catch (Exception e ) {
                 System.out.println(e.getMessage());
@@ -177,7 +177,7 @@ public class TestRenderers_1 extends ServletTestCase
             assertTrue("Error comparing files: diff -u "+
 		       EXPECTED_OUTPUT_FILENAME +
 		       " " + 
-		       FileOutputResponseWrapper.FACES_RESPONSE_FILENAME, 
+		       FileOutputResponseWriter.RESPONSE_WRITER_FILENAME, 
 		       result);
 	 }
         catch (Throwable e) {
@@ -205,7 +205,7 @@ public class TestRenderers_1 extends ServletTestCase
         // test encode method
         System.out.println("Testing encode method");
         inputRenderer.encodeBegin(facesContext, textEntry);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
       
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -234,7 +234,7 @@ public class TestRenderers_1 extends ServletTestCase
         // test encode method
         System.out.println("Testing encode method");
         textAreaRenderer.encodeBegin(facesContext, textEntry);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
        
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -274,12 +274,12 @@ public class TestRenderers_1 extends ServletTestCase
         // test encode method
         System.out.println("Testing encode method");
         formRenderer.encodeBegin(facesContext, uiForm);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
         
         // test encode method
         System.out.println("Testing encodeEnd method");
         formRenderer.encodeEnd(facesContext, uiForm);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
         
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -306,7 +306,7 @@ public class TestRenderers_1 extends ServletTestCase
         // test decode method
         System.out.println("Testing decode method");
         buttonRenderer.decode(facesContext, uiCommand);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
         
         // make sure commandEvent was queued.
         Iterator it = facesContext.getApplicationEvents();
@@ -319,9 +319,9 @@ public class TestRenderers_1 extends ServletTestCase
         // test encode method
         System.out.println("Testing encode method");
         buttonRenderer.encodeBegin(facesContext, uiCommand);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
         try {
-            wrappedResponse.flushBuffer();
+            responseWriter.flush();
         } catch (Exception e ) {
             throw new FacesException("Exception while flushing buffer");
         } 

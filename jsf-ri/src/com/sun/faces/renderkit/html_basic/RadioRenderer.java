@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.16 2002/06/05 17:00:58 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.17 2002/06/06 00:15:02 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
@@ -32,7 +33,6 @@ import org.apache.commons.beanutils.ConversionException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.PrintWriter;
 import java.io.IOException;
 
 
@@ -42,7 +42,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.16 2002/06/05 17:00:58 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.17 2002/06/06 00:15:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,7 +172,7 @@ public class RadioRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         String currentValue = null;
-        PrintWriter writer = null;
+        ResponseWriter writer = null;
         UISelectOne uiSelectOne = null;
         
         if ( context == null ) {
@@ -209,26 +209,26 @@ public class RadioRenderer extends Renderer {
             return;
         }
         
-        writer = context.getServletResponse().getWriter();
+        writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
         for (int i = 0; i < items.length; i++) {
-            writer.print("<INPUT TYPE=\"RADIO\"");
+            writer.write("<INPUT TYPE=\"RADIO\"");
             if (currentValue != null && 
                     (currentValue.equals(items[i].getValue()))){
-                writer.print(" CHECKED");
+                writer.write(" CHECKED");
             }
-            writer.print(" NAME=\"");
-            writer.print(uiSelectOne.getCompoundId());
-            writer.print("\" VALUE=\"");
-            writer.print(items[i].getValue());
-            writer.print("\">");
+            writer.write(" NAME=\"");
+            writer.write(uiSelectOne.getCompoundId());
+            writer.write("\" VALUE=\"");
+            writer.write(items[i].getValue());
+            writer.write("\">");
             String itemLabel = items[i].getLabel();
             if (itemLabel != null) {
-                writer.print(" ");
-                writer.print(itemLabel);
+                writer.write(" ");
+                writer.write(itemLabel);
             }
-            writer.print("\n");
+            writer.write("\n");
         }
     }
 

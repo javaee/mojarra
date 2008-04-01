@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.3 2002/06/05 17:00:58 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.4 2002/06/06 00:15:02 eburns Exp $
  */
 
 /*
@@ -34,6 +34,8 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.context.MessageList;
+import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseStream;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.RIConstants;
 import javax.faces.render.RenderKit;
@@ -47,7 +49,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.3 2002/06/05 17:00:58 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.4 2002/06/06 00:15:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -177,6 +179,24 @@ public void testAccessors()
     facesContext.addApplicationEvent(new CommandEvent(new UICommand(), 
             "cmdName"));
     System.out.println("Testing addApplicationEvent: " );
+
+    ResponseStream responseStream = new ResponseStream() {
+	    public void write(int b) {}
+	};
+    facesContext.setResponseStream(responseStream);
+    result = responseStream == facesContext.getResponseStream();
+    assertTrue(result);
+    System.out.println("Testing responseStream: " + result);
+
+    ResponseWriter responseWriter = new ResponseWriter() {
+	    public void close() {}
+	    public void flush() {}
+	    public void write(char[] cbuf, int off, int len) {}
+	};
+    facesContext.setResponseWriter(responseWriter);
+    result = responseWriter == facesContext.getResponseWriter();
+    assertTrue(result);
+    System.out.println("Testing responseWriter: " + result);
    
     Iterator it = facesContext.getApplicationEvents();
     result = null != it;

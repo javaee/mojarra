@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.21 2002/06/05 17:00:58 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.22 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
@@ -30,7 +31,6 @@ import org.apache.commons.beanutils.ConversionException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.PrintWriter;
 import java.io.IOException;
 
 /**
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.21 2002/06/05 17:00:58 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.22 2002/06/06 00:15:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,26 +141,26 @@ public class ButtonRenderer extends Renderer {
         }    
         ParameterCheck.nonNull(component);             
        
-        PrintWriter writer = context.getServletResponse().getWriter();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
         
         //can commandName be null ?
         String cmdName = (String) component.currentValue(context);
         Assert.assert_it(cmdName != null);
         
-        writer.print("<INPUT TYPE=");
+        writer.write("<INPUT TYPE=");
         if (component.getAttribute("image") != null) {
-            writer.print("\"IMAGE\" SRC=\"");
-            writer.print(component.getAttribute("image"));
-            writer.print("\"");
-            writer.print(" NAME=\"");
-            writer.print(cmdName);
-            writer.print("\"");
+            writer.write("\"IMAGE\" SRC=\"");
+            writer.write((String) component.getAttribute("image"));
+            writer.write("\"");
+            writer.write(" NAME=\"");
+            writer.write(cmdName);
+            writer.write("\"");
         } else {
-            writer.print("\"SUBMIT\" NAME=\"");
-            writer.print(cmdName);
-            writer.print("\"");
-            writer.print(" VALUE=\"");
+            writer.write("\"SUBMIT\" NAME=\"");
+            writer.write(cmdName);
+            writer.write("\"");
+            writer.write(" VALUE=\"");
             // Follow the UE Spec for Button:
             // http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
             // JavaServerFaces/uispecs/UICommand_Button.html
@@ -170,21 +170,21 @@ public class ButtonRenderer extends Renderer {
                 label = cmdName;
             }    
             if (label.length() == 3) {
-                writer.print("&nbsp;&nbsp;");
-                writer.print(label);
-                writer.print("&nbsp;&nbsp;");
-                writer.print("\"");
+                writer.write("&nbsp;&nbsp;");
+                writer.write(label);
+                writer.write("&nbsp;&nbsp;");
+                writer.write("\"");
             } else if (label.length() == 2) {
-                writer.print("&nbsp;&nbsp;&nbsp;");
-                writer.print(label);
-                writer.print("&nbsp;&nbsp;&nbsp;");
-                writer.print("\"");
+                writer.write("&nbsp;&nbsp;&nbsp;");
+                writer.write(label);
+                writer.write("&nbsp;&nbsp;&nbsp;");
+                writer.write("\"");
             } else {
-                writer.print(label);
-                writer.print("\"");
+                writer.write(label);
+                writer.write("\"");
             }
         }
-        writer.print(">");
+        writer.write(">");
     }
     
     public void encodeChildren(FacesContext context, UIComponent component) {

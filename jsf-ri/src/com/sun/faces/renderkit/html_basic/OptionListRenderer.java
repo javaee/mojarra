@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.14 2002/06/05 22:29:56 rkitain Exp $
+ * $Id: OptionListRenderer.java,v 1.15 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -12,13 +12,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectOne;
+import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
@@ -37,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.14 2002/06/05 22:29:56 rkitain Exp $
+ * @version $Id: OptionListRenderer.java,v 1.15 2002/06/06 00:15:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -157,7 +157,7 @@ public class OptionListRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
-        PrintWriter writer = null;
+        ResponseWriter writer = null;
 
         if (context == null) {
             throw new NullPointerException("Null FacesContext");
@@ -191,23 +191,23 @@ public class OptionListRenderer extends Renderer {
             items = new SelectItem[0];
         }
 
-        writer = context.getServletResponse().getWriter();
+        writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-        writer.print("<SELECT NAME=\"");
-        writer.print(component.getCompoundId());
-        writer.print("\">");
+        writer.write("<SELECT NAME=\"");
+        writer.write(component.getCompoundId());
+        writer.write("\">");
         for (int i = 0; i < items.length; i++) {
-            writer.print("<OPTION VALUE=\"");
-            writer.print(items[i].getValue());
-            writer.print("\"");
+            writer.write("<OPTION VALUE=\"");
+            writer.write((String) items[i].getValue());
+            writer.write("\"");
             if (currentValue.equals(items[i].getValue())) {
-                writer.print(" selected=\"selected\"");
+                writer.write(" selected=\"selected\"");
             }
-            writer.print(">");
-            writer.print(items[i].getLabel());
-            writer.print("</OPTION>");
+            writer.write(">");
+            writer.write(items[i].getLabel());
+            writer.write("</OPTION>");
         }
-        writer.print("</SELECT>");
+        writer.write("</SELECT>");
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.18 2002/06/05 22:29:56 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.19 2002/06/06 00:15:02 eburns Exp $
  */
 
 /*
@@ -12,13 +12,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.18 2002/06/05 22:29:56 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.19 2002/06/06 00:15:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,7 +165,7 @@ public class TextRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
-        PrintWriter writer = null;
+        ResponseWriter writer = null;
 
         if (context == null) {
             throw new NullPointerException("Null FacesContext");
@@ -190,11 +190,11 @@ public class TextRenderer extends Renderer {
             return;
         }
 
-        writer = context.getServletResponse().getWriter();
+        writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
         if (currentValue != null) {
-            writer.print(currentValue);
+            writer.write(currentValue);
         } 
 
     }

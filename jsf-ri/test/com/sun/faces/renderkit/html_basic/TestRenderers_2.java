@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.2 2002/06/05 23:00:07 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.3 2002/06/06 00:15:03 eburns Exp $
  */
 
 /*
@@ -12,7 +12,7 @@
 package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.CompareFiles;
-import com.sun.faces.FileOutputResponseWrapper;
+import com.sun.faces.FileOutputResponseWriter;
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.html_basic.CheckboxRenderer;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.ServletTestCase;
+import org.apache.cactus.JspTestCase;
 
 /**
  *
@@ -52,12 +52,12 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.2 2002/06/05 23:00:07 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.3 2002/06/06 00:15:03 eburns Exp $
  * 
  *
  */
 
-public class TestRenderers_2 extends ServletTestCase
+public class TestRenderers_2 extends JspTestCase
 {
     //
     // Protected Constants
@@ -76,7 +76,7 @@ public class TestRenderers_2 extends ServletTestCase
     //
     private FacesContext  facesContext = null;
     private FacesContextFactory  facesContextFactory = null;
-    private FileOutputResponseWrapper wrappedResponse = null;
+    private FileOutputResponseWriter responseWriter = null;
 
     // Attribute Instance Variables
     // Relationship Instance Variables
@@ -105,13 +105,9 @@ public class TestRenderers_2 extends ServletTestCase
         assertTrue(response != null);
         assertTrue(config.getServletContext() != null);
           
-         // create the wrapper response object that writes output
-         // to a file.
-        wrappedResponse = new FileOutputResponseWrapper(response);
-            
         facesContext = 
 	facesContextFactory.createFacesContext(config.getServletContext(),
-					       request, wrappedResponse);
+					       request, response);
         assertTrue(null != facesContext);
 
         // this stuff is needed for testing HyperlinkRenderer.encode()
@@ -122,6 +118,9 @@ public class TestRenderers_2 extends ServletTestCase
         XmlTreeImpl xmlTree = new XmlTreeImpl(
             config.getServletContext(), new UICommand(), "treeId");
         facesContext.setResponseTree(xmlTree);
+	responseWriter = new FileOutputResponseWriter();
+	facesContext.setResponseWriter(responseWriter);
+	assertTrue(responseWriter == facesContext.getResponseWriter());
     }     
 
     public void tearDown() {
@@ -160,7 +159,10 @@ public class TestRenderers_2 extends ServletTestCase
             testSecretRenderer(root);
             testTextRenderer(root);
 
-            assertTrue(filesCompare());
+            assertTrue("File Comparison failed: diff -u " +
+		       FileOutputResponseWriter.RESPONSE_WRITER_FILENAME + 
+		       " " + EXPECTED_OUTPUT_FILENAME,
+		       filesCompare());
         } catch (Throwable t) {
             t.printStackTrace();
             assertTrue(false);
@@ -226,17 +228,17 @@ public class TestRenderers_2 extends ServletTestCase
         selectBoolean.setComponentId("my_checkbox");
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(facesContext, selectBoolean);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked");
         selectBoolean.setSelected(false);
         checkboxRenderer.encodeBegin(facesContext, selectBoolean);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
 
         System.out.println("    Testing encode method - rendering unchecked with label");
         selectBoolean.setAttribute("label", "Foo");
         checkboxRenderer.encodeBegin(facesContext, selectBoolean);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -270,7 +272,7 @@ public class TestRenderers_2 extends ServletTestCase
 
         System.out.println("    Testing encode method...");
         hyperlinkRenderer.encodeBegin(facesContext, command);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -311,7 +313,7 @@ public class TestRenderers_2 extends ServletTestCase
         selectOne.setComponentId("my_optionlist");
         selectOne.setValue("Blue");
         optionlistRenderer.encodeBegin(facesContext, selectOne);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -343,7 +345,7 @@ public class TestRenderers_2 extends ServletTestCase
 
         System.out.println("    Testing encode method...");
         secretRenderer.encodeBegin(facesContext, textEntry);
-        wrappedResponse.getWriter().print("\n");
+        responseWriter.write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -375,7 +377,7 @@ public class TestRenderers_2 extends ServletTestCase
 
         System.out.println("    Testing encode method...");
         textRenderer.encodeBegin(facesContext, text);
-        wrappedResponse.flushBuffer();
+        responseWriter.flush();
 
         System.out.println("    Testing supportsComponentType methods..");
 
@@ -397,7 +399,7 @@ public class TestRenderers_2 extends ServletTestCase
             list.add(ignoreStr);
             result = 
                 cf.filesIdentical(
-                    FileOutputResponseWrapper.FACES_RESPONSE_FILENAME,
+                    FileOutputResponseWriter.RESPONSE_WRITER_FILENAME,
                     EXPECTED_OUTPUT_FILENAME, list);
         } catch (Exception e ) {
             System.out.println(e.getMessage());

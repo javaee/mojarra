@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.17 2002/06/05 22:29:55 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.18 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -12,13 +12,13 @@
 package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.event.CommandEvent;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.17 2002/06/05 22:29:55 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.18 2002/06/06 00:15:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -145,14 +145,14 @@ public class HyperlinkRenderer extends Renderer {
         }
         ParameterCheck.nonNull(component);
 
-        PrintWriter writer = context.getServletResponse().getWriter();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
 
-        writer.print("<a href=\"");
-        writer.print(href(context, component));
-        writer.print("\">");
-        writer.print(component.currentValue(context));
-        writer.print("</a>");
+        writer.write("<a href=\"");
+        writer.write(href(context, component));
+        writer.write("\">");
+        writer.write((String) component.currentValue(context));
+        writer.write("</a>");
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 

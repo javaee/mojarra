@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.19 2002/06/05 17:00:58 jvisvanathan Exp $
+ * $Id: InputRenderer.java,v 1.20 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UITextEntry;
@@ -30,7 +31,6 @@ import org.apache.commons.beanutils.ConversionException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.PrintWriter;
 import java.io.IOException;
 
 /**
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.19 2002/06/05 17:00:58 jvisvanathan Exp $
+ * @version $Id: InputRenderer.java,v 1.20 2002/06/06 00:15:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -170,7 +170,7 @@ public class InputRenderer extends Renderer {
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         String currentValue = null;
-        PrintWriter writer = null;
+        ResponseWriter writer = null;
         
         if ( context == null ) {
             throw new NullPointerException("FacesContext is null");
@@ -190,35 +190,35 @@ public class InputRenderer extends Renderer {
             }    
         }
         
-        writer = context.getServletResponse().getWriter();
+        writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        writer.print("<INPUT TYPE=\"text\"");
-        writer.print(" NAME=\"");
-        writer.print(component.getCompoundId());
-        writer.print("\"");
+        writer.write("<INPUT TYPE=\"text\"");
+        writer.write(" NAME=\"");
+        writer.write(component.getCompoundId());
+        writer.write("\"");
 
         // render default text specified
         if ( currentValue != null ) {
-            writer.print(" VALUE=\"");
-            writer.print(currentValue);
-            writer.print("\"");
+            writer.write(" VALUE=\"");
+            writer.write(currentValue);
+            writer.write("\"");
         }
         //render size if specified
         String textField_size = (String)component.getAttribute("size");
         if ( textField_size != null ) {
-            writer.print(" SIZE=\"");
-            writer.print(textField_size);
-            writer.print("\"");
+            writer.write(" SIZE=\"");
+            writer.write(textField_size);
+            writer.write("\"");
         }
         //render maxlength if specified
         String textField_ml = (String)component.getAttribute("maxlength");
         if ( textField_ml != null ) {
-            writer.print(" MAXLENGTH=\"");
-            writer.print(textField_ml);
-            writer.print("\"");
+            writer.write(" MAXLENGTH=\"");
+            writer.write(textField_ml);
+            writer.write("\"");
         }
-        writer.print(">");
+        writer.write(">");
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {

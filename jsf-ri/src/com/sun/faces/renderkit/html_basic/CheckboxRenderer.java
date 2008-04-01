@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.22 2002/06/05 22:29:55 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -14,13 +14,13 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.RIConstants;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectBoolean;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.22 2002/06/05 22:29:55 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -180,7 +180,7 @@ public class CheckboxRenderer extends Renderer {
         throws IOException {
 
         String currentValue = null;
-        PrintWriter writer = null;
+        ResponseWriter writer = null;
 
         if (context == null) {
             throw new NullPointerException("Null FacesContext");
@@ -205,23 +205,23 @@ public class CheckboxRenderer extends Renderer {
             return;
         }
 
-        writer = context.getServletResponse().getWriter();
+        writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-        writer.print("<INPUT TYPE=\"CHECKBOX\" ");
-        writer.print(" NAME=\"");
-        writer.print(component.getCompoundId());
-        writer.print("\"");
+        writer.write("<INPUT TYPE=\"CHECKBOX\" ");
+        writer.write(" NAME=\"");
+        writer.write(component.getCompoundId());
+        writer.write("\"");
 
         UISelectBoolean boolComp = (UISelectBoolean)component;
         if (boolComp.isSelected()) {
-            writer.print(" CHECKED ");
+            writer.write(" CHECKED ");
         }
 
-        writer.print(">");
+        writer.write(">");
         String label = (String)component.getAttribute("label");
         if (label != null) {
-            writer.print(" ");
-            writer.print(label);
+            writer.write(" ");
+            writer.write(label);
         }
     }
 

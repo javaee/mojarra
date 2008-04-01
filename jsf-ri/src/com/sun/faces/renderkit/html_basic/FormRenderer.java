@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.22 2002/06/05 17:00:58 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -28,7 +29,6 @@ import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.22 2002/06/05 17:00:58 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,12 +148,12 @@ public class FormRenderer extends Renderer {
         }    
         ParameterCheck.nonNull(component);             
        
-        PrintWriter writer = context.getServletResponse().getWriter();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
         
-        writer.print("<FORM METHOD=\"post\" ACTION=\"");
-        writer.print(getActionStr(context, component));
-        writer.print("\">");
+        writer.write("<FORM METHOD=\"post\" ACTION=\"");
+        writer.write(getActionStr(context, component));
+        writer.write("\">");
     }
     
     /**
@@ -189,9 +189,9 @@ public class FormRenderer extends Renderer {
         ParameterCheck.nonNull(component);
         
         // Render the end tag for form
-        PrintWriter writer = context.getServletResponse().getWriter();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
-        writer.print("</FORM>");
+        writer.write("</FORM>");
     }
 
 } // end of class FormRenderer

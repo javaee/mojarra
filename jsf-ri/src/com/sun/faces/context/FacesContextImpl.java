@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.4 2002/06/05 17:00:57 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.5 2002/06/06 00:15:01 eburns Exp $
  */
 
 /*
@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import javax.faces.FacesException;     
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseStream;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.context.MessageList;
@@ -61,6 +63,8 @@ public class FacesContextImpl extends FacesContext
     private Tree requestTree = null;
     private ServletResponse response = null;
     private Tree responseTree = null;
+    private ResponseStream responseStream = null;
+    private ResponseWriter responseWriter = null;
     private HttpSession session = null;
     private ArrayList events = null;
     
@@ -159,6 +163,13 @@ public class FacesContextImpl extends FacesContext
         return (this.requestTree);
     }
 
+    public ResponseStream getResponseStream() {
+	return responseStream;
+    }
+
+    public void setResponseStream(ResponseStream newResponseStream) {
+	responseStream = newResponseStream;
+    }
 
     public void setRequestTree(Tree requestTree) {
         ParameterCheck.nonNull(requestTree);
@@ -167,7 +178,6 @@ public class FacesContextImpl extends FacesContext
             this.responseTree = this.requestTree;
         }
     }
-
 
     public Tree getResponseTree() {
         return (this.responseTree);
@@ -179,6 +189,13 @@ public class FacesContextImpl extends FacesContext
         this.responseTree = responseTree;
     }
 
+    public ResponseWriter getResponseWriter() {
+	return responseWriter;
+    }
+
+    public void setResponseWriter(ResponseWriter newResponseWriter) {
+	responseWriter = newResponseWriter;
+    }
 
     public ServletContext getServletContext() {
         return (this.servletContext);
