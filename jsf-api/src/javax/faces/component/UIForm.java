@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.15 2002/07/31 01:42:03 craigmcc Exp $
+ * $Id: UIForm.java,v 1.16 2002/08/15 16:49:38 craigmcc Exp $
  */
 
 /*
@@ -105,14 +105,10 @@ public class UIForm extends UIComponentBase {
         }
 
         // Render the beginning of this form
-        String value = (String) getFormName();
-        if (value == null) {
-            throw new NullPointerException();
-        }
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("<form method=\"post\" action=\"");
+        writer.write("<form action=\"");
         writer.write(action(context));
-        writer.write("\">");
+        writer.write("\" method=\"post\">");
 
     }
 
@@ -145,6 +141,29 @@ public class UIForm extends UIComponentBase {
     }
 
 
+    /**
+     * <p>Suppress model updates for this component.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     *
+     * @exception FacesException if an error occurs during execution
+     *  of the <code>setModelValue()</code> method
+     * @exception IllegalArgumentException if the <code>modelReference</code>
+     *  property has invalid syntax for an expression
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void updateModel(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        ; // No action required
+
+    }
+
+
     // -------------------------------------------------------- Private Methods
 
 
@@ -156,22 +175,16 @@ public class UIForm extends UIComponentBase {
      */
     private String action(FacesContext context) {
 
-        Object value = currentValue(context);
-
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
+        HttpServletRequest request = (HttpServletRequest)
+            context.getServletRequest();
+        HttpServletResponse response = (HttpServletResponse)
+            context.getServletResponse();
+        String treeId = context.getResponseTree().getTreeId();
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append(PREFIX);
-        if (value != null) {
-            String formName = value.toString();
-            if (!formName.startsWith("/")) {
-                sb.append("/");
-            }
-            sb.append(formName);
-        }
+        sb.append("/faces");
+        sb.append(treeId);
         return (response.encodeURL(sb.toString()));
+
 
     }
 
