@@ -1,5 +1,5 @@
 /*
- * $Id: MessageList.java,v 1.2 2002/05/17 00:33:37 craigmcc Exp $
+ * $Id: MessageList.java,v 1.3 2002/06/08 02:57:55 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -23,6 +23,19 @@ import java.util.Iterator;
  */
 
 public abstract class MessageList {
+
+
+    /**
+     * <p>Add an existing {@link Message} to this message list.</p>
+     *
+     * @param message {@link Message} to be added
+     *
+     * @exception IllegalArgumentException if this {@link Message} is
+     *  already present in this message list
+     * @exception NullPointerException if <code>message</code
+     *  is <code>null</code>
+     */
+    public abstract void add(Message message);
 
 
     /**
@@ -88,6 +101,14 @@ public abstract class MessageList {
      *  are not associated with a specific component
      */
     public abstract Iterator iterator(String reference);
+
+
+    /**
+     * <p>Return the maximum severity list of all {@link Message}s in this
+     * <code>MessageList</code>, or SEVERITY_INFO if there are no messages
+     * in the list.</p>
+     */
+    public abstract int getMaximumSeverity();
 
 
     /**
