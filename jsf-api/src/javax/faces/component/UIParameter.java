@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.1 2002/08/15 18:26:59 craigmcc Exp $
+ * $Id: UIParameter.java,v 1.2 2002/08/29 22:28:16 craigmcc Exp $
  */
 
 /*
@@ -8,6 +8,10 @@
  */
 
 package javax.faces.component;
+
+
+import java.io.IOException;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -75,6 +79,63 @@ public class UIParameter extends UIOutput {
 
 
     // ------------------------------------------- Lifecycle Processing Methods
+
+
+    /**
+     * <p>Disable rendering of this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeBegin(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        ; // No action required
+
+    }
+
+
+    /**
+     * <p>Disable rendering of this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeChildren(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        ; // No action required
+
+    }
+
+
+    /**
+     * <p>Disable rendering of this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeEnd(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        ; // No action required
+
+    }
 
 
 }
