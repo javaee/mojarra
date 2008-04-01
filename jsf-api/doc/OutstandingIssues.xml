@@ -330,12 +330,226 @@
     can negatively affect application behavior by caching the content
     for one browser and serving it to another.  This only happens if the
     request URL is identical, which is something to avoid.</p>
+
+    <p>NOTE:  JSR188 <a href="http://jcp.org/jsr/detail/188.jsp">
+    http://jcp.org/jsr/detail/188.jsp</a> is operating in this space.
+    We should take its development into account.</p>
   </description>
   <resolution>
     
   </resolution>
   <status>OPEN</status>
   <status-date>04 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>DataGrid-16</id>
+  <originator>Jeff</originator>
+  <summary>What should a DataGrid control look like?</summary>
+  <description>
+    <p>Many existing GUI frameworks for web applications have data grid
+    controls that allow page authors to do relatively sophisticated hookups
+    to back end data sources.  It is very likely that Faces will need
+    such a control as well.  What should it look like, in terms of the
+    Faces component and renderer design?</p>
+
+    <p>Besides supporting JavaBean arrays, Collections, and Maps (like the
+    propotype "List" renderer in jsf-psuedo) does, we should consider
+    supporting a control whose model reference points at either a JSTL
+    <code>java.servlet.jsp.jstl.sql.Result</code> or a JDBC
+    <code>java.sql.ResultSet</code> (or <code>RowSet</code>) directly.
+    Using a <code>Result</code> object would allow very easy interoperability
+    with JSTL's SQL tags.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>05 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>NonJSPRendering-17</id>
+  <originator>Hans</originator>
+  <summary>Non-JSP Rendering Environment</summary>
+  <description>
+    <p>We have spent a significant amount of effort on making sure that Faces
+    interacts well with JSP and related technologies (such as JSTL).  We need
+    to prove (at a minimum to ourselves) that the basic APIs support rendering
+    in a non-JSP environment as well.  How much of this should show up in
+    the RI?  Or in ancillary distributions (along with enhanced renderkits)?
+    </p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>05 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>TreeClass-18</id>
+  <originator>EG</originator>
+  <summary>Tree/TreeFactory Classes Needed?</summary>
+  <description>
+    <p>One of the original motivations for the <code>Tree</code> and
+    <code>TreeFactory</code> classes was the notion of constructing an
+    entire component tree from some external metadata.  Our current approach
+    that allows the tree to be constructed dynamically during Render Response
+    makes the need for this substantially weaker.</p>
+
+    <p>Can we get rid of TreeFactory entirely?  Probably.</p>
+
+    <p>Can we get rid of Tree as well?  Possibly -- at the cost of replacing
+    two FacesContext properties (<code>requestTree</code> and
+    <code>responseTree</code>) with six (<code>renderKitId</code>,
+    <code>root</code>, and <code>treeId</code> for each of the two trees).</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>05 Sep 2002</status-date>
+</issue>
+
+<issue>
+  <id>EventTypes-19</id>
+  <originator>EG</originator>
+  <summary>Both FormEvent and CommandEvent?</summary>
+  <description>
+    <p>The current APIs have both CommandEvent (passes the command name)
+    and FormEvent (subclasses CommandEvent and adds the form name).  Do we
+    need both?  It would seem that command event is required in any case
+    (so that an application can distinguish which submit button was used).
+    Does FormEvent add enough value to make it worth keeping?</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>UIParameter-20</id>
+  <originator>EG</originator>
+  <summary>Should UIParameter be a component?</summary>
+  <description>
+    <p>Should UIParameter be a component?  If it's not, how would we do
+    things like specify the substitution parameters for the
+    <code>Message</code> renderer type?</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>UIComponentBase-21</id>
+  <originator>EG</originator>
+  <summary>UIComponentBase exists in API but not Spec</summary>
+  <description>
+    <p>Based on EG feedback, UIComponent was converted from an abstract class
+    to an interface, and UIComponentBase added as an abstract class.  This
+    change has not yet been reflected in the spec.  Do we want to keep it?
+    If so, the spec needs to be updated to reflect this.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>OASIS-22</id>
+  <originator>Kris &amp; Bart</originator>
+  <summary>Relationship with WSIA/WSRP Work</summary>
+  <description>
+    <p>Review current progress on the OASIS <em>Web Services for Interactive
+    Applications</em> and <em>Web Services for Remote Portals</em>, and
+    make any needed recommendations for changes in JSF.</p>
+
+    <p><a href="http://www.oasis-open.org/">http://www.oasis-open.org</a></p>
+
+    <p>NOTE:  WSRP seems to me (Craig) to be clearly in the JSR168 sphere.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>PortletTerminology-23</id>
+  <originator>Kris &amp; Bart</originator>
+  <summary>Alignment with JSR168 Terminology Definitions</summary>
+  <description>
+    <p>We should ensure that there is alignment between terminology definitions
+    in JSR168 (Portlets) and JSR127 (Faces) where the concepts are the same.
+    </p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>FacesServlet-24</id>
+  <originator>Kris &amp; Bart</originator>
+  <summary>Should we use FacesServlet or FacesFilter</summary>
+  <description>
+    <p>Re-examine our current choice of using a Servlet instead of a Filter
+    for the Faces mini-front-controller.  Among the issues:</p>
+    <ul>
+    <li>JSR168 choice to mimic servlet APIs instead of extend them.</li>
+    <li>Filters don't work on RequestDispatcher.include() calls on Servlet
+        2.3 (but this is possible in Servlet 2.4).</li>
+    </ul>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
+</issue>
+
+
+<issue>
+  <id>LookAndFeel-25</id>
+  <originator>Kris &amp; Bart</originator>
+  <summary>How will JSF address look and feel</summary>
+  <description>
+    <p>This is a somewhat open ended question.  The philosophy in the 0902
+    version of the standard renderers is to delegate as much of possible to
+    CSS stylesheets and give page authors the ability to configure the
+    stylesheet class (or classes) to use for rendering each component.
+    That seems to be the direction that W3C encourages for HTML.  Is that
+    the way we want to stay?</p>
+
+    <p>NOTE:  Running the jsf-pseudo examples under Netscape 4.x looked
+    surprisingly better than I thought it would, but there are going to be
+    obvious issues around stylesheet directives that 4.x doesn't support
+    or implements incorrectly.</p>
+  </description>
+  <resolution>
+    
+  </resolution>
+  <status>OPEN</status>
+  <status-date>06 Sep 2002</status-date>
 </issue>
 
 
