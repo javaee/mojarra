@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.14 2002/06/28 00:59:49 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.15 2002/07/16 23:26:25 craigmcc Exp $
  */
 
 /*
@@ -86,6 +86,20 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
+     * <p>Return the {@link UIComponent} instance that is associated with
+     * this tag instance.  This method is designed to be used by tags nested
+     * within this tag, and only returns useful results between the
+     * execution of <code>doStartTag()</code> and <code>doEndTag()</code>
+     * on this tag instance.</p>
+     */
+    public UIComponent getComponent() {
+
+        return (this.component);
+
+    }
+
+
+    /**
      * <p>Return the flag value that should be returned from the
      * <code>doEnd()</code> method when it is called.  Subclasses
      * May override this method to return the appropriate value.</p>
@@ -166,7 +180,15 @@ public abstract class FacesTag extends TagSupport {
      *     with the current {@link FacesContext}.  This ensures that encoded
      *     output from the components is routed through the
      *     <code>JspWriter</code> for the current page.</li>
-     * <li>FIXME - update the look-then-create description.</li>
+     * <li>Locate the component (in the response component tree) corresponding
+     *     to this tag, creating a new one if necesary.</li>
+     * <li>Override the attributes of the associated component with values
+     *     set in our custom tag attributes, if values for the corresponding
+     *     attributes are <strong>NOT</strong> already set on the component.
+     *     </li>
+     * <li>Push this component onto the stack of components corresponding to
+     *     nested component tags for the current response, creating the stack
+     *     if necessary.</li>
      * <li>If the <code>rendererType</code> property of this component is not
      *     null, acquire a reference to the corresponding {@link Renderer} from
      *     the {@link RenderKit} associated with this response.  Save the
@@ -175,11 +197,6 @@ public abstract class FacesTag extends TagSupport {
      * <li>Call the <code>encodeBegin()</code> method of the component (if
      *     <code>rendererType</code> is <code>null</code>) or the
      *     {@link Renderer} (if <code>rendererType</code> is not
-     *     <code>null</code>).</li>
-     * <li>If the <code>rendersChildren</code> property of this component is
-     *     <code>true</code>, call the <code>encodeChildren()</code> method
-     *     of the component (if <code>rendererType</code> is <code>null</code>)
-     *     or the {@link Renderer} (if <code>rendererType</code> is not
      *     <code>null</code>).</li>
      * </ul>
      *
@@ -264,13 +281,22 @@ public abstract class FacesTag extends TagSupport {
 
     /**
      * <p>Render the ending of the {@link UIComponent} that is associated
-     * with this tag (via the <code>id</code> attribute).  This is accomplished
-     * by calling the <code>encodeEnd()</code> method of the
-     * {@link UIComponent} (if its <code>rendererType</code> property is not
-     * set) or the associated {@link Renderer} (if <code>rendererType</code>
-     * was set).  After rendering is complete, release any references to the
-     * {@link UIComponent} and {@link Renderer} saved during execution of
-     * <code>doStart()</code>.</p>
+     * with this tag (via the <code>id</code> attribute), by following these
+     * steps:</p>
+     * <ul>
+     * <li>If the <code>rendersChildren</code> property of this component is
+     *     <code>true</code>, call the <code>encodeChildren()</code> method
+     *     of the component (if <code>rendererType</code> is <code>null</code>)
+     *     or the {@link Renderer} (if <code>rendererType</code> is not
+     *     <code>null</code>).</li>
+     * <li>Call the <code>encodeEnd()</code> method of the component (if
+     *     <code>rendererType</code> is <code>null</code>) or the
+     *     {@link Renderer} (if <code>rendererType</code> is not
+     *     <code>null</code>).</li>
+     * <li>Release all references to the component, and pop it from
+     *     the component stack for this response, removing the stack
+     *     if this was the outermost component.</li>
+     * </ul>
      *
      * <p>The flag value to be returned is acquired by calling the
      * <code>getDoEndValue()</code> method, which tag subclasses may
@@ -280,11 +306,19 @@ public abstract class FacesTag extends TagSupport {
      */
     public int doEndTag() throws JspException {
 
-        // Render the ending of the component associated with this tag
+        // Render the children (if needed) and  end of the component
+        // associated with this tag
+        boolean rendersChildren = component.getRendersChildren();
         try {
             if (renderer == null) {
+                if (rendersChildren) {
+                    component.encodeChildren(context);
+                }
                 component.encodeEnd(context);
             } else {
+                if (rendersChildren) {
+                    renderer.encodeChildren(context, component);
+                }
                 renderer.encodeEnd(context, component);
             }
         } catch (IOException e) {
@@ -295,7 +329,7 @@ public abstract class FacesTag extends TagSupport {
             renderer = null;
         }
 
-        // Pop the component stack
+        // Pop the component stack, and release it if we are outermost
         componentStack.pop();
         componentStack = null;
 
