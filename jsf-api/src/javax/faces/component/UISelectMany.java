@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.12 2002/07/30 22:51:36 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.13 2002/07/30 22:56:18 craigmcc Exp $
  */
 
 /*
@@ -137,7 +137,7 @@ public class UISelectMany extends UISelectBase {
         while (items.hasNext()) {
             SelectItem item = (SelectItem) items.next();
             writer.write("<option value=\"");
-            writer.write(item.getValue());
+            writer.write(item.getValue().toString());
             writer.write("\"");
             boolean match = false;
             for (int j = 0; j < values.length; j++) {

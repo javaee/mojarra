@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.14 2002/07/30 22:51:37 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.15 2002/07/30 22:56:18 craigmcc Exp $
  */
 
 /*
@@ -141,7 +141,7 @@ public class UISelectOne extends UISelectBase {
         while (items.hasNext()) {
             SelectItem item = (SelectItem) items.next();
             writer.write("<option value=\"");
-            writer.write(item.getValue());
+            writer.write(item.getValue().toString());
             writer.write("\"");
             if (value.equals(item.getValue())) {
                 writer.write(" selected=\"selected\"");

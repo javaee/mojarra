@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.2 2002/07/30 22:51:36 craigmcc Exp $
+ * $Id: SelectItem.java,v 1.3 2002/07/30 22:56:18 craigmcc Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ public class SelectItem {
      * @param description Description of this item, for use in tools
      */
 
-    public SelectItem(String value, String label, String description) {
+    public SelectItem(Object value, String label, String description) {
 
         super();
         this.value = value;
@@ -49,7 +49,7 @@ public class SelectItem {
 
     private String description = null;
     private String label = null;
-    private String value = null;
+    private Object value = null;
 
 
     // ------------------------------------------------------------- Properties
@@ -79,7 +79,7 @@ public class SelectItem {
      * <p>Return the value of this item, to be returned as a request parameter
      * if this item is selected by the user.
      */
-    public String getValue() {
+    public Object getValue() {
 
         return (this.value);
 
