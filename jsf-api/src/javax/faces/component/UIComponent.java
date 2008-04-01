@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.12 2002/05/17 00:33:37 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.13 2002/05/17 01:27:27 craigmcc Exp $
  */
 
 /*
@@ -114,6 +114,15 @@ import javax.faces.render.Renderer;
  * <a href="#findComponent(java.lang.String)">findComponent()</a> for
  * more information.</p>
  *
+ * <h3>Validators</h3>
+ *
+ * <p>Each component can be associated with zero or more {@link Validator}
+ * instances, used to check the correctness of the state of this component,
+ * as represented in the current request.  Each such {@link Validator} will
+ * be called during the <em>Process Validations</em> Phase of the request
+ * processing lifecycle, and given the opportunity to add error messages
+ * to the message list associated with our {@link FacesContext}.</p>
+
  * <h3>Lifecyle Phase Processing</h3>
  *
  * <p><strong>FIXME</strong> - Document how decode and
@@ -813,6 +822,51 @@ public abstract class UIComponent {
     }
 
 
+    // ----------------------------------------------------- Validators Methods
+
+
+    /**
+     * <p>The set of {@link Validator}s associated with this
+     * <code>UIComponent</code>.</p>
+     */
+    private ArrayList validators = null;
+
+
+    /**
+     * <p>Add a {@link Validator} instance to the set associated with
+     * this <code>UIComponent</code>.</p>
+     *
+     * @param validator The {@link Validator} to add
+     *
+     * @exception NullPointerException if <code>validator</code>
+     *  is null
+     */
+    public void addValidator(Validator validator) {
+
+        if (validators == null) {
+            validators = new ArrayList();
+        }
+        validators.add(validator);
+
+    }
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link Validator}s
+     * associated with this <code>UIComponent</code>.</p>
+     */
+    public Iterator getValidators() {
+
+        if (validators != null) {
+            return (validators.iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
+
+
+
     // ------------------------------------------- Lifecycle Processing Methods
 
 
@@ -869,6 +923,27 @@ public abstract class UIComponent {
     public void encode(FacesContext context) throws IOException {
 
         ; // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Give each {@link Validator} associated with this
+     * <code>UIComponent</code> an opportunity to check for correctness,
+     * and add error messages to the {@link MessageList} associated with
+     * the specified {@link FacesContext}.  This method will be called
+     * (for each component) during the <em>Process Validations</em>
+     * phase of the request processing lifecycle.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void validate(FacesContext context) {
+
+        Iterator validators = getValidators();
+        while (validators.hasNext()) {
+            ((Validator) validators.next()).validate(context, this);
+        }
+
 
     }
 
