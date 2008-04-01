@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -40,7 +40,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.9 2001/12/10 18:18:02 visvan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -286,7 +286,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
             }
         }
         if ( checked != null ) {
-             boolean state = Boolean.getBoolean(checked);
+             boolean state = (Boolean.valueOf(checked)).booleanValue();
              wSelectBoolean.setSelected(renderContext, state);
         }
         return wSelectBoolean;

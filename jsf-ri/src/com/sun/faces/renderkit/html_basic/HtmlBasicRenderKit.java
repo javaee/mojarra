@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.9 2001/12/12 00:24:42 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -51,7 +51,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.9 2001/12/12 00:24:42 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -227,6 +227,21 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
             continue;
         }
 
+        // check to see if param_name is a hidden field. We use hidden
+        // fields to track the status of the checkbox because HTML
+        // doesn't send the status unless it is checked. 
+
+        // Hidden field starts with facesCheckbox. For instance,
+        // if the param_name which is name of the hidden field is 
+        // facesCheckboxvalidUser, name of the checkbox will be
+        // decoded as validUser.
+        if ( param_name.startsWith(Constants.REF_HIDDENCHECKBOX) ) {
+            // substring after facesCheckbox is the name of the
+            // checkbox
+            int name_idx = Constants.REF_HIDDENCHECKBOX.length();
+            param_name = param_name.substring(name_idx);
+        }
+
         // PENDING ( visvan ) type of the component and model should be
         // encoded as a hidden field so that it need not be obtained
         // from the ObjectTable since the component may not exist in
@@ -255,15 +270,6 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
                 model_str = (String) te.getModel();
             } else if (c instanceof WSelectBoolean) {
                 WSelectBoolean sb = (WSelectBoolean) c;
-                // PENDING ( visvan ) HTML sends value of checkbox only
-                // if it is selected. So we cannot detect if it
-                // it is deselecte unless we track its state through
-                // hideen field and JavaScript. Will be fixed in the
-                // later check ins.  
-                // if checkbox is sent as part of the request, then
-                // its state is selected. Note HTML does not send
-                // state, but it sends the value of "value" attribute. 
-                param_value = "true";
                 boolean old_state = sb.isSelected(rc);
                 old_value = String.valueOf(old_state);
                 model_str = (String) sb.getModel();

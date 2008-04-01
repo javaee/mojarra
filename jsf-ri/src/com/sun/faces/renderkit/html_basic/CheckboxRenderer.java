@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.9 2001/12/10 18:18:00 visvan Exp $
+ * $Id: CheckboxRenderer.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -27,6 +27,7 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.WComponent;
 import javax.faces.WSelectBoolean;
+import javax.faces.Constants;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -39,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.9 2001/12/10 18:18:00 visvan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.10 2001/12/12 20:41:59 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -138,20 +139,34 @@ public class CheckboxRenderer extends Object implements Renderer {
         Assert.assert_it(outputMethod != null );
 
         StringBuffer output = new StringBuffer();
-        output.append("<input type=checkbox");
+
+        output.append("<input type=\"checkbox\" ");
         if (wSelectBoolean.isSelected(rc)) {
             output.append(" checked");
         }
-        output.append(" name=");
-        output.append(wSelectBoolean.getAttribute(rc, "name"));
-        output.append(" value=");
-        output.append(wSelectBoolean.getAttribute(rc, "value"));
+
+        // do not render the name and value of the checkbox.The
+        // state of this checkbox will be tracked using hidden
+        // field because HTML doesn't send the status of the check
+        // box during form submissions if it is not selected.
+
+        String cb_name = (String) wSelectBoolean.getAttribute(rc, "name");
+        String hiddenFieldname = Constants.REF_HIDDENCHECKBOX + cb_name;
+        String clickScript = hiddenFieldname + ".value=this.checked";
+        output.append("onClick=\"" + clickScript + "\" ");
+
         output.append(">");
         if (wSelectBoolean.getAttribute(rc, "label") != null) {
             output.append(" ");
             output.append(wSelectBoolean.getAttribute(rc, "label"));
         }
 
+        // render a hiddenField to track the state of the checkbox
+        output.append(" ");
+        output.append ("<input type=\"hidden\" name=\"");
+        output.append ( hiddenFieldname );
+        output.append ("\">");
+ 
         outputMethod.writeText(output.toString());
         outputMethod.flush();
     }

@@ -20,6 +20,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.WTextEntry;
 import javax.faces.WSelectOne;
+import javax.faces.WSelectBoolean;
 import javax.faces.WComponent;
 import javax.faces.ModelAccessor;
 
@@ -27,7 +28,7 @@ import javax.faces.ModelAccessor;
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.3 2001/12/12 00:24:41 edburns Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.4 2001/12/12 20:41:59 visvan Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
@@ -69,7 +70,11 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
 	    } else if (c instanceof WSelectOne) {
 		WSelectOne so = (WSelectOne) c;
 		so.setSelectedValue(rc, value_event.getNewValue());
-	    }
+	    } else if (c instanceof WSelectBoolean) {
+                WSelectBoolean se = (WSelectBoolean) c;
+                boolean state = (Boolean.valueOf(new_value)).booleanValue();
+                se.setSelected(rc, state);
+            }	
         } else {
             ModelAccessor.setModelObject(rc, modelRef, new_value);
         }
