@@ -1,0 +1,18 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<window id="basicForm" formName="basicForm">
+
+<label id="userLabel" value="UserName" />
+<textbox id="userName" value="default" />
+
+<label id="pwdLabel" value="Password" />
+<textbox id="password" type="password" />
+
+<label id="addrLabel" value="Address" />
+<textbox id="address" multiline="true" />
+
+<checkbox id="validUser" label="Checker" />
+
+<button id="login" label="Login" value="myLogin" />
+
+</window>

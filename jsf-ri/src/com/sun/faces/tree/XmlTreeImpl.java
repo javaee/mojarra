@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeImpl.java,v 1.2 2002/06/01 00:58:22 eburns Exp $
+ * $Id: XmlTreeImpl.java,v 1.3 2002/06/08 00:40:24 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
 import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
 
@@ -29,7 +30,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeImpl.java,v 1.2 2002/06/01 00:58:22 eburns Exp $
+ * @version $Id: XmlTreeImpl.java,v 1.3 2002/06/08 00:40:24 eburns Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -80,6 +81,18 @@ public XmlTreeImpl(ServletContext context, UIComponent newRoot,
 
     renderKit = (RenderKit) 
 	context.getAttribute(RIConstants.DEFAULT_RENDER_KIT);
+    if (null == renderKit) {
+	// create and store the default RenderKit
+	RenderKitFactory renderKitFactory = (RenderKitFactory)
+	    FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	Assert.assert_it(null != renderKitFactory);
+	
+	renderKit = 
+	    renderKitFactory.createRenderKit(RIConstants.DEFAULT_RENDER_KIT);
+	Assert.assert_it(null != renderKit);
+	context.setAttribute(RIConstants.DEFAULT_RENDER_KIT, renderKit);
+    }
+	
     Assert.assert_it(null != renderKit);
     
 }

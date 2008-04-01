@@ -1,5 +1,5 @@
 /*
- * $Id: JspRenderResponsePhase.java,v 1.1 2002/06/07 00:01:02 eburns Exp $
+ * $Id: JspRenderResponsePhase.java,v 1.2 2002/06/08 00:40:24 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: JspRenderResponsePhase.java,v 1.1 2002/06/07 00:01:02 eburns Exp $
+ * @version $Id: JspRenderResponsePhase.java,v 1.2 2002/06/08 00:40:24 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -79,8 +79,7 @@ public JspRenderResponsePhase(Lifecycle newDriver, int newId)
   * Strips off the first part of the path. <P>
   * PRECONDITION: requestURI is at least a filename.
   */
-protected String fixURI(String requestURI) 
-{
+protected String removeFirstPart(String requestURI) {
     String result = requestURI;
     int i = requestURI.indexOf("/");
     if (-1 != i && requestURI.length() > i) {
@@ -93,6 +92,26 @@ protected String fixURI(String requestURI)
 	// This uri doesn't have a leading slash.  Make sure it does.
 	result = "/" + requestURI;
     }
+    return result;
+}
+
+/**
+
+* Remove the first part of the url <P>.
+
+* Remove the second part iff it is equal to "/faces" <P>.
+
+*/
+
+protected String fixURI(String requestURI) 
+{
+    String result = removeFirstPart(requestURI);
+    String facesServletName = "/faces";
+
+    if (-1 != result.indexOf(facesServletName)) {
+	result = result.substring(facesServletName.length());
+    }
+
     return result;
 }
 
