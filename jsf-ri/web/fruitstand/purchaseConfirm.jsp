@@ -54,10 +54,20 @@ The items listed above will be billed to: <br>
 <TABLE border="2"><TR><TD>
 <TABLE>
 <TR>
-<TD>Select Shipping</TD>
-<TD><faces:SelectOne_Radio name="shipType" value="nextDay" label=" Next Day"/></TD>
-<TD><faces:SelectOne_Radio name="shipType" checked="true" value="nextWeek" label="Next Week"/> </TD>
-<TD><faces:SelectOne_Radio name="shipType" value="nextMonth" label="Next Month"/> </TD>
+<faces:RadioGroup name="shipType"
+                  model="$ShipTypeBean.shipType"
+                  selectedValueModel="$ShipTypeBean.currentShipType"
+                  valueChangeListener="selectOneListener">
+  <TABLE border="2"><TR><TD>
+  <TABLE>
+  <TR>
+  <TD>Select Shipping</TD>
+  <TD><faces:SelectOne_Radio value="nextDay" label=" Next Day"/></TD>
+  <TD><faces:SelectOne_Radio checked="true" value="nextWeek" label="Next Week"/> </TD>
+  <TD><faces:SelectOne_Radio value="nextMonth" label="Next Month"/> </TD>
+  </TABLE>
+  </TD></TR></TABLE>
+</faces:RadioGroup>
 
 </TR>
 <TR>
