@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.8 2001/12/02 00:51:26 edburns Exp $
+ * $Id: ObjectTable.java,v 1.9 2001/12/02 01:00:59 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -81,7 +81,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
   VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.8 2001/12/02 00:51:26 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.9 2001/12/02 01:00:59 edburns Exp $
  * 
  * @see	javax.faces.RenderContext#getObjectTable
  *
@@ -232,6 +232,7 @@ private Object getEnclosingScope(Object scopeKey) {
 		result = scope.get(scopeKey, name);
 		if (null == result) {
 		    scopeKey = getEnclosingScope(scopeKey);
+		    scope = null;
 		    if (null != scopeKey) {
 			scope = keyToScope(scopeKey);
 		    }
