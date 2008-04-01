@@ -254,7 +254,7 @@ Configuring UI Components
   </tag>
 
   <tag>
-    <name>selectboolean_checkbox</name>
+    <name>SelectBoolean_Checkbox</name>
     <tagclass>com.sun.faces.taglib.html_basic.SelectBoolean_CheckboxTag</tagclass>
     <bodycontent>JSP</bodycontent>
     <attribute>
