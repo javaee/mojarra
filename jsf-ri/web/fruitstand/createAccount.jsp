@@ -5,15 +5,24 @@
 
 <html>
 <head>
-<title>FruitStand.com</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>FruitStand.com</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
-<%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+
 <h2><font color="#0000FF">FruitStand.com</font></h2>
 <hr>
+
 <font size="4" color="#0000FF">Open a New Account </font><body bgcolor="#FFFFFF" text="#000000"> 
+
 <faces:UseFaces>
-<form name="form1" method="post" action="Login.jsp">
+  <faces:Form name="CreateAccountForm" model="UserBean">
+
+    <faces:Command name="handleCreateAccount" scope="session" 
+                   className="fruitstand.CommandListenerImpl" 
+                   onCompletion="Login.jsp" 
+                   onError="createAccount.jsp"/>
+
   <table width="450">
     <tr> 
       <td colspan='2'><font size="4" color="#0000FF">Personal Information</font></td>
@@ -66,11 +75,13 @@
     <tr> 
       <td>Credit Card Type</td>
       <td> 
-        <select name="creditCardType">
-          <option value="discover">Discover</option>
-          <option value="mastercard">Master Card</option>
-          <option value="visa">Visa</option>
-        </select>
+        <faces:SelectOne_OptionList name="creditCardType"
+                   model="$UserBean.items"
+                   selectedValueModel="$UserBean.creditCardType">
+          <faces:SelectOne_Option value="discover" label="Discover"/>
+          <faces:SelectOne_Option value="mastercard" label="Master Card"/>
+          <faces:SelectOne_Option value="visa" label="Visa"/>
+        </faces:SelectOne_OptionList>
       </td>
     </tr>
     <tr> 
@@ -114,12 +125,13 @@
     </tr>
     <tr> 
       <td> 
-        <faces:Command_Button name="createAccount" label="Create Account" />
+        <faces:Command_Button name="createAccount" label="Create Account" 
+                              command="handleCreateAccount"/>
       </td>
       <td>&nbsp;</td>
     </tr>
   </table>
-</form>
+</faces:Form>
 </faces:UseFaces>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>

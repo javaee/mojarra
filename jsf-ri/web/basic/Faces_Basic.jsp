@@ -5,7 +5,7 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
-    <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <faces:UseFaces>
@@ -14,7 +14,7 @@
         <faces:DeclareBean scope="session" name="ShipTypeBean" 
                            className="basic.ShipTypeBean"/>
 
-        <faces:Form name='basicForm' model="LoginBean">
+        <faces:Form name="basicForm" model="LoginBean">
             <faces:Listener name="loginListener" scope="session" className="basic.EventHandler" />
             <faces:Listener name="radioListener" scope="session" className="basic.EventHandler" />
             <faces:Listener name="optionListener" scope="session" className="basic.EventHandler" />
@@ -22,17 +22,17 @@
 
            <table> 
             <tr> 
-              <td> <faces:Output_Text name='userLabel'  value='UserName' /> </td>
-              <td> <faces:TextEntry_Input name="userName" size="20" maxlength="26" valueChangeListener="loginListener" />  </td>
+              <td> <faces:Output_Text name="userLabel"  value="UserName" /> </td>
+              <td> <faces:TextEntry_Input name="userName" size="20" maxlength="26" value="default" valueChangeListener="loginListener" />  </td>
             </tr>
 
              <tr>
-                <td> <faces:Output_Text name='pwdLabel'  value='Password' /> </td>
+                <td> <faces:Output_Text name="pwdLabel"  value="Password" /> </td>
                 <td> <faces:TextEntry_Secret name="password" size="20" maxlength="26" valueChangeListener ="loginListener"/> </td>
              </tr>
        
              <tr>
-                <td> <faces:Output_Text name='addrLabel'  value='Address' /> </td>
+                <td> <faces:Output_Text name="addrLabel"  value="Address" /> </td>
                 <td> <faces:TextEntry_TextArea name="address" cols="150" rows="10" valueChangeListener="loginListener" /> </td>
              </tr>
 

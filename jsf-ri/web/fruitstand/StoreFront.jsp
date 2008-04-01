@@ -11,13 +11,17 @@
    <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
    <title>StoreFront</title>
 </head>
-<%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 <body>
 <faces:UseFaces>
 
-<form action="purchaseConfirm.jsp"
-            method='post'>
-<font color="#3333FF"><font size=+2>Welcome to FruitStand.com</font></font>
+  <faces:Form name="purchaseForm" model="UserBean">
+      <faces:Command name="handleCheckout" scope="session" 
+                   className="fruitstand.CommandListenerImpl" 
+                   onCompletion="purchaseConfirm.jsp" 
+                   onError="StoreFront.jsp"/>
+
+<font color="#3333FF"><font size=+2>Welcome to FruitStand.com, <faces:Output_Text name="differentName" model="$UserBean.firstName" /></font></font>
 <hr WIDTH="100%">
 <p><font color="#000000"><font size=+1>Please select from our fresh fruits
 and vegetables.</font></font>
@@ -57,19 +61,20 @@ and vegetables.</font></font>
 <td><faces:Output_Text name='apple_price' value='0.29' /></td>
 
 <td>
-    <select name="appleQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
+    <faces:SelectOne_OptionList name="appleQuantity"
+                   model="$UserBean.items"
+                   selectedValueModel="$UserBean.appleQuantity">
+        <faces:SelectOne_Option value="0" label="0"/>
+        <faces:SelectOne_Option value="1" label="1"/>
+        <faces:SelectOne_Option value="2" label="2"/>
+        <faces:SelectOne_Option value="3" label="3"/>
+        <faces:SelectOne_Option value="4" label="4"/>
+        <faces:SelectOne_Option value="5" label="5"/>
+        <faces:SelectOne_Option value="6" label="6"/>
+        <faces:SelectOne_Option value="7" label="7"/>
+        <faces:SelectOne_Option value="8" label="8"/>
+        <faces:SelectOne_Option value="9" label="9"/>
+    </faces:SelectOne_OptionList>
 </td>
 </tr>
 
@@ -85,19 +90,20 @@ and vegetables.</font></font>
 <td><faces:Output_Text name='banana_price' value='$0.69/lb' /></td>
 
 <td>
-    <select name="bananaQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
+    <faces:SelectOne_OptionList name="bananaQuantity"
+                   model="$UserBean.items"
+                   selectedValueModel="$UserBean.bananaQuantity">
+        <faces:SelectOne_Option value="0" label="0"/>
+        <faces:SelectOne_Option value="1" label="1"/>
+        <faces:SelectOne_Option value="2" label="2"/>
+        <faces:SelectOne_Option value="3" label="3"/>
+        <faces:SelectOne_Option value="4" label="4"/>
+        <faces:SelectOne_Option value="5" label="5"/>
+        <faces:SelectOne_Option value="6" label="6"/>
+        <faces:SelectOne_Option value="7" label="7"/>
+        <faces:SelectOne_Option value="8" label="8"/>
+        <faces:SelectOne_Option value="9" label="9"/>
+    </faces:SelectOne_OptionList>
 </td>
 </tr>
 
@@ -113,19 +119,20 @@ and vegetables.</font></font>
 <td><faces:Output_Text name='cantaloupe_price' value='$0.19/lb' /></td>
 
 <td>
-    <select name="cantaloupeQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
+    <faces:SelectOne_OptionList name="cantaloupeQuantity"
+                   model="$UserBean.items"
+                   selectedValueModel="$UserBean.cantaloupeQuantity">
+        <faces:SelectOne_Option value="0" label="0"/>
+        <faces:SelectOne_Option value="1" label="1"/>
+        <faces:SelectOne_Option value="2" label="2"/>
+        <faces:SelectOne_Option value="3" label="3"/>
+        <faces:SelectOne_Option value="4" label="4"/>
+        <faces:SelectOne_Option value="5" label="5"/>
+        <faces:SelectOne_Option value="6" label="6"/>
+        <faces:SelectOne_Option value="7" label="7"/>
+        <faces:SelectOne_Option value="8" label="8"/>
+        <faces:SelectOne_Option value="9" label="9"/>
+    </faces:SelectOne_OptionList>
 </td>
 </tr>
 
@@ -141,19 +148,20 @@ and vegetables.</font></font>
 <td><faces:Output_Text name='grapefruit_price' value='$0.49/lb' /></td>
 
 <td>
-    <select name="grapefruitQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
+    <faces:SelectOne_OptionList name="grapefruitQuantity"
+                   model="$UserBean.items"
+                   selectedValueModel="$UserBean.grapefruitQuantity">
+        <faces:SelectOne_Option value="0" label="0"/>
+        <faces:SelectOne_Option value="1" label="1"/>
+        <faces:SelectOne_Option value="2" label="2"/>
+        <faces:SelectOne_Option value="3" label="3"/>
+        <faces:SelectOne_Option value="4" label="4"/>
+        <faces:SelectOne_Option value="5" label="5"/>
+        <faces:SelectOne_Option value="6" label="6"/>
+        <faces:SelectOne_Option value="7" label="7"/>
+        <faces:SelectOne_Option value="8" label="8"/>
+        <faces:SelectOne_Option value="9" label="9"/>
+    </faces:SelectOne_OptionList>
 </td>
 </tr>
 
@@ -169,28 +177,29 @@ and vegetables.</font></font>
 <td><faces:Output_Text name='grapes_price' value='$0.79/lb' /></td>
 
 <td>
-    <select name="grapeQuantity">
-        <option value="0" selected>0.00</option>
-        <option value="1">1.00</option>
-        <option value="2">2.00</option>
-        <option value="3">3.00</option>
-        <option value="4">4.00</option>
-        <option value="5">5.00</option>
-        <option value="6">6.00</option>
-        <option value="7">7.00</option>
-        <option value="8">8.00</option>
-        <option value="9">9.00</option>
-        <option value="10">10.00</option>
-    </select>
+    <faces:SelectOne_OptionList name="grapeQuantity"
+                   model="$UserBean.items"
+                   selectedValueModel="$UserBean.grapeQuantity">
+        <faces:SelectOne_Option value="0" label="0"/>
+        <faces:SelectOne_Option value="1" label="1"/>
+        <faces:SelectOne_Option value="2" label="2"/>
+        <faces:SelectOne_Option value="3" label="3"/>
+        <faces:SelectOne_Option value="4" label="4"/>
+        <faces:SelectOne_Option value="5" label="5"/>
+        <faces:SelectOne_Option value="6" label="6"/>
+        <faces:SelectOne_Option value="7" label="7"/>
+        <faces:SelectOne_Option value="8" label="8"/>
+        <faces:SelectOne_Option value="9" label="9"/>
+    </faces:SelectOne_OptionList>
 </td>
 </tr>
 </table>
 
 <br>&nbsp;
 <br>
-<faces:Command_Button name="checkout"
-    label="Checkout" />
-</form>
+<faces:Command_Button name="checkout" label="Checkout" 
+                      command="handleCheckout"/>
+</faces:Form>
 </faces:UseFaces>
 </body>
 </html>

@@ -11,10 +11,9 @@
    <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
    <title>FruitStand.com</title>
 </head>
-<%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
 <faces:UseFaces>
-<%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 <font color="#0000FF"> <h2> FruitStand.com </h2>
 <hr>
 Thank you for your purchase. 

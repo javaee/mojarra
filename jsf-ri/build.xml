@@ -202,9 +202,6 @@
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
-    <!-- copy tld file -->
-    <copy file="${conf.share.dir}/html_basic.tld"
-         toDir="${dist.home}/${app.name}/WEB-INF"/>
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
@@ -214,7 +211,7 @@
   <!-- deploy the web-app under tomcat. tomcat_home needs to be set prior
        to running this target -->
 
-  <target name="deploy.tomcat" depends="prepare,compile,compile.sample">
+  <target name="deploy.tomcat" depends="prepare,compile,compile.sample,clean.tomcat,jars">
 
     <!-- copy app.name directory to tomcat/webapps -->
     <copy todir="${deploy.home}">
@@ -227,23 +224,13 @@
     </copy>
 
     <mkdir dir="${deploy.home}/WEB-INF/classes" />
-    <!-- copy all classes from com.sun.faces package -->
-    <copy todir="${deploy.home}/WEB-INF/classes">
-      <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
-    </copy>
-    <copy file="${conf.share.dir}/html_basic.tld"
-         toDir="${deploy.home}/WEB-INF"/>
-
-    
-    <!-- copy all classes from javax.api package -->
-
-    <!-- PENDING(edburns): FFJ can't debug into jar files, so we unjar
-    into classes directory -->
-    <!-- <copy  file="${jsf-api.jar}" todir="${deploy.home}/WEB-INF/lib"/> -->
-    <unjar src="${jsf-api.jar}" dest="${deploy.home}/WEB-INF/classes"/>
     <!-- copy dependent libs to tomcat/libs -->
     <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${jsf-api.jar}" 
+           todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${build.home}/lib/${name}.jar"  
+           todir="${deploy.home}/WEB-INF/lib"/>
   </target>
 
   <target name="deploy.tomcat.basic" depends="build.basic.war">
@@ -312,7 +299,7 @@
     </target>
 
     <!-- builds"basic" sample app -->
-    <target name="build.basic.war" depends="clean.tomcat,prepare,compile,compile.basic.sample" >
+    <target name="build.basic.war" depends="clean.tomcat,prepare,compile,jars,compile.basic.sample" >
      <!-- name of the war file -->
      <property name="dist.war"  value="${basic.name}.war"/>
 
@@ -328,22 +315,11 @@
       <fileset dir="${build.home}/${basic.name}"/>
     </copy>
 
-    <!-- copy all the classes under com.sun.faces package -->
-    <copy todir="${dist.home}/${basic.name}/WEB-INF/classes">
-      <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
-    </copy>
-   
-    <!-- copy all the classes under javax.faces package -->
-    <!-- <copy  file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/classes> -->
-    <unjar src="${jsf-api.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
-
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-
-    <!-- copy tld file -->
-    <copy file="${conf.share.dir}/html_basic.tld"
-         toDir="${dist.home}/${basic.name}/WEB-INF"/>
+    <copy  file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
