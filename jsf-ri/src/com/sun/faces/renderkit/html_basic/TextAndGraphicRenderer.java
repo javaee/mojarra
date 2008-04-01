@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.14 2002/06/28 22:47:00 eburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.15 2002/07/20 00:21:42 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.14 2002/06/28 22:47:00 eburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.15 2002/07/20 00:21:42 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,6 +75,7 @@ public class TextAndGraphicRenderer extends HtmlBasicRenderer {
     //
 
     public boolean supportsComponentType(String componentType) {
+	// PENDING(roger): This shouldn't just return false, right?
         return false;
     }
 

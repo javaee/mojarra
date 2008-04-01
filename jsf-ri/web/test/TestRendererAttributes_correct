@@ -1,0 +1,112 @@
+MessageRenderer
+InputRenderer
+	size
+
+		The number of visible characters displayed in the field
+
+		Field Size
+
+		size
+
+		class java.lang.Integer
+
+	maxlength
+
+		The maximum number of characters allowed in the field
+
+		Maximum Length
+
+		maxlength
+
+		class java.lang.Integer
+
+TextAndGraphicRenderer
+FormRenderer
+CheckboxRenderer
+	label
+
+		The text label displayed for the checkbox
+
+		Label
+
+		label
+
+		class java.lang.String
+
+TextAreaRenderer
+	wrap
+
+		Determines whether lines are automatically wrapped when the text fills the row
+
+		Wrap
+
+		wrap
+
+		class java.lang.Boolean
+
+	rows
+
+		The number of rows displayed in the textarea
+
+		Rows
+
+		rows
+
+		class java.lang.Integer
+
+	cols
+
+		The number of columns displayed in the textarea
+
+		Columns
+
+		cols
+
+		class java.lang.Integer
+
+ButtonRenderer
+	label
+
+		The text label displayed in the button
+
+		Label
+
+		label
+
+		class java.lang.String
+
+	image
+
+		The path name of the image displayed in the component
+
+		Image
+
+		image
+
+		class java.lang.String
+
+HyperlinkRenderer
+RadioRenderer
+OptionListRenderer
+SecretRenderer
+	size
+
+		The number of visible characters displayed in the field
+
+		Field Size
+
+		size
+
+		class java.lang.Integer
+
+	maxlength
+
+		The maximum number of characters allowed in the field
+
+		Maximum Length
+
+		maxlength
+
+		class java.lang.Integer
+
+TextRenderer

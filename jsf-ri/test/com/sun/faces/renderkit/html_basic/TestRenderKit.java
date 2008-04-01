@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.14 2002/06/12 23:51:11 jvisvanathan Exp $
+ * $Id: TestRenderKit.java,v 1.15 2002/07/20 00:21:43 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import com.sun.faces.renderkit.html_basic.FormRenderer;
 import java.util.Iterator;
 
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIComponentBase;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
@@ -26,13 +27,21 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 import org.apache.cactus.ServletTestCase;
 
+import com.sun.faces.CompareFiles;
+import com.sun.faces.FileOutputResponseWrapper;
+
+import java.io.PrintStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 /**
  *
  *  <B>TestRenderKit</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.14 2002/06/12 23:51:11 jvisvanathan Exp $
+ * @version $Id: TestRenderKit.java,v 1.15 2002/07/20 00:21:43 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -43,6 +52,14 @@ public class TestRenderKit extends ServletTestCase {
 //
 // Protected Constants
 //
+
+public static final String OUTPUT_FILENAME = 
+    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "TestRenderKit_out";
+
+public static final String CORRECT_OUTPUT_FILENAME = 
+    FileOutputResponseWrapper.FACES_RESPONSE_ROOT + "TestRenderKit_correct";
+
+
 
 //
 // Class Variables
@@ -80,39 +97,43 @@ public class TestRenderKit extends ServletTestCase {
         assertTrue(renderer instanceof FormRenderer);
     }
 
-    public void testGetRenderers() {
+    public void testGetRendererTypesVariants() {
         renderKit = new HtmlBasicRenderKit();
      
-        // 1. Verify "getRenderers(UIComponent)"
+        // 1. Verify "getRendererTypes(UIComponent)"
         //
         Renderer renderer = null;
         UIOutput out = new UIOutput();
-        Iterator iter = renderKit.getRenderers(out);
+        Iterator iter = renderKit.getRendererTypes(out);
+	boolean correctInstance = false;
+	String rendererType = null;
         while (iter.hasNext()) {
-            renderer = (Renderer)iter.next();
-            boolean correctInstance = false;
+	    rendererType = (String) iter.next();
+            renderer = renderKit.getRenderer(rendererType);
             if (renderer instanceof TextRenderer ||
                 renderer instanceof TextAndGraphicRenderer ||
                 renderer instanceof MessageRenderer) {
                 correctInstance = true;
             }
-            assertTrue(correctInstance);
         }
+	assertTrue(correctInstance);
          
-        // 2. Verify "getRenderers(componentType)"
+        // 2. Verify "getRendererTypes(componentType)"
         //
         renderer = null;
         String cType = "javax.faces.component.UICommand";
-        iter = renderKit.getRenderers(cType);
+        iter = renderKit.getRendererTypes(cType);
         while (iter.hasNext()) {
-            renderer = (Renderer)iter.next();
-            boolean correctInstance = false;
+	    rendererType = (String) iter.next();
+            renderer = renderKit.getRenderer(rendererType);
+
+            correctInstance = false;
             if (renderer instanceof ButtonRenderer ||
                 renderer instanceof HyperlinkRenderer) {
                 correctInstance = true;
             }
-            assertTrue(correctInstance);
         }
+	assertTrue(correctInstance);
     }
             
     public void testGetRendererTypes() {
@@ -124,6 +145,114 @@ public class TestRenderKit extends ServletTestCase {
         while (iter.hasNext()) {
             System.out.println((String)iter.next());
         }
+    }
+
+    public void testGetComponentClasses() {
+	final PrintStream out;
+	File file = null;
+	FileOutputStream fs = null;
+	Iterator componentClasses = null;
+	
+	try {
+	    file = new File ( OUTPUT_FILENAME );
+	    fs = new FileOutputStream(file);
+	} catch ( Exception e ) {
+	    assertTrue(false);
+	}
+	out = new PrintStream(fs);
+
+	renderKit = new HtmlBasicRenderKit();
+	
+	componentClasses = renderKit.getComponentClasses();
+	assertTrue(null != componentClasses);
+	assertTrue(componentClasses.hasNext());
+
+	while (componentClasses.hasNext()) {
+	    out.println(((Class)componentClasses.next()).getName());
+	}
+	out.close();
+
+	try {
+	    CompareFiles cf = new CompareFiles();
+	    assertTrue(cf.filesIdentical(OUTPUT_FILENAME, CORRECT_OUTPUT_FILENAME, 
+					 null));
+	} catch (Throwable e ) {
+	    System.out.println("Throwable: " + e.getMessage());
+	    assertTrue(false);
+	}
+	
+    }
+
+    public void testAddComponentClass() {
+	renderKit = new HtmlBasicRenderKit();
+	boolean bool = false;
+	UIComponentBase newComp = new UIComponentBase() {
+		public String getComponentType() { return "BLAH"; }
+	    };
+	String newCompName = 
+	    "com.sun.faces.renderkit.html_basic.TestRenderKit$1";
+	Iterator componentClasses = null;
+	
+	try {
+	    renderKit.addComponentClass(null);
+	}
+	catch (NullPointerException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+
+	bool = false;
+	try {
+	    renderKit.addComponentClass(java.lang.String.class);
+	}
+	catch (IllegalArgumentException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+
+	bool = false;
+	renderKit.addComponentClass(newComp.getClass());
+	componentClasses = renderKit.getComponentClasses();
+	while (componentClasses.hasNext()) {
+	    if (newCompName.equals(((Class)componentClasses.next()).getName())){
+		bool = true;
+	    }
+	}
+	assertTrue(bool);
+
+    }
+
+    public void testAddRenderer() {
+	renderKit = new HtmlBasicRenderKit();
+	boolean bool = false;
+	FormRenderer formRenderer = new FormRenderer();
+
+	try {
+	    renderKit.addRenderer("FormRenderer", formRenderer);
+	}
+	catch (IllegalArgumentException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+
+	bool = false;
+	try {
+	    renderKit.addRenderer(null, formRenderer);
+	}
+	catch (NullPointerException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+
+	bool = false;
+	try {
+	    renderKit.addRenderer("BlahRenderer", null);
+	}
+	catch (NullPointerException e) {
+	    bool = true;
+	}
+	assertTrue(bool);
+	
     }
 
 } // end of class TestRenderKit

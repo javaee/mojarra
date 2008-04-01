@@ -7,8 +7,7 @@
 
     <component>
         <type>javax.faces.component.UIForm</type>
-        <renderer type="FormRenderer"
-            classname="com.sun.faces.renderkit.html_basic.FormRenderer">
+        <renderer>
             <type>FormRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.FormRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -17,22 +16,19 @@
 
     <component>
         <type>javax.faces.component.UIOutput</type>
-        <renderer type="TextRenderer"
-            classname="com.sun.faces.renderkit.html_basic.TextRenderer">
+        <renderer>
             <type>TextRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
 
-        <renderer type="TextAndGraphicRenderer"
-            classname="com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer">
+        <renderer>
             <type>TextAndGraphicRenderer</type> 
             <class>com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
 
-        <renderer type="MessageRenderer"
-            classname="com.sun.faces.renderkit.html_basic.MessageRenderer">
+        <renderer>
             <type>MessageRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.MessageRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -41,8 +37,7 @@
 
     <component>
         <type>javax.faces.component.UICommand</type>
-        <renderer type="ButtonRenderer"
-            classname="com.sun.faces.renderkit.html_basic.ButtonRenderer">
+        <renderer>
             <type>ButtonRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.ButtonRenderer</class>
             <attribute>
@@ -59,8 +54,7 @@
             </attribute>
         </renderer>
 
-        <renderer type="HyperlinkRenderer"
-            classname="com.sun.faces.renderkit.html_basic.HyperlinkRenderer">
+        <renderer>
             <type>HyperlinkRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.HyperlinkRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -69,8 +63,7 @@
 
     <component>
         <type>javax.faces.component.UISelectBoolean</type>
-        <renderer type="CheckboxRenderer"
-            classname="com.sun.faces.renderkit.html_basic.CheckboxRenderer">
+        <renderer>
             <type>CheckboxRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
             <attribute>
@@ -84,8 +77,7 @@
 
     <component>
         <type>javax.faces.component.UITextEntry</type>
-        <renderer type="InputRenderer"
-            classname="com.sun.faces.renderkit.html_basic.InputRenderer">
+        <renderer>
             <type>InputRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
             <attribute>
@@ -102,8 +94,7 @@
             </attribute>
         </renderer>
 
-        <renderer type="SecretRenderer"
-            classname="com.sun.faces.renderkit.html_basic.SecretRenderer">
+        <renderer>
             <type>SecretRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
             <attribute>
@@ -120,8 +111,7 @@
             </attribute>
         </renderer>
 
-        <renderer type="TextAreaRenderer"
-            classname="com.sun.faces.renderkit.html_basic.TextAreaRenderer">
+        <renderer>
             <type>TextAreaRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -148,8 +138,7 @@
 
     <component>
         <type>javax.faces.component.UISelectOne</type>
-        <renderer type="RadioRenderer"
-            classname="com.sun.faces.renderkit.html_basic.RadioRenderer">
+        <renderer>
             <type>RadioRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.RadioRenderer</class>
         <!-- Add Attribute Desc stuff here -->
@@ -157,9 +146,8 @@
     </component>
 
     <component>
-        <type>OptionList</type>
-        <renderer type="OptionListRenderer"
-            classname="com.sun.faces.renderkit.html_basic.OptionListRenderer">
+        <type>javax.faces.component.UISelectOne</type>
+        <renderer>
             <type>OptionListRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.OptionListRenderer</class>
         <!-- Add Attribute Desc stuff here -->
