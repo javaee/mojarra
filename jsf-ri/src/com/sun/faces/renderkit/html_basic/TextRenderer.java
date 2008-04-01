@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.3 2001/11/08 00:18:21 visvan Exp $
+ * $Id: TextRenderer.java,v 1.4 2001/11/08 01:10:18 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.3 2001/11/08 00:18:21 visvan Exp $
+ * @version $Id: TextRenderer.java,v 1.4 2001/11/08 01:10:18 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,11 +125,14 @@ public class TextRenderer extends Object implements Renderer
             if ( c instanceof WOutput ) {
                 label = (WOutput) c;
             }
-            OutputMethod outputMethod = rc.getOutputMethod();
-            StringBuffer out = new StringBuffer();
-            out.append(label.getValue());
-            outputMethod.writeText(out.toString());
-            outputMethod.flush();
+            String text = (String) label.getValue();
+            if ( text != null ) { 
+                OutputMethod outputMethod = rc.getOutputMethod();
+                StringBuffer out = new StringBuffer();
+                out.append(text);
+                outputMethod.writeText(out.toString());
+                outputMethod.flush();
+            }
             
         } catch(IOException ioe) {
             System.err.println("Error rendering Output_Text: " + ioe);
@@ -210,7 +213,7 @@ public class TextRenderer extends Object implements Renderer
         TextRenderer me = new TextRenderer();
         Log.setApplicationName("TextRenderer");
         Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: TextRenderer.java,v 1.3 2001/11/08 00:18:21 visvan Exp $");
+        Log.setApplicationVersionDate("$Id: TextRenderer.java,v 1.4 2001/11/08 01:10:18 visvan Exp $");
     
     }  
 
