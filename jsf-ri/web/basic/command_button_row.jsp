@@ -10,7 +10,7 @@
              <td>
 
                <faces:command_button id="command_button1" label="button1" 
-                      commandName="command_button1"/>
+                      commandName="standardRenderKitSubmit"/>
 
               </td>
 

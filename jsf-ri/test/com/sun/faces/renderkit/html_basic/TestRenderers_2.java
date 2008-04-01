@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.22 2002/08/19 21:38:49 rkitain Exp $
+ * $Id: TestRenderers_2.java,v 1.23 2002/08/20 20:00:56 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.22 2002/08/19 21:38:49 rkitain Exp $
+ * @version $Id: TestRenderers_2.java,v 1.23 2002/08/20 20:00:56 eburns Exp $
  * 
  *
  */
@@ -81,7 +81,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         String[] lines =  {
 	    "<a href=\"/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId\">HyperlinkRenderer</a>",
 	    "<img src=\"\">",
-	    "<img src=\";jsessionid=B8A2F36244E285B6547574B70269E9F5\">"
+	    "<img src=\";jsessionid=78B4E1C797D2F7533457F5F1D0037211\">"
 
 };
         return lines;

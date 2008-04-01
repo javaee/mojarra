@@ -10,7 +10,7 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
     <h1>JavaServer Faces 1.0 Standard RenderKit</h1>
-    <h3>$Id: StandardRenderKit.jsp,v 1.1 2002/08/18 01:51:01 eburns Exp $</h3>
+    <h3>$Id: StandardRenderKit.jsp,v 1.2 2002/08/20 20:00:57 eburns Exp $</h3>
 
     <p>The elements in this page should follow the
     StandardRenderKit.html page in the jsf-api.</p>
@@ -28,9 +28,16 @@
        <faces:form id="standardRenderKitForm" 
                    formName="standardRenderKitForm">
 
+         <faces:command_button id="standardRenderKitSubmit" 
+                               key="standardRenderKitSubmitLabel"
+                               bundle="${basicBundle}" 
+                      commandName="standardRenderKitSubmit"/>
+
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
 
 <!-- Each included page should have table rows for the appropriate widget. -->
+
+           <%@ include file="table_header.jsp" %>
 
            <%@ include file="command_button_row.jsp" %>
 
@@ -41,6 +48,11 @@
            <%@ include file="input_date_row.jsp" %>
 
          </table>
+
+         <faces:command_button id="standardRenderKitSubmit" 
+                               commandName="standardRenderKitSubmit" />
+
+
 
        </faces:form>
 

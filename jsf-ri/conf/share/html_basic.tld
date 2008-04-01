@@ -1041,6 +1041,11 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
+      <name>labelAlign</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
       <name>dateStyle</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>

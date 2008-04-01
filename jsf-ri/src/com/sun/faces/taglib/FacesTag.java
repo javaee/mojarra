@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.21 2002/08/18 01:51:00 eburns Exp $
+ * $Id: FacesTag.java,v 1.22 2002/08/20 20:00:54 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.21 2002/08/18 01:51:00 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.22 2002/08/20 20:00:54 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,6 +67,7 @@ protected String dateStyle = null;
 protected String timeStyle = null;
 protected String timezone = null;
 protected String formatPattern = null;
+protected String labelAlign = null;
 
 protected String accept = null;
 protected String acceptcharset = null;
@@ -224,6 +225,16 @@ public FacesTag()
     public void setFormatPattern(String newFormatPattern)
     {
 	formatPattern = newFormatPattern;
+    }
+
+    public String getLabelAlign()
+    {
+	return labelAlign;
+    }
+    
+    public void setLabelAlign(String newLabelAlign)
+    {
+	labelAlign = newLabelAlign;
     }
 
     // List of MIME types for file upload - 
@@ -1016,6 +1027,9 @@ protected void overrideProperties(UIComponent component)
     }
     if (null == component.getAttribute("timezone")) {
 	component.setAttribute("timezone", getTimezone());
+    }
+    if (null == component.getAttribute("labelAlign")) {
+	component.setAttribute("labelAlign", getLabelAlign());
     }
     
     if ( component instanceof UIOutput && !(component instanceof UIGraphic)) {

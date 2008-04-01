@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.5 2002/08/15 23:23:00 eburns Exp $
+ * $Id: DateRenderer.java,v 1.6 2002/08/20 20:00:52 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.5 2002/08/15 23:23:00 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.6 2002/08/20 20:00:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -203,9 +203,8 @@ public class DateRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
-	boolean isInput = component instanceof UIInput;
+	boolean isInput = UIInput.TYPE == component.getComponentType();
         String currentValue = null;
-        ResponseWriter writer = null;
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -224,29 +223,39 @@ public class DateRenderer extends HtmlBasicRenderer {
 	else {
 	    currentValue = "";
 	}
-        
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
 
+        
 	if (isInput) {
-	    writer.write("<input type=\"text\"");
-	    writer.write(" name=\"");
-	    writer.write(component.getCompoundId());
-	    writer.write("\"");
+	    StringBuffer buffer = new StringBuffer();
+	    
+	    buffer.append("<input type=\"text\"");
+	    buffer.append(" name=\"");
+	    buffer.append(component.getCompoundId());
+	    buffer.append("\"");
+	    // deal with HTML 4.0 LABEL element
+	    buffer.append(" id=\"");
+	    buffer.append(component.getComponentId());
+	    buffer.append("\"");
 	    
 	    // render default text specified
 	    if ( currentValue != null ) {
-		writer.write(" value=\"");
-		writer.write(currentValue);
-		writer.write("\"");
+		buffer.append(" value=\"");
+		buffer.append(currentValue);
+		buffer.append("\"");
 	    }
-	    writer.write(Util.renderPassthruAttributes(context, component));
-	    writer.write(Util.renderBooleanPassthruAttributes(context, component));
-	    writer.write(">");            
+	    buffer.append(Util.renderPassthruAttributes(context, component));
+	    buffer.append(Util.renderBooleanPassthruAttributes(context, component));
+	    buffer.append(">");
+	    // overwrite currentValue
+	    currentValue = this.renderWithLabel(context, component, 
+						buffer.toString());
 	}
-	else {
-	    writer.write(currentValue);
-	}
+
+        ResponseWriter writer = null;
+
+	writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+	writer.write(currentValue);
     }
 		   
     

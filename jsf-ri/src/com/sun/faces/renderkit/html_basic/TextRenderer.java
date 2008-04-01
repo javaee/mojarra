@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.29 2002/08/20 20:00:52 eburns Exp $
  */
 
 /*
@@ -31,13 +31,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 
+import com.sun.faces.RIConstants;
+
 /**
  *
  *  <B>TextRenderer</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.29 2002/08/20 20:00:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,6 +131,7 @@ public class TextRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
         String currentValue = null;
+	StringBuffer buffer = null;
         ResponseWriter writer = null;
         
         if (context == null || component == null) {
@@ -147,27 +150,26 @@ public class TextRenderer extends HtmlBasicRenderer {
         if (currentValue == null) {
             currentValue = "";
         }    
+
+	buffer = new StringBuffer();
         
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-        
-        if (component instanceof UIInput) {
-            writer.write("<input type=\"text\"");
-            writer.write(" name=\"");
-            writer.write(component.getCompoundId());
-            writer.write("\"");
+        if (UIInput.TYPE == component.getComponentType()) {
+            buffer.append("<input type=\"text\"");
+            buffer.append(" name=\"");
+            buffer.append(component.getCompoundId());
+            buffer.append("\"");
 
             // render default text specified
             if ( currentValue != null ) {
-                writer.write(" value=\"");
-                writer.write(currentValue);
-                writer.write("\"");
+                buffer.append(" value=\"");
+                buffer.append(currentValue);
+                buffer.append("\"");
             }
-            writer.write(Util.renderPassthruAttributes(context, component));
-            writer.write(Util.renderBooleanPassthruAttributes(context, 
+            buffer.append(Util.renderPassthruAttributes(context, component));
+            buffer.append(Util.renderBooleanPassthruAttributes(context, 
                 component));
-            writer.write(">");            
-        } else if (component instanceof UIOutput) {
+            buffer.append(">");            
+        } else if (UIOutput.TYPE == component.getComponentType()) {
             if (currentValue == null || currentValue == "") {
                 try {
                     currentValue = getKeyAndLookupInBundle(context, component,
@@ -180,9 +182,22 @@ public class TextRenderer extends HtmlBasicRenderer {
             }
 
             if (currentValue != null) {
-                writer.write(currentValue);
+                buffer.append(currentValue);
             }
         }
+
+	// find out if we're nested inside a UIInput
+	if (component.getParent().getComponentType() == UIInput.TYPE) {
+	    // if so, save our content in the
+	    // RIConstants.RENDERED_CONTENT attribute
+	    component.setAttribute(RIConstants.RENDERED_CONTENT, 
+				   buffer.toString());
+	}
+	else {
+	    writer = context.getResponseWriter();
+	    Assert.assert_it(writer != null );
+	    writer.write(buffer.toString());
+	}
     }
     
     // The testcase for this class is TestRenderers_2.java 

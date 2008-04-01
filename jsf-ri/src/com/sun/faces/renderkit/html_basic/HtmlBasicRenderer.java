@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.6 2002/08/12 23:15:37 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.7 2002/08/20 20:00:52 eburns Exp $
  */
 
 /*
@@ -32,6 +32,10 @@ import org.mozilla.util.ParameterCheck;
 
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+
+import java.io.IOException;
+
+import com.sun.faces.RIConstants;
 
 /**
  *
@@ -229,6 +233,357 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	}
 	
 	return bundle.getString(key);
+    }
+
+    /**
+
+    * If the argument component has children, enclose them in an HTML
+    * 4.0 &lt;label&gt; element and align them per the value of the
+    * "labelAlign" attribute in the argument component.  Return the
+    * result as a String.<P>
+
+    * If the argument component has no children, just return the
+    * renderedContet argument.
+
+    */
+
+    public String renderWithLabel(FacesContext context, UIComponent component,
+				String renderedContent) {
+	StringBuffer buffer = new StringBuffer();
+
+	// If we have child components, we must deal with the labelAlign
+	// attribute.
+	if (0 < component.getChildCount()) {
+	    Iterator children = component.getChildren();
+	    UIComponent curChild = null;
+	    String childContent = null, labelAlign = null;
+	    String forValue = component.getComponentId();
+
+	    if (null == (labelAlign = (String) 
+			 component.getAttribute("labelAlign"))) {
+		labelAlign = RIConstants.LINE_START;
+	    }
+
+	    if (Util.textReadsTopToBottom(context, component)) {
+		// text reads from top to bottom
+		if (Util.textReadsLeftToRight(context, component)) {
+		    if (labelAlign.equals(RIConstants.LINE_START)) {
+			// Put the label(s) to the left of the component
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append(renderedContent);
+		    } else if (labelAlign.equals(RIConstants.LINE_END)) {
+			// Put the label(s) to the right of the component
+			buffer.append(renderedContent);
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+		    } else if (labelAlign.equals(RIConstants.PAGE_START)) {
+			// Put the label(s) on top of the component
+			buffer.append("<table>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("</table>\n");
+		    }
+		    else if (labelAlign.equals(RIConstants.PAGE_END)) {
+			// Put the label(s) on below the component
+			buffer.append("<table>\n");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("</table>\n");
+		    }
+		} // end of left to right case
+		else {
+		    // text reads right to left
+		    if (labelAlign.equals(RIConstants.LINE_END)) {
+			// Put the label(s) to the left of the component
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append(renderedContent);
+		    } else if (labelAlign.equals(RIConstants.LINE_START)) {
+			// Put the label(s) to the right of the component
+			buffer.append(renderedContent);
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+		    } else if (labelAlign.equals(RIConstants.PAGE_START)) {
+			// Put the label(s) on top of the component
+			buffer.append("<table>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("</table>\n");
+		    }
+		    else if (labelAlign.equals(RIConstants.PAGE_END)) {
+			// Put the label(s) on top of the component
+			buffer.append("<table>\n");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("</table>\n");
+		    }
+		} // end of right to left case 
+	    } // end of top to bottom case
+	    else {
+		// text reads from bottom to top
+		if (Util.textReadsLeftToRight(context, component)) {
+		    if (labelAlign.equals(RIConstants.LINE_START)) {
+			// Put the label(s) to the left of the component
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append(renderedContent);
+		    } else if (labelAlign.equals(RIConstants.LINE_END)) {
+			// Put the label(s) to the right of the component
+			buffer.append(renderedContent);
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+		    } else if (labelAlign.equals(RIConstants.PAGE_END)) {
+			// Put the label(s) on top of the component
+			buffer.append("<table>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("</table>\n");
+		    }
+		    else if (labelAlign.equals(RIConstants.PAGE_START)) {
+			// Put the label(s) below the component
+			buffer.append("<table>\n");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("</table>\n");
+		    }
+		} // end of left to right case
+		else {
+		    // text reads right to left
+		    if (labelAlign.equals(RIConstants.LINE_END)) {
+			// Put the label(s) to the left of the component
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append(renderedContent);
+		    } else if (labelAlign.equals(RIConstants.LINE_START)) {
+			// Put the label(s) to the right of the component
+			buffer.append(renderedContent);
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append(childContent + " ");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+		    } else if (labelAlign.equals(RIConstants.PAGE_END)) {
+			// Put the label(s) on top of the component
+			buffer.append("<table>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("</table>\n");
+		    }
+		    else if (labelAlign.equals(RIConstants.PAGE_START)) {
+			// Put the label(s) on top of the component
+			buffer.append("<table>\n");
+			buffer.append("<tr><td>\n");
+			buffer.append(renderedContent);
+			buffer.append("</td></tr>\n");
+			buffer.append("<label for=\"" + forValue + "\">");
+			while (children.hasNext()) {
+			    childContent = (String) 
+				(curChild = (UIComponent)children.next()).
+				getAttribute(RIConstants.RENDERED_CONTENT);
+			    Assert.assert_it(null != childContent);
+			    buffer.append("<tr><td>\n");
+			    buffer.append(childContent + " ");
+			    buffer.append("</td></tr>\n");
+			    // Make sure to clear the attribute, for better GC
+			    curChild.setAttribute(RIConstants.RENDERED_CONTENT,
+						  null);
+			}
+			buffer.append("</label>");
+			buffer.append("</table>\n");
+		    }
+		} // end of right to left case 
+	    }
+	} // end of case where we have children
+	else {
+	    // we have no children, just return the string.
+	    return renderedContent;
+	}
+	
+	// At this point, buffer contains the text we should render
+	return buffer.toString();
     }
 
 } // end of class HtmlBasicRenderer

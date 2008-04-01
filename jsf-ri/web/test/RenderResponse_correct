@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=F7B369C6C9843433B159E91344935476">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=510134F0A0F2C1A437B0149073A539D0">
   <TABLE BORDER="1">
 
       <TR>
@@ -160,7 +160,7 @@
         <TD>Date: 
         </TD>
 
-	<TD><input type="text" name="/basicForm/date1" value="Wed, Jul 10, 1996">
+	<TD><input type="text" name="/basicForm/date1" id="date1" value="Wed, Jul 10, 1996">
 	</TD>
 
       </TR>
@@ -171,7 +171,7 @@
         <TD>Disabled Date: 
         </TD>
 
-	<TD><input type="text" name="/basicForm/date2" value="Thu, Jul 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1"  disabled >
+	<TD><input type="text" name="/basicForm/date2" id="date2" value="Thu, Jul 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1"  disabled >
 	</TD>
 
       </TR>
@@ -181,7 +181,7 @@
         <TD>DateTime: 
         </TD>
 
-	<TD><input type="text" name="/basicForm/date3" value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
+	<TD><input type="text" name="/basicForm/date3" id="date3" value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
 	</TD>
 
       </TR>
@@ -227,7 +227,7 @@
         <TD>InputTime: 
         </TD>
 
-	<TD><input type="text" name="/basicForm/date6" value="12:31:31 PM">
+	<TD><input type="text" name="/basicForm/date6" id="date6" value="12:31:31 PM">
 	</TD>
 
       </TR>
@@ -241,6 +241,108 @@
 	</TD>
 
       </TR>
+
+           <tr>
+
+             <td>
+
+               input_date MEDIUM readonly with PAGE_START label
+
+             </td>
+
+
+             <td>
+
+               
+
+                                
+
+               <table>
+<label for="input_date1"><tr><td>
+input_date MEDIUM readonly </td></tr>
+</label><tr><td>
+<input type="text" name="/basicForm/input_date1" id="input_date1" value="Jan 12, 1952" accesskey="D" alt="input_date MEDIUM readonly" maxlength="20" size="10" title="input_date MEDIUM readonly"  readonly ></td></tr>
+</table>
+
+
+
+             </td>
+
+            </tr>
+
+           <tr>
+
+             <td>
+
+               input_date MEDIUM with PAGE_END label
+
+             </td>
+
+
+             <td>
+
+               
+
+                                
+
+               <table>
+<tr><td>
+<input type="text" name="/basicForm/input_date2" id="input_date2" value="Jan 12, 1952" alt="input_date MEDIUM" title="input_date MEDIUM" ></td></tr>
+<label for="input_date2"><tr><td>
+input_date MEDIUM </td></tr>
+</label></table>
+
+
+
+             </td>
+
+            </tr>
+
+           <tr>
+
+             <td>
+
+               input_date SHORT with LINE_START label
+
+             </td>
+
+
+             <td>
+
+               
+
+                                
+
+               <label for="input_date3">input_date SHORT </label><input type="text" name="/basicForm/input_date3" id="input_date3" value="01/12/1952" alt="input_date SHORT" title="input_date SHORT" >
+
+
+             </td>
+
+            </tr>
+
+           <tr>
+
+             <td>
+
+               input_date LONG with LINE_END label
+
+             </td>
+
+
+             <td>
+
+               
+
+                                
+
+               <input type="text" name="/basicForm/input_date4" id="input_date4" value="January 12, 1952" accesskey="d" alt="input_date LONG with LINE_END label" maxlength="40" size="20" title="input_date LONG with LINE_END label" ><label for="input_date4">input_date LONG </label>
+
+
+             </td>
+
+            </tr>
+
+
 
 
   <TABLE>
