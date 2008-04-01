@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.11 2002/01/10 22:32:48 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.12 2002/01/11 20:05:59 edburns Exp $
  */
 
 
@@ -37,7 +37,7 @@ import java.util.Stack;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.11 2002/01/10 22:32:48 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.12 2002/01/11 20:05:59 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,6 +69,12 @@ public class HtmlBasicRenderContext extends RenderContext {
     private ServletRequest request;
 
     private Stack stack;
+
+    /** 
+
+    * This is the owning reference to the ObjectManager
+
+    */
 
     private ObjectManager objectManager = null;
 

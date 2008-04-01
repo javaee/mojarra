@@ -265,8 +265,9 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
-            <test name="com.sun.faces.TestModelAccessor"/>
             <test name="com.sun.faces.TestObjectManager"/>
+            <test name="com.sun.faces.TestEventContext"/>
+            <test name="com.sun.faces.TestModelAccessor"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.1 2002/01/10 22:20:13 edburns Exp $
+ * $Id: FacesTestCase.java,v 1.2 2002/01/11 20:06:00 edburns Exp $
  */
 
 /*
@@ -25,8 +25,10 @@ import javax.faces.RenderContext;
 import javax.faces.RenderContextFactory;
 import javax.faces.Constants;
 import javax.faces.FacesException;
+import javax.faces.EventContext;
 
 import com.sun.faces.servlet.FacesServlet;
+import com.sun.faces.EventContextFactory;
 
 /**
  *
@@ -36,7 +38,7 @@ import com.sun.faces.servlet.FacesServlet;
  *  faces testing more useful.  Extend this testcase to test faces.
 
  *
- * @version $Id: FacesTestCase.java,v 1.1 2002/01/10 22:20:13 edburns Exp $
+ * @version $Id: FacesTestCase.java,v 1.2 2002/01/11 20:06:00 edburns Exp $
  * 
  * @see	setUp
  * @see	tearDown
@@ -64,6 +66,7 @@ public abstract class FacesTestCase extends ServletTestCase
 public FacesServlet servlet = null;
 public ObjectManager objectManager = null;
 public RenderContext renderContext = null;
+public EventContext eventContext = null;
 
 //
 // Constructors and Initializers    
@@ -90,12 +93,14 @@ protected FacesTestCase(String name)
 * completed:  <P>
 
 * renderContext is a valid renderContext for this TestCase's request.
+* eventContext is a valid eventContext for this TestCase's request.
 
 */
 
 public void simulateProcessRequest() {
 
     RenderContextFactory factory = null;
+    EventContextFactory ecFactory = null;
     // Just used to get the RenderContextFactory
     ObjectManager tempObjectManager = null;
     
@@ -106,9 +111,15 @@ public void simulateProcessRequest() {
     factory = (RenderContextFactory)
 	tempObjectManager.get(Constants.REF_RENDERCONTEXTFACTORY);
     assertTrue(null != factory);
+
+    ecFactory = (EventContextFactory)
+	tempObjectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
+    assertTrue(null!= ecFactory);
     
     try {
 	renderContext = factory.newRenderContext(request);
+	eventContext = ecFactory.newEventContext(renderContext, request, 
+						 response);
     }
     catch (FacesException e) {
 	System.out.println("TestObjectManager.setUp: exception: " + 
@@ -162,7 +173,8 @@ public void simulateSessionDestroyed() {
 * PRECONDITION: none
 
 * POSTCONDITION: servlet is a FacesServlet, objectManager is a valid
-* ObjectManager, renderContext is a valid RenderContext.
+* ObjectManager, renderContext is a valid RenderContext, eventContext is
+* a valid EventContext.
 
 */
 

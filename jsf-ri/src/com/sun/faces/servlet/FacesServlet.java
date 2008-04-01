@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.11 2002/01/10 22:20:10 edburns Exp $
+ * $Id: FacesServlet.java,v 1.12 2002/01/11 20:06:00 edburns Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ import javax.faces.RenderKit;
 import javax.faces.FacesEvent;
 import javax.faces.EventDispatcher;
 import javax.faces.EventDispatcherFactory;
+import javax.faces.EventContext;
 import java.util.EventObject;
 
 import org.mozilla.util.Assert;
@@ -39,6 +40,7 @@ import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.EventContextFactory;
 
 public class FacesServlet extends HttpServlet {
 
@@ -110,6 +112,7 @@ public class FacesServlet extends HttpServlet {
         EventQueueFactory eqFactory;
         RenderContextFactory rcFactory;
         EventDispatcherFactory edFactory;
+        EventContextFactory ecFactory;
 
         ServletContext servletContext = getServletContext();
         Assert.assert_it(null != servletContext);
@@ -179,6 +182,19 @@ public class FacesServlet extends HttpServlet {
         Assert.assert_it(null != edFactory);
         objectManager.put(ObjectManager.GlobalScope,
                         Constants.REF_EVENTDISPATCHERFACTORY, edFactory);
+
+        // Step 5: Create the EventContextFactory and put it in the
+        // ObjectManager in GlobalScope
+        ecFactory = (EventContextFactory)objectManager.get(
+            Constants.REF_EVENTCONTEXTFACTORY);
+        // The EventContextFactory must not exist at this point.  It is an
+        // error if it does exist.
+        Assert.assert_it(null == ecFactory);
+
+        ecFactory = EventContextFactory.newInstance();
+        Assert.assert_it(null != ecFactory);
+        objectManager.put(ObjectManager.GlobalScope,
+                        Constants.REF_EVENTCONTEXTFACTORY, ecFactory);
     }
 
     /**
@@ -285,6 +301,7 @@ public class FacesServlet extends HttpServlet {
         EventQueue eq;
         EventQueueFactory eqFactory;
         EventDispatcherFactory edFactory;
+        EventContextFactory ecFactory;
 
 	HttpSession thisSession = req.getSession();
 
@@ -349,7 +366,21 @@ public class FacesServlet extends HttpServlet {
 		throw e;
 	    }
 	    Util.resetToken(req);
-	
+
+	    // create the EventContext
+	    ecFactory = (EventContextFactory)
+		objectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
+	    Assert.assert_it(ecFactory != null );
+	    EventContext eventContext = null;
+	    
+	    try {
+		eventContext = ecFactory.newEventContext(rc, req, res);
+	    } catch ( FacesException fe ) {
+		throw new ServletException("Can't create EventContext " +
+					   fe.getMessage() );
+	    }    
+	    
+	    // PENDINC(visvan): Take the eventContext as a a param
 	    rk.queueEvents(req, eq);
 	    
 	    if (!eq.isEmpty()) {
