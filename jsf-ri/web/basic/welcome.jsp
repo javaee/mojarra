@@ -9,11 +9,18 @@
 
     <H3> JSF Basic Components Test Page </H3>
     <hr>
+      <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
+
       <faces:usefaces>
         <faces:form id="welcomeForm" formName="welcomeForm" >
 
              <p>
-              <faces:output_text id="userLabel" value="Welcome!" />  </P>
+              <faces:output_message id="userMsg" value="Welcome {0}.  Thanks for trying the {1} application." >
+                  <faces:parameter id="param1" 
+                      modelReference="${LoginBean.userName}"/>
+                  <faces:parameter id="param2" 
+                      value="Faces Basic"/>
+              </faces:output_message>
 
 <P>
               <faces:command_button id="back" commandName="back" type="submit">

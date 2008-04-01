@@ -52,7 +52,7 @@
                                       bundle="${basicBundle}"/> </td>
               <td> 
 
-                   <faces:input_text id="userName">
+                   <faces:input_text id="userName" modelReference="${LoginBean.userName}">
 
 		     <faces:validator className="javax.faces.validator.LengthValidator"/>
 		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
