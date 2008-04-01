@@ -309,7 +309,9 @@
                HyperLinkRenderer 
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/> -->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderersFromJsp"/>
-            <test name="com.sun.faces.context.TestMessageListImpl"/>
+            <test name="com.sun.faces.context.TestMessageResourceImpl"/>
+            <test name="com.sun.faces.context.TestMessageResourceFactoryImpl"/>
+
 <!-- put non-running testcases here
 -->
         </junit>

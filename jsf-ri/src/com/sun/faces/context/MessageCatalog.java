@@ -1,5 +1,5 @@
 /*
- * $Id: MessageCatalog.java,v 1.1 2002/06/07 22:55:31 jvisvanathan Exp $
+ * $Id: MessageCatalog.java,v 1.2 2002/06/25 20:47:55 jvisvanathan Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import org.mozilla.util.ParameterCheck;
  *
  *  <B>MessageCatalog</B> maintains a list of messages for a particular locale.
  *
- * @version $Id: MessageCatalog.java,v 1.1 2002/06/07 22:55:31 jvisvanathan Exp $
+ * @version $Id: MessageCatalog.java,v 1.2 2002/06/25 20:47:55 jvisvanathan Exp $
  * 
  * @see com.sun.faces.context.MessageTemplate
  *
@@ -51,8 +51,7 @@ public class MessageCatalog extends Object
     // Constructors and Initializers    
     //
 
-    public MessageCatalog(Locale locale)
-    {
+    public MessageCatalog(Locale locale) {
         super();
         ParameterCheck.nonNull(locale);
         this.locale = locale;
@@ -71,12 +70,16 @@ public class MessageCatalog extends Object
         String msgId = msg.getMessageId();
         ParameterCheck.nonNull(msgId);
         msg.setLocale(locale);
-        messages.put(msgId, msg);
+        synchronized( messages) {
+            messages.put(msgId, msg);
+        }    
     }
 
     public MessageTemplate get(Object msgId) {
         ParameterCheck.nonNull(msgId);
-        return (MessageTemplate)messages.get(msgId);
+        synchronized(messages) {
+            return (MessageTemplate)messages.get(msgId);
+        }    
     }
     
     // The testcase for this class is TestMessageListImpl.java 

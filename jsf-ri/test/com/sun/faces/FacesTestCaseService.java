@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.3 2002/06/21 22:02:20 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.4 2002/06/25 20:48:00 jvisvanathan Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.3 2002/06/21 22:02:20 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.4 2002/06/25 20:48:00 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -163,10 +163,13 @@ public void setUp()
 public void tearDown()
 {
     Util.releaseFactoriesAndDefaultRenderKit(facesTestCase.getConfig().getServletContext());
-    (facesContext.getHttpSession()).removeAttribute("TestBean");
+    // make sure session is not null. It will null in case release
+    // was invoked.
+    if ( facesContext.getHttpSession() != null ) {
+        (facesContext.getHttpSession()).removeAttribute("TestBean");
+    }    
 
     PageContext pageContext = null;
-    
     if (null != (pageContext = facesTestCase.getPageContext())) {
 	pageContext.removeAttribute(FacesContext.FACES_CONTEXT_ATTR);
     }

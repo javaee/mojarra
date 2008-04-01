@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.12 2002/06/21 00:31:25 eburns Exp $
+ * $Id: Util.java,v 1.13 2002/06/25 20:47:59 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,10 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.tree.TreeFactory;
 import javax.faces.context.FacesContextFactory;
 
+import javax.faces.FactoryFinder;
+import javax.faces.context.MessageResourcesFactory;
+import javax.faces.context.MessageResources;
+
 import com.sun.faces.RIConstants;
 
 /**
@@ -32,7 +36,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.12 2002/06/21 00:31:25 eburns Exp $
+ * @version $Id: Util.java,v 1.13 2002/06/25 20:47:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,6 +98,24 @@ private Util()
         return Long.toHexString(id);
     }
 
+    /**
+     * This method will be called before calling facesContext.addMessage, so 
+     * message can be localized.
+     * <p>Return the {@link MessageResources} instance for the message
+     * resources defined by the JavaServer Faces Specification.
+     */
+    public static synchronized MessageResources getMessageResources() {
+        MessageResources resources = null;
+        if (resources == null) {
+            MessageResourcesFactory factory = (MessageResourcesFactory)
+                FactoryFinder.getFactory
+                (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
+            resources = factory.getMessageResources
+                (MessageResourcesFactory.FACES_IMPL_MESSAGES);
+        }
+        return (resources);
+    }
+    
     /**
 
     * Verify the existence of all the factories needed by faces.  Create

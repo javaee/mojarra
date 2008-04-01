@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.12 2002/06/25 19:05:54 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.13 2002/06/25 20:47:55 jvisvanathan Exp $
  */
 
 /*
@@ -28,11 +28,15 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.Message;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FactoryFinder;
 import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.LifecycleFactory;
+
+import javax.faces.context.MessageResourcesFactory;
+import javax.faces.context.MessageResources;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -68,6 +72,7 @@ public class FacesContextImpl extends FacesContext
     private ArrayList applicationEvents = null;
     private HashMap requestEvents = null;
     private int requestEventsCount = 0;
+    private HashMap messageList = null;
     
     // Attribute Instance Variables
 
@@ -107,8 +112,8 @@ public class FacesContextImpl extends FacesContext
 
     //
     // General Methods
+    
     //
-
     //
     // Methods from FacesContext
     //
@@ -147,19 +152,100 @@ public class FacesContextImpl extends FacesContext
     }
 
     public int getMaximumSeverity() {
-	throw new FacesException("UnImplemented");
+        Iterator it = null;
+        int max = 0;
+        ArrayList list = new ArrayList();
+        
+        if (null == messageList) {
+             return max;
+        }
+	it = messageList.values().iterator();
+        while ( it.hasNext()) {
+            list = (ArrayList) it.next();
+            int severity = getMaximumSeverityForList(list);
+            if ( severity > max ) {
+                max = severity;
+            }    
+        }
+        return max;
+    }    
+    
+	
+    protected int getMaximumSeverityForList(ArrayList list ) {
+        Iterator it = null;
+	int max = 0;
+        it = list.iterator();
+        while(it.hasNext()) {
+            Message msg = (Message)it.next();
+            if (msg.getSeverity() > max) {
+                max = msg.getSeverity();
+            }    
+        }
+        return max;
     }
 
     public Iterator getMessages() {
-        throw new FacesException("UnImplemented");
+        Iterator result = null;
+        ArrayList list = new ArrayList();
+        
+        if (null == messageList) {
+             return (Collections.EMPTY_LIST.iterator());
+        }
+	Iterator it = messageList.keySet().iterator();
+        while ( it.hasNext() ) {
+            UIComponent component = (UIComponent)it.next();
+            if ( component == null ) {
+                list.addAll((ArrayList) messageList.get(component));
+            }
+        }    
+	if (list.size() > 0 ) {
+            result = list.iterator();
+	} else {
+            result = Collections.EMPTY_LIST.iterator();
+	}
+        return result;
     }
 
     public Iterator getMessages(UIComponent component) {
-        throw new FacesException("UnImplemented");
+        Iterator result = null;
+        ArrayList list = null;
+
+	if (null == component) {
+	    throw new NullPointerException("component is null");
+	}
+
+        if (null == messageList) {
+            result = Collections.EMPTY_LIST.iterator();
+        }
+	else {
+	    list = (ArrayList) messageList.get(component);
+	    if (null != list) {
+		result = list.iterator();
+	    } else {
+		result = Collections.EMPTY_LIST.iterator();
+	    }
+        }
+        return result;
     }
 
     public Iterator getMessagesAll() {
-        throw new FacesException("UnImplemented");
+        Iterator result = null;
+        ArrayList list = new ArrayList();
+        
+        if (null == messageList) {
+             return (Collections.EMPTY_LIST.iterator());
+        }
+	Iterator it = messageList.keySet().iterator();
+        while ( it.hasNext() ) {
+            UIComponent component = (UIComponent) it.next();
+            list.addAll((ArrayList) messageList.get(component));
+        }    
+	if (list.size() > 0 ) {
+            result = list.iterator();
+	} else {
+            result = Collections.EMPTY_LIST.iterator();
+	}
+        return result;
     }
 
     public Iterator getRequestEvents(UIComponent component) {
@@ -277,11 +363,37 @@ public class FacesContextImpl extends FacesContext
     }
 
     public void addMessage(Message message) {
-        throw new FacesException("UnImplemented");
+        ArrayList list = null;
+        if ( message == null ) {
+            throw new NullPointerException("Message parameter cannot be null");
+        }
+        if (null == messageList) {
+            messageList = new HashMap();
+        }
+        
+        list = (ArrayList) messageList.get(null);
+        if (list == null) {
+            list = new ArrayList();
+            messageList.put(null, list);
+        }
+        list.add(message);  
     }
 
     public void addMessage(UIComponent component, Message message) {
-        throw new FacesException("UnImplemented");
+        ArrayList list = null;
+        if ( component == null || message == null ) {
+            throw new NullPointerException("One or more parameters could be null");
+        }
+        if (null == messageList) {
+            messageList = new HashMap();
+        }
+        
+        list = (ArrayList) messageList.get(component);
+        if (list == null) {
+            list = new ArrayList();
+            messageList.put(component, list);
+        }
+        list.add(message);
     }
 
     public void addRequestEvent(UIComponent component, FacesEvent event) {
@@ -513,8 +625,10 @@ public class FacesContextImpl extends FacesContext
     }    
     
     public void release() {
-        // PENDING (visvan) do we have to release servlet API components
-        // as well ??
+        request = null;
+        response = null;
+        servletContext = null;
+        session = null;
         lifecycle = null;
         locale = null;
         requestTree = null;

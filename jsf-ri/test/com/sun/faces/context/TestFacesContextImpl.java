@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.8 2002/06/22 00:15:08 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.9 2002/06/25 20:48:01 jvisvanathan Exp $
  */
 
 /*
@@ -15,6 +15,9 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.context.FacesContext;
+import javax.faces.context.Message;
+import javax.faces.context.MessageImpl;
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
 import javax.servlet.ServletResponse;
@@ -50,7 +53,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.8 2002/06/22 00:15:08 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.9 2002/06/25 20:48:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,17 +134,6 @@ public void testAccessors()
     result = null != locale;
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
-
-    Iterator messages = null; 
-    exceptionThrown = false;
-    System.out.println("Testing getMessages: " + result);
-    try {
-	messages = getFacesContext().getMessages();
-    }
-    catch (FacesException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
 
     getFacesContext().setRequestTree( new XmlTreeImpl(config.getServletContext(),
                 new UIForm(),"treeId", ""));
@@ -308,9 +300,90 @@ public void testRequestEvents()
 
 }
 
+public void testMessageMethodsNull() {
+    boolean gotException = false;
+    
+    FacesContext fc = getFacesContext();
+    assertTrue( fc != null);
+    
+    try {
+        fc.addMessage(null,null);
+    } catch ( NullPointerException fe) {
+        gotException = true;
+    }
+    assertTrue(gotException);
+    gotException = false;
+    
+    try {
+        fc.addMessage(null);
+    } catch ( NullPointerException fe) {
+        gotException = true;
+    }
+    assertTrue(gotException);
+    gotException = false;
+    
+    try {
+        fc.getMessages(null);
+    } catch ( NullPointerException fe) {
+        gotException = true;
+    }
+    assertTrue(gotException);
+    gotException = false;
+}
+
+public void testMessageMethods() {
+    FacesContext fc = getFacesContext();
+    assertTrue( fc != null);
+    
+    System.out.println("Testing add methods");
+    Message msg1 = new MessageImpl (2, "summary1", "detail1");
+    fc.addMessage(msg1);
+    
+    Message msg2 = new MessageImpl (3, "summary2", "detail2");
+    fc.addMessage(msg2);
+    
+    UICommand command = new UICommand();
+    Message msg3 = new MessageImpl (4, "summary3", "detail3");
+    fc.addMessage(command, msg3);
+    
+    Message msg4 = new MessageImpl (1, "summary4", "detail4");
+    fc.addMessage(command, msg4);
+    
+    System.out.println("Testing get methods");
+    assertTrue ( fc.getMaximumSeverity() == 4 );
+    
+    Iterator it = fc.getMessagesAll();
+    while ( it.hasNext() ) {
+       Message result = (Message) it.next();
+       assertTrue ( result.equals(msg1) || result.equals(msg2) || 
+           result.equals(msg3) || result.equals(msg4));
+    }   
+    
+    it = null;
+    it = fc.getMessages(command);
+    while ( it.hasNext() ) {
+       Message result = (Message) it.next();
+       assertTrue (result.equals(msg3) || result.equals(msg4));
+    }
+    
+    it = null;
+    it = fc.getMessages();
+    while ( it.hasNext() ) {
+       Message result = (Message) it.next();
+       //System.out.println("summary " + result.getSummary());
+       assertTrue ( result.equals(msg1) || result.equals(msg2));
+    }
+}    
+
 public void testRelease() {
     System.out.println("Testing release method");
     getFacesContext().release();
+    
+    assertTrue(getFacesContext().getServletContext() == null);
+    assertTrue(getFacesContext().getServletRequest() == null);
+    assertTrue(getFacesContext().getServletResponse() == null);
+    assertTrue(getFacesContext().getHttpSession() == null);
+    
     assertTrue(getFacesContext().getLifecycle() == null);
     assertTrue(getFacesContext().getLocale() == null);
     assertTrue(getFacesContext().getRequestTree() == null);

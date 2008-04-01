@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.6 2002/06/21 00:31:22 eburns Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.7 2002/06/25 20:47:59 jvisvanathan Exp $
  */
 
 /*
@@ -13,6 +13,10 @@ package com.sun.faces.lifecycle;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
+
+import javax.faces.context.MessageResources;
+import javax.faces.context.Message;
+import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
@@ -28,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.6 2002/06/21 00:31:22 eburns Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.7 2002/06/25 20:47:59 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -79,13 +83,12 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
                         params[0] = comp.getValue();
                         params[1] = model;
                         params[2] = e.getMessage(); 
-			Assert.assert_it(false, "PENDING(): fixme");
-			/*********
-			facesContext.getMessageList().add("MSG0005", 
-                            comp.getComponentId(),params);
-
-			***********/
-		    }
+			MessageResources resources = Util.getMessageResources();
+                        Assert.assert_it( resources != null );
+                        Message msg = resources.getMessage(facesContext, 
+                                "MSG0005",params);
+			facesContext.addMessage(comp, msg);
+                    }
 		}
 		
 		return rc;
@@ -125,16 +128,12 @@ public int execute(FacesContext facesContext) throws FacesException
     callback = pushValues;
     rc = traverseTreeInvokingCallback(facesContext);
 
-    Assert.assert_it(false, "PENDING(): fixme");
-    
-    messageIter = facesContext.getMessages();
-    
+    messageIter = facesContext.getMessagesAll();
     Assert.assert_it(null != messageIter);
     
     if (messageIter.hasNext()) {
 	// If we have gotten one or more errors, go to render phase.
-	//
-        rc = Phase.GOTO_RENDER;
+	rc = Phase.GOTO_RENDER;
     }
     if (Phase.GOTO_NEXT == rc) {
 	callback = clearValues;
