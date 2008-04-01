@@ -270,7 +270,7 @@
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
             <jvmarg value="-Dcatalina.home=${tomcat.home.40}"/>
             <!-- uncomment this to attach the debugger to the tomcat vm -->
-            <!-- <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/> -->
+            <jvmarg line="-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n"/>
 
             <arg value="-config"/>
             <arg value="${out.tomcat.40.dir}/conf/server.xml"/>
@@ -321,8 +321,6 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
-            <test name="com.sun.faces.lifecycle.TestCreateRequestTreePhase"/>
-            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl_Model"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
@@ -330,6 +328,11 @@
             <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
             <test name="com.sun.faces.lifecycle.TestGenericPhaseImpl"/>
+            <test name="com.sun.faces.lifecycle.TestCreateRequestTreePhase"/>
+            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
+            <test name="com.sun.faces.lifecycle.TestHandleRequestEventsPhase"/>
+            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
+            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
             <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>

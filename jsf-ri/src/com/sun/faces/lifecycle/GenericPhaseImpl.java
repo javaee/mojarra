@@ -1,5 +1,5 @@
 /*
- * $Id: GenericPhaseImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
+ * $Id: GenericPhaseImpl.java,v 1.3 2002/06/03 19:18:16 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.tree.TreeNavigatorImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: GenericPhaseImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
+ * @version $Id: GenericPhaseImpl.java,v 1.3 2002/06/03 19:18:16 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Phase
@@ -153,7 +153,10 @@ public int traverseTreeInvokingCallback(FacesContext facesContext) throws FacesE
 
     while (null != (next = treeNav.getNextStart())) {
 	if (null != callback) {
-	    callback.takeActionOnComponent(facesContext, next);
+	    result = callback.takeActionOnComponent(facesContext, next);
+	    if (Phase.GOTO_NEXT != result) {
+		break;
+	    }
 	}
     }
     treeNav.reset();

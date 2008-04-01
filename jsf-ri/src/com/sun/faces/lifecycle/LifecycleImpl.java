@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.3 2002/06/03 19:18:17 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.2 2002/06/01 00:58:21 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.3 2002/06/03 19:18:17 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -109,9 +109,12 @@ protected void initPhases()
 							    )));
     phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
                                        Lifecycle.APPLY_REQUEST_VALUES_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.HANDLE_REQUEST_EVENTS_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.PROCESS_VALIDATIONS_PHASE)));
-    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.UPDATE_MODEL_VALUES_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new HandleRequestEventsPhase(this, 
+                                      Lifecycle.HANDLE_REQUEST_EVENTS_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase(this, 
+  				        Lifecycle.PROCESS_VALIDATIONS_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, 
+				        Lifecycle.UPDATE_MODEL_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.INVOKE_APPLICATION_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new GenericPhaseImpl(this, Lifecycle.RENDER_RESPONSE_PHASE)));
 }

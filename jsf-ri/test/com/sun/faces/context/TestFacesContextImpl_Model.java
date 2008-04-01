@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.1 2002/05/28 18:20:40 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.2 2002/06/03 19:18:17 eburns Exp $
  */
 
 /*
@@ -25,13 +25,17 @@ import com.sun.faces.context.FacesContextImpl;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.FacesException;
 
+import com.sun.faces.TestBean;
+import com.sun.faces.TestBean.InnerBean;
+import com.sun.faces.TestBean.Inner2Bean;
+
 /**
  *
  *  <B>TestFacesContextImpl_Model</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.1 2002/05/28 18:20:40 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.2 2002/06/03 19:18:17 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -44,10 +48,6 @@ public class TestFacesContextImpl_Model extends ServletTestCase
 // Protected Constants
 //
 
-protected static final String PROP = "oneSet";
-
-protected static final String TRUE = "true";
-protected static final String FALSE = "false";
 //
 // Class Variables
 //
@@ -99,27 +99,27 @@ public void testSet()
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
     
     // Test one level of nesting
-    System.setProperty(PROP, FALSE);
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue("${TestBean.one}", "one");
-    assertTrue(System.getProperty(PROP).equals(TRUE));
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
-    System.setProperty(PROP, FALSE);
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue( "${TestBean.inner}", inner);
-    assertTrue(System.getProperty(PROP).equals(TRUE));
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
     // Test two levels of nesting
-    System.setProperty(PROP, FALSE);
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue("${TestBean.inner.two}", "two");
-    assertTrue(System.getProperty(PROP).equals(TRUE));
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
-    System.setProperty(PROP, FALSE);
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue("${TestBean.inner.inner2}", innerInner);
-    assertTrue(System.getProperty(PROP).equals(TRUE));
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
     // Test three levels of nesting
-    System.setProperty(PROP, FALSE);
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue("${TestBean.inner.inner2.three}", "three");
-    assertTrue(System.getProperty(PROP).equals(TRUE));
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
     
 }
 
@@ -181,112 +181,5 @@ public void testGet()
     className = classType.getName();
     assertTrue(className.equals("java.lang.String"));
 }
-
-public static class TestBean extends Object
-{
-
-protected String one = null;
-
-public void setOne(String newOne)
-{
-    one = newOne;
-    assertTrue(newOne.equals("one"));
-    System.setProperty(PROP, TRUE);
-}
-
-public String getOne() 
-{
-    return one;
-}
-
-protected InnerBean inner = null;
-
-public void setInner(InnerBean newInner)
-{
-    inner = newInner;
-    System.setProperty(PROP, TRUE);
-}
-
-public InnerBean getInner() 
-{
-    return inner;
-}
-
-}
-
-public static class InnerBean extends Object
-{
-
-protected String two = null;
-protected Integer pin = null;
-protected Boolean result = null; 
-
-public void setTwo(String newTwo)
-{
-    two = newTwo;
-    assertTrue(newTwo.equals("two"));
-    System.setProperty(PROP, TRUE);
-}
-
-public String getTwo() 
-{
-    return two;
-}
-
-public void setPin(Integer newPin)
-{
-    pin = newPin;
-}
-
-public Integer getPin() 
-{
-    return pin;
-}
-
-public void setResult(Boolean newResult)
-{
-    result = newResult;
-}
-
-public Boolean getResult() 
-{
-    return result;
-}
-
-protected Inner2Bean inner2 = null;
-
-public void setInner2(Inner2Bean newInner2)
-{
-    inner2 = newInner2;
-    System.setProperty(PROP, TRUE);
-}
-
-public Inner2Bean getInner2() 
-{
-    return inner2;
-}
-
-}
-
-public static class Inner2Bean extends Object
-{
-
-protected String three = null;
-
-public void setThree(String newThree)
-{
-    three = newThree;
-    assertTrue(newThree.equals("three"));
-    System.setProperty(PROP, TRUE);
-}
-
-public String getThree() 
-{
-    return three;
-}
-
-
-}
-
 
 } // end of class TestFacesContextImpl_Model
