@@ -1,5 +1,5 @@
 /*
- * $Id: SessionListener.java,v 1.1 2001/12/05 20:29:59 edburns Exp $
+ * $Id: SessionListener.java,v 1.2 2001/12/20 21:05:10 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -22,6 +22,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.http.HttpSessionListener;
 import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSession;
 
 import javax.faces.ObjectTable;
 import javax.faces.Constants;
@@ -32,7 +33,7 @@ import javax.faces.Constants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SessionListener.java,v 1.1 2001/12/05 20:29:59 edburns Exp $
+ * @version $Id: SessionListener.java,v 1.2 2001/12/20 21:05:10 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,12 +89,40 @@ protected void init()
 //
 
 
+/**
+
+* @see com.sun.faces.ObjectTableImpl#fixScopeKey
+
+*/
+
 public void sessionCreated(HttpSessionEvent sce) {
     ObjectTable ot = ObjectTable.getInstance();
     Assert.assert_it(null != ot);
+    HttpSession session = sce.getSession();
+    String sessionId = session.getId();
 
-    sce.getSession().setAttribute(Constants.REF_SESSIONINSTANCE,
-				  sce.getSession().getId());
+    // The below code is because the ObjectTable cannot safely use an
+    // actual HttpSession instance as a hash key, because the servlet
+    // container doesn't guarantee the same actual Object instance
+    // representing the Session will be given to us each time.  Rather,
+    // the container can wrap the Session with another instance that
+    // implements HttpSession.  This new instance will have a different
+    // hashCode(), so entries in the ObjectTable that should be found
+    // will not be found.
+
+    // Store it in the session's attr set so the case where the
+    // container serializes and deserializes the attr set is correctly
+    // handled.  This works because the session's attr set is safely
+    // serialized.
+    session.setAttribute(Constants.REF_SESSIONINSTANCE, sessionId);
+
+    // Now, you may wonder why we're putting it in the ServletContext's
+    // attr set, in addition to the Session's?  We must put it in the
+    // ServletContext's attr set because when it comes time to exit this
+    // session's scope (via an HttpSessionListener.sessionDestroyed()
+    // call), the session's attr set isn't accessible, because the
+    // session is already destroyed :(
+    session.getServletContext().setAttribute(sessionId, sessionId);
 }
 
 /**
@@ -110,9 +139,12 @@ public void sessionCreated(HttpSessionEvent sce) {
 public void sessionDestroyed(HttpSessionEvent sce) {
     ObjectTable ot = ObjectTable.getInstance();
     Assert.assert_it(null != ot);
-
+    HttpSession session = sce.getSession();
+    String sessionId = session.getId();
+    
     // exit the scope for this session
-    ot.exit(sce.getSession());
+    ot.exit(session);
+    session.getServletContext().removeAttribute(sessionId);
 }
 
 } // end of class SessionListener

@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectTable.java,v 1.8 2001/12/05 20:30:00 edburns Exp $
+ * $Id: TestObjectTable.java,v 1.9 2001/12/20 21:05:11 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -50,7 +50,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectTable.java,v 1.8 2001/12/05 20:30:00 edburns Exp $
+ * @version $Id: TestObjectTable.java,v 1.9 2001/12/20 21:05:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,12 +105,14 @@ public void setUp() {
     request.setAttribute(Constants.REF_REQUESTINSTANCE, request);
     HttpSession session = request.getSession();
 
-    session.setAttribute(Constants.REF_SESSIONINSTANCE,
-			 session.getId());
+    session.setAttribute(Constants.REF_SESSIONINSTANCE, session.getId());
+    session.getServletContext().setAttribute(session.getId(), session.getId());
 }
 
 public void tearDown() {
     objectTable = null;
+    session.removeAttribute(Constants.REF_SESSIONINSTANCE);
+    session.getServletContext().removeAttribute(session.getId());
 }
 
 //

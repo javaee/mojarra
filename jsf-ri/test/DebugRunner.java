@@ -1,5 +1,5 @@
 /*
- * $Id: DebugRunner.java,v 1.2 2001/12/01 02:30:53 edburns Exp $
+ * $Id: DebugRunner.java,v 1.3 2001/12/20 21:05:11 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -20,7 +20,7 @@
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugRunner.java,v 1.2 2001/12/01 02:30:53 edburns Exp $
+ * @version $Id: DebugRunner.java,v 1.3 2001/12/20 21:05:11 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,7 +98,7 @@ private static void startTomcat() {
 	System.setProperty("catalina.home", "D:\\tomcat4.0");
     }
     if (null == (serverXml = System.getProperty("server.xml"))) {
-	serverXml = "D:\\Projects\\J2EE\\workareas\\jsf-ri\\build\\test\\servers\\tomcat40\\conf\\server.xml";
+	serverXml = "D:\\Projects\\J2EE\\workareas\\jsf-ea1\\jsf-ri\\build\\test\\servers\\tomcat40\\conf\\server.xml";
     }
     final String [] args = {"-config", serverXml, "start"};
     Thread runner = new Thread(new Runnable() {

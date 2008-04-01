@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.7 2001/12/19 18:31:47 rogerk Exp $
+ * $Id: FacesServlet.java,v 1.8 2001/12/20 21:05:09 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -15,6 +15,7 @@
 package com.sun.faces.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.faces.Constants;
 import javax.faces.EventQueue;
 import javax.faces.EventQueueFactory;
@@ -42,8 +43,50 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.util.Util;
 
 public class FacesServlet extends HttpServlet {
+
+    //
+    // Helper methods
+    //
+
+
+
+    /**
+
+    *  Write out some HTML describing the exception.  
+
+    */
+
+
+    private void outputException(HttpServletResponse resp, 
+				 Throwable exOut) {
+	ParameterCheck.nonNull(resp);
+
+	resp.setContentType("text/html; charset=ISO-8859-4");
+	resp.setStatus(HttpServletResponse.SC_CONFLICT);
+	try {
+	    PrintWriter writer = resp.getWriter();
+	    writer.print("<HTML>\n" +
+			 "<HEAD><TITLE>" + exOut.toString() + "</TITLE></HEAD>\n" +
+			 "<BODY>\n" +
+			 "<H1>" + exOut.toString() + "</H1>\n" +
+			 "<CODE>\n");
+	    exOut.printStackTrace(writer);
+	    writer.print("</CODE>\n" + 
+			 "</BODY>\n" + 
+			 "</HTML>\n");
+	    resp.flushBuffer();
+	}
+	catch (Exception e) {
+	}
+    }
+
+    
+    //
+    // Methods from HttpServlet and superclasses
+    //
 
     /**
      * PRECONDITION: Nothing, this is to be called at the very beginning of
@@ -196,7 +239,8 @@ public class FacesServlet extends HttpServlet {
 	}
 	catch (Exception e) {
 	    System.out.println("Caught exception calling super.service: " + 
-			       e.getMessage());
+			       e.getMessage() + " " + e);
+	    e.printStackTrace();
 	} 
 	
 	// exit the scope for this request
@@ -282,7 +326,21 @@ public class FacesServlet extends HttpServlet {
         
         RenderKit rk = rc.getRenderKit();
         Assert.assert_it(rk != null);
-
+	
+	// Only check for a token if this request has parameters.
+	if (Util.hasParameters(req)) {
+	    // if we have a transaction token, see if it is valid
+	    if (!Util.isTokenValid(req)) {
+		// PENDING(edburns): look for servlet config param
+		// pageFlowErrorPage if found, redirect to it, else spit
+		// out simple page and return.
+		ServletException e = new ServletException("Token not valid.  Perhaps your session timed out?");
+		outputException(res, e);
+		throw e;
+	    }
+	    Util.resetToken(req);
+	}
+	
         rk.queueEvents(req, eq);
 
         if (!eq.isEmpty()) {

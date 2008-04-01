@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.9 2001/12/05 20:29:59 edburns Exp $
+ * $Id: ObjectTableImpl.java,v 1.10 2001/12/20 21:05:07 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableImpl.java,v 1.9 2001/12/05 20:29:59 edburns Exp $
+ * @version $Id: ObjectTableImpl.java,v 1.10 2001/12/20 21:05:07 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -170,19 +172,32 @@ pageContext.getRequest() from inside a tag's doStartTag() method is
 different from the one passed into the HttpServlet.service() method,
 even though they are logically the same request. <P>
 
+* @see com.sun.faces.servlet.SessionListener#sessionCreated
+
 */
 
 private Object fixScopeKey(Object scopeKey) {
     Object result = scopeKey;
     if (scopeKey instanceof HttpSession) {
-	result = ((HttpSession)scopeKey).
-	    getAttribute(Constants.REF_SESSIONINSTANCE);
+	HttpSession session = (HttpSession) scopeKey;
+	String sessionId = session.getId();
+	result = session.getServletContext().getAttribute(sessionId);
+	// if we can't get it out of the servletContext's attr set, we
+	// are dealing with a session that has been serialized and
+	// de-serialized by the container.  Rely on the logic in our
+	// SessionListener.
+	if (null == result) {
+	    result = session.getAttribute(Constants.REF_SESSIONINSTANCE);
+	    // this is necessary so the
+	    // SessionListener.sessionDestroyed() works.
+	    session.setAttribute(sessionId, sessionId);
+	}
     }
     else if (scopeKey instanceof HttpServletRequest) {
 	result = ((HttpServletRequest)scopeKey).
 		  getAttribute(Constants.REF_REQUESTINSTANCE);
     }
-    Assert.assert_it(null != scopeKey);
+    Assert.assert_it(null != result);
     return result;
 }
 
@@ -199,6 +214,19 @@ public boolean isA(Object scopeKey) {
 
 public void put(Object name, Object value) {
     outerMap.put(name, value);
+}
+
+public void put(Object scopeKey, Object name, Object value) {
+    scopeKey = fixScopeKey(scopeKey);
+    // lazily enter the scope if neccessary
+    if (!inScope(scopeKey)) {
+	enter(scopeKey);
+    }
+    
+    Map second = (Map) innerMap.get(scopeKey);
+    // We must have a secondary map by nature of the lazy scope entrance above
+    Assert.assert_it(null != second);
+    second.put(name, value);
 }
 
 public Object get(Object scopeKey, Object name) {
@@ -255,6 +283,15 @@ public void exit(Object scopeKey) {
     // clear the map
     Map scopeMap = (Map) innerMap.get(scopeKey);
     if (null != scopeMap) {
+	Iterator iter;
+	Set keys = scopeMap.keySet();
+	if (null != keys) {
+	    iter = keys.iterator();
+	    // remove all the entries in the outer map for this scopeKey
+	    while (iter.hasNext()) {
+		outerMap.remove((String) iter.next());
+	    }
+	}
 	scopeMap.clear();
 	innerMap.remove(scopeKey);
     }

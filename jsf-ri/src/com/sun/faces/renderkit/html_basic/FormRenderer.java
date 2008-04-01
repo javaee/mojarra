@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.9 2001/11/29 01:54:35 rogerk Exp $
+ * $Id: FormRenderer.java,v 1.10 2001/12/20 21:05:08 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -16,6 +16,8 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.Util; // for saveToken()
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.beans.PropertyDescriptor;
@@ -28,6 +30,8 @@ import javax.faces.Renderer;
 import javax.faces.WForm;
 import javax.faces.WComponent;
 
+import javax.servlet.http.HttpSession;
+
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
@@ -39,7 +43,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.9 2001/11/29 01:54:35 rogerk Exp $
+ * @version $Id: FormRenderer.java,v 1.10 2001/12/20 21:05:08 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -141,7 +145,7 @@ public class FormRenderer extends Object implements Renderer
             throw new FacesException("Invalid component type. Expected WForm");
         }
         StringBuffer out = new StringBuffer();
-        out.append("<FORM ");
+        out.append("<FORM METHOD=\"POST\" ");
 
         String form_name = (String) form.getAttribute(rc, "name");
         if (form_name != null) {
@@ -162,6 +166,19 @@ public class FormRenderer extends Object implements Renderer
         // render the form
         OutputMethod outputMethod = rc.getOutputMethod();
         StringBuffer out = new StringBuffer();
+	HttpSession session = rc.getSession();
+	
+	// Add a transaction token
+        if (session != null) {
+            String token = Util.saveToken(session);
+            if (token != null) {
+                out.append("\n<INPUT TYPE=\"HIDDEN\" NAME=\"");
+                out.append(Constants.REQUEST_TOKEN_KEY);
+                out.append("\" VALUE=\"");
+                out.append(token);
+                out.append("\">\n");
+            }
+        }
         out.append("</FORM>");
         outputMethod.writeText(out.toString());
         outputMethod.flush();
