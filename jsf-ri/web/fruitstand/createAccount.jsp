@@ -28,7 +28,7 @@
 
   <faces:Listener id="handleCreateAccount" scope="session" className="fruitstand.CommandListenerImpl" />
 
-  <faces:Form id="CreateAccountForm" modelReference="UserBean" navigationMapId="AccountNavMap" >
+  <faces:Form id="CreateAccountForm" modelReference="${UserBean}" navigationMapId="AccountNavMap" >
 
   <table width="450">
     <tr> 

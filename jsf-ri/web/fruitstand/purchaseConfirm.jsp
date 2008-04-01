@@ -13,7 +13,7 @@
 <h2><font color="#0000FF"> FruitStand.com </font></h2>
 <hr>
 <font size="4" color="#0000FF">Here are the items you selected.</font>
-<faces:Form id="purchaseConfirm" modelReference="UserBean" navigationMapId="purchaseNavMap" >
+<faces:Form id="purchaseConfirm" modelReference="${UserBean}" navigationMapId="purchaseNavMap" >
 <table cellpadding="10">
   <th>Item</th>
   <th>Amount(lbs)</th>

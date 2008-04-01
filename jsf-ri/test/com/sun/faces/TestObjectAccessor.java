@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectAccessor.java,v 1.3 2002/04/16 21:15:59 eburns Exp $
+ * $Id: TestObjectAccessor.java,v 1.4 2002/04/17 19:19:42 jvisvanathan Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.ObjectAccessor;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectAccessor.java,v 1.3 2002/04/16 21:15:59 eburns Exp $
+ * @version $Id: TestObjectAccessor.java,v 1.4 2002/04/17 19:19:42 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,13 +108,14 @@ private static final int INITIAL_NUM_SCOPES = 3;
             System.out.println("Testing Set/Get methods, returned: " + result);
             assertTrue(result);
 
-            // 2. Use model reference string without '$' (literal)
+            // 2. Use model reference string that doesn't refer to a nested
+            // property.
 
             result = false;
 
             // Here's the value we're setting
             //
-            modelReference = "user";
+            modelReference = "${user}";
             value = "2340 Linwood Avenue"; 
 
             // Set the model object value

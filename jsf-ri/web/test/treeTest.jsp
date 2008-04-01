@@ -24,7 +24,7 @@ the tree navigation mechanism.  These aren't really valid nestings.</P>
                     targetPath = "error.jsp" />
   </faces:NavigationMap>
 
-  <faces:Form id="1" modelReference="1" navigationMapId="navMap" >
+  <faces:Form id="1" modelReference="${1}" navigationMapId="navMap" >
 
     <table> 
 

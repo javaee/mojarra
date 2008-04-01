@@ -34,7 +34,7 @@
 
    </faces:NavigationMap>
 
-  <faces:Form id="LoginForm" modelReference="UserBean" navigationMapId="LoginNavMap" >
+  <faces:Form id="LoginForm" modelReference="${UserBean}" navigationMapId="LoginNavMap" >
 
     <table>
     <tr>

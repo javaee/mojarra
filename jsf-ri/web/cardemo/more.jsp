@@ -18,7 +18,7 @@
         targetPath = "error.jsp" />
 </faces:NavigationMap>
 
-<faces:Form id="carBuyForm" modelReference="CurrentOptionServer" navigationMapId="buyNavMap" >
+<faces:Form id="carBuyForm" modelReference="${CurrentOptionServer}" navigationMapId="buyNavMap" >
     <faces:Listener id="optionListener" scope="session" className="cardemo.OptionListener" />
 
 <P>

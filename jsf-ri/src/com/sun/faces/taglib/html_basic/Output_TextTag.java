@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.26 2002/04/16 21:15:58 eburns Exp $
+ * $Id: Output_TextTag.java,v 1.27 2002/04/17 19:19:42 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.26 2002/04/16 21:15:58 eburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.27 2002/04/17 19:19:42 jvisvanathan Exp $
  * 
  *
  */
@@ -107,7 +107,8 @@ public class Output_TextTag extends FacesTag
 							   FormTag.class);
 		String model_str = ancestor.getModelReference();
 		if ( model_str != null ) {
-		    setModelReference("${" + model_str + "." + getId() + "}");
+                    String modelref = model_str.substring(0, (model_str.length()-1));
+		    setModelReference(modelref + "." + getId() + "}");
 		    out.setModelReference(getModelReference());
 		}
             } catch ( Exception e ) {

@@ -39,7 +39,7 @@
 
 </faces:NavigationMap>
 
-<faces:Form id="carStoreFrontForm" modelReference="CurrentOptionServer" navigationMapId="navMap" >
+<faces:Form id="carStoreFrontForm" modelReference="${CurrentOptionServer}" navigationMapId="navMap" >
     <faces:Listener id="carListener" scope="session" className="cardemo.CarListener" />
   
 <P>

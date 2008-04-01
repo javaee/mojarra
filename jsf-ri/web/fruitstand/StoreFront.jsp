@@ -26,7 +26,7 @@
 
    <faces:Listener id="handleCheckout" scope="session" className="fruitstand.CommandListenerImpl" />
 
-  <faces:Form id="purchaseForm" modelReference="UserBean" navigationMapId = "StoreNavMap" >
+  <faces:Form id="purchaseForm" modelReference="${UserBean}" navigationMapId = "StoreNavMap" >
 
 <font color="#3333FF"><font size=+2>Welcome to FruitStand.com, <faces:Output_Text id="differentName" modelReference="${UserBean.firstName}" /></font></font>
 <hr WIDTH="100%">

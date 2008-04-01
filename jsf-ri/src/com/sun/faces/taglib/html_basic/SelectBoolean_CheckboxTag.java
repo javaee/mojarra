@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.24 2002/04/16 21:15:58 eburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.25 2002/04/17 19:19:42 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.servlet.jsp.JspException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.24 2002/04/16 21:15:58 eburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.25 2002/04/17 19:19:42 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -154,7 +154,8 @@ public class SelectBoolean_CheckboxTag extends FacesTag {
 							   FormTag.class);
 		String model_str = ancestor.getModelReference();
 		if ( model_str != null ) {
-		    setModelReference("${" + model_str + "." + getId() + "}");
+                    String modelref = model_str.substring(0, (model_str.length()-1));
+		    setModelReference(modelref + "." + getId() + "}");
 		    uiSelectBoolean.setModelReference(getModelReference());
                }
             } catch ( Exception e ) {

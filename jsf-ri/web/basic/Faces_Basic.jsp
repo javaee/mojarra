@@ -26,7 +26,7 @@
                     targetPath = "error.jsp" />
         </faces:NavigationMap>
 
-        <faces:Form id="basicForm" modelReference="LoginBean" navigationMapId="navMap" >
+        <faces:Form id="basicForm" modelReference="${LoginBean}" navigationMapId="navMap" >
             <faces:Listener id="loginListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="radioListener" scope="session" className="basic.EventHandler" />
             <faces:Listener id="optionListener" scope="session" className="basic.EventHandler" />
