@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.4 2002/08/02 01:17:39 eburns Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.5 2002/08/02 20:23:56 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.4 2002/08/02 01:17:39 eburns Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.5 2002/08/02 20:23:56 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +109,7 @@ public void testGet()
     FacesContext facesContext = getFacesContext();
     System.out.println("Testing getModelValue()");
     assertTrue( facesContext != null );
-    TestBean testBean = new TestBean();
+    TestBean testBeanResult = null, testBean = new TestBean();
     InnerBean inner = new InnerBean();
     Inner2Bean inner2 = new Inner2Bean();
     String result;
@@ -124,6 +124,10 @@ public void testGet()
     assertTrue( facesContext != null );
     assertTrue( facesContext.getHttpSession() != null );
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+
+    // Test zero levels of nesting
+    testBeanResult = (TestBean) facesContext.getModelValue("${TestBean}");
+    assertTrue(testBeanResult == testBean);
     
     // Test one level of nesting
     result = (String) facesContext.getModelValue("${TestBean.one}");
@@ -148,6 +152,13 @@ public void testGet()
     System.out.println("Testing getModelType()");
     Class classType = null;
     String className = null;
+
+    // Test zero levels of nesting
+    classType = facesContext.getModelType("${TestBean}");
+    assertTrue(classType != null);
+    className = classType.getName();
+    assertTrue(className.equals(testBean.getClass().getName()));
+
     classType = facesContext.getModelType("${TestBean.inner.pin}");
     assertTrue(classType != null);
     className = classType.getName();

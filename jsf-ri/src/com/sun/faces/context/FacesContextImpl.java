@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.18 2002/08/01 21:42:29 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.19 2002/08/02 20:23:56 eburns Exp $
  */
 
 /*
@@ -450,7 +450,7 @@ public class FacesContextImpl extends FacesContext
             if ( expression.indexOf(".") == -1 ) {
                 // PENDING (visvan) temporary: assume the model bean is stored
                 // in session
-                object = getObjectFromScope(baseName);
+                object = getObjectFromScope(expression);
                 if (object == null) {
 		    Object [] params = {expression};
                     throw new FacesException(Util.getExceptionMessage(Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
@@ -515,7 +515,7 @@ public class FacesContextImpl extends FacesContext
             // a model object. So there should be a model bean existing
             // in the one of scopes with this name.
             if ( expression.indexOf(".") == -1 ) {
-                returnObject = getObjectFromScope(baseName);
+                returnObject = getObjectFromScope(expression);
                 if (returnObject == null) {
                     throw new FacesException("Named Object: '"+expression+
                         "' not found.");
