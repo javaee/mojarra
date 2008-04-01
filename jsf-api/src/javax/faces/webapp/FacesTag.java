@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.5 2002/06/06 02:37:16 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.6 2002/06/07 20:15:52 craigmcc Exp $
  */
 
 /*
@@ -143,7 +143,7 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Render the beginning of the {@link UIComponent} that is associated
      * with this tag (via the <code>id</code> attribute), by following these
-     * steps:</p>
+     * steps.</p>
      * <ul>
      * <li>Ensure that an appropriate {@link ResponseWriter} is associated
      *     with the current {@link FacesContext}.  This ensures that encoded

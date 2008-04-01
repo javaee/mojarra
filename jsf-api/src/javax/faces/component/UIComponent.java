@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.26 2002/06/07 20:01:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.27 2002/06/07 20:15:51 craigmcc Exp $
  */
 
 /*
@@ -389,7 +389,7 @@ public abstract class UIComponent {
 
     /**
      * <p>Evaluate and return the current value of this component, according
-     * to the following algorithm:</p>
+     * to the following algorithm.</p>
      * <ul>
      * <li>If the <code>value</code> property has been set (corresponding
      *     to the local value for this component), return that; else</li>
