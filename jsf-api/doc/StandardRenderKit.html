@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.8 2002/08/14 21:46:30 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.9 2002/08/14 21:56:36 craigmcc Exp $</h3>
 </div>
 
 
@@ -109,17 +109,32 @@
 
   <tr>
     <td>Image</td>
-    <td>value <em>or</em> modelReference</td>
-    <td>url</td>
+    <td>String</td>
+    <td>url <em>or</em> modelReference</td>
     <td>&nbsp;</td>
     <td>
       &nbsp;
     </td>
     <td>
       Render an HTML <code>&lt;img&gt;</code> element with a <code>src</code>
-      element set from the value of the <code>url</code> attribute of the
+      attribute set from the value of the current value of the
       underlying component.  URL rewriting will be performed to maintain
       session state in the absence of cookies.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Image</td>
+    <td>String</td>
+    <td>&nbsp;</td>
+    <td>key, bundle</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render an HTML <code>&lt;img&gt;</code> element with a <code>src</code>
+      attribute localized from a resource bundle.  URL rewriting will be
+      performed to maintain session state in the absence of cookies.
     </td>
   </tr>
 
