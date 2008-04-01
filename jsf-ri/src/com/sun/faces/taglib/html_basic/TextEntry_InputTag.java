@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.34 2002/07/15 22:30:02 jvisvanathan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.35 2002/07/23 18:04:10 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.34 2002/07/15 22:30:02 jvisvanathan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.35 2002/07/23 18:04:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,7 +115,7 @@ public TextEntry_InputTag()
 	super.overrideProperties(component);
 	UITextEntry textEntry = (UITextEntry) component;
 	
-	if (null == textEntry.getText()) {
+	if (null == textEntry.getValue()) {
 	    textEntry.setText(getText());
 	}
 	if (null == textEntry.getAttribute("size")) {

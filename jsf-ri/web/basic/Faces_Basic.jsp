@@ -15,14 +15,140 @@
             <table> 
             <tr> 
               <td> <faces:output_text id="userLabel" text="Username" /> </td>
-              <td> <faces:textentry_input id="userName" />
+              <td> 
+
+                   <faces:textentry_input id="userName">
+
+		     <faces:validator className="javax.faces.validator.LengthValidator"/>
+		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
+		     <faces:attribute 
+                         name="javax.faces.validator.LengthValidator.MINIMUM"
+                         value="6"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.LengthValidator.MAXIMUM"
+                         value="10"/>
+                   </faces:textentry_input>
+
               </td>
+
+              <td> <faces:validation_message componentId="userName"/> </td>
+
             </tr>
 
             <tr>
                <td> <faces:output_text id="pwdLabel" text="Password" /> </td>
-               <td> <faces:textentry_secret id="password" /> </td>
+
+               <td> 
+
+                    <faces:textentry_secret id="password"> 
+
+		     <faces:validator className="javax.faces.validator.LengthValidator"/>
+		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
+		     <faces:attribute 
+                         name="javax.faces.validator.LengthValidator.MINIMUM"
+                         value="6"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.LengthValidator.MAXIMUM"
+                         value="10"/>
+
+                    </faces:textentry_secret>
+
+               </td>
+
+              <td> <faces:validation_message componentId="password"/> </td>
+
+
              </tr>
+
+            <tr>
+               <td> <faces:output_text id="doubleLabel" 
+                                       text="Double (3.2 - 3.9)" /> </td>
+
+               <td> 
+
+                    <faces:textentry_input id="double"
+                                  modelReference="${LoginBean.double}"> 
+
+		     <faces:validator 
+                       className="javax.faces.validator.DoubleRangeValidator"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.DoubleRangeValidator.MINIMUM"
+                         value="3.2"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.DoubleRangeValidator.MAXIMUM"
+                         value="3.9"/>
+
+                    </faces:textentry_input>
+
+               </td>
+
+              <td> <faces:validation_message componentId="double"/> </td>
+
+
+             </tr>
+
+            <tr>
+               <td> <faces:output_text id="intLabel" 
+                                       text="Integer (1-10)" /> </td>
+
+               <td> 
+
+                    <faces:textentry_input id="integer"
+                                  modelReference="${LoginBean.int}"> 
+
+		     <faces:validator 
+                       className="javax.faces.validator.IntegerRangeValidator"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.IntegerRangeValidator.MINIMUM"
+                         value="1"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.IntegerRangeValidator.MAXIMUM"
+                         value="10"/>
+
+                    </faces:textentry_input>
+
+               </td>
+
+              <td> <faces:validation_message componentId="integer"/> </td>
+
+
+             </tr>
+
+            <tr>
+               <td> <faces:output_text id="stringLength" 
+                                       text="Letter (a-f)" /> </td>
+
+               <td> 
+
+                    <faces:textentry_input id="string" size="1"
+                                  modelReference="${LoginBean.string}"> 
+
+		     <faces:validator 
+                       className="javax.faces.validator.StringRangeValidator"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.StringRangeValidator.MINIMUM"
+                         value="a"/>
+
+		     <faces:attribute 
+                         name="javax.faces.validator.StringRangeValidator.MAXIMUM"
+                         value="f"/>
+
+                    </faces:textentry_input>
+
+               </td>
+
+              <td> <faces:validation_message componentId="string"/> </td>
+
+
+             </tr>
+
        
              <tr>
                 <td> <faces:output_text id="addrLabel" text="Address" /> </td>
