@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.1 2002/09/04 22:32:40 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.2 2002/09/06 22:12:13 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectMany;
+import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContextFactory;
 
 import org.apache.cactus.WebRequest;
@@ -31,7 +32,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.1 2002/09/04 22:32:40 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.2 2002/09/06 22:12:13 rkitain Exp $
  * 
  *
  */
@@ -94,6 +95,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         theRequest.addParameter("/my_menu", "Blue");
         theRequest.addParameter("/my_listbox", "Blue");
         theRequest.addParameter("/my_checkboxlist", "Blue");
+        theRequest.addParameter("/my_onemenu", "Blue");
 
     }
 
@@ -111,6 +113,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
             testSelectManyMenuRenderer(root);
             testSelectManyListboxRenderer(root);
             testSelectManyCheckboxListRenderer(root);
+            testSelectOneMenuRenderer(root);
 
             assertTrue(verifyExpectedOutput());
         }
@@ -268,4 +271,50 @@ public class TestRenderers_3 extends JspFacesTestCase {
         assertTrue(!result);
     }
 
+    public void testSelectOneMenuRenderer(UIComponent root)
+        throws IOException {
+        System.out.println("Testing SelectOneMenuRenderer");
+        UISelectOne selectOne = new UISelectOne();
+        UISelectItems uiSelectItems = new UISelectItems();
+        selectOne.setValue(null);
+        selectOne.setComponentId("my_onemenu");
+        SelectItem item1 = new SelectItem("Red", "Red", null);
+        SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        SelectItem item3 = new SelectItem("Green", "Green", null);
+        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
+        SelectItem[] selectItems = { item1, item2, item3, item4 };
+        Object selectedValues[] = null;
+        uiSelectItems.setValue(selectItems);
+        uiSelectItems.setComponentId("manyitems");
+        selectOne.addChild(uiSelectItems);
+        root.addChild(selectOne);
+
+        SelectOneMenuRenderer selectOneMenuRenderer =
+            new SelectOneMenuRenderer();
+
+        // test decode method
+        System.out.println("    Testing decode method... ");
+        selectOneMenuRenderer.decode(getFacesContext(), selectOne);
+	assertTrue(null != (selectedValues = (Object[])selectOne.getValue()));
+	assertTrue(1 == selectedValues.length);
+        assertTrue(((String)selectedValues[0]).equals("Blue"));
+
+        // test encode method
+        System.out.println("    Testing encode method... ");
+        selectOneMenuRenderer.encodeBegin(getFacesContext(), selectOne);
+        selectOneMenuRenderer.encodeEnd(getFacesContext(), selectOne);
+        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result =
+            selectOneMenuRenderer.supportsComponentType(
+                "javax.faces.component.UISelectOne");
+        assertTrue(result);
+        result = selectOneMenuRenderer.supportsComponentType(selectOne);
+        assertTrue(result);
+        result = selectOneMenuRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
 } // end of class TestRenderers_3
