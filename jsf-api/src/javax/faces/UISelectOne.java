@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.12 2002/03/15 20:49:22 jvisvanathan Exp $
+ * $Id: UISelectOne.java,v 1.13 2002/04/02 01:24:39 jvisvanathan Exp $
  */
 
 /*
@@ -538,7 +538,7 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
         }
     }
 
-    /**
+   /**
     * If we do not have a modelReference, do nothing.  Else, If
     * localValue non-null, try to push localValue into model().  If
     * successful, set localValue to null, else leave localValue alone.
@@ -549,11 +549,8 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
 
     public void pushValueToModel(RenderContext rc) {
 
-        Object localValue = getAttribute(rc,Constants.REF_VALUE);
+        Object localValue = getValue(rc);
         if (null == selectedModelReference) {
-            if ( localValue != null ) {
-                setValue(localValue.toString());
-            }
             return;
         }
         if (null != localValue) {
@@ -562,10 +559,34 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
                                            selectedModelReference, localValue);
                 setValue(null);
             } catch ( FacesException e ) {
-                // local value should be converted to String for rendering
-                // purposes
-                setValue(localValue.toString());
             }
         }
-    }	
+    }
+
+   /**
+    * If we do not have a modelReference, do nothing.  If non-null
+    * value from model, overwrite local value, else do nothing. <P>
+    * PENDING(aim): should be moved to ValueComponent subclass (?)
+    * @return the value from the model
+    */
+
+    public Object pullValueFromModel(RenderContext rc) {
+        Object result = null;
+        if (null == selectedModelReference) {
+            return result;
+        }
+
+        try {
+            result = rc.getObjectAccessor().getObject(rc.getRequest(),
+                                 selectedModelReference);
+            if (null != result) {
+                // convert the object to string for rendering purpose.
+                setValue(result.toString());
+            }
+        } catch ( FacesException e ) {
+            // System.out.println(e.getMessage());
+            // PENDING (visvan) skip this exception ??
+        }
+        return result;
+    }
 }

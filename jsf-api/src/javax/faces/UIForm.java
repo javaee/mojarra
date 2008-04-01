@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.8 2002/03/16 00:09:03 eburns Exp $
+ * $Id: UIForm.java,v 1.9 2002/04/02 01:24:39 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.EventObject;
  * @see UIOutput
  * @see UICommand  
  */
-public class UIForm extends UIComponent implements Validatible  {
+public class UIForm extends UIComponent { 
 
     private static String TYPE = "Form";
     
@@ -174,11 +174,4 @@ public class UIForm extends UIComponent implements Validatible  {
 	return result;
     }
 
-    //
-    // Methods from Validatible
-    //
-
-    public void doValidate(EventContext ec) {}
-
- 
 }

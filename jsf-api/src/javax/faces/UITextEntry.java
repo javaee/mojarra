@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.10 2002/03/16 00:09:04 eburns Exp $
+ * $Id: UITextEntry.java,v 1.11 2002/04/02 01:24:39 jvisvanathan Exp $
  */
 
 /*
@@ -257,58 +257,29 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
     public void doValidate(EventContext eventContext) {
         Converter converterObj = null;
         Object obj = null;
-     
+    
         ObjectManager objectManager = eventContext.getObjectManager();
         ServletRequest request = eventContext.getRequest();
         RenderContext rc = (RenderContext)objectManager.get(request,
                         Constants.REF_RENDERCONTEXT);
         // Assert.assert_it( objectManager != null );
-
-        // if the converterReference is set, then get the converter directly
-        // from ObjectManager. If not based on modelType, get the converter from
-        // converterManager. If modelType is null or of type String, no conversion is done.
-        String converterReference = (String) getAttribute(null, "converterReference");
-
-        if ( converterReference != null ) {
-            converterObj = (Converter)objectManager.get(request, converterReference);
-        } else if ( (getAttribute(null, "modelType")) != null ){
-
-            Class converterClass = null;
-
-            Object model_type = getAttribute(null, "modelType");
-            if ( model_type instanceof String ) {
-                try {
-                    converterClass = Class.forName((String)model_type);
-                } catch ( ClassNotFoundException cfe ) {
-                    // PENDING ( visvan ) throw JSPException or just warn ??
-                }
-            } else {
-                converterClass = (Class)model_type;
-            }
-
-            String converterClassName = converterClass.getName();
-            // if modelType is String, need not obtain converter
-            if ( ! converterClassName.equals("java.lang.String") ) {
-                // get converter from converterManager.
-                ConverterManager cm = (ConverterManager)
-                    objectManager.get(Constants.REF_CONVERTERMANAGER);
-                converterObj = cm.getConverter(converterClass);
-            }
-        }
+       
+        converterObj = getConverter(rc);
         if ( converterObj != null ) {
             try {
                 obj = converterObj.convertStringToObject(eventContext, this, 
                         (String) getValue(rc));
+                setAttribute("validatedValue", obj);
             } catch ( ValidationException ce ) {
                 // if conversion failed don't proceed to validation
-                handleError(obj);
+                setValidState ( Validatible.INVALID);
                 return;
             }    
         } 
         // if no validators are set, if the conversion was successful
         // then values could still be pushed to model.
         if ( validators == null ) {
-            setValidState( Validatible.VALID);
+            setValidState(Validatible.VALID);
             return;
         }    
         Iterator iterator = getValidators();
@@ -327,23 +298,16 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
                 try {
                     validator.validate(eventContext, this,obj);
                     setValidState ( Validatible.VALID);
-                    // cache the validated value
-                    setValue(obj);
+                    // cache the validated value in a new attribute. Don't
+                    // overwrite the localValue. This is because if
+                    // validation fails or not required, then we don't
+                    // convert the value to string for rendering purposes.
+                    setAttribute("validatedValue", obj);
                 } catch ( ValidationException ve ) {
-                    handleError(obj);    
+                    setValidState ( Validatible.INVALID);
                 }
             } 
         }    
     }
    
-    /**
-     * Resets the state and converts the value back to string for 
-     * rendering purpose.
-     */ 
-    protected void handleError(Object obj) {
-        setValidState ( Validatible.INVALID);
-        if ( obj != null ) {
-            setValue(obj.toString());
-        }
-    }             
 }

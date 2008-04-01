@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.11 2002/03/20 00:34:11 jvisvanathan Exp $
+ * $Id: UIComponent.java,v 1.12 2002/04/02 01:24:39 jvisvanathan Exp $
  */
 
 /*
@@ -638,8 +638,6 @@ public abstract class UIComponent {
      * @param ec
      */
     public void validateAll(EventContext ec) {
-        // PENDING ( visvan )
-        // is it possible to avoid traversing the tree so many times.
         ObjectManager ot = ec.getObjectManager();
         ServletRequest request = ec.getRequest();
         RenderContext rc = (RenderContext)ot.get(request,
@@ -648,22 +646,20 @@ public abstract class UIComponent {
         Iterator iterator = getChildren(rc);
         while (iterator.hasNext()) {
             child = (UIComponent) iterator.next();
-            if ( child != null && child instanceof Validatible ) {
+            if ( child != null) {
                 child.validateAll(ec);
-            } 
-            if (child instanceof Validatible ) {
-                ((Validatible)child).doValidate(ec);
-            }   
-        }
+            }
+         }
+         // all the children have been validated at this point 
+         if (this instanceof Validatible ) {
+             ((Validatible)this).doValidate(ec);
+         }   
     }
 
    /**
     * Will recursively push all component values to model
-    * to model if validation succeeded. If validation failed,
-    * converts local values to string for rendering. Right we
-    * do this only for validatible components. For others, values
-    * get pushed during their dispatch method since we haven't
-    * implemented them yet.
+    * to model. Right we do this only for validatible components. 
+    * For others, values get pushed during their dispatch method.
     *
     * @param ec EventContext object representing the event-processing
     *           phase of this request 
@@ -671,35 +667,22 @@ public abstract class UIComponent {
     //PENDING (visvan) check method name with Aim.
     public void pushAllValuesToModel(EventContext ec) {
 
-	ObjectManager objectManager = ec.getObjectManager();
-	ServletRequest request = ec.getRequest();
-        RenderContext rc = (RenderContext)objectManager.get(request,
+	ObjectManager ot = ec.getObjectManager();
+        ServletRequest request = ec.getRequest();
+        RenderContext rc = (RenderContext)ot.get(request,
                         Constants.REF_RENDERCONTEXT);
-	TreeNavigator treeNav = (TreeNavigator) 
-	    objectManager.get(request, Constants.REF_TREENAVIGATOR);
-
-	// Assert.assert_it(null != treeNav);
-	UIComponent next;
-	treeNav.reset();
-        if (treeNav.getRoot().isValid(ec)) {
-	    while (null != (next = treeNav.getNextStart())) {
-                if ( (next instanceof Validatible) ) {
-                    next.pushValueToModel(rc);
-                    ((Validatible)next).setValidState(Validatible.UNVALIDATED);
-                }
+        UIComponent child = null;
+        Iterator iterator = getChildren(rc);
+        while (iterator.hasNext()) {
+            child = (UIComponent) iterator.next();
+            if ( child != null) {
+                child.pushAllValuesToModel(ec);
             }
-        } else {
-            while (null != (next = treeNav.getNextStart())) {
-                if ( (next instanceof Validatible) ) { 
-                    Object value = next.getValue(rc);
-                    if ( value != null ) {
-                        next.setValue(value.toString());
-                    }
-                    ((Validatible)next).setValidState(Validatible.UNVALIDATED);
-                }
-            }
-        }
-	treeNav.reset();
+         }
+         // values have been pushed to model for children at this point. 
+         if (this instanceof Validatible ) {
+             this.pushValueToModel(rc);
+         }
     }
 
     /**
@@ -715,30 +698,32 @@ public abstract class UIComponent {
      */
     public boolean isValid(EventContext ec ) {
 
-        boolean valid = false;
-        UIComponent child = null;
+        boolean valid = true;
 
-        ObjectManager objectManager = ec.getObjectManager();
+        ObjectManager ot = ec.getObjectManager();
         ServletRequest request = ec.getRequest();
-        RenderContext rc = (RenderContext)objectManager.get(request,
+        RenderContext rc = (RenderContext)ot.get(request,
                         Constants.REF_RENDERCONTEXT);
-        TreeNavigator treeNav = (TreeNavigator)
-            objectManager.get(request, Constants.REF_TREENAVIGATOR);
 
-        // Assert.assert_it(null != treeNav);
-        UIComponent next;
-        treeNav.reset();
-        while (null != (child = treeNav.getNextStart())) {
-            if ( child instanceof Validatible && 
-                 ((Validatible)child).getValidState() == Validatible.INVALID) {
-                valid = false;
-                break;
-            } else {
-                valid = true;
-            }    
-        }    
-        treeNav.reset();
-        return valid;
+        UIComponent child = null;
+        Iterator iterator = getChildren(rc);
+        while (iterator.hasNext()) {
+            child = (UIComponent) iterator.next();
+            if ( child != null) {
+                valid = child.isValid(ec);
+                if ( !valid ) {
+                    valid = false;
+                    return valid;
+                }
+            }
+         }
+         // if we get here, all the children are valid.
+         if (this instanceof Validatible && 
+             ((((Validatible)this).getValidState()) == Validatible.INVALID || 
+             (((Validatible)this).getValidState()) == Validatible.UNVALIDATED) ) {
+             valid = false;
+         }
+         return valid;
     }
 
     /**
@@ -791,41 +776,42 @@ public abstract class UIComponent {
 	setAttribute(Constants.REF_VALUE, newValue);
     }
 
-    /**
-    *   If we do not have a modelReference, do nothing.  Else, If
-    *   localValue non-null, try to push localValue into model().  If
-    *   successful, set localValue to null, else leave localValue alone.
-     * PENDING(aim): should be moved to ValueComponent subclass(?)
-
+   /**
+    * If we do not have a modelReference, do nothing.  Else, If
+    * localValue non-null, try to push localValue into model().  If
+    * successful, set localValue to null, else leave localValue alone.
+    * PENDING(aim): should be moved to ValueComponent subclass(?)
+    *
     */
     public void pushValueToModel(RenderContext rc) {
       
         Object localValue = ht.get(Constants.REF_VALUE); 
 	if (null == modelReference) {
-            // local value should be converted to String for rendering
-            // purposeS
-            if ( localValue != null ) {
-                setValue(localValue.toString());
-            }
-	    return;
+            return;
 	}
-	if (null != localValue) {
-            try {
-                rc.getObjectAccessor().setObject(rc.getRequest(), 
-						 modelReference, localValue); 
-		setValue(null);
-            } catch ( FacesException e ) {
-		// local value should be converted to String for rendering
-                // purposes
-                setValue(localValue.toString());
-            }
-	}
+        Object validatedValue = getAttribute(rc, "validatedValue");
+        if ( validatedValue == null ) {
+            validatedValue = getValue(rc);
+        }
+        try {
+            rc.getObjectAccessor().setObject(rc.getRequest(), 
+	        modelReference, validatedValue); 
+	    setValue(null);
+        } catch ( FacesException e ) {
+            // System.out.println(e.getMessage());
+        }
+        // null out the attribute that caches the validated or
+        // converted value and reset the state to unvalidated.
+        setAttribute("validatedValue", null);
+        if ( this instanceof Validatible ) {
+            ((Validatible)this).setValidState(Validatible.UNVALIDATED);
+        }
     }
 
-    /**
-    *   If we do not have a modelReference, do nothing.  If non-null
-    *   value from model, overwrite local value, else do nothing. <P>
-     * PENDING(aim): should be moved to ValueComponent subclass (?)
+   /**
+    * If we do not have a modelReference, do nothing.  If non-null
+    * value from model, overwrite local value, else do nothing. <P>
+    * PENDING(aim): should be moved to ValueComponent subclass (?)
     * @return the value from the model
     */
 
@@ -838,14 +824,77 @@ public abstract class UIComponent {
 	try {
             result = rc.getObjectAccessor().getObject(rc.getRequest(),
 						      modelReference);
+
             if (null != result) {
-                // convert the value to String for rendering purposes.
+                // convert the object to string for rendering purpose.
                 setValue(result.toString());
+                // PENDING(visvan)
+                // Use the following code once Converters take FacesContext.
+                // currently they take eventContext,but we don't have acess
+                // to that here.
+               /* Converter converterObj = getConverter(rc);
+                if (converterObj != null ) {
+                    setValue(converterObj.convertObjectToString(rc,this,result));    
+                } */
 	    }
 	} catch ( FacesException e ) {
+            // System.out.println(e.getMessage());
             // PENDING (visvan) skip this exception ??
 	}
-	return result;
+        return result;
+    }
+   
+    /**
+     * Returns a converter for a component's local value by looking 
+     * up converterManager. Returns null if it cannot find one.
+     * Local value with is of String type should be converted to
+     * correct Java type before validation.
+     */ 
+    protected Converter getConverter(RenderContext rc) {
+        
+        Converter converterObj = null;
+        ObjectManager objectManager = rc.getObjectManager();
+        ServletRequest request = rc.getRequest();
+        // Assert.assert_it( objectManager != null );
+
+        // if the converterReference is set, then get the converter directly
+        // from ObjectManager. 
+        String converterReference = (String) getAttribute(null, "converterReference");
+        if ( converterReference != null ) {
+            converterObj = (Converter)objectManager.get(request, converterReference);
+            return converterObj;
+        }
+        
+        // if modelType is not null, then get converter from converterManager.
+        // modelType can be of type String like "java.lang.Integer" or could
+        // be class object.
+        if ( (getAttribute(null, "modelType")) != null ){
+            Class converterClass = null;
+            Object model_type = getAttribute(null, "modelType");
+            if ( model_type instanceof String ) {
+                try {
+                    converterClass = Class.forName((String)model_type);
+                } catch ( ClassNotFoundException cfe ) {
+                    // PENDING ( visvan ) log error. 
+                }
+            } else if (model_type instanceof java.lang.Class ) {
+                converterClass = (Class)model_type;
+            }
+
+            if ( converterClass == null ) {
+                return null;
+            }
+
+            String converterClassName = converterClass.getName();
+            // if modelType is String, need not obtain converter
+            if (!converterClassName.equals("java.lang.String")) {
+                // get converter from converterManager.
+                ConverterManager cm = (ConverterManager)
+                    objectManager.get(Constants.REF_CONVERTERMANAGER);
+                converterObj = cm.getConverter(converterClass);
+            }
+        }
+        return converterObj;
     }
 
 } // End of class UIComponent

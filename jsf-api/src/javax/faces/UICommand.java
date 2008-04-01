@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.9 2002/03/20 00:34:10 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.10 2002/04/02 01:24:39 jvisvanathan Exp $
  */
 
 /*
@@ -127,6 +127,9 @@ public class UICommand extends UIComponent implements EventDispatcher {
 
         EventContext eventContext = ((FacesEvent)cmd_event).getEventContext();
         // Assert.assert_it( eventContext != null );
+      
+        NavigationHandler nh = eventContext.getNavigationHandler();
+        // Assert.assert_it( nh != null );
 
         ObjectManager ot = eventContext.getObjectManager();
         //Assert.assert_it( ot != null );
@@ -134,89 +137,60 @@ public class UICommand extends UIComponent implements EventDispatcher {
 
         Iterator listeners = getCommandListeners();
         // Assert.assert_it( listeners != null);
-        
+       
+        TreeNavigator treeNav = (TreeNavigator) ot.get(request,
+                                              Constants.REF_TREENAVIGATOR);
+        UIComponent root = treeNav.getRoot();
+        treeNav.reset(); 
+
         while ( listeners.hasNext() ) {
             String listenerName = (String) listeners.next();
             // Assert.assert_it( listenerName != null );
 
             CommandListener cl = (CommandListener)ot.get(request, listenerName);
             // Assert.assert_it ( cl != null );
-            // Out come of the command execution will be set inside
+            // Out come of the command execution will be set by
             // the commandListener.
-            // if requiresValidation is true, perform validation.
             if ( cl == null ) {
                 continue;
             }
-            // if requiresValidation is true, perform validation.
-            // To do this, we need the component hierarchy, which can be obtained.
-            // Makes sure validation is done only once.
+           
+            // if requiresValidation is true, perform validation. 
             boolean reqValidation = cl.requiresValidation(cmd_event);
 
-	    if ( reqValidation && !doneValidation ) {
-                // if validation did not succed, stop processing listeners
-                // and set the outcome in NavigationHandler.
-                valid = performValidation(eventContext);
+            if ( reqValidation && !doneValidation ) {
+                 root.validateAll(eventContext);
+                 valid = root.isValid(eventContext);     
             }
-            // if validation is not required, then this would directly push
-            // values to model and resets valid state.
-            if ( !doneValidation ) {
-                TreeNavigator treeNav = (TreeNavigator) ot.get(request,
-                                              Constants.REF_TREENAVIGATOR);
-                treeNav.getRoot().pushAllValuesToModel(eventContext);
+
+            // if validation is not required or validation succeeded,
+            // push values to model.
+            if ( (!reqValidation || valid) && (!doneValidation) ) {
+                root.pushAllValuesToModel(eventContext);
                 doneValidation = true;
             }
+
+            // dispatch command listeners if validation succeeded or
+            // if validation is not required.
             if ((!reqValidation) || valid ) {
                 try {
-                    TreeNavigator treeNav = (TreeNavigator) ot.get(request,
-                                               Constants.REF_TREENAVIGATOR);
-
-                    NavigationHandler nh = eventContext.getNavigationHandler();
                     cl.doCommand(cmd_event, nh);
                 } catch ( CommandFailedException cfe ) {
                     throw new FacesException ("CommandListener" + listenerName
-                            + " execution unsuccessful");
+                           + " execution unsuccessful");
                 }
-            }
-            // ifi validation failed stop processing any more commands
-            if (!valid ) {
+            } else if ( !valid ) {
+                // if validation failed, stop processing any more listeners.
+                // set the outcome in navigationHandler. By default,
+                // this would result in current page being redisplayed
+                String cmd_name = getCommandName();
+                if ( nh != null ) {
+                    nh.handleCommandOutcome(cmd_name,
+                        Constants.OUTCOME_VALIDATION_FAILED);
+                }
                 break;
-            }
+            }  
         }
     }
    
-    /**
-     * Performs validation on every component in the component tree
-     * and returns status.
-     */ 
-    protected boolean performValidation ( EventContext eventContext ) {
-
-        boolean valid = false;
-
-        ObjectManager ot = eventContext.getObjectManager();
-        ServletRequest request = eventContext.getRequest();
-      
-        TreeNavigator treeNav = (TreeNavigator) ot.get(request,
-                                              Constants.REF_TREENAVIGATOR);
-        treeNav.getRoot().validateAll(eventContext);
-        treeNav.reset();
-
-        if ( !treeNav.getRoot().isValid(eventContext) ) {
-            // if validation failed set the outcome in navigationHandler.
-            // By default, this would result in current page being redisplayed
-            // since there is no targetPath
-            NavigationHandler nh = eventContext.getNavigationHandler();
-            String cmd_name = (String) getAttribute(null,"commandName");
-            if ( cmd_name == null ) {
-                cmd_name = getId();
-            }
-            if ( nh != null ) {
-                nh.handleCommandOutcome(cmd_name, 
-                    Constants.OUTCOME_VALIDATION_FAILED);
-            } 
-        } else {
-           valid = true;
-        }
-        return valid;
-    }    
-	
 }
