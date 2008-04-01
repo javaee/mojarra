@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.8 2002/08/17 00:57:09 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.9 2002/08/20 20:43:15 jvisvanathan Exp $
  */
 
 /*
@@ -121,7 +121,7 @@ public class LoginBean {
         return floatVal;
     }
 
-    public void setFloat(int newFloatVal)
+    public void setFloat(float newFloatVal)
     {
         floatVal = newFloatVal;
     }

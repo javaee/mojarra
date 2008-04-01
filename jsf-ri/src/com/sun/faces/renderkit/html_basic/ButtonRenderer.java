@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.29 2002/08/06 20:01:38 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.30 2002/08/20 20:43:11 jvisvanathan Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.29 2002/08/06 20:01:38 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.30 2002/08/20 20:43:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -220,27 +220,41 @@ public class ButtonRenderer extends HtmlBasicRenderer {
 	    cmdName = (String) component.currentValue(context);
         Assert.assert_it(cmdName != null);
         
-        writer.write("<INPUT TYPE=");
+        String buttonType = (String)component.getAttribute("type");
+        if ( buttonType == null ) {
+            buttonType = "submit";
+        }    
+        // PENDING (visvan) IE has a bug in HTML 4.0 Button implementation.
+        // with nested label and graphic tags, the values don't get submitted
+        // correctly. So we decided not to render as HTML 4.0 BUTTON element.
+        // label attribute will go away once we move to nested tags.
+        writer.write("<input type=");
 	imageSrc = getImageSrc(context, component);
 	label = getLabel(context, component);
         if (null != imageSrc) {
-            writer.write("\"IMAGE\" SRC=\"");
+            writer.write("\"image\" src=\"");
             writer.write(imageSrc);
             writer.write("\"");
-            writer.write(" NAME=\"");
+            writer.write(" name=\"");
             writer.write(cmdName);
             writer.write("\"");
         } else {
-            writer.write("\"SUBMIT\" NAME=\"");
+            writer.write("\"");
+            writer.write(buttonType);
+            writer.write("\"");
+            writer.write(" name=\"");
             writer.write(cmdName);
             writer.write("\"");
-            writer.write(" VALUE=\"");
+            writer.write(" value=\"");
             if ( label == null ) {
                 label = cmdName;
             }    
 	    writer.write(padLabel(label));
 	    writer.write("\"");
         }
+        // render HTML 4.0 attributes if any.
+        writer.write(Util.renderPassthruAttributes(context, component));
+	writer.write(Util.renderBooleanPassthruAttributes(context, component));
         writer.write(">");
     }
 

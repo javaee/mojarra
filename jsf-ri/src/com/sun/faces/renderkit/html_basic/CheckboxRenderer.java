@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.30 2002/08/14 22:01:34 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.31 2002/08/20 20:43:11 jvisvanathan Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.30 2002/08/14 22:01:34 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.31 2002/08/20 20:43:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -164,7 +164,8 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         writer.write(">");
         String label = null;
 
-        /* PENDING (visvan) handle nested label tag and remove code below.
+        // PENDING (visvan) remove label attribute once we handle nested
+        // label tags.
 	try {
 	    label = getKeyAndLookupInBundle(context, component, "key");
 	}
@@ -179,7 +180,7 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         if (label != null) {
             writer.write(" ");
             writer.write(label);
-        }  */
+        }  
     }
 
 } // end of class CheckboxRenderer

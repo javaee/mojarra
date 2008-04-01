@@ -54,7 +54,7 @@
                    <faces:input_number id="testPattern" formatPattern="####"
                         value="9999.98765"/>
               </td>
-
+           
             </tr>
 
             <tr>
@@ -63,6 +63,7 @@
                    <faces:input_number id="byteInput" numberStyle="INTEGER"
                         modelReference="${LoginBean.byte}"/>
               </td>
+              <td> <faces:output_errors id="errByte" compoundId="/numberForm/byteInput"/> </td>
              </tr>
 
              <tr>
@@ -71,6 +72,7 @@
                    <faces:input_number id="doubleInput" numberStyle="NUMBER"
                         modelReference="${LoginBean.double}"/>
               </td>
+              <td> <faces:output_errors id="errDouble" compoundId="/numberForm/doubleInput"/> </td>
              </tr>
 
              <tr>
@@ -79,6 +81,7 @@
                    <faces:input_number id="floatInput" numberStyle="NUMBER"
                         modelReference="${LoginBean.float}"/>
               </td>
+              <td> <faces:output_errors id="errFloat" compoundId="/numberForm/floatInput"/> </td>
              </tr>
 
              <tr>
@@ -87,6 +90,7 @@
                    <faces:input_number id="intInput" numberStyle="INTEGER"
                         modelReference="${LoginBean.int}"/>
               </td>
+              <td> <faces:output_errors id="errInt" compoundId="/numberForm/intInput"/> </td>
              </tr>
 
              <tr>
@@ -95,6 +99,7 @@
                    <faces:input_number id="longInput" numberStyle="NUMBER"
                         modelReference="${LoginBean.long}"/>
               </td>
+              <td> <faces:output_errors id="errLong" compoundId="/numberForm/longInput"/> </td>
              </tr>
 
               <tr>
@@ -103,6 +108,7 @@
                    <faces:input_number id="shortInput" numberStyle="NUMBER"
                         modelReference="${LoginBean.short}"/>
               </td>
+              <td> <faces:output_errors id="errShort" compoundId="/numberForm/shortInput"/> </td>
              </tr>
 
              <tr>
@@ -111,6 +117,7 @@
                    <faces:input_number id="charInput" numberStyle="INTEGER"
                         modelReference="${LoginBean.char}"/>
               </td>
+              <td> <faces:output_errors id="errChar" compoundId="/numberForm/charInput"/> </td>
              </tr>
 
             <tr>
@@ -119,7 +126,7 @@
                                 key="loginButton"
                                 bundle="${basicBundle}" commandName="login"/>
 
-                </td>
+                </td> 
             </tr>
           </table>
         </faces:form>

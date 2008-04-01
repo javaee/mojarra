@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.3 2002/08/17 00:57:03 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.4 2002/08/20 20:43:12 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.3 2002/08/17 00:57:03 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.4 2002/08/20 20:43:12 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,7 +118,10 @@ public class NumberRenderer extends HtmlBasicRenderer {
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
-        if ( newValue == null ) {
+        if ( newValue != null ) {
+            newValue = newValue.trim();
+        }    
+        if ( newValue == null || newValue.length() == 0) {
             component.setValue(newValue);
             return;
         }

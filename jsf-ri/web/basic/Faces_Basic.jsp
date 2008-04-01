@@ -338,6 +338,25 @@
         <TD><faces:graphic_image id="graphicImage1" key="imageurl"
                 bundle="${basicBundle}" /></TD>
       </TR>
+
+      <TR>
+
+        <TD>
+
+             <faces:command_button id="pushButton" label="This is a push button"
+                                 type="button" commandName="push" disabled = "true" />
+
+        </TD>
+
+        <TD>
+
+             <faces:command_button id="resetButton"  title="Click to reset form"
+                                key="resetButton" type="reset"
+                                bundle="${basicBundle}" commandName="reset"/>
+
+        </TD>
+
+      </TR>
       
       <TR>
 

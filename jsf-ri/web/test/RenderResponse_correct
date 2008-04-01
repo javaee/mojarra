@@ -16,7 +16,7 @@
 
 	<TD>
 
-	      <INPUT TYPE="SUBMIT" NAME="login" VALUE="Login">
+	      <input type="submit" name="login" value="Login">
 
 	</TD>
 
@@ -27,7 +27,7 @@
 
 	<TD>
 
-	      <INPUT TYPE="IMAGE" SRC="duke.gif" NAME="login">
+	      <input type="image" src="duke.gif" name="login">
 
 	</TD>
 
