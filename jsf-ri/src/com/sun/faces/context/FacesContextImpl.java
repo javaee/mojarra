@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.21 2002/08/08 00:46:13 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.22 2002/08/09 00:00:51 eburns Exp $
  */
 
 /*
@@ -47,7 +47,9 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import com.sun.faces.renderkit.FormatPool;
 
 public class FacesContextImpl extends FacesContext
 {
@@ -119,6 +121,17 @@ public class FacesContextImpl extends FacesContext
         }
         this.viewHandler = lifecycle.getViewHandler();
         this.applicationHandler = lifecycle.getApplicationHandler();
+
+	// Verify the FormatPool is in the ServletContext
+
+	// PENDING(edburns): when we have a startup/shutdown hook,
+	// remove this from the ServletContext.
+	FormatPool formatPool = null;
+	if (null == (formatPool = (FormatPool)
+		  getServletContext().getAttribute(RIConstants.FORMAT_POOL))){
+	    getServletContext().setAttribute(RIConstants.FORMAT_POOL,
+			         new com.sun.faces.renderkit.FormatPoolImpl());
+	}
         
     }
 

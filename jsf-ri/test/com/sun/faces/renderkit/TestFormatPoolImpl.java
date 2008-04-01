@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.1 2002/08/08 23:40:54 eburns Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.2 2002/08/09 00:00:53 eburns Exp $
  */
 
 /*
@@ -28,13 +28,15 @@ import javax.faces.component.UIInput;
 
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
+import com.sun.faces.RIConstants;
+
 /**
  *
  *  <B>TestFormatPoolImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.1 2002/08/08 23:40:54 eburns Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.2 2002/08/09 00:00:53 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -324,6 +326,12 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	dateFormat2 = formatPool.getDateFormat(getFacesContext(), input2);
 	assertTrue(dateFormat1 == dateFormat2);
 	
+    }
+
+    public void testFormatPoolInServletContext() {
+	assertTrue(null !=
+		   getFacesContext().getServletContext().
+		   getAttribute(RIConstants.FORMAT_POOL));
     }
 
 

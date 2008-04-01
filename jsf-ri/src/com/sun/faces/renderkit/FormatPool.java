@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPool.java,v 1.1 2002/08/08 23:40:51 eburns Exp $
+ * $Id: FormatPool.java,v 1.2 2002/08/09 00:00:52 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.text.ParseException;
 
  * There is one instance of FormatPool per ServletContext.  It is
  * stored in the ServletContext attr set under the key
- * RIConstants.FORMAT_VENDOR at FacesContext creation time. <P>
+ * RIConstants.FORMAT_POOL at FacesContext creation time. <P>
 
  * <B>Usage</B> <P>
 
@@ -49,7 +49,7 @@ Date date = formatPool.dateFormat_parse(getFacesContext(), input, result);
 
  * We'll add methods to this interface/implementation as needed. <P>
 
- * @version $Id: FormatPool.java,v 1.1 2002/08/08 23:40:51 eburns Exp $
+ * @version $Id: FormatPool.java,v 1.2 2002/08/09 00:00:52 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
