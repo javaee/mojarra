@@ -9,13 +9,13 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-        <FORM METHOD="post" ACTION="/test/faces;jsessionid=0875D3A320D4D041C8A492E012D9B497?action=form&name=basicForm&tree=/TestRenderersFromJsp.xul">
+        <FORM METHOD="post" ACTION="/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=form&name=basicForm&tree=/TestRenderersFromJsp.xul">
 
             <INPUT TYPE="text" NAME="/basicForm/userName" VALUE="default">
 
             <INPUT TYPE="SUBMIT" NAME="loginButton" VALUE="Login">
 
-	    <!-- <a href="/test/faces;jsessionid=0875D3A320D4D041C8A492E012D9B497?action=command&name=loginButton&tree=/TestRenderersFromJsp.xul">loginButton</a> -->
+	    <!-- <a href="/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=command&name=loginButton&tree=/TestRenderersFromJsp.xul">loginButton</a> -->
 
             UserName
 
@@ -23,7 +23,10 @@
 
             <SELECT NAME="/basicForm/appleQuantity"><OPTION VALUE="0">0.00</OPTION><OPTION VALUE="1">1.00</OPTION><OPTION VALUE="2">2.00</OPTION><OPTION VALUE="3">3.00</OPTION><OPTION VALUE="4" selected="selected">4.00</OPTION><OPTION VALUE="5">5.00</OPTION><OPTION VALUE="6">6.00</OPTION><OPTION VALUE="7">7.00</OPTION><OPTION VALUE="8">8.00</OPTION><OPTION VALUE="9">9.00</OPTION></SELECT>
 
-            <select name="/basicForm/shipType"><option value="nextDay">Next Day</option><option value="nextWeek" selected="selected">Next Week</option><option value="nextMonth">Next Month</option></select>
+            <INPUT TYPE="RADIO" NAME="/basicForm/shipType" VALUE="nextDay"> Next Day
+<INPUT TYPE="RADIO" CHECKED NAME="/basicForm/shipType" VALUE="nextWeek"> Next Week
+<INPUT TYPE="RADIO" NAME="/basicForm/shipType" VALUE="nextMonth"> Next Month
+
 
             <INPUT TYPE="PASSWORD" NAME="/basicForm/password" VALUE="">
 

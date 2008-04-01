@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderersFromJsp.java,v 1.2 2002/06/09 01:49:09 eburns Exp $
+ * $Id: TestRenderersFromJsp.java,v 1.3 2002/06/11 20:41:10 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderersFromJsp.java,v 1.2 2002/06/09 01:49:09 eburns Exp $
+ * @version $Id: TestRenderersFromJsp.java,v 1.3 2002/06/11 20:41:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -135,8 +135,8 @@ public void testFromJsp()
     try {
 	ArrayList ignoreList = new ArrayList();
 	String ignore[] = {
-	    "        <FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=0875D3A320D4D041C8A492E012D9B497?action=form&name=basicForm&tree=/TestRenderersFromJsp.xul\">",
-	    "	    <!-- <a href=\"/test/faces;jsessionid=0875D3A320D4D041C8A492E012D9B497?action=command&name=loginButton&tree=/TestRenderersFromJsp.xul\">loginButton</a> -->"
+	    "        <FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=form&name=basicForm&tree=/TestRenderersFromJsp.xul\">",
+	    "	    <!-- <a href=\"/test/faces;jsessionid=D31568262822D1F579F1B4D228176342?action=command&name=loginButton&tree=/TestRenderersFromJsp.xul\">loginButton</a> -->"
 	};
 	for (int i = 0; i < ignore.length; i++) {
 	    ignoreList.add(ignore[i]);

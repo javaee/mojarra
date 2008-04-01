@@ -43,6 +43,28 @@
             </TD>
              </tr>
 
+	  <TR>
+	    <TD>Apple Quantity</TD>
+	    <TD>
+	    <faces:selectone_optionlist id="appleQuantity" />
+	    </TD>
+	  </TR>
+
+	  <TR>
+	    <TD>Ship Type</TD>
+
+	    <TD>
+
+	    <TABLE><TR><TD>
+	    <faces:selectone_radiogroup id="shipType" />
+	    </TD></TR></TABLE>
+
+	    </TD>
+
+	  </TR>
+
+
+
 
              <tr> 
              <td><faces:command_button id="login" /></td>
