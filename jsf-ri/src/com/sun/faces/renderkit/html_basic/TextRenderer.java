@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.29 2002/08/20 20:00:52 eburns Exp $
+ * $Id: TextRenderer.java,v 1.30 2002/08/22 00:00:21 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.29 2002/08/20 20:00:52 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.30 2002/08/22 00:00:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -152,6 +152,8 @@ public class TextRenderer extends HtmlBasicRenderer {
         }    
 
 	buffer = new StringBuffer();
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
         
         if (UIInput.TYPE == component.getComponentType()) {
             buffer.append("<input type=\"text\"");
@@ -169,6 +171,9 @@ public class TextRenderer extends HtmlBasicRenderer {
             buffer.append(Util.renderBooleanPassthruAttributes(context, 
                 component));
             buffer.append(">");            
+            currentValue = this.renderWithLabel(context, component,
+                                                buffer.toString());
+            writer.write(currentValue);
         } else if (UIOutput.TYPE == component.getComponentType()) {
             if (currentValue == null || currentValue == "") {
                 try {
@@ -181,23 +186,21 @@ public class TextRenderer extends HtmlBasicRenderer {
                 }
             }
 
-            if (currentValue != null) {
-                buffer.append(currentValue);
+	    // find out if we're nested inside a UIInput
+            // if we are, set the RENDERED_CONTENT attribute which will 
+            // be written out (assembled) in the super class (HtmlBasicRenderer)
+            // if we are not nested, then simply write out the info...
+        
+	    if (component.getParent().getComponentType() == UIInput.TYPE) {
+	        // if so, save our content in the
+	        // RIConstants.RENDERED_CONTENT attribute
+	        component.setAttribute(RIConstants.RENDERED_CONTENT, 
+				   currentValue);
+	    } else {
+                writer.write(currentValue);
             }
         }
 
-	// find out if we're nested inside a UIInput
-	if (component.getParent().getComponentType() == UIInput.TYPE) {
-	    // if so, save our content in the
-	    // RIConstants.RENDERED_CONTENT attribute
-	    component.setAttribute(RIConstants.RENDERED_CONTENT, 
-				   buffer.toString());
-	}
-	else {
-	    writer = context.getResponseWriter();
-	    Assert.assert_it(writer != null );
-	    writer.write(buffer.toString());
-	}
     }
     
     // The testcase for this class is TestRenderers_2.java 

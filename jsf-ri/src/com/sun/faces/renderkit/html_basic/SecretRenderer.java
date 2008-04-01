@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.29 2002/08/22 00:00:21 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.29 2002/08/22 00:00:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,6 +119,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
+        StringBuffer buffer = null;
         ResponseWriter writer = null;
 
         if (context == null || component == null) {
@@ -138,6 +139,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
             currentValue = "";
         }
 
+        buffer = new StringBuffer();
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
@@ -147,20 +149,23 @@ public class SecretRenderer extends HtmlBasicRenderer {
             currentValue = "";
         }
 
-        writer.write("<input type=\"password\"");
-        writer.write(" name=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\"");
+        buffer.append("<input type=\"password\"");
+        buffer.append(" name=\"");
+        buffer.append(component.getCompoundId());
+        buffer.append("\"");
 
         // render default text specified
         if (currentValue != null) {
-            writer.write(" value=\"");
-            writer.write(currentValue);
-            writer.write("\"");
+            buffer.append(" value=\"");
+            buffer.append(currentValue);
+            buffer.append("\"");
         }
-        writer.write(Util.renderPassthruAttributes(context, component));
-        writer.write(Util.renderBooleanPassthruAttributes(context, component));
-        writer.write(">");         
-   }
+        buffer.append(Util.renderPassthruAttributes(context, component));
+        buffer.append(Util.renderBooleanPassthruAttributes(context, component));
+        buffer.append(">");         
+        currentValue = this.renderWithLabel(context, component,
+            buffer.toString());
+        writer.write(currentValue);
+    }
 
 } // end of class SecretRenderer
