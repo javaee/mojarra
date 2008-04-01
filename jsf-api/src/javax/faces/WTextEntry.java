@@ -3,30 +3,38 @@ package javax.faces;
 import java.util.Hashtable;
 
 /**
- * Class for representing a form user-interface component. 
- * A form encapsulates the process of taking a collection of
- * input from the user and submitting it to the application
- * in a single submit operation.  
+ * Class for representing a user-interface component which displays
+ * output to the user.  This component type is not interactive -
+ * a user cannot directly manipulate this component.
  */
-public class WForm extends WComponent {
+public class WTextEntry extends WComponent {
 
-    private static String TYPE = "Form";
+    private static String TYPE = "TextEntry";
+    private Object value = null;
 
-    // PENDING(visvan) revisit later
+    // PENDING(visvan) revisit later.
     private Hashtable ht = null;
 
-    public WForm() {
+    public WTextEntry() {
         ht = new Hashtable();
     }
 
     /** 
-     * Returns a String representing the form's type.  
+     * Returns a String representing the this component type.  
      *
-     * @return a String object containing &quot;Form&quot;
+     * @return a String object containing &quot;TextEntry&quot;
      *         
      */
     public String getType() {
 	return TYPE;
+    }
+
+    public Object getValue() {
+	return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 
     /**

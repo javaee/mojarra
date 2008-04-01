@@ -12,7 +12,7 @@ public class WOutput extends WComponent {
     private static String TYPE = "Output";
     private Object value = null;
 
-    // JV revisit later.
+    // PENDING(visvan) revisit later.
     private Hashtable ht = null;
 
     public WOutput() {
