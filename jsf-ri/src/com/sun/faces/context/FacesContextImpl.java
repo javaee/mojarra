@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.1 2002/05/28 18:20:39 jvisvanathan Exp $
+ * $Id: FacesContextImpl.java,v 1.2 2002/05/28 20:52:01 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.context.MessageList;
-import javax.faces.FactoryFactory;
+import javax.faces.FactoryFinder;
 import javax.faces.component.FacesEvent;
 import javax.faces.lifecycle.LifecycleFactory;
 
@@ -93,7 +93,7 @@ public class FacesContextImpl extends FacesContext
         // set lifecyle.
         /* PENDING (visvan) set lifecyle once it is implemented
          LifecycleFactory lFactory = (LifecycleFactory)
-             FactoryFactory.createFactory
+             FactoryFinder.createFactory
              ("javax.faces.lifecycle.LifecycleFactory");
          this.lifecycle = lFactory.createLifecycle(lifecycleId); */
     }
