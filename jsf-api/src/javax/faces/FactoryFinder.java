@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.9 2002/06/14 00:00:03 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.10 2002/08/31 17:42:44 craigmcc Exp $
  */
 
 /*
@@ -66,6 +66,13 @@ public final class FactoryFinder {
 
 
     // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * The property name for the <code>ConverterFactory</code> class name.
+     */
+    public final static String CONVERTER_FACTORY =
+        "javax.faces.convert.ConverterFactory";
 
 
     /**
