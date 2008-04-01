@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngineImpl.java,v 1.6 2002/04/25 22:42:21 eburns Exp $
+ * $Id: NonJspTreeEngineImpl.java,v 1.1 2002/04/25 22:42:21 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TreeEngine.java
+// NonJspTreeEngine.java
 
 package com.sun.faces.treebuilder;
 
@@ -30,22 +30,25 @@ import javax.servlet.ServletResponse;
 import javax.servlet.ServletContext;
 
 import java.util.Map;
+import java.io.InputStream;
 
 /**
  *
 
- * @version $Id: TreeEngineImpl.java,v 1.6 2002/04/25 22:42:21 eburns Exp $
+ * @version $Id: NonJspTreeEngineImpl.java,v 1.1 2002/04/25 22:42:21 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine
 
  *
  */
 
-public class TreeEngineImpl extends Object implements TreeEngine
+public class NonJspTreeEngineImpl extends Object implements TreeEngine
 {
 //
 // Protected Constants
 //
+
+protected static final String TREE_SUFFIX = ".uiml";
 
 //
 // Class Variables
@@ -60,19 +63,16 @@ public class TreeEngineImpl extends Object implements TreeEngine
 // Relationship Instance Variables
 
 private ServletContext servletContext;
-private PreParser preParser = null;
 private BuildComponentFromTag componentBuilder = null;
 
 //
 // Constructors and Initializers    
 //
 
-public TreeEngineImpl(ServletContext newServletContext)
+public NonJspTreeEngineImpl(ServletContext newServletContext)
 {
     ParameterCheck.nonNull(newServletContext);
     servletContext = newServletContext;
-    preParser = new PreParser(servletContext);
-    componentBuilder = new com.sun.faces.taglib.html_basic.BuildComponentFromTagImpl();
 }
 
 //
@@ -82,31 +82,6 @@ public TreeEngineImpl(ServletContext newServletContext)
 //
 // helper methods
 //
-
-/**
-
-* Strips off the first part of the path. <P>
-
-* PRECONDITION: requestURI is at least a filename.
-
-*/
-
-public String fixURI(String requestURI) {
-    String result = requestURI;
-    int i = requestURI.indexOf("/");
-    if (-1 != i && requestURI.length() > i) {
-	requestURI = requestURI.substring(i + 1);
-	i = requestURI.indexOf("/");
-	if (-1 != i && requestURI.length() > i) {
-	    result = requestURI.substring(i);
-	}
-    } 
-    else {
-	// This uri doesn't have a leading slash.  Make sure it does.
-	result = "/" + requestURI;
-    }
-    return result;
-}
 
 //
 // General Methods
@@ -119,17 +94,16 @@ public TreeNavigator getTreeForURI(FacesContext fc, UIPage root,
     ParameterCheck.nonNull(requestURI);
 
     TreeNavigator result = null;
+    InputStream treeInput = null;
 
     // PENDING(edburns): do something more intelligent than parsing the
     // page each time.  
-    if ((null != requestURI) && requestURI.endsWith(".jsp")) {
-	requestURI = fixURI(requestURI);
-	TreeBuilder treeBuilder = new TreeBuilder(componentBuilder, fc, root, 
-						  requestURI);
-	preParser.addJspParseListener(treeBuilder);
-	preParser.preParse(requestURI);
-	preParser.removeJspParseListener(treeBuilder);
-	//treeBuilder.printTree(root, System.out);
+    if ((null != requestURI) && requestURI.endsWith(TREE_SUFFIX)) {
+	// turn the requestURI into an InputStream
+	NonJspTreeBuilder treeBuilder = new NonJspTreeBuilder(componentBuilder,
+							      fc, root,
+							      treeInput);
+	treeBuilder.printTree(root, System.out);
 	if (null != root) {
 	    result = new TreeNavigatorImpl(root);
 	}
@@ -137,7 +111,7 @@ public TreeNavigator getTreeForURI(FacesContext fc, UIPage root,
     return result;
 }
 
-public static class TreeEngineFactory extends Object implements FacesFactory
+public static class Factory extends Object implements FacesFactory
 {
 
 //
@@ -151,7 +125,7 @@ public Object newInstance(String facesName, ServletRequest req, ServletResponse 
 
 public Object newInstance(String facesName, ServletContext ctx) throws FacesException
 {
-    return new TreeEngineImpl(ctx);
+    return new NonJspTreeEngineImpl(ctx);
 }
 
 public Object newInstance(String facesName) throws FacesException
@@ -170,4 +144,4 @@ public Object newInstance(String facesName, Map args) throws FacesException
 // The testcase for this class is TestTreebuilder.java 
 
 
-} // end of class TreeEngineImpl
+} // end of class NonJspTreeEngineImpl
