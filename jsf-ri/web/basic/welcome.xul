@@ -1,0 +1,7 @@
+<?xml version="1.0"?> <!-- -*- Mode: HTML -*- --> 
+
+<window id="welcomeForm" formName="welcomeForm" rendererType="FormRenderer">
+
+<label id="userLabel" value="Login Successful" />
+
+</window>

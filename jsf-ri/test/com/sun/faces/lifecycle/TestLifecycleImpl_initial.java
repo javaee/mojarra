@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.3 2002/06/11 21:47:17 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.4 2002/06/18 18:23:25 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.3 2002/06/11 21:47:17 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.4 2002/06/18 18:23:25 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,8 +94,8 @@ public boolean sendResponseToFile()
 
 protected void initWebRequest(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+   // theRequest.addParameter("tree", TEST_URI_XUL);
     theRequest.addParameter(RIConstants.INITIAL_REQUEST_NAME, 
 			    RIConstants.INITIAL_REQUEST_VALUE);
 }

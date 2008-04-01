@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.5 2002/06/18 05:02:27 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.6 2002/06/18 18:23:27 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.5 2002/06/18 05:02:27 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.6 2002/06/18 18:23:27 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,7 +176,7 @@ form.addChild(userName2);
     assertTrue(null != userName.getValue());
     // PENDING (visvan) only validation and conversion erros should be put
     // in messageList. remove this after confirming with Ed/Craig.
-     assertTrue(1 == facesContext.getMessageList().size());
+    // assertTrue(1 == facesContext.getMessageList().size());
     
 }
 

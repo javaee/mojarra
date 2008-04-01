@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.2 2002/06/03 19:31:09 eburns Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.3 2002/06/18 18:23:26 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.2 2002/06/03 19:31:09 eburns Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.3 2002/06/18 18:23:26 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,7 +91,8 @@ public static UITextEntry userName = null;
 
 public void beginCallback(WebRequest theRequest)
 {
-    theRequest.addParameter("tree", TEST_URI_XUL);
+   // theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
     theRequest.addParameter("/root/basicForm/userName", "jerry");
 }
 

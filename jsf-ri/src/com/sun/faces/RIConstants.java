@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.6 2002/06/12 23:51:04 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.7 2002/06/18 18:23:22 jvisvanathan Exp $
  */
 
 /*
@@ -16,15 +16,21 @@ import javax.faces.render.RenderKitFactory;
  */
 public class RIConstants {
 
+    public static final String URL_PREFIX = "/faces";
+    
     /**
      * <p>Path Info prefix that indicates a form submit.</p>
      */
-    public static final String FORM_PREFIX = "/faces/form/";
+     public static final String FORM_PREFIX = "/form/";
+    
+    /**
+     * <p>Path Info prefix that indicates hyperlink</p>
+     */
+    public static final String COMMAND_PREFIX = "/command/";
     
     /**
      * Used to add uniqueness to the names.
     */
-    
     public final static String FACES_PREFIX = "com.sun.faces.";
 
     public final static String DEFAULT_RENDER_KIT = FACES_PREFIX +

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.24 2002/06/12 23:51:06 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.25 2002/06/18 18:23:22 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.net.URLEncoder;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.24 2002/06/12 23:51:06 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.25 2002/06/18 18:23:22 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,7 +136,6 @@ public class FormRenderer extends Renderer {
             return;
         }
         String formName = pathInfo.substring(RIConstants.FORM_PREFIX.length());
-        
         int slash = formName.indexOf('/');
         if (slash >= 0) {
             formName = formName.substring(0, slash);
@@ -150,7 +149,6 @@ public class FormRenderer extends Renderer {
         // with components!
         String commandName =
             extract(context, context.getServletRequest(), component);
-
         // Enqueue a form event to the application
         context.addApplicationEvent
             (new FormEvent(component, formName, commandName));
@@ -221,12 +219,16 @@ public class FormRenderer extends Renderer {
             (HttpServletRequest) context.getServletRequest();
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
-        StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append(RIConstants.FORM_PREFIX);
-        sb.append(URLEncoder.encode(form.currentValue(context).toString()));
+        String contextPath = request.getContextPath();
+        if ( contextPath.indexOf("/") == -1 ) {
+            contextPath = contextPath + "/";
+        }    
+        StringBuffer sb = new StringBuffer(contextPath);
+        sb.append(( RIConstants.URL_PREFIX + RIConstants.FORM_PREFIX));
+        sb.append(form.currentValue(context).toString());
         sb.append("/");
-        sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
-        return (response.encodeURL(URLEncoder.encode(sb.toString())));
+        sb.append(context.getResponseTree().getTreeId());
+        return (response.encodeURL(sb.toString())); 
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {

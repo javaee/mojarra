@@ -4,7 +4,7 @@
 
 <page-url>/Faces_Basic.jsp</page-url>
 
-<window id="basicForm" formName="basicForm">
+<window id="basicForm" formName="basicForm" rendererType="FormRenderer" >
 
 <label id="userLabel" value="UserName" />
 <textbox id="userName" value="default" />

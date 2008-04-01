@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.3 2002/06/09 01:49:09 eburns Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.4 2002/06/18 18:23:26 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.3 2002/06/09 01:49:09 eburns Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.4 2002/06/18 18:23:26 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,8 +125,8 @@ public void setUp()
 
 public void beginRender(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+   // theRequest.addParameter("tree", TEST_URI_XUL);
 }
 
 public void testRender()

@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageListImpl.java,v 1.2 2002/06/13 23:18:45 jvisvanathan Exp $
+ * $Id: TestMessageListImpl.java,v 1.3 2002/06/18 18:23:23 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageListImpl.java,v 1.2 2002/06/13 23:18:45 jvisvanathan Exp $
+ * @version $Id: TestMessageListImpl.java,v 1.3 2002/06/18 18:23:23 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -78,6 +78,7 @@ public class TestMessageListImpl extends FacesContextTestCase
         MessageList messageList = facesContext.getMessageList();
         Assert.assert_it(messageList != null);
         
+        // PENDING (visvan) add tests to test all add methods.
         // make sure we get an exception for a messageId that doesn't exist in 
         // resource file
         try {

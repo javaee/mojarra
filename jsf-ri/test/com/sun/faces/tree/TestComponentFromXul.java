@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentFromXul.java,v 1.1 2002/06/08 20:42:12 rkitain Exp $
+ * $Id: TestComponentFromXul.java,v 1.2 2002/06/18 18:23:28 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.lifecycle.CreateRequestTreePhase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentFromXul.java,v 1.1 2002/06/08 20:42:12 rkitain Exp $
+ * @version $Id: TestComponentFromXul.java,v 1.2 2002/06/18 18:23:28 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -81,7 +81,15 @@ public static final String TEST_URI_XUL = "/Faces_Basic_Component.xul";
 
 public void beginExecute(WebRequest theRequest)
 {
-    theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+    System.setProperty(FactoryFinder.TREE_FACTORY,
+			"com.sun.faces.tree.XmlTreeFactoryImpl");
+}
+
+public void beginExecteDefaultRequestTree(WebRequest theRequest)
+{
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+    //theRequest.addParameter("tree", TEST_URI_XUL);
     System.setProperty(FactoryFinder.TREE_FACTORY,
 			"com.sun.faces.tree.XmlTreeFactoryImpl");
 }
@@ -111,6 +119,7 @@ public void testExecteDefaultRequestTree()
 	result = createTree.execute(facesContext);
     }
     catch (Throwable e) {
+       e.printStackTrace();
 	assertTrue(false);
     }
     assertTrue(Phase.GOTO_NEXT == result);

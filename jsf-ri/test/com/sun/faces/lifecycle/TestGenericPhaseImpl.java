@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.1 2002/06/01 00:58:23 eburns Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.2 2002/06/18 18:23:24 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.1 2002/06/01 00:58:23 eburns Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.2 2002/06/18 18:23:24 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,7 +95,8 @@ public static final String CORRECT_OUTPUT_FILENAME = PATH_ROOT +
 
 public void beginExecute(WebRequest theRequest)
 {
-    theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+    //theRequest.addParameter("tree", TEST_URI_XUL);
 }
 
 public void testExecute()

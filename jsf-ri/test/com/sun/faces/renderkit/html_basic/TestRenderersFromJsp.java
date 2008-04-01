@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderersFromJsp.java,v 1.3 2002/06/11 20:41:10 eburns Exp $
+ * $Id: TestRenderersFromJsp.java,v 1.4 2002/06/18 18:23:27 jvisvanathan Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderersFromJsp.java,v 1.3 2002/06/11 20:41:10 eburns Exp $
+ * @version $Id: TestRenderersFromJsp.java,v 1.4 2002/06/18 18:23:27 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,8 +103,8 @@ public HttpServletResponse getResponse()
 
 protected void initWebRequest(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
-    theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+   // theRequest.addParameter("tree", TEST_URI_XUL);
     theRequest.addParameter(RIConstants.INITIAL_REQUEST_NAME, 
 			    RIConstants.INITIAL_REQUEST_VALUE);
 }

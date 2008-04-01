@@ -12,6 +12,10 @@
 
 <web-app>
 
+    
+    <listener>
+        <listener-class>basic.BasicServletContextListener</listener-class>
+    </listener>
 
     <!-- Faces Servlet -->
     <servlet>
@@ -26,6 +30,5 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
-
 
 </web-app>

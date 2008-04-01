@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.4 2002/06/04 21:21:50 eburns Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.5 2002/06/18 18:23:24 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.4 2002/06/04 21:21:50 eburns Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.5 2002/06/18 18:23:24 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,7 +88,8 @@ public static final String EMPTY = "empty";
 
 public void beginCallback(WebRequest theRequest)
 {
-    theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
+   // theRequest.addParameter("tree", TEST_URI_XUL);
     theRequest.addParameter("/valueChange", "jerry");
 }
 

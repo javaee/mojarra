@@ -1,5 +1,5 @@
 /*
- * $Id: CreateRequestTreePhase.java,v 1.3 2002/06/07 22:47:36 eburns Exp $
+ * $Id: CreateRequestTreePhase.java,v 1.4 2002/06/18 18:23:22 jvisvanathan Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.FactoryFinder;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.RIConstants;
 
@@ -34,7 +35,7 @@ import com.sun.faces.RIConstants;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: CreateRequestTreePhase.java,v 1.3 2002/06/07 22:47:36 eburns Exp $
+ * @version $Id: CreateRequestTreePhase.java,v 1.4 2002/06/18 18:23:22 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -99,9 +100,12 @@ public int execute(FacesContext facesContext) throws FacesException
     // Create the requested component tree
     ServletContext servletContext = facesContext.getServletContext();
     String initialRequestParam = null,
-	treeId = facesContext.getServletRequest().getParameter("tree"),
-	renderKitId = facesContext.getServletRequest().getParameter("renderKit");
+    renderKitId = facesContext.getServletRequest().getParameter("renderKit");
 
+    String pathInfo = 
+            ((HttpServletRequest) facesContext.getServletRequest()).getPathInfo();
+    
+    String treeId = getTreeIdFromPathInfo(pathInfo);
     TreeFactory treeFactory = null;
     RenderKitFactory renderKitFactory = null;
     RenderKit renderKit = null;
@@ -132,13 +136,44 @@ public int execute(FacesContext facesContext) throws FacesException
 		 facesContext.getServletRequest().getParameter(RIConstants.INITIAL_REQUEST_NAME))
 	&&
 	initialRequestParam.equals(RIConstants.INITIAL_REQUEST_VALUE)) {
-	rc = Phase.GOTO_RENDER;
-    }
-
+        rc = Phase.GOTO_RENDER;
+    } 
     return rc;
 }
 
+protected String getTreeIdFromPathInfo(String path_info) {
+            
+    String treeId = null;
+    String path = null;
+    ParameterCheck.nonNull(path_info);
+   
+    // If it is an initial request, then treeId is after /faces like
+    // /Faces_Basic.xul. No parsing is required.
+    if (!(path_info.startsWith(RIConstants.FORM_PREFIX) || 
+            path_info.startsWith(RIConstants.COMMAND_PREFIX))) {
+        return path_info;
+    }   
 
+    // if it is postback case, then pathInfo will be of the form
+    // /form/formName/treeid or /command/commandName/treeid.
+    // We cannot count on locating treeId between the two slashes
+    // because it could be nested like /jsp/examples/welcome.xul.
+    String submitStr = null;
+    if ( path_info.startsWith(RIConstants.FORM_PREFIX )) {
+        submitStr = RIConstants.FORM_PREFIX;
+    } else if ( path_info.startsWith(RIConstants.COMMAND_PREFIX )) {
+        submitStr = RIConstants.COMMAND_PREFIX;  
+    }    
+   
+    path = path_info.substring(submitStr.length());
+    if ( path != null ) {
+        int slash = path.indexOf('/');
+        if (slash >= 0) {
+            treeId = path.substring(slash, path.length());
+        }    
+    }
+    return treeId;
+    }    
 // The testcase for this class is TestCreateRequestTreePhase.java
 
 
