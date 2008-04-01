@@ -40,7 +40,7 @@
                                       bundle="${basicBundle}"/> </td>
               <td> 
 
-                   <faces:textentry_input id="userName">
+                   <faces:input_text id="userName">
 
 		     <faces:validator className="javax.faces.validator.LengthValidator"/>
 		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
@@ -51,7 +51,7 @@
 		     <faces:attribute 
                          name="javax.faces.validator.LengthValidator.MAXIMUM"
                          value="10"/>
-                   </faces:textentry_input>
+                   </faces:input_text>
 
               </td>
 
@@ -65,7 +65,7 @@
 
                <td> 
 
-                    <faces:textentry_secret id="password"> 
+                    <faces:input_secret id="password"> 
 
 		     <faces:validator className="javax.faces.validator.LengthValidator"/>
 		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
@@ -77,7 +77,7 @@
                          name="javax.faces.validator.LengthValidator.MAXIMUM"
                          value="10"/>
 
-                    </faces:textentry_secret>
+                    </faces:input_secret>
 
                </td>
 
@@ -92,7 +92,7 @@
 
                <td> 
 
-                    <faces:textentry_input id="double"
+                    <faces:input_text id="double"
                                   modelReference="${LoginBean.double}"> 
 
 		     <faces:validator 
@@ -106,7 +106,7 @@
                          name="javax.faces.validator.DoubleRangeValidator.MAXIMUM"
                          value="3.9"/>
 
-                    </faces:textentry_input>
+                    </faces:input_text>
 
                </td>
 
@@ -121,7 +121,7 @@
 
                <td> 
 
-                    <faces:textentry_input id="integer"
+                    <faces:input_text id="integer"
                                   modelReference="${LoginBean.int}"> 
 
 		     <faces:validator 
@@ -135,7 +135,7 @@
                          name="javax.faces.validator.LongRangeValidator.MAXIMUM"
                          value="10"/>
 
-                    </faces:textentry_input>
+                    </faces:input_text>
 
                </td>
 
@@ -150,7 +150,7 @@
 
                <td> 
 
-                    <faces:textentry_input id="string" size="1"
+                    <faces:input_text id="string" size="1"
                                   modelReference="${LoginBean.string}"> 
 
 		     <faces:validator 
@@ -164,7 +164,7 @@
                          name="javax.faces.validator.StringRangeValidator.MAXIMUM"
                          value="f"/>
 
-                    </faces:textentry_input>
+                    </faces:input_text>
 
                </td>
 
@@ -177,7 +177,7 @@
              <tr>
                 <td> <faces:output_text id="addrLabel" key="addressLabel" 
                                       bundle="${basicBundle}" /> </td>
-                <td> <faces:textentry_textarea rows="10" cols="10" 
+                <td> <faces:input_textarea rows="10" cols="10" 
                                                id="address" /> </td>
              </tr>
 
