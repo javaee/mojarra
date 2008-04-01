@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.6 2002/06/20 01:34:26 eburns Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.7 2002/06/22 00:15:09 jvisvanathan Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.6 2002/06/20 01:34:26 eburns Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.7 2002/06/22 00:15:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,7 +124,7 @@ public void testCallback()
     assertTrue(!System.getProperty(DID_DECODE).equals(EMPTY));
     
     rc = handleEvents.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    assertTrue(Phase.GOTO_RENDER == rc);
     assertTrue(!System.getProperty(DID_EVENT).equals(EMPTY));
 
     System.setProperty(DID_DECODE, EMPTY);
@@ -159,14 +159,14 @@ public void decode(FacesContext context) throws IOException
 	valueChanged = true;
     }
     if (valueChanged) {
-	this.addEvent(new FacesEvent(this));
+	context.addRequestEvent(this,new FacesEvent(this));
     }
 	
     setValue(newValue);
     
 }
 
-public boolean event(FacesContext context, FacesEvent event) 
+public boolean processEvent(FacesContext context, FacesEvent event) 
 {
     assertTrue(event.getSource() == this);
     System.setProperty(DID_EVENT, DID_EVENT);

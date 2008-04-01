@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.7 2002/06/21 22:02:20 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.8 2002/06/22 00:15:08 jvisvanathan Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import javax.faces.component.UIForm;
 
 import javax.faces.event.FacesEvent;
 import javax.faces.event.CommandEvent;
+import javax.faces.event.FormEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
@@ -37,7 +38,7 @@ import javax.faces.context.ResponseStream;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.RIConstants;
 import javax.faces.render.RenderKit;
-
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Iterator;
 
@@ -49,7 +50,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.7 2002/06/21 22:02:20 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.8 2002/06/22 00:15:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,7 +131,7 @@ public void testAccessors()
     result = null != locale;
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
-    
+
     Iterator messages = null; 
     exceptionThrown = false;
     System.out.println("Testing getMessages: " + result);
@@ -141,7 +142,7 @@ public void testAccessors()
 	exceptionThrown = true;
     }
     assertTrue(exceptionThrown);
-    
+
     getFacesContext().setRequestTree( new XmlTreeImpl(config.getServletContext(),
                 new UIForm(),"treeId", ""));
     Tree requestTree = getFacesContext().getRequestTree();
@@ -163,11 +164,7 @@ public void testAccessors()
     result = null != responseTree;
     System.out.println("Testing getResponseTree: " + result);
     assertTrue(result);
-    
-    getFacesContext().addApplicationEvent(new CommandEvent(new UICommand(), 
-            "cmdName"));
-    System.out.println("Testing addApplicationEvent: " );
-
+ 
     ResponseStream responseStream = new ResponseStream() {
 	    public void write(int b) {}
 	};
@@ -185,29 +182,36 @@ public void testAccessors()
     result = responseWriter == getFacesContext().getResponseWriter();
     assertTrue(result);
     System.out.println("Testing responseWriter: " + result);
-   
-    Iterator it = getFacesContext().getApplicationEvents();
-    result = null != it;
-    System.out.println("Testing getApplicationEvent: " + result);
-    assertTrue(result);
+}
 
-    assertTrue(1 == getFacesContext().getApplicationEventsCount());
+public void testApplicationEvents() {
     
+    assertTrue(getFacesContext().getApplicationEventsCount() == 0);
+    
+    boolean gotException = false;
+    try {
+        getFacesContext().addApplicationEvent(null);
+    } catch (Exception e ) {
+        gotException = true;
+    }
+    assertTrue(gotException);
+    
+    System.out.println("Testing addApplicationEvent: " );
+    getFacesContext().addApplicationEvent(new CommandEvent(new UICommand(), 
+            "cmdName"));
+    getFacesContext().addApplicationEvent(new FormEvent(new UIForm(), "basicForm", 
+            "cmdName"));
+    
+    System.out.println("Testing getApplicationEventCount: " );
+    int size = getFacesContext().getApplicationEventsCount();
+    assertTrue (size ==2 );
+    
+    Iterator it = getFacesContext().getApplicationEvents();
     FacesEvent event = (FacesEvent) it.next();
     assertTrue(event instanceof CommandEvent);
     
-    // this method it not implemented yet. Make sure the result fails.
-    try {
-        getFacesContext().release();
-        result = false;
-        System.out.println("Testing release: " + result);
-    } catch (FacesException fe) {
-        result = true;    
-    }    
-    assertTrue(result);
-    
-    // Unit tests to update and retrieve values from model objects
-    // are in TestFacesContextImpl_Model.java
+    event = (FacesEvent) it.next();
+    assertTrue(event instanceof FormEvent);
 }
 
 public void testRequestEventsNull()
@@ -304,4 +308,19 @@ public void testRequestEvents()
 
 }
 
+public void testRelease() {
+    System.out.println("Testing release method");
+    getFacesContext().release();
+    assertTrue(getFacesContext().getLifecycle() == null);
+    assertTrue(getFacesContext().getLocale() == null);
+    assertTrue(getFacesContext().getRequestTree() == null);
+    assertTrue(getFacesContext().getResponseTree() == null);
+    assertTrue(getFacesContext().getResponseStream() == null);
+    assertTrue(getFacesContext().getResponseWriter() == null);
+    Iterator it = getFacesContext().getApplicationEvents();
+    assertTrue( !it.hasNext());
+    assertTrue(getFacesContext().getRequestEventsCount() == 0);
+}
+// Unit tests to update and retrieve values from model objects
+// are in TestFacesContextImpl_Model.java
 } // end of class TestFacesContextImpl

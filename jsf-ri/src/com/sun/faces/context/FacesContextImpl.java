@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.9 2002/06/21 22:02:20 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.10 2002/06/22 00:15:07 jvisvanathan Exp $
  */
 
 /*
@@ -312,16 +312,10 @@ public class FacesContextImpl extends FacesContext
             requestEvents.put(component, list);
         }
         list.add(event);
-
-	requestEventsCount++;
-    }
-
+        requestEventsCount++;
+    } 
+    
     /**
-     * PRECONDITION: ObjectManager exists in Application Scope.  The
-     * 'model reference' string references a valid model bean instance
-     * existing in the ObjectManager.  Note that for nested beans,
-     * the nested bean is also instantiated inside the container bean.
-     *
      * POSTCONDITION: Class type of the property is returned as identified by  
      * the model reference string.
      *
@@ -329,12 +323,14 @@ public class FacesContextImpl extends FacesContext
      * @param objectReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the ObjectManager,
+     *     model reference string cannot be found in the any scope,
      *     or the property value could not be retrieved.
      */
     public Class getModelType(String model) throws FacesException {
-        ParameterCheck.nonNull(model);
-	
+        
+	if ( model == null ) {
+            return null;
+        }
         String expression = null;
         String property = null;
         String baseName = null;
@@ -345,14 +341,14 @@ public class FacesContextImpl extends FacesContext
 	    expression = model.substring(2, model.length() - 1);
             // if it is not a nested property, then it directly references
             // a model object. So there should be a model bean existing
-            // in the ObjectManager with this name.
+            // in the one of the scopes with this name.
             if ( expression.indexOf(".") == -1 ) {
                 // PENDING (visvan) temporary: assume the model bean is stored
                 // in session
-                object = getHttpSession().getAttribute(baseName);
+                object = getObjectFromScope(baseName);
                 if (object == null) {
                     throw new FacesException("Named Object: '"+expression+
-                        "' not found in ObjectManager.");
+                        "' not found.");
                 }
                 returnClass = object.getClass();
             } else {    
@@ -360,10 +356,10 @@ public class FacesContextImpl extends FacesContext
                 baseName = expression.substring(0, expression.indexOf("."));
                 // PENDING (visvan) temporary: assume the model bean is stored
                 // in session
-                object = getHttpSession().getAttribute(baseName);
+                object = getObjectFromScope(baseName);
                 if (object == null) {
                     throw new FacesException("Named Object: '"+baseName+
-                        "' not found in ObjectManager.");
+                        "' not found in.");
                 }
                 try {
                     returnClass = PropertyUtils.getPropertyType(object, 
@@ -383,11 +379,6 @@ public class FacesContextImpl extends FacesContext
     }
 
     /**
-     * PRECONDITION: ObjectManager exists in Application Scope.  The
-     * 'model reference' string references a valid model bean instance
-     * existing in the ObjectManager.  Note that for nested beans,
-     * the nested bean is also instantiated inside the container bean.
-     *
      * POSTCONDITION: An object is returned as identified by  
      * the model reference string.
      *
@@ -395,13 +386,14 @@ public class FacesContextImpl extends FacesContext
      * @param objectReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the ObjectManager,
+     *     model reference string cannot be found in the any scope,
      *     or the property value could not be retrieved.
      */
     public Object getModelValue(String model) throws FacesException {
         
-        ParameterCheck.nonNull(model);
-	
+        if (model == null) {
+	    return null;
+        }    
         String expression = null;
         String property = null;
         String baseName = null;
@@ -412,25 +404,20 @@ public class FacesContextImpl extends FacesContext
 	    expression = model.substring(2, model.length() - 1);
             // if it is not a nested property, then it directly references
             // a model object. So there should be a model bean existing
-            // in the ObjectManager with this name.
+            // in the one of scopes with this name.
             if ( expression.indexOf(".") == -1 ) {
-                // PENDING (visvan) temporary: assume the model bean is stored
-                // in session
-                returnObject = getHttpSession().getAttribute(baseName);
+                returnObject = getObjectFromScope(baseName);
                 if (returnObject == null) {
                     throw new FacesException("Named Object: '"+expression+
-                        "' not found in ObjectManager.");
+                        "' not found.");
                 }
             } else {    
                 property = expression.substring((expression.indexOf(".")+1));
                 baseName = expression.substring(0, expression.indexOf("."));
-
-                // PENDING (visvan) temporary: assume the model bean is stored
-                // in session
-                object = getHttpSession().getAttribute(baseName);
+                object = getObjectFromScope(baseName);
                 if (object == null) {
                     throw new FacesException("Named Object: '"+baseName+
-                        "' not found in ObjectManager.");
+                        "' not found.");
                 }
                 try {
                     returnObject = PropertyUtils.getNestedProperty(object, 
@@ -450,29 +437,26 @@ public class FacesContextImpl extends FacesContext
     }
 
     /**
-     * PRECONDITION: ObjectManager exists in Application Scope.  The
-     * 'model reference' string references a valid model bean instance
-     * existing in the ObjectManager.  Note that for nested beans,
-     * the nested bean is also instantiated inside the container bean.
-     *
+     * // PENDING (visvan) update Java docs.
      * POSTCONDITION: The property value is set, where the property
      * is identified by the model reference string.  The model bean
-     * with the new value is put back into the ObjectManager.
+     * with the new value is put back into the session scope.
+     * This could change in future.
      *
      * @param request ServletRequest object representing the client request
      * @param modelReference A string referencing a bean's property.
      * @param value The value of the property to be set.
      *
      * @exception FacesException If the model bean identified by the
-     *     model reference string cannot be found in the ObjectManager,
+     *     model reference string cannot be found in the any scope,
      *     or the property value could not be set.
      */
     public void setModelValue(String model, Object value) 
             throws FacesException {
         
-        ParameterCheck.nonNull(model);
-        ParameterCheck.nonNull(value);
-        
+        if (model == null ) {
+            return;
+        }    
         String expression = null;
         String property = null;
         String baseName = null;
@@ -483,26 +467,25 @@ public class FacesContextImpl extends FacesContext
 	    expression = model.substring(2, model.length() - 1);
             // if it is not a nested property, then it directly references
             // a model object. So there should be a model bean existing
-            // in the ObjectManager with this name.
+            // in one of the scopes with this name.
             if ( expression.indexOf(".") == -1 ) {
-                // PENDING (visvan) temporary: assume the model bean is stored
-                // in session
-                object = getHttpSession().getAttribute(baseName);
+                object = getObjectFromScope(baseName);
                 if (object == null) {
                     throw new FacesException("Named Object: '"+expression+
-                        "' not found in ObjectManager.");
+                        "' not found.");
                 }
+                // PENDING (visvan) store model objects in correct scope.
                 object = value;
                 getHttpSession().setAttribute(baseName, object);   
             } else {
                 property = expression.substring((expression.indexOf(".")+1));
                 baseName = expression.substring(0, expression.indexOf("."));
-                // PENDING (visvan) temporary: assume the model bean is stored
-                // in session
-                object = getHttpSession().getAttribute(baseName);
+                // PENDING (visvan) temporary: store model bean in 
+                // correct scope.
+                object = getObjectFromScope(baseName);
                 if (object == null) {
                     throw new FacesException("Named Object: '"+baseName+
-                        "' not found in ObjectManager.");
+                        "' not found.");
                 }
                 try {
                     PropertyUtils.setNestedProperty(object, property, value);
@@ -518,12 +501,42 @@ public class FacesContextImpl extends FacesContext
             throw new FacesException("Expression should start with ${");
         }    
     }
-
-
-    public void release() {
-        throw new FacesException("UnImplemented");
-    }
     
+    /**
+     * This method does a narrow to broad search to locate a model
+     * bean
+     */
+    private Object getObjectFromScope(String modelRef) {
+        // search request, session and application scope in that order.
+        Object modelObj = null;
+        modelObj = getServletRequest().getAttribute(modelRef);
+        if ( modelObj != null ) {
+            return modelObj;
+        }
+        if (getHttpSession() != null ) {
+            modelObj = getHttpSession().getAttribute(modelRef);
+            if ( modelObj != null ) {
+                return modelObj;
+            }
+        }    
+        modelObj = getServletContext().getAttribute(modelRef);
+        return modelObj;
+    }    
+    
+    public void release() {
+        // PENDING (visvan) do we have to release servlet API components
+        // as well ??
+        lifecycle = null;
+        locale = null;
+        requestTree = null;
+        responseTree = null;
+        responseStream = null;
+        responseWriter = null;
+        applicationEvents = null;
+        requestEvents = null;
+        requestEventsCount = 0;
+    }    
+        
     // The testcase for this class is TestFacesContextImpl.java 
     // The testcase for this class is TestFacesContextImpl_Model.java
 

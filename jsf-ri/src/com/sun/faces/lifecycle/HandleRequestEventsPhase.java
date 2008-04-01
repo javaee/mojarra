@@ -1,5 +1,5 @@
 /*
- * $Id: HandleRequestEventsPhase.java,v 1.3 2002/06/21 00:31:21 eburns Exp $
+ * $Id: HandleRequestEventsPhase.java,v 1.4 2002/06/22 00:15:07 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: HandleRequestEventsPhase.java,v 1.3 2002/06/21 00:31:21 eburns Exp $
+ * @version $Id: HandleRequestEventsPhase.java,v 1.4 2002/06/22 00:15:07 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#HANDLE_REQUEST_EVENTS_PHASE
@@ -64,9 +64,6 @@ public HandleRequestEventsPhase(Lifecycle newDriver, int newId)
 	  new LifecycleCallback() {
 	      public int takeActionOnComponent(FacesContext context,
 					       UIComponent comp) throws FacesException {
-		  Assert.assert_it(false, 
-				   "PENDING(): Not sure if this is correct");
-
 		  if (comp.processEvents(context)) {
 		      return Phase.GOTO_RENDER;
 		  }

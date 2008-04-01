@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.2 2002/06/03 19:18:17 eburns Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.3 2002/06/22 00:15:08 jvisvanathan Exp $
  */
 
 /*
@@ -14,17 +14,9 @@ package com.sun.faces.context;
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
-import org.apache.cactus.ServletTestCase;
-
-import javax.servlet.http.HttpSession;
-import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletContext;
-import com.sun.faces.context.FacesContextImpl;
-import javax.faces.lifecycle.LifecycleFactory;
+import com.sun.faces.ServletFacesTestCase;
 import javax.faces.FacesException;
-
+import javax.faces.context.FacesContext;
 import com.sun.faces.TestBean;
 import com.sun.faces.TestBean.InnerBean;
 import com.sun.faces.TestBean.Inner2Bean;
@@ -35,14 +27,14 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.2 2002/06/03 19:18:17 eburns Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.3 2002/06/22 00:15:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestFacesContextImpl_Model extends ServletTestCase
+public class TestFacesContextImpl_Model extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -55,8 +47,6 @@ public class TestFacesContextImpl_Model extends ServletTestCase
 //
 // Instance Variables
 //
-protected FacesContextImpl facesContext = null;
-
 // Attribute Instance Variables
 
 // Relationship Instance Variables
@@ -78,19 +68,10 @@ protected FacesContextImpl facesContext = null;
 //
 // General Methods
 //
-public void setUp() {
-    
-    ServletContext sc = (request.getSession()).getServletContext();
-    try {
-        facesContext = new FacesContextImpl(sc,request, response, 
-                LifecycleFactory.DEFAULT_LIFECYCLE);
-    } catch ( FacesException fe) {
-    }
-    assertTrue(facesContext != null);
-}  
 
 public void testSet()
 {
+    FacesContext facesContext = getFacesContext();
     System.out.println("Testing setModelValue()");
     TestBean testBean = new TestBean();
     InnerBean inner = new InnerBean();
@@ -125,6 +106,7 @@ public void testSet()
 
 public void testGet()
 {
+    FacesContext facesContext = getFacesContext();
     System.out.println("Testing getModelValue()");
     assertTrue( facesContext != null );
     TestBean testBean = new TestBean();
@@ -181,5 +163,52 @@ public void testGet()
     className = classType.getName();
     assertTrue(className.equals("java.lang.String"));
 }
+
+public void testModelObjectSearch() {
+    String result = null;
+    FacesContext facesContext = getFacesContext();
+    assertTrue( facesContext != null );
+    TestBean testBean = new TestBean();
+    testBean.setOne("one");
+    
+    boolean gotException = false;
+    assertTrue(facesContext.getModelType(null) == null );
+    assertTrue(facesContext.getModelValue(null) == null );
+    try {
+        facesContext.setModelValue(null,null);
+    } catch ( Exception e ) {
+        gotException = true;
+    }    
+    assertTrue( !gotException);
+    // store the bean in various scope and make sure the narrow to broad
+    // search works.
+    
+    // Test Bean in request scope.
+    (facesContext.getServletRequest()).setAttribute("TestBean", testBean);
+    result = (String) facesContext.getModelValue("${TestBean.one}");
+    assertTrue(result.equals("one"));
+    (facesContext.getServletRequest()).removeAttribute("TestBean");
+   
+    // Test Bean in session scope.
+    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    result = (String) facesContext.getModelValue("${TestBean.one}");
+    assertTrue(result.equals("one"));
+    (facesContext.getHttpSession()).removeAttribute("TestBean");
+  
+    // Test Bean in ServletContext
+    (facesContext.getServletContext()).setAttribute("TestBean", testBean);
+    result = (String) facesContext.getModelValue("${TestBean.one}");
+    assertTrue(result.equals("one"));
+    (facesContext.getServletContext()).removeAttribute("TestBean");
+    
+    // make sure we get an exception if bean doesn't exist
+    gotException = false;
+    try {
+        result = (String) facesContext.getModelValue("${TestBean.one}");
+    } catch ( FacesException fe) {
+        gotException = true;
+    }    
+    assertTrue(gotException);
+}    
 
 } // end of class TestFacesContextImpl_Model

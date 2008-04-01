@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.3 2002/06/20 01:34:26 eburns Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.4 2002/06/22 00:15:09 jvisvanathan Exp $
  */
 
 /*
@@ -24,9 +24,9 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.component.UITextEntry;
 import javax.faces.tree.Tree;
-import javax.faces.event.CommandEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.event.FormEvent;
-
+import javax.faces.event.CommandEvent;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.tree.XmlTreeImpl;
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.3 2002/06/20 01:34:26 eburns Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.4 2002/06/22 00:15:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,14 +98,11 @@ public void testInvokeNormal()
     Tree tree = new XmlTreeImpl(config.getServletContext(),
 				root, "default.xul", "");
     ApplicationHandler appHandler = new ApplicationHandler() {
-
-	    public void commandEvent(FacesContext context, CommandEvent event){
-		System.setProperty(DID_COMMAND, DID_COMMAND);
-		assertTrue(root == event.getComponent());
-	    }
-	    public void formEvent(FacesContext context, FormEvent event){
+        public boolean processEvent(FacesContext context, FacesEvent event){
 		System.setProperty(DID_FORM, DID_FORM);
+                System.setProperty(DID_COMMAND, DID_COMMAND);
 		assertTrue(root == event.getComponent());
+                return true;
 	    }
 	};
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
@@ -117,7 +114,7 @@ public void testInvokeNormal()
     getFacesContext().addApplicationEvent(new CommandEvent(root, "command"));
     getFacesContext().addApplicationEvent(new FormEvent(root, "form"));
     rc = invokeApplicationPhase.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    assertTrue(Phase.GOTO_RENDER == rc);
     assertTrue(System.getProperty(DID_COMMAND).equals(DID_COMMAND));
     assertTrue(System.getProperty(DID_FORM).equals(DID_FORM));
 }
