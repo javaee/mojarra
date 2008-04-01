@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<!-- 
+  =======================================================================
+    JSF-API build file                                                      
+  ======================================================================= 
+-->
+<project name="JSF-API" default="main" basedir=".">
+
+  <property name="Name" value="jsf-api"/>
+  <property name="name" value="jsf-api"/>
+  <property name="version" value="0.1"/>
+
+  <property name="debug" value="true" />
+  <property name="deprecation" value="false" />
+  <property name="optimize" value="false" />
+
+  <property name="src.dir" value="src"/>
+  <property name="java.dir" value="${src.dir}"/>
+  <property name="lib.dir" value="lib"/>
+  
+  <property name="manifest" value="etc/manifest"/>
+
+  <property name="build.dir" value="build"/>
+  <property name="build.classes" value="${build.dir}/classes"/>
+  <property name="build.lib" value="${build.dir}/lib"/>
+  <property name="build.javadocs" value="${build.dir}/javadocs"/>
+
+  <path id="classpath">
+  </path>
+
+  <!-- 
+       ===================================================================
+         Prepare the build              
+       =================================================================== 
+  -->
+  <target name="prepare">
+    <tstamp />
+  </target>
+
+  <!-- 
+       ===================================================================
+         Build the code           
+       =================================================================== 
+  -->
+  <target name="build" depends="prepare">
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes}"/>
+    <mkdir dir="${build.lib}"/>
+    
+    <javac srcdir="${java.dir}"
+           destdir="${build.classes}"
+           debug="${debug}"
+           deprecation="${deprecation}"
+           optimize="${optimize}" >
+      <classpath refid="classpath" />
+    </javac>
+    
+    <copy todir="${build.classes}">
+      <fileset dir="${java.dir}">
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
+
+    <filter token="VERSION" value="${version}" />
+    <filter token="DATE" value="${TODAY}" />
+    <filter token="TIME" value="${TSTAMP}" />
+    <copy    todir="${build.classes}" 
+             overwrite="true"
+             filtering="on">
+      <fileset dir="${java.dir}">
+        <include name="**/version.txt" />
+        <include name="**/defaultManifest.mf" />
+      </fileset>
+    </copy>
+
+  </target>
+  
+  <!-- 
+       =================================================================== 
+         Create the jars
+       =================================================================== 
+  -->
+  <target name="jars" depends="build">
+
+    <jar jarfile="${build.lib}/${name}.jar" 
+         basedir="${build.classes}" 
+         manifest="${manifest}">
+    </jar>
+
+  </target>
+
+  <!--
+       ===================================================================
+         Clean up build and distribution directories
+       ===================================================================
+  -->
+  <target name="clean">
+    <delete dir="${build.dir}" />
+    <delete> 
+      <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+    </delete>
+  </target> 
+
+  <!--
+       ===================================================================
+         Clean everything
+       ===================================================================
+  -->
+  <target name="allclean" depends="clean">
+  </target> 
+
+  <!-- 
+       ===================================================================
+         Create the API documentation                             
+       =================================================================== 
+  -->
+  
+  <target name="javadoc_check">
+    <uptodate property="javadoc.notrequired" targetfile="${build.javadocs}/packages.html" >
+        <srcfiles dir= "${java.dir}" includes="**/*.java"/>
+    </uptodate>
+  </target>
+
+  <target name="javadocs" depends="prepare, javadoc_check" 
+          unless="javadoc.notrequired"
+          description="Creates the API documentation">
+    <mkdir dir="${build.javadocs}"/>
+    <javadoc packagenames="javax.*"
+             sourcepath="${java.dir}"
+             destdir="${build.javadocs}"
+             author="true"
+             version="true"
+             windowtitle="${Name} API"
+             doctitle="${Name}"
+             bottom="Copyright &#169; 2001 Sun Microsystems, Inc. All Rights Reserved.">
+    </javadoc>
+  </target>
+  
+  <!-- 
+       =================================================================== 
+         Main target
+       =================================================================== 
+  -->
+  <target name="main" depends="jars"/>
+
+</project>
