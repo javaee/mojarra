@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.6 2001/11/21 17:48:48 rogerk Exp $
+ * $Id: HyperlinkRenderer.java,v 1.7 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.6 2001/11/21 17:48:48 rogerk Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.7 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,11 +87,21 @@ public class HyperlinkRenderer extends Object implements Renderer {
     //
 
     public boolean supportsType(WComponent c) { 
-        return false;
+        ParameterCheck.nonNull(c);
+        boolean supports= false;
+        if ( c instanceof WCommand ) {
+            supports = true;
+        }
+        return supports;
     }
 
     public boolean supportsType(String componentType) { 
-        return false;
+        ParameterCheck.nonNull(componentType);
+        boolean supports = false;
+        if ( componentType.equals("WCommand")) {
+            supports = true;
+        }
+        return supports;
     }
 
     public Iterator getSupportedAttributeNames(String componentType) {
@@ -100,8 +110,20 @@ public class HyperlinkRenderer extends Object implements Renderer {
 
     public void renderStart(RenderContext rc, WComponent c) 
         throws IOException, FacesException {
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
+
+        WCommand wCommand = null;
+        if ( supportsType(c)) {
+            wCommand = (WCommand) c;
+        } else {
+            throw new FacesException("Invalid component type. " +
+                      "Expected WCommand");
+        }
+
         OutputMethod outputMethod = rc.getOutputMethod();
-        WCommand wCommand = (WCommand)c;
+        Assert.assert_it(outputMethod != null );
+ 
         StringBuffer output = new StringBuffer();
         output.append("<a href=");
         output.append(wCommand.getAttribute(rc, "target"));
@@ -125,7 +147,8 @@ public class HyperlinkRenderer extends Object implements Renderer {
         return;
     }
 
-    public void renderEnd(RenderContext rc, WComponent c) throws IOException {
+    public void renderEnd(RenderContext rc, WComponent c) 
+            throws IOException,FacesException {
         return;
     }
 

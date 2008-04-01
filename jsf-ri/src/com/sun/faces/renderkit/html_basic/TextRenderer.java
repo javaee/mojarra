@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.7 2001/11/21 17:48:48 rogerk Exp $
+ * $Id: TextRenderer.java,v 1.8 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.7 2001/11/21 17:48:48 rogerk Exp $
+ * @version $Id: TextRenderer.java,v 1.8 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,26 +95,27 @@ public class TextRenderer extends Object implements Renderer
 
     public void renderStart(RenderContext rc, WComponent c )
         throws IOException, FacesException { 
-        try {
-            WOutput label = null;
-            if ( c instanceof WOutput ) {
-                label = (WOutput) c;
-            }
-            String text = (String) label.getValue();
-            if ( text != null ) { 
-                OutputMethod outputMethod = rc.getOutputMethod();
-                StringBuffer out = new StringBuffer();
-                out.append(text);
-                outputMethod.writeText(out.toString());
-                outputMethod.flush();
-            }
-            
-        } catch(IOException ioe) {
-            System.err.println("Error rendering Output_Text: " + ioe);
+
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
+
+        WOutput label = null;
+        if ( supportsType(c)) {
+            label = (WOutput) c;
+        } else {
+            throw new FacesException("Invalid component type. Expected WOutput");
+        }
+        String text = (String) label.getValue();
+        if ( text != null ) { 
+            OutputMethod outputMethod = rc.getOutputMethod();
+            Assert.assert_it(outputMethod != null );
+            StringBuffer out = new StringBuffer();
+            out.append(text);
+            outputMethod.writeText(out.toString());
+            outputMethod.flush();
         }
         return;
     }
-
 
     public void renderChildren(RenderContext rc, WComponent c) 
             throws IOException {
@@ -122,16 +123,26 @@ public class TextRenderer extends Object implements Renderer
     }
 
     public void renderEnd(RenderContext rc, WComponent c) 
-            throws IOException {
+            throws IOException,FacesException {
         return;
     }
 
     public boolean supportsType(String componentType) {
-        return true;
+        ParameterCheck.nonNull(componentType);
+        boolean supports = false;
+        if ( componentType.equals("WOutput")) {
+            supports = true;
+        }
+        return supports;
     }
     
     public boolean supportsType(WComponent c) {
-        return true;
+        ParameterCheck.nonNull(c);
+        boolean supports= false;
+        if ( c instanceof WOutput ) {
+            supports = true;
+        }
+        return supports;
     }
 
 

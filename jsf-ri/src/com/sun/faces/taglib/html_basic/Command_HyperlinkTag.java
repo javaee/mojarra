@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.5 2001/11/21 17:50:41 rogerk Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.6 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -27,6 +27,7 @@ import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WCommand;
 import javax.faces.WForm;
+import javax.faces.ObjectTable;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -37,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.5 2001/11/21 17:50:41 rogerk Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.6 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,18 +117,23 @@ public class Command_HyperlinkTag extends TagSupport
      * @exception JspException if a JSP exception has occurred
      */
     public int doStartTag() throws JspException {
-        // Get the RenderContext from the session. It was set there
-        // in the BeginTag.
-        //
-        RenderContext renderContext;
-        renderContext = (RenderContext)pageContext.getSession().
-            getAttribute("renderContext");
 
+        Assert.assert_it( pageContext != null );
         // 1. get an instance of "WCommand"
-        // Normally, this would be retrieved from some instance pool,
-        // but for now, we will just instantiate one..
-        //
-        WCommand wCommand = new WCommand();
+        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+                getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext renderContext = (RenderContext)ot.get(pageContext.getSession(),
+                "renderContext");
+        Assert.assert_it( renderContext != null );
+
+        // PENDING shouldn't hyperlink have a name attribute. For now
+        // using target as name to put in the objectTable.
+        WCommand wCommand = (WCommand) ot.get(pageContext.getRequest(), target);
+        if ( wCommand == null ) {
+            wCommand = new WCommand();
+            ot.put(pageContext.getRequest(), target, wCommand);
+        }
 
         // 2. set tag attributes into the instance..
         //

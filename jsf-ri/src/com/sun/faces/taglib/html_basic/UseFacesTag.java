@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.6 2001/11/21 00:23:00 edburns Exp $
+ * $Id: UseFacesTag.java,v 1.7 2001/11/21 22:32:40 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -42,7 +42,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UseFacesTag.java,v 1.6 2001/11/21 00:23:00 edburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.7 2001/11/21 22:32:40 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,8 +111,8 @@ public int doStartTag() throws JspException {
     JspOutputMethod outputMethod = new JspOutputMethod();
     outputMethod.setPageContext(pageContext);
     renderContext.setOutputMethod(outputMethod);
-    pageContext.getSession().setAttribute("renderContext",
-					  renderContext);
+   // pageContext.getSession().setAttribute("renderContext",
+	//				  renderContext);
 
     // PENDING(edburns): this will be done in the FrontController.
     ObjectTable objectTable;
@@ -135,6 +135,8 @@ public int doStartTag() throws JspException {
 	servletContext.setAttribute("objectTable", objectTable);
     }
 
+    // PENDING(visvan): this will be done in the FrontController.
+    objectTable.put(pageContext.getSession(),"renderContext", renderContext); 
     return EVAL_BODY_INCLUDE;
 }
 

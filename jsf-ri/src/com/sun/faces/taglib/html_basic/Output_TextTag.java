@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.5 2001/11/21 17:50:41 rogerk Exp $
+ * $Id: Output_TextTag.java,v 1.6 2001/11/21 22:32:40 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -26,6 +26,7 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WOutput;
+import javax.faces.ObjectTable;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -37,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.5 2001/11/21 17:50:41 rogerk Exp $
+ * @version $Id: Output_TextTag.java,v 1.6 2001/11/21 22:32:40 visvan Exp $
  * 
  *
  */
@@ -91,26 +92,30 @@ public class Output_TextTag extends TagSupport
      * Renders Output_Text's start tag
      */
     public int doStartTag() throws JspException{
-        // check if the tag is already created and exists in the 
-        // JSP pool. If not, create form component.
-        
-        // PENDING(visvan) figure out the scope. For now use session scope
+
+        Assert.assert_it( pageContext != null );
         // PENDING(visvan) use tagext class to validate attributes.
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+                getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
+                "renderContext");
+        Assert.assert_it( rc != null );
+
         if ( name != null ) {
-            RenderContext rc = (RenderContext)pageContext.getSession().
-                    getAttribute("renderContext");
-            Assert.assert_it( rc != null );
-            Renderer text_renderer = getRenderer(rc);
-            HttpSession session = pageContext.getSession();
-            WOutput c = (WOutput) session.getAttribute(name);
+            Renderer renderer = getRenderer(rc);
+            WOutput c = (WOutput) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
-                addToScope(c, session);
-            }	
+                // PENDING (visvan ) scope should be an attribute of the tag
+                // for now using the default scope, request
+                ot.put(pageContext.getRequest(), name, c);
+            }
             try {
-                text_renderer.renderStart(rc, c);
+                renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Output component: "+
+                throw new JspException("Problem rendering Output_Text component: "+
                         e.getMessage());
             } catch (FacesException f) {
                 throw new JspException("Problem rendering component: "+
@@ -177,18 +182,6 @@ public class Output_TextTag extends TagSupport
         String full_name = packageName + "." + class_name;
         return full_name;
     } */
-
-    /**
-     * Adds the component to the specified scope.
-     *
-     * @param c component to add to scope.
-     * @param scope scope to which the component is to be added
-     * For now use session scope.
-     *
-     */
-    void addToScope(WOutput c, HttpSession session) {
-        session.setAttribute(name, c);
-    }
 
     /**
      * Returns the value of the "name" attribute

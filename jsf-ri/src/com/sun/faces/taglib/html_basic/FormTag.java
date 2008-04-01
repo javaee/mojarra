@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.7 2001/11/21 17:50:41 rogerk Exp $
+ * $Id: FormTag.java,v 1.8 2001/11/21 22:32:40 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -30,6 +30,7 @@ import javax.faces.WForm;
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.faces.ObjectTable;
 
 /**
  *
@@ -37,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.7 2001/11/21 17:50:41 rogerk Exp $
+ * @version $Id: FormTag.java,v 1.8 2001/11/21 22:32:40 visvan Exp $
  * 
  *
  */
@@ -90,24 +91,28 @@ public class FormTag extends TagSupport
      * Renders Form's start tag
      */
     public int doStartTag() throws JspException{
-        // check if the tag is already created and exists in the 
-        // JSP pool. If not, create form component.
-        
-        // PENDING(visvan) figure out the scope. For now use session scope
+
         // PENDING(visvan) use tagext class to validate attributes.
+        // get ObjectTable from ServletContext.
+        Assert.assert_it( pageContext != null );
+        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+                getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
+                "renderContext");
+        Assert.assert_it( rc != null );
+
         if ( name != null ) {
-            RenderContext rc = (RenderContext)pageContext.getSession().
-                    getAttribute("renderContext");
-            Assert.assert_it( rc != null );
-            Renderer form_renderer = getRenderer(rc);
-            HttpSession session = pageContext.getSession();
-            WForm c = (WForm) session.getAttribute(name);
+            Renderer renderer = getRenderer(rc);
+            WForm c = (WForm) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
-                addToScope(c, session);
+                // PENDING (visvan ) scope should be an attribute of the tag
+                // for now using the default scope, request
+                ot.put(pageContext.getRequest(), name, c);
             }
             try {
-                form_renderer.renderStart(rc, c);
+               renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering Form component: "+
                         e.getMessage());
@@ -122,6 +127,7 @@ public class FormTag extends TagSupport
 
     public Renderer getRenderer(RenderContext rc ) throws JspException{
         Renderer renderer = null;
+   
         RenderKit renderKit = rc.getRenderKit();
         if (renderKit == null) {
             throw new JspException("Can't determine RenderKit!");
@@ -177,18 +183,6 @@ public class FormTag extends TagSupport
     } */
 
     /**
-     * Adds the component to the specified scope.
-     *
-     * @param c component to add to scope.
-     * @param scope scope to which the component is to be added
-     * For now use session scope.
-     *
-     */
-    void addToScope(WForm c, HttpSession session) {
-        session.setAttribute(name, c);
-    }
-
-    /**
      * Returns the value of the "name" attribute
      *
      * @return String value of "name" attribute
@@ -210,18 +204,27 @@ public class FormTag extends TagSupport
      * Renders the Form's end Tag
      */
     public int doEndTag() throws JspException{
-        HttpSession session = pageContext.getSession();
-        WForm c = (WForm) session.getAttribute(name);
+
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
+                "renderContext");
+        Assert.assert_it( rc != null );
+
+        WForm c = (WForm) ot.get(pageContext.getRequest(), name);
         if ( c != null ) {
-            RenderContext rc = (RenderContext)pageContext.getSession().
-                    getAttribute("renderContext");
-            Assert.assert_it( rc != null );
             Renderer form_renderer = getRenderer(rc);
             try {
                 form_renderer.renderEnd(rc, c);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering Form component: "+
                         e.getMessage());
+            }catch (FacesException e) {
+                e.printStackTrace();
+                throw new JspException("FacesException " + e.getMessage());
             }
         }
         return(EVAL_PAGE);

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.6 2001/11/21 17:48:48 rogerk Exp $
+ * $Id: FormRenderer.java,v 1.7 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.6 2001/11/21 17:48:48 rogerk Exp $
+ * @version $Id: FormRenderer.java,v 1.7 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,37 +93,51 @@ public class FormRenderer extends Object implements Renderer
     }
 
     public boolean supportsType(String componentType) {
-        return true;
+        ParameterCheck.nonNull(componentType);
+        boolean supports = false;
+        if ( componentType.equals("WForm")) {
+            supports = true;
+        }
+        return supports;
     }
 
     public boolean supportsType(WComponent c) {
-        return true;
+
+        ParameterCheck.nonNull(c);
+        boolean supports= false;
+        if ( c instanceof WForm ) {
+            supports = true;
+        }
+        return supports;
     }
 
 
     public void renderStart(RenderContext rc, WComponent c ) 
         throws IOException, FacesException {
+
         // render the form
-        try {
-            WForm form = null;
-            OutputMethod outputMethod = rc.getOutputMethod();
-            if ( c instanceof WForm ) {
-                form = (WForm) c;
-            }
-            StringBuffer out = new StringBuffer();
-            out.append("<FORM ");
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
 
-            String form_name = (String) form.getAttribute(rc, "name");
-            if (form_name != null) {
-                out.append("NAME=\"" + form_name + "\"");
-            }
-            out.append(">");
-            outputMethod.writeText(out.toString());
-            outputMethod.flush();
-
-        } catch(IOException ioe) {
-            System.err.println("Error rendering Form Tag: " + ioe);
+        OutputMethod outputMethod = rc.getOutputMethod();
+        Assert.assert_it(outputMethod != null );
+        
+        WForm form = null; 
+        if ( supportsType(c)) {
+            form = (WForm) c;
+        } else {
+            throw new FacesException("Invalid component type. Expected WForm");
         }
+        StringBuffer out = new StringBuffer();
+        out.append("<FORM ");
+
+        String form_name = (String) form.getAttribute(rc, "name");
+        if (form_name != null) {
+            out.append("NAME=\"" + form_name + "\"");
+        }
+        out.append(">");
+        outputMethod.writeText(out.toString());
+        outputMethod.flush();
     }
 
     public void renderChildren(RenderContext rc, 
@@ -132,19 +146,13 @@ public class FormRenderer extends Object implements Renderer
     }
 
     public void renderEnd(RenderContext rc, WComponent c )
-            throws IOException {
-
+            throws IOException, FacesException {
         // render the form
-        try {
-            OutputMethod outputMethod = rc.getOutputMethod();
-            StringBuffer out = new StringBuffer();
-            out.append("</FORM>");
-            outputMethod.writeText(out.toString());
-            outputMethod.flush();
-        } catch(IOException ioe) {
-            System.err.println("Error rendering Form Tag: " + ioe);
-        }
-
+        OutputMethod outputMethod = rc.getOutputMethod();
+        StringBuffer out = new StringBuffer();
+        out.append("</FORM>");
+        outputMethod.writeText(out.toString());
+        outputMethod.flush();
         return;
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.7 2001/11/21 21:20:22 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.8 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.7 2001/11/21 21:20:22 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.8 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,11 +125,21 @@ public class ButtonRenderer extends Object implements Renderer
     // Methods From Renderer
     //
     public boolean supportsType(WComponent c) {
-        return true;
+        ParameterCheck.nonNull(c);
+        boolean supports= false;
+        if ( c instanceof WCommand ) {
+            supports = true;
+        }
+        return supports;
     }
 
     public boolean supportsType(String componentType) {
-        return true;
+        ParameterCheck.nonNull(componentType);
+        boolean supports = false;
+        if ( componentType.equals("WCommand")) {
+            supports = true;
+        }
+        return supports;
     }
 
     public Iterator getSupportedAttributeNames(String componentType) {
@@ -138,12 +148,20 @@ public class ButtonRenderer extends Object implements Renderer
 
     public void renderStart(RenderContext rc, WComponent c) 
         throws IOException, FacesException {
-
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
-    
+
+        WCommand wCommand = null;
+        if ( supportsType(c)) {
+            wCommand = (WCommand) c;
+        } else {
+            throw new FacesException("Invalid component type. " +
+                      "Expected WCommand");
+        }
+
         OutputMethod outputMethod = rc.getOutputMethod();
-        WCommand wCommand = (WCommand)c;
+        Assert.assert_it(outputMethod != null );
+
         StringBuffer output = new StringBuffer();
         output.append("<input type=");
         if (wCommand.getAttribute(rc, "image") != null) {
@@ -157,7 +175,8 @@ public class ButtonRenderer extends Object implements Renderer
             output.append(wCommand.getAttribute(rc, "name"));
             output.append(" value=");
 	    // Follow the UE Spec for Button:
-	    // http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/JavaServerFaces/uispecs/WCommand_Button.html
+	    // http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
+            // JavaServerFaces/uispecs/WCommand_Button.html
             if (label.length() == 3) {
                 output.append("&nbsp;&nbsp;");
                 output.append(label);
@@ -181,7 +200,8 @@ public class ButtonRenderer extends Object implements Renderer
         return;
     }
 
-    public void renderEnd(RenderContext rc, WComponent c) throws IOException {
+    public void renderEnd(RenderContext rc, WComponent c) 
+            throws IOException,FacesException {
         return;
     }
 

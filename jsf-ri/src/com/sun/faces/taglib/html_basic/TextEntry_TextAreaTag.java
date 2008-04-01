@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.4 2001/11/21 17:50:41 rogerk Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.5 2001/11/21 22:32:40 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -26,6 +26,7 @@ import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
 import javax.faces.WTextEntry;
+import javax.faces.ObjectTable;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -37,7 +38,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.4 2001/11/21 17:50:41 rogerk Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.5 2001/11/21 22:32:40 visvan Exp $
  * 
  *
  */
@@ -94,26 +95,30 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
      * Renders TextEntry_TextAreaTag's start tag and its attributes.
      */
     public int doStartTag() throws JspException{
-        // check if the tag is already created and exists in the 
-        // JSP pool. If not, create form component.
-        
-        // PENDING(visvan) figure out the scope. For now use session scope
+
+        Assert.assert_it( pageContext != null );
         // PENDING(visvan) use tagext class to validate attributes.
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+                getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
+                "renderContext");
+        Assert.assert_it( rc != null );
+
         if ( name != null ) {
-            RenderContext rc = (RenderContext) pageContext.getSession().
-                    getAttribute("renderContext");
-            Assert.assert_it( rc != null );
-            Renderer text_renderer = getRenderer(rc);
-            HttpSession session = pageContext.getSession();
-            WTextEntry c = (WTextEntry) session.getAttribute(name);
+            Renderer renderer = getRenderer(rc);
+            WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
-                addToScope(c, session);
-            }	
+                // PENDING (visvan ) scope should be an attribute of the tag
+                // for now using the default scope, request
+                ot.put(pageContext.getRequest(), name, c);
+            }
             try {
-                text_renderer.renderStart(rc, c);
+               renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering TextEntry component: "+
+                throw new JspException("Problem rendering TextArea component: "+
                         e.getMessage());
             } catch (FacesException f) {
                 throw new JspException("Problem rendering component: "+
@@ -121,18 +126,28 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
             }
 
         }
-        return(EVAL_BODY_TAG);
+        return(EVAL_BODY_INCLUDE);
     }
 
     /**
      * Gets the TextEntry_TextAreaTag's body if specified.
      */
     public int doAfterBody() throws JspException {
-        String text = getBodyContent().getString();
-        HttpSession session = pageContext.getSession();
-        WTextEntry c = (WTextEntry) session.getAttribute(name);
+
+        Assert.assert_it( pageContext != null );
+    
+        ObjectTable ot = (ObjectTable) pageContext.getServletContext().
+                getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
+                "renderContext");
+        Assert.assert_it( rc != null );
+
+        WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
         if ( c != null ) {
-           c.setValue(text);
+           if ( getBodyContent() != null ) {
+               c.setValue(getBodyContent().getString());
+           }
         }
         return SKIP_BODY;
     }
@@ -141,18 +156,27 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
      * Renders the Form's end Tag
      */
     public int doEndTag() throws JspException{
-        HttpSession session = pageContext.getSession();
-        WTextEntry c = (WTextEntry) session.getAttribute(name);
+
+        Assert.assert_it( pageContext != null );
+        // get ObjectTable from ServletContext.
+        ObjectTable ot = (ObjectTable)pageContext.getServletContext().
+                 getAttribute("objectTable");
+        Assert.assert_it( ot != null );
+        RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
+                "renderContext");
+        Assert.assert_it( rc != null );
+
+        WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
         if ( c != null ) {
-            RenderContext rc = (RenderContext)session.
-                    getAttribute("renderContext");
-            Assert.assert_it( rc != null );
-            Renderer text_renderer = getRenderer(rc);
+            Renderer renderer = getRenderer(rc);
             try {
-                text_renderer.renderEnd(rc, c);
+                renderer.renderEnd(rc, c);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering TextArea component: "+
                         e.getMessage());
+            }catch (FacesException e) {
+                e.printStackTrace();
+                throw new JspException("FacesException " + e.getMessage());
             }
         }
         return(EVAL_PAGE);
@@ -223,17 +247,6 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         return full_name;
     } */
 
-    /**
-     * Adds the component to the specified scope.
-     *
-     * @param c component to add to scope.
-     * @param scope scope to which the component is to be added
-     * For now use session scope.
-     *
-     */
-    void addToScope(WTextEntry c, HttpSession session) {
-        session.setAttribute(name, c);
-    }
 
     /**
      * Returns the value of the "name" attribute

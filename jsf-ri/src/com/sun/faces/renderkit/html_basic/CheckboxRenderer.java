@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.5 2001/11/21 17:48:48 rogerk Exp $
+ * $Id: CheckboxRenderer.java,v 1.6 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.5 2001/11/21 17:48:48 rogerk Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.6 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,11 +87,21 @@ public class CheckboxRenderer extends Object implements Renderer {
     //
 
     public boolean supportsType(WComponent c) {
-        return false;
+        ParameterCheck.nonNull(c);
+        boolean supports= false;
+        if ( c instanceof WSelectBoolean ) {
+            supports = true;
+        }
+        return supports;
     }
 
     public boolean supportsType(String componentType) {
-        return false;
+        ParameterCheck.nonNull(componentType);
+        boolean supports = false;
+        if ( componentType.equals("WSelectBoolean")) {
+            supports = true;
+        }
+        return supports;
     }
 
     public Iterator getSupportedAttributeNames(String componentType) {
@@ -101,8 +111,19 @@ public class CheckboxRenderer extends Object implements Renderer {
     public void renderStart(RenderContext rc, WComponent c) 
         throws IOException, FacesException {
 
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
+ 
+        WSelectBoolean wSelectBoolean = null;
+        if ( supportsType(c)) {
+            wSelectBoolean = (WSelectBoolean) c;
+        } else {
+            throw new FacesException("Invalid component type. " +
+                      "Expected WSelectBoolean");
+        }
         OutputMethod outputMethod = rc.getOutputMethod();
-        WSelectBoolean wSelectBoolean = (WSelectBoolean)c;
+        Assert.assert_it(outputMethod != null );
+
         StringBuffer output = new StringBuffer();
         output.append("<input type=checkbox");
         if (wSelectBoolean.getAttribute(rc, "checked") != null) {
@@ -127,7 +148,8 @@ public class CheckboxRenderer extends Object implements Renderer {
         return;
     }
 
-    public void renderEnd(RenderContext rc, WComponent c) throws IOException {
+    public void renderEnd(RenderContext rc, WComponent c) 
+            throws IOException,FacesException {
         return;
     }
 

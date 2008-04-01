@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.3 2001/11/21 17:48:48 rogerk Exp $
+ * $Id: SecretRenderer.java,v 1.4 2001/11/21 22:32:39 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.3 2001/11/21 17:48:48 rogerk Exp $
+ * @version $Id: SecretRenderer.java,v 1.4 2001/11/21 22:32:39 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,50 +95,54 @@ public class SecretRenderer extends Object implements Renderer
 
     public void renderStart(RenderContext rc, WComponent c )
         throws IOException, FacesException { 
-        try {
-            WTextEntry textField = null;
-            if ( c instanceof WTextEntry ) {
-                textField = (WTextEntry) c;
-            }
-            OutputMethod outputMethod = rc.getOutputMethod();
-            StringBuffer output = new StringBuffer();
-            output.append("<input type=\"password\"");
-            
-            // render name of the component if specified
-            String textField_name = (String)textField.getAttribute(rc, "name");
-            if ( textField_name != null ) {
-                output.append(" name=\"");
-                output.append(textField_name);
-                output.append("\"");
-            }
-            // render default text specified
-            String textField_value = (String)textField.getValue();
-            if ( textField_value != null ) {
-                output.append(" value=\"");
-                output.append(textField_value);
-                output.append("\"");
-            }
-            //render size if specified
-            String textField_size = (String)textField.getAttribute(rc, "size");
-            if ( textField_size != null ) {
-                output.append(" size=\"");
-                output.append(textField_size);
-                output.append("\"");
-            }
-            //render maxlength if specified 
-            String textField_ml = (String)textField.getAttribute(rc, "maxlength");
-            if ( textField_ml != null ) {
-                output.append(" maxlength=\"");
-                output.append(textField_ml);
-                output.append("\"");
-            }
-            output.append(">");
-            outputMethod.writeText(output.toString());
-            outputMethod.flush();
-            
-        } catch(IOException ioe) {
-            System.err.println("Error rendering Password field: " + ioe);
+
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
+
+        WTextEntry textField = null;
+        if ( supportsType(c)) {
+             textField = (WTextEntry) c;
+        } else {
+            throw new FacesException("Invalid component type. " +
+                     "Expected WTextEntry");
         }
+        OutputMethod outputMethod = rc.getOutputMethod();
+        Assert.assert_it(outputMethod != null );
+
+        StringBuffer output = new StringBuffer();
+        output.append("<input type=\"password\"");
+            
+        // render name of the component if specified
+        String textField_name = (String)textField.getAttribute(rc, "name");
+        if ( textField_name != null ) {
+            output.append(" name=\"");
+            output.append(textField_name);
+            output.append("\"");
+        }
+        // render default text specified
+        String textField_value = (String)textField.getValue();
+        if ( textField_value != null ) {
+            output.append(" value=\"");
+            output.append(textField_value);
+            output.append("\"");
+        }
+        //render size if specified
+        String textField_size = (String)textField.getAttribute(rc, "size");
+        if ( textField_size != null ) {
+            output.append(" size=\"");
+            output.append(textField_size);
+            output.append("\"");
+        }
+        //render maxlength if specified 
+        String textField_ml = (String)textField.getAttribute(rc, "maxlength");
+        if ( textField_ml != null ) {
+            output.append(" maxlength=\"");
+            output.append(textField_ml);
+            output.append("\"");
+        }
+        output.append(">");
+        outputMethod.writeText(output.toString());
+        outputMethod.flush();
         return;
     }
 
@@ -148,16 +152,26 @@ public class SecretRenderer extends Object implements Renderer
     }
 
     public void renderEnd(RenderContext rc, WComponent c) 
-            throws IOException {
+            throws IOException,FacesException {
         return;
     }
 
     public boolean supportsType(String componentType) {
-        return true;
+        ParameterCheck.nonNull(componentType);
+        boolean supports = false;
+        if ( componentType.equals("WTextEntry")) {
+            supports = true;
+        }
+        return supports;
     }
     
     public boolean supportsType(WComponent c) {
-        return true;
+        ParameterCheck.nonNull(c);
+        boolean supports= false;
+        if ( c instanceof WTextEntry ) {
+            supports = true;
+        }
+        return supports;
     }
 
 
