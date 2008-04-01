@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.11 2002/06/25 18:31:08 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.12 2002/06/25 19:05:54 eburns Exp $
  */
 
 /*
@@ -491,11 +491,6 @@ public class FacesContextImpl extends FacesContext
         }    
     }
 
-
-    public void release() {
-        throw new FacesException("UnImplemented");
-    }
-    
     /**
      * This method does a narrow to broad search to locate a model
      * bean
