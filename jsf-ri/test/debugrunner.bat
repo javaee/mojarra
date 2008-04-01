@@ -13,7 +13,7 @@ REM
 @if "%2" == "" goto setCp
 
 :setDebug
-set DO_DEBUG=-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y
+set DO_DEBUG=-Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n
 
 :setCp
 @set CP=%TOMCAT_HOME%\common\lib\servlet.jar;%TOMCAT_HOME%\server\lib\catalina.jar;%TOMCAT_HOME%\bin\bootstrap.jar;%TOMCAT_HOME%\common\lib\naming-common.jar;%TOMCAT_HOME%\common\lib\naming-resources.jar;%TOMCAT_HOME%\common\lib\xerces.jar;%JSF_RI_HOME%\build\test\servers\tomcat40\webapps\test\WEB-INF\classes;%JSF_RI_HOME%\conf\test;%CACTUS_HOME%\lib\cactus.jar;%CACTUS_HOME%\lib\httpclient.jar;%JUNIT_HOME%\junit.jar;

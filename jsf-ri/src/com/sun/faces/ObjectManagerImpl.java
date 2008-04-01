@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectManagerImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
+ * $Id: ObjectManagerImpl.java,v 1.2 2002/01/18 21:52:30 edburns Exp $
  */
 
 /*
@@ -24,9 +24,11 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -35,7 +37,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P> This instance is created by the
  * FacesServlet in its init method.
 
- * @version $Id: ObjectManagerImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
+ * @version $Id: ObjectManagerImpl.java,v 1.2 2002/01/18 21:52:30 edburns Exp $
  * 
  * @see	javax.faces.ObjectManager
  *
@@ -65,9 +67,9 @@ private ArrayList scopes = null;
 // Constructors and Initializers    
 //
 
-public ObjectManagerImpl()
+public ObjectManagerImpl(ServletContext yourServletContext)
 {
-    super();
+    ParameterCheck.nonNull(yourServletContext);
     if (null == scopes) {
 	synchronized(this) {
 	    scopes = new ArrayList();
@@ -75,8 +77,12 @@ public ObjectManagerImpl()
 	    scopes.add(RequestScope);
 	    SessionScope = new ScopeImpl(HttpSession.class);
 	    scopes.add(SessionScope);
-	    GlobalScope = new ScopeImpl(Object.class); 
+	    GlobalScope = new ScopeImpl(ServletContext.class); 
 	    scopes.add(GlobalScope);
+	    servletContext = yourServletContext;
+	    // see fixScopeKey.  This enables global gets to work.
+	    servletContext.setAttribute(Constants.REF_SERVLETCONTEXTINSTANCE,
+					servletContext);
 	}
     }
     // PENDING(edburns): see ObjectManager.setInstance()
@@ -112,6 +118,16 @@ public void setScopes(List newScopes) {
     }
 }
 
+public void enter(Object scopeKey) {
+    Scope scope = keyToScope(scopeKey);
+    scope.enter(scopeKey);
+}
+    
+public void exit(Object scopeKey) {
+    Scope scope = keyToScope(scopeKey);
+    scope.exit(scopeKey);
+}
+
 //
 // Inner interfaces and classes
 // 
@@ -122,6 +138,8 @@ protected static class ScopeImpl extends ObjectManager.Scope {
 
     private Map outerMap;
     private Map innerMap;
+
+    private Vector scopeListeners;
 
 // Attribute Instance Variables
 
@@ -191,6 +209,9 @@ private Object fixScopeKey(Object scopeKey) {
     else if (scopeKey instanceof HttpServletRequest) {
 	result = ((HttpServletRequest)scopeKey).
 		  getAttribute(Constants.REF_REQUESTINSTANCE);
+    }
+    else if (scopeKey instanceof ServletContext) {
+	result = ((ServletContext)scopeKey).getAttribute(Constants.REF_SERVLETCONTEXTINSTANCE);
     }
     Assert.assert_it(null != result);
     return result;
@@ -276,14 +297,28 @@ public Object get(Object scopeKey, Object name) {
 
 public void enter(Object scopeKey) {
     ParameterCheck.nonNull(scopeKey);
+    // Call scopeListeners
+    if (null != scopeListeners) {
+	Iterator iter = scopeListeners.iterator();
+	while (iter.hasNext()) {
+	    ((ScopeListener)iter.next()).willEnter(this, scopeKey);
+	}
+    }
+
     innerMap.put(scopeKey, new HashMap());
-    // Call listeners
+
 }
     
 public void exit(Object scopeKey) {
     ParameterCheck.nonNull(scopeKey);
     scopeKey = fixScopeKey(scopeKey);
-    // Call listeners
+    // Call scopeListeners
+    if (null != scopeListeners) {
+	Iterator iter = scopeListeners.iterator();
+	while (iter.hasNext()) {
+	    ((ScopeListener)iter.next()).willExit(this, scopeKey);
+	}
+    }
 
     // clear the map
     Map scopeMap = (Map) innerMap.get(scopeKey);
@@ -301,6 +336,28 @@ public void exit(Object scopeKey) {
 	innerMap.remove(scopeKey);
     }
 }
+
+public void addScopeListener(ScopeListener l) {
+    if (null == scopeListeners) {
+	scopeListeners = new Vector();
+    }
+    if (null == scopeListeners) {
+	// PENDING(edburns): perhaps throw exception?
+	return;
+    }
+    scopeListeners.add(l);
+}
+    
+public void removeScopeListener(ScopeListener l) {
+
+    if (null == scopeListeners) {
+	// PENDING(edburns): throw IllegalArgumentException?
+	return;
+    }
+
+    scopeListeners.remove(l);
+}
+
 } // end of class ScopeImpl
 
 // The testcase for this class is TestObjectManager.java 

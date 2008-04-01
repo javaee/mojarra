@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectManagerFactory.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
+ * $Id: ObjectManagerFactory.java,v 1.2 2002/01/18 21:52:29 edburns Exp $
  */
 
 /*
@@ -11,7 +11,7 @@
 
 package com.sun.faces;
 
-import javax.servlet.ServletRequest;
+import javax.servlet.ServletContext;
 
 import javax.faces.FactoryFinder;
 import javax.faces.FactoryConfigurationError;
@@ -39,7 +39,7 @@ import javax.faces.FacesException;
     
     try {
 	factory = ObjectManagerFactory.newInstance();
-	context = factory.newObjectManager(servletRequest);
+	context = factory.newObjectManager(servletContext);
 	kit = context.getRenderKit();
     }
     catch (Exception e) {
@@ -49,7 +49,7 @@ import javax.faces.FacesException;
 </PRE></CODE>
 
  *
- * @version $Id: ObjectManagerFactory.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
+ * @version $Id: ObjectManagerFactory.java,v 1.2 2002/01/18 21:52:29 edburns Exp $
  * 
  * @see	javax.faces.ObjectManager
  *
@@ -109,6 +109,6 @@ public static ObjectManagerFactory newInstance() throws FactoryConfigurationErro
   *         created.
   */
 
-public abstract ObjectManager newObjectManager() throws FacesException;
+public abstract ObjectManager newObjectManager(ServletContext servletContext) throws FacesException;
 
 } // end of class ObjectManagerFactory

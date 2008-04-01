@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectManager.java,v 1.2 2002/01/12 01:41:18 edburns Exp $
+ * $Id: TestObjectManager.java,v 1.3 2002/01/18 21:52:31 edburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import javax.faces.ObjectManager;
 import javax.faces.ObjectManager.Scope;
+import javax.faces.ObjectManager.ScopeListener;
 import javax.faces.ObjectManager.ActiveValue;
 import javax.faces.ObjectManager.LazyValue;
 
@@ -29,7 +30,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectManager.java,v 1.2 2002/01/12 01:41:18 edburns Exp $
+ * @version $Id: TestObjectManager.java,v 1.3 2002/01/18 21:52:31 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -192,7 +193,7 @@ public void testNarrowToBroad() {
     // Test that putting something under Global is accessible from a
     // request
     name = "putInGlobal";
-    objectManager.put(ObjectManager.GlobalScope, name, value);
+    objectManager.put(config.getServletContext(), name, value);
     getResult = objectManager.get(request, name);
     result = getResult == value;
     System.out.println("put under Global accessible from a get on that request: " + result);
@@ -288,6 +289,41 @@ public void testLazyActive() {
     result = one != two;
     System.out.println("result: " + result);
     assertTrue(result);
+}
+
+public void testScopeListener() {
+    ParamBlockingRequestWrapper wrapped = 
+	new ParamBlockingRequestWrapper(request);
+    String empty = "empty";
+    final String didEnter = "didEnter";
+    final String didExit = "didExit";
+    System.setProperty(didEnter, empty);
+    System.setProperty(didExit, empty);
+
+    ScopeListener listener = new ScopeListener() {
+	    public void willEnter(Scope scope, Object scopeKey) {
+		System.out.println("Got Enter: " + scope + " " + scopeKey);
+		System.setProperty(didEnter, didEnter);
+	    }
+	    public void willExit(Scope scope, Object scopeKey) {
+		System.out.println("Got Exit: " + scope + " " + scopeKey);
+		System.setProperty(didExit, didExit);
+	    }
+	};
+    objectManager.RequestScope.addScopeListener(listener);
+    objectManager.put(wrapped, didEnter, didEnter);
+    
+    try {
+	System.out.println("Testing doFilter:");
+	filter.doFilter(wrapped, response, filterChain);
+	assertTrue(true);
+	assertTrue(empty != System.getProperty(didEnter));
+	assertTrue(empty != System.getProperty(didExit));
+    }
+    catch(Exception e) {
+	System.out.println("testEnterExit: caught exception");
+	assertTrue(false);
+    }
 }
 
 } // end of class TestObjectManager

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.3 2002/01/15 02:17:32 rogerk Exp $
+ * $Id: FacesTestCase.java,v 1.4 2002/01/18 21:52:31 edburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.EventContextFactory;
  *  faces testing more useful.  Extend this testcase to test faces.
 
  *
- * @version $Id: FacesTestCase.java,v 1.3 2002/01/15 02:17:32 rogerk Exp $
+ * @version $Id: FacesTestCase.java,v 1.4 2002/01/18 21:52:31 edburns Exp $
  * 
  * @see	setUp
  * @see	tearDown
@@ -164,6 +164,10 @@ public void simulateSessionCreated() {
 
 public void simulateSessionDestroyed() {
     HttpSession session = request.getSession();
+    // PENDING(edburns): Hans doesn't want this in the public API
+    // just cast to our implementation for now
+    ((com.sun.faces.ObjectManagerImpl)objectManager).exit(session);
+
     session.removeAttribute(Constants.REF_SESSIONINSTANCE);
     session.getServletContext().removeAttribute(session.getId());
 }

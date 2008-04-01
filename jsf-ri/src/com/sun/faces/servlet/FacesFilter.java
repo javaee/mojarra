@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.1 2002/01/15 02:05:00 rogerk Exp $
+ * $Id: FacesFilter.java,v 1.2 2002/01/18 21:52:30 edburns Exp $
  */
 
 /*
@@ -64,6 +64,7 @@ public class FacesFilter implements Filter {
     public void destroy() {
         this.filterConfig.getServletContext().removeAttribute(
             Constants.REF_OBJECTMANAGER);
+	// PENDING(edburns): clear ObjectManager
         this.filterConfig = null;
     }
 
@@ -111,7 +112,7 @@ public class FacesFilter implements Filter {
         // create the ObjectManager
         try {
             omFactory = ObjectManagerFactory.newInstance();
-            objectManager = omFactory.newObjectManager();
+            objectManager = omFactory.newObjectManager(servletContext);
         } catch (FacesException e) {
             throw new ServletException(e.getMessage());
         }
@@ -134,7 +135,7 @@ public class FacesFilter implements Filter {
 
         eqFactory = EventQueueFactory.newInstance();
         Assert.assert_it(null != eqFactory);
-        objectManager.put(ObjectManager.GlobalScope,
+        objectManager.put(servletContext,
                         Constants.REF_EVENTQUEUEFACTORY, eqFactory);
 
         // Step 3: Create the RenderContextFactory and put it in the
@@ -148,7 +149,7 @@ public class FacesFilter implements Filter {
 
         rcFactory = RenderContextFactory.newInstance();
         Assert.assert_it(null != rcFactory);
-        objectManager.put(ObjectManager.GlobalScope,
+        objectManager.put(servletContext,
                         Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
 
         // Step 4: Create the EventDispatcherFactory and put it in the
@@ -162,7 +163,7 @@ public class FacesFilter implements Filter {
 
         edFactory = EventDispatcherFactory.newInstance();
         Assert.assert_it(null != edFactory);
-        objectManager.put(ObjectManager.GlobalScope,
+        objectManager.put(servletContext,
                         Constants.REF_EVENTDISPATCHERFACTORY, edFactory);
 
         // Step 5: Create the EventContextFactory and put it in the
@@ -175,7 +176,7 @@ public class FacesFilter implements Filter {
 
         ecFactory = EventContextFactory.newInstance();
         Assert.assert_it(null != ecFactory);
-        objectManager.put(ObjectManager.GlobalScope,
+        objectManager.put(servletContext,
                         Constants.REF_EVENTCONTEXTFACTORY, ecFactory);
 
         // Step 6: Create the ObjectAccessorFactory and put it in the
@@ -188,7 +189,7 @@ public class FacesFilter implements Filter {
 
         oaFactory = ObjectAccessorFactory.newInstance();
         Assert.assert_it(null != oaFactory);
-        objectManager.put(ObjectManager.GlobalScope,
+        objectManager.put(servletContext,
                         Constants.REF_OBJECTACCESSORFACTORY, oaFactory);
     }
 
@@ -375,7 +376,9 @@ public class FacesFilter implements Filter {
         }
 
         // exit the scope for this request
-        objectManager.exit(req);
+	// PENDING(edburns): Hans doesn't want this in the public API
+	// just cast to our implementation for now
+        ((com.sun.faces.ObjectManagerImpl)objectManager).exit(req);
 
     }
 

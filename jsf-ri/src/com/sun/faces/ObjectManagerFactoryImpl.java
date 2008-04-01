@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectManagerFactoryImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
+ * $Id: ObjectManagerFactoryImpl.java,v 1.2 2002/01/18 21:52:29 edburns Exp $
  */
 
 /*
@@ -19,13 +19,15 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.ObjectManager;
 import javax.faces.FacesException;
 
+import javax.servlet.ServletContext;
+
 /**
  *
  *  <B>ObjectManagerFactoryImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectManagerFactoryImpl.java,v 1.1 2002/01/10 22:20:09 edburns Exp $
+ * @version $Id: ObjectManagerFactoryImpl.java,v 1.2 2002/01/18 21:52:29 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,8 +69,8 @@ public ObjectManagerFactoryImpl()
 // Class methods
 //
 
-public ObjectManager newObjectManager() throws FacesException {
-    ObjectManager result = new ObjectManagerImpl();
+public ObjectManager newObjectManager(ServletContext servletContext) throws FacesException {
+    ObjectManager result = new ObjectManagerImpl(servletContext);
     return result;
 }
 

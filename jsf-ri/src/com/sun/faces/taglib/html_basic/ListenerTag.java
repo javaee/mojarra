@@ -1,5 +1,5 @@
 /*
- * $Id: ListenerTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
+ * $Id: ListenerTag.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListenerTag.java,v 1.4 2002/01/16 21:06:35 rogerk Exp $
+ * @version $Id: ListenerTag.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -120,7 +120,7 @@ public class ListenerTag extends TagSupport
           objectManager.put(pageContext.getSession(),id, el);
         }
         else if ("application".equals(scope)){
-             objectManager.put(ObjectManager.GlobalScope,id, el);
+             objectManager.put(pageContext.getServletContext(),id, el);
         } else {
             objectManager.put(pageContext.getRequest(),id, el);
         }

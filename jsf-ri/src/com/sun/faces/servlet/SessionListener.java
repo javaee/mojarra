@@ -1,5 +1,5 @@
 /*
- * $Id: SessionListener.java,v 1.4 2002/01/10 22:20:10 edburns Exp $
+ * $Id: SessionListener.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.Constants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SessionListener.java,v 1.4 2002/01/10 22:20:10 edburns Exp $
+ * @version $Id: SessionListener.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -139,7 +139,10 @@ public void sessionDestroyed(HttpSessionEvent sce) {
     Assert.assert_it(null != objectManager);
     
     // exit the scope for this session
-    objectManager.exit(session);
+    // PENDING(edburns): Hans doesn't want this in the public API
+    // just cast to our implementation for now
+    ((com.sun.faces.ObjectManagerImpl)objectManager).exit(session);
+    session.removeAttribute(Constants.REF_SESSIONINSTANCE);
     session.getServletContext().removeAttribute(sessionId);
 }
 

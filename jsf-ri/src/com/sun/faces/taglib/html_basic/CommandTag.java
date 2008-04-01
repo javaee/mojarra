@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTag.java,v 1.4 2002/01/16 21:06:34 rogerk Exp $
+ * $Id: CommandTag.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CommandTag.java,v 1.4 2002/01/16 21:06:34 rogerk Exp $
+ * @version $Id: CommandTag.java,v 1.5 2002/01/18 21:52:30 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -126,7 +126,7 @@ public class CommandTag extends TagSupport
           objectManager.put(pageContext.getSession(),id, cmd);
         }
         else if ("application".equals(scope)){
-             objectManager.put(ObjectManager.GlobalScope,id, cmd);
+             objectManager.put(pageContext.getServletContext(),id, cmd);
         } else {
             objectManager.put(pageContext.getRequest(), id, cmd);
         }
