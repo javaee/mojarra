@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicFacesContext.java,v 1.1 2002/04/05 19:41:15 jvisvanathan Exp $
+ * $Id: HtmlBasicFacesContext.java,v 1.2 2002/04/11 22:52:41 eburns Exp $
  */
 
 
@@ -18,6 +18,8 @@ import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.Constants;
+import javax.faces.AbstractFactory;
+import javax.faces.FactoryConfigurationError;
 import javax.faces.OutputMethod;
 import javax.faces.ObjectManager;
 import javax.faces.ObjectAccessor;
@@ -32,7 +34,6 @@ import javax.faces.EventDispatcher;
 import javax.faces.NavigationHandler;
 import javax.faces.ClientCapabilities;
 import com.sun.faces.NavigationHandlerFactory;
-import javax.faces.EventQueueFactory;
 import javax.faces.UIForm;
 import javax.faces.NavigationMap;
 import javax.faces.TreeNavigator;
@@ -53,7 +54,7 @@ import com.sun.faces.ObjectAccessorFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicFacesContext.java,v 1.1 2002/04/05 19:41:15 jvisvanathan Exp $
+ * @version $Id: HtmlBasicFacesContext.java,v 1.2 2002/04/11 22:52:41 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -282,25 +283,25 @@ public class HtmlBasicFacesContext extends FacesContext {
     }
 
    /**
-    * PRECONDITION: EventQueueFactory is in ObjectManager.
+    * PRECONDITION: AbstractFactory is in ObjectManager.
     *
     * @see javax.faces.EventContext#getEventQueue
     */
     public EventQueue getEventQueue() {
-        EventQueueFactory eventQueueFactory;
+	AbstractFactory abstractFactory;
 
         if (null == eventQueue) {
             eventQueue = (EventQueue)objectManager.get(request,
                                                Constants.REF_EVENTQUEUE);
             if (eventQueue == null) {
-                eventQueueFactory = (EventQueueFactory)
-                    objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
-                Assert.assert_it(null != eventQueueFactory);
+                abstractFactory = (AbstractFactory)
+                    objectManager.get(Constants.REF_ABSTRACTFACTORY);
+                Assert.assert_it(null != abstractFactory);
                 try {
-                    eventQueue = eventQueueFactory.newEventQueue();
-                } catch (FacesException e) {
+                    eventQueue = abstractFactory.newEventQueue();
+                } catch (FactoryConfigurationError e) {
                     // PENDING(edburns): log message
-                    System.out.println("Exception getEventQueue: " +
+                    System.out.println("Error getEventQueue: " +
                                        e.getMessage());
                     e.printStackTrace();
                     Assert.assert_it(false);

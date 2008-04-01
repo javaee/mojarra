@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerFactory.java,v 1.1 2002/01/25 18:45:16 visvan Exp $
+ * $Id: NavigationHandlerFactory.java,v 1.2 2002/04/11 22:52:40 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.faces.FacesException;
 </PRE></CODE>
 
  *
- * @version $Id: NavigationHandlerFactory.java,v 1.1 2002/01/25 18:45:16 visvan Exp $
+ * @version $Id: NavigationHandlerFactory.java,v 1.2 2002/04/11 22:52:40 eburns Exp $
  * 
  * @see	javax.faces.NavigationHandler
  *
@@ -80,16 +80,11 @@ public abstract class NavigationHandlerFactory extends Object
     //
 
     public static NavigationHandlerFactory newInstance() throws FactoryConfigurationError  {
-        try {
-            return (NavigationHandlerFactory) FactoryFinder.find(
+	return (NavigationHandlerFactory) FactoryFinder.find(
                /* The default property name according to the JSFaces spec */
                "com.sun.faces.NavigationHandlerFactory",
                /* The fallback implementation class name */
                "com.sun.faces.NavigationHandlerFactoryImpl");
-        } catch (FactoryFinder.ConfigurationError e) {
-            throw new FactoryConfigurationError(e.getException(),
-                                                e.getMessage());
-        }
     }
 
 

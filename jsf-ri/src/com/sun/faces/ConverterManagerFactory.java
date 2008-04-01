@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterManagerFactory.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * $Id: ConverterManagerFactory.java,v 1.2 2002/04/11 22:52:39 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import javax.faces.FacesException;
 </PRE></CODE>
 
  *
- * @version $Id: ConverterManagerFactory.java,v 1.1 2002/03/08 00:24:48 jvisvanathan Exp $
+ * @version $Id: ConverterManagerFactory.java,v 1.2 2002/04/11 22:52:39 eburns Exp $
  * 
  * @see	javax.faces.ConverterManager
  *
@@ -82,16 +82,11 @@ public abstract class ConverterManagerFactory extends Object
 
     public static ConverterManagerFactory newInstance() 
             throws FactoryConfigurationError  {
-        try {
             return (ConverterManagerFactory) FactoryFinder.find(
                /* The default property name according to the JSFaces spec */
                "com.sun.faces.ConverterManagerFactory",
                /* The fallback implementation class name */
                "com.sun.faces.ConverterManagerFactoryImpl");
-        } catch (FactoryFinder.ConfigurationError e) {
-            throw new FactoryConfigurationError(e.getException(),
-                                                e.getMessage());
-        }
     }
 
 

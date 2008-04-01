@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.7 2002/04/05 19:41:21 jvisvanathan Exp $
+ * $Id: TestRenderer.java,v 1.8 2002/04/11 22:52:42 eburns Exp $
  */
 
 /*
@@ -15,9 +15,10 @@ import junit.framework.TestCase;
 import java.io.IOException;
 import javax.faces.RenderKit;
 import javax.servlet.ServletRequest;
-import javax.faces.FacesContextFactory;
+import javax.faces.AbstractFactory;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.Constants;
 import javax.faces.*;
 import com.sun.faces.renderkit.html_basic.*;
 import com.sun.faces.FacesTestCase;
@@ -28,7 +29,7 @@ import com.sun.faces.FacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderer.java,v 1.7 2002/04/05 19:41:21 jvisvanathan Exp $
+ * @version $Id: TestRenderer.java,v 1.8 2002/04/11 22:52:42 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -48,6 +49,7 @@ public class TestRenderer extends FacesTestCase
     //
     // Instance Variables
     //
+    AbstractFactory factory;
     javax.faces.Renderer rendererObj;
     java.util.Iterator typeIt;
     String type, rendererName;

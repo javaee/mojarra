@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenerateId.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
+ * $Id: TestGenerateId.java,v 1.3 2002/04/11 22:52:41 eburns Exp $
  */
 
 /*
@@ -22,16 +22,15 @@ import java.io.IOException;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.ObjectManager;
+import javax.faces.AbstractFactory;
 import javax.faces.UIForm;
 import javax.faces.FacesContext;
-import javax.faces.FacesContextFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.*;
 
-import com.sun.faces.ObjectManagerFactory;
 import com.sun.faces.taglib.html_basic.FormTag;
 
 /**
@@ -39,7 +38,7 @@ import com.sun.faces.taglib.html_basic.FormTag;
  *  <B>TestGenerateId</B> is a class which tests the unique id
  *     generation used in component Faces JSP tags.
  *
- * @version $Id: TestGenerateId.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
+ * @version $Id: TestGenerateId.java,v 1.3 2002/04/11 22:52:41 eburns Exp $
  *
  * @see setUp 
  * @see tearDown 
@@ -65,8 +64,7 @@ public class TestGenerateId extends JspTestCase
 // Relationship Instance Variables
 
     private FormTag formTag;
-    private ObjectManagerFactory omFactory;
-    private FacesContextFactory rcFactory;
+    private AbstractFactory abstractFactory;
     private FacesContext fc = null;
 
     private FacesTestCase fCase = null;
@@ -105,10 +103,6 @@ public class TestGenerateId extends JspTestCase
         try {
             omFactory = ObjectManagerFactory.newInstance();
             om = omFactory.newObjectManager(this.pageContext.getServletContext());
-            rcFactory = FacesContextFactory.newInstance();
-            fc = rcFactory.newFacesContext(this.pageContext.getRequest());
-            om.put(pageContext.getSession(), Constants.REF_RENDERCONTEXT,
-                fc);
         } catch (FacesException e) {
             System.out.println("Exception:"+ e.getMessage());
         }

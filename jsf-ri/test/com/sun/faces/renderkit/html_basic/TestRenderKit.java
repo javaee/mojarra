@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.10 2002/04/05 19:41:21 jvisvanathan Exp $
+ * $Id: TestRenderKit.java,v 1.11 2002/04/11 22:52:42 eburns Exp $
  */
 
 /*
@@ -16,10 +16,11 @@ import com.sun.faces.FacesTestCase;
 import javax.servlet.http.HttpSession;
 
 import javax.faces.RenderKit;
+import javax.faces.Constants;
+import javax.faces.AbstractFactory;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletContext;
-import javax.faces.FacesContextFactory;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import com.sun.faces.FacesTestCase;
@@ -30,7 +31,7 @@ import com.sun.faces.FacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.10 2002/04/05 19:41:21 jvisvanathan Exp $
+ * @version $Id: TestRenderKit.java,v 1.11 2002/04/11 22:52:42 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,19 +73,14 @@ public class TestRenderKit extends FacesTestCase
 public void testFactory() {
     RenderKit kit = null;
     FacesContext context;
-    FacesContextFactory factory;
+    AbstractFactory abstractFactory = new AbstractFactory();
     javax.faces.Renderer renderer;
     java.util.Iterator typeIt, rendererIt = null;
     String type, rendererName;
     boolean result = false;
     
     try {
-	factory = FacesContextFactory.newInstance();
-	System.out.println("HtmlBasicFacesContextFactory: got factory: " + 
-			   factory);
-
-        ServletContext sc = config.getServletContext();
-	context = factory.newFacesContext(request, response, sc);
+	context = abstractFactory.newFacesContext(request, response);
 	System.out.println("HtmlBasicFacesContextFactory: got context: " + 
 			   context);
 	// PENDING(edburns): test for context's clientCaps, and locale.

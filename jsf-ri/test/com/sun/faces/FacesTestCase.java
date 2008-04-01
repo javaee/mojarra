@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.6 2002/04/05 19:41:20 jvisvanathan Exp $
+ * $Id: FacesTestCase.java,v 1.7 2002/04/11 22:52:41 eburns Exp $
  */
 
 /*
@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javax.faces.ObjectManager;
-import javax.faces.FacesContextFactory;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.FacesContext;
@@ -42,7 +41,7 @@ import com.sun.faces.Page;
  *  faces testing more useful.  Extend this testcase to test faces.
 
  *
- * @version $Id: FacesTestCase.java,v 1.6 2002/04/05 19:41:20 jvisvanathan Exp $
+ * @version $Id: FacesTestCase.java,v 1.7 2002/04/11 22:52:41 eburns Exp $
  * 
  * @see	setUp
  * @see	tearDown
@@ -70,10 +69,9 @@ public void _jspService(HttpServletRequest request,
 
 public FacesContext testCallCreateFacesContext(ObjectManager objectManager, 
 					       HttpServletRequest req, 
-					       HttpServletResponse res,
-                                             ServletContext sc ) throws ServletException
+					       HttpServletResponse res) throws ServletException
 {
-    return createFacesContext(objectManager, req, res, sc);
+    return createFacesContext(objectManager, req, res);
 }
 } // end of class FacesTestCasePage
 
@@ -129,9 +127,8 @@ public void simulateService() {
     assertTrue(null != tempObjectManager);
 
     try {
-        ServletContext sc = config.getServletContext();
 	facesContext = page.testCallCreateFacesContext(tempObjectManager,
-						       request, response, sc);
+						       request, response);
 	assertTrue(null != facesContext);
 	
     }

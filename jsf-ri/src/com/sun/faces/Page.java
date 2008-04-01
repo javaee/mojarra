@@ -1,5 +1,5 @@
 /*
- * $Id: Page.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
+ * $Id: Page.java,v 1.4 2002/04/11 22:52:40 eburns Exp $
  */
 
 /*
@@ -28,9 +28,10 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import javax.faces.Constants;
+import javax.faces.AbstractFactory;
 import javax.faces.ObjectManager;
 import javax.faces.FacesContext;
-import javax.faces.FacesContextFactory;
+import javax.faces.FactoryConfigurationError;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.TreeNavigator;
@@ -47,7 +48,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Page.java,v 1.3 2002/04/05 19:41:13 jvisvanathan Exp $
+ * @version $Id: Page.java,v 1.4 2002/04/11 22:52:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,20 +120,19 @@ private void outputException(HttpServletResponse resp,
 
 protected FacesContext createFacesContext(ObjectManager objectManager, 
 					  HttpServletRequest req, 
-					  HttpServletResponse res,
-                                          ServletContext sc) 
+					  HttpServletResponse res) 
                                           throws ServletException {
     FacesContext fc;
-    FacesContextFactory fcFactory;
+    AbstractFactory abstractFactory;
    
     // create a new instance of facesContext for every request. 
-    fcFactory = (FacesContextFactory)
-            objectManager.get(Constants.REF_FACESCONTEXTFACTORY);
-
-    Assert.assert_it(null != fcFactory);
+    abstractFactory = (AbstractFactory)
+	objectManager.get(Constants.REF_ABSTRACTFACTORY);
+    
+    Assert.assert_it(null != abstractFactory);
     try {
-        fc = fcFactory.newFacesContext(req, res, sc );
-    } catch (FacesException e) {
+        fc = abstractFactory.newFacesContext(req, res );
+    } catch (FactoryConfigurationError e) {
         throw new ServletException(e.getMessage());
     }
     Assert.assert_it(null != fc);
@@ -213,8 +213,7 @@ final public void service(ServletRequest req, ServletResponse res) throws Servle
     // Put the RenderWrapper in the OM request scope
     objectManager.put(request, Constants.REF_RENDERWRAPPER, this);
     
-    facesContext = createFacesContext(objectManager, request, response, 
-            servletContext);
+    facesContext = createFacesContext(objectManager, request, response);
 
     // Rather than this class extending UIPage, we create a new one each
     // time.  This prevents problems with knowing when it is safe to

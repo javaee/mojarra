@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectManagerFactoryImpl.java,v 1.2 2002/01/18 21:52:29 edburns Exp $
+ * $Id: ObjectManagerFactoryImpl.java,v 1.3 2002/04/11 22:52:40 eburns Exp $
  */
 
 /*
@@ -18,8 +18,13 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.ObjectManager;
 import javax.faces.FacesException;
+import javax.faces.FacesFactory;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import java.util.Map;
 
 /**
  *
@@ -27,14 +32,14 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectManagerFactoryImpl.java,v 1.2 2002/01/18 21:52:29 edburns Exp $
+ * @version $Id: ObjectManagerFactoryImpl.java,v 1.3 2002/04/11 22:52:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class ObjectManagerFactoryImpl extends ObjectManagerFactory
+public class ObjectManagerFactoryImpl extends Object implements FacesFactory
 {
 //
 // Protected Constants
@@ -62,10 +67,6 @@ public ObjectManagerFactoryImpl()
 }
 
 //
-// Methods from ObjectManagerFactory
-//
-
-//
 // Class methods
 //
 
@@ -73,6 +74,24 @@ public ObjectManager newObjectManager(ServletContext servletContext) throws Face
     ObjectManager result = new ObjectManagerImpl(servletContext);
     return result;
 }
+
+public Object newInstance(String facesName, ServletRequest req, ServletResponse res) throws FacesException {
+    throw new FacesException("Can't create ObjectManager instance from request and response");
+}
+
+public Object newInstance(String facesName, ServletContext ctx) throws FacesException {
+    return new ObjectManagerImpl(ctx);
+}
+
+public Object newInstance(String facesName) throws FacesException {
+    throw new FacesException("Can't create ObjectManager instance from nothing.");
+}
+
+public Object newInstance(String facesName, Map args) throws FacesException {
+    throw new FacesException("Can't create ObjectManager instance from Map.");
+}
+
+
 
 //
 // General Methods

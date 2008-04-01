@@ -3,16 +3,45 @@ package com.sun.faces;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
 
 import javax.faces.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class MessageFactoryImpl extends MessageFactory 
+public class MessageFactoryImpl extends MessageFactory implements FacesFactory
 {
 	private	String	_resource = "JSFMessages";
 	private	ClassLoader	_classLoader;
+
+public Object newInstance(String facesName, ServletRequest req, 
+			  ServletResponse res) throws FacesException
+{
+    throw new FacesException("Can't create MessageFactory from Request and Response");
+}
+
+public Object newInstance(String facesName, ServletContext ctx) throws FacesException
+{
+    throw new FacesException("Can't create MessageFactory from ServletContext");
+}
+
+public Object newInstance(String facesName) throws FacesException
+{
+    return new MessageFactoryImpl();
+}
+
+public Object newInstance(String facesName, Map args) throws FacesException
+{
+    throw new FacesException("Can't create MessageFactory from map");
+}
+
+    public MessageFactoryImpl() { 
+    };
 	
 	/**
 	 * A catalog of the message catalogs for this application. The key is a String and is

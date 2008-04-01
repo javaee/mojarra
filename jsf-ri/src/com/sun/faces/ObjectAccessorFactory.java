@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectAccessorFactory.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
+ * $Id: ObjectAccessorFactory.java,v 1.3 2002/04/11 22:52:40 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.faces.FacesContext;
 </PRE></CODE>
 
  *
- * @version $Id: ObjectAccessorFactory.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
+ * @version $Id: ObjectAccessorFactory.java,v 1.3 2002/04/11 22:52:40 eburns Exp $
  * 
  * @see	javax.faces.ObjectAccessor
  *
@@ -88,16 +88,11 @@ protected ObjectAccessorFactory()
 //
 
 public static ObjectAccessorFactory newInstance() throws FactoryConfigurationError  {
-    try {
 	return (ObjectAccessorFactory) FactoryFinder.find(
 	   /* The default property name according to the JSFaces spec */
 	   "com.sun.faces.ObjectAccessorFactory",
 	   /* The fallback implementation class name */
 	   "com.sun.faces.ObjectAccessorFactoryImpl");
-    } catch (FactoryFinder.ConfigurationError e) {
-	throw new FactoryConfigurationError(e.getException(),
-					    e.getMessage());
-    }
 }
 
 

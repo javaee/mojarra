@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicFacesContextFactory.java,v 1.1 2002/04/05 19:41:15 jvisvanathan Exp $
+ * $Id: HtmlBasicFacesContextFactory.java,v 1.2 2002/04/11 22:52:41 eburns Exp $
  */
 
 /*
@@ -19,10 +19,13 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletContext;
-import javax.faces.FacesContextFactory;
+import javax.servlet.http.HttpServletRequest;
+
+import javax.faces.FacesFactory;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
 
+import java.util.Map;
 
 /**
  *
@@ -30,14 +33,14 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicFacesContextFactory.java,v 1.1 2002/04/05 19:41:15 jvisvanathan Exp $
+ * @version $Id: HtmlBasicFacesContextFactory.java,v 1.2 2002/04/11 22:52:41 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class HtmlBasicFacesContextFactory extends FacesContextFactory
+public class HtmlBasicFacesContextFactory extends Object implements FacesFactory
 {
 //
 // Protected Constants
@@ -65,17 +68,31 @@ public HtmlBasicFacesContextFactory()
 }
 
 //
-// Methods from FacesContextFactory
+// Methods from FacesFactory
 //
 
-//
-// Class methods
-//
-
-public FacesContext newFacesContext(ServletRequest request, 
-        ServletResponse response, ServletContext sc ) throws FacesException {
-    FacesContext result = new HtmlBasicFacesContext(request, response, sc);
+public Object newInstance(String facesName, ServletRequest req, 
+			  ServletResponse res) throws FacesException
+{
+    ServletContext sc = 
+	((HttpServletRequest)req).getSession().getServletContext();
+    FacesContext result = new HtmlBasicFacesContext(req, res, sc);
     return result;
+}
+
+public Object newInstance(String facesName, ServletContext ctx) throws FacesException
+{
+    throw new FacesException("Can't create FacesContext from ServletContext");
+}
+
+public Object newInstance(String facesName) throws FacesException
+{
+    throw new FacesException("Can't create FacesContext from nothing");
+}
+
+public Object newInstance(String facesName, Map args) throws FacesException
+{
+    throw new FacesException("Can't create FacesContext from map");
 }
 
 //

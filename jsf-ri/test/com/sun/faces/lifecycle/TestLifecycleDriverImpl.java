@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleDriverImpl.java,v 1.4 2002/04/05 19:41:21 jvisvanathan Exp $
+ * $Id: TestLifecycleDriverImpl.java,v 1.5 2002/04/11 22:52:42 eburns Exp $
  */
 
 /*
@@ -33,8 +33,7 @@ import javax.faces.ObjectManager;
 import javax.faces.TreeNavigator;
 import javax.faces.MessageFactory;
 
-import javax.faces.EventQueueFactory;
-import javax.faces.FacesContextFactory;
+import javax.faces.AbstractFactory;
 import javax.faces.FacesContext;
 import javax.faces.UIPage;
 import com.sun.faces.ObjectAccessorFactory;
@@ -48,7 +47,7 @@ import com.sun.faces.treebuilder.TreeEngine;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleDriverImpl.java,v 1.4 2002/04/05 19:41:21 jvisvanathan Exp $
+ * @version $Id: TestLifecycleDriverImpl.java,v 1.5 2002/04/11 22:52:42 eburns Exp $
  * 
  * @see	javax.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -123,8 +122,7 @@ public void commenceRendering(FacesContext ctx, TreeNavigator treeNav) throws Se
 
 public void testInit() 
 {
-    EventQueueFactory eqf = null;
-    FacesContextFactory fcf = null;
+    AbstractFactory abstractFactory = null;
     ObjectAccessorFactory oaf = null;
     NavigationHandlerFactory nhf = null;
     ConverterManager cm = null;
@@ -144,11 +142,8 @@ public void testInit()
 	config.getServletContext().getAttribute(Constants.REF_OBJECTMANAGER);
     assertTrue(null != objectManager);
 
-    eqf = (EventQueueFactory) objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
-    assertTrue(null != eqf);
-
-    fcf = (FacesContextFactory) objectManager.get(Constants.REF_FACESCONTEXTFACTORY);
-    assertTrue(null != fcf);
+    abstractFactory = (AbstractFactory) objectManager.get(Constants.REF_ABSTRACTFACTORY);
+    assertTrue(null != abstractFactory);
 
     oaf = (ObjectAccessorFactory) objectManager.get(Constants.REF_OBJECTACCESSORFACTORY);
     assertTrue(null != oaf);
@@ -200,9 +195,8 @@ public void testLifecycle()
     page = new FacesTestCasePage();
 
     try {
-        ServletContext sc = config.getServletContext();
 	facesContext = page.testCallCreateFacesContext(objectManager, wrapped, 
-						       response, sc);
+						       response);
 	assertTrue(null != facesContext);
 	UIPage root = new UIPage();
 	root.setId(Util.generateId());

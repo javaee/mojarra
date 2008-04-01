@@ -1,5 +1,5 @@
 /*
- * $Id: EventQueueFactoryImpl.java,v 1.3 2001/12/20 22:26:38 ofung Exp $
+ * $Id: EventQueueFactoryImpl.java,v 1.4 2002/04/11 22:52:39 eburns Exp $
  */
 
 /*
@@ -16,9 +16,15 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+
+import java.util.Map;
+
 import javax.faces.FacesException;
-import javax.faces.EventQueueFactory;
+import javax.faces.FacesFactory;
 import javax.faces.EventQueue;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -26,7 +32,7 @@ import javax.faces.EventQueue;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: EventQueueFactoryImpl.java,v 1.3 2001/12/20 22:26:38 ofung Exp $
+ * @version $Id: EventQueueFactoryImpl.java,v 1.4 2002/04/11 22:52:39 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  * @see	javax.faces.EventQueueFactory
@@ -34,7 +40,7 @@ import javax.faces.EventQueue;
  *
  */
 
-public class EventQueueFactoryImpl extends EventQueueFactory
+public class EventQueueFactoryImpl extends Object implements FacesFactory
 {
     //
     // Protected Constants
@@ -69,13 +75,31 @@ public class EventQueueFactoryImpl extends EventQueueFactory
     // Class methods
     //
 
-    public EventQueue newEventQueue() throws FacesException {
-        EventQueue result = new EventQueueImpl();
-        return result;
-    }
+    //
+    // Methods from FacesFactory
+    //
 
-    //
-    // General Methods
-    //
+public Object newInstance(String facesName, ServletRequest req, 
+			  ServletResponse res) throws FacesException
+{
+    throw new FacesException("Can't create EventQueue from Request and Response");
+}
+
+public Object newInstance(String facesName, ServletContext ctx) throws FacesException
+{
+    throw new FacesException("Can't create EventQueue from ServletContext");
+}
+
+public Object newInstance(String facesName) throws FacesException
+{
+    return new EventQueueImpl();
+}
+
+public Object newInstance(String facesName, Map args) throws FacesException
+{
+    throw new FacesException("Can't create EventQueue from map");
+}
+
+
 
 } // end of class EventQueueFactoryImpl

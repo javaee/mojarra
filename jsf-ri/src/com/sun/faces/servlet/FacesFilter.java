@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.7 2002/04/05 19:41:17 jvisvanathan Exp $
+ * $Id: FacesFilter.java,v 1.8 2002/04/11 22:52:41 eburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import java.io.PrintWriter;
 import java.util.EventObject;
 
 import com.sun.faces.ObjectAccessorFactory;
-import com.sun.faces.ObjectManagerFactory;
 import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.util.Util;
 import com.sun.faces.ConverterManagerFactory;
@@ -22,12 +21,10 @@ import com.sun.faces.ConverterManagerFactory;
 import javax.faces.Constants;
 import javax.faces.EventDispatcher;
 import javax.faces.EventQueue;
-import javax.faces.EventQueueFactory;
 import javax.faces.FacesEvent;
 import javax.faces.FacesException;
 import javax.faces.ObjectManager;
 import javax.faces.FacesContext;
-import javax.faces.FacesContextFactory;
 import javax.faces.RenderKit;
 import javax.faces.UICommand;
 import javax.faces.UISelectOne;
@@ -35,7 +32,8 @@ import javax.faces.UITextEntry;
 import javax.faces.UISelectBoolean;
 import javax.faces.NavigationHandler;
 import javax.faces.ConverterManager;
-import javax.faces.FacesContextFactory;
+import javax.faces.AbstractFactory;
+import javax.faces.FactoryConfigurationError;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -80,7 +78,7 @@ public class FacesFilter implements Filter {
      *
      * POSTCONDITION: ObjectManager instance created using Factory.  Instance
      * put in ServletContext.  ObjectManager global scope contains
-     * FacesContextFactory, EventQueueFactory.
+     * AbstractFactory.
      *
      * @param config The Filter configuration object which contains
      *        parameters for this filter.
@@ -96,9 +94,7 @@ public class FacesFilter implements Filter {
         // com.sun.faces.util.DebugUtil.waitForDebugger();
 
         ObjectManager objectManager;
-        ObjectManagerFactory omFactory;
-        EventQueueFactory eqFactory;
-        FacesContextFactory fcFactory;
+        AbstractFactory abstractFactory;
         ObjectAccessorFactory oaFactory;
         NavigationHandlerFactory nhFactory;
         ConverterManager converterManager = null;
@@ -115,11 +111,16 @@ public class FacesFilter implements Filter {
         // if it does exist.
         Assert.assert_it(null == objectManager);
 
+	// Step 1.5 create the AbstractFactory
+        abstractFactory = new AbstractFactory();
+        Assert.assert_it(null != abstractFactory);
+	
         // create the ObjectManager
         try {
-            omFactory = ObjectManagerFactory.newInstance();
-            objectManager = omFactory.newObjectManager(servletContext);
-        } catch (FacesException e) {
+            objectManager = (ObjectManager) 
+		abstractFactory.newInstance(Constants.REF_OBJECTMANAGER,
+					    servletContext);
+        } catch (FactoryConfigurationError e) {
             throw new ServletException(e.getMessage());
         }
         Assert.assert_it(null != objectManager);
@@ -127,36 +128,12 @@ public class FacesFilter implements Filter {
         // Store the ObjectManager in the servlet context
         // (application scope).
         //
-        servletContext.setAttribute(Constants.REF_OBJECTMANAGER, objectManager);
+        servletContext.setAttribute(Constants.REF_OBJECTMANAGER, 
+				    objectManager);
 
-        // Step 2: Create the EventQueueFactory and put it in the
-        // ObjectManager in Global Scope.
-
-        eqFactory = (EventQueueFactory)objectManager.get(
-            Constants.REF_EVENTQUEUEFACTORY);
-
-        // The EventQueueFactory must not exist at this point.  It is an
-        // error if it does exist.
-        Assert.assert_it(null == eqFactory);
-
-        eqFactory = EventQueueFactory.newInstance();
-        Assert.assert_it(null != eqFactory);
+	// Put the AbstractFactory in global scope
         objectManager.put(servletContext,
-                        Constants.REF_EVENTQUEUEFACTORY, eqFactory);
-
-        // Step 3: Create the FacesContextFactory and put it in the
-        // ObjectManager in GlobalScope
-
-        fcFactory = (FacesContextFactory)objectManager.get(
-            Constants.REF_FACESCONTEXTFACTORY);
-        // The FacesContextFactory must not exist at this point.  It is an
-        // error if it does exist.
-        Assert.assert_it(null == fcFactory);
-
-        fcFactory = FacesContextFactory.newInstance();
-        Assert.assert_it(null != fcFactory);
-        objectManager.put(servletContext,
-                        Constants.REF_FACESCONTEXTFACTORY, fcFactory);
+                        Constants.REF_ABSTRACTFACTORY, abstractFactory);
 
         // Step 4: Create the ObjectAccessorFactory and put it in the
         // ObjectManager in GlobalScope
@@ -204,7 +181,7 @@ public class FacesFilter implements Filter {
                         Constants.REF_CONVERTERMANAGER, converterManager);
 
         // Step 7 create a default Message Factory and put it in Global scope
-        javax.faces.MessageFactory mf = javax.faces.MessageFactory.newInstance();
+        javax.faces.MessageFactory mf = abstractFactory.newMessageFactory();
         mf.setClassLoader(this.getClass().getClassLoader());
         objectManager.put(servletContext,
                 Constants.DEFAULT_MESSAGE_FACTORY_ID, mf);
@@ -214,8 +191,7 @@ public class FacesFilter implements Filter {
      * Process a request.
      *
      * PRECONDITION: ObjectManager exists in ServletContext.
-     * ObjectManager global scope contains FacesContextFactory,
-     * EventQueueFactory.
+     * ObjectManager global scope contains AbstractFactory.
      *
      * POSTCONDITION: ObjectManager contains FacesContext and
      * EventQueue instances in session scope.
@@ -231,9 +207,8 @@ public class FacesFilter implements Filter {
         throws IOException, ServletException {
 
         FacesContext fc;
-        FacesContextFactory fcFactory;
+        AbstractFactory abstractFactory;
         EventQueue eq;
-        EventQueueFactory eqFactory;
 
         ServletContext servletContext = filterConfig.getServletContext();
 
@@ -264,12 +239,11 @@ public class FacesFilter implements Filter {
         Assert.assert_it(null != objectManager);
 
         // create a new instance of facesContext for every request.
-        fcFactory = (FacesContextFactory)
-            objectManager.get(Constants.REF_FACESCONTEXTFACTORY);
-
-        Assert.assert_it(null != fcFactory);
+        abstractFactory = (AbstractFactory)
+            objectManager.get(Constants.REF_ABSTRACTFACTORY);
+	
         try {
-            fc = fcFactory.newFacesContext(req, res, servletContext );
+            fc = abstractFactory.newFacesContext(req, res);
         } catch (FacesException e) {
             throw new ServletException(e.getMessage());
         }

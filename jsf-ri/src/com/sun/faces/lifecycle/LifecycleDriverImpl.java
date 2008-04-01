@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.5 2002/04/05 19:41:13 jvisvanathan Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.6 2002/04/11 22:52:41 eburns Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sun.faces.ObjectAccessorFactory;
-import com.sun.faces.ObjectManagerFactory;
 import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.ConverterManagerFactory;
 import com.sun.faces.util.Util;
@@ -31,8 +30,7 @@ import com.sun.faces.treebuilder.TreeEngine;
 
 import javax.faces.Constants;
 import javax.faces.ObjectManager;
-import javax.faces.EventQueueFactory;
-import javax.faces.FacesContextFactory;
+import javax.faces.AbstractFactory;
 import javax.faces.FacesException;
 import javax.faces.ConverterManager;
 import javax.faces.LifecycleDriver;
@@ -51,7 +49,7 @@ import javax.faces.UIComponent;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.5 2002/04/05 19:41:13 jvisvanathan Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.6 2002/04/11 22:52:41 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,9 +110,7 @@ public LifecycleDriverImpl()
 * and scopes in the ObjectManager. <P>
 
 * <CODE><PRE>
-Constants.REF_EVENTQUEUEFACTORY application
-Constants.REF_RENDERCONTEXTFACTORY application
-Constants.REF_EVENTCONTEXTFACTORY application
+Constants.REF_ABSTRACTFACTORY application
 Constants.REF_OBJECTACCESSORFACTORY application
 Constants.REF_NAVIGATIONHANDLERFACTORY application
 Constants.REF_CONVERTERMANAGER application
@@ -125,8 +121,8 @@ Constants.REF_TREEENGINE application
 
 protected void initFactories(ObjectManager objectManager)
 {
-    EventQueueFactory eqFactory;
-    FacesContextFactory fcFactory;
+    AbstractFactory abstractFactory = (AbstractFactory)
+	objectManager.get(Constants.REF_ABSTRACTFACTORY);
     ObjectAccessorFactory oaFactory;
     NavigationHandlerFactory nhFactory;
     ConverterManagerFactory cmFactory;
@@ -134,35 +130,6 @@ protected void initFactories(ObjectManager objectManager)
 
     Assert.assert_it(null != servletContext);
 
-    // Step 2: Create the EventQueueFactory and put it in the
-    // ObjectManager in Global Scope.
-    
-    eqFactory = (EventQueueFactory)
-	objectManager.get(Constants.REF_EVENTQUEUEFACTORY);
-    
-    // The EventQueueFactory must not exist at this point.  It is an
-    // error if it does exist.
-    Assert.assert_it(null == eqFactory);
-    
-    eqFactory = EventQueueFactory.newInstance();
-    Assert.assert_it(null != eqFactory);
-    objectManager.put(servletContext,
-		      Constants.REF_EVENTQUEUEFACTORY, eqFactory);
-    
-    // Step 4: Create the FacesContextFactory and put it in the
-    // ObjectManager in GlobalScope
-    
-    fcFactory = (FacesContextFactory)objectManager.get(
-				Constants.REF_FACESCONTEXTFACTORY);
-    // The RenderContextFactory must not exist at this point.  It is an
-    // error if it does exist.
-    Assert.assert_it(null == fcFactory);
-    
-    fcFactory = FacesContextFactory.newInstance();
-    Assert.assert_it(null != fcFactory);
-    objectManager.put(servletContext,
-		      Constants.REF_FACESCONTEXTFACTORY, fcFactory);
-    
     // Step 5: Create the ObjectAccessorFactory and put it in the
     // ObjectManager in GlobalScope
     oaFactory = (ObjectAccessorFactory)objectManager.get(
@@ -217,7 +184,8 @@ protected void initFactories(ObjectManager objectManager)
 		      treeEngine);
 
     // Step 9 create a default Message Factory and put it in Global scope
-    javax.faces.MessageFactory mf = javax.faces.MessageFactory.newInstance();
+    javax.faces.MessageFactory mf = abstractFactory.newMessageFactory();
+    Assert.assert_it(null != mf);
     mf.setClassLoader(this.getClass().getClassLoader());
     objectManager.put(servletContext,
             Constants.DEFAULT_MESSAGE_FACTORY_ID, mf);
@@ -274,7 +242,7 @@ public void init(ServletContext newServletContext) throws ServletException
     // com.sun.faces.util.DebugUtil.waitForDebugger();
     
     ObjectManager objectManager;
-    ObjectManagerFactory omFactory;
+    AbstractFactory abstractFactory;
     
     Assert.assert_it(null != servletContext);
     
@@ -286,11 +254,17 @@ public void init(ServletContext newServletContext) throws ServletException
     // The objectManager must not exist at this point.  It is an error
     // if it does exist.
     Assert.assert_it(null == objectManager);
+
+    // Step 1.5 create the AbstractFactory
+    abstractFactory = new AbstractFactory();
+    Assert.assert_it(null != abstractFactory);
+
     
     // create the ObjectManager
     try {
-	omFactory = ObjectManagerFactory.newInstance();
-	objectManager = omFactory.newObjectManager(servletContext);
+	objectManager = (ObjectManager)
+	    abstractFactory.newInstance(Constants.REF_OBJECTMANAGER,
+					servletContext);
     } catch (FacesException e) {
 	throw new ServletException(e.getMessage());
     }
@@ -300,6 +274,10 @@ public void init(ServletContext newServletContext) throws ServletException
     // (application scope).
     //
     servletContext.setAttribute(Constants.REF_OBJECTMANAGER, objectManager);
+
+    // Put the AbstractFactory in global scope
+    objectManager.put(servletContext,
+		      Constants.REF_ABSTRACTFACTORY, abstractFactory);
 
     initFactories(objectManager);
     initStages(objectManager);

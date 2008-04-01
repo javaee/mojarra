@@ -1,5 +1,5 @@
 /*
- * $Id: TestEventQueue.java,v 1.2 2001/12/20 22:26:43 ofung Exp $
+ * $Id: TestEventQueue.java,v 1.3 2002/04/11 22:52:41 eburns Exp $
  */
 
 /*
@@ -14,7 +14,8 @@ package com.sun.faces;
 import junit.framework.TestCase;
 import java.io.IOException;
 import javax.faces.EventQueue;
-import javax.faces.EventQueueFactory;
+import javax.faces.AbstractFactory;
+import javax.faces.Constants;
 import java.util.EventObject;
 
 /**
@@ -23,7 +24,7 @@ import java.util.EventObject;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestEventQueue.java,v 1.2 2001/12/20 22:26:43 ofung Exp $
+ * @version $Id: TestEventQueue.java,v 1.3 2002/04/11 22:52:41 eburns Exp $
  * 
  *
  */
@@ -41,7 +42,6 @@ public class TestEventQueue extends TestCase
     //
     // Instance Variables
     //
-    EventQueueFactory eqFactory = null;
     EventQueue eventQueue = null;
 
     // Attribute Instance Variables
@@ -59,10 +59,8 @@ public class TestEventQueue extends TestCase
     public void setUp() {
         // create renderContext
         try {
-            eqFactory = EventQueueFactory.newInstance();
-            System.out.println("created EventQueueFactory: " +
-                           eqFactory);
-            eventQueue = eqFactory.newEventQueue();
+	    AbstractFactory abstractFactory = new AbstractFactory();
+            eventQueue = abstractFactory.newEventQueue();
             System.out.println("Created eventQueue " +
                            eventQueue);
         }
