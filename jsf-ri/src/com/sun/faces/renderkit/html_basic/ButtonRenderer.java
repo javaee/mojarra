@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.4 2001/11/17 01:32:59 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.5 2001/11/21 17:15:04 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.4 2001/11/17 01:32:59 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.5 2001/11/21 17:15:04 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,6 +136,9 @@ public class ButtonRenderer extends Object implements Renderer
     }
 
     public void renderStart(RenderContext rc, WComponent c) throws IOException {
+
+        ParameterCheck.nonNull(rc);
+        ParameterCheck.nonNull(c);
     
         OutputMethod outputMethod = rc.getOutputMethod();
         WCommand wCommand = (WCommand)c;
@@ -147,10 +150,21 @@ public class ButtonRenderer extends Object implements Renderer
             output.append(" name=");
             output.append(wCommand.getAttribute(rc, "name"));
         } else {
+            String label = (String)wCommand.getAttribute(rc, "label");
             output.append("submit name=");
             output.append(wCommand.getAttribute(rc, "name"));
             output.append(" value=");
-            output.append(wCommand.getAttribute(rc, "label"));
+            if (label.length() == 3) {
+                output.append("&#160&#160");
+                output.append(label);
+                output.append("&#160&#160");
+            } else if (label.length() == 2) {
+                output.append("&#160&#160&#160");
+                output.append(label);
+                output.append("&#160&#160&#160");
+            } else {
+                output.append(label);
+            }
         }
         output.append(">");
 
