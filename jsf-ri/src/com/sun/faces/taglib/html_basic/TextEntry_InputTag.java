@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.19 2002/01/25 18:45:19 visvan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.20 2002/01/28 18:31:14 visvan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.19 2002/01/25 18:45:19 visvan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.20 2002/01/28 18:31:14 visvan Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -236,7 +236,7 @@ public class TextEntry_InputTag extends TagSupport
         // PENDING ( visvan )
         // make sure that the model object is registered
         if ( model != null ) {
-            c.setModel(model);
+            c.setModelReference(model);
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface ??
@@ -247,7 +247,7 @@ public class TextEntry_InputTag extends TagSupport
                String model_str = ancestor.getModel();
                if ( model_str != null ) {
                    model = "$" + model_str + "." + id;
-                   c.setModel(model);
+                   c.setModelReference(model);
                } 
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null

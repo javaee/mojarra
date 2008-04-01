@@ -1,5 +1,5 @@
 /*
- * $Id: RadioGroupTag.java,v 1.9 2002/01/25 18:45:19 visvan Exp $
+ * $Id: RadioGroupTag.java,v 1.10 2002/01/28 18:31:14 visvan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashSet;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioGroupTag.java,v 1.9 2002/01/25 18:45:19 visvan Exp $
+ * @version $Id: RadioGroupTag.java,v 1.10 2002/01/28 18:31:14 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -162,8 +162,8 @@ protected UISelectOne createComponent(RenderContext renderContext)
     // PENDING(edburns): assert that model and selectedValueModel
     // are either both non-null or both null.
     if ( null != model && null != selectedValueModel) {
-	wSelectOne.setModel(model);
-	wSelectOne.setSelectedValueModel(selectedValueModel);
+	wSelectOne.setModelReference(model);
+	wSelectOne.setSelectedModelReference(selectedValueModel);
     } 
     return wSelectOne;
 }

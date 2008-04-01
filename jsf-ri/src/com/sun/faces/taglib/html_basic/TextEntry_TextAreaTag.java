@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.19 2002/01/28 18:31:15 visvan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.19 2002/01/28 18:31:15 visvan Exp $
  * 
  *
  */
@@ -260,7 +260,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         // PENDING ( visvan )
         // make sure that the model object is registered
         if ( model != null ) {
-            c.setModel(model);
+            c.setModelReference(model);
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface ??
@@ -271,7 +271,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
                String model_str = ancestor.getModel();
                if ( model_str != null ) {
                    model = "$" + model_str + "." + id;
-                   c.setModel(model);
+                   c.setModelReference(model);
                }
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null

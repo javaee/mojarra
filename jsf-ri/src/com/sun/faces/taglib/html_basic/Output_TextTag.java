@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
+ * $Id: Output_TextTag.java,v 1.19 2002/01/28 18:31:13 visvan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.18 2002/01/25 18:45:19 visvan Exp $
+ * @version $Id: Output_TextTag.java,v 1.19 2002/01/28 18:31:13 visvan Exp $
  * 
  *
  */
@@ -221,7 +221,7 @@ public class Output_TextTag extends TagSupport
         // PENDING ( visvan )
         // make sure that the model object is registered
         if ( model != null ) {
-            c.setModel(model);
+            c.setModelReference(model);
         } else {
             // PENDING ( visvan ) all tags should implement a common
             // interface. Also at this point we must ensure that
@@ -235,7 +235,7 @@ public class Output_TextTag extends TagSupport
                String model_str = ancestor.getModel();
                if ( model_str != null ) {
                    model = "$" + model_str + "." + id;
-                   c.setModel(model);
+                   c.setModelReference(model);
                }
             } catch ( Exception e ) {
                 // If form tag cannot be found then model is null

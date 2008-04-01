@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.18 2002/01/25 18:45:17 visvan Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.19 2002/01/28 18:31:13 visvan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.18 2002/01/25 18:45:17 visvan Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.19 2002/01/28 18:31:13 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -275,7 +275,7 @@ public void queueEvents(EventContext eventContext) {
             if ( c instanceof UITextEntry ) {
                 UITextEntry te = (UITextEntry) c;
                 old_value = te.getText(rc);
-                model_str = (String) te.getModel();
+                model_str = (String) te.getModelReference();
             } else if (c instanceof UISelectBoolean) {
                 UISelectBoolean sb = (UISelectBoolean) c;
                 boolean old_state = sb.isSelected(rc);
@@ -284,7 +284,7 @@ public void queueEvents(EventContext eventContext) {
             } else if (c instanceof UISelectOne) {
 		UISelectOne so = (UISelectOne) c;
 		old_value = (String) so.getSelectedValue(rc);
-		model_str = (String) so.getSelectedValueModel();
+		model_str = (String) so.getSelectedModelReference();
 	    }
 
             // construct value changed event objects and put in the queue.
