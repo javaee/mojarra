@@ -114,7 +114,7 @@
             <!-- Suite of tests -->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.TestObjectTable"/>
-
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderer"/>
         </junit>
 
     </target>
