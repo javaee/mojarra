@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyMenuRenderer.java,v 1.1 2002/09/04 22:32:36 eburns Exp $
+ * $Id: SelectManyMenuRenderer.java,v 1.2 2002/09/06 22:10:28 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,6 +17,7 @@ import java.util.Iterator;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
+import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -31,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyMenuRenderer.java,v 1.1 2002/09/04 22:32:36 eburns Exp $
+ * @version $Id: SelectManyMenuRenderer.java,v 1.2 2002/09/06 22:10:28 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -95,8 +96,8 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null);
 
-        String newValues[] = 
-	    context.getServletRequest().getParameterValues(compoundId);
+        String newValues[] =
+            context.getServletRequest().getParameterValues(compoundId);
         // currently we assume the model type to be of type string or 
         // convertible to string and localised by the application.
         component.setValue(newValues);
@@ -135,8 +136,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         if (currentObj != null) {
             if (currentObj instanceof String) {
                 currentValue = (String) currentObj;
-            }
-            else {
+            } else {
                 currentValue = currentObj.toString();
             }
         }
@@ -146,11 +146,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
 
         StringBuffer buffer = new StringBuffer();
 
-        getSelectBuffer(
-            context,
-            (UISelectMany) component,
-            currentValue,
-            buffer);
+        getSelectBuffer(context, component, currentValue, buffer);
 
         currentValue = buffer.toString();
 
@@ -162,17 +158,18 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
 
     void getSelectBuffer(
         FacesContext context,
-        UISelectMany component,
+        UIComponent component,
         String curValue,
         StringBuffer buff) {
         buff.append("<select name=\"");
         buff.append(component.getCompoundId());
-        buff.append("\" multiple ");
+        buff.append("\"");
+        buff.append(getMultipleText());
 
-        if (null != component.getAttribute("selectmanyClass"))
-        {
+        String classStr;
+        if (null != (classStr = (String) component.getAttribute("selectClass"))) {
             buff.append(" class=\"");
-            buff.append(component.getAttribute("selectmanyClass"));
+            buff.append(classStr);
             buff.append("\" ");
         }
 
@@ -181,15 +178,10 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
 
         StringBuffer optionsBuffer = new StringBuffer();
         int itemCount =
-            getOptionBuffer(
-                context,
-                (UISelectMany) component,
-                curValue,
-                optionsBuffer);
+            getOptionBuffer(context, component, curValue, optionsBuffer);
 
-        if (null != component.getAttribute("size"))
-        {
-            Integer size = (Integer) component.getAttribute("size");
+        if (null != component.getAttribute("size")) {
+            Integer size = Integer.valueOf((String)component.getAttribute("size"));
             itemCount = size.intValue();
         }
 
@@ -202,13 +194,13 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
 
     int getOptionBuffer(
         FacesContext context,
-        UISelectMany selectMany,
+        UIComponent component,
         String curValue,
         StringBuffer buff) {
-	Object selectedValues[] = selectMany.getSelectedValues();
-	int i = 0, len = 0;
+
+        Object selectedValues[] = getCurrentSelectedValues(component);
         int itemCount = 0;
-        Iterator items = Util.getSelectItemWrappers(context, selectMany);
+        Iterator items = Util.getSelectItemWrappers(context, component);
 
         UIComponent curComponent;
         SelectItem curItem = null;
@@ -218,21 +210,12 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
             curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
-            
+
             buff.append("\t<option value=\"");
             buff.append((String) curItem.getValue());
             buff.append("\"");
-	    // Wouldn't a C macro be nice here?
-	    if (null != selectedValues) {
-		len = selectedValues.length;
-		for (i = 0; i < len; i++) {
-		    if (selectedValues[i].equals(curItem.getValue())) {
-			buff.append(" selected");
-		    }
-		}
-            }
-            
-            buff.append(Util.renderPassthruAttributes(context,curComponent));
+            buff.append(getSelectedText(curItem, selectedValues));
+            buff.append(Util.renderPassthruAttributes(context, curComponent));
             buff.append(Util.renderBooleanPassthruAttributes(context, curComponent));
             buff.append(">");
             buff.append(curItem.getLabel());
@@ -240,5 +223,33 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         }
         return itemCount;
     }
+
+    String getSelectedText(SelectItem item, Object[] values) {
+        if (null != values) {
+            int len = values.length;
+            for (int i = 0; i < len; i++) {
+                if (values[i].equals(item.getValue())) {
+                    return getSelectedTextString();
+                }
+            }
+        }
+        return "";
+    }
+
+    String getSelectedTextString() {
+        return " selected";
+    }
+	
+    // To derive a selectOne type component from this, override
+    // these methods.
+    String getMultipleText() {
+        return " multiple ";
+    }
+
+    Object[] getCurrentSelectedValues(UIComponent component) {
+        UISelectMany select = (UISelectMany) component;
+        return select.getSelectedValues();
+    }
+
 
 } // end of class SelectManyMenuRenderer

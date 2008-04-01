@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyListboxRenderer.java,v 1.1 2002/09/04 22:32:36 eburns Exp $
+ * $Id: SelectManyListboxRenderer.java,v 1.2 2002/09/06 22:10:28 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectMany;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.util.SelectItemWrapper;
@@ -27,7 +26,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyListboxRenderer.java,v 1.1 2002/09/04 22:32:36 eburns Exp $
+ * @version $Id: SelectManyListboxRenderer.java,v 1.2 2002/09/06 22:10:28 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -73,43 +72,34 @@ public class SelectManyListboxRenderer extends SelectManyMenuRenderer {
 
     int getOptionBuffer(
         FacesContext context,
-        UISelectMany selectMany,
+        UIComponent component,
         String curValue,
         StringBuffer buff) {
-        Iterator items = Util.getSelectItemWrappers(context, selectMany);
-        int itemCount = 0;
-	Object selectedValues[] = selectMany.getSelectedValues();
-	int i = 0, len = 0;
+            Iterator items = Util.getSelectItemWrappers(context, component);
+            int itemCount = 0;
+            Object selectedValues[] = getCurrentSelectedValues(component);
 
-        UIComponent curComponent;
-        SelectItem curItem = null;
-        SelectItemWrapper curItemWrapper = null;
-        while (items.hasNext()) {
-            itemCount++;
-            curItemWrapper = (SelectItemWrapper) items.next();
-            curItem = curItemWrapper.getSelectItem();
-            curComponent = curItemWrapper.getUISelectItem();
+            UIComponent curComponent;
+            SelectItem curItem = null;
+            SelectItemWrapper curItemWrapper = null;
+            while (items.hasNext()) {
+                itemCount++;
+                curItemWrapper = (SelectItemWrapper) items.next();
+                curItem = curItemWrapper.getSelectItem();
+                curComponent = curItemWrapper.getUISelectItem();
 
-            buff.append("\t<option value=\"");
-            buff.append((String) curItem.getValue());
-            buff.append("\"");
-	    // Wouldn't a C macro be nice here?
-	    if (null != selectedValues) {
-		len = selectedValues.length;
-		for (i = 0; i < len; i++) {
-		    if (selectedValues[i].equals(curItem.getValue())) {
-			buff.append(" selected");
-		    }
-		}
+                buff.append("\t<option value=\"");
+                buff.append((String) curItem.getValue());
+                buff.append("\"");
+                buff.append(getSelectedText(curItem, selectedValues));
+
+                buff.append(Util.renderPassthruAttributes(context, curComponent));
+                buff.append(Util.renderBooleanPassthruAttributes(context, curComponent));
+                buff.append(">");
+                buff.append(curItem.getLabel());
+                buff.append("</option>\n");
             }
-            
-            buff.append(Util.renderPassthruAttributes(context,curComponent));
-            buff.append(Util.renderBooleanPassthruAttributes(context,curComponent));
-            buff.append(">");
-            buff.append(curItem.getLabel());
-            buff.append("</option>\n");
-        }
-        return itemCount;
-    }
+            return itemCount;
+	}
 
 } // end of class SelectManyListboxRenderer
