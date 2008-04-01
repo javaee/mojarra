@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.5 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.6 2002/03/08 00:26:38 jvisvanathan Exp $
  */
 
 /*
@@ -151,10 +151,8 @@ public class UICommand extends UIComponent implements EventDispatcher {
             // To do this, we need the component hierarchy, which can be obtained.
             // Makes sure validation is done only once.
             boolean reqValidation = cl.requiresValidation(cmd_event);
-            System.out.println("validation req " + reqValidation);
 
             if ( reqValidation && !doneValidation ) {
-                System.out.println("doing validation");
                 doneValidation = true;
                 // if validation did not succed, stop processing listeners
                 // and set the outcome in NavigationHandler.
@@ -164,7 +162,6 @@ public class UICommand extends UIComponent implements EventDispatcher {
                 }    
             }
             if ((!reqValidation) || valid ) {
-                System.out.println("set nav handler");
                 try {
                     NavigationHandler nh = eventContext.getNavigationHandler();
                     cl.doCommand(cmd_event, nh);
