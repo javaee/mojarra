@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.1 2002/05/17 01:27:27 craigmcc Exp $
+ * $Id: Validator.java,v 1.2 2002/05/20 17:46:31 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 
+import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 import javax.faces.context.MessageList;
@@ -29,13 +30,40 @@ import javax.faces.context.MessageList;
  * messages should be configured with the <code>compoundId</code> of the
  * specified component as the <code>reference</code> property of the message.
  * </p>
+ *
+ * <p>For maximum generality, <code>Validator</code> instances should be
+ * configurable based on attribute values associated with the
+ * {@link UIComponent} being validated.  For example, a range check
+ * validator might support configuration of the minimum and maximum values
+ * to be used.  Each <code>Validator</code> should document the attributes
+ * it cares about via the <code>getAttributeNames()</code> and
+ * <code>getAttributeDescriptor()</code> methods, so that tools can construct
+ * robust user interfaces for configuring them.</p>
  */
 
 public interface Validator {
 
 
     /**
-     * <p>Return 
+     * <p>Return an {@link AttributeDescriptor} for the specified attribute
+     * name that is supported by this <code>Validator</code>.</p>
+     *
+     * @param name The requested attribute name
+     *
+     * @exception IllegalArgumentException if this attribute is not
+     *  supported by this <code>Validator</code>.
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public AttributeDescriptor getAttributeDescriptor(String name);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the names of the supported
+     * attributes for this <code>Validator</code>.  If no attributes are
+     * supported, an empty <code>Iterator</code> is returned.</p>
+     */
+    public Iterator getAttributeNames();
 
 
     /**
