@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.5 2002/05/17 04:55:39 craigmcc Exp $
+ * $Id: UICommand.java,v 1.6 2002/05/17 22:57:12 craigmcc Exp $
  */
 
 /*
@@ -27,9 +27,9 @@ import javax.servlet.http.HttpServletRequest;
  * <p>Each <code>UICommand</code> instance supports the following JavaBean
  * properties to describe its render-independent characteristics:</p>
  * <ul>
- * <li><strong>name</strong> (java.lang.String) - Command name associated
- *     with this command.  Command names need not be unique, as many
- *     applications will wish to trigger the same application action
+ * <li><strong>commandName</strong> (java.lang.String) - Command name
+ *     associated with this command.  Command names need not be unique,
+ *     as many applications will wish to trigger the same application action
  *     no matter which of several alternative <code>UICommand</code>
  *     components the user chose to activate.</li>
  * </ul>
@@ -174,6 +174,8 @@ public class UICommand extends UIComponent {
         writer.print("&tree=");
         writer.print(context.getResponseTree().getTreeId()); // FIXME - URL encode?
         writer.print("\">");
+        writer.print(value);
+        writer.print("</a>");
 
     }
 
