@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.6 2001/11/29 00:12:34 edburns Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,6 +21,7 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -38,7 +39,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.6 2001/11/29 00:12:34 edburns Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
  * 
  *
  */
@@ -100,10 +101,10 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         // PENDING(visvan) use tagext class to validate attributes.
         // get ObjectTable from ServletContext.
         ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute("objectTable");
+                getAttribute(Constants.REF_OBJECTTABLE);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
-                "renderContext");
+                Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
         if ( name != null ) {
@@ -137,10 +138,10 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         Assert.assert_it( pageContext != null );
     
         ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute("objectTable");
+                getAttribute(Constants.REF_OBJECTTABLE);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(),
-                "renderContext");
+                Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
         WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
@@ -160,10 +161,10 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         Assert.assert_it( pageContext != null );
         // get ObjectTable from ServletContext.
         ObjectTable ot = (ObjectTable)pageContext.getServletContext().
-                 getAttribute("objectTable");
+                 getAttribute(Constants.REF_OBJECTTABLE);
         Assert.assert_it( ot != null );
         RenderContext rc = (RenderContext)ot.get(pageContext.getSession(), 
-                "renderContext");
+                Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
         WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);

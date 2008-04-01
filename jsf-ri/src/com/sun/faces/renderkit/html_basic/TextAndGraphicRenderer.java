@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.7 2001/11/29 01:54:35 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.beans.PropertyDescriptor;
 
+import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -36,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.7 2001/11/29 01:54:35 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo

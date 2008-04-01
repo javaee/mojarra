@@ -29,8 +29,7 @@
 </table>
 
 <p> <faces:command_button name="Login" label="login"/> 
-<p><font color="#000000">click&nbsp;</font> <a href="createAccount.jsp">here</a>
-to open new account
+<p><font color="#000000">click&nbsp;</font> <faces:command_hyperlink target="createAccount.jsp" text="here"/> to open new account
 <hr WIDTH="100%">
 <p><img SRC="duke.gif" height=55 width=49 align=ABSCENTER> Thanks
 for stopping by.

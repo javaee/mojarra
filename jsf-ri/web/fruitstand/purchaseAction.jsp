@@ -1,8 +1,13 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
 <html>
 <head>
-<title>FruitStand.com</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Roger Kitain">
+   <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
+   <title>FruitStand.com</title>
 </head>
+<%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
+
 <faces:useFaces>
 <%@ taglib uri='WEB-INF/html_basic.tld' prefix='faces' %>
 <font color="#0000FF"> <h2> FruitStand.com </h2>

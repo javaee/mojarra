@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.9 2001/11/29 00:12:32 edburns Exp $
+ * $Id: ButtonRenderer.java,v 1.10 2001/11/29 01:54:34 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -18,6 +18,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.Constants;
 import java.beans.PropertyDescriptor;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
@@ -37,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.9 2001/11/29 00:12:32 edburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.10 2001/11/29 01:54:34 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -137,7 +138,7 @@ public class ButtonRenderer extends Object implements Renderer
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals("WCommand")) {
+        if ( componentType.equals(Constants.REF_WCOMMAND)) {
             supports = true;
         }
         return supports;

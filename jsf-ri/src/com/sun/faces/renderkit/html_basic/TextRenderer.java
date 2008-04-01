@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.9 2001/11/29 00:12:33 edburns Exp $
+ * $Id: TextRenderer.java,v 1.10 2001/11/29 01:54:35 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.beans.PropertyDescriptor;
 
+import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
@@ -38,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.9 2001/11/29 00:12:33 edburns Exp $
+ * @version $Id: TextRenderer.java,v 1.10 2001/11/29 01:54:35 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -142,7 +143,7 @@ public class TextRenderer extends Object implements Renderer
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals("WOutput")) {
+        if ( componentType.equals(Constants.REF_WOUTPUT)) {
             supports = true;
         }
         return supports;

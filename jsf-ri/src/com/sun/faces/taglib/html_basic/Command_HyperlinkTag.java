@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.6 2001/11/21 22:32:39 visvan Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -21,6 +21,7 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -38,7 +39,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.6 2001/11/21 22:32:39 visvan Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.7 2001/11/29 01:54:36 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,70 +120,65 @@ public class Command_HyperlinkTag extends TagSupport
     public int doStartTag() throws JspException {
 
         Assert.assert_it( pageContext != null );
-        // 1. get an instance of "WCommand"
         ObjectTable ot = (ObjectTable) pageContext.getServletContext().
-                getAttribute("objectTable");
+                getAttribute(Constants.REF_OBJECTTABLE);
         Assert.assert_it( ot != null );
-        RenderContext renderContext = (RenderContext)ot.get(pageContext.getSession(),
-                "renderContext");
+        RenderContext renderContext = 
+            (RenderContext)ot.get(pageContext.getSession(),
+            Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
         // PENDING shouldn't hyperlink have a name attribute. For now
         // using target as name to put in the objectTable.
-        WCommand wCommand = (WCommand) ot.get(pageContext.getRequest(), target);
-        if ( wCommand == null ) {
-            wCommand = new WCommand();
+        if (target != null) {
+
+            // 1. Get or create the component instance.
+            //
+            WCommand wCommand = 
+                (WCommand) ot.get(pageContext.getRequest(), target);
+            if ( wCommand == null ) {
+                wCommand = new WCommand();
+            }
+            wCommand.setAttribute(renderContext, "target", getTarget());
+            wCommand.setAttribute(renderContext, "image", getImage());
+            wCommand.setAttribute(renderContext, "text", getText());
             ot.put(pageContext.getRequest(), target, wCommand);
+
+            // 2. Get a RenderKit and associated Renderer for this
+            //    component.
+            //
+            RenderKit renderKit = renderContext.getRenderKit();
+            if (renderKit == null) {
+                throw new JspException("Can't determine RenderKit!");
+            }
+
+            Renderer renderer = null;
+            try {
+                renderer = renderKit.getRenderer(
+                    "com.sun.faces.renderkit.html_basic.HyperlinkRenderer");
+            } catch (FacesException e) {
+                throw new JspException(
+                    "FacesException!!! " + e.getMessage());
+            }
+
+            if (renderer == null) {
+                throw new JspException(
+                    "Could not determine 'renderer' for component");
+            }
+
+            // 3. Render the component.
+            //
+            try {
+                renderer.renderStart(renderContext, wCommand);
+            } catch (java.io.IOException e) {
+                throw new JspException("Problem rendering component: "+
+                    e.getMessage());
+            } catch (FacesException f) {
+                throw new JspException("Problem rendering component: "+
+                    f.getMessage());
+            }
+
         }
-
-        // 2. set tag attributes into the instance..
-        //
-        wCommand.setAttribute(renderContext, "target", getTarget());
-        wCommand.setAttribute(renderContext, "image", getImage());
-        wCommand.setAttribute(renderContext, "text", getText());
-
-        // 3. find the parent (WForm), and add WCommand instance as
-        // a child.
-        // wForm.add(...
-        //
-
-        // 4. place back in namespace..
-        //
-
-        // 5. Obtain "Renderer" instance from the "RenderKit
-        //
-        Renderer renderer = null;
-
-        RenderKit renderKit = renderContext.getRenderKit();
-        if (renderKit == null) {
-            throw new JspException("Can't determine RenderKit!");
-        }
-
-        try {
-            renderer = renderKit.getRenderer(
-                "com.sun.faces.renderkit.html_basic.HyperlinkRenderer");
-        } catch (FacesException e) {
-            throw new JspException(
-                "FacesException!!! " + e.getMessage());
-        }
-
-        if (renderer == null) {
-            throw new JspException(
-                "Could not determine 'renderer' for component");
-        }
-
-        // 6. Render the good stuff...
-        //
-        try {
-            renderer.renderStart(renderContext, wCommand);
-        } catch (java.io.IOException e) {
-            throw new JspException("Problem rendering component: "+
-                e.getMessage());
-        } catch (FacesException f) {
-            throw new JspException("Problem rendering component: "+
-                f.getMessage());
-        }
-
         return (EVAL_BODY_INCLUDE);
     }
 

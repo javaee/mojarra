@@ -1,8 +1,21 @@
+/*
+ * $Id: FacesServlet.java,v 1.3 2001/11/29 01:54:35 rogerk Exp $
+ *
+ * Copyright 2000-2001 by Sun Microsystems, Inc.,
+ * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
+ * All rights reserved.
+ *
+ * This software is the confidential and proprietary information
+ * of Sun Microsystems, Inc. ("Confidential Information").  You
+ * shall not disclose such Confidential Information and shall use
+ * it only in accordance with the terms of the license agreement
+ * you entered into with Sun.
+ */
+
 package com.sun.faces.servlet;
 
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import java.io.IOException;
+import javax.faces.Constants;
 import javax.faces.EventQueue;
 import javax.faces.EventQueueFactory;
 import javax.faces.FacesException;
@@ -13,6 +26,7 @@ import javax.faces.RenderContextFactory;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -59,7 +73,7 @@ public class FacesServlet extends HttpServlet {
         // servlet context.
         //
         objectTable = (ObjectTable) servletContext.getAttribute(
-            "faces.ObjectTable");
+            Constants.REF_OBJECTTABLE);
         if (objectTable == null) {
             try {
                 otFactory = ObjectTableFactory.newInstance();
@@ -68,35 +82,38 @@ public class FacesServlet extends HttpServlet {
                 throw new ServletException(e.getMessage());
             }
         }
+        Assert.assert_it(null != objectTable);
 
         // Try to get the EventQueueFactory from the Object Table
         // (Global Scope).  If it doesn't exist, create it and stash it.
         //
         eqFactory = (EventQueueFactory)objectTable.get(
-            "faces.EventQueueFactory");
+            Constants.REF_EVENTQUEUEFACTORY);
 
         if (eqFactory == null) {
             eqFactory = EventQueueFactory.newInstance();
             objectTable.put(ObjectTable.GlobalScope, 
-                "faces.EventQueueFactory", eqFactory);
+                Constants.REF_EVENTQUEUEFACTORY, eqFactory);
         }
+        Assert.assert_it(null != eqFactory);
 
         // Try to get the RenderContextFactory from the Object Table
         // (Global Scope).  If it doesn't exist, create it and stash it.
         //
         rcFactory = (RenderContextFactory)objectTable.get(
-            "faces.RenderContextFactory");
+            Constants.REF_RENDERCONTEXTFACTORY);
 
         if (rcFactory == null) {
             rcFactory = RenderContextFactory.newInstance();
             objectTable.put(ObjectTable.GlobalScope, 
-                "faces.RenderContextFactory", rcFactory);
+                Constants.REF_RENDERCONTEXTFACTORY, rcFactory);
         }
+        Assert.assert_it(null != rcFactory);
 
         // Store the Object Table in the servlet context 
         // (application scope).
         //
-        servletContext.setAttribute("faces.ObjectTable", objectTable);
+        servletContext.setAttribute(Constants.REF_OBJECTTABLE, objectTable);
     }
 
     /**
@@ -132,6 +149,13 @@ public class FacesServlet extends HttpServlet {
     /**
      * Process an HTTP request.
      *
+     * PRECONDITION: ObjectTable exists in ServletContext.  
+     * ObjectTable global scope contains RenderContextFactory, 
+     * EventQueueFactory.
+     *
+     * POSTCONDITION: ObjectTable contains RenderContext and
+     * EventQueue instances in session scope.
+     *
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating
      *
@@ -148,18 +172,19 @@ public class FacesServlet extends HttpServlet {
         EventQueueFactory eqFactory;
 
         ObjectTable objectTable = (ObjectTable)getServletContext().
-            getAttribute("faces.ObjectTable");
+            getAttribute(Constants.REF_OBJECTTABLE);
         Assert.assert_it(null != objectTable); 
 
         // Attempt to get a render context from the object table
         // for the current session.  If one doesn't exist, create one.
         //
         rc = (RenderContext)objectTable.get(
-            ObjectTable.SessionScope, "faces.RenderContext");
+            ObjectTable.SessionScope, Constants.REF_RENDERCONTEXT);
 
         if (rc == null) {
             rcFactory = (RenderContextFactory)objectTable.get(
-                ObjectTable.GlobalScope, "faces.RenderContextFactory");
+                ObjectTable.GlobalScope, 
+                Constants.REF_RENDERCONTEXTFACTORY);
 
             Assert.assert_it(null != rcFactory);
             try {
@@ -167,25 +192,28 @@ public class FacesServlet extends HttpServlet {
             } catch (FacesException e) {
                 throw new ServletException(e.getMessage());
             }
-            objectTable.put(req.getSession(), "faces.RenderContext", rc);
+            objectTable.put(req.getSession(), 
+                Constants.REF_RENDERCONTEXT, rc);
         }
+        Assert.assert_it(null != rc); 
 
         // Attempt to get an event queue from the object table
         // for the current session.  If one doesn't exist, create one.
         //
         eq = (EventQueue)objectTable.get(
-            ObjectTable.SessionScope, "faces.EventQueue");
+            ObjectTable.SessionScope, Constants.REF_EVENTQUEUE);
         if (eq == null) {
             eqFactory = (EventQueueFactory)objectTable.get(
-                ObjectTable.GlobalScope, "faces.EventQueueFactory");
+                ObjectTable.GlobalScope, Constants.REF_EVENTQUEUEFACTORY);
             Assert.assert_it(null != eqFactory);
             try {
                 eq = eqFactory.newEventQueue();
             } catch (FacesException e) {
                 throw new ServletException(e.getMessage());
             }
-            objectTable.put(req.getSession(), "faces.EventQueue", eq);
+            objectTable.put(req.getSession(), Constants.REF_EVENTQUEUE, eq);
         }
+        Assert.assert_it(null != eq); 
 
 // PENDING (rogerk) plug in event handling helper class
 // invocations here.
@@ -213,11 +241,13 @@ public class FacesServlet extends HttpServlet {
 // (from action mappings table)
 // Use that url as the target.
 
-//        String forwardUrl = "/Login.jsp";
+        String forwardUrl = "/"+selectUrl;
+System.out.println("FORWARDURL:"+forwardUrl);
 
-//        getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl)).
-//            forward(req, res);        
+        RequestDispatcher reqD = 
+            getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl));
+        reqD.forward(req, res);        
+
     }
 
 }
-

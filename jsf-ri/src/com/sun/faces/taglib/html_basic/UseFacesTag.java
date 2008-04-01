@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.7 2001/11/21 22:32:40 visvan Exp $
+ * $Id: UseFacesTag.java,v 1.8 2001/11/29 01:54:36 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -23,6 +23,7 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
@@ -32,6 +33,7 @@ import javax.faces.ObjectTableFactory;
 import javax.faces.RenderKit;
 import javax.faces.ObjectTable;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.servlet.ServletContext;
@@ -42,7 +44,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UseFacesTag.java,v 1.7 2001/11/21 22:32:40 visvan Exp $
+ * @version $Id: UseFacesTag.java,v 1.8 2001/11/29 01:54:36 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -92,52 +94,35 @@ public UseFacesTag()
  */
 public int doStartTag() throws JspException {
 
-    // Get the RenderContext from the session.  If it doesn't
-    // exist, create one, and put it in the session.
+    ObjectTable objectTable;
+    ObjectTableFactory otf;
+    ServletContext servletContext = pageContext.getServletContext();
+
+    // Try to get the ObjectTable from the ServletContext
     //
-    RenderContextFactory factory = null;
+    objectTable = (ObjectTable) servletContext.getAttribute(
+        Constants.REF_OBJECTTABLE);
+    Assert.assert_it(null != objectTable);
+
+    // Get the RenderContext from the ObjectTable (session scope).  
+    //
+    RenderContextFactory rcf = null;
     RenderContext renderContext = null;
-    renderContext = (RenderContext)pageContext.getSession().
-        getAttribute("renderContext");
-    if (renderContext == null) {
-        try {
-	    factory = RenderContextFactory.newInstance();
-            renderContext = factory.newRenderContext(pageContext.getRequest());
-        } catch (FacesException e) {
-            throw new JspException(e.getMessage());
-        }
-    }
+
+    renderContext = (RenderContext)objectTable.get(pageContext.getSession(),
+        Constants.REF_RENDERCONTEXT);
+    Assert.assert_it(null != renderContext);
 
     JspOutputMethod outputMethod = new JspOutputMethod();
     outputMethod.setPageContext(pageContext);
     renderContext.setOutputMethod(outputMethod);
-   // pageContext.getSession().setAttribute("renderContext",
-	//				  renderContext);
 
-    // PENDING(edburns): this will be done in the FrontController.
-    ObjectTable objectTable;
-    ObjectTableFactory otf;
-    ServletContext servletContext = pageContext.getServletContext();
-    Assert.assert_it(null != servletContext);
+    objectTable.put(pageContext.getSession(), Constants.REF_RENDERCONTEXT, 
+        renderContext); 
 
-    // PENDING(edburns): standardize the name of the ObjectTable attr.
-
-    // try to get the ObjectTable from the ServletContext
-    objectTable = (ObjectTable) servletContext.getAttribute("objectTable");
-    if (objectTable == null) {
-        try {
-	    otf = ObjectTableFactory.newInstance();
-            objectTable = otf.newObjectTable();
-        } catch (FacesException e) {
-            throw new JspException(e.getMessage());
-        }
-	// put it in the session
-	servletContext.setAttribute("objectTable", objectTable);
-    }
-
-    // PENDING(visvan): this will be done in the FrontController.
-    objectTable.put(pageContext.getSession(),"renderContext", renderContext); 
+    servletContext.setAttribute(Constants.REF_OBJECTTABLE, objectTable);
+    
     return EVAL_BODY_INCLUDE;
 }
 
-} // end of class SelectBoolean_CheckboxTag
+} // end of class UseFacesTag 
