@@ -379,6 +379,13 @@
                 <type>java.lang.String</type>
             </attribute>
             <attribute>
+                <name>checked</name>
+                <display-name>Checked</display-name>
+                <description>If true, this component should be rendered
+                as checked.</description>
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
                 <name>disabled</name>
                 <display-name>Disabled</display-name>
                 <description>If true, this component should be rendered
