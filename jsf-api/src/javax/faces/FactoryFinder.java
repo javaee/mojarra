@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFactory.java,v 1.4 2002/05/21 02:15:36 craigmcc Exp $
+ * $Id: FactoryFinder.java,v 1.7 2002/05/25 22:35:38 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import java.util.Properties;
 
 
 /**
- * <p><strong>FactoryFactory</strong> implements the standard discovery
+ * <p><strong>FactoryFinder</strong> implements the standard discovery
  * algorithm for all factory objects specified in the JavaServer Faces APIs.
  * For a given factory class name, a corresponding implementation class is
  * searched for based on the following algorithm:</p>
@@ -55,7 +55,7 @@ import java.util.Properties;
  * longer creates any conflict?</p>
  */
 
-public final class FactoryFactory {
+public final class FactoryFinder {
 
 
     // ----------------------------------------------------------- Constructors
@@ -64,7 +64,7 @@ public final class FactoryFactory {
     /**
      * Package-private constructor to disable instantiation of this class.
      */
-    FactoryFactory() {
+    FactoryFinder() {
     }
 
 

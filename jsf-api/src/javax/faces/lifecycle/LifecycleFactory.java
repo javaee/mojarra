@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.5 2002/05/23 00:19:11 craigmcc Exp $
+ * $Id: LifecycleFactory.java,v 1.6 2002/05/25 22:35:38 craigmcc Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   LifecycleFactory factory = (LifecycleFactory)
- *    FactoryFactory.createFactory(FactoryFactory.LIFECYCLE_FACTORY);
+ *    FactoryFinder.createFactory(FactoryFinder.LIFECYCLE_FACTORY);
  * </pre>
  *
  * <p>A <code>LifecycleFactory</code> instance MUST return the same
