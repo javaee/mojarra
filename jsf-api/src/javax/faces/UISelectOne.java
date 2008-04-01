@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.9 2002/03/02 00:14:44 eburns Exp $
+ * $Id: UISelectOne.java,v 1.10 2002/03/07 23:44:04 eburns Exp $
  */
 
 /*
@@ -379,7 +379,6 @@ public class UISelectOne extends UIComponent implements EventDispatcher, Validat
         }
 
         String new_value = (String) value_event.getNewValue();
-        String srcId = value_event.getSourceId();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.6 2002/02/14 03:55:53 edburns Exp $
+ * $Id: UISelectBoolean.java,v 1.7 2002/03/07 23:44:04 eburns Exp $
  */
 
 /*
@@ -224,7 +224,6 @@ public class UISelectBoolean extends UIComponent implements EventDispatcher {
         }
 
         String new_value = (String) value_event.getNewValue();
-        String srcId = value_event.getSourceId();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );

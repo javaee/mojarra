@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.5 2002/01/25 18:35:07 visvan Exp $
+ * $Id: FormEvent.java,v 1.6 2002/03/07 23:44:04 eburns Exp $
  */
 
 /*
@@ -38,15 +38,14 @@ public class FormEvent extends FacesEvent {
      * Creates a form event.
      * @param ec EventContext object representing the event-processing 
      *           phase of the request where this event originated
-     * @param sourceId a String containing the id of the component 
-     *        where this event originated
+     * @param sourceComponent the component where this event originated
      * @param type an integer value indicating the type of form event which
      *        occurred
-     * @throws NullPointerException if sourceId is null
+     * @throws NullPointerException if sourceComponent is null
      * @throws IllegalParameterException if type isn't either INIT or EXIT
      */
-    public FormEvent(EventContext ec, String sourceId, int type) {
-	super(ec, sourceId);
+    public FormEvent(EventContext ec, UIComponent sourceComponent, int type) {
+	super(ec, sourceComponent);
 	this.type = type;
     }
 

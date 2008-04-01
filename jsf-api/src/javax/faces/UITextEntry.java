@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.6 2002/02/14 03:55:53 edburns Exp $
+ * $Id: UITextEntry.java,v 1.7 2002/03/07 23:44:04 eburns Exp $
  */
 
 /*
@@ -136,8 +136,6 @@ public class UITextEntry extends UIComponent implements EventDispatcher {
             throw new FacesException("Invalid event type. " +
                     "Expected ValueChangeEvent");
         }
-
-        String srcId = value_event.getSourceId();
 
         EventContext eventContext = value_event.getEventContext();
         // Assert.assert_it( eventContext != null );

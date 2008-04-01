@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeEvent.java,v 1.5 2002/01/25 18:35:08 visvan Exp $
+ * $Id: ValueChangeEvent.java,v 1.6 2002/03/07 23:44:04 eburns Exp $
  */
 
 /*
@@ -25,14 +25,13 @@ public class ValueChangeEvent extends FacesEvent {
      * Creates a value-change event.
      * @param ec EventContext object representing the event-processing 
      *           phase of the request where this event originated
-     * @param sourceId a String containing the id of the component 
-     *        where this event originated
+     * @param sourceComponent the component where this event originated
      * @param newValue an Object containing the new value of the source component
-     * @throws NullPointerException if sourceId or newValue is null
+     * @throws NullPointerException if sourceComponent or newValue is null
      */
-    public ValueChangeEvent(EventContext ec, String sourceId, 
+    public ValueChangeEvent(EventContext ec, UIComponent sourceComponent, 
 			    Object newValue) {
-	super(ec, sourceId);
+	super(ec, sourceComponent);
 	this.newValue = newValue;
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.6 2002/01/25 18:35:06 visvan Exp $
+ * $Id: FacesEvent.java,v 1.7 2002/03/07 23:44:03 eburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import javax.servlet.ServletRequest;
  * encapsulates any state associated with a particular event.
  */
 public abstract class FacesEvent extends EventObject {
-    private String sourceId;
+    private UIComponent sourceComponent = null;
     private EventContext eventContext;
 
     /**
@@ -26,13 +26,13 @@ public abstract class FacesEvent extends EventObject {
      * this FacesEvent object.
      * @param ec EventContext object representing the event-processing 
      *           phase of the request where this event originated
-     * @param sourceId the id of the component where this event originated
+     * @param sourceComponent the component where this event originated
      * @throws NullPointerException if sourceName is null
      */
-    protected FacesEvent(EventContext ec, String sourceId) {
-	super(sourceId);
+    protected FacesEvent(EventContext ec, UIComponent sourceComponent) {
+	super(sourceComponent);
 	this.eventContext = ec;
-	this.sourceId = sourceId;
+	this.sourceComponent = sourceComponent;
     }
 
     /**
@@ -56,16 +56,6 @@ public abstract class FacesEvent extends EventObject {
      * @return UIComponent where this event originated
      */
     public UIComponent getSourceComponent() {
-        return eventContext != null?
-	    (UIComponent)(eventContext.getObjectManager().get(eventContext.getRequest(),
-						sourceId)) : null;
-    }
-
-    /**
-     * @return String containing the id of the component where
-     *         this event originated
-     */
-    public String getSourceId() { 
-	return sourceId;
+        return sourceComponent;
     }
 }
