@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.9 2002/08/14 21:56:36 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.10 2002/08/15 17:34:25 craigmcc Exp $</h3>
 </div>
 
 
@@ -28,8 +28,8 @@
 
   <tr>
     <td>Button</td>
-    <td>(none)</td>
-    <td>commandName</td>
+    <td>String</td>
+    <td>commandName <em>or</em> modelReference</td>
     <td>type</td>
     <td>
       Submit FormEvent to application as per default behavior of UICommand.
@@ -46,14 +46,36 @@
 
   <tr>
     <td>Hyperlink</td>
-    <td>(none)</td>
-    <td>commandName</td>
-    <td>FIXME</td>
+    <td>String</td>
+    <td>commandName <em>or</em> modelReference</td>
+    <td>&nbsp;</td>
     <td>
-      FIXME
+      Submit CommandEvent to application containing the command name
+      of this command.
     </td>
     <td>
-      FIXME
+      Render an HTML <code>&lt;a&gt;</code> element that generates a
+      link back to the tree identifier of the response page so that a
+      command event can be enqueued.  Nested child components can be
+      used to provide the image and/or text for the hyperlink.  URL
+      rewriting will be performed to maintain session state in the
+      absence of cookies.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Hyperlink</td>
+    <td>(none)</td>
+    <td>&nbsp;</td>
+    <td>href</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render an HTML hyperlink to the specified URL.  Nested child components
+      can be used to provide the image and/or text for the hyperlink.  URL
+      rewriting will be performed to maintain session state in the absence
+      of cookies.
     </td>
   </tr>
 
