@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.23 2002/06/14 21:30:46 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.24 2002/07/26 04:04:39 craigmcc Exp $
  */
 
 /*
@@ -92,6 +92,25 @@ public abstract class FacesContext {
      * <code>null</code>.</p>
      */
     public abstract HttpSession getHttpSession();
+
+
+    /**
+     * <p>If <code>create</code> is <code>false</code>, return the same value
+     * as the <code>getHttpSession()</code> method with no parameters.  If
+     * <code>create</code> is <code>true</code>, create a new
+     * <code>HttpSession</code> instance associated with the current request
+     * if there is not one already, and return the <code>HttpSession</code>
+     * associated with this request.</p>
+     *
+     * <p>Applications using JavaServer Faces <strong>MUST</strong> call this
+     * method, rather than the <code>HttpServletRequest.getSession()</code>
+     * method, in order to create a new session.</p>
+     *
+     * @param create Flag indicating whether a new <code>HttpSession</code>
+     *  instance should be created if there is none associated with the
+     *  current request
+     */
+    public abstract HttpSession getHttpSession(boolean create);
 
 
     /**
