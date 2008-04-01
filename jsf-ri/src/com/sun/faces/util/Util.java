@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.23 2002/08/08 23:40:53 eburns Exp $
+ * $Id: Util.java,v 1.24 2002/08/09 20:13:09 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.23 2002/08/08 23:40:53 eburns Exp $
+ * @version $Id: Util.java,v 1.24 2002/08/09 20:13:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,10 +131,34 @@ public class Util extends Object
 // Class Variables
 //
 
+    private static String passthruAttributes[] = {
+	"onblur",
+	"onchange",
+	"onclick",
+	"ondblclick",
+	"onfocus",
+	"onkeydown",
+	"onkeypress",
+	"onkeyup",
+	"onload",
+	"onload",
+	"onmousedown",
+	"onmousemove",
+	"onmouseout",
+	"onmouseover",
+	"onmouseup",
+	"onreset",
+	"onselect",
+	"onsubmit",
+	"onunload"
+    };
+
+private static long id = 0;
+
+
 //
 // Instance Variables
 //
-private static long id = 0;
 
 // Attribute Instance Variables
 
@@ -396,6 +420,37 @@ private Util()
 	}
 
 	return result;
+    }
+
+    /**
+
+    * Render any "passthru" attributes, where we simply just output the
+    * raw name and value of the attribute.  This method is aware of the
+    * set of HTML4 attributes that fall into this bucket.  Examples are
+    * all the javascript attributes, alt, rows, cols, etc.  <P>
+
+    * @return the rendererd attributes as specified in the component.
+    * If there are no passthru attributes in the component, return the
+    * empty String.
+
+    * @see passthruAttributes
+
+    */
+
+    public static String renderPassthruAttributes(FacesContext context,
+						  UIComponent component) {
+	int i = 0, len = passthruAttributes.length;
+	String value;
+	StringBuffer renderedText = new StringBuffer();
+
+	for (i = 0; i < len; i++) {
+	    if (null != (value = (String) 
+			 component.getAttribute(passthruAttributes[i]))) {
+		renderedText.append(passthruAttributes[i] + "=\"" + value + 
+				    "\" ");
+	    }
+	}
+	return renderedText.toString();
     }
 
 //

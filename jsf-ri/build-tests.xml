@@ -291,6 +291,7 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl_Model"/>
