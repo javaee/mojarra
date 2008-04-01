@@ -1,5 +1,5 @@
 /*
- * $Id: JspRenderResponsePhase.java,v 1.3 2002/06/09 01:43:08 eburns Exp $
+ * $Id: JspRenderResponsePhase.java,v 1.4 2002/06/18 04:58:35 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // JspRenderResponsePhase.java
 
 package com.sun.faces.lifecycle;
+
+import com.sun.faces.tree.XmlTreeImpl;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -34,7 +36,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: JspRenderResponsePhase.java,v 1.3 2002/06/09 01:43:08 eburns Exp $
+ * @version $Id: JspRenderResponsePhase.java,v 1.4 2002/06/18 04:58:35 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -76,30 +78,6 @@ public JspRenderResponsePhase(Lifecycle newDriver, int newId)
 // General Methods
 //
 
-/**
-
-This implementation just replaces the file extension on treeId with
-".jsp".
-
-*/
-
-protected String fixTreeId(String treeId) throws FacesException
-{
-    ParameterCheck.nonNull(treeId);
-
-    String result = null;
-    int i = 0;
-
-    if (-1 == (i = treeId.indexOf("."))) {
-	throw new FacesException("invalid treeId");
-    }
-
-    result = treeId.substring(0, i) + ".jsp";
-
-    return result;
-}
-
-
 //
 // Methods from Phase
 //
@@ -113,7 +91,11 @@ public int execute(FacesContext facesContext) throws FacesException
     RequestDispatcher requestDispatcher = null;
     Tree tree = facesContext.getResponseTree();
     try {
-	requestURI = fixTreeId(tree.getTreeId());
+
+//PENDING(rogerk) do we want to add "getPageUrl" method to 
+//javax.faces.tree.Tree class (in which case, we won;t have to cast??
+//
+        requestURI = ((XmlTreeImpl)tree).getPageUrl();
 	requestDispatcher = request.getRequestDispatcher(requestURI);
 	requestDispatcher.forward(request, facesContext.getServletResponse());
     }
