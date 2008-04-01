@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.6 2002/05/18 20:33:47 craigmcc Exp $
+ * $Id: Renderer.java,v 1.7 2002/05/20 18:01:58 craigmcc Exp $
  */
 
 /*
@@ -169,9 +169,6 @@ public abstract class Renderer {
      *     <code>context.getMessageList().add()</code>.</li>
      * </ul>
      *
-     * <p>During decoding, events may be enqueued for later processing
-     * by (<strong>FIXME</strong> - specify mechanism).</p>
-     *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent to be decoded.
      *
@@ -193,8 +190,6 @@ public abstract class Renderer {
      * call to <code>decode()</code>, the value to be displayed should be
      * acquired by calling <code>component.currentValue()</code>, and
      * rendering the value as appropriate.</p>
-     *
-     * <p><strong>FIXME</strong> - Not sufficient for child rendering.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param component UIComponent to be rendered
