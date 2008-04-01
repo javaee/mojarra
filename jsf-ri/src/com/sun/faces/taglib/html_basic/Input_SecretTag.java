@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.1 2002/08/13 22:55:28 rkitain Exp $
+ * $Id: Input_SecretTag.java,v 1.2 2002/08/16 23:27:02 rkitain Exp $
  */
 
 /*
@@ -12,10 +12,11 @@
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_SecretTag.java,v 1.1 2002/08/13 22:55:28 rkitain Exp $
+ * @version $Id: Input_SecretTag.java,v 1.2 2002/08/16 23:27:02 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -38,6 +39,8 @@ public class Input_SecretTag extends Input_TextTag
 
 // Attribute Instance Variables
 
+    protected String redisplay = null;
+
 // Relationship Instance Variables
 
 //
@@ -52,7 +55,13 @@ public Input_SecretTag()
 //
 // Class methods
 //
+    public String getRedisplay() {
+        return redisplay;
+    }
 
+    public void setRedisplay(String newRedisplay) {
+        redisplay = newRedisplay;
+    }
 // 
 // Accessors
 //
@@ -62,6 +71,20 @@ public Input_SecretTag()
 //
 
     public String getLocalRendererType() { return "SecretRenderer"; }
+
+    public UIComponent createComponent() {
+        return (new UIInput());
+    }
+
+    protected void overrideProperties(UIComponent component) {
+        super.overrideProperties(component);
+        UIInput input = (UIInput) component;
+
+        if (null == input.getAttribute("redisplay")) {
+            input.setAttribute("redisplay", getRedisplay());
+        }
+    }
+
 
 //
 // Methods from TagSupport
