@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.16 2002/08/15 16:49:38 craigmcc Exp $
+ * $Id: UIForm.java,v 1.17 2002/08/15 16:51:16 craigmcc Exp $
  */
 
 /*
@@ -31,12 +31,6 @@ public class UIForm extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables
-
-
-    /**
-     * <p>Path Info prefix that indicates a form submit.</p>
-     */
-    static final String PREFIX = "/faces/form";
 
 
     /**
