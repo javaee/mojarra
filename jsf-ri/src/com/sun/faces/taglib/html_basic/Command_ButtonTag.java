@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.24 2002/06/07 23:29:12 eburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.25 2002/07/10 17:57:24 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -30,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.24 2002/06/07 23:29:12 eburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.25 2002/07/10 17:57:24 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,6 +78,10 @@ public Command_ButtonTag()
 //
 
     public String getLocalRendererType() { return "ButtonRenderer"; }
+    
+    public UIComponent createComponent() {
+        return(new UICommand());
+    }    
 
 //
 // Methods from TagSupport

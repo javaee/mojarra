@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.7 2002/06/25 20:47:59 jvisvanathan Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.8 2002/07/10 17:57:20 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.context.MessageResources;
 import javax.faces.context.Message;
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
@@ -32,7 +33,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.7 2002/06/25 20:47:59 jvisvanathan Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.8 2002/07/10 17:57:20 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -86,7 +87,7 @@ public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 			MessageResources resources = Util.getMessageResources();
                         Assert.assert_it( resources != null );
                         Message msg = resources.getMessage(facesContext, 
-                                "MSG0005",params);
+                                RIConstants.CONVERSION_ERROR_MESSAGE_ID,params);
 			facesContext.addMessage(comp, msg);
                     }
 		}

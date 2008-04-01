@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.21 2002/06/28 22:47:01 eburns Exp $
+ * $Id: TextRenderer.java,v 1.22 2002/07/10 17:57:22 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.21 2002/06/28 22:47:01 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.22 2002/07/10 17:57:22 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,7 +82,9 @@ public class TextRenderer extends HtmlBasicRenderer {
     //
 
     public boolean supportsComponentType(String componentType) {
-        ParameterCheck.nonNull(componentType);
+        if ( componentType == null ) {
+            return false;
+        }
         return (componentType.equals(UIOutput.TYPE));
     }
 

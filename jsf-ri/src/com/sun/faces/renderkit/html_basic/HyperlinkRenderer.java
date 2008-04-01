@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.23 2002/07/10 17:57:21 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.22 2002/06/28 22:47:00 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.23 2002/07/10 17:57:21 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,7 +91,9 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
     // Methods From Renderer
     //
     public boolean supportsComponentType(String componentType) {
-        ParameterCheck.nonNull(componentType);
+        if ( componentType == null ) {
+            return false;
+        }    
         return (componentType.equals(UICommand.TYPE));
     }
 

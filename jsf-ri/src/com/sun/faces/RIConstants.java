@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.7 2002/06/18 18:23:22 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.8 2002/07/10 17:57:19 jvisvanathan Exp $
  */
 
 /*
@@ -51,4 +51,12 @@ public class RIConstants {
 
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
+    
+    /**
+     * The message identifier of the {@link Message} to be created as
+     * a result of type conversion error.
+     */
+    public static final String CONVERSION_ERROR_MESSAGE_ID =
+        "com.sun.faces.TYPECONVERSION_ERROR";
+    
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_SecretTag.java,v 1.23 2002/06/07 23:29:14 eburns Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.24 2002/07/10 17:57:26 jvisvanathan Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UITextEntry;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -30,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: TextEntry_SecretTag.java,v 1.23 2002/06/07 23:29:14 eburns Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.24 2002/07/10 17:57:26 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,7 +78,9 @@ public TextEntry_SecretTag()
 //
 
     public String getLocalRendererType() { return "SecretRenderer"; }
-
+    public UIComponent createComponent() {
+        return (new UITextEntry());
+    }
 //
 // Methods from TagSupport
 // 

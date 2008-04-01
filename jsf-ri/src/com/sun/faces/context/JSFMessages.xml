@@ -17,5 +17,8 @@
   <message messageId="MSG0005" severity="4" summary="Conversion Error." >
       <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
   </message>
+  <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
+      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+  </message>
 </messages>
 

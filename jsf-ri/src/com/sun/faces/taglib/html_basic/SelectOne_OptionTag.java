@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionTag.java,v 1.14 2002/06/07 00:01:09 eburns Exp $
+ * $Id: SelectOne_OptionTag.java,v 1.15 2002/07/10 17:57:25 jvisvanathan Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.jsp.JspException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
@@ -30,7 +29,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionTag.java,v 1.14 2002/06/07 00:01:09 eburns Exp $
+ * @version $Id: SelectOne_OptionTag.java,v 1.15 2002/07/10 17:57:25 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -78,6 +77,11 @@ public SelectOne_OptionTag()
 
     public String getLocalRendererType() { return null; }
 
+    public UIComponent createComponent() {
+        // PENDING (visvan) should it return UISelectBase ?
+        return null;
+    }
+    
 //
 // Methods from TagSupport
 // 
