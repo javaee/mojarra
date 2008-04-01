@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.44 2002/07/29 00:26:08 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.45 2002/08/04 20:46:27 craigmcc Exp $
  */
 
 /*
@@ -616,6 +616,10 @@ public interface UIComponent extends Serializable {
      *
      * @param context FacesContext for the request we are processing
      *
+     * @exception FacesException if an error occurs during execution
+     *  of the <code>setModelValue()</code> method
+     * @exception IllegalArgumentException if the <code>modelReference</code>
+     *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */

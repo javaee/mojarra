@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.16 2002/08/01 23:38:29 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.17 2002/08/04 20:46:27 craigmcc Exp $
  */
 
 /*
@@ -1247,6 +1247,10 @@ public abstract class UIComponentBase implements UIComponent {
      *
      * @param context FacesContext for the request we are processing
      *
+     * @exception FacesException if an error occurs during execution
+     *  of the <code>setModelValue()</code> method
+     * @exception IllegalArgumentException if the <code>modelReference</code>
+     *  property has invalid syntax for an expression
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
