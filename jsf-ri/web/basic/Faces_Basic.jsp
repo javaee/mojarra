@@ -396,7 +396,7 @@
       </TR>
 				<TR>
 					<TD>Multi-select menu:</TD>
-					<TD><faces:selectmany_menu id="ManyApples">
+					<TD><faces:selectmany_menu id="ManyApples" size="3">
 						<faces:selectitem itemValue="0" itemLabel="zero" />
 						<faces:selectitem itemValue="1" itemLabel="one" />
 						<faces:selectitem itemValue="2" itemLabel="two" />
@@ -410,7 +410,7 @@
 					</faces:selectmany_menu></TD>
 				</TR>
 				<TR>
-					<TD>Multi-select menumodel:</TD>
+					<TD>Multi-select menu with model:</TD>
 					<TD><faces:selectmany_menu id="menumodel" size="3">
 						<faces:selectitems id="menumodelitems"
 							modelReference="${LoginBean.options}" />
@@ -432,7 +432,7 @@
 					</faces:selectmany_listbox></TD>
 				</TR>
 				<TR>
-					<TD>Multi-select listmodel:</TD>
+					<TD>Multi-select listbox with model:</TD>
 					<TD><faces:selectmany_listbox id="listmodel"
 						modelReference="${LoginBean.currentOption}">
 						<faces:selectitems id="listmodelitems"
@@ -455,13 +455,27 @@
 					</faces:selectmany_checkboxlist></TD>
 				</TR>
 				<TR>
-					<TD>Multi-select checklistmodel:</TD>
+					<TD>Multi-select checkbox with model:</TD>
 					<TD><faces:selectmany_checkboxlist id="checklistmodel"
 						modelReference="${LoginBean.currentOption}">
 						<faces:selectitems id="checklistmodelitems"
 							modelReference="${LoginBean.options}" />
 					</faces:selectmany_checkboxlist></TD>
 				</TR>
+                                <TR>
+                                    <TD>Single-select menu: </TD>
+                                    <TD><faces:selectone_menu id="players" size="3">
+                                            <faces:selectitem itemValue="99"
+                                                itemLabel="Wayne Gretzky" /> 
+                                            <faces:selectitem itemValue="4"
+                                                itemLabel="Bobby Orr" /> 
+                                            <faces:selectitem itemValue="9"
+                                                itemLabel="Gordie Howe" /> 
+                                            <faces:selectitem itemValue="2"
+                                                itemLabel="Brad Park" /> 
+                                        </faces:selectone_menu> </TD>
+                                </TR>
+                                   
 
 
 
