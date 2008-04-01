@@ -1,5 +1,5 @@
 /*
- * $Id: TestAbstractFactory.java,v 1.1 2002/04/11 22:52:41 eburns Exp $
+ * $Id: TestAbstractFactory.java,v 1.2 2002/04/11 23:14:20 eburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.AbstractFactory;
 import javax.faces.FactoryConfigurationError;
 import javax.faces.MessageFactory;
 import javax.faces.FacesContext;
+import javax.faces.FacesException;
 import javax.faces.Constants;
 
 import javax.servlet.ServletContext;
@@ -32,7 +33,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestAbstractFactory.java,v 1.1 2002/04/11 22:52:41 eburns Exp $
+ * @version $Id: TestAbstractFactory.java,v 1.2 2002/04/11 23:14:20 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -180,7 +181,7 @@ public void testExceptions()
 	// Use the wrong constructor arguments
 	abstractFactory.newInstance(Constants.REF_FACESCONTEXT);
     }
-    catch (FactoryConfigurationError e) {
+    catch (FacesException e) {
 	result = true;
     }
     assertTrue(result);
