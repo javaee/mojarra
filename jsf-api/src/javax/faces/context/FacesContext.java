@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.4 2002/05/09 21:21:25 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.5 2002/05/14 00:44:04 craigmcc Exp $
  */
 
 /*
@@ -9,6 +9,8 @@
 
 package javax.faces.context;
 
+
+import javax.faces.FacesException;     // FIXME - subpackage?
 import javax.faces.component.UIComponent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
@@ -175,6 +177,54 @@ public abstract class FacesContext {
 
 
     // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>Evaluate the specified model reference expression, and return the
+     * expected type of the corresponding value, if it can be determined;
+     * otherwise, return <code>null</code>.</p>
+     *
+     * @param model Model reference expression to be evaluated
+     *
+     * @exception IllegalArgumentException if the model reference
+     *  expression is invalid
+     * @exception NullPointerException if <code>model</code>
+     *  is <code>null</code>
+     */
+    public abstract Class getModelType(String model);
+
+
+    /**
+     * <p>Evaluate the specified model reference expression, and return the
+     * corresponding data value (which may be null).  No data type conversion
+     * is performed.</p>
+     *
+     * @param model Model reference to be evaluated
+     *
+     * @exception FacesException if an error occurs during expression
+     *  evaluation
+     * @exception IllegalArgumentException if the model reference
+     *  expression is invalid
+     * @exception NullPointerException if <code>model</code>
+     *  is <code>null</code>
+     */
+    public abstract Object getModelValue(String model) throws FacesException;
+
+
+    /**
+     * <p>Evaluate the specified model reference expression, and set the
+     * corresponding data value (which may be null).  No data type conversion
+     * is performed.</p>
+     *
+     * @exception FacesException if an error occurs during expression
+     *  evaluation
+     * @exception IllegalArgumentException if the model reference
+     *  expression is invalid
+     * @exception NullPointerException if <code>model</code>
+     *  is <code>null</code>
+     */
+    public abstract Object setModelValue(String model, Object value)
+        throws FacesException;
 
 
     /**

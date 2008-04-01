@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.1 2002/05/08 01:11:47 craigmcc Exp $
+ * $Id: RenderKitFactory.java,v 1.2 2002/05/14 00:44:05 craigmcc Exp $
  */
 
 /*
@@ -20,16 +20,20 @@ import javax.faces.FacesException;     // FIXME - subpackage?
  * JavaServer Faces MUST provide at least a default implementation of
  * {@link RenderKit}.  Advanced implementations (or external third party
  * libraries) MAY provide additional {@link RenderKit} implementations
- * for specialized uses.</p>
+ * (keyed by render kit identifiers) for specialized uses.</p>
  *
  * <p>There shall be one <code>RenderKitFactory</code> instance per web
- * application that is utilizing JavaServer Faces.  <strong>FIXME</strong>
- * - document the discovery process for this factory implementation.</p>
+ * application that is utilizing JavaServer Faces.  This instance can be
+ * acquired, in a portable manner, by calling:</p>
+ * <pre>
+ *   RenderKitFactory factory = (RenderKitFactory)
+ *    FactoryFactory.createFactory("javax.faces.render.RenderKitFactory");
+ * </pre>
  *
  * <p>The factory instance MUST return the same {@link RenderKit} instance
- * for all calls to the <code>createRenderKit()</code> method with no
- * parameters, or for all calls to the <code>createRenderKit()</code> method
- * with the same logical render kit name.</p>
+ * for all calls to the <code>createRenderKit()</code> method with the
+ * same render kit identifier value, from within the same web application.
+ * </p>
  *
  * <p><strong>FIXME</strong> - Specify a way for third party
  * {@link RenderKit}s to register themselves.</p>
@@ -39,40 +43,37 @@ public abstract class RenderKitFactory {
 
 
     /**
-     * <p>Create (if needed) and return a {@link RenderKit} that is the
-     * default implementation for all JavaServer Faces requests for this
-     * web application.  All JavaServer Faces implementations MUST be able
-     * to return a {@link RenderKit} instance via this call.</p>
-     *
-     * @exception FacesException if a {@link RenderKit} cannot be
-     *  constructed
+     * <p>The render kit identifier of the default {@link RenderKit} instance
+     * for this JavaServer Faces implementation.</p>
      */
-    public abstract RenderKit createRenderKit() throws FacesException;
+    public static final String DEFAULT_RENDER_KIT = "DEFAULT";
 
 
     /**
      * <p>Create (if needed) and return a {@link RenderKit} instance
-     * for the specified render kit name.  The set of available render kit
-     * names is available via the <code>getRenderKitNames()</code>
+     * for the specified render kit identifier.  The set of available render
+     * kit identifiers is available via the <code>getRenderKitIds()</code>
      * method.</p>
      *
-     * @param renderKitName Name of the requested {@link RenderKit} instance
+     * @param renderKitId Render kit identifier of the requested
+     *  {@link RenderKit} instance
      *
-     * @exception FacesException if a {@link RenderKit} cannot be
+     * @exception FacesException if a {@link RenderKit} instance cannot be
      *  constructed
-     * @exception NullPointerException if <code>name</code>
+     * @exception NullPointerException if <code>renderKitId</code>
      *  is <code>null</code>
      */
-    public abstract RenderKit createRenderKit(String renderKitName)
+    public abstract RenderKit createRenderKit(String renderKitId)
         throws FacesException;
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the set of custom render kit
-     * names supported by this factory.  If no custom names are supported,
-     * an empty <code>Iterator</code> is returned.</p>
+     * <p>Return an <code>Iterator</code> over the set of render kit
+     * identifiers supported by this factory.  This set MUST include
+     * the value specified by <code>RenderKitFactory.DEFAULT_RENDER_KIT</code>.
+     * </p>
      */
-    public abstract Iterator getRenderKitNames();
+    public abstract Iterator getRenderKitIds();
 
 
 }

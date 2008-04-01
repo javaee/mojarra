@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.2 2002/05/08 01:11:46 craigmcc Exp $
+ * $Id: LifecycleFactory.java,v 1.3 2002/05/14 00:44:05 craigmcc Exp $
  */
 
 /*
@@ -14,37 +14,35 @@ import javax.faces.FacesException;     // FIXME - subpackage?
 
 
 /**
- * <p><strong>LifecycleFactory</strong> is a Factory object that creates
- * and returns new {@link Lifecycle} instances.  Implementations of
+ * <p><strong>LifecycleFactory</strong> is a factory object that creates
+ * and returns {@link Lifecycle} instances.  Implementations of
  * JavaServer Faces MUST provide at least a default implementation of
  * {@link Lifecycle}.  Advanced implementations MAY provide additional
- * instances (keyed by logical names) for performing different types of
+ * instances (keyed by lifecycle identifiers) for performing different types of
  * request processing on a per-request basis.</p>
  *
  * <p>There shall be one <code>LifecycleFactory</code> instance per web
- * application that is utilizing JavaServer Faces.  <strong>FIXME</strong>
- * - document the discovery process for this factory implementation.</p>
+ * application that is utilizing JavaServer Faces.  This instance can be
+ * acquired, in a portable manner, by calling:</p>
+ * <pre>
+ *   LifecycleFactory factory = (LifecycleFactory)
+ *    FactoryFactory.createFactory("javax.faces.lifecycle.LifecycleFactory");
+ * </pre>
  *
- * <p>The factory instance MUST return the same {@link Lifecycle} instance
- * for all calls to the <code>createLifecycle()</code> method with no
- * parameters, or for all calls the the <code>createLifecycle()</code> method
- * with the same logical lifecycle identifier.</p>
+ * <p>A <code>LifecycleFactory</code> instance MUST return the same
+ * {@link Lifecycle} instance for all calls to the
+ * <code>createLifecycle()</code> method with the same lifecycle identifier
+ * value, from within the same web applcation.</p>
  */
 
 public abstract class LifecycleFactory {
 
 
     /**
-     * <p>Create (if needed) and return a {@link Lifecycle} that is the
-     * default processing lifecycle for all JavaServer Faces requests
-     * for this web application.  All JavaServer Faces implementations
-     * MUST be able to return a {@link Lifecycle} instance via this call.
-     *</p>
-     *
-     * @exception FacesException if a {@link Lifecycle} cannot be
-     *  constructed
+     * <p>The lifecycle identifier for the default {@link Lifecycle} instance
+     * for this JavaServer Faces implementation.</p>
      */
-    public abstract Lifecycle createLifecycle() throws FacesException;
+    public static final String DEFAULT_LIFECYCLE = "DEFAULT";
 
 
     /**
@@ -56,7 +54,7 @@ public abstract class LifecycleFactory {
      * @param lifecycleId Lifecycle identifier of the requested
      *  {@link Lifecycle} instance
      *
-     * @exception FacesException if a {@link Lifecycle} cannot be
+     * @exception FacesException if a {@link Lifecycle} instance cannot be
      *  constructed
      * @exception NullPointerException if <code>lifecycleId</code>
      *  is <code>null</code>
@@ -66,9 +64,10 @@ public abstract class LifecycleFactory {
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the set of custom lifecycle
-     * identifiers supported by this factory.  If no custom identifiers are
-     * supported, an empty <code>Iterator</code> is returned.</p>
+     * <p>Return an <code>Iterator</code> over the set of lifecycle
+     * identifiers supported by this factory.  This set MUST include
+     * the value specified by <code>LifecycleFactory.DEFAULT_LIFECYCLE</code>.
+     * </p>
      */
     public abstract Iterator getLifecycleIds();
 

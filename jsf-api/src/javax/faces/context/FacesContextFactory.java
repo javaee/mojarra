@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.1 2002/05/07 05:18:57 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.2 2002/05/14 00:44:04 craigmcc Exp $
  */
 
 /*
@@ -26,8 +26,12 @@ import javax.servlet.ServletResponse;
  * every time.</p>
  *
  * <p>There shall be one <code>FacesContextFactory</code> instance per web
- * application that is utilizing JavaServer Faces.  <strong>FIXME</strong>
- * - document the discovery process for this factory implementation.</p>
+ * application that is utilizing JavaServer Faces.  This instance can be
+ * acquired, in a portable manner, by calling:</p>
+ * <pre>
+ *   FacesContextFactory factory = (FacesContextFactory)
+ *    FactoryFactory.createFactory("javax.faces.context.FacesContextFactory");
+ * </pre>
  */
 
 public abstract class FacesContextFactory {
