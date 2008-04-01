@@ -1,9 +1,12 @@
-<FORM METHOD="post" ACTION="/test/faces;jsessionid=92F1C50409C42051E825E4A1F3B6B856?action=form&name=FormRenderer&tree=treeId">
+<FORM METHOD="post" ACTION="/test/faces/form/FormRenderertreeId;jsessionid=C5366598A51328E62948F964F9447243">
 </FORM>
 <INPUT TYPE="text" NAME="/input_renderer" VALUE="InputRenderer">
 <TEXTAREA  NAME="/textarea_renderer"> TextAreaRenderer
-<INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="One"> One
-<INPUT TYPE="RADIO" CHECKED NAME="/radio_renderer" VALUE="Two"> Two
-<INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="Three"> Three
-
+<TABLE BORDER="0">
+	<TR>
+<TD><INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="One"> One</TD>
+<TD><INPUT TYPE="RADIO" CHECKED NAME="/radio_renderer" VALUE="Two"> Two</TD>
+<TD><INPUT TYPE="RADIO" NAME="/radio_renderer" VALUE="Three"> Three</TD>
+	</TR>
+</TABLE>
 <INPUT TYPE="SUBMIT" NAME="ButtonRenderer" VALUE="Login">

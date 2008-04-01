@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.6 2002/06/26 19:20:16 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.7 2002/07/13 01:21:56 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.6 2002/06/26 19:20:16 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.7 2002/07/13 01:21:56 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -41,7 +41,6 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/components.xul";
 public static final String TEST_URI = "/components.jsp";
 
 public String getExpectedOutputFilename() {
@@ -49,7 +48,7 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=87423981A10915149193138335343814\">"
+    "<form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.jsp;jsessionid=151570B338F444B3F451B049396260F0\">"
 };
 
 public String [] getLinesToIgnore() {
@@ -91,10 +90,7 @@ public boolean sendResponseToFile()
 
 protected void initWebRequest(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-   // theRequest.addParameter("tree", TEST_URI_XUL);
-    theRequest.addParameter(RIConstants.INITIAL_REQUEST_NAME, 
-			    RIConstants.INITIAL_REQUEST_VALUE);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 }
 
 public void beginExecuteInitial(WebRequest theRequest)

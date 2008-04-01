@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.8 2002/06/25 21:42:55 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.9 2002/07/13 01:21:56 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.8 2002/06/25 21:42:55 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.9 2002/07/13 01:21:56 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -48,7 +48,6 @@ public class TestLifecycleImpl extends JspFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/components.xul";
 public static final String TEST_URI = "/components.jsp";
 
 //
@@ -95,8 +94,7 @@ protected void setSharedLifecycleImpl(LifecycleImpl newLife)
     
 protected void initWebRequest(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI_XUL, null);
-    //theRequest.addParameter("tree", TEST_URI_XUL);
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
 }
 
 public void testApplicationHandler()

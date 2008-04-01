@@ -9,27 +9,161 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-        <form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=87423981A10915149193138335343814">
+<form method="post" action="%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.jsp;jsessionid=151570B338F444B3F451B049396260F0">
+  <TABLE BORDER="1">
 
-            <input type="text" name="/basicForm/userName" value="default">
 
-            <input type="submit">
+      <TR>
 
-	    <!-- <input type="submit"> -->
+	<TD>
 
-            UserName
+	      <input type="text" name="/basicForm/userName" value="Default_username">
 
-            <input type="checkbox" name="/basicForm/validUser">
+	</TD>
 
-            <select name="/basicForm/appleQuantity"><option value="0">0.00</option><option value="1">1.00</option><option value="2">2.00</option><option value="3">3.00</option><option value="4" selected="selected">4.00</option><option value="5">5.00</option><option value="6">6.00</option><option value="7">7.00</option><option value="8">8.00</option><option value="9">9.00</option></select>
+      </TR>
 
-            <select name="/basicForm/shipType"><option value="nextDay">Next Day</option><option value="nextWeek" selected="selected">Next Week</option><option value="nextMonth">Next Month</option></select>
+      <TR>
 
-            <input type="text" name="/basicForm/password" value="">
+	<TD>
 
-            <input type="text" name="/basicForm/address" value="">
+	      <input type="text" name="/basicForm/password" value="Default_password">
 
-        </form>
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit" name="login">
+
+	</TD>
+
+      </TR>
+
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit" name="login">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="submit">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      Output Text
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="checkbox" name="/basicForm/validUser" checked="checked">
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <select name="/basicForm/appleQuantity"></select>
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	      
+
+              Option List
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <select name="/basicForm/shipType"></select>
+
+		
+		
+		
+
+              
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+		<select name="/basicForm/verticalRadio"></select>
+
+  		
+		
+		
+
+                
+
+	</TD>
+
+      </TR>
+
+      <TR>
+
+	<TD>
+
+	      <input type="text" name="/basicForm/address" value="Hi There">
+
+	</TD>
+
+      </TR>
+
+  <TABLE>
+
+</form>
+
 
     </BODY>
 </HTML>

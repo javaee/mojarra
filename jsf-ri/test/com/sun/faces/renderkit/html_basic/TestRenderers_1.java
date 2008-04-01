@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.10 2002/06/26 21:25:10 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.11 2002/07/13 01:21:58 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.10 2002/06/26 21:25:10 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.11 2002/07/13 01:21:58 eburns Exp $
  * 
  *
  */
@@ -108,7 +108,9 @@ public class TestRenderers_1 extends JspFacesTestCase
     }    
 
     public String [] getLinesToIgnore() {
-        String[] lines =  {"<FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=92F1C50409C42051E825E4A1F3B6B856?action=form&name=FormRenderer&tree=treeId\">"};
+        String[] lines =  {
+	    "<FORM METHOD=\"post\" ACTION=\"/test/faces/form/FormRenderertreeId;jsessionid=C5366598A51328E62948F964F9447243\">"
+};
         return lines;
     }    
     
@@ -313,6 +315,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test encode method
         System.out.println("Testing encode method");
         radioRenderer.encodeBegin(getFacesContext(), uiSelectOne);
+        radioRenderer.encodeEnd(getFacesContext(), uiSelectOne);
        
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
