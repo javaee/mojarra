@@ -1,5 +1,5 @@
 /*
- * $Id: MessageList.java,v 1.3 2002/06/08 02:57:55 craigmcc Exp $
+ * $Id: MessageList.java,v 1.4 2002/06/08 17:14:06 craigmcc Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -82,6 +82,26 @@ public abstract class MessageList {
 
 
     /**
+     * <p>Return the maximum severity list of all {@link Message}s in this
+     * <code>MessageList</code>, or SEVERITY_INFO if there are no messages
+     * in the list.</p>
+     */
+    public abstract int getMaximumSeverity();
+
+
+    /**
+     * <p>Return the maximum severity list of all {@link Message}s in this
+     * <code>MessageList</code> for the specified compnoent, or
+     * SEVERITY_INFO if there are no messages in the list for that component.
+     * </p>
+     *
+     * @param reference Reference to the component for which
+     *  a maximum severity is requested
+     */
+    public abstract int getMaximumSeverity(String reference);
+
+
+    /**
      * <p>Return an iterator over all of the {@link Message}s in this
      * <code>MessageList</code>, whether or not they are associated with
      * a particular component.  If there are no such {@link Message}s,
@@ -104,20 +124,22 @@ public abstract class MessageList {
 
 
     /**
-     * <p>Return the maximum severity list of all {@link Message}s in this
-     * <code>MessageList</code>, or SEVERITY_INFO if there are no messages
-     * in the list.</p>
-     */
-    public abstract int getMaximumSeverity();
-
-
-    /**
      * <p>Return the number of messages that have been queued, whether
      * or not they are for a particular component.  <strong>FIXME</strong> -
      * add more useful metrics to help the <em>Process Validations</em>
      * phase decide what to do?</p>
      */
     public abstract int size();
+
+
+    /**
+     * <p>Return the number of messages that have been queued for the
+     * specified component, if any; otherwise, return zero.</p>
+     *
+     * @param reference Reference to the component for which
+     *  a message count is requested
+     */
+    public abstract int size(String reference);
 
 
 }
