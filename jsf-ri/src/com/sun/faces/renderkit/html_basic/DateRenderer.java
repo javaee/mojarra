@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.1 2002/08/12 19:57:34 eburns Exp $
+ * $Id: DateRenderer.java,v 1.2 2002/08/12 23:15:36 eburns Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIOutput;
 import javax.faces.FacesException;
 
 import org.mozilla.util.Assert;
@@ -51,7 +52,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.1 2002/08/12 19:57:34 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.2 2002/08/12 23:15:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,7 +102,8 @@ public class DateRenderer extends HtmlBasicRenderer {
         if ( componentType == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
-        return (componentType.equals(UIInput.TYPE));
+        return (componentType.equals(UIInput.TYPE) || 
+		componentType.equals(UIOutput.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
@@ -117,6 +119,11 @@ public class DateRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
+
+	if (!(component instanceof UIInput)) {
+	    // do nothing in output case
+	    return;
+	}
 	
         compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
@@ -187,6 +194,7 @@ public class DateRenderer extends HtmlBasicRenderer {
 
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
+	boolean isInput = component instanceof UIInput;
         String currentValue = null;
         ResponseWriter writer = null;
 	FormatPool formatPool = (FormatPool)
@@ -214,24 +222,30 @@ public class DateRenderer extends HtmlBasicRenderer {
         
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-        
-        writer.write("<input type=\"text\"");
-        writer.write(" name=\"");
-        writer.write(component.getCompoundId());
-        writer.write("\"");
 
-        // render default text specified
-        if ( currentValue != null ) {
-            writer.write(" value=\"");
-            writer.write(currentValue);
-            writer.write("\"");
-        }
-	writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
-        writer.write(">");            
+	if (isInput) {
+	    writer.write("<input type=\"text\"");
+	    writer.write(" name=\"");
+	    writer.write(component.getCompoundId());
+	    writer.write("\"");
+	    
+	    // render default text specified
+	    if ( currentValue != null ) {
+		writer.write(" value=\"");
+		writer.write(currentValue);
+		writer.write("\"");
+	    }
+	    writer.write(Util.renderPassthruAttributes(context, component));
+	    writer.write(Util.renderBooleanPassthruAttributes(context, component));
+	    writer.write(">");            
+	}
+	else {
+	    writer.write(currentValue);
+	}
     }
+		   
     
-    // The testcase for this class is TestRenderers_1.java 
+    // The testcase for this class is TestRenderers_2.java 
 
 } // end of class DateRenderer
 

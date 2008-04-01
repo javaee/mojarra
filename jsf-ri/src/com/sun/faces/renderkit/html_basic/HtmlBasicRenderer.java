@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.5 2002/08/05 21:22:40 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.6 2002/08/12 23:15:37 eburns Exp $
  */
 
 /*
@@ -93,6 +93,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
         AttributeDescriptorImpl ad = new AttributeDescriptorImpl(name, 
 					 displayName, description, typeClass);
         attributeTable.put(name, ad);
+    }
+
+    public boolean hasAttributeWithName(String name) {
+	if (null == attributeTable) {
+	    return false;
+	}
+	return (null != attributeTable.get(name));
     }
 	
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.34 2002/08/01 23:47:36 rkitain Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.35 2002/08/12 23:15:36 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.34 2002/08/01 23:47:36 rkitain Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.35 2002/08/12 23:15:36 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -260,35 +260,44 @@ public class HtmlBasicRenderKit extends RenderKit
 	ParameterCheck.nonNull(className);
 
 	HtmlBasicRenderer curRenderer = null;
-        try {
-            Class rendererClass = Util.loadClass(className);
-            curRenderer = (HtmlBasicRenderer)rendererClass.newInstance();
-        } catch (ClassNotFoundException cnf) {
-            throw new RuntimeException("Class Not Found:"+cnf.getMessage());
-        } catch (InstantiationException ie) {
-            throw new RuntimeException("Class Instantiation Exception:"+
-                ie.getMessage());
-        } catch (IllegalAccessException ia) {
-            throw new RuntimeException("Illegal Access Exception:"+
-                ia.getMessage());
-        }
-        renderersByRendererType.put(rendererType, curRenderer);
-        if (parse_renderersForCurrentComponent == null) {
-            parse_renderersForCurrentComponent = new ArrayList();
-        }
-        
-        synchronized(parse_renderersForCurrentComponent) {
-            parse_renderersForCurrentComponent.add(curRenderer);
-        }
+
+	// Only add the renderer for this rendererType once
+	if (null == (curRenderer = (HtmlBasicRenderer)
+		     renderersByRendererType.get(rendererType))){
+	    try {
+		Class rendererClass = Util.loadClass(className);
+		curRenderer = (HtmlBasicRenderer)rendererClass.newInstance();
+	    } catch (ClassNotFoundException cnf) {
+		throw new RuntimeException("Class Not Found:"+cnf.getMessage());
+	    } catch (InstantiationException ie) {
+		throw new RuntimeException("Class Instantiation Exception:"+
+					   ie.getMessage());
+	    } catch (IllegalAccessException ia) {
+		throw new RuntimeException("Illegal Access Exception:"+
+					   ia.getMessage());
+	    }
+	    renderersByRendererType.put(rendererType, curRenderer);
+	}
+	if (parse_renderersForCurrentComponent == null) {
+	    parse_renderersForCurrentComponent = new ArrayList();
+	}
+	
+	synchronized(parse_renderersForCurrentComponent) {
+	    parse_renderersForCurrentComponent.add(curRenderer);
+	}
 	
 	// handle attribute descriptors
 	AttributeStruct struct = null;
 	while (!parse_attrStack.isEmpty()) {
 	    struct = (AttributeStruct) parse_attrStack.pop();
-	    curRenderer.registerAttribute(struct.name,
-					  struct.displayName,
-					  struct.description,
-					  struct.typeClassName);
+	    // Only add this attribute if the renderer doesn't have one 
+	    // with this name.
+	    if (!curRenderer.hasAttributeWithName(struct.name)) {
+		curRenderer.registerAttribute(struct.name,
+					      struct.displayName,
+					      struct.description,
+					      struct.typeClassName);
+	    }
 	}
     }
 

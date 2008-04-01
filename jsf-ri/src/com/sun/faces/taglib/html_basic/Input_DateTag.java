@@ -1,5 +1,5 @@
 /*
- * $Id: Input_DateTag.java,v 1.1 2002/08/12 19:57:37 eburns Exp $
+ * $Id: Input_DateTag.java,v 1.2 2002/08/12 23:15:38 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.taglib.FacesTag;
 
 /**
  *
- * @version $Id: Input_DateTag.java,v 1.1 2002/08/12 19:57:37 eburns Exp $
+ * @version $Id: Input_DateTag.java,v 1.2 2002/08/12 23:15:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -50,7 +50,6 @@ public class Input_DateTag extends FacesTag
 
 // Attribute Instance Variables
 
-    protected String label = null;
     protected String timezone = null;
 
 // Relationship Instance Variables
@@ -67,17 +66,6 @@ public Input_DateTag()
 //
 // Class methods
 //
-
-public String getLabel()
-{
-    return label;
-}
-
-public void setLabel(String newLabel)
-{
-    label = newLabel;
-}
-
 
 public String getTimezone()
 {

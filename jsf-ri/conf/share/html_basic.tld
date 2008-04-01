@@ -511,6 +511,40 @@
 
  </tag>
 
+  <tag>
+    <name>output_date</name>
+    <!-- PENDING(edburns): rename tag handler -->
+    <tagclass>com.sun.faces.taglib.html_basic.Input_DateTag</tagclass>
+    <bodycontent>JSP</bodycontent>
+    <!-- Faces Attributes -->  
+    <attribute>
+      <name>id</name>
+      <!-- Replaces HTML 4.0 name attribute -->
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>modelReference</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>formatStyle</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>timezone</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>formatPattern</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+ </tag>
+
 
  <tag>
       <name>validator</name>

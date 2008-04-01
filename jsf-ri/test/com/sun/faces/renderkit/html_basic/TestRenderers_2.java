@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.11 2002/08/12 19:57:39 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.12 2002/08/12 23:15:39 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.11 2002/08/12 19:57:39 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.12 2002/08/12 23:15:39 eburns Exp $
  * 
  *
  */
@@ -124,8 +124,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("/my_secret", "secret");
         // for Text
         theRequest.addParameter("/my_text", "text");
-        theRequest.addParameter("/my_date", DATE_STR);
-        theRequest.addParameter("/my_date2", DATE_STR_LONG);
+        theRequest.addParameter("/my_input_date", DATE_STR);
+        theRequest.addParameter("/my_input_date2", DATE_STR_LONG);
+        theRequest.addParameter("/my_output_date", DATE_STR);
+        theRequest.addParameter("/my_output_date2", DATE_STR_LONG);
     } 
 
     public void testRenderers() {
@@ -145,8 +147,11 @@ public class TestRenderers_2 extends JspFacesTestCase
             testSecretRenderer(root);
             testTextRenderer(root);
 	    **/
-	    testDateRenderer(root);
-	    testDateRendererWithPattern(root);
+	    testInputDateRenderer(root);
+	    testInputDateRendererWithPattern(root);
+
+	    testOutputDateRenderer(root);
+	    testOutputDateRendererWithPattern(root);
 
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
@@ -386,11 +391,11 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
-    public void testDateRenderer(UIComponent root) throws IOException {
-        System.out.println("Testing DateRenderer");
+    public void testInputDateRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing Input_DateRenderer");
         UIInput input = new UIInput();
         input.setValue(null);
-        input.setComponentId("my_date");
+        input.setComponentId("my_input_date");
 	input.setAttribute("formatStyle", "MEDIUM");
         root.addChild(input);
 
@@ -427,12 +432,12 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(!result);
     }
 
-    public void testDateRendererWithPattern(UIComponent root) throws IOException {
-        System.out.println("Testing DateRenderer With Pattern");
+    public void testInputDateRendererWithPattern(UIComponent root) throws IOException {
+        System.out.println("Testing Input_DateRenderer With Pattern");
 	String formatPattern = "EEE, MMM d, yyyy";
         UIInput input = new UIInput();
         input.setValue(null);
-        input.setComponentId("my_date2");
+        input.setComponentId("my_input_date2");
 	input.setAttribute("formatPattern", formatPattern);
         root.addChild(input);
 
@@ -465,6 +470,90 @@ public class TestRenderers_2 extends JspFacesTestCase
         assertTrue(result);
         result = dateRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
+    }
+
+    public void testOutputDateRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing Output_DateRenderer");
+        UIOutput output = new UIOutput();
+        output.setComponentId("my_output_date");
+	output.setAttribute("formatStyle", "MEDIUM");
+	output.setValue(DATE_STR);
+        root.addChild(output);
+
+        DateRenderer dateRenderer = new DateRenderer();
+	Date date = null;
+	DateFormat formatter = 
+	    DateFormat.getDateInstance(DateFormat.MEDIUM,
+				       getFacesContext().getLocale());
+	
+        // test decode method
+	
+        System.out.println("    Testing decode method...");
+
+        dateRenderer.decode(getFacesContext(), output);
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        dateRenderer.encodeBegin(getFacesContext(), output);
+        dateRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = dateRenderer.supportsComponentType("javax.faces.component.UIOutput");
+        assertTrue(result);
+        result = dateRenderer.supportsComponentType(output);
+        assertTrue(result);
+        result = dateRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+
+    public void testOutputDateRendererWithPattern(UIComponent root) throws IOException {
+        System.out.println("Testing DateRenderer With Pattern");
+	String formatPattern = "EEE, MMM d, yyyy";
+        UIOutput output = new UIOutput();
+        output.setValue(DATE_STR_LONG);
+        output.setComponentId("my_output_date2");
+	output.setAttribute("formatPattern", formatPattern);
+        root.addChild(output);
+
+        DateRenderer dateRenderer = new DateRenderer();
+	Date date = null;
+	SimpleDateFormat formatter = new SimpleDateFormat(formatPattern);
+	
+        // test decode method
+	
+        System.out.println("    Testing decode method...");
+
+        dateRenderer.decode(getFacesContext(), output);
+
+        // test encode method
+
+        System.out.println("    Testing encode method...");
+        dateRenderer.encodeBegin(getFacesContext(), output);
+        dateRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().flush();
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = dateRenderer.supportsComponentType("javax.faces.component.UIOutput");
+        assertTrue(result);
+        result = dateRenderer.supportsComponentType(output);
+        assertTrue(result);
+        result = dateRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+
+	// testing encode with invalid date
+	output.setValue("invalidDate");
+        System.out.println("    Testing encode method...");
+        dateRenderer.encodeBegin(getFacesContext(), output);
+        dateRenderer.encodeEnd(getFacesContext(), output);
+        getFacesContext().getResponseWriter().flush();
+	assertTrue(!output.isValid());
+	
     }
 
 } // end of class TestRenderers2_
