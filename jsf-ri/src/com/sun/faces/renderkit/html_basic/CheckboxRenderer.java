@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.1 2001/11/01 07:29:07 edburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.1 2001/11/01 07:29:07 edburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,6 +86,13 @@ protected void init()
 // Methods From Renderer
 //
 
+public boolean supportsType(WComponent c) {
+    return false;
+}
+
+public boolean supportsType(String componentType) {
+    return false;
+}
 public Iterator getSupportedAttributeNames(String componentType) {
     return null;
 }
@@ -119,7 +126,7 @@ public static void main(String [] args)
     CheckboxRenderer me = new CheckboxRenderer();
     Log.setApplicationName("CheckboxRenderer");
     Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: CheckboxRenderer.java,v 1.1 2001/11/01 07:29:07 edburns Exp $");
+    Log.setApplicationVersionDate("$Id: CheckboxRenderer.java,v 1.2 2001/11/05 23:07:52 edburns Exp $");
     
 }
 
