@@ -1,6 +1,6 @@
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.6 2001/11/21 21:31:32 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -25,8 +25,6 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
-import javax.faces.ObjectTable;
-
 import javax.servlet.ServletRequest;
 
 import java.util.Locale;
@@ -37,7 +35,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.6 2001/11/21 21:31:32 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,7 +62,6 @@ public class HtmlBasicRenderContext extends RenderContext {
 
     private RenderKit renderKit;
     private OutputMethod outputMethod;
-    private ObjectTable objectTable;
 
 //
 // Constructors and Initializers    
@@ -72,7 +69,6 @@ public class HtmlBasicRenderContext extends RenderContext {
 
 public HtmlBasicRenderContext() {
     renderKit = new HtmlBasicRenderKit();
-    objectTable = new com.sun.faces.ObjectTableImpl();
 }
 
 //
@@ -87,11 +83,6 @@ public HtmlBasicRenderContext() {
 public RenderKit getRenderKit() {
     return renderKit;
 }
-
-public ObjectTable getObjectTable() {
-    return objectTable;
-}
-
 
 public OutputMethod getOutputMethod() {
     return outputMethod;
