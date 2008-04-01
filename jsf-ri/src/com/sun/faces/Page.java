@@ -1,5 +1,5 @@
 /*
- * $Id: Page.java,v 1.1 2002/03/13 18:04:21 eburns Exp $
+ * $Id: Page.java,v 1.2 2002/03/15 23:29:47 eburns Exp $
  */
 
 /*
@@ -35,10 +35,12 @@ import javax.faces.EventContext;
 import javax.faces.FacesContext;
 import javax.faces.FacesException;
 import javax.faces.TreeNavigator;
+import javax.faces.UIPage;
 
 import com.sun.faces.lifecycle.LifecycleDriverImpl;
 import com.sun.faces.lifecycle.RenderWrapper;
 import com.sun.faces.EventContextFactory;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -47,7 +49,7 @@ import com.sun.faces.EventContextFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Page.java,v 1.1 2002/03/13 18:04:21 eburns Exp $
+ * @version $Id: Page.java,v 1.2 2002/03/15 23:29:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -117,12 +119,9 @@ private void outputException(HttpServletResponse resp,
     }
 }
 
-    // PENDING(edburns): only public until we fix FacesTestcase to
-    // extend this class.  Then we'll make it protected.
-
-public FacesContext createFacesContext(ObjectManager objectManager, 
-				       HttpServletRequest req, 
-				       HttpServletResponse res) throws ServletException {
+protected FacesContext createFacesContext(ObjectManager objectManager, 
+					  HttpServletRequest req, 
+					  HttpServletResponse res) throws ServletException {
     FacesContext result;
     RenderContext rc;
     EventContext eventContext;
@@ -216,6 +215,9 @@ final public void destroy() {
     Assert.assert_it(null != lifecycle);
 
     lifecycle.destroy();
+    ServletContext ctx = servletConfig.getServletContext();
+    ctx.removeAttribute(REF_LIFECYCLE);
+
 
     jspDestroy();
 }
@@ -250,9 +252,18 @@ final public void service(ServletRequest req, ServletResponse res) throws Servle
     objectManager.put(request, Constants.REF_RENDERWRAPPER, this);
     
     facesContext = createFacesContext(objectManager, request, response);
+
+    // Rather than this class extending UIPage, we create a new one each
+    // time.  This prevents problems with knowing when it is safe to
+    // remove the children.
+
+    // PENDING(edburns): check for leaks.
+
+    UIPage root = new UIPage();
+    root.setId(Util.generateId());
     
     try {
-	treeNav = lifecycle.wireUp(facesContext);
+	treeNav = lifecycle.wireUp(facesContext, root);
 	Assert.assert_it(null != treeNav);
 	
 	// This causes our _jspService() to be called via the
@@ -263,6 +274,11 @@ final public void service(ServletRequest req, ServletResponse res) throws Servle
 	outputException(response, e);
 	return;
     }
+
+    // exit the scope for this request
+    // PENDING(edburns): Hans doesn't want this in the public API
+    // just cast to our implementation for now
+    ((com.sun.faces.ObjectManagerImpl)objectManager).exit(req);
     
 }
 
@@ -293,11 +309,19 @@ abstract public void _jspService(HttpServletRequest request,
 
 */ 
 
-public void commenceRendering(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-    HttpServletRequest request = (HttpServletRequest) req;
-    HttpServletResponse response = (HttpServletResponse) res;
+public void commenceRendering(FacesContext ctx, 
+			      TreeNavigator treeNav) throws ServletException, IOException {
+    EventContext eventContext = ctx.getEventContext();
+    HttpServletResponse response = (HttpServletResponse) eventContext.getResponse();
+    HttpServletRequest request =(HttpServletRequest) eventContext.getRequest();
 
+    // Beacuse the tree is rooted at UIPage, and there is no tag
+    // that matches UIPage, we have to prime the treeNav here.
+    treeNav.getNextStart();
     _jspService(request, response);
+    // For completeness, we pull off the end.
+    treeNav.getNextEnd();
+
 }
 
 } // end of class Page

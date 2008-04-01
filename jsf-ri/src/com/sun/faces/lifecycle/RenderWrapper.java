@@ -1,5 +1,5 @@
 /*
- * $Id: RenderWrapper.java,v 1.1 2002/03/13 18:04:23 eburns Exp $
+ * $Id: RenderWrapper.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  */
 
 /*
@@ -13,16 +13,17 @@ package com.sun.faces.lifecycle;
 
 import java.io.IOException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.ServletException;
+
+import javax.faces.FacesContext;
+import javax.faces.TreeNavigator;
 
 /**
  *
  * An implementation of this class knows what to do to start rendering
  * the Faces page
 
- * @version $Id: RenderWrapper.java,v 1.1 2002/03/13 18:04:23 eburns Exp $
+ * @version $Id: RenderWrapper.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  * 
  * @see	com.sun.faces.Page#service
  *
@@ -31,6 +32,7 @@ import javax.servlet.ServletException;
 public interface RenderWrapper
 {
 
-public void commenceRendering(ServletRequest req, ServletResponse res) throws ServletException, IOException;
+public void commenceRendering(FacesContext facesContext, 
+			      TreeNavigator treeNav) throws ServletException, IOException;
 
 } // end of interface RenderWrapper

@@ -1,5 +1,5 @@
 /*
- * $Id: TestTreebuilder.java,v 1.2 2002/03/08 22:16:10 eburns Exp $
+ * $Id: TestTreebuilder.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import javax.faces.UIComponent;
 import javax.faces.RenderContext;
 import javax.faces.ObjectManager;
 import javax.faces.TreeNavigator;
+import javax.faces.UIPage;
 
 
 import org.xml.sax.Attributes;
@@ -34,6 +35,7 @@ import org.apache.cactus.WebRequest;
 
 import com.sun.faces.treebuilder.TreeEngine;
 import com.sun.faces.treebuilder.TreeBuilder;
+import com.sun.faces.util.Util;
 
 import java.util.List;
 import java.util.Iterator;
@@ -47,7 +49,7 @@ import org.apache.jasper_hacked.compiler.JspParseListener;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestTreebuilder.java,v 1.2 2002/03/08 22:16:10 eburns Exp $
+ * @version $Id: TestTreebuilder.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
  * 
  * @see	com.sun.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -61,6 +63,7 @@ public class TestTreebuilder extends FacesTestCase
 //
 
 public static final String TEST_URI = "/treeTest.jsp";
+public static final String WHILE_URI = "/testWhile.jsp";
 
 //
 // Class Variables
@@ -111,8 +114,10 @@ public void getTreeForURI(ObjectManager objectManager,
 	TreeEngine treeEng = (TreeEngine) 
 	    objectManager.get(Constants.REF_TREEENGINE);
 	assertTrue(null != treeEng);
+	UIPage root = new UIPage();
+	root.setId(Util.generateId());
 	
-	treeNav = treeEng.getTreeForURI(rc, requestURI);
+	treeNav = treeEng.getTreeForURI(rc, root, requestURI);
 	// stick this here so we can have access to it on the postback.
 	if (null != treeNav) {
 	    session.setAttribute(requestURI, treeNav);
@@ -131,11 +136,6 @@ public void setUp() {
     super.setUp();
     ServletContext servletContext = config.getServletContext();
     preParser = new PreParser(servletContext);    
-    TreeEngine treeEngine = 
-	new com.sun.faces.treebuilder.TreeEngineImpl(servletContext);
-    assertTrue(null != treeEngine);
-    objectManager.put(servletContext, Constants.REF_TREEENGINE, 
-		      treeEngine);
 
 }
 
@@ -158,7 +158,7 @@ public void testTree() {
 
     TreeNavigator treeNav = null;
 
-    // Simulate the filter's parsing of the tree
+    // Simulate the LifecyleDriver's parsing of the tree
     try {
 	System.out.println("Testing getTreeForURI:");
 
@@ -169,31 +169,86 @@ public void testTree() {
 	assertTrue(true);
     }
     catch(Exception e) {
-	System.out.println("testEnterExit: caught exception");
+	System.out.println("testTree: caught exception");
+	assertTrue(false);
+    }
+    assertTrue(null != treeNav);
+
+    UIPage root = new UIPage();
+    root.setId(Util.generateId());
+	
+    // simulate the JSP Engine's parsing of the tree
+    JspSimulator jspSim = new JspSimulator(renderContext, root, TEST_URI, 
+					   treeNav);
+    // Account for the UIPage root
+    treeNav.getNextStart();
+    preParser.addJspParseListener(jspSim);
+    preParser.preParse(TEST_URI);
+    preParser.removeJspParseListener(jspSim);
+    // Account for the UIPage root
+    treeNav.getNextEnd();
+
+
+    System.out.println("Resetting TreeNav");
+    treeNav.reset();
+    // Account for the UIPage root
+    treeNav.getNextStart();
+    preParser.addJspParseListener(jspSim);
+    preParser.preParse(TEST_URI);
+    preParser.removeJspParseListener(jspSim);
+    // Account for the UIPage root
+    treeNav.getNextEnd();
+}
+
+public void beginWhile(WebRequest theRequest) {
+    theRequest.setURL("localhost:8080", null, null, WHILE_URI,null);
+}
+
+public void testWhile() {
+    ParamBlockingRequestWrapper wrapped = 
+	new ParamBlockingRequestWrapper(request);
+
+    // put the rc in the session
+    HttpSession session = request.getSession();
+    objectManager.put(session, Constants.REF_RENDERCONTEXT, renderContext);
+
+    TreeNavigator treeNav = null;
+
+    // Simulate the LifecyleDriver's parsing of the tree
+    try {
+	System.out.println("Testing getTreeForURI:");
+
+	getTreeForURI(objectManager, wrapped, WHILE_URI);
+
+	treeNav = (TreeNavigator) objectManager.get(wrapped, 
+						 Constants.REF_TREENAVIGATOR);
+	assertTrue(true);
+    }
+    catch(Exception e) {
+	System.out.println("testTree: caught exception");
 	assertTrue(false);
     }
     assertTrue(null != treeNav);
 	
-    // simulate the JSP Engine's parsing of the tree
-    JspSimulator jspSim = new JspSimulator(renderContext, TEST_URI, treeNav);
-    preParser.addJspParseListener(jspSim);
-    preParser.preParse(TEST_URI);
-    preParser.removeJspParseListener(jspSim);
-
-    System.out.println("Resetting TreeNav");
     treeNav.reset();
-    preParser.addJspParseListener(jspSim);
-    preParser.preParse(TEST_URI);
-    preParser.removeJspParseListener(jspSim);
+
+    UIComponent next;
+    
+    while (null != (next = treeNav.getNextStart())) {
+	System.out.println("cur = " + next.getId());
+    }
+
+
 }
+
 
 public static class JspSimulator extends TreeBuilder implements JspParseListener {
 
 protected TreeNavigator treeNav;
 
-public JspSimulator(RenderContext newRenderContext, String newRequestURI,
-		    TreeNavigator newTreeNav) {
-    super(newRenderContext, newRequestURI);
+public JspSimulator(RenderContext newRenderContext, UIPage root, 
+		    String newRequestURI, TreeNavigator newTreeNav) {
+    super(newRenderContext, root, newRequestURI);
     treeNav = newTreeNav;
 }
 

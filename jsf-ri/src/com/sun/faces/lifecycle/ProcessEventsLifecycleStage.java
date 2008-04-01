@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessEventsLifecycleStage.java,v 1.1 2002/03/13 18:04:22 eburns Exp $
+ * $Id: ProcessEventsLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: ProcessEventsLifecycleStage.java,v 1.1 2002/03/13 18:04:22 eburns Exp $
+ * @version $Id: ProcessEventsLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -182,6 +182,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
 	    Assert.assert_it ( src != null );
 	    src.dispatch ( e );
 	} catch ( Throwable fe ) {
+	    fe.printStackTrace();
 	    // abort processing events and lookup the navigation
 	    // handler to find out where to go next.
 	    // PENDING ( visvan ) should eventQueue be emptied here ?
@@ -203,12 +204,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
     return result;
 }
 
-
-// Delete this text and replace the below text with the name of the file
-// containing the testcase covering this class.  If this text is here
-// someone touching this file is poor software engineer.
-
-// The testcase for this class is TestProcessEventsLifecycleStage.java 
+// The testcase for this class is TestLifecycleDriverImpl.java 
 
 
 } // end of class ProcessEventsLifecycleStage

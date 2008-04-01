@@ -198,6 +198,9 @@
         <copy file="${basedir}/web/test/treeTest.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
+        <copy file="${basedir}/web/test/testWhile.jsp"
+            todir="${out.tomcat.40.dir}/webapps/test"/>
+
         <copy file="${basedir}/web/basic/Faces_Basic.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 

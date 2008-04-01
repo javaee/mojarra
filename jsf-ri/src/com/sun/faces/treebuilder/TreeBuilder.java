@@ -1,5 +1,5 @@
 /*
- * $Id: TreeBuilder.java,v 1.4 2002/03/15 20:58:03 jvisvanathan Exp $
+ * $Id: TreeBuilder.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.ParameterCheck;
 
 import org.apache.jasper_hacked.compiler.JspParseListener;
 import javax.faces.UIComponent;
+import javax.faces.UIPage;
 import javax.faces.UISelectOne;
 import javax.faces.RenderContext;
 import javax.faces.ObjectManager;
@@ -31,6 +32,8 @@ import com.sun.faces.util.Util;
 import javax.servlet.jsp.tagext.TagInfo;
 import javax.servlet.jsp.tagext.TagLibraryInfo;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -63,7 +66,7 @@ import java.lang.reflect.Method;
 
  *
  *
- * @version $Id: TreeBuilder.java,v 1.4 2002/03/15 20:58:03 jvisvanathan Exp $
+ * @version $Id: TreeBuilder.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *
@@ -96,7 +99,7 @@ private String formModelRef = null;
 
 private RenderContext renderContext;
 private String requestURI;
-private UIComponent root = null;
+private UIPage root = null;
 
 /**
 
@@ -113,15 +116,19 @@ private int curDepth = 0;
 // Constructors and Initializers    
 //
 
-public TreeBuilder(RenderContext newRenderContext, String newRequestURI)
+public TreeBuilder(RenderContext newRenderContext, UIPage newRoot, 
+		   String newRequestURI)
 {
     ParameterCheck.nonNull(newRenderContext);
+    ParameterCheck.nonNull(newRoot);
     ParameterCheck.nonNull(newRequestURI);
     renderContext = newRenderContext;
     requestURI = newRequestURI;
-    root = null;
+    root = newRoot;
     curDepth = 0;
     initializeClassMap();
+    // push the root
+    tagStack.push(root);
 }
 
 //
@@ -323,7 +330,14 @@ private void handleSpecialAttr(UIComponent child, String attrName,
     ObjectManager objectManager = renderContext.getObjectManager();
     Assert.assert_it(objectManager != null );
 
-    ServletRequest request = renderContext.getRequest();
+    HttpServletRequest request =(HttpServletRequest)renderContext.getRequest();
+
+    // PENDING(visvan): We put the validator instances in session scope
+    // UNTIL they are no longer in the ObjectManager.  That is, when we
+    // move to storing Valitdators on the tree, we won't need this
+    // session dependency.
+
+    HttpSession session = request.getSession();
     Assert.assert_it(request != null );
 
     if (attrName.equals("valueChangeListener")) {
@@ -363,7 +377,7 @@ private void handleSpecialAttr(UIComponent child, String attrName,
 
             RequiredValidator reqValidator = new RequiredValidator();
             String reqValidatorId = Util.generateId();
-            objectManager.put( request, reqValidatorId, reqValidator);
+            objectManager.put( session, reqValidatorId, reqValidator);
 
             attrMethod = child.getClass().getMethod("addValidator", stringArg);
             attrValue = reqValidatorId;
@@ -376,7 +390,7 @@ private void handleSpecialAttr(UIComponent child, String attrName,
 
         FormatValidator formatValidator = new FormatValidator();
         String formatValidatorId = Util.generateId();
-        objectManager.put( request, formatValidatorId, formatValidator);
+        objectManager.put( session, formatValidatorId, formatValidator);
 
         attrMethod = child.getClass().getMethod("addValidator", stringArg);
         attrValue = formatValidatorId;
@@ -388,7 +402,7 @@ private void handleSpecialAttr(UIComponent child, String attrName,
 
         RangeValidator rangeValidator = new RangeValidator();
         String rangeValidatorId = Util.generateId();
-        objectManager.put( request, rangeValidatorId, rangeValidator);
+        objectManager.put( session, rangeValidatorId, rangeValidator);
 
         attrMethod = child.getClass().getMethod("addValidator", stringArg);
         attrValue = rangeValidatorId;
@@ -400,7 +414,7 @@ private void handleSpecialAttr(UIComponent child, String attrName,
 
         LengthValidator lengthValidator = new LengthValidator();
         String lengthValidatorId = Util.generateId();
-        objectManager.put( request, lengthValidatorId, lengthValidator);
+        objectManager.put( session, lengthValidatorId, lengthValidator);
 
         attrMethod = child.getClass().getMethod("addValidator", stringArg);
         attrValue = lengthValidatorId;
@@ -472,9 +486,6 @@ public void handleTagBegin(Attributes attrs, String prefix,
 			   String shortTagName, TagLibraryInfo tli,
 			   TagInfo ti, boolean hasBody, boolean isXml)
 {
-    if (!prefix.equalsIgnoreCase("faces")) {
-	return;
-    }
     UIComponent child = null, parent = null;
     String attrName, attrValue;
 
@@ -563,10 +574,6 @@ public void handleTagBegin(Attributes attrs, String prefix,
     
     Assert.assert_it(null != renderContext);
     if (tagHasComponent(shortTagName)) {
-	if (null == root) {
-	    root = child;
-	}
-	
 	if (null != parent) {
 	    parent.add(child);
 	}
@@ -597,12 +604,7 @@ public void handleTagEnd(Attributes attrs, String prefix,
     }
 }
 
-
-// Delete this text and replace the below text with the name of the file
-// containing the testcase covering this class.  If this text is here
-// someone touching this file is poor software engineer.
-
-// The testcase for this class is TestTreeBuilder.java 
+// The testcase for this class is TestTreebuilder.java 
 
 
 } // end of class TreeBuilder

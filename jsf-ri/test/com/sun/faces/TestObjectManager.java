@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectManager.java,v 1.4 2002/01/19 01:51:23 edburns Exp $
+ * $Id: TestObjectManager.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
  */
 
 /*
@@ -10,6 +10,9 @@
 // TestObjectManager.java
 
 package com.sun.faces;
+
+import org.apache.cactus.WebRequest;
+
 
 import javax.servlet.http.HttpSession;
 
@@ -32,7 +35,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectManager.java,v 1.4 2002/01/19 01:51:23 edburns Exp $
+ * @version $Id: TestObjectManager.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -44,6 +47,8 @@ public class TestObjectManager extends FacesTestCase
 //
 // Protected Constants
 //
+
+public static final String TEST_URI = "/Faces_Basic.jsp";
 
 //
 // Class Variables
@@ -76,6 +81,11 @@ private static final int INITIAL_NUM_SCOPES = 3;
 //
 // General Methods
 //
+
+public void setURL(WebRequest theRequest)
+{
+    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+}
 
 public void testScope() {
     boolean result;
@@ -293,6 +303,10 @@ public void testLazyActive() {
     assertTrue(result);
 }
 
+public void beginScopeListener(WebRequest theRequest) {
+    setURL(theRequest);
+}
+
 public void testScopeListener() {
     ParamBlockingRequestWrapper wrapped = 
 	new ParamBlockingRequestWrapper(request);
@@ -316,8 +330,8 @@ public void testScopeListener() {
     objectManager.put(wrapped, didEnter, didEnter);
     
     try {
-	System.out.println("Testing doFilter:");
-	filter.doFilter(wrapped, response, filterChain);
+	System.out.println("Testing service:");
+	page.service(wrapped, response);
 	assertTrue(true);
 	assertTrue(empty != System.getProperty(didEnter));
 	assertTrue(empty != System.getProperty(didExit));
@@ -326,6 +340,12 @@ public void testScopeListener() {
 	System.out.println("testEnterExit: caught exception");
 	assertTrue(false);
     }
+}
+
+
+public void beginManagedValue(WebRequest theRequest) 
+{
+    setURL(theRequest);
 }
 
 public void testManagedValue() {
@@ -371,8 +391,8 @@ public void testManagedValue() {
     wrapped.setAttribute(Constants.REF_REQUESTINSTANCE, wrapped);
     objectManager.put(wrapped, managedValueName, managedValue);
     try {
-	System.out.println("Testing doFilter:");
-	filter.doFilter(wrapped, response, filterChain);
+	System.out.println("Testing service:");
+	page.service(wrapped, response);
 	assertTrue(true);
 	assertTrue(empty != System.getProperty(willRemove));
 	assertTrue(empty != System.getProperty(didRemove));
@@ -382,5 +402,6 @@ public void testManagedValue() {
 	assertTrue(false);
     }
 }
+
 
 } // end of class TestObjectManager

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.4 2002/01/18 21:52:31 edburns Exp $
+ * $Id: FacesTestCase.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
  */
 
 /*
@@ -15,14 +15,15 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
-import org.apache.cactus.FilterTestCase;
+import org.apache.cactus.ServletTestCase;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javax.faces.ObjectManager;
@@ -31,9 +32,11 @@ import javax.faces.RenderContextFactory;
 import javax.faces.Constants;
 import javax.faces.FacesException;
 import javax.faces.EventContext;
+import javax.faces.FacesContext;
 
-import com.sun.faces.servlet.FacesFilter;
 import com.sun.faces.EventContextFactory;
+
+import com.sun.faces.Page;
 
 /**
  *
@@ -43,14 +46,14 @@ import com.sun.faces.EventContextFactory;
  *  faces testing more useful.  Extend this testcase to test faces.
 
  *
- * @version $Id: FacesTestCase.java,v 1.4 2002/01/18 21:52:31 edburns Exp $
+ * @version $Id: FacesTestCase.java,v 1.5 2002/03/15 23:29:49 eburns Exp $
  * 
  * @see	setUp
  * @see	tearDown
  *
  */
 
-public abstract class FacesTestCase extends FilterTestCase
+public abstract class FacesTestCase extends ServletTestCase
 {
 //
 // Protected Constants
@@ -60,6 +63,23 @@ public abstract class FacesTestCase extends FilterTestCase
 // Class Variables
 //
 
+public static class FacesTestCasePage extends Page
+{
+
+public FacesTestCasePage() {}
+
+public void _jspService(HttpServletRequest request,
+			HttpServletResponse response) 
+    throws ServletException, IOException { }
+
+public FacesContext testCallCreateFacesContext(ObjectManager objectManager, 
+					       HttpServletRequest req, 
+					       HttpServletResponse res) throws ServletException
+{	
+    return createFacesContext(objectManager, req, res);
+}
+} // end of class FacesTestCasePage
+
 //
 // Instance Variables
 //
@@ -68,10 +88,11 @@ public abstract class FacesTestCase extends FilterTestCase
 
 // Relationship Instance Variables
 
-public FacesFilter filter = null;
+public FacesTestCasePage page = null;
 public ObjectManager objectManager = null;
 public RenderContext renderContext = null;
 public EventContext eventContext = null;
+public FacesContext facesContext = null;
 
 //
 // Constructors and Initializers    
@@ -92,49 +113,47 @@ protected FacesTestCase(String name)
 
 /**
 
-* PRECONDITION: the filter has been created and init()ed <P>
+* PRECONDITION: the page has been created and init()ed <P>
 
-* POSTCONDITION: Some of the stuff that happens in doFilter() is
+* POSTCONDITION: Some of the stuff that happens in service() is
 * completed:  <P>
 
 * renderContext is a valid renderContext for this TestCase's request.
 * eventContext is a valid eventContext for this TestCase's request.
+* facesContext is a valid FacesContext for this TestCase's request.
+* the REQUESTINSTANCE has been set in the Request's attr set.
 
 */
 
-public void simulateDoFilter() {
-
-    RenderContextFactory factory = null;
-    EventContextFactory ecFactory = null;
-    // Just used to get the RenderContextFactory
+public void simulateService() {
+    // Just used to pass into testCallCreateFacesContext
     ObjectManager tempObjectManager = null;
+
+    request.setAttribute(Constants.REF_REQUESTINSTANCE, request);
     
     tempObjectManager = (ObjectManager)
         config.getServletContext().getAttribute(Constants.REF_OBJECTMANAGER);
     assertTrue(null != tempObjectManager);
-    
-    factory = (RenderContextFactory)
-        tempObjectManager.get(Constants.REF_RENDERCONTEXTFACTORY);
-    assertTrue(null != factory);
 
-    ecFactory = (EventContextFactory)
-        tempObjectManager.get(Constants.REF_EVENTCONTEXTFACTORY);
-    assertTrue(null!= ecFactory);
-    
     try {
-        renderContext = factory.newRenderContext(request);
-        eventContext = ecFactory.newEventContext(renderContext, request, response);
-    } catch (FacesException e) {
-        System.out.println("TestObjectManager.setUp: exception: " + 
-            e.getMessage());
-	    e.printStackTrace();
-	    assertTrue(false);
+	facesContext = page.testCallCreateFacesContext(tempObjectManager,
+						       request, response);
+	renderContext = facesContext.getRenderContext();
+	eventContext = facesContext.getEventContext();
+	assertTrue(null != facesContext);
+	assertTrue(null != renderContext);
+	assertTrue(null != eventContext);
     }
+    catch (Throwable e) {
+	e.printStackTrace();
+	assertTrue(false);
+    }
+    
 }
 
 /**
    
-* PRECONDITION: simulateDoFilter has been called <P>
+* PRECONDITION: simulateService has been called <P>
 
 * POSTCONDITION: the action that takes place in the sessionCreated of
 * our SessionListener has been called: <P>
@@ -187,30 +206,34 @@ public void simulateSessionDestroyed() {
 */
 
 public void setUp() {
-    filter = new FacesFilter();
+    // Uncomment this to cause the debugger to wait at this point for
+    // you to attach to it.
+    // com.sun.faces.util.DebugUtil.waitForDebugger();
+    page = new FacesTestCasePage();
+
     // this creates the ObjectManager, puts it in the ServletContext,
     // and populates the ObjectManager with several key items.
     try {
-	filter.init(config);
+	page.init(config);
     }
     catch (ServletException e) {
 	assertTrue(false);
     }
 
-    simulateDoFilter();
+    simulateSessionCreated();
+    simulateService();
 
     objectManager = renderContext.getObjectManager();
 
-    simulateSessionCreated();
 }
 
 
 public void tearDown() {
-    filter.destroy();
+    page.destroy();
     simulateSessionDestroyed();
     objectManager = null;
     renderContext = null;
-    filter = null;
+    page = null;
 }
 
 

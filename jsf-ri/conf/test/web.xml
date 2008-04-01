@@ -5,30 +5,21 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
+
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/j2ee/dtds/web-app_2_3.dtd">
+    "http://java.sun.com/j2ee/dtds/web-app_2.3.dtd">
 
 <web-app>
 
-    <filter>
-        <filter-name>FilterRedirector</filter-name>
-        <filter-class>org.apache.cactus.server.FilterTestRedirector</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>FilterRedirector</filter-name>
-        <url-pattern>/FilterRedirector</url-pattern>
-    </filter-mapping>
-
     <servlet>
-        <servlet-name>JspRedirector</servlet-name>
-        <jsp-file>/jspRedirector.jsp</jsp-file>
+        <servlet-name>ServletRedirector</servlet-name>
+        <servlet-class>org.apache.cactus.server.ServletTestRedirector</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>JspRedirector</servlet-name>
-        <url-pattern>/JspRedirector</url-pattern>
+        <servlet-name>ServletRedirector</servlet-name>
+        <url-pattern>/ServletRedirector</url-pattern>
     </servlet-mapping>
 
 </web-app>

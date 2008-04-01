@@ -1,5 +1,5 @@
 /*
- * $Id: GenericLifecycleStage.java,v 1.1 2002/03/13 18:04:21 eburns Exp $
+ * $Id: GenericLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.FacesException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: GenericLifecycleStage.java,v 1.1 2002/03/13 18:04:21 eburns Exp $
+ * @version $Id: GenericLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -100,11 +100,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
 }
 
 
-// Delete this text and replace the below text with the name of the file
-// containing the testcase covering this class.  If this text is here
-// someone touching this file is poor software engineer.
-
-// The testcase for this class is TestGenericLifecycleStage.java 
+// The testcase for this class is TestLifecycleDriverImpl.java 
 
 
 } // end of class GenericLifecycleStage

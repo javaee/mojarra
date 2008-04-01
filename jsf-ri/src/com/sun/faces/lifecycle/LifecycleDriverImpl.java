@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:02 jvisvanathan Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:48 eburns Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ import javax.faces.EventContext;
 import javax.faces.FacesContext;
 import javax.faces.TreeNavigator;
 import javax.faces.LifecycleStage;
+import javax.faces.UIPage;
 
 /**
  *
@@ -52,7 +53,7 @@ import javax.faces.LifecycleStage;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:02 jvisvanathan Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -341,7 +342,7 @@ public void destroy()
 
 */
 
-public TreeNavigator wireUp(FacesContext ctx) throws IOException
+public TreeNavigator wireUp(FacesContext ctx, UIPage root) throws IOException
 {
     TreeNavigator result = null;
     RenderContext renderContext = ctx.getRenderContext();
@@ -352,7 +353,7 @@ public TreeNavigator wireUp(FacesContext ctx) throws IOException
 	objectManager.get(Constants.REF_TREEENGINE);
     Assert.assert_it(null != treeEng);
 
-    result = treeEng.getTreeForURI(renderContext, requestURI);
+    result = treeEng.getTreeForURI(renderContext, root, requestURI);
     if (null == result) {
 	throw new IOException("Can't get tree for: " + requestURI);
     }

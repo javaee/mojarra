@@ -1,5 +1,5 @@
 /*
- * $Id: RenderLifecycleStage.java,v 1.1 2002/03/13 18:04:22 eburns Exp $
+ * $Id: RenderLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: RenderLifecycleStage.java,v 1.1 2002/03/13 18:04:22 eburns Exp $
+ * @version $Id: RenderLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -116,7 +116,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
     response.addHeader("Expires:", "1");
 
     try {
-	renderWrapper.commenceRendering(request, eventContext.getResponse());
+	renderWrapper.commenceRendering(ctx, root);
 	result = true;
     }
     catch (Throwable e) {
@@ -128,11 +128,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
 }
 
 
-// Delete this text and replace the below text with the name of the file
-// containing the testcase covering this class.  If this text is here
-// someone touching this file is poor software engineer.
-
-// The testcase for this class is TestRenderLifecycleStage.java 
+// The testcase for this class is TestLifecycleDriverImpl.java 
 
 
 } // end of class RenderLifecycleStage

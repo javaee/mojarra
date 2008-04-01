@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngine.java,v 1.2 2002/03/08 22:16:09 eburns Exp $
+ * $Id: TreeEngine.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.UIComponent;
 import javax.faces.RenderContext;
 import javax.faces.TreeNavigator;
+import javax.faces.UIPage;
 
 /**
  *
@@ -29,7 +30,7 @@ import javax.faces.TreeNavigator;
 
  * There is one instance of this class per webapp. </P>
  *
- * @version $Id: TreeEngine.java,v 1.2 2002/03/08 22:16:09 eburns Exp $
+ * @version $Id: TreeEngine.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
  * 
  * @see	com.sun.faces.servlet.FacesFilter#init
  * @see	com.sun.faces.treebuilder.TreeBuilder
@@ -58,6 +59,7 @@ public interface TreeEngine
 
 */
 
-public TreeNavigator getTreeForURI(RenderContext rc, String requestURI);
+public TreeNavigator getTreeForURI(RenderContext rc, UIPage root, 
+				   String requestURI);
 
 } // end of interface TreeEngine

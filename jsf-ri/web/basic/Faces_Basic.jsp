@@ -37,29 +37,7 @@
               <td> <faces:Output_Text id="userLabel"  value="UserName" /> </td>
               <td> <faces:TextEntry_Input id="userName" 
                                           value="default" 
-                                          valueChangeListener="loginListener"  
-                                          required = "true"
-                                          lengthMinimum="1"
-                                          lengthMaximum="15" />
-              </td>
-            </tr>
-
-            <tr>
-              <td> <faces:Output_Text id="pinLabel"  value="Pin Number" /> </td>
-              <td> <faces:TextEntry_Input id="pin"
-                                          required = "true"
-                                          modelType ="java.lang.Integer"
-                                          rangeMinimum="1"
-                                          rangeMaximum="1000" />
-              </td>
-            </tr>
-
-            <tr>
-              <td> <faces:Output_Text id="dobLabel"  value="Date of Birth" /> </td>
-
-              <td> <faces:TextEntry_Input id="dob"
-                                          required = "true"
-                                          converter="DateValidator" />
+                                          valueChangeListener="loginListener" />
               </td>
             </tr>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.8 2002/01/17 02:17:05 edburns Exp $
+ * $Id: TestRenderKit.java,v 1.9 2002/03/15 23:29:50 eburns Exp $
  */
 
 /*
@@ -11,8 +11,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import junit.framework.TestCase;
-import org.apache.cactus.FilterTestCase;
+import com.sun.faces.FacesTestCase;
 
 import javax.servlet.http.HttpSession;
 
@@ -29,14 +28,14 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.8 2002/01/17 02:17:05 edburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.9 2002/03/15 23:29:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRenderKit extends FilterTestCase
+public class TestRenderKit extends FacesTestCase
 {
 //
 // Protected Constants

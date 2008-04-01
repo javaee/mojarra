@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:04 jvisvanathan Exp $
+ * $Id: TestLifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
  */
 
 /*
@@ -23,8 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import com.sun.faces.FacesTestCase;
+import com.sun.faces.FacesTestCase.FacesTestCasePage;
 import com.sun.faces.Page;
 import com.sun.faces.ParamBlockingRequestWrapper;
+import com.sun.faces.util.Util;
 
 import javax.faces.Constants;
 import javax.faces.ObjectManager;
@@ -34,6 +36,7 @@ import javax.faces.MessageFactory;
 import javax.faces.EventQueueFactory;
 import javax.faces.RenderContextFactory;
 import javax.faces.FacesContext;
+import javax.faces.UIPage;
 import com.sun.faces.EventContextFactory;
 import com.sun.faces.ObjectAccessorFactory;
 import com.sun.faces.NavigationHandlerFactory;
@@ -46,7 +49,7 @@ import com.sun.faces.treebuilder.TreeEngine;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleDriverImpl.java,v 1.2 2002/03/15 20:58:04 jvisvanathan Exp $
+ * @version $Id: TestLifecycleDriverImpl.java,v 1.3 2002/03/15 23:29:50 eburns Exp $
  * 
  * @see	javax.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -111,7 +114,7 @@ public void tearDown() {
 
 */ 
 
-public void commenceRendering(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+public void commenceRendering(FacesContext ctx, TreeNavigator treeNav) throws ServletException, IOException {
     commenceRenderingCalled = true;
 }
 
@@ -179,7 +182,7 @@ public void testLifecycle()
 {
     FacesContext facesContext  = null;
     commenceRenderingCalled = false;
-    Page page = null;
+    FacesTestCasePage page = null;
     TreeNavigator treeNav = null;
     HttpServletRequest wrapped = new ParamBlockingRequestWrapper(request);
 
@@ -199,18 +202,16 @@ public void testLifecycle()
     // Put the RenderWrapper in the OM request scope
     objectManager.put(wrapped, Constants.REF_RENDERWRAPPER, this);
 
-    page = new Page() {
-	    public void _jspService(HttpServletRequest request,
-				    HttpServletResponse response) 
-		throws ServletException, IOException { }
-	};
+    page = new FacesTestCasePage();
 
     try {
-	facesContext = page.createFacesContext(objectManager, wrapped, 
-					       response);
+	facesContext = page.testCallCreateFacesContext(objectManager, wrapped, 
+						       response);
 	assertTrue(null != facesContext);
+	UIPage root = new UIPage();
+	root.setId(Util.generateId());
 
-	treeNav = lifecycle.wireUp(facesContext);
+	treeNav = lifecycle.wireUp(facesContext, root);
 	assertTrue(null != treeNav);
 	
 	// This causes our _jspService() to be called via the

@@ -20,9 +20,7 @@
 Thank you for your purchase. 
 <br>
 <br>
-<faces:Form>
 <faces:Output_Text id='confirmOrder' value='Your order will be shipped on 01/11/2001' />
-</faces:Form>
 </font>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>

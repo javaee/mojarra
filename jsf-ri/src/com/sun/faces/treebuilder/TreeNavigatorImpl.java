@@ -1,5 +1,5 @@
 /*
- * $Id: TreeNavigatorImpl.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
+ * $Id: TreeNavigatorImpl.java,v 1.4 2002/03/15 23:29:49 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.TreeNavigator;
 
 /**
 
- * @version $Id: TreeNavigatorImpl.java,v 1.3 2002/03/13 18:04:25 eburns Exp $
+ * @version $Id: TreeNavigatorImpl.java,v 1.4 2002/03/15 23:29:49 eburns Exp $
  * 
  * @see	javax.faces.TreeNavigator
 
@@ -122,10 +122,6 @@ public UIComponent getNextStart() {
 		if (!iter.hasNext()) {
 		    // pop up a level
 		    startStack.pop();
-		    // done with traversal
-		    if (startStack.empty()) {
-			startTraversalDone = true;
-		    }
 		}
 	    }
 	}
@@ -133,11 +129,15 @@ public UIComponent getNextStart() {
 	    // we are done with this level.
 	    startStack.pop();
 	}
-	    
     }
-    Assert.assert_it(null != cur);
-    // make it so getNextEnd returns this.
-    endStack.push(cur);
+    // done with traversal
+    if (startStack.empty()) {
+	startTraversalDone = true;
+    }
+    if (null != cur) {
+	// make it so getNextEnd returns this.
+	endStack.push(cur);
+    }
 
     return cur;
 }

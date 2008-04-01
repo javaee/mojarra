@@ -1,5 +1,5 @@
 /*
- * $Id: TreeEngineImpl.java,v 1.2 2002/03/08 22:16:09 eburns Exp $
+ * $Id: TreeEngineImpl.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
  */
 
 /*
@@ -21,11 +21,12 @@ import org.apache.jasper_hacked.compiler.PreParser;
 import javax.faces.UIComponent;
 import javax.faces.RenderContext;
 import javax.faces.TreeNavigator;
+import javax.faces.UIPage;
 
 /**
  *
 
- * @version $Id: TreeEngineImpl.java,v 1.2 2002/03/08 22:16:09 eburns Exp $
+ * @version $Id: TreeEngineImpl.java,v 1.3 2002/03/15 23:29:49 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine
 
@@ -101,22 +102,23 @@ public String fixURI(String requestURI) {
 // General Methods
 //
 
-public TreeNavigator getTreeForURI(RenderContext rc, String requestURI) {
+public TreeNavigator getTreeForURI(RenderContext rc, UIPage root,
+				   String requestURI) {
     ParameterCheck.nonNull(rc);
+    ParameterCheck.nonNull(root);
+    ParameterCheck.nonNull(requestURI);
 
-    UIComponent root = null;
     TreeNavigator result = null;
 
     // PENDING(edburns): do something more intelligent than parsing the
     // page each time.  
     if ((null != requestURI) && requestURI.endsWith(".jsp")) {
 	requestURI = fixURI(requestURI);
-	TreeBuilder treeBuilder = new TreeBuilder(rc, requestURI);
+	TreeBuilder treeBuilder = new TreeBuilder(rc, root, requestURI);
 	preParser.addJspParseListener(treeBuilder);
 	preParser.preParse(requestURI);
 	preParser.removeJspParseListener(treeBuilder);
-	root = treeBuilder.getRoot();
-	// treeBuilder.printTree(root, System.out);
+	//treeBuilder.printTree(root, System.out);
 	if (null != root) {
 	    result = new TreeNavigatorImpl(root);
 	}
@@ -124,11 +126,7 @@ public TreeNavigator getTreeForURI(RenderContext rc, String requestURI) {
     return result;
 }
 
-// Delete this text and replace the below text with the name of the file
-// containing the testcase covering this class.  If this text is here
-// someone touching this file is poor software engineer.
-
-// The testcase for this class is TestTreeEngine.java 
+// The testcase for this class is TestTreebuilder.java 
 
 
 } // end of class TreeEngineImpl
