@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=31C6005799C5E200C9A60815F9075512">
+<FORM METHOD="post" ACTION="/test/faces/form/basicForm;jsessionid=60D54179727517C252F3E72302031574">
   <TABLE BORDER="1">
 
       <TR>
@@ -67,10 +67,7 @@
 
 	<TD>
 
-            
-
-                  
-                  <input type="checkbox"  name="/basicForm/validUser"><label for="validUser">Valid user ? </label>
+            <input type="checkbox"  name="/basicForm/validUser">
 	</TD>
 
       </TR>
@@ -92,13 +89,7 @@
                 
                 
 
-                
-
-              <table>
-<label for="appleQuantity"><tr><td>
-Option list from JSP </td></tr>
-</label><tr><td>
-<select name="/basicForm/appleQuantity" accesskey="N" size="6" tabindex="20" title="Select Quantity" >	<option value="0" disabled >0</option>
+              <select name="/basicForm/appleQuantity" accesskey="N" size="6" tabindex="20" title="Select Quantity" >	<option value="0" disabled >0</option>
 	<option value="1" title="One" >1</option>
 	<option value="2" title="Two" >2</option>
 	<option value="3" title="Three" >3</option>
@@ -108,9 +99,7 @@ Option list from JSP </td></tr>
 	<option value="7" title="Seven" >7</option>
 	<option value="8" title="Eight" >8</option>
 	<option value="9" title="nine" >9</option>
-</select></td></tr>
-</table>
-
+</select>
 
 	</TD>
 
@@ -126,21 +115,13 @@ Option list from JSP </td></tr>
                 
                 
 
-                
-
-              <table>
-<label for="shipType"><tr><td>
-Radio laid out horizontally </td></tr>
-</label><tr><td>
-<table border="0">
+              <table border="0">
 	<tr>
 <td><input type="radio" name="/basicForm/shipType" value="nextDay" tabindex="30" title="Next day shipment" > Next Day</td>
 <td><input type="radio" checked name="/basicForm/shipType" value="nextWeek" tabindex="40" title="Next week shipment" > Next Week</td>
 <td><input type="radio" name="/basicForm/shipType" value="nextMonth" tabindex="50" title="Next month shipment" > Next Month</td>
 	</tr>
-</table></td></tr>
 </table>
-
 
 	</TD>
 
@@ -155,8 +136,7 @@ Radio laid out horizontally </td></tr>
                 
                 
 
-                
-           <label for="verticalRadio">Radio laid out vertically </label><table border="1">
+           <table border="1">
 	<tr>
 <td><input type="radio" checked name="/basicForm/verticalRadio" value="nextDay"> Next Day</td>
 	<tr>
@@ -206,9 +186,7 @@ Radio laid out horizontally </td></tr>
 
       <tr>
           <td>
-                   
-                      
-                   <label for="testPattern">NUMBER-INPUT-PATTERN </label><input type="text" name="/basicForm/testPattern" id="testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" >
+                   <input type="text" name="/basicForm/testPattern" id="testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" >
               </td>
 
       </tr>
@@ -264,24 +242,7 @@ Radio laid out horizontally </td></tr>
 
              <td>
 
-               input_date MEDIUM readonly with PAGE_START label
-
-             </td>
-
-
-             <td>
-
-               
-
-                                
-
-               <table>
-<label for="input_date1"><tr><td>
-input_date MEDIUM readonly </td></tr>
-</label><tr><td>
-<input type="text" name="/basicForm/input_date1" id="input_date1" value="Jan 12, 1952" accesskey="D" alt="input_date MEDIUM readonly" maxlength="20" size="10" title="input_date MEDIUM readonly"  readonly ></td></tr>
-</table>
-
+               <input type="text" name="/basicForm/input_date1" id="input_date1" value="Jan 12, 1952" accesskey="D" alt="input_date MEDIUM readonly" maxlength="20" size="10" title="input_date MEDIUM readonly"  readonly >
 
 
              </td>
@@ -292,24 +253,17 @@ input_date MEDIUM readonly </td></tr>
 
              <td>
 
-               input_date MEDIUM with PAGE_END label
+               <input type="text" name="/basicForm/input_date2" id="input_date2" value="Jan 12, 1952" alt="input_date MEDIUM" title="input_date MEDIUM" >
 
              </td>
 
+            </tr>
+
+           <tr>
 
              <td>
 
-               
-
-                                
-
-               <table>
-<tr><td>
-<input type="text" name="/basicForm/input_date2" id="input_date2" value="Jan 12, 1952" alt="input_date MEDIUM" title="input_date MEDIUM" ></td></tr>
-<label for="input_date2"><tr><td>
-input_date MEDIUM </td></tr>
-</label></table>
-
+               <input type="text" name="/basicForm/input_date3" id="input_date3" value="01/12/1952" alt="input_date SHORT" title="input_date SHORT" >
 
 
              </td>
@@ -320,40 +274,7 @@ input_date MEDIUM </td></tr>
 
              <td>
 
-               input_date SHORT with LINE_START label
-
-             </td>
-
-
-             <td>
-
-               
-
-                                
-
-               <label for="input_date3">input_date SHORT </label><input type="text" name="/basicForm/input_date3" id="input_date3" value="01/12/1952" alt="input_date SHORT" title="input_date SHORT" >
-
-
-             </td>
-
-            </tr>
-
-           <tr>
-
-             <td>
-
-               input_date LONG with LINE_END label
-
-             </td>
-
-
-             <td>
-
-               
-
-                                
-
-               <input type="text" name="/basicForm/input_date4" id="input_date4" value="January 12, 1952" accesskey="d" alt="input_date LONG with LINE_END label" maxlength="40" size="20" title="input_date LONG with LINE_END label" ><label for="input_date4">input_date LONG </label>
+               <input type="text" name="/basicForm/input_date4" id="input_date4" value="January 12, 1952" accesskey="d" alt="input_date LONG" maxlength="40" size="20" title="input_date LONG" >
 
 
              </td>

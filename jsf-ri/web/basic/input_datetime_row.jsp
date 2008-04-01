@@ -3,7 +3,7 @@
              <td>
 
                <faces:output_text id="input_datetime1_label" 
-                     value="input_datetime MEDIUM readonly with PAGE_START label"/>
+                     value="input_datetime MEDIUM readonly"/>
 
              </td>
 
@@ -17,14 +17,8 @@
 
                                  size="10" maxlength="20"
                                  alt="input_datetime MEDIUM readonly"
-                                 accesskey="D" labelAlign="PAGE_START"
-                               title="input_datetime MEDIUM readonly">
-
-                                <faces:output_text 
-                                      id="input_datetime1_label_page_start" 
-                           value="input_datetime MEDIUM readonly"/>
-
-               </faces:input_datetime>
+                                 accesskey="D"
+                               title="input_datetime MEDIUM readonly"/>
 
 
              </td>
@@ -36,7 +30,7 @@
              <td>
 
                <faces:output_text id="input_datetime2_label" 
-                     value="input_datetime pattern with no label"/>
+                     value="input_datetime pattern"/>
 
              </td>
 

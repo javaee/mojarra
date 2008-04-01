@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.29 2002/08/22 00:00:21 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.30 2002/08/29 01:28:19 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.29 2002/08/22 00:00:21 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.30 2002/08/29 01:28:19 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -163,9 +163,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
         buffer.append(Util.renderPassthruAttributes(context, component));
         buffer.append(Util.renderBooleanPassthruAttributes(context, component));
         buffer.append(">");         
-        currentValue = this.renderWithLabel(context, component,
-            buffer.toString());
-        writer.write(currentValue);
+        writer.write(buffer.toString());
     }
 
 } // end of class SecretRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.5 2002/08/23 18:42:35 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.6 2002/08/29 01:28:18 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.5 2002/08/23 18:42:35 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.6 2002/08/29 01:28:18 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -259,8 +259,7 @@ public class NumberRenderer extends HtmlBasicRenderer {
 	    buffer.append(Util.renderBooleanPassthruAttributes(context, component));
 	    buffer.append(">");
 	    // overwrite currentValue
-	    currentValue = this.renderWithLabel(context, component, 
-						buffer.toString());
+	    currentValue = buffer.toString();
 	}
 
         ResponseWriter writer = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.32 2002/08/23 18:42:34 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.33 2002/08/29 01:28:17 eburns Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.32 2002/08/23 18:42:34 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.33 2002/08/29 01:28:17 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -161,12 +161,10 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
 	buffer.append(Util.renderBooleanPassthruAttributes(context, component));
         buffer.append(">");
         
-        String currentValue = this.renderWithLabel(context,component,buffer.toString());
-        
         ResponseWriter writer = null;
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-	writer.write(currentValue);
+	writer.write(buffer.toString());
     }
 
 } // end of class CheckboxRenderer

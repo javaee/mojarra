@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.32 2002/08/22 00:28:51 jvisvanathan Exp $
+ * $Id: Util.java,v 1.33 2002/08/29 01:28:23 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.32 2002/08/22 00:28:51 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.33 2002/08/29 01:28:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -537,31 +537,6 @@ private Util()
 	
 	return renderedText.toString();
     }
-
-    /**
- 
-    * @return true if the text in the current Locale reads from left to right.
-
-    */
-
-    public static boolean textReadsLeftToRight(FacesContext context, 
-					       UIComponent component) {
-	Locale curLocale = getLocaleFromContextOrComponent(context, component);
-	return true;
-    }
-
-    /**
- 
-    * @return true if the text in the current Locale reads from top to bottom.
-
-    */
-    
-    public static boolean textReadsTopToBottom(FacesContext context, 
-					       UIComponent component) {
-	Locale curLocale = getLocaleFromContextOrComponent(context, component);
-	return true;
-    }
-    
 
 //
 // General Methods

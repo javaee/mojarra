@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.6 2002/08/20 20:00:52 eburns Exp $
+ * $Id: DateRenderer.java,v 1.7 2002/08/29 01:28:18 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.6 2002/08/20 20:00:52 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.7 2002/08/29 01:28:18 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -247,8 +247,7 @@ public class DateRenderer extends HtmlBasicRenderer {
 	    buffer.append(Util.renderBooleanPassthruAttributes(context, component));
 	    buffer.append(">");
 	    // overwrite currentValue
-	    currentValue = this.renderWithLabel(context, component, 
-						buffer.toString());
+	    currentValue = buffer.toString();
 	}
 
         ResponseWriter writer = null;

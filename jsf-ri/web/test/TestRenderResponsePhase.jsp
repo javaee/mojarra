@@ -71,10 +71,7 @@
 
 	<TD>
 
-            <faces:selectboolean_checkbox id="validUser" labelAlign="LINE_END">
-
-                  <faces:output_text id="checkLabel" value="Valid user ?" />
-                  </faces:selectboolean_checkbox>
+            <faces:selectboolean_checkbox id="validUser" />
 	</TD>
 
       </TR>
@@ -84,7 +81,7 @@
 	<TD>
 
 	     <faces:selectone_optionlist id="appleQuantity" size="6"
-                     labelAlign="PAGE_START" title="Select Quantity"
+                     title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
                 <faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
@@ -98,8 +95,6 @@
                 <faces:selectitem  itemValue="8" itemLabel="8" title="Eight" />
                 <faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-                <faces:output_text id="quantityLabel" value="Option list from JSP" />
-
               </faces:selectone_optionlist>
 
 	</TD>
@@ -110,8 +105,7 @@
 
 	<TD>
 
-	    <faces:selectone_radiogroup id="shipType" layout="LINE_DIRECTION"
-                     labelAlign="PAGE_START">
+	    <faces:selectone_radiogroup id="shipType" layout="LINE_DIRECTION">
 
                 <faces:selectitem itemValue="nextDay" itemLabel="Next Day"
                       tabindex="30" title="Next day shipment"/>
@@ -119,8 +113,6 @@
                                   tabindex="40" selected="true" />
                 <faces:selectitem itemValue="nextMonth" itemLabel="Next Month"
                         tabindex="50" title="Next month shipment"/>
-
-                <faces:output_text id="shipmentLabel" value="Radio laid out horizontally" />
 
               </faces:selectone_radiogroup>
 
@@ -131,7 +123,7 @@
       <TR>
 
 	<TD>
-            <faces:selectone_radiogroup id="verticalRadio" labelAlign="LINE_START"
+            <faces:selectone_radiogroup id="verticalRadio" 
                                             layout="PAGE_DIRECTION" border="1" >
 
                 <faces:selectitem itemValue="nextDay" itemLabel="Next Day"
@@ -139,7 +131,6 @@
                 <faces:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
                 <faces:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
-                <faces:output_text id="verticalLabel" value="Radio laid out vertically" />
            </faces:selectone_radiogroup>
 
 	</TD>
@@ -185,10 +176,9 @@
 
       <tr>
           <td>
-                   <faces:input_number labelAlign="LINE_START" id="testPattern" formatPattern="####"
-                        value="9999.98765" size="3" maxlength="20" tabindex="2" accesskey="D">
-                      <faces:output_text id="patternLabel" value="NUMBER-INPUT-PATTERN" />
-                   </faces:input_number>
+                   <faces:input_number id="testPattern" formatPattern="####"
+                        value="9999.98765" size="3" maxlength="20" 
+                        tabindex="2" accesskey="D"/>
               </td>
 
       </tr>
@@ -252,27 +242,13 @@
 
              <td>
 
-               <faces:output_text id="input_date1_label" 
-                     value="input_date MEDIUM readonly with PAGE_START label"/>
-
-             </td>
-
-
-             <td>
-
                <faces:input_date id="input_date1" dateStyle="MEDIUM"
                                  value="Jan 12, 1952" 
                                  readonly="true"
                                  size="10" maxlength="20"
                                  alt="input_date MEDIUM readonly"
-                                 accesskey="D" labelAlign="PAGE_START"
-                               title="input_date MEDIUM readonly">
-
-                                <faces:output_text 
-                                      id="input_date1_label_page_start" 
-                           value="input_date MEDIUM readonly"/>
-
-               </faces:input_date>
+                                 accesskey="D" 
+                               title="input_date MEDIUM readonly"/>
 
 
              </td>
@@ -280,57 +256,26 @@
             </tr>
 
            <tr>
-
-             <td>
-
-               <faces:output_text id="input_date2_label" 
-                     value="input_date MEDIUM with PAGE_END label"/>
-
-             </td>
-
 
              <td>
 
                <faces:input_date id="input_date2" dateStyle="MEDIUM"
                                  value="Jan 12, 1952" 
                                  alt="input_date MEDIUM"
-                                 labelAlign="PAGE_END"
-                                  title="input_date MEDIUM">
-
-                                <faces:output_text 
-                                      id="input_date2_label_page_end" 
-                           value="input_date MEDIUM"/>
-
-               </faces:input_date>
-
+                                  title="input_date MEDIUM"/>
 
              </td>
 
             </tr>
 
            <tr>
-
-             <td>
-
-               <faces:output_text id="input_date3_label" 
-                     value="input_date SHORT with LINE_START label"/>
-
-             </td>
-
 
              <td>
 
                <faces:input_date id="input_date3" dateStyle="SHORT"
                                  value="01/12/1952" 
                                  alt="input_date SHORT"
-                                 labelAlign="LINE_START"
-                                  title="input_date SHORT">
-
-                                <faces:output_text 
-                                      id="input_date3_label_line_start" 
-                           value="input_date SHORT"/>
-
-               </faces:input_date>
+                                  title="input_date SHORT"/>
 
 
              </td>
@@ -341,27 +286,12 @@
 
              <td>
 
-               <faces:output_text id="input_date4_label" 
-                     value="input_date LONG with LINE_END label"/>
-
-             </td>
-
-
-             <td>
-
                <faces:input_date id="input_date4" dateStyle="LONG" 
                                  value="January 12, 1952" 
                                  size="20" maxlength="40"
-                                 alt="input_date LONG with LINE_END label"
+                                 alt="input_date LONG"
                                  accesskey="d"
-                               title="input_date LONG with LINE_END label"
-                                 labelAlign="LINE_END">
-
-                                <faces:output_text 
-                                      id="input_date4_label_line_end" 
-                           value="input_date LONG"/>
-
-               </faces:input_date>
+                               title="input_date LONG"/>
 
 
              </td>

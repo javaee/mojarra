@@ -191,12 +191,11 @@
              </tr>
 
               <tr>
-             <td> <faces:selectboolean_checkbox id="validUser" labelAlign="LINE_END">
-
+             <td> <faces:selectboolean_checkbox id="validUser" /> 
                   <faces:output_text id="checkLabel" 
                                      key="validUserLabel"
                                                 bundle="${basicBundle}"/>
-                  </faces:selectboolean_checkbox>
+
                   </td>
              </tr>
 
@@ -235,16 +234,15 @@
 
          <TD>
 
-	      <faces:selectone_optionlist id="OptionList"  labelAlign="PAGE_START"
+	      <faces:selectone_optionlist id="OptionList" 
                              modelReference="${LoginBean.currentOption}">
-
-                <faces:output_text id="optionLabel" 
-                   value="OptionList with Kinds of Beans from Model Object" />
 
 		<faces:selectitems id="optionListOptions"
                                    modelReference="${LoginBean.options}"/>
 
 	      </faces:selectone_optionlist>
+                <faces:output_text id="optionLabel" 
+                   value="OptionList with Kinds of Beans from Model Object" />
 
 	</TD>
 
@@ -256,7 +254,7 @@
 	<TD>
 
 	      <faces:selectone_optionlist id="appleQuantity" size="6"
-                     labelAlign="PAGE_START" title="Select Quantity" 
+                     title="Select Quantity" 
                      accesskey="N" tabindex="20" >
 
 		<faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
@@ -270,10 +268,9 @@
 		<faces:selectitem  itemValue="8" itemLabel="8" title="Eight" />
 		<faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
 
-                <faces:output_text id="quantityLabel" value="Option list from JSP" />
-
 	      </faces:selectone_optionlist>
 
+               <faces:output_text id="quantityLabel" value="Option list from JSP" />
 	</TD>
 
       </TR>
@@ -282,8 +279,7 @@
 
 	<TD>
 
-	      <faces:selectone_radiogroup id="shipType" layout="LINE_DIRECTION" 
-                     labelAlign="PAGE_START">
+	      <faces:selectone_radiogroup id="shipType" layout="LINE_DIRECTION" >
 
 		<faces:selectitem itemValue="nextDay" itemLabel="Next Day" 
                       tabindex="30" title="Next day shipment"/>
@@ -292,9 +288,9 @@
 		<faces:selectitem itemValue="nextMonth" itemLabel="Next Month" 
                         tabindex="50" title="Next month shipment"/>
  
+              </faces:selectone_radiogroup>
                 <faces:output_text id="shipmentLabel" value="Radio laid out horizontally" />
 
-              </faces:selectone_radiogroup>
 
 	</TD>
 
@@ -303,22 +299,19 @@
       <TR>
 
 	<TD>
-		<faces:selectone_radiogroup id="verticalRadio" labelAlign="LINE_START"
-                                            layout="PAGE_DIRECTION" border="1" >
+		<faces:selectone_radiogroup id="verticalRadio" layout="PAGE_DIRECTION" border="1" >
 
   		<faces:selectitem itemValue="nextDay" itemLabel="Next Day" 
                                   selected="true" />
 		<faces:selectitem itemValue="nextWeek" itemLabel="Next Week"  />
 		<faces:selectitem itemValue="nextMonth" itemLabel="Next Month" />
 
-                <faces:output_text id="verticalLabel" value="Radio laid out vertically" />
                 </faces:selectone_radiogroup>
 
+                <faces:output_text id="verticalLabel" value="Radio laid out vertically" />
 	</TD>
 
       </TR>
-<<<<<<< variant A
->>>>>>> variant B
 
       <TR>
 
@@ -326,21 +319,18 @@
 
 	      <faces:selectone_radiogroup id="radioFromModel" 
                        modelReference="${LoginBean.currentOption}"
-                       layout="LINE_DIRECTION" labelAlign="PAGE_END" >
+                       layout="LINE_DIRECTION" >
 
 		<faces:selectitems id="optionListOptions"
                                    title="options come from model" 
                                    modelReference="${LoginBean.options}"/>
 
-               <faces:output_text id="modelLabel" value="Above options come from model " />
-
               </faces:selectone_radiogroup>
+              <faces:output_text id="modelLabel" value="Above options come from model " />
 
 	</TD>
 
       </TR>
-
-======= end
 
       <TR>
         <TD><faces:output_text id="graphicLabel" value="Graphic Image: " /></TD>

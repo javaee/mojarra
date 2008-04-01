@@ -3,7 +3,7 @@
              <td>
 
                <faces:output_text id="input_time1_label" 
-                     value="input_time MEDIUM readonly with LINE_START label"/>
+                     value="input_time MEDIUM readonly"/>
 
              </td>
 
@@ -16,14 +16,8 @@
 
                                  size="10" maxlength="20"
                                  alt="input_time MEDIUM readonly"
-                                 accesskey="D" labelAlign="LINE_START"
-                               title="input_time MEDIUM readonly">
-
-                                <faces:output_text 
-                                      id="input_time1_label_line_start" 
-                           value="input_time MEDIUM readonly"/>
-
-               </faces:input_time>
+                                 accesskey="D" 
+                               title="input_time MEDIUM readonly"/>
 
 
              </td>
@@ -35,7 +29,7 @@
              <td>
 
                <faces:output_text id="input_time2_label" 
-                     value="input_time LONG with no label"/>
+                     value="input_time LONG "/>
 
              </td>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.31 2002/08/23 18:42:36 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.32 2002/08/29 01:28:20 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.31 2002/08/23 18:42:36 jvisvanathan Exp $
+ * @version $Id: TextRenderer.java,v 1.32 2002/08/29 01:28:20 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -174,9 +174,7 @@ public class TextRenderer extends HtmlBasicRenderer {
             buffer.append(Util.renderBooleanPassthruAttributes(context, 
                 component));
             buffer.append(">");            
-            currentValue = this.renderWithLabel(context, component,
-                                                buffer.toString());
-            writer.write(currentValue);
+            writer.write(buffer.toString());
         } else if (UIOutput.TYPE == component.getComponentType()) {
             if (currentValue == null || currentValue == "") {
                 try {
@@ -189,22 +187,7 @@ public class TextRenderer extends HtmlBasicRenderer {
                 }
             }
 
-	    // find out if we're nested inside a UIInput, UISelectOne, UISelectMany
-            // UISelectBoolean.
-            // if we are, set the RENDERED_CONTENT attribute which will 
-            // be written out (assembled) in the super class (HtmlBasicRenderer)
-            // if we are not nested, then simply write out the info...
-            if (component.getParent().getComponentType() == UIInput.TYPE ||
-                component.getParent().getComponentType() == UISelectBoolean.TYPE
-                || component.getParent().getComponentType() == UISelectOne.TYPE
-                || component.getParent().getComponentType() == UISelectMany.TYPE){
-	        // if so, save our content in the
-	        // RIConstants.RENDERED_CONTENT attribute
-	        component.setAttribute(RIConstants.RENDERED_CONTENT, 
-				   currentValue);
-	    } else {
-                writer.write(currentValue);
-            }
+	    writer.write(currentValue);
         }
 
     }

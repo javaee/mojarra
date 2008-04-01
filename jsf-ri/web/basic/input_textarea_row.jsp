@@ -3,7 +3,7 @@
              <td>
 
                <faces:output_text id="input_textarea1_label" 
-                     value="input_textarea readonly with PAGE_START label"/>
+                     value="input_textarea readonly "/>
 
              </td>
 
@@ -15,14 +15,8 @@
                                  readonly="true"
                                  rows="5" cols="20"
                                  alt="input_textarea readonly"
-                                 accesskey="D" labelAlign="PAGE_START" 
-                                 title="input_textarea readonly">
-
-                                <faces:output_text 
-                                      id="input_textarea1_label_page_start" 
-                           value="input_textarea readonly"/>
-
-               </faces:input_textarea>
+                                 accesskey="D" 
+                                 title="input_textarea readonly"/>
 
 
              </td>
@@ -34,7 +28,7 @@
              <td>
 
                <faces:output_text id="input_textarea2_label" 
-                     value="input_textarea with PAGE_END label"/>
+                     value="input_textarea"/>
 
              </td>
 
@@ -44,14 +38,7 @@
                <faces:input_textarea id="input_textarea2"
                                  rows="5" cols="20"
                                  alt="input_textarea"
-                                 labelAlign="PAGE_END"
-                                  title="input_textarea">
-
-                                <faces:output_text 
-                                      id="input_textarea2_label_page_end" 
-                           value="input_textarea"/>
-
-               </faces:input_textarea>
+                                  title="input_textarea"/>
 
 
              </td>
@@ -70,7 +57,7 @@
              <td>
 
                <faces:output_text id="input_textarea3_label" 
-                     value="input_textarea with LINE_START label"/>
+                     value="input_textarea"/>
 
              </td>
 
@@ -80,14 +67,7 @@
                <faces:input_textarea id="input_textarea3"
                                  rows="5" cols="20"
                                  alt="input_textarea"
-                                 labelAlign="LINE_START"
-                                  title="input_textarea">
-
-                                <faces:output_text 
-                                      id="input_textarea3_label_line_start" 
-                           value="input_textarea"/>
-
-               </faces:input_textarea>
+                                  title="input_textarea"/>
 
 
              </td>
@@ -106,7 +86,7 @@
              <td>
 
                <faces:output_text id="input_textarea4_label" 
-                     value="input_textarea with LINE_END label"/>
+                     value="input_textarea"/>
 
              </td>
 
@@ -115,16 +95,9 @@
 
                <faces:input_textarea id="input_textarea4" 
                                  rows="5" cols="20"
-                                 alt="input_textarea with LINE_END label"
+                                 alt="input_textarea"
                                  accesskey="d"
-                               title="input_textarea with LINE_END label"
-                                 labelAlign="LINE_END">
-
-                                <faces:output_text 
-                                      id="input_textarea4_label_line_end" 
-                           value="input_textarea"/>
-
-               </faces:input_textarea>
+                               title="input_textarea"/>
 
 
              </td>

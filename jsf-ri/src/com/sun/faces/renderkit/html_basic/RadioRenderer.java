@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.30 2002/08/29 00:28:04 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.31 2002/08/29 01:28:19 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.30 2002/08/29 00:28:04 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.31 2002/08/29 01:28:19 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -185,7 +185,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	if (!alignVertical) {
 	    buffer.append("\t<tr>\n");
 	}
-        // PENDING (visvan) handle nested labels
+
 	while (items.hasNext()) {
 	    curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
@@ -225,12 +225,10 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	}
 	buffer.append("</table>");
         
-        currentValue = this.renderWithLabel(context,component,buffer.toString());
-        
         ResponseWriter writer = null;
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-	writer.write(currentValue);
+	writer.write(buffer.toString());
     }
 
 } // end of class RadioRenderer
