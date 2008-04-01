@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.1 2002/05/29 20:43:58 rkitain Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.2 2002/05/31 20:26:44 rkitain Exp $
  */
 
 /*
@@ -85,7 +85,8 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
     /**
      * Return a {@link RenderKit} instance for the given render
      * kit identifier.  If a {@link RenderKit} instance does not
-     * exist for the identifier, create one.
+     * exist for the identifier, create one and add it to the
+     * internal table.
      *
      * @param renderKitId A RenderKit identifier.
      * @returns RenderKit A RenderKit instance.
@@ -138,6 +139,12 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
         } catch (IllegalAccessException ia) {
             throw new RuntimeException("Illegal Access Exception:"+
                 ia.getMessage());
+        }
+
+        // Add the newly created renderkit to the table.
+        //
+        synchronized(renderKits) {
+            renderKits.put(renderKitId, renderKit);
         }
 
         return renderKit;
