@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.10 2002/01/10 22:20:10 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.11 2002/01/10 22:32:48 edburns Exp $
  */
 
 
@@ -22,7 +22,7 @@ import javax.faces.OutputMethod;
 import javax.faces.ObjectManager;
 import javax.faces.RenderContext;
 import javax.faces.RenderKit;
-import javax.faces.WComponent;
+import javax.faces.UIComponent;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.ServletRequest;
@@ -37,7 +37,7 @@ import java.util.Stack;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.10 2002/01/10 22:20:10 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.11 2002/01/10 22:32:48 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,26 +131,26 @@ public HttpSession getSession() {
     return session;
 }
 
-public WComponent peekAtAncestor(int level) {
-    WComponent c;
+public UIComponent peekAtAncestor(int level) {
+    UIComponent c;
     try {
-        c = (WComponent)stack.get(level);
+        c = (UIComponent)stack.get(level);
         return c;
     } catch (ArrayIndexOutOfBoundsException e) {
         return null;
     }
 }
 
-public void pushChild(WComponent c){
+public void pushChild(UIComponent c){
     stack.push(c);
 }
 
-public WComponent popChild() {
-    WComponent c;
+public UIComponent popChild() {
+    UIComponent c;
     if (stack.empty()) {
         return null;
     } else { 
-        c = (WComponent)stack.pop();
+        c = (UIComponent)stack.pop();
         return c;
     }
 }

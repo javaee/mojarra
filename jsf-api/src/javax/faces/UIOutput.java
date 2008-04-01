@@ -1,5 +1,5 @@
 /*
- * $Id: WOutput.java,v 1.6 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UIOutput.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import java.util.Hashtable;
  * output to the user.  This component type is not interactive -
  * a user cannot directly manipulate this component.
  */
-public class WOutput extends WComponent {
+public class UIOutput extends UIComponent {
 
     private static String TYPE = "Output";
     private Object value = null;

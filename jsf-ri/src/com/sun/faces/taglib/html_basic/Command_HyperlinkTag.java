@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.11 2002/01/10 22:20:11 edburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.12 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WCommand;
-import javax.faces.WForm;
+import javax.faces.UICommand;
+import javax.faces.UIForm;
 import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
@@ -34,7 +34,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.11 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.12 2002/01/10 22:32:50 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,10 +129,10 @@ public class Command_HyperlinkTag extends TagSupport
 
             // 1. Get or create the component instance.
             //
-            WCommand wCommand = 
-                (WCommand) objectManager.get(pageContext.getRequest(), target);
+            UICommand wCommand = 
+                (UICommand) objectManager.get(pageContext.getRequest(), target);
             if ( wCommand == null ) {
-                wCommand = new WCommand();
+                wCommand = new UICommand();
             }
             wCommand.setAttribute(renderContext, "target", getTarget());
             wCommand.setAttribute(renderContext, "image", getImage());
@@ -173,7 +173,7 @@ public class Command_HyperlinkTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WCommand wCommand = (WCommand) objectManager.get(pageContext.getRequest(), target);
+        UICommand wCommand = (UICommand) objectManager.get(pageContext.getRequest(), target);
         Assert.assert_it( wCommand != null );
 
         // Complete the rendering process

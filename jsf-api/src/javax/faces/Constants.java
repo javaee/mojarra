@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.9 2002/01/10 22:16:31 edburns Exp $
+ * $Id: Constants.java,v 1.10 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -56,34 +56,34 @@ public class Constants {
         "faces.RenderContextFactory";
 
     /**
-     * The component type name for 'WCommand' components.
+     * The component type name for 'UICommand' components.
      */
-    public static final String REF_WCOMMAND = "WCommand";
+    public static final String REF_UICOMMAND = "UICommand";
 
     /**
-     * The component type name for 'WForm' components.
+     * The component type name for 'UIForm' components.
      */
-    public static final String REF_WFORM = "WForm";
+    public static final String REF_UIFORM = "UIForm";
 
     /**
-     * The component type name for 'WOutput' components.
+     * The component type name for 'UIOutput' components.
      */
-    public static final String REF_WOUTPUT = "WOutput";
+    public static final String REF_UIOUTPUT = "UIOutput";
 
     /**
-     * The component type name for 'WSelectBoolean' components.
+     * The component type name for 'UISelectBoolean' components.
      */
-    public static final String REF_WSELECTBOOLEAN = "WSelectBoolean";
+    public static final String REF_UISELECTBOOLEAN = "UISelectBoolean";
 
     /**
-     * The component type name for 'WSelectOne' components.
+     * The component type name for 'UISelectOne' components.
      */
-    public static final String REF_WSELECTONE = "WSelectOne";
+    public static final String REF_UISELECTONE = "UISelectOne";
 
     /**
-     * The component type name for 'WTextEntry' components.
+     * The component type name for 'UITextEntry' components.
      */
-    public static final String REF_WTEXTENTRY = "WTextEntry";
+    public static final String REF_UITEXTENTRY = "UITextEntry";
 
     /**
      * Name for listeners

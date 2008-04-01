@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.13 2002/01/10 22:20:12 edburns Exp $
+ * $Id: TextEntry_InputTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WTextEntry;
+import javax.faces.UITextEntry;
 import javax.faces.ObjectManager;
 
 import java.util.Vector;
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.13 2002/01/10 22:20:12 edburns Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -112,7 +112,7 @@ public class TextEntry_InputTag extends TagSupport
 
             // 1. Get or create the component instance.
             //
-            WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
+            UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot); 
@@ -153,7 +153,7 @@ public class TextEntry_InputTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
+        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
         Assert.assert_it( c != null );
 
         // Complete the rendering process
@@ -190,10 +190,10 @@ public class TextEntry_InputTag extends TagSupport
     /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WTextEntry c, ObjectManager ot) {
+    public void addToScope(UITextEntry c, ObjectManager ot) {
     
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -226,9 +226,9 @@ public class TextEntry_InputTag extends TagSupport
      *
      * @param rc renderContext client information
      */
-    protected WTextEntry createComponent(RenderContext rc) throws
+    protected UITextEntry createComponent(RenderContext rc) throws
             JspException {
-        WTextEntry c = new WTextEntry();
+        UITextEntry c = new UITextEntry();
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
         c.setAttribute(rc, "size", size);

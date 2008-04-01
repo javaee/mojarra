@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListener.java,v 1.3 2001/12/20 22:25:46 ofung Exp $
+ * $Id: ValueChangeListener.java,v 1.4 2002/01/10 22:32:23 edburns Exp $
  */
 
 /*
@@ -16,9 +16,9 @@ import java.util.EventListener;
  * An object should implement this interface if it needs
  * to respond when a value is changed on a component.
  *
- * @see WSelectBoolean#addValueChangeListener
- * @see WSelectOne#addValueChangeListener
- * @see WTextEntry#addValueChangeListener
+ * @see UISelectBoolean#addValueChangeListener
+ * @see UISelectOne#addValueChangeListener
+ * @see UITextEntry#addValueChangeListener
  */
 public interface ValueChangeListener extends EventListener {
     /**

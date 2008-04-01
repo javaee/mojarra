@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.11 2001/12/20 22:26:39 ofung Exp $
+ * $Id: FormRenderer.java,v 1.12 2002/01/10 22:32:48 edburns Exp $
  */
 
 /*
@@ -22,8 +22,8 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
-import javax.faces.WForm;
-import javax.faces.WComponent;
+import javax.faces.UIForm;
+import javax.faces.UIComponent;
 
 import javax.servlet.http.HttpSession;
 
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.11 2001/12/20 22:26:39 ofung Exp $
+ * @version $Id: FormRenderer.java,v 1.12 2002/01/10 22:32:48 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,24 +106,24 @@ public class FormRenderer extends Object implements Renderer
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals(Constants.REF_WFORM)) {
+        if ( componentType.equals(Constants.REF_UIFORM)) {
             supports = true;
         }
         return supports;
     }
 
-    public boolean supportsType(WComponent c) {
+    public boolean supportsType(UIComponent c) {
 
         ParameterCheck.nonNull(c);
         boolean supports= false;
-        if ( c instanceof WForm ) {
+        if ( c instanceof UIForm ) {
             supports = true;
         }
         return supports;
     }
 
 
-    public void renderStart(RenderContext rc, WComponent c ) 
+    public void renderStart(RenderContext rc, UIComponent c ) 
         throws IOException, FacesException {
 
         // render the form
@@ -133,11 +133,11 @@ public class FormRenderer extends Object implements Renderer
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
         
-        WForm form = null; 
+        UIForm form = null; 
         if ( supportsType(c)) {
-            form = (WForm) c;
+            form = (UIForm) c;
         } else {
-            throw new FacesException("Invalid component type. Expected WForm");
+            throw new FacesException("Invalid component type. Expected UIForm");
         }
         StringBuffer out = new StringBuffer();
         out.append("<FORM METHOD=\"POST\" ");
@@ -152,11 +152,11 @@ public class FormRenderer extends Object implements Renderer
     }
 
     public void renderChildren(RenderContext rc, 
-            WComponent c) throws IOException {
+            UIComponent c) throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, WComponent c )
+    public void renderComplete(RenderContext rc, UIComponent c )
             throws IOException, FacesException {
         // render the form
         OutputMethod outputMethod = rc.getOutputMethod();

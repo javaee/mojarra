@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.12 2001/12/20 22:26:40 ofung Exp $
+ * $Id: TextRenderer.java,v 1.13 2002/01/10 22:32:49 edburns Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
-import javax.faces.WOutput;
-import javax.faces.WComponent;
+import javax.faces.UIOutput;
+import javax.faces.UIComponent;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.12 2001/12/20 22:26:40 ofung Exp $
+ * @version $Id: TextRenderer.java,v 1.13 2002/01/10 22:32:49 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,17 +101,17 @@ public class TextRenderer extends Object implements Renderer
     }
 
 
-    public void renderStart(RenderContext rc, WComponent c )
+    public void renderStart(RenderContext rc, UIComponent c )
         throws IOException, FacesException { 
 
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
 
-        WOutput label = null;
+        UIOutput label = null;
         if ( supportsType(c)) {
-            label = (WOutput) c;
+            label = (UIOutput) c;
         } else {
-            throw new FacesException("Invalid component type. Expected WOutput");
+            throw new FacesException("Invalid component type. Expected UIOutput");
         }
         String text = (String) label.getValue(rc);
         if ( text != null ) { 
@@ -125,12 +125,12 @@ public class TextRenderer extends Object implements Renderer
         return;
     }
 
-    public void renderChildren(RenderContext rc, WComponent c) 
+    public void renderChildren(RenderContext rc, UIComponent c) 
             throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, WComponent c) 
+    public void renderComplete(RenderContext rc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }
@@ -138,16 +138,16 @@ public class TextRenderer extends Object implements Renderer
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals(Constants.REF_WOUTPUT)) {
+        if ( componentType.equals(Constants.REF_UIOUTPUT)) {
             supports = true;
         }
         return supports;
     }
     
-    public boolean supportsType(WComponent c) {
+    public boolean supportsType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
-        if ( c instanceof WOutput ) {
+        if ( c instanceof UIOutput ) {
             supports = true;
         }
         return supports;

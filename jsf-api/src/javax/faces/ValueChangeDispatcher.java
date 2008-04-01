@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeDispatcher.java,v 1.3 2001/12/20 22:25:46 ofung Exp $
+ * $Id: ValueChangeDispatcher.java,v 1.4 2002/01/10 22:32:23 edburns Exp $
  */
 
 /*
@@ -18,9 +18,9 @@ import java.util.EventObject;
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @see WSelectBoolean#addValueChangeListener
- * @see WSelectOne#addValueChangeListener
- * @see WTextEntry#addValueChangeListener
+ * @see UISelectBoolean#addValueChangeListener
+ * @see UISelectOne#addValueChangeListener
+ * @see UITextEntry#addValueChangeListener
  */
 public class ValueChangeDispatcher implements EventDispatcher {
 

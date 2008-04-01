@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.7 2001/12/20 22:25:45 ofung Exp $
+ * $Id: Renderer.java,v 1.8 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import java.util.Iterator;
  * <p>
  * A renderer object can support the rendering of one or more 
  * component types.  It defines the set of component types it
- * supports by providing methods which take either a WComponent
+ * supports by providing methods which take either a UIComponent
  * instance or component-type String and returns a boolean value
  * indicating whether it supports that type or not.
  * <p>
@@ -31,7 +31,7 @@ import java.util.Iterator;
  * supported attributes.
  *<p>
  * A renderer should be stateless, deriving all appropriate 
- * state for rendering from the WComponent parameter.
+ * state for rendering from the UIComponent parameter.
  *
  */
 
@@ -44,7 +44,7 @@ public interface Renderer {
      * @return a boolean value indicating whether or not the specified
      *         component type can be rendered by this renderer
      */
-    public boolean supportsType(WComponent c);
+    public boolean supportsType(UIComponent c);
 
     /**
      * This method is used to determine whether or not the specified
@@ -101,17 +101,17 @@ public interface Renderer {
      * is obtained by first looking for a component-specific value
      * using c.getAttribute() and if not set directly on the component,
      * using the default value of that attribute defined by this renderer. 
-     * @see WComponent#render
-     * @see WComponent#getAttribute
+     * @see UIComponent#render
+     * @see UIComponent#getAttribute
      * @param rc the render context used to render the specified component
-     * @param c the WComponent instance representing the component state
+     * @param c the UIComponent instance representing the component state
      *          being rendered
      * @throws IOException
      * @throws FacesException if the specified componentType is not
      *         supported by this renderer
      * @throws NullPointerException if rc or c is null
      */
-    public void renderStart(RenderContext rc, WComponent c) 
+    public void renderStart(RenderContext rc, UIComponent c) 
         throws IOException, FacesException;
 
     /**
@@ -124,27 +124,27 @@ public interface Renderer {
      * each child.  If the specified component type returns =
 <code>false</code>
      * from getPerformsLayout() then this method should do nothing.
-     * @see WComponent#renderAll
-     * @see WComponent#renderChildren
+     * @see UIComponent#renderAll
+     * @see UIComponent#renderChildren
      * @param rc the render context used to render the specified component
-     * @param c the WComponent instance representing the component state
+     * @param c the UIComponent instance representing the component state
      *          being rendered
      * @throws IOException
      * @throws NullPointerException if rc or c is null
      */ 
-    public void renderChildren(RenderContext rc, WComponent c) throws IOException;
+    public void renderChildren(RenderContext rc, UIComponent c) throws IOException;
 
     /**
      * Invoked after all of the specified component's descendents have
      * been rendered. 
-     * @see WComponent#renderComplete
+     * @see UIComponent#renderComplete
      * @param rc the render context used to render the specified component
-     * @param c the WComponent instance representing the component state
+     * @param c the UIComponent instance representing the component state
      *          being rendered
      * @throws IOException
      * @throws NullPointerException if rc or c is null
      */
-    public void renderComplete(RenderContext rc, WComponent c) throws IOException, FacesException;
+    public void renderComplete(RenderContext rc, UIComponent c) throws IOException, FacesException;
 
  }
 

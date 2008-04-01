@@ -1,5 +1,5 @@
 /*
- * $Id: OptionRenderer.java,v 1.2 2001/12/20 22:26:40 ofung Exp $
+ * $Id: OptionRenderer.java,v 1.3 2002/01/10 22:32:49 edburns Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
-import javax.faces.WComponent;
-import javax.faces.WSelectOne;
+import javax.faces.UIComponent;
+import javax.faces.UISelectOne;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionRenderer.java,v 1.2 2001/12/20 22:26:40 ofung Exp $
+ * @version $Id: OptionRenderer.java,v 1.3 2002/01/10 22:32:49 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,10 +84,10 @@ public class OptionRenderer extends Object implements Renderer {
     // Methods From Renderer
     //
 
-    public boolean supportsType(WComponent c) {
+    public boolean supportsType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
-        if ( c instanceof WSelectOne ) {
+        if ( c instanceof UISelectOne ) {
             supports = true;
         }
         return supports;
@@ -96,7 +96,7 @@ public class OptionRenderer extends Object implements Renderer {
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals(Constants.REF_WSELECTONE)) {
+        if ( componentType.equals(Constants.REF_UISELECTONE)) {
             supports = true;
         }
         return supports;
@@ -116,18 +116,18 @@ public class OptionRenderer extends Object implements Renderer {
     }
 
 
-    public void renderStart(RenderContext rc, WComponent c) 
+    public void renderStart(RenderContext rc, UIComponent c) 
         throws IOException, FacesException {
 
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
  
-        WSelectOne wSelectOne = null;
+        UISelectOne wSelectOne = null;
         if ( supportsType(c)) {
-            wSelectOne = (WSelectOne) c;
+            wSelectOne = (UISelectOne) c;
         } else {
             throw new FacesException("Invalid component type. " +
-                      "Expected WSelectOne");
+                      "Expected UISelectOne");
         }
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
@@ -150,17 +150,17 @@ public class OptionRenderer extends Object implements Renderer {
         outputMethod.flush();
     }
 
-    public void renderChildren(RenderContext rc, WComponent c) 
+    public void renderChildren(RenderContext rc, UIComponent c) 
         throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, WComponent c) 
+    public void renderComplete(RenderContext rc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }
 
-    public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
+    public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
         return false;
     }
 

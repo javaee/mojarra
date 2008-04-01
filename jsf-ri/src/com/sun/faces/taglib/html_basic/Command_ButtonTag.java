@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WCommand;
-import javax.faces.WForm;
+import javax.faces.UICommand;
+import javax.faces.UIForm;
 import javax.faces.ObjectManager;
 
 import java.util.Vector;
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -201,10 +201,10 @@ public class Command_ButtonTag extends TagSupport {
 
             // 1. Get or create the component instance.
             //
-            WCommand wCommand = 
-                (WCommand) objectManager.get(pageContext.getRequest(), name);
+            UICommand wCommand = 
+                (UICommand) objectManager.get(pageContext.getRequest(), name);
             if ( wCommand == null ) {
-                wCommand = new WCommand();
+                wCommand = new UICommand();
                 addToScope(wCommand, objectManager);
             }
             wCommand.setAttribute(renderContext, "name", getName());
@@ -246,7 +246,7 @@ public class Command_ButtonTag extends TagSupport {
 //PENDING(rogerk)can we eliminate this extra get if wCommand is instance
 //variable? If so, threading issue?
 //
-        WCommand wCommand = (WCommand) objectManager.get(pageContext.getRequest(), name);
+        UICommand wCommand = (UICommand) objectManager.get(pageContext.getRequest(), name);
         Assert.assert_it( wCommand != null );
 
         // Complete the rendering process
@@ -283,10 +283,10 @@ public class Command_ButtonTag extends TagSupport {
     /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param objectManager Object pool
      */
-    public void addToScope(WCommand c, ObjectManager objectManager) {
+    public void addToScope(UICommand c, ObjectManager objectManager) {
    
         Vector listeners = null; 
         // PENDING ( visvan ) right now, we are not saving the state of the

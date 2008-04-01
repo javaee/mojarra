@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.16 2002/01/10 22:20:11 edburns Exp $
+ * $Id: FormTag.java,v 1.17 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WForm;
+import javax.faces.UIForm;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -34,7 +34,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.16 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: FormTag.java,v 1.17 2002/01/10 22:32:50 edburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -106,7 +106,7 @@ public class FormTag extends TagSupport
 
             // 1. Get or create the component instance.
             //
-            WForm c = (WForm) ot.get(pageContext.getRequest(), name);
+            UIForm c = (UIForm) ot.get(pageContext.getRequest(), name);
             if ( c == null ) {
                 c = createComponent(rc);
                 addToScope(c, ot);
@@ -134,10 +134,10 @@ public class FormTag extends TagSupport
     /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WForm c, ObjectManager ot) {
+    public void addToScope(UIForm c, ObjectManager ot) {
    
         Vector listeners = null; 
         // PENDING ( visvan ) right now, we are not saving the state of the
@@ -168,9 +168,9 @@ public class FormTag extends TagSupport
      *
      * @param rc renderContext
      */
-    protected WForm createComponent(RenderContext rc) {
+    protected UIForm createComponent(RenderContext rc) {
         
-        WForm c = new WForm();
+        UIForm c = new UIForm();
 
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
@@ -269,7 +269,7 @@ public class FormTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WForm c = (WForm) ot.get(pageContext.getRequest(), name);
+        UIForm c = (UIForm) ot.get(pageContext.getRequest(), name);
         Assert.assert_it( c != null );
 
         // Complete the rendering process

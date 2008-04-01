@@ -1,5 +1,5 @@
 /*
- * $Id: FormListener.java,v 1.2 2001/12/20 22:25:45 ofung Exp $
+ * $Id: FormListener.java,v 1.3 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -14,9 +14,9 @@ import java.util.EventListener;
 /**
  * The listener interface for handling form events.
  * An object should implement this interface if it needs
- * to respond to lifecycle events on a WForm component.
+ * to respond to lifecycle events on a UIForm component.
  *
- * @see WForm#addFormListener
+ * @see UIForm#addFormListener
  */
 public interface FormListener extends EventListener {
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: WForm.java,v 1.7 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UIForm.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.servlet.ServletRequest;
  * input from the user and submitting it to the application
  * in a single submit operation.  
  */
-public class WForm extends WComponent {
+public class UIForm extends UIComponent {
 
     private static String TYPE = "Form";
     private Object model = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.3 2001/12/20 22:25:44 ofung Exp $
+ * $Id: FacesEvent.java,v 1.4 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -35,11 +35,11 @@ public abstract class FacesEvent extends EventObject {
     }
 
     /**
-     * @return WComponent instance representing the component where
+     * @return UIComponent instance representing the component where
      *         this event originated
      */
     public Object getSource() {
-	//return (WComponent)ObjectManager.get(request, sourceName);
+	//return (UIComponent)ObjectManager.get(request, sourceName);
 	return null;
     }
 

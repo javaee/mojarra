@@ -1,5 +1,5 @@
 /*
- * $Id: CommandDispatcherImpl.java,v 1.5 2002/01/10 22:20:08 edburns Exp $
+ * $Id: CommandDispatcherImpl.java,v 1.6 2002/01/10 22:32:48 edburns Exp $
  */
 
 /*
@@ -42,13 +42,13 @@ import com.sun.faces.util.Util;
  * appropriate flow-control when it dispatches to listeners which 
  * implement the <code>Command</code>interface.
  *
- * @version $Id: CommandDispatcherImpl.java,v 1.5 2002/01/10 22:20:08 edburns Exp $
+ * @version $Id: CommandDispatcherImpl.java,v 1.6 2002/01/10 22:32:48 edburns Exp $
  * @author Jayashri Visvanathan
  *
  * @see CommandEvent
  * @see CommandListener
  * @see Command
- * @see WCommand#addCommandListener
+ * @see UICommand#addCommandListener
  */
 public class CommandDispatcherImpl extends CommandDispatcher {
 

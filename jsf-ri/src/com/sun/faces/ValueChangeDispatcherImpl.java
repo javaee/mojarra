@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeDispatcherImpl.java,v 1.6 2002/01/10 22:20:10 edburns Exp $
+ * $Id: ValueChangeDispatcherImpl.java,v 1.7 2002/01/10 22:32:48 edburns Exp $
  */
 
 /*
@@ -27,17 +27,17 @@ import javax.faces.Constants;
 import javax.faces.ObjectManager;
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
-import javax.faces.WTextEntry;
-import javax.faces.WSelectOne;
-import javax.faces.WSelectBoolean;
-import javax.faces.WComponent;
+import javax.faces.UITextEntry;
+import javax.faces.UISelectOne;
+import javax.faces.UISelectBoolean;
+import javax.faces.UIComponent;
 import javax.faces.ModelAccessor;
 
 /**
  * A class which implements the dispatching of value-change events
  * to appropriate target value-change listener objects.  
  *
- * @version $Id: ValueChangeDispatcherImpl.java,v 1.6 2002/01/10 22:20:10 edburns Exp $
+ * @version $Id: ValueChangeDispatcherImpl.java,v 1.7 2002/01/10 22:32:48 edburns Exp $
  * @author Jayashri Visvanathan
  */
 public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
@@ -72,15 +72,15 @@ public class ValueChangeDispatcherImpl extends ValueChangeDispatcher {
         String modelRef = value_event.getModelReference();
 
         if ( modelRef == null ) {
-	    WComponent c = (WComponent) ot.get(request, srcName);
-	    if (c instanceof WTextEntry) {
-		WTextEntry te = (WTextEntry) c;
+	    UIComponent c = (UIComponent) ot.get(request, srcName);
+	    if (c instanceof UITextEntry) {
+		UITextEntry te = (UITextEntry) c;
 		te.setText(rc, (String)value_event.getNewValue());
-	    } else if (c instanceof WSelectOne) {
-		WSelectOne so = (WSelectOne) c;
+	    } else if (c instanceof UISelectOne) {
+		UISelectOne so = (UISelectOne) c;
 		so.setSelectedValue(rc, value_event.getNewValue());
-	    } else if (c instanceof WSelectBoolean) {
-                WSelectBoolean se = (WSelectBoolean) c;
+	    } else if (c instanceof UISelectBoolean) {
+                UISelectBoolean se = (UISelectBoolean) c;
                 boolean state = (Boolean.valueOf(new_value)).booleanValue();
                 se.setSelected(rc, state);
             }	

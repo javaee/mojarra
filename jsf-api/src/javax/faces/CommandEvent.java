@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.3 2001/12/20 22:25:44 ofung Exp $
+ * $Id: CommandEvent.java,v 1.4 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import javax.servlet.ServletRequest;
  * The class which encapsulates information associated
  * with a command event.  Command events are typically generated
  * as a result of a user invoking the command action on the
- * client representation of the WCommand component.
+ * client representation of the UICommand component.
  * <p>
  * A command event has a single property:
  * <ul>
@@ -23,7 +23,7 @@ import javax.servlet.ServletRequest;
  *                  command to be executed as a result of this event
  *                  e.g. &quot;login&quot;, &quot;place-order&quot;, etc.
  *                  This will contain the value of the commandName
- *                  property of the WCommand component where the command
+ *                  property of the UICommand component where the command
  *                  event originated.
  * </ul>
  * @see CommandListener

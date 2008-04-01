@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.6 2002/01/10 22:20:12 edburns Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.7 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WForm;
-import javax.faces.WSelectOne;
+import javax.faces.UIForm;
+import javax.faces.UISelectOne;
 import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
@@ -35,7 +35,7 @@ import java.util.Collection;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_RadioTag.java,v 1.6 2002/01/10 22:20:12 edburns Exp $
+ * @version $Id: SelectOne_RadioTag.java,v 1.7 2002/01/10 22:32:50 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,10 +130,10 @@ public int doStartTag() throws JspException {
     
     // Ascend the tag hierarchy to get the RadioGroup tag
     RadioGroupTag ancestor = null;
-    WSelectOne wSelectOne = null;
+    UISelectOne wSelectOne = null;
     String parentName = null;
     
-    // get the WSelectOne that is our component.
+    // get the UISelectOne that is our component.
     try {
 	ancestor = (RadioGroupTag) 
 	    findAncestorWithClass(this, RadioGroupTag.class);
@@ -147,8 +147,8 @@ public int doStartTag() throws JspException {
     // 1. Set up the component
     //
     // by virtue of being inside a RadioGroup there must be a
-    // WSelectOne instance under the name.
-    wSelectOne = (WSelectOne) ot.get(pageContext.getRequest(), parentName);
+    // UISelectOne instance under the name.
+    wSelectOne = (UISelectOne) ot.get(pageContext.getRequest(), parentName);
     Assert.assert_it(null != wSelectOne);
     
     // These over-write the values from "the last time around", but
@@ -199,7 +199,7 @@ public int doStartTag() throws JspException {
             Constants.REF_RENDERCONTEXT);
         Assert.assert_it( renderContext != null );
 
-        // get the WSelectOne that is our component.
+        // get the UISelectOne that is our component.
         String parentName = null;
         RadioGroupTag ancestor = null;
         try {
@@ -213,12 +213,12 @@ public int doStartTag() throws JspException {
         Assert.assert_it(null != parentName);
 
         // by virtue of being inside a RadioGroup there must be a
-        // WSelectOne instance under the name.
+        // UISelectOne instance under the name.
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WSelectOne wSelectOne = 
-            (WSelectOne) ot.get(pageContext.getRequest(), parentName);
+        UISelectOne wSelectOne = 
+            (UISelectOne) ot.get(pageContext.getRequest(), parentName);
         Assert.assert_it(null != wSelectOne);
 
         // Complete the rendering process

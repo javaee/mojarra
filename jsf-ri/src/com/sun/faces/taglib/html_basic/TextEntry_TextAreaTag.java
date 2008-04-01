@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.12 2002/01/10 22:20:12 edburns Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.13 2002/01/10 22:32:51 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WTextEntry;
+import javax.faces.UITextEntry;
 import javax.faces.ObjectManager;
 import java.util.Vector;
 
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.12 2002/01/10 22:20:12 edburns Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.13 2002/01/10 22:32:51 edburns Exp $
  * 
  *
  */
@@ -110,7 +110,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
 
            // 1. Get or create the component instance.
            //
-            WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
+            UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot);
@@ -135,10 +135,10 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
     /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WTextEntry c, ObjectManager ot) {
+    public void addToScope(UITextEntry c, ObjectManager ot) {
 
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -174,7 +174,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
                 Constants.REF_RENDERCONTEXT);
         Assert.assert_it( rc != null );
 
-        WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
+        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
         if ( c != null ) {
            if ( getBodyContent() != null ) {
                c.setText(rc, getBodyContent().getString());
@@ -200,7 +200,7 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WTextEntry c = (WTextEntry) ot.get(pageContext.getRequest(), name);
+        UITextEntry c = (UITextEntry) ot.get(pageContext.getRequest(), name);
         Assert.assert_it( c != null );
 
         // Complete the rendering process
@@ -240,8 +240,8 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
      * Creates a TextEntry component and sets renderer specific
      * properties.
      */
-    protected WTextEntry createComponent(RenderContext rc) {
-        WTextEntry c = new WTextEntry();
+    protected UITextEntry createComponent(RenderContext rc) {
+        UITextEntry c = new UITextEntry();
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
         c.setAttribute(rc, "rows", rows);

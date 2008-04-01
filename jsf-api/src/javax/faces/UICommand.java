@@ -1,5 +1,5 @@
 /*
- * $Id: WCommand.java,v 1.6 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UICommand.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * Class for representing a user-interface component which allows
  * the user to execute a command.
  */
-public class WCommand extends WComponent {
+public class UICommand extends UIComponent {
     private static String COMMAND_TYPE = "Command";
 
     /** 

@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.8 2001/12/21 00:38:46 rogerk Exp $
+ * $Id: SecretRenderer.java,v 1.9 2002/01/10 22:32:49 edburns Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
-import javax.faces.WTextEntry;
-import javax.faces.WComponent;
+import javax.faces.UITextEntry;
+import javax.faces.UIComponent;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -34,7 +34,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.8 2001/12/21 00:38:46 rogerk Exp $
+ * @version $Id: SecretRenderer.java,v 1.9 2002/01/10 22:32:49 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,18 +101,18 @@ public class SecretRenderer extends Object implements Renderer
     }
 
 
-    public void renderStart(RenderContext rc, WComponent c )
+    public void renderStart(RenderContext rc, UIComponent c )
         throws IOException, FacesException { 
 
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
 
-        WTextEntry textField = null;
+        UITextEntry textField = null;
         if ( supportsType(c)) {
-             textField = (WTextEntry) c;
+             textField = (UITextEntry) c;
         } else {
             throw new FacesException("Invalid component type. " +
-                     "Expected WTextEntry");
+                     "Expected UITextEntry");
         }
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
@@ -154,12 +154,12 @@ public class SecretRenderer extends Object implements Renderer
         return;
     }
 
-    public void renderChildren(RenderContext rc, WComponent c) 
+    public void renderChildren(RenderContext rc, UIComponent c) 
             throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, WComponent c) 
+    public void renderComplete(RenderContext rc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }
@@ -167,16 +167,16 @@ public class SecretRenderer extends Object implements Renderer
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals(Constants.REF_WTEXTENTRY)) {
+        if ( componentType.equals(Constants.REF_UITEXTENTRY)) {
             supports = true;
         }
         return supports;
     }
     
-    public boolean supportsType(WComponent c) {
+    public boolean supportsType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
-        if ( c instanceof WTextEntry ) {
+        if ( c instanceof UITextEntry ) {
             supports = true;
         }
         return supports;

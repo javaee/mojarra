@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.4 2001/12/20 22:26:44 ofung Exp $
+ * $Id: TestRenderer.java,v 1.5 2002/01/10 22:32:51 edburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.renderkit.html_basic.*;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderer.java,v 1.4 2001/12/20 22:26:44 ofung Exp $
+ * @version $Id: TestRenderer.java,v 1.5 2002/01/10 22:32:51 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,57 +90,57 @@ public class TestRenderer extends TestCase
 
     public void testRenderer() {
 
-        WComponent c = null;
+        UIComponent c = null;
 
         // create TextRenderer instance.
         System.out.println("Testing TextRenderer");
         rendererObj = new TextRenderer();
-        c = new WOutput();
-        verifyRendererMethods(rendererObj,c, "WOutput");
+        c = new UIOutput();
+        verifyRendererMethods(rendererObj,c, "UIOutput");
 
         System.out.println("Testing FormRenderer");
         rendererObj = new FormRenderer();
-        c = new WForm();
-        verifyRendererMethods(rendererObj,c, "WForm");
-        verifyRenderEnd(rendererObj,c, "WForm");
+        c = new UIForm();
+        verifyRendererMethods(rendererObj,c, "UIForm");
+        verifyRenderEnd(rendererObj,c, "UIForm");
 
         System.out.println("Testing InputRenderer");
         rendererObj = new InputRenderer();
-        c = new WTextEntry();
-        verifyRendererMethods(rendererObj,c, "WTextEntry");
+        c = new UITextEntry();
+        verifyRendererMethods(rendererObj,c, "UITextEntry");
 
         System.out.println("Testing SecretRenderer");
         rendererObj = new SecretRenderer();
-        c = new WTextEntry();
-        verifyRendererMethods(rendererObj,c, "WTextEntry"); 
+        c = new UITextEntry();
+        verifyRendererMethods(rendererObj,c, "UITextEntry"); 
 
         System.out.println("Testing TextAreaRenderer"); 
         rendererObj = new TextAreaRenderer();
-        c = new WTextEntry();
-        verifyRendererMethods(rendererObj,c, "WTextEntry");
-        verifyRenderEnd(rendererObj,c, "WTextEntry");
+        c = new UITextEntry();
+        verifyRendererMethods(rendererObj,c, "UITextEntry");
+        verifyRenderEnd(rendererObj,c, "UITextEntry");
 
         System.out.println("Testing ButtonRenderer"); 
         rendererObj = new ButtonRenderer();
-        c = new WCommand();
-        verifyRendererMethods(rendererObj,c, "WCommand");
+        c = new UICommand();
+        verifyRendererMethods(rendererObj,c, "UICommand");
 
         System.out.println("Testing HyperLinkRenderer"); 
         rendererObj = new HyperlinkRenderer();
-        c = new WCommand();
-        verifyRendererMethods(rendererObj,c, "WCommand");
+        c = new UICommand();
+        verifyRendererMethods(rendererObj,c, "UICommand");
 
         System.out.println("Testing CheckBoxRenderer"); 
         rendererObj = new CheckboxRenderer();
-        c = new WSelectBoolean();
-        verifyRendererMethods(rendererObj,c, "WSelectBoolean");
+        c = new UISelectBoolean();
+        verifyRendererMethods(rendererObj,c, "UISelectBoolean");
         
     }
 
-    protected void verifyRendererMethods(Renderer renderer, WComponent c, 
+    protected void verifyRendererMethods(Renderer renderer, UIComponent c, 
             String comp_name) {
 
-         WOutput output = new WOutput();
+         UIOutput output = new UIOutput();
 	 boolean gotException = false;
         // test renderStart method
  
@@ -155,7 +155,7 @@ public class TestRenderer extends TestCase
 	assertTrue(gotException);
 
 	gotException = false;
-        if ( ! comp_name.equals("WOutput") ) {
+        if ( ! comp_name.equals("UIOutput") ) {
             try {
                 renderer.renderStart(context,output);
             } catch ( Exception e ) {
@@ -192,7 +192,7 @@ public class TestRenderer extends TestCase
      * is separated out so that it can be invoked only for
      * renderers that implement renderEnd method. 
      */
-    protected void verifyRenderEnd(Renderer renderer, WComponent c,
+    protected void verifyRenderEnd(Renderer renderer, UIComponent c,
             String comp_name) {
 
         // test renderEnd method

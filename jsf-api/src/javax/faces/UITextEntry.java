@@ -1,5 +1,5 @@
 /*
- * $Id: WTextEntry.java,v 1.8 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UITextEntry.java,v 1.1 2002/01/10 22:32:23 edburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Iterator;
  * which interact with the model object under the covers.
  *
  */
-public class WTextEntry extends WComponent {
+public class UITextEntry extends UIComponent {
 
     private static String TYPE = "TextEntry";
     private Object model = null;

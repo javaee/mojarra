@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.12 2002/01/10 22:20:11 edburns Exp $
+ * $Id: Output_TextTag.java,v 1.13 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WOutput;
+import javax.faces.UIOutput;
 import javax.faces.ObjectManager;
 import java.util.Vector;
 
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.12 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: Output_TextTag.java,v 1.13 2002/01/10 22:32:50 edburns Exp $
  * 
  *
  */
@@ -107,7 +107,7 @@ public class Output_TextTag extends TagSupport
 
             // 1. Get or create the component instance.
             //
-            WOutput c = (WOutput) ot.get(pageContext.getRequest(), name);
+            UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, ot);
@@ -133,10 +133,10 @@ public class Output_TextTag extends TagSupport
      * Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WOutput c, ObjectManager ot) {
+    public void addToScope(UIOutput c, ObjectManager ot) {
 
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -176,7 +176,7 @@ public class Output_TextTag extends TagSupport
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WOutput c = (WOutput) ot.get(pageContext.getRequest(), name);
+        UIOutput c = (UIOutput) ot.get(pageContext.getRequest(), name);
         Assert.assert_it( c != null );
 
         // Complete the rendering process
@@ -212,8 +212,8 @@ public class Output_TextTag extends TagSupport
      * Creates a Output component and sets renderer specific
      * properties.
      */
-    protected WOutput createComponent(RenderContext rc) {
-        WOutput c = new WOutput();
+    protected UIOutput createComponent(RenderContext rc) {
+        UIOutput c = new UIOutput();
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
 

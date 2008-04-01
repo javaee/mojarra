@@ -1,5 +1,5 @@
 /*
- * $Id: WSelectBoolean.java,v 1.10 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UISelectBoolean.java,v 1.1 2002/01/10 22:32:23 edburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * Class for representing a user-interface component which allows
  * the user to select a boolean value.
  */
-public class WSelectBoolean extends WComponent {
+public class UISelectBoolean extends UIComponent {
     private static String TYPE = "SelectBoolean";
     private boolean selected;
     private Object model = null;

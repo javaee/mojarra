@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.4 2002/01/10 22:20:12 edburns Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.5 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WSelectOne;
+import javax.faces.UISelectOne;
 import javax.faces.ObjectManager;
 
 import javax.servlet.jsp.JspException;
@@ -36,7 +36,7 @@ import java.util.Vector;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.4 2002/01/10 22:20:12 edburns Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.5 2002/01/10 22:32:50 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -166,14 +166,14 @@ protected Collection getItems() {
     }
 
     /**
-     * Creates a WSelectOne component and sets renderer specific
+     * Creates a UISelectOne component and sets renderer specific
      * properties.
      *
      * @param rc renderContext client information
      */
-protected WSelectOne createComponent(RenderContext renderContext) 
+protected UISelectOne createComponent(RenderContext renderContext) 
     throws JspException {
-    WSelectOne wSelectOne = new WSelectOne();
+    UISelectOne wSelectOne = new UISelectOne();
     
     // set renderer specific properties
     wSelectOne.setAttribute(renderContext, "name", getName());
@@ -190,10 +190,10 @@ protected WSelectOne createComponent(RenderContext renderContext)
     /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WSelectOne c, ObjectManager ot) {
+    public void addToScope(UISelectOne c, ObjectManager ot) {
    
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form
@@ -239,7 +239,7 @@ public int doStartTag() throws JspException {
     
     // 1. Get or create the component instance.
     //
-    WSelectOne wSelectOne = (WSelectOne) 
+    UISelectOne wSelectOne = (UISelectOne) 
 	ot.get(pageContext.getRequest(), name);
     if (wSelectOne == null) {
 	wSelectOne = createComponent(renderContext);
@@ -278,7 +278,7 @@ public int doEndTag() throws JspException {
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-    WSelectOne wSelectOne = (WSelectOne)ot.get(pageContext.getRequest(), name);
+    UISelectOne wSelectOne = (UISelectOne)ot.get(pageContext.getRequest(), name);
     Assert.assert_it(null != wSelectOne);
     
     // The magic method: setting the collection into the component
@@ -287,10 +287,10 @@ public int doEndTag() throws JspException {
     // Complete the rendering process
     //
     try {
-//PENDING(rogerk)we need to reset the renderer name for WSelectOne, becuase
-//it is a tag has enclosing component of the same type (WSelectOne) - 
+//PENDING(rogerk)we need to reset the renderer name for UISelectOne, becuase
+//it is a tag has enclosing component of the same type (UISelectOne) - 
 //sharing same attribute list (renderer name is set in attributeList of
-//WComponent.
+//UIComponent.
 //
         wSelectOne.setRendererName(renderContext,
             "OptionListRenderer");

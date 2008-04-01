@@ -1,5 +1,5 @@
 /*
- * $Id: WComponent.java,v 1.8 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UIComponent.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import java.util.Set;
 
 /**
  * The base class for representing all state associated with a
- * user-interface component.  WComponent instances are created
+ * user-interface component.  UIComponent instances are created
  * and managed in the server in order to serve the following core 
  * functions to a JavaServer Faces application:
  * <ol>
@@ -34,17 +34,17 @@ import java.util.Set;
  * <li>Provide event-handler registration on components
  * </ol>
  * <p>
- * A WComponent instance may act as a "parent" container if one or
- * more WComponent instances are added as children.
- * A WComponent instance may act as a "child" if it is added to
- * one or more parent WComponent instances.
+ * A UIComponent instance may act as a "parent" container if one or
+ * more UIComponent instances are added as children.
+ * A UIComponent instance may act as a "child" if it is added to
+ * one or more parent UIComponent instances.
  */
-public abstract class WComponent {
+public abstract class UIComponent {
  
     private Hashtable ht;
 
 
-    public WComponent() {
+    public UIComponent() {
         ht = new Hashtable();
     }
 
@@ -169,21 +169,21 @@ public abstract class WComponent {
      * Adds the specified component as a child to this component.
      * The child will be added at the end of this component's sequence
      * of children.
-     * @param child the WComponent to be added as a child
+     * @param child the UIComponent to be added as a child
      * @throws NullPointerException if child is null
      */
-    public void add(WComponent child) {}
+    public void add(UIComponent child) {}
 
     /**
      * Adds the specified component as a child to this component at
      * the specified index.
-     * @param child the WComponent to be added as a child
+     * @param child the UIComponent to be added as a child
      * @param index the integer indicating where in the sequence of
      *        children the child should be added
      * @throws NullPointerException if child is null
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount
      */
-    public void add(WComponent child, int index) {}
+    public void add(UIComponent child, int index) {}
 
    /**
      * Adds the specified component as a child to this component with
@@ -193,13 +193,13 @@ public abstract class WComponent {
      * it will be replaced with the new child specified in this method
      * call.
      *
-     * @param child the WComponent representing the child to be added
+     * @param child the UIComponent representing the child to be added
      * @param childID a String which logically identifies the child within
      *        this parent component
      * @throws NullPointerException if child is null
      */ 
     // Aim10-25-01: Don't implement yet
-    public void add(WComponent child, String childID) {}
+    public void add(UIComponent child, String childID) {}
 
     /** 
      * Removes the child component located at the specified index from
@@ -233,7 +233,7 @@ public abstract class WComponent {
      * @param kids the array containing the components to add as children
      * @throws NullPointerException if kids is null
      */
-    public void setChildren(WComponent[] kids) {}
+    public void setChildren(UIComponent[] kids) {}
 
     /**
      * Returns an iterator containing all the children of this component
@@ -261,7 +261,7 @@ public abstract class WComponent {
      * @param index the integer indicating the index of the child
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount-1
      */
-    public WComponent getChild(RenderContext rc, int index) {
+    public UIComponent getChild(RenderContext rc, int index) {
         return null;
     }
 
@@ -272,12 +272,12 @@ public abstract class WComponent {
      * @param rc the render context used to render this component
      * @param childID a String which logically identifies the child within
      *        this parent component
-     * @return the WComponent representing the child associated with the
+     * @return the UIComponent representing the child associated with the
      *          childID, or null if it does not exist
      * @throws NullPointerException if childID is null
      */
     // Aim10-25-01: don't implement yet
-    public WComponent getChild(RenderContext rc, String childID) {
+    public UIComponent getChild(RenderContext rc, String childID) {
         return null;
     }
 

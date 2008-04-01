@@ -1,5 +1,5 @@
 /*
- * $Id: WSelectOne.java,v 1.8 2001/12/20 22:25:46 ofung Exp $
+ * $Id: UISelectOne.java,v 1.1 2002/01/10 22:32:23 edburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import org.mozilla.util.ParameterCheck;
  * Class for representing a user-interface component which allows
  * the user to select one value from many.
  */
-public class WSelectOne extends WComponent {
+public class UISelectOne extends UIComponent {
     private static String TYPE = "SelectOne";
     // PENDING(edburns): don't cast these to Strings all over the place.
     private Object modelRef = null;
@@ -82,7 +82,7 @@ public class WSelectOne extends WComponent {
     }
 
     // This set of methods are the contract between the tag handler and
-    // this WSelectOne instance.  The implementations of these methods
+    // this UISelectOne instance.  The implementations of these methods
     // in turn access the model using the "model" set of methods.
 
     public void setItems(RenderContext rc, Collection newItems) {

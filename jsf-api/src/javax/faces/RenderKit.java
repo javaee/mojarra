@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.9 2001/12/20 22:25:45 ofung Exp $
+ * $Id: RenderKit.java,v 1.10 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ public abstract class RenderKit {
     /**
      * Returns an iterator containing Strings corresponding to the
      * component types supported by this render kit.
-     * @see WComponent#getType
+     * @see UIComponent#getType
      * @return Iterator containing Strings corresponding to supported
      *          component types
      */

@@ -1,5 +1,5 @@
 /*
- * $Id: CommandDispatcher.java,v 1.3 2001/12/20 22:25:43 ofung Exp $
+ * $Id: CommandDispatcher.java,v 1.4 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.util.EventObject;
  * @see CommandEvent
  * @see CommandListener
  * @see Command
- * @see WCommand#addCommandListener
+ * @see UICommand#addCommandListener
  */
 public class CommandDispatcher implements EventDispatcher {
 

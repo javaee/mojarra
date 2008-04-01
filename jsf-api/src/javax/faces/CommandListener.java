@@ -1,5 +1,5 @@
 /*
- * $Id: CommandListener.java,v 1.2 2001/12/20 22:25:44 ofung Exp $
+ * $Id: CommandListener.java,v 1.3 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import java.util.EventListener;
  * An object should implement this interface if it needs
  * to respond to a command event.
  *
- * @see WCommand#addCommandListener
+ * @see UICommand#addCommandListener
  */
 public interface CommandListener extends EventListener {
     /**

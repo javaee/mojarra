@@ -1,5 +1,5 @@
 /*
- * $Id: FormDispatcher.java,v 1.2 2001/12/20 22:25:45 ofung Exp $
+ * $Id: FormDispatcher.java,v 1.3 2002/01/10 22:32:21 edburns Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.util.EventObject;
  * A class which implements the dispatching of form events
  * to appropriate target form listener objects.  
  *
- * @see WForm#addFormListener
+ * @see UIForm#addFormListener
  */
 public class FormDispatcher implements EventDispatcher {
 

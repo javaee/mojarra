@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
  */
 
 /*
@@ -21,8 +21,8 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WForm;
-import javax.faces.WSelectBoolean;
+import javax.faces.UIForm;
+import javax.faces.UISelectBoolean;
 import javax.faces.ObjectManager;
 import java.util.Vector;
 
@@ -35,7 +35,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.13 2002/01/10 22:20:11 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.14 2002/01/10 22:32:50 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -189,7 +189,7 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
 
             // 1. Get or create the component instance.
             //
-            WSelectBoolean wSelectBoolean = (WSelectBoolean) 
+            UISelectBoolean wSelectBoolean = (UISelectBoolean) 
                 ot.get(pageContext.getRequest(), name);
             if ( wSelectBoolean == null ) {
                 wSelectBoolean = createComponent(renderContext);
@@ -231,8 +231,8 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
 //PENDING(rogerk)can we eliminate this extra get if component is instance
 //variable? If so, threading issue?
 //
-        WSelectBoolean wSelectBoolean =
-            (WSelectBoolean) ot.get(pageContext.getRequest(), name);
+        UISelectBoolean wSelectBoolean =
+            (UISelectBoolean) ot.get(pageContext.getRequest(), name);
         Assert.assert_it( wSelectBoolean != null );
 
         // Complete the rendering process
@@ -272,10 +272,10 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
      *
      * @param rc renderContext client information
      */
-    protected WSelectBoolean createComponent(RenderContext renderContext) 
+    protected UISelectBoolean createComponent(RenderContext renderContext) 
             throws JspException {
 
-        WSelectBoolean wSelectBoolean = new WSelectBoolean();
+        UISelectBoolean wSelectBoolean = new UISelectBoolean();
 
         // set renderer specific properties
         wSelectBoolean.setAttribute(renderContext, "name", getName());
@@ -317,10 +317,10 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
     /** Adds the component and listener to the ObjectManager
      * in the appropriate scope
      *
-     * @param c WComponent to be stored in namescope
+     * @param c UIComponent to be stored in namescope
      * @param ot Object pool
      */
-    public void addToScope(WSelectBoolean c, ObjectManager ot) {
+    public void addToScope(UISelectBoolean c, ObjectManager ot) {
    
         // PENDING ( visvan ) right now, we are not saving the state of the
         // components. So if the scope is specified as reques, when the form

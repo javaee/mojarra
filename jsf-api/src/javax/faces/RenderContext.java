@@ -1,5 +1,5 @@
 /*
- * $Id: RenderContext.java,v 1.9 2002/01/10 22:16:33 edburns Exp $
+ * $Id: RenderContext.java,v 1.10 2002/01/10 22:32:22 edburns Exp $
  */
 
 /*
@@ -120,10 +120,10 @@ public abstract class RenderContext {
      * is returned.
      * @param level the number of levels down the stack to access
      *        the ancestor
-     * @return the WComponent object on the render stack down the
+     * @return the UIComponent object on the render stack down the
      *         specified number of levels
      */
-    public WComponent peekAtAncestor(int level) {
+    public UIComponent peekAtAncestor(int level) {
         return null;
     }
 
@@ -134,7 +134,7 @@ public abstract class RenderContext {
      * @param c the component to be pushed on the render stack
      * @throws NullPointerException if c is null
      */
-    public void pushChild(WComponent c){
+    public void pushChild(UIComponent c){
     
     }
 
@@ -143,10 +143,10 @@ public abstract class RenderContext {
      * method is invoked after the specified component and all of
      * its descendents have been rendered.  If
      * there is no component currently on the stack, returns null.
-     * @return WComponent object corresponding to the component
+     * @return UIComponent object corresponding to the component
      *         which was most recently rendered from this render context
      */
-    public WComponent popChild() {
+    public UIComponent popChild() {
         return null;
     }
 

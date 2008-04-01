@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.12 2001/12/21 00:38:46 rogerk Exp $
+ * $Id: CheckboxRenderer.java,v 1.13 2002/01/10 22:32:48 edburns Exp $
  */
 
 /*
@@ -20,8 +20,8 @@ import javax.faces.FacesException;
 import javax.faces.OutputMethod;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
-import javax.faces.WComponent;
-import javax.faces.WSelectBoolean;
+import javax.faces.UIComponent;
+import javax.faces.UISelectBoolean;
 import javax.faces.Constants;
 
 import org.mozilla.util.Assert;
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.12 2001/12/21 00:38:46 rogerk Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.13 2002/01/10 22:32:48 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -85,10 +85,10 @@ public class CheckboxRenderer extends Object implements Renderer {
     // Methods From Renderer
     //
 
-    public boolean supportsType(WComponent c) {
+    public boolean supportsType(UIComponent c) {
         ParameterCheck.nonNull(c);
         boolean supports= false;
-        if ( c instanceof WSelectBoolean ) {
+        if ( c instanceof UISelectBoolean ) {
             supports = true;
         }
         return supports;
@@ -97,7 +97,7 @@ public class CheckboxRenderer extends Object implements Renderer {
     public boolean supportsType(String componentType) {
         ParameterCheck.nonNull(componentType);
         boolean supports = false;
-        if ( componentType.equals(Constants.REF_WSELECTBOOLEAN)) {
+        if ( componentType.equals(Constants.REF_UISELECTBOOLEAN)) {
             supports = true;
         }
         return supports;
@@ -117,18 +117,18 @@ public class CheckboxRenderer extends Object implements Renderer {
     }
 
 
-    public void renderStart(RenderContext rc, WComponent c) 
+    public void renderStart(RenderContext rc, UIComponent c) 
         throws IOException, FacesException {
 
         ParameterCheck.nonNull(rc);
         ParameterCheck.nonNull(c);
  
-        WSelectBoolean wSelectBoolean = null;
+        UISelectBoolean wSelectBoolean = null;
         if ( supportsType(c)) {
-            wSelectBoolean = (WSelectBoolean) c;
+            wSelectBoolean = (UISelectBoolean) c;
         } else {
             throw new FacesException("Invalid component type. " +
-                      "Expected WSelectBoolean");
+                      "Expected UISelectBoolean");
         }
         OutputMethod outputMethod = rc.getOutputMethod();
         Assert.assert_it(outputMethod != null );
@@ -166,17 +166,17 @@ public class CheckboxRenderer extends Object implements Renderer {
         outputMethod.flush();
     }
 
-    public void renderChildren(RenderContext rc, WComponent c) 
+    public void renderChildren(RenderContext rc, UIComponent c) 
         throws IOException {
         return;
     }
 
-    public void renderComplete(RenderContext rc, WComponent c) 
+    public void renderComplete(RenderContext rc, UIComponent c) 
             throws IOException,FacesException {
         return;
     }
 
-    public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
+    public boolean getCanRenderChildren(RenderContext rc, UIComponent c) {
         return false;
     }
 

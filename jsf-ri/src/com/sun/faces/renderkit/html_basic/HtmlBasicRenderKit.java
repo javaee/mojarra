@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.14 2002/01/10 22:20:10 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.15 2002/01/10 22:32:48 edburns Exp $
  */
 
 /*
@@ -28,15 +28,15 @@ import javax.faces.Renderer;
 import javax.faces.FacesException;
 import javax.faces.ClientCapabilities;
 import javax.faces.EventQueue;
-import javax.faces.WComponent;
-import javax.faces.WCommand;
-import javax.faces.WTextEntry;
+import javax.faces.UIComponent;
+import javax.faces.UICommand;
+import javax.faces.UITextEntry;
 import javax.faces.CommandEvent;
 import javax.faces.ValueChangeEvent;
 import javax.faces.RenderContext;
 import javax.faces.Constants;
-import javax.faces.WSelectBoolean;
-import javax.faces.WSelectOne;
+import javax.faces.UISelectBoolean;
+import javax.faces.UISelectOne;
 
 import javax.faces.ObjectManager;
 
@@ -46,7 +46,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.14 2002/01/10 22:20:10 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.15 2002/01/10 22:32:48 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -195,7 +195,7 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
     String param_name = null;
     String param_value = null;
     String cmdName = null;
-    WComponent c = null;
+    UIComponent c = null;
     Vector cmd_events = new Vector();
     ObjectManager objectManager = null;
     RenderContext rc = null;
@@ -244,9 +244,9 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
         // encoded as a hidden field so that it need not be obtained
         // from the ObjectManager since the component may not exist in
         // the pool. Also value should also be encoded as a hidden
-        // field so that change in values can be detected without WComponent.
+        // field so that change in values can be detected without UIComponent.
 
-        c = (WComponent)(objectManager.get(request,param_name));
+        c = (UIComponent)(objectManager.get(request,param_name));
         // if the component is not found then it might not have been a
         // faces component or it was not stored in OBJECTMANAGER because of the scope.
         if ( c == null ) {
@@ -255,24 +255,24 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
 
         // add value change events first. Because they should
         // be processed before command events.
-        if ( c instanceof WTextEntry || c instanceof WSelectBoolean ||
-	     c instanceof WSelectOne) {
+        if ( c instanceof UITextEntry || c instanceof UISelectBoolean ||
+	     c instanceof UISelectOne) {
              String old_value = null;
              String model_str = null;
              // check in for Component types will be removed
              // once we support encoding of types using 
              /// hidden fields.	
-            if ( c instanceof WTextEntry ) {
-                WTextEntry te = (WTextEntry) c;
+            if ( c instanceof UITextEntry ) {
+                UITextEntry te = (UITextEntry) c;
                 old_value = te.getText(rc);
                 model_str = (String) te.getModel();
-            } else if (c instanceof WSelectBoolean) {
-                WSelectBoolean sb = (WSelectBoolean) c;
+            } else if (c instanceof UISelectBoolean) {
+                UISelectBoolean sb = (UISelectBoolean) c;
                 boolean old_state = sb.isSelected(rc);
                 old_value = String.valueOf(old_state);
                 model_str = (String) sb.getModel();
-            } else if (c instanceof WSelectOne) {
-		WSelectOne so = (WSelectOne) c;
+            } else if (c instanceof UISelectOne) {
+		UISelectOne so = (UISelectOne) c;
 		old_value = (String) so.getSelectedValue(rc);
 		model_str = (String) so.getSelectedValueModel();
 	    }
@@ -285,7 +285,7 @@ public void queueEvents(ServletRequest request, EventQueue queue) {
             } else if ( old_value == null ) {
                 queue.add(e);
             }
-	} else if ( c instanceof WCommand) {
+	} else if ( c instanceof UICommand) {
             CommandEvent e =  new CommandEvent(request, param_name, 
 					       param_value);
             cmd_events.add(e);
