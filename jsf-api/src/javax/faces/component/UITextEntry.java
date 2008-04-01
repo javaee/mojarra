@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.3 2002/05/22 17:47:26 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.4 2002/05/22 21:37:03 craigmcc Exp $
  */
 
 /*
@@ -13,35 +13,12 @@ package javax.faces.component;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * <p><strong>UITextEntry</strong> is a {@link UIComponent} that can display
- * output to, and then accept input text from, the user.  It is typically
- * rendered as either a single-line text field or a multi-line text box.</p>
- *
- * <p>The local value of the text to be displayed by this component
- * is stored in the <code>value</code> property, and must be a
- * <code>java.lang.String</code> (as must the model property corresponding
- * to any model reference for this component).</p>
- *
- * <p>For convenience, the local value of the text value is
- * accessible via the <code>getText()</code> and <code>setText()</code>
- * methods.  The <code>currentValue()</code> method should be used to
- * retrieve the value to be rendered.</p>
- *
- * <h3>Default Behavior</h3>
- *
- * <p>In the absence of a Renderer performing more sophisticated processing,
- * this component supports the following functionality:</p>
- * <ul>
- * <li><em>decode()</em> - Copy the value of the request parameter that
- *     corresponds to this field to the local value.  If there is no such
- *     parameter, set the local value to a zero-length String.</li>
- * <li><em>encodeBegin()</em> - Render the current value of this component
- *     as a single-line text field.</li>
- * </ul>
+ * <p><strong>UITextEntry</strong> is a {@link UIComponent} that represents
+ * a text entry field in an input form.  It is typically rendered as
+ * either a single-line text field or a multi-line text box.</p>
  */
 
 public class UITextEntry extends UIComponent {
@@ -110,9 +87,6 @@ public class UITextEntry extends UIComponent {
         }
         String newValue =
             context.getServletRequest().getParameter(getCompoundId());
-        if (newValue == null) {
-            newValue = "";
-        }
         setValue(newValue);
 
     }
@@ -132,7 +106,7 @@ public class UITextEntry extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value = (String) currentValue(context);
+        Object value = currentValue(context);
         if (value == null) {
             value = "";
         }
@@ -140,7 +114,7 @@ public class UITextEntry extends UIComponent {
         writer.print("<input type=\"text\" name=\"");
         writer.print(getCompoundId());
         writer.print("\" value=\"");
-        writer.print(value);
+        writer.print(value.toString());
         writer.print("\">");
 
     }

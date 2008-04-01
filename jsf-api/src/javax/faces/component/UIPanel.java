@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.2 2002/05/15 18:20:07 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.3 2002/05/22 21:37:02 craigmcc Exp $
  */
 
 /*
@@ -25,6 +25,20 @@ public class UIPanel extends UIComponent {
      * The component type of this {@link UIComponent} subclass.
      */
     public static final String TYPE = "Panel";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Construct a default <code>UIPanel</code> instance.</p>
+     */
+    public UIPanel() {
+
+        super();
+        setRendersChildren(true);
+
+    }
 
 
     // ------------------------------------------------------------- Properties

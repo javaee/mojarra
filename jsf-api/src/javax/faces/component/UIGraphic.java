@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.5 2002/05/22 17:47:26 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.6 2002/05/22 21:37:02 craigmcc Exp $
  */
 
 /*
@@ -14,35 +14,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * <p><strong>UIGraphic</strong> is a {@link UIComponent} that can display
+ * <p><strong>UIGraphic</strong> is a {@link UIComponent} that displays
  * a graphical image to the user.  The user cannot manipulate this component;
  * it is for display purposes only.</p>
- *
- * <p>The local value of the URL of the image that is to be displayed by
- * this component is stored in the <code>value</code> property, and
- * must be a <code>java.lang.String</code> (as must the model property
- * corresponding to any model reference for this component).  This URL is
- * interpreted as a context-relative path if it starts with a slash ('/')
- * character; otherwise, it is interpreted as an absolute or relative path
- * that should be used unchanged.</p>
- *
- * <p>For convenience, the local value of the image URL is accessible
- * via the <code>getImagePath()</code> and <code>setImagePath()</code>
- * methods.  The <code>currentValue()</code> method should be used to
- * retrieve the value to be rendered.</p>
- *
- * <h3>Default Behavior</h3>
- *
- * <p>In the absence of a Renderer performing more sophisticated processing,
- * this component supports the following functionality:</p>
- * <ul>
- * <li><em>encodeBegin()</em> - Create an HTML <code>&lt;img&gt;</code>
- *     element, with a <code>src</code> attribute based on the current
- *     value stored in the component.</li>
- * </ul>
  */
 
 public class UIGraphic extends UIComponent {
@@ -109,19 +87,36 @@ public class UIGraphic extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value = (String) currentValue(context);
-        if (value == null) {
-            throw new NullPointerException();
-        }
         PrintWriter writer = context.getServletResponse().getWriter();
         writer.print("<img src=\"");
-        if (value.startsWith("/")) {
-            HttpServletRequest request =
-                (HttpServletRequest) context.getServletRequest();
-            writer.print(request.getContextPath());
-        }
-        writer.print(value);
+        writer.print(src(context));
         writer.print("\">");
+
+    }
+
+
+    /**
+     * <p>Return the value to be rendered as the <code>src</code> attribute
+     * of the image element generated for this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     */
+    private String src(FacesContext context) {
+
+        String value = (String) currentValue(context);
+        if (value == null) {
+            value = "";
+        }
+        HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+        HttpServletResponse response =
+            (HttpServletResponse) context.getServletResponse();
+        StringBuffer sb = new StringBuffer();
+        if (value.startsWith("/")) {
+            sb.append(request.getContextPath());
+        }
+        sb.append(currentValue(context));
+        return (response.encodeURL(sb.toString()));
 
     }
 

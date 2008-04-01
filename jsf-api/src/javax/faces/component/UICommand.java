@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.7 2002/05/18 20:33:46 craigmcc Exp $
+ * $Id: UICommand.java,v 1.8 2002/05/22 21:37:01 craigmcc Exp $
  */
 
 /*
@@ -14,44 +14,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
  * <p><strong>UICommand</strong> is a {@link UIComponent} that represents
- * a command to be executed at the request of a user.  Typically, a
- * <code>UICommand</code> will be rendered as a pushbutton, menu item,
- * or hyperlink in a web application.</p>
- *
- * <h3>Properties</h3>
- *
- * <p>Each <code>UICommand</code> instance supports the following JavaBean
- * properties to describe its render-independent characteristics:</p>
- * <ul>
- * <li><strong>commandName</strong> (java.lang.String) - Command name
- *     associated with this command.  Command names need not be unique,
- *     as many applications will wish to trigger the same application action
- *     no matter which of several alternative <code>UICommand</code>
- *     components the user chose to activate.</li>
- * </ul>
- *
- * <h3>Default Behavior</h3>
- *
- * <p>In the absence of a Renderer performing more sophisticated processing,
- * this component supports the following functionality:</p>
- * <ul>
- * <li><em>decode()</em> - Enqueue a {@link CommandEvent} to the application,
- *     to pass the command name that was selected, if the command name
- *     included in the request matches our own.</li>
- * <li><em>encodeBegin()</em> - Render an HTML hyperlink, with a
- *     context-relative URL of
- *     <code>/faces?action=command&name=xxxxx&tree=yyyyy</code>,
- *     where "xxxxx" is the command name of this command, and "yyyyy" is
- *     the tree ID of the response tree that we are rendering.</li>
- * </ul>
- *
- * <p><strong>FIXME</strong> - The above mechanism assumes that a
- * JavaServer Faces implementation is using a servlet as the implementation
- * mechanism, mapped to the context-relative URL pattern "/faces".</p>
+ * a user interface component which, when activated by the user, triggers
+ * an application specific "command" or "action".  Such a component is
+ * typically rendered as a push button, a menu item, or a hyperlink.</p>
  */
 
 public class UICommand extends UIComponent {
@@ -74,7 +44,7 @@ public class UICommand extends UIComponent {
      */
     public String getCommandName() {
 
-        return ((String) getAttribute("commandName"));
+        return ((String) getAttribute("value"));
 
     }
 
@@ -83,16 +53,10 @@ public class UICommand extends UIComponent {
      * <p>Set the command name for this <code>UICommand</code>.</p>
      *
      * @param commandName The new command name
-     *
-     * @exception NullPointerException if <code>name</code> is
-     *  <code>null</code>
      */
     public void setCommandName(String commandName) {
 
-        if (commandName == null) {
-            throw new NullPointerException("setCommandName");
-        }
-        setAttribute("commandName", commandName);
+        setAttribute("value", commandName);
 
     }
 
@@ -135,7 +99,7 @@ public class UICommand extends UIComponent {
         if (name == null) {
             return;
         }
-        if (!name.equals(getCommandName())) {
+        if (!name.equals(currentValue(context))) {
             return;
         }
 
@@ -161,22 +125,34 @@ public class UICommand extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value = (String) getCommandName();
-        if (value == null) {
-            throw new NullPointerException();
-        }
         PrintWriter writer = context.getServletResponse().getWriter();
         writer.print("<a href=\"");
+        writer.print(href(context));
+        writer.print("\">");
+        writer.print(currentValue(context));
+        writer.print("</a>");
+
+    }
+
+
+    /**
+     * <p>Return the value to be rendered as the <code>href</code> attribute
+     * of the hyperlink generated for this component.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     */
+    private String href(FacesContext context) {
+
         HttpServletRequest request =
             (HttpServletRequest) context.getServletRequest();
-        writer.print(request.getContextPath());
-        writer.print("/faces?action=command&name=");
-        writer.print(value); // FIXME - URL encode?
-        writer.print("&tree=");
-        writer.print(context.getResponseTree().getTreeId()); // FIXME - URL encode?
-        writer.print("\">");
-        writer.print(value);
-        writer.print("</a>");
+        HttpServletResponse response =
+            (HttpServletResponse) context.getServletResponse();
+        StringBuffer sb = new StringBuffer(request.getContextPath());
+        sb.append("/faces?action=command&name=");
+        sb.append(currentValue(context)); // FIXME - null handling?
+        sb.append("&tree=");
+        sb.append(context.getResponseTree().getTreeId());
+        return (response.encodeURL(sb.toString()));
 
     }
 

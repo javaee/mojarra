@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.3 2002/05/22 21:37:03 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.1 2002/05/22 21:37:02 craigmcc Exp $
  */
 
 /*
@@ -16,15 +16,15 @@ import javax.faces.context.FacesContext;
 
 
 /**
- * <p><strong>UISelectOne</strong> is a {@link UIComponent} that represents
- * the user's choice of a single item from among a discrete set of
+ * <p><strong>UISelectMany</strong> is a {@link UIComponent} that represents
+ * the user's choice of a zero or more items from among a discrete set of
  * available options.  The user can modify the selected value.  Optionally,
- * the component can be preconfigured with a currently selected item.  This
- * component is generally rendered as a select box or a group of
- * radio buttons.</p>
+ * the component can be preconfigured with zero or more currently selected
+ * items.  This component is generally rendered as a select box or a group of
+ * checkboxes.</p>
  */
 
-public class UISelectOne extends UIComponent {
+public class UISelectMany extends UIComponent {
 
 
     // ------------------------------------------------------- Static Variables
@@ -33,7 +33,7 @@ public class UISelectOne extends UIComponent {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "SelectOne";
+    public static final String TYPE = "SelectMany";
 
 
     // ------------------------------------------------------------- Properties
@@ -98,9 +98,9 @@ public class UISelectOne extends UIComponent {
     /**
      * <p>Return the local value of the selected item's value.</p>
      */
-    public String getSelectedValue() {
+    public String[] getSelectedValues() {
 
-        return ((String) getAttribute("value"));
+        return ((String[]) getAttribute("value"));
 
     }
 
@@ -108,11 +108,11 @@ public class UISelectOne extends UIComponent {
     /**
      * <p>Set the local value of the selected item's value.</p>
      *
-     * @param selectedValue The new selected item's value
+     * @param selectedValues The new selected item's value
      */
-    public void setSelectedValue(String selectedValue) {
+    public void setSelectedValues(String selectedValues[]) {
 
-        setAttribute("value", selectedValue);
+        setAttribute("value", selectedValues);
 
     }
 
@@ -134,9 +134,9 @@ public class UISelectOne extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value =
-            context.getServletRequest().getParameter(getCompoundId());
-        setValue(value);
+        String values[] =
+            context.getServletRequest().getParameterValues(getCompoundId());
+        setValue(values);
 
     }
 
@@ -155,11 +155,10 @@ public class UISelectOne extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        Object oldValue = currentValue(context);
-        if (oldValue == null) {
-            oldValue = "";
+        String values[] = (String[]) currentValue(context);
+        if (values == null) {
+            values = new String[0];
         }
-        String value = oldValue.toString();
         UISelectItem items[] = getItems();
         if (items == null) {
             items = (UISelectItem[]) context.getModelValue(getItemsModel());
@@ -171,12 +170,19 @@ public class UISelectOne extends UIComponent {
         PrintWriter writer = context.getServletResponse().getWriter();
         writer.print("<select name=\"");
         writer.print(getCompoundId());
-        writer.print("\">");
+        writer.print("\" multiple=\"multiple\">");
         for (int i = 0; i < items.length; i++) {
             writer.print("<option value=\"");
             writer.print(items[i].getValue());
             writer.print("\"");
-            if (value.equals(items[i].getValue())) {
+            boolean match = false;
+            for (int j = 0; j < values.length; j++) {
+                if (values[j].equals(items[i].getValue())) {
+                    match = true;
+                    break;
+                }
+            }
+            if (match) {
                 writer.print(" selected=\"selected\"");
             }
             writer.print(">");

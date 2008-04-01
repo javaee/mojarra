@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.5 2002/05/22 17:47:26 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.6 2002/05/22 21:37:02 craigmcc Exp $
  */
 
 /*
@@ -19,29 +19,6 @@ import javax.faces.context.FacesContext;
  * <p><strong>UISelectBoolean</strong> is a {@link UIComponent} that
  * represents a single boolean (<code>true</code> or <code>false</code>) value.
  * It is most commonly rendered as a checkbox.</p>
- *
- * <p>The local value of the selected state of this component is stored
- * in the <code>value</code> property, and must be a
- * <code>java.lang.Boolean</code> (as must the model property corresponding
- * to any model reference for this component).</p>
- *
- * <p>For convenience, the local value of the selected state is accessible
- * via the <code>isSelected()</code> and <code>setSelected() methods.  The
- * <code>currentValue()</code> method should be used to retrieve the value
- * to be rendered.</p>
- *
- * <h3>Default Behavior</h3>
- *
- * <p>In the absence of a Renderer performing more sophisticated processing,
- * this component supports the following default functionality:</p>
- * <ul>
- * <li><em>decode()</em> - Set this component to true if a request parameter
- *     with our id is included in the request.</li>
- * <li><em>encodeBegin()</em> - Create an HTML
- *     <code>&lt;input type="checkbox"&gt;</code> element, which will be
- *     checked if <code>currentValue()</code> of this component is
- *     <code>true</code>.</li>
- * </ul>
  */
 
 public class UISelectBoolean extends UIComponent {
@@ -114,7 +91,8 @@ public class UISelectBoolean extends UIComponent {
             throw new NullPointerException();
         }
         Boolean newValue = Boolean.FALSE;
-        if (context.getServletRequest().getParameter(getCompoundId()) != null) {
+        String compoundId = getCompoundId();
+        if (context.getServletRequest().getParameter(compoundId) != null) {
             newValue = Boolean.TRUE;
         }
         setValue(newValue);
@@ -138,7 +116,7 @@ public class UISelectBoolean extends UIComponent {
         }
         Boolean value = (Boolean) currentValue(context);
         if (value == null) {
-            throw new NullPointerException();
+            value = Boolean.FALSE;
         }
         PrintWriter writer = context.getServletResponse().getWriter();
         writer.print("<input type=\"checkbox\" name=\"");

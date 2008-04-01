@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.6 2002/05/22 17:47:26 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.7 2002/05/22 21:37:02 craigmcc Exp $
  */
 
 /*
@@ -13,33 +13,13 @@ package javax.faces.component;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 
 /**
- * <p><strong>UIOutput</strong> is a {@link UIComponent} that can display
+ * <p><strong>UIOutput</strong> is a {@link UIComponent} that displays
  * output to the user.  The user cannot manipulate this component; it is
  * for display purposes only.  Any localization of the text to be rendered
  * is the responsibility of the application.</p>
- *
- * <p>The local value of the text to be displayed by this component
- * is stored in the <code>value</code> property, and must be a
- * <code>java.lang.String</code> (as must the model property corresponding
- * to any model reference for this component).</p>
- *
- * <p>For convenience, the local value of the text to be displayed is
- * accessible via the <code>getText()</code> and <code>setText()</code>
- * methods.  The <code>currentValue()</code> method should be used to
- * retrieve the value to be rendered.</p>
- *
- * <h3>Default Behavior</h3>
- *
- * <p>In the absence of a Renderer performing more sophisticated processing,
- * this component supports the following functionality:</p>
- * <ul>
- * <li><em>encodeBegin()</em> - Render the current value of this component
- *     directly to the response.</li>
- * </ul>
  */
 
 public class UIOutput extends UIComponent {
@@ -106,12 +86,15 @@ public class UIOutput extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        String value = (String) currentValue(context);
+        Object value = currentValue(context);
         if (value == null) {
-            throw new NullPointerException();
+            value = "";
+        }
+        if (!(value instanceof String)) {
+            value = value.toString();
         }
         PrintWriter writer = context.getServletResponse().getWriter();
-        writer.print(value);
+        writer.print((String) value);
 
     }
 
