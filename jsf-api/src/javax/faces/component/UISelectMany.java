@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.1 2002/05/22 21:37:02 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.2 2002/05/25 22:28:40 craigmcc Exp $
  */
 
 /*
@@ -52,9 +52,9 @@ public class UISelectMany extends UIComponent {
     /**
      * <p>Return the available items for this component.</p>
      */
-    public UISelectItem[] getItems() {
+    public SelectItem[] getItems() {
 
-        return ((UISelectItem[]) getAttribute("items"));
+        return ((SelectItem[]) getAttribute("items"));
 
     }
 
@@ -64,7 +64,7 @@ public class UISelectMany extends UIComponent {
      *
      * @param items The new available items
      */
-    public void setItems(UISelectItem items[]) {
+    public void setItems(SelectItem items[]) {
 
         setAttribute("items", items);
 
@@ -159,12 +159,12 @@ public class UISelectMany extends UIComponent {
         if (values == null) {
             values = new String[0];
         }
-        UISelectItem items[] = getItems();
+        SelectItem items[] = getItems();
         if (items == null) {
-            items = (UISelectItem[]) context.getModelValue(getItemsModel());
+            items = (SelectItem[]) context.getModelValue(getItemsModel());
         }
         if (items == null) {
-            items = new UISelectItem[0];
+            items = new SelectItem[0];
         }
 
         PrintWriter writer = context.getServletResponse().getWriter();

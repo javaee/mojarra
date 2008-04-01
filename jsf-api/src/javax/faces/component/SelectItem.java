@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.2 2002/05/23 17:45:31 craigmcc Exp $
+ * $Id: SelectItem.java,v 1.1 2002/05/25 22:28:40 craigmcc Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ package javax.faces.component;
  * </p>
  */
 
-public class UISelectItem {
+public class SelectItem {
 
 
     // ----------------------------------------------------------- Constructors
@@ -33,7 +33,7 @@ public class UISelectItem {
      * @param description Description of this item, for use in tools
      */
 
-    public UISelectItem(String value, String label, String description) {
+    public SelectItem(String value, String label, String description) {
 
         super();
         this.value = value;
