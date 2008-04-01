@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.4 2002/08/02 22:21:58 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.5 2002/08/05 21:22:40 eburns Exp $
  */
 
 /*
@@ -30,6 +30,8 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
+import java.util.ResourceBundle;
+import java.util.MissingResourceException;
 
 /**
  *
@@ -54,12 +56,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     // Instance Variables
     //
-    private Hashtable attributeTable;
 
     // Attribute Instance Variables
 
-
     // Relationship Instance Variables
+
+    private Hashtable attributeTable;
 
     //
     // Constructors and Initializers    
@@ -176,6 +178,50 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Message msg = resources.getMessage(facesContext, 
                 Util.CONVERSION_ERROR_MESSAGE_ID,params);
         facesContext.addMessage(comp, msg);
+    }
+
+    /**
+
+    * Look up the attribute named keyAttr in the component's attr set.
+    * Use the result as a key into the resource bundle named by the
+    * model reference in the component's "bundle" attribute.
+
+    */
+
+    protected String getKeyAndLookupInBundle(FacesContext context,
+					     UIComponent component, 
+					     String keyAttr) throws MissingResourceException{
+	String key = null, bundleName = null, bundleAttr = "bundle";
+	ResourceBundle bundle = null;
+
+	ParameterCheck.nonNull(context);
+	ParameterCheck.nonNull(component);
+	ParameterCheck.nonNull(keyAttr);
+	
+	// verify our component has the proper attributes for key and bundle.
+	if (null == (key = (String) component.getAttribute(keyAttr)) ||
+	    null == (bundleName = (String)component.getAttribute(bundleAttr))){
+	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_RESOURCE_ERROR_MESSAGE_ID),
+					       bundleName, key);
+	}
+	
+	// verify the required Class is loadable
+	// PENDING(edburns): Find a way to do this once per ServletContext.
+	if (null == Thread.currentThread().getContextClassLoader().
+	    getResource("javax.servlet.jsp.jstl.fmt.LocalizationContext")){
+	    Object [] params = { "javax.servlet.jsp.jstl.fmt.LocalizationContext" };
+	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params), bundleName, key);
+	}
+	
+	// verify there is a ResourceBundle for this modelReference
+	javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
+	if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
+		     context.getModelValue(bundleName)) ||
+	    null == (bundle = locCtx.getResourceBundle())) {
+	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_RESOURCE_ERROR_MESSAGE_ID), bundleName, key);
+	}
+	
+	return bundle.getString(key);
     }
 
 } // end of class HtmlBasicRenderer

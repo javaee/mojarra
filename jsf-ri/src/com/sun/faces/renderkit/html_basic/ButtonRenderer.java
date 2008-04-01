@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.27 2002/08/02 19:31:59 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.28 2002/08/05 21:22:39 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 
 import java.util.Iterator;
+import java.util.MissingResourceException;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.context.FacesContext;
@@ -46,7 +47,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.27 2002/08/02 19:31:59 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.28 2002/08/05 21:22:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,6 +87,59 @@ public class ButtonRenderer extends HtmlBasicRenderer {
     //
     // General Methods
     //
+
+    /** Follow the UE Spec for Button:
+     * http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
+     * JavaServerFaces/uispecs/UICommand_Button.html
+     */
+    protected String padLabel(String label) {
+	if (label.length() == 3) {
+	    label = "&nbsp;&nbsp;" + label + "&nbsp;&nbsp;";
+	} else if (label.length() == 2) {
+	    label = "&nbsp;&nbsp;&nbsp;" + label + "&nbsp;&nbsp;&nbsp;";
+	}
+	return label;
+    }
+
+    /**
+
+    * @return the image src if this component is configured to display
+    * an image label, null otherwise.
+
+    */
+
+    protected String getImageSrc(FacesContext context, 
+				 UIComponent component) {
+	String result = null;
+	try {
+	    result = getKeyAndLookupInBundle(context, component, "imageKey");
+	}
+	catch (MissingResourceException e) {
+	    // Do nothing since the absence of a resource is not an
+	    // error.
+	}
+	if (null == result) {
+	    result = (String) component.getAttribute("image");
+	}
+	return result;
+    }
+
+    protected String getLabel(FacesContext context, 
+			      UIComponent component) throws IOException {
+	String result = null;
+
+	try {
+	    result = getKeyAndLookupInBundle(context, component, "key");
+	}
+	catch (MissingResourceException e) {
+	    // Do nothing since the absence of a resource is not an
+	    // error.
+	}
+	if (null == result) {
+	    result = (String) component.getAttribute("label");
+	}
+	return result;
+    }
 
     //
     // Methods From Renderer
@@ -159,13 +213,16 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         Assert.assert_it( writer != null );
         
         //can commandName be null ?
-        String cmdName = (String) component.currentValue(context);
+        String label= null, imageSrc = null,
+	    cmdName = (String) component.currentValue(context);
         Assert.assert_it(cmdName != null);
         
         writer.write("<INPUT TYPE=");
-        if (component.getAttribute("image") != null) {
+	imageSrc = getImageSrc(context, component);
+	label = getLabel(context, component);
+        if (null != imageSrc) {
             writer.write("\"IMAGE\" SRC=\"");
-            writer.write((String) component.getAttribute("image"));
+            writer.write(imageSrc);
             writer.write("\"");
             writer.write(" NAME=\"");
             writer.write(cmdName);
@@ -175,28 +232,11 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.write(cmdName);
             writer.write("\"");
             writer.write(" VALUE=\"");
-            // Follow the UE Spec for Button:
-            // http://javaweb.sfbay.sun.com/engineering/jsue/j2ee/WebServices/
-            // JavaServerFaces/uispecs/UICommand_Button.html
-            // If there is no label specified, default to commandName.
-            String label = (String)component.getAttribute("label");
             if ( label == null ) {
                 label = cmdName;
             }    
-            if (label.length() == 3) {
-                writer.write("&nbsp;&nbsp;");
-                writer.write(label);
-                writer.write("&nbsp;&nbsp;");
-                writer.write("\"");
-            } else if (label.length() == 2) {
-                writer.write("&nbsp;&nbsp;&nbsp;");
-                writer.write(label);
-                writer.write("&nbsp;&nbsp;&nbsp;");
-                writer.write("\"");
-            } else {
-                writer.write(label);
-                writer.write("\"");
-            }
+	    writer.write(padLabel(label));
+	    writer.write("\"");
         }
         writer.write(">");
     }

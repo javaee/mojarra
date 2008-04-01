@@ -5,11 +5,16 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
     <%@ taglib uri="WEB-INF/lib/basic.tld" prefix="basic" %>
 
     <H3> JSF Basic Components Test Page </H3>
     <hr>
+       <fmt:setBundle
+	    basename="basic.Resources"
+	    scope="session" var="basicBundle"/>
+
        <faces:usefaces>  
         <faces:form id="basicForm" formName="basicForm" >
 
@@ -29,7 +34,8 @@
             </tr>
 
             <tr> 
-              <td> <faces:output_text id="userLabel" text="Username" /> </td>
+              <td> <faces:output_text id="userLabel" key="usernameLabel" 
+                                      bundle="${basicBundle}"/> </td>
               <td> 
 
                    <faces:textentry_input id="userName">
@@ -52,7 +58,8 @@
             </tr>
 
             <tr>
-               <td> <faces:output_text id="pwdLabel" text="Password" /> </td>
+               <td> <faces:output_text id="pwdLabel" key="passwordLabel" 
+                                      bundle="${basicBundle}" /> </td>
 
                <td> 
 
@@ -79,7 +86,7 @@
 
             <tr>
                <td> <faces:output_text id="doubleLabel" 
-                                       text="Double (3.2 - 3.9)" /> </td>
+                            key="doubleLabel" bundle="${basicBundle}" /> </td>
 
                <td> 
 
@@ -108,7 +115,7 @@
 
             <tr>
                <td> <faces:output_text id="intLabel" 
-                                       text="Integer (1-10)" /> </td>
+                        key="intLabel" bundle="${basicBundle}" /> </td>
 
                <td> 
 
@@ -136,8 +143,8 @@
              </tr>
 
             <tr>
-               <td> <faces:output_text id="stringLength" 
-                                       text="Letter (a-f)" /> </td>
+               <td> <faces:output_text id="stringLength" key="characterLabel" 
+                                      bundle="${basicBundle}" /> </td>
 
                <td> 
 
@@ -166,14 +173,17 @@
 
        
              <tr>
-                <td> <faces:output_text id="addrLabel" text="Address" /> </td>
+                <td> <faces:output_text id="addrLabel" key="addressLabel" 
+                                      bundle="${basicBundle}" /> </td>
                 <td> <faces:textentry_textarea rows="10" cols="10" 
                                                id="address" /> </td>
              </tr>
 
               <tr>
              <td> <faces:selectboolean_checkbox id="validUser" 
-                                                label="Valid User"/>
+                                                label="Valid User" 
+                                                key="validUserLabel" 
+                                                bundle="${basicBundle}"/>
                   </td>
              </tr>
 
@@ -188,7 +198,9 @@
 
 	      <faces:command_hyperlink id="link" 
                   target="/faces/Basic_Thanks.jsp"
-                  commandName="thankyoulink" label="Link to Thank You page"/>
+                  commandName="thankyoulink" label="Link to Thank You page"
+                                                key="linkLabel" 
+                                                bundle="${basicBundle}"/>
 
 	</TD>
 
@@ -199,9 +211,8 @@
 
 	<TD>
 
-	      <faces:command_hyperlink id="imageLink" target="/basic/index.html"
-                  image="/basic/duke.gif"/>
-              Image Link to index
+	      <faces:command_hyperlink id="imageLink" 
+                      target="/basic/index.html" image="/basic/duke.gif"/>
 
 	</TD>
 
@@ -270,8 +281,9 @@
 
 	<TD>
 
-             <faces:command_button id="login" label="Login"
-                                   commandName="login"/>
+             <faces:command_button id="login" label="Login" 
+                                key="loginButton"
+                                bundle="${basicBundle}" commandName="login"/>
 
 	</TD>
 

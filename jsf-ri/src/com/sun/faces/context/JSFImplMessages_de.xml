@@ -5,20 +5,20 @@
 
 <messages>
   <message messageId="MSG0001" severity="1" summary="{0} is not a valid number.">
-  	<detail>Please re-enter a valid number.</detail>
+  	<detail>Bitte tret eines gultige Anzahl wieder ein.</detail>
   </message>
   <message messageId="MSG0002" severity="2" summary="{0} is not a valid date." >
-      <detail>Please re-enter date in mm/dd/yy format.</detail>
+      <detail>Bitte tret eines Datum in mm/dd/jj Format weider ein.</detail>
   </message>
   <message messageId="MSG0003" severity="3" summary="{0} field cannot be empty." />
   <message messageId="MSG0004" severity="2" summary="{0} out of range." >
-      <detail>Value should be between {1} and {2}.</detail>
+      <detail>Wert muß zwischen {1} und {2} sein.</detail>
   </message>
   <message messageId="MSG0005" severity="4" summary="Conversion Error." >
-      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+      <detail>Konvertierungsfehler wahrend ansetzen {0} für Model {1} : Ausnahme: [2].</detail>
   </message>
   <message messageId="com.sun.faces.TYPECONVERSION_ERROR" severity="4" summary="Conversion Error." >
-      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+      <detail>Konvertierungsfehler wahrend ansetzen {0} für Model {1} : Ausnahme: [2].</detail>
   </message>
   <message messageId="com.sun.faces.MODELUPDATE_ERROR" severity="4" summary="Model Update failure." >
       <detail>Error updating value {0} for model {1} : Exception: [2].</detail>

@@ -65,6 +65,16 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
+        <name>key</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>imageKey</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
         <name>commandName</name>
         <required>true</required>
         <rtexprvalue>false</rtexprvalue>
@@ -76,6 +86,11 @@
       </attribute>
       <attribute>
         <name>image</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
+      <attribute>
+        <name>bundle</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -116,6 +131,17 @@
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>bundle</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+
   </tag>
 
   <tag>
@@ -141,6 +167,16 @@
         <name>label</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>bundle</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
 
@@ -261,6 +297,16 @@
     </attribute>
     <attribute>
       <name>text</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>key</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>bundle</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.14 2002/07/19 23:57:57 eburns Exp $
+ * $Id: FacesTag.java,v 1.15 2002/08/05 21:22:42 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.14 2002/07/19 23:57:57 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.15 2002/08/05 21:22:42 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -57,6 +57,10 @@ public abstract class FacesTag extends javax.faces.webapp.FacesTag
 
 // Attribute Instance Variables
 
+protected String key = null;
+protected String imageKey = null;
+protected String bundle = null;
+
 // Relationship Instance Variables
 
 //
@@ -75,6 +79,38 @@ public FacesTag()
 // 
 // Accessors
 //
+
+    public String getKey()
+    {
+	return key;
+    }
+    
+    public void setKey(String newKey)
+    {
+	key = newKey;
+    }
+
+    public String getImageKey()
+    {
+	return imageKey;
+    }
+    
+    public void setImageKey(String newImageKey)
+    {
+	imageKey = newImageKey;
+    }
+
+    public String getBundle()
+    {
+	return bundle;
+    }
+    
+    public void setBundle(String newBundle)
+    {
+	bundle = newBundle;
+    }
+    
+
 
     /**
 
@@ -130,6 +166,22 @@ public final String getRendererType()
 }
 
 public abstract UIComponent createComponent();
+
+protected void overrideProperties(UIComponent component) 
+{
+    super.overrideProperties(component);
+    String keyAttr = null;
+
+    if (null == component.getAttribute("key")) {
+	component.setAttribute("key", getKey());
+    }
+    if (null == component.getAttribute("imageKey")) {
+	component.setAttribute("imageKey", getImageKey());
+    }
+    if (null == component.getAttribute("bundle")) {
+	component.setAttribute("bundle", getBundle());
+    }
+}
 
 // 
 // Methods From TagSupport

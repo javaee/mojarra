@@ -92,6 +92,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${jasper_hacked.jar}"/>
+    <pathelement location="${jstl.jar}"/>
   </path>
 
 
@@ -347,6 +348,8 @@
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${commons.digester.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${commons.logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${standard.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jasper_hacked.jar}"
 	  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.25 2002/08/02 19:32:01 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.26 2002/08/05 21:22:40 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.25 2002/08/02 19:32:01 jvisvanathan Exp $
+ * @version $Id: TextRenderer.java,v 1.26 2002/08/05 21:22:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -181,8 +181,17 @@ public class TextRenderer extends HtmlBasicRenderer {
         }
 
         if (currentValue == null) {
-            return;
-        }
+	    try {
+		currentValue = getKeyAndLookupInBundle(context, component, 
+						       "key");
+	    }
+	    catch (java.util.MissingResourceException e) {
+		// Do nothing since the absence of a resource is not an
+		// error.
+		return;
+	    }
+	}
+
 
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.21 2002/08/02 22:22:36 rkitain Exp $
+ * $Id: Util.java,v 1.22 2002/08/05 21:22:42 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.21 2002/08/02 22:22:36 rkitain Exp $
+ * @version $Id: Util.java,v 1.22 2002/08/05 21:22:42 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,6 +120,12 @@ public class Util extends Object
 
     public static final String SUPPORTS_COMPONENT_ERROR_MESSAGE_ID =
         "com.sun.faces.SUPPORTS_COMPONENT_ERROR";
+
+    public static final String MISSING_RESOURCE_ERROR_MESSAGE_ID =
+        "com.sun.faces.MISSING_RESOURCE_ERROR";
+
+    public static final String MISSING_CLASS_ERROR_MESSAGE_ID =
+        "com.sun.faces.MISSING_CLASS_ERROR";
 //
 // Class Variables
 //

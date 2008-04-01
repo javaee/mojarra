@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.28 2002/08/02 19:31:59 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.29 2002/08/05 21:22:39 eburns Exp $
  *
  */
 
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.28 2002/08/02 19:31:59 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.29 2002/08/05 21:22:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -207,7 +207,19 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         }
 
         writer.write(">");
-        String label = (String)component.getAttribute("label");
+        String label = null;
+
+	try {
+	    label = getKeyAndLookupInBundle(context, component, "key");
+	}
+	catch (java.util.MissingResourceException e) {
+	    // Do nothing since the absence of a resource is not an
+	    // error.
+	}
+	if (null == label) {
+	    label = (String)component.getAttribute("label");
+	}
+
         if (label != null) {
             writer.write(" ");
             writer.write(label);

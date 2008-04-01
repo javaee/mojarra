@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.27 2002/08/01 23:47:36 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.28 2002/08/05 21:22:40 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.27 2002/08/01 23:47:36 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.28 2002/08/05 21:22:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,7 +176,18 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             writer.write(image);
             writer.write("\">");
         }
-        String text = (String)component.getAttribute("label");
+        String text = null;
+
+	try {
+	    text = getKeyAndLookupInBundle(context, component, "key");
+	}
+	catch (java.util.MissingResourceException e) {
+	    // Do nothing since the absence of a resource is not an
+	    // error.
+	}
+	if (null == text) {
+	    text = (String)component.getAttribute("label");
+	}
         if (text != null) {
             writer.write(text);
         }
