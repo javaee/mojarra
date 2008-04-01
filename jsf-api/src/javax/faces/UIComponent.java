@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.7 2002/03/13 17:59:33 eburns Exp $
+ * $Id: UIComponent.java,v 1.8 2002/03/15 20:49:22 jvisvanathan Exp $
  */
 
 /*
@@ -489,10 +489,10 @@ public abstract class UIComponent {
 
     /**
      * Will recursively validate all components in this hierarchy.
+     * @param ec EventContext object representing the event-processing
+     *           phase of this request
      */
     public void validateAll(EventContext ec) {
-        // PENDING ( visvan )
-        // is it possible to avoid traversing the tree so many times.
         ObjectManager ot = ec.getObjectManager();
         ServletRequest request = ec.getRequest();
         RenderContext rc = (RenderContext)ot.get(request,
@@ -502,51 +502,28 @@ public abstract class UIComponent {
         while (iterator.hasNext()) {
             child = (UIComponent) iterator.next();
             if ( child != null && child instanceof Validatible ) {
+                child.validateAll(ec);
+            } 
+            if (child instanceof Validatible ) {
                 ((Validatible)child).validate(ec);
-            }    
+            }   
         }
-        if ( isValid()) {
-            // validation succeeded, push values to model
-            iterator = getChildren(rc);
-            while ( iterator.hasNext() ) {
-                child = (UIComponent) iterator.next();
-                if ( child instanceof Validatible ) {
-                    child.pushValueToModel(rc);
-                    ((Validatible)child).setValidState(Validatible.UNVALIDATED);
-                }    
-            }
-        } else {
-            // PENDING ( visvan ) hack to store the validation state.
-            // If validation fails, UICommand object has to stop
-            // processing listeners and set outcome in NavigationHandler.
-            // when validateAll returns it resets the state to UNVALIDATED
-            // so isValid() will always return false whether validation
-            // succeeded or not. How to get around this ??
-            setAttribute("valid", "false");
-            
-            // convert the objects back to String for rendering. Otherwise
-            // it will cause ClassCastExceptions while rendering and processing
-            // events and set valid state to unvalidated for all components
-            iterator = getChildren(rc);
-            while ( iterator.hasNext() ) {
-                child = (UIComponent) iterator.next();
-                if ( child instanceof Validatible && child.getValue(rc) != null ) {
-                    child.setValue(child.getValue(rc).toString());
-                    ((Validatible)child).setValidState(Validatible.UNVALIDATED);
-                }    
-            }    
-        }    
     }
 
-    /**
-
-    * PENDING(edburns): not sure if this method is necessary.  Used when
-    * validation is not required, but we still need to push values to
-    * the models.
-
+   /**
+    * Will recursively push all component values to model
+    * to model if validation succeeded. If validation failed,
+    * converts local values to string for rendering. Right we
+    * do this only for validatible components. For others, values
+    * get pushed during their dispatch method since we haven't
+    * implemented them yet.
+    *
+    * @param ec EventContext object representing the event-processing
+    *           phase of this request 
     */
+    //PENDING (visvan) check method name with Aim.
+    public void pushAllValuesToModel(EventContext ec) {
 
-    public void hackPushTreeToModels(EventContext ec) {
 	ObjectManager objectManager = ec.getObjectManager();
 	ServletRequest request = ec.getRequest();
         RenderContext rc = (RenderContext)objectManager.get(request,
@@ -557,9 +534,24 @@ public abstract class UIComponent {
 	// Assert.assert_it(null != treeNav);
 	UIComponent next;
 	treeNav.reset();
-	while (null != (next = treeNav.getNextStart())) {
-	    next.pushValueToModel(rc);
-	}
+        if (treeNav.getRoot().isValid()) {
+	    while (null != (next = treeNav.getNextStart())) {
+                if ( (next instanceof Validatible) ) {
+                    next.pushValueToModel(rc);
+                    ((Validatible)next).setValidState(Validatible.UNVALIDATED);
+                }
+            }
+        } else {
+            while (null != (next = treeNav.getNextStart())) {
+                if ( (next instanceof Validatible) ) { 
+                    Object value = next.getValue(rc);
+                    if ( value != null ) {
+                        next.setValue(value.toString());
+                    }
+                    ((Validatible)next).setValidState(Validatible.UNVALIDATED);
+                }
+            }
+        }
 	treeNav.reset();
     }
 
@@ -580,8 +572,7 @@ public abstract class UIComponent {
         while ( iterator.hasNext() ) {
             child = (UIComponent) iterator.next();
             if ( child instanceof Validatible ) {
-                if (((Validatible)child).getValidState() == Validatible.INVALID
-                    || ((Validatible)child).getValidState() == Validatible.UNVALIDATED) {
+                if (((Validatible)child).getValidState() == Validatible.INVALID) {
                     valid = false;
                     break;
                 } else {
@@ -619,12 +610,13 @@ public abstract class UIComponent {
         this.modelReference = modelReference;
     }
 
-    /**
-
+   /**
     * If localValue is non-null, we just return it.  Else, if we have a
     * model reference, we ask it for a value.  If it does, we cache it
     * in localValue.  Then we return localValue.
-
+    *
+    * @param rc the render context used to render this component
+    * @return String containing the current text value
     */ 
 
     public Object getValue(RenderContext rc) {
@@ -634,26 +626,36 @@ public abstract class UIComponent {
 	}
         return result;
     }
-    
+  
+   /**
+    * Sets the current value. 
+    *
+    * @param newValue object containing the current value 
+    */
     public void setValue(Object newValue) {
 	setAttribute(Constants.REF_VALUE, newValue);
     }
 
-    /**
-
-    *   If we do not have a modelReference, do nothing.  Else, If
-    *   localValue non-null, try to push localValue into model().  If
-    *   successful, set localValue to null, else leave localValue alone.
-
+   /**
+    * If we do not have a modelReference, do nothing.  Else, If
+    * localValue non-null, try to push localValue into model().  If
+    * successful, set localValue to null, else leave localValue alone.
+    *
+    * PENDING(aim): should be moved to ValueComponent subclass(?)
+    * @param rc the render context used to render this component
     */
 
     public void pushValueToModel(RenderContext rc) {
-        
+      
+        Object localValue = ht.get(Constants.REF_VALUE); 
 	if (null == modelReference) {
+            // local value should be converted to String for rendering
+            // purposeS
+            if ( localValue != null ) {
+                setValue(localValue.toString());
+            }
 	    return;
 	}
-	Object localValue = ht.get(Constants.REF_VALUE);
-	
 	if (null != localValue) {
             try {
                 rc.getObjectAccessor().setObject(rc.getRequest(), 
@@ -667,13 +669,12 @@ public abstract class UIComponent {
 	}
     }
 
-    /**
-
-    *   If we do not have a modelReference, do nothing.  If non-null
-    *   value from model, overwrite local value, else do nothing. <P>
-
+   /**
+    * If we do not have a modelReference, do nothing.  If non-null
+    * value from model, overwrite local value, else do nothing. <P>
+    *
+    * @param rc the render context used to render this component
     * @return the value from the model
-
     */
 
     public Object pullValueFromModel(RenderContext rc) {

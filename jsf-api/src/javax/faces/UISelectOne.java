@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.11 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: UISelectOne.java,v 1.12 2002/03/15 20:49:22 jvisvanathan Exp $
  */
 
 /*
@@ -537,4 +537,35 @@ public class UISelectOne extends UIComponent implements EventDispatcher {
             description = null;
         }
     }
+
+    /**
+    * If we do not have a modelReference, do nothing.  Else, If
+    * localValue non-null, try to push localValue into model().  If
+    * successful, set localValue to null, else leave localValue alone.
+    *
+    * PENDING(aim): should be moved to ValueComponent subclass(?)
+    * @param rc the render context used to render this component
+    */
+
+    public void pushValueToModel(RenderContext rc) {
+
+        Object localValue = getAttribute(rc,Constants.REF_VALUE);
+        if (null == selectedModelReference) {
+            if ( localValue != null ) {
+                setValue(localValue.toString());
+            }
+            return;
+        }
+        if (null != localValue) {
+            try {
+                rc.getObjectAccessor().setObject(rc.getRequest(),
+                                           selectedModelReference, localValue);
+                setValue(null);
+            } catch ( FacesException e ) {
+                // local value should be converted to String for rendering
+                // purposes
+                setValue(localValue.toString());
+            }
+        }
+    }	
 }

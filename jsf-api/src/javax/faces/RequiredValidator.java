@@ -1,5 +1,5 @@
 /*
- * $Id: RequiredValidator.java,v 1.2 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: RequiredValidator.java,v 1.3 2002/03/15 20:49:22 jvisvanathan Exp $
  */
 
 /*
@@ -16,10 +16,6 @@ package javax.faces;
 public class RequiredValidator implements Validator {
 
     private static String TYPE = "RequiredValidator";
-
-    // PENDING ( visvan ) these messages have to be localized. Revisit while
-    // integrating Gary's validation proposal.
-    public final static String NULL_VALUE_MESSAGE_KEY = "Value cannot be empty";
 
     public RequiredValidator() {
     }
@@ -43,12 +39,12 @@ public class RequiredValidator implements Validator {
     public void validate(EventContext ec, UIComponent component, Object value) 
             throws ValidationException {
 
-        // PENDING (visvan)
-        // only String values need to be validated because "required" checking
-        // for other data types will be taken care of by converters.
 	if (value == null || (value instanceof String && value.equals(""))) {
-	    throw new ValidationException(NULL_VALUE_MESSAGE_KEY);
+            MessageList msgList = ec.getMessageList();
+            msgList.addMessage("MSG0003", component.getId(), value);
+	    throw new ValidationException("");
         } 
         return;
-    }    
+    }
+
 }

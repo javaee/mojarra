@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.2 2002/03/08 00:22:07 jvisvanathan Exp $
+ * $Id: FormatValidator.java,v 1.3 2002/03/15 20:49:21 jvisvanathan Exp $
  */
 
 /*
@@ -19,11 +19,6 @@ package javax.faces;
 public class FormatValidator implements Validator {
 
     private static String TYPE = "FormatValidator";
-
-    // PENDING (visvan) these messages have to be localized. Revisit while
-    // integrating Gary's validation proposal.
-    public final static String VALUE_NOT_STRING_MESSAGE_KEY = "javax.faces.valueNotStringMessage";
-    public final static String INVALID_FORMAT_MESSAGE_KEY = "javax.faces.invalidFormatMessage";
 
     /**
      * Instantiates a format validator object with a null format mask;
@@ -50,8 +45,11 @@ public class FormatValidator implements Validator {
             Object value) throws ValidationException {
         // PENDING (visvan) not yet implemented. Look at Swing's
         // JFormattedTextField.
+        MessageList msgList = ec.getMessageList();
+
 	if (value == null || !(value instanceof String)) {
-	    throw new ValidationException( VALUE_NOT_STRING_MESSAGE_KEY);
+            msgList.addMessage("MSG0007", component.getId(), value);
+	    throw new ValidationException("");
 	}
     }
 }

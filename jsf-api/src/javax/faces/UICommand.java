@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.7 2002/03/13 17:59:33 eburns Exp $
+ * $Id: UICommand.java,v 1.8 2002/03/15 20:49:22 jvisvanathan Exp $
  */
 
 /*
@@ -151,31 +151,36 @@ public class UICommand extends UIComponent implements EventDispatcher {
             // To do this, we need the component hierarchy, which can be obtained.
             // Makes sure validation is done only once.
             boolean reqValidation = cl.requiresValidation(cmd_event);
-	    
 
-	    if (!reqValidation) {
-		TreeNavigator treeNav = (TreeNavigator) ot.get(request, 
-					       Constants.REF_TREENAVIGATOR);
-		treeNav.getRoot().hackPushTreeToModels(eventContext);
-	    }
-	    else if ( reqValidation && !doneValidation ) {
-                doneValidation = true;
+	    if ( reqValidation && !doneValidation ) {
                 // if validation did not succed, stop processing listeners
                 // and set the outcome in NavigationHandler.
                 valid = performValidation(eventContext);
-                if ( !valid ) {
-                    break;
-                }    
+            }
+            // if validation is not required, then this would directly push
+            // values to model and resets valid state.
+            if ( !doneValidation ) {
+                TreeNavigator treeNav = (TreeNavigator) ot.get(request,
+                                              Constants.REF_TREENAVIGATOR);
+                treeNav.getRoot().pushAllValuesToModel(eventContext);
+                doneValidation = true;
             }
             if ((!reqValidation) || valid ) {
                 try {
+                    TreeNavigator treeNav = (TreeNavigator) ot.get(request,
+                                               Constants.REF_TREENAVIGATOR);
+
                     NavigationHandler nh = eventContext.getNavigationHandler();
                     cl.doCommand(cmd_event, nh);
                 } catch ( CommandFailedException cfe ) {
                     throw new FacesException ("CommandListener" + listenerName
                             + " execution unsuccessful");
                 }
-            }    
+            }
+            // ifi validation failed stop processing any more commands
+            if (!valid ) {
+                break;
+            }
         }
     }
    
@@ -184,31 +189,34 @@ public class UICommand extends UIComponent implements EventDispatcher {
      * and returns status.
      */ 
     protected boolean performValidation ( EventContext eventContext ) {
+
+        boolean valid = false;
+
         ObjectManager ot = eventContext.getObjectManager();
         ServletRequest request = eventContext.getRequest();
-        String formId = request.getParameter(Constants.REF_UIFORMID);
-        if ( formId != null ) {
-            UIForm formObj = (UIForm ) ot.get( request, formId);
-            formObj.validateAll(eventContext);  
+      
+        TreeNavigator treeNav = (TreeNavigator) ot.get(request,
+                                              Constants.REF_TREENAVIGATOR);
+        treeNav.getRoot().validateAll(eventContext);
+        treeNav.reset();
 
+        if ( !treeNav.getRoot().isValid() ) {
             // if validation failed set the outcome in navigationHandler.
             // By default, this would result in current page being redisplayed
             // since there is no targetPath
-            // PENDING ( visvan ) get rid of this once the bug is fixed.
-            String valid = (String) formObj.getAttribute(null, "valid");
-            if ( valid != null ) {
-                formObj.setAttribute("valid", null);
-                NavigationHandler nh = eventContext.getNavigationHandler();
-                String cmd_name = (String) getAttribute(null,"commandName");
-                if ( nh != null ) {
-                    nh.handleCommandOutcome(cmd_name, 
-                        Constants.OUTCOME_VALIDATION_FAILED);
-                }
-            } else {
-                return true;
+            NavigationHandler nh = eventContext.getNavigationHandler();
+            String cmd_name = (String) getAttribute(null,"commandName");
+            if ( cmd_name == null ) {
+                cmd_name = getId();
             }
+            if ( nh != null ) {
+                nh.handleCommandOutcome(cmd_name, 
+                    Constants.OUTCOME_VALIDATION_FAILED);
+            } 
+        } else {
+           valid = true;
         }
-        return false;
+        return valid;
     }    
 	
 }

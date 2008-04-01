@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.2 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: LengthValidator.java,v 1.3 2002/03/15 20:49:21 jvisvanathan Exp $
  */
 
 /*
@@ -17,11 +17,6 @@ package javax.faces;
 public class LengthValidator implements Validator {
 
     private static String TYPE = "LengthValidator";
-
-    // PENDING (visvan) these messages have to be localized. Revisit while
-    // integrating Gary's validation proposal.
-    public final static String VALUE_NOT_STRING_MESSAGE_KEY = "Invalid Type";
-    public final static String INVALID_LENGTH_MESSAGE_KEY = "Length not within the range";
 
     /**
      * Instantiates a length validator object.
@@ -47,20 +42,38 @@ public class LengthValidator implements Validator {
      */
     public void validate(EventContext ec, UIComponent component, Object value) 
             throws ValidationException {
-        
+    
+        MessageList msgList = ec.getMessageList();
+        String componentId = component.getId();
+ 
 	if (value == null || !(value instanceof String)) {
-	    throw new ValidationException(VALUE_NOT_STRING_MESSAGE_KEY);
+            msgList.addMessage("MSG0007", componentId, value);
+	    throw new ValidationException("");
 	}
-        Integer minChars = (Integer) component.getAttribute(null, "lengthMinimum");
-        Integer maxChars =  (Integer) component.getAttribute(null, "lengthMaximum");
-        if ( minChars == null || maxChars == null ) {
-            throw new ValidationException(INVALID_LENGTH_MESSAGE_KEY);
+        Object minChars = component.getAttribute(null, "lengthMinimum");
+        Object maxChars = component.getAttribute(null, "lengthMaximum");
+    
+        if ( minChars != null &&  minChars instanceof String) {
+            minChars = new Integer((String)minChars);
+        } else if ( minChars == null ) {
+            minChars = new Integer(0);
+        } 
+
+        if ( maxChars != null &&  maxChars instanceof String) {
+            maxChars = new Integer((String)maxChars);
+        } else if ( maxChars == null ) {
+            // if maxchars is not specified, there is no point in doing
+            // validation
+            return;
         }
+
         int minimumChars = ((Integer)minChars).intValue();
         int maximumChars = ((Integer)maxChars).intValue();
         int length = ((String)value).length();
         if (length < minimumChars || length > maximumChars) {
-            throw new ValidationException(INVALID_LENGTH_MESSAGE_KEY );
+            msgList.addMessage("MSG0005", componentId, value, minChars.toString(),
+                    maxChars.toString());
+            throw new ValidationException("");
 	}
 	
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: RangeValidator.java,v 1.2 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: RangeValidator.java,v 1.3 2002/03/15 20:49:22 jvisvanathan Exp $
  */
 
 /*
@@ -14,14 +14,9 @@ package javax.faces;
  * that a value object's value is a numeric value within a specified
  * range: minimum >= value <= maximum.
  */
-public class RangeValidator extends RequiredValidator {
+public class RangeValidator implements Validator {
 
     private static String TYPE = "RangeValidator";
-
-    // PENDING ( visvan ) these messages have to be localized. Revisit while
-    // integrating Gary's validation proposal.
-    public final static String NON_NUMERIC_MESSAGE_KEY = "Invalid Type";
-    public final static String OUT_OF_RANGE_MESSAGE_KEY = "Value out of range";
 
     public RangeValidator() {
     }
@@ -45,16 +40,9 @@ public class RangeValidator extends RequiredValidator {
     public void validate(EventContext ec, UIComponent component, Object value) 
             throws ValidationException {
 
-        // PENDING (visvan) RangeValidator need not invoke requiredValidator
-        // because if the value is null, it will be caught during conversion.
-        // so RangeValidator need not extend from RequiredValidator. Check before
-        // changing the API.
-        /*try {         
-	    super.validate(ec, component, value); // RequiredValidator:validate()
-        } catch (ValidationException ve ) {
-            throw ve;
-        } */ 
-   
+        MessageList msgList = ec.getMessageList();
+        String componentId= component.getId();
+    
         int intValue = -1;
 	if (value instanceof Integer) {
             intValue = ((Integer)value).intValue();
@@ -62,22 +50,38 @@ public class RangeValidator extends RequiredValidator {
 	    try {
                 intValue = Integer.parseInt((String)value);
             } catch (NumberFormatException e) {
-                throw new ValidationException(NON_NUMERIC_MESSAGE_KEY);
+                msgList.addMessage("MSG0001", componentId, value);
+                throw new ValidationException("");
 	     }
 	} else {
-            throw new ValidationException(NON_NUMERIC_MESSAGE_KEY);
+            msgList.addMessage("MSG0001", componentId, value);
+            throw new ValidationException("");
 	}
 
-        Integer minValue = (Integer) component.getAttribute(null, "rangeMinimum");
-        Integer maxValue =  (Integer) component.getAttribute(null, "rangeMaximum");
+        Object minValue = component.getAttribute(null, "rangeMinimum");
+        Object  maxValue = component.getAttribute(null, "rangeMaximum");
 
-        if ( minValue == null || maxValue == null ) {
-            throw new ValidationException(OUT_OF_RANGE_MESSAGE_KEY);
-        }    
+
+        if ( minValue != null &&  minValue instanceof String) {
+            minValue = new Integer((String)minValue);
+        } else if ( minValue == null ) {
+            minValue = new Integer(0);
+        }
+
+        if ( maxValue != null &&  maxValue instanceof String) {
+            maxValue = new Integer((String)maxValue);
+        } else if ( maxValue == null ) {
+            // if maxValue is not specified, there is no point in doing
+            // validation
+            return;
+        }
         int minimum = ((Integer)minValue).intValue();
         int maximum = ((Integer)maxValue).intValue();
 	if (intValue < minimum || intValue > maximum) {
-            throw new ValidationException(OUT_OF_RANGE_MESSAGE_KEY);
+            msgList.addMessage("MSG0004", componentId, value, 
+                minValue.toString(), maxValue.toString());
+            throw new ValidationException("");
 	}
     }
+
 }

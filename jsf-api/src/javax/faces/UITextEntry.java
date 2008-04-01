@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.8 2002/03/08 00:22:08 jvisvanathan Exp $
+ * $Id: UITextEntry.java,v 1.9 2002/03/15 20:49:23 jvisvanathan Exp $
  */
 
 /*
@@ -284,9 +284,7 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
     public void validate(EventContext eventContext) {
         Converter converterObj = null;
         Object obj = null;
-        
-        // PENDING ( visvan ) not sure if the error message should be set here
-        // or in validator.
+     
         ObjectManager objectManager = eventContext.getObjectManager();
         ServletRequest request = eventContext.getRequest();
         RenderContext rc = (RenderContext)objectManager.get(request,
@@ -301,30 +299,41 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
         if ( converterReference != null ) {
             converterObj = (Converter)objectManager.get(request, converterReference);
         } else if ( (getAttribute(null, "modelType")) != null ){
-            // if modelType is String, need not obtain converter
-            Class converterClass = (Class)getAttribute(null, "modelType");
+
+            Class converterClass = null;
+
+            Object model_type = getAttribute(null, "modelType");
+            if ( model_type instanceof String ) {
+                try {
+                    converterClass = Class.forName((String)model_type);
+                } catch ( ClassNotFoundException cfe ) {
+                    // PENDING ( visvan ) throw JSPException or just warn ??
+                }
+            } else {
+                converterClass = (Class)model_type;
+            }
+
             String converterClassName = converterClass.getName();
+            // if modelType is String, need not obtain converter
             if ( ! converterClassName.equals("java.lang.String") ) {
                 // get converter from converterManager.
                 ConverterManager cm = (ConverterManager)
                     objectManager.get(Constants.REF_CONVERTERMANAGER);
-                converterObj = cm.getConverter((Class)getAttribute(null, "modelType"));
+                converterObj = cm.getConverter(converterClass);
             }
         }
         if ( converterObj != null ) {
             try {
-                obj = converterObj.convertStringToObject(rc, this, 
+                obj = converterObj.convertStringToObject(eventContext, this, 
                         (String) getValue(rc));
             } catch ( ValidationException ce ) {
                 // if conversion failed don't proceed to validation
-                setErrorMessage(rc, ce.getMessage(), obj);
+                handleError(obj);
                 return;
             }    
-        }
-        // PENDING ( visvan )
-        // if no converters are found and the model Type is not set
-        // as String, should it be an error ? Currently it is lenient.
-        // if no validators are set
+        } 
+        // if no validators are set, if the conversion was successful
+        // then values could still be pushed to model.
         if ( validators == null ) {
             setValidState( Validatible.VALID);
             return;
@@ -348,23 +357,20 @@ public class UITextEntry extends UIComponent implements EventDispatcher,
                     // cache the validated value
                     setValue(obj);
                 } catch ( ValidationException ve ) {
-                    setErrorMessage(rc, ve.getMessage(), obj);    
+                    handleError(obj);    
                 }
-            }
+            } 
         }    
     }
    
     /**
-     * Sets error message and state
+     * Resets the state and converts the value back to string for 
+     * rendering purpose.
      */ 
-    protected void setErrorMessage (RenderContext rc, String errorMessage,
-            Object obj) {
-        
-        // set error message in the message model object
+    protected void handleError(Object obj) {
         setValidState ( Validatible.INVALID);
-        // PENDING ( visvan ) this should go away once we integrate
-        // Gary's proposal. This is temporary solution to check in
-        // validation work.
-        setAttribute("errorMessage", errorMessage);
+        if ( obj != null ) {
+            setValue(obj.toString());
+        }
     }             
 }

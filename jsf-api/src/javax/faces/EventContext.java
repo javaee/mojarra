@@ -85,6 +85,14 @@ public abstract class EventContext {
 	return null; //compile
     }
 
+    /**
+     * @return A central message list that can be used by all parts of the
+     * request to store messages.
+     */
+    public MessageList getMessageList() {
+        return null;
+    }
+
 
 }
 
