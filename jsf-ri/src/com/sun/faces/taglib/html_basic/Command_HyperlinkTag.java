@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.21 2002/07/12 19:44:36 eburns Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.22 2002/07/19 22:44:25 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Command_HyperlinkTag.java,v 1.21 2002/07/12 19:44:36 eburns Exp $
+ * @version $Id: Command_HyperlinkTag.java,v 1.22 2002/07/19 22:44:25 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,6 +75,11 @@ public Command_HyperlinkTag()
 // 
 // Accessors
 //
+    public String getCommandName() { return commandname; }
+    public void setCommandName(String newCommandname) {
+        ParameterCheck.nonNull(newCommandname);
+        commandname = newCommandname;
+    }
 
     public void setTarget(String newTarget) {
 	target = newTarget;
