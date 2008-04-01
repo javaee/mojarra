@@ -293,7 +293,7 @@
             <test name="com.sun.faces.TestObjectAccessor"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.TestParamBlockingRequestWrapper"/>
-            <!-- PENDING(visvan) Test for Validation will be added soon -->
+            <test name="com.sun.faces.TestValidation"/>
         </junit>
 
     </target>
