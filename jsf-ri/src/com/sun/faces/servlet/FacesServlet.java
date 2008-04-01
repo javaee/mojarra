@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.6 2001/12/06 22:59:16 visvan Exp $
+ * $Id: FacesServlet.java,v 1.7 2001/12/19 18:31:47 rogerk Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -309,22 +309,17 @@ public class FacesServlet extends HttpServlet {
         // Get the last portion of the request and use it as an index 
         // into mappings configuration table to get the target url.
         //  
-        System.out.println("FORWARDING REQUEST");
-        String selectUrl = null;
-        String requestInfo = req.getRequestURI();
-        int lastPathSeperator = requestInfo.lastIndexOf("/") + 1;
-        if (lastPathSeperator != -1) { 
-            selectUrl = requestInfo.substring(lastPathSeperator,
-            requestInfo.length()); 
-        }
+        String forwardUrl = req.getPathInfo();
 
-        //PENDING (rogerk) use selectUrl to determine where to forward
-        // (from action mappings table)
+        // "getPathInfo" will return path information after the 
+        // servlet address but before query data. 
+        //     Example (assume "faces" maps to our servlet):
+        //     /faces/survey.jsp --> /survey.jsp
+        //     /faces/foo/survey.jsp --> /foo/survey.jsp
         // Use that url as the target.
-        String forwardUrl = "/"+selectUrl;
         System.out.println("FORWARDURL:"+ forwardUrl);
         RequestDispatcher reqD = 
-                getServletContext().getRequestDispatcher(res.encodeURL(forwardUrl));
+                getServletContext().getRequestDispatcher(forwardUrl);
         try {
             reqD.forward(req, res); 
         } catch ( IllegalStateException ie ) {
