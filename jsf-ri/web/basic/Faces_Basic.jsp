@@ -7,11 +7,12 @@
         <faces:DeclareBean scope="session" name="LoginBean" 
                            className="basic.LoginBean"/>
         <faces:DeclareBean scope="session" name="ShipTypeBean" 
-                           className="basic.LoginBean"/>
+                           className="basic.ShipTypeBean"/>
 
         <faces:Form name='basicForm' model="LoginBean">
             <faces:Listener name="loginListener" scope="session" className="basic.EventHandler" />
-            <faces:Listener name="selectOneListener" scope="session" className="basic.EventHandler" />
+            <faces:Listener name="radioListener" scope="session" className="basic.EventHandler" />
+            <faces:Listener name="optionListener" scope="session" className="basic.EventHandler" />
             <faces:Command name="handleLogin" scope="session" className="basic.EventHandler" onCompletion="welcome.jsp" onError="error.jsp"/>
 
            <table> 
@@ -40,7 +41,7 @@
 <faces:RadioGroup name="shipType" 
                   model="$ShipTypeBean.shipType" 
                   selectedValueModel="$ShipTypeBean.currentShipType" 
-                  valueChangeListener="selectOneListener">
+                  valueChangeListener="radioListener">
   <TABLE border="2"><TR><TD>
   <TABLE>
   <TR>
@@ -51,6 +52,22 @@
   </TABLE>
   </TD></TR></TABLE>
 </faces:RadioGroup>
+
+</TR>
+<TR>Options: 
+    <faces:SelectOne_OptionList name="appleQuantity"
+                   valueChangeListener="optionListener">
+        <faces:SelectOne_Option value="0" label="0.00"/>
+        <faces:SelectOne_Option value="1" label="1.00"/>
+        <faces:SelectOne_Option value="2" label="2.00"/>
+        <faces:SelectOne_Option value="3" label="3.00"/>
+        <faces:SelectOne_Option value="4" selected="true" label="4.00"/>
+        <faces:SelectOne_Option value="5" label="5.00"/>
+        <faces:SelectOne_Option value="6" label="6.00"/>
+        <faces:SelectOne_Option value="7" label="7.00"/>
+        <faces:SelectOne_Option value="8" label="8.00"/>
+        <faces:SelectOne_Option value="9" label="9.00"/>
+    </faces:SelectOne_OptionList>
 
 </TR>
           </table>
