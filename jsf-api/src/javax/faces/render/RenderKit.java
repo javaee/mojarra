@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.2 2002/05/16 00:09:27 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.3 2002/05/17 05:06:13 craigmcc Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ public abstract class RenderKit {
      * implementation shall return
      * <code>RenderKitFactory.DEFAULT_RENDER_KIT</code></p>
      */
-    public abstract String getRenderKitName();
+    public abstract String getRenderKitId();
 
 
     /**
