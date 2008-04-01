@@ -4,28 +4,31 @@
 
 <page-url>/TestRenderersFromJsp.jsp</page-url>
 
-<window id="basicForm" formName="basicForm">
+<window id="basicForm" formName="basicForm" rendererType="FormRenderer">
 
-<label id="userLabel" value="UserName" />
-<textbox id="userName" value="default" />
+<label id="userLabel" value="UserName" rendererType="TextRenderer" />
+<textbox id="userName" value="default" rendererType="InputRenderer" />
 
-<label id="pwdLabel" value="Password" />
-<textbox id="password" type="password" />
+<label id="pwdLabel" value="Password" rendererType="TextRenderer" />
+<textbox id="password" type="password" rendererType="InputRenderer" />
 
-<label id="addrLabel" value="Address" />
-<textbox id="address" multiline="true" />
+<label id="addrLabel" value="Address" rendererType="TextRenderer" />
+<textbox id="address" multiline="true" rendererType="TextAreaRenderer" />
 
 <checkbox id="validUser" label="Checker" 
-          modelReference="${TestBean.boolProp}"/>
+          modelReference="${TestBean.boolProp}" 
+          rendererType="CheckboxRenderer" />
 
-<radiogroup id="shipType" modelReference="${TestBean.prop}">
+<radiogroup id="shipType" modelReference="${TestBean.prop}" 
+            rendererType="RadioRenderer" >
 
 <radio value="nextDay" label="Next Day" />
 <radio value="nextWeek" label="Next Week" checked="true" />
 <radio value="nextMonth" label="Next Month" />
 </radiogroup>
 
-<menupopup id="appleQuantity" modelReference="${TestBean.prop}">
+<menupopup id="appleQuantity" modelReference="${TestBean.prop}" 
+           rendererType="OptionListRenderer" >
 
 <menuitem value="0" label="0.00"/>
 <menuitem value="1" label="1.00"/>
@@ -40,9 +43,11 @@
 
 </menupopup>
 
-<button id="login" label="Login" value="loginButton" />
+<button id="login" label="Login" value="loginButton" 
+        rendererType="ButtonRenderer" />
 
-<button id="login2" src="duke.gif" value="loginButton" />
+<button id="login2" src="duke.gif" value="loginButton" 
+        rendererType="ButtonRenderer" />
 
 </window>
 
