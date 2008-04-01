@@ -45,8 +45,9 @@
 
 	<TD>
 
-	      <faces:command_hyperlink id="link" target="index.html"
-				       label="back to index"/>
+	      <faces:command_hyperlink id="link" 
+                  target="/faces/Basic_Thanks.jsp"
+                  commandName="thankyoulink" label="Link to Thank You page"/>
 
 	</TD>
 
@@ -57,8 +58,8 @@
 
 	<TD>
 
-	      <faces:command_hyperlink id="imageLink" target="index.html"
-				       image="/basic/duke.gif"/>
+	      <faces:command_hyperlink id="imageLink" target="/basic/index.html"
+                  image="/basic/duke.gif"/>
               Image Link to index
 
 	</TD>
@@ -128,8 +129,8 @@
 
 	<TD>
 
-	      <faces:command_button id="login" label="Login" 
-				    commandName="login"/>
+             <faces:command_button id="login" label="Login"
+                                   commandName="login"/>
 
 	</TD>
 
@@ -140,8 +141,8 @@
 
 	<TD>
 
-	      <faces:command_button id="imageButton" image="/basic/duke.gif"
-				    commandName="login"/>
+             <faces:command_button id="imageButton" image="/basic/duke.gif"
+                                   commandName="login"/>
 
                Image button that does the same thing
 

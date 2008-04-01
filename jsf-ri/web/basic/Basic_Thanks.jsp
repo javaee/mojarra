@@ -10,15 +10,18 @@
     <H3> Basic Components Thank You Page </H3>
     <hr>
        <faces:usefaces>
-        <faces:form id="/basicForm" >
+        <faces:form id="basicForm" formName="basicForm" >
 
             <table> 
             <tr> 
-              <td> <faces:output_text id="thanksLabel" /> </td>
+              <td> <faces:output_text id="thanksLabel" text="Thanks for using the Basic Application..." /> </td>
             </tr>
 
           </TR>
-            <td><faces:command_hyperlink id="mylink" /></td>
+            <td><faces:command_hyperlink id="link" 
+                target="/faces/Faces_Basic.jsp" 
+                commandName="basiclink" 
+                label="Back To Components Page" /></td>
           </TR>
 
           </table>
