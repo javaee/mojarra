@@ -266,20 +266,6 @@
     </javadoc>
   </target>
 
-  <target name="run-factory" depends="compile" 
-   description="Run the factory test">
-    <java classname="com.sun.faces.renderkit.html_basic.HtmlBasicRenderContextFactory">
-      <classpath refid="compile.classpath"/>
-    </java>
-  </target>
-
-  <target name="test-objectmanager" depends="compile" 
-   description="Run the test of ObjectManager">
-    <java classname="com.sun.faces.ObjectTableImpl">
-      <classpath refid="compile.classpath"/>
-    </java>
-  </target>
-
     <target name="compile.test" depends="prepare,compile"
      description="Run unit tests">
 
