@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectManager.java,v 1.3 2002/01/18 21:52:31 edburns Exp $
+ * $Id: TestObjectManager.java,v 1.4 2002/01/19 01:51:23 edburns Exp $
  */
 
 /*
@@ -16,8 +16,10 @@ import javax.servlet.http.HttpSession;
 import javax.faces.ObjectManager;
 import javax.faces.ObjectManager.Scope;
 import javax.faces.ObjectManager.ScopeListener;
+import javax.faces.ObjectManager.ManagedValue;
 import javax.faces.ObjectManager.ActiveValue;
 import javax.faces.ObjectManager.LazyValue;
+import javax.faces.Constants;
 
 import com.sun.faces.ObjectManagerImpl.ScopeImpl;
 
@@ -30,7 +32,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectManager.java,v 1.3 2002/01/18 21:52:31 edburns Exp $
+ * @version $Id: TestObjectManager.java,v 1.4 2002/01/19 01:51:23 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -319,6 +321,61 @@ public void testScopeListener() {
 	assertTrue(true);
 	assertTrue(empty != System.getProperty(didEnter));
 	assertTrue(empty != System.getProperty(didExit));
+    }
+    catch(Exception e) {
+	System.out.println("testEnterExit: caught exception");
+	assertTrue(false);
+    }
+}
+
+public void testManagedValue() {
+    ParamBlockingRequestWrapper wrapped = 
+	new ParamBlockingRequestWrapper(request);
+    String empty = "empty";
+    final String willRemove = "willRemove";
+    final String didRemove = "didRemove";
+    System.setProperty(willRemove, empty);
+    System.setProperty(didRemove, empty);
+
+    String managedValueName = "managedValue";
+    Object managedValue = new ManagedValue() {
+	    public void willRemove(Scope scope, Object scopeKey, Object name) {
+		System.out.println("Got willRemove: " + scope + " " + 
+				   scopeKey + " " + name);
+		boolean test = false;
+
+		test = scope.isA(scopeKey);
+		System.out.println("Got willRemove: " + 
+				   "Testing scope.isA(scopeKey): " + test);
+		assertTrue(test);
+
+		System.setProperty(willRemove, willRemove);
+	    }
+	    public void didRemove(Scope scope, Object scopeKey, Object name) {
+		System.out.println("Got didRemove: " + scope + " " + 
+				   scopeKey + " " + name);
+		boolean test = false;
+
+		test = scope.isA(scopeKey);
+		System.out.println("Got didRemove: " + 
+				   "Testing scope.isA(scopeKey): " + test);
+		assertTrue(test);
+		
+		System.setProperty(didRemove, didRemove);
+	    }
+	};
+    Object result;
+
+    System.out.println("Testing ManagedValue");
+
+    wrapped.setAttribute(Constants.REF_REQUESTINSTANCE, wrapped);
+    objectManager.put(wrapped, managedValueName, managedValue);
+    try {
+	System.out.println("Testing doFilter:");
+	filter.doFilter(wrapped, response, filterChain);
+	assertTrue(true);
+	assertTrue(empty != System.getProperty(willRemove));
+	assertTrue(empty != System.getProperty(didRemove));
     }
     catch(Exception e) {
 	System.out.println("testEnterExit: caught exception");

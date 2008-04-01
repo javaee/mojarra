@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectManagerImpl.java,v 1.2 2002/01/18 21:52:30 edburns Exp $
+ * $Id: ObjectManagerImpl.java,v 1.3 2002/01/19 01:51:23 edburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.ServletContext;
  * <B>Lifetime And Scope</B> <P> This instance is created by the
  * FacesServlet in its init method.
 
- * @version $Id: ObjectManagerImpl.java,v 1.2 2002/01/18 21:52:30 edburns Exp $
+ * @version $Id: ObjectManagerImpl.java,v 1.3 2002/01/19 01:51:23 edburns Exp $
  * 
  * @see	javax.faces.ObjectManager
  *
@@ -163,6 +163,21 @@ protected ScopeImpl(Class yourScopeClass) {
 
 /**
 
+* This class is used in Scope.exit().  Consider it a struct.
+
+*/
+
+private class ManagedValueWrapper extends Object {
+    public String name;
+    public ManagedValue value;
+    public ManagedValueWrapper(String yourName, ManagedValue yourVal) {
+	name = yourName;
+	value = yourVal;
+    }
+}
+
+/**
+
 * @return true if the given scope is active
 
 */
@@ -235,12 +250,6 @@ public void bind(Object name, LazyValue value) {
 public void bind(Object name, ActiveValue value) {
     outerMap.put(name, value);
 }
-
-    /*
-     *public void bind(Object name, Object value) {
-     *    outerMap.put(name, value);
-     *}
-     */
 
 public void put(Object scopeKey, Object name, Object value) {
     scopeKey = fixScopeKey(scopeKey);
@@ -322,17 +331,56 @@ public void exit(Object scopeKey) {
 
     // clear the map
     Map scopeMap = (Map) innerMap.get(scopeKey);
+    Vector managedValues = null;
+    Iterator iter;
     if (null != scopeMap) {
-	Iterator iter;
 	Set keys = scopeMap.keySet();
 	if (null != keys) {
 	    iter = keys.iterator();
 	    // remove all the entries in the outer map for this scopeKey
 	    while (iter.hasNext()) {
-		outerMap.remove((String) iter.next());
+		String nextKey = (String) iter.next();
+		Object val = scopeMap.get(nextKey);
+		if (val instanceof ManagedValue) {
+		    // lazily create the local Vector
+		    if (null == managedValues) {
+			managedValues = new Vector();
+		    }
+		    // We use a wrapper here to encapsulate two pieces
+		    // of information only known during the traversal
+		    // through the keySet: 1) the name of this instance
+		    // in the ObjectManager 2) the instance itself.
+		    // This information is used in calling willExit,
+		    // didExit
+		    managedValues.add(new ManagedValueWrapper(nextKey, 
+						      (ManagedValue)val));
+		}
+		outerMap.remove(nextKey);
 	    }
 	}
+	// call the willRemove 
+	if (null != managedValues) {
+	    ManagedValueWrapper val;
+	    iter = managedValues.iterator();
+	    while (iter.hasNext()) {
+		val = (ManagedValueWrapper) iter.next();
+		val.value.willRemove(this, scopeKey, val.name);
+	    }
+	}
+
 	scopeMap.clear();
+
+	// call the didRemove 
+	if (null != managedValues) {
+	    ManagedValueWrapper val;
+	    iter = managedValues.iterator();
+	    while (iter.hasNext()) {
+		val = (ManagedValueWrapper) iter.next();
+		val.value.didRemove(this, scopeKey, val.name);
+	    }
+	}
+	managedValues = null;
+
 	innerMap.remove(scopeKey);
     }
 }
