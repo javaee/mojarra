@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.43 2002/07/26 22:01:13 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.44 2002/07/29 00:26:08 craigmcc Exp $
  */
 
 /*
@@ -469,6 +469,10 @@ public interface UIComponent extends Serializable {
      * <code>addRequestEvent()</code> on the associated {@link FacesContext}.
      * </p>
      *
+     * <p>The default behavior of this method is to delegate to the
+     * associated {@link Renderer} if there is one; otherwise this method
+     * does nothing.</p>
+     *
      * @param context FacesContext for the request we are processing
      *
      * @exception IOException if an input/output error occurs during decoding
@@ -490,6 +494,10 @@ public interface UIComponent extends Serializable {
      * <code>currentValue()</code>, and rendering the value as appropriate.
      * </p>
      *
+     * <p>The default behavior of this method is to delegate to the
+     * associated {@link Renderer} if there is one; otherwise this method
+     * does nothing.</p>
+     *
      * @param context FacesContext for the response we are creating
      *
      * @exception IOException if an input/output error occurs while rendering
@@ -505,6 +513,10 @@ public interface UIComponent extends Serializable {
      * appropriate value to be rendered.  This method will only be called
      * if the <code>rendersChildren</code> property is <code>true</code>.</p>
      *
+     * <p>The default behavior of this method is to delegate to the
+     * associated {@link Renderer} if there is one; otherwise this method
+     * does nothing.</p>
+     *
      * @param context FacesContext for the response we are creating
      *
      * @exception IOException if an input/output error occurs while rendering
@@ -519,6 +531,10 @@ public interface UIComponent extends Serializable {
      * <code>UIComponent</code>, following the rules described for
      * <code>encodeBegin()</code> to acquire the appropriate value
      * to be rendered.</p>
+     *
+     * <p>The default behavior of this method is to delegate to the
+     * associated {@link Renderer} if there is one; otherwise this method
+     * does nothing.</p>
      *
      * @param context FacesContext for the response we are creating
      *
