@@ -1,5 +1,5 @@
 /*
- * $Id: TestParamBlockingRequestWrapper.java,v 1.2 2002/01/03 05:36:31 edburns Exp $
+ * $Id: TestParamBlockingRequestWrapper.java,v 1.3 2002/01/15 02:17:32 rogerk Exp $
  */
 
 /*
@@ -36,14 +36,14 @@ import java.util.Set;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestParamBlockingRequestWrapper.java,v 1.2 2002/01/03 05:36:31 edburns Exp $
+ * @version $Id: TestParamBlockingRequestWrapper.java,v 1.3 2002/01/15 02:17:32 rogerk Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestParamBlockingRequestWrapper extends ServletTestCase {
+public class TestParamBlockingRequestWrapper extends FilterTestCase {
     //
     // Protected Constants
     //
