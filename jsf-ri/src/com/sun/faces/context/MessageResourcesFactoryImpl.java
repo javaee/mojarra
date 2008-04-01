@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesFactoryImpl.java,v 1.2 2002/07/25 16:36:33 eburns Exp $
+ * $Id: MessageResourcesFactoryImpl.java,v 1.3 2002/07/26 21:04:19 eburns Exp $
  */
 
 /*
@@ -49,6 +49,10 @@ public class MessageResourcesFactoryImpl extends MessageResourcesFactory
     public MessageResourcesFactoryImpl()
     {
         super();
+	// Pre-populate our list with the required MessageResources
+	// instances.
+	getMessageResources(FACES_API_MESSAGES);
+	getMessageResources(FACES_IMPL_MESSAGES);
     }
 
     //
