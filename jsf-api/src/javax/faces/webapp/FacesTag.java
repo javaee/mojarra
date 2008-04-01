@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.15 2002/07/16 23:26:25 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.16 2002/07/26 03:44:25 craigmcc Exp $
  */
 
 /*
@@ -13,11 +13,13 @@ package javax.faces.webapp;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Stack;
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.faces.tree.Tree;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -243,7 +245,14 @@ public abstract class FacesTag extends TagSupport {
                 throw new JspException(e);
             }
         } else {
-            RenderKit renderKit = context.getResponseTree().getRenderKit();
+            String renderKitId =
+                context.getResponseTree().getRenderKitId();
+            if (renderKitId == null) { // FIXME - i18n
+                throw new JspException("No renderKitId specified");
+            }
+            RenderKitFactory rkFactory = (RenderKitFactory)
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+            RenderKit renderKit = rkFactory.getRenderKit(renderKitId);
             if (renderKit == null) { // FIXME - i18n
                 throw new JspException("Cannot find RenderKit");
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: Tree.java,v 1.3 2002/05/22 17:55:48 craigmcc Exp $
+ * $Id: Tree.java,v 1.4 2002/07/26 03:44:24 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.tree;
 
 
+import java.io.Serializable;
 import javax.faces.component.UIComponent;
 import javax.faces.render.RenderKit;
 
@@ -23,27 +24,25 @@ import javax.faces.render.RenderKit;
  * unique within the scope of a web application.</p>
  */
 
-public abstract class Tree {
-
-
-    // ------------------------------------------------------------- Properties
+public abstract class Tree implements Serializable {
 
 
     /**
-     * <p>Return the {@link RenderKit} instance (if any) associated with
-     * this <code>Tree</code>.</p>
+     * <p>Return the render kit identifier of the {@link RenderKit} instance
+     * (if any) associated with this <code>Tree</code>.</p>
      */
-    public abstract RenderKit getRenderKit();
+    public abstract String getRenderKitId();
 
 
     /**
-     * <p>Set the {@link RenderKit} instance (if any) associated with
-     * this <code>Tree</code>.</p>
+     * <p>Set the render kit identifier of the  {@link RenderKit} instance
+     * (if any) associated with this <code>Tree</code>.</p>
      *
-     * @param renderKit The new {@link RenderKit}, or <code>null</code>
-     *  to disassociate this tree with any specific RenderKit instance
+     * @param renderKit The new {@link RenderKit} identifier, or
+     *  <code>null</code> to disassociate this tree with any specific
+     *  {@link RenderKit} instance
      */
-    public abstract void setRenderKit(RenderKit renderKit);
+    public abstract void setRenderKitId(String renderKitId);
 
 
     /**
@@ -58,18 +57,6 @@ public abstract class Tree {
      * <p>Return the tree identifier for this <code>Tree</code>.</p>
      */
     public abstract String getTreeId();
-
-
-    // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Release any resources associated with this <code>Tree</code>
-     * instance.  Faces implementations may choose to pool instances in the
-     * associated {@link TreeFactory} to avoid repeated object creation
-     * and garbage collection.
-     */
-    public abstract void release();
 
 
 }
