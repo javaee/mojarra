@@ -1,4 +1,38 @@
-MessageRenderer
+FormRenderer
+TextRenderer
+ButtonRenderer
+	label
+
+		The text label displayed in the button
+
+		Label
+
+		label
+
+		class java.lang.String
+
+	image
+
+		The path name of the image displayed in the component
+
+		Image
+
+		image
+
+		class java.lang.String
+
+HyperlinkRenderer
+CheckboxRenderer
+	label
+
+		The text label displayed for the checkbox
+
+		Label
+
+		label
+
+		class java.lang.String
+
 InputRenderer
 	size
 
@@ -19,19 +53,6 @@ InputRenderer
 		maxlength
 
 		class java.lang.Integer
-
-TextAndGraphicRenderer
-FormRenderer
-CheckboxRenderer
-	label
-
-		The text label displayed for the checkbox
-
-		Label
-
-		label
-
-		class java.lang.String
 
 TextAreaRenderer
 	wrap
@@ -64,30 +85,6 @@ TextAreaRenderer
 
 		class java.lang.Integer
 
-ButtonRenderer
-	label
-
-		The text label displayed in the button
-
-		Label
-
-		label
-
-		class java.lang.String
-
-	image
-
-		The path name of the image displayed in the component
-
-		Image
-
-		image
-
-		class java.lang.String
-
-HyperlinkRenderer
-RadioRenderer
-OptionListRenderer
 SecretRenderer
 	size
 
@@ -109,4 +106,7 @@ SecretRenderer
 
 		class java.lang.Integer
 
-TextRenderer
+RadioRenderer
+OptionListRenderer
+RadioRenderer
+OptionListRenderer
