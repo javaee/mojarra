@@ -151,6 +151,7 @@
         <copy file="${cactus.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.beanutils.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${commons.collections.jar}" todir="${out.test.dir}/lib"/>
+        <copy file="${commons.logging.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jasper_hacked.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${jsf-api.jar}" todir="${out.test.dir}/lib"/>
         <copy file="${basedir}/build/lib/jsf-ri.jar" todir="${out.test.dir}/lib"/>

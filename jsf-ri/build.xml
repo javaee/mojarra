@@ -86,6 +86,7 @@
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
     <pathelement location="${commons.beanutils.jar}"/>
+    <pathelement location="${commons.logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${xerces.jar}"/>
@@ -209,6 +210,7 @@
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
+    <copy  file="${commons.logging.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
 
     <copy  file="${jsf-api.jar}"
            todir="${dist.home}/${app.name}/WEB-INF/lib"/>
@@ -242,6 +244,7 @@
     <!-- copy dependent libs to tomcat/libs -->
     <copy  file="${commons.beanutils.jar}" todir="${deploy.home}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
+    <copy  file="${commons.logging.jar}" todir="${deploy.home}/WEB-INF/lib"/>
     <copy  file="${jsf-api.jar}" 
            todir="${deploy.home}/WEB-INF/lib"/>
     <copy  file="${build.home}/lib/${name}.jar"  
@@ -339,6 +342,7 @@
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <copy  file="${commons.logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jasper_hacked.jar}"
 	  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
@@ -372,6 +376,7 @@
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
+    <copy  file="${commons.logging.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
     <copy  file="${jasper_hacked.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
     <copy file="${jsf-api.jar}" todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
     <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${cardemo.name}/WEB-INF/lib"/>
