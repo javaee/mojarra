@@ -1,7 +1,7 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020605
+jsf-api cvs tag for this implementation: JSF_API_20020605A
 jsf-api-spec for this implementation: JSF_20020604.pdf
 
 Overview of the Current Implementation
@@ -112,9 +112,6 @@ Known Issues With This Release
   time, which implies that the default decode() is used, but the
   RenderKit's encode is used.
 
-* The javax.faces.webapp.ComponentTag in jsf-api cvs tag JSF_API_20020605
-  doesn't work unless you apply the following patch:
-
 * The unit tests could use some refactoring
 
 * It's impossible to use the same tree on different jsp pages since the
@@ -122,32 +119,3 @@ Known Issues With This Release
   page, with different extensions of course.  For example: login.xul and
   login.jsp.  This restriction will be lifted when we have a better idea
   for navigation.
-
-Index: ComponentTag.java
-===================================================================
-RCS file: /export/cvs/jsf-api/src/javax/faces/webapp/ComponentTag.java,v
-retrieving revision 1.1
-diff -u -r1.1 ComponentTag.java
---- ComponentTag.java	2002/06/06 04:30:32	1.1
-+++ ComponentTag.java	2002/06/09 01:31:14
-@@ -12,7 +12,9 @@
- 
- import javax.faces.component.UIComponent;
- 
-+import javax.servlet.jsp.JspException;
- 
-+
- /**
-  * <p><strong>ComponentTag</strong> is a generic custom action that accepts
-  * only a component identifier (<code>id</code>) and renderer type
-@@ -102,6 +104,9 @@
-         }
- 
-     }
-+
-+    public int doStartTag() throws JspException { return super.doStart(); }
-+    public int doEndTag() throws JspException { return super.doEnd(); }
- 
- 
- }
-
