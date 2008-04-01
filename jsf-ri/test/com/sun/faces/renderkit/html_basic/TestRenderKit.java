@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.3 2001/12/03 22:47:11 edburns Exp $
+ * $Id: TestRenderKit.java,v 1.4 2001/12/13 01:17:13 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -34,7 +34,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.3 2001/12/03 22:47:11 edburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.4 2001/12/13 01:17:13 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,6 +103,8 @@ public void testFactory() {
 	assertTrue(false);
     }
     assertTrue(true);
+
+    com.sun.faces.util.DebugUtil.waitForDebugger();
 
     if (null == kit) {
 	System.out.println("Can't find default RenderKit!");

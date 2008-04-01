@@ -111,11 +111,11 @@
     <mkdir dir="${build.home}"/>
     <mkdir dir="${build.home}/bin"/>
     <mkdir dir="${build.home}/classes"/>
+    <mkdir dir="${build.home}/classes/META-INF"/>
     <mkdir dir="${build.home}/javadocs"/>
     <mkdir dir="${build.home}/lib"/>
-    <mkdir dir="${build.home}/library/classes/META-INF/tlds"/>
     <copy file="${conf.share.dir}/html_basic.tld"
-         tofile="${build.home}/library/classes/META-INF/html_basic.tld"/>
+         toDir="${build.home}/classes/META-INF"/>
     <!-- unjar mozutil to classes, so we don't have to expose it -->
     <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
@@ -363,7 +363,18 @@
     </copy>
   </target>
 
+  <!-- 
+       =================================================================== 
+         Create the jars
+       =================================================================== 
+  -->
+  <target name="jars" depends="compile">
+    <jar jarfile="${build.home}/lib/${name}.jar" 
+         basedir="${build.home}/classes" > 
+    </jar>
 
-  <target name="main" depends="prepare,compile"/>
+  </target>
+
+  <target name="main" depends="prepare,compile,jars"/>
 
 </project>
