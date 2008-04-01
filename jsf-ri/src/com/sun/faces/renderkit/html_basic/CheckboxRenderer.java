@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
+ * $Id: CheckboxRenderer.java,v 1.24 2002/06/12 23:51:06 jvisvanathan Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.24 2002/06/12 23:51:06 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,7 +125,7 @@ public class CheckboxRenderer extends Renderer {
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModel();
+        String modelRef = component.getModelReference();
 
         //PENDING(rogerk) if there was nothing sent in the request,
         //the checkbox wasn't checked..

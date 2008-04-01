@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.17 2002/06/06 00:15:02 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.18 2002/06/12 23:51:07 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.17 2002/06/06 00:15:02 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.18 2002/06/12 23:51:07 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,7 +134,7 @@ public class RadioRenderer extends Renderer {
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModel();
+        String modelRef = component.getModelReference();
         
         // If modelReference String is null or newValue is null, type
         // conversion is not necessary. This is because default type
@@ -199,7 +199,7 @@ public class RadioRenderer extends Renderer {
         }    
         SelectItem items[] = uiSelectOne.getItems();
         if (items == null) {
-            String itemsModel = uiSelectOne.getItemsModel();
+            String itemsModel = uiSelectOne.getItemsModelReference();
             if ( itemsModel != null ) {
                 items = (SelectItem[]) context.getModelValue(itemsModel);
             }    

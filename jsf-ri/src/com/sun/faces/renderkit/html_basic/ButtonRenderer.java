@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.22 2002/06/06 00:15:01 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.23 2002/06/12 23:51:05 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.22 2002/06/06 00:15:01 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.23 2002/06/12 23:51:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,25 +115,10 @@ public class ButtonRenderer extends Renderer {
         return (componentType.equals(UICommand.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) {
-        
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
-        }    
-        ParameterCheck.nonNull(component);
-        
-        String name = context.getServletRequest().getParameter("name");
-        if (name == null) {
-            return;
-        }
-        if (!name.equals(component.currentValue(context))) {
-            return;
-        }
-
-        // queue command event to be processed during Invoke Applications phase.
-        context.addApplicationEvent(new CommandEvent(component, name));
+    public void decode(FacesContext context, UIComponent component) 
+            throws IOException {
     }
-
+    
     public void encodeBegin(FacesContext context, UIComponent component) 
             throws IOException {
         if ( context == null ) {

@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.5 2002/06/07 22:55:30 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.6 2002/06/12 23:51:04 jvisvanathan Exp $
  */
 
 /*
@@ -16,6 +16,11 @@ import javax.faces.render.RenderKitFactory;
  */
 public class RIConstants {
 
+    /**
+     * <p>Path Info prefix that indicates a form submit.</p>
+     */
+    public static final String FORM_PREFIX = "/faces/form/";
+    
     /**
      * Used to add uniqueness to the names.
     */

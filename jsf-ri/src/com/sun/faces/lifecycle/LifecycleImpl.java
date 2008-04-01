@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.6 2002/06/07 00:01:02 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.7 2002/06/12 23:51:04 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.6 2002/06/07 00:01:02 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.7 2002/06/12 23:51:04 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -133,15 +133,22 @@ protected void registerBefore(int phaseId, Phase phase)
 {
     Assert.assert_it(null != phaseWrappers);
 
+    Phase genericPhase = null;
     PhaseWrapper wrapper = null;
-
-    try {
-	wrapper = (PhaseWrapper) phaseWrappers.get(phaseId);
-    }
-    catch(Throwable e) {
-	Assert.assert_it(false, "Can't find phase " + phaseId);
-    }
+   
+    // PENDING (visvan) Ed: please review
+    Iterator it = phaseWrappers.iterator();
+    while ( it.hasNext() ) {
+        wrapper = (PhaseWrapper) it.next();
+        Assert.assert_it(wrapper != null);
+        genericPhase = wrapper.instance;
+        Assert.assert_it(genericPhase != null);
+        if ( (((GenericPhaseImpl)genericPhase).getId()) == phaseId) {
+            break;
+        }
+    }    
     
+    Assert.assert_it(wrapper != null);
     wrapper.registerBefore(phase);
 }
 
@@ -155,15 +162,22 @@ protected void registerAfter(int phaseId, Phase phase)
 {
     Assert.assert_it(null != phaseWrappers);
 
+    Phase genericPhase = null;
     PhaseWrapper wrapper = null;
-
-    try {
-	wrapper = (PhaseWrapper) phaseWrappers.get(phaseId);
-    }
-    catch(Throwable e) {
-	Assert.assert_it(false, "Can't find phase " + phaseId);
-    }
+  
+    // PENDING (visvan) Ed: please review
+    Iterator it = phaseWrappers.iterator();
+    while ( it.hasNext() ) {
+        wrapper = (PhaseWrapper) it.next();
+        Assert.assert_it(wrapper != null);
+        genericPhase = wrapper.instance;
+        Assert.assert_it(genericPhase != null);
+        if ( (((GenericPhaseImpl)genericPhase).getId()) == phaseId) {
+            break;
+        }
+    }    
     
+    Assert.assert_it(wrapper != null);
     wrapper.registerAfter(phase);
 }
 
@@ -171,10 +185,22 @@ protected int executeRender(FacesContext context) throws FacesException
 {
     Assert.assert_it(null != phaseWrappers);
     int rc = 0;
+    Phase renderPhase = null;
+    PhaseWrapper wrapper = null;
     
-    Phase renderPhase = 
-	((PhaseWrapper) 
-	 phaseWrappers.get(Lifecycle.RENDER_RESPONSE_PHASE)).instance;
+    // PENDING (visvan) Ed: please review
+    Iterator it = phaseWrappers.iterator();
+    while ( it.hasNext() ) {
+        wrapper = (PhaseWrapper) it.next();
+        Assert.assert_it(wrapper != null);
+        renderPhase = wrapper.instance;
+        Assert.assert_it(renderPhase != null);
+        if ( (((GenericPhaseImpl)renderPhase).getId()) == 
+                Lifecycle.RENDER_RESPONSE_PHASE) {
+            break;
+        }
+    }
+    
     Assert.assert_it(null != renderPhase);
     rc = renderPhase.execute(context);
     

@@ -2,67 +2,58 @@
 id:root
 value=null
 attr=componentId : root
-attr=rendersChildren : false
-  ===>Type:Form
+  ===>Type:javax.faces.component.UIForm
   id:basicForm
   value=basicForm
   attr=componentId : basicForm
   attr=parent : com.sun.faces.tree.XmlTreeFactoryImpl
-  attr=rendersChildren : false
   attr=value : basicForm
-    ===>Type:Output
+    ===>Type:javax.faces.component.UIOutput
     id:userLabel
     value=UserName
     attr=componentId : userLabel
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
     attr=value : UserName
-    ===>Type:TextEntry
+    ===>Type:javax.faces.component.UITextEntry
     id:userName
     value=default
     attr=componentId : userName
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
     attr=value : default
-    ===>Type:Output
+    ===>Type:javax.faces.component.UIOutput
     id:pwdLabel
     value=Password
     attr=componentId : pwdLabel
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
     attr=value : Password
-    ===>Type:TextEntry
+    ===>Type:javax.faces.component.UITextEntry
     id:password
     value=null
     attr=componentId : password
     attr=parent : javax.faces.component.UIForm
     attr=type : password
-    attr=rendersChildren : false
-    ===>Type:Output
+    ===>Type:javax.faces.component.UIOutput
     id:addrLabel
     value=Address
     attr=componentId : addrLabel
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
     attr=value : Address
-    ===>Type:TextEntry
+    ===>Type:javax.faces.component.UITextEntry
     id:address
     value=null
     attr=multiline : true
     attr=componentId : address
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
-    ===>Type:SelectBoolean
+    ===>Type:javax.faces.component.UISelectBoolean
     id:validUser
     modelReference:${TestBean.boolProp}
     value=false
-    attr=model : 
+    attr=modelReference : 
     attr=label : Checker
     attr=componentId : validUser
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
     attr=value : false
-    ===>Type:SelectOne
+    ===>Type:javax.faces.component.UISelectOne
     id:shipType
     modelReference:${TestBean.prop}
      {
@@ -70,7 +61,7 @@ attr=rendersChildren : false
     	 value=nextWeek label=Next Week description=null
     	 value=nextMonth label=Next Month description=null
      }
-    ===>Type:SelectOne
+    ===>Type:javax.faces.component.UISelectOne
     id:appleQuantity
     modelReference:${TestBean.prop}
      {
@@ -85,17 +76,15 @@ attr=rendersChildren : false
     	 value=8 label=8.00 description=null
     	 value=9 label=9.00 description=null
      }
-    ===>Type:Command
+    ===>Type:javax.faces.component.UICommand
     id:login
     value=null
     attr=label : Login
     attr=componentId : login
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
-    ===>Type:Command
+    ===>Type:javax.faces.component.UICommand
     id:login2
     value=null
     attr=componentId : login2
     attr=parent : javax.faces.component.UIForm
-    attr=rendersChildren : false
     attr=src : duke.gif

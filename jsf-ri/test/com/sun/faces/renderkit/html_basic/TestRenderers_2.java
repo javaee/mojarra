@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.3 2002/06/06 00:15:03 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.4 2002/06/12 23:51:11 jvisvanathan Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectBoolean;
@@ -52,7 +53,7 @@ import org.apache.cactus.JspTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.3 2002/06/06 00:15:03 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.4 2002/06/12 23:51:11 jvisvanathan Exp $
  * 
  *
  */
@@ -148,7 +149,7 @@ public class TestRenderers_2 extends JspTestCase
 
         try {
             // create a dummy root for the tree.
-            UIComponent root = new UIComponent() {
+            UIComponentBase root = new UIComponentBase() {
                 public String getComponentType() { return "root"; }
             };
             root.setComponentId("root");

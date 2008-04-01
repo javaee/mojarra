@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.15 2002/06/06 00:15:01 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.16 2002/06/12 23:51:07 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.15 2002/06/06 00:15:01 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.16 2002/06/12 23:51:07 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,7 +120,7 @@ public class OptionListRenderer extends Renderer {
         Assert.assert_it(compoundId != null );
 
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModel();
+        String modelRef = component.getModelReference();
 
         if (newValue == null || modelRef == null) {
             component.setValue(newValue);
@@ -185,7 +185,7 @@ public class OptionListRenderer extends Renderer {
         SelectItem items[] = selectOne.getItems();
         if (items == null) {
             items = (SelectItem[]) context.getModelValue(
-                selectOne.getItemsModel());
+                selectOne.getItemsModelReference());
         }
         if (items == null) {
             items = new SelectItem[0];

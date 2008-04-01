@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.3 2002/06/01 00:58:22 eburns Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.4 2002/06/12 23:51:09 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.tree.TreeFactory;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIComponentBase;
 
 import javax.servlet.ServletContext;
 
@@ -39,7 +39,7 @@ import org.apache.commons.logging.impl.SimpleLog;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.3 2002/06/01 00:58:22 eburns Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.4 2002/06/12 23:51:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -155,12 +155,12 @@ public Tree createTree(ServletContext servletContext,
 {
     Tree result = null;
     InputStream treeInput = null;
-    UIComponent root = null;
+    UIComponentBase root = null;
     RuleSetBase ruleSet = null;
 
-    root = new UIComponent() {
-	    public String getComponentType() { return "Root"; } 
-	};
+    root = new UIComponentBase() {
+	public String getComponentType() { return "Root"; }
+    };
     root.setComponentId("root");
 
     if (null == treeId) {
@@ -220,7 +220,7 @@ public Tree createTree(ServletContext servletContext,
     digester.push(root);
     
     try {
-	root = (UIComponent)digester.parse(treeInput);
+	root = (UIComponentBase)digester.parse(treeInput);
     } catch (Throwable e) {
 	throw new FacesException("Can't parse stream for " + treeId, e);
     }

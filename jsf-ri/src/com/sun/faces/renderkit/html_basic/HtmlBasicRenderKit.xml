@@ -5,7 +5,7 @@
 <!-- Component Type - Renderer Name Mappings -->
 
     <component>
-        <type>Form</type>
+        <type>javax.faces.component.UIForm</type>
         <renderer>
             <type>FormRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.FormRenderer</class>
@@ -14,7 +14,7 @@
     </component>
 
     <component>
-        <type>Output</type>
+        <type>javax.faces.component.UIOutput</type>
         <renderer> 
             <type>TextRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
@@ -35,7 +35,7 @@
     </component>
 
     <component>
-        <type>Command</type>
+        <type>javax.faces.component.UICommand</type>
         <renderer>
             <type>ButtonRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.ButtonRenderer</class>
@@ -50,7 +50,7 @@
     </component>
 
     <component>
-        <type>SelectBoolean</type>
+        <type>javax.faces.component.UISelectBoolean</type>
         <renderer>
             <type>CheckboxRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
@@ -59,7 +59,7 @@
     </component>
 
     <component>
-        <type>TextEntry</type>
+        <type>javax.faces.component.UITextEntry</type>
         <renderer>
             <type>InputRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
@@ -80,7 +80,7 @@
     </component>
 
     <component>
-        <type>SelectOne</type>
+        <type>javax.faces.component.UISelectOne</type>
         <renderer>
             <type>RadioRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.RadioRenderer</class>
@@ -98,7 +98,7 @@
     </component>
 
     <component>
-        <type>TextEntry</type>
+        <type>javax.faces.component.UITextEntry</type>
         <renderer>
             <type>InputRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>

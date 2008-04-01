@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.3 2002/05/30 01:42:09 eburns Exp $
+ * $Id: DebugUtil.java,v 1.4 2002/06/12 23:51:10 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.3 2002/05/30 01:42:09 eburns Exp $
+ * @version $Id: DebugUtil.java,v 1.4 2002/06/12 23:51:10 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,8 +123,8 @@ public static void printTree(UIComponent root, PrintStream out)
     indentPrintln(out, "===>Type:" + root.getComponentType());
     indentPrintln(out, "id:"+root.getComponentId());
 
-    if (root.getModel() != null) {
-	indentPrintln(out, "modelReference:"+root.getModel());
+    if (root.getModelReference() != null) {
+	indentPrintln(out, "modelReference:"+root.getModelReference());
     }
     
     SelectItem items[] = null;

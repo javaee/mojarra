@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.13 2002/05/29 20:45:54 rkitain Exp $
+ * $Id: TestRenderKit.java,v 1.14 2002/06/12 23:51:11 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.13 2002/05/29 20:45:54 rkitain Exp $
+ * @version $Id: TestRenderKit.java,v 1.14 2002/06/12 23:51:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,7 +102,7 @@ public class TestRenderKit extends ServletTestCase {
         // 2. Verify "getRenderers(componentType)"
         //
         renderer = null;
-        String cType = "Command";
+        String cType = "javax.faces.component.UICommand";
         iter = renderKit.getRenderers(cType);
         while (iter.hasNext()) {
             renderer = (Renderer)iter.next();

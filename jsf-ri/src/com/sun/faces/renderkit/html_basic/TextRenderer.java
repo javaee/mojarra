@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.19 2002/06/06 00:15:02 eburns Exp $
+ * $Id: TextRenderer.java,v 1.20 2002/06/12 23:51:09 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.19 2002/06/06 00:15:02 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.20 2002/06/12 23:51:09 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,7 +122,7 @@ public class TextRenderer extends Renderer {
         Assert.assert_it(compoundId != null );
 
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModel();
+        String modelRef = component.getModelReference();
 
         // If modelReference String is null or newValue is null, type
         // conversion is not necessary. This is because default type

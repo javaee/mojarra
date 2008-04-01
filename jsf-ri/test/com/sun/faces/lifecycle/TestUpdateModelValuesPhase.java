@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.3 2002/06/07 22:55:34 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.4 2002/06/12 23:51:10 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.3 2002/06/07 22:55:34 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.4 2002/06/12 23:51:10 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,7 +98,7 @@ public void testUpdateNormal()
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
-    userName.setModel("${TestBean.one}");
+    userName.setModelReference("${TestBean.one}");
     tree = new XmlTreeImpl(config.getServletContext(), userName, 
 			   "updateModel.xul");
     facesContext.setRequestTree(tree);
@@ -124,7 +124,7 @@ public void testUpdateFailed()
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
-    userName.setModel("${UserBean.one}");
+    userName.setModelReference("${UserBean.one}");
     tree = new XmlTreeImpl(config.getServletContext(), userName, 
 			   "updateModel.xul");
     facesContext.setRequestTree(tree);

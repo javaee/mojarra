@@ -1,5 +1,5 @@
 /*
- * $Id: MessageListImpl.java,v 1.2 2002/06/07 22:55:32 jvisvanathan Exp $
+ * $Id: MessageListImpl.java,v 1.3 2002/06/12 23:51:04 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ public class MessageListImpl extends MessageList
     //
     // Instance Variables
     //
-    private ArrayList messageList = new ArrayList();
+    private ArrayList messageList = null;
     private FacesContext facesContext = null;
     private MessageLoader messageLoader = null;
     
@@ -47,6 +47,7 @@ public class MessageListImpl extends MessageList
 
     public MessageListImpl(FacesContext fc) {
         this.facesContext = fc;
+        messageList = new ArrayList();
         messageLoader = new MessageLoader();
     }
 
@@ -97,19 +98,13 @@ public class MessageListImpl extends MessageList
 
 
     public Iterator iterator(String reference) {
+        ParameterCheck.nonNull(reference);
         ArrayList list = new ArrayList(messageList.size());
     	Iterator it = iterator();
     	while(it.hasNext()) {
     	    Message m = (Message)it.next();
-    	    if (reference == null) {
-                if (m.getReference() == null) {
-                        list.add(m);
-                }    
-            }
-    	    else {
-                if (reference.equals(m.getReference())) {
-                    list.add(m);
-                }    
+    	    if (m.getReference() != null && reference.equals(m.getReference())){
+                list.add(m);
             }
     	}
     	return list.iterator();    
@@ -119,7 +114,56 @@ public class MessageListImpl extends MessageList
     public int size() {
         return messageList.size();
     }
+    
    
+    public int getMaximumSeverity() {
+        int max = 0;
+        Iterator it = iterator();
+        while(it.hasNext()) {
+            Message m = (Message)it.next();
+            if (m.getSeverity() > max) {
+                max = m.getSeverity();
+            }    
+        }
+        return max;
+    }    
+   
+    
+    public int size(String reference) {
+        int size = 0;
+        ParameterCheck.nonNull(reference);
+    	Iterator it = iterator();
+    	while(it.hasNext()) {
+    	    Message m = (Message)it.next();
+    	    if (m.getReference() != null && reference.equals(m.getReference())){
+                    size++;
+            }    
+        }
+    	return size;
+    }
+    
+    
+    public int getMaximumSeverity(String reference) {
+        int max = 0;
+        ParameterCheck.nonNull(reference);
+        Iterator it = iterator();
+        while(it.hasNext()) {
+            Message m = (Message)it.next();
+            String comp_id = m.getReference();
+            if ( comp_id != null && (comp_id.equals(m.getReference())) &&
+                (m.getSeverity() > max)) {
+                max = m.getSeverity();
+            }    
+        }
+        return max;
+    }
+    
+    
+    public void add(Message message) {
+        Assert.assert_it(message != null);
+        messageList.add(message);
+    }
+    
     // The testcase for this class is TestclassName.java 
 
 

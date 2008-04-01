@@ -36,7 +36,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>model</name>
+        <name>modelReference</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -52,7 +52,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>model</name>
+        <name>modelReference</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -67,7 +67,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>model</name>
+        <name>modelReference</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -203,7 +203,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>model</name>
+        <name>modelReference</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -359,7 +359,7 @@
         <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -385,12 +385,12 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectedmodelreference</name>
+      <name>itemsmodelreference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -443,12 +443,12 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
-      <name>model</name>
+      <name>modelReference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectedmodelreference</name>
+      <name>itemsModelreference</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

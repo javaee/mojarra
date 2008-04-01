@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
+ * $Id: FormRenderer.java,v 1.24 2002/06/12 23:51:06 jvisvanathan Exp $
  */
 
 /*
@@ -21,7 +21,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.FacesException;
 import javax.faces.event.FormEvent;
-
+import javax.faces.component.UICommand;
+import com.sun.faces.RIConstants;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -31,6 +32,8 @@ import org.mozilla.util.ParameterCheck;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import java.net.URLEncoder;
 
 /**
  *
@@ -38,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.23 2002/06/06 00:15:01 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.24 2002/06/12 23:51:06 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,29 +119,78 @@ public class FormRenderer extends Renderer {
 
     public void decode(FacesContext context, UIComponent component) 
             throws IOException{
-        if ( context == null ) {
-            throw new NullPointerException("FacesContext is null");
-        }    
-        ParameterCheck.nonNull(component);    
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        ParameterCheck.nonNull(component);
         
-        // action parameter must have the value "form"
-        String action = context.getServletRequest().getParameter("action");
-        if (!"form".equals(action)) {
+        // Does the extra path info on this request identify a form submit
+        // for this UIForm component?
+        String pathInfo = 
+            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
+       
+        if (pathInfo == null) {
             return;
         }
-        
-        // name parameter must have a value equal to currentValue.
-        String formName = context.getServletRequest().getParameter("name");
-        if (formName == null) {
+        if (!pathInfo.startsWith(RIConstants.FORM_PREFIX)) {
             return;
         }
+        String formName = pathInfo.substring(RIConstants.FORM_PREFIX.length());
         
+        int slash = formName.indexOf('/');
+        if (slash >= 0) {
+            formName = formName.substring(0, slash);
+        }
         if (!formName.equals(component.currentValue(context))) {
             return;
         }
 
-        // queue form event to be processed during Invoke Applications phase.
-        context.addApplicationEvent(new FormEvent(component, formName));
+        // Which of our nested UICommand children triggered this submit?
+        // PENDING(visvan)- assumes commandName won't have name clash 
+        // with components!
+        String commandName =
+            extract(context, context.getServletRequest(), component);
+
+        // Enqueue a form event to the application
+        context.addApplicationEvent
+            (new FormEvent(component, formName, commandName));
+    }
+    
+    /**
+     * <p>Extract the command name of the child {@link UICommand} that
+     * caused this form to be submitted.  The specified component, and
+     * all of its children, are to be checked.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     * @param request ServletRequest we are processing
+     * @param component Component to be checked
+     */
+    private String extract(FacesContext context, ServletRequest request,
+                           UIComponent component) {
+
+        // Check the current component
+        if ((component.getComponentType()).equals(UICommand.TYPE)) {
+            Object value = component.currentValue(context);
+            if (value != null) {
+                String commandName = value.toString();
+                if (request.getParameter(commandName) != null) {
+                    return (commandName);
+                }
+            }
+        }
+
+        // Check the children of the current component
+        Iterator kids = component.getChildren();
+        while (kids.hasNext()) {
+            String commandName =
+                extract(context, request, (UIComponent) kids.next());
+            if (commandName != null) {
+                return (commandName);
+            }
+        }
+
+        // No matching command name was found
+        return (null);
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -165,16 +217,16 @@ public class FormRenderer extends Renderer {
      */
     private String getActionStr(FacesContext context, UIComponent form) {
 
-         HttpServletRequest request =
+        HttpServletRequest request =
             (HttpServletRequest) context.getServletRequest();
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces?action=form&name=");
-        sb.append(form.currentValue(context)); 
-        sb.append("&tree=");
-        sb.append(context.getResponseTree().getTreeId());
-        return (response.encodeURL(sb.toString()));
+        sb.append(RIConstants.FORM_PREFIX);
+        sb.append(URLEncoder.encode(form.currentValue(context).toString()));
+        sb.append("/");
+        sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
+        return (response.encodeURL(URLEncoder.encode(sb.toString())));
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {

@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.20 2002/06/06 00:15:01 eburns Exp $
+ * $Id: InputRenderer.java,v 1.21 2002/06/12 23:51:06 jvisvanathan Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.20 2002/06/06 00:15:01 eburns Exp $
+ * @version $Id: InputRenderer.java,v 1.21 2002/06/12 23:51:06 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,7 +131,7 @@ public class InputRenderer extends Renderer {
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModel();
+        String modelRef = component.getModelReference();
        
         // If modelReference String is null or newValue is null, type
         // conversion is not necessary. This is because default type

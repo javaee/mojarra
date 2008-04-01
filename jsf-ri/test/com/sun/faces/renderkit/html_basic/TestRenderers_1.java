@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.5 2002/06/06 00:15:02 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.6 2002/06/12 23:51:11 jvisvanathan Exp $
  */
 
 /*
@@ -37,6 +37,7 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
+import javax.faces.component.UIComponentBase;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FormEvent;
 import javax.faces.event.CommandEvent;
@@ -60,7 +61,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.5 2002/06/06 00:15:02 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.6 2002/06/12 23:51:11 jvisvanathan Exp $
  * 
  *
  */
@@ -75,6 +76,7 @@ public class TestRenderers_1 extends JspTestCase
    public static final String EXPECTED_OUTPUT_FILENAME = PATH_ROOT +
         "CorrectRenderersResponse";
 
+   public static final String TEST_URI = "/faces/form/FormRenderer/";
     //
     // Class Variables
     //
@@ -136,10 +138,11 @@ public class TestRenderers_1 extends JspTestCase
     
     public void beginRenderers(WebRequest theRequest) {
 
-        theRequest.addParameter("name", "FormRenderer");
+        theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+       // theRequest.addParameter("name", "FormRenderer");
         theRequest.addParameter("/input_renderer", "InputRenderer");
         theRequest.addParameter("/textarea_renderer", "TextAreaRenderer");
-        theRequest.addParameter("action", "form");
+        //theRequest.addParameter("action", "form");
         theRequest.addParameter("/radio_renderer", "Two");
         theRequest.addParameter("name", "ButtonRenderer");
     } 
@@ -150,7 +153,7 @@ public class TestRenderers_1 extends JspTestCase
     public void testRenderers() {
         try {
             // create a dummy root for the tree.
-            UIComponent root = new UIComponent() {
+            UIComponentBase root = new UIComponentBase() {
 	        public String getComponentType() { return "root"; } 
 	    };
             root.setComponentId("root");
@@ -209,7 +212,7 @@ public class TestRenderers_1 extends JspTestCase
       
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
-        result = inputRenderer.supportsComponentType("Form"); 
+        result = inputRenderer.supportsComponentType("javax.faces.component.Form"); 
         assertTrue(!result);
 
         result = inputRenderer.supportsComponentType(textEntry); 
@@ -308,14 +311,6 @@ public class TestRenderers_1 extends JspTestCase
         buttonRenderer.decode(facesContext, uiCommand);
         responseWriter.write("\n");
         
-        // make sure commandEvent was queued.
-        Iterator it = facesContext.getApplicationEvents();
-        result = null != it;
-        System.out.println("Testing getApplicationEvent: " + result);
-        assertTrue(result);
-        
-        // PENDING (visvan) make sure commandEvent was queued.
-    
         // test encode method
         System.out.println("Testing encode method");
         buttonRenderer.encodeBegin(facesContext, uiCommand);
