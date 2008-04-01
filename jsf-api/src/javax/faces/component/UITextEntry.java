@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.9 2002/07/26 03:26:07 craigmcc Exp $
+ * $Id: UITextEntry.java,v 1.10 2002/07/29 00:47:06 craigmcc Exp $
  */
 
 /*
@@ -85,6 +85,14 @@ public class UITextEntry extends UIComponentBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.decode(context);
+            return;
+        }
+
+        // Perform the default decoding
         String newValue =
             context.getServletRequest().getParameter(getCompoundId());
         setValue(newValue);
@@ -107,6 +115,14 @@ public class UITextEntry extends UIComponentBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform the default encoding
         Object value = currentValue(context);
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<input type=\"text\" name=\"");

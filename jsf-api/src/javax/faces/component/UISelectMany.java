@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.10 2002/07/26 03:26:06 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.11 2002/07/29 00:47:05 craigmcc Exp $
  */
 
 /*
@@ -88,6 +88,14 @@ public class UISelectMany extends UISelectBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.decode(context);
+            return;
+        }
+
+        // Perform the default decoding
         String values[] =
             context.getServletRequest().getParameterValues(getCompoundId());
         setValue(values);
@@ -110,6 +118,14 @@ public class UISelectMany extends UISelectBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform the default encoding
         String values[] = getAsStrings(context, "value", getModelReference());
         SelectItem items[] =
             getAsItems(context, "items", getItemsModelReference());

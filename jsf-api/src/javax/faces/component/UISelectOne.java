@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.12 2002/07/26 03:26:07 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.13 2002/07/29 00:47:05 craigmcc Exp $
  */
 
 /*
@@ -88,6 +88,14 @@ public class UISelectOne extends UISelectBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.decode(context);
+            return;
+        }
+
+        // Perform the default decoding
         String value =
             context.getServletRequest().getParameter(getCompoundId());
         setValue(value);
@@ -110,6 +118,14 @@ public class UISelectOne extends UISelectBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform the default encoding
         Object oldValue = currentValue(context);
         if (oldValue == null) {
             oldValue = "";

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.15 2002/07/15 18:08:24 craigmcc Exp $
+ * $Id: UICommand.java,v 1.16 2002/07/29 00:47:05 craigmcc Exp $
  */
 
 /*
@@ -90,6 +90,14 @@ public class UICommand extends UIComponentBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform default encoding
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<input type=\"submit\"");
         Object currentValue = currentValue(context);

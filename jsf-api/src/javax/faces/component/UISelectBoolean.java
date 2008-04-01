@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.12 2002/07/26 03:30:23 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.13 2002/07/29 00:47:05 craigmcc Exp $
  */
 
 /*
@@ -105,6 +105,14 @@ public class UISelectBoolean extends UIComponentBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.decode(context);
+            return;
+        }
+
+        // Perform the default decoding
         Boolean newValue = Boolean.FALSE;
         String compoundId = getCompoundId();
         if (context.getServletRequest().getParameter(compoundId) != null) {
@@ -130,6 +138,14 @@ public class UISelectBoolean extends UIComponentBase {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform the default encoding
         Boolean value = (Boolean) currentValue(context);
         if (value == null) {
             value = Boolean.FALSE;

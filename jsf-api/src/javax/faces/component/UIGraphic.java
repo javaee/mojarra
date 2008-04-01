@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.11 2002/07/28 22:25:44 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.12 2002/07/29 00:47:05 craigmcc Exp $
  */
 
 /*
@@ -87,6 +87,14 @@ public class UIGraphic extends UIOutput {
         if (context == null) {
             throw new NullPointerException();
         }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform the default encoding
         ResponseWriter writer = context.getResponseWriter();
         writer.write("<img src=\"");
         writer.write(src(context));

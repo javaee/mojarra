@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.12 2002/07/09 00:05:24 craigmcc Exp $
+ * $Id: UIForm.java,v 1.13 2002/07/29 00:47:05 craigmcc Exp $
  */
 
 /*
@@ -102,6 +102,12 @@ public class UIForm extends UIComponentBase {
             throw new NullPointerException();
         }
 
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.decode(context);
+            return;
+        }
+
         // Does the extra path info on this request identify a form submit?
         // for this UIForm component?
         String pathInfo = // FIXME - HTTP dependency
@@ -148,6 +154,12 @@ public class UIForm extends UIComponentBase {
             throw new NullPointerException();
         }
 
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeBegin(context);
+            return;
+        }
+
         // Render the beginning of this form
         String value = (String) getFormName();
         if (value == null) {
@@ -174,6 +186,12 @@ public class UIForm extends UIComponentBase {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
         }
 
         // Render the ending of this form
