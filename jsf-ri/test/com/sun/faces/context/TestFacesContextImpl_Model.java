@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.5 2002/08/02 20:23:56 eburns Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.6 2002/08/05 23:00:29 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.5 2002/08/02 20:23:56 eburns Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.6 2002/08/05 23:00:29 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -104,6 +104,41 @@ public void testSet()
     
 }
 
+public void testSetWithNoCurlyBraces()
+{
+    FacesContext facesContext = getFacesContext();
+    System.out.println("Testing setModelValue()");
+    TestBean testBean = new TestBean();
+    InnerBean inner = new InnerBean();
+    Inner2Bean innerInner = new Inner2Bean();
+
+    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    
+    // Test one level of nesting
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
+    facesContext.setModelValue("TestBean.one", "one");
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
+    facesContext.setModelValue( "TestBean.inner", inner);
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+
+    // Test two levels of nesting
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
+    facesContext.setModelValue("TestBean.inner.two", "two");
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
+    facesContext.setModelValue("TestBean.inner.inner2", innerInner);
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+
+    // Test three levels of nesting
+    System.setProperty(TestBean.PROP, TestBean.FALSE);
+    facesContext.setModelValue("TestBean.inner.inner2.three", "three");
+    assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
+    
+}
+
 public void testGet()
 {
     FacesContext facesContext = getFacesContext();
@@ -175,6 +210,77 @@ public void testGet()
     assertTrue(className.equals("java.lang.String"));
 }
 
+public void testGetWithNoCurlyBraces()
+{
+    FacesContext facesContext = getFacesContext();
+    System.out.println("Testing getModelValue()");
+    assertTrue( facesContext != null );
+    TestBean testBeanResult = null, testBean = new TestBean();
+    InnerBean inner = new InnerBean();
+    Inner2Bean inner2 = new Inner2Bean();
+    String result;
+
+    // Init the beans
+    testBean.setOne("one");
+    inner.setTwo("two");
+    inner2.setThree("three");
+    inner.setInner2(inner2);
+    testBean.setInner(inner);
+    
+    assertTrue( facesContext != null );
+    assertTrue( facesContext.getHttpSession() != null );
+    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+
+    // Test zero levels of nesting
+    testBeanResult = (TestBean) facesContext.getModelValue("TestBean");
+    assertTrue(testBeanResult == testBean);
+    
+    // Test one level of nesting
+    result = (String) facesContext.getModelValue("TestBean.one");
+    assertTrue(result.equals("one"));
+
+    inner = (InnerBean) facesContext.getModelValue("TestBean.inner");
+    assertTrue(null != inner);
+
+    // Test two levels of nesting
+    result = (String) facesContext.getModelValue("TestBean.inner.two");
+    assertTrue(result.equals("two"));
+
+    inner2 = (Inner2Bean) 
+	facesContext.getModelValue("TestBean.inner.inner2");
+    assertTrue(null != inner2);
+
+    // Test three levels of nesting
+    result = (String) facesContext.getModelValue("TestBean.inner.inner2.three");
+    assertTrue(result.equals("three"));
+    
+    // Test model type
+    System.out.println("Testing getModelType()");
+    Class classType = null;
+    String className = null;
+
+    // Test zero levels of nesting
+    classType = facesContext.getModelType("TestBean");
+    assertTrue(classType != null);
+    className = classType.getName();
+    assertTrue(className.equals(testBean.getClass().getName()));
+
+    classType = facesContext.getModelType("TestBean.inner.pin");
+    assertTrue(classType != null);
+    className = classType.getName();
+    assertTrue(className.equals("java.lang.Integer"));
+    
+    classType = facesContext.getModelType("TestBean.inner.result");
+    assertTrue(classType != null);
+    className = classType.getName();
+    assertTrue(className.equals("java.lang.Boolean"));
+    
+    classType = facesContext.getModelType("TestBean.one");
+    assertTrue(classType != null);
+    className = classType.getName();
+    assertTrue(className.equals("java.lang.String"));
+}
+
 public void testModelObjectSearch() {
     String result = null;
     FacesContext facesContext = getFacesContext();
@@ -232,6 +338,69 @@ public void testModelObjectSearch() {
     gotException = false;
     try {
         result = (String) facesContext.getModelValue("${TestBean.one}");
+    } catch ( FacesException fe) {
+        gotException = true;
+    }    
+    assertTrue(gotException);
+}
+
+public void testModelObjectSearchWithNoCurlyFries() {
+    String result = null;
+    FacesContext facesContext = getFacesContext();
+    assertTrue( facesContext != null );
+    TestBean testBean = new TestBean();
+    testBean.setOne("one");
+    
+    boolean gotException = false;
+    try {
+	facesContext.getModelType(null);
+    }
+    catch (NullPointerException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+    
+    gotException = false;
+    try {
+	facesContext.getModelValue(null);
+    }
+    catch (NullPointerException e) {
+	gotException = true;
+    }
+    assertTrue(gotException);
+
+
+    try {
+        facesContext.setModelValue(null,null);
+    } catch ( Exception e ) {
+        gotException = true;
+    }    
+    assertTrue(gotException);
+    // store the bean in various scope and make sure the narrow to broad
+    // search works.
+    
+    // Test Bean in request scope.
+    (facesContext.getServletRequest()).setAttribute("TestBean", testBean);
+    result = (String) facesContext.getModelValue("TestBean.one");
+    assertTrue(result.equals("one"));
+    (facesContext.getServletRequest()).removeAttribute("TestBean");
+   
+    // Test Bean in session scope.
+    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    result = (String) facesContext.getModelValue("TestBean.one");
+    assertTrue(result.equals("one"));
+    (facesContext.getHttpSession()).removeAttribute("TestBean");
+  
+    // Test Bean in ServletContext
+    (facesContext.getServletContext()).setAttribute("TestBean", testBean);
+    result = (String) facesContext.getModelValue("TestBean.one");
+    assertTrue(result.equals("one"));
+    (facesContext.getServletContext()).removeAttribute("TestBean");
+    
+    // make sure we get an exception if bean doesn't exist
+    gotException = false;
+    try {
+        result = (String) facesContext.getModelValue("TestBean.one");
     } catch ( FacesException fe) {
         gotException = true;
     }    
