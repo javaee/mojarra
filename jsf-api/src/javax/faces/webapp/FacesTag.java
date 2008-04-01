@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.12 2002/06/27 21:47:28 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.13 2002/06/27 21:50:56 craigmcc Exp $
  */
 
 /*
@@ -150,7 +150,8 @@ public abstract class FacesTag extends TagSupport {
 
     /**
      * <p>Return the <code>rendererType</code> property that selects the
-     * <code>Renderer</code> to be used for encoding this component.
+     * <code>Renderer</code> to be used for encoding this component, or
+     * <code>null</code> to ask the component to render itself directly.
      * Subclasses must override this method to return the appropriate value.
      * </p>
      */
