@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.10 2002/07/15 18:08:24 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.11 2002/07/28 22:25:44 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  * it is for display purposes only.</p>
  */
 
-public class UIGraphic extends UIComponentBase {
+public class UIGraphic extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
@@ -49,9 +49,9 @@ public class UIGraphic extends UIComponentBase {
 
 
     /**
-     * <p>Return the local value of the image path.</p>
+     * <p>Return the local value of the image URL.</p>
      */
-    public String getImagePath() {
+    public String getURL() {
 
         return ((String) getAttribute("value"));
 
@@ -59,13 +59,13 @@ public class UIGraphic extends UIComponentBase {
 
 
     /**
-     * <p>Set the local value of the image path.</p>
+     * <p>Set the local value of the image URL.</p>
      *
-     * @param imagePath The new image path
+     * @param url The new image URL
      */
-    public void setImagePath(String imagePath) {
+    public void setURL(String url) {
 
-        setAttribute("value", imagePath);
+        setAttribute("value", url);
 
     }
 

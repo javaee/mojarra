@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.1 2002/06/04 02:31:07 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.2 2002/07/28 22:25:45 craigmcc Exp $
  */
 
 /*
@@ -100,19 +100,19 @@ public class UIGraphicTestCase extends UIComponentTestCase {
         UIGraphic graphic = (UIGraphic) component;
 
         // graphicName
-        assertNull("imagePath1", graphic.getImagePath());
-        assertNull("imagePath2", graphic.getAttribute("value"));
-        graphic.setImagePath("foo");
-        assertEquals("imagePath3", "foo", graphic.getImagePath());
-        assertEquals("imagePath4", "foo",
+        assertNull("url1", graphic.getURL());
+        assertNull("url2", graphic.getAttribute("value"));
+        graphic.setURL("foo");
+        assertEquals("url3", "foo", graphic.getURL());
+        assertEquals("url4", "foo",
                      (String) graphic.getAttribute("value"));
         graphic.setAttribute("value", "bar");
-        assertEquals("imagePath5", "bar", graphic.getImagePath());
-        assertEquals("imagePath6", "bar",
+        assertEquals("url5", "bar", graphic.getURL());
+        assertEquals("url6", "bar",
                      (String) graphic.getAttribute("value"));
         graphic.setAttribute("value", null);
-        assertNull("imagePath7", graphic.getImagePath());
-        assertNull("imagePath8", graphic.getAttribute("value"));
+        assertNull("url7", graphic.getURL());
+        assertNull("url8", graphic.getAttribute("value"));
 
     }
 
