@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.12 2002/01/12 01:38:07 edburns Exp $
+ * $Id: Constants.java,v 1.13 2002/01/18 21:51:33 edburns Exp $
  */
 
 /*
@@ -48,6 +48,13 @@ public class Constants {
      * the correct scopeKey for a session
      */ 
     public static final String REF_SESSIONINSTANCE = "faces.SessionInstance";
+
+    /**
+     * The key stored in the servletcontext attributes that enables 
+     * the correct scopeKey for a servletContext
+     */ 
+    public static final String REF_SERVLETCONTEXTINSTANCE = "faces.ServletContextInstance";
+
 
     /**
      * The factory used to create the render context.

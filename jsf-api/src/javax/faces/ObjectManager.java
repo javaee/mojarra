@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectManager.java,v 1.1 2002/01/10 22:16:32 edburns Exp $
+ * $Id: ObjectManager.java,v 1.2 2002/01/18 21:51:34 edburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.servlet.ServletContext;
 
 /**
 
@@ -157,25 +158,25 @@ removed.  Applications can use scope listeners to add their own
 enter/exit behavior.  For example:
 
 <pre>
-ObjectManager.Listener listener = new ObjectManager.Listener() {
-    public void enter(Scope scope, Object scopeKey) {
+ObjectManager.ScopeListener listener = new ObjectManager.ScopeListener() {
+    public void willEnter(Scope scope, Object scopeKey) {
         scope.put(scopeKey, "eager1", eager1);
         scope.put(scopeKey, "eager2", eager2);
     }
-    public void exit(Scope scope, Object scopeKey) {
+    public void willExit(Scope scope, Object scopeKey) {
         myApp.cleanup(scopeKey);
     }
 };
-ObjectManager.Request.addListener(listener);
+ObjectManager.Request.addScopeListener(listener);
 </pre>
 
 <p>
 In the previous example the listener creates two mappings for eagerly
 created objects "eager1" and "eager2" when the scope is entered.  When
 the scope defined by scopeKey is exited, all mappings, including the
-ones created by the listeners enter method are removed by the Scope
-implementation - after the listener's exit method has run.  In this
-example, the listener's exit method calls an application cleanup
+ones created by the listeners willEnter method are removed by the Scope
+implementation - after the listener's willExit method has run.  In this
+example, the listener's willExit method calls an application cleanup
 method when the scope is exited.
 
 <p>
@@ -210,7 +211,7 @@ scope.
 
 */
 
-public class ObjectManager
+public abstract class ObjectManager
 {
 
 //
@@ -244,6 +245,8 @@ public class ObjectManager
 
     private static ObjectManager instance = null;
 
+    protected ServletContext servletContext;
+
 // 
 // Private helper methods
 // 
@@ -266,7 +269,7 @@ public class ObjectManager
  
   */
 
-    private Scope keyToScope(Object scopeKey) {
+    protected Scope keyToScope(Object scopeKey) {
 	Scope result = null;
 	Iterator iter;
 	List scopes = getScopes();
@@ -300,7 +303,7 @@ public class ObjectManager
 	    result = ((HttpServletRequest)scopeKey).getSession();
 	}
 	else if (scopeKey instanceof HttpSession) {
-	    result = GlobalScope;
+	    result = servletContext;
 	}
 	
 	return result;
@@ -350,11 +353,6 @@ public class ObjectManager
 	    };
 	scope.bind(name, createValue);
     }
-
-    /*
-     **    public void bind(Scope scope, Object name, Object value) {
-     **	scope.bind(name, value);
-     **    }
 
     /**
      * Defines a single name to value mapping in the scope that
@@ -409,7 +407,7 @@ public class ObjectManager
      * Returns the value of name in the ObjectManager.Global scope.
      */
     public final Object get(Object name) {
-	return GlobalScope.get(GlobalScope, name);
+	return GlobalScope.get(servletContext, name);
     }
 
 
@@ -446,16 +444,6 @@ public class ObjectManager
      */
     public static void setInstance(ObjectManager om) {
 	instance = om;
-    }
-
-    public void enter(Object scopeKey) {
-	Scope scope = keyToScope(scopeKey);
-	scope.enter(scopeKey);
-    }
-
-    public void exit(Object scopeKey) {
-	Scope scope = keyToScope(scopeKey);
-	scope.exit(scopeKey);
     }
 
     /**
@@ -523,12 +511,12 @@ public class ObjectManager
 
    /**
     * This interface is used to create objects that will be notified
-    * when a Scope is entered or exited.
+    * when a Scope will be entered or exited.
     *
     * @see addListener
     * @see removeListener
     */
-    public class ScopeListener
+    public interface ScopeListener
     {
        /**
         * This method is called the first time the scope defined
@@ -538,17 +526,15 @@ public class ObjectManager
         * so it can be used to seed a scope with a set of mappings
         * by calling ObjectManager.put().
         */
-        public void enter(Scope scope, Object scopeKey) {
-        }
+        public void willEnter(Scope scope, Object scopeKey);
 
         /**
          * This method is called when the scope defined by scopeKey
          * is exited and before all of the mappings defined for
          * this scope are (automatically) removed.
          */
-        public void exit(Scope scope, Object scopeKey) {
-        }
-    }
+        public void willExit(Scope scope, Object scopeKey);
+    } // end of class ScopeListener
 
 
     /**
@@ -625,7 +611,7 @@ public class ObjectManager
          *
          * @see #removeListener
          */
-        public void addListener(ScopeListener l) {
+        public void addScopeListener(ScopeListener l) {
         }
 
         /**
@@ -633,7 +619,7 @@ public class ObjectManager
          *
          * @see #addListener
          */
-        public void removeListener(ScopeListener l) {
+        public void removeScopeListener(ScopeListener l) {
         }
-    }
+    } // end of class Scope
 }
