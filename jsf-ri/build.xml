@@ -64,6 +64,7 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
+    <pathelement location="${jsf.api.home}/build/classes"/>
     <pathelement location="${mozutil.jar}"/>
     <pathelement location="${servlet.jar}"/>
   </path>
@@ -120,6 +121,9 @@
           optimize="${compile.optimize}">
       <classpath refid="compile.classpath"/>
     </javac>
+    <copy todir="${build.home}/classes">
+        <fileset dir="${source.home}" includes="**/*.properties"/>
+    </copy>
   </target>
 
   <target name="clean"
@@ -187,6 +191,13 @@
         </fileset>
       </batchtest>
     </junit>
+  </target>
+
+  <target name="run-factory" depends="compile" 
+   description="Run the factory test">
+    <java classname="com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit">
+      <classpath refid="compile.classpath"/>
+    </java>
   </target>
 
   <target name="run-single-test" if="testcase" depends="compile-tests"
