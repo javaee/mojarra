@@ -1,0 +1,74 @@
+<?xml encoding='UTF-8'?>
+
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+                <description>The element got the focus.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+                <description>The element lost the focus.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onclick</name>
+                <display-name>On Click</display-name>
+                <description>The element was clicked.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>ondblclick</name>
+                <display-name>On Double Click</display-name>
+                <description>The element was double clicked.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmousedown</name>
+                <display-name>On Mouse Down</display-name>
+                <description>Mouse was pressed over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseup</name>
+                <display-name>On Mouse Up</display-name>
+                <description>Mouse was released over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseover</name>
+                <display-name>On Mouse Over</display-name>
+                <description>Mouse was moved into this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmousemove</name>
+                <display-name>On Mouse Move</display-name>
+                <description>Mouse was moved over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onmouseout</name>
+                <display-name>On Mouse Out</display-name>
+                <description>Mouse was moved away from this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeypress</name>
+                <display-name>On Key Press</display-name>
+                <description>Key was pressed and released over this element </description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeydown</name>
+                <display-name>On Key Down</display-name>
+                <description>Key was pressed down over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onkeyup</name>
+                <display-name>On Key Up</display-name>
+                <description>Key was released over this element.</description>
+                <type>java.lang.String</type>
+            </attribute>

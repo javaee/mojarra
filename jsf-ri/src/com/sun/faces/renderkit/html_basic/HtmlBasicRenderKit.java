@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.35 2002/08/12 23:15:36 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.36 2002/09/08 20:45:43 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import com.sun.faces.util.Util;
 import org.apache.commons.digester.AbstractObjectCreationFactory;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
+import org.xml.sax.InputSource;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -24,8 +25,6 @@ import org.mozilla.util.ParameterCheck;
 
 import org.xml.sax.Attributes;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -46,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.35 2002/08/12 23:15:36 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.36 2002/09/08 20:45:43 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,18 +159,22 @@ public class HtmlBasicRenderKit extends RenderKit
         renderersByComponentType = new Hashtable();
 
         String fileName = "com/sun/faces/renderkit/html_basic/HtmlBasicRenderKit.xml";
-        InputStream in;
+        InputSource is = null;
+	java.net.URL url = null;
         try {
-            in = this.getClass().getClassLoader().getResourceAsStream(
-                fileName);
+	    url = this.getClass().getClassLoader().getResource(fileName);
+            is = new InputSource(url.toExternalForm());
+	    is.setByteStream(this.getClass().getClassLoader().getResourceAsStream(fileName));
         } catch (Throwable t) {
             throw new RuntimeException("Error Opening File:"+fileName);
         }
         try {
             parse_digester.push(this);
-            parse_digester.parse(in);
-            in.close();
+            parse_digester.parse(is);
         } catch (Throwable t) {
+	    if (null != t) {
+		t.printStackTrace();
+	    }
             throw new IllegalStateException(
                 "Unable to parse file:"+t.getMessage());
         }

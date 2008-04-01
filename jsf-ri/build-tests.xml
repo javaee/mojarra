@@ -184,7 +184,7 @@
 <!--
         Prepare test directory structure for Tomcat 4.0 servlet engine
 -->
-    <target name="prepare.test.tomcat.40" depends="prepare.test.war" if="tomcat.home.40">
+    <target name="prepare.test.tomcat.40" depends="prepare.test.war,copy-test-data-files" if="tomcat.home.40">
 
         <property name="out.tomcat.40.dir" value="${out.test.dir}/servers/tomcat40"/>
         <filter token="out.tomcat.40.full.dir" value="${out.tomcat.40.dir}"/>
@@ -203,13 +203,16 @@
         <copy file="${cactus.home}/sample/web/test/jspRedirector.jsp"
             todir="${out.tomcat.40.dir}/webapps/test"/>
 
-        <!-- Copy Unit test static files. -->
+    </target>
 
+
+   <target name="copy-test-data-files">
+        <!-- Copy Unit test static files. -->
+        <property name="out.tomcat.40.dir" value="${out.test.dir}/servers/tomcat40"/>
         <copy todir="${out.tomcat.40.dir}/webapps/test">
             <fileset dir="${basedir}/web/test"/>
         </copy>
-
-    </target>
+   </target>
 
 <!--
         Run unit tests on Tomcat 4.0 servlet engine
@@ -288,7 +291,6 @@
             <classpath refid="compile.classpath"/>
 
             <formatter type="plain" usefile="false"/>
-
             <!-- Suite of tests -->
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
@@ -328,7 +330,6 @@
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
 
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
 
@@ -338,7 +339,7 @@
     </target>
 
 
-    <target name="run.test" depends="compile.test">
+    <target name="run.test" depends="compile.test,copy-test-data-files">
 
         <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
 
@@ -350,10 +351,7 @@
 
             <formatter type="plain" usefile="false"/>
 
-            <!-- Suite of tests
-            <test name="com.sun.faces.TestNavigationMap"/>
-            <test name="com.sun.faces.TestEventQueue"/>
-            -->
+            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
         </junit>
 
     </target>

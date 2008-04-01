@@ -49,6 +49,11 @@
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
+      <attribute>
+        <name>onsubmit</name>
+        <required>false</required>
+        <rtexprvalue>false</rtexprvalue>
+      </attribute>
   </tag>
 
   <tag>
@@ -953,6 +958,11 @@
     </attribute>
     <attribute>
       <name>bundle</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>longdesc</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

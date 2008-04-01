@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererAttributes.java,v 1.3 2002/08/02 22:24:07 rkitain Exp $
+ * $Id: TestRendererAttributes.java,v 1.4 2002/09/08 20:45:46 eburns Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.cactus.ServletTestCase;
+import junit.framework.TestCase;
 
 /**
  *
@@ -38,14 +39,14 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererAttributes.java,v 1.3 2002/08/02 22:24:07 rkitain Exp $
+ * @version $Id: TestRendererAttributes.java,v 1.4 2002/09/08 20:45:46 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRendererAttributes extends ServletTestCase
+    public class TestRendererAttributes extends TestCase // ServletTestCase
 {
 //
 // Protected Constants
@@ -97,7 +98,6 @@ public static final String CORRECT_OUTPUT_FILENAME =
 	    assertTrue(false);
 	}
 	out = new PrintStream(fs);
-
 	RenderKit renderKit = new HtmlBasicRenderKit();
 
         Iterator componentClasses = renderKit.getComponentClasses();
@@ -141,6 +141,9 @@ public static final String CORRECT_OUTPUT_FILENAME =
 	    CompareFiles cf = new CompareFiles();
 	    assertTrue(cf.filesIdentical(OUTPUT_FILENAME, CORRECT_OUTPUT_FILENAME, null));
 	} catch (Throwable e ) {
+	    System.out.println("File Comparison failed: diff -u " + 
+			       OUTPUT_FILENAME + " " + 
+			       CORRECT_OUTPUT_FILENAME);
 	    System.out.println("Throwable: " + e.getMessage());
 	    assertTrue(false);
 	}
