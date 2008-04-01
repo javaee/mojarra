@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.10 2002/07/17 22:34:05 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.11 2002/08/01 00:33:12 jvisvanathan Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
-import javax.faces.lifecycle.LifecycleFactory;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.tree.XmlTreeImpl;
 
@@ -33,7 +32,6 @@ import javax.faces.component.UIForm;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.CommandEvent;
 import javax.faces.event.FormEvent;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 import javax.faces.context.ResponseWriter;
@@ -55,7 +53,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.10 2002/07/17 22:34:05 jvisvanathan Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.11 2002/08/01 00:33:12 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,10 +125,8 @@ public void testAccessors()
     System.out.println("Testing getHttpSession: " + result);
     assertTrue(result);
     
-    Lifecycle lc = getFacesContext().getLifecycle();
-    result = null != lc;
-    System.out.println("Testing getLifeCyle: " + result);
-    assertTrue(result);
+    assertTrue(facesContext.getApplicationHandler() != null);
+    assertTrue(facesContext.getViewHandler() != null );
     
     Locale locale = getFacesContext().getLocale();
     result = null != locale;
@@ -393,8 +389,6 @@ public void testRelease() {
     assertTrue(getFacesContext().getServletRequest() == null);
     assertTrue(getFacesContext().getServletResponse() == null);
     assertTrue(getFacesContext().getHttpSession() == null);
-    
-    assertTrue(getFacesContext().getLifecycle() == null);
     assertTrue(getFacesContext().getLocale() == null);
     assertTrue(getFacesContext().getRequestTree() == null);
     assertTrue(getFacesContext().getResponseTree() == null);
@@ -403,6 +397,8 @@ public void testRelease() {
     Iterator it = getFacesContext().getApplicationEvents();
     assertTrue( !it.hasNext());
     assertTrue(getFacesContext().getRequestEventsCount() == 0);
+    assertTrue(getFacesContext().getViewHandler() == null);
+    assertTrue(getFacesContext().getApplicationHandler() == null);
 }
 // Unit tests to update and retrieve values from model objects
 // are in TestFacesContextImpl_Model.java
