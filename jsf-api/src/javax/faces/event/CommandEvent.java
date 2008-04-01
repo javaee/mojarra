@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.1 2002/05/17 04:55:38 craigmcc Exp $
+ * $Id: CommandEvent.java,v 1.1 2002/06/03 19:34:26 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,11 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component;
+package javax.faces.event;
+
+
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
 
 
 /**

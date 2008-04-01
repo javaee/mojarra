@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.8 2002/05/22 21:37:01 craigmcc Exp $
+ * $Id: UICommand.java,v 1.9 2002/06/03 19:34:26 craigmcc Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.component;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.faces.context.FacesContext;
+import javax.faces.event.CommandEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

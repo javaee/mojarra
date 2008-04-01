@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.1 2002/05/17 02:24:13 craigmcc Exp $
+ * $Id: FacesEvent.java,v 1.1 2002/06/03 19:34:26 craigmcc Exp $
  */
 
 /*
@@ -7,10 +7,11 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component;
+package javax.faces.event;
 
 
 import java.util.EventObject;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 

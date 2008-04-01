@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.1 2002/06/03 16:56:37 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.2 2002/06/03 19:34:27 craigmcc Exp $
  */
 
 /*
@@ -13,10 +13,10 @@ package javax.faces.webapp;
 import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.component.CommandEvent;
-import javax.faces.component.FormEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.event.CommandEvent;
+import javax.faces.event.FormEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.servlet.ServletException;

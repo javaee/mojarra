@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.14 2002/05/29 22:42:56 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.15 2002/06/03 19:34:26 craigmcc Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package javax.faces.context;
 import java.util.Iterator;
 import java.util.Locale;
 import javax.faces.FacesException;     // FIXME - subpackage?
-import javax.faces.component.FacesEvent;
+import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.tree.Tree;
 import javax.servlet.ServletRequest;
