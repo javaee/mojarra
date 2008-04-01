@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.24 2002/08/29 01:28:22 eburns Exp $
+ * $Id: FacesTag.java,v 1.25 2002/09/06 00:25:33 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.24 2002/08/29 01:28:22 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.25 2002/09/06 00:25:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1017,9 +1017,6 @@ protected void overrideProperties(UIComponent component)
 	component.setAttribute("timezone", getTimezone());
     }
 
-    if ( component instanceof UIOutput && !(component instanceof UIGraphic)) {
-        return;
-    }    
     // HTML 4.0 event handlers common to most BODY-content elements.
     if (null == component.getAttribute("onclick")) {
 	component.setAttribute("onclick", getOnclick());

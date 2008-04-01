@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=520015F84334553491F4758431D24444">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=F311B20611274240E041E26593B075A9">
   <TABLE BORDER="1">
 
       <TR>
@@ -18,9 +18,9 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=520015F84334553491F4758431D24444">
+                 <img src="/test/duke.gif;jsessionid=F311B20611274240E041E26593B075A9">
                  <!-- this isn't valid HTML, but it works for our label case -->
-                 <label for="/basicForm/pushButton">
+                 <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt" >
 
                  Label for PushButon
                  </label>
@@ -36,7 +36,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=520015F84334553491F4758431D24444">
+                 <img src="/test/duke.gif;jsessionid=F311B20611274240E041E26593B075A9">
              </button>
 
 	</TD>

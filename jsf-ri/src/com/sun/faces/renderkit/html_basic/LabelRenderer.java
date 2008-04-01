@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.1 2002/09/05 18:54:12 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.2 2002/09/06 00:25:32 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.1 2002/09/05 18:54:12 eburns Exp $
+ * @version $Id: LabelRenderer.java,v 1.2 2002/09/06 00:25:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,7 +124,8 @@ public class LabelRenderer extends HtmlBasicRenderer {
 	    }
 	}
 	
-	writer.write("<label for=\"" + forValue + "\">\n");
+	writer.write("<label for=\"" + forValue + "\" "+ 
+		     Util.renderPassthruAttributes(context, component) +">\n");
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
