@@ -1,5 +1,5 @@
 /*
- * $Id: EventHandler.java,v 1.8 2002/03/08 02:02:32 jvisvanathan Exp $
+ * $Id: BasicListener.java,v 1.1 2002/03/08 02:02:32 jvisvanathan Exp $
  */
 
 /*
@@ -25,13 +25,9 @@ import javax.servlet.*;
  * An object should implement this interface if it needs
  * to respond to a command event.
  */
-public class EventHandler implements CommandListener,ValueChangeListener{
+public class BasicListener implements CommandListener{
 
-    public EventHandler ( ) {
-        //super ( cp, ep );
-        // System.out.println("Completion path " + cp );
-        // System.out.println("Error path " + ep );
-        // System.out.println("Event Handler constructor");
+    public BasicListener ( ) {
     }
 
     public void doCommand(CommandEvent e, NavigationHandler nh )  
@@ -47,17 +43,9 @@ public class EventHandler implements CommandListener,ValueChangeListener{
        System.out.println("CommandEvent processing successful");
     }
 
-    public void handleValueChange(ValueChangeEvent e) {
-       UIComponent source = e.getSourceComponent();
-
-       System.out.println("Name of UIComponent that generated event " + 
-			  source.getId());
-       System.out.println("New Value " + e.getNewValue());
-       System.out.println("ValueChangeEvent processing successful");
-    }
 
     public boolean requiresValidation(CommandEvent e ) {
-        return false;
+        return true;
     }
     
 }
