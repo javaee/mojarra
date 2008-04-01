@@ -76,7 +76,7 @@
     </component>
 
     <component>
-        <type>javax.faces.component.UITextEntry</type>
+        <type>javax.faces.component.UIInput</type>
         <renderer>
             <type>InputRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
