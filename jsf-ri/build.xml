@@ -175,7 +175,7 @@
     </copy>
   </target>
 
-  <target name="build.war" depends="clean,prepare,compile,compile.sample" >
+  <target name="build.war" depends="clean,prepare,compile,compile.sample,jars" >
      <!-- name of the war file -->
      <property name="dist.war"  value="${app.name}.war"/>
      <mkdir  dir="${dist.home}/${app.name}"/>
@@ -190,18 +190,16 @@
       <fileset dir="${build.home}/${app.name}"/>
     </copy>
 
-    <!-- copy all the classes under com.sun.faces package -->
-    <copy todir="${dist.home}/${app.name}/WEB-INF/classes">
-      <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
-    </copy>
-    
-    <!-- copy all the classes under javax.faces package -->
-    <!-- <copy  file="${jsf-api.jar}" todir="${dist.home}/${app.name}/WEB-INF/classes> -->
-    <unjar src="${jsf-api.jar}" dest="${dist.home}/${app.name}/WEB-INF/classes"/>
+    <mkdir dir="${dist.home}/${app.name}/WEB-INF/classes" />
 
     <!-- copy dependent libs -->
     <copy  file="${commons.beanutils.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
     <copy  file="${commons.collections.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib"/>
+
+    <copy  file="${jsf-api.jar}"
+           todir="${dist.home}/${app.name}/WEB-INF/lib"/>
+    <copy  file="${build.home}/lib/${name}.jar"
+           todir="${dist.home}/${app.name}/WEB-INF/lib"/>
 
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
