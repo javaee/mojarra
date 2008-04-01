@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.10 2002/05/16 18:39:16 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.11 2002/05/16 21:53:37 craigmcc Exp $
  */
 
 /*
@@ -859,10 +859,18 @@ public abstract class UIComponent {
 
     /**
      * <p>Decode the current state of this <code>UIComponent</code> from the
-     * request contained in the specified {@link FacesContext}.  This method
-     * is only called if no <code>rendererType</code> value is specified,
-     * which implies that the component itself rendered its value to the
-     * response in the <code>encode()</code> method.</p>
+     * request contained in the specified {@link FacesContext}, and attempt
+     * to convert this state information into an object of the required type
+     * for this component.  If conversion is successful, save the resulting
+     * object via a call to <code>getValue()</code>.  If conversion is not
+     * successful:</p>
+     * <ul>
+     * <li>Save the state information in such a way that <code>encode()</code>
+     *     can reproduce the previous input (even though it was syntactically
+     *     or semantically incorrect)</li>
+     * <li>Add an appropriate conversion failure error message by calling
+     *     <code>context.getMessageList().add()</code>.</li>
+     * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
      * by (<strong>FIXME</strong> - specify mechanism).</p>
@@ -882,10 +890,14 @@ public abstract class UIComponent {
 
     /**
      * <p>Render the current state of this <code>UIComponent</code> to the
-     * response contained in the specified {@link FacesContext}.  This method
-     * is only called if no <code>rendererType</code> value is specified,
-     * which implies that the component itself renders its own value rather
-     * than delegating to a {@link Renderer}.</p>
+     * response contained in the specified {@link FacesContext}.  If the
+     * conversion attempted in a previous call to <code>decode()</code> for
+     * this component failed, the state information saved during execution
+     * of <code>decode()</code> should be utilized to reproduce the incorrect
+     * input.  If the conversion was successful, or if there was no previous
+     * call to <code>decode()</code>, the value to be displayed should be
+     * acquired by calling <code>currentValue()</code>, and rendering the
+     * value as appropriate.</p>
      *
      * <p><strong>FIXME</strong> - Not sufficient for child rendering.</p>
      *
@@ -896,21 +908,6 @@ public abstract class UIComponent {
      *  is <code>null</code>
      */
     public void encode(FacesContext context) throws IOException {
-
-        ; // Default implementation does nothing
-
-    }
-
-
-    /**
-     * <p>Perform format validations on the characteristics of this component,
-     * as represented in the current request.  Add any required error messages
-     * to the message list associated with the specified {@link FacesContext}.
-     * </p>
-     *
-     * @param context FacesContext for the request we are processing
-     */
-    public void validate(FacesContext context) {
 
         ; // Default implementation does nothing
 

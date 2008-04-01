@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.3 2002/05/16 18:39:16 craigmcc Exp $
+ * $Id: Renderer.java,v 1.4 2002/05/16 21:53:38 craigmcc Exp $
  */
 
 /*
@@ -156,8 +156,17 @@ public abstract class Renderer {
     /**
      * <p>Decode the current state of the specified {@link UIComponent}
      * from the request contained in the specified {@link FacesContext},
-     * which will have been received from a response page that was created
-     * by this <code>Renderer</code>.</p>
+     * and attempt to convert this state information into an object of
+     * the type required for this component.  If conversion is successful,
+     * save the resulting object via a call to <code>getValue()</code>.
+     * If conversion is not successful:</p>
+     * <ul>
+     * <li>Save the state inforamtion (inside the component) in such a way
+     *     that <code>encode()</code> can reproduce the previous input
+     *     (even though it was syntactically or semantically incorrect).</li>
+     * <li>Add an appropriate conversion failure error message by calling
+     *     <code>context.getMessageList().add()</code>.</li>
+     * </ul>
      *
      * <p>During decoding, events may be enqueued for later processing
      * by (<strong>FIXME</strong> - specify mechanism).</p>
@@ -175,7 +184,14 @@ public abstract class Renderer {
 
     /**
      * <p>Render the specified {@link UIComponent} to the output stream or
-     * writer associated with the response we are creating.</p>
+     * writer associated with the response we are creating.  If the
+     * conversion attempted in a previous call to <code>decode</code> for
+     * this component failed, the state information saved during execution
+     * of <code>decode()</code> should be utilized to reproduce the incorrect
+     * input.  If the conversion was successful, or if there was no previous
+     * call to <code>decode()</code>, the value to be displayed should be
+     * acquired by calling <code>component.currentValue()</code>, and
+     * rendering the value as appropriate.</p>
      *
      * <p><strong>FIXME</strong> - Not sufficient for child rendering.</p>
      *
@@ -188,18 +204,6 @@ public abstract class Renderer {
      */
     public abstract void encode(FacesContext context, UIComponent component)
         throws IOException;
-
-
-    /**
-     * <p>Perform format validations on the characteristics of the specified
-     * component, as represented in the current request.  Add any required
-     * error messages to the message list associated with the specified
-     * {@link FacesContext}.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent to be validated
-     */
-    public abstract void validate(FacesContext context, UIComponent component);
 
 
 }
