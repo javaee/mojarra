@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.3 2002/06/25 21:42:54 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.4 2002/06/26 19:20:15 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2002/06/25 21:42:54 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2002/06/26 19:20:15 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -346,12 +346,7 @@ public void handleNestedComponentTag(UIComponent parent,
     }
 
 
-    /**********
-	       I hate to comment out code, but I need to get my testcase
-	       working before the fix for UISelectOne is ready.
-    
-    Assert.assert_it(false, "PENDING(amy): fixme");
-    SelectItem [] oldItems = uiSelectOne.getItems();
+    SelectItem [] oldItems = (SelectItem []) uiSelectOne.getItems();
     SelectItem [] newItems = null;
 
     if (null != oldItems) {
@@ -374,7 +369,6 @@ public void handleNestedComponentTag(UIComponent parent,
 	uiSelectOne.setSelectedValue(itemValue);
     }
 
-    ************/
 }
 
 public void applyAttributesToComponentInstance(UIComponent child, 

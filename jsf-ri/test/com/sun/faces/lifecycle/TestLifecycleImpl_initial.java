@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.5 2002/06/26 18:43:24 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.6 2002/06/26 19:20:16 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.5 2002/06/26 18:43:24 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.6 2002/06/26 19:20:16 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -41,16 +41,15 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase
 // Protected Constants
 //
 
-public static final String TEST_URI_XUL = "/components_1.xul";
-public static final String TEST_URI = "/components_1.jsp";
+public static final String TEST_URI_XUL = "/components.xul";
+public static final String TEST_URI = "/components.jsp";
 
 public String getExpectedOutputFilename() {
     return "TestLifecycleImpl_initial_correct";
 }
 
 public static final String ignore[] = {
-    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents_1.xul;jsessionid=73083205D69562F604C556A1E4B54538\">"
-
+    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=87423981A10915149193138335343814\">"
 };
 
 public String [] getLinesToIgnore() {

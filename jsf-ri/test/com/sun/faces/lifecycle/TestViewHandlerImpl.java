@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.1 2002/06/25 21:08:41 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.2 2002/06/26 19:20:17 eburns Exp $ 
  */ 
 
 
@@ -61,7 +61,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.1 2002/06/25 21:08:41 eburns Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.2 2002/06/26 19:20:17 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -76,8 +76,8 @@ public class TestViewHandlerImpl extends JspFacesTestCase
 // 
 
 
-public static final String TEST_URI_XUL = "/components_1.xul"; 
-public static final String TEST_URI = "/components_1.jsp"; 
+public static final String TEST_URI_XUL = "/components.xul"; 
+public static final String TEST_URI = "/components.jsp"; 
 
 
 public String getExpectedOutputFilename() { 
@@ -86,7 +86,7 @@ public String getExpectedOutputFilename() {
 
 
 public static final String ignore[] = { 
-    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents_1.xul;jsessionid=96B461C04035B090217500B6F3B79452\">",
+    "        <form method=\"post\" action=\"%2Ftest%2Ffaces%2Fform%2FbasicForm%2F%252Fcomponents.xul;jsessionid=0893D474A94104F7215275E1A385C4D8\">"
 }; 
      
 public String [] getLinesToIgnore() { 

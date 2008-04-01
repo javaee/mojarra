@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.5 2002/06/21 00:31:24 eburns Exp $
+ * $Id: DebugUtil.java,v 1.6 2002/06/26 19:20:16 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.5 2002/06/21 00:31:24 eburns Exp $
+ * @version $Id: DebugUtil.java,v 1.6 2002/06/26 19:20:16 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,11 +131,9 @@ public static void printTree(UIComponent root, PrintStream out)
     SelectItem curItem = null;
     int j = 0;
 
-    Assert.assert_it(false, "PENDING(): fix this");
-
-    /*************
     if (root instanceof javax.faces.component.UISelectOne) {
-	items = ((javax.faces.component.UISelectOne)root).getItems();
+	items = (SelectItem [])
+	    ((javax.faces.component.UISelectOne)root).getItems();
 	indentPrintln(out, " {");
 	for (j = 0; j < items.length; j++) {
 	    curItem = items[j];
@@ -182,8 +180,6 @@ public static void printTree(UIComponent root, PrintStream out)
 	    }
 	}
     }
-
-    ***********/
 
     curDepth++;
     Iterator it = root.getChildren();
