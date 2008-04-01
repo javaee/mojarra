@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeDescriptor.java,v 1.4 2002/05/23 17:45:31 craigmcc Exp $
+ * $Id: AttributeDescriptor.java,v 1.5 2002/06/03 19:27:26 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import javax.faces.render.Renderer;
+import javax.faces.validator.Validator;
 
 
 /**

@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.3 2002/06/03 16:36:22 craigmcc Exp $
+ * $Id: Validator.java,v 1.1 2002/06/03 19:27:27 craigmcc Exp $
  */
 
 /*
@@ -7,10 +7,12 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.component;
+package javax.faces.validator;
 
 
 import java.util.Iterator;
+import javax.faces.component.AttributeDescriptor;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 import javax.faces.context.MessageList;

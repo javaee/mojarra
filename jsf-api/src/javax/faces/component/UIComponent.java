@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.21 2002/05/30 18:36:44 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.22 2002/06/03 19:27:26 craigmcc Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
+import javax.faces.validator.Validator;
 
 
 /**
