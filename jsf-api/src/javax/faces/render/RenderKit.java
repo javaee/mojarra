@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.1 2002/05/08 01:11:47 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.2 2002/05/16 00:09:27 craigmcc Exp $
  */
 
 /*
@@ -39,7 +39,8 @@ public abstract class RenderKit {
     /**
      * <p>Return the logical name of this <code>RenderKit</code>.  The
      * default <code>RenderKit</code> instance for a given JavaServer Faces
-     * implementation shall return a zero-length String.</p>
+     * implementation shall return
+     * <code>RenderKitFactory.DEFAULT_RENDER_KIT</code></p>
      */
     public abstract String getRenderKitName();
 
