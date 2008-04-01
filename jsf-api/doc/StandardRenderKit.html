@@ -6,7 +6,7 @@
 
 <div align="center">
   <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
-  <h3>$Id: StandardRenderKit.html,v 1.6 2002/08/13 17:18:49 craigmcc Exp $</h3>
+  <h3>$Id: StandardRenderKit.html,v 1.7 2002/08/14 19:55:07 craigmcc Exp $</h3>
 </div>
 
 
@@ -152,14 +152,14 @@
     <td>Date</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, formatStyle, timezone</td>
+    <td>label, dateStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
     </td>
     <td>
       Get current value, convert to Date, create localized DateFormat date
-      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL),
+      instance for the specified dateStyle (SHORT, MEDIUM, LONG, FULL),
       set time zone (if specified), render formatted result as text input
       field.
     </td>
@@ -185,16 +185,16 @@
     <td>DateTime</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, formatStyle, timezone</td>
+    <td>label, dateStyle, timeStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary, and store.
     </td>
     <td>
       Get current value, convert to Date, create localized DateFormat
-      datetime instance for the specified formatStyle (SHORT, MEDIUM, LONG,
-      FULL), set time zone (if specified), render formatted result as text
-      input field.
+      datetime instance for the specified dateStyle (SHORT, MEDIUM, LONG,
+      FULL), and timeStyle (SHORT, MEDIUM, LONG, FULL), set time zone
+      (if specified), render formatted result as text input field.
     </td>
   </tr>
 
@@ -218,18 +218,18 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>label, formatStyle</td>
+    <td>label, numberStyle</td>
     <td>
       Get NumberFormat instance as for encoding, parse text input,
       convert as necessary, and store.
     </td>
     <td>
       <p>Get current value, convert to numeric (as appropriate), create
-      localized NumberFormat instance based on style (CURRENCY,
+      localized NumberFormat instance based on numberStyle (CURRENCY,
       INTEGER, NUMBER, PERCENT), render formatted result as
       text input field.</p>
 
-      <p><strong>FIXME</strong> - When <code>formatStyle</code> is set to
+      <p><strong>FIXME</strong> - When <code>numberStyle</code> is set to
       <code>CURRENCY</code>, we need to specify <code>currencyCode</code>
       and <code>currencySymbol</code> optional attributes, like the
       JSTL <code>&lt;fmt:formatNumber&gt;</code> tag allows.  It's probably
@@ -286,14 +286,14 @@
     <td>Time</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>label, formatStyle, timezone</td>
+    <td>label, timeStyle, timezone</td>
     <td>
       Get DateFormat instance as for encoding, parse text input,
       convert as necessary and store.
     </td>
     <td>
       Get current value, convert to Date, create localized DateFormat time
-      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL), set
+      instance for the specified timeStyle (SHORT, MEDIUM, LONG, FULL), set
       time zone (if specified), render formatted result as text input field.
     </td>
   </tr>
@@ -338,13 +338,13 @@
     <td>Date</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>formatStyle, timezone</td>
+    <td>dateStyle, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Date, create localized DateFormat date
-      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL),
+      instance for the specified dateStyle (SHORT, MEDIUM, LONG, FULL),
       set time zone (if specified), render formatted result.
     </td>
   </tr>
@@ -368,14 +368,15 @@
     <td>DateTime</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>formatStyle, timezone</td>
+    <td>dateStyle, timeStyle, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Date, create localized DateFormat
-      datetime instance for the specified formatStyle (SHORT, MEDIUM, LONG,
-      FULL), set time zone (if specified), render formatted result.
+      datetime instance for the specified dateStyle (SHORT, MEDIUM, LONG,
+      FULL), and timeStyle (SHORT, MEDIUM, LONG, FULL), set time zone
+      (if specified), render formatted result as text input field.
     </td>
   </tr>
 
@@ -451,16 +452,16 @@
     <td>Number</td>
     <td>numeric</td>
     <td>&nbsp;</td>
-    <td>formatStyle</td>
+    <td>numberStyle</td>
     <td>
       &nbsp;
     </td>
     <td>
       <p>Get current value, convert to numeric (as appropriate), create
-      localized NumberFormat instance based on formatStyle (CURRENCY,
+      localized NumberFormat instance based on numberStyle (CURRENCY,
       INTEGER, NUMBER, PERCENT), render formatted result.</p>
 
-      <p><strong>FIXME</strong> - When <code>formatStyle</code> is set to
+      <p><strong>FIXME</strong> - When <code>numberStyle</code> is set to
       <code>CURRENCY</code>, we need to specify <code>currencyCode</code>
       and <code>currencySymbol</code> optional attributes, like the
       JSTL <code>&lt;fmt:formatNumber&gt;</code> tag allows.  It's probably
@@ -485,13 +486,13 @@
     <td>Time</td>
     <td>Date, Long</td>
     <td>value <em>or</em> modelReference</td>
-    <td>formatStyle, timezone</td>
+    <td>numberStyle, timezone</td>
     <td>
       &nbsp;
     </td>
     <td>
       Get current value, convert to Date, create localized DateFormat time
-      instance for the specified formatStyle (SHORT, MEDIUM, LONG, FULL), set
+      instance for the specified numberStyle (SHORT, MEDIUM, LONG, FULL), set
       time zone (if specified), render formatted result.
     </td>
   </tr>
