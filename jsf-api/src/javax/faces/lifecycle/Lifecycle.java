@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.12 2002/06/14 04:32:01 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.13 2002/06/14 17:36:50 craigmcc Exp $
  */
 
 /*
@@ -9,8 +9,7 @@
 
 package javax.faces.lifecycle;
 
-import java.util.SortedMap;
-import javax.faces.FacesException;     // FIXME - subpackage?
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -32,28 +31,26 @@ import javax.faces.context.FacesContext;
  *
  * <p>The set of {@link Phase} instances associated with a particular
  * <code>Lifecycle</code> instance, as well as the order that they are
- * executed in, must be configured during execution of the
+ * executed in, must be configured prior to, or during, execution of the
  * <code>getLifecycle()</code> method in {@link LifecycleFactory}.  For
  * each standard phase identifier, a JavaServer Faces implementation will
  * provide a default {@link Phase} instance that implements the
- * required behavior of that phase.  In addition, it is possible for an
- * application to register additional {@link Phase} instances, to be executed
- * before or after the standard instance, for a particular phase identifier,
- * by calling the <code>registerBefore()</code> or <code>registerAfter()</code>
- * methods of {@link LifecycleFactory}.  Note that registration of custom
- * {@link Phase} instances must be completed before the call to
- * <code>getLifecycle()</code> that creates this <code>Lifecycle</code>
- * instance.</p>
+ * required behavior of that phase.  A particular instance of
+ * <code>Lifecycle</code> may execute additional, implementation-defined,
+ * {@link Phase}s in between the execution of the standard phases, as long
+ * as the ordering of standard phases is maintained, and the state change
+ * indicator values returned by the <code>execute()</code> method of
+ * standard {@link Phase}s is respected.</p>
  *
- * <p>The <code>execute()</code> method of <code>Lifecycle</code> is run
- * once per incoming request processed by a Faces application, according
- * to the following algorithm:</p>
- * <blockquote>
- * <p><strong>FIXME</strong> - Describe the algorithm used to identify
- * which phase instances are called in which order (including transitions
- * to <em>Render Response</em> starting with custom phases registered to
- * run before the standard one), and when phase listeners are invoked.</p>
- * </blockquote>
+ * <p><strong>FIXME</strong> - Ongoing EG discussion about whether a
+ * JSF implementation must use the execute() method defined here, or may
+ * use an adapter pattern to call <code>executePhase()</code> for each
+ * phase individually.</p>
+ *
+ * <p><strong>FIXME</strong> - Do we really need defined phase identifiers
+ * any more?  We will need them if we reintroduce registerBefore() and
+ * registerAfter(), but that is probably not needed if the adapter pattern
+ * is the one we end up with.</p>
  */
 
 public abstract class Lifecycle {
@@ -164,11 +161,9 @@ public abstract class Lifecycle {
 
     /**
      * <p>Execute the {@link Phase}s registered for this <code>Lifecycle</code>
-     * instance, according to the algorithm described in the class description.
-     * As phases are executed, call the <code>setPhaseId()</code> method of
-     * {@link FacesContext} as transitions between phases occur.</p>
-     *
-     * <p><strong>FIXME</strong> - setPhaseId() to what value when done?</p>
+     * instance, in the order required by the specification.  The execution
+     * of each individual {@link Phase} must be accomplished by calling the
+     * <code>executePhase()</code> method for that phase.</p>
      *
      * @param context FacesContext for the current request being processed
      *
@@ -178,6 +173,24 @@ public abstract class Lifecycle {
      *  from its <code>execute()</code> method
      */
     public abstract void execute(FacesContext context) throws FacesException;
+
+
+    /**
+     * <p>Execute the specified {@link Phase} as part of the request processing
+     * lifecycle being managed by this <code>Lifecycle</code> instance, by
+     * calling its <code>execute()</code> method.  Return the <em>state
+     * change indicator</em> value that was returned by the {@link Phase}.</p>
+     *
+     * @param context FacesContext for the current request being processed
+     * @param phase Phase instance to be processed
+     *
+     * @exception FacesException if thrown by the <code>execute()</code>
+     *  method of the {@link Phase} that was executed
+     * @exception NullPointerException if <code>context</code> or
+     *  <code>phase</code> is <code>null</code>
+     */
+    public abstract int executePhase(FacesContext context, Phase phase)
+        throws FacesException;
 
 
 }
