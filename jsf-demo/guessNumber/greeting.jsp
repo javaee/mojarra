@@ -46,7 +46,7 @@
     <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
     <faces:usefaces>
     <faces:form id="helloForm" formName="helloForm" >
-  	<faces:input_text id="userNo"
+  	<faces:input_number id="userNo" numberStyle="NUMBER"
    				modelReference="UserNumberBean.userNumber">
 	        <faces:validator 
                        className="javax.faces.validator.LongRangeValidator"/>
@@ -59,7 +59,7 @@
                          name="javax.faces.validator.LongRangeValidator.MAXIMUM"
                          value="10"/>
 
-         </faces:input_text> 
+         </faces:input_number> 
 	 <faces:command_button id="submit" commandName="submit">
          Submit
          </faces:command_button>
