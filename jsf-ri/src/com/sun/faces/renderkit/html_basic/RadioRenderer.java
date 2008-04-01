@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.23 2002/08/01 23:47:36 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.24 2002/08/02 00:11:03 eburns Exp $
  */
 
 /*
@@ -30,6 +30,8 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
 
+import com.sun.faces.util.Util;
+
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.ConversionException;
 
@@ -44,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.23 2002/08/01 23:47:36 rkitain Exp $
+ * @version $Id: RadioRenderer.java,v 1.24 2002/08/02 00:11:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -191,21 +193,15 @@ public class RadioRenderer extends HtmlBasicRenderer {
             uiSelectOne = (UISelectOne) component;
         }    
 
-        SelectItem items[] = (SelectItem []) uiSelectOne.getItems();
-        if (items == null) {
-            String itemsModel = uiSelectOne.getItemsModelReference();
-            if ( itemsModel != null ) {
-                items = (SelectItem[]) context.getModelValue(itemsModel);
-            }    
-        }
-        
+        Iterator items = Util.getSelectItems(context, uiSelectOne);
+	SelectItem curItem = null;
         if ( items == null ) {
             return;
         }
         
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-
+	
 	if (null != (alignStr = (String) uiSelectOne.getAttribute("align"))) {
 	    alignVertical = alignStr.equalsIgnoreCase("vertical") ? 
 		true : false;
@@ -218,27 +214,28 @@ public class RadioRenderer extends HtmlBasicRenderer {
 		border = 0;
 	    }
 	}
-
+	
 	writer.write("<TABLE BORDER=\"" + border + "\">\n");
 	if (!alignVertical) {
 	    writer.write("\t<TR>\n");
 	}
         
-        for (int i = 0; i < items.length; i++) {
+	while (items.hasNext()) {
+	    curItem = (SelectItem) items.next();
 	    if (alignVertical) {
 		writer.write("\t<TR>\n");
 	    }
             writer.write("<TD><INPUT TYPE=\"RADIO\"");
-            if (currentValue != null && 
-                    (currentValue.equals(items[i].getValue()))){
+            if (null != curItem.getValue() &&
+		curItem.getValue().equals(uiSelectOne.getSelectedValue())){
                 writer.write(" CHECKED");
             }
             writer.write(" NAME=\"");
             writer.write(uiSelectOne.getCompoundId());
             writer.write("\" VALUE=\"");
-            writer.write(items[i].getValue());
+            writer.write((String) curItem.getValue());
             writer.write("\">");
-            String itemLabel = items[i].getLabel();
+            String itemLabel = curItem.getLabel();
             if (itemLabel != null) {
                 writer.write(" ");
                 writer.write(itemLabel);

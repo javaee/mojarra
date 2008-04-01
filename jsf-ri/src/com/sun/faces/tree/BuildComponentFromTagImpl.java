@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.5 2002/07/31 22:40:10 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.6 2002/08/02 00:11:06 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.5 2002/07/31 22:40:10 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.6 2002/08/02 00:11:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -349,6 +349,7 @@ public void handleNestedComponentTag(UIComponent parent,
     }
 
 
+    /********** PENDING(edburns): Fix this for non-jsp example
     SelectItem [] oldItems = (SelectItem []) uiSelectOne.getItems();
     SelectItem [] newItems = null;
 
@@ -371,7 +372,7 @@ public void handleNestedComponentTag(UIComponent parent,
     if (checked && null == uiSelectOne.getSelectedValue()) {
 	uiSelectOne.setSelectedValue(itemValue);
     }
-
+    ***************/
 }
 
 public void applyAttributesToComponentInstance(UIComponent child, 

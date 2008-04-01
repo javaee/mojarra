@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.2 2002/07/15 23:48:32 eburns Exp $
+ * $Id: SelectItemTag.java,v 1.3 2002/08/02 00:11:04 eburns Exp $
  */
 
 /*
@@ -16,7 +16,9 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.jsp.JspException;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UIComponent;
 import javax.faces.component.SelectItem;
+import javax.faces.component.UISelectItem;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 
@@ -24,22 +26,20 @@ import com.sun.faces.util.Util;
 import com.sun.faces.taglib.FacesTag;
 import com.sun.faces.RIConstants;
 
-import javax.servlet.jsp.tagext.TagSupport;
-
 /**
  *
  *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.2 2002/07/15 23:48:32 eburns Exp $
+ * @version $Id: SelectItemTag.java,v 1.3 2002/08/02 00:11:04 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class SelectItemTag extends TagSupport
+public class SelectItemTag extends FacesTag
 {
 //
 // Protected Constants
@@ -92,6 +92,10 @@ public SelectItemTag()
         return value;
     }
 
+    public String getId() {
+        return getValue();
+    }
+
     public void setValue(String value) {
         this.value = value;
     }
@@ -115,56 +119,37 @@ public SelectItemTag()
 //
 // General Methods
 //
+    public String getLocalRendererType() { return "InputRenderer"; }
+
 
 //
-// Methods from TagSupport
+// Methods from FacesTag
 // 
-
-    public int doStartTag() throws JspException {
-	FacesTag parent = null;
-	UISelectOne uiSelectOne = null;
-
-	parent = (FacesTag) findAncestorWithClass(this, FacesTag.class);
-	Assert.assert_it(null != parent);
-
-	uiSelectOne = (UISelectOne) parent.getComponent();
-	Assert.assert_it(null != uiSelectOne);
-
-	// If the SelectItems have already been configured for this tag
-	if (null !=uiSelectOne.getAttribute(RIConstants.SELECTITEMS_CONFIGURED)
-	    &&
-	    ((String)uiSelectOne.getAttribute(RIConstants.SELECTITEMS_CONFIGURED)).equals(RIConstants.SELECTITEMS_CONFIGURED)) {
-	    // do nothing.
-	    return EVAL_BODY_INCLUDE;
-	}
-
-	SelectItem [] oldItems = (SelectItem []) uiSelectOne.getItems();
-	SelectItem [] newItems = null;
-	
-	if (null != oldItems) {
-	    newItems = new SelectItem[oldItems.length + 1];
-	    System.arraycopy(oldItems, 0, newItems, 0, oldItems.length);
-	    newItems[oldItems.length] = new SelectItem(getValue(), getLabel(), 
-						       getDescription());
-	}
-	else {
-	    newItems = new SelectItem[1];
-	    newItems[0] = new SelectItem(getValue(), getLabel(), 
-					 getDescription());
-	}
-	
-	uiSelectOne.setItems(newItems);
-	// if it is checked, make sure the model knows about it.
-	// we should update selectedValue only if it is null
-	// in the model bean otherwise we would be overwriting
-	// the value in model bean, losing any earlier updates. 
-	if ((null != getSelected()) && 
-	    (null == uiSelectOne.getSelectedValue())) {
-	    uiSelectOne.setSelectedValue(getValue());
-	}
-	
-	return EVAL_BODY_INCLUDE;
+    public UIComponent createComponent() {
+        return (new UISelectItem());
     }
+
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+	UISelectItem selectItem = (UISelectItem) component;
+	UISelectOne selectOne = (UISelectOne) selectItem.getParent();
+	
+	if (null == selectItem.getItemValue()) {
+	    selectItem.setItemValue(getValue());
+	}
+	if (null == selectItem.getItemLabel()) {
+	    selectItem.setItemLabel(getLabel());
+	}
+	if (null == selectItem.getItemDescription()) {
+	    selectItem.setItemDescription(getDescription());
+	}
+	// If this SelectItemTag instance is selected and
+	// there is no selected item in our UISelectOne...
+	if (null != getSelected() && null == selectOne.getSelectedValue()) {
+	    selectOne.setSelectedValue(selectItem.getItemValue());
+	}
+    }
+
 
 
 } // end of class SelectItemTag

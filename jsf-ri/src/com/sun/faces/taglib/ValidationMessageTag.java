@@ -1,5 +1,5 @@
 /*
- * $Id: ValidationMessageTag.java,v 1.1 2002/07/23 18:04:09 eburns Exp $
+ * $Id: ValidationMessageTag.java,v 1.2 2002/08/02 00:11:04 eburns Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.io.IOException;
 
  *
 
- * @version $Id: ValidationMessageTag.java,v 1.1 2002/07/23 18:04:09 eburns Exp $
+ * @version $Id: ValidationMessageTag.java,v 1.2 2002/08/02 00:11:04 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -150,7 +150,7 @@ public int doEndTag() throws JspException
 
     // If the tag says to show all messages...
     if (null != getShowAll()) {
-	messageIter = facesContext.getMessagesAll();
+	messageIter = facesContext.getMessages();
     }
     else {
 	// if not, if there is a component for which messages should be

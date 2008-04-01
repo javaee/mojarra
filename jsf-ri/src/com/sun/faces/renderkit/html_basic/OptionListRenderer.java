@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.22 2002/08/01 23:47:36 rkitain Exp $
+ * $Id: OptionListRenderer.java,v 1.23 2002/08/02 00:11:03 eburns Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 
+import com.sun.faces.util.Util;
+
 import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.ConvertUtils;
 
@@ -39,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.22 2002/08/01 23:47:36 rkitain Exp $
+ * @version $Id: OptionListRenderer.java,v 1.23 2002/08/02 00:11:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,29 +178,26 @@ public class OptionListRenderer extends HtmlBasicRenderer {
             currentValue = "";
         }
 
-        SelectItem items[] = (SelectItem []) selectOne.getItems();
-        if (items == null) {
-            items = (SelectItem[]) context.getModelValue(
-                selectOne.getItemsModelReference());
-        }
-        if (items == null) {
-            items = new SelectItem[0];
-        }
-
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
+
         writer.write("<SELECT NAME=\"");
         writer.write(component.getCompoundId());
         writer.write("\">");
-        for (int i = 0; i < items.length; i++) {
+        Iterator items = Util.getSelectItems(context, selectOne);
+	SelectItem curItem = null;
+
+        while (items.hasNext()) {
+	    curItem = (SelectItem) items.next();
             writer.write("\t<OPTION VALUE=\"");
-            writer.write((String) items[i].getValue());
+            writer.write((String) curItem.getValue());
             writer.write("\"");
-            if (currentValue.equals(items[i].getValue())) {
+            if (null != curItem.getValue() &&
+		curItem.getValue().equals(selectOne.getSelectedValue())) {
                 writer.write(" selected=\"selected\"");
             }
             writer.write(">");
-            writer.write(items[i].getLabel());
+            writer.write(curItem.getLabel());
             writer.write("</OPTION>\n");
         }
         writer.write("</SELECT>");

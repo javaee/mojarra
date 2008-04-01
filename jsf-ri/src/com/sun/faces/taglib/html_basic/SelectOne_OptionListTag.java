@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_OptionListTag.java,v 1.22 2002/07/19 23:57:58 eburns Exp $
+ * $Id: SelectOne_OptionListTag.java,v 1.23 2002/08/02 00:11:05 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_OptionListTag.java,v 1.22 2002/07/19 23:57:58 eburns Exp $
+ * @version $Id: SelectOne_OptionListTag.java,v 1.23 2002/08/02 00:11:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -55,8 +55,6 @@ public class SelectOne_OptionListTag extends FacesTag
 
 // Attribute Instance Variables
 
-    protected String itemsmodelreference = null;
-
 // Relationship Instance Variables
 
 //
@@ -76,14 +74,6 @@ public SelectOne_OptionListTag()
 // Accessors
 //
 
-    public void setItemsModelReference(String newItemsmodelreference) {
-	itemsmodelreference = newItemsmodelreference;
-    }
-
-    public String getItemsModelReference() {
-	return itemsmodelreference;
-    }
-
 //
 // General Methods
 //
@@ -93,14 +83,6 @@ public SelectOne_OptionListTag()
         return (new UISelectOne());
     }
 
-    protected void overrideProperties(UIComponent component) {
-	super.overrideProperties(component);
-	UISelectOne selectOne = (UISelectOne) component;
-	
-	if (null == selectOne.getItemsModelReference()) {
-	    selectOne.setItemsModelReference(getItemsModelReference());
-	}
-    }
 //
 // Methods from TagSupport
 // 

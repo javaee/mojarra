@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.16 2002/08/01 23:01:49 rkitain Exp $
+ * $Id: Util.java,v 1.17 2002/08/02 00:11:06 eburns Exp $
  */
 
 /*
@@ -29,8 +29,19 @@ import javax.faces.context.MessageResourcesFactory;
 import javax.faces.context.MessageResources;
 import javax.faces.context.Message;
 
+import javax.faces.component.UISelectItem;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItems;
+import javax.faces.component.SelectItem;
+
 import com.sun.faces.RIConstants;
 import com.sun.faces.context.MessageResourcesImpl;
+import javax.faces.context.FacesContext;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Iterator;
 
 /**
  *
@@ -38,7 +49,7 @@ import com.sun.faces.context.MessageResourcesImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.16 2002/08/01 23:01:49 rkitain Exp $
+ * @version $Id: Util.java,v 1.17 2002/08/02 00:11:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -246,8 +257,65 @@ private Util()
 	context.removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
     }
 			 
+    /**
+     * <p>Return an Iterator over {@link SelectItem} instances representing the
+     * available options for this component, assembled from the set of
+     * {@link UISelectItem} and/or {@link UISelectItems} components that are
+     * direct children of this component.  If there are no such children, a
+     * zero-length array is returned.</p>
+     *
+     * @param context The {@link FacesContext} for the current request.
+     * If null, the UISelectItems behavior will not work.
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public static Iterator getSelectItems(FacesContext context,
+					  UIComponent component) {
 
+        ArrayList list = new ArrayList();
+        Iterator kids = component.getChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid instanceof UISelectItem) {
+                UISelectItem item = (UISelectItem) kid;
+                list.add(new SelectItem(item.getItemValue(),
+                                        item.getItemLabel(),
+                                        item.getItemDescription()));
+            } else if (kid instanceof UISelectItems && null != context) {
+                Object value = kid.currentValue(context);
+                if (value instanceof UISelectItem) {
+                    list.add(value);
+                } else if (value instanceof UISelectItem[]) {
+                    UISelectItem items[] = (UISelectItem[]) value;
+                    for (int i = 0; i < items.length; i++) {
+                        list.add(items[i]);
+                    }
+                } else if (value instanceof Collection) {
+                    Iterator elements = ((Collection) value).iterator();
+                    while (elements.hasNext()) {
+                        list.add((SelectItem) elements.next());
+                    }
+                } else if (value instanceof Map) {
+                    Iterator keys = ((Map) value).keySet().iterator();
+                    while (keys.hasNext()) {
+                        Object key = keys.next();
+                        if (key == null) {
+                            continue;
+                        }
+                        Object val = ((Map) value).get(key);
+                        if (val == null) {
+                            continue;
+                        }
+                        list.add(new SelectItem(val.toString(), key.toString(),
+                                                null));
+                    }
+                }
+            }
+        }
+        return (list.iterator());
 
+    }
 
 //
 // General Methods

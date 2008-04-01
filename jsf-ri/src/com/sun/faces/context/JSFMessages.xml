@@ -39,19 +39,19 @@
       <detail>Value is required.</detail>
   </message>
 
-  <message messageId="javax.faces.validator.IntegerRangeValidator.LIMIT" 
+  <message messageId="javax.faces.validator.LongRangeValidator.LIMIT" 
            severity="1" summary="Validation Error." >
       <detail>Specified attribute cannot be converted to proper type.</detail>
   </message>
-  <message messageId="javax.faces.validator.IntegerRangeValidator.MAXIMUM" 
+  <message messageId="javax.faces.validator.LongRangeValidator.MAXIMUM" 
            severity="1" summary="Validation Error." >
       <detail>Value is greater than allowable maximum of {0}.</detail>
   </message>
-  <message messageId="javax.faces.validator.IntegerRangeValidator.MINIMUM" 
+  <message messageId="javax.faces.validator.LongRangeValidator.MINIMUM" 
            severity="1" summary="Validation Error." >
       <detail>Value is less than allowable minimum of {0}.</detail>
   </message>
-  <message messageId="javax.faces.validator.IntegerRangeValidator.TYPE" 
+  <message messageId="javax.faces.validator.LongRangeValidator.TYPE" 
            severity="1" summary="Validation Error." >
       <detail>Value is not of the correct type.</detail>
   </message>
