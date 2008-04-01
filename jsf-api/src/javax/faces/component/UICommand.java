@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.3 2002/05/14 00:41:37 craigmcc Exp $
+ * $Id: UICommand.java,v 1.4 2002/05/15 18:20:07 craigmcc Exp $
  */
 
 /*
@@ -86,25 +86,6 @@ public class UICommand extends UIComponent {
 
 
     // ------------------------------------------- Lifecycle Processing Methods
-
-
-    /**
-     * <p>If this command has been selected, record it so that the application
-     * will be notified that this command should be processed.</p>
-     *
-     * <p><strong>FIXME</strong> - How should the generic component class
-     * recognize that it has been selected?</p>
-     *
-     * <p><strong>FIXME</strong> - How are command events propogated
-     * to the application?</p>
-     *
-     * @param context FacesContext for the current request being processed
-     */
-    public void applyRequestValues(FacesContext context) {
-
-        ; // FIXME - provide default implementation
-
-    }
 
 
 }

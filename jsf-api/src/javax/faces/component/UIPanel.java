@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.1 2002/05/14 00:41:37 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.2 2002/05/15 18:20:07 craigmcc Exp $
  */
 
 /*
@@ -38,6 +38,9 @@ public class UIPanel extends UIComponent {
         return (TYPE);
 
     }
+
+
+    // ------------------------------------------- Lifecycle Processing Methods
 
 
 }

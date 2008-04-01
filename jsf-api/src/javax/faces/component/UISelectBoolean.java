@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.1 2002/05/14 00:41:38 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.2 2002/05/15 18:20:08 craigmcc Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public class UISelectBoolean extends UIComponent {
     }
 
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------- Lifecycle Processing Methods
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.2 2002/05/14 00:41:37 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.3 2002/05/15 18:20:07 craigmcc Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class UIOutput extends UIComponent {
     }
 
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------- Lifecycle Processing Methods
 
 
 }

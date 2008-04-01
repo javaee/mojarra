@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.8 2002/05/15 01:03:52 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.9 2002/05/15 18:20:07 craigmcc Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.LifecycleHandler;
 import javax.faces.render.AttributeDescriptor;
 import javax.faces.render.Renderer;
 
@@ -57,11 +56,6 @@ import javax.faces.render.Renderer;
  * <li><strong>facesContext</strong> (javax.faces.context.FacesContext) -
  *     For the root component in a component tree, the {@link FacesContext}
  *     within which this component tree is registered.</p>
- * <li><strong>lifecycleHandler</strong>
- *     (javax.faces.lifecycle.LifecycleHandler) - Processing object to which
- *     we delegate the behavioral aspects of component-level lifecycle phase
- *     processing.  If not set, the corresponding methods on this
- *     component instance will be called instead.</p>
  * <li><strong>model</strong> (java.lang.STring) - A symbolic expression
  *     used to attach this component to <em>model</em> data in the underlying
  *     application (typically a JavaBean property).  The syntax of this
@@ -123,17 +117,12 @@ import javax.faces.render.Renderer;
  *
  * <h3>Lifecyle Phase Processing</h3>
  *
- * <p>This class implements the {@link LifecycleHandler} interface, as well
- * as supporting a <code>lifecycleHandler</code> property that supports
- * optional delegation of processing to an external object.  Lifecycle phases
- * that interact with the component tree are required to call the corresponding
- * method on the delegated handler if there is one; otherwise to call the
- * corresponding method on this <code>UIComponent</code> instance.  This
- * allows custom component developers to centralize all of the state management
- * and behavior of that component into a single class, if desired.</p>
+ * <p><strong>FIXME</strong> - Document how decode and
+ * encode calls get delegated to the {@link Renderer}, if a
+ * <code>rendererType</code> is specified.</p>
  */
 
-public abstract class UIComponent implements LifecycleHandler {
+public abstract class UIComponent {
 
 
     /**
@@ -361,29 +350,6 @@ public abstract class UIComponent implements LifecycleHandler {
     public void setFacesContext(FacesContext context) {
 
         setAttribute("facesContext", context);
-
-    }
-
-
-    /**
-     * <p>Return the lifecycle phase handler for this <code>UIComponent</code>,
-     * if any.</p>
-     */
-    public LifecycleHandler getLifecycleHandler() {
-
-        return ((LifecycleHandler) getAttribute("lifecycleHandler"));
-
-    }
-
-
-    /**
-     * <p>Set the lifecycle phase handler for this <code>UIComponent</code>.
-     *
-     * @param lifecycleHandler The new lifecycle phase handler
-     */
-    public void setLifecycleHandler(LifecycleHandler lifecycleHandler) {
-
-        setAttribute("lifecycleHandler", lifecycleHandler);
 
     }
 
@@ -892,15 +858,22 @@ public abstract class UIComponent implements LifecycleHandler {
 
 
     /**
-     * <p>Handler for the <em>Reconstitute Request Tree</em> phase.  Ensure
-     * that the properties and attributes of the specified component
-     * reflect the values that were current as of the previous response.</p>
+     * <p>Decode the current state of this <code>UIComponent</code> from the
+     * request contained in the specified {@link FacesContext}.  This method
+     * is only called if no <code>rendererType</code> value is specified,
+     * which implies that the component itself rendered its value to the
+     * response in the <code>encode()</code> method.</p>
      *
-     * @param context FacesContext of the request we are processing
-     * @param component Current UIComponent being processed
+     * <p>During decoding, events may be enqueued for later processing
+     * by (<strong>FIXME</strong> - specify mechanism).</p>
+     *
+     * @param context FacesContext for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs during decoding
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
-    public void reconstituteRequestTree(FacesContext context,
-                                        UIComponent component) {
+    public void decode(FacesContext context) throws IOException {
 
         ; // Default implementation does nothing
 
@@ -908,91 +881,21 @@ public abstract class UIComponent implements LifecycleHandler {
 
 
     /**
-     * <p>Handler for the <em>Apply Request Values</em> phase.  Extract
-     * the new value (if any) from the current request, and update the
-     * local value of the specified component.  While values are being
-     * extracted, optionally queue events to be processed during the
-     * next phase by (<strong>FIXME</strong> - specify mechanism).</p>
+     * <p>Render the current state of this <code>UIComponent</code> to the
+     * response contained in the specified {@link FacesContext}.  This method
+     * is only called if no <code>rendererType</code> value is specified,
+     * which implies that the component itself renders its own value rather
+     * than delegating to a {@link Renderer}.</p>
      *
-     * @param context FacesContext of the request we are processing
-     * @param component Current UIComponent being processed
-     */
-    public void applyRequestValues(FacesContext context,
-                                   UIComponent component) {
-
-        ; // Default implementation does nothing
-
-    }
-
-
-    /**
-     * <p>Handler for the <em>Handle Request Events</em> phase.  Process
-     * the specified event, for the specified component, that was queued
-     * during the previous phase.  This method will be called once per
-     * event that was queued.</p>
+     * <p><strong>FIXME</strong> - Not sufficient for child rendering.</p>
      *
-     * @param context FacesContext of the request we are processing
-     * @param component Current UIComponent being processed
-     * @param event <strong>FIXME</strong> - event data???
-     */
-    public void handleRequestEvents(FacesContext context,
-                                    UIComponent component) { // FIXME - event
-
-        ; // Default implementation does nothing
-
-    }
-
-
-
-    /**
-     * <p>Handler for the <em>Process Validations</em> phase.  Perform
-     * all registered validations for the specified component, accumulating
-     * error messages by (<strong>FIXME</strong> - specify mechanism).
+     * @param context FacesContext for the response we are creating
      *
-     * @param context FacesContext of the request we are processing
-     * @param component Current UIComponent being processed
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
-    public void processValidations(FacesContext context,
-                                   UIComponent component) {
-
-        ; // Default implementation does nothing
-
-    }
-
-
-    /**
-     * <p>Handler for the <em>Update Model Values</em> phase.  Copy the
-     * local value of this component to the corresponding model object, if
-     * a model reference has been defined for this component.
-     * 
-     * @param context FacesContext of the request we are processing
-     * @param component Current UIComponent being processed
-     */
-    public void updateModelValues(FacesContext context,
-                                  UIComponent component) {
-
-        ; // Default implementation does nothing
-
-    }
-
-
-    /**
-     * <p>Handler for the <em>Render Response</em> phase.  If a
-     * <code>rendererType</code> has been defined for this component,
-     * acquire a corresponding {@link Renderer} instance
-     * from our {@link RenderKit}, and use it to render the state of this
-     * component to the response.  If no <code>rendererType</code> has
-     * been defined for this component, render the state of this
-     * component directly.</p>
-     *
-     * <p><strong>FIXME</strong> - Deal with the complexities of
-     * conditionally rendering child components.</p>
-     * 
-     * @param context FacesContext of the request we are processing
-     * @param component Current UIComponent being processed
-     */
-    public void renderResponse(FacesContext context,
-                               UIComponent component) {
+    public void encode(FacesContext context) throws IOException {
 
         ; // Default implementation does nothing
 

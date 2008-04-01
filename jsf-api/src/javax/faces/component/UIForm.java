@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.1 2002/05/14 00:41:37 craigmcc Exp $
+ * $Id: UIForm.java,v 1.2 2002/05/15 18:20:07 craigmcc Exp $
  */
 
 /*
@@ -48,25 +48,6 @@ public class UIForm extends UIComponent {
 
 
     // ------------------------------------------- Lifecycle Processing Methods
-
-
-    /**
-     * <p>If this command has been selected, record it so that the application
-     * will be notified that this command should be processed.</p>
-     *
-     * <p><strong>FIXME</strong> - How should the generic component class
-     * recognize that it has been submitted?</p>
-     *
-     * <p><strong>FIXME</strong> - How are form events propogated
-     * to the application?</p>
-     *
-     * @param context FacesContext for the current request being processed
-     */
-    public void applyRequestValues(FacesContext context) {
-
-        ; // FIXME - provide default implementation
-
-    }
 
 
 }

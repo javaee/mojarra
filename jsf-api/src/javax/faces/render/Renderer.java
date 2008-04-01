@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.1 2002/05/08 01:11:47 craigmcc Exp $
+ * $Id: Renderer.java,v 1.2 2002/05/15 18:20:08 craigmcc Exp $
  */
 
 /*
@@ -154,6 +154,26 @@ public abstract class Renderer {
 
 
     /**
+     * <p>Decode the current state of the specified {@link UIComponent}
+     * from the request contained in the specified {@link FacesContext},
+     * which will have been received from a response page that was created
+     * by this <code>Renderer</code>.</p>
+     *
+     * <p>During decoding, events may be enqueued for later processing
+     * by (<strong>FIXME</strong> - specify mechanism).</p>
+     *
+     * @param context FacesContext for the request we are processing
+     * @param component UIComponent to be decoded.
+     *
+     * @exception IOException if an input/output error occurs while decoding
+     * @exception NullPointerException if <code>context</code>
+     *  or <code>component</code> is null
+     */
+    public abstract void decode(FacesContext context, UIComponent copmonent)
+        throws IOException;
+
+
+    /**
      * <p>Render the specified {@link UIComponent} to the output stream or
      * writer associated with the response we are creating.</p>
      *
@@ -166,7 +186,7 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
-    public abstract void render(FacesContext context, UIComponent component)
+    public abstract void encode(FacesContext context, UIComponent component)
         throws IOException;
 
 
