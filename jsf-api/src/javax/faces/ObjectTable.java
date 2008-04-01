@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.6 2001/11/29 23:57:38 edburns Exp $
+ * $Id: ObjectTable.java,v 1.7 2001/12/01 01:52:49 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -81,7 +81,7 @@ import javax.servlet.http.HttpSession;
  * <B>Lifetime And Scope</B> <P>There is one instance of ObjectTable per
   VM.  Clients obtain a reference to it by asking the RenderContext.</P>
  *
- * @version $Id: ObjectTable.java,v 1.6 2001/11/29 23:57:38 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.7 2001/12/01 01:52:49 edburns Exp $
  * 
  * @see	javax.faces.RenderContext#getObjectTable
  *
@@ -111,18 +111,6 @@ public abstract class ObjectTable
 	public void put(Object name, Object value);
 
 	public Object get(Object scopeKey, Object name);
-
-	/**
-
-	* Search this Scope for the named object.  Takes more time
-	* because it has to run through all the scopeKeys.
-	* Implementations may simply traverse themselves to find a
-	* scopeKey for which there is a value under name, then call
-	* this.get(scopeKey, name);
-
-	*/
-
-	public Object get(Object name);
 
 	public void enter(Object scopeKey);
 
@@ -179,6 +167,25 @@ private Scope keyToScope(Object scopeKey) {
     return result;
 }
 
+private Object getEnclosingScope(Object scopeKey) {
+    Object result = null;
+
+    // PENDING(edburns): I really don't like hard coding scope enclosure
+    // logic, especially if it requires me to do instanceof.  There has
+    // to be a better way.  Also, this logic makes it so newly added
+    // scopes don't have the ability to define an enclosure hierarchy.
+
+    if (scopeKey instanceof HttpServletRequest) {
+	result = ((HttpServletRequest)scopeKey).getSession();
+    }
+    else if (scopeKey instanceof HttpSession) {
+	// Object is the type of GlobalScope
+	result = new Object();
+    }
+    
+    return result;
+}
+
     public void put(Object scopeKey, Object name, Object value) {
 	Scope s = keyToScope(scopeKey);
 	if (null != s) {
@@ -211,37 +218,30 @@ private Scope keyToScope(Object scopeKey) {
 
     public Object get(Object scopeKey, Object name) {
 	Scope scope = keyToScope(scopeKey);
-	if (null != scope) {
-	    return scope.get(scopeKey, name);
-	}
-	return null;
-    }
-
-    /**
-
-    * Search narrow-to-broad through scopes List until we find a scope
-    * that contains the named object. <P>
-
-    * PRECONDITION: this.getScopes() returns a List for which the
-    * iterator() runs narrow to broad. <P>
-
-    * POSTCONDITION: if found, the get has been performed on the first
-    * scope to contain an object under name. <P>
-
-    * @result the object, or null if not found.
-
-    */ 
-
-    public Object get(Object name) {
 	Object result = null;
-	Iterator scopes = this.getScopes().iterator();
-	while (scopes.hasNext()) {
-	    result = ((Scope)scopes.next()).get(name);
-	    if (null != result) {
-		break;
-	    }
+	// this loop searches through scope instances for a hit for this
+	// (scopeKey, name) pair.  It starts out with the above scope,
+	// then calls getEnclosingScope() until either:
+
+	// 1. A hit is found
+
+	// 2. There are no more enclosing scopes.
+	
+	if (null != scope) {
+	    do {
+		result = scope.get(scopeKey, name);
+		if (null == result) {
+		    scopeKey = getEnclosingScope(scopeKey);
+		    scope = keyToScope(scopeKey);
+		}
+	    } while ((result == null) && (null != scope));
 	}
 	return result;
+    }
+
+
+    public Object get(Object name) {
+	return GlobalScope.get("global", name);
     }
 
     public void enter(Object scopeKey) {
