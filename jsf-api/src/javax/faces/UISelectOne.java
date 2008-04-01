@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.1 2002/01/10 22:32:23 edburns Exp $
+ * $Id: UISelectOne.java,v 1.2 2002/01/12 01:38:08 edburns Exp $
  */
 
 /*
@@ -92,7 +92,8 @@ public class UISelectOne extends UIComponent {
 	items = newItems;
 	if (null != modelRef) {
 	    try {
-		ModelAccessor.setModelObject(rc, (String) modelRef, items);
+		rc.getObjectAccessor().setObject(rc.getRequest(), 
+					       (String) modelRef, items);
 		// Set this to null to insure the class invariant of
 		// either having {modelRef, selectedValueModelRef} OR
 		// having ivars {items, selectedItem}
@@ -128,8 +129,8 @@ public class UISelectOne extends UIComponent {
 	// We can't do anything without having a model
 	if (null != modelRef) {
 	    try {
-		modelItems = (Collection) ModelAccessor.getModelObject(rc, 
-						      (String) modelRef);
+		modelItems = (Collection) rc.getObjectAccessor().
+		    getObject(rc.getRequest(), (String) modelRef);
 		items = null;
 	    } catch ( FacesException e ) {
 	    }
@@ -156,8 +157,8 @@ public class UISelectOne extends UIComponent {
 	// We can't do anything without having a model
 	if (null != selectedValueModelRef) {
 	    try {
-		result = ModelAccessor.
-		    getModelObject(rc, (String) selectedValueModelRef);
+		result = rc.getObjectAccessor().getObject(rc.getRequest(), 
+							  (String) selectedValueModelRef);
 		selectedItem = null;
 	    } catch ( FacesException e ) {
 	    }
@@ -181,9 +182,9 @@ public class UISelectOne extends UIComponent {
 	
 	if (null != selectedValueModelRef) {
 	    try {
-		ModelAccessor.setModelObject(rc, 
-					     (String) selectedValueModelRef,
-					     value);
+		rc.getObjectAccessor().
+		    setObject(rc.getRequest(),
+			      (String) selectedValueModelRef, value);
 		selectedItem = null;
 	    } catch ( FacesException e ) {
 	    }

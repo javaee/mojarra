@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.1 2002/01/10 22:32:23 edburns Exp $
+ * $Id: UISelectBoolean.java,v 1.2 2002/01/12 01:38:08 edburns Exp $
  */
 
 /*
@@ -114,8 +114,8 @@ public class UISelectBoolean extends UIComponent {
         }
         else {
             try {
-                String state_str = (String) ModelAccessor.
-                        getModelObject(rc, (String) model);
+                String state_str = (String) rc.getObjectAccessor().
+                        getObject(rc.getRequest(), (String) model);
                 state = (Boolean.valueOf(state_str)).booleanValue();
             } catch ( FacesException e ) {
                 // PENDING (visvan) skip this exception ??
@@ -140,7 +140,8 @@ public class UISelectBoolean extends UIComponent {
         } else {
             try {
                 String state_str = String.valueOf( state );
-                ModelAccessor.setModelObject(rc,(String)model,state_str);
+                rc.getObjectAccessor().setObject(rc.getRequest(),
+						 (String)model,state_str);
             } catch ( FacesException e ) {
                 // PENDING ( visvan ) skip this exception ??
                 selected = state;

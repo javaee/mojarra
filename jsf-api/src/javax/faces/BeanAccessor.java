@@ -1,5 +1,5 @@
 /*
- * $Id: ModelAccessor.java,v 1.4 2002/01/10 22:16:32 edburns Exp $
+ * $Id: BeanAccessor.java,v 1.1 2002/01/12 01:38:07 edburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.FacesException;
 import javax.faces.ObjectManager;
 import javax.faces.RenderContext;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -36,7 +37,28 @@ import org.mozilla.util.ParameterCheck;
  * This class incorporates the methods for setting values in
  * model objects, as well as getting model object values.
  */ 
-public class ModelAccessor {
+public class BeanAccessor implements ObjectAccessor {
+
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+private RenderContext renderContext;
+
+//
+// Constructors and Initializers    
+//
+
+public BeanAccessor(RenderContext yourRenderContext)
+{
+    super();
+    renderContext = yourRenderContext;
+}
+
 
     /**
      * PRECONDITION: ObjectManager exists in Application Scope.  The
@@ -56,35 +78,30 @@ public class ModelAccessor {
      *     model reference string cannot be found in the ObjectManager,
      *     or the property value could not be set.
      */
-    public static void setModelObject(RenderContext rc, 
-        String modelReference, Object value) throws FacesException {
+    public void setObject(ServletRequest request, String objectReference,  
+			  Object value) throws FacesException {
 
-        ParameterCheck.nonNull(rc);
-        ParameterCheck.nonNull(modelReference);
+        ParameterCheck.nonNull(request);
+        ParameterCheck.nonNull(objectReference);
+	Assert.assert_it(null != renderContext);
 
         String expression = null;
         String property = null;
         String baseName = null;
         Object object = null;
-        ObjectManager objectTable;
-
-        HttpSession session = rc.getSession();
-        Assert.assert_it(null != session);
-
-        objectTable = (ObjectManager)session.getServletContext()
-            .getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it(null != objectTable);
+        ObjectManager objectManager = renderContext.getObjectManager();
+        Assert.assert_it(null != objectManager);
 
         // If the reference string begins with a "$" (ex:
         // $user.address.street), then the string is to be 
         // interpreted as 'a user bean which contains an address
         // bean which has a "street" property'.
         //
-        if (modelReference.startsWith("$")) {
-            expression = modelReference.substring(1);
+        if (objectReference.startsWith("$")) {
+            expression = objectReference.substring(1);
             property = expression.substring((expression.indexOf(".")+1));
             baseName = expression.substring(0, expression.indexOf("."));
-            object = objectTable.get(session, baseName);
+            object = objectManager.get(request, baseName);
             if (object == null) {
                 throw new FacesException("Named Object: '"+baseName+
                     "' not found in ObjectManager.");
@@ -92,7 +109,6 @@ public class ModelAccessor {
 
             try {
                 PropertyUtils.setNestedProperty(object, property, value);
-                objectTable.put(session, baseName, object);
             } catch (IllegalAccessException iae) {
                 throw new FacesException(iae.getMessage());
             } catch (InvocationTargetException ite) {
@@ -107,13 +123,14 @@ public class ModelAccessor {
         // name.
         //
         } else {
-            object = objectTable.get(session, modelReference);
+            object = objectManager.get(request, objectReference);
             if (object == null) {
-                throw new FacesException("Named Object: '"+modelReference+
+                throw new FacesException("Named Object: '"+objectReference+
                     "' not found in ObjectManager.");
             }
             object = value;
-            objectTable.put(session, modelReference, object); 
+            objectManager.put(renderContext.getSession(), 
+			      objectReference, object); 
         }
     }
 
@@ -127,35 +144,32 @@ public class ModelAccessor {
      * the model reference string.
      *
      * @param rc The RenderContext containing the current session.
-     * @param modelReference A string referencing a bean's property.
+     * @param objectReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
      *     model reference string cannot be found in the ObjectManager,
      *     or the property value could not be retrieved.
      */
-    public static Object getModelObject(RenderContext rc, 
-        String modelReference) throws FacesException {
-        
+    public Object getObject(ServletRequest request, 
+			    String objectReference) throws FacesException {
+        ParameterCheck.nonNull(request);
+	ParameterCheck.nonNull(objectReference);
+	Assert.assert_it(null != renderContext);
+	
         String expression = null;
         String property = null;
         String baseName = null;
         Object object = null;
         Object returnObject = null;
-        ObjectManager objectTable;
+        ObjectManager objectManager = renderContext.getObjectManager();
+	Assert.assert_it(null != objectManager);
 
-        HttpSession session = rc.getSession();
-        Assert.assert_it(null != session);
-
-        objectTable = (ObjectManager)session.getServletContext()
-            .getAttribute(Constants.REF_OBJECTMANAGER);
-        Assert.assert_it(null != objectTable);
-
-        if (modelReference.startsWith("$")) {
-            expression = modelReference.substring(1);
+        if (objectReference.startsWith("$")) {
+            expression = objectReference.substring(1);
             property = expression.substring((expression.indexOf(".")+1));
             baseName = expression.substring(0, expression.indexOf("."));
 
-            object = objectTable.get(session, baseName);
+            object = objectManager.get(request, baseName);
             if (object == null) {
                 throw new FacesException("Named Object: '"+baseName+
                     "' not found in ObjectManager.");
@@ -171,9 +185,9 @@ public class ModelAccessor {
             }
 // PENDING (ROGERK) Just return from object table???
         } else {
-            returnObject = objectTable.get(session, modelReference);
+            returnObject = objectManager.get(request, objectReference);
             if (returnObject == null) {
-                throw new FacesException("Named Object: '"+modelReference+
+                throw new FacesException("Named Object: '"+objectReference+
                     "' not found in ObjectManager.");
             }
         }

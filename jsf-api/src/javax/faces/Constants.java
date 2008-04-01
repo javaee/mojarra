@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.11 2002/01/11 20:03:33 edburns Exp $
+ * $Id: Constants.java,v 1.12 2002/01/12 01:38:07 edburns Exp $
  */
 
 /*
@@ -104,6 +104,11 @@ public class Constants {
      * Name for EventContextFactory
      */
     public static final String REF_EVENTCONTEXTFACTORY = "eventContextFactory";
+
+    /**
+     * Name for ObjectAccessorFactory
+     */
+    public static final String REF_OBJECTACCESSORFACTORY = "objectAccessorFactory";
 
     /**
      * The name of a Renderer.

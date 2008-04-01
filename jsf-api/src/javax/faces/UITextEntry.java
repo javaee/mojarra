@@ -1,5 +1,5 @@
 /*
- * $Id: UITextEntry.java,v 1.1 2002/01/10 22:32:23 edburns Exp $
+ * $Id: UITextEntry.java,v 1.2 2002/01/12 01:38:08 edburns Exp $
  */
 
 /*
@@ -94,8 +94,7 @@ public class UITextEntry extends UIComponent {
         }    
         else { 
             try {
-                value = (String) ModelAccessor.
-                        getModelObject(rc, (String) model);
+                value = (String) rc.getObjectAccessor().getObject(rc.getRequest(), (String) model);
             } catch ( FacesException e ) {
                 // PENDING (visvan) skip this exception ??
                 return text;
@@ -118,7 +117,8 @@ public class UITextEntry extends UIComponent {
             this.text = text;
         } else {
             try {
-                ModelAccessor.setModelObject(rc, (String)model, text);    
+                rc.getObjectAccessor().setObject(rc.getRequest(), 
+						 (String)model, text);    
             } catch ( FacesException e ) {
                 // PENDING ( visvan ) skip this exception ??
                 this.text = text;

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderContext.java,v 1.10 2002/01/10 22:32:22 edburns Exp $
+ * $Id: RenderContext.java,v 1.11 2002/01/12 01:38:08 edburns Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package javax.faces;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Locale;
 
@@ -111,6 +112,20 @@ public abstract class RenderContext {
     */
 
     public abstract HttpSession getSession();
+
+    /**
+
+    * The ServletRequest for this RenderContext.  This is used by the
+    * components to get and set model objects.<P>
+
+    * PENDING(edburns): Amy, not sure if a RenderContext should have an
+    * ServletRequest.
+
+
+    */
+
+    public abstract ServletRequest getRequest();
+
 
     /**
      * Returns the ancestor of the component currently at the top

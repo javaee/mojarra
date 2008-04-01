@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.1 2002/01/10 22:32:22 edburns Exp $
+ * $Id: UIOutput.java,v 1.2 2002/01/12 01:38:08 edburns Exp $
  */
 
 /*
@@ -51,8 +51,8 @@ public class UIOutput extends UIComponent {
         }
         else {
             try {
-                label = (String) ModelAccessor.
-                        getModelObject(rc, (String) model);
+                label = (String) rc.getObjectAccessor().
+                        getObject(rc.getRequest(), (String) model);
             } catch ( FacesException e ) {
                 // PENDING (visvan) skip this exception ??
                 return (String) value;
@@ -75,7 +75,8 @@ public class UIOutput extends UIComponent {
             value = label;
         } else {
             try {
-                ModelAccessor.setModelObject(rc, (String)model, label);
+                rc.getObjectAccessor().setObject(rc.getRequest(), 
+						 (String)model, label);
             } catch ( FacesException e ) {
                 // PENDING ( visvan ) skip this exception ??
                 value = label;
