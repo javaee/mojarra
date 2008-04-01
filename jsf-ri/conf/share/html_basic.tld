@@ -1654,6 +1654,27 @@
  </tag>
 
  <tag>
+   <name>output_errors</name>
+   <tagclass>com.sun.faces.taglib.html_basic.Output_ErrorsTag</tagclass>
+   <bodycontent>JSP</bodycontent>
+   <attribute>
+     <name>id</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+   </attribute>
+   <attribute>
+     <name>compoundId</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+   </attribute>
+   <attribute>
+     <name>color</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+   </attribute>
+ </tag>
+
+ <tag>
    <name>validation_message</name>
    <tagclass>com.sun.faces.taglib.ValidationMessageTag</tagclass>
    <bodycontent>JSP</bodycontent>
