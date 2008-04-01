@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.6 2002/06/14 00:00:09 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.7 2002/06/14 00:10:35 craigmcc Exp $
  */
 
 /*
@@ -164,7 +164,7 @@ public final class FacesServlet implements Servlet {
 
         // Acquire and cache the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
-            (servletConfig.getServletContext(), request, response);
+            (servletConfig.getServletContext(), request, response, lifecycle);
         request.setAttribute(FacesContext.FACES_CONTEXT_ATTR, context);
 
         // Execute the request processing lifecycle for this request

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.7 2002/06/12 21:51:27 craigmcc Exp $
+ * $Id: FacesContextFactory.java,v 1.8 2002/06/14 00:10:34 craigmcc Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 package javax.faces.context;
 
-import javax.faces.FacesException;     // FIXME - subpackage?
+import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
@@ -40,28 +40,6 @@ public abstract class FacesContextFactory {
     /**
      * <p>Construct and return a {@link FacesContext} that is initialized
      * for the processing of the specified request and response objects,
-     * utilizing the standard {@link Lifecycle} implementation for this
-     * web application.</p>
-     *
-     * @param context The <code>ServletContext</code> that is associated
-     *  with this web application
-     * @param request The <code>ServletRequest</code> that is to be
-     *  processed
-     * @param response The <code>ServletResponse</code> that is to be
-     *  created
-     *
-     * @exception FacesException if a {@link FacesContext} cannot be
-     *  constructed for the specified parameters
-     */
-    public abstract FacesContext getFacesContext
-        (ServletContext context, ServletRequest request,
-         ServletResponse response)
-        throws FacesException;
-
-
-    /**
-     * <p>Construct and return a {@link FacesContext} that is initialized
-     * for the processing of the specified request and response objects,
      * utilizing the specified {@link Lifecycle} implementation for this
      * web application.</p>
      *
@@ -71,15 +49,15 @@ public abstract class FacesContextFactory {
      *  processed
      * @param response The <code>ServletResponse</code> that is to be
      *  created
-     * @param lifecycleId The logical name of the {@link Lifecycle}
-     *  implementation to be utilized when processing this request.
+     * @param lifecycle The {@link Lifecycle} instance being used
+     *  to process this request
      *
      * @exception FacesException if a {@link FacesContext} cannot be
      *  constructed for the specified parameters
      */
     public abstract FacesContext getFacesContext
         (ServletContext context, ServletRequest request,
-         ServletResponse response, String lifecycleId)
+         ServletResponse response, Lifecycle lifecycle)
         throws FacesException;
 
 
