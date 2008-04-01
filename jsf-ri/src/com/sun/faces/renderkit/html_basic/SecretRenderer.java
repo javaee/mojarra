@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.26 2002/08/08 00:46:15 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.27 2002/08/13 22:53:26 rkitain Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
-//import javax.faces.component.UITextEntry;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.26 2002/08/08 00:46:15 eburns Exp $
+ * @version $Id: SecretRenderer.java,v 1.27 2002/08/13 22:53:26 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,8 +87,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
         if ( componentType == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-	return false;
-//        return (componentType.equals(UITextEntry.TYPE));
+        return (componentType.equals(UIInput.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
@@ -112,6 +111,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
 
         if ( newValue == null || modelRef == null ) {
             component.setValue(newValue);
+            component.setValid(true);
             return;
         }
 
@@ -129,19 +129,11 @@ public class SecretRenderer extends HtmlBasicRenderer {
         try {
             convertedValue = ConvertUtils.convert(newValue, modelType);
             component.setValid(true);
-        } catch (ConversionException ce ) {
-            addConversionErrorMessage( context, component, ce.getMessage()); 
-        }
-
-        if ( convertedValue == null ) {
-            // since conversion failed, don't modify the localValue.
-            // set the value temporarily in an attribute so that encode can
-            // use this local state instead of local value.
-            // PENDING (visvan) confirm with Craig ??
-            component.setAttribute("localState", newValue);
-        } else {
-            // conversion successful, set converted value as the local value.
             component.setValue(convertedValue);
+        } catch (ConversionException ce ) {
+            component.setValue(newValue);
+            component.setValid(false);
+            addConversionErrorMessage( context, component, ce.getMessage()); 
         }
     }
 
@@ -168,18 +160,15 @@ public class SecretRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        // if localState attribute is set, then conversion failed, so use
-        // that to reproduce the incorrect value. Otherwise use the
-        // current value stored in component.
-
-        Object localState = component.getAttribute("localState");
-        if (localState != null) {
-            currentValue = (String) localState;
-        } else {
-            Object currentObj = component.currentValue(context);
-            if (currentObj != null) {
+        Object currentObj = component.currentValue(context);
+        if (currentObj != null) {
+            if (currentValue instanceof String) {
+                currentValue = (String)currentObj;
+            } else { 
                 currentValue = ConvertUtils.convert(currentObj);
             }
+        } else {
+            currentValue = "";
         }
 
         if (currentValue == null) {
@@ -189,33 +178,19 @@ public class SecretRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-        writer.write("<INPUT TYPE=\"PASSWORD\"");
-        writer.write(" NAME=\"");
+        writer.write("<input type=\"password\"");
+        writer.write(" name=\"");
         writer.write(component.getCompoundId());
         writer.write("\"");
 
         // render default text specified
         if (currentValue != null) {
-            writer.write(" VALUE=\"");
+            writer.write(" value=\"");
             writer.write(currentValue);
             writer.write("\"");
         }
-
-        //render size if specified
-        String textField_size = (String)component.getAttribute("size");
-        if (textField_size != null) {
-            writer.write(" SIZE=\"");
-            writer.write(textField_size);
-            writer.write("\"");
-        }
-
-        //render maxlength if specified
-        String textField_ml = (String)component.getAttribute("maxlength");
-        if (textField_ml != null) {
-            writer.write(" MAXLENGTH=\"");
-            writer.write(textField_ml);
-            writer.write("\"");
-        }
+        writer.write(Util.renderPassthruAttributes(context, component));
+        writer.write(Util.renderBooleanPassthruAttributes(context, component));
         writer.write(">");         
    }
 

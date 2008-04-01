@@ -91,19 +91,95 @@
     <component>
         <type>javax.faces.component.UIInput</type>
         <renderer>
-            <type>InputRenderer</type>
-            <class>com.sun.faces.renderkit.html_basic.InputRenderer</class>
+            <type>TextRenderer</type>
+            <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
+            <attribute>
+                <name>disabled</name>
+                <display-name>Disabled</display-name>
+
+                <description>If true, this component should be rendered as disabled.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>readonly</name>
+                <display-name>Read Only</display-name>
+
+                <description>If true, this component should be rendered as readonly.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
             <attribute>
                 <name>size</name>
-                <display-name>Field Size</display-name>
-                <description>The number of visible characters displayed in the field</description>
+                <display-name>Size</display-name>
+
+                <description>The number of columns in this TextRenderer.</description>
+
                 <type>java.lang.Integer</type>
             </attribute>
             <attribute>
                 <name>maxlength</name>
-                <display-name>Maximum Length</display-name>
-                <description>The maximum number of characters allowed in the field</description>
+                <display-name>Max Length</display-name>
+
+                <description>The maximum number of characters in this TextRenderer.</description>
+
                 <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>alt</name>
+                <display-name>Alt Text</display-name>
+
+                <description>The alt text for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>lang</name>
+                <display-name>Language</display-name>
+
+                <description>Hint to the user agent about the language for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>accesskey</name>
+                <display-name>Access Key</display-name>
+
+                <description>Accessibility key character</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+
+                <description>The element got the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+
+                <description>The element lost the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onselect</name>
+                <display-name>On Select</display-name>
+
+                <description>Some text was selected.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onchange</name>
+                <display-name>On Change</display-name>
+
+                <description>The element value was changed.</description>
+
+                <type>java.lang.String</type>
             </attribute>
         </renderer>
 
@@ -111,16 +187,92 @@
             <type>SecretRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
             <attribute>
+                <name>disabled</name>
+                <display-name>Disabled</display-name>
+
+                <description>If true, this component should be rendered as disabled.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>readonly</name>
+                <display-name>Read Only</display-name>
+
+                <description>If true, this component should be rendered as readonly.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
                 <name>size</name>
-                <display-name>Field Size</display-name>
-                <description>The number of visible characters displayed in the field</description>
+                <display-name>Size</display-name>
+
+                <description>The number of columns in this SecretRenderer.</description>
+
                 <type>java.lang.Integer</type>
             </attribute>
             <attribute>
                 <name>maxlength</name>
-                <display-name>Maximum Length</display-name>
-                <description>The maximum number of characters allowed in the field</description>
+                <display-name>Max Length</display-name>
+
+                <description>The maximum number of characters in this SecretRenderer.</description>
+
                 <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>alt</name>
+                <display-name>Alt Text</display-name>
+
+                <description>The alt text for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>lang</name>
+                <display-name>Language</display-name>
+
+                <description>Hint to the user agent about the language for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>accesskey</name>
+                <display-name>Access Key</display-name>
+
+                <description>Accessibility key character</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+
+                <description>The element got the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+
+                <description>The element lost the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onselect</name>
+                <display-name>On Select</display-name>
+
+                <description>Some text was selected.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onchange</name>
+                <display-name>On Change</display-name>
+
+                <description>The element value was changed.</description>
+
+                <type>java.lang.String</type>
             </attribute>
         </renderer>
 
@@ -128,6 +280,93 @@
             <type>TextAreaRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
         <!-- Add Attribute Desc stuff here -->
+            <attribute>
+                <name>disabled</name>
+                <display-name>Disabled</display-name>
+
+                <description>If true, this component should be rendered as disabled.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>readonly</name>
+                <display-name>Read Only</display-name>
+
+                <description>If true, this component should be rendered as readonly.</description>
+
+                <type>java.lang.Boolean</type>
+            </attribute>
+            <attribute>
+                <name>size</name>
+                <display-name>Size</display-name>
+
+                <description>The number of columns in this TextAreaRenderer.</description>
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>maxlength</name>
+                <display-name>Max Length</display-name>
+
+                <description>The maximum number of characters in this TextAreaRenderer.</description>
+
+                <type>java.lang.Integer</type>
+            </attribute>
+            <attribute>
+                <name>alt</name>
+                <display-name>Alt Text</display-name>
+
+                <description>The alt text for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>lang</name>
+                <display-name>Language</display-name>
+
+                <description>Hint to the user agent about the language for this component.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>accesskey</name>
+                <display-name>Access Key</display-name>
+
+                <description>Accessibility key character</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onfocus</name>
+                <display-name>On Focus</display-name>
+
+                <description>The element got the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onblur</name>
+                <display-name>On Blur</display-name>
+
+                <description>The element lost the focus.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onselect</name>
+                <display-name>On Select</display-name>
+
+                <description>Some text was selected.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
+            <attribute>
+                <name>onchange</name>
+                <display-name>On Change</display-name>
+
+                <description>The element value was changed.</description>
+
+                <type>java.lang.String</type>
+            </attribute>
             <attribute>
                 <name>rows</name>
                 <display-name>Rows</display-name>
@@ -139,12 +378,6 @@
                 <display-name>Columns</display-name>
                 <description>The number of columns displayed in the textarea</description>
                 <type>java.lang.Integer</type>
-            </attribute>
-            <attribute>
-                <name>wrap</name>
-                <display-name>Wrap</display-name>
-                <description>Determines whether lines are automatically wrapped when the text fills the row</description>
-                <type>java.lang.Boolean</type>
             </attribute>
         </renderer>
 
