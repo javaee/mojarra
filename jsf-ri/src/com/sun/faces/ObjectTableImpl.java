@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.5 2001/11/22 02:02:17 edburns Exp $
+ * $Id: ObjectTableImpl.java,v 1.6 2001/11/29 21:22:18 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableImpl.java,v 1.5 2001/11/22 02:02:17 edburns Exp $
+ * @version $Id: ObjectTableImpl.java,v 1.6 2001/11/29 21:22:18 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -82,6 +82,8 @@ public ObjectTableImpl()
 	    scopes.add(GlobalScope);
 	}
     }
+    // PENDING(edburns): see ObjectTable.setInstance()
+    ObjectTable.setInstance(this);
 }
 
 //
