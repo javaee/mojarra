@@ -1,5 +1,5 @@
 /*
- * $Id: FacesException.java,v 1.8 2002/05/18 02:09:11 craigmcc Exp $
+ * $Id: FacesException.java,v 1.9 2002/07/11 18:10:49 craigmcc Exp $
  */
 
 /*
@@ -7,82 +7,95 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
+
 package javax.faces;
 
+
 /**
- * The class which encapsulates general JavaServer Faces exceptions.
+ * <p>This class encapsulates general JavaServer Faces exceptions.</p>
  */
+
 public class FacesException extends RuntimeException {
 
-    private String xcptMessage;
-    private Throwable rootCause;
+
+    // ----------------------------------------------------------- Constructors
+
 
     /**
-    * Constructs a new Faces exception with the specified message.  The
-    * message can be written to the server log and/or displayed to the user.
-    *
-    * @param message 
-    *   String containing the detailed message for this exception.
-    */
+     * <p>Construct a new exception with no detail message or root cause.</p>
+     */
+    public FacesException() {
+
+        super();
+
+    }
+
+
+    /**
+     * <p>Construct a new exception with the specified detail message and
+     * no root cause.</p>
+     *
+     * @param message The detail message for this exception
+     */
     public FacesException(String message) {
+
         super(message);
-        xcptMessage = message;
+
     }
 
+
     /**
-     * Constructs a new Faces exception with the specified message
-     * and root cause.  This constructor should be used when Faces 
-     * needs to throw an exception and include a message about the 
-     * quot;root causequot; exception that interfered with its 
-     * normal operation.
+     * <p>Construct a new exception with the specified root cause.  The detail
+     * message will be set to <code>(cause == null ? null :
+     * cause.toString()</code>
      *
-     * @param message 
-     *   String containing the detailed message for this exception.
-     * @param rootCause
-     *   the Throwable exception that interfered with its normal operation,
-     *   making this Faces exception necessary
-     *
+     * @param cause The root cause for this exception
      */
-    public FacesException(String message, Throwable rootCause) {
+    public FacesException(Throwable cause) {
+
+        super(cause == null ? (String) null : cause.toString());
+        this.cause = cause;
+
+    }
+
+
+    /**
+     * <p>Construct a new exception with the specified detail message and
+     * root cause.
+     *
+     * @param message The detail message for this exception
+     * @param cause The root cause for this exception
+     */
+    public FacesException(String message, Throwable cause) {
+
         super(message);
-	xcptMessage = message;
-	this.rootCause = rootCause;
+        this.cause = cause;
+
     }
 
+
+
+    // ----------------------------------------------------- Instance Variables
+
+
     /**
-     * Constructs a new Faces exception with the specified rootCause.
-     * This constructor should be used when Faces needs to throw an 
-     * exception and include a message about the &quot;root cause&quot; 
-     * exception that interfered with its normal operation. 
-     * The exception's message is based on the localized message 
-     * of the underlying exception. 
-     * <p>
-     * This method calls the getLocalizedMessage method on the 
-     * Throwable exception to get a localized exception message. When 
-     * subclassing FacesException, this method can be overridden to 
-     * create an exception message designed for a specific locale.
-     * @param rootCause
-     *   the Throwable exception that interfered with its normal operation,
-     *   making this Faces exception necessary
-     *
+     * <p>The underlying exception that caused this exception.</p>
      */
-    public FacesException(Throwable rootCause) {
-	this.rootCause = rootCause;
-    }
+    private Throwable cause = null;
+
+
+    // --------------------------------------------------------- Public Methods
+
 
     /**
-    * Returns the message of this exception
-    * @return the message string.
-    */
-    public String getMessage() {
-        return xcptMessage;
-    }
-
-    /**
-     * Returns the root cause of this exception.
+     * <p>Return the cause of this exception, or <code>null</code> if the
+     * cause is nonexistent or unknown.</p>
      */
-    public Throwable getRootCause() {
-        return rootCause;
+    public Throwable getCause() {
+
+        return (this.cause);
+
     }
+
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.7 2002/06/14 00:10:35 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.8 2002/07/11 18:10:49 craigmcc Exp $
  */
 
 /*
@@ -117,7 +117,7 @@ public final class FacesServlet implements Servlet {
                 FactoryFinder.getFactory
                 (FactoryFinder.FACES_CONTEXT_FACTORY);
         } catch (FacesException e) {
-            Throwable rootCause = e.getRootCause();
+            Throwable rootCause = e.getCause();
             if (rootCause == null) {
                 throw e;
             } else {
@@ -137,7 +137,7 @@ public final class FacesServlet implements Servlet {
             }
             lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
         } catch (FacesException e) {
-            Throwable rootCause = e.getRootCause();
+            Throwable rootCause = e.getCause();
             if (rootCause == null) {
                 throw e;
             } else {
