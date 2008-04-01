@@ -1,5 +1,5 @@
 /*
- * $Id: MessageListImpl.java,v 1.4 2002/06/13 23:18:45 jvisvanathan Exp $
+ * $Id: MessageListImpl.java,v 1.5 2002/06/18 18:48:09 rkitain Exp $
  */
 
 /*
@@ -79,7 +79,6 @@ public class MessageListImpl extends MessageList
 
     public void add(String messageId, String reference, Object params[]) {
         ParameterCheck.nonNull(messageId);
-        ParameterCheck.nonNull(reference);
         
         if (messageList == null ) {
             messageList = new ArrayList();

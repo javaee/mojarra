@@ -14,5 +14,8 @@
   <message messageId="MSG0004" severity="40" summary="{0} out of range." >
       <detail>Value should be between {1} and {2}.</detail>
   </message>
+  <message messageId="MSG0005" severity="30" summary="Conversion Error." >
+      <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
+  </message>
 </messages>
 
