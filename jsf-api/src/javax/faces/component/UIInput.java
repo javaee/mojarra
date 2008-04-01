@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.15 2002/08/04 23:15:57 craigmcc Exp $
+ * $Id: UIInput.java,v 1.1 2002/08/04 23:15:56 craigmcc Exp $
  */
 
 /*
@@ -16,16 +16,17 @@ import javax.faces.context.ResponseWriter;
 
 
 /**
- * <p><strong>UIOutput</strong> is a {@link UIComponent} that displays
- * output to the user.  The user cannot manipulate this component; it is
- * for display purposes only.  There are no restrictions on the data type
- * of the local value, or the object referenced by the model reference
- * expression (if any); however, individual <code>Renderer</code>s will
- * generally impose restrictions on the type of data they know how to
- * display.</p>
+ * <p><strong>UIInput</strong> is a {@link UIComponent} that represents
+ * a component that both displays output to the user (like
+ * {@link UIOutput} components do) and includes request parameters on the
+ * subsequent request that need to be decoded.  There are no restrictions
+ * on the data type of the local value, or the object referenced by the
+ * model reference expression (if any); however, individual
+ * <code>Renderer</code>s will generally impose restrictions on the type
+ * of data they know how to display.</p>
  */
 
-public class UIOutput extends UIComponentBase {
+public class UIInput extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables
@@ -34,7 +35,7 @@ public class UIOutput extends UIComponentBase {
     /**
      * The component type of this {@link UIComponent} subclass.
      */
-    public static final String TYPE = "javax.faces.component.UIOutput";
+    public static final String TYPE = "javax.faces.component.UIInput";
 
 
     // ------------------------------------------------------------- Properties
@@ -54,15 +55,31 @@ public class UIOutput extends UIComponentBase {
 
 
     /**
-     * <p>This component is output only, so do not perform any decode
-     * processing during the <em>Apply Request Values</em> phase of
-     * the request processing lifecycle.</p>
+     * <p>Decode the new value of this component from the incoming request.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs while reading
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
      */
-    public void decode(FacesContext context) {
+    public void decode(FacesContext context) throws IOException {
 
-        ; // No action required
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.decode(context);
+            return;
+        }
+
+        // Perform the default decoding
+        String newValue =
+            context.getServletRequest().getParameter(getCompoundId());
+        setValue(newValue);
+        setValid(true);
 
     }
 
@@ -90,23 +107,14 @@ public class UIOutput extends UIComponentBase {
 
         // Perform the default encoding
         Object value = currentValue(context);
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<input type=\"text\" name=\"");
+        writer.write(getCompoundId());
+        writer.write("\" value=\"");
         if (value != null) {
-            ResponseWriter writer = context.getResponseWriter();
             writer.write(value.toString());
         }
-
-    }
-
-
-    /**
-     * <p>This component is output only, so do not update the model
-     * even if there is a non-null <code>modelReference</code> expression.
-     *
-     * @param context FacesContext for the request we are processing
-     */
-    public void updateModel(FacesContext context) {
-
-        ; // No action required
+        writer.write("\">");
 
     }
 

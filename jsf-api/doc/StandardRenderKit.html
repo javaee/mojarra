@@ -1,0 +1,655 @@
+<html>
+<head>
+<title>JavaServer Faces 1.0 Standard Render Kit</title>
+</head>
+<body bgcolor="white">
+
+<div align="center">
+  <h1>JavaServer Faces 1.0 Standard Render Kit</h1>
+  <h3>$Id: StandardRenderKit.html,v 1.1 2002/08/04 23:15:56 craigmcc Exp $</h3>
+</div>
+
+
+
+<div align="center">
+  <h2>Component Class:  UICommand</h2>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Button</td>
+    <td>(none)</td>
+    <td>commandName</td>
+    <td>type</td>
+    <td>
+      Submit FormEvent to application as per default behavior of UICommand.
+    </td>
+    <td>
+      Render an HTML <code>&lt;button&gt;</code> element with the
+      specified <code>type</code> (BUTTON, SUBMIT, RESET).  The
+      <code>value</code> attribute is set to the command name.
+      Nested child components (such as <code>UIGraphic</code> and
+      <code>UIOutput</code>) can be used to provide the image and/or
+      text that goes on the button.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Hyperlink</td>
+    <td>(none)</td>
+    <td>commandName</td>
+    <td>FIXME</td>
+    <td>
+      FIXME
+    </td>
+    <td>
+      FIXME
+    </td>
+  </tr>
+
+</table>
+
+
+<div align="center">
+  <h2>Component Class:  UIForm</h2>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Form</td>
+    <td>(none)</td>
+    <td>formName</td>
+    <td>accept, accept-charset, enctype, method</td>
+    <td>
+      Per specified default decode behavior for <code>UIForm</code>.
+    </td>
+    <td>
+      Per specified default encode behavior for <code>UIForm</code>.
+    </td>
+  </tr>
+
+</table>
+
+
+
+<div align="center">
+  <h2>Component Class:  UIGraphic</h2>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Image</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>url</td>
+    <td>&nbsp;</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Render an HTML <code>&lt;img&gt;</code> element with a <code>src</code>
+      element set from the value of the <code>url</code> attribute of the
+      underlying component.  URL rewriting will be performed to maintain
+      session state in the absence of cookies.
+    </td>
+  </tr>
+
+</table>
+
+
+
+<div align="center">
+  <h2>Component Class:  UIInput</h2>
+
+  <p>Any child components nested inside this component will be rendered
+  in an HTML <code>&lt;label&gt;</code> element associated with this
+  component, aligned based on the <code>label</code> attribute (NORTH,
+  SOUTH, EAST, WEST).
+  </p>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Date</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, style, timezone</td>
+    <td>
+      Get DateFormat instance as for encoding, parse text input,
+      convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to Calendar, create localized DateFormat date
+      instance for the specified style (SHORT, MEDIUM, LONG, FULL),
+      set time zone (if specified), render formatted result as text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>DateTime</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, pattern, timezone</td>
+    <td>
+      Get DateFormat instance as for encoding, parse text input,
+      convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to Calendar, create SimpleDateFormat based
+      on pattern, set time zone (if specified), render formatted result as text
+      input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>DateTime</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, style, timezone</td>
+    <td>
+      Get DateFormat instance as for encoding, parse text input,
+      convert as necessary, and store.
+    </td>
+    <td>
+      Get current value, convert to Calendar, create localized DateFormat
+      datetime instance for the specified style (SHORT, MEDIUM, LONG, FULL),
+      set time zone (if specified), render formatted result as text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Number</td>
+    <td>numeric</td>
+    <td>&nbsp;</td>
+    <td>label, pattern</td>
+    <td>
+      Get DecimalFormat as for encoding, parse text input,
+      convert as necessary, and store.
+    </td>
+    <td>
+      Get current value, convert to double or long (as appropriate), create
+      DecimalFormat based on pattern, render formatted result as text
+      input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Number</td>
+    <td>numeric</td>
+    <td>&nbsp;</td>
+    <td>label, style</td>
+    <td>
+      Get NumberFormat instance as for encoding, parse text input,
+      convert as necessary, and store.
+    </td>
+    <td>
+      Get current value, convert to double or long (as appropriate), create
+      localized NumberFormat instance based on style (CURRENCY,
+      INTEGER, NUMBER, PERCENT), render formatted result as
+      text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Secret</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, redisplay</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to String, render literally as password
+      input field.  The <code>redisplay</code> attribute is a boolean flag
+      (default=false) indicating whether or not the actual value should be
+      displayed -- it shows as stars on the screen but cleartext in the
+      page source so some people will not want it.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Text</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to String, render literally as text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Textarea</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to String, render literally as text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Time</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, style, timezone</td>
+    <td>
+      Get DateFormat instance as for encoding, parse text input,
+      convert as necessary and store.
+    </td>
+    <td>
+      Get current value, convert to Calendar, create localized DateFormat time
+      instance for the specified style (SHORT, MEDIUM, LONG, FULL), set
+      time zone (if specified), render formatted result as text input field.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Upload</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>accept, filename, label</td>
+    <td>
+      Convert via JAF based on media type, and store.  <strong>FIXME:</strong>
+      Availability of this Renderer implies that JSF implementations must
+      support parsing of <code>multipart/form-data</code> uploads.
+    </td>
+    <td>
+      Render an HTML <code>&lt;input type="file"&gt;</code> control, using the
+      <code>filename</code> attribute (if present) to set the default
+      filename value.
+    </td>
+  </tr>
+
+</table>
+
+
+
+<div align="center">
+  <h2>Component Class:  UIOutput</h2>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Date</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>style, timezone</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to Calendar, create localized DateFormat date
+      instance for the specified style (SHORT, MEDIUM, LONG, FULL),
+      set time zone (if specified), render formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>DateTime</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>pattern, timezone</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to Calendar, create SimpleDateFormat based
+      on pattern, set time zone (if specified), render formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>DateTime</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>style, timezone</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to Calendar, create localized DateFormat
+      datetime instance for the specified style (SHORT, MEDIUM, LONG, FULL),
+      set time zone (if specified), render formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Message</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>&nbsp;</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to String, treat as MessageFormat pattern
+      (nested UIParameter components for parameter substitution), render
+      formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Message</td>
+    <td>Any</td>
+    <td>&nbsp;</td>
+    <td>key, bundle</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get localized resource from resource bundle, convert to String, treat
+      as a MessageFormat pattern (nested UIParameter components for
+      parameter substitution), render formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Number</td>
+    <td>numeric</td>
+    <td>&nbsp;</td>
+    <td>pattern</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to double or long (as appropriate), create
+      DecimalFormat based on pattern, render formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Number</td>
+    <td>numeric</td>
+    <td>&nbsp;</td>
+    <td>style</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to double or long (as appropriate), create
+      localized NumberFormat instance based on style (CURRENCY,
+      INTEGER, NUMBER, PERCENT), render formatted result.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Text</td>
+    <td>Any</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>&nbsp;</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to String, render literally.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Time</td>
+    <td>Calendar, Date, Long</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>style, timezone</td>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+      Get current value, convert to Calendar, create localized DateFormat time
+      instance for the specified style (SHORT, MEDIUM, LONG, FULL), set
+      time zone (if specified), render formatted result.
+    </td>
+  </tr>
+
+</table>
+
+
+
+<div align="center">
+  <h2>Component Class:  UISelectBoolean</h2>
+
+  <p>Any child components nested inside this component will be rendered
+  in an HTML <code>&lt;label&gt;</code> element associated with this
+  component, aligned based on the <code>label</code> attribute (NORTH,
+  SOUTH, EAST, WEST).
+  </p>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Checkbox</td>
+    <td>Convertible to boolean</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, render as an HTML
+      <code>&lt;input type="checkbox"&gt;</code> element.
+    </td>
+  </tr>
+
+</table>
+
+
+
+<div align="center">
+  <h2>Component Class:  UISelectMany</h2>
+
+  <p>Any child components nested inside this component will be rendered
+  in an HTML <code>&lt;label&gt;</code> element associated with this
+  component, aligned based on the <code>label</code> attribute (NORTH,
+  SOUTH, EAST, WEST).
+  </p>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Checkbox</td>
+    <td>Convertible to String</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, layout</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, get available items from nested child
+      <code>UISelectItem</code> and <code>UISelectItems</code>
+      components, render as a series of checkboxes laid out
+      according to the <code>layout</code> attribute (VERTICAL,
+      HORIZONTAL).
+    </td>
+  </tr>
+
+  <tr>
+    <td>Listbox</td>
+    <td>Convertible to String[]</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value(s), get available items from nested child
+      <code>UISelectItem</code> and <code>UISelectItems</code>
+      components, render as an HTML <code>&lt;select&gt;</code>
+      element that displays all of the possible choices (and
+      therefore needs no scrollbar).
+    </td>
+  </tr>
+
+  <tr>
+    <td>Menu</td>
+    <td>Convertible to String[]</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, size</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value(s), get available items from nested child
+      <code>UISelectItem</code> and <code>UISelectItems</code>
+      components, render as an HTML <code>&lt;select&gt;</code>
+      element that displays the number of elements specified by
+      the <code>size</code> attribute (default=1) at a time.
+    </td>
+  </tr>
+
+</table>
+
+
+
+<div align="center">
+  <h2>Component Class:  UISelectOne</h2>
+
+  <p>Any child components nested inside this component will be rendered
+  in an HTML <code>&lt;label&gt;</code> element associated with this
+  component, aligned based on the <code>label</code> attribute (NORTH,
+  SOUTH, EAST, WEST).
+  </p>
+</div>
+
+<table width="100%" border="1" cellpadding="3" cellspacing="3"
+
+  <tr>
+    <th align="center">Renderer Type</th>
+    <th align="center">Data Type</th>
+    <th align="center">Component Attributes</th>
+    <th align="center">Renderer Attributes</th>
+    <th align="center" width="25%">Decode Behavior</th>
+    <th align="center" width="35%">Encode Behavior</th>
+  </tr>
+
+  <tr>
+    <td>Listbox</td>
+    <td>Convertible to String</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, get available items from nested child
+      <code>UISelectItem</code> and <code>UISelectItems</code>
+      components, render as an HTML <code>&lt;select&gt;</code>
+      element that displays all of the possible choices (and
+      therefore needs no scrollbar).
+    </td>
+  </tr>
+
+  <tr>
+    <td>Menu</td>
+    <td>Convertible to String</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, size</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, get available items from nested child
+      <code>UISelectItem</code> and <code>UISelectItems</code>
+      components, render as an HTML <code>&lt;select&gt;</code>
+      element that displays the number of elements specified by
+      the <code>size</code> attribute (default=1) at a time.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Radio</td>
+    <td>Convertible to String</td>
+    <td>value <em>or</em> modelReference</td>
+    <td>label, layout</td>
+    <td>
+      Convert as necessary and store.
+    </td>
+    <td>
+      Get current value, get available items from nested child
+      <code>UISelectItem</code> and <code>UISelectItems</code>
+      components, render as a series of radio buttons laid out
+      according to the <code>layout</code> attribute (VERTICAL,
+      HORIZONTAL).
+    </td>
+  </tr>
+
+</table>
+
+
+
+
+</body>
+</html>
