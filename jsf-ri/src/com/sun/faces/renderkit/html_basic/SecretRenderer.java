@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.27 2002/08/13 22:53:26 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
  */
 
 /*
@@ -21,11 +21,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.faces.FacesException;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -38,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.27 2002/08/13 22:53:26 rkitain Exp $
+ * @version $Id: SecretRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,45 +91,15 @@ public class SecretRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        // PENDING (rogerk) should we call supportsType to double check
-        // component Type ??
-
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
 
+        // Get the value from the request param
+
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModelReference();
 
-        // If modelReference String is null or newValue is null, type
-        // conversion is not necessary. This is because default type
-        // for UIOutput component is String. Simply set local value.
-
-        if ( newValue == null || modelRef == null ) {
-            component.setValue(newValue);
-            component.setValid(true);
-            return;
-        }
-
-        // if we get here, type conversion is required.
-
-        Class modelType = null;
-        try {
-            modelType = context.getModelType(modelRef);
-        } catch (FacesException fe ) {
-            // FIXME log error
-        }
-        Assert.assert_it(modelType != null );
-
-        Object convertedValue = null;
-        try {
-            convertedValue = ConvertUtils.convert(newValue, modelType);
-            component.setValid(true);
-            component.setValue(convertedValue);
-        } catch (ConversionException ce ) {
-            component.setValue(newValue);
-            component.setValid(false);
-            addConversionErrorMessage( context, component, ce.getMessage()); 
-        }
+        component.setValue(newValue);
+        component.setValid(true);
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -162,13 +127,11 @@ public class SecretRenderer extends HtmlBasicRenderer {
 
         Object currentObj = component.currentValue(context);
         if (currentObj != null) {
-            if (currentValue instanceof String) {
+            if (currentObj instanceof String) {
                 currentValue = (String)currentObj;
-            } else { 
-                currentValue = ConvertUtils.convert(currentObj);
+            } else {
+                currentValue = currentObj.toString();
             }
-        } else {
-            currentValue = "";
         }
 
         if (currentValue == null) {
@@ -177,6 +140,12 @@ public class SecretRenderer extends HtmlBasicRenderer {
 
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
+
+
+        String redisplay = (String)component.getAttribute("redisplay");
+        if (redisplay == null || !redisplay.equals("true")) {
+            currentValue = "";
+        }
 
         writer.write("<input type=\"password\"");
         writer.write(" name=\"");

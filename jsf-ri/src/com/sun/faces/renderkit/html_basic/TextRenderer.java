@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.27 2002/08/13 22:53:26 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
  */
 
 /*
@@ -16,21 +16,16 @@ import com.sun.faces.util.Util;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
-import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -42,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.27 2002/08/13 22:53:26 rkitain Exp $
+ * @version $Id: TextRenderer.java,v 1.28 2002/08/16 23:26:23 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,40 +103,14 @@ public class TextRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        // PENDING (visvan) should we call supportsType to double check
-        // componentType ??
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModelReference();
        
-        // If modelReference String is null or newValue is null, type
-        // conversion is not necessary. This is because default type
-        // for UITextEntry component is String. Simply set local value.
-        if ( newValue == null || modelRef == null ) {
-            component.setValue(newValue);
-            component.setValid(true);
-            return;
-        }
+        component.setValue(newValue);
+        component.setValid(true);
         
-        // if we get here, type conversion is required.
-        try {
-            modelType = context.getModelType(modelRef);
-        } catch (FacesException fe ) {
-            // PENDING (visvan) log error
-        }    
-        Assert.assert_it(modelType != null );
-        
-        try {
-            convertedValue = ConvertUtils.convert(newValue, modelType);
-            component.setValid(true);
-            component.setValue(convertedValue);    
-        } catch (ConversionException ce ) {
-            component.setValue(newValue);
-            component.setValid(false);
-            addConversionErrorMessage( context, component, ce.getMessage()); 
-        }    
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -168,12 +137,14 @@ public class TextRenderer extends HtmlBasicRenderer {
        
         Object currentObj = component.currentValue(context);
         if ( currentObj != null) {
-            if (currentValue instanceof String) {
+            if (currentObj instanceof String) {
                 currentValue = (String)currentObj;
-            } else { 
-                currentValue = ConvertUtils.convert(currentObj);
+            } else {
+                currentValue = currentObj.toString();
             }
-        } else {
+        }
+
+        if (currentValue == null) {
             currentValue = "";
         }    
         
@@ -197,7 +168,7 @@ public class TextRenderer extends HtmlBasicRenderer {
                 component));
             writer.write(">");            
         } else if (component instanceof UIOutput) {
-            if (currentValue == null) {
+            if (currentValue == null || currentValue == "") {
                 try {
                     currentValue = getKeyAndLookupInBundle(context, component,
                                                        "key");
@@ -214,7 +185,7 @@ public class TextRenderer extends HtmlBasicRenderer {
         }
     }
     
-    // The testcase for this class is TestRenderers_1.java 
+    // The testcase for this class is TestRenderers_2.java 
 
 } // end of class TextRenderer
 
