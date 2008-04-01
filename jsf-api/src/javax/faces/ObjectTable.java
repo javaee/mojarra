@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTable.java,v 1.1 2001/11/13 02:09:13 edburns Exp $
+ * $Id: ObjectTable.java,v 1.2 2001/11/13 23:17:55 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -29,7 +29,7 @@ import javax.servlet.http.HttpSession;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTable.java,v 1.1 2001/11/13 02:09:13 edburns Exp $
+ * @version $Id: ObjectTable.java,v 1.2 2001/11/13 23:17:55 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -67,14 +67,15 @@ public abstract class ObjectTable
     }
 
 
-    public static Scope RequestScope;
+    public static Scope RequestScope = null;
 
-    public static Scope SessionScope;
+    public static Scope SessionScope = null;
 
-    public static Scope GlobalScope;
+    public static Scope GlobalScope = null;
 
 private static Scope keyToScope(Object scopeKey) {
     Scope result = null;
+    // PENDING(edburns): can we use Scope.isA() here?
     if (scopeKey instanceof HttpServletRequest) {
 	result = RequestScope;
     }
@@ -132,16 +133,10 @@ private static Scope keyToScope(Object scopeKey) {
 	scope.exit(scopeKey);
     }
 
+    // PENDING(edburns): Hans had these static, don't see why.
 
-    public static List getScopes() {
-	// return a copy of the internal list
-	return null;
-    }
-
-
-    public static void setScopes(List scopes) {
-	// make a copy of the list parameter
-    }
+    public abstract List getScopes();
+    public abstract void setScopes(List scopes);
 }
 
 				   
