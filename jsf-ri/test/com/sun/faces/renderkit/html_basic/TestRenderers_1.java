@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.6 2002/06/12 23:51:11 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.7 2002/06/18 05:02:27 rkitain Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.6 2002/06/12 23:51:11 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.7 2002/06/18 05:02:27 rkitain Exp $
  * 
  *
  */
@@ -125,7 +125,7 @@ public class TestRenderers_1 extends JspTestCase
         config.getServletContext().setAttribute(RIConstants.DEFAULT_RENDER_KIT, renderKit);
     
         facesContext.setResponseTree( new XmlTreeImpl(config.getServletContext(),
-                new UIForm(),"treeId"));
+                new UIForm(),"treeId", ""));
 	responseWriter = new FileOutputResponseWriter();
 	facesContext.setResponseWriter(responseWriter);
 	assertTrue(responseWriter == facesContext.getResponseWriter());

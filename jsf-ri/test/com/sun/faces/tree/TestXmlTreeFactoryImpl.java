@@ -1,5 +1,5 @@
 /*
- * $Id: TestXmlTreeFactoryImpl.java,v 1.4 2002/06/12 23:51:12 jvisvanathan Exp $
+ * $Id: TestXmlTreeFactoryImpl.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import com.sun.faces.FacesContextTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestXmlTreeFactoryImpl.java,v 1.4 2002/06/12 23:51:12 jvisvanathan Exp $
+ * @version $Id: TestXmlTreeFactoryImpl.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
  * 
  * @see	com.sun.faces.tree.XULTreeFactoryImpl
  *
@@ -118,6 +118,9 @@ public void testCreate()
     tree = factory.createTree(config.getServletContext(), TEST_URI_XUL);
     assertTrue(null != tree);
 
+    String pageUrl = ((XmlTreeImpl)tree).getPageUrl();
+    assertTrue(null != pageUrl);
+
     root = tree.getRoot();
     assertTrue(null != root);
 
@@ -156,6 +159,9 @@ public void testCreateNull()
 
     tree = factory.createTree(config.getServletContext(), null);
     assertTrue(null != tree);
+
+    String pageUrl = ((XmlTreeImpl)tree).getPageUrl();
+    assertTrue(null != pageUrl);
 
     root = tree.getRoot();
     assertTrue(null != root);

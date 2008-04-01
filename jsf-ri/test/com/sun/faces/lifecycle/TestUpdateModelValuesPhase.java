@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.4 2002/06/12 23:51:10 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.5 2002/06/18 05:02:27 rkitain Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.component.UITextEntry;
 import javax.faces.tree.Tree;
 
@@ -39,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.4 2002/06/12 23:51:10 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.5 2002/06/18 05:02:27 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,7 +88,10 @@ public class TestUpdateModelValuesPhase extends FacesContextTestCase
 public void testUpdateNormal()
 {
     int rc = Phase.GOTO_NEXT;
+UIForm form = null;
     UITextEntry userName = null;
+    UITextEntry userName1 = null;
+    UITextEntry userName2 = null;
     Tree tree = null;
     TestBean testBean = new TestBean();
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
@@ -95,12 +99,28 @@ public void testUpdateNormal()
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
+form = new UIForm();
+form.setComponentId("form");
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${TestBean.one}");
-    tree = new XmlTreeImpl(config.getServletContext(), userName, 
-			   "updateModel.xul");
+form.addChild(userName);
+userName1 = new UITextEntry();
+userName1.setComponentId("userName1");
+userName1.setValue("one");
+userName1.setModelReference("${TestBean.one}");
+form.addChild(userName1);
+userName2 = new UITextEntry();
+userName2.setComponentId("userName2");
+userName2.setValue("one");
+userName2.setModelReference("${TestBean.one}");
+form.addChild(userName2);
+
+//    tree = new XmlTreeImpl(config.getServletContext(), userName, 
+//			   "updateModel.xul", "");
+    tree = new XmlTreeImpl(config.getServletContext(), form, 
+			   "updateModel.xul", "");
     facesContext.setRequestTree(tree);
 
     rc = updateModelValues.execute(facesContext);
@@ -115,29 +135,48 @@ public void testUpdateNormal()
 public void testUpdateFailed()
 {
     int rc = Phase.GOTO_NEXT;
+UIForm form = null;
     UITextEntry userName = null;
+UITextEntry userName1 = null;
+UITextEntry userName2 = null;
     Tree tree = null;
     String value = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase(null, 
 				       Lifecycle.UPDATE_MODEL_VALUES_PHASE);
+form = new UIForm();
+form.setComponentId("form");
     userName = new UITextEntry();
     userName.setComponentId("userName");
     userName.setValue("one");
     userName.setModelReference("${UserBean.one}");
-    tree = new XmlTreeImpl(config.getServletContext(), userName, 
-			   "updateModel.xul");
+form.addChild(userName);
+userName1 = new UITextEntry();
+userName1.setComponentId("userName1");
+userName1.setValue("one");
+userName1.setModelReference("${TestBean.one}");
+form.addChild(userName1);
+userName2 = new UITextEntry();
+userName2.setComponentId("userName2");
+userName2.setValue("one");
+userName2.setModelReference("${TestBean.one}");
+form.addChild(userName2);
+
+//    tree = new XmlTreeImpl(config.getServletContext(), userName, 
+//			   "updateModel.xul", "");
+    tree = new XmlTreeImpl(config.getServletContext(), form,
+                           "updateModel.xul", "");
     facesContext.setRequestTree(tree);
 
-    // This stage will go straight to render, since there is no model
-    // called UserBean.
+    // This stage will go to render, since there was at least one error
+    // during component updates... 
     rc = updateModelValues.execute(facesContext);
     assertTrue(Phase.GOTO_RENDER == rc);    
 
     assertTrue(null != userName.getValue());
     // PENDING (visvan) only validation and conversion erros should be put
     // in messageList. remove this after confirming with Ed/Craig.
-    // assertTrue(1 == facesContext.getMessageList().size());
+     assertTrue(1 == facesContext.getMessageList().size());
     
 }
 

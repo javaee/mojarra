@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.1 2002/06/05 19:07:23 eburns Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.2 2002/06/18 05:02:27 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.1 2002/06/05 19:07:23 eburns Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.2 2002/06/18 05:02:27 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,7 +97,7 @@ public void testInvokeNormal()
     final UITextEntry root = new UITextEntry();
     Lifecycle life = new LifecycleImpl();
     Tree tree = new XmlTreeImpl(config.getServletContext(),
-				root, "default.xul");
+				root, "default.xul", "");
     ApplicationHandler appHandler = new ApplicationHandler() {
 
 	    public void commandEvent(FacesContext context, CommandEvent event){
@@ -128,7 +128,7 @@ public void testInvokeNoOp()
     UITextEntry root = new UITextEntry();
     Lifecycle life = new LifecycleImpl();
     Tree tree = new XmlTreeImpl(config.getServletContext(),
-				root, "default.xul");
+				root, "default.xul", "");
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
 				      Lifecycle.INVOKE_APPLICATION_PHASE);
     int rc = Phase.GOTO_NEXT;

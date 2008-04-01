@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.4 2002/06/12 23:51:11 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import org.apache.cactus.JspTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.4 2002/06/12 23:51:11 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.5 2002/06/18 05:02:28 rkitain Exp $
  * 
  *
  */
@@ -117,7 +117,7 @@ public class TestRenderers_2 extends JspTestCase
         config.getServletContext().setAttribute(RIConstants.DEFAULT_RENDER_KIT,
             renderKit);
         XmlTreeImpl xmlTree = new XmlTreeImpl(
-            config.getServletContext(), new UICommand(), "treeId");
+            config.getServletContext(), new UICommand(), "treeId", "");
         facesContext.setResponseTree(xmlTree);
 	responseWriter = new FileOutputResponseWriter();
 	facesContext.setResponseWriter(responseWriter);
@@ -244,7 +244,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = checkboxRenderer.supportsComponentType("SelectBoolean");
+        result = checkboxRenderer.supportsComponentType("javax.faces.component.UISelectBoolean");
         assertTrue(result);
         result = checkboxRenderer.supportsComponentType(selectBoolean);
         assertTrue(result);
@@ -278,7 +278,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = hyperlinkRenderer.supportsComponentType("Command");
+        result = hyperlinkRenderer.supportsComponentType("javax.faces.component.UICommand");
         assertTrue(result);
         result = hyperlinkRenderer.supportsComponentType(command);
         assertTrue(result);
@@ -319,7 +319,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = optionlistRenderer.supportsComponentType("SelectOne");
+        result = optionlistRenderer.supportsComponentType("javax.faces.component.UISelectOne");
         assertTrue(result);
         result = optionlistRenderer.supportsComponentType(selectOne);
         assertTrue(result);
@@ -351,7 +351,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = secretRenderer.supportsComponentType("TextEntry");
+        result = secretRenderer.supportsComponentType("javax.faces.component.UITextEntry");
         assertTrue(result);
         result = secretRenderer.supportsComponentType(textEntry);
         assertTrue(result);
@@ -383,7 +383,7 @@ public class TestRenderers_2 extends JspTestCase
         System.out.println("    Testing supportsComponentType methods..");
 
         boolean result = false;
-        result = textRenderer.supportsComponentType("Output");
+        result = textRenderer.supportsComponentType("javax.faces.component.UIOutput");
         assertTrue(result);
         result = textRenderer.supportsComponentType(text);
         assertTrue(result);
