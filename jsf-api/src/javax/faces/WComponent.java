@@ -1,7 +1,9 @@
 package javax.faces;
 
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Set;
 
 
 /**
@@ -30,6 +32,13 @@ import java.util.Iterator;
  */
 public abstract class WComponent {
  
+    private Hashtable ht;
+
+
+    public WComponent() {
+        ht = new Hashtable();
+    }
+
     /** 
      * Returns a String representing the type of this concrete
      * component class.  This read-only property is used by the RenderKit
@@ -77,7 +86,7 @@ public abstract class WComponent {
      *         this component
      */
     public String getRendererName(RenderContext rc) {
-	return null;
+	return (String)getAttribute(rc, Constants.REF_RENDERER_NAME);
     }
 
     /**
@@ -95,6 +104,7 @@ public abstract class WComponent {
      *         support rendering this component type
      */
     public void setRendererName(RenderContext rc, String rendererName) throws FacesException {
+        setAttribute(rc, Constants.REF_RENDERER_NAME, rendererName);
     }
  
     /**
@@ -106,7 +116,12 @@ public abstract class WComponent {
      * @return an Iteration of attribute names on this component
      */   
     public Iterator getAttributeNames(RenderContext rc) {
-        return null;
+        Set set = ht.keySet();
+        if (set.isEmpty()) {
+            return null;
+        } else {
+            return set.iterator();
+        }
     }
 
     /**
@@ -120,7 +135,7 @@ public abstract class WComponent {
      *          attribute does not exist.
      */
     public Object getAttribute(RenderContext rc, String attributeName) {
-        return null;
+        return ht.get(attributeName);
     }
 
     /**
@@ -131,7 +146,15 @@ public abstract class WComponent {
      * @param attributeName a String specifying the name of the attribute
      * @param value an Object representing the value of the attribute
      */
-    public void setAttribute(RenderContext rc, String attributeName, Object value) {}
+    public void setAttribute(RenderContext rc, String attributeName, 
+        Object value) {
+        if (attributeName != null && value != null) {
+            ht.put(attributeName,value);
+        }
+        else if (null != attributeName && null == value) {
+            ht.remove(attributeName);
+        }
+    }
 
     /**
      * Adds the specified component as a child to this component.
@@ -306,7 +329,18 @@ public abstract class WComponent {
      * @param rc the render context used to render this component
      * @throws IOException if input or output exception occurred
      */
-    public void render(RenderContext rc) throws IOException {}
+    public void render(RenderContext rc) throws IOException,
+        FacesException {
+
+        RenderKit rk = rc.getRenderKit();
+        String rendererName = getRendererName(rc);
+        if (rendererName == null) {
+            throw new FacesException("Renderer Name Not Set.");
+        }
+        Renderer r = rk.getRenderer(rendererName);
+        rc.pushChild(this);
+        r.renderStart(rc, this);
+    }
 
     /**
      * Invoked from renderAll() to Render the children of this component.  
@@ -328,7 +362,17 @@ public abstract class WComponent {
      * @param rc the render context used to render this component
      * @throws IOException if input or output exception occurred
      */
-    public void renderComplete(RenderContext rc) throws IOException {}
+    public void renderComplete(RenderContext rc) throws IOException,
+        FacesException {
+        RenderKit rk = rc.getRenderKit();
+        String rendererName = getRendererName(rc);
+        if (rendererName == null) {
+            throw new FacesException("Renderer Name Not Set.");
+        }
+        Renderer r = rk.getRenderer(rendererName);
+        r.renderComplete(rc, this);
+        rc.popChild();
+    }
 
 }
 

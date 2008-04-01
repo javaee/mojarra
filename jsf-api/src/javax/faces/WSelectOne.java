@@ -15,16 +15,11 @@ import org.mozilla.util.ParameterCheck;
  */
 public class WSelectOne extends WComponent {
     private static String TYPE = "SelectOne";
-    private Hashtable ht;
     // PENDING(edburns): don't cast these to Strings all over the place.
     private Object modelRef = null;
     private Object selectedValueModelRef = null;
     private Collection items;
     private Object selectedItem;
-
-    public WSelectOne() {
-        ht = new Hashtable();
-    }
 
     /** 
      * Returns a String representing the select-one type.  
@@ -183,24 +178,6 @@ public class WSelectOne extends WComponent {
 		selectedItem = null;
 	    } catch ( FacesException e ) {
 	    }
-	}
-    }
-
-    //
-    // Getters and settrs for the attr table.
-    //
-
-    public Object getAttribute(RenderContext rc, String attributeName) {
-        return ht.get(attributeName);
-    }
-
-    public void setAttribute(RenderContext rc, String attributeName,
-        Object value) {
-        if (attributeName != null && value != null) {
-            ht.put(attributeName,value);
-        }
-	else if (null != attributeName && null == value) {
-	    ht.remove(attributeName);
 	}
     }
 
