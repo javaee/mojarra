@@ -1,5 +1,5 @@
 /*
- * $Id: Tree.java,v 1.2 2002/05/20 17:17:35 craigmcc Exp $
+ * $Id: Tree.java,v 1.3 2002/05/22 17:55:48 craigmcc Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.render.RenderKit;
 
 /**
  * <p>A <strong>Tree</strong> is a container for a tree of {@link UIComponent}
- * nodes rooted at a node, along with associated metadata about those
+ * nodes rooted at a root node, along with associated metadata about those
  * {@link UIComponent}s.  Trees have unique identifiers, which associate
  * them with metadata information that can be acquired from external sources,
  * by means of a {@link TreeFactory} instance.  Tree identifiers must be
@@ -48,7 +48,8 @@ public abstract class Tree {
 
     /**
      * <p>Return the root node of the component tree associated with
-     * this <code>Tree</code>.</p>
+     * this <code>Tree</code>, or <code>null</code> if this component
+     * tree has no nodes.</p>
      */
     public abstract UIComponent getRoot();
 

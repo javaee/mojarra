@@ -1,5 +1,5 @@
 /*
- * $Id: TreeFactory.java,v 1.1 2002/05/14 15:02:29 craigmcc Exp $
+ * $Id: TreeFactory.java,v 1.2 2002/05/22 17:55:48 craigmcc Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.faces.FacesException;    // FIXME - subpackage?
  * acquired, in a portable manner, by calling:</p>
  * <pre>
  *   TreeFactory factory = (TreeFactory)
- *    FactoryFactory.createFactory("javax.faces.tree.TreeFactory");
+ *    FactoryFactory.createFactory(FactoryFactory.TREE_FACTORY);
  * </pre>
  */
 
