@@ -240,6 +240,11 @@
     <copy  file="${commons.collections.jar}" todir="${deploy.home}/WEB-INF/lib"/>
   </target>
 
+  <target name="deploy.tomcat.basic">
+    <unjar  src="${dist.home}/basic.war" dest="${basic.home}"/>
+  </target>
+
+
   <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
    description="Clean and compile all components"/>
 
@@ -337,6 +342,8 @@
     <!-- create a war file for distribution -->
     <jar jarfile="${dist.home}/${dist.war}"
          basedir="${dist.home}/${basic.name}"/>
+
+    <copy file="${dist.home}/${dist.war}" toDir="${tomcat.home}/webapps"/>
   </target>
 
   <target name="compile.basic.sample"
