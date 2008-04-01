@@ -8,7 +8,7 @@
 
 <!-- ************ JSF build file ************************************** -->
 
-<project name="JSF-RI" default="compile.demo" basedir=".">
+<project name="JSF-RI" default="build-all" basedir=".">
 
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
@@ -26,15 +26,90 @@
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
 
-  <!-- The base directory for the JSF APIs -->
+  <!-- The base directory for the JSF API and RI -->
   <property name="jsf.api.home" value ="../jsf-api"/>
   <property name="jsf.ri.home" value ="../jsf-ri"/>
 
-  <target name="compile.demo">
+  <!-- dependent jars -->
+  <property name="commons-beanutils.jar" 
+            value="${jsf.ri.home}/lib/commons-beanutils.jar" />
+  <property name="commons-logging.jar" 
+            value="${jsf.ri.home}/lib/commons-logging.jar" />
+  <property name="commons-digester.jar" 
+            value="${jsf.ri.home}/lib/commons-digester.jar" />
+  <property name="jsf-api.jar" 
+            value="${jsf.api.home}/build/lib/jsf-api.jar" />
+  <property name="jsf-ri.jar" 
+            value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
 
-    <echo message="${jsf.api.home}"/>
-    <echo message="${jsf.ri.home}"/>
+  <target name="clean">
 
+    <antcall target="deleteJarsFromDemo">
+      <param name="demoDir" value="templateDemo"/>
+    </antcall>
+
+  </target>
+
+  <target name="copyJarsToDemos">
+
+    <antcall target="copyJarsToDemo">
+      <param name="demoDir" value="templateDemo"/>
+    </antcall>
+
+  </target>
+
+  <target name="copyJarsToDemo">
+
+    <mkdir dir="${demoDir}/WEB-INF/lib"/>
+    <copy todir="${demoDir}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${demoDir}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${demoDir}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${demoDir}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${demoDir}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${demoDir}/WEB-INF/lib" file="${standard.jar}" />
+    <copy todir="${demoDir}/WEB-INF/lib" file="${jstl.jar}" />
+
+  </target>
+
+  <target name="deleteJarsFromDemo">
+
+    <delete file="${demoDir}/WEB-INF/lib/commons-beanutils.jar" />
+    <delete file="${demoDir}/WEB-INF/lib/commons-logging.jar" />
+    <delete file="${demoDir}/WEB-INF/lib/commons-digester.jar" />
+    <delete file="${demoDir}/WEB-INF/lib/jsf-api.jar" />
+    <delete file="${demoDir}/WEB-INF/lib/jsf-ri.jar" />
+    <delete file="${demoDir}/WEB-INF/lib/standard.jar" />
+    <delete file="${demoDir}/WEB-INF/lib/jstl.jar" />
+
+  </target>
+
+
+
+  <target name="build-all" depends="verifyPreconditions,copyJarsToDemos">
+
+  </target>
+
+  <target name="verifyPreconditions">
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${standard.jar}"/>
+       <param name="fail.message" value="${standard.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl.jar}"/>
+       <param name="fail.message" value="${jstl.jar} must exist."/>
+    </antcall>
+
+  </target>
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
   </target>
 
 </project>

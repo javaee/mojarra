@@ -3,3 +3,8 @@
 
 jsf.api.home=../../jsf-trunk/jsf-api
 jsf.ri.home=../../jsf-trunk/jsf-ri
+
+# You must locate standard.jar and jstl.jar
+
+standard.jar=/tomcat4.0/common/lib/standard.jar
+jstl.jar=/tomcat4.0/common/lib/jstl.jar
