@@ -1,5 +1,5 @@
 /*
- * $Id: BeanAccessor.java,v 1.5 2002/04/16 21:15:30 eburns Exp $
+ * $Id: BeanAccessor.java,v 1.6 2002/04/17 19:19:00 jvisvanathan Exp $
  */
 
 /*
@@ -92,45 +92,44 @@ public BeanAccessor(FacesContext yourFacesContext)
         // interpreted as 'a user bean which contains an address
         // bean which has a "street" property'.
         //
-        if (objectReference.startsWith("${") &&
-	    objectReference.endsWith("}")) {
+        if (objectReference.startsWith("${") && objectReference.endsWith("}")) {
 	    expression = 
 		objectReference.substring(2, objectReference.length() - 1);
-            property = expression.substring((expression.indexOf(".")+1));
-            baseName = expression.substring(0, expression.indexOf("."));
-            object = objectManager.get(request, baseName);
-            if (object == null) {
-                throw new FacesException("Named Object: '"+baseName+
-                    "' not found in ObjectManager.");
-            }
-
-            try {
-                PropertyUtils.setNestedProperty(object, property, value);
-            } catch (IllegalAccessException iae) {
-                throw new FacesException(iae.getMessage());
-            } catch (InvocationTargetException ite) {
-                throw new FacesException(ite.getMessage());
-            } catch (NoSuchMethodException nme) {
-                throw new FacesException(nme.getMessage());
-            }
-//PENDING (ROGERK) - Not Sure About This Part (below)....???? 
-        // Otherwise, treat the reference string as a 'literal'
-        // name for the model bean itself.  There should be 
-        // a model bean existing in the ObjectManager with this
-        // name.
-        //
-        } else {
-            object = objectManager.get(request, objectReference);
-            if (object == null) {
-                throw new FacesException("Named Object: '"+objectReference+
-                    "' not found in ObjectManager.");
-            }
-            object = value;
-            javax.servlet.http.HttpServletRequest httpRequest = 
+            // if it is not a nested property, then it directly references
+            // a model object. So there should be a model bean existing
+            // in the ObjectManager with this name.
+            if ( expression.indexOf(".") == -1 ) {
+                object = objectManager.get(request, expression);
+                if (object == null) {
+                    throw new FacesException("Named Object: '"+expression+
+                        "' not found in ObjectManager.");
+                }
+                object = value;
+                javax.servlet.http.HttpServletRequest httpRequest =
                     (javax.servlet.http.HttpServletRequest) request;
-            objectManager.put(httpRequest.getSession(),objectReference,object); 
-        }
-    }
+                objectManager.put(httpRequest.getSession(),expression,object);    
+            } else {
+                property = expression.substring((expression.indexOf(".")+1));
+                baseName = expression.substring(0, expression.indexOf("."));
+                object = objectManager.get(request, baseName);
+                if (object == null) {
+                    throw new FacesException("Named Object: '"+baseName+
+                        "' not found in ObjectManager.");
+                }
+                try {
+                    PropertyUtils.setNestedProperty(object, property, value);
+                } catch (IllegalAccessException iae) {
+                    throw new FacesException(iae.getMessage());
+                } catch (InvocationTargetException ite) {
+                    throw new FacesException(ite.getMessage());
+                } catch (NoSuchMethodException nme) {
+                    throw new FacesException(nme.getMessage());
+                }
+            }    
+        } else {
+            throw new FacesException("Expression should start with ${");
+        }     
+    }       
 
     /**
      * PRECONDITION: ObjectManager exists in Application Scope.  The
@@ -166,33 +165,38 @@ public BeanAccessor(FacesContext yourFacesContext)
 	    objectReference.endsWith("}")) {
 	    expression = 
 		objectReference.substring(2, objectReference.length() - 1);
-            property = expression.substring((expression.indexOf(".")+1));
-            baseName = expression.substring(0, expression.indexOf("."));
+            // if it is not a nested property, then it directly references
+            // a model object. So there should be a model bean existing
+            // in the ObjectManager with this name.
+            if ( expression.indexOf(".") == -1 ) {
+                returnObject = objectManager.get(request, expression);
+                if (returnObject == null) {
+                    throw new FacesException("Named Object: '"+expression+
+                        "' not found in ObjectManager.");
+                }
+            } else {    
+                property = expression.substring((expression.indexOf(".")+1));
+                baseName = expression.substring(0, expression.indexOf("."));
 
-            object = objectManager.get(request, baseName);
-            if (object == null) {
-                throw new FacesException("Named Object: '"+baseName+
-                    "' not found in ObjectManager.");
-            }
-            try {
-                returnObject = PropertyUtils.getNestedProperty(object, 
-							       property);
-            } catch (IllegalAccessException iae) {
-                throw new FacesException(iae.getMessage());
-            } catch (InvocationTargetException ite) {
-                throw new FacesException(ite.getMessage());
-            } catch (NoSuchMethodException nme) {
-                throw new FacesException(nme.getMessage());
-            }
-// PENDING (ROGERK) Just return from object table???
+                object = objectManager.get(request, baseName);
+                if (object == null) {
+                    throw new FacesException("Named Object: '"+baseName+
+                        "' not found in ObjectManager.");
+                }
+                try {
+                    returnObject = PropertyUtils.getNestedProperty(object, 
+                                                                   property);
+                } catch (IllegalAccessException iae) {
+                    throw new FacesException(iae.getMessage());
+                } catch (InvocationTargetException ite) {
+                    throw new FacesException(ite.getMessage());
+                } catch (NoSuchMethodException nme) {
+                    throw new FacesException(nme.getMessage());
+                }
+            }    
         } else {
-            returnObject = objectManager.get(request, objectReference);
-            if (returnObject == null) {
-                throw new FacesException("Named Object: '"+objectReference+
-                    "' not found in ObjectManager.");
-            }
+            throw new FacesException("Expression should start with ${");    
         }
-
         return returnObject;
     }
 
