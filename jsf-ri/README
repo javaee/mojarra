@@ -1,121 +1,87 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020605A
-jsf-api-spec for this implementation: JSF_20020604.pdf
+jsf-api cvs tag for this implementation: JSF_API_20020607
+jsf-api-spec for this implementation: JSF_20020607.pdf
 
-Overview of the Current Implementation
-======================================
 
-This is the first RI snapshot since version 0.03 of the spec on
-20020320.  The API has changed quite a bit since then, with all of the
-old API classes either being removed or moved into different packages.
-As such, the old RI was put aside and we created the new one by copying
-code from the old as appropriate.
+Major changes/features in this release:
+=======================================
 
-This snapshot implements the entire breadth of the jsf-api, but lacks
-depth in some areas.  Currently we have support for a simple webapp, an
-example of which is in the web/basic directory.  This webapp illustrates
-several key concepts of the jsf-api spec:
+* A "page-url" element has been added to ".xul" files which refers to uri for jsp page.
 
-* A separate metadata file for defining the component tree
+* Faces_Basic webapp has a link and submit button that navigates to another page
+  upon click.
 
-* The syntax for putting required parameters into the query string to
-  get the RI to function correctly.
-
-* The ability to implement new UIComponent subclasses to create custom
-  components.
-
-* The use of the stock javax.faces.webapp.FacesServlet.
-
-* The use of the HtmlBasicRenderKit, which is the default RenderKit for
-  the RI.
-
-Directory Overview
-==================
-
-Only directories of interest to the Expert Group are mentioned in this
-overview.
-
-src/com/sun/faces
-
-                  Constants file
-
-                  /renderkit
-
-                    The HtmlBasicRenderKit.  This implements the
-                    javax.faces.render package.
-
-                  /util
-
-                    Utility classes
-
-                  /lifecycle
-
-                    Implements the javax.faces.lifecycle package
-
-                  /tree
-
-                    Implements the javax.faces.tree package.  This
-                    implementation uses a modified version of XUL
-                    language <http://www.mozilla.org/docs/xul/xulnotes>
-                    for the metadata format for specifying the tree.
-
-                  /context
-
-                    Implements the javax.faces.context package.  Please
-                    note that this is where some of the ObjectManager
-                    functionality has migrated.
-
-                  /taglib
-
-                    A VERY simple taglib to go along with the
-                    HtmlBasicRenderKit.
-
-test/com/sun/faces
-
-                   Cactus unit tests for all of the functionality in the
-                   current RI.
-
-web/basic
-
-          The basic webapp.  
-
-Build Instructions
-==================
-
-Copy build.properties.sample to build.properties and make sure all of
-the values in that file are valid for your system.
-
-Make sure you have the ../jsf-api directory built.
-
-Ant targets:
-
-  ant 
-
-      The default target just produces jsf-ri.jar
-
-  ant run.test
-
-      Run the junit unit tests
-
-  ant deploy.tomcat.basic
-
-      Create the basic webapp and deploy it to your tomcat server.
+* Change to a completely "path info" based URI scheme.
 
 Known Issues With This Release
 ==============================
 
-* Components are instantiated on each request.
+1. Components are instantiated on each request.
+   Fix:
 
-* Components don't get their RendererType property set until renderering
-  time, which implies that the default decode() is used, but the
-  RenderKit's encode is used.
+2. Components don't get their RendererType property set until renderering
+   time, which implies that the default decode() is used, but the
+   RenderKit's encode is used.
+   Fix:
 
-* The unit tests could use some refactoring
+3. The unit tests could use some refactoring
+   Fix:
 
-* It's impossible to use the same tree on different jsp pages since the
-  filename of the XUL tree must be the same as the filename of the JSP
-  page, with different extensions of course.  For example: login.xul and
-  login.jsp.  This restriction will be lifted when we have a better idea
-  for navigation.
+
+4. It's impossible to use the same tree on different jsp pages since the
+   filename of the XUL tree must be the same as the filename of the JSP
+   page, with different extensions of course.  For example: login.xul and
+   login.jsp.  This restriction will be lifted when we have a better idea
+   for navigation.
+
+   Fix: A new element "<page-url>" has been introduced in the "xul" metadata
+        file which refers to the "jsp" page for this "xul" file
+        (ex: /Faces_Basic.jsp).  The name of the "jsp" need not correspond
+        with the "xul" file. 
+
+   This may be a temporary fix, because we may be moving away from
+   maintaining a seperate "xul" file, as well as "jsp" page.  We 
+   still will have a component tree, but it may be built automatically.
+
+5. For hyperlink event processing, where the destination "target" is another
+   Faces page ("target" will refer to the "xul" file of the destination
+   page), we need to set the response tree to this "target" attribute value. 
+
+      Example: <link id="mylink" target="/Faces_Basic_Thanks.xul"
+                   text="Thanks..." value="mylink" />
+
+   So, a tree would be created for "Faces_Basic_Thanks.xul" and set as
+   the response tree.  The ideal solution would be to enqueue a Command
+   event in the hyperlink renderer's "decode" method, set the response 
+
+   tree in UICommand event processing method, and return "true" to 
+   proceed to the "rendering" phase.  However, UICommand accomodates both 
+   Hyperlinks and Buttons, so the UICommand.event method becomes unmanageable 
+   (the event processing logic for Buttons may be different).
+
+
+   Fix: Create the new tree (corresponding to the "xul" tree id specified in
+        "target" attribute) and overwrite the response tree in the 
+        hyperlink's "decode" method.
+
+   This is probably a temporary fix until we come up with a better 
+   solution. One possible solution may be to enqueue the Command event
+   in the "decode" method, and just handle the event in an event handler
+   (during InvokeApplication phase).  However, we would be going through
+   some needless phases (such as validation), when all we want to do
+   for hyperlinks, is go to the "rendering" phase.
+
+
+6. Component type is hard coded in component subclasses (ex: UICommand)
+   as fully qualfied class names (ex: javax.faces.component.UICommand).
+   However, a component's type is configurable in the renderkit's xml 
+   configuration file (HtmlBasicRenderKit.xml).
+
+7. Since Phase ids are not consecutive anymore, phaseid cannot be used as an index to 
+   locate a particular phase. Since Phase doesn't have accessor methods for Id, 
+   we have to cast to RI implementation class GenericPhaseImpl.
+
+8. There is no way to register validators in XUL.
+

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCase.java,v 1.9 2002/06/11 21:47:16 eburns Exp $
+ * $Id: FacesTestCase.java,v 1.10 2002/06/20 20:20:11 jvisvanathan Exp $
  */
 
 /*
@@ -52,5 +52,7 @@ public boolean sendResponseToFile();
 public String getExpectedOutputFilename();
 
 public String [] getLinesToIgnore();
+
+public boolean sendWriterToFile();
 
 } // end of interface FacesTestCase

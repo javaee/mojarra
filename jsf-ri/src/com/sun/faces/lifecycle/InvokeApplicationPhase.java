@@ -1,5 +1,5 @@
 /*
- * $Id: InvokeApplicationPhase.java,v 1.1 2002/06/05 19:07:23 eburns Exp $
+ * $Id: InvokeApplicationPhase.java,v 1.2 2002/06/20 20:20:10 jvisvanathan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: InvokeApplicationPhase.java,v 1.1 2002/06/05 19:07:23 eburns Exp $
+ * @version $Id: InvokeApplicationPhase.java,v 1.2 2002/06/20 20:20:10 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#INVOKE_APPLICATION_PHASE
@@ -64,40 +64,38 @@ public class InvokeApplicationPhase extends GenericPhaseImpl
 public InvokeApplicationPhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
-    callback = new LifecycleCallback() {
-	    public int takeActionOnComponent(FacesContext facesContext,
-					     UIComponent comp) throws FacesException {
-		int rc = Phase.GOTO_NEXT;
-		ApplicationHandler handler = null;
-		
-		if (null == lifecycleDriver) {
-		    return rc;
-		}
-		
-		handler = lifecycleDriver.getApplicationHandler();
-		if (null == handler) {
-		    return rc;
-		}
-		
-		// Process all events that have been queued to the
-		// application
-		Iterator events = facesContext.getApplicationEvents();
-		while (events.hasNext()) {
-		    FacesEvent event = (FacesEvent) events.next();
-		    if (event instanceof CommandEvent) {
-			handler.commandEvent(facesContext, 
-					     (CommandEvent) event);
-		    } else if (event instanceof FormEvent) {
-			handler.formEvent(facesContext, (FormEvent) event);
-		    } else {
-			throw new IllegalArgumentException("Invalid event type " +
-							   event);
-		    }
-		}
-		
-		return rc;
-	    }
-	};
+}
+
+public int execute(FacesContext facesContext) throws FacesException
+{
+    int rc = Phase.GOTO_NEXT;
+    ApplicationHandler handler = null;
+
+    if (null == lifecycleDriver) {
+        return rc;
+    }
+
+    handler = lifecycleDriver.getApplicationHandler();
+    if (null == handler) {
+        return rc;
+    }
+
+    // Process all events that have been queued to the
+    // application
+    Iterator events = facesContext.getApplicationEvents();
+    while (events.hasNext()) {
+        FacesEvent event = (FacesEvent) events.next();
+        if (event instanceof CommandEvent) {
+            handler.commandEvent(facesContext, 
+                                 (CommandEvent) event);
+        } else if (event instanceof FormEvent) {
+            handler.formEvent(facesContext, (FormEvent) event);
+        } else {
+            throw new IllegalArgumentException("Invalid event type " +
+                                               event);
+        }
+    }
+    return rc;
 }
 
 //

@@ -1,5 +1,5 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.1 2002/06/11 21:47:17 eburns Exp $
+ * $Id: JspFacesTestCase.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.context.FacesContext;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.1 2002/06/11 21:47:17 eburns Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
  * 
  * @see	#facesService
  *
@@ -152,5 +152,9 @@ public boolean verifyExpectedOutput()
 {
     return facesService.verifyExpectedOutput();
 }
+
+public boolean sendWriterToFile() {
+    return false;
+}    
 
 } // end of class JspFacesTestCase

@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageListImpl.java,v 1.4 2002/06/20 01:34:24 eburns Exp $
+ * $Id: TestMessageListImpl.java,v 1.5 2002/06/20 20:20:12 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageListImpl.java,v 1.4 2002/06/20 01:34:24 eburns Exp $
+ * @version $Id: TestMessageListImpl.java,v 1.5 2002/06/20 20:20:12 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,15 +72,13 @@ public class TestMessageListImpl extends ServletFacesTestCase
     
     public void testAccessors() {
         boolean result = false;
-        
         Assert.assert_it(getFacesContext() != null );
-        
+
         MessageList messageList = getFacesContext().getMessageList();
         Assert.assert_it(messageList != null);
         
-        // PENDING (visvan) add tests to test all add methods.
-        // make sure we get an exception for a messageId that doesn't exist in 
-        // resource file
+        // if msgId doesn't exist in the resource, faces exception must be
+        // thrown.
         try {
             messageList.add("MSG01", "userName", null);
         } catch ( FacesException fe ) {
@@ -137,6 +135,15 @@ public class TestMessageListImpl extends ServletFacesTestCase
         size = messageList.size("userId");
         assertTrue(size == 2);
         
+        // test various ways to add message.
+        messageList.add("MSG0002");
+        
+        Object[] paramsTest = {"JavaServerFaces"};
+        messageList.add("MSG0005", paramsTest);
+        
+        messageList.add("MSG0001", "userLabel");
+        // make sure all messages were added.
+        assertTrue(messageList.size() == 6);
     }
 
 } // end of class TestMessageListImpl

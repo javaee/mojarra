@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.8 2002/06/18 18:23:27 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.9 2002/06/20 20:20:12 jvisvanathan Exp $
  */
 
 /*
@@ -12,25 +12,17 @@
 package com.sun.faces.renderkit.html_basic;
 
 import org.apache.cactus.WebRequest;
-import org.apache.cactus.JspTestCase;
+import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.FacesTestCaseService;
 
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.webapp.JspResponseWriter;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.faces.context.ResponseWriter;
+import javax.faces.FacesException;
 
 import java.io.IOException;
-import java.util.Vector;
-import java.util.ArrayList;
 import java.util.Iterator;
-import com.sun.faces.CompareFiles;
 
 import javax.faces.component.UITextEntry;
 import javax.faces.component.UIForm;
@@ -42,18 +34,16 @@ import javax.faces.component.UIComponent;
 import javax.faces.event.FormEvent;
 import javax.faces.event.CommandEvent;
 import javax.faces.event.FacesEvent;
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
 import com.sun.faces.RIConstants;
-import javax.faces.render.RenderKit;
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+import com.sun.faces.tree.XmlTreeImpl;
 
-import javax.faces.FacesException;
 import com.sun.faces.renderkit.html_basic.InputRenderer;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
 import com.sun.faces.renderkit.html_basic.TextAreaRenderer;
 import com.sun.faces.renderkit.html_basic.RadioRenderer;
 import com.sun.faces.FileOutputResponseWriter;
-import com.sun.faces.tree.XmlTreeImpl;
 
 /**
  *
@@ -61,12 +51,12 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.8 2002/06/18 18:23:27 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.9 2002/06/20 20:20:12 jvisvanathan Exp $
  * 
  *
  */
 
-public class TestRenderers_1 extends JspTestCase
+public class TestRenderers_1 extends JspFacesTestCase
 {
     //
     // Protected Constants
@@ -77,6 +67,7 @@ public class TestRenderers_1 extends JspTestCase
         "CorrectRenderersResponse";
 
    public static final String TEST_URI = "/faces/form/FormRenderer/";
+   
     //
     // Class Variables
     //
@@ -84,57 +75,59 @@ public class TestRenderers_1 extends JspTestCase
     //
     // Instance Variables
     //
-    private FacesContext  facesContext = null;
-    private FacesContextFactory  facesContextFactory = null;
-    private FileOutputResponseWriter responseWriter = null;
+    private FacesContext facesContext = null;
     
+    //
     // Attribute Instance Variables
     // Relationship Instance Variables
     //
     // Constructors and Initializers    
     //
 
-    public TestRenderers_1() {super("TestRenderers_1");}
-    public TestRenderers_1(String name) {super(name);}
-
+    public TestRenderers_1() {
+        super("TestRenderers_1");
+    }
+    
+    public TestRenderers_1(String name) {
+        super(name);
+    }
+   
     //
     // Class methods
     //
 
     //
     // Methods from TestCase
-    //
+    
     public void setUp() {
-        System.setProperty(FactoryFinder.FACES_CONTEXT_FACTORY,
-		       "com.sun.faces.context.FacesContextFactoryImpl");
-        facesContextFactory = (FacesContextFactory) 
-	FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        assertTrue(null != facesContextFactory);
-    
-       // com.sun.faces.util.DebugUtil.waitForDebugger();
-        assertTrue(request != null);
-        assertTrue(response != null);
-        assertTrue(config.getServletContext() != null);
-          
-        facesContext = 
-	facesContextFactory.createFacesContext(config.getServletContext(),
-					       request, response);
-        assertTrue(null != facesContext);
+        super.setUp();
+        facesContext = facesService.getFacesContext();
+        assertTrue(facesContext != null);
         
-        RenderKit renderKit = new HtmlBasicRenderKit();
-        config.getServletContext().setAttribute(RIConstants.DEFAULT_RENDER_KIT, renderKit);
-    
-        facesContext.setResponseTree( new XmlTreeImpl(config.getServletContext(),
-                new UIForm(),"treeId", ""));
-	responseWriter = new FileOutputResponseWriter();
-	facesContext.setResponseWriter(responseWriter);
-	assertTrue(responseWriter == facesContext.getResponseWriter());
-    }     
+        if ( facesContext.getResponseTree() == null) {
+            HtmlBasicRenderKit renderKit = new HtmlBasicRenderKit();
+            facesContext.getServletContext().setAttribute(RIConstants.DEFAULT_RENDER_KIT,
+                renderKit);
+            XmlTreeImpl xmlTree = new XmlTreeImpl(
+                facesContext.getServletContext(), new UICommand(), "treeId", "");
+            facesContext.setRequestTree(xmlTree);
+        }
+        assertTrue(facesContext.getResponseWriter() != null);
+     }     
 
-    public void tearDown() {
-        config.getServletContext().removeAttribute(RIConstants.DEFAULT_RENDER_KIT);
-    }
+    // Methods from FacesTestCase
+    public boolean sendWriterToFile() {
+        return true;
+    }    
 
+    public String getExpectedOutputFilename() {
+        return EXPECTED_OUTPUT_FILENAME;
+    }    
+
+    public String [] getLinesToIgnore() {
+        String[] lines =  {"<FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=92F1C50409C42051E825E4A1F3B6B856?action=form&name=FormRenderer&tree=treeId\">"};
+        return lines;
+    }    
     
     public void beginRenderers(WebRequest theRequest) {
 
@@ -163,26 +156,12 @@ public class TestRenderers_1 extends JspTestCase
             verifyRadioRenderer(root);
             verifyButtonRenderer(root);
             
-            boolean result = false;
-            try {
-                String ignore = "<FORM METHOD=\"post\" ACTION=\"/test/faces;jsessionid=92F1C50409C42051E825E4A1F3B6B856?action=form&name=FormRenderer&tree=treeId\">";
-                CompareFiles cf = new CompareFiles();
-                ArrayList list = new ArrayList();
-                list.add(ignore);
-                result = 
-                cf.filesIdentical(FileOutputResponseWriter.RESPONSE_WRITER_FILENAME,
-                    EXPECTED_OUTPUT_FILENAME, list);
-            } catch (Exception e ) {
-                System.out.println(e.getMessage());
-		System.out.flush();
-                result = false;
-            }
+            boolean result = verifyExpectedOutput();
             assertTrue("Error comparing files: diff -u "+
 		       EXPECTED_OUTPUT_FILENAME +
 		       " " + 
-		       FileOutputResponseWriter.RESPONSE_WRITER_FILENAME, 
-		       result);
-	 }
+		       FileOutputResponseWriter.RESPONSE_WRITER_FILENAME, result);
+        }
         catch (Throwable e) {
             e.printStackTrace();
             assertTrue(false);
@@ -208,7 +187,7 @@ public class TestRenderers_1 extends JspTestCase
         // test encode method
         System.out.println("Testing encode method");
         inputRenderer.encodeBegin(facesContext, textEntry);
-        responseWriter.write("\n");
+        facesContext.getResponseWriter().write("\n");
       
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -237,7 +216,7 @@ public class TestRenderers_1 extends JspTestCase
         // test encode method
         System.out.println("Testing encode method");
         textAreaRenderer.encodeBegin(facesContext, textEntry);
-        responseWriter.write("\n");
+        facesContext.getResponseWriter().write("\n");
        
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -277,12 +256,12 @@ public class TestRenderers_1 extends JspTestCase
         // test encode method
         System.out.println("Testing encode method");
         formRenderer.encodeBegin(facesContext, uiForm);
-        responseWriter.write("\n");
+        facesContext.getResponseWriter().write("\n");
         
         // test encode method
         System.out.println("Testing encodeEnd method");
         formRenderer.encodeEnd(facesContext, uiForm);
-        responseWriter.write("\n");
+        facesContext.getResponseWriter().write("\n");
         
         // test supportComponentType method
         System.out.println("Testing supportsComponentType method"); 
@@ -309,14 +288,14 @@ public class TestRenderers_1 extends JspTestCase
         // test decode method
         System.out.println("Testing decode method");
         buttonRenderer.decode(facesContext, uiCommand);
-        responseWriter.write("\n");
+        facesContext.getResponseWriter().write("\n");
         
         // test encode method
         System.out.println("Testing encode method");
         buttonRenderer.encodeBegin(facesContext, uiCommand);
-        responseWriter.write("\n");
+        facesContext.getResponseWriter().write("\n");
         try {
-            responseWriter.flush();
+            facesContext.getResponseWriter().flush();
         } catch (Exception e ) {
             throw new FacesException("Exception while flushing buffer");
         } 

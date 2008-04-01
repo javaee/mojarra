@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.2 2002/06/07 22:55:32 jvisvanathan Exp $
+ * $Id: MessageImpl.java,v 1.3 2002/06/20 20:20:10 jvisvanathan Exp $
  */
 
 /*
@@ -49,8 +49,6 @@ public class MessageImpl extends Message
             Object params[]) {
                 
         ParameterCheck.nonNull(template);
-        ParameterCheck.nonNull(reference);
-       
         this.template = template;
         this.reference = reference;
         this.params = params;

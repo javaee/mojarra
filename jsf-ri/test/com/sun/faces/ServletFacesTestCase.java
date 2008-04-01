@@ -1,5 +1,5 @@
 /*
- * $Id: ServletFacesTestCase.java,v 1.1 2002/06/19 18:59:06 eburns Exp $
+ * $Id: ServletFacesTestCase.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.context.FacesContext;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: ServletFacesTestCase.java,v 1.1 2002/06/19 18:59:06 eburns Exp $
+ * @version $Id: ServletFacesTestCase.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
  * 
  * @see	#facesService
  *
@@ -127,6 +127,10 @@ public String [] getLinesToIgnore()
 {
     return null;
 }
+
+public boolean sendWriterToFile() {
+    return false;
+} 
 
 //
 // General Methods

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.1 2002/06/11 21:47:17 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
  */
 
 /*
@@ -14,8 +14,12 @@ package com.sun.faces;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.faces.FactoryFinder;
+import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
+import javax.faces.component.UICommand;
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
+import com.sun.faces.tree.XmlTreeImpl;
 import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
@@ -39,7 +43,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.1 2002/06/11 21:47:17 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.2 2002/06/20 20:20:11 jvisvanathan Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -115,11 +119,9 @@ public void setUp()
     Assert.assert_it(null != facesContextFactory);
 
     // See if the testcase wants to have its output sent to a file.
-
     if (facesTestCase.sendResponseToFile()) {
 	response = new FileOutputResponseWrapper(facesTestCase.getResponse());
-    }
-    else {
+    } else {
 	response = facesTestCase.getResponse();
     }
     
@@ -129,6 +131,12 @@ public void setUp()
 					       facesTestCase.getRequest(), 
 					       response);
     Assert.assert_it(null != facesContext);
+        
+    if (facesTestCase.sendWriterToFile()){
+        ResponseWriter responseWriter = new FileOutputResponseWriter();
+	facesContext.setResponseWriter(responseWriter);
+    }    
+    
     TestBean testBean = new TestBean();
     (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
     System.setProperty(RIConstants.DISABLE_RENDERERS, 
@@ -162,13 +170,20 @@ public boolean verifyExpectedOutput()
     
     // If this testcase doesn't participate in file comparison
     if (!facesTestCase.sendResponseToFile() || 
+        (!facesTestCase.sendWriterToFile()) ||
 	(null == facesTestCase.getExpectedOutputFilename())) {
 	return true;
     }
     
-    errorMessage = "File Comparison failed: diff -u " +
-	FileOutputResponseWrapper.FACES_RESPONSE_FILENAME + " " + 
-	facesTestCase.getExpectedOutputFilename();
+    String outputFileName = null;
+    if (!facesTestCase.sendResponseToFile() ) {
+        outputFileName = FileOutputResponseWrapper.FACES_RESPONSE_FILENAME;
+    } else {
+        outputFileName = FileOutputResponseWriter.RESPONSE_WRITER_FILENAME;
+    }
+    
+    errorMessage = "File Comparison failed: diff -u " + outputFileName + " " + 
+        facesTestCase.getExpectedOutputFilename();
     
     ArrayList ignoreList = null;
     String [] ignore = null;
