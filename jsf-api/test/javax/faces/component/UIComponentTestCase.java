@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.3 2002/06/07 20:25:20 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.4 2002/06/07 20:57:51 craigmcc Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ public class UIComponentTestCase extends TestCase {
 
         component = new TestComponent();
         attributes = new String[]
-            { "componentId", "rendersChildren" };
+            { "componentId" };
 
     }
 
@@ -157,12 +157,6 @@ public class UIComponentTestCase extends TestCase {
 
         // rendersChildren
         assertEquals("rendersChildren1", component.getRendersChildren(),
-                     ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
-        component.setRendersChildren(true);
-        assertEquals("rendersChildren2", component.getRendersChildren(),
-                     ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
-        component.setRendersChildren(false);
-        assertEquals("rendersChildren3", component.getRendersChildren(),
                      ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
 
         // value
@@ -446,6 +440,13 @@ public class UIComponentTestCase extends TestCase {
         }
         try {
             component.setAttribute("compoundId", "/foo/bar"); // Read-only prop
+            fail("setAttribute did not throw IAE");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        try {
+            component.setAttribute("rendersChildren", Boolean.FALSE); // Read-only prop
             fail("setAttribute did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result

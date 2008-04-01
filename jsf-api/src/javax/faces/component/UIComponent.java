@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.28 2002/06/07 20:25:19 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.29 2002/06/07 20:57:51 craigmcc Exp $
  */
 
 /*
@@ -37,20 +37,6 @@ import javax.faces.validator.Validator;
  */
 
 public abstract class UIComponent {
-
-
-    // ----------------------------------------------------------- Constructors
-
-
-    /**
-     * <p>Construct a <code>UIComponent</code> with default properties
-     * and no component identifier.</p>
-     */
-    public UIComponent() {
-
-        setRendersChildren(false);
-
-    }
 
 
     // ------------------------------------------------------------- Attributes
@@ -116,6 +102,12 @@ public abstract class UIComponent {
             return (getComponentType());
         } else if ("compoundId".equals(name)) {
             return (getCompoundId());
+        } else if ("rendersChildren".equals(name)) {
+            if (getRendersChildren()) {
+                return (Boolean.TRUE);
+            } else {
+                return (Boolean.FALSE);
+            }
         }
 
         // Return the selected attribute value
@@ -165,7 +157,8 @@ public abstract class UIComponent {
 
         // Special cases for read-only pseudo-attributes
         if ("componentType".equals(name) ||
-            "compoundId".equals(name)) {
+            "compoundId".equals(name) ||
+            "rendersChildren".equals(name)) {
             throw new IllegalArgumentException(name);
         }
 
@@ -334,33 +327,13 @@ public abstract class UIComponent {
 
     /**
      * <p>Return a flag indicating whether this component is responsible
-     * for rendering its child components.</p>
+     * for rendering its child components.  The default implementation returns
+     * <code>false</code>; components that want to return <code>true</code>
+     * must override this method to do so. </p>
      */
     public boolean getRendersChildren() {
 
-        Boolean value = (Boolean) getAttribute("rendersChildren");
-        if (value != null) {
-            return (value.booleanValue());
-        } else {
-            return (false);
-        }
-
-    }
-
-
-    /**
-     * <p>Set a flag indicating whether this component is responsible for
-     * rendering its child components.</p>
-     *
-     * @param rendersChildren The new flag value
-     */
-    public void setRendersChildren(boolean rendersChildren) {
-
-        if (rendersChildren) {
-            setAttribute("rendersChildren", Boolean.TRUE);
-        } else {
-            setAttribute("rendersChildren", Boolean.FALSE);
-        }
+        return (false);
 
     }
 

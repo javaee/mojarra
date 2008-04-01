@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.4 2002/06/07 20:13:16 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.5 2002/06/07 20:57:51 craigmcc Exp $
  */
 
 /*
@@ -27,20 +27,6 @@ public class UIPanel extends UIComponent {
     public static final String TYPE = "javax.faces.component.UIPanel";
 
 
-    // ----------------------------------------------------------- Constructors
-
-
-    /**
-     * <p>Construct a default <code>UIPanel</code> instance.</p>
-     */
-    public UIPanel() {
-
-        super();
-        setRendersChildren(true);
-
-    }
-
-
     // ------------------------------------------------------------- Properties
 
 
@@ -50,6 +36,17 @@ public class UIPanel extends UIComponent {
     public String getComponentType() {
 
         return (TYPE);
+
+    }
+
+
+    /**
+     * <p>Return a flag indicating whether this component is responsible
+     * for rendering its child components.</p>
+     */
+    public boolean getRendersChildren() {
+
+        return (true);
 
     }
 
