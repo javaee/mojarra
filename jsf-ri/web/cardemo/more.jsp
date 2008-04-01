@@ -34,16 +34,16 @@
 							</TR>
 							<TR>
 								<TD WIDTH="100%"><IMG SRC="pictures/current.gif" ALIGN="LEFT" BORDER="0"><B><FONT SIZE="4" COLOR="#330066"
-									FACE="Arial, Helvetica"><faces:Output_Text id="carDetails"  modelReference="$CurrentOptionServer.carTitle" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
+									FACE="Arial, Helvetica"><faces:Output_Text id="carDetails"  modelReference="${CurrentOptionServer.carTitle}" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
                                                                         <BR>
-                                                                        <faces:Output_Text id="currentCarDesc"  modelReference="$CurrentOptionServer.carDesc" /><BR>
+                                                                        <faces:Output_Text id="currentCarDesc"  modelReference="${CurrentOptionServer.carDesc}" /><BR>
                                                                         <BR>
                                                                         </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
                                                                         <faces:Output_Text id="basePrice"  value="Base Price: " />
                                                                         </FONT></B><FONT FACE="Arial, Helvetica"> 
-                                                                        <faces:Output_Text id="currentCarBasePrice"  modelReference="$CurrentOptionServer.basePrice" />
+                                                                        <faces:Output_Text id="currentCarBasePrice"  modelReference="${CurrentOptionServer.basePrice}" />
 									<BR>
-									</FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="yourPrice"  value="Price Including your Options: " /></FONT></B><FONT FACE="Arial, Helvetica"><faces:Output_Text id="currentCarPrice"  modelReference="$CurrentOptionServer.currentPrice" /><BR>
+									</FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="yourPrice"  value="Price Including your Options: " /></FONT></B><FONT FACE="Arial, Helvetica"><faces:Output_Text id="currentCarPrice"  modelReference="${CurrentOptionServer.currentPrice}" /><BR>
                                                                         <BR>
                                                                         <faces:Command_Button id="checkOut" label="Buy" commandListener="optionListener"/>
                                                                         </TD></FONT></TD>
@@ -58,8 +58,8 @@
                                                                                 <faces:Output_Text id="engine"  value="Engine" /></FONT></B></P>
 										<BLOCKQUOTE>
                                                                                 <P><FONT FACE="Arial, Helvetica">
-                                                                                <faces:SelectOne_OptionList id="engineOption" modelReference="$CurrentOptionServer.engineOption" 
-                                                                                    selectedModelReference="$CurrentOptionServer.currentEngineOption" valueChangeListener="optionListener" >
+                                                                                <faces:SelectOne_OptionList id="engineOption" modelReference="${CurrentOptionServer.engineOption}" 
+                                                                                    selectedModelReference="${CurrentOptionServer.currentEngineOption}" valueChangeListener="optionListener" >
                                                                                     <faces:SelectOne_Option value="4 cylinder" selected="true" label="4 cylinder" />
                                                                                     <faces:SelectOne_Option value="V6" label="V6" />
                                                                                     <faces:SelectOne_Option value="V8" label="V8" />
@@ -69,8 +69,8 @@
 										<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="brakes"  value="Brakes" /></FONT></B><FONT FACE="Arial, Helvetica"></FONT></P>
 										<BLOCKQUOTE>
 											<P><FONT FACE="Arial, Helvetica">
-                                                                                <faces:SelectOne_OptionList id="brakeOption" modelReference="$CurrentOptionServer.brakeOption" 
-                                                                                    selectedModelReference="$CurrentOptionServer.currentBrakeOption" valueChangeListener="optionListener" >
+                                                                                <faces:SelectOne_OptionList id="brakeOption" modelReference="${CurrentOptionServer.brakeOption}" 
+                                                                                    selectedModelReference="${CurrentOptionServer.currentBrakeOption}" valueChangeListener="optionListener" >
                                                                                     <faces:SelectOne_Option value="disk" selected="true" label="disk" />
                                                                                     <faces:SelectOne_Option value="drum" label="drum" />
                                                                                 </faces:SelectOne_OptionList>
@@ -79,8 +79,8 @@
 										<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="suspension"  value="Suspension" /></FONT></B><FONT FACE="Arial, Helvetica"></FONT></P>
 										<BLOCKQUOTE>
 											<P><FONT FACE="Arial, Helvetica">
-                                                                                <faces:SelectOne_OptionList id="suspensionOption" modelReference="$CurrentOptionServer.suspensionOption" 
-                                                                                    selectedModelReference="$CurrentOptionServer.currentSuspensionOption" valueChangeListener="optionListener" >
+                                                                                <faces:SelectOne_OptionList id="suspensionOption" modelReference="${CurrentOptionServer.suspensionOption}" 
+                                                                                    selectedModelReference="${CurrentOptionServer.currentSuspensionOption}" valueChangeListener="optionListener" >
                                                                                     <faces:SelectOne_Option value="regular" selected="true" label="regular" />
                                                                                     <faces:SelectOne_Option value="performance" label="performance" />
                                                                                 </faces:SelectOne_OptionList>
@@ -89,8 +89,8 @@
 										<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="speakers"  value="Speakers" /></FONT></B><FONT FACE="Arial, Helvetica"></FONT></P>
 										<BLOCKQUOTE>
 											<P><FONT FACE="Arial, Helvetica">
-                                                                                <faces:SelectOne_OptionList id="speakerOption" modelReference="$CurrentOptionServer.speakerOption" 
-                                                                                    selectedModelReference="$CurrentOptionServer.currentSpeakerOption" valueChangeListener="optionListener" >
+                                                                                <faces:SelectOne_OptionList id="speakerOption" modelReference="${CurrentOptionServer.speakerOption}" 
+                                                                                    selectedModelReference="${CurrentOptionServer.currentSpeakerOption}" valueChangeListener="optionListener" >
                                                                                     <faces:SelectOne_Option value="4 speakers" selected="true" label="4 speakers" />
                                                                                     <faces:SelectOne_Option value="6 speakers" label="6 speakers" />
                                                                                 </faces:SelectOne_OptionList>
@@ -99,8 +99,8 @@
 										<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="audio"  value="Audio" /></FONT></B><FONT FACE="Arial, Helvetica"></FONT></P>
 										<BLOCKQUOTE>
 											<P><FONT FACE="Arial, Helvetica">
-                                                                                <faces:SelectOne_OptionList id="audioOption" modelReference="$CurrentOptionServer.audioOption" 
-                                                                                    selectedModelReference="$CurrentOptionServer.currentAudioOption" valueChangeListener="optionListener" >
+                                                                                <faces:SelectOne_OptionList id="audioOption" modelReference="${CurrentOptionServer.audioOption}" 
+                                                                                    selectedModelReference="${CurrentOptionServer.currentAudioOption}" valueChangeListener="optionListener" >
                                                                                     <faces:SelectOne_Option value="standard" selected="true" label="standard" />
                                                                                     <faces:SelectOne_Option value="premium" label="premium" />
                                                                                 </faces:SelectOne_OptionList>
@@ -109,8 +109,8 @@
 										<P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica"><faces:Output_Text id="transmission"  value="Transmission" /></FONT></B><FONT FACE="Arial, Helvetica"></FONT></P>
 										<BLOCKQUOTE>
 											<P><FONT FACE="Arial, Helvetica">
-                                                                                <faces:SelectOne_OptionList id="transmissionOption" modelReference="$CurrentOptionServer.transmissionOption" 
-                                                                                    selectedModelReference="$CurrentOptionServer.currentTransmissionOption" valueChangeListener="optionListener" >
+                                                                                <faces:SelectOne_OptionList id="transmissionOption" modelReference="${CurrentOptionServer.transmissionOption}" 
+                                                                                    selectedModelReference="${CurrentOptionServer.currentTransmissionOption}" valueChangeListener="optionListener" >
                                                                                     <faces:SelectOne_Option value="auto" selected="true" label="auto" />
                                                                                     <faces:SelectOne_Option value="manual" label="manual" />
                                                                                 </faces:SelectOne_OptionList>

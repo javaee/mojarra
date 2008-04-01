@@ -83,8 +83,8 @@
       <td>Credit Card Type</td>
       <td> 
         <faces:SelectOne_OptionList id="creditCardType"
-                   modelReference="$UserBean.items"
-                   selectedModelReference="$UserBean.creditCardType">
+                   modelReference="${UserBean.items}"
+                   selectedModelReference="${UserBean.creditCardType}">
           <faces:SelectOne_Option value="discover" label="Discover"/>
           <faces:SelectOne_Option value="mastercard" label="Master Card"/>
           <faces:SelectOne_Option value="visa" label="Visa"/>

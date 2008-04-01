@@ -1,5 +1,5 @@
 /*
- * $Id: TestBeanAccessor.java,v 1.2 2002/04/15 23:07:59 eburns Exp $
+ * $Id: TestBeanAccessor.java,v 1.3 2002/04/16 21:15:59 eburns Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.ObjectManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestBeanAccessor.java,v 1.2 2002/04/15 23:07:59 eburns Exp $
+ * @version $Id: TestBeanAccessor.java,v 1.3 2002/04/16 21:15:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,26 +79,26 @@ public void testSet()
     
     // Test one level of nesting
     System.setProperty(PROP, FALSE);
-    objectAccessor.setObject(request, "$TestBean.one", "one");
+    objectAccessor.setObject(request, "${TestBean.one}", "one");
     assertTrue(System.getProperty(PROP).equals(TRUE));
 
     System.setProperty(PROP, FALSE);
-    objectAccessor.setObject(request, "$TestBean.inner", inner);
+    objectAccessor.setObject(request, "${TestBean.inner}", inner);
     assertTrue(System.getProperty(PROP).equals(TRUE));
 
     // Test two levels of nesting
     System.setProperty(PROP, FALSE);
-    objectAccessor.setObject(request, "$TestBean.inner.two", "two");
+    objectAccessor.setObject(request, "${TestBean.inner.two}", "two");
     assertTrue(System.getProperty(PROP).equals(TRUE));
 
     System.setProperty(PROP, FALSE);
-    objectAccessor.setObject(request, "$TestBean.inner.inner2", 
+    objectAccessor.setObject(request, "${TestBean.inner.inner2}", 
 			     innerInner);
     assertTrue(System.getProperty(PROP).equals(TRUE));
 
     // Test three levels of nesting
     System.setProperty(PROP, FALSE);
-    objectAccessor.setObject(request, "$TestBean.inner.inner2.three", 
+    objectAccessor.setObject(request, "${TestBean.inner.inner2.three}", 
 			     "three");
     assertTrue(System.getProperty(PROP).equals(TRUE));
     
@@ -123,23 +123,23 @@ public void testGet()
     objectManager.put(request, "TestBean", testBean);
     
     // Test one level of nesting
-    result = (String) objectAccessor.getObject(request, "$TestBean.one");
+    result = (String) objectAccessor.getObject(request, "${TestBean.one}");
     assertTrue(result.equals("one"));
 
-    inner = (InnerBean) objectAccessor.getObject(request, "$TestBean.inner");
+    inner = (InnerBean) objectAccessor.getObject(request, "${TestBean.inner}");
     assertTrue(null != inner);
 
     // Test two levels of nesting
-    result = (String) objectAccessor.getObject(request, "$TestBean.inner.two");
+    result = (String) objectAccessor.getObject(request, "${TestBean.inner.two}");
     assertTrue(result.equals("two"));
 
     inner2 = (Inner2Bean) 
-	objectAccessor.getObject(request, "$TestBean.inner.inner2");
+	objectAccessor.getObject(request, "${TestBean.inner.inner2}");
     assertTrue(null != inner2);
 
     // Test three levels of nesting
     result = (String) objectAccessor.getObject(request, 
-					       "$TestBean.inner.inner2.three");
+					       "${TestBean.inner.inner2.three}");
     assertTrue(result.equals("three"));
     
 }

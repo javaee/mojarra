@@ -50,8 +50,8 @@ the tree navigation mechanism.  These aren't really valid nestings.</P>
           
           <faces:Output_Text id="3"  value="3">
 
-            <faces:RadioGroup id="7" modelReference="$ShipTypeBean.shipType" 
-                            selectedModelReference="$ShipTypeBean.currentShipType" 
+            <faces:RadioGroup id="7" modelReference="${ShipTypeBean.shipType}" 
+                            selectedModelReference="${ShipTypeBean.currentShipType}" 
                             valueChangeListener="radioListener">
               <TABLE border="2">
  

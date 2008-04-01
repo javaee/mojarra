@@ -54,17 +54,17 @@
 							<TR>
 								<TD WIDTH="50%" VALIGN="TOP"><IMG SRC="pictures/crop_honda_civic_small.gif" ALIGN="LEFT" BORDER="0"><B><FONT
 									SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-                                                                        <faces:Output_Text id="car1Title"  modelReference="$CarServer.car1Title" />
+                                                                        <faces:Output_Text id="car1Title"  modelReference="${CarServer.car1Title}" />
                                                                         </FONT></B><FONT FACE="Arial, Helvetica"><BR>
 									<BR>
-									<faces:Output_Text id="car1Desc"  modelReference="$CarServer.car1Desc" /> <BR>
+									<faces:Output_Text id="car1Desc"  modelReference="${CarServer.car1Desc}" /> <BR>
 									</FONT>
                                                                         <faces:Command_Button id="buyCar1" label="More" commandName="buyCar1" commandListener="carListener"/>
                                                                         </TD>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white"><IMG SRC="pictures/crop_acura_sport_small.gif" ALIGN="LEFT" BORDER="0"><B><FONT SIZE="4" COLOR="#330066"
-									FACE="Arial, Helvetica"><faces:Output_Text id="car2Title"  modelReference="$CarServer.car2Title" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
+									FACE="Arial, Helvetica"><faces:Output_Text id="car2Title"  modelReference="${CarServer.car2Title}" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
 									<BR>
-									<faces:Output_Text id="car2Desc"  modelReference="$CarServer.car2Desc" /><BR>
+									<faces:Output_Text id="car2Desc"  modelReference="${CarServer.car2Desc}" /><BR>
 									<faces:Command_Button id="buyCar2" label="More" commandListener="carListener"/>
                                                                         </TD>
 							</TR>
@@ -74,14 +74,14 @@
 							</TR>
 							<TR>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white"><IMG SRC="pictures/crop_lexus_small.gif" ALIGN="LEFT" BORDER="0"><B><FONT SIZE="4" COLOR="#330066"
-									FACE="Arial, Helvetica"><faces:Output_Text id="car3Title"  modelReference="$CarServer.car3Title" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
+									FACE="Arial, Helvetica"><faces:Output_Text id="car3Title"  modelReference="${CarServer.car3Title}" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
 									<BR>
-									<faces:Output_Text id="car3Desc"  modelReference="$CarServer.car3Desc" /><BR>
+									<faces:Output_Text id="car3Desc"  modelReference="${CarServer.car3Desc}" /><BR>
 									<faces:Command_Button id="buyCar3" label="More" commandListener="carListener"/></TD>
 								<TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white"><IMG SRC="pictures/crop_ford_explorer_small.gif" ALIGN="LEFT" BORDER="0"><B><FONT SIZE="4" COLOR="#330066"
-									FACE="Arial, Helvetica"><faces:Output_Text id="car4Title"  modelReference="$CarServer.car4Title" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
+									FACE="Arial, Helvetica"><faces:Output_Text id="car4Title"  modelReference="${CarServer.car4Title}" /></FONT></B><FONT FACE="Arial, Helvetica"><BR>
 									<BR>
-									<faces:Output_Text id="car4Desc"  modelReference="$CarServer.car4Desc" /> <BR>
+									<faces:Output_Text id="car4Desc"  modelReference="${CarServer.car4Desc}" /> <BR>
 									<faces:Command_Button id="buyCar4" label="More" commandListener="carListener"/></TD>
 							</TR>
 						</TABLE>

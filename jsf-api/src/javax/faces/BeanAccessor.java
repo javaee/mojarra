@@ -1,5 +1,5 @@
 /*
- * $Id: BeanAccessor.java,v 1.4 2002/04/15 23:07:30 eburns Exp $
+ * $Id: BeanAccessor.java,v 1.5 2002/04/16 21:15:30 eburns Exp $
  */
 
 /*
@@ -87,13 +87,15 @@ public BeanAccessor(FacesContext yourFacesContext)
         ObjectManager objectManager = facesContext.getObjectManager();
         // Assert.assert_it(null != objectManager);
 
-        // If the reference string begins with a "$" (ex:
-        // $user.address.street), then the string is to be 
+        // If the reference string is a JSTL string "${" (ex:
+        // ${user.address.street}), then the string is to be 
         // interpreted as 'a user bean which contains an address
         // bean which has a "street" property'.
         //
-        if (objectReference.startsWith("$")) {
-            expression = objectReference.substring(1);
+        if (objectReference.startsWith("${") &&
+	    objectReference.endsWith("}")) {
+	    expression = 
+		objectReference.substring(2, objectReference.length() - 1);
             property = expression.substring((expression.indexOf(".")+1));
             baseName = expression.substring(0, expression.indexOf("."));
             object = objectManager.get(request, baseName);
@@ -160,8 +162,10 @@ public BeanAccessor(FacesContext yourFacesContext)
         ObjectManager objectManager = facesContext.getObjectManager();
 	// Assert.assert_it(null != objectManager);
 
-        if (objectReference.startsWith("$")) {
-            expression = objectReference.substring(1);
+        if (objectReference.startsWith("${") &&
+	    objectReference.endsWith("}")) {
+	    expression = 
+		objectReference.substring(2, objectReference.length() - 1);
             property = expression.substring((expression.indexOf(".")+1));
             baseName = expression.substring(0, expression.indexOf("."));
 

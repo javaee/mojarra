@@ -32,9 +32,9 @@
 </tr>
 
 <tr>
-<td WIDTH="100%"><b><font face="Arial, Helvetica"><font color="#330066"><font size=+1><faces:Output_Text id="currentCarName"  modelReference="$CurrentOptionServer.carName" /></font></font></font></b>
+<td WIDTH="100%"><b><font face="Arial, Helvetica"><font color="#330066"><font size=+1><faces:Output_Text id="currentCarName"  modelReference="${CurrentOptionServer.carName}" /></font></font></font></b>
 <p><font face="Arial, Helvetica"><b><font color="#93B629">Price including
-your options: </font></b><faces:Output_Text id="currentCarPrice"  modelReference="$CurrentOptionServer.currentPrice" /></font>
+your options: </font></b><faces:Output_Text id="currentCarPrice"  modelReference="${CurrentOptionServer.currentPrice}" /></font>
 <p>&nbsp;</td>
 </tr>
 

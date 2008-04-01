@@ -28,7 +28,7 @@
 
   <faces:Form id="purchaseForm" modelReference="UserBean" navigationMapId = "StoreNavMap" >
 
-<font color="#3333FF"><font size=+2>Welcome to FruitStand.com, <faces:Output_Text id="differentName" modelReference="$UserBean.firstName" /></font></font>
+<font color="#3333FF"><font size=+2>Welcome to FruitStand.com, <faces:Output_Text id="differentName" modelReference="${UserBean.firstName}" /></font></font>
 <hr WIDTH="100%">
 <p><font color="#000000"><font size=+1>Please select from our fresh fruits
 and vegetables.</font></font>
@@ -69,8 +69,8 @@ and vegetables.</font></font>
 
 <td>
     <faces:SelectOne_OptionList id="appleQuantity"
-                   modelReference="$UserBean.items"
-                   selectedModelReference="$UserBean.appleQuantity">
+                   modelReference="${UserBean.items}"
+                   selectedModelReference="${UserBean.appleQuantity}">
         <faces:SelectOne_Option value="0" label="0"/>
         <faces:SelectOne_Option value="1" label="1"/>
         <faces:SelectOne_Option value="2" label="2"/>
@@ -98,8 +98,8 @@ and vegetables.</font></font>
 
 <td>
     <faces:SelectOne_OptionList id="bananaQuantity"
-                   modelReference="$UserBean.items"
-                   selectedModelReference="$UserBean.bananaQuantity">
+                   modelReference="${UserBean.items}"
+                   selectedModelReference="${UserBean.bananaQuantity}">
         <faces:SelectOne_Option value="0" label="0"/>
         <faces:SelectOne_Option value="1" label="1"/>
         <faces:SelectOne_Option value="2" label="2"/>
@@ -127,8 +127,8 @@ and vegetables.</font></font>
 
 <td>
     <faces:SelectOne_OptionList id="cantaloupeQuantity"
-                   modelReference="$UserBean.items"
-                   selectedModelReference="$UserBean.cantaloupeQuantity">
+                   modelReference="${UserBean.items}"
+                   selectedModelReference="${UserBean.cantaloupeQuantity}">
         <faces:SelectOne_Option value="0" label="0"/>
         <faces:SelectOne_Option value="1" label="1"/>
         <faces:SelectOne_Option value="2" label="2"/>
@@ -156,8 +156,8 @@ and vegetables.</font></font>
 
 <td>
     <faces:SelectOne_OptionList id="grapefruitQuantity"
-                   modelReference="$UserBean.items"
-                   selectedModelReference="$UserBean.grapefruitQuantity">
+                   modelReference="${UserBean.items}"
+                   selectedModelReference="${UserBean.grapefruitQuantity}">
         <faces:SelectOne_Option value="0" label="0"/>
         <faces:SelectOne_Option value="1" label="1"/>
         <faces:SelectOne_Option value="2" label="2"/>
@@ -185,8 +185,8 @@ and vegetables.</font></font>
 
 <td>
     <faces:SelectOne_OptionList id="grapeQuantity"
-                   modelReference="$UserBean.items"
-                   selectedModelReference="$UserBean.grapeQuantity">
+                   modelReference="${UserBean.items}"
+                   selectedModelReference="${UserBean.grapeQuantity}">
         <faces:SelectOne_Option value="0" label="0"/>
         <faces:SelectOne_Option value="1" label="1"/>
         <faces:SelectOne_Option value="2" label="2"/>

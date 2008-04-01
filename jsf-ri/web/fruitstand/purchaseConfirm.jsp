@@ -22,35 +22,35 @@
   <tr> 
     <td><faces:Output_Text id="apple_item" value="apple" /></td>
     <td><faces:Output_Text id="apple_amount" 
-                           modelReference="$UserBean.appleQuantity"/></td>
+                           modelReference="${UserBean.appleQuantity}"/></td>
     <td><faces:Output_Text id="apple_price" value= "0.29"/></td>
     <td><faces:Output_Text id="apple_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="banana_item" value="banana" /></td>
     <td><faces:Output_Text id="banana_amount" 
-                           modelReference="$UserBean.bananaQuantity"/></td>
+                           modelReference="${UserBean.bananaQuantity}"/></td>
     <td><faces:Output_Text id="banana_price" value= "0.29"/></td>
     <td><faces:Output_Text id="banana_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="cantaloupe_item" value="cantaloupe" /></td>
     <td><faces:Output_Text id="cantaloupe_amount" 
-                           modelReference="$UserBean.cantaloupeQuantity"/></td>
+                           modelReference="${UserBean.cantaloupeQuantity}"/></td>
     <td><faces:Output_Text id="cantaloupe_price" value= "0.29"/></td>
     <td><faces:Output_Text id="cantaloupe_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="grapefruit_item" value="grapefruit" /></td>
     <td><faces:Output_Text id="grapefruit_amount" 
-                           modelReference="$UserBean.grapefruitQuantity"/></td>
+                           modelReference="${UserBean.grapefruitQuantity}"/></td>
     <td><faces:Output_Text id="grapefruit_price" value= "0.29"/></td>
     <td><faces:Output_Text id="grapefruit_total" value= "0.58"/></td>
   </tr>
   <tr> 
     <td><faces:Output_Text id="grape_item" value="grape" /></td>
     <td><faces:Output_Text id="grape_amount" 
-                           modelReference="$UserBean.grapeQuantity"/></td>
+                           modelReference="${UserBean.grapeQuantity}"/></td>
     <td><faces:Output_Text id="grape_price" value= "0.29"/></td>
     <td><faces:Output_Text id="grape_total" value= "0.58"/></td>
   </tr>
@@ -68,13 +68,13 @@
 The items listed above will be billed to: <br>
 <br>
 
-<faces:Output_Text id="cust_firstName" modelReference="$UserBean.firstName" /> 
-<faces:Output_Text id="cust_lastName" modelReference="$UserBean.lastName" /> <br>
-<faces:Output_Text id="cust_address" modelReference="$UserBean.address" /><br>
-<faces:Output_Text id="cust_city" modelReference="$UserBean.city" />
-<faces:Output_Text id="cust_state" modelReference="$UserBean.state" />
+<faces:Output_Text id="cust_firstName" modelReference="${UserBean.firstName}" /> 
+<faces:Output_Text id="cust_lastName" modelReference="${UserBean.lastName}" /> <br>
+<faces:Output_Text id="cust_address" modelReference="${UserBean.address}" /><br>
+<faces:Output_Text id="cust_city" modelReference="${UserBean.city}" />
+<faces:Output_Text id="cust_state" modelReference="${UserBean.state}" />
 <br>
-<faces:Output_Text id="cust_country" modelReference="$UserBean.country" />
+<faces:Output_Text id="cust_country" modelReference="${UserBean.country}" />
 
 <faces:NavigationMap id="purchaseNavMap" scope="session" >
 
@@ -93,8 +93,8 @@ The items listed above will be billed to: <br>
 <TABLE>
 <TR>
 <faces:RadioGroup id="shipType"
-                  modelReference="$ShipTypeBean.shipType"
-                  selectedModelReference="$ShipTypeBean.currentShipType">
+                  modelReference="${ShipTypeBean.shipType}"
+                  selectedModelReference="${ShipTypeBean.currentShipType}">
   <TABLE border="2"><TR><TD>
   <TABLE>
   <TR>

@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.3 2002/04/05 21:01:04 rkitain Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.4 2002/04/16 21:15:58 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.3 2002/04/05 21:01:04 rkitain Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2002/04/16 21:15:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -476,7 +476,7 @@ public void applyAttributesToComponentInstance(FacesContext facesContext,
     // parent form if it exists.
     if (child.getModelReference() == null && formModelRef != null && 
             !(child instanceof UIForm) ) {
-       child.setModelReference("$" + formModelRef + "." + child.getId());     
+       child.setModelReference("${" + formModelRef + "." + child.getId() + "}");     
     }   
     
     // cleanup: make sure we have the necessary required attributes

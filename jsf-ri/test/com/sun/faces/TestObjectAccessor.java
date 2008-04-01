@@ -1,5 +1,5 @@
 /*
- * $Id: TestObjectAccessor.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
+ * $Id: TestObjectAccessor.java,v 1.3 2002/04/16 21:15:59 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import javax.faces.ObjectAccessor;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestObjectAccessor.java,v 1.2 2002/04/05 19:41:21 jvisvanathan Exp $
+ * @version $Id: TestObjectAccessor.java,v 1.3 2002/04/16 21:15:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,7 +91,7 @@ private static final int INITIAL_NUM_SCOPES = 3;
        
             // Here's the value we're setting
             //
-            modelReference = "$user.address.street";
+            modelReference = "${user.address.street}";
             value = "2340 Linwood Avenue";
 
             // Set the model object value

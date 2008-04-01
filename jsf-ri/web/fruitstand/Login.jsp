@@ -40,13 +40,13 @@
     <tr>
     <td><faces:Output_Text id="name_label" value="Name:" /></td>
 
-    <td> <faces:TextEntry_Input id="userName" modelReference="$UserBean.userName" /> </td>
+    <td> <faces:TextEntry_Input id="userName" modelReference="${UserBean.userName}" /> </td>
     </tr>
 
     <tr>
     <td><faces:Output_Text id="passwd_label" value="Password:" /></td>
 
-    <td> <faces:TextEntry_Secret id="password" modelReference="$UserBean.password" 
+    <td> <faces:TextEntry_Secret id="password" modelReference="${UserBean.password}" 
                           size="10"/></td>
     </tr>
     </table>

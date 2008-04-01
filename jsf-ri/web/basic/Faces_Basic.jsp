@@ -58,8 +58,8 @@
            <table> 
 <TR>
 <faces:RadioGroup id="shipType" 
-                  modelReference="$ShipTypeBean.shipType" 
-                  selectedModelReference="$ShipTypeBean.currentShipType" 
+                  modelReference="${ShipTypeBean.shipType}" 
+                  selectedModelReference="${ShipTypeBean.currentShipType}" 
                   valueChangeListener="radioListener">
   <TABLE border="2"><TR><TD>
   <TABLE>

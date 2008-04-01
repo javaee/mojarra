@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.26 2002/04/05 21:01:05 rkitain Exp $
+ * $Id: TextEntry_InputTag.java,v 1.27 2002/04/16 21:15:59 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.26 2002/04/05 21:01:05 rkitain Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.27 2002/04/16 21:15:59 eburns Exp $
  * @author Jayashri Visvanathan
  * 
  *
@@ -129,7 +129,7 @@ public class TextEntry_InputTag extends FacesTag
                     FormTag.class);
                String model_str = ancestor.getModelReference();
                if ( model_str != null ) {
-                   setModelReference("$" + model_str + "." + getId());
+                   setModelReference("${" + model_str + "." + getId() + "}");
                    uiTextEntry.setModelReference(getModelReference());
                } 
             } catch ( Exception e ) {
