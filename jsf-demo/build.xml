@@ -43,7 +43,8 @@
             value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
 
   <target name="clean">
-
+    
+    <ant target="clean" dir="templateDemo"/>
     <antcall target="deleteJarsFromDemo">
       <param name="demoDir" value="templateDemo"/>
     </antcall>
