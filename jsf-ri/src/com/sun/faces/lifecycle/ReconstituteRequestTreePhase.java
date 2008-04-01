@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.5 2002/08/08 00:46:14 eburns Exp $
+ * $Id: ReconstituteRequestTreePhase.java,v 1.6 2002/08/29 19:37:59 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.5 2002/08/08 00:46:14 eburns Exp $
+ * @version $Id: ReconstituteRequestTreePhase.java,v 1.6 2002/08/29 19:37:59 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
@@ -183,10 +183,23 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
         treeId = request.getPathInfo();
     }
     requestTree = (Tree) session.getAttribute(RIConstants.FACES_TREE);
+    // If there is nothing in the session, 
     if (requestTree == null) {
+	// create the tree from the pathInfo
         requestTree = treeFactory.getTree(facesContext.getServletContext(),
             treeId);
     } 
+    else {
+	// There is something in the session.  Make sure its TreeId,
+	// matches the treeId from the pathInfo.
+	if ((null != treeId) && !treeId.equals(requestTree.getTreeId())) {
+	    // If it doesn't match, use the pathInfo
+	    requestTree = treeFactory.getTree(facesContext.getServletContext(),
+					      treeId);
+	}
+	// If it does match, use the tree from the Session
+    }
+	
     facesContext.setRequestTree(requestTree);
     session.removeAttribute(RIConstants.FACES_TREE);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.28 2002/08/05 21:22:40 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.29 2002/08/29 19:38:01 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.28 2002/08/05 21:22:40 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.29 2002/08/29 19:38:01 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,27 +103,8 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        String pathInfo =
-            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
-
-        if (pathInfo == null) {
-            return;
-        }
-        if (!pathInfo.startsWith(RIConstants.COMMAND_PREFIX)) {
-            return;
-        }
-        String cmdName = pathInfo.substring(RIConstants.COMMAND_PREFIX.length());
-
-        int slash = cmdName.indexOf('/');
-        if (slash >= 0) {
-            cmdName = cmdName.substring(0, slash);
-        }
-        if (!cmdName.equals(component.currentValue(context))) {
-            return;
-        }
-
-        // Enqueue a command event to the application
-        context.addApplicationEvent(new CommandEvent(component, cmdName));
+	// NO-OP decode, since our encode, coupled with the logic in
+	// reconstituteRequestTree, causes this to never be called.
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -206,10 +187,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
             contextPath = contextPath + "/";
         }
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append(( RIConstants.URL_PREFIX + RIConstants.COMMAND_PREFIX));
-        sb.append(component.currentValue(context).toString());
-        sb.append("/");
-
+        sb.append(RIConstants.URL_PREFIX);
         // need to make sure the rendered string contains where we
         // want to go next (target).
         //PENDING(rogerk) should "target" be required attribute??

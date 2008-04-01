@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.30 2002/08/20 20:43:11 jvisvanathan Exp $
+ * $Id: ButtonRenderer.java,v 1.31 2002/08/29 19:38:00 eburns Exp $
  */
 
 /*
@@ -22,6 +22,7 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIForm;
 import javax.faces.event.CommandEvent;
 
 import org.mozilla.util.Assert;
@@ -47,7 +48,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.30 2002/08/20 20:43:11 jvisvanathan Exp $
+ * @version $Id: ButtonRenderer.java,v 1.31 2002/08/29 19:38:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,7 +161,9 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         
         // Was our command the one that caused this submission?
         Object value = component.currentValue(context);
-        String commandName = null;
+        String 
+	    formName = null,
+	    commandName = null;
         if (value != null) {
             commandName = value.toString();
             // to handle image buttons, check for x and y parameters.
@@ -183,10 +186,14 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         if (pathInfo == null) {
             return;
         }
-        if (!pathInfo.startsWith(RIConstants.FORM_PREFIX)) {
-            return;
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent instanceof UIForm) {
+                formName = ((UIForm)parent).getFormName();
+                break;
+            }
+            parent = parent.getParent();
         }
-        String formName = pathInfo.substring(RIConstants.FORM_PREFIX.length() + 1);
 
         // Enqueue a form event to the application
         context.addApplicationEvent

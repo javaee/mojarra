@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.16 2002/08/29 01:28:17 eburns Exp $
+ * $Id: RIConstants.java,v 1.17 2002/08/29 19:37:59 eburns Exp $
  */
 
 /*
@@ -17,16 +17,6 @@ import javax.faces.render.RenderKitFactory;
 public class RIConstants {
 
     public static final String URL_PREFIX = "/faces";
-    
-    /**
-     * <p>Path Info prefix that indicates a form submit.</p>
-     */
-     public static final String FORM_PREFIX = "/form/";
-    
-    /**
-     * <p>Path Info prefix that indicates hyperlink</p>
-     */
-    public static final String COMMAND_PREFIX = "/command/";
     
     /**
      * Used to add uniqueness to the names.
@@ -70,9 +60,5 @@ public class RIConstants {
 
     public static final String FORMAT_POOL = "com.sun.faces.renderkit.FormatPool";
 
-    public static final String LINE_START = "LINE_START";
-    public static final String LINE_END = "LINE_END";
-    public static final String PAGE_START = "PAGE_START";
-    public static final String PAGE_END = "PAGE_END";
 
 }
