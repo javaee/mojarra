@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.13 2002/06/07 23:31:11 craigmcc Exp $
+ * $Id: UICommand.java,v 1.14 2002/06/08 00:35:50 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.CommandEvent;
@@ -77,44 +76,8 @@ public class UICommand extends UIComponentBase {
 
 
     /**
-     * <p>Enqueue a command event to the application if the incoming
-     * command name matches our own.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void decode(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Does the command match our own name?
-        String action = context.getServletRequest().getParameter("action");
-        if (!"command".equals(action)) {
-            return;
-        }
-        String name = context.getServletRequest().getParameter("name");
-        if (name == null) {
-            return;
-        }
-        if (!name.equals(currentValue(context))) {
-            return;
-        }
-
-        // Enqueue a command event to the application
-        context.addApplicationEvent(new CommandEvent(this, name));
-
-        // FIXME - bypass stages up to Invoke Application?
-
-    }
-
-
-    /**
-     * <p>Render the current value of this component.</p>
+     * <p>Render the current value of this component as an HTML submit
+     * button.</p>
      *
      * @param context FacesContext for the response we are creating
      *
@@ -128,36 +91,14 @@ public class UICommand extends UIComponentBase {
             throw new NullPointerException();
         }
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("<a href=\"");
-        writer.write(href(context));
-        writer.write("\">");
+        writer.write("<input type=\"submit\"");
         Object currentValue = currentValue(context);
         if (currentValue != null) {
+            writer.write(" name=\"");
             writer.write(currentValue.toString());
+            writer.write("\"");
         }
-        writer.write("</a>");
-
-    }
-
-
-    /**
-     * <p>Return the value to be rendered as the <code>href</code> attribute
-     * of the hyperlink generated for this component.</p>
-     *
-     * @param context FacesContext for the response we are creating
-     */
-    private String href(FacesContext context) {
-
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
-        StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces/command/");
-        sb.append(URLEncoder.encode(currentValue(context).toString())); // FIXME - null handling?
-        sb.append("/");
-        sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
-        return (response.encodeURL(sb.toString()));
+        writer.write(">");
 
     }
 

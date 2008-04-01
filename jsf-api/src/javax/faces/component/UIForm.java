@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.10 2002/06/07 23:31:12 craigmcc Exp $
+ * $Id: UIForm.java,v 1.11 2002/06/08 00:35:50 craigmcc Exp $
  */
 
 /*
@@ -12,9 +12,11 @@ package javax.faces.component;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.FormEvent;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,6 +32,12 @@ public class UIForm extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables
+
+
+    /**
+     * <p>Path Info prefix that indicates a form submit.</p>
+     */
+    private static final String PREFIX = "/faces/form/";
 
 
     /**
@@ -77,8 +85,10 @@ public class UIForm extends UIComponentBase {
 
 
     /**
-     * <p>Enqueue a command event to the application if the incoming
-     * command name matches our own.</p>
+     * <p>Enqueue a {@link FormEvent} event to the application identifying
+     * the form submission that has occurred, along with the command name
+     * of the {@link UICommand} that caused the form to be submitted, if any.
+     * </p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -92,23 +102,33 @@ public class UIForm extends UIComponentBase {
             throw new NullPointerException();
         }
 
-        // Does the form match our own name?
-        String action = context.getServletRequest().getParameter("action");
-        if (!"form".equals(action)) {
+        // Does the extra path info on this request identify a form submit?
+        // for this UIForm component?
+        String pathInfo = // FIXME - HTTP dependency
+            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
+        if (pathInfo == null) {
             return;
         }
-        String name = context.getServletRequest().getParameter("name");
-        if (name == null) {
+        if (!pathInfo.startsWith(PREFIX)) {
             return;
         }
-        if (!name.equals(currentValue(context))) {
+        String formName = pathInfo.substring(PREFIX.length());
+        int slash = pathInfo.indexOf('/');
+        if (slash >= 0) {
+            formName = formName.substring(0, slash);
+        }
+        if (!formName.equals(currentValue(context))) {
             return;
         }
+
+        // Which of our nested UICommand children triggered this submit?
+        // FIXME - assumes commandName won't have name clash with components!
+        String commandName =
+            extract(context, context.getServletRequest(), this);
 
         // Enqueue a form event to the application
-        context.addApplicationEvent(new FormEvent(this, name));
-
-        // FIXME - bypass stages up to Invoke Application?
+        context.addApplicationEvent
+            (new FormEvent(this, formName, commandName));
 
     }
 
@@ -176,11 +196,50 @@ public class UIForm extends UIComponentBase {
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces/form/");
+        sb.append(PREFIX);
         sb.append(URLEncoder.encode(currentValue(context).toString())); // FIXME - null handling?
         sb.append("/");
         sb.append(URLEncoder.encode(context.getResponseTree().getTreeId()));
         return (response.encodeURL(URLEncoder.encode(sb.toString())));
+
+    }
+
+
+    /**
+     * <p>Extract the command name of the child {@link UICommand} that
+     * caused this form to be submitted.  The specified component, and
+     * all of its children, are to be checked.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     * @param request ServletRequest we are processing
+     * @param component Component to be checked
+     */
+    private String extract(FacesContext context, ServletRequest request,
+                           UIComponent component) {
+
+        // Check the current component
+        if (component instanceof UICommand) {
+            Object value = component.currentValue(context);
+            if (value != null) {
+                String commandName = value.toString();
+                if (request.getParameter(commandName) != null) {
+                    return (commandName);
+                }
+            }
+        }
+
+        // Check the children of the current component
+        Iterator kids = component.getChildren();
+        while (kids.hasNext()) {
+            String commandName =
+                extract(context, request, (UIComponent) kids.next());
+            if (commandName != null) {
+                return (commandName);
+            }
+        }
+
+        // No matching command name was found
+        return (null);
 
     }
 

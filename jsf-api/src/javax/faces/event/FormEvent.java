@@ -1,5 +1,5 @@
 /*
- * $Id: FormEvent.java,v 1.1 2002/06/03 19:34:27 craigmcc Exp $
+ * $Id: FormEvent.java,v 1.2 2002/06/08 00:35:50 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.event;
 
 
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 
@@ -35,8 +36,24 @@ public class FormEvent extends FacesEvent {
      */
     public FormEvent(UIComponent source, String formName) {
 
+        this(source, formName, null);
+
+    }
+
+
+    /**
+     * <p>Construct a new event object from the specified source component.</p>
+     *
+     * @param component Source {@link UIComponent} for this event (if any)
+     * @param formName Form name of the form this event signifies
+     * @param commandName Command name of the submit button that caused this
+     *  form to be submitted (if any)
+     */
+    public FormEvent(UIComponent source, String formName, String commandName) {
+
         super(source);
         this.formName = formName;
+        this.commandName = commandName;
 
     }
 
@@ -45,7 +62,25 @@ public class FormEvent extends FacesEvent {
 
 
     /**
-     * <p>The form namd whose submitted this event signifies.</p>
+     * <p>The command name of the submit button that caused this form to be
+     * submitted (if any).</p>
+     */
+    private String commandName = null;
+
+
+    /**
+     * <p>Return the command name of the {@link UICommand} that caused this
+     * form to be submitted, if any.</p>
+     */
+    public String getCommandName() {
+
+        return (commandName);
+
+    }
+
+
+    /**
+     * <p>The form name whose submitted this event signifies.</p>
      */
     private String formName = null;
 
