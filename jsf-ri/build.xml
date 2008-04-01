@@ -44,7 +44,10 @@
   <!-- The home directory for Ant -->
   <property name="ant.home" value="${basedir}/lib"/>
 
-<!-- ************ Dependencies **** *************************************** -->
+  <!-- Application name to deploy under tomcat -->
+  <property name="app.name"       value="basic"/>
+
+  <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
@@ -109,6 +112,8 @@
     <mkdir dir="${build.home}/library/classes/META-INF/tlds"/>
     <copy file="${conf.share.dir}/html_basic.tld"
          tofile="${build.home}/library/classes/META-INF/html_basic.tld"/>
+    <copy file="${conf.share.dir}/html_basic.tld"
+         tofile="${basedir}/web/${app.name}/WEB-INF/html_basic.tld"/>
   </target>
 
   <target name="compile" depends="prepare"
@@ -124,7 +129,8 @@
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.properties"/>
     </copy>
-  </target>
+
+    </target>
 
   <target name="clean"
    description="Clean build and distribution directories">
@@ -135,7 +141,65 @@
     </delete>
   </target>
 
-  <target name="all" depends="clean,compile"
+  <target name="build.war" depends="clean,prepare,compile" >
+     <!-- name of the war file -->
+     <property name="dist.war"  value="${app.name}.war"/>
+     <mkdir  dir="${dist.home}/${app.name}"/>
+
+     <!-- copy app.name directory to tomcat/webapps -->
+    <copy todir="${dist.home}/${app.name}">
+      <fileset dir="${basedir}/web/${app.name}" />
+    </copy>
+ 
+    <!-- copy all the classes under com.sun.faces package -->
+    <copy todir="${dist.home}/${app.name}/WEB-INF/classes">
+      <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
+    </copy>
+    
+    <!-- copy all the classes under javax.faces package -->
+    <copy   todir="${dist.home}/${app.name}/WEB-INF/classes">
+      <fileset dir="${jsf.api.home}/build/classes"  excludes="**/CVS/**" />
+    </copy>
+
+    <copy file="${mozutil.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib">
+    </copy>
+
+    <!-- create a war file for distribution -->
+    <jar jarfile="${dist.home}/${dist.war}"
+         basedir="${dist.home}/${app.name}"/>
+  </target>
+
+  <!-- deploy the web-app under tomcat. tomcat_home needs to be set prior
+       to running this target -->
+
+  <target name="deploy.tomcat" depends="prepare,compile">
+
+    <!-- Directory name to deploy under tomcat -->
+    <property name="deploy.home"  value="${tomcat.home}/webapps/${app.name}"/>
+    <delete dir="${deploy.home}"/>
+
+    <!-- copy app.name directory to tomcat/webapps -->
+    <copy todir="${deploy.home}">
+      <fileset dir="${basedir}/web/${app.name}" />
+    </copy>
+
+    <mkdir dir="${deploy.home}/WEB-INF/classes" />
+    <!-- copy all classes from com.sun.faces package -->
+    <copy todir="${deploy.home}/WEB-INF/classes">
+      <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
+    </copy>
+    
+    <!-- copy all classes from javax.api package -->
+    <copy   todir="${deploy.home}/WEB-INF/classes">
+      <fileset dir="${jsf.api.home}/build/classes"  excludes="**/CVS/**" />
+    </copy>
+
+    <!-- copy dependent libs to tomcat/libs -->
+    <copy file="${mozutil.jar}" todir="${deploy.home}/WEB-INF/lib">
+    </copy>
+  </target>
+
+  <target name="all" depends="clean,prepare,compile,build.war,deploy.tomcat"
    description="Clean and compile all components"/>
 
   <target name="dist">
@@ -231,6 +295,6 @@
           fork="true" />
   </target>
 
-  <target name="main" depends="compile,prepare"/>
+  <target name="main" depends="compile,prepare,deploy.tomcat"/>
 
 </project>

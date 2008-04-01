@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.3 2001/11/08 00:18:21 visvan Exp $
+ * $Id: Output_TextTag.java,v 1.1 2001/11/08 00:18:21 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -12,7 +12,7 @@
  * you entered into with Sun.
  */
 
-// FormTag.java
+// Output_TextTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -29,7 +29,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WForm;
+import javax.faces.WOutput;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -37,16 +37,16 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  *
- *  <B>FormTag</B> is a class ...
+ *  <B>Output_TextTag</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.3 2001/11/08 00:18:21 visvan Exp $
+ * @version $Id: Output_TextTag.java,v 1.1 2001/11/08 00:18:21 visvan Exp $
  * 
  *
  */
 
-public class FormTag extends TagSupport
+public class Output_TextTag extends TagSupport
 {
     //
     // Protected Constants
@@ -62,6 +62,7 @@ public class FormTag extends TagSupport
 
     // Attribute Instance Variables
     private String name = null;
+    private String value = null;
 
     // Relationship Instance Variables
 
@@ -69,7 +70,7 @@ public class FormTag extends TagSupport
     // Constructors and Initializers
     //
 
-    public FormTag()
+    public Output_TextTag()
     {
         super();
         // ParameterCheck.nonNull();
@@ -91,7 +92,7 @@ public class FormTag extends TagSupport
     //
 
     /**
-     * Renders Form's start tag
+     * Renders Output_Text's start tag
      */
     public int doStartTag() throws JspException{
         // check if the tag is already created and exists in the 
@@ -102,18 +103,17 @@ public class FormTag extends TagSupport
         if ( name != null ) {
             RenderContext rc = (RenderContext)pageContext.getSession().
                     getAttribute("renderContext");
-            Renderer form_renderer = getRenderer(rc);
-
+            Renderer text_renderer = getRenderer(rc);
             HttpSession session = pageContext.getSession();
-            WForm c = (WForm) session.getAttribute(name);
+            WOutput c = (WOutput) session.getAttribute(name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, session);
-            }
+            }	
             try {
-                form_renderer.renderStart(rc, c);
+                text_renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Form component: "+
+                throw new JspException("Problem rendering Output component: "+
                         e.getMessage());
             }
         }
@@ -121,13 +121,14 @@ public class FormTag extends TagSupport
     }
 
     public Renderer getRenderer(RenderContext rc ) throws JspException{
+
         Renderer renderer = null;
         RenderKit renderKit = rc.getRenderKit();
         if (renderKit == null) {
             throw new JspException("Can't determine RenderKit!");
         }
         try {
-            String class_name = "com.sun.faces.renderkit.html_basic.FormRenderer";
+            String class_name = "com.sun.faces.renderkit.html_basic.TextRenderer";
             renderer = renderKit.getRenderer(class_name);
         } catch (FacesException e) {
             e.printStackTrace();
@@ -136,20 +137,21 @@ public class FormTag extends TagSupport
 
         if (renderer == null) {
             throw new JspException(
-                "Could not determine 'renderer' for Form component");
+                "Could not determine 'renderer' for Output component");
         }
         return renderer;	
     }
 
     /**
-     * Creates a Form component and sets renderer specific
+     * Creates a Output component and sets renderer specific
      * properties.
      */
-    protected WForm createComponent(RenderContext rc) {
-        WForm c = new WForm();
+    protected WOutput createComponent(RenderContext rc) {
+        WOutput c = new WOutput();
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
-        // set render independent attributes
+        // set render independent attributes 
+        c.setValue(value);
         return c;
     }
 
@@ -166,7 +168,7 @@ public class FormTag extends TagSupport
         try {
             renderclass = Class.forName(class_name);
         } catch ( ClassNotFoundException e ) {
-            System.out.println("Couldn't find Form Renderer class");
+            System.out.println("Couldn't find Text Renderer class");
         }
         String packageName = (renderclass.getPackage()).getName();
         if ( packageName == null ) {
@@ -184,8 +186,8 @@ public class FormTag extends TagSupport
      * For now use session scope.
      *
      */
-    void addToScope(WForm c, HttpSession session) {
-        System.out.println("adding Form to session: " + name);
+    void addToScope(WOutput c, HttpSession session) {
+        // System.out.println("adding Text to session: " + name);
         session.setAttribute(name, c);
     }
 
@@ -206,25 +208,21 @@ public class FormTag extends TagSupport
         this.name = name;
     }
 
+    /**
+     * Returns the value of the "value" attribute
+     *
+     * @return String value of "value" attribute
+     */
+    public String getValue() {
+        return this.value;
+    }
 
     /**
-     * Renders the Form's end Tag
+     * Sets the "value" attribute
+     * @param name value of "value" attribute
      */
-    public int doEndTag() throws JspException{
-        HttpSession session = pageContext.getSession();
-        WForm c = (WForm) session.getAttribute(name);
-        if ( c != null ) {
-            RenderContext rc = (RenderContext)pageContext.getSession().
-                    getAttribute("renderContext");
-            Renderer form_renderer = getRenderer(rc);
-            try {
-                form_renderer.renderEnd(rc, c);
-            } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Form component: "+
-                        e.getMessage());
-            }
-        }
-        return(EVAL_PAGE);
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public static void main(String [] args)
@@ -233,7 +231,7 @@ public class FormTag extends TagSupport
         FormTag me = new FormTag();
         Log.setApplicationName("FormTag");
         Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: FormTag.java,v 1.3 2001/11/08 00:18:21 visvan Exp $");
+        Log.setApplicationVersionDate("$Id: Output_TextTag.java,v 1.1 2001/11/08 00:18:21 visvan Exp $");
     
     }
 
