@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.9 2002/03/16 00:09:03 eburns Exp $
+ * $Id: UIComponent.java,v 1.10 2002/03/19 00:46:56 jvisvanathan Exp $
  */
 
 /*
@@ -432,6 +432,15 @@ public abstract class UIComponent {
      * @param os PENDING(aim): need to define OS subclass?
      */
     public void saveState(FacesContext ctx, OutputStream os) {
+    }
+
+    /**
+     * Invoked on each component after all rendering is
+     * complete, but before the UI component tree is garbage
+     * collected, allowing any cleanup to be performed
+     * @param ctx the FacesContext object used to process the current request
+     */
+    public void dispose(FacesContext ctx) {
     }
 
     /**
