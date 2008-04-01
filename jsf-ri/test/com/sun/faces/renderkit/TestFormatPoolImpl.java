@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.2 2002/08/09 00:00:53 eburns Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.3 2002/08/09 21:01:50 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.2 2002/08/09 00:00:53 eburns Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.3 2002/08/09 21:01:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	input.setComponentId("input");
 	Date date = null;
 	
-	// style == short, timezone == null, get Locale from FacesContext
+	// formatStyle == short, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	try {
 	    date = DateFormat.getDateInstance(DateFormat.SHORT, 
@@ -93,12 +93,12 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("style", "SHORT");
+	input.setAttribute("formatStyle", "SHORT");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("12/31/52"));
 
-	// style == medium, timezone == null, get Locale from FacesContext
+	// formatStyle == medium, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	try {
 	    date = DateFormat.getDateInstance(DateFormat.MEDIUM, 
@@ -107,12 +107,12 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("style", "MEDIUM");
+	input.setAttribute("formatStyle", "MEDIUM");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("Jan 12, 1952"));
 
-	// style == long, timezone == null, get Locale from FacesContext
+	// formatStyle == long, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	try {
 	    date = DateFormat.getDateInstance(DateFormat.LONG, 
@@ -121,12 +121,12 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("style", "LONG");
+	input.setAttribute("formatStyle", "LONG");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("January 12, 1952"));
 
-	// style == full, timezone == null, get Locale from FacesContext
+	// formatStyle == full, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	try {
 	    date = DateFormat.getDateInstance(DateFormat.FULL, 
@@ -135,12 +135,12 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("style", "FULL");
+	input.setAttribute("formatStyle", "FULL");
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("Saturday, April 12, 1952"));
 
-	// style == null, timezone == null, get Locale from FacesContext
+	// formatStyle == null, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	try {
 	    date = DateFormat.getDateInstance(DateFormat.MEDIUM, 
@@ -149,7 +149,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("style", null);
+	input.setAttribute("formatStyle", null);
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals("Apr 12, 1952"));
@@ -164,11 +164,11 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	input.setComponentId("input");
 	String date = null;
 	
-	// style == short, timezone == null, get Locale from FacesContext
+	// formatStyle == short, timezone == null, get Locale from FacesContext
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "12/31/52";
-	    input.setAttribute("style", "SHORT");
+	    input.setAttribute("formatStyle", "SHORT");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -179,11 +179,11 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	    assertTrue(false);
 	}
 
-	// style == medium, timezone == null, get Locale from FacesContext
+	// formatStyle == medium, timezone == null, get Locale from FacesContext
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "Jan 12, 1952";
-	    input.setAttribute("style", "MEDIUM");
+	    input.setAttribute("formatStyle", "MEDIUM");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -194,11 +194,11 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	    assertTrue(false);
 	}
 
-	// style == long, timezone == null, get Locale from FacesContext
+	// formatStyle == long, timezone == null, get Locale from FacesContext
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "January 12, 1952";
-	    input.setAttribute("style", "LONG");
+	    input.setAttribute("formatStyle", "LONG");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -209,11 +209,11 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	    assertTrue(false);
 	}
 
-	// style == full, timezone == null, get Locale from FacesContext
+	// formatStyle == full, timezone == null, get Locale from FacesContext
 	try {
 	    getFacesContext().setLocale(Locale.US);
 	    date = "Saturday, April 12, 1952";
-	    input.setAttribute("style", "FULL");
+	    input.setAttribute("formatStyle", "FULL");
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, date);
 	    assertTrue(null != result);
 	    assertTrue(DateFormat.
@@ -227,17 +227,17 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
     }
 
     public void testDateFormat_formatWithPattern() {
-	String pattern = "EEE, MMM d, yyyy";
+	String formatPattern = "EEE, MMM d, yyyy";
 	String expectedDate = "Wed, Jul 10, 1996";
 	String result = null;
 	FormatPool formatPool = new FormatPoolImpl();
 	UIInput input = new UIInput();
 	input.setComponentId("input");
 	Date date = null;
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern,
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatPattern,
 								 Locale.US);
 	
-	// pattern == pattern, timezone == null, get Locale from FacesContext
+	// formatPattern == formatPattern, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	try {
 	    date = simpleDateFormat.parse(expectedDate);
@@ -245,27 +245,27 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	catch (ParseException e) {
 	    assertTrue(false);
 	}
-	input.setAttribute("pattern", pattern);
+	input.setAttribute("formatPattern", formatPattern);
 	result = formatPool.dateFormat_format(getFacesContext(), input, date);
 	assertTrue(null != result);
 	assertTrue(result.equals(expectedDate));
     }
 
     public void testDateFormat_parseWithPattern() {
-	String pattern = "EEE, MMM d, yyyy";
+	String formatPattern = "EEE, MMM d, yyyy";
 	String expectedDate = "Wed, Jul 10, 1996";
 
 	Date expectedResult = null, result = null;
 	FormatPool formatPool = new FormatPoolImpl();
 	UIInput input = new UIInput();
 	input.setComponentId("input");
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern,
+	SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatPattern,
 								 Locale.US);
 	
-	// style == short, timezone == null, get Locale from FacesContext
+	// formatStyle == short, timezone == null, get Locale from FacesContext
 	try {
 	    getFacesContext().setLocale(Locale.US);
-	    input.setAttribute("pattern", pattern);
+	    input.setAttribute("formatPattern", formatPattern);
 	    result = formatPool.dateFormat_parse(getFacesContext(), input, 
 						 expectedDate);
 	    assertTrue(null != result);
@@ -296,15 +296,15 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	input2 = new UIInput();
 	input2.setComponentId("input2");
 
-	// style == short, timezone == null, get Locale from FacesContext
+	// formatStyle == short, timezone == null, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
-	input1.setAttribute("style", "SHORT");
-	input2.setAttribute("style", "SHORT");
+	input1.setAttribute("formatStyle", "SHORT");
+	input2.setAttribute("formatStyle", "SHORT");
 	dateFormat1 = formatPool.getDateFormat(getFacesContext(), input1);
 	dateFormat2 = formatPool.getDateFormat(getFacesContext(), input2);
 	assertTrue(dateFormat1 == dateFormat2);
 
-	// style == short, timezone == PST, get Locale from FacesContext
+	// formatStyle == short, timezone == PST, get Locale from FacesContext
 	getFacesContext().setLocale(Locale.US);
 	input1.setAttribute("timezone", "PST");
 	input2.setAttribute("timezone", "PST");
@@ -313,7 +313,7 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 	dateFormat2 = formatPool.getDateFormat(getFacesContext(), input2);
 	assertTrue(dateFormat1 == dateFormat2);
 
-	// style == short, timezone == PST, get Locale from attribute
+	// formatStyle == short, timezone == PST, get Locale from attribute
 
 	LocalizationContext locCtx = 
 	    new LocalizationContext(null, Locale.FRANCE);

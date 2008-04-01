@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.1 2002/08/08 23:40:52 eburns Exp $
+ * $Id: FormatPoolImpl.java,v 1.2 2002/08/09 21:01:49 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.1 2002/08/08 23:40:52 eburns Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.2 2002/08/09 21:01:49 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,7 +97,7 @@ public FormatPoolImpl()
     * Build the hashKey from the component attributes and get the
     * DateFormat from the hashMap.  Create and store if necessary. <P>
 
-    * attribute <CODE>style</CODE> is SHORT, MEDIUM, LONG, FULL.  If not
+    * attribute <CODE>formatStyle</CODE> is SHORT, MEDIUM, LONG, FULL.  If not
     * present, defaults to {@link DEFAULT_DATE_STYLE}.  Not required.<P>
 
     * attribute <CODE>timezone</CODE> is put directly into
@@ -109,7 +109,7 @@ public FormatPoolImpl()
 
     DateFormat getDateFormat(FacesContext context, UIComponent component) {
 	String 
-	    pattern = null, 
+	    formatPattern = null, 
 	    formatStyle = null, 
 	    timezone = null, 
 	    hashKey = null;
@@ -122,7 +122,7 @@ public FormatPoolImpl()
 	//
 
 	// get the formatStyle
-	if (null == (formatStyle = (String) component.getAttribute("style"))) {
+	if (null == (formatStyle = (String) component.getAttribute("formatStyle"))) {
 	    formatStyle = DEFAULT_DATE_STYLE;
 	    formatStyleInt = DEFAULT_DATE_STYLE_INT;
 	}
@@ -148,22 +148,22 @@ public FormatPoolImpl()
 	// get the timezone, null is ok.
 	timezone = (String) component.getAttribute("timezone");
 
-	// get the pattern, null is ok
-	pattern = (String) component.getAttribute("pattern");
+	// get the formatPattern, null is ok
+	formatPattern = (String) component.getAttribute("formatPattern");
 	
-	hashKey = locale.toString() + formatStyle + timezone + pattern;
+	hashKey = locale.toString() + formatStyle + timezone + formatPattern;
 	
 	// Look in the formatters map
 	if (null == (dateFormat = (DateFormat) formatters.get(hashKey))) {
 	    
 	    // if not present, create one
 	    dateFormat = DateFormat.getDateInstance(formatStyleInt, locale);
-	    if (null != pattern) {
+	    if (null != formatPattern) {
 		if (dateFormat instanceof SimpleDateFormat) {
-		    ((SimpleDateFormat)dateFormat).applyPattern(pattern);
+		    ((SimpleDateFormat)dateFormat).applyPattern(formatPattern);
 		}
 		else {
-		    dateFormat = new SimpleDateFormat(pattern, locale);
+		    dateFormat = new SimpleDateFormat(formatPattern, locale);
 		}
 	    }
 
