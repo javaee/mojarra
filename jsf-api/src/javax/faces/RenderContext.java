@@ -28,47 +28,9 @@ import java.util.Locale;
  */
 public abstract class RenderContext {
 
-    public static final String DEFAULT_RENDERCONTEXT_PROPERTY_NAME = 
-        "FACES_DEFAULT_RENDERCONTEXT";
-
-    /**
-     * Returns a RenderContext object configured for rendering all
-     * ui components associated with the specified request.  
-     * @param request the ServletRequest object corresponding to the
-     *        client request
-     * @throws NullPointerException if request is null
-     * @throws FacesException if a render context could not be created
-     *         for the specified request
-     * @return RenderContext object configured for rendering a response
-     *         to the specified request
-     */
-    public static RenderContext getRenderContext(ServletRequest request) throws FacesException {
-        String defaultRenderContextName;
-        RenderContext result = null;
-    
-        defaultRenderContextName = System.getProperty(DEFAULT_RENDERCONTEXT_PROPERTY_NAME);
-
-        if (null == defaultRenderContextName) {
-            return null;
-        }
-        result = (RenderContext)RenderKit.createInstanceFromSystemProperty(defaultRenderContextName);
-
-        return result;
-    }
-
     protected RenderContext() {
     }
-
-    /**
-     * Internal constructor which initializes a <code>RenderContext</code>,
-     * the <code>ClientCapabilities</code>, <code>Locale</code> based on
-     * information in the request.
-     * @throws FacesException if any of these objects could not be
-     *         created.
-     */
-    private RenderContext(ServletRequest request) throws FacesException {
-    }
-
+    
     /**
      * The current value of the ClientCapabilities object.
      * @return ClientCapabilities object which characterizes the client
@@ -80,6 +42,8 @@ public abstract class RenderContext {
 
     /**
      * The current value of the render kit object.
+     * Returns a RenderKit instance targeted for the client described
+     * by the specified ClientCapabilities instance.
      * @return RenderKit object used to render components for the
      *         associated request
      */
@@ -154,6 +118,7 @@ public abstract class RenderContext {
 
     // Aim11-2-01: method for encoding URLs (?)
     // per Oracle's suggestion
+
 
 }
 

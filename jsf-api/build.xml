@@ -33,6 +33,7 @@
 
   <path id="classpath">
     <pathelement location="${servlet.jar}"/>
+    <pathelement location="${build.classes}"/>
   </path>
 
   <!-- 
@@ -80,6 +81,20 @@
     </copy>
 
   </target>
+
+  <!-- 
+       =================================================================== 
+         Test targets
+       =================================================================== 
+  -->
+
+  <target name="test-finder" depends="build" 
+   description="Run the factory test">
+    <java classname="javax.faces.FactoryFinder" fork="yes">
+      <classpath refid="classpath" />
+    </java>
+  </target>
+
   
   <!-- 
        =================================================================== 
@@ -134,7 +149,7 @@
              sourcepath="${java.dir}"
              destdir="${build.javadocs}"
              author="true"
-             version="true"
+             version="true" private="true"
              windowtitle="${Name} API"
              doctitle="${Name}"
              bottom="Copyright &#169; 2001 Sun Microsystems, Inc. All Rights Reserved.">

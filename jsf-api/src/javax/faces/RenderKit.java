@@ -14,68 +14,6 @@ import java.util.Iterator;
  */
 public abstract class RenderKit {
 
-/**
-
- * The value of this property is the fully qualified className of the
- * default RenderKit implementation.  This class must implement
- * RenderKit and have a public no-arg constructor.
-
- */
-
-public static final String DEFAULT_RENDERKIT_PROPERTY_NAME = "FACES_DEFAULT_RENDERER";
-
-    /**
-     * Returns a RenderKit instance targeted for the client described
-     * by the specified ClientCapabilities instance.
-     * @param client ClientCapabilities object describing client
-     * @return RenderKit object representing the RenderKit capable of
-     *          rendering to the target client
-     * @throws NullPointerException if client is null
-     */
-    public static RenderKit getRenderKitForClient(ClientCapabilities client) {
-	String defaultRenderKitName;
-	RenderKit result = null;
-	
-	defaultRenderKitName = System.getProperty(DEFAULT_RENDERKIT_PROPERTY_NAME);
-	if (null == defaultRenderKitName) {
-	    return null;
-	}
-        result = (RenderKit)createInstanceFromSystemProperty(defaultRenderKitName);
-	return result;
-    }
-
-    /**
-     * This method creates an instance of class whose fully qualified
-     * class name is the value of the given system property.
-     * This class must have a public no-arg constructor.
-     * <p>This is a temporary solution to the problem of instantiating
-     * "ri" objects from the api.
-     * @param propName The system propety name used to instantiate the
-     *        class.
-     * @return The object instance (or null) if not found.
-     */
-    static Object createInstanceFromSystemProperty(String propName) {
-        Class renderKitClass;
-        Object result = null;
-        
-        try {
-            renderKitClass = Class.forName(propName);
-            result = renderKitClass.newInstance();
-        }
-        catch (IllegalAccessException e) {
-            System.out.println("Can't create instance for " + 
-                               propName+ ": " + e.getMessage());
-        }
-        catch (InstantiationException e) {
-            System.out.println("Can't create instance for " + 
-                               propName+ ": " + e.getMessage());
-        }
-        catch (ClassNotFoundException e) {
-            System.out.println("Can't find class for " + 
-                               propName+ ": " + e.getMessage());
-        }
-        return result;
-    }
     /*
      * Returns a String representing the name of this render kit
      * Concrete subclasses must override this method and return a
