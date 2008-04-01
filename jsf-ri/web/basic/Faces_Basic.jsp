@@ -116,14 +116,14 @@
                                   modelReference="${LoginBean.int}"> 
 
 		     <faces:validator 
-                       className="javax.faces.validator.IntegerRangeValidator"/>
+                       className="javax.faces.validator.LongRangeValidator"/>
 
 		     <faces:attribute 
-                         name="javax.faces.validator.IntegerRangeValidator.MINIMUM"
+                         name="javax.faces.validator.LongRangeValidator.MINIMUM"
                          value="1"/>
 
 		     <faces:attribute 
-                         name="javax.faces.validator.IntegerRangeValidator.MAXIMUM"
+                         name="javax.faces.validator.LongRangeValidator.MAXIMUM"
                          value="10"/>
 
                     </faces:textentry_input>
