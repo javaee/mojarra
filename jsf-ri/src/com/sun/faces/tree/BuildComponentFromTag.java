@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.1 2002/05/30 01:42:07 eburns Exp $
+ * $Id: BuildComponentFromTag.java,v 1.2 2002/07/31 22:40:10 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import org.xml.sax.Attributes;
  * Has the same scope as the TreeEngine instance.  The TreeEngine has a
  * BuildComponentFromTag instance. <P>
  *
- * @version $Id: BuildComponentFromTag.java,v 1.1 2002/05/30 01:42:07 eburns Exp $
+ * @version $Id: BuildComponentFromTag.java,v 1.2 2002/07/31 22:40:10 eburns Exp $
  * 
  * @see	com.sun.faces.treebuilder.TreeEngine#getTreeForURI
  *
@@ -49,3 +49,4 @@ public void applyAttributesToComponentInstance(UIComponent child,
 					       Attributes attrs);
 
 } // end of interface BuildComponentFromTag
+

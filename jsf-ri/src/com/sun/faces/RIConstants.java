@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.12 2002/07/31 19:22:00 jvisvanathan Exp $
+ * $Id: RIConstants.java,v 1.13 2002/07/31 22:40:07 eburns Exp $
  */
 
 /*
@@ -50,13 +50,6 @@ public class RIConstants {
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
     
-    /**
-     * The message identifier of the {@link Message} to be created as
-     * a result of type conversion error.
-     */
-    public static final String CONVERSION_ERROR_MESSAGE_ID =
-        "com.sun.faces.TYPECONVERSION_ERROR";
-    
     public final static String FACES_TREE = "com.sun.faces.TREE";
     public final static String REQUEST_LOCALE = "com.sun.faces.LOCALE";
    
@@ -69,7 +62,9 @@ public class RIConstants {
     */ 
 
     public final static String SELECTITEMS_CONFIGURED = "com.sun.faces.SELECTITEMS_CONFIGURED";
-    
+
+    public final static String IMPL_MESSAGES = "com.sun.faces.IMPL_MESSAGES";
+
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
     public static final String SAVESTATE_INITPARAM = "saveStateInClient";
 }

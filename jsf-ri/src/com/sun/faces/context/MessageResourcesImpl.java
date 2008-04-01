@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.3 2002/07/25 16:36:33 eburns Exp $
+ * $Id: MessageResourcesImpl.java,v 1.4 2002/07/31 22:40:08 eburns Exp $
  */
 
 /*
@@ -195,6 +195,39 @@ public class MessageResourcesImpl extends MessageResources
         return localizedStr;
     }
 
+    /**
+
+    * This version of getMessage() is used in the RI for localizing RI
+    * specific messages.
+
+    */
+
+    public Message getMessage(String messageId, Object params[]) {
+	Locale locale = Locale.getDefault();
+
+	return getMessage(locale, messageId, params);
+    }
+
+    protected Message getMessage(Locale locale, String messageId, 
+				 Object params[]) {
+        MessageCatalog catalog = findCatalog(locale);
+        if (catalog == null) {
+            // PENDING (visvan) log error
+            throw new FacesException("No message catalogs for resource " + 
+				     messageResourceId);
+        }
+        MessageTemplate template = (MessageTemplate) catalog.get(messageId);
+        if (template == null) {
+            throw new FacesException("The message id '" +
+				     messageId + "' was not found in the message catalog");
+        }
+        
+        // substitute parameters
+        String summary = substituteParams(locale, template.getSummary(), params);
+        String detail = substituteParams(locale, template.getDetail(),params);
+        return (new MessageImpl(template.getSeverity(), summary, detail));
+    }
+
 
     //
     // Methods from MessageResources
@@ -204,30 +237,14 @@ public class MessageResourcesImpl extends MessageResources
     }    
 
     public Message getMessage(FacesContext context, String messageId,
-                                       Object params[]) {
+			      Object params[]) {
         if (context == null || messageId == null ) {
             throw new NullPointerException("One or more parameters could be null");
         }
         
         Locale locale = context.getLocale();
         Assert.assert_it(locale != null);
-        
-        MessageCatalog catalog = findCatalog(locale);
-        if (catalog == null) {
-            // PENDING (visvan) log error
-            throw new FacesException("No message catalogs for resource " + 
-                   messageResourceId);
-        }
-        MessageTemplate template = (MessageTemplate) catalog.get(messageId);
-        if (template == null) {
-            throw new FacesException("The message id '" +
-                  messageId + "' was not found in the message catalog");
-        }
-        
-        // substitute parameters
-        String summary = substituteParams(locale, template.getSummary(), params);
-        String detail = substituteParams(locale, template.getDetail(),params);
-        return (new MessageImpl(template.getSeverity(), summary, detail));
+        return getMessage(locale, messageId, params);
     }  
     
     public Message getMessage(FacesContext context, String messageId,

@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.13 2002/06/25 20:47:59 jvisvanathan Exp $
+ * $Id: Util.java,v 1.14 2002/07/31 22:40:11 eburns Exp $
  */
 
 /*
@@ -27,8 +27,10 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.context.MessageResourcesFactory;
 import javax.faces.context.MessageResources;
+import javax.faces.context.Message;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.context.MessageResourcesImpl;
 
 /**
  *
@@ -36,7 +38,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.13 2002/06/25 20:47:59 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.14 2002/07/31 22:40:11 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -49,6 +51,37 @@ public class Util extends Object
 // Protected Constants
 //
 
+    /**
+     * The message identifier of the {@link Message} to be created as
+     * a result of type conversion error.
+     */
+    public static final String CONVERSION_ERROR_MESSAGE_ID =
+        "com.sun.faces.TYPECONVERSION_ERROR";
+
+    public static final String FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID = 
+	"com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR";
+
+    public static final String NULL_COMPONENT_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_COMPONENT_ERROR";
+
+    public static final String NULL_REQUEST_TREE_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_REQUEST_TREE_ERROR";
+
+    public static final String NULL_RESPONSE_TREE_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_RESPONSE_TREE_ERROR";
+
+    public static final String REQUEST_TREE_ALREADY_SET_ERROR_MESSAGE_ID = 
+	"com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR";
+    
+    public static final String NULL_MESSAGE_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_MESSAGE_ERROR";
+    
+    public static final String NULL_PARAMETERS_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_PARAMETERS_ERROR";
+    
+    public static final String NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR";
+    
 //
 // Class Variables
 //
@@ -106,14 +139,43 @@ private Util()
      */
     public static synchronized MessageResources getMessageResources() {
         MessageResources resources = null;
-        if (resources == null) {
-            MessageResourcesFactory factory = (MessageResourcesFactory)
-                FactoryFinder.getFactory
-                (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
-            resources = factory.getMessageResources
-                (MessageResourcesFactory.FACES_IMPL_MESSAGES);
-        }
+	MessageResourcesFactory factory = (MessageResourcesFactory)
+	    FactoryFinder.getFactory
+	    (FactoryFinder.MESSAGE_RESOURCES_FACTORY);
+	resources = factory.getMessageResources
+	    (MessageResourcesFactory.FACES_IMPL_MESSAGES);
+	
         return (resources);
+    }
+
+    /**
+
+    * Called by the RI to get the IMPL_MESSAGES MessageResources
+    * instance and get a message on it.  
+
+    */
+
+    public static synchronized String getExceptionMessage(String messageId,
+							  Object params[]) {
+	String result = null;
+	MessageResourcesImpl resources = (MessageResourcesImpl)
+	    Util.getMessageResources();
+
+	// As an optimization, we could store the MessageResources
+	// instance in the System Properties for subsequent calls to
+	// getExceptionMessage().
+
+	if (null != resources) {
+	    result = resources.getMessage(messageId, params).getDetail();
+	}
+	else {
+	    result = "null MessageResources";
+	}
+	return result;
+    }
+
+    public static synchronized String getExceptionMessage(String messageId) {
+	return Util.getExceptionMessage(messageId, null);
     }
     
     /**

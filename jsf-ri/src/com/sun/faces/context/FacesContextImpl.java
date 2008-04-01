@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.14 2002/07/12 19:44:31 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.15 2002/07/31 22:40:07 eburns Exp $
  */
 
 /*
@@ -44,6 +44,8 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
+
+import com.sun.faces.util.Util;
 
 public class FacesContextImpl extends FacesContext
 {
@@ -91,8 +93,7 @@ public class FacesContextImpl extends FacesContext
             ParameterCheck.nonNull(response);
             ParameterCheck.nonNull(lifecycle);
         } catch (Exception e ) {
-            throw new FacesException("Cannot create FacesContext." + 
-                "One or more input paramters might be null");
+            throw new FacesException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }
         
         this.servletContext = sc;
@@ -211,7 +212,7 @@ public class FacesContextImpl extends FacesContext
         ArrayList list = null;
 
 	if (null == component) {
-	    throw new NullPointerException("component is null");
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
 	}
 
         if (null == messageList) {
@@ -253,7 +254,7 @@ public class FacesContextImpl extends FacesContext
         ArrayList list = null;
 
 	if (null == component) {
-	    throw new NullPointerException("component is null");
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
 	}
 
         if (null == requestEvents) {
@@ -280,7 +281,7 @@ public class FacesContextImpl extends FacesContext
         ArrayList list = null;
 
 	if (null == component) {
-	    throw new NullPointerException("component is null");
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
 	}
 
         if (null != requestEvents) {
@@ -307,11 +308,10 @@ public class FacesContextImpl extends FacesContext
 
     public void setRequestTree(Tree requestTree) {
         if (requestTree == null) {
-            throw new NullPointerException("requestTree Argument is Null");
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
         }
         if (this.requestTree != null) {
-            throw new IllegalStateException("Request Tree has already been "+
-                "set for this request");
+            throw new IllegalStateException(Util.getExceptionMessage(Util.REQUEST_TREE_ALREADY_SET_ERROR_MESSAGE_ID));
         }
         this.requestTree = requestTree;
         if (this.responseTree == null) {
@@ -326,7 +326,7 @@ public class FacesContextImpl extends FacesContext
 
     public void setResponseTree(Tree responseTree) {
         if (responseTree == null) {
-            throw new NullPointerException("responseTree Argument is Null");
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_RESPONSE_TREE_ERROR_MESSAGE_ID));
         }
         this.responseTree = responseTree;
     }
@@ -365,7 +365,7 @@ public class FacesContextImpl extends FacesContext
     public void addMessage(Message message) {
         ArrayList list = null;
         if ( message == null ) {
-            throw new NullPointerException("Message parameter cannot be null");
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_MESSAGE_ERROR_MESSAGE_ID));
         }
         if (null == messageList) {
             messageList = new HashMap();
@@ -382,7 +382,7 @@ public class FacesContextImpl extends FacesContext
     public void addMessage(UIComponent component, Message message) {
         ArrayList list = null;
         if ( component == null || message == null ) {
-            throw new NullPointerException("One or more parameters could be null");
+            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (null == messageList) {
             messageList = new HashMap();
@@ -400,7 +400,7 @@ public class FacesContextImpl extends FacesContext
         ArrayList list = null;
 
 	if (null == component || null == event) {
-	    throw new NullPointerException("null component or event");
+	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 
         if (null == requestEvents) {
@@ -448,8 +448,9 @@ public class FacesContextImpl extends FacesContext
                 // in session
                 object = getObjectFromScope(baseName);
                 if (object == null) {
-                    throw new FacesException("Named Object: '"+expression+
-                        "' not found.");
+		    Object [] params = {expression};
+                    throw new FacesException(Util.getExceptionMessage(Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
+								      params));
                 }
                 returnClass = object.getClass();
             } else {    

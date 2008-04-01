@@ -21,5 +21,37 @@
       <detail>Conversion error setting value {0} for model {1} : Exception: [2].</detail>
   </message>
 
+  <message messageId="com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR" severity="1" summary="Construction Error." >
+      <detail>Cannot create FacesContext.  One or more input paramters might be null.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_COMPONENT_ERROR" severity="1" summary="Construction Error." >
+      <detail>Component argument is null.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_REQUEST_TREE_ERROR" severity="1" summary="Argument Error." >
+      <detail>requestTree argument is null.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_RESPONSE_TREE_ERROR" severity="1" summary="Argument Error." >
+      <detail>responseTree argument is null.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR" severity="1" summary="State Error." >
+      <detail>requestTree has already been set for this request.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_MESSAGE_ERROR" severity="1" summary="Argument Error." >
+      <detail>Message parameter cannot be null.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NULL_PARAMETERS_ERROR" severity="1" summary="Argument Error." >
+      <detail>One or more parameters could be null.</detail>
+  </message>
+
+  <message messageId="com.sun.faces.NAMED_OBJECT_NOT_FOUND_ERROR" severity="1" summary="Expression Error." >
+      <detail>Named Object: '{0}' not found.</detail>
+  </message>
+
 </messages>
 

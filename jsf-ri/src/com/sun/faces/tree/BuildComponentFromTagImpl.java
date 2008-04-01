@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.4 2002/06/26 19:20:15 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.5 2002/07/31 22:40:10 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.4 2002/06/26 19:20:15 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.5 2002/07/31 22:40:10 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -181,7 +181,10 @@ private boolean attrRequiresSpecialTreatment(String attrName) {
 }
 
 private void handleSpecialAttr(UIComponent child, String attrName,
-			       String attrValue) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
+			       String attrValue) throws IllegalAccessException, 
+							IllegalArgumentException, 
+							InvocationTargetException, 
+							NoSuchMethodException {
     ParameterCheck.nonNull(child);
     ParameterCheck.nonNull(attrName);
     ParameterCheck.nonNull(attrValue);
