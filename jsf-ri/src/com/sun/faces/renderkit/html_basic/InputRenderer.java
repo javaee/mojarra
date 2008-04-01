@@ -1,5 +1,5 @@
 /*
- * $Id: InputRenderer.java,v 1.26 2002/08/02 19:32:00 jvisvanathan Exp $
+ * $Id: InputRenderer.java,v 1.27 2002/08/07 23:40:34 rkitain Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+//import javax.faces.component.UITextEntry;
 import javax.faces.FacesException;
 
 import org.mozilla.util.Assert;
@@ -41,7 +41,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: InputRenderer.java,v 1.26 2002/08/02 19:32:00 jvisvanathan Exp $
+ * @version $Id: InputRenderer.java,v 1.27 2002/08/07 23:40:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,7 +89,7 @@ public class InputRenderer extends HtmlBasicRenderer {
         if ( componentType == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
-        return (componentType.equals(UITextEntry.TYPE));
+//        return (componentType.equals(UITextEntry.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 

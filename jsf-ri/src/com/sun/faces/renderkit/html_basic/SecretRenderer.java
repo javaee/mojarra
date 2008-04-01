@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.24 2002/08/02 19:32:01 jvisvanathan Exp $
+ * $Id: SecretRenderer.java,v 1.25 2002/08/07 23:40:34 rkitain Exp $
  */
 
 /*
@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UITextEntry;
+//import javax.faces.component.UITextEntry;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -38,7 +38,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.24 2002/08/02 19:32:01 jvisvanathan Exp $
+ * @version $Id: SecretRenderer.java,v 1.25 2002/08/07 23:40:34 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,7 +87,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
         if ( componentType == null ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        return (componentType.equals(UITextEntry.TYPE));
+//        return (componentType.equals(UITextEntry.TYPE));
     }
 
     public void decode(FacesContext context, UIComponent component) 
