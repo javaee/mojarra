@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.17 2002/07/28 22:12:50 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.18 2002/07/29 00:33:24 craigmcc Exp $
  */
 
 /*
@@ -17,9 +17,6 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.faces.render.RenderKit;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.tree.Tree;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -75,13 +72,6 @@ public abstract class FacesTag extends TagSupport {
      * </p>
      */
     protected FacesContext context = null;
-
-
-    /**
-     * <p>The {@link Renderer} to which we should delegate encoding for
-     * the component associated with this tag, if any.</p>
-     */
-    protected Renderer renderer = null;
 
 
     // ------------------------------------------------------------- Properties
@@ -191,15 +181,7 @@ public abstract class FacesTag extends TagSupport {
      * <li>Push this component onto the stack of components corresponding to
      *     nested component tags for the current response, creating the stack
      *     if necessary.</li>
-     * <li>If the <code>rendererType</code> property of this component is not
-     *     null, acquire a reference to the corresponding {@link Renderer} from
-     *     the {@link RenderKit} associated with this response.  Save the
-     *     acquired reference in the <code>renderer</code> instance variable.
-     *     </li>
-     * <li>Call the <code>encodeBegin()</code> method of the component (if
-     *     <code>rendererType</code> is <code>null</code>) or the
-     *     {@link Renderer} (if <code>rendererType</code> is not
-     *     <code>null</code>).</li>
+     * <li>Call the <code>encodeBegin()</code> method of the component.</li>
      * </ul>
      *
      * <p>The flag value to be returned is acquired by calling the
@@ -229,57 +211,14 @@ public abstract class FacesTag extends TagSupport {
         componentStack.push(component);
 
         // Render the beginning of the component associated with this tag
-        String rendererType = component.getRendererType();
-        if (rendererType == null) {
-            renderer = null;
-            try {
-                component.encodeBegin(context);
-                if (rendersChildren) {
-                    component.encodeChildren(context);
-                }
-            } catch (IOException e) {
-                component = null;
-                context = null;
-                componentStack.pop();
-                componentStack = null;
-                throw new JspException(e);
-            }
-        } else {
-            String renderKitId =
-                context.getResponseTree().getRenderKitId();
-            if (renderKitId == null) { // FIXME - i18n
-                throw new JspException("No renderKitId specified");
-            }
-            RenderKitFactory rkFactory = (RenderKitFactory)
-                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-            RenderKit renderKit = rkFactory.getRenderKit(renderKitId);
-            if (renderKit == null) { // FIXME - i18n
-                throw new JspException("Cannot find RenderKit");
-            }
-            // FIXME - deal with direct output components!
-            try {
-                renderer = renderKit.getRenderer(rendererType);
-            } catch (IllegalArgumentException e) { // FIXME - i18n
-                component = null;
-                context = null;
-                componentStack.pop();
-                componentStack = null;
-                throw new JspException("Cannot find Renderer '" +
-                                       rendererType + "'");
-            }
-            try {
-                renderer.encodeBegin(context, component);
-                if (rendersChildren) {
-                    renderer.encodeChildren(context, component);
-                }
-            } catch (IOException e) {
-                component = null;
-                context = null;
-                renderer = null;
-                componentStack.pop();
-                componentStack = null;
-                throw new JspException(e);
-            }
+        try {
+            component.encodeBegin(context);
+        } catch (IOException e) {
+            component = null;
+            context = null;
+            componentStack.pop();
+            componentStack = null;
+            throw new JspException(e);
         }
 
         // Return the appropriate control value
@@ -295,13 +234,8 @@ public abstract class FacesTag extends TagSupport {
      * <ul>
      * <li>If the <code>rendersChildren</code> property of this component is
      *     <code>true</code>, call the <code>encodeChildren()</code> method
-     *     of the component (if <code>rendererType</code> is <code>null</code>)
-     *     or the {@link Renderer} (if <code>rendererType</code> is not
-     *     <code>null</code>).</li>
-     * <li>Call the <code>encodeEnd()</code> method of the component (if
-     *     <code>rendererType</code> is <code>null</code>) or the
-     *     {@link Renderer} (if <code>rendererType</code> is not
-     *     <code>null</code>).</li>
+     *     of the component.</li>
+     * <li>Call the <code>encodeEnd()</code> method of the component.</li>
      * <li>Release all references to the component, and pop it from
      *     the component stack for this response, removing the stack
      *     if this was the outermost component.</li>
@@ -319,23 +253,15 @@ public abstract class FacesTag extends TagSupport {
         // associated with this tag
         boolean rendersChildren = component.getRendersChildren();
         try {
-            if (renderer == null) {
-                if (rendersChildren) {
-                    component.encodeChildren(context);
-                }
-                component.encodeEnd(context);
-            } else {
-                if (rendersChildren) {
-                    renderer.encodeChildren(context, component);
-                }
-                renderer.encodeEnd(context, component);
+            if (rendersChildren) {
+                component.encodeChildren(context);
             }
+            component.encodeEnd(context);
         } catch (IOException e) {
             throw new JspException(e);
         } finally {
             component = null;
             context = null;
-            renderer = null;
         }
 
         // Pop the component stack, and release it if we are outermost
