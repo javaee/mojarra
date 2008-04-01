@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleDriverImpl.java,v 1.5 2002/04/11 22:52:42 eburns Exp $
+ * $Id: TestLifecycleDriverImpl.java,v 1.6 2002/04/15 20:11:03 jvisvanathan Exp $
  */
 
 /*
@@ -36,8 +36,6 @@ import javax.faces.MessageFactory;
 import javax.faces.AbstractFactory;
 import javax.faces.FacesContext;
 import javax.faces.UIPage;
-import com.sun.faces.ObjectAccessorFactory;
-import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.lifecycle.RenderWrapper;
 import javax.faces.ConverterManager;
 import com.sun.faces.treebuilder.TreeEngine;
@@ -47,7 +45,7 @@ import com.sun.faces.treebuilder.TreeEngine;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleDriverImpl.java,v 1.5 2002/04/11 22:52:42 eburns Exp $
+ * @version $Id: TestLifecycleDriverImpl.java,v 1.6 2002/04/15 20:11:03 jvisvanathan Exp $
  * 
  * @see	javax.faces.TreeNavigator
  * @see	com.sun.faces.TreeEngine
@@ -123,8 +121,6 @@ public void commenceRendering(FacesContext ctx, TreeNavigator treeNav) throws Se
 public void testInit() 
 {
     AbstractFactory abstractFactory = null;
-    ObjectAccessorFactory oaf = null;
-    NavigationHandlerFactory nhf = null;
     ConverterManager cm = null;
     TreeEngine te = null;
     MessageFactory mf = null;
@@ -144,12 +140,6 @@ public void testInit()
 
     abstractFactory = (AbstractFactory) objectManager.get(Constants.REF_ABSTRACTFACTORY);
     assertTrue(null != abstractFactory);
-
-    oaf = (ObjectAccessorFactory) objectManager.get(Constants.REF_OBJECTACCESSORFACTORY);
-    assertTrue(null != oaf);
-
-    nhf = (NavigationHandlerFactory) objectManager.get(Constants.REF_NAVIGATIONHANDLERFACTORY);
-    assertTrue(null != nhf);
 
     cm = (ConverterManager) objectManager.get(Constants.REF_CONVERTERMANAGER);
     assertTrue(null != cm);

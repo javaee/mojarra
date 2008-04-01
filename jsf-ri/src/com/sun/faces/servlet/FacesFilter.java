@@ -1,5 +1,5 @@
 /*
- * $Id: FacesFilter.java,v 1.8 2002/04/11 22:52:41 eburns Exp $
+ * $Id: FacesFilter.java,v 1.9 2002/04/15 20:11:02 jvisvanathan Exp $
  */
 
 /*
@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.EventObject;
 
-import com.sun.faces.ObjectAccessorFactory;
-import com.sun.faces.NavigationHandlerFactory;
 import com.sun.faces.util.Util;
-import com.sun.faces.ConverterManagerFactory;
 
 import javax.faces.Constants;
 import javax.faces.EventDispatcher;
@@ -95,8 +92,6 @@ public class FacesFilter implements Filter {
 
         ObjectManager objectManager;
         AbstractFactory abstractFactory;
-        ObjectAccessorFactory oaFactory;
-        NavigationHandlerFactory nhFactory;
         ConverterManager converterManager = null;
 
         ServletContext servletContext = config.getServletContext();
@@ -135,52 +130,13 @@ public class FacesFilter implements Filter {
         objectManager.put(servletContext,
                         Constants.REF_ABSTRACTFACTORY, abstractFactory);
 
-        // Step 4: Create the ObjectAccessorFactory and put it in the
-        // ObjectManager in GlobalScope
-        oaFactory = (ObjectAccessorFactory)objectManager.get(
-            Constants.REF_OBJECTACCESSORFACTORY);
-        // The ObjectAccessorFactory must not exist at this point.  It is an
-        // error if it does exist.
-        Assert.assert_it(null == oaFactory);
-
-        oaFactory = ObjectAccessorFactory.newInstance();
-        Assert.assert_it(null != oaFactory);
-        objectManager.put(servletContext,
-                        Constants.REF_OBJECTACCESSORFACTORY, oaFactory);
-
-        // Step 5 create an instance of navigationHandlerFactory
+        // Step 2 create an instance of ConverterManager
         // and put it in Application scope.
-        nhFactory = (NavigationHandlerFactory)objectManager.get(
-            Constants.REF_NAVIGATIONHANDLERFACTORY);
-
-        // The NavigationHandlerFactory must not exist at this point.  It is an
-        // error if it does exist.
-        Assert.assert_it(null == nhFactory);
-
-        nhFactory = NavigationHandlerFactory.newInstance();
-        Assert.assert_it(null != nhFactory);
-        objectManager.put(servletContext,
-                        Constants.REF_NAVIGATIONHANDLERFACTORY, nhFactory);
-
-        // Step 6 create an instance of ConverterManager
-        // and put it in Application scope.
-        converterManager = (ConverterManager)objectManager.get(
-            Constants.REF_CONVERTERMANAGER);
-
-        // The converterManager must not exist at this point.  It is an
-        // error if it does exist.
-        // PENDING(visvan)  ConverterManager should be request scoped
-        // to avoid threading issues. 
-        Assert.assert_it(null == converterManager);
-
-        ConverterManagerFactory cmFactory = ConverterManagerFactory.newInstance();
-        Assert.assert_it(null != cmFactory);
-
-        converterManager = cmFactory.newConverterManager(servletContext);
+        converterManager = abstractFactory.newConverterManager(servletContext);
         objectManager.put(servletContext,
                         Constants.REF_CONVERTERMANAGER, converterManager);
 
-        // Step 7 create a default Message Factory and put it in Global scope
+        // Step 3 create a default Message Factory and put it in Global scope
         javax.faces.MessageFactory mf = abstractFactory.newMessageFactory();
         mf.setClassLoader(this.getClass().getClassLoader());
         objectManager.put(servletContext,

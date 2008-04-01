@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleDriverImpl.java,v 1.6 2002/04/11 22:52:41 eburns Exp $
+ * $Id: LifecycleDriverImpl.java,v 1.7 2002/04/15 20:11:02 jvisvanathan Exp $
  */
 
 /*
@@ -22,9 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import com.sun.faces.ObjectAccessorFactory;
-import com.sun.faces.NavigationHandlerFactory;
-import com.sun.faces.ConverterManagerFactory;
 import com.sun.faces.util.Util;
 import com.sun.faces.treebuilder.TreeEngine;
 
@@ -49,7 +46,7 @@ import javax.faces.UIComponent;
  * webapp.</P>
 
  *
- * @version $Id: LifecycleDriverImpl.java,v 1.6 2002/04/11 22:52:41 eburns Exp $
+ * @version $Id: LifecycleDriverImpl.java,v 1.7 2002/04/15 20:11:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -123,67 +120,25 @@ protected void initFactories(ObjectManager objectManager)
 {
     AbstractFactory abstractFactory = (AbstractFactory)
 	objectManager.get(Constants.REF_ABSTRACTFACTORY);
-    ObjectAccessorFactory oaFactory;
-    NavigationHandlerFactory nhFactory;
-    ConverterManagerFactory cmFactory;
+    Assert.assert_it( null != servletContext );
+    
     ConverterManager converterManager;
 
-    Assert.assert_it(null != servletContext);
-
-    // Step 5: Create the ObjectAccessorFactory and put it in the
-    // ObjectManager in GlobalScope
-    oaFactory = (ObjectAccessorFactory)objectManager.get(
-							 Constants.REF_OBJECTACCESSORFACTORY);
-    // The ObjectAccessorFactory must not exist at this point.  It is an
-    // error if it does exist.
-    Assert.assert_it(null == oaFactory);
-    
-    oaFactory = ObjectAccessorFactory.newInstance();
-    Assert.assert_it(null != oaFactory);
-    objectManager.put(servletContext,
-		      Constants.REF_OBJECTACCESSORFACTORY, oaFactory);
-    
-    // Step 6 create an instance of navigationHandlerFactory
+    // Step 1 create an instance of ConverterManager
     // and put it in Application scope.
-    nhFactory = (NavigationHandlerFactory)objectManager.get(
-							    Constants.REF_NAVIGATIONHANDLERFACTORY);
-    
-    // The NavigationHandlerFactory must not exist at this point.  It is an
-    // error if it does exist.
-    Assert.assert_it(null == nhFactory);
-    
-    nhFactory = NavigationHandlerFactory.newInstance();
-    Assert.assert_it(null != nhFactory);
+    converterManager = abstractFactory.newConverterManager(servletContext);
+    Assert.assert_it(converterManager != null );
     objectManager.put(servletContext,
-		      Constants.REF_NAVIGATIONHANDLERFACTORY, nhFactory);
-
-    // Step 7 create an instance of ConverterManager
-    // and put it in Application scope.
-    converterManager = (ConverterManager)objectManager.get(
-							   Constants.REF_CONVERTERMANAGER);
+            Constants.REF_CONVERTERMANAGER, converterManager);
     
-    // The converterManager must not exist at this point.  It is an
-    // error if it does exist.
-    // PENDING(visvan)  ConverterManager should be request scoped
-    // to avoid threading issues. 
-    Assert.assert_it(null == converterManager);
-    
-    cmFactory = ConverterManagerFactory.newInstance();
-    Assert.assert_it(null != cmFactory);
-    
-    converterManager = cmFactory.newConverterManager(servletContext);
-    objectManager.put(servletContext,
-		      Constants.REF_CONVERTERMANAGER, converterManager);
-    
-    
-    // Step 8, put the treeEngine in the OM ApplicationScope
+    // Step 2, put the treeEngine in the OM ApplicationScope
     TreeEngine treeEngine = 
 	new com.sun.faces.treebuilder.TreeEngineImpl(servletContext);
     Assert.assert_it(null != treeEngine);
     objectManager.put(servletContext, Constants.REF_TREEENGINE, 
 		      treeEngine);
 
-    // Step 9 create a default Message Factory and put it in Global scope
+    // Step 3 create a default Message Factory and put it in Global scope
     javax.faces.MessageFactory mf = abstractFactory.newMessageFactory();
     Assert.assert_it(null != mf);
     mf.setClassLoader(this.getClass().getClassLoader());

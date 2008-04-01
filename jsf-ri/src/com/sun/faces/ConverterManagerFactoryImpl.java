@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterManagerFactoryImpl.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
+ * $Id: ConverterManagerFactoryImpl.java,v 1.3 2002/04/15 20:11:01 jvisvanathan Exp $
  */
 
 /*
@@ -18,8 +18,15 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.faces.ConverterManager;
 import javax.faces.FacesException;
+import javax.faces.NavigationMap;
+import javax.faces.FacesContext;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.util.Map;
+
+import javax.faces.FacesFactory;
 
 /**
  *
@@ -27,14 +34,14 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ConverterManagerFactoryImpl.java,v 1.2 2002/03/15 20:58:00 jvisvanathan Exp $
+ * @version $Id: ConverterManagerFactoryImpl.java,v 1.3 2002/04/15 20:11:01 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class ConverterManagerFactoryImpl extends ConverterManagerFactory
+public class ConverterManagerFactoryImpl implements FacesFactory
 {
     //
     // Protected Constants
@@ -69,14 +76,29 @@ public class ConverterManagerFactoryImpl extends ConverterManagerFactory
     // Class methods
     //
 
-    public ConverterManager newConverterManager(javax.servlet.ServletContext sc) 
-            throws FacesException {
-        ConverterManager result = new ConverterManagerImpl(sc);
-        return result;
+    //
+    // Methods from FacesFactory
+    //
+
+    public Object newInstance(String facesName, ServletRequest req,
+                          ServletResponse res) throws FacesException
+    {
+        throw new FacesException("Can't create ConverterManager from Request and Response");
     }
 
-    //
-    // General Methods
-    //
+    public Object newInstance(String facesName, ServletContext ctx) throws FacesException
+    {
+        return (new ConverterManagerImpl(ctx)); 
+    }
 
+    public Object newInstance(String facesName) throws FacesException
+    {
+        throw new FacesException("Can't create ConverterManager");    
+    }
+
+    public Object newInstance(String facesName, Map args) throws FacesException
+    {
+        throw new FacesException("Can't create ConverterManager from map");
+    }
+   
 } // end of class ConverterManagerFactoryImpl

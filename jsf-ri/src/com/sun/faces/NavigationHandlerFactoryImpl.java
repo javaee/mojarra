@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerFactoryImpl.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
+ * $Id: NavigationHandlerFactoryImpl.java,v 1.3 2002/04/15 20:11:02 jvisvanathan Exp $
  */
 
 /*
@@ -18,12 +18,15 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletContext;
+import java.util.Map;
 
 import javax.faces.NavigationHandler;
 import javax.faces.NavigationMap;
+import javax.faces.Constants;
 
 import javax.faces.FacesException;
-
+import javax.faces.FacesFactory;
 
 /**
  *
@@ -31,14 +34,14 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NavigationHandlerFactoryImpl.java,v 1.2 2002/04/05 19:41:13 jvisvanathan Exp $
+ * @version $Id: NavigationHandlerFactoryImpl.java,v 1.3 2002/04/15 20:11:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class NavigationHandlerFactoryImpl extends NavigationHandlerFactory
+public class NavigationHandlerFactoryImpl implements FacesFactory
 {
     //
     // Protected Constants
@@ -73,13 +76,31 @@ public class NavigationHandlerFactoryImpl extends NavigationHandlerFactory
     // Class methods
     //
 
-    public NavigationHandler newNavigationHandler( NavigationMap navMap ) 
-            throws FacesException {
+   //
+    // Methods from FacesFactory
+    //
 
-        NavigationHandler result = new NavigationHandlerImpl( navMap);
-        return result;
+    public Object newInstance(String facesName, ServletRequest req,
+                          ServletResponse res) throws FacesException
+    {
+        throw new FacesException("Can't create NavigationHandler from Request and Response");
     }
 
+    public Object newInstance(String facesName, ServletContext ctx) throws FacesException
+    {
+        throw new FacesException("Can't create NavigationHandler from ServletContext");
+    }
+
+    public Object newInstance(String facesName) throws FacesException
+    {
+        throw new FacesException("Can't create NavigationHandler");   
+    }
+
+    public Object newInstance(String facesName, Map args) throws FacesException
+    {
+        return new NavigationHandlerImpl(((NavigationMap)args.get(Constants.REF_NAVIGATIONMAP)));
+    }
+    
     //
     // General Methods
     //

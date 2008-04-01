@@ -1,5 +1,5 @@
 /*
- * $Id: TestAbstractFactory.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
+ * $Id: TestAbstractFactory.java,v 1.4 2002/04/15 20:11:03 jvisvanathan Exp $
  */
 
 /*
@@ -19,8 +19,13 @@ import javax.faces.FacesContext;
 import javax.faces.EventQueue;
 import javax.faces.FacesException;
 import javax.faces.Constants;
-
+import javax.faces.NavigationMap;
+import javax.faces.NavigationHandler;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
+import javax.faces.ObjectAccessor;
+import javax.faces.ConverterManager;
 
 import java.util.HashMap;
 import java.util.Properties;
@@ -35,7 +40,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestAbstractFactory.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
+ * @version $Id: TestAbstractFactory.java,v 1.4 2002/04/15 20:11:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,7 +170,12 @@ public void testHardCodedMethods()
     MessageFactory messageFactory = null;
     MessageList messageList = null;
     FacesContext facesContext = null;
+   
+    ConverterManager converterManager = null;
+    NavigationHandler navHandler = null;
+    ObjectAccessor objectAccessor = null;
     EventQueue eventQueue = null;
+
     boolean result;
 
     eventQueue = abstractFactory.newEventQueue();
@@ -174,11 +184,23 @@ public void testHardCodedMethods()
     messageFactory = abstractFactory.newMessageFactory();
     assertTrue(null != messageFactory);
 
-    messageList = abstractFactory.newMessageList();
-    assertTrue(null != messageList);
-
+    
+    ServletContext servletContext = request.getSession().getServletContext();
+    converterManager = abstractFactory.newConverterManager(servletContext);
+    assertTrue(null != converterManager);
+    
+    NavigationMap navMap = new NavigationMapImpl();
+    navHandler = abstractFactory.newNavigationHandler(navMap);
+    assertTrue(null != navHandler);
+    
     facesContext = abstractFactory.newFacesContext(request, response);
     assertTrue(null != facesContext);
+    
+    objectAccessor = abstractFactory.newObjectAccessor(facesContext);
+    assertTrue(null != objectAccessor);
+    
+    messageList = abstractFactory.newMessageList();
+    assertTrue(null != messageList);
 
 }
 

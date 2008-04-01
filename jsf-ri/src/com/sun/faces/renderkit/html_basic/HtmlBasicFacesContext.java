@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicFacesContext.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
+ * $Id: HtmlBasicFacesContext.java,v 1.4 2002/04/15 20:11:02 jvisvanathan Exp $
  */
 
 
@@ -31,7 +31,6 @@ import javax.faces.EventQueue;
 import javax.faces.EventDispatcher;
 import javax.faces.NavigationHandler;
 import javax.faces.ClientCapabilities;
-import com.sun.faces.NavigationHandlerFactory;
 import javax.faces.UIForm;
 import javax.faces.NavigationMap;
 import javax.faces.TreeNavigator;
@@ -44,15 +43,13 @@ import java.util.Locale;
 import java.util.Stack;
 import java.util.EventObject;
 
-import com.sun.faces.ObjectAccessorFactory;
-
 /**
  *
  *  <B>HtmlBasicFacesContext</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicFacesContext.java,v 1.3 2002/04/12 23:16:34 eburns Exp $
+ * @version $Id: HtmlBasicFacesContext.java,v 1.4 2002/04/15 20:11:02 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,7 +87,6 @@ public class HtmlBasicFacesContext extends FacesContext {
     private EventQueue eventQueue = null;
     private String formId = null;
     private NavigationHandler navHandler = null;
-    private NavigationHandlerFactory navHandlerFactory = null;
     private MessageList _messageList = null;
 
     /** 
@@ -154,16 +150,23 @@ public class HtmlBasicFacesContext extends FacesContext {
         return objectManager;
     }
 
+   /**
+    * PRECONDITION: AbstractFactory is in ObjectManager.
+    *
+    * @see javax.faces.ObjectAccessor
+    */
     public ObjectAccessor getObjectAccessor() {
+        AbstractFactory abstractFactory;
+       
         if (null == objectAccessor) {
-            getObjectManager();  // Make sure our lazy objectManager is there
-            Assert.assert_it(null != objectManager);
+            Assert.assert_it(null != getObjectManager());
 
-            ObjectAccessorFactory oaFactory = (ObjectAccessorFactory)
-                objectManager.get(Constants.REF_OBJECTACCESSORFACTORY);
-            Assert.assert_it(null != oaFactory);
+            abstractFactory = (AbstractFactory)
+                objectManager.get(Constants.REF_ABSTRACTFACTORY);
+            Assert.assert_it(null != abstractFactory);
             try {
-                objectAccessor = oaFactory.newObjectAccessor(this);
+                objectAccessor = abstractFactory.newObjectAccessor(this);
+                Assert.assert_it(objectAccessor != null );
             } catch ( FacesException fe ) {
                 // PENDING(edburns): log message
             }    
@@ -243,16 +246,23 @@ public class HtmlBasicFacesContext extends FacesContext {
         }
         return _messageList;
     }
-
+    
+    /**
+    * PRECONDITION: AbstractFactory is in ObjectManager.
+    *
+    * @see javax.faces.NavigationHandler.
+    */
     public NavigationHandler getNavigationHandler() {
 
+        AbstractFactory abstractFactory = null;
         if (navHandler != null) {
             return navHandler;
         }
         // get the navigationHandler Factory
-        navHandlerFactory = (NavigationHandlerFactory)
-                    objectManager.get(Constants.REF_NAVIGATIONHANDLERFACTORY);
-        Assert.assert_it(null != navHandlerFactory);
+        Assert.assert_it(getObjectManager() != null);
+        abstractFactory = (AbstractFactory)
+                    objectManager.get(Constants.REF_ABSTRACTFACTORY);
+        Assert.assert_it(null != abstractFactory);
 
         // get NavigationMap from ObjectManager
         // and pass it to constructor. For this we need to look up the
@@ -270,7 +280,7 @@ public class HtmlBasicFacesContext extends FacesContext {
                 NavigationMap navMap = form_obj.getNavigationMap(this);
                 if ( navMap != null ) {
                     try {
-                        navHandler = navHandlerFactory.newNavigationHandler(navMap);
+                        navHandler = abstractFactory.newNavigationHandler(navMap);
                     } catch (FacesException e) {
                         // PENDING(edburns): log message
                         System.out.println("Exception getEventQueue: " +
