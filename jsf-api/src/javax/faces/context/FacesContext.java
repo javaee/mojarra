@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.24 2002/07/26 04:04:39 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.25 2002/07/26 04:12:51 craigmcc Exp $
  */
 
 /*
@@ -159,15 +159,18 @@ public abstract class FacesContext {
     /**
      * <p>Return an <code>Iterator</code> over the {@link Message}s that have
      * been queued that are associated with the specified {@link UIComponent},
-     * which must exist in the request component tree.
-     * If no such messages have been queued, return an empty
+     * which must exist in the request component tree. if
+     * <code>component</code> is not <code>null</code>.  If
+     * <code>component</code> is <code>null</code>, return an
+     * <code>Iterator</code> over the {@link Message}s that have been queued
+     * that are not associated with any specific {@link UIComponent}.</p>
+     *
+     * <p>If no such messages have been queued, return an empty
      * <code>Iterator</code>.</p>
      *
      * @param component The {@link UIComponent} for which messages are
-     *  requested
-     *
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
+     *  requested, or <code>null</code> for messages not associated with
+     *  any component
      */
     public abstract Iterator getMessages(UIComponent component);
 
