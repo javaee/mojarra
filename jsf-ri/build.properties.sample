@@ -1,6 +1,6 @@
 # Make these values be correct on your system, then rename to
 # build.properties.  On win32, make sure to preserve the \\ syntax
-# for escaping backslashes.  
+# for escaping backslashes.    
 
 tomcat.home = D:\\tomcat4.0
 cactus.home = D:\\cactus-23-1.2
