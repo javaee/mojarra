@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.22 2002/08/09 00:00:51 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.23 2002/08/29 00:28:03 jvisvanathan Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ public class FacesContextImpl extends FacesContext
     private ArrayList applicationEvents = null;
     private HashMap requestEvents = null;
     private int requestEventsCount = 0;
-
+    private EvaluationContext evaluationContext = null;
     /**
 
     * Store mapping of UIComponent instance to ArrayList of Message
@@ -421,75 +421,37 @@ public class FacesContextImpl extends FacesContext
         requestEventsCount++;
     } 
     
+    private EvaluationContext getEvaluationContext() {
+        if (evaluationContext == null) {
+            evaluationContext = new EvaluationContext(this);
+        }
+        return (evaluationContext);
+    }
+    
     /**
      * POSTCONDITION: Class type of the property is returned as identified by  
      * the model reference string.
      *
-     * @param request ServletRequest object representing the client request
-     * @param objectReference A string referencing a bean's property.
+     * @param modelReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
      *     model reference string cannot be found in the any scope,
      *     or the property value could not be retrieved.
      * @exception NullPointerException if model argument is <code>null</code>
      */
-    public Class getModelType(String expression) throws FacesException {
-        
-        if (expression == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+    public Class getModelType(String modelReference) throws FacesException {
+        if (modelReference == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        String property = null;
-        String baseName = null;
-        Object object = null;
-        Class returnClass = null;
-        
-        if (expression.startsWith("${") && expression.endsWith("}")) {
-	    expression = expression.substring(2, expression.length() - 1);
-	}
-	// if it is not a nested property, then it directly references
-	// a model object. So there should be a model bean existing
-	// in the one of the scopes with this name.
-	if ( expression.indexOf(".") == -1 ) {
-	    // PENDING (visvan) temporary: assume the model bean is stored
-	    // in session
-	    object = getObjectFromScope(expression);
-	    if (object == null) {
-		Object [] params = {expression};
-		throw new FacesException(Util.getExceptionMessage(Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
-								  params));
-	    }
-	    returnClass = object.getClass();
-	} else {    
-	    property = expression.substring((expression.indexOf(".")+1));
-	    baseName = expression.substring(0, expression.indexOf("."));
-	    // PENDING (visvan) temporary: assume the model bean is stored
-	    // in session
-	    object = getObjectFromScope(baseName);
-	    if (object == null) {
-		throw new FacesException("Named Object: '"+baseName+
-					 "' not found in.");
-	    }
-	    try {
-		returnClass = PropertyUtils.getPropertyType(object, 
-							    property);
-	    } catch (IllegalAccessException iae) {
-		throw new FacesException(iae.getMessage());
-	    } catch (InvocationTargetException ite) {
-		throw new FacesException(ite.getMessage());
-	    } catch (NoSuchMethodException nme) {
-		throw new FacesException(nme.getMessage());
-	    }
-	}    
-        return returnClass;
-    }
-
+        return (getEvaluationContext().getModelType(modelReference));
+    } 
+    
     /**
      * POSTCONDITION: An object is returned as identified by  
      * the model reference string.
      *
-     * @param request ServletRequest object representing the client request
-     * @param objectReference A string referencing a bean's property.
+     * @param modelReference A string referencing a bean's property.
      *
      * @exception FacesException If the model bean identified by the
      *     model reference string cannot be found in the any scope,
@@ -497,59 +459,19 @@ public class FacesContextImpl extends FacesContext
      * @exception NullPointerException if model argument is <code>null</code>
      *
      */
-    public Object getModelValue(String expression) throws FacesException {
-        
-        if (expression == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+    public Object getModelValue(String modelReference) throws FacesException {
+        if (modelReference == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        String property = null;
-        String baseName = null;
-        Object object = null;
-        Object returnObject = null;
-     
-        if (expression.startsWith("${") && expression.endsWith("}")) {
-	    expression = expression.substring(2, expression.length() - 1);
-	}
-	// if it is not a nested property, then it directly references
-	// a model object. So there should be a model bean existing
-	// in the one of scopes with this name.
-	if ( expression.indexOf(".") == -1 ) {
-	    returnObject = getObjectFromScope(expression);
-	    if (returnObject == null) {
-		throw new FacesException("Named Object: '"+expression+
-					 "' not found.");
-	    }
-	} else {    
-	    property = expression.substring((expression.indexOf(".")+1));
-	    baseName = expression.substring(0, expression.indexOf("."));
-	    object = getObjectFromScope(baseName);
-	    if (object == null) {
-		throw new FacesException("Named Object: '"+baseName+
-					 "' not found.");
-	    }
-	    try {
-		returnObject = PropertyUtils.getNestedProperty(object, 
-							       property);
-	    } catch (IllegalAccessException iae) {
-		throw new FacesException(iae.getMessage());
-	    } catch (InvocationTargetException ite) {
-		throw new FacesException(ite.getMessage());
-	    } catch (NoSuchMethodException nme) {
-		throw new FacesException(nme.getMessage());
-	    }
-	}    
-	return returnObject;
+        Object value = getEvaluationContext().get(modelReference);
+        return (value);
     }
 
     /**
-     * // PENDING (visvan) update Java docs.
+     * 
      * POSTCONDITION: The property value is set, where the property
-     * is identified by the model reference string.  The model bean
-     * with the new value is put back into the session scope.
-     * This could change in future.
-     *
-     * @param request ServletRequest object representing the client request
+     * is identified by the model reference string.  
      * @param modelReference A string referencing a bean's property.
      * @param value The value of the property to be set.
      *
@@ -558,75 +480,14 @@ public class FacesContextImpl extends FacesContext
      *     or the property value could not be set.
      * @exception NullPointerException if model argument is <code>null</code>
      */
-    public void setModelValue(String expression, Object value) 
+    public void setModelValue(String modelReference, Object value) 
             throws FacesException {
-        
-        if (expression == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        if (modelReference == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-        String property = null;
-        String baseName = null;
-        Object object = null;
-        
-       // expression reference string complies with JSTL syntax
-        if (expression.startsWith("${") && expression.endsWith("}")) {
-	    expression = expression.substring(2, expression.length() - 1);
-	}
-	// if it is not a nested property, then it directly references
-	// a model object. So there should be a model bean existing
-	// in one of the scopes with this name.
-	if ( expression.indexOf(".") == -1 ) {
-	    object = getObjectFromScope(baseName);
-	    if (object == null) {
-		throw new FacesException("Named Object: '"+expression+
-					 "' not found.");
-	    }
-	    // PENDING (visvan) store model objects in correct scope.
-	    object = value;
-	    getHttpSession().setAttribute(baseName, object);   
-	} else {
-	    property = expression.substring((expression.indexOf(".")+1));
-	    baseName = expression.substring(0, expression.indexOf("."));
-	    // PENDING (visvan) temporary: store model bean in 
-	    // correct scope.
-	    object = getObjectFromScope(baseName);
-	    if (object == null) {
-		throw new FacesException("Named Object: '"+baseName+
-					 "' not found.");
-	    }
-	    try {
-		PropertyUtils.setNestedProperty(object, property, value);
-	    } catch (IllegalAccessException iae) {
-		throw new FacesException(iae.getMessage());
-	    } catch (InvocationTargetException ite) {
-		throw new FacesException(ite.getMessage());
-	    } catch (NoSuchMethodException nme) {
-		throw new FacesException(nme.getMessage());
-	    }
-	}    
+        getEvaluationContext().set(modelReference, value);
     }
-
-    /**
-     * This method does a narrow to broad search to locate a model
-     * bean
-     */
-    private Object getObjectFromScope(String modelRef) {
-        // search request, session and application scope in that order.
-        Object modelObj = null;
-        modelObj = getServletRequest().getAttribute(modelRef);
-        if ( modelObj != null ) {
-            return modelObj;
-        }
-        if (getHttpSession() != null ) {
-            modelObj = getHttpSession().getAttribute(modelRef);
-            if ( modelObj != null ) {
-                return modelObj;
-            }
-        }    
-        modelObj = getServletContext().getAttribute(modelRef);
-        return modelObj;
-    }    
     
     public void release() {
         request = null;

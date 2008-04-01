@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl_Model.java,v 1.6 2002/08/05 23:00:29 eburns Exp $
+ * $Id: TestFacesContextImpl_Model.java,v 1.7 2002/08/29 00:28:05 jvisvanathan Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.TestBean.Inner2Bean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl_Model.java,v 1.6 2002/08/05 23:00:29 eburns Exp $
+ * @version $Id: TestFacesContextImpl_Model.java,v 1.7 2002/08/29 00:28:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,7 +72,7 @@ public class TestFacesContextImpl_Model extends ServletFacesTestCase
 public void testSet()
 {
     FacesContext facesContext = getFacesContext();
-    System.out.println("Testing setModelValue()");
+    System.out.println("Testing setModelValue() with model bean in session ");
     TestBean testBean = new TestBean();
     InnerBean inner = new InnerBean();
     Inner2Bean innerInner = new Inner2Bean();
@@ -101,18 +101,18 @@ public void testSet()
     System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue("${TestBean.inner.inner2.three}", "three");
     assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
-    
 }
 
 public void testSetWithNoCurlyBraces()
 {
     FacesContext facesContext = getFacesContext();
-    System.out.println("Testing setModelValue()");
+    System.out.println("Testing setModelValue() with model bean in request ");
     TestBean testBean = new TestBean();
     InnerBean inner = new InnerBean();
     Inner2Bean innerInner = new Inner2Bean();
-
-    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
+    
+    (facesContext.getHttpSession()).removeAttribute("TestBean");
+    (facesContext.getServletRequest()).setAttribute("TestBean", testBean);
     
     // Test one level of nesting
     System.setProperty(TestBean.PROP, TestBean.FALSE);
@@ -136,13 +136,12 @@ public void testSetWithNoCurlyBraces()
     System.setProperty(TestBean.PROP, TestBean.FALSE);
     facesContext.setModelValue("TestBean.inner.inner2.three", "three");
     assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
-    
 }
 
 public void testGet()
 {
     FacesContext facesContext = getFacesContext();
-    System.out.println("Testing getModelValue()");
+    System.out.println("Testing getModelValue() with model bean in context");
     assertTrue( facesContext != null );
     TestBean testBeanResult = null, testBean = new TestBean();
     InnerBean inner = new InnerBean();
@@ -158,10 +157,14 @@ public void testGet()
     
     assertTrue( facesContext != null );
     assertTrue( facesContext.getHttpSession() != null );
-    (facesContext.getHttpSession()).setAttribute("TestBean", testBean);
-
+    
+    (facesContext.getServletRequest()).removeAttribute("TestBean");
+    (facesContext.getHttpSession()).removeAttribute("TestBean");
+    (facesContext.getServletContext()).setAttribute("TestBean", testBean);
+ 
     // Test zero levels of nesting
     testBeanResult = (TestBean) facesContext.getModelValue("${TestBean}");
+    assertTrue( testBeanResult != null);
     assertTrue(testBeanResult == testBean);
     
     // Test one level of nesting
@@ -213,13 +216,14 @@ public void testGet()
 public void testGetWithNoCurlyBraces()
 {
     FacesContext facesContext = getFacesContext();
-    System.out.println("Testing getModelValue()");
+    System.out.println("Testing getModelValue() with model bean in session ");
     assertTrue( facesContext != null );
     TestBean testBeanResult = null, testBean = new TestBean();
     InnerBean inner = new InnerBean();
     Inner2Bean inner2 = new Inner2Bean();
     String result;
 
+    (facesContext.getServletContext()).removeAttribute("TestBean");
     // Init the beans
     testBean.setOne("one");
     inner.setTwo("two");
@@ -288,6 +292,7 @@ public void testModelObjectSearch() {
     TestBean testBean = new TestBean();
     testBean.setOne("one");
     
+    (facesContext.getHttpSession()).removeAttribute("TestBean");
     boolean gotException = false;
     try {
 	facesContext.getModelType(null);
@@ -351,6 +356,7 @@ public void testModelObjectSearchWithNoCurlyFries() {
     TestBean testBean = new TestBean();
     testBean.setOne("one");
     
+    (facesContext.getServletContext()).removeAttribute("TestBean");
     boolean gotException = false;
     try {
 	facesContext.getModelType(null);

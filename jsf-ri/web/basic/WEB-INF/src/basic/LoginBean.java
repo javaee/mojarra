@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.9 2002/08/20 20:43:15 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.10 2002/08/29 00:28:06 jvisvanathan Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ public class LoginBean {
     String userName = null;
     String password = null;
     String address = null;
-    String validUser = null;
+    Boolean validUser = null;
     Integer pin = null;
 
     String defaultOptions[] = {
@@ -82,12 +82,12 @@ public class LoginBean {
         return address;
     }
 
-    public void setValidUser(String valid_user) {
+    public void setValidUser(Boolean valid_user) {
         validUser = valid_user;
         System.out.println("Set validUser " + validUser);
     }
 
-    public String getvalidUser() {
+    public Boolean getvalidUser() {
         System.out.println("get validUser " + validUser);
         return validUser;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.29 2002/08/23 18:42:35 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.30 2002/08/29 00:28:04 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.29 2002/08/23 18:42:35 jvisvanathan Exp $
+ * @version $Id: RadioRenderer.java,v 1.30 2002/08/29 00:28:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -169,7 +169,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
         
         StringBuffer buffer = new StringBuffer();
 	if (null != (alignStr = (String) uiSelectOne.getAttribute("layout"))) {
-	    alignVertical = alignStr.equalsIgnoreCase("vertical") ? 
+	    alignVertical = alignStr.equalsIgnoreCase("PAGE_DIRECTION") ? 
 		true : false;
 	}
 	if (null != (borderStr = (String) uiSelectOne.getAttribute("border"))){
@@ -202,7 +202,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
             buffer.append("\" value=\"");
             buffer.append((String) curItem.getValue());
             buffer.append("\"");
-            // render HTML 4.0 attributes if any for radi tag.
+            // render HTML 4.0 attributes if any for radio tag.
             buffer.append(Util.renderPassthruAttributes(context, 
                     curItemWrapper.getUISelectItem()));
 	    buffer.append(Util.renderBooleanPassthruAttributes(context, 

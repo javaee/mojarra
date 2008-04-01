@@ -193,7 +193,9 @@
               <tr>
              <td> <faces:selectboolean_checkbox id="validUser" labelAlign="LINE_END">
 
-                  <faces:output_text id="checkLabel" value="Valid user ?" />
+                  <faces:output_text id="checkLabel" 
+                                     key="validUserLabel"
+                                                bundle="${basicBundle}"/>
                   </faces:selectboolean_checkbox>
                   </td>
              </tr>
@@ -258,7 +260,7 @@
                      accesskey="N" tabindex="20" >
 
 		<faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-		<faces:selectitem  itemValue="1" itemLabel="1" title="One"/>
+		<faces:selectitem  itemValue="1" itemLabel="1" title="One" modelReference="${LoginBean.userName}" />
 		<faces:selectitem  itemValue="2" itemLabel="2" title="Two" />
 		<faces:selectitem  itemValue="3" itemLabel="3" title="Three" />
 		<faces:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
@@ -280,7 +282,7 @@
 
 	<TD>
 
-	      <faces:selectone_radiogroup id="shipType" layout="horizontal" 
+	      <faces:selectone_radiogroup id="shipType" layout="LINE_DIRECTION" 
                      labelAlign="PAGE_START">
 
 		<faces:selectitem itemValue="nextDay" itemLabel="Next Day" 
@@ -302,7 +304,7 @@
 
 	<TD>
 		<faces:selectone_radiogroup id="verticalRadio" labelAlign="LINE_START"
-                                            layout="vertical" border="1" >
+                                            layout="PAGE_DIRECTION" border="1" >
 
   		<faces:selectitem itemValue="nextDay" itemLabel="Next Day" 
                                   selected="true" />
@@ -324,7 +326,7 @@
 
 	      <faces:selectone_radiogroup id="radioFromModel" 
                        modelReference="${LoginBean.currentOption}"
-                       layout="horizontal" labelAlign="PAGE_END" >
+                       layout="LINE_DIRECTION" labelAlign="PAGE_END" >
 
 		<faces:selectitems id="optionListOptions"
                                    title="options come from model" 
