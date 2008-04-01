@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.3 2002/07/30 22:56:18 craigmcc Exp $
+ * $Id: SelectItem.java,v 1.4 2002/07/31 00:30:00 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,9 @@
 package javax.faces.component;
 
 
+import java.io.Serializable;
+
+
 /**
  * <p><strong>SelectItem</strong> represents a single <em>item</em> in the
  * list of supported <em>items</em> associated with a {@link UISelectMany}
@@ -18,7 +21,7 @@ package javax.faces.component;
  * {@link UISelectItem} component.</p>
  */
 
-public class SelectItem {
+public class SelectItem implements Serializable {
 
 
     // ----------------------------------------------------------- Constructors
