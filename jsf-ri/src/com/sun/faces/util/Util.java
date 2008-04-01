@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.19 2002/08/02 19:32:10 jvisvanathan Exp $
+ * $Id: Util.java,v 1.20 2002/08/02 21:01:26 rkitain Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.19 2002/08/02 19:32:10 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.20 2002/08/02 21:01:26 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -114,6 +114,9 @@ public class Util extends Object
 
     public static final String NULL_CONTEXT_ERROR_MESSAGE_ID = 
 	"com.sun.faces.NULL_CONTEXT_ERROR";
+
+    public static final String NULL_LOCALE_ERROR_MESSAGE_ID =
+        "com.sun.faces.NULL_LOCALE_ERROR";
 //
 // Class Variables
 //

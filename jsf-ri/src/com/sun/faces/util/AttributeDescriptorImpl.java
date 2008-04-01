@@ -76,11 +76,19 @@ public class AttributeDescriptorImpl extends AttributeDescriptor {
     }
 
     public String getDisplayName(Locale locale) {
+        if (locale == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_LOCALE_ERROR_MESSAGE_ID));
+        }
         return null;
     }    
     
    
     public String getDescription(Locale locale) {
+        if (locale == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                Util.NULL_LOCALE_ERROR_MESSAGE_ID));
+        }
         return null;
     }    
 
