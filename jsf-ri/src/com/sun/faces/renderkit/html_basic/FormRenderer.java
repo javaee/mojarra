@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.4 2001/11/08 23:36:49 edburns Exp $
+ * $Id: FormRenderer.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.4 2001/11/08 23:36:49 edburns Exp $
+ * @version $Id: FormRenderer.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -147,23 +147,5 @@ public class FormRenderer extends Object implements Renderer
         return;
     }
 
-    
-    // ----VERTIGO_TEST_START
-
-    //
-    // Test methods
-    //
-
-    public static void main(String [] args)
-    {
-        Assert.setEnabled(true);
-        FormRenderer me = new FormRenderer();
-        Log.setApplicationName("FormRenderer");
-        Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: FormRenderer.java,v 1.4 2001/11/08 23:36:49 edburns Exp $");
-    
-    }
-
-    // ----VERTIGO_TEST_END
 
 } // end of class FormRenderer

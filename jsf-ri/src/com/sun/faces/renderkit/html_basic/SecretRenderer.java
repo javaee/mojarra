@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.1 2001/11/09 22:54:40 visvan Exp $
+ * $Id: SecretRenderer.java,v 1.2 2001/11/17 01:33:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.1 2001/11/09 22:54:40 visvan Exp $
+ * @version $Id: SecretRenderer.java,v 1.2 2001/11/17 01:33:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -160,22 +160,5 @@ public class SecretRenderer extends Object implements Renderer
     }
 
 
-    // ----VERTIGO_TEST_START
-
-    //
-    // Test methods
-    //
-
-    public static void main(String [] args)
-    {
-        Assert.setEnabled(true);
-        SecretRenderer me = new SecretRenderer();
-        Log.setApplicationName("SecretRenderer");
-        Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: SecretRenderer.java,v 1.1 2001/11/09 22:54:40 visvan Exp $");
-    
-    }  
-
-    // ----VERTIGO_TEST_END
 
 } // end of class SecretRenderer

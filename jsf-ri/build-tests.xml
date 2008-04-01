@@ -1,0 +1,123 @@
+<project name="Java Server Faces Unit Tests" default="test.local" basedir=".">
+
+<!--
+        This is a generic build.xml file for Ant that is used to run the
+        Java Server Faces unit tests. This build file *must* be called from the
+        build.xml file in order to inherit most of it's needed properties
+        (See below for the list of these properties).
+-->
+
+<!-- ========== Prerequisite Properties =================================== -->
+
+
+<!--
+        These properties MUST be set on the "ant" command line, the "antrc"
+        properties file in your home directory, or from settings in a superior
+        build.xml script.
+
+        build.home                    Base directory into which we are building
+                                      the Struts components.
+
+        servlet.jar                   The servlet jar (either 2.2 or 2.3)
+
+        junit.jar                     The JUnit jar
+
+        tomcat.home.32                The home directory of where Tomcat 3.2
+                                      is installed
+
+        tomcat.home.40                The home directory of where Tomcat 4.0
+                                      is installed
+
+        compile.debug                 The debug mode for compilation
+
+        compile.deprecation           The deprecation mode for compilation
+
+        compile.optimize              The optimization mode for compilation
+
+        src.dir                       The location of the source directory
+
+        app.name                      The name of the Struts jar (without the
+                                      '.jar' suffix
+
+-->
+
+<!-- ========== Initialization Properties ================================= -->
+
+<!-- ========== Derived Properties ======================================== -->
+
+<!--
+        These property values are derived from values defined above, and
+        generally should NOT be overridden by command line settings
+-->
+
+    <!-- Source directory for tests -->
+    <property name="src.test.dir" value="${basedir}/test"/>
+
+    <!-- Configuration directory for tests -->
+    <property name="conf.test.dir" value="conf/test"/>
+
+    <!-- Output directory for tests -->
+    <property name="out.test.dir" value="${build.home}/test"/>
+
+    <!-- Compilation Classpath -->
+    <path id="compile.classpath">
+      <pathelement location="${servlet.jar}"/>
+      <pathelement location="${junit.jar}"/>
+      <pathelement location="${build.home}/classes"/>
+      <pathelement location="${jsf-api.jar}"/>
+    </path>
+
+<!-- ========== Executable Targets ======================================== -->
+
+
+<!-- 
+        Create directories and copy files for the struts tests
+-->
+    <target name="prepare.test">
+
+        <!-- Create target directories for classes -->
+        <mkdir dir="${out.test.dir}/classes"/>
+
+    </target>
+
+<!-- 
+        Compile unit tests
+-->
+    <target name="compile.test" depends="prepare.test">
+
+        <javac srcdir="${src.test.dir}"
+            destdir="${out.test.dir}/classes"
+            debug="${compile.debug}"
+            optimize="${compile.optimize}"
+            deprecation="${compile.deprecation}">
+
+            <classpath refid="compile.classpath"/>
+        </javac>
+        <copy todir="${out.test.dir}/classes">
+            <fileset dir="${src.test.dir}" includes="**/*.properties"/>
+        </copy>
+
+    </target>
+
+    <target name="run.test" depends="compile.test">
+
+        <junit printsummary="yes" haltonfailure="yes" haltonerror="yes" fork="yes">
+
+            <classpath>
+                <pathelement path="${java.class.path}"/>
+                <pathelement location="${out.test.dir}/classes"/>
+            </classpath>
+            <classpath refid="compile.classpath"/>
+
+            <formatter type="plain" usefile="false"/>
+
+            <!-- Suite of tests -->
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
+            <test name="com.sun.faces.TestObjectTable"/>
+
+        </junit>
+
+    </target>
+
+
+</project>

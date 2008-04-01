@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.5 2001/11/17 01:33:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -36,7 +36,7 @@ import javax.faces.ClientCapabilities;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.5 2001/11/17 01:33:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -183,21 +183,7 @@ protected void initialize() {
 protected void destroy() {
 }
 
-// ----VERTIGO_TEST_START
-
-//
-// Test methods
-//
-
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    Log.setApplicationName("HtmlBasicRenderKit");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderKit.java,v 1.4 2001/11/10 01:09:22 edburns Exp $");
-}
-
-// ----VERTIGO_TEST_END
+    // The test for this class is in TestRenderKit.java
 
 } // end of class HtmlBasicRenderKit
 

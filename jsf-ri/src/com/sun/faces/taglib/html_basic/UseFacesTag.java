@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
+ * $Id: UseFacesTag.java,v 1.5 2001/11/17 01:33:01 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -38,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: UseFacesTag.java,v 1.4 2001/11/10 01:09:22 edburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.5 2001/11/17 01:33:01 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,27 +111,5 @@ public int doStartTag() throws JspException {
 					  renderContext);
     return EVAL_BODY_INCLUDE;
 }
-
-// ----VERTIGO_TEST_START
-
-//
-// Test methods
-//
-
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    UseFacesTag me = new UseFacesTag();
-    Log.setApplicationName("UseFacesTag");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: UseFacesTag.java,v 1.4 2001/11/10 01:09:22 edburns Exp $");
-    try {
-        me.doStartTag(); 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
-
-// ----VERTIGO_TEST_END
 
 } // end of class SelectBoolean_CheckboxTag

@@ -35,12 +35,6 @@
   <!-- The base directory for executable scripts -->
   <property name="bin.home" value="${basedir}/etc/bin"/>
 
-  <!-- The base directory for unit test sources -->
-  <property name="test.home" value="${basedir}/test/src"/>
-
-  <!-- The base directory for benchmark sources -->
-  <property name="benchmark.home" value="${basedir}/test-benchmark/src"/>
-
   <!-- The home directory for Ant -->
   <property name="ant.home" value="${basedir}/lib"/>
 
@@ -72,19 +66,6 @@
     <pathelement location="${servlet.jar}"/>
   </path>
 
-  <path id="test.classpath">
-    <pathelement location="${build.home}/classes" />
-    <pathelement location="${build.home}/test/classes" />
-    <pathelement path="${java.class.path}"/>
-    <path refid="compile.classpath" />
-  </path>
-
-  <path id="benchmark.classpath">
-    <pathelement location="${build.home}/classes" />
-    <pathelement location="${build.home}/test-benchmark/classes" />
-    <pathelement path="${java.class.path}"/>
-    <path refid="compile.classpath" />
-  </path>
 
     <!-- Directory where core struts library configurations files are stored -->
     <property name="conf.share.dir" value="conf/share"/>
@@ -105,17 +86,11 @@
     <mkdir dir="${build.home}/classes"/>
     <mkdir dir="${build.home}/javadocs"/>
     <mkdir dir="${build.home}/lib"/>
-    <mkdir dir="${build.home}/test"/>
-    <mkdir dir="${build.home}/test/classes"/>
-    <mkdir dir="${build.home}/test-benchmark"/>
-    <mkdir dir="${build.home}/test-benchmark/classes"/>
     <mkdir dir="${build.home}/library/classes/META-INF/tlds"/>
     <copy file="${conf.share.dir}/html_basic.tld"
          tofile="${build.home}/library/classes/META-INF/html_basic.tld"/>
     <!-- unjar mozutil to classes, so we don't have to expose it -->
-    <exec dir="${build.home}/classes" executable="jar">
-      <arg line="-xf ${mozutil.jar}"/>
-    </exec>
+    <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
 
   <target name="compile" depends="prepare"
@@ -140,6 +115,7 @@
     <delete    dir="${dist.home}"/>
     <delete> 
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
+      <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
     </delete>
   </target>
 
@@ -232,30 +208,6 @@
     </javadoc>
   </target>
 
-  <target name="compile-tests"
-          description="Compile the unit tests">
-    <javac srcdir="${test.home}"
-           destdir="${build.home}/test/classes"
-           debug="${compile.debug}"
-           deprecation="${compile.deprecation}" >
-      <include name="**/*.java" />
-      <classpath refid="test.classpath" />
-    </javac>
-  </target>
-
-  <target name="run-tests" depends="compile-tests"
-          description="Run the unit tests">
-    <junit printsummary="no" haltonfailure="no" fork="true">
-      <classpath refid="test.classpath"/>
-      <formatter type="plain" usefile="false" />
-      <batchtest>
-        <fileset dir="${build.home}/test/classes">
-          <include name="**/AllTests.class" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-
   <target name="run-factory" depends="compile" 
    description="Run the factory test">
     <java classname="com.sun.faces.renderkit.html_basic.HtmlBasicRenderContextFactory">
@@ -270,36 +222,19 @@
     </java>
   </target>
 
-  <target name="run-single-test" if="testcase" depends="compile-tests"
-          description="Run a unit test">
-    <junit printsummary="no" haltonfailure="yes" fork="true">
-      <classpath refid="test.classpath"/>
-      <formatter type="plain" usefile="false" />
-      <test name="${testcase}" />
-    </junit>
-  </target>
+    <target name="run.test" depends="prepare,compile,compile.test"
+     description="Run unit tests">
 
-  <target name="compile-benchmarks"
-          description="Compile the benchmarks">
-    <javac srcdir="${benchmark.home}"
-           destdir="${build.home}/test-benchmark/classes"
-           debug="false"
-           optimize="true"
-           deprecation="false" >
-      <include name="**/*.java" />
-      <classpath refid="benchmark.classpath" />
-    </javac>
-  </target>
+        <ant antfile="build-tests.xml" target="run.test"/>
+    
+    </target>
 
-  <target name="run-benchmarks" depends="compile-benchmarks"
-          description="Run the benchmarks">
-    <java classname="xml_benchmark.Main"
-          classpathref="benchmark.classpath"
-          fork="true" />
-    <java classname="stub_tie_benchmark.Main"
-          classpathref="benchmark.classpath"
-          fork="true" />
-  </target>
+    <target name="compile.test" depends="prepare,compile"
+     description="Run unit tests">
+
+        <ant antfile="build-tests.xml" target="compile.test"/>
+    
+    </target>
 
   <target name="main" depends="prepare,compile"/>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.4 2001/11/10 01:34:37 edburns Exp $
+ * $Id: Command_ButtonTag.java,v 1.5 2001/11/17 01:33:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Command_ButtonTag.java,v 1.4 2001/11/10 01:34:37 edburns Exp $
+ * @version $Id: Command_ButtonTag.java,v 1.5 2001/11/17 01:33:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -177,23 +177,5 @@ public class Command_ButtonTag extends TagSupport {
          
         return (EVAL_BODY_INCLUDE);
     }
-
-    // ----VERTIGO_TEST_START
-
-    //
-    // Test methods
-    //
-
-    public static void main(String [] args)
-    {
-        Assert.setEnabled(true);
-        Command_ButtonTag me = new Command_ButtonTag();
-        Log.setApplicationName("Command_ButtonTag");
-        Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: Command_ButtonTag.java,v 1.4 2001/11/10 01:34:37 edburns Exp $");
-    
-    }
-
-    // ----VERTIGO_TEST_END
-
+ 
 } // end of class Command_ButtonTag

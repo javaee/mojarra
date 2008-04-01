@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.3 2001/11/10 01:34:37 edburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.4 2001/11/17 01:33:01 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.3 2001/11/10 01:34:37 edburns Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.4 2001/11/17 01:33:01 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -185,21 +185,5 @@ public class SelectBoolean_CheckboxTag extends TagSupport {
         return (EVAL_BODY_INCLUDE);
     }
 
-    // ----VERTIGO_TEST_START
-
-    //
-    // Test methods
-    //
-
-    public static void main(String [] args) {
-        Assert.setEnabled(true);
-        SelectBoolean_CheckboxTag me = new SelectBoolean_CheckboxTag();
-        Log.setApplicationName("SelectBoolean_CheckboxTag");
-        Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: SelectBoolean_CheckboxTag.java,v 1.3 2001/11/10 01:34:37 edburns Exp $");
-    
-    }
-
-    // ----VERTIGO_TEST_END
 
 } // end of class SelectBoolean_CheckboxTag

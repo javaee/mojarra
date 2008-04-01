@@ -1,6 +1,6 @@
 
 /*
- * $Id: HtmlBasicRenderContext.java,v 1.4 2001/11/13 23:20:04 edburns Exp $
+ * $Id: HtmlBasicRenderContext.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderContext.java,v 1.4 2001/11/13 23:20:04 edburns Exp $
+ * @version $Id: HtmlBasicRenderContext.java,v 1.5 2001/11/17 01:32:59 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,22 +105,5 @@ public void setOutputMethod(OutputMethod om) {
 
 
 
-// ----VERTIGO_TEST_START
-
-//
-// Test methods
-//
-
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    HtmlBasicRenderContext me = new HtmlBasicRenderContext();
-    Log.setApplicationName("HtmlBasicRenderContext");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: HtmlBasicRenderContext.java,v 1.4 2001/11/13 23:20:04 edburns Exp $");
-    
-}
-
-// ----VERTIGO_TEST_END
 
 } // end of class HtmlBasicRenderContext

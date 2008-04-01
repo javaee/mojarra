@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.3 2001/11/07 00:18:33 rogerk Exp $
+ * $Id: ButtonRenderer.java,v 1.4 2001/11/17 01:32:59 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -35,7 +35,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.3 2001/11/07 00:18:33 rogerk Exp $
+ * @version $Id: ButtonRenderer.java,v 1.4 2001/11/17 01:32:59 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,22 +172,5 @@ public class ButtonRenderer extends Object implements Renderer
     }
 
 
-    // ----VERTIGO_TEST_START
-
-    //
-    // Test methods
-    //
-
-    public static void main(String [] args)
-    {
-        Assert.setEnabled(true);
-        ButtonRenderer me = new ButtonRenderer();
-        Log.setApplicationName("ButtonRenderer");
-        Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: ButtonRenderer.java,v 1.3 2001/11/07 00:18:33 rogerk Exp $");
-    
-    }
-
-    // ----VERTIGO_TEST_END
 
 } // end of class ButtonRenderer

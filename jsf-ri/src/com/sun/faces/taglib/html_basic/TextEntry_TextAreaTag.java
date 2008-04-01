@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_TextAreaTag.java,v 1.2 2001/11/10 01:34:37 edburns Exp $
+ * $Id: TextEntry_TextAreaTag.java,v 1.3 2001/11/17 01:33:01 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -37,7 +37,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_TextAreaTag.java,v 1.2 2001/11/10 01:34:37 edburns Exp $
+ * @version $Id: TextEntry_TextAreaTag.java,v 1.3 2001/11/17 01:33:01 edburns Exp $
  * 
  *
  */
@@ -316,16 +316,5 @@ public class TextEntry_TextAreaTag extends BodyTagSupport
         return this.wrap;
     }
 
-    public static void main(String [] args)
-    {
-        Assert.setEnabled(true);
-        TextEntry_TextAreaTag me = new TextEntry_TextAreaTag();
-        Log.setApplicationName("TextEntry_TextAreaTag");
-        Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: TextEntry_TextAreaTag.java,v 1.2 2001/11/10 01:34:37 edburns Exp $");
-    
-    }
-
-// ----VERTIGO_TEST_END
 
 } // end of class TextEntry_TextAreaTag

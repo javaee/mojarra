@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.4 2001/11/17 01:33:00 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.4 2001/11/17 01:33:00 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,23 +111,6 @@ public void renderEnd(RenderContext rc, WComponent c) throws IOException {
 
 public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
     return false;
-}
-
-
-// ----VERTIGO_TEST_START
-
-//
-// Test methods
-//
-
-public static void main(String [] args)
-{
-    Assert.setEnabled(true);
-    TextAndGraphicRenderer me = new TextAndGraphicRenderer();
-    Log.setApplicationName("TextAndGraphicRenderer");
-    Log.setApplicationVersion("0.0");
-    Log.setApplicationVersionDate("$Id: TextAndGraphicRenderer.java,v 1.3 2001/11/08 20:55:26 edburns Exp $");
-    
 }
 
 // ----VERTIGO_TEST_END
