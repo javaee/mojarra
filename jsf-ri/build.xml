@@ -144,11 +144,11 @@
      <property name="dist.war"  value="${app.name}.war"/>
      <mkdir  dir="${dist.home}/${app.name}"/>
 
-     <!-- copy app.name directory to tomcat/webapps -->
+     <!-- copy app.name directory under dist.home -->
     <copy todir="${dist.home}/${app.name}">
       <fileset dir="${basedir}/web/${app.name}" />
     </copy>
- 
+
     <!-- copy all the classes under com.sun.faces package -->
     <copy todir="${dist.home}/${app.name}/WEB-INF/classes">
       <fileset dir="${build.home}/classes" excludes="**/CVS/**" />
@@ -158,6 +158,10 @@
     <copy   todir="${dist.home}/${app.name}/WEB-INF/classes">
       <fileset dir="${jsf.api.home}/build/classes"  excludes="**/CVS/**" />
     </copy>
+
+    <!-- copy tld file -->
+    <copy file="${conf.share.dir}/html_basic.tld"
+         toDir="${dist.home}/${app.name}/WEB-INF"/>
 
     <copy file="${mozutil.jar}" todir="${dist.home}/${app.name}/WEB-INF/lib">
     </copy>

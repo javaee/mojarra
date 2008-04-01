@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TextTag.java,v 1.2 2001/11/09 22:54:41 visvan Exp $
+ * $Id: TextEntry_SecretTag.java,v 1.1 2001/11/09 22:54:41 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -12,7 +12,7 @@
  * you entered into with Sun.
  */
 
-// Output_TextTag.java
+// TextEntry_SecretTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -26,7 +26,7 @@ import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
 import javax.faces.RenderKit;
-import javax.faces.WOutput;
+import javax.faces.WTextEntry;
 
 import javax.servlet.http.*;
 import javax.servlet.jsp.JspException;
@@ -34,16 +34,16 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  *
- *  <B>Output_TextTag</B> is a class ...
+ *  <B>TextEntry_SecretTag</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Output_TextTag.java,v 1.2 2001/11/09 22:54:41 visvan Exp $
+ * @version $Id: TextEntry_SecretTag.java,v 1.1 2001/11/09 22:54:41 visvan Exp $
  * 
  *
  */
 
-public class Output_TextTag extends TagSupport
+public class TextEntry_SecretTag extends TagSupport
 {
     //
     // Protected Constants
@@ -60,6 +60,8 @@ public class Output_TextTag extends TagSupport
     // Attribute Instance Variables
     private String name = null;
     private String value = null;
+    private String size = null;
+    private String maxlength = null;
 
     // Relationship Instance Variables
 
@@ -67,7 +69,7 @@ public class Output_TextTag extends TagSupport
     // Constructors and Initializers
     //
 
-    public Output_TextTag()
+    public TextEntry_SecretTag()
     {
         super();
         // ParameterCheck.nonNull();
@@ -89,7 +91,7 @@ public class Output_TextTag extends TagSupport
     //
 
     /**
-     * Renders Output_Text's start tag
+     * Renders TextEntry_SecretTag's start tag and its attributes.
      */
     public int doStartTag() throws JspException{
         // check if the tag is already created and exists in the 
@@ -103,7 +105,7 @@ public class Output_TextTag extends TagSupport
             Assert.assert_it( rc != null );
             Renderer text_renderer = getRenderer(rc);
             HttpSession session = pageContext.getSession();
-            WOutput c = (WOutput) session.getAttribute(name);
+            WTextEntry c = (WTextEntry) session.getAttribute(name);
             if (c == null) {
                 c = createComponent(rc);
                 addToScope(c, session);
@@ -111,13 +113,18 @@ public class Output_TextTag extends TagSupport
             try {
                 text_renderer.renderStart(rc, c);
             } catch (java.io.IOException e) {
-                throw new JspException("Problem rendering Output component: "+
+                throw new JspException("Problem rendering TextEntry component: "+
                         e.getMessage());
             }
         }
         return(EVAL_BODY_INCLUDE);
     }
 
+    /**
+     * Returns the appropriate renderer for the tag
+     *
+     * @param rc RenderContext to obtain renderkit
+     */
     public Renderer getRenderer(RenderContext rc ) throws JspException{
 
         Renderer renderer = null;
@@ -126,7 +133,7 @@ public class Output_TextTag extends TagSupport
             throw new JspException("Can't determine RenderKit!");
         }
         try {
-            String class_name = "com.sun.faces.renderkit.html_basic.TextRenderer";
+            String class_name = "com.sun.faces.renderkit.html_basic.SecretRenderer";
             renderer = renderKit.getRenderer(class_name);
         } catch (FacesException e) {
             e.printStackTrace();
@@ -135,19 +142,21 @@ public class Output_TextTag extends TagSupport
 
         if (renderer == null) {
             throw new JspException(
-                "Could not determine 'renderer' for Output component");
+                "Could not determine 'renderer' for TextEntry component");
         }
         return renderer;	
     }
 
     /**
-     * Creates a Output component and sets renderer specific
+     * Creates a TextEntry component and sets renderer specific
      * properties.
      */
-    protected WOutput createComponent(RenderContext rc) {
-        WOutput c = new WOutput();
+    protected WTextEntry createComponent(RenderContext rc) {
+        WTextEntry c = new WTextEntry();
         // set renderer specific properties 
         c.setAttribute(rc, "name", name);
+        c.setAttribute(rc, "size", size);
+        c.setAttribute(rc, "maxlength", maxlength);
         // set render independent attributes 
         c.setValue(value);
         return c;
@@ -184,7 +193,7 @@ public class Output_TextTag extends TagSupport
      * For now use session scope.
      *
      */
-    void addToScope(WOutput c, HttpSession session) {
+    void addToScope(WTextEntry c, HttpSession session) {
         session.setAttribute(name, c);
     }
 
@@ -215,23 +224,57 @@ public class Output_TextTag extends TagSupport
     }
 
     /**
-     * Sets the "value" attribute
+     * Sets "value" attribute
      * @param value value of "value" attribute
      */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * Sets the size attribute
+     * @param size value of size attribute
+     */
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    /**
+     * Returns the value of size attribute
+     *
+     * @return String value of size attribute
+     */
+    public String getSize() {
+        return this.size;
+    }
+
+    /**
+     * Sets  maxlength attribute
+     * @param  maxlength value of maxlength attribute
+     */
+    public void setMaxlength(String maxlength) {
+        this.maxlength = maxlength;
+    }
+
+   /**
+     * Returns the value of maxlength attribute
+     *
+     * @return String value of maxlength attribute
+     */
+    public String getMaxlength() {
+        return this.maxlength;
+    }
+
     public static void main(String [] args)
     {
         Assert.setEnabled(true);
-        Output_TextTag me = new Output_TextTag();
-        Log.setApplicationName("Output_TextTag");
+        TextEntry_SecretTag me = new TextEntry_SecretTag();
+        Log.setApplicationName("TextEntry_SecretTag");
         Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: Output_TextTag.java,v 1.2 2001/11/09 22:54:41 visvan Exp $");
+        Log.setApplicationVersionDate("$Id: TextEntry_SecretTag.java,v 1.1 2001/11/09 22:54:41 visvan Exp $");
     
     }
 
 // ----VERTIGO_TEST_END
 
-} // end of class Output_TextTag
+} // end of class TextEntry_SecretTag

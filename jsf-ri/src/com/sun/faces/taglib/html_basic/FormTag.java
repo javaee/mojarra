@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.3 2001/11/08 00:18:21 visvan Exp $
+ * $Id: FormTag.java,v 1.4 2001/11/09 22:54:41 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -22,9 +22,6 @@ import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit;
-
-import java.util.Iterator;
-
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -41,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.3 2001/11/08 00:18:21 visvan Exp $
+ * @version $Id: FormTag.java,v 1.4 2001/11/09 22:54:41 visvan Exp $
  * 
  *
  */
@@ -97,13 +94,13 @@ public class FormTag extends TagSupport
         // check if the tag is already created and exists in the 
         // JSP pool. If not, create form component.
         
-        // JV figure out the scope. For now use session scope
-        // JV use tagext class to validate attributes.
+        // PENDING(visvan) figure out the scope. For now use session scope
+        // PENDING(visvan) use tagext class to validate attributes.
         if ( name != null ) {
             RenderContext rc = (RenderContext)pageContext.getSession().
                     getAttribute("renderContext");
+            Assert.assert_it( rc != null );
             Renderer form_renderer = getRenderer(rc);
-
             HttpSession session = pageContext.getSession();
             WForm c = (WForm) session.getAttribute(name);
             if (c == null) {
@@ -185,7 +182,6 @@ public class FormTag extends TagSupport
      *
      */
     void addToScope(WForm c, HttpSession session) {
-        System.out.println("adding Form to session: " + name);
         session.setAttribute(name, c);
     }
 
@@ -216,6 +212,7 @@ public class FormTag extends TagSupport
         if ( c != null ) {
             RenderContext rc = (RenderContext)pageContext.getSession().
                     getAttribute("renderContext");
+            Assert.assert_it( rc != null );
             Renderer form_renderer = getRenderer(rc);
             try {
                 form_renderer.renderEnd(rc, c);
@@ -233,7 +230,7 @@ public class FormTag extends TagSupport
         FormTag me = new FormTag();
         Log.setApplicationName("FormTag");
         Log.setApplicationVersion("0.0");
-        Log.setApplicationVersionDate("$Id: FormTag.java,v 1.3 2001/11/08 00:18:21 visvan Exp $");
+        Log.setApplicationVersionDate("$Id: FormTag.java,v 1.4 2001/11/09 22:54:41 visvan Exp $");
     
     }
 
