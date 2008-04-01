@@ -40,9 +40,16 @@
 
   <!-- Application name to deploy under tomcat -->
   <property name="app.name"       value="fruitstand"/>
-
-  <!-- Directory name to deploy under tomcat -->
+ 
+  <!-- Directory name to deploy app.name under tomcat -->
   <property name="deploy.home"  value="${tomcat.home}/webapps/${app.name}"/>
+
+  <!-- Name of ultra-simple web-app -->
+  <property name="basic.name"  value="basic"/>
+
+  <!-- Directory name to deploy app.name under tomcat -->
+  <property name="basic.home"  value="${tomcat.home}/webapps/${basic.name}"/>
+
 
   <!-- ************ Dependencies **** *************************************** -->
 
@@ -142,6 +149,7 @@
   <target name="clean.tomcat"
    description="Clean tomcat of anything we've put in it">
     <delete    dir="${deploy.home}"/>
+    <delete    dir="${basic.home}"/>
   </target>
 
 
@@ -294,7 +302,6 @@
 
     <!-- builds"basic" sample app -->
     <target name="build.basic.war" depends="clean,prepare,compile,compile.basic.sample" >
-     <property name="basic.name"  value="basic"/>
      <!-- name of the war file -->
      <property name="dist.war"  value="${basic.name}.war"/>
 
@@ -320,7 +327,7 @@
     <unjar src="${jsf-api.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
 
     <!-- copy dependent libs -->
-    <unjar  src="${commons.beanutils.jar}" dest="${dist.home}/${basic.name}/WEB-INF/lib"/>
+    <unjar  src="${commons.beanutils.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
     <unjar  src="${commons.collections.jar}" dest="${dist.home}/${basic.name}/WEB-INF/classes"/>
 
     <!-- copy tld file -->
