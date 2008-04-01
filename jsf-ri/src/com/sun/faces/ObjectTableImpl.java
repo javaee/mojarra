@@ -1,5 +1,5 @@
 /*
- * $Id: ObjectTableImpl.java,v 1.7 2001/11/30 00:00:23 edburns Exp $
+ * $Id: ObjectTableImpl.java,v 1.8 2001/12/01 01:54:08 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -29,8 +29,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.Iterator;
 
 
 /**
@@ -39,7 +37,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ObjectTableImpl.java,v 1.7 2001/11/30 00:00:23 edburns Exp $
+ * @version $Id: ObjectTableImpl.java,v 1.8 2001/12/01 01:54:08 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -210,35 +208,6 @@ public Object get(Object scopeKey, Object name) {
 	}
     }
 
-    return result;
-}
-
-    /**
-
-    * @see javax.faces.ObjectTable.Scope#get(java.lang.Object name)
-
-    */
-
-public Object get(Object name) {
-    // for each scopeKey in the outerMapMap, look for a value under key
-    // name.
-    Set keySet = outerMap.keySet();
-    Iterator keys = keySet.iterator();
-    Object scopeKey, result = null;
-    Map second;
-
-    // This loop finds the scopeKey for which there is a name
-    while (keys.hasNext()) {
-	// this wacky statement uses the current value from the iterator
-	// as a key in the outerMap, saving the key in the local var
-	// scopeKey.
-	result = outerMap.get(scopeKey = keys.next());
-	if (null != result) {
-	    // now, do a real get on this scopeKey and name
-	    result = this.get(scopeKey, name);
-	    break;
-	}
-    }
     return result;
 }
 
