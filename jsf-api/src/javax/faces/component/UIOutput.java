@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.10 2002/06/07 23:31:12 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.11 2002/06/27 21:47:28 craigmcc Exp $
  */
 
 /*
@@ -91,6 +91,19 @@ public class UIOutput extends UIComponentBase {
             ResponseWriter writer = context.getResponseWriter();
             writer.write(value.toString());
         }
+
+    }
+
+
+    /**
+     * <p>This component is output only, so do not update the model
+     * even if there is a non-null <code>modelReference</code> expression.
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void updateModel(FacesContext context) {
+
+        ; // No action required
 
     }
 

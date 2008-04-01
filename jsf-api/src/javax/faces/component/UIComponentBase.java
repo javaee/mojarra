@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.8 2002/06/24 04:34:54 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.9 2002/06/27 21:47:28 craigmcc Exp $
  */
 
 /*
@@ -384,14 +384,14 @@ public abstract class UIComponentBase implements UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        Object value = getAttribute("value");
+        Object value = getValue();
         if (value != null) {
             return (value);
         }
-        String model = (String) getAttribute("model");
-        if (model != null) {
+        String modelReference = getModelReference();
+        if (modelReference != null) {
             if (context != null) {
-                return (context.getModelValue(model));
+                return (context.getModelValue(modelReference));
             }
         }
         return (null);

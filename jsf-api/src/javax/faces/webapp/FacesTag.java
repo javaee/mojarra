@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.11 2002/06/27 05:47:44 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.12 2002/06/27 21:47:28 craigmcc Exp $
  */
 
 /*
@@ -141,7 +141,7 @@ public abstract class FacesTag extends TagSupport {
      *
      * @param modelReference The new model reference expression
      */
-    public void setModelReference(String model) {
+    public void setModelReference(String modelReference) {
 
         this.modelReference = modelReference;
 
@@ -394,7 +394,8 @@ public abstract class FacesTag extends TagSupport {
 
     /**
      * <p>Override properties of the specified component if the corresponding
-     * properties of this tag handler were explicitly set.</p>
+     * properties of this tag handler were explicitly set, and the
+     * corresponding attribute of the component is not set.</p>
      *
      * <p>Tag subclasses that want to support additional override properties
      * must ensure that the base class <code>overrideProperties()</code>
@@ -419,7 +420,8 @@ public abstract class FacesTag extends TagSupport {
         component.setRendererType(getRendererType());
 
         // Override other properties as required
-        if (modelReference != null) {
+        if ((modelReference != null) &&
+            (component.getModelReference() == null)) {
             component.setModelReference(modelReference);
         }
 
