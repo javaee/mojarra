@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeFactoryImpl.java,v 1.4 2002/06/12 23:51:09 jvisvanathan Exp $
+ * $Id: XmlTreeFactoryImpl.java,v 1.5 2002/06/18 04:56:32 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.apache.commons.logging.impl.SimpleLog;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeFactoryImpl.java,v 1.4 2002/06/12 23:51:09 jvisvanathan Exp $
+ * @version $Id: XmlTreeFactoryImpl.java,v 1.5 2002/06/18 04:56:32 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -165,7 +165,9 @@ public Tree createTree(ServletContext servletContext,
 
     if (null == treeId) {
 	// PENDING(edburns): need name for default tree
-	result = new XmlTreeImpl(servletContext, root, "default");
+        // PENDING(rogerk) : what to specify for page url
+        // (last parameter)????
+	result = new XmlTreeImpl(servletContext, root, "default", "");
 	return result;
     }
 
@@ -214,26 +216,25 @@ public Tree createTree(ServletContext servletContext,
 	}
     }
 
-    // push the topmost component onto the stack so we have
-    // access to it after parsing is complete.
+    // push the xml wraper object (which contains the page (jsp) url
+    // and tree) onto the stack so we have access to it after parsing 
+    // is complete.
     //
-    digester.push(root);
+    XmlTreeConfig xmlTreeConfig = new XmlTreeConfig(root);
+    digester.push(xmlTreeConfig);
     
     try {
-	root = (UIComponentBase)digester.parse(treeInput);
+	xmlTreeConfig = (XmlTreeConfig)digester.parse(treeInput);
     } catch (Throwable e) {
 	throw new FacesException("Can't parse stream for " + treeId, e);
     }
 
-    result = new XmlTreeImpl(servletContext, root, treeId);
+    root = xmlTreeConfig.getRoot();
+    String pageUrl = xmlTreeConfig.getPageUrl();
+
+    result = new XmlTreeImpl(servletContext, root, treeId, pageUrl);
 
     return result;
-}
-
-public Iterator getTreeIds(ServletContext context)
-{
-    Assert.assert_it(null != dialectProvider);
-    return getTreeIdsFromSuffix(context, dialectProvider.getSuffix());
 }
 
 // The testcase for this class is TestXmlTreeFactoryImpl.java 

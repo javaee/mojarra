@@ -1,5 +1,5 @@
 /*
- * $Id: XmlTreeImpl.java,v 1.3 2002/06/08 00:40:24 eburns Exp $
+ * $Id: XmlTreeImpl.java,v 1.4 2002/06/18 04:56:32 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XmlTreeImpl.java,v 1.3 2002/06/08 00:40:24 eburns Exp $
+ * @version $Id: XmlTreeImpl.java,v 1.4 2002/06/18 04:56:32 rkitain Exp $
  * 
  * @see	javax.faces.tree.Tree
  *
@@ -58,6 +58,7 @@ protected String treeId = null;
 
 protected RenderKit renderKit = null;
 protected UIComponent root = null;
+protected String pageUrl = null;
 
 //
 // Constructors and Initializers    
@@ -71,13 +72,14 @@ protected UIComponent root = null;
 */ 
 
 public XmlTreeImpl(ServletContext context, UIComponent newRoot, 
-		   String newTreeId)
+		   String newTreeId, String pageUrl)
 {
     super();
     ParameterCheck.nonNull(context);
 
     setRoot(newRoot);
     setTreeId(newTreeId);
+    setPageUrl(pageUrl);
 
     renderKit = (RenderKit) 
 	context.getAttribute(RIConstants.DEFAULT_RENDER_KIT);
@@ -117,6 +119,11 @@ void setTreeId(String newTreeId)
    treeId = newTreeId;
 }
 
+void setPageUrl(String pageUrl) {
+    ParameterCheck.nonNull(pageUrl);
+    this.pageUrl = pageUrl;
+}
+
 //
 // Methods from Tree
 //
@@ -143,11 +150,16 @@ public String getTreeId()
     return treeId;
 }
 
+public String getPageUrl() {
+    return pageUrl;
+}
+
 public void release()
 {
     root = null;
     treeId = null;
     renderKit = null;
+    pageUrl = null;
 }
 
 // The testcase for this class is TestXmlTreeImpl.java 

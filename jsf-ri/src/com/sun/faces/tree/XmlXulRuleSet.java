@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.3 2002/06/08 20:42:12 rkitain Exp $
+ * $Id: XmlXulRuleSet.java,v 1.4 2002/06/18 04:56:33 rkitain Exp $
  */
 
 /*
@@ -59,8 +59,10 @@ public class XmlXulRuleSet extends RuleSetBase {
      */
     public void addRuleInstances(Digester digester) {
 
-        digester.addObjectCreate("window", "javax.faces.component.UIForm");
-        digester.addSetNext("window", "addChild", "javax.faces.component.UIComponent");
+        digester.addCallMethod("*/page-url", "setPageUrl", 0);
+
+        digester.addObjectCreate("*/window", "javax.faces.component.UIForm");
+        digester.addSetNext("*/window", "addChild", "javax.faces.component.UIComponent");
 
         digester.addObjectCreate("*/label", "javax.faces.component.UIOutput");
         digester.addSetNext("*/label", "addChild", "javax.faces.component.UIComponent");
@@ -77,6 +79,9 @@ public class XmlXulRuleSet extends RuleSetBase {
         digester.addObjectCreate("*/menupopup", "javax.faces.component.UISelectOne");
         digester.addSetNext("*/menupopup", "addChild", "javax.faces.component.UIComponent");
 
+        digester.addObjectCreate("*/link", "javax.faces.component.UICommand");
+        digester.addSetNext("*/link", "addChild", "javax.faces.component.UIComponent");
+
         digester.addObjectCreate("*/button", "javax.faces.component.UICommand");
         digester.addSetNext("*/button", "addChild", "javax.faces.component.UIComponent");
 
@@ -85,12 +90,13 @@ public class XmlXulRuleSet extends RuleSetBase {
 
         ComponentRule cRule = new ComponentRule();
         cRule.setBuildComponent(buildComponent);
-        digester.addRule("window", cRule);
+        digester.addRule("*/window", cRule);
         digester.addRule("*/label", cRule);
         digester.addRule("*/textbox", cRule);
         digester.addRule("*/checkbox", cRule);
         digester.addRule("*/radiogroup", cRule);
         digester.addRule("*/menupopup", cRule);
+        digester.addRule("*/link", cRule);
         digester.addRule("*/button", cRule);
 
         ComponentNestedRule cnRule = new ComponentNestedRule();
