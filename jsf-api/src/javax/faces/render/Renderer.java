@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.2 2002/05/15 18:20:08 craigmcc Exp $
+ * $Id: Renderer.java,v 1.3 2002/05/16 18:39:16 craigmcc Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public abstract class Renderer {
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
-    public abstract void decode(FacesContext context, UIComponent copmonent)
+    public abstract void decode(FacesContext context, UIComponent component)
         throws IOException;
 
 
@@ -188,6 +188,18 @@ public abstract class Renderer {
      */
     public abstract void encode(FacesContext context, UIComponent component)
         throws IOException;
+
+
+    /**
+     * <p>Perform format validations on the characteristics of the specified
+     * component, as represented in the current request.  Add any required
+     * error messages to the message list associated with the specified
+     * {@link FacesContext}.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     * @param component UIComponent to be validated
+     */
+    public abstract void validate(FacesContext context, UIComponent component);
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.9 2002/05/15 18:20:07 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.10 2002/05/16 18:39:16 craigmcc Exp $
  */
 
 /*
@@ -896,6 +896,21 @@ public abstract class UIComponent {
      *  is <code>null</code>
      */
     public void encode(FacesContext context) throws IOException {
+
+        ; // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Perform format validations on the characteristics of this component,
+     * as represented in the current request.  Add any required error messages
+     * to the message list associated with the specified {@link FacesContext}.
+     * </p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void validate(FacesContext context) {
 
         ; // Default implementation does nothing
 
