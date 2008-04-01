@@ -10,7 +10,7 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
     <h1>JavaServer Faces 1.0 Standard RenderKit</h1>
-    <h3>$Id: StandardRenderKit.jsp,v 1.6 2002/09/03 18:42:35 jvisvanathan Exp $</h3>
+    <h3>$Id: StandardRenderKit.jsp,v 1.7 2002/09/04 22:32:42 eburns Exp $</h3>
 
     <p>The elements in this page should follow the
     StandardRenderKit.html page in the jsf-api.</p>
@@ -66,13 +66,20 @@
 
            <%@ include file="selectone_radiogroup_row.jsp" %>
 
+           <%@ include file="selectmany_menu_row.jsp" %>
+
+           <%@ include file="selectmany_listbox_row.jsp" %>
+
+           <%@ include file="selectmany_checkbox_row.jsp" %>
+
 
          </table>
 
          <faces:command_button id="standardRenderKitSubmit" 
-                               commandName="standardRenderKitSubmit" />
-
-
+                      commandName="standardRenderKitSubmit">
+             <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
+                      bundle="${basicBundle}" />
+         </faces:command_button>
 
        </faces:form>
 

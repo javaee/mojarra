@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.6 2002/09/03 18:42:31 jvisvanathan Exp $
+ * $Id: SelectItemTag.java,v 1.7 2002/09/04 22:32:37 eburns Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.jsp.JspException;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UISelectMany;
 import javax.faces.component.UIComponent;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItem;
@@ -32,7 +33,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectItemTag.java,v 1.6 2002/09/03 18:42:31 jvisvanathan Exp $
+ * @version $Id: SelectItemTag.java,v 1.7 2002/09/04 22:32:37 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -132,7 +133,8 @@ public SelectItemTag()
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UISelectItem selectItem = (UISelectItem) component;
-	UISelectOne selectOne = (UISelectOne) selectItem.getParent();
+	UIComponent parent = selectItem.getParent();
+	Assert.assert_it(null != parent);
 	
 	if (null == selectItem.getItemValue()) {
 	    selectItem.setItemValue(getItemValue());
@@ -143,10 +145,49 @@ public SelectItemTag()
 	if (null == selectItem.getItemDescription()) {
 	    selectItem.setItemDescription(getDescription());
 	}
-	// If this SelectItemTag instance is selected and
-	// there is no selected item in our UISelectOne...
-	if (null != getSelected() && null == selectOne.currentValue(context)) {
-	    selectOne.setSelectedValue(selectItem.getItemValue());
+
+	if (parent.getComponentType().equals(UISelectOne.TYPE)) {
+	    UISelectOne selectOne = (UISelectOne) parent;
+	    // If this SelectItemTag instance is selected and
+	    // there is no selected item in our UISelectOne...
+	    if (null != getSelected() && null == selectOne.currentValue(context)) {
+		selectOne.setSelectedValue(selectItem.getItemValue());
+	    }
+	}
+	else if (parent.getComponentType().equals(UISelectMany.TYPE)) {
+	    UISelectMany selectMany = (UISelectMany) parent;
+	    Object newSelectItems[] = null, selectItems[] = null;
+	    int len, i = 0;
+	    boolean foundMatch = false;
+	    // If this SelectItemTag instance is marked as selected and
+	    // there is no Value in the UISelectMany values that matches
+	    // the current value
+	    if (null != getSelected()) {
+		// If there are no selected values
+		if (null == (selectItems = selectMany.getSelectedValues())) {
+		    // create some.
+		    selectItems = new Object[] { selectItem.getItemValue() };
+		}
+		else {
+		    // Search the items for a match.
+		    len = selectItems.length;
+		    for (i = 0; i < len; i++) {
+			if (foundMatch = selectItems[i] == 
+			    selectItem.getItemValue()) {
+			    break;
+			}
+		    }
+		    if (!foundMatch) {
+			newSelectItems = new Object[len+1];
+			System.arraycopy(selectItems, 0, newSelectItems,0,len);
+			newSelectItems[len] = selectItem.getItemValue();
+			selectItems = newSelectItems;
+			newSelectItems = null;
+		    }
+		}
+		Assert.assert_it(null != selectItems);
+		selectMany.setSelectedValues(selectItems);
+	    }
 	}
     }
 

@@ -53,7 +53,7 @@
               <td> 
 
                    <faces:input_text id="userName" modelReference="${LoginBean.userName}"
-                       value="JavaServerFaces" >
+                       value="joebob" >
 
 		     <faces:validator className="javax.faces.validator.LengthValidator"/>
 		     <faces:validator className="javax.faces.validator.RequiredValidator"/>
@@ -394,6 +394,74 @@
 	</TD>
 
       </TR>
+				<TR>
+					<TD>Multi-select menu:</TD>
+					<TD><faces:selectmany_menu id="ManyApples">
+						<faces:selectitem itemValue="0" itemLabel="zero" />
+						<faces:selectitem itemValue="1" itemLabel="one" />
+						<faces:selectitem itemValue="2" itemLabel="two" />
+						<faces:selectitem itemValue="3" itemLabel="three" />
+						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<faces:selectitem itemValue="5" itemLabel="five" />
+						<faces:selectitem itemValue="6" itemLabel="six" />
+						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+						<faces:selectitem itemValue="8" itemLabel="eight" />
+						<faces:selectitem itemValue="9" itemLabel="nine" />
+					</faces:selectmany_menu></TD>
+				</TR>
+				<TR>
+					<TD>Multi-select menumodel:</TD>
+					<TD><faces:selectmany_menu id="menumodel" size="3">
+						<faces:selectitems id="menumodelitems"
+							modelReference="${LoginBean.options}" />
+					</faces:selectmany_menu></TD>
+				</TR>
+				<TR>
+					<TD>Multi-select listbox:</TD>
+					<TD><faces:selectmany_listbox id="ManyApples2">
+						<faces:selectitem itemValue="0" itemLabel="zero" />
+						<faces:selectitem itemValue="1" itemLabel="one" />
+						<faces:selectitem itemValue="2" itemLabel="two" />
+						<faces:selectitem itemValue="3" itemLabel="three" />
+						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<faces:selectitem itemValue="5" itemLabel="five" />
+						<faces:selectitem itemValue="6" itemLabel="six" />
+						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+						<faces:selectitem itemValue="8" itemLabel="eight" />
+						<faces:selectitem itemValue="9" itemLabel="nine" />
+					</faces:selectmany_listbox></TD>
+				</TR>
+				<TR>
+					<TD>Multi-select listmodel:</TD>
+					<TD><faces:selectmany_listbox id="listmodel"
+						modelReference="${LoginBean.currentOption}">
+						<faces:selectitems id="listmodelitems"
+							modelReference="${LoginBean.options}" />
+					</faces:selectmany_listbox></TD>
+				</TR>
+				<TR>
+					<TD>Multi-select checkbox:</TD>
+					<TD><faces:selectmany_checkboxlist id="ManyApples3">
+						<faces:selectitem itemValue="0" itemLabel="zero" />
+						<faces:selectitem itemValue="1" itemLabel="one" />
+						<faces:selectitem itemValue="2" itemLabel="two" />
+						<faces:selectitem itemValue="3" itemLabel="three" />
+						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<faces:selectitem itemValue="5" itemLabel="five" />
+						<faces:selectitem itemValue="6" itemLabel="six" />
+						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+						<faces:selectitem itemValue="8" itemLabel="eight" />
+						<faces:selectitem itemValue="9" itemLabel="nine" />
+					</faces:selectmany_checkboxlist></TD>
+				</TR>
+				<TR>
+					<TD>Multi-select checklistmodel:</TD>
+					<TD><faces:selectmany_checkboxlist id="checklistmodel"
+						modelReference="${LoginBean.currentOption}">
+						<faces:selectitems id="checklistmodelitems"
+							modelReference="${LoginBean.options}" />
+					</faces:selectmany_checkboxlist></TD>
+				</TR>
 
 
 

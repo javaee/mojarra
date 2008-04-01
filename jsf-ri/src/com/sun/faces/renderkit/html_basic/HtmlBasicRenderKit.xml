@@ -2100,4 +2100,464 @@
         </renderer>
     </component>
 
+	<component>
+		<type>javax.faces.component.UISelectMany</type>
+		<renderer>
+			<type>SelectManyMenuRenderer</type>
+			<class>com.sun.faces.renderkit.html_basic.SelectManyMenuRenderer</class>
+			<attribute>
+				<name>selectmanyClass</name>
+				<display-name>SelectMany Class</display-name>
+				<description>Class name for this element</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>dir</name>
+				<display-name>Directionality</display-name>
+				<description>Direction of the text - LTR or RTL</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>disabled</name>
+				<display-name>Disabled</display-name>
+				<description>If true, this component should be rendered as disabled.</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<display-name>Identifier</display-name>
+				<description>Control identifier</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>lang</name>
+				<display-name>Language</display-name>
+				<description>Component language</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>modelreference</name>
+				<display-name>Model Reference</display-name>
+				<description>Reference to the model</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>name</name>
+				<display-name>Name</display-name>
+				<description>Control name</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onblur</name>
+				<display-name>On Blur</display-name>
+				<description>The component loses focus</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onchange</name>
+				<display-name>On Change</display-name>
+				<description>The value of the component changes</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onclick</name>
+				<display-name>On Click</display-name>
+				<description>The component is clicked</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>ondblclick</name>
+				<display-name>On Double Click</display-name>
+				<description>The component is double-clicked</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onfocus</name>
+				<display-name>On Focus</display-name>
+				<description>The component gets focus</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeydown</name>
+				<display-name>On Key Down</display-name>
+				<description>A key is pressed on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeypress</name>
+				<display-name>On Key Press</display-name>
+				<description>A key is pressed and released on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeyup</name>
+				<display-name>On Key Up</display-name>
+				<description>A key is released on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmousedown</name>
+				<display-name>On Mouse Down</display-name>
+				<description>The mousebutton is depressed over this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmousemove</name>
+				<display-name>On Mouse Move</display-name>
+				<description>The mouse pointer is moved over the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseout</name>
+				<display-name>On Mouse Out</display-name>
+				<description>The mouse is moved away from the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseover</name>
+				<display-name>On Mouse Over</display-name>
+				<description>The mouse is moved across the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseup</name>
+				<display-name>On Mouse Up</display-name>
+				<description>The mouse button is released over the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>size</name>
+				<display-name>Size</display-name>
+				<description>Number of rows displayed</description>
+				<type>java.lang.Integer</type>
+			</attribute>
+			<attribute>
+				<name>style</name>
+				<display-name>Style</display-name>
+				<description>Style-sheet information</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>tabindex</name>
+				<display-name>Tab Index</display-name>
+				<description>The sequence of this component when tabbing through the page</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>title</name>
+				<display-name>Title</display-name>
+				<description>Displayed text hint for this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+		</renderer>
+
+		<renderer>
+			<type>SelectManyListboxRenderer</type>
+			<class>com.sun.faces.renderkit.html_basic.SelectManyListboxRenderer</class>
+			<attribute>
+				<name>selectmanyClass</name>
+				<display-name>SelectMany Class</display-name>
+				<description>Class name for this element</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>dir</name>
+				<display-name>Directionality</display-name>
+				<description>Direction of the text - LTR or RTL</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>disabled</name>
+				<display-name>Disabled</display-name>
+				<description>If true, this component should be rendered as disabled.</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<display-name>Identifier</display-name>
+				<description>Control identifier</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>lang</name>
+				<display-name>Language</display-name>
+				<description>Component language</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>modelreference</name>
+				<display-name>Model Reference</display-name>
+				<description>Reference to the model</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>name</name>
+				<display-name>Name</display-name>
+				<description>Control name</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onblur</name>
+				<display-name>On Blur</display-name>
+				<description>The component loses focus</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onchange</name>
+				<display-name>On Change</display-name>
+				<description>The value of the component changes</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onclick</name>
+				<display-name>On Click</display-name>
+				<description>The component is clicked</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>ondblclick</name>
+				<display-name>On Double Click</display-name>
+				<description>The component is double-clicked</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onfocus</name>
+				<display-name>On Focus</display-name>
+				<description>The component gets focus</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeydown</name>
+				<display-name>On Key Down</display-name>
+				<description>A key is pressed on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeypress</name>
+				<display-name>On Key Press</display-name>
+				<description>A key is pressed and released on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeyup</name>
+				<display-name>On Key Up</display-name>
+				<description>A key is released on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmousedown</name>
+				<display-name>On Mouse Down</display-name>
+				<description>The mousebutton is depressed over this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmousemove</name>
+				<display-name>On Mouse Move</display-name>
+				<description>The mouse pointer is moved over the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseout</name>
+				<display-name>On Mouse Out</display-name>
+				<description>The mouse is moved away from the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseover</name>
+				<display-name>On Mouse Over</display-name>
+				<description>The mouse is moved across the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseup</name>
+				<display-name>On Mouse Up</display-name>
+				<description>The mouse button is released over the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>size</name>
+				<display-name>Size</display-name>
+				<description>Number of rows displayed</description>
+				<type>java.lang.Integer</type>
+			</attribute>
+			<attribute>
+				<name>style</name>
+				<display-name>Style</display-name>
+				<description>Style-sheet information</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>tabindex</name>
+				<display-name>Tab Index</display-name>
+				<description>The sequence of this component when tabbing through the page</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>title</name>
+				<display-name>Title</display-name>
+				<description>Displayed text hint for this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+
+		</renderer>
+
+
+		<renderer>
+			<type>SelectManyCheckboxListRenderer</type>
+			<class>com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer</class>
+			<attribute>
+				<name>selectmanyClass</name>
+				<display-name>SelectMany Class</display-name>
+				<description>Class name for this element</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>dir</name>
+				<display-name>Directionality</display-name>
+				<description>Direction of the text - LTR or RTL</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>disabled</name>
+				<display-name>Disabled</display-name>
+				<description>If true, this component should be rendered as disabled.</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>id</name>
+				<display-name>Identifier</display-name>
+				<description>Control identifier</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>lang</name>
+				<display-name>Language</display-name>
+				<description>Component language</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>labelAlign</name>
+				<display-name>Label Alignment</display-name>
+				<description>List layout - PAGE_START|LINE_END</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>modelreference</name>
+				<display-name>Model Reference</display-name>
+				<description>Reference to the model</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>name</name>
+				<display-name>Name</display-name>
+				<description>Control name</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onblur</name>
+				<display-name>On Blur</display-name>
+				<description>The component loses focus</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onchange</name>
+				<display-name>On Change</display-name>
+				<description>The value of the component changes</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onclick</name>
+				<display-name>On Click</display-name>
+				<description>The component is clicked</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>ondblclick</name>
+				<display-name>On Double Click</display-name>
+				<description>The component is double-clicked</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onfocus</name>
+				<display-name>On Focus</display-name>
+				<description>The component gets focus</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeydown</name>
+				<display-name>On Key Down</display-name>
+				<description>A key is pressed on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeypress</name>
+				<display-name>On Key Press</display-name>
+				<description>A key is pressed and released on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onkeyup</name>
+				<display-name>On Key Up</display-name>
+				<description>A key is released on this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmousedown</name>
+				<display-name>On Mouse Down</display-name>
+				<description>The mousebutton is depressed over this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmousemove</name>
+				<display-name>On Mouse Move</display-name>
+				<description>The mouse pointer is moved over the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseout</name>
+				<display-name>On Mouse Out</display-name>
+				<description>The mouse is moved away from the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseover</name>
+				<display-name>On Mouse Over</display-name>
+				<description>The mouse is moved across the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>onmouseup</name>
+				<display-name>On Mouse Up</display-name>
+				<description>The mouse button is released over the component</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>size</name>
+				<display-name>Size</display-name>
+				<description>Number of rows displayed</description>
+				<type>java.lang.Integer</type>
+			</attribute>
+			<attribute>
+				<name>style</name>
+				<display-name>Style</display-name>
+				<description>Style-sheet information</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>tabindex</name>
+				<display-name>Tab Index</display-name>
+				<description>The sequence of this component when tabbing through the page</description>
+				<type>java.lang.String</type>
+			</attribute>
+			<attribute>
+				<name>title</name>
+				<display-name>Title</display-name>
+				<description>Displayed text hint for this component</description>
+				<type>java.lang.String</type>
+			</attribute>
+
+		</renderer>
+	</component>
+
+
 </renderkit>

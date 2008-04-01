@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=E8E125C25297C467F2B85418B6F52793">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=5745B0E504620130F47327E272F034C6">
   <TABLE BORDER="1">
 
       <TR>
@@ -18,7 +18,7 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=E8E125C25297C467F2B85418B6F52793">
+                 <img src="/test/duke.gif;jsessionid=5745B0E504620130F47327E272F034C6">
              </button>
 
 	</TD>
@@ -31,7 +31,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=E8E125C25297C467F2B85418B6F52793">
+                 <img src="/test/duke.gif;jsessionid=5745B0E504620130F47327E272F034C6">
              </button>
 
 	</TD>
@@ -286,7 +286,83 @@
 
             </tr>
 
+<tr>
+					<TD>Multi-select menu:</TD>
+					<TD>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					<select name="/basicForm/ManyApples" multiple size="10">	<option value="0">zero</option>
+	<option value="1">one</option>
+	<option value="2">two</option>
+	<option value="3">three</option>
+	<option value="4" selected>four</option>
+	<option value="5">five</option>
+	<option value="6">six</option>
+	<option value="7" selected>seven</option>
+	<option value="8">eight</option>
+	<option value="9">nine</option>
+</select></TD>
 
+</tr>
+
+<tr>
+					<TD>Multi-select listbox:</TD>
+					<TD>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					<select name="/basicForm/ManyApples2" multiple size="10">	<option value="0">zero</option>
+	<option value="1">one</option>
+	<option value="2">two</option>
+	<option value="3">three</option>
+	<option value="4" selected>four</option>
+	<option value="5">five</option>
+	<option value="6">six</option>
+	<option value="7" selected>seven</option>
+	<option value="8">eight</option>
+	<option value="9">nine</option>
+</select></TD>
+</tr>
+
+<tr>
+					<TD>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					
+<label for="/basicForm/ManyApples3/0">zero<input name="/basicForm/ManyApples3/0" id="/basicForm/ManyApples3/0" value="0" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/1">one<input name="/basicForm/ManyApples3/1" id="/basicForm/ManyApples3/1" value="1" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/2">two<input name="/basicForm/ManyApples3/2" id="/basicForm/ManyApples3/2" value="2" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/3">three<input name="/basicForm/ManyApples3/3" id="/basicForm/ManyApples3/3" value="3" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/4">four<input name="/basicForm/ManyApples3/4" id="/basicForm/ManyApples3/4" value="4" type="checkbox" checked></label>
+<label for="/basicForm/ManyApples3/5">five<input name="/basicForm/ManyApples3/5" id="/basicForm/ManyApples3/5" value="5" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/6">six<input name="/basicForm/ManyApples3/6" id="/basicForm/ManyApples3/6" value="6" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/7">seven<input name="/basicForm/ManyApples3/7" id="/basicForm/ManyApples3/7" value="7" type="checkbox" checked></label>
+<label for="/basicForm/ManyApples3/8">eight<input name="/basicForm/ManyApples3/8" id="/basicForm/ManyApples3/8" value="8" type="checkbox"></label>
+<label for="/basicForm/ManyApples3/9">nine<input name="/basicForm/ManyApples3/9" id="/basicForm/ManyApples3/9" value="9" type="checkbox"></label></TD>
+</tr>
 
 
   <TABLE>
