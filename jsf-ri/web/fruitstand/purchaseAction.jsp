@@ -14,7 +14,6 @@
     <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
-<faces:UseFaces>
 <font color="#0000FF"> <h2> FruitStand.com </h2>
 <hr>
 Thank you for your purchase. 
@@ -24,5 +23,4 @@ Thank you for your purchase.
 </font>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>
-</faces:UseFaces>
 </html>

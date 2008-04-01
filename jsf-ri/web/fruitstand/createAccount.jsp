@@ -16,8 +16,6 @@
 
 <font size="4" color="#0000FF">Open a New Account </font><body bgcolor="#FFFFFF" text="#000000"> 
 
-<faces:UseFaces>
-
   <faces:NavigationMap id="AccountNavMap" scope="session" >
 
         <faces:outcome commandName="Create Account" outcome="success" targetAction="forward"
@@ -141,7 +139,6 @@
     </tr>
   </table>
 </faces:Form>
-</faces:UseFaces>
 <hr>
 <p>Thanks for shopping with FruitStand.com. </p>
 </body>

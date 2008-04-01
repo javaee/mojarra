@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.5 2002/03/13 18:04:24 eburns Exp $
+ * $Id: FacesTag.java,v 1.6 2002/03/18 21:24:00 eburns Exp $
  */
 
 /*
@@ -27,13 +27,15 @@ import javax.faces.TreeNavigator;
 
 import com.sun.faces.util.Util;
 
+import com.sun.faces.renderkit.html_basic.JspOutputMethod;
+
 /**
  *
  *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.5 2002/03/13 18:04:24 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.6 2002/03/18 21:24:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -264,6 +266,11 @@ public UIComponent getComponentFromEnd(ObjectManager objectManager) {
 	    (RenderContext)objectManager.get(pageContext.getSession(),
 					     Constants.REF_RENDERCONTEXT);
         Assert.assert_it(null != renderContext);
+	if (null == renderContext.getOutputMethod()) {
+	    JspOutputMethod outputMethod = new JspOutputMethod();
+	    outputMethod.setPageContext(pageContext);
+	    renderContext.setOutputMethod(outputMethod);
+	}
         
         uiComponent = getComponentFromStart(objectManager);
 

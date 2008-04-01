@@ -531,12 +531,6 @@ Configuring UI Components
 
 
   <tag>
-      <name>UseFaces</name>
-      <tagclass>com.sun.faces.taglib.html_basic.UseFacesTag</tagclass>
-      <bodycontent>JSP</bodycontent>
-  </tag>
-
-  <tag>
       <name>Output_Text</name>
       <tagclass>com.sun.faces.taglib.html_basic.Output_TextTag</tagclass>
       <bodycontent>JSP</bodycontent>

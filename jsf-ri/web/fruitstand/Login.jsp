@@ -17,7 +17,6 @@
 <hr WIDTH="100%">
 <p><font color="#0000FF"><font size=+2>Please Login.  Demo userid:password is <CODE>default:default</CODE></font></font>
 <hr>
-<faces:UseFaces>
   <faces:DeclareBean scope="session" id="UserBean" 
                      className="fruitstand.UserBean"/>
   <faces:DeclareBean scope="session" id="ShipTypeBean" 
@@ -60,6 +59,5 @@
 for stopping by.
 <br>
 </faces:Form>
-</faces:UseFaces>
 </body>
 </html>

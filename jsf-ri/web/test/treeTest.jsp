@@ -12,7 +12,6 @@
 <P>This page shouldn't be actually loaded into faces.  It's just to test
 the tree navigation mechanism.  These aren't really valid nestings.</P>
 
-<faces:UseFaces>
   <faces:DeclareBean scope="session" id="LoginBean" 
                      className="basic.LoginBean"/>
   <faces:DeclareBean scope="session" id="ShipTypeBean" 
@@ -145,6 +144,5 @@ the tree navigation mechanism.  These aren't really valid nestings.</P>
 
   </faces:Form>
 
-</faces:UseFaces>
 
 </HTML>

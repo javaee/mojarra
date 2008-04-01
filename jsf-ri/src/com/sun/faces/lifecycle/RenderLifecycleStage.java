@@ -1,5 +1,5 @@
 /*
- * $Id: RenderLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * $Id: RenderLifecycleStage.java,v 1.3 2002/03/18 21:24:00 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * LifecycleDriverImpl.
  *
- * @version $Id: RenderLifecycleStage.java,v 1.2 2002/03/15 23:29:48 eburns Exp $
+ * @version $Id: RenderLifecycleStage.java,v 1.3 2002/03/18 21:24:00 eburns Exp $
  * 
  * @see	com.sun.faces.lifecycle.LifecycleDriverImpl
  *
@@ -120,6 +120,7 @@ public boolean execute(FacesContext ctx, TreeNavigator root) throws FacesExcepti
 	result = true;
     }
     catch (Throwable e) {
+	e.printStackTrace();
 	throw new FacesException(e.getMessage());
     }
 

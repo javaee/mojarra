@@ -10,7 +10,6 @@
 
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-    <faces:UseFaces>
         <faces:DeclareBean scope="session" id="LoginBean" 
                            className="basic.LoginBean"/>
         <faces:DeclareBean scope="session" id="ShipTypeBean" 
@@ -110,5 +109,4 @@
             <P></P>
             <faces:Command_Hyperlink target="Faces_Basic.jsp" image="duke.gif" text="Hello World`"/>
         </faces:Form>
-    </faces:UseFaces>
 </HTML>

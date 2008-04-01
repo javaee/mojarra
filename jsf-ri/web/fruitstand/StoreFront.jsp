@@ -14,8 +14,6 @@
     <%@ page extends="com.sun.faces.Page" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 <body>
-<faces:UseFaces>
-
    <faces:NavigationMap id="StoreNavMap" scope="session" >
 
         <faces:outcome commandName="Checkout" outcome="success" targetAction="forward"
@@ -209,6 +207,5 @@ and vegetables.</font></font>
 <faces:Command_Button id="checkout" label="Checkout" 
                       commandListener="handleCheckout" commandName="Checkout"/>
 </faces:Form>
-</faces:UseFaces>
 </body>
 </html>

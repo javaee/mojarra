@@ -9,7 +9,6 @@
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-    <faces:UseFaces>
         <faces:DeclareBean scope="session" id="LoginBean" 
                            className="basic.LoginBean"/>
         <faces:DeclareBean scope="session" id="ShipTypeBean" 
@@ -86,5 +85,4 @@
           </table>
 
         </faces:Form>
-    </faces:UseFaces>
 </HTML>
