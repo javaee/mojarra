@@ -52,6 +52,19 @@ public abstract class RenderKit {
      * @throws FacesException if no renderer exists with the specified name
      */ 
     public abstract Renderer getRenderer(String name) throws FacesException;
+
+    /**
+     * Decodes any events described by the associated request object
+     * and places appropriate Event objects on the specified event queue.
+     * Event decoding is handled by the render kit because the render kit
+     * is responsible for encoding the events when rendering user-interface
+     * components in the response to the client.  The precise encoding 
+     * of client-generated events is defined by the render kit.
+     *
+     * @param request the ServletRequest object corresponding to the client
+     *        request
+     */
+    public abstract void queueEvents(ServletRequest request, EventQueue queue);
  
     /**
      * Invoked when this render kit is first instantiated.  Subclasses

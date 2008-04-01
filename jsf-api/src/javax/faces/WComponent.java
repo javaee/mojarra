@@ -6,7 +6,22 @@ import java.util.Iterator;
 
 /**
  * The base class for representing all state associated with a
- * user-interface component.  
+ * user-interface component.  WComponent instances are created
+ * and managed in the server in order to serve the following core 
+ * functions to a JavaServer Faces application:
+ * <ol>
+ * <li>Identify a component's functional type
+ * <li>Identify a component's name (identity)
+ * <li>Store any component non-default state
+ * <li>If component is data-bound, maintain reference to 
+ *     application data object
+ * <li>Provide descriptive API for getting/setting any component
+ *     non-render-specific state
+ * <li>Enable the creation and manipulation of component hierarchies
+ * <li>Drive the rendering process of a component or hierarchy of
+ *     components
+ * <li>Provide event-handler registration on components
+ * </ol>
  * <p>
  * A WComponent instance may act as a "parent" container if one or
  * more WComponent instances are added as children.
@@ -15,23 +30,43 @@ import java.util.Iterator;
  */
 public abstract class WComponent {
  
-    /** Returns a String representing the type of this concrete
+    /** 
+     * Returns a String representing the type of this concrete
      * component class.  This read-only property is used by the RenderKit
      * instance as the name key for mapping a component type to its 
-     * available renderers.  A concrete subclass should return a
-     * unique String value which is descriptive of the functional
-     * purpose of the component.
+     * available renderers.  A concrete subclass must return a
+     * String value which is descriptive of the functional purpose 
+     * of the component.
      *
-     * @return a String representing the component functional type
+     * @return a String representing the component's functional type
      *         
      */
-    // Aim10-25-01: hint-WTextEntry should return "TextEntry"
     public abstract String getType();
+
+    /**
+     * The name which identifies this component within the application.
+     * This name should be equivelent to the name used to store the
+     * component in the scoped namespace.
+     * @see ObjectTable#put
+     * @see #setName
+     * @return String containing the name of this component
+     */
+    public String getName() {
+	return null;
+    }
+
+    /**
+     * Sets the name of this component.
+     * @see #getName
+     * @param name String containing the name of the component
+     */
+    public void setName(String name) {
+    }
 
     /**
      * The renderer name to be used to render this component in the
      * specified render context.  
-     * @param rc the render context used to render this component
+     * @param rc the render-context used to render this component
      * @return String containing the name of the renderer set for
      *         this component
      */
@@ -42,7 +77,7 @@ public abstract class WComponent {
     /**
      * Sets the renderer name to be used to render this component
      * in the specified render context.  The specified rendererName
-     * must exist in the render context's render kit and the renderer
+     * must exist in the render-context's render-kit and the renderer
      * corresponding to that name must support rendering this component's
      * type, else an exception will be thrown.
      *
@@ -219,37 +254,39 @@ public abstract class WComponent {
         return 0;
     }
 
-    //Aim:11-2-01: should we put getPerformsLayout(),renderAll()
-    //in a separate interface ???
-
     /**
-     * The performsLayout property.
+     * The rendersChildren property.  Returns <code>false</code>
+     * by default.
      * @param rc the render context used to render this component
      * @return boolean value indicating whether or not this component
      *         takes responsibility for laying out and rendering its
      *         children.
      */
-    public boolean getPerformsLayout(RenderContext rc) {
+    public boolean getRendersChildren(RenderContext rc) {
 	return false;
     }
 
     /**
      * Invokes full render processing on this component and its
-     * descendents. This method should only be called on components
-     * which return <code>true</code> from getPerformsLayout().
+     * children. This method should only be called on components
+     * which return <code>true</code> from <code>getRendersChildren()</code>.
      * It calls the following sequence of methods, passing 
      * in the specified render context:
      * <ol>
      * <li>render(rc)
      * <li>renderChildren(rc)
-     * <li>postRender(rc)
+     * <li>postComplete(rc)
      * </ol>
      * This method will recursively drive the rendering process for
      * this component and all of its descendents, treating the
      * rendering of that hierarchy as an atomic process.  This 
      * method should only be called if the the portion of the page
      * defined by this hierarchy is completely defined by this
-     * hierarchy (no interleaved presentation markup).
+     * hierarchy (i.e. no interleaved presentation markup).
+     *
+     * @see #getRendersChildren
+     * @param rc the render context used to render this component
+     * @throws IOException if input or output exception occurred
      */
     public void renderAll(RenderContext rc) throws IOException {}
 
@@ -261,7 +298,7 @@ public abstract class WComponent {
      * any recursive rendering on children.
      *
      * @param rc the render context used to render this component
-     * @throws IOException // Aim10-25-01: under what conditions?
+     * @throws IOException if input or output exception occurred
      */
     public void render(RenderContext rc) throws IOException {}
 
@@ -271,19 +308,21 @@ public abstract class WComponent {
      * corresponding to the rendererName property of this component.  
      * If this component type does not support rendering the layout 
      * of its children, it should override this method to do nothing.
+     *
      * @param rc the render context used to render this component
-     * @throws IOException // Aim10-25-01: under what conditions?
+     * @throws IOException if input or output exception occurred
      */
     public void renderChildren(RenderContext rc) throws IOException {}
 
     /**
      * Invoked after this component and all of it's children are
      * rendered. By default it will invoke renderEnd() on the renderer 
-     * corresponding to the rendererName property of this component.  
+     * corresponding to the rendererName property of this component. 
+     * 
      * @param rc the render context used to render this component
-     * @throws IOException // Aim10-25-01: under what conditions?
+     * @throws IOException if input or output exception occurred
      */
-    public void postRender(RenderContext rc) throws IOException {}
+    public void renderComplete(RenderContext rc) throws IOException {}
 
 }
 
