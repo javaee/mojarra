@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.2 2002/01/16 21:02:44 rogerk Exp $
+ * $Id: UICommand.java,v 1.3 2002/01/17 02:15:02 edburns Exp $
  */
 
 /*
@@ -30,37 +30,39 @@ public class UICommand extends UIComponent {
     }
 
     /**
-     * Returns the commandName property of this component. This
-     * property will default to the id of this component.  The
+     * Returns the &quot;commandName&quot; attribute of this component. A single
+     * commandName value may be shared across multiple UICommand instances.
+     * This attribute will default to the id of this component.  The
      * commandName will be contained in any command events generated
      * by this component.
+     * @see #setCommandName
      * @see #addCommandListener
      * @see CommandEvent
      * @return String containing the name of the command associated
      *         with this component
      */
-    public String getCommandName(RenderContext rc) {
-	String commandName = (String)getAttribute(rc, "commandName");
+    public String getCommandName() {
+	String commandName = (String)getAttribute(null, "commandName");
 	return commandName == null? getId() : commandName;
     }
 
     /**
-     * Sets the commandName property of this component.
+     * Sets the &quot;commandName&quot; attribute of this component.
+     * @see #getCommandName
      * @param commandName String containing the name of the command
      *        associated with this component
      */
-    public void setCommandName(RenderContext rc, String commandName) {
-	setAttribute(rc, "commandName", commandName);
+    public void setCommandName(String commandName) {
+	setAttribute("commandName", commandName);
     }
 
     /**
-     * Registers the specified listener name as a command listener
-     * for this component.  The specified listener name must be registered
+     * Registers the specified listener id as a command listener
+     * for this component.  The specified listener id must be registered
      * in the scoped namespace and it must be a listener which implements
      * the <code>CommandListener</code> interface, else an exception will
      * be thrown.
      * @see CommandListener
-     * @see Command
      * @param listenerId the id of the command listener
      * @throws FacesException if listenerId is not registered in the
      *         scoped namespace or if the object referred to by listenerId
@@ -70,10 +72,10 @@ public class UICommand extends UIComponent {
     }
 
     /**
-     * Removes the specified listener name as a command listener
+     * Removes the specified listener id as a command listener
      * for this component.  
      * @param listenerId the id of the command listener
-     * @throws FacesException if listenerName is not registered as a
+     * @throws FacesException if listenerId is not registered as a
      *         command listener for this component.
      */
     public void removeCommandListener(String listenerId) throws FacesException {

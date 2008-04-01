@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.2 2002/01/16 21:02:44 rogerk Exp $
+ * $Id: UIComponent.java,v 1.3 2002/01/17 02:15:02 edburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
-
 /**
  * The base class for representing all state associated with a
  * user-interface component.  UIComponent instances are created
@@ -22,27 +21,27 @@ import java.util.Set;
  * functions to a JavaServer Faces application:
  * <ol>
  * <li>Identify a component's functional type
- * <li>Identify a component's name (identity)
- * <li>Store any component non-default state
- * <li>If component is data-bound, maintain reference to 
- *     application data object
- * <li>Provide descriptive API for getting/setting any component
+ * <li>Store a unique identifier
+ * <li>Store any instance-specific non-default state (attribute values, etc)
+ * <li>
+ * <li>If data-bound, maintain reference to 
+ *     application &quot;model&quot; object
+ * <li>Provide descriptive API for getting/setting any
  *     non-render-specific state
  * <li>Enable the creation and manipulation of component hierarchies
- * <li>Drive the rendering process of a component or hierarchy of
- *     components
- * <li>Provide event-handler registration on components
+ * <li>Drive the rendering
+ * <li>Provide event-handler registration
+ * <li>Drive server-side event-processing
+ * <li>Provide validator registration
+ * <li>Drive server-side validation processing
  * </ol>
  * <p>
- * A UIComponent instance may act as a "parent" container if one or
- * more UIComponent instances are added as children.
- * A UIComponent instance may act as a "child" if it is added to
- * one or more parent UIComponent instances.
  */
 public abstract class UIComponent {
  
     private Hashtable ht;
-
+    private String id;
+    private String rendererType;
 
     public UIComponent() {
         ht = new Hashtable();
@@ -51,7 +50,7 @@ public abstract class UIComponent {
     /** 
      * Returns a String representing the type of this concrete
      * component class.  This read-only property is used by the RenderKit
-     * instance as the name key for mapping a component type to its 
+     * instance as the key for mapping a component type to its 
      * available renderers.  A concrete subclass must return a
      * String value which is descriptive of the functional purpose 
      * of the component.
@@ -68,15 +67,16 @@ public abstract class UIComponent {
     public abstract String getType();
 
     /**
-     * The name which identifies this component within the application.
-     * This name should be equivelent to the name used to store the
-     * component in the scoped namespace.
-     * @see ObjectTable#put
+     * The id which identifies this component instance within the application.
+     * If the component instance is being managed in the ObjectManager's
+     * scoped namespace, this id should be equivelent to the id used to 
+     * store the component in the scoped namespace.
+     * @see ObjectManager#put
      * @see #setId
      * @return String containing the id of this component
      */
     public String getId() {
-	return null;
+	return id;
     }
 
     /**
@@ -85,39 +85,34 @@ public abstract class UIComponent {
      * @param id String containing the id of the component
      */
     public void setId(String id) {
+	this.id = id;
     }
 
     /**
-     * The renderer name to be used to render this component in the
-     * specified render context.  
-     * @param rc the render-context used to render this component
-     * @return String containing the name of the renderer set for
+     * The renderer type to be used to render this component.
+     * When <code>render</code> is invoked on this component, the value of 
+     * this property must match one of the advertized renderer types on the 
+     * render kit specified in the render context.
+     * @see RenderKit#getRendererTypesForComponent
+     * @see #render
+     * @return String containing the type of the renderer set for
      *         this component
      */
-    public String getRendererName(RenderContext rc) {
-	return (String)getAttribute(rc, Constants.REF_RENDERER_NAME);
+    public String getRendererType() {
+	return rendererType;
     }
 
     /**
-     * Sets the renderer name to be used to render this component
-     * in the specified render context.  The specified rendererName
-     * must exist in the render-context's render-kit and the renderer
-     * corresponding to that name must support rendering this component's
-     * type, else an exception will be thrown.
-     *
-     * @param rc the render context used to render this component
-     * @param rendererName String containing the name of the renderer
-     * @throws NullPointerException if rc or rendererName is null
-     * @throws FacesException if the specified rendererName is not
-     *         supported by the render kit or the renderer does not
-     *         support rendering this component type
+     * Sets the renderer type to be used to render this component.
+     * @see #getRendererType
+     * @param rendererType String containing the type of the renderer
      */
-    public void setRendererName(RenderContext rc, String rendererName) throws FacesException {
-        setAttribute(rc, Constants.REF_RENDERER_NAME, rendererName);
+    public void setRendererType(String rendererType) {
+        this.rendererType = rendererType;
     }
  
     /**
-     * Returns an iteration containing all the attribute names
+     * Returns an iterator containing all the attribute names
      * corresponding to attributes set specifically on this
      * component within the specified render context.
      *
@@ -135,7 +130,7 @@ public abstract class UIComponent {
 
     /**
      * Returns the component attribute with the given name
-     * within the specified render context or null if there is the
+     * within the specified render context or null if the
      * specified attribute is not set on this component.
      *
      * @param rc the render context used to render this component
@@ -148,15 +143,12 @@ public abstract class UIComponent {
     }
 
     /**
-     * Binds an object to the specified attribute name for this component
-     * within the specified render context.
+     * Binds an object to the specified attribute name for this component.
      *
-     * @param rc the render context used to render this component
      * @param attributeName a String specifying the name of the attribute
      * @param value an Object representing the value of the attribute
      */
-    public void setAttribute(RenderContext rc, String attributeName, 
-        Object value) {
+    public void setAttribute(String attributeName, Object value) {
         if (attributeName != null && value != null) {
             ht.put(attributeName,value);
         }
@@ -187,19 +179,16 @@ public abstract class UIComponent {
 
    /**
      * Adds the specified component as a child to this component with
-     * the specified childID.  The childID is an abitrary String
-     * which may be used internally by this parent component to logically
-     * identify the child.  If a child already exists with this childID, 
-     * it will be replaced with the new child specified in this method
-     * call.
+     * the specified childMarker.  The childMarker is an arbitrary Object
+     * which may be used internally by this parent component to associate
+     * information with this child.  
      *
      * @param child the UIComponent representing the child to be added
-     * @param childID a String which logically identifies the child within
+     * @param childMarker an Object which is associated with the child within
      *        this parent component
      * @throws NullPointerException if child is null
      */ 
-    // Aim10-25-01: Don't implement yet
-    public void add(UIComponent child, String childID) {}
+    public void add(UIComponent child, Object childMarker) {}
 
     /** 
      * Removes the child component located at the specified index from
@@ -211,14 +200,13 @@ public abstract class UIComponent {
     public void remove(int index) {}
 
     /** 
-     * Removes the child component associated with the specified logical
-     * childID from this component.
-     * @param childID a String which logically identifies the child within
-     *        this parent component
-     * @throws NullPointerException if childID is null
+     * Removes any child components which are associated with a childMarker
+     * object which is equivelent to the specified child marker object. 
+     * @param childMarker an Object which is associated with one or more children
+     *        within this parent component
+     * @throws NullPointerException if childMarker is null
      */ 
-    // Aim10-25-01: Don't implement yet
-    public void remove(String childID) {}
+    public void remove(Object childMarker) {}
 
     /**
      * Removes all child components from this component.
@@ -228,8 +216,8 @@ public abstract class UIComponent {
     /**
      * Sets the child components on this component to be the specified 
      * array of components.  If this component already contains children at
-     * the time this method is invoked, they will first be removed
-     * before the new children are added.
+     * the time this method is invoked, they will be removed by invoking
+     * <code>removeAll</code> before the new children are added.
      * @param kids the array containing the components to add as children
      * @throws NullPointerException if kids is null
      */
@@ -237,54 +225,74 @@ public abstract class UIComponent {
 
     /**
      * Returns an iterator containing all the children of this component
-     * for the specified render context.
-     * @param rc the render context used to render this component
+     * for the specified render context.  
+     * @param rc the render context used to render this component, or null
      */
     public Iterator getChildren(RenderContext rc) {
-        return null;
+        return null; //compile
     }
 
     /**
-     * Returns an iterator containing Strings representing all the
-     * childIDs of all children associated with childID for this component
-     * for the specified render context.
-     * @param rc the render context used to render this component
+     * Returns an iterator containing Strings representing the ids
+     * of all children of this component for the specified render context.
+     * @param rc the render context used to render this component, or null
      */
     public Iterator getChildIds(RenderContext rc) {
-        return null;
+        return null; //compile
+    }
+
+    /**
+     * Returns an iterator containing child marker objects associated with
+     * children of this component for the specified render context.
+     * @param rc the render context used to render this component, or null
+     */
+    public Iterator getChildMarkers(RenderContext rc) {
+        return null; //compile
     }
 
     /**
      * Returns the child at the specified index in this component
      * for the specified render context.
-     * @param rc the render context used to render this component
+     * @param rc the render context used to render this component, or null
      * @param index the integer indicating the index of the child
      * @throws IndexOutOfBoundsException if index < 0 or index > childCount-1
      */
     public UIComponent getChild(RenderContext rc, int index) {
-        return null;
+        return null; //compile
     }
 
     /**
-     * Returns the child associated with the specified logical childID
+     * Returns the child with the specified id, or null if no child
+     * with that id exists.
+     * @param rc the render context used to render this component, or null
+     * @param id a String containing the id of the child being retrieved
+     * @throws NullPointerException if id is null
+     */
+    public UIComponent getChild(RenderContext rc, String id) {
+        return null; //compile
+    }
+
+    /**
+     * Returns the first child which is associated with a childMarker object
+     * equivelent to the specified childMarker object
      * for the specified render context.  If no child exists with that
-     * childID, returns null.
-     * @param rc the render context used to render this component
-     * @param childID a String which logically identifies the child within
+     * childMarker, returns null.
+     * @param rc the render context used to render this component, or null
+     * @param childMarker Object which logically identifies the child within
      *        this parent component
-     * @return the UIComponent representing the child associated with the
-     *          childID, or null if it does not exist
-     * @throws NullPointerException if childID is null
+     * @return the UIComponent representing the first child associated with the
+     *          childMarker, or null if it does not exist
+     * @throws NullPointerException if childMarker is null
      */
     // Aim10-25-01: don't implement yet
-    public UIComponent getChild(RenderContext rc, String childID) {
-        return null;
+    public UIComponent getChild(RenderContext rc, Object childMarker) {
+        return null; //compile
     }
 
     /**
      * Returns the number of children in this component for the
      * specified render context.
-     * @param rc the render context used to render this component
+     * @param rc the render context used to render this component, or null
      * @return an integer indicating the number of children in this
      *          component.
      */
@@ -293,15 +301,47 @@ public abstract class UIComponent {
     }
 
     /**
-     * The rendersChildren property.  Returns <code>false</code>
-     * by default.
-     * @param rc the render context used to render this component
+     * The rendersChildren attribute.  Returns <code>false</code>
+     * by default.  A concrete subclass which supports the ability to
+     * drive the layout and rendering of children should override this
+     * method to return <code>true</code>.
+     * @param rc the render context used to render this component, or null
      * @return boolean value indicating whether or not this component
      *         takes responsibility for laying out and rendering its
      *         children.
      */
     public boolean getRendersChildren(RenderContext rc) {
 	return false;
+    }
+
+   /**
+    * The shouldRender attribute.  
+    * @return a boolean value indicating whether or not this component 
+    *         should be rendered during a rendering pass
+    */
+    public boolean getShouldRender(RenderContext rc) {
+	return true;
+    }
+
+    /**
+     * Sets the shouldRender attribute.
+     * @see #getShouldRender
+     */
+    public void setShouldRender(boolean shouldRender) {
+    }
+
+    /**
+     * Returns whether or not this component is in a renderable hierarchy.
+     * A hierarchy is renderable if this component and all it's ancestors
+     * on the render context's render-stack have shouldRender set to 
+     * <code>true</code>.
+     * @param rc the render context used to render this component
+     * @throws NullPointerException if rc is null
+     * @return boolean value indicating whether or not this component is in
+     *         a renderable hierarchy
+     */
+    public boolean isRenderable(RenderContext rc) {
+	return true;
     }
 
     /**
@@ -313,74 +353,107 @@ public abstract class UIComponent {
      * <ol>
      * <li>render(rc)
      * <li>renderChildren(rc)
-     * <li>postComplete(rc)
+     * <li>renderComplete(rc)
      * </ol>
      * This method will recursively drive the rendering process for
      * this component and all of its descendents, treating the
      * rendering of that hierarchy as an atomic process.  This 
-     * method should only be called if the the portion of the page
+     * method should only be called if the the portion of the user-interface
      * defined by this hierarchy is completely defined by this
      * hierarchy (i.e. no interleaved presentation markup).
      *
      * @see #getRendersChildren
      * @param rc the render context used to render this component
+     * @throws NullPointerException if rc is null
+     * @throws FacesException if rendersChildren is <code>false</code>
      * @throws IOException if input or output exception occurred
      */
     public void renderAll(RenderContext rc) throws IOException {}
 
     /**
-     * Renders this component.  By default it will invoke renderStart()
-     * on the renderer corresponding to the rendererName property of
+     * Renders this component.  By default it will push this component
+     * on the render context's render-stack and invoke <code>renderStart</code>
+     * on the renderer corresponding to the rendererType property of
      * this component.  
      * This method renders this component only and does not perform
      * any recursive rendering on children.
      *
      * @param rc the render context used to render this component
+     * @throws NullPointerException if rc is null
+     * @throws FacesException if rendererType is not set to a valid renderer
+     *         in the render context's render kit
      * @throws IOException if input or output exception occurred
      */
     public void render(RenderContext rc) throws IOException,
         FacesException {
 
         RenderKit rk = rc.getRenderKit();
-        String rendererName = getRendererName(rc);
-        if (rendererName == null) {
-            throw new FacesException("Renderer Name Not Set.");
+        String rendererType = getRendererType();
+        if (rendererType == null) {
+            throw new FacesException("Renderer Type Not Set.");
         }
-        Renderer r = rk.getRenderer(rendererName);
+        Renderer r = rk.getRenderer(rendererType);
         rc.pushChild(this);
         r.renderStart(rc, this);
     }
 
     /**
-     * Invoked from renderAll() to Render the children of this component.  
-     * By default it will invoke renderChildren() on the renderer 
-     * corresponding to the rendererName property of this component.  
+     * Invoked from <code>renderAll</code> render the children of this component.  
+     * By default it will invoke <code>renderChildren</code> on the renderer 
+     * corresponding to the rendererType property of this component.  
      * If this component type does not support rendering the layout 
      * of its children, it should override this method to do nothing.
-     *
+     * @see #getRendersChildren
      * @param rc the render context used to render this component
+     * @throws NullPointerException if rc is null
+     * @throws FacesException if rendererType is not set to a valid renderer
+     *         in the render context's render kit
      * @throws IOException if input or output exception occurred
      */
     public void renderChildren(RenderContext rc) throws IOException {}
 
     /**
      * Invoked after this component and all of it's children are
-     * rendered. By default it will invoke renderComplete() on the renderer 
-     * corresponding to the rendererName property of this component. 
+     * rendered. By default it will invoke <code>renderComplete</code> on 
+     * the renderer corresponding to the rendererType property of this component
+     * and then pop this component off the render context's render-stack. 
      * 
      * @param rc the render context used to render this component
+     * @throws NullPointerException if rc is null
+     * @throws FacesException if rendererType is not set to a valid renderer
+     *         in the render context's render kit
      * @throws IOException if input or output exception occurred
      */
     public void renderComplete(RenderContext rc) throws IOException,
         FacesException {
         RenderKit rk = rc.getRenderKit();
-        String rendererName = getRendererName(rc);
-        if (rendererName == null) {
-            throw new FacesException("Renderer Name Not Set.");
+        String rendererType = getRendererType();
+        if (rendererType == null) {
+            throw new FacesException("Renderer Type Not Set.");
         }
-        Renderer r = rk.getRenderer(rendererName);
+        Renderer r = rk.getRenderer(rendererType);
         r.renderComplete(rc, this);
         rc.popChild();
+    }
+
+    /**
+     * Will recursively validate all components in this hierarchy.
+     */
+    public void validateAll() {
+    }
+
+    /**
+     * A component hierarchy is valid when it and all of its descendents are
+     * either:
+     * <ol>
+     * <li>not Validatible 
+     * <li>Validatible with <code>validState</code> == <code>Validatible.VALID</code>
+     * </ol>
+     * @return boolean value indicating whether this component hierarchy 
+     *         is valid or not
+     */
+    public boolean isValid() {
+        return true; //compile
     }
 
 }

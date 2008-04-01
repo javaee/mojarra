@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.10 2002/01/10 22:32:22 edburns Exp $
+ * $Id: RenderKit.java,v 1.11 2002/01/17 02:15:02 edburns Exp $
  */
 
 /*
@@ -14,13 +14,10 @@ import java.util.Iterator;
 
 
 /**
- * The base class for defining rendering capabilities targeted fo
- * a specific client.  This class defines
- * <ol>
- * <li>The list of component types it support
- * <li>For each supported component type, a set of one or mor
- *     renderer
- * </ol
+ * The base class for encapsulating the rendering capabilities targeted for
+ * a specific client.  A render kit is responsible for transforming
+ * the definition of the user-interface (represented by a hierarchy
+ * of UIComponent objects) into output appropriate for a target client.  
  */
 public abstract class RenderKit {
 
@@ -44,6 +41,7 @@ public abstract class RenderKit {
     /**
      * Returns an iterator containing Strings corresponding to the
      * renderers supported for the specified component type.
+     * @see UIComponent#getRendererType
      * @param componentType string representing the type of component
      * @return Iterator containing Strings corresponding to supported
      *          renderers for the component type
@@ -52,27 +50,28 @@ public abstract class RenderKit {
      *         by this render kit
      */
     // Aim10-26-01: should we have notion of "default" renderer per type?
-    public abstract Iterator getRendererNamesForComponent(String componentType) throws FacesException;
+    public abstract Iterator getRendererTypesForComponent(String componentType) throws FacesException;
 
     /**
-     * Returns a renderer corresponding to the specified name.
-     * @param name the name of the renderer
+     * Returns a renderer corresponding to the specified type.
+     * @param type String containing the type of the renderer
      * @return the Renderer instance corresponding to the specified name
-     * @throws NullPointerException if name is null
-     * @throws FacesException if no renderer exists with the specified name
+     * @throws NullPointerException if type is null
+     * @throws FacesException if no renderer exists with the specified type
      */ 
-    public abstract Renderer getRenderer(String name) throws FacesException;
+    public abstract Renderer getRenderer(String type) throws FacesException;
 
     /**
-     * Decodes any events described by the associated request object
-     * and places appropriate Event objects on the specified event queue.
+     * Decodes any events described by the request represented
+     * in the specified event context and places appropriate Event 
+     * objects on the event queue provided by the event context.
      * Event decoding is handled by the render kit because the render kit
      * is responsible for encoding the events when rendering user-interface
      * components in the response to the client.  The precise encoding 
-     * of client-generated events is defined by the render kit.
+     * and decoding of client-generated events is defined by the render kit.
      *
-     * @param request the ServletRequest object corresponding to the client
-     *        request
+     * @param ec the event context used for the event processing phase of
+     *           the request
      */
     public abstract void queueEvents(ServletRequest request, EventQueue queue);
  
