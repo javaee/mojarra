@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.2 2002/06/04 17:53:23 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.3 2002/06/07 20:25:20 craigmcc Exp $
  */
 
 /*
@@ -115,20 +115,20 @@ public class UIComponentTestCase extends TestCase {
         assertNull("componentId7", component.getComponentId());
         assertNull("componentId8", component.getAttribute("componentId"));
 
-        // model
-        assertNull("model1", component.getModel());
-        assertNull("model2", component.getAttribute("model"));
-        component.setModel("${foo}");
-        assertEquals("model3", "${foo}", component.getModel());
+        // modelReference
+        assertNull("model1", component.getModelReference());
+        assertNull("model2", component.getAttribute("modelReference"));
+        component.setModelReference("${foo}");
+        assertEquals("model3", "${foo}", component.getModelReference());
         assertEquals("model4", "${foo}",
-                     (String) component.getAttribute("model"));
-        component.setAttribute("model", "${bar}");
-        assertEquals("model5", "${bar}", component.getModel());
+                     (String) component.getAttribute("modelReference"));
+        component.setAttribute("modelReference", "${bar}");
+        assertEquals("model5", "${bar}", component.getModelReference());
         assertEquals("model6", "${bar}",
-                     (String) component.getAttribute("model"));
-        component.setAttribute("model", null);
-        assertNull("model7", component.getModel());
-        assertNull("model8", component.getAttribute("model"));
+                     (String) component.getAttribute("modelReference"));
+        component.setAttribute("modelReference", null);
+        assertNull("model7", component.getModelReference());
+        assertNull("model8", component.getAttribute("modelReference"));
 
         // parent
         assertNull("parent1", component.getParent());
@@ -501,7 +501,7 @@ public class UIComponentTestCase extends TestCase {
         assertTrue("Can find self", result == component);
 
         // [3.1.5] Model Object References
-        assertNull("model", component.getModel());
+        assertNull("modelReference", component.getModelReference());
 
         // [3.1.6] Local Values
         if (component instanceof UISelectBoolean) {

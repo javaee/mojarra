@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.27 2002/06/07 20:15:51 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.28 2002/06/07 20:25:19 craigmcc Exp $
  */
 
 /*
@@ -260,9 +260,9 @@ public abstract class UIComponent {
      * <p>Return the model reference expression of this
      * <code>UIComponent</code>, if any.</p>
      */
-    public String getModel() {
+    public String getModelReference() {
 
-        return ((String) getAttribute("model"));
+        return ((String) getAttribute("modelReference"));
 
     }
 
@@ -271,12 +271,12 @@ public abstract class UIComponent {
      * <p>Set the model reference expression of this
      * <code>UIComponent</code>.</p>
      *
-     * @param model The new model reference expression, or
+     * @param modelReference The new model reference expression, or
      *  <code>null</code> to disconnect this component from any model data
      */
-    public void setModel(String model) {
+    public void setModelReference(String modelReference) {
 
-        setAttribute("model", model);
+        setAttribute("modelReference", modelReference);
 
     }
 

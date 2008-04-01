@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.6 2002/06/07 20:15:52 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.7 2002/06/07 20:25:19 craigmcc Exp $
  */
 
 /*
@@ -103,15 +103,15 @@ public abstract class FacesTag extends TagSupport {
      * <p>An override for the model reference expression associated with our
      * {@link UIComponent}, if not <code>null</code>.</p>
      */
-    protected String model = null;
+    protected String modelReference = null;
 
 
     /**
      * <p>Return the override for the model reference expression.</p>
      */
-    public String getModel() {
+    public String getModelReference() {
 
-        return (this.model);
+        return (this.modelReference);
 
     }
 
@@ -119,11 +119,11 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Set an override for the model reference expression.</p>
      *
-     * @param model The new model reference expression
+     * @param modelReference The new model reference expression
      */
-    public void setModel(String model) {
+    public void setModelReference(String model) {
 
-        this.model = model;
+        this.modelReference = modelReference;
 
     }
 
@@ -289,7 +289,7 @@ public abstract class FacesTag extends TagSupport {
 
         super.release();
         this.id = null;
-        this.model = null;
+        this.modelReference = null;
 
     }
 
@@ -385,8 +385,8 @@ public abstract class FacesTag extends TagSupport {
         component.setRendererType(getRendererType());
 
         // Override other properties as required
-        if (model != null) {
-            component.setModel(model);
+        if (modelReference != null) {
+            component.setModelReference(modelReference);
         }
 
     }
