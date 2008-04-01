@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeDescriptorImpl.java,v 1.1 2002/06/03 19:27:27 craigmcc Exp $
+ * $Id: AttributeDescriptorImpl.java,v 1.2 2002/07/12 00:30:02 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,10 @@
 package javax.faces.validator;
 
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import javax.faces.component.AttributeDescriptor;
 
 
@@ -22,6 +26,15 @@ import javax.faces.component.AttributeDescriptor;
 final class AttributeDescriptorImpl extends AttributeDescriptor {
 
 
+    // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * <p>The base name of our localized resource bundle.
+     */
+    private static final String BUNDLE = "javax.faces.validator.Resources";
+
+
     // ----------------------------------------------------------- Constructors
 
 
@@ -30,17 +43,16 @@ final class AttributeDescriptorImpl extends AttributeDescriptor {
      *
      * @param name Attribute name being described
      * @param type Valid Java type for this attribute
-     * @param displayName Display name of this attribute
-     * @param description Description of this attribute
+     * @param base Base message key for our localized description
+     *  and display name lookups
      */
-    public AttributeDescriptorImpl(String name, Class type,
-                                   String displayName, String description) {
+    public AttributeDescriptorImpl(String name, Class type, String base) {
 
         super();
         this.name = name;
         this.type = type;
-        this.displayName = displayName;
-        this.description = description;
+        this.displayNameKey = base + ".displayName";
+        this.descriptionKey = base + ".description";
 
     }
 
@@ -48,10 +60,10 @@ final class AttributeDescriptorImpl extends AttributeDescriptor {
     // ----------------------------------------------------- Instance Variables
 
 
+    private String descriptionKey = null;
+    private String displayNameKey = null;
     private String name = null;
     private Class type = null;
-    private String displayName = null;
-    private String description = null;
 
 
     // --------------------------------------------------------- Public Methods
@@ -59,26 +71,56 @@ final class AttributeDescriptorImpl extends AttributeDescriptor {
 
     /**
      * <p>Return a brief description of this attribute, useful when
-     * rendering help text in a tool.</p>
-     *
-     * <p><strong>FIXME</strong> - I18N.</p>
+     * rendering help text in a tool, localized for the default
+     * <code>Locale</code> for this instance of the Java Virtual Machine.</p>
      */
     public String getDescription() {
 
-        return (this.description);
+        return (getDescription(Locale.getDefault()));
+
+    }
+
+
+    /**
+     * <p>Return a brief description of this attribute, useful when
+     * rendering help text in a tool, localized for the specified
+     * <code>Locale</code>.</p>
+     *
+     * @param locale Locale for which to retrieve a localized description
+     *
+     * @exception NullPointerException if <code>locale</code>
+     *  is <code>null</code>
+     */
+    public String getDescription(Locale locale) {
+
+        return (getMessage(descriptionKey, locale));
 
     }
 
 
     /**
      * <p>Return a short displayable name of this attribute, useful in
-     * constructing the user interface of a tool.</p>
-     *
-     * <p><strong>FIXME</strong> - I18N.</p>
+     * constructing the user interface of a tool, localized for the
+     * default <code>Locale</code> for this instance of the Java Virtual
+     * Machine.</p>
      */
     public String getDisplayName() {
 
-        return (this.displayName);
+        return (getDisplayName(Locale.getDefault()));
+
+    }
+
+
+    /**
+     * <p>Return a short displayable name of this attribute, useful in
+     * constructing the user interface of a tool, localized for the
+     * specified <code>Locale</code>.</p>
+     *
+     * @param locale Locale for which to retrieve a display name
+     */
+    public String getDisplayName(Locale locale) {
+
+        return (getMessage(displayNameKey, locale));
 
     }
 
@@ -101,6 +143,80 @@ final class AttributeDescriptorImpl extends AttributeDescriptor {
     public Class getType() {
 
         return (this.type);
+
+    }
+
+
+    // ------------------------------------------------------- Static Variables
+
+
+    /**
+     * <p>The set of <code>ResourceBundle</code> instances for the
+     * localized text of attribute descriptors and display names in
+     * this package, keyed by <code>Locale</code>.</p>
+     */
+    private static HashMap bundles = new HashMap();
+
+
+    // --------------------------------------------------------- Static Methods
+
+
+    /**
+     * <p>Return the <code>ResourceBundle</code> for the specified
+     * <code>Locale</code>, if there is one; otherwise, return
+     * <code>null</code>.</p>
+     *
+     * @param locale Locale for which to acquire a resource bundle,
+     *  or <code>null</code> for the default locale of this JVM
+     */
+    private ResourceBundle getBundle(Locale locale) {
+
+        // Return any cached resource bundle
+        synchronized (bundles) {
+            if (bundles.containsKey(locale)) {
+                return ((ResourceBundle) bundles.get(locale));
+            }
+        }
+
+        // Acquire a resource bundle for this locale, if possible
+        ResourceBundle bundle = null;
+        try {
+            if (locale == null) {
+                bundle = ResourceBundle.getBundle(BUNDLE);
+            } else {
+                bundle = ResourceBundle.getBundle(BUNDLE, locale);
+            }
+            synchronized (bundles) {
+                bundles.put(locale, bundle);
+            }
+            return (bundle);
+        } catch (MissingResourceException e) {
+            return (null);
+        }
+
+    }
+
+
+    /**
+     * <p>Return the message string with the specified key, localized
+     * for the specified <code>Locale</code>.  If no such message can
+     * be found, return <code>null</code>.</p>
+     *
+     * @param key Message key of the desired message
+     * @param locale Locale to localize for, or <code>null</code>
+     *  for the default <code>Locale</code> for this JVM
+     */
+    private String getMessage(String key, Locale locale) {
+
+        ResourceBundle bundle = getBundle(locale);
+        if (bundle == null) {
+            return (null);
+        }
+        try {
+            return (bundle.getString(key));
+        } catch (MissingResourceException e) {
+            return (null);
+        }
 
     }
 

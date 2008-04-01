@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeDescriptor.java,v 1.5 2002/06/03 19:27:26 craigmcc Exp $
+ * $Id: AttributeDescriptor.java,v 1.6 2002/07/12 00:30:01 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.component;
 
 
+import java.util.Locale;
 import javax.faces.render.Renderer;
 import javax.faces.validator.Validator;
 
@@ -19,10 +20,7 @@ import javax.faces.validator.Validator;
  * of a <code>UIComponent</code> that might be of interest to other classes,
  * such as a {@link Validator} or a {@link Renderer}.  This information is
  * particularly useful in tools that wish to automate the creation of user
- * interfaces based on JavaServer Pages components.</p>
- *
- * <p><strong>FIXME</strong> - Specify optional list of legal values?  Specify
- * optional default value?</p>
+ * interfaces based on JavaServer Faces components.</p>
  */
 
 public abstract class AttributeDescriptor {
@@ -30,20 +28,42 @@ public abstract class AttributeDescriptor {
 
     /**
      * <p>Return a brief description of this attribute, useful when
-     * rendering help text in a tool.</p>
-     *
-     * <p><strong>FIXME</strong> - I18N.</p>
+     * rendering help text in a tool, localized for the default
+     * <code>Locale</code> for this instance of the Java Virtual Machine.</p>
      */
     public abstract String getDescription();
 
 
     /**
-     * <p>Return a short displayable name of this attribute, useful in
-     * constructing the user interface of a tool.</p>
+     * <p>Return a brief description of this attribute, useful when
+     * rendering help text in a tool, localized for the specified
+     * <code>Locale</code>.</p>
      *
-     * <p><strong>FIXME</strong> - I18N.</p>
+     * @param locale Locale for which to retrieve a localized description
+     *
+     * @exception NullPointerException if <code>locale</code>
+     *  is <code>null</code>
+     */
+    public abstract String getDescription(Locale locale);
+
+
+    /**
+     * <p>Return a short displayable name of this attribute, useful in
+     * constructing the user interface of a tool, localized for the
+     * default <code>Locale</code> for this instance of the Java Virtual
+     * Machine.</p>
      */
     public abstract String getDisplayName();
+
+
+    /**
+     * <p>Return a short displayable name of this attribute, useful in
+     * constructing the user interface of a tool, localized for the
+     * specified <code>Locale</code>.</p>
+     *
+     * @param locale Locale for which to retrieve a display name
+     */
+    public abstract String getDisplayName(Locale locale);
 
 
     /**

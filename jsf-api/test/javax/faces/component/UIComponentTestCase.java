@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.6 2002/06/24 04:18:17 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.7 2002/07/12 00:30:05 craigmcc Exp $
  */
 
 /*
@@ -20,7 +20,7 @@ import junit.framework.TestSuite;
 
 
 /**
- * <p>Test case for the <strong>javax.faces.UIComponent</strong>
+ * <p>Test case for the <strong>javax.faces.component.UIComponentBase</strong>
  * concrete class.</p>
  */
 

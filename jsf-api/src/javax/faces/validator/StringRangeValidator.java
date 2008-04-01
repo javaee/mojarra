@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.3 2002/06/14 22:16:42 craigmcc Exp $
+ * $Id: StringRangeValidator.java,v 1.4 2002/07/12 00:30:03 craigmcc Exp $
  */
 
 /*
@@ -108,15 +108,13 @@ public class StringRangeValidator extends ValidatorBase {
             (MAXIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
                                          String.class,
-                                         "Maximum Value",
-                                         "The maximum allowed value"));
+                                         "maxValue"));
 
         descriptors.put
             (MINIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
                                          String.class,
-                                         "Minimum Value",
-                                         "The minimum allowed value"));
+                                         "minValue"));
 
     }
 

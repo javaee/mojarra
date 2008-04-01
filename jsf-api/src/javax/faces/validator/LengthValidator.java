@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.4 2002/06/14 22:16:42 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.5 2002/07/12 00:30:02 craigmcc Exp $
  */
 
 /*
@@ -99,17 +99,13 @@ public class LengthValidator extends ValidatorBase {
             (MAXIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
                                          Integer.class,
-                                         "Maximum Length",
-                                         "The maximum number of characters " +
-                                         "allowed for this value"));
+                                         "maxLength"));
 
         descriptors.put
             (MINIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
                                          Integer.class,
-                                         "Minimum Length",
-                                         "The minimum number of characters " +
-                                         "allowed for this value"));
+                                         "minLength"));
 
     }
 

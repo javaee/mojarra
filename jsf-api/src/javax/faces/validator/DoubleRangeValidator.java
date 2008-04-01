@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.3 2002/06/14 22:16:41 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.4 2002/07/12 00:30:02 craigmcc Exp $
  */
 
 /*
@@ -108,15 +108,13 @@ public class DoubleRangeValidator extends ValidatorBase {
             (MAXIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MAXIMUM_ATTRIBUTE_NAME,
                                          Double.class,
-                                         "Maximum Value",
-                                         "The maximum allowed value"));
+                                         "maxValue"));
 
         descriptors.put
             (MINIMUM_ATTRIBUTE_NAME,
              new AttributeDescriptorImpl(MINIMUM_ATTRIBUTE_NAME,
                                          Double.class,
-                                         "Minimum Value",
-                                         "The minimum allowed value"));
+                                         "minValue"));
 
     }
 
