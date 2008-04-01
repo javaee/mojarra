@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.26 2002/09/06 18:05:25 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.27 2002/09/07 16:36:04 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.26 2002/09/06 18:05:25 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.27 2002/09/07 16:36:04 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,7 +75,15 @@ protected String action = null;
 protected String alt = null;
 protected String charset = null;
 protected String checked = null;
-protected String htmlClass = null;
+protected String commandClass = null;
+protected String graphicClass = null;
+protected String inputClass = null;
+protected String outputClass = null;
+protected String selectbooleanClass = null;
+protected String selectmanyClass = null;
+protected String selectoneClass = null;
+protected String selectitemClass = null;
+protected String selectitemsClass = null;
 protected String cols = null;
 protected String coords = null;
 protected String dir = null;
@@ -325,14 +333,94 @@ public FacesTag()
     // Space seperated list of classes -
     // For all HTML elements pertaining to Faces
 
-    public String getHtmlClass()
+    public String getCommandClass()
     {
-        return htmlClass;
+        return commandClass;
     }
 
-    public void setHtmlClass(String newHtmlClass) 
+    public void setCommandClass(String newCommandClass) 
     {
-        htmlClass = newHtmlClass;
+        commandClass = newCommandClass;
+    }
+
+    public String getGraphicClass()
+    {
+        return graphicClass;
+    }
+
+    public void setGraphicClass(String newGraphicClass) 
+    {
+        graphicClass = newGraphicClass;
+    }
+
+    public String getInputClass()
+    {
+        return inputClass;
+    }
+
+    public void setInputClass(String newInputClass) 
+    {
+        inputClass = newInputClass;
+    }
+
+    public String getOutputClass()
+    {
+        return outputClass;
+    }
+
+    public void setOutputClass(String newOutputClass) 
+    {
+        outputClass = newOutputClass;
+    }
+
+    public String getSelectbooleanClass()
+    {
+        return selectbooleanClass;
+    }
+
+    public void setSelectbooleanClass(String newSelectbooleanClass) 
+    {
+        selectbooleanClass = newSelectbooleanClass;
+    }
+
+    public String getSelectmanyClass()
+    {
+        return selectmanyClass;
+    }
+
+    public void setSelectmanyClass(String newSelectmanyClass) 
+    {
+        selectmanyClass = newSelectmanyClass;
+    }
+
+    public String getSelectoneClass()
+    {
+        return selectoneClass;
+    }
+
+    public void setSelectoneClass(String newSelectoneClass) 
+    {
+        selectoneClass = newSelectoneClass;
+    }
+
+    public String getSelectitemClass()
+    {
+        return selectitemClass;
+    }
+
+    public void setSelectitemClass(String newSelectitemClass) 
+    {
+        selectitemClass = newSelectitemClass;
+    }
+
+    public String getSelectitemsClass()
+    {
+        return selectitemsClass;
+    }
+
+    public void setSelectitemsClass(String newSelectitemsClass) 
+    {
+        selectitemsClass = newSelectitemsClass;
     }
 
     // For TEXTAREA HTML element
@@ -1145,8 +1233,32 @@ protected void overrideProperties(UIComponent component)
     if (null == component.getAttribute("dir")) {
 	component.setAttribute("dir", getDir());
     }
-    if (null == component.getAttribute("class")) {
-	component.setAttribute("class", getHtmlClass());
+    if (null == component.getAttribute("commandClass")) {
+	component.setAttribute("commandClass", getCommandClass());
+    }
+    if (null == component.getAttribute("graphicClass")) {
+	component.setAttribute("graphicClass", getGraphicClass());
+    }
+    if (null == component.getAttribute("inputClass")) {
+	component.setAttribute("inputClass", getInputClass());
+    }
+    if (null == component.getAttribute("outputClass")) {
+	component.setAttribute("outputClass", getOutputClass());
+    }
+    if (null == component.getAttribute("selectbooleanClass")) {
+	component.setAttribute("selectbooleanClass", getSelectbooleanClass());
+    }
+    if (null == component.getAttribute("selectmanyClass")) {
+	component.setAttribute("selectmanyClass", getSelectmanyClass());
+    }
+    if (null == component.getAttribute("selectoneClass")) {
+	component.setAttribute("selectoneClass", getSelectoneClass());
+    }
+    if (null == component.getAttribute("selectitemClass")) {
+	component.setAttribute("selectitemClass", getSelectitemClass());
+    }
+    if (null == component.getAttribute("selectitemsClass")) {
+	component.setAttribute("selectitemsClass", getSelectitemsClass());
     }
     if (null == component.getAttribute("style")) {
 	component.setAttribute("style", getStyle());

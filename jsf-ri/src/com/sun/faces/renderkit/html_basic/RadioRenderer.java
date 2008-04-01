@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.31 2002/08/29 01:28:19 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.32 2002/09/07 16:35:59 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.31 2002/08/29 01:28:19 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.32 2002/09/07 16:35:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,6 +136,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
         UISelectOne uiSelectOne = null;
 	String alignStr = null;
 	String borderStr = null;
+	String selectoneClass = null;
 	boolean alignVertical = false;
 	int border = 0;
 
@@ -179,6 +180,10 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	    catch (Throwable e) {
 		border = 0;
 	    }
+	}
+	if (null != (selectoneClass = (String) 
+		     component.getAttribute("selectoneClass"))) {
+	    buffer.append("<span class=\"" + selectoneClass + "\">");
 	}
 	
 	buffer.append("<table border=\"" + border + "\">\n");
@@ -224,6 +229,10 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	    buffer.append("\t</tr>\n");
 	}
 	buffer.append("</table>");
+
+	if (null != selectoneClass) {
+	    buffer.append("</span>");
+	}
         
         ResponseWriter writer = null;
         writer = context.getResponseWriter();

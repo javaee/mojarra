@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.7 2002/08/29 01:28:18 eburns Exp $
+ * $Id: DateRenderer.java,v 1.8 2002/09/07 16:35:58 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.7 2002/08/29 01:28:18 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.8 2002/09/07 16:35:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -205,6 +205,7 @@ public class DateRenderer extends HtmlBasicRenderer {
             throws IOException {
 	boolean isInput = UIInput.TYPE == component.getComponentType();
         String currentValue = null;
+	String styleClass = null;
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -223,7 +224,17 @@ public class DateRenderer extends HtmlBasicRenderer {
 	else {
 	    currentValue = "";
 	}
+        ResponseWriter writer = null;
 
+	writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
+	if ((null != (styleClass = (String) 
+		      component.getAttribute("inputClass"))) || 
+	    (null != (styleClass = (String) 
+		      component.getAttribute("outputClass")))) {
+	    writer.write("<span class=\"" + styleClass + "\">");
+	}
         
 	if (isInput) {
 	    StringBuffer buffer = new StringBuffer();
@@ -249,12 +260,12 @@ public class DateRenderer extends HtmlBasicRenderer {
 	    // overwrite currentValue
 	    currentValue = buffer.toString();
 	}
-
-        ResponseWriter writer = null;
-
-	writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
 	writer.write(currentValue);
+
+	if (null != styleClass) {
+	    writer.write("</span>");
+	}
+
     }
 		   
     

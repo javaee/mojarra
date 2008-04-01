@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.7 2002/09/03 18:42:29 jvisvanathan Exp $
+ * $Id: NumberRenderer.java,v 1.8 2002/09/07 16:35:59 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.7 2002/09/03 18:42:29 jvisvanathan Exp $
+ * @version $Id: NumberRenderer.java,v 1.8 2002/09/07 16:35:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -225,6 +225,7 @@ public class NumberRenderer extends HtmlBasicRenderer {
         }
        
 	Object curValue = null;
+	String styleClass = null;
 
 	if (null != (curValue = component.currentValue(context))) {
 	    if (curValue instanceof Number) {
@@ -238,6 +239,17 @@ public class NumberRenderer extends HtmlBasicRenderer {
 	}
 	else {
 	    currentValue = "";
+	}
+
+        ResponseWriter writer = null;
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
+	if ((null != (styleClass = (String) 
+		      component.getAttribute("inputClass"))) || 
+	    (null != (styleClass = (String) 
+		      component.getAttribute("outputClass")))) {
+	    writer.write("<span class=\"" + styleClass + "\">");
 	}
         if (isInput) {
 	    StringBuffer buffer = new StringBuffer();
@@ -264,10 +276,10 @@ public class NumberRenderer extends HtmlBasicRenderer {
 	    currentValue = buffer.toString();
 	}
 
-        ResponseWriter writer = null;
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
 	writer.write(currentValue);                 
+	if (null != styleClass) {
+	    writer.write("</span>");
+	}
     }
     
     // The testcase for this class is TestRenderers_2.java 

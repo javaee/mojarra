@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.29 2002/08/29 19:38:01 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.30 2002/09/07 16:35:58 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.29 2002/08/29 19:38:01 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.30 2002/09/07 16:35:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,9 +129,10 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
+	String commandClass = null;
         Assert.assert_it( writer != null );
 
-        writer.write("<A HREF=\"");
+        writer.write("<a href=\"");
 
         //PENDING(rogerk) don't call this if "target" (destination) is
         // a non-faces page.  For non-faces pages, we would simply 
@@ -149,11 +150,16 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
                 writer.write(target);
             }
         }
+	writer.write("\"");
+	if (null != (commandClass = (String) 
+		     component.getAttribute("commandClass"))) {
+	    writer.write(" class=\"" + commandClass + "\"");
+	}
 
-        writer.write("\">");
+        writer.write(">");
         String image = (String)component.getAttribute("image");
         if (image != null) {
-            writer.write("<IMAGE SRC=\"");
+            writer.write("<image src=\"");
             writer.write(image);
             writer.write("\">");
         }

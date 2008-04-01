@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.15 2002/07/20 00:21:43 eburns Exp $
+ * $Id: TestRenderKit.java,v 1.16 2002/09/07 16:36:06 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.15 2002/07/20 00:21:43 eburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.16 2002/09/07 16:36:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,7 +111,6 @@ public static final String CORRECT_OUTPUT_FILENAME =
 	    rendererType = (String) iter.next();
             renderer = renderKit.getRenderer(rendererType);
             if (renderer instanceof TextRenderer ||
-                renderer instanceof TextAndGraphicRenderer ||
                 renderer instanceof MessageRenderer) {
                 correctInstance = true;
             }

@@ -166,12 +166,6 @@
                  UIInput -->
         </renderer>
         <renderer>
-            <type>TextAndGraphicRenderer</type> 
-            <class>com.sun.faces.renderkit.html_basic.TextAndGraphicRenderer</class>
-        <!-- Add Attribute Desc stuff here -->
-        </renderer>
-
-        <renderer>
             <type>MessageRenderer</type>
             <class>com.sun.faces.renderkit.html_basic.MessageRenderer</class>
         <!-- Add Attribute Desc stuff here -->

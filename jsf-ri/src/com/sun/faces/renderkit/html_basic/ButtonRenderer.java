@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.33 2002/08/30 23:49:28 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.34 2002/09/07 16:35:57 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.33 2002/08/30 23:49:28 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.34 2002/09/07 16:35:57 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -172,6 +172,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
         String type = (String) component.getAttribute("type");
+	String commandClass = null;
         if (type == null) {
             type = "submit";
 	    // This is needed in the decode method
@@ -196,6 +197,10 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         // render HTML 4.0 attributes if any.
         writer.write(Util.renderPassthruAttributes(context, component));
 	writer.write(Util.renderBooleanPassthruAttributes(context, component));
+	if (null != (commandClass = (String) 
+		     component.getAttribute("commandClass"))) {
+	    writer.write(" class=\"" + commandClass + "\" ");
+	}
         writer.write(">");
     }
     

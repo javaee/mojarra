@@ -28,14 +28,14 @@
 
                     <faces:output_text id="text1" value="Username:"/>
 
-                    <faces:input_text id="username1" value="JavaServerFaces" />
+                    <faces:input_text id="username1" inputClass="inputClass" value="JavaServerFaces" />
 
-                    <faces:output_text id="text2" value="Password:"/>
+                    <faces:output_text id="text2" outputClass="outputClass" value="Password:"/>
 
-                    <faces:input_secret id="password1" />
+                    <faces:input_secret inputClass="secretClass" id="password1" />
 
                     <faces:command_button id="submit1" type="SUBMIT"
-                             commandName="submit">
+                           commandClass="commandClass" commandName="submit">
                       <faces:output_text id="submit1_label" value="Login" />
                     </faces:command_button>
 
@@ -56,7 +56,10 @@
                  <faces:output_text id="buttonLabel" value="This is a push button " />
                  <faces:graphic_image id="buttonImage" url="/duke.gif" />
                  <!-- this isn't valid HTML, but it works for our label case -->
-                 <faces:output_label id="pushButtonLabel" lang="en_US" accesskey="Z" style="12pt" for="../pushButton">
+                 <faces:output_label id="pushButtonLabel" 
+	             outputClass="outputClass"
+                     lang="en_US" accesskey="Z" 
+                     style="12pt" for="../pushButton">
                  Label for PushButon
                  </faces:output_label>
              </faces:command_button>
@@ -71,7 +74,8 @@
 
             <faces:command_button id="imageOnlyButton" type="submit"
                      commandName="login"  >
-                 <faces:graphic_image id="buttonImage1" url="/duke.gif" />
+                 <faces:graphic_image id="buttonImage1" url="/duke.gif" 
+                        graphicClass="buttonImage1"/>
              </faces:command_button>
 	</TD>
 
@@ -82,6 +86,7 @@
 	<TD>
 
 	      <faces:command_hyperlink id="link" target="hello.html"
+                           commandClass="hyperlinkClass"
 				       label="link text"/>
 
 	</TD>
@@ -113,7 +118,8 @@
 
 	<TD>
 
-            <faces:selectboolean_checkbox id="validUser" />
+            <faces:selectboolean_checkbox id="validUser" 
+                   selectbooleanClass="selectbooleanClass"/>
 	</TD>
 
       </TR>
@@ -185,6 +191,7 @@
         </TD>
 
 	<TD><faces:input_date id="date1" value="Wed, Jul 10, 1996"
+                              inputClass="inputClass"
                               dateStyle="LONG" />
 	</TD>
 
@@ -220,13 +227,14 @@
           <td>
                    <faces:input_number id="testPattern" formatPattern="####"
                         value="9999.98765" size="3" maxlength="20" 
+                        inputClass="inputClass" 
                         tabindex="2" accesskey="D"/>
               </td>
 
       </tr>
 
       <tr>
-          <td> <faces:output_text id="percentLabel" value="OUTPUT-PERCENT" /> </td>
+          <td> <faces:output_text outputClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
                    <faces:output_number id="testPercent" numberStyle="PERCENT"
                         value="45%"/>
@@ -239,7 +247,7 @@
         </TD>
 
 	<TD><faces:output_date id="date4" value="Wed, Jul 10, 1996"
-                              dateStyle="LONG" />
+                              outputClass="outputClass" dateStyle="LONG" />
 	</TD>
 
       </TR>

@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.29 2002/08/29 01:28:18 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.30 2002/09/07 16:35:59 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.29 2002/08/29 01:28:18 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.30 2002/09/07 16:35:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,6 +127,7 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         throws IOException {
         String currentValue = null;
         UISelectOne selectOne = null;
+	String selectoneClass = null;
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
@@ -151,6 +152,12 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         }
        
         StringBuffer buffer = new StringBuffer();
+
+	if (null != (selectoneClass = (String) 
+		     component.getAttribute("selectoneClass"))) {
+	    buffer.append("<span class=\"" + selectoneClass + "\">");
+	}
+
         buffer.append("<select name=\"");
         buffer.append(component.getCompoundId());
         buffer.append("\"");
@@ -183,6 +190,9 @@ public class OptionListRenderer extends HtmlBasicRenderer {
             buffer.append("</option>\n");
         }
         buffer.append("</select>");
+	if (null != selectoneClass) {
+	    buffer.append("</span>");
+	}
         
         ResponseWriter writer = null;
         writer = context.getResponseWriter();

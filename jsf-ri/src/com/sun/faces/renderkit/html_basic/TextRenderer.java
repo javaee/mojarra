@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.32 2002/08/29 01:28:20 eburns Exp $
+ * $Id: TextRenderer.java,v 1.33 2002/09/07 16:36:00 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.32 2002/08/29 01:28:20 eburns Exp $
+ * @version $Id: TextRenderer.java,v 1.33 2002/09/07 16:36:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,6 +136,7 @@ public class TextRenderer extends HtmlBasicRenderer {
         String currentValue = null;
 	StringBuffer buffer = null;
         ResponseWriter writer = null;
+	String styleClass = null;
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -158,6 +159,12 @@ public class TextRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
+	if ((null != (styleClass = (String) 
+		      component.getAttribute("inputClass"))) || 
+	    (null != (styleClass = (String) 
+		      component.getAttribute("outputClass")))) {
+	    writer.write("<span class=\"" + styleClass + "\">");
+	}
         if (UIInput.TYPE == component.getComponentType()) {
             buffer.append("<input type=\"text\"");
             buffer.append(" name=\"");
@@ -189,6 +196,9 @@ public class TextRenderer extends HtmlBasicRenderer {
 
 	    writer.write(currentValue);
         }
+	if (null != styleClass) {
+	    writer.write("</span>");
+	}
 
     }
     

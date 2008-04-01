@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.30 2002/08/29 01:28:19 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.31 2002/09/07 16:35:59 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.30 2002/08/29 01:28:19 eburns Exp $
+ * @version $Id: SecretRenderer.java,v 1.31 2002/09/07 16:35:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,6 +119,7 @@ public class SecretRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
+	String inputClass = null;
         StringBuffer buffer = null;
         ResponseWriter writer = null;
 
@@ -162,6 +163,11 @@ public class SecretRenderer extends HtmlBasicRenderer {
         }
         buffer.append(Util.renderPassthruAttributes(context, component));
         buffer.append(Util.renderBooleanPassthruAttributes(context, component));
+	if (null != (inputClass = (String) 
+		     component.getAttribute("inputClass"))) {
+	    buffer.append(" class=\"" + inputClass + "\" ");
+	}
+	
         buffer.append(">");         
         writer.write(buffer.toString());
     }

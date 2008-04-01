@@ -9,7 +9,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=D314E6F804010321A38932C38551B0F7">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=71E573C4F33411457359941524D01733">
   <TABLE BORDER="1">
 
       <tr>
@@ -45,12 +45,12 @@
 <td>Username:</td>
 </tr>
 <tr>
-<td><input type="text" name="/basicForm/logonPanel1/username1" value="JavaServerFaces"></td>
-<td>Password:</td>
+<td><span class="inputClass"><input type="text" name="/basicForm/logonPanel1/username1" value="JavaServerFaces"></span></td>
+<td><span class="outputClass">Password:</span></td>
 </tr>
 <tr>
-<td><input type="password" name="/basicForm/logonPanel1/password1" value=""></td>
-<td><button id="/basicForm/logonPanel1/submit1" name="/basicForm/logonPanel1/submit1" type="submit" value="submit">Login</button>
+<td><input type="password" name="/basicForm/logonPanel1/password1" value="" class="secretClass" ></td>
+<td><button id="/basicForm/logonPanel1/submit1" name="/basicForm/logonPanel1/submit1" type="submit" value="submit" class="commandClass" >Login</button>
 </td>
 </tr>
 <tr>
@@ -68,9 +68,9 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=D314E6F804010321A38932C38551B0F7">
+                 <img src="/test/duke.gif;jsessionid=71E573C4F33411457359941524D01733">
                  <!-- this isn't valid HTML, but it works for our label case -->
-                 <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt" >
+                 <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt"  class="outputClass" >
 
                  Label for PushButon
                  </label>
@@ -86,7 +86,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=D314E6F804010321A38932C38551B0F7">
+                 <img src="/test/duke.gif;jsessionid=71E573C4F33411457359941524D01733" class="buttonImage1">
              </button>
 
 	</TD>
@@ -97,7 +97,7 @@
 
 	<TD>
 
-	      <A HREF="hello.html">link text</A>
+	      <a href="hello.html" class="hyperlinkClass">link text</A>
 
 	</TD>
 
@@ -107,7 +107,7 @@
 
 	<TD>
 
-	      <A HREF="hello.html"><IMAGE SRC="duke.gif"></A>
+	      <a href="hello.html"><image src="duke.gif"></A>
 
 	</TD>
 
@@ -127,7 +127,7 @@
 
 	<TD>
 
-            <input type="checkbox"  name="/basicForm/validUser">
+            <input type="checkbox"  name="/basicForm/validUser" class="selectbooleanClass" >
 	</TD>
 
       </TR>
@@ -217,7 +217,7 @@
         <TD>Date: 
         </TD>
 
-	<TD><input type="text" name="/basicForm/date1" id="date1" value="Wed, Jul 10, 1996">
+	<TD><span class="inputClass"><input type="text" name="/basicForm/date1" id="date1" value="Wed, Jul 10, 1996"></span>
 	</TD>
 
       </TR>
@@ -246,13 +246,13 @@
 
       <tr>
           <td>
-                   <input type="text" name="/basicForm/testPattern" id="testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" >
+                   <span class="inputClass"><input type="text" name="/basicForm/testPattern" id="testPattern" value="9999.98765" accesskey="D" maxlength="20" size="3" tabindex="2" ></span>
               </td>
 
       </tr>
 
       <tr>
-          <td> OUTPUT-PERCENT </td>
+          <td> <span class="outputClass">OUTPUT-PERCENT</span> </td>
               <td>
                    45%
               </td>
@@ -263,7 +263,7 @@
         <TD>OutputDate: 
         </TD>
 
-	<TD>Wed, Jul 10, 1996
+	<TD><span class="outputClass">Wed, Jul 10, 1996</span>
 	</TD>
 
       </TR>

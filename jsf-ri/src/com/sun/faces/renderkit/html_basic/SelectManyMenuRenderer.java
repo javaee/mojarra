@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyMenuRenderer.java,v 1.2 2002/09/06 22:10:28 rkitain Exp $
+ * $Id: SelectManyMenuRenderer.java,v 1.3 2002/09/07 16:35:59 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyMenuRenderer.java,v 1.2 2002/09/06 22:10:28 rkitain Exp $
+ * @version $Id: SelectManyMenuRenderer.java,v 1.3 2002/09/07 16:35:59 eburns Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -125,6 +125,7 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
         String currentValue = null;
+	String selectmanyClass = null;
 
         if (context == null || component == null) {
             throw new NullPointerException(
@@ -153,7 +154,17 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = null;
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null);
+	if (null != (selectmanyClass = (String) 
+		     component.getAttribute("selectmanyClass"))) {
+	    writer.write("<span class=\"" + selectmanyClass + "\">");
+	}
+
         writer.write(currentValue);
+
+	if (null != selectmanyClass) {
+	    writer.write("</span>");
+	}
+
     }
 
     void getSelectBuffer(

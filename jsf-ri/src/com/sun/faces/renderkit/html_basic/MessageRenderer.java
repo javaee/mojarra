@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.10 2002/08/30 22:18:31 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.11 2002/09/07 16:35:59 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.10 2002/08/30 22:18:31 rkitain Exp $
+ * @version $Id: MessageRenderer.java,v 1.11 2002/09/07 16:35:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,6 +116,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
+	String outputClass = null;
         UIOutput output = null;
         
         if (context == null || component == null) {
@@ -181,7 +182,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
+	if (null != (outputClass = (String) 
+		     component.getAttribute("outputClass"))) {
+	    writer.write("<span class=\"" + outputClass + "\">");
+	}
         writer.write(message);
+	if (null != outputClass) {
+	    writer.write("</span>");
+	}
     }
 
 } // end of class MessageRenderer

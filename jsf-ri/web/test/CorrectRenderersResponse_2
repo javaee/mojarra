@@ -1,7 +1,7 @@
 <input type="checkbox"  name="/my_checkbox" checked >
 <input type="checkbox"  name="/my_checkbox">
 <input type="checkbox"  name="/my_checkbox">
-<A HREF=""></A>
+<a href=""></A>
 <select name="/my_optionlist">	<option value="Red">Red</option>
 	<option value="Blue" selected="selected">Blue</option>
 	<option value="Green">Green</option>
@@ -13,5 +13,5 @@
 <input type="text" name="/my_number" id="my_number" value="47%"><input type="text" name="/my_number2" id="my_number2" value="1999.877">
 99%
 999.000
-<img src="">
-<FONT COLOR="RED">	component message summary<BR>	Severity: 1<BR>	component message detail	global message summary<BR>	Severity: 1<BR>	global message detail</FONT>My name is Bobby Orr
+<img src=";jsessionid=33E510B47477A8B13558C3C21880D160">
+<font color="RED">	component message summary<BR>	Severity: 1<BR>	component message detail	global message summary<BR>	Severity: 1<BR>	global message detail</font>My name is Bobby Orr
