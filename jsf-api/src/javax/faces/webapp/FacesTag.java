@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.10 2002/06/10 18:19:39 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.11 2002/06/27 05:47:44 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Stack;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -46,10 +48,24 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
+     * <p>The request attribute under which our component stack is stored.</p>
+     */
+    protected static final String COMPONENT_STACK_ATTR =
+        "javax.faces.webapp.FacesTag.COMPONENT_STACK";
+
+
+    /**
      * <p>The {@link UIComponent} that is being encoded by this tag,
      * if any.</p>
      */
     protected UIComponent component = null;
+
+
+    /**
+     * <p>The {@link UIComponent} stack representing the current nesting
+     * of components for the current response.</p>
+     */
+    protected Stack componentStack = null;
 
 
     /**
@@ -153,10 +169,7 @@ public abstract class FacesTag extends TagSupport {
      *     with the current {@link FacesContext}.  This ensures that encoded
      *     output from the components is routed through the
      *     <code>JspWriter</code> for the current page.</li>
-     * <li>Use the <code>findComponent()</code> method to acquire a reference
-     *     to the {@link UIComponent} associated with this tag.  Save the
-     *     acquired reference in the <code>component</code> instance variable.
-     *     </li>
+     * <li>FIXME - update the look-then-create description.</li>
      * <li>If the <code>rendererType</code> property of this component is not
      *     null, acquire a reference to the corresponding {@link Renderer} from
      *     the {@link RenderKit} associated with this response.  Save the
@@ -181,24 +194,23 @@ public abstract class FacesTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        // Ensure that an appropriate ResponseWriter is available
+        // Look up the FacesContext instance for this request
         context = (FacesContext)
             pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
                                      PageContext.REQUEST_SCOPE);
         if (context == null) { // FIXME - i18n
             throw new JspException("Cannot find FacesContext");
         }
-        ResponseWriter writer = context.getResponseWriter();
-        if ((writer == null) ||
-            !(writer instanceof JspResponseWriter)) {
-            writer = new JspResponseWriter(pageContext.getOut());
-            context.setResponseWriter(writer);
-        }
+
+        // Set up the ResponseWriter as needed
+        setupResponseWriter();
 
         // Locate and configure the component that corresponds to this tag
+        componentStack = findComponentStack();
         component = findComponent();
         overrideProperties(component);
         boolean rendersChildren = component.getRendersChildren();
+        componentStack.push(component);
 
         // Render the beginning of the component associated with this tag
         String rendererType = component.getRendererType();
@@ -212,6 +224,8 @@ public abstract class FacesTag extends TagSupport {
             } catch (IOException e) {
                 component = null;
                 context = null;
+                componentStack.pop();
+                componentStack = null;
                 throw new JspException(e);
             }
         } else {
@@ -219,11 +233,14 @@ public abstract class FacesTag extends TagSupport {
             if (renderKit == null) { // FIXME - i18n
                 throw new JspException("Cannot find RenderKit");
             }
+            // FIXME - deal with direct output components!
             try {
                 renderer = renderKit.getRenderer(rendererType);
             } catch (IllegalArgumentException e) { // FIXME - i18n
                 component = null;
                 context = null;
+                componentStack.pop();
+                componentStack = null;
                 throw new JspException("Cannot find Renderer '" +
                                        rendererType + "'");
             }
@@ -236,6 +253,8 @@ public abstract class FacesTag extends TagSupport {
                 component = null;
                 context = null;
                 renderer = null;
+                componentStack.pop();
+                componentStack = null;
                 throw new JspException(e);
             }
         }
@@ -279,6 +298,10 @@ public abstract class FacesTag extends TagSupport {
             renderer = null;
         }
 
+        // Pop the component stack
+        componentStack.pop();
+        componentStack = null;
+
         // Return the appropriate control value
         return (getDoEndValue());
 
@@ -302,62 +325,69 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
+     * <p>Create and return a new {@link UIComponent} that is acceptable
+     * to this tag.  Concrete subclasses must override this method.</p>
+     */
+    public abstract UIComponent createComponent();
+
+
+    /**
      * <p>Find and return the component, from the response component tree,
-     * that corresponds to the absolute or relative identifier defined in the
-     * <code>id</code> attribute of this tag.</p>
+     * that corresponds to the relative identifier defined by the
+     * <code>id</code> attribute of this tag.  If no such component can
+     * be found, create an appropriate instance.</p>
      *
      * @exception JspException if the specified component cannot be located
      */
     protected UIComponent findComponent() throws JspException {
 
-        // Acquire a reference to the response component tree
-        FacesContext context = (FacesContext)
-            pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
-                                     PageContext.REQUEST_SCOPE);
-        if (context == null) { // FIXME - i18n
-            throw new JspException("Cannot locate FacesContext");
-        }
-        Tree tree = context.getResponseTree();
-        if (tree == null) { // FIXME - i18n
-            throw new JspException("Cannot locate Tree");
-        }
-
-        // Process an absolute identifier
+        // Validate the requested identifier
         String id = getId();
         if (id == null) { // FIXME - i18n
             throw new JspException("No id attribute specified");
         } else if (id.length() < 1) { // FIXME - i18n
             throw new JspException("Zero-length id attribute specified");
-        } else if (id.startsWith("/")) {
-            UIComponent root = tree.getRoot();
-            if (root == null) { // FIXME - i18n
-                throw new JspException("Cannot locate root node");
-            }
-            try {
-                return (root.findComponent(id));
-            } catch (IllegalArgumentException e) {
-                throw new JspException(e);
+        } else if (id.startsWith("/") || id.startsWith(".")) { // FIXME - i18n
+            throw new JspException("Only simple id values allowed");
+        }
+
+        // Ask the top component on the stack if it has a child of this id
+        UIComponent parent = (UIComponent) componentStack.peek();
+        UIComponent child = null;
+        Iterator children = parent.getChildren();
+        while (children.hasNext()) {
+            child = (UIComponent) children.next();
+            if (id.equals(child.getComponentId())) {
+                return (child);
             }
         }
 
-        // Process a relative identifier
-        Tag tag = getParent();
-        while (true) {
-            if (tag == null) { // FIXME - i18n
-                throw new JspException("Cannot find parent FacesTag");
-            }
-            if (tag instanceof FacesTag) {
-                break;
-            }
-            tag = tag.getParent();
+        // Create and return a new child component of the appropriate type
+        child = createComponent();
+        child.setComponentId(id);
+        parent.addChild(child);
+        return (child);
+
+    }
+
+
+    /**
+     * <p>Locate and return the component stack for this response,
+     * creating one if this has not been done already.</p>
+     */
+    protected Stack findComponentStack() {
+
+        Stack componentStack = (Stack)
+            pageContext.getAttribute(COMPONENT_STACK_ATTR,
+                                     PageContext.REQUEST_SCOPE);
+        if (componentStack == null) {
+            componentStack = new Stack();
+            componentStack.push(context.getResponseTree().getRoot());
+            pageContext.setAttribute(COMPONENT_STACK_ATTR,
+                                     componentStack,
+                                     PageContext.REQUEST_SCOPE);
         }
-        FacesTag parent = (FacesTag) tag;
-        try {
-            UIComponent component = parent.findComponent();
-            return (component.findComponent(id));
-        } catch (IllegalArgumentException e) { // FIXME - i18n
-            throw new JspException("Cannot find parent FacesTag component");
-        }
+        return (componentStack);
 
     }
 
@@ -391,6 +421,22 @@ public abstract class FacesTag extends TagSupport {
         // Override other properties as required
         if (modelReference != null) {
             component.setModelReference(modelReference);
+        }
+
+    }
+
+
+    /**
+     * <p>Set up the {@link ResponseWriter} for the current response,
+     * if this has not been done already.</p>
+     */
+    protected void setupResponseWriter() {
+
+        ResponseWriter writer = context.getResponseWriter();
+        if ((writer == null) ||
+            !(writer instanceof JspResponseWriter)) {
+            writer = new JspResponseWriter(pageContext.getOut());
+            context.setResponseWriter(writer);
         }
 
     }
