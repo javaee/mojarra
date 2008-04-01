@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.17 2002/07/31 01:42:02 craigmcc Exp $
+ * $Id: UICommand.java,v 1.18 2002/08/15 16:29:27 craigmcc Exp $
  */
 
 /*
@@ -100,37 +100,59 @@ public class UICommand extends UIComponentBase {
         }
 
         // Was our command the one that caused this submission?
-        Object value = currentValue(context);
-        String commandName = null;
-        if (value != null) {
-            commandName = value.toString();
-            if (context.getServletRequest().getParameter(commandName) ==
-                null) {
-                return;
+        setValid(true);
+        String value = context.getServletRequest().
+            getParameter(getCompoundId());
+        if (!"submit".equals(value)) {
+            return;
+        }
+
+        // Construct and enqueue a FormEvent for the application
+        String commandName = (String) currentValue(context);
+        String formName = null;
+        UIComponent parent = getParent();
+        while (parent != null) {
+            if (parent instanceof UIForm) {
+                formName = (String) parent.currentValue(context);
+                break;
             }
-        } else {
-            return;
+            parent = parent.getParent();
         }
-
-        // Does the extra path info on this request identify a form submit?
-        String pathInfo = (String)
-          context.getServletRequest().getAttribute
-          ("javax.servlet.include.path_info");
-        if (pathInfo == null) {
-          pathInfo =
-            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
+        if (formName == null) {
+            return; // Not nested in a form
         }
-        if (pathInfo == null) {
-            return;
-        }
-        if (!pathInfo.startsWith(UIForm.PREFIX)) {
-            return;
-        }
-        String formName = pathInfo.substring(UIForm.PREFIX.length() + 1);
-
-        // Enqueue a form event to the application
         context.addApplicationEvent
             (new FormEvent(this, formName, commandName));
+
+    }
+
+
+    /**
+     * <p>Render the beginning of an HTML submit button.</p>
+     *
+     * @param context FacesContext for the response we are creating
+     *
+     * @exception IOException if an input/output error occurs while rendering
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void encodeBegin(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+        // Perform default encoding
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<button name=\"");
+        writer.write(getCompoundId());
+        writer.write("\" type=\"submit\" value=\"submit\">\n");
 
     }
 
@@ -159,14 +181,30 @@ public class UICommand extends UIComponentBase {
 
         // Perform default encoding
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("<input type=\"submit\"");
-        Object currentValue = currentValue(context);
-        if (currentValue != null) {
-            writer.write(" name=\"");
-            writer.write(currentValue.toString());
-            writer.write("\"");
+        writer.write("</button>\n");
+
+    }
+
+
+    /**
+     * <p>Suppress model updates for this component.</p>
+     *
+     * @param context FacesContext for the request we are processing
+     *
+     * @exception FacesException if an error occurs during execution
+     *  of the <code>setModelValue()</code> method
+     * @exception IllegalArgumentException if the <code>modelReference</code>
+     *  property has invalid syntax for an expression
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void updateModel(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
         }
-        writer.write(">");
+
+        ; // No action required
 
     }
 
