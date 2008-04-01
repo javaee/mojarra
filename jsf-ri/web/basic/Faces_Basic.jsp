@@ -255,7 +255,8 @@
 
 	<TD>
 
-	      <faces:selectone_optionlist id="appleQuantity">
+	      <faces:selectone_optionlist id="appleQuantity" size="6"
+                      title="Select Quantity" accesskey="N" tabindex="20" >
 
 		<faces:selectitem  value="0" label="0"/>
 		<faces:selectitem  value="1" label="1"/>
@@ -278,7 +279,8 @@
 
 	<TD>
 
-	      <faces:selectone_radiogroup id="shipType" align="horizontal">
+	      <faces:selectone_radiogroup id="shipType" layout="horizontal"
+                      tabindex="30" title="Ship details" accesskey="S" >
 
 		<faces:selectitem value="nextDay" label="Next Day" />
 		<faces:selectitem value="nextWeek" label="Next Week" 
@@ -295,7 +297,7 @@
 
 	<TD>
 		<faces:selectone_radiogroup id="verticalRadio" 
-                                            align="vertical" border="1" >
+                                            layout="vertical" border="1" >
 
   		<faces:selectitem value="nextDay" label="Next Day" 
                                   selected="true" />
@@ -316,7 +318,7 @@
 
 	      <faces:selectone_radiogroup id="radioFromModel" 
                        modelReference="${LoginBean.currentOption}"
-                       align="horizontal">
+                       layout="horizontal">
 
 		<faces:selectitems id="optionListOptions"
                                    modelReference="${LoginBean.options}"/>

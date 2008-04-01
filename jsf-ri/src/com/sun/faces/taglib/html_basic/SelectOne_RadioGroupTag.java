@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioGroupTag.java,v 1.4 2002/07/12 19:44:37 eburns Exp $
+ * $Id: SelectOne_RadioGroupTag.java,v 1.5 2002/08/21 19:26:05 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectOne_RadioGroupTag.java,v 1.4 2002/07/12 19:44:37 eburns Exp $
+ * @version $Id: SelectOne_RadioGroupTag.java,v 1.5 2002/08/21 19:26:05 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -40,49 +40,49 @@ import com.sun.faces.taglib.FacesTag;
 
 public class SelectOne_RadioGroupTag extends SelectOne_OptionListTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-    protected String align = null;
+    protected String layout = null;
     protected String border = null;
 
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public SelectOne_RadioGroupTag()
-{
-    super();
-}
-
-//
-// Class methods
-//
-
-// 
-// Accessors
-//
-
-    public void setAlign(String newAlign) {
-	align = newAlign;
+    public SelectOne_RadioGroupTag()
+    {
+        super();
     }
 
-    public String getAlign() {
-	return align;
+    //
+    // Class methods
+    //
+
+    // 
+    // Accessors
+    //
+
+    public void setLayout(String newLayout) {
+	layout = newLayout;
+    }
+
+    public String getLayout() {
+	return layout;
     }
 
     public void setBorder(String newBorder) {
@@ -107,8 +107,8 @@ public SelectOne_RadioGroupTag()
 	super.overrideProperties(component);
 	UISelectOne uiSelectOne = (UISelectOne) component;
 	
-	if (null == uiSelectOne.getAttribute("align")) {
-	    uiSelectOne.setAttribute("align", getAlign());
+	if (null == uiSelectOne.getAttribute("layout")) {
+	    uiSelectOne.setAttribute("layout", getLayout());
 	}
 	if (null == uiSelectOne.getAttribute("border")) {
 	    uiSelectOne.setAttribute("border", getBorder());

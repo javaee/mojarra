@@ -107,7 +107,7 @@
 
 	<TD>
 
-	      <faces:selectone_radiogroup id="shipType" align="horizontal">
+	      <faces:selectone_radiogroup id="shipType" layout="horizontal">
 
 		<faces:selectitem value="nextDay" label="Next Day" />
 		<faces:selectitem value="nextWeek" label="Next Week" 
@@ -124,7 +124,7 @@
 
 	<TD>
 		<faces:selectone_radiogroup id="verticalRadio" 
-                                            align="vertical" border="1" >
+                                            layout="vertical" border="1" >
 
   		<faces:selectitem value="nextDay" label="Next Day" 
                                   selected="true" />

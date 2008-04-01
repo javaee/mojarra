@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.26 2002/08/14 19:11:24 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.27 2002/08/21 19:26:03 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.26 2002/08/14 19:11:24 eburns Exp $
+ * @version $Id: RadioRenderer.java,v 1.27 2002/08/21 19:26:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,47 +106,15 @@ public class RadioRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        
-        // PENDING (visvan) should we call supportsType to double check
-        // componentType ??
+       
         String compoundId = component.getCompoundId();
         Assert.assert_it(compoundId != null );
         
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModelReference();
-        
-        // If modelReference String is null or newValue is null, type
-        // conversion is not necessary. This is because default type
-        // for UISelectOne component is String. Simply set local value.
-        if ( newValue == null || modelRef == null ) {
-            component.setValue(newValue);
-            return;
-        }
-        
-        // if we get here, type conversion is required.
-        try {
-            modelType = context.getModelType(modelRef);
-        } catch (FacesException fe ) {
-            // PENDING (visvan) log error
-        }    
-        Assert.assert_it(modelType != null );
-        
-        try {
-            convertedValue = ConvertUtils.convert(newValue, modelType);
-            component.setValid(true);
-        } catch (ConversionException ce ) {
-            addConversionErrorMessage( context, component, ce.getMessage()); 
-        }    
-            
-        if ( convertedValue == null ) {
-            // since conversion failed, don't modify the localValue.
-            // set the value temporarily in an attribute so that encode can 
-            // use this local state instead of local value.
-            component.setAttribute("localState", newValue);
-        } else {
-            // conversion successful, set converted value as the local value.
-            component.setValue(convertedValue);    
-        }
+        // currently we assume the model type to be of type string or 
+        // convertible to string and localised by the application.
+        component.setValue(newValue);
+        component.setValid(true);
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -176,17 +144,16 @@ public class RadioRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
-        // if localState attribute is set, then conversion failed, so use
-        // that to reproduce the incorrect value. Otherwise use the current value
-        // stored in component.
-        Object localState = component.getAttribute("localState");
-        if ( localState != null ) {
-            currentValue = (String) localState;
-        } else {
-            Object currentObj = component.currentValue(context);
-            if ( currentObj != null) {
-                currentValue = ConvertUtils.convert(currentObj);
-            }    
+        Object currentObj = component.currentValue(context);
+        if ( currentObj != null) {
+            if (currentObj instanceof String) {
+                currentValue = (String)currentObj;
+            } else {
+                currentValue = currentObj.toString();
+            }
+        }
+        if (currentValue == null) {
+            currentValue = "";
         }
       
         // cast component to UISelectOne.
@@ -203,7 +170,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 	
-	if (null != (alignStr = (String) uiSelectOne.getAttribute("align"))) {
+	if (null != (alignStr = (String) uiSelectOne.getAttribute("layout"))) {
 	    alignVertical = alignStr.equalsIgnoreCase("vertical") ? 
 		true : false;
 	}
@@ -216,41 +183,49 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	    }
 	}
 	
-	writer.write("<TABLE BORDER=\"" + border + "\">\n");
+	writer.write("<table border=\"" + border + "\">\n");
 	if (!alignVertical) {
-	    writer.write("\t<TR>\n");
+	    writer.write("\t<tr>\n");
 	}
-        
+        // PENDING (visvan) handle nested labels
 	while (items.hasNext()) {
 	    curItem = (SelectItem) items.next();
 	    if (alignVertical) {
-		writer.write("\t<TR>\n");
+		writer.write("\t<tr>\n");
 	    }
-            writer.write("<TD><INPUT TYPE=\"RADIO\"");
+            writer.write("<td><input type=\"radio\"");
             if (null != curItem.getValue() &&
 		curItem.getValue().equals(currentValue)){
-                writer.write(" CHECKED");
+                writer.write(" checked");
             }
-            writer.write(" NAME=\"");
+            writer.write(" name=\"");
             writer.write(uiSelectOne.getCompoundId());
-            writer.write("\" VALUE=\"");
+            writer.write("\" value=\"");
             writer.write((String) curItem.getValue());
-            writer.write("\">");
+            writer.write("\"");
+            // render HTML 4.0 attributes if any
+            // PENDING (visvan) render HTML 4.0 attributes for each checkbox tag.
+            // can't do this right now,  because SelectItem doesn't store
+            // attributes, UISelectItem does.
+           // writer.write(Util.renderPassthruAttributes(context, component));
+	   // writer.write(Util.renderBooleanPassthruAttributes(context, component));
+            writer.write(">");
+            
             String itemLabel = curItem.getLabel();
             if (itemLabel != null) {
                 writer.write(" ");
                 writer.write(itemLabel);
             }
-            writer.write("</TD>\n");
+            writer.write("</td>\n");
 	    if (alignVertical) {
-		writer.write("\t<TR>\n");
+		writer.write("\t<tr>\n");
 	    }
         }
 
 	if (!alignVertical) {
-	    writer.write("\t</TR>\n");
+	    writer.write("\t</tr>\n");
 	}
-	writer.write("</TABLE>");
+	writer.write("</table>");
 
 
     }

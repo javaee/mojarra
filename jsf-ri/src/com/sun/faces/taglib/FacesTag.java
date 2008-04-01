@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.22 2002/08/20 20:00:54 eburns Exp $
+ * $Id: FacesTag.java,v 1.23 2002/08/21 19:26:04 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.RIConstants;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.22 2002/08/20 20:00:54 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.23 2002/08/21 19:26:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,8 +127,7 @@ protected String type = null;
 protected String usemap = null;
 protected String value = null;
 
- 
-// Relationship Instance Variables
+ // Relationship Instance Variables
 
 //
 // Constructors and Initializers    
@@ -909,7 +908,7 @@ public FacesTag()
     {
         title = newTitle;
     }
-
+    
     // For "A" (Hyperlink)/INPUT/BUTTON HTML elements
 
     public String getType() 
@@ -1090,6 +1089,9 @@ protected void overrideProperties(UIComponent component)
     }
     if (null == component.getAttribute("lang")) {
 	component.setAttribute("lang", getLang());
+    }
+    if (null == component.getAttribute("dir")) {
+	component.setAttribute("dir", getDir());
     }
     if (null == component.getAttribute("class")) {
 	component.setAttribute("class", getHtmlClass());

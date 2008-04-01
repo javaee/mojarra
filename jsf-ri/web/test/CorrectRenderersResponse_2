@@ -2,11 +2,11 @@
 <input type="checkbox"  name="/my_checkbox">
 <input type="checkbox"  name="/my_checkbox">
 <A HREF=""></A>
-<SELECT NAME="/my_optionlist">	<OPTION VALUE="Red">Red</OPTION>
-	<OPTION VALUE="Blue" selected="selected">Blue</OPTION>
-	<OPTION VALUE="Green">Green</OPTION>
-	<OPTION VALUE="Yellow">Yellow</OPTION>
-</SELECT>
+<select name="/my_optionlist">	<option value="Red">Red</option>
+	<option value="Blue" selected="selected">Blue</option>
+	<option value="Green">Green</option>
+	<option value="Yellow">Yellow</option>
+</select>
 <input type="password" name="/my_secret" value="">
 <input type="text" name="/my_input_text" value="text"><input type="text" name="/my_input_date" id="my_input_date" value="Jan 12, 1952"><input type="text" name="/my_input_time" id="my_input_time" value="12:31:31 PM"><input type="text" name="/my_input_date2" id="my_input_date2" value="Sat, Jan 12, 1952 AD at 12:31:31 PM">Jan 12, 195212:31:31 PMSat, Jan 12, 1952 AD at 12:31:31 PMinvalidDate
 <textarea  name="/my_textarea"> TextAreaRenderer</TEXTAREA>

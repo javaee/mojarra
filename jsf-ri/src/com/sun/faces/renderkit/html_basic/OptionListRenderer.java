@@ -1,5 +1,5 @@
 /*
- * $Id: OptionListRenderer.java,v 1.25 2002/08/14 19:11:24 eburns Exp $
+ * $Id: OptionListRenderer.java,v 1.26 2002/08/21 19:26:03 jvisvanathan Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OptionListRenderer.java,v 1.25 2002/08/14 19:11:24 eburns Exp $
+ * @version $Id: OptionListRenderer.java,v 1.26 2002/08/21 19:26:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,39 +103,10 @@ public class OptionListRenderer extends HtmlBasicRenderer {
         Assert.assert_it(compoundId != null );
 
         String newValue = context.getServletRequest().getParameter(compoundId);
-        String modelRef = component.getModelReference();
-
-        if (newValue == null || modelRef == null) {
-            component.setValue(newValue);
-            return;
-        }
-
-        // if there is a model, then convert to the model type.
-
-        Class modelType = null;
-        try {
-            modelType = context.getModelType(modelRef);
-        } catch (FacesException fe ) {
-            //PENDING(rogerk) log error
-        }
-        Assert.assert_it(modelType != null );
-
-        Object convertedValue = null;
-        try {
-            convertedValue = ConvertUtils.convert(newValue, modelType);
-            component.setValid(true);
-        } catch (ConversionException ce ) {
-           addConversionErrorMessage( context, component, ce.getMessage()); 
-        }
-
-        // PENDING(rogerk) store failed conversion value in other
-        // "localstate" attribute??
-        //
-        if ( convertedValue == null ) {
-            component.setAttribute("localState", newValue);
-        } else {
-            component.setValue(convertedValue);
-        }
+        // currently we assume the model type to be of type string or 
+        // convertible to string and localised by the application.
+        component.setValue(newValue);
+        component.setValid(true);
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -155,53 +126,64 @@ public class OptionListRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
+        UISelectOne selectOne = null;
+        
         ResponseWriter writer = null;
         if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        UISelectOne selectOne = (UISelectOne)component;
-
-        // Use "localState" (if it's set - indicating conversion
-        // failure)
-        //
-        Object localState = selectOne.getAttribute("localState");
-        if ( localState != null ) {
-            currentValue = (String) localState;
-        } else {
-            Object currentObj = selectOne.currentValue(context);
-            if ( currentObj != null) {
-                currentValue = ConvertUtils.convert(currentObj);
+        Object currentObj = component.currentValue(context);
+        if ( currentObj != null) {
+            if (currentObj instanceof String) {
+                currentValue = (String)currentObj;
+            } else {
+                currentValue = currentObj.toString();
             }
         }
-
         if (currentValue == null) {
             currentValue = "";
         }
 
+        // cast component to UISelectOne.
+        if ( supportsComponentType(component)) {
+            selectOne = (UISelectOne) component;
+        }
+       
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-        writer.write("<SELECT NAME=\"");
+        // PENDING (visvan) handle nested labels
+        writer.write("<select name=\"");
         writer.write(component.getCompoundId());
-        writer.write("\">");
+        writer.write("\"");
+       
+        // render HTML 4.0 attributes if any
+        writer.write(Util.renderPassthruAttributes(context, component));
+	writer.write(Util.renderBooleanPassthruAttributes(context, component));
+        
+        writer.write(">");
         Iterator items = Util.getSelectItems(context, selectOne);
 	SelectItem curItem = null;
 
         while (items.hasNext()) {
 	    curItem = (SelectItem) items.next();
-            writer.write("\t<OPTION VALUE=\"");
+            writer.write("\t<option value=\"");
             writer.write((String) curItem.getValue());
             writer.write("\"");
             if (null != curItem.getValue() &&
 		curItem.getValue().equals(currentValue)) {
                 writer.write(" selected=\"selected\"");
             }
+            // PENDING (visvan) render HTML 4.0 attributes for Option tag.
+            // can't do this right now,  because SelectItem doesn't store
+            // attributes, UISelectItem does.
             writer.write(">");
             writer.write(curItem.getLabel());
-            writer.write("</OPTION>\n");
+            writer.write("</option>\n");
         }
-        writer.write("</SELECT>");
+        writer.write("</select>");
     }
 
 } // end of class OptionListRenderer

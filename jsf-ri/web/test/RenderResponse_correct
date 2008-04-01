@@ -90,17 +90,17 @@
 		
 		
 
-	      <SELECT NAME="/basicForm/appleQuantity">	<OPTION VALUE="0">0</OPTION>
-	<OPTION VALUE="1">1</OPTION>
-	<OPTION VALUE="2">2</OPTION>
-	<OPTION VALUE="3">3</OPTION>
-	<OPTION VALUE="4" selected="selected">4</OPTION>
-	<OPTION VALUE="5">5</OPTION>
-	<OPTION VALUE="6">6</OPTION>
-	<OPTION VALUE="7">7</OPTION>
-	<OPTION VALUE="8">8</OPTION>
-	<OPTION VALUE="9">9</OPTION>
-</SELECT>
+	      <select name="/basicForm/appleQuantity">	<option value="0">0</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4" selected="selected">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+</select>
 
               Option List
 
@@ -118,13 +118,13 @@
 		
 		
 
-              <TABLE BORDER="0">
-	<TR>
-<TD><INPUT TYPE="RADIO" NAME="/basicForm/shipType" VALUE="nextDay"> Next Day</TD>
-<TD><INPUT TYPE="RADIO" CHECKED NAME="/basicForm/shipType" VALUE="nextWeek"> Next Week</TD>
-<TD><INPUT TYPE="RADIO" NAME="/basicForm/shipType" VALUE="nextMonth"> Next Month</TD>
-	</TR>
-</TABLE>
+              <table border="0">
+	<tr>
+<td><input type="radio" name="/basicForm/shipType" value="nextDay"> Next Day</td>
+<td><input type="radio" checked name="/basicForm/shipType" value="nextWeek"> Next Week</td>
+<td><input type="radio" name="/basicForm/shipType" value="nextMonth"> Next Month</td>
+	</tr>
+</table>
 
 	</TD>
 
@@ -139,17 +139,17 @@
 		
 		
 
-                <TABLE BORDER="1">
-	<TR>
-<TD><INPUT TYPE="RADIO" CHECKED NAME="/basicForm/verticalRadio" VALUE="nextDay"> Next Day</TD>
-	<TR>
-	<TR>
-<TD><INPUT TYPE="RADIO" NAME="/basicForm/verticalRadio" VALUE="nextWeek"> Next Week</TD>
-	<TR>
-	<TR>
-<TD><INPUT TYPE="RADIO" NAME="/basicForm/verticalRadio" VALUE="nextMonth"> Next Month</TD>
-	<TR>
-</TABLE>
+                <table border="1">
+	<tr>
+<td><input type="radio" checked name="/basicForm/verticalRadio" value="nextDay"> Next Day</td>
+	<tr>
+	<tr>
+<td><input type="radio" name="/basicForm/verticalRadio" value="nextWeek"> Next Week</td>
+	<tr>
+	<tr>
+<td><input type="radio" name="/basicForm/verticalRadio" value="nextMonth"> Next Month</td>
+	<tr>
+</table>
 
 	</TD>
 
