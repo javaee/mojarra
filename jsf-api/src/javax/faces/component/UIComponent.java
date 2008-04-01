@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.48 2002/08/31 22:59:47 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.49 2002/08/31 23:16:09 craigmcc Exp $
  */
 
 /*
@@ -172,11 +172,22 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return <code>true</code> if the <code>decode()</code> method,
-     * called during the <em>Apply Request Values</em> phase of the
-     * request processing lifecycle, was successful in converting the
-     * incoming request parameters into an updated local <code>value</code>.
-     * If conversion was unsuccessful, return <code>false</code>.
+     * <p>Return the current validity state of this component.  The validity
+     * state of a component is adjusted at the following points during the
+     * request processing lifecycle:</p>
+     * <ul>
+     * <li>During the <em>Apply Request Values</em> phase, set to
+     *     <code>true</code> or <code>false</code> by <code>decode()</code>,
+     *     based on the success or failure of decoding a new local value for
+     *     this component.</li>
+     * <li>During the <em>Process Validations</em> phase, set to
+     *     <code>false</code> by <code>processValidations()</code> if any
+     *     call to a <code>validate()</code> method returned
+     *     <code>false</code>.</li>
+     * <li>During the <em>Update Model Values</em> phase, set to
+     *     <code>false</code> by <code>updateModel()</code> if any conversion
+     *     or update error occurred.</li>
+     * </ul>
      */
     public boolean isValid();
 
@@ -581,7 +592,7 @@ public interface UIComponent extends Serializable {
      * <p>Perform all validations for this component, as follows.</p>
      * <ul>
      * <li>Skip validation processing if the current <code>valid</code>
-     *     property of this component is <code>false</code>.</p>
+     *     property of this component is <code>false</code>.</li>
      * <li>Call the <code>validate()</code> method on this component,
      *     to perform any self-validation that has been defined.</li>
      * <li>Call the <code>validate()</code> method on each registered
@@ -589,7 +600,8 @@ public interface UIComponent extends Serializable {
      * <li>If any of the calls to a <code>validate()</code> method performed
      *     in the preceding steps returns <code>false</code>, set the
      *     <code>valid</code> property of this component to <code>false</code>.
-     * <ul>
+     *     </li>
+     * </ul>
      *
      * <p>Normally, component writers will not overwrite this method -- it is
      * primarily available for use by tools.  Component writers should
