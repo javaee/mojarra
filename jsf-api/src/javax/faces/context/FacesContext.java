@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.10 2002/05/16 18:28:47 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.11 2002/05/17 02:24:14 craigmcc Exp $
  */
 
 /*
@@ -10,8 +10,10 @@
 package javax.faces.context;
 
 
+import java.util.Iterator;
 import java.util.Locale;
 import javax.faces.FacesException;     // FIXME - subpackage?
+import javax.faces.component.FacesEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.render.RenderKit;
 import javax.faces.tree.Tree;
@@ -51,6 +53,15 @@ public abstract class FacesContext {
 
 
     // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link FacesEvent}s for
+     * events that should be handled by the application during the
+     * <em>Invoke Application</em> phase of the request processing lifecycle.
+     * </p>
+     */
+    public abstract Iterator getApplicationEvents();
 
 
     /**
@@ -189,6 +200,16 @@ public abstract class FacesContext {
 
 
     // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>Append a {@link FacesEvent} to the set of events that should be
+     * processed by the application during the <em>Invoke Application</em>
+     * phase of the request processing lifecycle.</p>
+     *
+     * @param event The event to be appended
+     */
+    public abstract void addApplicationEvent(FacesEvent event);
 
 
     /**

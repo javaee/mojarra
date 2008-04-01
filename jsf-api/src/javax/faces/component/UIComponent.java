@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.14 2002/05/17 01:49:56 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.15 2002/05/17 02:24:14 craigmcc Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package javax.faces.component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -838,20 +837,20 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>The set of {@link EventObject}s for the events queued to this
+     * <p>The set of {@link FacesEvent}s for the events queued to this
      * <code>UIComponent</code>.</p>
      */
     private ArrayList events = null;
 
 
     /**
-     * <p>Add a {@link EventObject} representing an event to be processed
+     * <p>Add a {@link FacesEvent} representing an event to be processed
      * by this component during the <em>Handle Request Events</em> phase
      * of the request processing lifecycle.</p>
      *
      * @param event The event to be added
      */
-    public void addEvent(EventObject event) {
+    public void addEvent(FacesEvent event) {
 
         if (events == null) {
             events = new ArrayList();
@@ -862,7 +861,7 @@ public abstract class UIComponent {
 
 
     /**
-     * <p>Return an <code>Iterator</code> over the {@link EventObject}s
+     * <p>Return an <code>Iterator</code> over the {@link FacesEvent}s
      * for the events queued to this <code>UIComponent</code>.</p>
      */
     public Iterator getEvents() {
@@ -988,7 +987,7 @@ public abstract class UIComponent {
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
      */
-    protected void event(FacesContext context, EventObject event) {
+    protected void event(FacesContext context, FacesEvent event) {
 
         ; // Default implementation does nothing
 
@@ -1009,7 +1008,7 @@ public abstract class UIComponent {
 
         Iterator events = getEvents();
         while (events.hasNext()) {
-            event(context, (EventObject) events.next());
+            event(context, (FacesEvent) events.next());
         }
 
     }
