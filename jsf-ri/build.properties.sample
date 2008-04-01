@@ -14,4 +14,5 @@ commons.collections.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-co
 commons.logging.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-logging.jar
 commons.digester.jar = D:\\Projects\\J2EE\\workareas\\jsf-ri\\lib\\commons-digester.jar
 # Define the arguments to give to the jvm to enable debugging
+# If this is commented out, no debugging arguments will be passed.
 debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n
