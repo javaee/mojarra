@@ -2,6 +2,7 @@ package javax.faces;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import javax.servlet.ServletRequest;
 
 /**
  * Class for representing a form user-interface component. 
@@ -12,6 +13,7 @@ import java.util.Iterator;
 public class WForm extends WComponent {
 
     private static String TYPE = "Form";
+    private Object model = null;
 
     // PENDING(visvan) revisit later
     private Hashtable ht = null;
@@ -71,7 +73,8 @@ public class WForm extends WComponent {
      *         scoped namespace or if the object referred to by listenerName
      *         does not implement the <code>FormListener</code> interface.
      */
-    public void addFormListener(String listenerName) throws FacesException {
+    public void addFormListener(ServletRequest req, String listenerName) 
+            throws FacesException {
     }
 
     /**
@@ -90,6 +93,32 @@ public class WForm extends WComponent {
      */
     public Iterator getFormListeners() {
 	return null;
+    }
+
+    /**
+     * The model property for this data-bound component.
+     * This property contains a reference to the object which acts
+     * as the data-source for this component.  The supported types
+     * for this reference:
+     * <ul>
+     * <li>String containing a model-reference in the scoped namespace
+     *     e.g. &quot;user.lastName&quot; refers to an object named
+     *          &quot;user&quot;
+     *          with a property named &quot;lastName&quot;.
+     * </ul>
+     * @return Object describing the data-source for this component
+     */
+    public Object getModel() {
+        return model;
+    }
+
+    /**
+     * Sets the model property on this data-bound component.
+     * @param model the Object which contains a reference to the
+     *        object which acts as the data-source for this component
+     */
+    public void setModel(Object model) {
+        this.model = model;
     }
 
 

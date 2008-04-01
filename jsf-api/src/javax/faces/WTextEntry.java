@@ -28,6 +28,7 @@ public class WTextEntry extends WComponent {
 
     private static String TYPE = "TextEntry";
     private Object model = null;
+    private String text = null;
 
     // PENDING(visvan) revisit later.
     private Hashtable ht = null;
@@ -83,8 +84,22 @@ public class WTextEntry extends WComponent {
      * @param rc the render context used to render this component
      * @return String containing the current text value 
      */
-    public String getText(RenderContext rc) {
-	return (String) model;
+    public String getText(RenderContext rc) { 
+
+        String value = null;
+        if ( model == null )  {
+            return text;
+        }    
+        else { 
+            try {
+                value = (String) ModelAccessor.
+                        getModelObject(rc, (String) model);
+            } catch ( FacesException e ) {
+                // PENDING (visvan) skip this exception ??
+                return text;
+            }
+	    return value;
+        }    
     }
 
     /**
@@ -96,8 +111,16 @@ public class WTextEntry extends WComponent {
      * @param rc the render context used to render this component
      * @param text String containing the new text value for this component
      */
-    public void setText(RenderContext rc, String text) {
-	model = text;
+    public void setText(RenderContext rc, String text) { 
+        if ( model == null ) {
+            text = text;
+        } else {
+            try {
+                ModelAccessor.setModelObject(rc, (String)model, text);    
+            } catch ( FacesException e ) {
+                // PENDING ( visvan ) skip this exception ??
+            }
+        }    
     }
 
     /**

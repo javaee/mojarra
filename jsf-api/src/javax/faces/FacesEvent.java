@@ -20,7 +20,7 @@ public abstract class FacesEvent extends EventObject {
      * @throws NullPointerException if sourceName is null
      */
     protected FacesEvent(ServletRequest request, String sourceName) {
-	super(null);
+	super(sourceName);
 	this.request = request;
 	this.sourceName = sourceName;
     }

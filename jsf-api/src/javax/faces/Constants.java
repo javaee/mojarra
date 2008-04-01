@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.3 2001/12/05 20:25:05 edburns Exp $
+ * $Id: Constants.java,v 1.4 2001/12/06 22:02:30 visvan Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -89,5 +89,20 @@ public class Constants {
      * The component type name for 'WTextEntry' components.
      */
     public static final String REF_WTEXTENTRY = "WTextEntry";
+
+    /**
+     * Name for listeners
+     */
+    // PENDING ( visvan ) all constants must start with "faces". So
+    // need to declare a Faces constant an use it with listeners.
+    public static final String REF_FORMLISTENERS = ".formListeners";
+    public static final String REF_VALUECHANGELISTENERS = ".valueChangeListeners";
+    public static final String REF_COMMANDLISTENERS = ".commandListeners";
+    public static final String REF_COMMAND = ".command";
+
+    /**
+     * Name for EventDispatcherFactory
+     */
+    public static final String REF_EVENTDISPATCHERFACTORY = "eventDispatcherFactory";
     
 }
