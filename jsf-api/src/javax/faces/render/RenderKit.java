@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.6 2002/07/12 01:30:56 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.7 2002/07/15 18:09:01 craigmcc Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public abstract class RenderKit {
 
 
     /**
-     * <p>Return an <code>Iterator</code> of the {@lnk UIComponent}
+     * <p>Return an <code>Iterator</code> of the {@link UIComponent}
      * classes that are known to be supported by this <code>RenderKit</code>
      * instance and its constituent {@link Renderer}s.</p>
      */
