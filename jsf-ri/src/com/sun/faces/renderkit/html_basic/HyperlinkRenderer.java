@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.18 2002/06/06 00:15:01 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.19 2002/06/19 18:14:40 rkitain Exp $
  */
 
 /*
@@ -11,7 +11,10 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.RIConstants;
+
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 
 import javax.faces.component.AttributeDescriptor;
@@ -20,9 +23,12 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.CommandEvent;
-import javax.faces.render.Renderer;
 import javax.faces.FacesException;
+import javax.faces.render.Renderer;
+import javax.faces.tree.TreeFactory;
+import javax.faces.FactoryFinder;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,7 +46,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.18 2002/06/06 00:15:01 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.19 2002/06/19 18:14:40 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -120,21 +126,41 @@ public class HyperlinkRenderer extends Renderer {
         }
         ParameterCheck.nonNull(component);
 
-        // Does the command match our own name?
-        String action = context.getServletRequest().getParameter("action");
-        if (!"command".equals(action)) {
+        String pathInfo =
+            ((HttpServletRequest) context.getServletRequest()).getPathInfo();
+
+        if (pathInfo == null) {
             return;
         }
-        String name = context.getServletRequest().getParameter("name");
-        if (name == null) {
+        if (!pathInfo.startsWith(RIConstants.COMMAND_PREFIX)) {
             return;
         }
-        if (!name.equals(component.currentValue(context))) {
+        String cmdName = pathInfo.substring(RIConstants.COMMAND_PREFIX.length());
+
+        int slash = cmdName.indexOf('/');
+        if (slash >= 0) {
+            cmdName = cmdName.substring(0, slash);
+        }
+        if (!cmdName.equals(component.currentValue(context))) {
             return;
         }
 
+//PENDING(rogerk) FIXME nasty hack - overwriting the responseTree should 
+// probably be done in the component event handling, but there are unanswered
+//questions - currently the only way to do this would be to put this
+//logic (which is specific to hyperlinks in UICommand.event (messy).
+//
+        String target = (String)component.getAttribute("target");
+        if (target != null) {
+            TreeFactory treeFactory = (TreeFactory)
+                FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
+            Assert.assert_it(null != treeFactory);
+            ServletContext sc = context.getServletContext();
+            context.setResponseTree(treeFactory.createTree(sc, target));
+        }
+
         // Enqueue a command event to the application
-        context.addApplicationEvent(new CommandEvent(component, name));
+        context.addApplicationEvent(new CommandEvent(component, cmdName));
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 
@@ -148,11 +174,37 @@ public class HyperlinkRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it( writer != null );
 
-        writer.write("<a href=\"");
-        writer.write(href(context, component));
+        writer.write("<A HREF=\"");
+
+//PENDING(rogerk) don't call this if "target" (destination) is
+// a non-faces page.  For non-faces pages, we would simply 
+// include the "target attribute's value.
+// ex: <a href="http://java.sun.com".....
+// For faces pages, we are expecting the "target" attribute to
+// reference another ".xul" file.
+//PENDING(rogerk) what if "target" attribute is not set (null)???
+//
+        String target = (String)component.getAttribute("target");
+        if (target != null) {
+            if (target.endsWith(".xul")) {
+                writer.write(href(context, component));
+            } else {
+                writer.write(target);
+            }
+        }
+
         writer.write("\">");
-        writer.write((String) component.currentValue(context));
-        writer.write("</a>");
+        String image = (String)component.getAttribute("image");
+        if (image != null) {
+            writer.write("<IMAGE SRC=\"");
+            writer.write(image);
+            writer.write("\">");
+        }
+        String text = (String)component.getAttribute("text");
+        if (text != null) {
+            writer.write(text);
+        }
+        writer.write("</A>");
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) 
@@ -175,13 +227,26 @@ public class HyperlinkRenderer extends Renderer {
             (HttpServletRequest) context.getServletRequest();
         HttpServletResponse response =
             (HttpServletResponse) context.getServletResponse();
+        String contextPath = request.getContextPath();
+        if ( contextPath.indexOf("/") == -1 ) {
+            contextPath = contextPath + "/";
+        }
         StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces?action=command&name=");
-        sb.append(component.currentValue(context)); // FIXME - null handling?
-        sb.append("&tree=");
-        sb.append(context.getResponseTree().getTreeId());
-        return (response.encodeURL(sb.toString()));
+        sb.append(( RIConstants.URL_PREFIX + RIConstants.COMMAND_PREFIX));
+        sb.append(component.currentValue(context).toString());
+        sb.append("/");
 
+        // need to make sure the rendered string contains where we
+        // want to go next (target).
+        //PENDING(rogerk) should "target" be required attribute??
+        //
+        String target = (String)component.getAttribute("target");
+        if (target != null) {
+            sb.append(target);
+        } else {
+            sb.append(context.getResponseTree().getTreeId());
+        }
+        return (response.encodeURL(sb.toString()));
     }
 
 } // end of class HyperlinkRenderer
