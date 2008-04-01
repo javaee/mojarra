@@ -1,5 +1,5 @@
 /*
- * $Id: FacesException.java,v 1.9 2002/07/11 18:10:49 craigmcc Exp $
+ * $Id: FacesException.java,v 1.10 2002/07/24 21:37:10 craigmcc Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ public class FacesException extends RuntimeException {
 
     /**
      * <p>Construct a new exception with the specified detail message and
-     * root cause.
+     * root cause.</p>
      *
      * @param message The detail message for this exception
      * @param cause The root cause for this exception
