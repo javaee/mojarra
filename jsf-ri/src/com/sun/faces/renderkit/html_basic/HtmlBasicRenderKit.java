@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.32 2002/07/20 00:21:41 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.33 2002/07/31 18:32:07 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.32 2002/07/20 00:21:41 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.33 2002/07/31 18:32:07 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -159,7 +159,7 @@ public class HtmlBasicRenderKit extends RenderKit
         renderersByRendererType = new Hashtable();
         renderersByComponentType = new Hashtable();
 
-        String fileName = "HtmlBasicRenderKit.xml";
+        String fileName = "com/sun/faces/renderkit/html_basic/HtmlBasicRenderKit.xml";
         InputStream in;
         try {
             in = this.getClass().getClassLoader().getResourceAsStream(

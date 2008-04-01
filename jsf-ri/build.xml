@@ -151,7 +151,7 @@
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.properties"/>
     </copy>
-    <copy todir="${build.home}/classes" flatten="yes">
+    <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.xml"/>
     </copy>
 

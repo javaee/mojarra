@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactoryImpl.java,v 1.3 2002/06/21 00:31:22 eburns Exp $
+ * $Id: RenderKitFactoryImpl.java,v 1.4 2002/07/31 18:32:07 eburns Exp $
  */
 
 /*
@@ -107,7 +107,7 @@ public class RenderKitFactoryImpl extends RenderKitFactory {
             }
         }
 
-        String fileName = "RenderKitConfig.xml";
+        String fileName = "com/sun/faces/renderkit/RenderKitConfig.xml";
         InputStream in;
         try {
             in = this.getClass().getClassLoader().getResourceAsStream(

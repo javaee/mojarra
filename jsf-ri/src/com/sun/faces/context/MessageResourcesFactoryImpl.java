@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesFactoryImpl.java,v 1.3 2002/07/26 21:04:19 eburns Exp $
+ * $Id: MessageResourcesFactoryImpl.java,v 1.4 2002/07/31 18:32:06 eburns Exp $
  */
 
 /*
@@ -24,9 +24,9 @@ public class MessageResourcesFactoryImpl extends MessageResourcesFactory
     // Protected Constants
     //
 
-    static final String JSF_API_RESOURCE_FILENAME = "JSFMessages";
+    static final String JSF_API_RESOURCE_FILENAME = "com/sun/faces/context/JSFMessages";
 
-    static final String JSF_RI_RESOURCE_FILENAME = "JSFImplMessages";
+    static final String JSF_RI_RESOURCE_FILENAME = "com/sun/faces/context/JSFImplMessages";
 
 
     //
