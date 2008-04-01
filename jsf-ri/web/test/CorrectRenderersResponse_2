@@ -7,7 +7,9 @@
 	<OPTION VALUE="Green">Green</OPTION>
 	<OPTION VALUE="Yellow">Yellow</OPTION>
 </SELECT>
-<input type="text" name="/my_input_date" value="Jan 12, 1952"><input type="text" name="/my_input_date2" value="Sat, Jan 12, 1952">Jan 12, 1952Sat, Jan 12, 1952invalidDate
+<input type="password" name="/my_secret" value="secret">
+<input type="text" name="/my_input_text" value="text"><input type="text" name="/my_input_date" value="Jan 12, 1952"><input type="text" name="/my_input_date2" value="Sat, Jan 12, 1952">Jan 12, 1952Sat, Jan 12, 1952invalidDate
+<textarea  name="/my_textarea"> TextAreaRenderer</TEXTAREA>
 <input type="text" name="/my_number" value="47%"><input type="text" name="/my_number2" value="1999.877">
 99%
 999.000

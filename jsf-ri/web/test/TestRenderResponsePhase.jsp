@@ -61,7 +61,7 @@
 
 	<TD>
 
-	      <faces:output_text id="userLabel" text="Output Text" />
+	      <faces:output_text id="userLabel" value="Output Text" />
 
 	</TD>
 
@@ -162,7 +162,7 @@
       </TR>
 
       <tr>
-         <td> <faces:output_text id="patternLabel" text="NUMBER-INPUT-PATTERN" /> </td>
+         <td> <faces:output_text id="patternLabel" value="NUMBER-INPUT-PATTERN" /> </td>
              <td>
                    <faces:input_number id="testPattern" formatPattern="####"
                         value="9999.98765" size="3" maxlength="20" tabindex="2" accesskey="D"/>
@@ -171,7 +171,7 @@
       </tr>
 
       <tr>
-          <td> <faces:output_text id="percentLabel" text="OUTPUT-PERCENT" /> </td>
+          <td> <faces:output_text id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
                    <faces:output_number id="testPercent" formatStyle="PERCENT"
                         value="45%"/>
