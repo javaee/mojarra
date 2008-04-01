@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.2 2001/12/04 01:06:25 edburns Exp $
+ * $Id: Constants.java,v 1.3 2001/12/05 20:25:05 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -41,6 +41,18 @@ public class Constants {
      * user interface components.
      */ 
     public static final String REF_RENDERCONTEXT = "faces.RenderContext";
+
+    /**
+     * The key stored in the servlet request attributes that enables 
+     * the correct scopeKey for a request
+     */ 
+    public static final String REF_REQUESTINSTANCE = "faces.RequestInstance";
+
+    /**
+     * The key stored in the session attributes that enables 
+     * the correct scopeKey for a session
+     */ 
+    public static final String REF_SESSIONINSTANCE = "faces.SessionInstance";
 
     /**
      * The factory used to create the render context.
