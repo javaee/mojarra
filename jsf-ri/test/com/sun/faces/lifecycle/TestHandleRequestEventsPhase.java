@@ -1,5 +1,5 @@
 /*
- * $Id: TestHandleRequestEventsPhase.java,v 1.1 2002/06/03 19:18:17 eburns Exp $
+ * $Id: TestHandleRequestEventsPhase.java,v 1.2 2002/06/03 19:26:58 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHandleRequestEventsPhase.java,v 1.1 2002/06/03 19:18:17 eburns Exp $
+ * @version $Id: TestHandleRequestEventsPhase.java,v 1.2 2002/06/03 19:26:58 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -166,11 +166,11 @@ public void decode(FacesContext context) throws IOException
     
 }
 
-public void event(FacesContext context, FacesEvent event) 
+public boolean event(FacesContext context, FacesEvent event) 
 {
     assertTrue(event.getSource() == this);
     System.setProperty(DID_EVENT, DID_EVENT);
-
+    return true;
 }
 
 
