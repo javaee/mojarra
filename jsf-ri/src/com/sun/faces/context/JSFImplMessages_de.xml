@@ -87,5 +87,8 @@
   <message messageId="com.sun.faces.MISSING_CLASS_ERROR" severity="1" summary="Missing Class." >
       <detail>Can't load class '{0}'.</detail>
   </message>
+  <message messageId="com.sun.faces.COMPONENT_NOT_FOUND_ERROR" severity="3" summary="Component Not Found.">
+      <detail>Can't find component for identifier: '{0}'.</detail>
+  </message>
 </messages>
 
