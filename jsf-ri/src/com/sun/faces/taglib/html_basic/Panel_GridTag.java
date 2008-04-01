@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.1 2002/09/06 18:05:27 jvisvanathan Exp $
+ * $Id: Panel_GridTag.java,v 1.2 2002/09/06 18:08:19 jvisvanathan Exp $
  */
 
 /*
@@ -16,14 +16,14 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_GridTag.java,v 1.1 2002/09/06 18:05:27 jvisvanathan Exp $
+ * @version $Id: Panel_GridTag.java,v 1.2 2002/09/06 18:08:19 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class Panel_ListTag extends FacesTag {
+public class Panel_GridTag extends FacesTag {
 
     //
     // Protected Constants
@@ -37,6 +37,7 @@ public class Panel_ListTag extends FacesTag {
     // Instance Variables
     //
     private String columnClasses = null;
+    private int columns = 2;
     private String footerClass = null;
     private String headerClass = null;
     private String panelClass = null;
@@ -50,7 +51,7 @@ public class Panel_ListTag extends FacesTag {
     // Constructors and Initializers    
     //
     
-    public Panel_ListTag()
+    public Panel_GridTag()
     {
         super();
     }
@@ -70,7 +71,15 @@ public class Panel_ListTag extends FacesTag {
     public String getColumnClasses() {
         return columnClasses;
     }
- 
+    
+    public void setColumns(int newColumns) {
+        this.columns = newColumns;
+    }
+    
+    public int getColumns() {
+        return columns;
+    }
+
     public void setFooterClass(String newFooterClass) {
         this.footerClass = newFooterClass;
     }
@@ -127,6 +136,9 @@ public class Panel_ListTag extends FacesTag {
         if ((columnClasses != null) &&
             (component.getAttribute("columnClasses") == null)) {
             component.setAttribute("columnClasses", getColumnClasses());
+        }
+        if (component.getAttribute("columns") == null) {
+            component.setAttribute("columns", new Integer(getColumns()));
         }
         if ((footerClass != null) &&
             (component.getAttribute("footerClass") == null)) {
