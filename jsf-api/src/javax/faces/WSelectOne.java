@@ -1,6 +1,7 @@
 package javax.faces;
 
 import java.util.Iterator;
+import java.util.Hashtable;
 
 /**
  * Class for representing a user-interface component which allows
@@ -8,6 +9,11 @@ import java.util.Iterator;
  */
 public class WSelectOne extends WComponent {
     private static String TYPE = "SelectOne";
+    private Hashtable ht;
+
+    public WSelectOne() {
+        ht = new Hashtable();
+    }
 
     /** 
      * Returns a String representing the select-one type.  
@@ -18,6 +24,28 @@ public class WSelectOne extends WComponent {
     public String getType() {
 	return TYPE;
     }
+
+    public Object getModel() {
+        return null;
+    }
+
+    public void setModel(Object model) throws FacesException {}
+
+    public boolean isSelected() {
+	return false;
+    }
+
+    public Object getAttribute(RenderContext rc, String attributeName) {
+        return ht.get(attributeName);
+    }
+
+    public void setAttribute(RenderContext rc, String attributeName,
+        Object value) {
+        if (attributeName != null && value != null) {
+            ht.put(attributeName,value);
+        }
+    }
+
 
     /**
      * Registers the specified listener name as a value-change listener

@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.1 2001/11/29 01:28:19 rogerk Exp $
+ * $Id: Constants.java,v 1.2 2001/12/04 01:06:25 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -67,6 +67,11 @@ public class Constants {
      * The component type name for 'WSelectBoolean' components.
      */
     public static final String REF_WSELECTBOOLEAN = "WSelectBoolean";
+
+    /**
+     * The component type name for 'WSelectOne' components.
+     */
+    public static final String REF_WSELECTONE = "WSelectOne";
 
     /**
      * The component type name for 'WTextEntry' components.
