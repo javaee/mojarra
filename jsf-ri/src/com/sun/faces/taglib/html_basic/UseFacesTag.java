@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.14 2002/08/15 00:29:52 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.15 2002/08/15 17:55:08 jvisvanathan Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import javax.faces.webapp.FacesBodyTag;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 import javax.faces.FacesException;
+import javax.servlet.jsp.tagext.BodyTag;
 
 /**
  *
@@ -41,7 +42,7 @@ import javax.faces.FacesException;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.14 2002/08/15 00:29:52 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.15 2002/08/15 17:55:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,6 +92,10 @@ public class UseFacesTag extends FacesBodyTag
     //
     // Methods from FacesBodyTag
     //
+    public int doStartTag() throws JspException {
+        return BodyTag.EVAL_BODY_BUFFERED;
+    }
+    
     public int doAfterBody() throws JspException {
        
         // Look up the FacesContext instance for this request
@@ -176,28 +181,6 @@ public class UseFacesTag extends FacesBodyTag
         }  
     }    
     
-    /**
-     * To enable buffering of response, out variable should point to
-     * bodyContent. Otherwise, response will be sent to output directly
-     * instead of being buffered. After UseFaces body is processed buffer
-     * is written to output.
-     */
-    protected void setupResponseWriter(){
-       FacesContext facesContext = (FacesContext)
-            pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
-                                     PageContext.REQUEST_SCOPE);
-        if (facesContext == null) { // FIXME - i18n
-            throw new FacesException("Cannot find FacesContext");
-        }
-        ResponseWriter writer = facesContext.getResponseWriter();
-        if ((writer == null) ||
-            !(writer instanceof JspResponseWriter)) {
-            writer = new JspResponseWriter(pageContext);
-            facesContext.setResponseWriter(writer);
-        }
-
-    }
-
     public UIComponent createComponent() {
         return null;
     }    
