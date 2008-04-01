@@ -137,6 +137,7 @@
                 test.UIInput,
                 test.UIOutput,
                 test.UIPanel,
+                test.UIParameter,
                 test.UISelectBoolean,
                 test.UISelectMany,
                 test.UISelectOne,
@@ -202,6 +203,15 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <arg value="javax.faces.component.UIPanelTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIParameter" depends="build.test">
+    <echo message="Running UIParameter tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIParameterTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
