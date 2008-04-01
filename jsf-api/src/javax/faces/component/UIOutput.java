@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.15 2002/08/04 23:15:57 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.16 2002/08/04 23:37:56 craigmcc Exp $
  */
 
 /*
@@ -59,8 +59,10 @@ public class UIOutput extends UIComponentBase {
      * the request processing lifecycle.</p>
      *
      * @param context FacesContext for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs while rendering
      */
-    public void decode(FacesContext context) {
+    public void decode(FacesContext context) throws IOException {
 
         ; // No action required
 
