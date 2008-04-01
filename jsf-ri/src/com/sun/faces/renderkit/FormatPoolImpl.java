@@ -1,5 +1,5 @@
 /*
- * $Id: FormatPoolImpl.java,v 1.3 2002/08/13 18:29:48 jvisvanathan Exp $
+ * $Id: FormatPoolImpl.java,v 1.4 2002/08/13 22:01:06 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormatPoolImpl.java,v 1.3 2002/08/13 18:29:48 jvisvanathan Exp $
+ * @version $Id: FormatPoolImpl.java,v 1.4 2002/08/13 22:01:06 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -162,7 +162,7 @@ public FormatPoolImpl()
 	    dateFormat = DateFormat.getDateInstance(formatStyleInt, locale);
 	    if (null != formatPattern) {
 		if (dateFormat instanceof SimpleDateFormat) {
-                    ((SimpleDateFormat)dateFormat).applyPattern(formatPattern);
+                    ((SimpleDateFormat)dateFormat).applyLocalizedPattern(formatPattern);
                 }
 		else {
 		    dateFormat = new SimpleDateFormat(formatPattern, locale);
