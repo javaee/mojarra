@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.13 2002/06/14 17:36:50 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.14 2002/07/08 23:49:54 craigmcc Exp $
  */
 
 /*
@@ -60,51 +60,45 @@ public abstract class Lifecycle {
 
 
     /**
-     * <p>Phase identifier for <em>Create Request Tree</em>.</p>
-     */
-    public static final int CREATE_REQUEST_TREE_PHASE = 0;
-
-
-    /**
      * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>
      */
-    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 10;
+    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 0;
 
 
     /**
      * <p>Phase identifier for <em>Apply Request Values</em>.</p>
      */
-    public static final int APPLY_REQUEST_VALUES_PHASE = 20;
+    public static final int APPLY_REQUEST_VALUES_PHASE = 10;
 
 
     /**
      * <p>Phase identifier for <em>Handle Request Events</em>.</p>
      */
-    public static final int HANDLE_REQUEST_EVENTS_PHASE = 30;
+    public static final int HANDLE_REQUEST_EVENTS_PHASE = 20;
 
 
     /**
      * <p>Phase identifier for <em>Process Validations</em>.</p>
      */
-    public static final int PROCESS_VALIDATIONS_PHASE = 40;
+    public static final int PROCESS_VALIDATIONS_PHASE = 30;
 
 
     /**
      * <p>Phase identifier for <em>Update Model Values</em>.</p>
      */
-    public static final int UPDATE_MODEL_VALUES_PHASE = 50;
+    public static final int UPDATE_MODEL_VALUES_PHASE = 40;
 
 
     /**
      * <p>Phase identifier for <em>Invoke Application</em>.</p>
      */
-    public static final int INVOKE_APPLICATION_PHASE = 60;
+    public static final int INVOKE_APPLICATION_PHASE = 50;
 
 
     /**
      * <p>Phase identifier for <em>Render Response</em>.</p>
      */
-    public static final int RENDER_RESPONSE_PHASE = 70;
+    public static final int RENDER_RESPONSE_PHASE = 60;
 
 
     // ------------------------------------------------------------- Properties
