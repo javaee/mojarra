@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.4 2002/06/25 20:48:00 jvisvanathan Exp $
+ * $Id: FacesTestCaseService.java,v 1.5 2002/06/25 21:08:40 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.4 2002/06/25 20:48:00 jvisvanathan Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.5 2002/06/25 21:08:40 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -180,23 +180,26 @@ public boolean verifyExpectedOutput()
     boolean result = false;
     CompareFiles cf = new CompareFiles();
     String errorMessage = null;
+    String outputFileName = null;
+    String correctFileName = null;
     
     // If this testcase doesn't participate in file comparison
-    if (!facesTestCase.sendResponseToFile() || 
-        (!facesTestCase.sendWriterToFile()) ||
+    if (!facesTestCase.sendResponseToFile() && 
+	(!facesTestCase.sendWriterToFile()) && 
 	(null == facesTestCase.getExpectedOutputFilename())) {
 	return true;
     }
     
-    String outputFileName = null;
-    if (!facesTestCase.sendResponseToFile() ) {
+    if (facesTestCase.sendResponseToFile() ) {
         outputFileName = FileOutputResponseWrapper.FACES_RESPONSE_FILENAME;
     } else {
         outputFileName = FileOutputResponseWriter.RESPONSE_WRITER_FILENAME;
     }
+    correctFileName = FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
+	facesTestCase.getExpectedOutputFilename();
     
     errorMessage = "File Comparison failed: diff -u " + outputFileName + " " + 
-        facesTestCase.getExpectedOutputFilename();
+        correctFileName;
     
     ArrayList ignoreList = null;
     String [] ignore = null;
@@ -209,11 +212,7 @@ public boolean verifyExpectedOutput()
     }
     
     try {
-	result = 
-	   cf.filesIdentical(FileOutputResponseWrapper.FACES_RESPONSE_FILENAME,
-			     FileOutputResponseWrapper.FACES_RESPONSE_ROOT +
-			     facesTestCase.getExpectedOutputFilename(), 
-			     ignoreList);
+	result = cf.filesIdentical(outputFileName, correctFileName,ignoreList);
     }
     catch (IOException e) {
 	System.out.println(e.getMessage());
@@ -223,6 +222,7 @@ public boolean verifyExpectedOutput()
     if (!result) {
 	System.out.println(errorMessage);
     }
+    System.out.println("VERIFY:"+result); 
     return result;
 }
 

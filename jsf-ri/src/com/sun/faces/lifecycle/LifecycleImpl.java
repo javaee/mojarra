@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.8 2002/06/21 00:31:22 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.9 2002/06/25 21:08:38 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.8 2002/06/21 00:31:22 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.9 2002/06/25 21:08:38 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -69,6 +69,7 @@ protected ArrayList phaseWrappers;
 protected Object lock = null;
 
 protected ApplicationHandler applicationHandler = null;
+protected ViewHandler viewHandler = null;
 
 //
 // Constructors and Initializers    
@@ -233,13 +234,17 @@ public void setApplicationHandler(ApplicationHandler handler)
 
 public ViewHandler getViewHandler()
 {
-    Assert.assert_it(false, "PENDING(): fixme");
-    return null;
+    if (null == viewHandler) {
+	viewHandler = new ViewHandlerImpl();
+    }
+    return viewHandler;
 }
 
 public void setViewHandler(ViewHandler handler)
 {
-    Assert.assert_it(false, "PENDING(): fixme");
+    ParameterCheck.nonNull(handler);
+
+    viewHandler = handler;
 }
 
 public void execute(FacesContext context) throws FacesException
