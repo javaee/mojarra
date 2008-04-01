@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.3 2002/01/10 22:16:32 edburns Exp $
+ * $Id: FactoryFinder.java,v 1.4 2002/02/26 21:18:28 eburns Exp $
  */
 
 /*
@@ -81,7 +81,14 @@ public class FactoryFinder {
         try {
             Class spiClass;
             if (classLoader == null) {
-                spiClass = Class.forName(className);
+		ClassLoader loader =
+		    Thread.currentThread().getContextClassLoader();
+		if (loader == null) {
+		    spiClass =  Class.forName(className);
+		}
+		else {
+		    spiClass = loader.loadClass(className);
+		}
             } else {
                 spiClass = classLoader.loadClass(className);
             }
