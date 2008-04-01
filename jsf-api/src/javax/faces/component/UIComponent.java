@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.25 2002/06/04 17:53:23 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.26 2002/06/07 20:01:46 craigmcc Exp $
  */
 
 /*
@@ -1011,6 +1011,25 @@ public abstract class UIComponent {
     public boolean event(FacesContext context, FacesEvent event) {
 
         return (false); // Default implementation does nothing
+
+    }
+
+
+    /**
+     * <p>Perform any correctness checks that this component wishes to perform
+     * on itself.  This method will be called, along with calls to all
+     * {@link Validator}s registered on this component, during the
+     * <em>Process Validations</em> phase of the request processing lifecycle.
+     * If errors are encountered, appropriate <code>Message</code> instances
+     * should be added to the <code>MessageList</code> associated with the
+     * {@link FacesContext} for the current request.
+     * </p>
+     *
+     * @param context FacesContext for the request we are processing
+     */
+    public void validate(FacesContext context) {
+
+        ; // Default implementation does nothing
 
     }
 
