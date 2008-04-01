@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.17 2002/06/07 20:43:42 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.18 2002/06/08 02:24:17 craigmcc Exp $
  */
 
 /*
@@ -153,6 +153,11 @@ public abstract class FacesContext {
      * <p><strong>FIXME</strong> - Does this method need to be public?</p>
      *
      * @param tree The new inbound request tree
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in beween
+     * @exception NullPointerException if <code>tree</code>
+     *  is <code>null</code>
      */
     public abstract void setRequestTree(Tree tree);
 
@@ -189,6 +194,9 @@ public abstract class FacesContext {
      * outbound response.</p>
      *
      * @param tree The new outbound response tree
+     *
+     * @exception NullPointerException if <code>tree</code>
+     *  is <code>null</code>
      */
     public abstract void setResponseTree(Tree tree);
 
