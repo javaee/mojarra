@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.17 2002/05/18 20:33:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.18 2002/05/21 01:44:18 craigmcc Exp $
  */
 
 /*
@@ -148,12 +148,6 @@ import javax.faces.render.Renderer;
  */
 
 public abstract class UIComponent {
-
-
-    /**
-     * <p>The component type of this <code>UIComponent}</code>.</p>
-     */
-    public static final String TYPE = "Component";
 
 
     // ------------------------------------------------------------- Attributes
@@ -319,11 +313,7 @@ public abstract class UIComponent {
     /**
      * <p>Return the component type of this <code>UIComponent</code>.</p>
      */
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
+    public abstract String getComponentType();
 
 
     /**
@@ -420,7 +410,7 @@ public abstract class UIComponent {
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
      */
-    public void setParent(UIComponent parent) {
+    void setParent(UIComponent parent) {
 
         setAttribute("parent", parent);
 
@@ -618,10 +608,11 @@ public abstract class UIComponent {
      *  ((index < 0) || (index &gt;= size()))
      * @exception NullPointerException if <code>component</code> is null
      */
-    public void add(int index, UIComponent component) {
+    public void addChild(int index, UIComponent component) {
 
         checkComponentId(component.getComponentId());
         getChildList().add(index, component);
+        component.setParent(this);
 
     }
 
@@ -658,7 +649,9 @@ public abstract class UIComponent {
         }
         Iterator kids = getChildList().iterator();
         while (kids.hasNext()) {
-            ((UIComponent) kids.next()).clearChildren();
+            UIComponent kid = (UIComponent) kids.next();
+            kid.clearChildren();
+            kid.setParent(null);
         }
         children.clear();
 
@@ -849,7 +842,9 @@ public abstract class UIComponent {
      */
     public void removeChild(int index) {
 
+        UIComponent kid = findChild(index);
         getChildList().remove(index);
+        kid.setParent(null);
 
     }
 
@@ -866,7 +861,10 @@ public abstract class UIComponent {
         if (component == null) {
             throw new NullPointerException("remove");
         }
-        getChildList().remove(component);
+        if (containsChild(component)) {
+            getChildList().remove(component);
+            component.setParent(null);
+        }
 
     }
 
