@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.4 2002/02/26 21:18:28 eburns Exp $
+ * $Id: FactoryFinder.java,v 1.5 2002/04/11 22:51:21 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ public class FactoryFinder {
      * the context ClassLoader.
      */           
     private static ClassLoader findClassLoader()
-        throws ConfigurationError
+        throws FactoryConfigurationError
     {
         ClassLoader classLoader;
         Method m = null;
@@ -60,11 +60,11 @@ public class FactoryFinder {
             classLoader = (ClassLoader) m.invoke(Thread.currentThread(), null);
         } catch (IllegalAccessException e) {
             // assert(false)
-            throw new ConfigurationError("Unexpected IllegalAccessException",
+            throw new FactoryConfigurationError("Unexpected IllegalAccessException",
                                          e);
         } catch (InvocationTargetException e) {
             // assert(e.getTargetException() instanceof SecurityException)
-            throw new ConfigurationError("Unexpected InvocationTargetException",
+            throw new FactoryConfigurationError("Unexpected InvocationTargetException",
                                          e);
         }
 
@@ -76,7 +76,7 @@ public class FactoryFinder {
      */
     private static Object newInstance(String className,
                                       ClassLoader classLoader)
-        throws ConfigurationError
+        throws FactoryConfigurationError
     {
         try {
             Class spiClass;
@@ -94,10 +94,10 @@ public class FactoryFinder {
             }
             return spiClass.newInstance();
         } catch (ClassNotFoundException x) {
-            throw new ConfigurationError(
+            throw new FactoryConfigurationError(
                 "Provider " + className + " not found", x);
         } catch (Exception x) {
-            throw new ConfigurationError(
+            throw new FactoryConfigurationError(
                 "Provider " + className + " could not be instantiated: " + x,
                 x);
         }
@@ -138,13 +138,13 @@ public class FactoryFinder {
      * @param fallbackClassName     Implementation class name, if nothing else
      *                              is found.  Use null to mean no fallback.
      *
-     * @exception FactoryFinder.ConfigurationError
+     * @exception FactoryConfigurationError
      *
      // PENDING(edburns): make this package private again.
      * Package private so this code can be shared.
      */
     public static Object find(String factoryId, String fallbackClassName)
-        throws ConfigurationError
+        throws FactoryConfigurationError
     {
         ClassLoader classLoader = findClassLoader();
 
@@ -169,13 +169,17 @@ public class FactoryFinder {
             File f=new File( configFile );
             if( f.exists()) {
                 Properties props=new Properties();
-                props.load( new FileInputStream(f));
+		FileInputStream fos = new FileInputStream(f);
+                props.load(fos);
                 String factoryClassName = props.getProperty(factoryId);
+		fos.close();
 	    /* PENDING(edburns): 
                 debugPrintln("found java.home property " + factoryClassName);
 
 	    */
-                return newInstance(factoryClassName, classLoader);
+		if (null != factoryClassName) {
+		    return newInstance(factoryClassName, classLoader);
+		}
             }
         } catch(Exception ex ) {
 	    /* PENDING(edburns): 
@@ -221,7 +225,7 @@ public class FactoryFinder {
         }
 
         if (fallbackClassName == null) {
-            throw new ConfigurationError(
+            throw new FactoryConfigurationError(
                 "Provider for " + factoryId + " cannot be found", null);
         }
 
@@ -232,51 +236,6 @@ public class FactoryFinder {
         return newInstance(fallbackClassName, classLoader);
     }
 
-    // PENDING(edburns): make this package private
-    public static class ConfigurationError extends Error {
-        private Exception exception;
-
-        /**
-         * Construct a new instance with the specified detail string and
-         * exception.
-         */
-        ConfigurationError(String msg, Exception x) {
-            super(msg);
-            this.exception = x;
-        }
-
-	// PENDING(edburns): make this package private
-        public Exception getException() {
-            return exception;
-        }
-    }
-
-// ----VERTIGO_TEST_START
-
-//
-// Test methods
-//
-
-public static void main(String [] args)
-{
-    FactoryFinder factoryFinder;
-    String propName = "javax.faces.FactoryFinder";
-    String propVal = FactoryFinder.class.getName();
-
-    System.setProperty(propName, propVal);
-
-    try {
-	factoryFinder = (FactoryFinder) FactoryFinder.find(propName, propVal);
-	System.out.println("FactoryFinder: got Factory for name: " + 
-			   propName + " value: " + factoryFinder);
-    }
-    catch (ConfigurationError e) {
-	System.out.println("FactoryFinder: ConfigurationError: " 
-			   + e.getMessage());
-    }
-}
-
-// ----VERTIGO_TEST_END
-
+    // The testcase for this class is com.sun.faces.TestAbstractFactory
 
 }

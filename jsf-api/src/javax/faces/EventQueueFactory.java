@@ -1,5 +1,5 @@
 /*
- * $Id: EventQueueFactory.java,v 1.2 2001/12/20 22:25:44 ofung Exp $
+ * $Id: EventQueueFactory.java,v 1.3 2002/04/11 22:51:20 eburns Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ package javax.faces;
  * <B>Lifetime And Scope</B> <P>
  *
  *
- * @version $Id: EventQueueFactory.java,v 1.2 2001/12/20 22:25:44 ofung Exp $
+ * @version $Id: EventQueueFactory.java,v 1.3 2002/04/11 22:51:20 eburns Exp $
  * 
  * @see	javax.faces.EventQueue
  *
@@ -59,16 +59,11 @@ protected EventQueueFactory()
 //
 
 public static EventQueueFactory newInstance() throws FactoryConfigurationError  {
-    try {
-	return (EventQueueFactory) FactoryFinder.find(
+    return (EventQueueFactory) FactoryFinder.find(
 	   /* The default property name according to the JSFaces spec */
 	   "javax.faces.EventQueueFactory",
 	   /* The fallback implementation class name */
 	   "com.sun.faces.EventQueueFactoryImpl");
-    } catch (FactoryFinder.ConfigurationError e) {
-	throw new FactoryConfigurationError(e.getException(),
-					    e.getMessage());
-    }
 }
 
 

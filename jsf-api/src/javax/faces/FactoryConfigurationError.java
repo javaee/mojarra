@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryConfigurationError.java,v 1.3 2002/01/10 22:16:32 edburns Exp $
+ * $Id: FactoryConfigurationError.java,v 1.4 2002/04/11 22:51:21 eburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public class FactoryConfigurationError extends Error {
      * @param e The exception to be wrapped in a FactoryConfigurationError
      */
     
-    public FactoryConfigurationError(Exception e, String msg) {
+    public FactoryConfigurationError(String msg, Exception e) {
         super(msg);
         this.exception = e;
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageList.java,v 1.2 2002/04/05 19:40:16 jvisvanathan Exp $
+ * $Id: MessageList.java,v 1.3 2002/04/11 22:51:21 eburns Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -13,7 +13,7 @@ package javax.faces;
 import java.util.Iterator;
 import java.util.Locale;
 
-import javax.faces.FactoryFinder.ConfigurationError;
+import javax.faces.FactoryConfigurationError;
 
 /**
  * A centralized place to store messages, that are are usually shown to an
@@ -65,19 +65,13 @@ public abstract class MessageList
 	public static MessageList newInstance()
             throws FactoryConfigurationError  
 	{
-        try 
-        {
             return (MessageList) FactoryFinder.find(
-               /* The default property name according to the JSFaces spec */
-               "javax.faces.MessageList",
-               /* The fallback implementation class name */
-               "com.sun.faces.MessageListImpl");
-        } catch (FactoryFinder.ConfigurationError fe) 
-        {
-            throw new FactoryConfigurationError(fe.getException(), fe.getMessage());
-        }
-    }
-        
+						    /* The default property name according to the JSFaces spec */
+						    "javax.faces.MessageList",
+						    /* The fallback implementation class name */
+						    "com.sun.faces.MessageListImpl");
+	}
+    
     /**
      * Create a new message and add it to this list. 
      * 

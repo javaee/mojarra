@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.1 2002/03/15 20:49:21 jvisvanathan Exp $
+ * $Id: MessageFactory.java,v 1.2 2002/04/11 22:51:21 eburns Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -12,7 +12,7 @@ package javax.faces;
 
 import java.util.Locale;
 
-import javax.faces.FactoryFinder.ConfigurationError;
+import javax.faces.FactoryConfigurationError;
 
 /**
  * A class that knows how to create new messages. 
@@ -42,25 +42,6 @@ import javax.faces.FactoryFinder.ConfigurationError;
  */
 public abstract class MessageFactory
 {
-	/**
-	 * The implementation that is selected is based on the "javax.faces.MessageFactory"
-	 * property.
-	 */
-	public static MessageFactory newInstance()
-            throws FactoryConfigurationError  
-	{
-        try 
-        {
-            return (MessageFactory) FactoryFinder.find(
-               /* The default property name according to the JSFaces spec */
-               "javax.faces.MessageFactory",
-               /* The fallback implementation class name */
-               "com.sun.faces.MessageFactoryImpl");
-        } catch (FactoryFinder.ConfigurationError fe) 
-        {
-            throw new FactoryConfigurationError(fe.getException(), fe.getMessage());
-        }
-    }
     
     protected MessageFactory(){};
     

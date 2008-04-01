@@ -152,6 +152,7 @@
   <target name="clean">
     <delete dir="${build.dir}" />
     <delete> 
+      <fileset dir="." includes="**/.nbattrs" defaultexcludes="no"/>
       <fileset dir="." includes="**/*~" defaultexcludes="no"/>
     </delete>
   </target> 

@@ -1,5 +1,5 @@
 /*
- * $Id: Constants.java,v 1.20 2002/04/05 19:40:15 jvisvanathan Exp $
+ * $Id: Constants.java,v 1.21 2002/04/11 22:51:20 eburns Exp $
  */
 
 /*
@@ -19,6 +19,11 @@ public class Constants {
      * specified scopes. 
      */
     public static final String REF_OBJECTMANAGER = "faces.ObjectManager";
+
+    /**
+     * The way Faces Objects are instantiated.
+     */
+    public static final String REF_ABSTRACTFACTORY = "faces.AbstractFactory";
 
     /**
      * The event queue used to queue Faces events.
