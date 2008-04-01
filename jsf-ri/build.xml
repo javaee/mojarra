@@ -82,6 +82,9 @@
     <path refid="compile.classpath" />
   </path>
 
+    <!-- Directory where core struts library configurations files are stored -->
+    <property name="conf.share.dir" value="conf/share"/>
+
 
 <!-- ************ Executable Targets ************************************** -->
 
@@ -102,6 +105,9 @@
     <mkdir dir="${build.home}/test/classes"/>
     <mkdir dir="${build.home}/test-benchmark"/>
     <mkdir dir="${build.home}/test-benchmark/classes"/>
+    <mkdir dir="${build.home}/library/classes/META-INF/tlds"/>
+    <copy file="${conf.share.dir}/html_basic.tld"
+         tofile="${build.home}/library/classes/META-INF/html_basic.tld"/>
   </target>
 
   <target name="compile" depends="prepare"
@@ -116,41 +122,6 @@
     </javac>
   </target>
 
-  <target name="image" depends="compile,prepare"
-   description="Build into build.home">
-   
-    <!-- Copy resource files etc -->
-    <copy todir="${build.home}/classes">
-      <fileset dir="${source.home}">
-        <include name="**/*.properties" />
-      </fileset>
-    </copy>
-
-    <!-- Copy executable files -->
-    <copy todir="${build.home}/bin">
-      <fileset dir="${bin.home}">
-        <include name="*" />
-      </fileset>
-    </copy>
-
-    <chmod perm="+x" file="${build.home}/bin/wsdlp.sh"/>
-    <chmod perm="+x" file="${build.home}/bin/xrpcc.sh"/>
-
-    <!-- Copy dependent jars -->
-    <copy    todir="${build.home}/lib">
-      <fileset dir="${lib.home}/" 
-               includes="**/*.jar" 
-	           excludes="ant.jar, optional.jar, junit.jar, servlet.jar, xerces.jar"/>
-    </copy>
-
-    <!-- Make the RI jar -->
-    <jar jarfile="${build.home}/lib/jsf-ri.jar"
-         basedir="${build.home}/classes"
-         manifest="${basedir}/etc/manifest">
-    </jar>
-
-  </target>
-
   <target name="clean"
    description="Clean build and distribution directories">
     <delete    dir="${build.home}"/>
@@ -163,7 +134,7 @@
   <target name="all" depends="clean,compile"
    description="Clean and compile all components"/>
 
-  <target name="dist" depends="image">
+  <target name="dist">
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/bin"/>
     <mkdir dir="${dist.home}/lib"/>
@@ -180,7 +151,7 @@
     </copy>
   </target>
 
-  <target name="javadocs" depends="image" 
+  <target name="javadocs" 
           description="Create the API documentation">
     <javadoc packagenames="com.sun.*"
              sourcepath="${source.home}"
@@ -194,7 +165,7 @@
     </javadoc>
   </target>
 
-  <target name="compile-tests" depends="image"
+  <target name="compile-tests"
           description="Compile the unit tests">
     <javac srcdir="${test.home}"
            destdir="${build.home}/test/classes"
@@ -227,7 +198,7 @@
     </junit>
   </target>
 
-  <target name="compile-benchmarks" depends="image"
+  <target name="compile-benchmarks"
           description="Compile the benchmarks">
     <javac srcdir="${benchmark.home}"
            destdir="${build.home}/test-benchmark/classes"
@@ -249,6 +220,6 @@
           fork="true" />
   </target>
 
-  <target name="main" depends="image"/>
+  <target name="main" depends="compile,prepare"/>
 
 </project>
