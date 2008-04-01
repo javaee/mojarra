@@ -1,5 +1,5 @@
 /*
- * $Id: TextAndGraphicRenderer.java,v 1.5 2001/11/21 17:48:48 rogerk Exp $
+ * $Id: TextAndGraphicRenderer.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -18,6 +18,8 @@ package com.sun.faces.renderkit.html_basic;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.beans.PropertyDescriptor;
+
 import javax.faces.FacesException;
 import javax.faces.RenderContext;
 import javax.faces.Renderer;
@@ -34,7 +36,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextAndGraphicRenderer.java,v 1.5 2001/11/21 17:48:48 rogerk Exp $
+ * @version $Id: TextAndGraphicRenderer.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,9 +96,19 @@ public boolean supportsType(WComponent c) {
 public boolean supportsType(String componentType) {
     return false;
 }
-public Iterator getSupportedAttributeNames(String componentType) {
-    return null;
-}
+    public Iterator getSupportedAttributeNames(String componentType) throws FacesException {
+        return null;
+    }
+
+    public Iterator getSupportedAttributes(String componentType) throws FacesException {
+	return null;
+    }
+
+    public PropertyDescriptor getAttributeDescriptor(String attributeName)
+	throws FacesException {
+	return null;
+    }
+
 
 public void renderStart(RenderContext rc, WComponent c) 
     throws IOException, FacesException {
@@ -107,14 +119,12 @@ public void renderChildren(RenderContext rc, WComponent c) throws IOException {
     return;
 }
 
-public void renderEnd(RenderContext rc, WComponent c) throws IOException {
+public void renderComplete(RenderContext rc, WComponent c) throws IOException {
     return;
 }
 
 public boolean getCanRenderChildren(RenderContext rc, WComponent c) {
     return false;
 }
-
-// ----VERTIGO_TEST_END
 
 } // end of class TextAndGraphicRenderer

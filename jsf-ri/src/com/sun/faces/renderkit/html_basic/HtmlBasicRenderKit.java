@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.5 2001/11/17 01:33:00 edburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.io.InputStream;
 
+import javax.servlet.ServletRequest;
+
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
@@ -29,6 +31,7 @@ import javax.faces.RenderKit;
 import javax.faces.Renderer;
 import javax.faces.FacesException;
 import javax.faces.ClientCapabilities;
+import javax.faces.EventQueue;
 
 /**
  *
@@ -36,7 +39,7 @@ import javax.faces.ClientCapabilities;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.5 2001/11/17 01:33:00 edburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.6 2001/11/29 00:12:33 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -175,6 +178,9 @@ public Renderer getRenderer(String name) throws FacesException {
 				 name + ": " + e.getMessage());
     }
     return result;
+}
+
+public void queueEvents(ServletRequest request, EventQueue queue) {
 }
 									
 protected void initialize() {

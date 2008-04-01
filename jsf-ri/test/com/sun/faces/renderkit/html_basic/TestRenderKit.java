@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.1 2001/11/17 01:33:02 edburns Exp $
+ * $Id: TestRenderKit.java,v 1.2 2001/11/29 00:12:34 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -31,7 +31,7 @@ import javax.faces.FacesException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.1 2001/11/17 01:33:02 edburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.2 2001/11/29 00:12:34 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -75,7 +75,7 @@ public void testFactory() {
     RenderContext context;
     RenderContextFactory factory;
     javax.faces.Renderer renderer;
-    java.util.Iterator typeIt, rendererIt;
+    java.util.Iterator typeIt, rendererIt = null;
     String type, rendererName;
     
     try {
@@ -102,8 +102,13 @@ public void testFactory() {
     
     while (typeIt.hasNext()) {
 	type = (String) typeIt.next();
-	rendererIt = kit.getRendererNamesForComponent(type);
-		assertTrue(null != rendererIt);
+	try {
+	    rendererIt = kit.getRendererNamesForComponent(type);
+	}
+	catch (FacesException e) {
+	    System.out.println("FacesException!!! " + e.getMessage());
+	}
+	assertTrue(null != rendererIt);
 
 	while(rendererIt.hasNext()) {
 	    rendererName = (String) rendererIt.next();

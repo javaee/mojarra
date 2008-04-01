@@ -1,5 +1,5 @@
 /*
- * $Id: TextEntry_InputTag.java,v 1.5 2001/11/21 22:32:40 visvan Exp $
+ * $Id: TextEntry_InputTag.java,v 1.6 2001/11/29 00:12:34 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -38,7 +38,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextEntry_InputTag.java,v 1.5 2001/11/21 22:32:40 visvan Exp $
+ * @version $Id: TextEntry_InputTag.java,v 1.6 2001/11/29 00:12:34 edburns Exp $
  * 
  *
  */
@@ -165,7 +165,7 @@ public class TextEntry_InputTag extends TagSupport
         c.setAttribute(rc, "size", size);
         c.setAttribute(rc, "maxlength", maxlength);
         // set render independent attributes 
-        c.setValue(value);
+        c.setText(rc, value);
         return c;
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderer.java,v 1.2 2001/11/27 00:06:36 visvan Exp $
+ * $Id: TestRenderer.java,v 1.3 2001/11/29 00:12:34 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -32,7 +32,7 @@ import com.sun.faces.renderkit.html_basic.*;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderer.java,v 1.2 2001/11/27 00:06:36 visvan Exp $
+ * @version $Id: TestRenderer.java,v 1.3 2001/11/29 00:12:34 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -204,7 +204,7 @@ public class TestRenderer extends TestCase
         System.out.println("Testing renderEnd()");
         boolean gotException = false;
         try {
-            renderer.renderEnd(null, null);
+            renderer.renderComplete(null, null);
         } catch ( Exception e ) {
             gotException = true;
             System.out.println("Expected exception in Renderer.renderEnd()");

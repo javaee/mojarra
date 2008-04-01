@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.8 2001/11/21 22:32:40 visvan Exp $
+ * $Id: FormTag.java,v 1.9 2001/11/29 00:12:34 edburns Exp $
  *
  * Copyright 2000-2001 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
@@ -38,7 +38,7 @@ import javax.faces.ObjectTable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormTag.java,v 1.8 2001/11/21 22:32:40 visvan Exp $
+ * @version $Id: FormTag.java,v 1.9 2001/11/29 00:12:34 edburns Exp $
  * 
  *
  */
@@ -218,7 +218,7 @@ public class FormTag extends TagSupport
         if ( c != null ) {
             Renderer form_renderer = getRenderer(rc);
             try {
-                form_renderer.renderEnd(rc, c);
+                form_renderer.renderComplete(rc, c);
             } catch (java.io.IOException e) {
                 throw new JspException("Problem rendering Form component: "+
                         e.getMessage());
