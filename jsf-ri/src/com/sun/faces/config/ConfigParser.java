@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.14 2003/05/05 19:57:55 craigmcc Exp $
+ * $Id: ConfigParser.java,v 1.15 2003/05/06 01:54:12 craigmcc Exp $
  */
 
 /*
@@ -79,24 +79,6 @@ public class ConfigParser {
         configureRules(digester);
     }
 
-    /**
-     *
-     * <p>Create a brand new ConfigBase object, clearing the existing
-     * configuration, and populate it from the specified configPath.</p>
-     */
-
-    protected ConfigBase parseConfig(String configPath, 
-				     ServletContext servletContext) { 
-	ConfigBase base = new ConfigBase();
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = 
-	    (ApplicationImpl)aFactory.getApplication();
-        application.getAppConfig().reset();
-	
-	base = this.parseConfig(configPath, servletContext, base);
-	return base;
-    }
 
     /**
      *

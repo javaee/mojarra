@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.11 2003/05/05 23:31:31 craigmcc Exp $
+ * $Id: ConfigListener.java,v 1.12 2003/05/06 01:54:12 craigmcc Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -119,10 +120,16 @@ public class ConfigListener implements ServletContextListener
 	jarInputStream = this.getClass().getClassLoader().
 	    getResourceAsStream(RIConstants.JSF_RI_CONFIG);
 	Assert.assert_it(null != jarInputStream);
-
+        if (log.isDebugEnabled()) {
+            log.debug("Loading JSF_RI_CONFIG configuration resources from " +
+                      RIConstants.JSF_RI_CONFIG);
+        }
         configBase = configParser.parseConfig(jarInputStream);
 	Assert.assert_it(null != configBase);
 	// It's an error if this doesn't load.
+        if (log.isDebugEnabled()) {
+            log.debug("Loading JSF_RI_CONFIG completed");
+        }
 
 	// Step 1: scan the META-INF directory of all jar files in
 	// "/WEB-INF/lib" for "faces-config.xml" files.
@@ -141,9 +148,15 @@ public class ConfigListener implements ServletContextListener
 		    cur = cur.trim();
 
 		    try {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Trying to load application file " + cur);
+                        }
 			configBase = configParser.parseConfig(cur,
 							      servletContext,
 							      configBase);
+                        if (log.isDebugEnabled()) {
+                            log.debug("Application file " + cur + " loaded");
+                        }
 		    } catch (Throwable t) {
                         Object[] obj = new Object[1];
                         obj[0] = cur;
@@ -156,9 +169,16 @@ public class ConfigListener implements ServletContextListener
 	else {
 	    // Step 3, load the app's "/WEB-INF/faces-config.xml"
 	    try {
+                if (log.isDebugEnabled()) {
+                    log.debug("Trying to default configuration file");
+                }
 		configBase = configParser.parseConfig("/WEB-INF/faces-config.xml",
 						      servletContext,
 						      configBase);
+                if (log.isDebugEnabled()) {
+                    log.debug("Default configuration file loaded");
+                }
+
 	    }
 	    catch (Exception toIgnore) {
 		// do nothing, apps are not required to have a faces-config file
@@ -242,10 +262,6 @@ public class ConfigListener implements ServletContextListener
                                         ConfigBase configBase,
                                         String jarPath) {
 
-        if (log.isTraceEnabled()) {
-            log.trace("Scanning JAR at " + jarPath);
-        }
-
         // Calculate a URL for the config resource (if it exists) in this JAR
         URL resourceURL = null;
         try {
@@ -290,6 +306,10 @@ public class ConfigListener implements ServletContextListener
                           resourceURL.toExternalForm());
             }
             configBase = configParser.parseConfig(source, configBase);
+            if (log.isDebugEnabled()) {
+                log.debug("Finished application configuration resource " +
+                          resourceURL.toExternalForm());
+            }
         } catch (Exception e) {
             // PENDING(craigmcc) - We need to do a very thorough review
             // of our exception handling strategies throughout the RI

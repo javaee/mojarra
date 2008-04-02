@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.8 2003/05/05 23:31:31 craigmcc Exp $
+ * $Id: ConfigBase.java,v 1.9 2003/05/06 01:54:12 craigmcc Exp $
  */
 
 /*
@@ -27,11 +27,17 @@ import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 
 /**
  * <p>Base bean for parsing configuration information.</p>
  */
 public class ConfigBase {
+
+
+    private static Log log = LogFactory.getLog(ConfigBase.class);
 
 
     // ---------------------------------------------------------- <application>
@@ -196,11 +202,23 @@ public class ConfigBase {
 
 
     private Map renderKits = null;
-    public void addRenderKit(ConfigRenderKit renderKit) {
+    public void addRenderKit(ConfigRenderKit newRenderKit) {
         if (renderKits == null) {
             renderKits = new HashMap();
         }
-        renderKits.put(renderKit.getRenderKitId(), renderKit);
+        if (renderKits.containsKey(newRenderKit.getRenderKitId())) {
+            ConfigRenderKit oldRenderKit = (ConfigRenderKit)
+                renderKits.get(newRenderKit.getRenderKitId());
+            Map oldRenderersMap = oldRenderKit.getRenderers();
+            Iterator oldRendererIds = oldRenderersMap.keySet().iterator();
+            while (oldRendererIds.hasNext()) {
+                String oldRendererId = (String) oldRendererIds.next();
+                ConfigRenderer oldRenderer = (ConfigRenderer)
+                    oldRenderersMap.get(oldRendererId);
+                newRenderKit.addRenderer(oldRenderer);
+            }
+        }
+        renderKits.put(newRenderKit.getRenderKitId(), newRenderKit);
     }
     public Map getRenderKits() {
         if (renderKits == null) {
@@ -219,6 +237,9 @@ public class ConfigBase {
         Iterator renderKitIds = renderKits.keySet().iterator();
         while (renderKitIds.hasNext()) {
             String renderKitId = (String) renderKitIds.next();
+            if (log.isDebugEnabled()) {
+                log.debug("Updating RenderKit " + renderKitId);
+            }
             ConfigRenderKit configRenderKit = (ConfigRenderKit)
                 renderKits.get(renderKitId);
             RenderKit renderKit =
@@ -230,6 +251,9 @@ public class ConfigBase {
             Iterator rendererIds = renderersMap.keySet().iterator();
             while (rendererIds.hasNext()) {
                 String rendererId = (String) rendererIds.next();
+                if (log.isTraceEnabled()) {
+                    log.trace("  Adding Renderer " + rendererId);
+                }
                 ConfigRenderer configRenderer = (ConfigRenderer)
                     renderersMap.get(rendererId);
                 String rendererClass = configRenderer.getRendererClass();
