@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.36 2004/02/06 18:54:16 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.37 2004/02/09 19:50:11 eburns Exp $ 
  */ 
 
 
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.36 2004/02/06 18:54:16 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.37 2004/02/09 19:50:11 eburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -355,7 +355,7 @@ public class ViewHandlerImpl extends ViewHandler {
 
 
     /**
-     * Attempts to find a matching locale based on <code>perf></code> and
+     * Attempts to find a matching locale based on <code>perf</code> and
      * list of supported locales, using the matching algorithm
      * as described in JSTL 8.3.2.
      */
@@ -370,17 +370,36 @@ public class ViewHandlerImpl extends ViewHandler {
                 result = supportedLocale;
                 break;
             } else {
-                // Make sure the preferred locale doesn't have  country set, when 
-                // doing a language match, For ex., if the preferred locale is
-                // "en-US", if one of supported locales is "en-UK", even though 
-                // its language matches that of the preferred locale, we must 
-                // ignore it.
+                // Make sure the preferred locale doesn't have country
+                // set, when doing a language match, For ex., if the
+                // preferred locale is "en-US", if one of supported
+                // locales is "en-UK", even though its language matches
+                // that of the preferred locale, we must ignore it.
                 if (perf.getLanguage().equals(supportedLocale.getLanguage()) &&
                     supportedLocale.getCountry().equals("")) {
                     result = supportedLocale;
                 }
             }
         }
+	// if it's not in the supported locales,
+	if (null == result) {
+	    Locale defaultLocale = context.getApplication().getDefaultLocale();
+            if ( perf.equals(defaultLocale)) {
+                // exact match
+                result = defaultLocale;
+            } else {
+                // Make sure the preferred locale doesn't have country
+                // set, when doing a language match, For ex., if the
+                // preferred locale is "en-US", if one of supported
+                // locales is "en-UK", even though its language matches
+                // that of the preferred locale, we must ignore it.
+                if (perf.getLanguage().equals(defaultLocale.getLanguage()) &&
+                    defaultLocale.getCountry().equals("")) {
+                    result = defaultLocale;
+                }
+            }
+	}
+
         return result;
     }
 
