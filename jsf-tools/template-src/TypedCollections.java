@@ -34,6 +34,19 @@ import java.util.Set;
 
     /**
      * Dynamically check that the members of the collection are all
+     * instances of the given type (or null).
+     */
+    private static boolean checkCollectionMembers(Collection<?> c, Class<?> type) {
+        for (Object element : c) {
+            if (element != null && !type.isInstance(element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Dynamically check that the members of the collection are all
      * instances of the given type (or null), and that the collection
      * itself is of the given collection type.
      * 
@@ -54,7 +67,9 @@ import java.util.Set;
             return null;
         if (!collectionType.isInstance(c))
             throw new ClassCastException(c.getClass().getName());
-       
+        assert checkCollectionMembers(c, type) :
+            "The collection contains members with a type other than " + type.getName();
+
         return collectionType.cast(c);
     }
 
@@ -119,6 +134,11 @@ import java.util.Set;
         if (map == null) {
             return null;                                                                     
         }
+        assert checkCollectionMembers(map.keySet(), keyType) :
+            "The map contains keys with a type other than " + keyType.getName();
+        assert checkCollectionMembers(map.values(), valueType) :
+            "The map contains values with a type other than " + valueType.getName();
+
         return (Map<K, V>) map;
     }
 }
