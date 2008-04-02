@@ -1,6 +1,8 @@
 package characterCombat;
 
 import javax.faces.model.SelectItem;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.AbortProcessingException;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -301,9 +303,8 @@ public class ModelBean {
      * <p>Add the new name to character list if name is not empty or does
      * not already exist in the list<p>
      *
-     * @return action result String to be used for navigation
      */
-    public String addCustomName() {
+    public void addCustomName(ActionEvent event) throws AbortProcessingException {
         if ((customName != null) && (!customName.trim().equals(""))) {
             customName = customName.trim();
 
@@ -312,7 +313,7 @@ public class ModelBean {
             while (iter.hasNext()) {
                 CharacterBean item = (CharacterBean) iter.next();
                 if (item.getName().equals(customName)) {
-                    return select();
+                    select();
                 }
             }
 
@@ -323,7 +324,6 @@ public class ModelBean {
                 speciesPropertyMap.get(customSpecies));
             dataList.add(item);
         }
-        return null;
     }
 
     /**

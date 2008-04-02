@@ -121,7 +121,7 @@ fun way. The application is called Character Combat.
 </ul>
 <img src="workflow.jpg" title="" alt="Workflow Diagram"
  style="width: 437px; height: 165px;"><br>
-The above workflow diagram shows the workflow through the
+The above diagram shows the page flow through the
 application.&nbsp; On the first page, the user can either add
 characters, or go straight to the next page.&nbsp; On the second page,
 the user can go back to the first page and add more characters, choose
@@ -133,7 +133,9 @@ third page, or restart at the beginning.<br>
 <br>
 You wil note that this workflow lends itself to the "wizard" UI design
 pattern.&nbsp; We have extracted the wizard functionality of this
-example into a simple reusable bean for your own applications.<br>
+example into a simple reusable bean for your own applications.&nbsp;
+For more on the wizard bean, see the below section: <span
+ style="font-weight: bold;">Example Wizard Component</span>.<br>
 <h2>Managed Beans
 </h2>
 <p>A managed bean is simply a java class with a public, no-args
@@ -143,10 +145,11 @@ managed bean facility.&nbsp; The managed bean facility is configured in
 the WEB-INF/faces-config.xml file.&nbsp; You can place any number of
 <code>&lt;managed-bean&gt;</code> declarations in this file, giving
 each one a name,
-class, and scope.&nbsp; Then in your web
+class, and scope.&nbsp; In your web
 application itself you simply reference the bean using your defined
 bean
-name. The bean will be created and placed in the appropriate scope the
+name in a JSF Expression Language expression. The bean will be created
+and placed in the appropriate scope the
 first time you reference it. Managed beans are very flexible and allow
 you to customize your bean by specifying properties, including java
 arrays, Maps, Lists, and other managed beans.
@@ -189,7 +192,7 @@ modifying the model and view to support this feature.
 <p>jmh: NOTE: would be nice to graphically display the component tree
 for some of the component examples</p>
 <p>The JSP pages provide the view for the web application. JSF provides
-two JSP tag libraries that exposes the components to the page
+two JSP tag libraries that expose the components to the page
 author.&nbsp; You can customize these components or create your
 own.&nbsp; The standard components render themselves as basic HTML
 4.01, with the absolute minimum of javascript.&nbsp; This ensures that
@@ -305,34 +308,74 @@ sample:
 <p> We will discuss actions in the next section since they are very
 important in navigation handling.
 </p>
-<h2>Actions and Navigation Handling
-</h2>
-<p>jmh: NOTE: talk about actions...</p>
-<p>The JSF Framework has a built-in Navigation Handler that handles
-navigation based on a configuration file and action events. The
-component hierarchy for each JSF page is called a view. In the
-application configuration file you can specify the view id, actions,
-and
-outcome.
-</p>
-<p>Here is a configuration example:
-</p>
-<pre><code><br>  &lt;navigation-rule&gt;<br>    &lt;from-view-id&gt;/main.jsp&lt;/from-view-id&gt;<br>    &lt;navigation-case&gt;<br>	   &lt;description&gt;<br>	     If the action returns "success", goto<br>	     firstSelection.jsp<br>	   &lt;/description&gt;<br>	   &lt;from-outcome&gt;success&lt;/from-outcome&gt;<br>	   &lt;to-view-id&gt;/firstSelection.jsp&lt;/to-view-id&gt;<br>	  &lt;/navigation-case&gt;<br>  &lt;/navigation-rule&gt;<br></code></pre>
-<p>In this example if the action invoked from the "main.jsp" page
+jmh: NOTE: talk about actions...
+<h2>Navigation: the Example Wizard Component</h2>
+Let's take a look at the wizard component that handles navigation in
+the app.&nbsp; There are
+three parts to this component, shown by the black shapes in this
+diagram.<br>
+<img src="wizard.jpg" title="" alt="wizard diagram"
+ style="width: 444px; height: 494px;"><br>
+The user must do two things to use this component.&nbsp; 1. include it
+in your UI, 2. author the navigation rules accordingly.&nbsp; We'll
+cover these&nbsp; steps in detail below.&nbsp; The details of the
+WizardButtons managed bean are beyond the scope of this article, but
+basically it has methods that enable or disable the next and back
+buttons based on the user's current position in the wizard pageflow.<br>
+<h3>Including the buttons in your UI<br>
+</h3>
+The component is included in the UI via the &lt;jsp:include&gt;
+feature.&nbsp; For each of the pages in the example app, you will see
+the following line at the bottom:<br>
+<pre>&nbsp;&nbsp;&nbsp; &lt;jsp:include page="wizard-buttons.jsp"/&gt;<br></pre>
+Looking at this page, we see it has the following markup:<br>
+<pre>&lt;%@ page contentType="text/html" language="java" %&gt;<br>&lt;%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %&gt;<br>&lt;%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %&gt;<br><br>&lt;f:subview id="wizard-buttons"&gt;<br><br>  &lt;h:panelGrid columns="2"&gt;<br><br>    &lt;h:commandButton value="&lt; Back" action="back" <br>                     disabled="#{wizardButtons.hasBack}" /&gt;<br><br>    &lt;h:commandButton value="#{wizardButtons.nextLabel}" action="next" <br>                     disabled="#{wizardButtons.hasNext}"/&gt;<br><br>  &lt;/h:panelGrid&gt;<br><br>&lt;/f:subview&gt;<br></pre>
+It's important to note that any JSF components that reside in an
+included page must be the children of a &lt;f:subview&gt; tag, just as
+in the parent page they must be children of the &lt;f:view&gt;
+tag.&nbsp; Also, this example doesn't show it, but any template markup
+text that you want to include in a subview must be wrapped inside of an
+&lt;f:verbatim&gt; tag.&nbsp; You can see that this page just has a
+panel grid that lays out two buttons next to eachother.&nbsp; The
+attributes for these buttons are tightly bound to the methods and
+properties exposed on the wizardButtons bean.&nbsp; These buttons and
+the bean are designed to work together.&nbsp; The back button has its
+value and action hardcoded.&nbsp; The next button gets its value from
+the wizardButtons bean, and has its action hardcoded.&nbsp; <br>
+<h3>The Navigation Rules<br>
+</h3>
+The navigation rules are at the heart of the wizard component.&nbsp;
+These rules must be included in the app's faces-config.xml file.&nbsp;
+Here is a subset of the rules for this particular application.&nbsp;
+You can use these rules as a starting point for leveraging the wizard
+component in your own application.<span style="font-family: monospace;"><br>
+</span>
+<pre><span style="font-family: monospace;"></span>&lt;navigation-rule&gt;</pre>
+<pre><code>    &lt;from-view-id&gt;/main.jsp&lt;/from-view-id&gt;<br>    &lt;navigation-case&gt;<br>      &lt;description&gt;<br>        If the action returns "next", goto<br>        firstSelection.jsp<br>      &lt;/description&gt;<br>      &lt;from-outcome&gt;next&lt;/from-outcome&gt;<br>      &lt;to-view-id&gt;/firstSelection.jsp&lt;/to-view-id&gt;<br>    &lt;/navigation-case&gt;<br>  &lt;/navigation-rule&gt;<br><br>  &lt;navigation-rule&gt;<br>    &lt;from-view-id&gt;/firstSelection.jsp&lt;/from-view-id&gt;<br>    &lt;navigation-case&gt;<br>      &lt;description&gt;<br>        If the action returns "next", goto<br>        secondSelection.jsp<br>      &lt;/description&gt;<br>      &lt;from-outcome&gt;next&lt;/from-outcome&gt;<br>      &lt;to-view-id&gt;/secondSelection.jsp&lt;/to-view-id&gt;<br>    &lt;/navigation-case&gt;<br>    &lt;navigation-case&gt;<br>      &lt;description&gt;<br>        If the action returns "back", goto<br>        main.jsp<br>      &lt;/description&gt;<br>      &lt;from-outcome&gt;back&lt;/from-outcome&gt;<br>      &lt;to-view-id&gt;/main.jsp&lt;/to-view-id&gt;<br>    &lt;/navigation-case&gt;<br><br>  &lt;/navigation-rule&gt;<br></code></pre>
+In this example if the action invoked from the "main.jsp" page
 returns
-the "success" outcome then the Navigation Handler will render the
-"firstSelection.jsp" page.
+the "next" outcome then the Navigation Handler will render the
+"firstSelection.jsp" page.&nbsp; If the action invoked from the
+"firstSelection.jsp" page returns the "back" outcome, we go back to the
+main page.&nbsp; If the action invoked returns "next" we go to the
+"secondSelection.jsp" page.<br>
+<h2>Actions<br>
+</h2>
+<p>As you recall from the workflow diagram, the first page is special
+in that the workflow can cause the page to be reloaded.&nbsp; This
+happens when the user wants to add characters to the character
+table.&nbsp; This addition is implemented by placing a button in the
+page that causes the appropriate action to take place when the button
+is pressed.</p>
+<p>On the "main.jsp" page, you'll see this button declaration:<br>
 </p>
-<p>The action in the "main.jsp" page is associated with a command
-button
-nested in a form. It will be invoked when the form is submitted:
-</p>
-<pre><code> &lt;h:commandButton action="#{modelBean.addFirstSelection}"<br>value="Submit First Character Selection"/&gt;<br><br></code></pre>
+<pre>      &lt;h:commandButton actionListener="#{modelBean.addCustomName}" value="Add Name"/&gt;<br></pre>
+<p></p>
 <p>The actual Action Handler implementation is in the ModelBean.java
-file. The "select" method performs some model logic and returns the
-appropriate request expected by the Navigation Handler:
+file. The "addCustomName" method adds the name to the table.<br>
 </p>
-<pre><code><br>    public String addFirstSelection() {<br>        firstSelection = currentSelection;<br><br>        currentSelection = null;<br>        secondSelection = null;<br><br>        return "success";<br>    }<br><br></code></pre>
+<pre>    public void addCustomName(ActionEvent event) throws AbortProcessingException {<br>        if ((customName != null) &amp;&amp; (!customName.trim().equals(""))) {<br>            customName = customName.trim();<br><br>            //check to see if name already exists in list<br>            Iterator iter = dataList.iterator();<br>            while (iter.hasNext()) {<br>                CharacterBean item = (CharacterBean) iter.next();<br>                if (item.getName().equals(customName)) {<br>                    select();<br>                }<br>            }<br><br>            //create new entry<br>            CharacterBean item = new CharacterBean();<br>            item.setName(customName);<br>            item.setSpecies((SpeciesBean) <br>                speciesPropertyMap.get(customSpecies));<br>            dataList.add(item);<br>        }<br>    }<br><br></pre>
+<p></p>
 <p>Building the Application
 </p>
 <p>jmh: NOTE: write simple build.xml and build.properties.sample file

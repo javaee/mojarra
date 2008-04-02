@@ -92,7 +92,8 @@
     </h:panelGrid>
 <br>
     <h:panelGrid columns="1">
-      <h:commandButton action="#{modelBean.addCustomName}" value="Add Name"/>
+      <h:commandButton actionListener="#{modelBean.addCustomName}" 
+                       value="Add Name"/>
     </h:panelGrid>
 
     <jsp:include page="wizard-buttons.jsp"/>
