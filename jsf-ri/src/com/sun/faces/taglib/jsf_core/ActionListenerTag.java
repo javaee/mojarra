@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.31 2006/09/05 23:42:06 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.32 2006/12/12 18:38:11 rlubke Exp $
  */
 
 /*
@@ -74,12 +74,11 @@ import com.sun.faces.util.Util;
 
 public class ActionListenerTag extends TagSupport {
 
-
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -5222351612904952740L;
-    private static final Logger logger = 
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger logger =
+         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
     /**
      * <p>The fully qualified class name of the {@link ActionListener}
      * instance to be created.</p>
@@ -87,8 +86,8 @@ public class ActionListenerTag extends TagSupport {
     private ValueExpression type = null;
 
     /**
-     * <p>The value expression used to create a listener instance and it is 
-     * also used to wire up this listener to an {@link ActionListener} property 
+     * <p>The value expression used to create a listener instance and it is
+     * also used to wire up this listener to an {@link ActionListener} property
      * of a JavaBean class.</p>
      */
     private ValueExpression binding = null;
@@ -111,7 +110,7 @@ public class ActionListenerTag extends TagSupport {
      * @param binding The new value binding expression
      */
     public void setBinding(ValueExpression binding) {
-	this.binding = binding;
+        this.binding = binding;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -132,14 +131,14 @@ public class ActionListenerTag extends TagSupport {
 
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+             UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
-            Object params [] = {this.getClass().getName()};
+            Object params[] = {this.getClass().getName()};
             throw new JspException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID, params));
         }
-        
+
         // Nothing to do unless this tag created a component
         if (!tag.getCreated()) {
             return (SKIP_BODY);
@@ -149,30 +148,30 @@ public class ActionListenerTag extends TagSupport {
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof ActionSource)) {
-            Object params [] = {"actionListener", "javax.faces.component.ActionSource"};
+            Object params[] = {"actionListener", "javax.faces.component.ActionSource"};
             throw new JspException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
-        
+
         // If "binding" is set, use it to create a listener instance.
-        
+
         if (null != binding) {
-	    try {
-		handler = (ActionListener)binding.getValue(context.getELContext());
-		if (handler != null) {
-		    // we ignore the type in this case, even though
-		    // it may have been set.
-		    ((ActionSource)component).addActionListener(handler);
-		    return (SKIP_BODY);
-		}
-	    } catch (ELException e) {
-		throw new JspException(e);
-	    }
-	}
+            try {
+                handler = (ActionListener) binding.getValue(context.getELContext());
+                if (handler != null) {
+                    // we ignore the type in this case, even though
+                    // it may have been set.
+                    ((ActionSource) component).addActionListener(handler);
+                    return (SKIP_BODY);
+                }
+            } catch (ELException e) {
+                throw new JspException(e);
+            }
+        }
         // If "type" is set, use it to create the listener
         // instance.  If "type" and "binding" are both set, store the 
         // listener instance in the value of the property represented by
@@ -180,19 +179,19 @@ public class ActionListenerTag extends TagSupport {
         if (type != null) {
             handler = createActionListener(context);
             if (handler != null && binding != null) {
-		try {
-		    binding.setValue(context.getELContext(), handler);
-		} catch (ELException e) {
-		    throw new JspException(e);
-		}
+                try {
+                    binding.setValue(context.getELContext(), handler);
+                } catch (ELException e) {
+                    throw new JspException(e);
+                }
             }
         }
-	
+
         // We need to cast here because addActionListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
         if (handler != null) {
-            ((ActionSource)component).addActionListener(handler);
+            ((ActionSource) component).addActionListener(handler);
         } else {
             if (logger.isLoggable(Level.FINE)) {
                 if (binding == null && type == null) {
@@ -203,7 +202,7 @@ public class ActionListenerTag extends TagSupport {
             }
         }
 
-               
+
         return (SKIP_BODY);
 
     }
@@ -218,7 +217,6 @@ public class ActionListenerTag extends TagSupport {
 
     }
 
-
     // ------------------------------------------------------ Protected Methods
 
 
@@ -226,17 +224,19 @@ public class ActionListenerTag extends TagSupport {
      * <p>Create and return a new {@link ActionListener} to be registered
      * on our surrounding {@link UIComponent}.</p>
      *
+     * @param context the <code>FacesContext</code> for the current request
+     * @return a new <code>ActionListener</code> instance
      * @throws JspException if a new instance cannot be created
      */
     protected ActionListener createActionListener(FacesContext context)
-        throws JspException {
+         throws JspException {
 
         try {
-	    // PENDING(edburns): log potential NPE with a good error
-	    // message.
-	    String className = 
-		type.getValue(context.getELContext()).toString();
-	    
+            // PENDING(edburns): log potential NPE with a good error
+            // message.
+            String className =
+                 type.getValue(context.getELContext()).toString();
+
             Class clazz = Util.loadClass(className, this);
             return ((ActionListener) clazz.newInstance());
         } catch (Exception e) {
