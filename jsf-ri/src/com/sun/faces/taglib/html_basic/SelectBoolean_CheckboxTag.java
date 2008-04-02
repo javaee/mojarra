@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.44 2003/08/15 19:15:17 rlubke Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.45 2003/09/05 14:34:47 rkitain Exp $
  */
 
 /*
@@ -70,24 +70,24 @@ public class SelectBoolean_CheckboxTag extends FacesTag
 	super.overrideProperties(component);
 	UISelectBoolean checkbox = (UISelectBoolean) component;
 	
-        if (null != getChecked()) {
+        if (null != checked) {
             checkbox.setSelected(true);
         } 
        
-        if (null != getSize()) {
-	    checkbox.setAttribute("size", getSize());
+        if (null != size) {
+	    checkbox.setAttribute("size", size);
 	}
-        if (null != getReadonly()) {
-	    checkbox.setAttribute("readonly", getReadonly());
+        if (null != readonly) {
+	    checkbox.setAttribute("readonly", readonly);
 	}
-        if (null != getAlt()) {
-	    checkbox.setAttribute("alt", getAlt());
+        if (null != alt) {
+	    checkbox.setAttribute("alt", alt);
 	}
-        if (null != getOnselect()) {
-	    checkbox.setAttribute("onselect", getOnselect());
+        if (null != onselect) {
+	    checkbox.setAttribute("onselect", onselect);
 	}
-        if (null != getOnchange()) {
-	    checkbox.setAttribute("onchange", getOnchange());
+        if (null != onchange) {
+	    checkbox.setAttribute("onchange", onchange);
 	}
     }
     

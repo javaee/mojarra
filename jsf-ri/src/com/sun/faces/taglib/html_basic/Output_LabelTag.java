@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.8 2003/08/15 19:15:13 rlubke Exp $
+ * $Id: Output_LabelTag.java,v 1.9 2003/09/05 14:34:47 rkitain Exp $
  */
 
 /*
@@ -56,11 +56,6 @@ public class Output_LabelTag extends FacesTag
     // 
     // Accessors
     //
-
-    public String getFor()
-    {
-        return forValue;
-    }
 
     public void setFor(String newForValue)
     {

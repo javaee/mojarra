@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.10 2003/08/15 19:15:10 rlubke Exp $
+ * $Id: Input_SecretTag.java,v 1.11 2003/09/05 14:34:46 rkitain Exp $
  */
 
 /*
@@ -51,9 +51,6 @@ public class Input_SecretTag extends Input_TextTag
     //
     // Class methods
     //
-    public String getRedisplay() {
-        return redisplay;
-    }
 
     public void setRedisplay(String newRedisplay) {
         redisplay = newRedisplay;

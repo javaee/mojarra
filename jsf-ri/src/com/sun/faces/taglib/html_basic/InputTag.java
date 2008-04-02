@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.9 2003/08/13 02:08:07 eburns Exp $
+ * $Id: InputTag.java,v 1.10 2003/09/05 14:34:46 rkitain Exp $
  */
 
 /*
@@ -51,11 +51,6 @@ public abstract class InputTag extends FacesTag
     // Accessors
     //
 
-    public String getLabel()
-    {
-        return label;
-    }
-
     public void setLabel(String newLabel)
     {
         label = newLabel;
@@ -69,23 +64,23 @@ public abstract class InputTag extends FacesTag
 	super.overrideProperties(component);
 	UIInput input = (UIInput) component;
 
-        if (null != getReadonly()) {
-	    input.setAttribute("readonly", getReadonly());
+        if (null != readonly) {
+	    input.setAttribute("readonly", readonly);
 	}
-	if (null != getSize()) {
-	    input.setAttribute("size", getSize());
+	if (null != size) {
+	    input.setAttribute("size", size);
 	}
-	if (null != getMaxlength()) {
-	    input.setAttribute("maxlength", getMaxlength());
+	if (null != maxlength) {
+	    input.setAttribute("maxlength", maxlength);
 	}
-	if (null != getAlt()) {
-	    input.setAttribute("alt", getAlt());
+	if (null != alt) {
+	    input.setAttribute("alt", alt);
 	}
-        if (null != getOnselect()) {
-	    input.setAttribute("onselect", getOnselect());
+        if (null != onselect) {
+	    input.setAttribute("onselect", onselect);
 	}
-	if (null != getOnchange()) {
-	    input.setAttribute("onchange", getOnchange());
+	if (null != onchange) {
+	    input.setAttribute("onchange", onchange);
 	}
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.9 2003/08/15 19:15:08 rlubke Exp $
+ * $Id: Graphic_ImageTag.java,v 1.10 2003/09/05 14:34:45 rkitain Exp $
  */
 
 /*
@@ -53,10 +53,6 @@ public class Graphic_ImageTag extends FacesTag
     //
     // Class methods
     //
-
-    public String getUrl() {
-        return url;
-    }
 
     public void setUrl(String newUrl) {
         url = newUrl;

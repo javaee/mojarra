@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.12 2003/08/15 19:15:13 rlubke Exp $
+ * $Id: Output_ErrorsTag.java,v 1.13 2003/09/05 14:34:47 rkitain Exp $
  */
 
 /*
@@ -57,19 +57,9 @@ public class Output_ErrorsTag extends FacesTag {
     // Accessors
     //
 
-    public String getFor()
-    {
-        return forValue;
-    }
-
     public void setFor(String newForValue)
     {
         forValue = newForValue;
-    }
-
-
-    public String getColor() {
-        return color;
     }
 
     public void setColor(String newColor) {

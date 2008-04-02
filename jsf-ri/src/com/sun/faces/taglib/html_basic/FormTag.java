@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.45 2003/09/04 18:04:42 rlubke Exp $
+ * $Id: FormTag.java,v 1.46 2003/09/05 14:34:45 rkitain Exp $
  */
 
 /*
@@ -63,9 +63,6 @@ public class FormTag extends FacesTag
     // Accessors
     //
 
-    public String getFormName() { 
-        return formName; 
-    }
     public void setFormName(String newFormName) { 
 	formName = newFormName;
     }

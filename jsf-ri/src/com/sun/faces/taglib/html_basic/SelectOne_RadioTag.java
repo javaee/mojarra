@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.27 2003/08/15 19:15:19 rlubke Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.28 2003/09/05 14:34:48 rkitain Exp $
  */
 
 /*
@@ -64,18 +64,9 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 	layout = newLayout;
     }
 
-    public String getLayout() {
-	return layout;
-    }
-
     public void setBorder(String newBorder) {
 	border = newBorder;
     }
-
-    public String getBorder() {
-	return border;
-    }
-
 
     //
     // General Methods

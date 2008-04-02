@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.47 2003/09/04 20:27:51 rlubke Exp $
+ * $Id: FacesTag.java,v 1.48 2003/09/05 14:34:44 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.47 2003/09/04 20:27:51 rlubke Exp $ 
+ * @version $Id: FacesTag.java,v 1.48 2003/09/05 14:34:44 rkitain Exp $ 
  */
 
 public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
@@ -155,11 +155,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 	required = newVal;
     }
 
-    public String getValueRef()
-    {
-	return valueRef;
-    }
-    
     public void setValueRef(String newValueRef)
     {
 	valueRef = newValueRef;
@@ -170,49 +165,24 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     }
 
   
-    public String getKey()
-    {
-	return key;
-    }
-    
     public void setKey(String newKey)
     {
 	key = newKey;
     }
 
-    public String getImageKey()
-    {
-	return imageKey;
-    }
-    
     public void setImageKey(String newImageKey)
     {
 	imageKey = newImageKey;
     }
 
-    public String getBundle()
-    {
-	return bundle;
-    }
-    
     public void setBundle(String newBundle)
     {
 	bundle = newBundle;
     }
 
-    public String getFormatStyle()
-    {
-	return formatStyle;
-    }
-    
     public void setFormatStyle(String newFormatStyle)
     {
 	formatStyle = newFormatStyle;
-    }
-    
-    public String getDateStyle()
-    {
-	return dateStyle;
     }
     
     public void setDateStyle(String newDateStyle)
@@ -220,29 +190,14 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 	dateStyle = newDateStyle;
     }
     
-    public String getTimeStyle()
-    {
-	return timeStyle;
-    }
-    
     public void setTimeStyle(String newTimeStyle)
     {
 	timeStyle = newTimeStyle;
     }
 
-    public String getTimezone()
-    {
-	return timezone;
-    }
-    
     public void setTimezone(String newTimezone)
     {
 	timezone = newTimezone;
-    }
-    
-    public String getFormatPattern()
-    {
-	return formatPattern;
     }
     
     public void setFormatPattern(String newFormatPattern)
@@ -253,22 +208,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // List of MIME types for file upload - 
     // For FORM/INPUT HTML elements
 
-    public String getAccept()
-    {
-        return accept;
-    }
-
     public void setAccept(String newAccept) 
     {
         accept = newAccept;
     }
 
     // List of supported char sets - For FORM HTML element
-
-    public String getAcceptcharset()
-    {
-        return acceptcharset;
-    }
 
     public void setAcceptcharset(String newAcceptcharset) 
     {
@@ -278,11 +223,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Accessibility key char -
     // For "A" (Hyperlink)/BUTTON/INPUT/LABEL/TEXTAREA HTML elements
 
-    public String getAccesskey()
-    {
-        return accesskey;
-    }
-
     public void setAccesskey(String newAccesskey) 
     {
         accesskey = newAccesskey;
@@ -290,22 +230,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Server-side form handler - For FORM HTML element
 
-    public String getAction()
-    {
-        return action;
-    }
-
     public void setAction(String newAction) 
     {
         action = newAction;
     }
 
     // Short description - For INPUT HTML element
-
-    public String getAlt()
-    {
-        return alt;
-    }
 
     public void setAlt(String newAlt)
     {
@@ -315,22 +245,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Char encoding for linked resource -
     // For "A" (Hyperlink) HTML element
 
-    public String getCharset() 
-    {
-        return charset;
-    }
-
     public void setCharset(String newCharset) 
     {
         charset = newCharset;
     }
 
     // For radio buttons and checkboxes - For INPUT element
-
-    public String getChecked()
-    {
-        return checked;
-    }
 
     public void setChecked(String newChecked) 
     {
@@ -342,11 +262,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For TEXTAREA HTML element
 
-    public String getCols()
-    {
-        return cols;
-    }
-
     public void setCols(String newCols)
     {
         cols = newCols;
@@ -354,11 +269,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For use with client side image maps - 
     // For "A" (Hyperlink) HTML element
-
-    public String getCoords()
-    {
-        return coords;
-    }
 
     public void setCoords(String newCoords)
     {
@@ -368,11 +278,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Direction for weak/neutral text - For all HTML elements 
     // pertaining to Faces
 
-    public String getDir() 
-    {
-        return dir;
-    }
-    
     public void setDir(String newDir) 
     {
         dir = newDir;
@@ -381,22 +286,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Means "unavailable" in this context -
     // For BUTTON/INPUT/OPTGROUP/OPTION/SELECT/TEXTAREA HTML elements 
 
-    public String getDisabled()
-    {
-        return disabled;
-    }
-
     public void setDisabled(String newDisabled)
     {
         disabled = newDisabled;
     }
 
     // For FORM HTML element
-
-    public String getEnctype() 
-    {
-        return enctype;
-    }
 
     public void setEnctype(String newEnctype)
     {
@@ -405,22 +300,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Matches field "id" value - For LABEL HTML element
 
-    public String getHtmlFor()
-    {
-        return htmlFor;
-    }
-
     public void setHtmlFor(String newHtmlFor)
     {
         htmlFor = newHtmlFor;
     }
 
     // Override height - For IMG HTML element
-
-    public String getHeight() 
-    {
-        return height;
-    }
 
     public void setHeight(String newHeight)
     {
@@ -429,22 +314,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For "A" (Hyperlink) HTML element
 
-    public String getHref() 
-    {
-        return href;
-    }
-
     public void setHref(String newHref)
     {
         href = newHref;
     }
 
     // Language Code - For "A" (Hyperlink) HTML element
-
-    public String getHreflang() 
-    {
-        return hreflang;
-    }
 
     public void setHreflang(String newHreflang)
     {
@@ -453,22 +328,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Horizontal space - For IMG HTML element
 
-    public String getHspace()
-    {
-        return hspace;
-    }
-
     public void setHspace(String newHspace)
     {
         hspace = newHspace;
     }
 
     // Use server side image map - For IMG/INPUT HTML elements
-
-    public String getIsmap() 
-    {
-        return ismap;
-    }
 
     public void setIsmap(String newIsmap)
     {
@@ -477,22 +342,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For OPTION/OPTGROUP HTML elements
 
-    public String getLabel()
-    {
-        return label;
-    }
-
     public void setLabel(String newLabel)
     {
         label = newLabel;
     }
 
     // Language Code - For all HTML elements pertaining to Faces
-
-    public String getLang() 
-    {
-        return lang;
-    }
 
     public void setLang(String newLang)
     {
@@ -501,22 +356,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Link to long description - For IMG HTML element
 
-    public String getLongdesc()
-    {
-        return longdesc;
-    }
-
     public void setLongdesc(String newLongdesc)
     {
         longdesc = newLongdesc;
     }
 
     // Maximum chars for text fields - For INPUT HTML elements
-
-    public String getMaxlength() 
-    {
-        return maxlength;
-    }
 
     public void setMaxlength(String newMaxlength) 
     {
@@ -526,22 +371,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // HTTP method used to submit the form -
     // For FORM HTML element
 
-    public String getMethod()
-    {
-        return method;
-    }
-
     public void setMethod(String newMethod)
     {
         method = newMethod;
     }
 
     // Default is single selection - For SELECT HTML element
-
-    public String getMultiple()
-    {
-        return multiple;
-    }
 
     public void setMultiple(String newMultiple)
     {
@@ -551,11 +386,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Element name - For BUTTON/TEXTAREA/SELECT/FORM/
     // IMG/"A" (Hyperlink)/INPUT HTML elements 
 
-    public String getName()
-    {
-        return name;
-    }
-
     public void setName(String newName)
     {
         name = newName;
@@ -564,21 +394,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Element lost focus - For "A" (Hyperlink)/BUTTON/INPUT/
     // LABEL/SELECT/TEXTAREA HTML elements
 
-    public String getOnblur() 
-    {
-        return onblur;
-    }
-
     public void setOnblur(String newOnblur)
     {
         onblur = newOnblur;
     }
 
     // Element value was changed - For INPUT/SELECT/TEXTAREA HTML elements
-    public String getOnchange() 
-    {
-        return onchange;
-    }
 
     public void setOnchange(String newOnchange)
     {
@@ -588,11 +409,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // A pointer button was clicked - For all HTML elements pertaining
     // to Faces
 
-    public String getOnclick() 
-    {
-        return onclick;
-    }
-
     public void setOnclick(String newOnclick)
     {
         onclick = newOnclick;
@@ -600,11 +416,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // A pointer button was double clicked - For all HTML 
     // elements pertaining to Faces
-
-    public String getOndblclick() 
-    {
-        return ondblclick;
-    }
 
     public void setOndblclick(String newOndblclick)
     {
@@ -614,11 +425,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Element got the focus - For "A" (Hyperlink)/BUTTON/
     // INPUT/LABEL/SELECT/TEXTAREA HTML elements
 
-    public String getOnfocus() 
-    {
-        return onfocus;
-    }
-
     public void setOnfocus(String newOnfocus)
     {
         onfocus = newOnfocus;
@@ -626,11 +432,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // A key was pressed down - For all HTML elements pertaining
     // to Faces
-
-    public String getOnkeydown() 
-    {
-        return onkeydown;
-    }
 
     public void setOnkeydown(String newOnkeydown)
     {
@@ -640,11 +441,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // A key was pressed and released - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnkeypress() 
-    {
-        return onkeypress;
-    }
-
     public void setOnkeypress(String newOnkeypress)
     {
         onkeypress = newOnkeypress;
@@ -652,11 +448,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // A key was released - For all HTML elements pertaining
     // to Faces
-
-    public String getOnkeyup() 
-    {
-        return onkeyup;
-    }
 
     public void setOnkeyup(String newOnkeyup)
     {
@@ -666,11 +457,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // A pointer button was pressed down - For all HTML
     // elements pertaining to Faces.
 
-    public String getOnmousedown() 
-    {
-        return onmousedown;
-    }
-
     public void setOnmousedown(String newOnmousedown)
     {
         onmousedown = newOnmousedown;
@@ -678,11 +464,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // A pointer was moved within - For all HTML elements
     // pertaining to Faces.
-
-    public String getOnmousemove() 
-    {
-        return onmousemove;
-    }
 
     public void setOnmousemove(String newOnmousemove)
     {
@@ -692,11 +473,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // A pointer was moved away - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnmouseout() 
-    {
-        return onmouseout;
-    }
-
     public void setOnmouseout(String newOnmouseout)
     {
         onmouseout = newOnmouseout;
@@ -704,11 +480,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // A pointer was moved onto - For all HTML elements
     // pertaining to Faces.
-
-    public String getOnmouseover() 
-    {
-        return onmouseover;
-    }
 
     public void setOnmouseover(String newOnmouseover)
     {
@@ -718,22 +489,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // A pointer button was released - For all HTML elements
     // pertaining to Faces.
 
-    public String getOnmouseup() 
-    {
-        return onmouseup;
-    }
-
     public void setOnmouseup(String newOnmouseup)
     {
         onmouseup = newOnmouseup;
     }
 
     // The form was reset - For FORM HTML element
-
-    public String getOnreset() 
-    {
-        return onreset;
-    }
 
     public void setOnreset(String newOnreset)
     {
@@ -742,21 +503,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Some text was selected - For SELECT HTML element.
 
-    public String getOnselect() 
-    {
-        return onselect;
-    }
-
     public void setOnselect(String newOnselect)
     {
         onselect = newOnselect;
     }
 
     // The form was submitted - For FORM HTML element
-
-    public String getOnsubmit() {
-        return onsubmit;
-    }
 
     public void setOnsubmit(String newOnsubmit)
     {
@@ -765,22 +517,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For TEXTAREA/INPUT HTML elements
 
-    public String getReadonly() 
-    {
-        return readonly;
-    }
-
     public void setReadonly(String newReadonly)
     {
         readonly = newReadonly;
     }
 
     // Forward link types - For "A" (Hyperlink) HTML element
-
-    public String getRel() 
-    {
-        return rel;
-    }
 
     public void setRel(String newRel)
     {
@@ -789,11 +531,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Reverse link types - For "A" (Hyperlink) HTML element
 
-    public String getRev() 
-    {
-        return rev;
-    }
-
     public void setRev(String newRev)
     {
         rev = newRev;
@@ -801,22 +538,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For TEXTAREA HTML element
 
-    public String getRows()
-    {
-        return rows;
-    }
-
     public void setRows(String newRows)
     {
         rows = newRows;
     }
     
     // For OPTION HTML element
-
-    public String getSelected() 
-    {
-        return selected;
-    }
 
     public void setSelected(String newSelected)
     {
@@ -826,11 +553,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // For use with client-side image maps -
     // For "A" (Hyperlink) HTML element
 
-    public String getShape()
-    {
-        return shape;
-    }
-
     public void setShape(String newShape)
     {
         shape = newShape;
@@ -839,22 +561,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // For INPUT/SELECT HTML elements - (means rows visible
     // for SELECT)
 
-    public String getSize() 
-    {
-        return size;
-    }
-
     public void setSize(String newSize)
     {
         size = newSize;
     }
 
     // For INPUT/IMG HTML elements
-
-    public String getSrc() 
-    {
-        return src;
-    }
 
     public void setSrc(String newSrc)
     {
@@ -872,11 +584,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Position in tabbing order - For "A" (Hyperlink)/
     // BUTTON/INPUT/SELECT/TEXTAREA HTML elements.
 
-    public String getTabindex() 
-    {
-        return tabindex;
-    }
-
     public void setTabindex(String newTabindex)
     {
         tabindex = newTabindex;
@@ -884,11 +591,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Render in this frame - For "A" (Hyperlink)/ FORM
     // HTML elements
-
-    public String getTarget()
-    {
-        return target;
-    }
 
     public void setTarget(String newTarget)
     {
@@ -898,22 +600,12 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     // Advisory title - For all HTML elements pertaining
     // to Faces.
 
-    public String getTitle() 
-    {
-        return title;
-    }
-
     public void setTitle(String newTitle)
     {
         title = newTitle;
     }
     
     // For "A" (Hyperlink)/INPUT/BUTTON HTML elements
-
-    public String getType() 
-    {
-        return type;
-    }
 
     public void setType(String newType)
     {
@@ -922,11 +614,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Use client-side image map - For IMG/INPUT HTML elements.
 
-    public String getUsemap() 
-    {
-        return usemap;
-    }
-
     public void setUsemap(String newUsemap)
     {
         usemap = newUsemap;
@@ -934,11 +621,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // For INPUT/OPTION/BUTTON HTML elements.
     // Required for INPUT type = radio/checkbox
-
-    public String getValue()
-    {
-        return value;
-    }
 
     public void setValue(String newValue)
     {
@@ -950,59 +632,34 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
    public  void setSummary(String newSummary) {
        this.summary = newSummary;
    } 
-   public String getSummary() {
-        return summary;
-   } 
-   
+
    public  void setWidth(String newWidth) {
        this.width = newWidth;
    } 
-   public String getWidth() {
-        return width;
-   }
    
    public  void setBgcolor(String newColor) {
        this.bgcolor = newColor;
-   }
-   public String getBgcolor() {
-        return bgcolor;
    }
    
    public  void setFrame(String newFrame) {
        this.frame = newFrame;
    }
-   public String getFrame() {
-        return frame;
-   }
    
    public  void setRules(String newRules) {
        this.rules = newRules;
-   }
-   public String getRules() {
-        return rules;
    }
    
    public  void setBorder(String newBorder) {
        this.border = newBorder;
    }
-   public String getBorder() {
-        return border;
-   }
    
    public  void setCellspacing(String newCellspacing) {
        this.cellspacing = newCellspacing;
-   }
-   public String getCellspacing() {
-        return cellspacing;
    }
    
    public  void setCellpadding(String newCellpadding) {
        this.cellpadding = newCellpadding;
    }
-   public String getCellpadding() {
-        return cellpadding;
-   }
-
 
     /**
 
@@ -1084,86 +741,86 @@ protected void overrideProperties(UIComponent component)
 	((UIInput)component).setRequired(required);
     }
 
-    if (null != getKey()) {
-	component.setAttribute("key", getKey());
+    if (null != key) {
+	component.setAttribute("key", key);
     }
-    if (null != getImageKey()) {
-	component.setAttribute("imageKey", getImageKey());
+    if (null != imageKey) {
+	component.setAttribute("imageKey", imageKey);
     }
-    if (null != getBundle()) {
-	component.setAttribute(RIConstants.BUNDLE_ATTR, getBundle());
+    if (null != bundle) {
+	component.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
     }
-    if (null != getFormatPattern()) {
-	component.setAttribute("formatPattern", getFormatPattern());
+    if (null != formatPattern) {
+	component.setAttribute("formatPattern", formatPattern);
     }
-    if (null != getDateStyle()) {
-	component.setAttribute("dateStyle", getDateStyle());
+    if (null != dateStyle) {
+	component.setAttribute("dateStyle", dateStyle);
     }
-    if (null != getTimeStyle()) {
-	component.setAttribute("timeStyle", getTimeStyle());
+    if (null != timeStyle) {
+	component.setAttribute("timeStyle", timeStyle);
     }
-    if (null != getTimezone()) {
-	component.setAttribute("timezone", getTimezone());
+    if (null != timezone) {
+	component.setAttribute("timezone", timezone);
     }
 
     // HTML 4.0 event handlers common to most BODY-content elements.
-    if (null != getOnclick()) {
-	component.setAttribute("onclick", getOnclick());
+    if (null != onclick) {
+	component.setAttribute("onclick", onclick);
     }
-    if (null != getOndblclick()) {
-	component.setAttribute("ondblclick", getOndblclick());
+    if (null != ondblclick) {
+	component.setAttribute("ondblclick", ondblclick);
     }
 
-    if (null != getOnkeydown()) {
-	component.setAttribute("onkeydown", getOnkeydown());
+    if (null != onkeydown) {
+	component.setAttribute("onkeydown", onkeydown);
     }
-    if (null != getOnkeypress()) {
-	component.setAttribute("onkeypress", getOnkeypress());
+    if (null != onkeypress) {
+	component.setAttribute("onkeypress", onkeypress);
     }
-    if (null != getOnkeyup()) {
-	component.setAttribute("onkeyup", getOnkeyup());
+    if (null != onkeyup) {
+	component.setAttribute("onkeyup", onkeyup);
     }
-    if (null != getOnmousedown()) {
-	component.setAttribute("onmousedown", getOnmousedown());
+    if (null != onmousedown) {
+	component.setAttribute("onmousedown", onmousedown);
     }
-    if (null != getOnmousemove()) {
-	component.setAttribute("onmousemove", getOnmousemove());
+    if (null != onmousemove) {
+	component.setAttribute("onmousemove", onmousemove);
     }
-    if (null != getOnmouseout()) {
-	component.setAttribute("onmouseout", getOnmouseout());
+    if (null != onmouseout) {
+	component.setAttribute("onmouseout", onmouseout);
     }
-    if (null != getOnmouseover()) {
-	component.setAttribute("onmouseover", getOnmouseover());
+    if (null != onmouseover) {
+	component.setAttribute("onmouseover", onmouseover);
     }
-    if (null != getOnmouseup()) {
-	component.setAttribute("onmouseup", getOnmouseup());
+    if (null != onmouseup) {
+	component.setAttribute("onmouseup", onmouseup);
     }
-    if (null != getOnfocus()) {
-        component.setAttribute("onfocus", getOnfocus()); 
+    if (null != onfocus) {
+        component.setAttribute("onfocus", onfocus); 
     }
-    if (null != getOnblur()) {
-        component.setAttribute("onblur", getOnblur());
+    if (null != onblur) {
+        component.setAttribute("onblur", onblur);
     }
     
     // common HTML 4.0 attributes.
     // PENDING (visvan) id attribute clashes with faces id attribute
-    if (null != getTitle()) {
-        component.setAttribute("title", getTitle());
+    if (null != title) {
+        component.setAttribute("title", title);
     }
-    if (null != getDisabled()) {
-	component.setAttribute("disabled", getDisabled());
+    if (null != disabled) {
+	component.setAttribute("disabled", disabled);
     }
-    if (null != getTabindex()) {
-	component.setAttribute("tabindex", getTabindex());
+    if (null != tabindex) {
+	component.setAttribute("tabindex", tabindex);
     }
-    if (null != getAccesskey()) {
-	component.setAttribute("accesskey", getAccesskey());
+    if (null != accesskey) {
+	component.setAttribute("accesskey", accesskey);
     }
-    if (null != getLang()) {
-	component.setAttribute("lang", getLang());
+    if (null != lang) {
+	component.setAttribute("lang", lang);
     }
-    if (null != getDir()) {
-	component.setAttribute("dir", getDir());
+    if (null != dir) {
+	component.setAttribute("dir", dir);
     }
     if (null != style) {
         component.setAttribute("style", style);
@@ -1171,11 +828,11 @@ protected void overrideProperties(UIComponent component)
     if (null != styleClass) {
         component.setAttribute("styleClass", styleClass);
     }   
-    if (null != getDateStyle()) {
-	component.setAttribute("dateStyle", getDateStyle());
+    if (null != dateStyle) {
+	component.setAttribute("dateStyle", dateStyle);
     }
-    if (null != getTimeStyle()) {
-	component.setAttribute("timeStyle", getTimeStyle());
+    if (null != timeStyle) {
+	component.setAttribute("timeStyle", timeStyle);
     }
   
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.7 2003/08/15 19:15:34 rlubke Exp $
+ * $Id: ParameterTag.java,v 1.8 2003/09/05 14:34:53 rkitain Exp $
  */
 
 /*
@@ -70,11 +70,11 @@ public class ParameterTag extends FacesTag {
         super.overrideProperties(component);
         UIParameter parameter = (UIParameter)component;
 
-        if (getName() != null) {
+        if (name != null) {
             parameter.setName(name);
         }
         // if component has non null value, do not call setValue().
-        if (getValue() != null) {
+        if (value != null) {
             parameter.setValue(value);
         }
     }

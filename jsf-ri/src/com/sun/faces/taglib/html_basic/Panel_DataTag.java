@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.9 2003/08/15 19:15:15 rlubke Exp $
+ * $Id: Panel_DataTag.java,v 1.10 2003/09/05 14:34:47 rkitain Exp $
  */
 
 /*
@@ -56,10 +56,6 @@ public class Panel_DataTag extends FacesTag {
     //
     public void setVar(String var) {
         this.var = var;
-    }
-
-    public String getVar() {
-        return var;
     }
 
     public void release() {

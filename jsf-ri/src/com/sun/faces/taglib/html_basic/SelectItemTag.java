@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.19 2003/08/15 19:15:17 rlubke Exp $
+ * $Id: SelectItemTag.java,v 1.20 2003/09/05 14:34:48 rkitain Exp $
  */
 
 /*
@@ -58,24 +58,12 @@ public class SelectItemTag extends FacesTag
     // Accessors
     //
 
-    public String getItemValue() {
-        return itemValue;
-    }
-
     public void setItemValue(String value) {
         this.itemValue = value;
     }
 
-    public String getItemLabel() {
-        return itemLabel;
-    }
-
     public void setItemLabel(String label) {
         this.itemLabel = label;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {

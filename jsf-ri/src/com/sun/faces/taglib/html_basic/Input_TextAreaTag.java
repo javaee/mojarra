@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextAreaTag.java,v 1.9 2003/08/15 19:15:11 rlubke Exp $
+ * $Id: Input_TextAreaTag.java,v 1.10 2003/09/05 14:34:46 rkitain Exp $
  */
 
 /*
@@ -68,7 +68,7 @@ public class Input_TextAreaTag extends Input_TextTag
 	if (null != rows) {
 	    inputTextArea.setAttribute("rows", rows);
 	}
-	if (null != getCols()) {
+	if (null != cols) {
 	    inputTextArea.setAttribute("cols", cols);
 	}
     }

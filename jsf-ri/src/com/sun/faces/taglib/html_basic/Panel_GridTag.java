@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.10 2003/08/15 19:15:15 rlubke Exp $
+ * $Id: Panel_GridTag.java,v 1.11 2003/09/05 14:34:47 rkitain Exp $
  */
 
 /*
@@ -63,51 +63,26 @@ public class Panel_GridTag extends FacesTag {
         this.columnClasses = newColumnClasses;
     }
     
-    public String getColumnClasses() {
-        return columnClasses;
-    }
-    
     public void setColumns(int newColumns) {
         this.columns = newColumns;
     }
     
-    public int getColumns() {
-        return columns;
-    }
-
     public void setFooterClass(String newFooterClass) {
         this.footerClass = newFooterClass;
     }
     
-    public String getFooterClass() {
-       return footerClass;
-    }
-
     public void setHeaderClass(String newHeaderClass) {
         this.headerClass = newHeaderClass;
-    }
-    
-    public String getHeaderClass() {
-        return headerClass;
     }
     
     public void setPanelClass(String newPanelClass) {
         this.panelClass = newPanelClass;
     }
     
-    public String getPanelClass() {
-        return panelClass;
-    }
-    
     public void setRowClasses(String newRowClasses) {
         this.rowClasses = newRowClasses;
     }
     
-    public String getRowClasses() {
-      return rowClasses;
-    }
-
-
     public void release() {
         super.release();
         this.columnClasses = null;
@@ -122,46 +97,46 @@ public class Panel_GridTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         if (columnClasses != null) {
-            component.setAttribute("columnClasses", getColumnClasses());
+            component.setAttribute("columnClasses", columnClasses);
         }
-	component.setAttribute("columns", new Integer(getColumns()));
+	component.setAttribute("columns", new Integer(columns));
         if (footerClass != null) {
-            component.setAttribute("footerClass", getFooterClass());
+            component.setAttribute("footerClass", footerClass);
         }
         if (headerClass != null) {
-            component.setAttribute("headerClass", getHeaderClass());
+            component.setAttribute("headerClass", headerClass);
         }
         if (panelClass != null) {
-            component.setAttribute("panelClass", getPanelClass());
+            component.setAttribute("panelClass", panelClass);
         }
         if (rowClasses != null) {
-            component.setAttribute("rowClasses", getRowClasses());
+            component.setAttribute("rowClasses", rowClasses);
         }
         
         // set HTML 4.0 attributes if any
         if (summary != null) {
-            component.setAttribute("summary", getSummary());
+            component.setAttribute("summary", summary);
         }
         if (width != null) {
-            component.setAttribute("width", getWidth());
+            component.setAttribute("width", width);
         }
         if (bgcolor != null) {
-            component.setAttribute("bgcolor", getBgcolor());
+            component.setAttribute("bgcolor", bgcolor);
         }
         if (frame != null) {
-            component.setAttribute("frame", getFrame());
+            component.setAttribute("frame", frame);
         }
         if (rules != null) {
-            component.setAttribute("rules", getRules());
+            component.setAttribute("rules", rules);
         }
         if (border != null) {
-            component.setAttribute("border", getBorder());
+            component.setAttribute("border", border);
         }
         if (cellspacing != null) {
-            component.setAttribute("cellspacing", getCellspacing());
+            component.setAttribute("cellspacing", cellspacing);
         }
         if (cellpadding != null) {
-            component.setAttribute("cellpadding", getCellpadding());
+            component.setAttribute("cellpadding", cellpadding);
         }
     }
 
