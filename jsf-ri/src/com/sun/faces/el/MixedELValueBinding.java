@@ -79,7 +79,10 @@ public class MixedELValueBinding extends ValueBindingImpl {
 	    Object o = i.next();
 	    if (o instanceof Expression) {
 		try {
-		    sb.append(((Expression) o).evaluate(info));
+		    Object value = ((Expression) o).evaluate(info);
+		    if (value != null) {
+			sb.append(value);
+		    } // null values are effectively zero length strings
 		}
 		catch (ElException e) {
 		    Throwable t = e;
