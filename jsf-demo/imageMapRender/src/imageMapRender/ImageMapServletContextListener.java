@@ -46,6 +46,8 @@ import javax.servlet.ServletContextEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.render.*;
 
+import components.renderkit.AreaRenderer;
+
 /**
  *  Receives notifications of changes to the <code>FacesContext</code>
  *  associated with the <code>ImapRender</code> Web application.

@@ -49,7 +49,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
-import com.sun.faces.RIConstants;
+
+import components.components.UIMap;
 
 /**
  * The listener interface for handling the ActionEvent generated

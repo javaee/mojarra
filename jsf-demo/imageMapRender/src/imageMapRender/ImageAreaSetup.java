@@ -44,6 +44,8 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import components.model.ImageArea;
+
 /**
  * <p>This <code>HttpSessionListener</code> is a simulation of
  * business logic that would look up the hot spots of an image

@@ -71,6 +71,8 @@
             value="web/WEB-INF/lib/jstl.jar"/>
   <property name="standard.jar" 
             value="web/WEB-INF/lib/standard.jar"/>
+  <property name="demo-components.jar" 
+            value="web/WEB-INF/lib/demo-components.jar"/>
 
   <path id="classpath">
     <fileset dir="${build}/WEB-INF/lib" includes="*.jar" />
@@ -129,6 +131,11 @@
     <antcall target="checkRequiredFile">
        <param name="file" value="${jstl.jar}"/>
        <param name="fail.message" value="${jstl.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${demo-components.jar}"/>
+       <param name="fail.message" value="${demo-components.jar} must exist."/>
     </antcall>
 
   </target>

@@ -43,7 +43,7 @@
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="/WEB-INF/imageMapRender.tld" prefix="imageMapRender" %>
+    <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
 
      <fmt:setBundle
 	    basename="imageMapRender.Resources"
@@ -57,15 +57,15 @@
 	     </tr>
              <tr>
               <TD>
-		<imageMapRender:image id="mapImage" url="/world.gif" usemap="#worldMap" />	
-		<imageMapRender:map id="worldMap" currentArea="NAmericas" >	
+		<d:image id="mapImage" url="/world.gif" usemap="#worldMap" />	
+		<d:map id="worldMap" currentArea="NAmericas" >	
                     <f:action_listener type="imageMapRender.ImageMapEventHandler"/>
-       			<imageMapRender:area id="NAmericas" modelReference="NA" onmouseover="/imageMapRender/world_namer.gif" onmouseout="/imageMapRender/world.gif" />
-			<imageMapRender:area id="SAmericas" modelReference="SA" onmouseover="/imageMapRender/world_samer.gif" onmouseout="/imageMapRender/world.gif" />
-			<imageMapRender:area id="Finland" modelReference="finA" onmouseover="/imageMapRender/world_finland.gif" onmouseout="/imageMapRender/world.gif"  />
-			<imageMapRender:area id="Germany" modelReference="gerA" onmouseover="/imageMapRender/world_germany.gif" onmouseout="/imageMapRender/world.gif" />
-       			<imageMapRender:area id="France" modelReference="fraA" onmouseover="/imageMapRender/world_france.gif" onmouseout="/imageMapRender/world.gif" />
-		</imageMapRender:map>
+       			<d:area id="NAmericas" modelReference="NA" onmouseover="/imageMapRender/world_namer.gif" onmouseout="/imageMapRender/world.gif" />
+			<d:area id="SAmericas" modelReference="SA" onmouseover="/imageMapRender/world_samer.gif" onmouseout="/imageMapRender/world.gif" />
+			<d:area id="Finland" modelReference="finA" onmouseover="/imageMapRender/world_finland.gif" onmouseout="/imageMapRender/world.gif"  />
+			<d:area id="Germany" modelReference="gerA" onmouseover="/imageMapRender/world_germany.gif" onmouseout="/imageMapRender/world.gif" />
+       			<d:area id="France" modelReference="fraA" onmouseover="/imageMapRender/world_france.gif" onmouseout="/imageMapRender/world.gif" />
+		</d:map>
 	     </TD></TR>
 	</TABLE>
 	</h:form>
