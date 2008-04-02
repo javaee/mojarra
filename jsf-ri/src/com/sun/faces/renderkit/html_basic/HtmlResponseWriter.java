@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.23 2006/01/25 20:40:40 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.24 2006/03/20 20:26:46 rlubke Exp $
  */
 
 /*
@@ -349,9 +349,12 @@ public class HtmlResponseWriter extends ResponseWriter {
                 MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         closeStartIfNecessary();
-        writer.write("<!-- ");
+        // Don't include a trailing space after the '<!--'
+        // or a leading space before the '-->' to support
+        // IE conditional commentsoth
+        writer.write("<!--");
         writer.write(comment.toString());
-        writer.write(" -->");
+        writer.write("-->");
     }
 
 

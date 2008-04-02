@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.17 2005/11/01 16:40:24 rlubke Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.18 2006/03/20 20:26:45 rlubke Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.17 2005/11/01 16:40:24 rlubke Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.18 2006/03/20 20:26:45 rlubke Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -239,7 +239,7 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
     public void testWriteComment() {
         try {
             writer.writeComment("This is a comment");
-            assertTrue(sw.toString().equals("<!-- This is a comment -->"));
+            assertTrue(sw.toString().equals("<!--This is a comment-->"));
         } catch (IOException e) {
             assertTrue(false);
         }
