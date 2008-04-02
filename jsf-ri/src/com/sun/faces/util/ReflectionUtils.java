@@ -25,6 +25,8 @@
 
 package com.sun.faces.util;
 
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletContextEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -35,7 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * <p>Cache system for reflection objects.</p>
+ * <p>A set of utility methods to make working with
+ * Classes and Reflection a little easier.</p>
  */
 public final class ReflectionUtils {
 
@@ -63,10 +66,18 @@ public final class ReflectionUtils {
      * @param loader the <code>ClassLoader</code> whose associated cache
      *  should be cleared
      */
-    public static void clearCache(ClassLoader loader) {
+    public static synchronized void clearCache(ClassLoader loader) {
 
-        synchronized(REFLECTION_CACHE) {
             REFLECTION_CACHE.remove(loader);
+
+    }
+
+
+    public static synchronized void initCache(ClassLoader loader) {
+
+        if (REFLECTION_CACHE.get(loader) == null) {
+            REFLECTION_CACHE.put(loader,
+                                 new ConcurrentHashMap<String,MetaData>());
         }
 
     }
@@ -115,6 +126,45 @@ public final class ReflectionUtils {
     }
 
 
+    /**
+     * <p>Constructs a new object instance based off the
+     * provided class name.</p>
+     * @param className the class of the object to instantiate
+     * @return a new instances of said class
+     * @throws InstantiationException if the class cannot be instantiated
+     * @throws IllegalAccessException if there is a security violation
+     */
+    public static Object newInstance(String className)
+    throws InstantiationException, IllegalAccessException {
+
+        ClassLoader loader = Util.getCurrentLoader(null);
+        if (loader == null) {
+            return null;
+        }
+
+        return getMetaData(loader, className).lookupClass().newInstance();
+        
+    }
+
+
+    /**
+     * <p>Obtain a <code>Class</code> instance based on the provided
+     * String name.</p>
+     * @param className the class to look up
+     * @return the <code>Class</code> corresponding to <code>className</code>
+     */
+    public static Class<?> lookupClass(String className) {
+
+        ClassLoader loader = Util.getCurrentLoader(null);
+        if (loader == null) {
+            return null;
+        }
+
+        return getMetaData(loader, className).lookupClass();
+        
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -132,14 +182,10 @@ public final class ReflectionUtils {
     private static MetaData getMetaData(ClassLoader loader, Class<?> clazz) {
 
         ConcurrentMap<String, MetaData> cache = REFLECTION_CACHE.get(loader);
+
         if (cache == null) {
-            synchronized (REFLECTION_CACHE) {
-                cache = REFLECTION_CACHE.get(loader);
-                if (cache == null) {
-                    cache = new ConcurrentHashMap<String, MetaData>();
-                    REFLECTION_CACHE.put(loader, cache);
-                }
-            }
+            initCache(loader);
+            cache = REFLECTION_CACHE.get(loader);
         }
 
         MetaData meta = cache.get(clazz.getName());
@@ -154,6 +200,41 @@ public final class ReflectionUtils {
 
 
     /**
+     * <p>Return the <code>MetaData</code> for the specified className.</p>
+     *
+     * <p>This will check the cache associated with the specified
+     * <code>ClassLoader</code>.  If there is no cache hit, then a new
+     * <code>MetaData</code> instance will be created and stored.
+     *
+     * @param loader <code>ClassLoader</code>
+     * @param className the class of interest
+     * @return a <code>MetaData</code> object for the specified Class
+     */
+    private static MetaData getMetaData(ClassLoader loader, String className) {
+
+        ConcurrentMap<String, MetaData> cache = REFLECTION_CACHE.get(loader);
+
+        if (cache == null) {
+            initCache(loader);
+            cache = REFLECTION_CACHE.get(loader);
+        }
+
+        MetaData meta = cache.get(className);
+        if (meta == null) {
+            try {
+                Class<?> clazz = Util.loadClass(className, cache);
+                meta = new MetaData(clazz);
+                cache.put(className, meta);
+            } catch (ClassNotFoundException cnfe) {
+                return null;
+            }
+        }
+
+        return meta;
+    }
+
+
+    /**
      * <p>MetaData contains lookup methods for <code>Constructor</code>s and
      * <code>Method</code>s of a particular Class.
      */
@@ -162,6 +243,7 @@ public final class ReflectionUtils {
 
         Map<Integer,Constructor> constructors;
         Map<String,HashMap<Integer,Method>> methods;
+        Class<?> clazz;
 
 
     // ------------------------------------------------------------ Constructors
@@ -174,6 +256,7 @@ public final class ReflectionUtils {
          */
         public MetaData(Class<?> clazz) {
 
+            this.clazz = clazz;
             Constructor[] ctors = clazz.getConstructors();
             constructors = new HashMap<Integer,Constructor>(ctors.length, 1.0f);
             for (int i = 0, len = ctors.length; i < len; i++) {
@@ -228,6 +311,17 @@ public final class ReflectionUtils {
         }
 
 
+        /**
+         * <p>Looks up the class for this MetaData instance.</p>
+         * @return the <code>Class</code> for this MetaData instance
+         */
+        public Class<?> lookupClass() {
+
+            return clazz;
+
+        }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -243,6 +337,39 @@ public final class ReflectionUtils {
 
         }
 
+    }
+
+
+    // ----------------------------------------------------------- Inner Classes
+
+
+    /**
+     * <p>A <code>SerlvetContextListener</code> to ensure that the ReflectionUtils
+     * cache is intialized and cleanup when the application starts and finishes.</p>
+     *
+     * <p>Since the Servlet spec guarantees a single thread during initialization,
+     * doing the cache init and clearing here eliminates the need to have
+     * synchronization code in the loopup methods in order to init the caches
+     * properly.</p>
+     */
+    public static class ReflectionUtilsListener
+         implements ServletContextListener {
+
+
+        // --------------------------------- Methods from ServletContextListener
+
+
+        public void contextInitialized(ServletContextEvent servletContextEvent) {
+
+            ReflectionUtils.initCache(Thread.currentThread().getContextClassLoader());
+
+        }
+
+        public void contextDestroyed(ServletContextEvent servletContextEvent) {
+
+            ReflectionUtils.clearCache(Thread.currentThread().getContextClassLoader());
+            
+        }
     }
 
 } // END ReflectionUtils

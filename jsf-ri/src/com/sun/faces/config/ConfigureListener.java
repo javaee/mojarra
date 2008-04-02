@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.91 2006/11/22 09:09:17 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.92 2006/12/14 23:18:48 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -114,7 +114,6 @@ import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.ReflectionUtils;
 import com.sun.org.apache.commons.digester.Digester;
 
 /**
@@ -495,7 +494,6 @@ public class ConfigureListener implements ServletContextListener {
             // Release the initialization mark on this web application
             release();
         } finally {
-            ReflectionUtils.clearCache(Util.getCurrentLoader(this));
             tlsExternalContext.set(null);    
             WebConfiguration.clear(context);
         }

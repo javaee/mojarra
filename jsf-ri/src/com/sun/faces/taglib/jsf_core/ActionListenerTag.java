@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.32 2006/12/12 18:38:11 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.33 2006/12/14 23:18:47 rlubke Exp $
  */
 
 /*
@@ -29,12 +29,13 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.component.ActionSource;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
@@ -42,9 +43,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.Serializable;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.ReflectionUtils;
 
 
 /**
@@ -127,8 +130,6 @@ public class ActionListenerTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        ActionListener handler = null;
-
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
              UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
@@ -143,65 +144,22 @@ public class ActionListenerTag extends TagSupport {
         if (!tag.getCreated()) {
             return (SKIP_BODY);
         }
-        FacesContext context = FacesContext.getCurrentInstance();
 
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
-        if (!(component instanceof ActionSource)) {
-            Object params[] = {"actionListener", "javax.faces.component.ActionSource"};
+        if (!(component instanceof ActionSource)) {           
             throw new JspException(
                  MessageUtils.getExceptionMessageString(
-                      MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
+                      MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID,
+                      "actionListener",
+                      "javax.faces.component.ActionSource"));
         }
 
-        // If "binding" is set, use it to create a listener instance.
-
-        if (null != binding) {
-            try {
-                handler = (ActionListener) binding.getValue(context.getELContext());
-                if (handler != null) {
-                    // we ignore the type in this case, even though
-                    // it may have been set.
-                    ((ActionSource) component).addActionListener(handler);
-                    return (SKIP_BODY);
-                }
-            } catch (ELException e) {
-                throw new JspException(e);
-            }
-        }
-        // If "type" is set, use it to create the listener
-        // instance.  If "type" and "binding" are both set, store the 
-        // listener instance in the value of the property represented by
-        // the value binding expression.
-        if (type != null) {
-            handler = createActionListener(context);
-            if (handler != null && binding != null) {
-                try {
-                    binding.setValue(context.getELContext(), handler);
-                } catch (ELException e) {
-                    throw new JspException(e);
-                }
-            }
-        }
-
-        // We need to cast here because addActionListener
-        // method does not apply to all components (it is not a method on
-        // UIComponent/UIComponentBase).
-        if (handler != null) {
-            ((ActionSource) component).addActionListener(handler);
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                if (binding == null && type == null) {
-                    logger.fine("'handler' was not created because both 'binding' and 'type' were null.");
-                } else {
-                    logger.fine("'handler' was not created.");
-                }
-            }
-        }
-
+        ((ActionSource) component).addActionListener(
+             new BindingActionListener(type, binding));       
 
         return (SKIP_BODY);
 
@@ -217,31 +175,75 @@ public class ActionListenerTag extends TagSupport {
 
     }
 
-    // ------------------------------------------------------ Protected Methods
+
+    // ----------------------------------------------------------- Inner Classes
 
 
-    /**
-     * <p>Create and return a new {@link ActionListener} to be registered
-     * on our surrounding {@link UIComponent}.</p>
-     *
-     * @param context the <code>FacesContext</code> for the current request
-     * @return a new <code>ActionListener</code> instance
-     * @throws JspException if a new instance cannot be created
-     */
-    protected ActionListener createActionListener(FacesContext context)
-         throws JspException {
+    private static class BindingActionListener
+         implements ActionListener, Serializable {
 
-        try {
-            // PENDING(edburns): log potential NPE with a good error
-            // message.
-            String className =
-                 type.getValue(context.getELContext()).toString();
+        private transient ActionListener instance;
+        private ValueExpression type;
+        private ValueExpression binding;
 
-            Class clazz = Util.loadClass(className, this);
-            return ((ActionListener) clazz.newInstance());
-        } catch (Exception e) {
-            throw new JspException(e);
+        // -------------------------------------------------------- Constructors
+
+
+        public BindingActionListener(ValueExpression type,
+                                     ValueExpression binding) {
+
+            this.type = type;
+            this.binding = binding;
+
         }
 
+        // ----------------------------------------- Methods from ActionListener
+
+
+        /**
+         * PENDING
+         *
+         * @param event The {@link javax.faces.event.ActionEvent} that has occurred
+         * @throws javax.faces.event.AbortProcessingException
+         *          Signal the JavaServer Faces
+         *          implementation that no further processing on the current event
+         *          should be performed
+         */
+        public void processAction(ActionEvent event) throws AbortProcessingException {           
+
+            if (instance == null) {
+                FacesContext faces = FacesContext.getCurrentInstance();
+                if (faces == null)
+                    return;
+                if (binding != null) {
+                    instance = (ActionListener) binding
+                         .getValue(faces.getELContext());
+                }
+                if (instance == null && type != null) {
+                    try {
+                        instance = (ActionListener)
+                             ReflectionUtils.newInstance(((String)type.getValue(faces.getELContext())));
+                    } catch (Exception e) {
+                        throw new AbortProcessingException(e.getMessage(), e);
+                    }
+
+                    if (binding != null) {
+                        binding.setValue(faces.getELContext(), this.instance);
+                    }
+                }
+            }
+            if (instance != null) {
+                instance.processAction(event);
+            } else {
+                if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING,
+                               "jsf.core.taglib.action_or_valuechange_listener.null_type_binding",
+                               new Object[] {
+                                "ActionListener",
+                                event.getComponent().getClientId(FacesContext.getCurrentInstance())});
+                }
+            }
+        }
     }
+    
 }

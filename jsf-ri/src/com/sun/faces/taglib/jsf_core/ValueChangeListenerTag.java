@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.25 2006/12/12 19:28:17 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.26 2006/12/14 23:18:47 rlubke Exp $
  */
 
 /*
@@ -30,21 +30,23 @@
 package com.sun.faces.taglib.jsf_core;
 
 
-import javax.el.ELException;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+import com.sun.faces.util.ReflectionUtils;
+
 import javax.el.ValueExpression;
 import javax.faces.component.EditableValueHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.webapp.UIComponentClassicTagBase;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
-
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.util.Util;
 
 /**
  * <p>Tag implementation that creates a {@link ValueChangeListener} instance
@@ -128,8 +130,6 @@ public class ValueChangeListenerTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        ValueChangeListener handler = null;
-
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
              UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
@@ -158,51 +158,8 @@ public class ValueChangeListenerTag extends TagSupport {
                       MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
 
-        // If "binding" is set, use it to create a listener instance.
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (binding != null) {
-            try {
-                handler = (ValueChangeListener) binding.getValue(context.getELContext());
-                if (handler != null) {
-                    // we ignore the type in this case, even though
-                    // it may have been set.
-                    ((EditableValueHolder) component).addValueChangeListener(handler);
-                    return (SKIP_BODY);
-                }
-            } catch (ELException e) {
-                throw new JspException(e);
-            }
-        }
-        // If "type" is set, use it to create the listener
-        // instance.  If "type" and "binding" are both set, store the 
-        // listener instance in the value of the property represented by
-        // the value binding expression.    
-        if (type != null) {
-            handler = createValueChangeListener(context);
-            if (handler != null && binding != null) {
-                try {
-                    binding.setValue(context.getELContext(), handler);
-                } catch (ELException e) {
-                    throw new JspException(e);
-                }
-            }
-        }
-
-        // We need to cast here because addValueChangeListener
-        // method does not apply to all components (it is not a method on
-        // UIComponent/UIComponentBase).
-        if (handler != null) {
-            ((EditableValueHolder) component).addValueChangeListener(handler);
-        } else {
-            if (logger.isLoggable(Level.FINE)) {
-                if (binding == null && type == null) {
-                    logger.fine("'handler' was not created because both 'binding' and 'type' were null.");
-                } else {
-                    logger.fine("'handler' was not created.");
-                }
-            }
-        }
-
+        ((EditableValueHolder) component).addValueChangeListener(
+             new BindingValueChangeListener(type, binding));        
 
         return (SKIP_BODY);
 
@@ -218,28 +175,77 @@ public class ValueChangeListenerTag extends TagSupport {
 
     }
 
-    // ------------------------------------------------------ Protected Methods
+
+    // ----------------------------------------------------------- Inner Classes
 
 
-    /**
-     * <p>Create and return a new {@link ValueChangeListener} to be registered
-     * on our surrounding {@link UIComponent}.</p>
-     * @param context the <code>FacesContext</code> for the current request
-     * @return a new <code>ValueChangeListener</code> instance.
-     * @throws JspException if a new instance cannot be created
-     */
-    protected ValueChangeListener createValueChangeListener(FacesContext context)
-         throws JspException {
+    private static class BindingValueChangeListener
+         implements ValueChangeListener, Serializable {
 
-        try {
-            String className = type.getValue(context.getELContext()).toString();
+        private transient ValueChangeListener instance;
+        private ValueExpression type;
+        private ValueExpression binding;
 
-            Class clazz = Util.loadClass(className, this);
-            return ((ValueChangeListener) clazz.newInstance());
-        } catch (Exception e) {
-            throw new JspException(e);
+        // -------------------------------------------------------- Constructors
+
+
+        public BindingValueChangeListener(ValueExpression type,
+                                          ValueExpression binding) {
+
+            this.type = type;
+            this.binding = binding;
+
         }
 
+        // ------------------------------------ Methods from ValueChangeListener
+
+
+        /**
+         * <p>Invoked when the value change described by the specified
+         * {@link javax.faces.event.ValueChangeEvent} occurs.</p>
+         *
+         * @param event The {@link javax.faces.event.ValueChangeEvent} that has occurred
+         * @throws javax.faces.event.AbortProcessingException
+         *          Signal the JavaServer Faces
+         *          implementation that no further processing on the current event
+         *          should be performed
+         */
+        public void processValueChange(ValueChangeEvent event) throws AbortProcessingException {
+
+            if (instance == null) {
+                FacesContext faces = FacesContext.getCurrentInstance();
+                if (faces == null)
+                    return;
+                if (binding != null) {
+                    instance = (ValueChangeListener) binding
+                         .getValue(faces.getELContext());
+                }
+                if (instance == null && type != null) {
+                    try {
+                        instance = (ValueChangeListener)
+                             ReflectionUtils.newInstance(((String) type.getValue(faces.getELContext())));
+
+                    } catch (Exception e) {
+                        throw new AbortProcessingException(e.getMessage(), e);
+                    }
+                    if (binding != null) {
+                        binding.setValue(faces.getELContext(), this.instance);
+                    }
+                }
+            }
+            if (instance != null) {
+                instance.processValueChange(event);
+            } else {
+                 if (logger.isLoggable(Level.WARNING)) {
+                    logger.log(Level.WARNING,
+                               "jsf.core.taglib.action_or_valuechange_listener.null_type_binding",
+                               new Object[] {
+                                "ValueChangeListener", 
+                                event.getComponent().getClientId(FacesContext.getCurrentInstance())});
+                }
+            }
+        }
+        
     }
 
 }

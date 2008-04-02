@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.10 2006/12/12 19:45:54 rlubke Exp $
+ * $Id: PhaseListenerTag.java,v 1.11 2006/12/14 23:18:47 rlubke Exp $
  */
 
 /*
@@ -29,12 +29,11 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseListener;
+import javax.faces.event.*;
 import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -42,6 +41,11 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.ReflectionUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.io.Serializable;
 
 /**
  * <p>Tag implementation that creates a {@link PhaseListener} instance
@@ -53,6 +57,11 @@ import com.sun.faces.util.Util;
  */
 
 public class PhaseListenerTag extends TagSupport {
+
+
+    private static final Logger logger =
+         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+
 
     // ------------------------------------------------------------- Attributes
 
@@ -105,9 +114,6 @@ public class PhaseListenerTag extends TagSupport {
      */
     public int doStartTag() throws JspException {
 
-        PhaseListener handler = null;
-        ValueExpression handlerError = null;
-
         // find the viewTag
         Tag parent = this;
         UIComponentELTag tag = null;
@@ -135,57 +141,10 @@ public class PhaseListenerTag extends TagSupport {
                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
 
-        // If "binding" is set use it to create a listener instance.
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (null != binding) {
-            handlerError = binding;
-            try {
-                handler =
-                     (PhaseListener) binding.getValue(context.getELContext());
-                if (handler != null) {
-                    // we ignore the type in this case, even though
-                    // it may have been set.
-                    viewRoot.addPhaseListener(handler);
-                    return (SKIP_BODY);
-                }
-            } catch (ELException e) {
-                throw new JspException(e);
-            }
-        }
-        // If "type" is set, use it to create the listener
-        // instance.  
-
-        if (null != type) {
-            handlerError = type;
-            handler = createPhaseListener(context);
-            if (handler != null) {
-                if (binding != null) {
-                    // If "type" and "binding" are both set, store the listener
-                    // instance in the value of the property represented by the
-                    // value binding expression.
-
-                    try {
-                        binding.setValue(context.getELContext(), handler);
-                    } catch (ELException e) {
-                        throw new JspException(e);
-                    }
-                }
-            }
-        }
-
-        if (handler == null) {
-            Object params[] = {"javax.faces.event.PhaseListener",
-                 handlerError.getExpressionString()};
-            throw new JspException(
-                 MessageUtils.getExceptionMessageString(
-                      MessageUtils.CANT_CREATE_CLASS_ERROR_ID, params));
-        }
-
         // We need to cast here because addPhaseListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
-        viewRoot.addPhaseListener(handler);
+        viewRoot.addPhaseListener(new BindingPhaseListener(type, binding));
 
         return (SKIP_BODY);
 
@@ -201,27 +160,118 @@ public class PhaseListenerTag extends TagSupport {
 
     }
 
-    // ------------------------------------------------------ Protected Methods
+
+// ----------------------------------------------------------- Inner Classes
 
 
-    /**
-     * <p>Create and return a new {@link PhaseListener} to be registered
-     * on our surrounding {@link UIComponent}.</p>
-     *
-     * @throws JspException if a new instance cannot be created
-     */
-    protected PhaseListener createPhaseListener(FacesContext context)
-         throws JspException {
+    private static class BindingPhaseListener
+         implements PhaseListener, Serializable {
 
-        try {
-            String className =
-                 type.getValue(context.getELContext()).toString();
+        private transient PhaseListener instance;
+        private ValueExpression type;
+        private ValueExpression binding;
 
-            Class clazz = Util.loadClass(className, this);
-            return ((PhaseListener) clazz.newInstance());
-        } catch (Exception e) {
-            throw new JspException(e);
+        // -------------------------------------------------------- Constructors
+
+
+        public BindingPhaseListener(ValueExpression type,
+                                    ValueExpression binding) {
+
+            this.type = type;
+            this.binding = binding;
+
         }
 
+        // ------------------------------------------ Methods from PhaseListener
+
+
+        /**
+         * <p>Handle a notification that the processing for a particular
+         * phase has just been completed.</p>
+         */
+        public void afterPhase(PhaseEvent event) {
+
+            PhaseListener listener = getPhaseListener();
+            if (listener != null) {
+                listener.afterPhase(event);
+            }
+
+        }
+
+        /**
+         * <p>Handle a notification that the processing for a particular
+         * phase of the request processing lifecycle is about to begin.</p>
+         */
+        public void beforePhase(PhaseEvent event) {
+
+            PhaseListener listener = getPhaseListener();
+            if (listener != null) {
+                listener.beforePhase(event);
+            }
+
+        }
+
+        /**
+         * <p>Return the identifier of the request processing phase during
+         * which this listener is interested in processing {@link javax.faces.event.PhaseEvent}
+         * events.  Legal values are the singleton instances defined by the
+         * {@link javax.faces.event.PhaseId} class, including <code>PhaseId.ANY_PHASE</code>
+         * to indicate an interest in being notified for all standard phases.</p>
+         */
+        public PhaseId getPhaseId() {
+
+            PhaseListener listener = getPhaseListener();
+            if (listener != null) {
+                return listener.getPhaseId();
+            }
+
+            return null;
+
+        }
+
+        /**
+         * <p>Invoked when the value change described by the specified
+         * {@link javax.faces.event.ValueChangeEvent} occurs.</p>
+         *
+         * @return a <code>PhaseListener</code> instance
+         * @throws javax.faces.event.AbortProcessingException
+         *          Signal the JavaServer Faces
+         *          implementation that no further processing on the current event
+         *          should be performed
+         */
+        public PhaseListener getPhaseListener() throws AbortProcessingException {
+            if (instance == null) {
+                FacesContext faces = FacesContext.getCurrentInstance();
+                if (faces == null)
+                    return null;
+                if (binding != null) {
+                    instance = (PhaseListener) binding
+                         .getValue(faces.getELContext());
+                }
+                if (instance == null && type != null) {
+                    try {
+                        instance = (PhaseListener)
+                             ReflectionUtils.newInstance(((String) type.getValue(faces.getELContext())));
+                    } catch (Exception e) {
+                        throw new AbortProcessingException(e.getMessage(), e);
+                    }
+
+                    if (binding != null) {
+                        binding.setValue(faces.getELContext(), this.instance);
+                    }
+                }
+            }
+            if (instance != null) {
+                return instance;
+            } else {
+                 if (logger.isLoggable(Level.WARNING)) {
+                    // PENDING i18n
+                    logger.warning("PhaseListener will not be processed - " +
+                         "both 'binding' and 'type' are null");
+                }
+                return null;
+            }
+        }
     }
+
 }
