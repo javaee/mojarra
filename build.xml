@@ -259,7 +259,6 @@
   
       <ant dir="${jsf-demo.home}" target="main" inheritAll="false" />
       <mkdir dir="samples" />
-      <mkdir dir="jsf-samples" />
       <copy todir="${basedir}/samples/jsf-samples" 
           file="${jsf-demo.home}/guessNumber/build/jsf-guessNumber.war" />
       <copy todir="${basedir}/samples/jsf-samples" 
@@ -268,6 +267,8 @@
           file="${jsf-demo.home}/components/build/jsf-components.war" />
       <copy todir="${basedir}/samples/jsf-samples" 
           file="${jsf-demo.home}/webtier-sample/build/webtier-sample.war" />
+      <copy todir="${basedir}/samples/jsf-samples"
+          file="${jsf-demo.home}/renderkits/build/jsf-renderkits.war" />
           
       <copy toFile="${basedir}/samples/jsf-samples/README.html" 
           file="${jsf-ri.home}/docs/samples.html" />    
