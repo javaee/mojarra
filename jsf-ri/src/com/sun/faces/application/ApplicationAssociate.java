@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.16 2005/07/21 00:56:39 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.17 2005/07/29 20:10:24 rlubke Exp $
  */
 
 /*
@@ -335,9 +335,13 @@ public class ApplicationAssociate extends Object {
         ResourceBundle result = null;
         
         if (null != bean) {
-            baseName = (String) bean.getBasename();
+            baseName = bean.getBasename();
             if (null != baseName) {
-                result = ResourceBundle.getBundle(baseName, locale);
+                result =
+                    ResourceBundle.getBundle(baseName,
+                                             locale,
+                                             Thread.currentThread().
+                                                 getContextClassLoader());
             }
         }
         // PENDING(edburns): should cache these based on var/Locale pair for performance

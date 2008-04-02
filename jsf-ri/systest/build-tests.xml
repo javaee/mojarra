@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.85 2005/07/29 17:42:22 jayashri Exp $
+ $Id: build-tests.xml,v 1.86 2005/07/29 20:10:24 rlubke Exp $
 -->
 
 <!--
@@ -774,7 +774,8 @@
          golden="${golden.path}/resourceBundle03.txt" failonerror="${failonerror}"/>
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/resourceBundle04.jsp"
-         status="500" failonerror="${failonerror}"/>
+         recordGolden="${local.golden.path}/resourceBundle04.txt"
+         golden="${golden.path}/resourceBundle04.txt" failonerror="${failonerror}"/>
   </target>
 
   
