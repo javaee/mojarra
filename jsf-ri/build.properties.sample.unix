@@ -1,0 +1,80 @@
+# -----------------------------------------------------------------------------
+# build.properties.sample.unix
+#
+# This is an example "build.properties" file, used to customize building the
+# jsf-ri for your local environment.  It defines the location of all external
+# modules that the jsf-ri depends on.  Copy this file to "build.properties"
+# in the top-level source directory, and customize it as needed.
+#
+# $Id: build.properties.sample.unix,v 1.1 2002/11/02 01:32:54 jhorwat Exp $
+# -----------------------------------------------------------------------------
+
+
+# ----- Compile Control Flags -----
+
+compile.deprecation = true
+
+
+# ----- Build Control Flags
+
+
+# ----- Run Control Flags
+
+# Define the arguments to give to the jvm to enable debugging
+# If this is commented out, no debugging arguments will be passed.
+debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+
+
+# ----- Default Paths for Dependent Packages
+
+base.path=/usr/local
+jsf.base.path=${base.path}
+
+
+# --------------------------------------------------
+#		 REQUIRED LIBRARIES
+# --------------------------------------------------
+
+
+# ----- JSF API -----
+jsf.api.head.home=${jsf.base.path}/jsf-api
+
+
+# ----- Jakarta JSTL, version 1.0 or later -----
+jstl.home=${base.path}/jakarta-taglibs/standard-1.0.2
+jstl.lib=${jstl.home}/lib
+jstl.jar=${jstl.lib}/jstl.jar
+standard.jar=${jstl.lib}/standard.jar
+jstl.loc=http://jakarta.apache.org/builds/jakarta-taglibs/releases/standard/jakarta-taglibs-standard-1.0.2.tar.gz
+
+
+# ----- Commons Cactus, version 23-1.2 -----
+cactus.home=${base.path}/jakarta-cactus-23-1.2
+cactus.lib=${cactus.home}/lib
+cactus.jar=${cactus.lib}/cactus.jar
+cactus.ant.jar=${cactus.lib}/cactus-ant.jar
+httpclient.jar=${cactus.lib}/httpclient.jar
+cactus.loc=http://jakarta.apache.org/builds/jakarta-cactus/release/v1.2/jakarta-cactus-23-1.2.zip
+
+
+# ----- JUnit, version 3.7 -----
+junit.home=${base.path}/junit3.7
+junit.lib=${junit.home}
+junit.jar=${junit.lib}/junit.jar
+junit.loc=http://prdownloads.sourceforge.net/junit/junit3.7.zip
+
+
+# --------------------------------------------------
+#		 OPTIONAL LIBRARIES
+# --------------------------------------------------
+
+
+# --------------------------------------------------
+#		 RUN-TIME COMPONENTS
+# --------------------------------------------------
+
+
+# ----- Jakarta Tomcat, version 4.0.x or later -----
+tomcat.home=${base.path}/jakarta-tomcat-4.0.6
+tomcat.loc=http://jakarta.apache.org/builds/jakarta-tomcat-4.0/release/v4.0.6/bin/jakarta-tomcat-4.0.6.tar.gz
+
