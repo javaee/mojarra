@@ -87,8 +87,8 @@
             </FONT></B><FONT FACE="Arial, Helvetica"><BR><BR>
             <h:output_text  key="car1Desc" bundle="carDemoBundle"  /> 
             <BR></FONT>
-            <h:command_button label="More" key="moreButton" action="success"
-                 bundle="carDemoBundle" commandName="more1">
+            <h:command_button key="moreButton" action="more1"
+                 bundle="carDemoBundle" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -108,8 +108,8 @@
             <h:output_text  key="car2Desc" bundle="carDemoBundle" />
 
             <BR>
-            <h:command_button  label="More" key="moreButton" action="success"
-                 bundle="carDemoBundle" commandName="more2">
+            <h:command_button  key="moreButton" action="more2"
+                 bundle="carDemoBundle" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -135,8 +135,8 @@
             <h:output_text  key="car3Desc" bundle="carDemoBundle"  />
 
             <BR>
-            <h:command_button label="More" key="moreButton" action="success"
-                 bundle="carDemoBundle" commandName="more3">
+            <h:command_button key="moreButton" action="more3"
+                 bundle="carDemoBundle" >
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
@@ -156,8 +156,8 @@
             <h:output_text key="car4Desc" bundle="carDemoBundle"  /> 
 
             <BR>
-            <h:command_button  key="moreButton" action="success" 
-                 bundle="carDemoBundle" commandName="more4">
+            <h:command_button  key="moreButton" action="more4" 
+                 bundle="carDemoBundle" >
                <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>

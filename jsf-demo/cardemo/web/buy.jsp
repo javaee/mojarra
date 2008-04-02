@@ -147,7 +147,7 @@
 <TD>
 <P>
 <h:command_button key="buy" bundle="carDemoBundle"
-                  commandName="customer" action="success" />
+                  action="success" />
 
 </TD></TR></TABLE>
 					

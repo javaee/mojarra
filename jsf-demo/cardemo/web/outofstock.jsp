@@ -51,10 +51,10 @@
         <p> <h:output_text id="stock_label" key="stockLabel" bundle="carDemoBundle"/>
         </p> 
         <p> <h:command_button id="reconfigure" key="configureButton" 
-                bundle="carDemoBundle" commandName="reconfigure" action="reconfigure"/> 
+                bundle="carDemoBundle" action="reconfigure"/> 
        
                <h:command_button id="buy" key="buy" bundle="carDemoBundle" 
-                commandName="buy" action="buy"/> </P>
+                action="buy"/> </P>
              
     </h:form>
     </f:view>

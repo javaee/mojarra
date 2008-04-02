@@ -104,9 +104,9 @@
                 valueRef="CarServer.carCurrentPrice" />
 
             <BR> <BR>
-            <h:command_button commandName="buy" key="buy" 
+            <h:command_button key="buy" 
                 bundle="carDemoBundle" actionRef="CarServer.carBuyAction" >
-                <f:action_listener type="cardemo.CarActionListener"/>
+                <f:action_listener type="cardemo.CarBuyListener"/>
             </h:command_button>
             <BR> <BR>
             </TD></FONT></TD>
@@ -121,22 +121,22 @@
             <h:output_text key="Package" bundle="carDemoBundle" />
             </FONT></B>
             <BR>
-            <h:command_button id="custom" commandName="custom"
+            <h:command_button id="custom" action="custom"
                 commandClass="package-selected"
                 key="Custom" bundle="carDemoBundle">
-                <f:action_listener type="cardemo.CarActionListener" />
+                <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
-            <h:command_button id="standard" commandName="standard"
+            <h:command_button id="standard" action="standard" 
                 key="Standard" bundle="carDemoBundle">
-                <f:action_listener type="cardemo.CarActionListener" />
+                <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
-            <h:command_button id="performance" commandName="performance"
+            <h:command_button id="performance" action="performance"
                 key="Performance" bundle="carDemoBundle">
-                <f:action_listener type="cardemo.CarActionListener" />
+                <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
-            <h:command_button id="deluxe" commandName="deluxe"
+            <h:command_button id="deluxe" action="deluxe"
                 key="Deluxe" bundle="carDemoBundle">
-                <f:action_listener type="cardemo.CarActionListener" />
+                <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
             <BR> <BR>
             </TD>
@@ -337,12 +337,12 @@
                 <TD>
                 <P>
                 <h:command_button id="recalculate" key="recalculate" 
-                bundle="carDemoBundle" commandName="recalculate">
-                    <f:action_listener type="cardemo.CarActionListener" />
+                bundle="carDemoBundle">
+                    <f:action_listener type="cardemo.CarBuyListener" />
                 </h:command_button>
-                <h:command_button id="buy2" key="buy" bundle="carDemoBundle" 
-                commandName="buy" actionRef="CarServer.carBuyAction">
-                    <f:action_listener type="cardemo.CarActionListener"/>
+                <h:command_button key="buy" bundle="carDemoBundle" 
+                actionRef="CarServer.carBuyAction">
+                    <f:action_listener type="cardemo.CarBuyListener"/>
                 </h:command_button>
 
                 </TD>

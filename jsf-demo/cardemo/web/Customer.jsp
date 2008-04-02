@@ -241,7 +241,7 @@
                             </tbody>
                           </table>
     
-<h:command_button  key="finishButton" bundle="carDemoBundle" commandName="finish"
+<h:command_button  key="finishButton" bundle="carDemoBundle"
         action="success" />
 
 <p></p>

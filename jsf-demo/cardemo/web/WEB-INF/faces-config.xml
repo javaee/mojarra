@@ -35,8 +35,32 @@
   <navigation-rule>
     <from-tree-id>/Storefront.jsp</from-tree-id>
     <navigation-case>
-      <from-outcome>success</from-outcome>
-      <to-tree-id>/more.jsp</to-tree-id>
+      <from-outcome>more1</from-outcome>
+      <to-view-id>/more.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>more2</from-outcome>
+      <to-view-id>/more.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>more3</from-outcome>
+      <to-view-id>/more.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>more4</from-outcome>
+      <to-view-id>/more.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
@@ -44,11 +68,11 @@
     <from-tree-id>/more.jsp</from-tree-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/buy.jsp</to-tree-id>
+      <to-view-id>/buy.jsp</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>out of stock</from-outcome>
-      <to-tree-id>/outofstock.jsp</to-tree-id>
+      <to-view-id>/outofstock.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
   
@@ -56,11 +80,11 @@
     <from-tree-id>/outofstock.jsp</from-tree-id>
     <navigation-case>
       <from-outcome>reconfigure</from-outcome>
-      <to-tree-id>/more.jsp</to-tree-id>
+      <to-view-id>/more.jsp</to-view-id>
     </navigation-case>
     <navigation-case>
       <from-outcome>buy</from-outcome>
-      <to-tree-id>/buy.jsp</to-tree-id>
+      <to-view-id>/buy.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
@@ -68,7 +92,7 @@
     <from-tree-id>/buy.jsp</from-tree-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/Customer.jsp</to-tree-id>
+      <to-view-id>/Customer.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
@@ -76,7 +100,7 @@
     <from-tree-id>/Customer.jsp</from-tree-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/thanks.jsp</to-tree-id>
+      <to-view-id>/thanks.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 

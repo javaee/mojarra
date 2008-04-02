@@ -73,8 +73,8 @@
                               <TR> 
                                 <TD>
           <h:graphic_image id="mapImage" url="/world.jpg" usemap="#worldMap" />
-                <d:map id="worldMap" currentArea="NAmericas" >
-                    <f:action_listener type="cardemo.ImageMapEventHandler"/> 
+                <d:map id="worldMap" current="NAmericas">
+                        <d:area_selected type="cardemo.AreaSelectedHandler"/> 
                         <d:area id="NAmericas" valueRef="NA" onmouseover="/world_namer.jpg" onmouseout="/world.jpg" />
                         <d:area id="SAmericas" valueRef="SA" onmouseover="/world_samer.jpg" onmouseout="/world.jpg" />
                         <d:area id="Germany" valueRef="gerA" onmouseover="/world_germany.jpg" onmouseout="/world.jpg" />
