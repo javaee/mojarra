@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.2 2003/07/28 22:22:34 eburns Exp $
+ * $Id: MockViewHandler.java,v 1.3 2003/08/02 05:11:35 eburns Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ public class MockViewHandler extends Object implements ViewHandler {
 		    protected Object getTreeStateToSave(FacesContext context) {
 			return null;
 		    }
+		    public void restoreTree(FacesContext context, String treeId) throws IOException {}
 		    public void writeStateMarker(FacesContext context) throws IOException {}
 		    public void saveTree(FacesContext context, Reader content, 
 			SerializedTree state) {}

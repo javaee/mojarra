@@ -1,5 +1,5 @@
 /*
- * $Id: UIPage.java,v 1.3 2003/07/28 22:39:46 craigmcc Exp $
+ * $Id: UIPage.java,v 1.4 2003/08/02 05:11:33 eburns Exp $
  */
 
 /*
@@ -41,6 +41,14 @@ public interface UIPage extends UIComponent, NamingContainer {
      * <p>Return the tree identifier for this tree.</p>
      */
     public String getTreeId();
+
+    /**
+     *
+     * <p>Assign the tree identifier for this page.</p>
+     *
+     */
+
+    public void setTreeId(String treeId);
 
 }
 

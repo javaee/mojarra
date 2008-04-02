@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.2 2003/07/28 22:18:41 eburns Exp $
+ * $Id: StateHolder.java,v 1.3 2003/08/02 05:11:32 eburns Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 /**
  *
  * <p>This interface is implemented by classes that need to save their
- * component state between requests.</p>
+ * state between requests.</p>
  *
  * <p>An implementor <strong>must</strong> implement both {@link
  * #getState} and {@link #restoreState} methods in this class, since
@@ -30,13 +30,16 @@ import javax.faces.context.FacesContext;
 public interface StateHolder {
 
     /**
-     * <p> Gets the state of the component as a serializable Object.<p>
+     * <p> Gets the state of the instance as a
+     * <code>Serializable</code> Object.<p>
      *
-     * <p>If the class that implements this interface may have
-     * references to instances that may also implement StateHolder (such
-     * as a UIComponent with child components, faces, event handlers,
-     * etc.) this method must call the getState() method on all those
+     * <p>If the class that implements this interface has references to
+     * instances that implement StateHolder (such as a
+     * <code>UIComponent</code> with event handlers, validators, etc.)
+     * this method must call the {@link #getState} method on all those
      * instances as well.</p>
+     *
+     * <p>The return from this method must be <code>Serializable</code></p>
      *
      */
 
@@ -47,11 +50,11 @@ public interface StateHolder {
      * <p> Perform any processing required to restore the state from the
      * entries in the state Object.</p>
      *
-     * <p>If the class that implements this interface may have
-     * references to instances that may also implement StateHolder (such
-     * as a UIComponent with child components, faces, event handlers,
-     * etc.) this method must call the restoreState() method on all
-     * those instances as well. </p>
+     * <p>If the class that implements this interface has references to
+     * instances that also implement StateHolder (such as a
+     * <code>UIComponent</code> with event handlers, validators, etc.)
+     * this method must call the {@link #restoreState} method on all those
+     * instances as well. </p>
      *
      */
 

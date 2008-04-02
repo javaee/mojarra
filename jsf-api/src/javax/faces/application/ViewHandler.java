@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.3 2003/07/31 12:22:19 eburns Exp $
+ * $Id: ViewHandler.java,v 1.4 2003/08/02 05:11:31 eburns Exp $
  */
 
 /*
@@ -75,6 +75,9 @@ public interface ViewHandler {
      * tree associated with the specified {@link FacesContext} and
      * treeId.  This method may call through to {@link
      * StateManager#restoreTree}.</p>
+     *
+     * <p>This method must cause the new <code>UIPage</code> to be
+     * stored in the <code>FacesContext</code> as the new root.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param treeId the tree identifier for the current request

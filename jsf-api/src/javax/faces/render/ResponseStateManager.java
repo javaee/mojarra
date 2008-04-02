@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.3 2003/07/31 12:22:23 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.4 2003/08/02 05:11:34 eburns Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public abstract class ResponseStateManager {
     * <code>writeState()</code>.</p>
 
     * @return the tree Object string passed in to
-    * <code>writeState</ncode>.
+    * <code>writeState</code>.
 
     */
 

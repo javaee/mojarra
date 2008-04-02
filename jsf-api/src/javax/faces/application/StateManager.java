@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.4 2003/07/31 12:22:18 eburns Exp $
+ * $Id: StateManager.java,v 1.5 2003/08/02 05:11:31 eburns Exp $
  */
 
 /*
@@ -123,6 +123,10 @@ public abstract class StateManager {
      * objects, which it wraps in a {@link SerializedTree} Object to return.
      * </p>
      *
+     * <p>In JSP applications, this method must be called from the
+     * <code>doAfterBody()</code> method of the tag handler for the
+     * {@link javax.faces.component.UIPage} tag.</p>
+     *
      * @return a SerializedTree instance which encapsulates the state of this
      * tree, or null if no state needs to be written to the response.
      *
@@ -140,8 +144,9 @@ public abstract class StateManager {
     /**
      *
      * <p>The implementation must save the tree structure, from the root
-     * of the component tree.  Tree structure is comprised of parent
-     * child relationships, including Facets.</p>
+     * of the component tree, to a <code>Serializable</code> Object.
+     * Tree structure is comprised of parent child relationships,
+     * including Facets.</p>
      *
      * <p>Note that associations to {@link
      * javax.faces.validator.Validator}s, {@link
@@ -154,12 +159,10 @@ public abstract class StateManager {
      * <strong>and</strong> state by setting their
      * <code>transient</code> property to <code>true</code>. The default
      * value of this property is <code>false</code>.  Children of
-     * <code>transient</code> components are not saved.</p>
-     *
-     * <p>During the traversal of the tree structure, if a component has
-     * its <code>transient</code> property set to true, that component
-     * (and its children) should not be included in the tree
-     * structure.</p>
+     * <code>transient</code> components are not saved. During the
+     * traversal of the tree structure, if a component has its
+     * <code>transient</code> property set to true, that component (and
+     * its children) should not be included in the tree structure.</p>
      *
      * @return an Serilizable Object representing the structure of the
      * tree.  For example, this could be an ASCII encoding of the actual
@@ -174,7 +177,7 @@ public abstract class StateManager {
     /**
 
     * <p>The implementation must get the state of the component tree as
-    * a serializable Object.  This is done by calling {@link
+    * a <code>Serializable</code> Object.  This may be done by calling {@link
     * javax.faces.component.UIComponent#processGetState} on the root of
     * the component tree.  This state includes the following kinds of
     * information.</p>
@@ -218,13 +221,12 @@ public abstract class StateManager {
      * forms in a single page can be saved.</p>
      *
      * <p>In JSP applications, this method must be called during the
-     * <code>doEndTag()</code> method of the tag handler for the
-     * <code>&lt;h:form&gt;</code> tag <strong>before</strong> the
-     * {@link javax.faces.component.UIComponent#encodeEnd} method for
-     * the component associated with the <code>&lt;h:form&gt;</code> tag
-     * is called.  The implementation of this method may call {@link
-     * javax.faces.render.ResponseStateManager#writeStateMarker} to
-     * actually cause the marker to be written to the {@link
+     * <code>doEndTag()</code> method of the tag handler for {@link
+     * javax.faces.component.UIForm} <strong>before</strong> the {@link
+     * javax.faces.component.UIComponent#encodeEnd} method for the form
+     * component is called.  The implementation of this method may call
+     * {@link javax.faces.render.ResponseStateManager#writeStateMarker}
+     * to actually cause the marker to be written to the {@link
      * javax.faces.context.ResponseWriter} for this request.</p>
      *
      */
@@ -243,10 +245,20 @@ public abstract class StateManager {
      * whether it should save the state in the response or on the
      * server.</p>
      *
-     * <p>If the ServletContext init parameter directs the state to be
-     * saved to the response, the implementation of this method must call
-     * {@link javax.faces.render.ResponseStateManager#writeState} to
-     * cause the state to be saved to the response.</p>
+     * <p>If the <code>ServletContext</code> init parameter directs the
+     * state to be saved to the response, the implementation of this
+     * method must call {@link
+     * javax.faces.render.ResponseStateManager#writeState} to cause the
+     * state to be saved to the response.</p>
+     *
+     * <p>If the <code>ServletContext</code> init parameter directs the
+     * state to be saved on the server, it must be done so such that it
+     * can be retrieved using only the <code>treeId</code>.  This is
+     * necessary for the {@link #restoreTree} method to work.</p>
+     *
+     * <p>In JSP applications, this method must be called from the
+     * <code>doAfterBody()</code> method of the tag handler for the
+     * {@link javax.faces.component.UIPage} component.</p>
      *
      * @param context the {@link FacesContext} for this tree.  This is
      * used to obtain the {@link javax.faces.context.ResponseWriter} to
@@ -274,23 +286,23 @@ public abstract class StateManager {
      * javax.faces.component.UIComponent} tree is ready to be used for
      * the remainder of the request processing lifecycle.</p>
      *
-     * <p>The default implementation of this method calls through to
-     * {@link #restoreTreeStructure} and, if necessary {@link
+     * <p>This method must be called from the <em>Restore Component
+     * Tree</em> phase of the request processing lifecycle.</p>
+     *
+     * <p> The implementation must consult the
+     * <code>ServletContext</code> init parameter named as the value of
+     * the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} to determine
+     * whether state was saved in the response or on the server.</p>
+     *
+     * <p>If the state was saved on the server, it is accessible using
+     * the <code>treeId</code> as a key.</p>
+     *
+     * <p>If the state was saved in the client, this method calls
+     * through to {@link #restoreTreeStructure} and, if necessary {@link
      * #restoreTreeState}</p>
      */
 
-    public void restoreTree(FacesContext context, String treeId) throws IOException {
-	// PENDING(edburns): leverage the treeId for the case where the
-	// state is not in the response.
-	boolean hasTreeStructure = restoreTreeStructure(context, treeId);
-
-	if (!hasTreeStructure) {
-	    // there was no tree structure to restore, so we can just
-	    // return.
-	    return;
-	}
-	restoreTreeState(context);
-    }
+    public abstract void restoreTree(FacesContext context, String treeId) throws IOException;
 
     /**
      *
@@ -305,8 +317,9 @@ public abstract class StateManager {
      * which it stores as the root in the FacesContext.  If {@link
      * javax.faces.render.ResponseStateManager#getTreeStructureToRestore}
      * returns <code>null</code>, create a {@link
-     * javax.faces.component.UIPage} instance and store that as the root
-     * node in the <code>FacesContext</code>.</p>
+     * javax.faces.component.UIPage} instance, set its
+     * <code>treeId</code> property using the argument, and store that
+     * as the root node in the <code>FacesContext</code>.</p>
      *
      * @return true if there was a tree structure Object, false if we
      * had to create a {@link javax.faces.component.UIPage} from
@@ -318,9 +331,10 @@ public abstract class StateManager {
 
     /**
      *
-     * <p>This method is only called if there actually is some state to
-     * restore.  The implementation must take the argument
-     * <code>FacesContext</code> and pull out its {@link
+     * <p>This method should only be called if {@link
+     * #restoreTreeStructure} returned true, indicating there actually
+     * is some state to restore.  The implementation must take the
+     * argument <code>FacesContext</code> and pull out its {@link
      * javax.faces.component.UIPage} root and populate it with state
      * information.  The implementation may call {@link
      * javax.faces.render.ResponseStateManager#getTreeStateToRestore} to
