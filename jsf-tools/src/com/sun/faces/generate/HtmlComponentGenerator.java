@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.24 2007/01/26 20:33:46 rlubke Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.25 2007/01/30 18:21:29 jdlee Exp $
  */
 
 /*
@@ -301,7 +301,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 writer.write(TYPE_DEFAULTS.get(type));
             }
             writer.write(";\n");
-            if (primitive(type)) {
+            if (primitive(type) || (pb.getDefaultValue() != null)) {
                 writer.fwrite("private boolean ");
                 writer.write(var);
                 writer.write("_set = false;\n");
@@ -331,7 +331,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(capitalize(pb.getPropertyName()));
             writer.write("() {\n");
             writer.indent();
-            if (primitive(type)) {
+            if (primitive(type) || (pb.getDefaultValue() != null)) {
                 writer.fwrite("if (this.");
                 writer.write(var);
                 writer.write("_set) {\n");
@@ -379,7 +379,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.outdent();
             writer.fwrite("} else {\n");
             writer.indent();
-            if (primitive(type)) {
+            if (primitive(type) || (pb.getDefaultValue() != null)) {
                 writer.fwrite("return this.");
                 writer.write(var);
                 writer.write(";\n");
@@ -410,7 +410,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             writer.write(" = ");
             writer.write(var);
             writer.write(";\n");
-            if (primitive(type)) {
+            if (primitive(type) || (pb.getDefaultValue() != null)) {
                 writer.fwrite("this.");
                 writer.write(var);
                 writer.write("_set = true;\n");
