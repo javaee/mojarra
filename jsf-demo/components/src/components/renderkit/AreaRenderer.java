@@ -144,7 +144,6 @@ public class AreaRenderer extends BaseRenderer {
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-        component.setValid(true);
     } 
 
 } // end of class AreaRenderer

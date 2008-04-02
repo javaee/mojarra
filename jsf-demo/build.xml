@@ -67,6 +67,9 @@
   <property name="name" value="jsf-demo"/>
   <property name="version" value="20030611"/>
 
+  <property name="depth" value=""/>
+
+
 <!-- ************ Per user local properties ******************************* -->
 
   <property file="build.properties"/>                <!-- demo local    -->
@@ -398,12 +401,14 @@ Before running this target you must:
     </ant>
     <copy todir="${basedir}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
+<!--
     <ant dir="${basedir}/cardemo">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
+-->
     <ant dir="${basedir}/helloDuke">
       <property name="jsf-api.jar" 
                 value="../../jsf-api/build/lib/jsf-api.jar"/>

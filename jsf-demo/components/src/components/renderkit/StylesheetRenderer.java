@@ -1,5 +1,5 @@
 /*
- * $Id: StylesheetRenderer.java,v 1.4 2003/04/30 06:31:22 eburns Exp $
+ * $Id: StylesheetRenderer.java,v 1.5 2003/07/07 21:01:09 eburns Exp $
  */
 
 /*
@@ -66,9 +66,6 @@ public class StylesheetRenderer extends BaseRenderer {
 
     public void decode(FacesContext context, UIComponent component)
         throws IOException {
-
-        component.setValid(true);
-
     }
 
 

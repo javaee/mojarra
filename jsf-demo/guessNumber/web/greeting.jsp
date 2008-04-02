@@ -52,8 +52,7 @@
 	        <f:validate_longrange minimum="0" maximum="10" />
 
          </h:input_number> 
-	 <h:command_button id="submit" action="success" label="Submit" 
-             commandName="submit" />
+	 <h:command_button id="submit" action="success" label="Submit" />
          <p>
 	 <h:output_errors id="errors1" for="userNo"/>
     </h:form>

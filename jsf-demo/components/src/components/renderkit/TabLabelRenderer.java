@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.7 2003/05/05 15:26:13 rkitain Exp $
+ * $Id: TabLabelRenderer.java,v 1.8 2003/07/07 21:01:09 eburns Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.7 2003/05/05 15:26:13 rkitain Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.8 2003/07/07 21:01:09 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -212,7 +212,6 @@ public class TabLabelRenderer extends BaseRenderer {
         if (value == null) {
             if (requestParameterMap.get(clientId+".x") == null &&
                 requestParameterMap.get(clientId+".y") == null) {
-                component.setValid(true);
                 return;
             }
         }
@@ -247,7 +246,6 @@ public class TabLabelRenderer extends BaseRenderer {
             (new PaneSelectedEvent(component, tabComponent.getClientId(
                 context)));
 
-        component.setValid(true);
 	return;
     }
     

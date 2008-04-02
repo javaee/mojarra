@@ -138,8 +138,7 @@ public class UIMap extends UICommand {
         String value = (String)requestParameterMap.get("selectedArea");
         if (value != null) {
 	    setAttribute("currentArea", value);
-            context.addFacesEvent(new ActionEvent(this, value));
+            context.addFacesEvent(new ActionEvent(this));
         }
-        setValid(true);
     }
 }

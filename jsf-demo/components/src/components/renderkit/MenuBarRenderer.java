@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.5 2003/05/14 20:21:44 eburns Exp $
+ * $Id: MenuBarRenderer.java,v 1.6 2003/07/07 21:01:09 eburns Exp $
  */
 
 /*
@@ -113,7 +113,6 @@ public class MenuBarRenderer extends BaseRenderer {
             }
             context.addFacesEvent(event);
         }    
-        component.setValid(true);
     }
 
 
