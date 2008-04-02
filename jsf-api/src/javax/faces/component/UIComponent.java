@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.80 2003/04/29 18:51:29 eburns Exp $
+ * $Id: UIComponent.java,v 1.81 2003/06/20 23:28:46 craigmcc Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
-import javax.faces.validator.Validator;
 
 
 /**
@@ -468,45 +467,6 @@ public interface UIComponent extends Serializable {
     public Iterator getFacetsAndChildren();
     
     
-    // ----------------------------------------------------- Validators Methods
-
-
-    /**
-     * <p>Add a {@link Validator} instance to the set associated with
-     * this {@link UIComponent}.</p>
-     *
-     * @param validator The {@link Validator} to add
-     *
-     * @exception NullPointerException if <code>validator</code>
-     *  is null
-     */
-    public void addValidator(Validator validator);
-
-
-    /**
-     * <p>Clear any {@link Validator}s that have been registered for
-     * processing by this component.</p>
-     */
-    public void clearValidators();
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link Validator}s
-     * associated with this {@link UIComponent}.</p>
-     */
-    public Iterator getValidators();
-
-
-    /**
-     * <p>Remove a {@link Validator} instance from the set associated with
-     * this {@link UIComponent}, if it was previously associated.
-     * Otherwise, do nothing.</p>
-     *
-     * @param validator The {@link Validator} to remove
-     */
-    public void removeValidator(Validator validator);
-
-
     // ------------------------------------------- Lifecycle Processing Methods
 
 
@@ -664,23 +624,6 @@ public interface UIComponent extends Serializable {
     public void updateModel(FacesContext context);
 
 
-    /**
-     * <p>Perform any correctness checks that this component wishes to perform
-     * on itself.  This method will be called during the
-     * <em>Process Validations</em> phase of the request processing
-     * lifecycle.  If errors are encountered, appropriate <code>Message</code>
-     * instances should be added to the {@link FacesContext} for the current
-     * request, and the <code>valid</code> property of this {@link UIComponent}
-     * should be set to <code>false</code>.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void validate(FacesContext context);
-
-
     // ----------------------------------------------- Lifecycle Phase Handlers
 
 
@@ -734,6 +677,8 @@ public interface UIComponent extends Serializable {
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
+     * <li>If the current component is not {@link UIInput} or a subclass
+     *     of {@link UIInput}, skip the remaining steps.</li>
      * <li>If the <code>valid</code> property of this component is
      *     currently <code>true</code>:
      *     <ul>

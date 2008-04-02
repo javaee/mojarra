@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.31 2003/05/13 22:47:33 eburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.32 2003/06/20 23:28:51 craigmcc Exp $
  */
 
 /*
@@ -730,14 +730,6 @@ public class UIComponentTestCase extends TestCase {
         }
         */
 
-        // [3.1.9] addValidator()
-        try {
-            component.addValidator(null);
-            fail("addValidator did not throw NPE");
-        } catch (NullPointerException e) {
-            ; // Expected result
-        }
-
     }
 
 
@@ -801,10 +793,6 @@ public class UIComponentTestCase extends TestCase {
             }
         }
 
-        // [3.1.9] Validation Processing
-        assertTrue("valid true", !component.isValid());
-        checkValidatorCount(component, 0);
-
         // Renderer Type
         if (rendererType == null) {
             assertNull("rendererType null", component.getRendererType());
@@ -813,26 +801,11 @@ public class UIComponentTestCase extends TestCase {
                          rendererType, component.getRendererType());
         }
 
-    }
-
-
-
-
-
-    /**
-     * [3.1.9] Validator Queue.
-     */
-    public void testValidatorQueue() {
-
-        checkValidatorCount(component, 0);
-        component.addValidator(new TestValidator());
-        checkValidatorCount(component, 1);
-        component.addValidator(new TestValidator());
-        checkValidatorCount(component, 2);
-        component.clearValidators();
-        checkValidatorCount(component, 0);
+        // Valid Property
+	//        assertTrue("valid true", component.isValid());
 
     }
+
 
 
     // -------------------------------------------------------- Support Methods
@@ -879,24 +852,4 @@ public class UIComponentTestCase extends TestCase {
     }
 
 
-    /**
-     * Validate that the specified number of validators are present.
-     *
-     * @param component Component being tested
-     * @param count Expected number of validators
-     */
-    protected void checkValidatorCount(UIComponent component, int count) {
-
-        int results = 0;
-        Iterator validators = component.getValidators();
-        assertNotNull("validators", validators);
-        while (validators.hasNext()) {
-            Validator validator = (Validator) validators.next();
-            results++;
-        }
-        assertEquals("validator count", count, results);
-
-    }
-
-    
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.9 2003/04/29 18:51:52 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.10 2003/06/20 23:28:51 craigmcc Exp $
  */
 
 /*
@@ -116,6 +116,48 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
 
         super.testAttributePropertyTransparency();
         UIInput input = (UIInput) component;
+
+    }
+
+
+    public void testInvalidSetters() {
+
+	super.testInvalidSetters();
+
+        // addValidator()
+        try {
+            ((UIInput) component).addValidator(null);
+            fail("addValidator did not throw NPE");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+
+    }
+
+
+    /**
+     * Test the state of an unmodified test component.
+     */
+    public void testUnmodifiedComponent() {
+
+	super.testUnmodifiedComponent();
+	checkValidatorCount(component, 0);
+
+    }
+
+
+    /**
+     * Validator Queue.
+     */
+    public void testValidatorQueue() {
+
+        checkValidatorCount(component, 0);
+        ((UIInput) component).addValidator(new TestValidator());
+        checkValidatorCount(component, 1);
+        ((UIInput) component).addValidator(new TestValidator());
+        checkValidatorCount(component, 2);
+        ((UIInput) component).clearValidators();
+        checkValidatorCount(component, 0);
 
     }
 
@@ -370,9 +412,32 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         
     }    
     
+
+    /**
+     * Validate that the specified number of validators are present.
+     *
+     * @param component Component being tested
+     * @param count Expected number of validators
+     */
+    protected void checkValidatorCount(UIComponent component, int count) {
+
+        int results = 0;
+        Iterator validators = ((UIInput) component).getValidators();
+        assertNotNull("validators", validators);
+        while (validators.hasNext()) {
+            Validator validator = (Validator) validators.next();
+            results++;
+        }
+        assertEquals("validator count", count, results);
+
+    }
+
+
     protected int getListenerIndex(UIInput input,
             TestValueChangedListener listener) {
         int ordinal = listener.getPhaseId().getOrdinal();
         return (input.listeners[ordinal].indexOf(listener));
     }     
+
+
 }

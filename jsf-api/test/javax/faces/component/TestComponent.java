@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.9 2003/02/20 22:46:48 ofung Exp $
+ * $Id: TestComponent.java,v 1.10 2003/06/20 23:28:50 craigmcc Exp $
  */
 
 /*
@@ -66,12 +66,6 @@ public class TestComponent extends UIComponentBase {
     public void updateModel(FacesContext context) {
         trace("u-" + getComponentId());
         super.updateModel(context);
-    }
-
-
-    public void validate(FacesContext context) {
-        trace("v-" + getComponentId());
-        super.validate(context);
     }
 
 

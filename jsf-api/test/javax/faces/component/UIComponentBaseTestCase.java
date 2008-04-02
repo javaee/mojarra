@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.5 2003/02/20 22:46:50 ofung Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.6 2003/06/20 23:28:50 craigmcc Exp $
  */
 
 /*
@@ -147,7 +147,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         TestComponent.trace(null);
         component.processValidators(context);
         assertEquals("processValidators",
-                     lifecycleTrace("pV", "v"),
+                     lifecycleTrace("pV", null),
                      TestComponent.trace());
 
         // Test processUpdates()
@@ -190,7 +190,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         while (names.hasNext()) {
             String name = (String) names.next();
             sb.append("/" + lmethod + "-" + name);
-            sb.append("/" + cmethod + "-" + name);
+	    if (cmethod != null) {
+		sb.append("/" + cmethod + "-" + name);
+	    }
         }
 
         // Append the calls for each child
@@ -201,7 +203,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
 
         // Append the call for this component's component method
-        sb.append("/" + cmethod + "-" + id);
+	if (cmethod != null) {
+	    sb.append("/" + cmethod + "-" + id);
+	}
 
     }
 

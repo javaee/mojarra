@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.18 2003/04/29 18:51:30 eburns Exp $
+ * $Id: UIInput.java,v 1.19 2003/06/20 23:28:47 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.FacesException;
@@ -24,6 +25,8 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
+import javax.faces.validator.Validator;
+
 
 /**
  * <p><strong>UIInput</strong> is a {@link UIComponent} that represents
@@ -48,9 +51,6 @@ import javax.faces.event.ValueChangedListener;
  */
 
 public class UIInput extends UIOutput {
-
-
-    // ------------------------------------------------------- Static Variables
 
 
     // ----------------------------------------------------------- Constructors
@@ -232,6 +232,80 @@ public class UIInput extends UIOutput {
 
     }
     
+
+    // ------------------------------------------------------ Validation Methods
+
+
+    /**
+     * <p>The set of {@link Validator}s associated with this
+     * <code>UIComponent</code>.</p>
+     */
+    private ArrayList validators = null;
+
+
+    /**
+     * <p>Add a {@link Validator} instance to the set associated with
+     * this {@link UIInput}.</p>
+     *
+     * @param validator The {@link Validator} to add
+     *
+     * @exception NullPointerException if <code>validator</code>
+     *  is null
+     */
+    public void addValidator(Validator validator) {
+
+        if (validator == null) {
+            throw new NullPointerException();
+        }
+        if (validators == null) {
+            validators = new ArrayList();
+        }
+        validators.add(validator);
+
+    }
+
+
+    /**
+     * <p>Clear any {@link Validator}s that have been registered for
+     * processing by this component.</p>
+     */
+    public void clearValidators() {
+
+        validators = null;
+
+    }
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link Validator}s
+     * associated with this {@link UIInput}.</p>
+     */
+    public Iterator getValidators() {
+
+        if (validators != null) {
+            return (validators.iterator());
+        } else {
+            return (Collections.EMPTY_LIST.iterator());
+        }
+
+    }
+
+
+    /**
+     * <p>Remove a {@link Validator} instance from the set associated with
+     * this {@link UIInput}, if it was previously associated.
+     * Otherwise, do nothing.</p>
+     *
+     * @param validator The {@link Validator} to remove
+     */
+    public void removeValidator(Validator validator) {
+
+        if (validators != null) {
+            validators.remove(validator);
+        }
+
+    }
+
 
     // ------------------------------------------------------ Protected Methods
 

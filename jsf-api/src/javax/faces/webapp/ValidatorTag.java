@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.8 2003/05/20 23:06:56 jvisvanathan Exp $
+ * $Id: ValidatorTag.java,v 1.9 2003/06/20 23:28:49 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.webapp;
 
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.validator.Validator;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
@@ -25,7 +26,7 @@ import javax.faces.FactoryFinder;
 /**
  * <p><strong>ValidatorTag</strong> is a base class for all JSP custom actions
  * that create and register a <code>Validator</code> instance on the
- * {@link UIComponent} associated with our most immediate surrounding instance
+ * {@link UIInput} associated with our most immediate surrounding instance
  * of a tag whose implementation class is a subclass of {@link UIComponentTag}.
  * To avoid creating duplicate instances when a page is redisplayed,
  * creation and registration of a {@link Validator} occurs
@@ -103,7 +104,7 @@ public class ValidatorTag extends TagSupport {
 
         // Create and register an instance with the appropriate component
         Validator validator = createValidator();
-        facesTag.getComponent().addValidator(validator);
+        ((UIInput) facesTag.getComponent()).addValidator(validator);
         return (SKIP_BODY);
 
     }

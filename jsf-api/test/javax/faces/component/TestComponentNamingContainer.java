@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentNamingContainer.java,v 1.8 2003/02/20 22:46:49 ofung Exp $
+ * $Id: TestComponentNamingContainer.java,v 1.9 2003/06/20 23:28:50 craigmcc Exp $
  */
 
 /*
@@ -66,12 +66,6 @@ public class TestComponentNamingContainer extends UINamingContainer {
     public void updateModel(FacesContext context) {
         TestComponent.trace("u-" + getComponentId());
         super.updateModel(context);
-    }
-
-
-    public void validate(FacesContext context) {
-        TestComponent.trace("v-" + getComponentId());
-        super.validate(context);
     }
 
 

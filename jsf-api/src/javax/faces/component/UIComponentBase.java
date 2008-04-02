@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.52 2003/06/20 22:17:58 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.53 2003/06/20 23:28:47 craigmcc Exp $
  */
 
 /*
@@ -773,55 +773,6 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    // ----------------------------------------------------- Validators Methods
-
-
-    /**
-     * <p>The set of {@link Validator}s associated with this
-     * <code>UIComponent</code>.</p>
-     */
-    private ArrayList validators = null;
-
-
-    public void addValidator(Validator validator) {
-
-        if (validator == null) {
-            throw new NullPointerException();
-        }
-        if (validators == null) {
-            validators = new ArrayList();
-        }
-        validators.add(validator);
-
-    }
-
-
-    public void clearValidators() {
-
-        validators = null;
-
-    }
-
-
-    public Iterator getValidators() {
-
-        if (validators != null) {
-            return (validators.iterator());
-        } else {
-            return (Collections.EMPTY_LIST.iterator());
-        }
-
-    }
-
-    public void removeValidator(Validator validator) {
-
-        if (validators != null) {
-            validators.remove(validator);
-        }
-
-    }
-
-
     // ------------------------------------------- Lifecycle Processing Methods
 
 
@@ -904,15 +855,6 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    public void validate(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
     // ----------------------------------------------- Lifecycle Phase Handlers
 
 
@@ -967,14 +909,19 @@ public abstract class UIComponentBase implements UIComponent {
             kid.processValidators(context);
         }
 
+	// Skip validation processing for this component unless we are a UIInput
+	if (!(this instanceof UIInput)) {
+	    return;
+	}
+
         // Process this component itself
         if (isValid()) {
-            Iterator validators = getValidators();
+            Iterator validators = ((UIInput) this).getValidators();
             while (validators.hasNext()) {
                 Validator validator = (Validator) validators.next();
                 validator.validate(context, this);
             }
-            validate(context);
+            ((UIInput) this).validate(context);
         }
         if (!isValid()) {
             context.renderResponse();
