@@ -18,8 +18,8 @@
      displayed in a different format using the built-in JavaServer
      Faces components</p>
 
-  <p>You may now choose your first character that will be waging in magical
-     combat</p>
+  <p>You may now choose your first character that will be waging a
+  magical combat</p>
 
   <h:form>
 

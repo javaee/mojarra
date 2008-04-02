@@ -18,8 +18,8 @@
      does not include the user's first combat choice so that character
      will not be picked twice.</p>
 
-  <p>You may now choose your second character that will be waging in magical
-     combat with the first.</p>
+  <p>You may now choose your second character that will be waging a
+  magical combat with the first.</p>
 
 
   <h:form>
