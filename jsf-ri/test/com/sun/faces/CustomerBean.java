@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.1 2002/09/09 23:52:27 visvan Exp $
+ * $Id: CustomerBean.java,v 1.2 2002/09/10 01:05:31 visvan Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package com.sun.faces;
  * <p>JavaBean represented the data for an individual customer.</p>
  */
 
-public class CustomerBean {
+public class CustomerBean implements java.io.Serializable {
 
 
     public CustomerBean() {
