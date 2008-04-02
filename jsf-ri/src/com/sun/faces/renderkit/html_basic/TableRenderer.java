@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.40 2006/10/13 16:19:24 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.41 2006/10/24 17:46:07 rlubke Exp $
  */
 
 /*
@@ -286,23 +286,19 @@ public class TableRenderer extends HtmlBasicRenderer {
             // Iterate over the child UIColumn components for each row
             int columnStyleIdx = 0;
             List<UIColumn> columns = getColumns(data);
-            int numberOfColumns = columns.size();
-            int numColClassesToRender = 0;            
-            if (numberOfColumns > numColumnClasses) {
-                numColClassesToRender = (numColumnClasses - 1);
-            } else if (numberOfColumns < numColumnClasses) {
-                numColClassesToRender = (numberOfColumns - 1);
-            } else if (numberOfColumns == numColumnClasses) {
-                numColClassesToRender = (numberOfColumns -1);
-            }
+            int numberOfColumnClasses = columnClasses.length;
+
             for (UIColumn column : columns) {
 
                 // Render the beginning of this cell
                 writer.startElement("td", column);
-                if (numColClassesToRender >= 0 && columnStyleIdx <= numColClassesToRender) {
+                if (numberOfColumnClasses > 0) {
                     writer.writeAttribute("class", columnClasses[columnStyleIdx++],
-                                          "columnClasses");                    
-                }
+                                          "columnClasses");
+                    if (columnStyleIdx >= numberOfColumnClasses) {
+                        columnStyleIdx = 0;
+                    }
+                }               
 
                 // Render the contents of this cell by iterating over
                 // the kids of our kids

@@ -27,7 +27,7 @@
 
     <%
         List<String[]> list = new ArrayList<String[]>(1);
-        list.add(new String[]{"c1", "c2", "c3"});
+        list.add(new String[]{"c1", "c2", "c3", "c4", "c5", "c6"});
         request.setAttribute("list", list);
     %>
 </head>
@@ -45,6 +45,15 @@
         <h:column>
             <h:outputText value="#{row[2]}"/>
         </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
+        </h:column>
     </h:dataTable>
     <h:dataTable value="#{requestScope.list}"
                  var="row"
@@ -57,6 +66,15 @@
         </h:column>
         <h:column>
             <h:outputText value="#{row[2]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
         </h:column>
     </h:dataTable>
     <h:dataTable value="#{requestScope.list}"
@@ -71,6 +89,15 @@
         <h:column>
             <h:outputText value="#{row[2]}"/>
         </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
+        </h:column>
     </h:dataTable>
     <h:dataTable value="#{requestScope.list}"
                  var="row"
@@ -84,6 +111,15 @@
         <h:column>
             <h:outputText value="#{row[2]}"/>
         </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
+        </h:column>
     </h:dataTable>
     <h:dataTable value="#{requestScope.list}"
                  var="row">
@@ -95,6 +131,15 @@
         </h:column>
         <h:column>
             <h:outputText value="#{row[2]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[3]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[4]}"/>
+        </h:column>
+        <h:column>
+            <h:outputText value="#{row[5]}"/>
         </h:column>
     </h:dataTable>
 </f:view>

@@ -33,7 +33,10 @@
 <tr>
 <td class="b1">c1</td>
 <td class="b2">c2</td>
-<td>c3</td>
+<td class="b1">c3</td>
+<td class="b2">c4</td>
+<td class="b1">c5</td>
+<td class="b2">c6</td>
 </tr>
 </tbody>
 </table>
@@ -43,6 +46,9 @@
 <td class="b1">c1</td>
 <td class="b2">c2</td>
 <td class="b3">c3</td>
+<td class="b4">c4</td>
+<td class="b1">c5</td>
+<td class="b2">c6</td>
 </tr>
 </tbody>
 </table>
@@ -52,6 +58,9 @@
 <td class="b1">c1</td>
 <td class="b2">c2</td>
 <td class="b3">c3</td>
+<td class="b1">c4</td>
+<td class="b2">c5</td>
+<td class="b3">c6</td>
 </tr>
 </tbody>
 </table>
@@ -59,8 +68,11 @@
 <tbody>
 <tr>
 <td class="b1">c1</td>
-<td>c2</td>
-<td>c3</td>
+<td class="b1">c2</td>
+<td class="b1">c3</td>
+<td class="b1">c4</td>
+<td class="b1">c5</td>
+<td class="b1">c6</td>
 </tr>
 </tbody>
 </table>
@@ -70,6 +82,9 @@
 <td>c1</td>
 <td>c2</td>
 <td>c3</td>
+<td>c4</td>
+<td>c5</td>
+<td>c6</td>
 </tr>
 </tbody>
 </table>
