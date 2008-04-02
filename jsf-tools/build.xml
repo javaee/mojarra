@@ -16,6 +16,7 @@
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="../build.properties"/>             <!-- Commons local     -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property environment="myenv" />
 
   <property name="Name"             value="JavaServer Faces Tools"/>
   <property name="name"             value="jsf-tools"/>
@@ -36,6 +37,8 @@
   <!-- The locations of necessary jar files -->
   <property name="junit.jar" 
             value="${tomcat.home}/../junit3.8.1/junit.jar"/>
+  <property name="ant.jar"
+            value="${myenv.ANT_HOME}/lib/ant.jar" />
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
   <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
   <property name="commons-logging.jar" 
@@ -82,10 +85,11 @@
     <pathelement location="${build.classes}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/>
+    <pathelement location="${ant.jar}"/>
   </path>
 
   <path id="run.classpath">
-    <pathelement location="${build.classes}"/>
+    <pathelement location="${build.dir}/${name}.jar"/>
     <pathelement location="${build.test}"/>
     <pathelement location="${junit.jar}"/>
     <pathelement location="${servlet.jar}"/>
@@ -113,9 +117,13 @@
     <mkdir dir="${build.generate}"/>
     <mkdir dir="${build.generate.facesdoc}"/>
     <mkdir dir="${build.generate.tld}"/>
+    <mkdir dir="${build.classes}/META-INF"/>
     <mkdir     dir="${build.temp}"/>
     <copy    todir="${build.temp}">
       <fileset dir="${jsf-api.dir}/doc" includes="*.xml"/>
+    </copy>
+    <copy    todir="${build.classes}/META-INF">
+      <fileset dir="${jsf-api.dir}/doc" includes="*.dtd"/>
     </copy>
     <copy    todir="${build.temp}"
               file="${standard-html-renderkit-impl}"/>
@@ -221,13 +229,11 @@ necessary to generate required classes.
                if="standard-html-renderkit-impl" 
            unless="skip.taglib.generation">
 
-    <java fork="yes" 
-	  classname="com.sun.faces.generate.HtmlTaglibGenerator">
-
-      <!-- <jvmarg line="${debug.jvm.args}"/> --> 
-      <classpath refid="compile.classpath" />
-      <classpath refid="run.classpath" />
-
+    <generateTaglib inputfile="${build.temp}/standard-html-renderkit.xml" 
+                    tlddir="${build.generate.tld}"
+                    destdir="${build.generate}" fork="yes"
+                    copyright="${basedir}/COPYRIGHT"
+                    tagdef="${basedir}/TAG-DEF">
       <sysproperty   key="java.endorsed.dirs"
                    value="${tomcat.home}/jaxp/lib/endorsed"/>
 
@@ -241,21 +247,10 @@ necessary to generate required classes.
                    value="${log.digester}"/>
       <sysproperty   key="org.apache.commons.logging.simplelog.log.org.apache.commons.digester.Digester.sax"
                    value="${log.sax}"/>
+      <!-- <jvmarg line="${debug.jvm.args}"/> --> 
+      <classpath refid="run.classpath" />
 
-      <arg         value="--config"/>
-      <arg         value="${build.temp}/standard-html-renderkit.xml"/>
-      <arg         value="--tlddir"/>
-      <arg         value="${build.generate.tld}"/>
-      <arg         value="--dir"/>
-      <arg         value="${build.generate}"/>
-      <arg         value="--dtd"/>
-      <arg         value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${jsf-api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
-      <arg         value="--copyright"/>
-      <arg         value="${basedir}/COPYRIGHT"/>
-      <arg         value="--tagdef"/>
-      <arg         value="${basedir}/TAG-DEF"/>
-
-    </java>
+    </generateTaglib>
 
   </target>
 
@@ -271,11 +266,21 @@ necessary to generate required classes.
       <classpath refid="run.classpath" />
     </javac>
 
+    <echo file="${build.classes}/com/sun/faces/whaat" message="cosby" />
+
+    <taskdef name="generateTaglib" classname="com.sun.faces.ant.TaglibGenTask">
+        <classpath>
+          <pathelement location="${build.classes}" />
+        </classpath>
+    </taskdef>
+
     <copy todir="${build.classes}">
       <fileset dir="${src.dir}">
         <exclude name="**/*.java" />
       </fileset>
     </copy>
+
+    <jar destfile="${build.dir}/${name}.jar" basedir="${build.classes}" />
 
   </target>
 
@@ -477,5 +482,6 @@ necessary to generate required classes.
     </zip>
 
   </target>
+
 
 </project>

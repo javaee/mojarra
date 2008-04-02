@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.7 2004/05/12 03:08:49 rkitain Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.8 2004/08/24 17:07:13 edburns Exp $
  */
 
 /*
@@ -535,7 +535,15 @@ public class HtmlComponentGenerator extends AbstractGenerator {
             String[] dtds = new String[arrayLen];
 	    int i=0;
 	    while (st.hasMoreTokens()) {
-	        dtds[i] = st.nextToken();
+		// even numbered elements are left alone
+		if (0 == (i % 2)) {
+		    dtds[i] = st.nextToken();
+		}
+		else {
+		    // odd numbered elements are treated as absolute
+		    // filenames
+		    dtds[i] =(new File(st.nextToken())).toURL().toString();
+		}
 		i++;
 	    }
 

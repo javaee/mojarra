@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.5 2004/05/12 03:08:49 rkitain Exp $
+ * $Id: AbstractGenerator.java,v 1.6 2004/08/24 17:07:13 edburns Exp $
  */
 
 /*
@@ -202,8 +202,8 @@ public abstract class AbstractGenerator {
      * <p>Configure and return a <code>Digester</code> instance suitable for
      * use in the environment specified by our parameter flags.</p>
      *
-     * @param dtd[] array of absolute pathnames of the DTDs to be registered (if any)
-     *  and their corresponding public identifiers
+     * @param dtd[] array of toString()'d URLs to DTDs to be registered
+     * (if any) and their corresponding public identifiers
      * @param design Include rules suitable for design time use in a tool
      * @param generate Include rules suitable for generating component,
      *  renderer, and tag classes
@@ -229,7 +229,7 @@ public abstract class AbstractGenerator {
 	int i = 0;
 	while (dtd.length > 0) {
             if (dtd[i] != null && dtd[i+1] != null) {
-                digester.register(dtd[i], (new File(dtd[i+1])).toURL().toString());
+                digester.register(dtd[i], dtd[i+1]);
 	    }
 	    i += 2;
 	    if (i >= dtd.length) {

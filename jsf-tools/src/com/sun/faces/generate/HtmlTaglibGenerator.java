@@ -28,6 +28,8 @@ import java.util.SortedMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import java.net.URL;
+
 import org.apache.commons.digester.Digester;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -1195,18 +1197,43 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
                 log.debug("Configuring digester instance with public identifiers and DTD '" +
                           dtd + "'");
             }
-	    StringTokenizer st = new StringTokenizer(dtd, "|");
-	    int arrayLen = st.countTokens();
-	    if (arrayLen == 0) {
-		// PENDING I18n
-		throw new Exception("No DTDs specified");
+
+	    String[] dtds = null;
+
+	    // this if-else block populates the dtds array according to
+	    // the expectations of the digester() method.
+	    if (null == dtd) {
+		ClassLoader cl =Thread.currentThread().getContextClassLoader();
+		dtds = new String[4];
+		dtds[0] = "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN";
+		dtds[1] = ((URL)cl.getResource("META-INF/web-facesconfig_1_0.dtd")).toString();
+		dtds[2] = "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|";
+		dtds[3] = ((URL) cl.getResource("META-INF/web-facesconfig_1_1.dtd")).toString();
+		
 	    }
-            String[] dtds = new String[arrayLen];
-	    int i=0;
-	    while (st.hasMoreTokens()) {
-	        dtds[i] = st.nextToken();
-		i++;
+	    else {
+		StringTokenizer st = new StringTokenizer(dtd, "|");
+		int arrayLen = st.countTokens();
+		if (arrayLen == 0) {
+		    // PENDING I18n
+		    throw new Exception("No DTDs specified");
+		}
+		dtds = new String[arrayLen];
+		int i=0;
+		while (st.hasMoreTokens()) {
+		    // even numbered elements are left alone
+		    if (0 == (i % 2)) {
+			dtds[i] = st.nextToken();
+		    }
+		    else {
+			// odd numbered elements are treated as absolute
+			// filenames
+			dtds[i] =(new File(st.nextToken())).toURL().toString();
+		    }
+		    i++;
+		}
 	    }
+
             copyright((String) options.get("--copyright"));
             directories((String) options.get("--tlddir"), false);
             Digester digester = digester(dtds, false, true, false);
