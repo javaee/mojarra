@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.46 2003/04/29 20:51:51 eburns Exp $
+ * $Id: FormRenderer.java,v 1.47 2003/05/27 22:56:04 rkitain Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.46 2003/04/29 20:51:51 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.47 2003/05/27 22:56:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -151,9 +151,6 @@ public class FormRenderer extends HtmlBasicRenderer {
      */
     private String getActionStr(FacesContext context, UIComponent form) {
         String contextPath = context.getExternalContext().getRequestContextPath();
-        if ( contextPath.indexOf("/") == -1 ) {
-            contextPath = contextPath + "/";
-        }    
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
 	sb.append(context.getTree().getTreeId());

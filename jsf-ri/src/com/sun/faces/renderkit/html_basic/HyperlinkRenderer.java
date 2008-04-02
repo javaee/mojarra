@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.45 2003/04/29 20:51:52 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.46 2003/05/27 22:56:04 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.45 2003/04/29 20:51:52 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.46 2003/05/27 22:56:04 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -398,9 +398,6 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 	// exaple, the local variable contextPath isn't used.
 
         String contextPath = context.getExternalContext().getRequestContextPath();
-        if ( contextPath.indexOf("/") == -1 ) {
-            contextPath = contextPath + "/";
-        }
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
         // need to make sure the rendered string contains where we
