@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.7 2003/09/25 07:46:11 craigmcc Exp $
+ * $Id: UIParameterTestCase.java,v 1.8 2003/09/30 22:04:48 eburns Exp $
  */
 
 /*
@@ -123,7 +123,7 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
     // Test saving and restoring state
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIParameter
 	    preSave = null,
 	    postSave = null;

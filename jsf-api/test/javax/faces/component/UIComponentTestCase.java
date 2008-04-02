@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.37 2003/09/25 07:46:07 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.38 2003/09/30 22:04:46 eburns Exp $
  */
 
 /*
@@ -939,7 +939,7 @@ public class UIComponentTestCase extends TestCase {
     /*
     public void testGetFacetsAndChildren() {
 
-        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent testComponent = new TestComponent();
         UIComponent facet1 = new TestComponent("facet1");
         UIComponent facet2 = new TestComponent("facet2");
         UIComponent facet3 = new TestComponent("facet3");

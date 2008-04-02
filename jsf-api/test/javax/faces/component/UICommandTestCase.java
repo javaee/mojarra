@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.11 2003/09/29 22:20:58 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.12 2003/09/30 22:04:46 eburns Exp $
  */
 
 /*
@@ -293,7 +293,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UICommandSub
 	    preSave = null,
 	    postSave = null;

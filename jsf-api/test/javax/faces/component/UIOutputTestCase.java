@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.8 2003/09/25 07:46:10 craigmcc Exp $
+ * $Id: UIOutputTestCase.java,v 1.9 2003/09/30 22:04:48 eburns Exp $
  */
 
 /*
@@ -118,7 +118,7 @@ public class UIOutputTestCase extends ValueHolderTestCaseBase {
     // Test saving and restoring state
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIOutput
 	    preSave = null,
 	    postSave = null;

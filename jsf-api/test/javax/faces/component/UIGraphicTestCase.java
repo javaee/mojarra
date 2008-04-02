@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.8 2003/09/25 07:46:08 craigmcc Exp $
+ * $Id: UIGraphicTestCase.java,v 1.9 2003/09/30 22:04:47 eburns Exp $
  */
 
 /*
@@ -125,7 +125,7 @@ public class UIGraphicTestCase extends ValueHolderTestCaseBase {
     // Test saving and restoring state
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIGraphic
 	    preSave = null,
 	    postSave = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.103 2003/09/30 14:34:59 rlubke Exp $
+ * $Id: UIComponent.java,v 1.104 2003/09/30 22:04:39 eburns Exp $
  */
 
 /*
@@ -40,17 +40,6 @@ import javax.faces.render.Renderer;
  */
 
 public abstract class UIComponent implements StateHolder {
-
-
-    // ------------------------------------------------------ Manifest Constants
-
-
-    /**
-     * <p>The separator character used in component identifiers to demarcate
-     * navigation to a child naming container.</p>
-     */
-    public static final char SEPARATOR_CHAR = ':';
-
 
     // -------------------------------------------------------------- Attributes
 
@@ -97,8 +86,10 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Return a client-side identifier for this component, generating
-     * one if necessary.  Generation will be delegated to the associated
-     * {@link javax.faces.render.Renderer} (if there is one).</p>
+     * one if necessary.  The associated {@link
+     * javax.faces.render.Renderer}, if present, will be asked to
+     * convert the clientId to a form suitable for transmission to the
+     * client.</p>
      *
      * @param context The {@link FacesContext} for the current request
      *
@@ -136,11 +127,10 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param id The new component identifier
      *
-     * @exception IllegalArgumentException if <code>id</code>
-     *  is zero length or contains invalid characters
-     * @exception IllegalStateException if <code>id</code> is non-null
-     *  and not unique within the scope of the nearest containing
-     *  {@link UIComponent} that is also a {@link NamingContainer}
+     * @exception IllegalArgumentException if <code>id</code> is zero
+     * length, begins with {@link NamingContainer#SEPARATOR_CHAR}, or
+     * {@link UIViewRoot#UNIQUE_ID_PREFIX}, or contains invalid
+     * characters
      */
     public abstract void setId(String id);
 
@@ -221,29 +211,24 @@ public abstract class UIComponent implements StateHolder {
      *     a NullPointerException</li>
      * <li>Any attempt to add an object that does not implement
      *     {@link UIComponent} must throw a ClassCastException.</li>
+     *
      * <li>Any attempt to add a child {@link UIComponent} with a
-     *     non-null <code>componentId</code> that contains invalid characters
-     *     (i.e. other than letters, digits, '-', or '_') must throw
+     *     non-null <code>componentId</code> that contains invalid
+     *     characters, or begins with {@link
+     *     NamingContainer#SEPARATOR_CHAR}, or {@link
+     *     UIViewRoot#UNIQUE_ID_PREFIX} (i.e. other than letters,
+     *     digits, '-', or '_') must throw
      *     IllegalArgumentException.</li>
-     * <li>Any attempt to add two child {@link UIComponent}s with the same
-     *     non-null <code>componentId</code>, within the scope of the
-     *     closest parent {@link UIComponent} that is also a
-     *     {@link NamingContainer}, must throw IllegalStateException.</li>
+     *
      * <li>Whenever a new child component is added:
      *     <ul>
      *     <li>The <code>parent</code> property of the child must be set to
      *         this component instance.</li>
-     *     <li>If the new child has a non-null component identifier,
-     *         it  must be added to the nearest parent {@link UIComponent}
-     *         that is a {@link NamingContainer}.</li>
      *     </ul></li>
      * <li>Whenever an existing child component is removed:
      *     <ul>
      *     <li>The <code>parent</code> property of the child must be
      *         set to <code>null</code>.</li>
-     *     <li>If the previous child has a non-null component identifier,
-     *         it must be removed from the nearest parent {@link UIComponent}
-     *         that is a {@link NamingContainer}.</li>
      *     </ul></li>
      * </ul>
      */
@@ -258,14 +243,30 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Find the {@link UIComponent} named by the specified expression,
-     * if any is found.  This is done by locating the closest parent
-     * {@link UIComponent} that is a {@link NamingContainer}, and
-     * calling its <code>findComponentInNamespace()</code> method.</p>
+     * <p>Searches for a component with a matching ID.  The search will
+     * begin either from the root of the component tree or the nearest
+     * ancestor <code>NamingContainer</code>, whichever is closer, and
+     * continue recursively through all children and facets, but will
+     * not continue inside any <code>NamingContainers</code>.</p>
      *
-     * <p>The specified <code>expr</code> may contain either a
-     * component identifier, or a set of component identifiers separated
-     * by SEPARATOR_CHAR characters.</p>
+     * <p>If this component is itself a <code>NamingContainer</code>,
+     * the search will first recursively search children and facets
+     * inside of the component, then search from the root of the
+     * component tree or the nearest ancestor
+     * <code>NamingContainer</code>, whichever is closer.</p>
+     *
+     * <p>If the ID contains instances of
+     * <code>NamingContainer.SEPARATOR_CHAR</code>, then the call is
+     * treated as a request for a recursive search.  The ID will be
+     * divided into a series of IDs separated by
+     * <code>NamingContainer.SEPARATOR_CHAR</code>, reading from left to
+     * right.  The search begins as above, but will instead search for a
+     * component matching the first ID.  If that search suceeds,
+     * findComponent() will search recursively all children and facets
+     * inside of that component for a descendant matching the second ID;
+     * etc.  If any step of the search fails,
+     * <code>findComponent()</code> returns <code>null</code> (and does
+     * not throw an exception).</p>
      *
      * @param expr Expression identifying the {@link UIComponent}
      *  to be returned

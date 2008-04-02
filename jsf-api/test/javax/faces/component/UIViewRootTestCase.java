@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.4 2003/09/29 22:49:36 craigmcc Exp $
+ * $Id: UIViewRootTestCase.java,v 1.5 2003/09/30 22:04:48 eburns Exp $
  */
 
 /*
@@ -115,7 +115,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 
     public void testStateHolder() {
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIViewRoot
 	    preSave = null,
 	    postSave = null;

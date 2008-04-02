@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.1 2003/09/25 07:46:13 craigmcc Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.2 2003/09/30 22:04:49 eburns Exp $
  */
 
 /*
@@ -225,7 +225,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIOutput
 	    preSave = null,
 	    postSave = null;
@@ -285,7 +285,7 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
     // Special save/restore test for components implementing ValueHolderBase
     public void testValueHolderBase() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
         ValueHolder
             preSave = null,
             postSave = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.11 2003/09/25 23:21:49 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.12 2003/09/30 22:04:46 eburns Exp $
  */
 
 /*
@@ -119,7 +119,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Set up the component under test
         super.setUp();
-        component = new TestComponentNamingContainer(expectedId);
+        component = new TestComponent(expectedId);
 
     }
 
@@ -217,7 +217,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void testChildrenRecursive() {
 
         // Create the components we will need
-        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent testComponent = new TestComponent();
         UIComponent child1 = new TestComponent("child1");
         UIComponent child2 = new TestComponent("child2");
         UIComponent child3 = new TestComponent("child3");
@@ -307,7 +307,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     // Test removing components from our naming container.
     public void testComponentRemoval() {
 
-        UIComponent testComponent = new TestComponentNamingContainer();
+        UIComponent testComponent = new TestComponent();
         UIComponent child1 = new TestComponent("child1");
         UIComponent child2 = new TestComponent("child2");
         UIComponent child3 = new TestComponent("child3");
@@ -364,7 +364,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIComponent
 	    preSave = null,
 	    postSave = null;

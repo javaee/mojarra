@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.65 2003/09/30 17:04:58 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.66 2003/09/30 22:04:39 eburns Exp $
  */
 
 /*
@@ -271,93 +271,34 @@ public abstract class UIComponentBase extends UIComponent {
                 return (repeater.getChildClientId(context, clientId));
             }
         }
-	NamingContainer closestContainer = null;
 	UIComponent containerComponent = this;
+	Renderer renderer = null;
+	String parentIds = "";
 
-	// note that this method uses different logic to locate the
-	// closest naming container than what is implemented in
-	// findClosestNamingContainer().  This is intentional and
-	// necessary to support the requirement of separating when you
-	// get a client id from when you add the child to the tree.
-
-	// if there is a Renderer for this component
-        String rendererType = getRendererType();
-        if (rendererType != null) {
-
-	    // let the Renderer define the client id
-	    Renderer renderer = getRenderer(context);
-            clientId = renderer.getClientId(context, this);
-
-	    // Search for an ancestor that is a naming container
-	    while (null != (containerComponent = 
-			    containerComponent.getParent())) {
-		if (containerComponent instanceof NamingContainer) {
-		    closestContainer = (NamingContainer) containerComponent;
-		    break;
-		}
-	    }
-
-	    // If none is found, see if this is a naming container
-	    if (null == closestContainer && this instanceof NamingContainer) {
-		closestContainer = (NamingContainer) this;
-	    }
-
-        } else {
-
-	    // we have to define the client id ourselves
-
-	    // Search for an ancestor that is a naming container
-	    while (null != (containerComponent = 
-			    containerComponent.getParent())) {
-		if (containerComponent instanceof NamingContainer) {
-		    closestContainer = (NamingContainer) containerComponent;
-		    break;
-		}
-	    }
-
-	    // If none is found, see if this is a naming container
-	    if (null == closestContainer && this instanceof NamingContainer) {
-		closestContainer = (NamingContainer) this;
-	    }
-	    
-	    if (null != closestContainer) {
-
-		// If there is no component id, ask our naming container
-		if (id == null) {
-		    clientId = closestContainer.generateClientId();
-		} else {
-                    clientId = id;
-                }
-
-		// build up the client side id
-		containerComponent = (UIComponent) closestContainer;
-
-		// If this is the root naming container, break
-		if (null != containerComponent.getParent()) {
-		    clientId = containerComponent.getClientId(context) +
-			NamingContainer.SEPARATOR_CHAR + clientId;
-		}
-
-	    }
-
-        }
-	if (null == clientId) {
-	    throw new NullPointerException();
-	}
-
-	if (null != closestContainer && null != id) {
-	    // ensure we've been added to the namespace.
-	    if (null == closestContainer.findComponentInNamespace(id)){
-		closestContainer.addComponentToNamespace(this);
+	// Search for an ancestor that is a naming container
+	while (null != (containerComponent = containerComponent.getParent())) {
+	    if (containerComponent instanceof NamingContainer) {
+		break;
 	    }
 	}
-		
-        if (repeater == null) {
-            return (clientId);
-        } else {
+	if (null != containerComponent) {
+	    parentIds = containerComponent.getClientId(context) + 
+		NamingContainer.SEPARATOR_CHAR;
+	}
+	if (null != id) {
+	    clientId = parentIds + id;
+	}
+	else {
+	    clientId = parentIds + context.getViewRoot().createUniqueId();
+	}
+	if (null != (renderer = getRenderer(context))) {
+	    clientId = renderer.convertClientId(context, clientId);
+	}
+	
+        if (null != repeater) {
             return (repeater.getChildClientId(context, clientId));
         }
-
+	return (clientId);
     }
 
 
@@ -392,23 +333,11 @@ public abstract class UIComponentBase extends UIComponent {
      * @exception IllegalStateException {@inheritDoc}    
      */ 
     public void setId(String id) {
-
+	
 	validateId(id);
-        NamingContainer naming = getNamingContainer();
-	String currentId = getId();
-
-	// Handle the case where we're renaming this component
-        if ((currentId != null) && (naming != null)) {
-            naming.removeComponentFromNamespace(this);
-            this.clientId = null;
-	}
-
+	
         // Save the newly assigned component identifier
         this.id = id;
-        if ((id != null) && (naming != null)) {
-            naming.addComponentToNamespace(this);
-        }
-
     }
 
 
@@ -490,7 +419,6 @@ public abstract class UIComponentBase extends UIComponent {
                             UIComponent child =
                                 (UIComponent) element;
                             eraseParent(child);
-                            addRecursive(getNamingContainer(), child);
                             child.setParent(UIComponentBase.this);
                             super.add(index, child);
                         }
@@ -505,7 +433,6 @@ public abstract class UIComponentBase extends UIComponent {
                             UIComponent child =
                                 (UIComponent) element;
                             eraseParent(child);
-                            addRecursive(getNamingContainer(), child);
                             child.setParent(UIComponentBase.this);
                             return (super.add(element));
                         }
@@ -548,11 +475,9 @@ public abstract class UIComponentBase extends UIComponent {
                         if (n < 1) {
                             return;
                         }
-                        NamingContainer naming = getNamingContainer();
                         for (int i = 0; i < n; i++) {
                             UIComponent child = (UIComponent) get(i);
                             child.setParent(null);
-                            removeRecursive(naming, child);
                         }
                         super.clear();
                     }
@@ -576,7 +501,6 @@ public abstract class UIComponentBase extends UIComponent {
                         UIComponent child = (UIComponent) get(index);
                         super.remove(index);
                         child.setParent(null);
-                        removeRecursive(getNamingContainer(), child);
                         return (child);
                     }
 
@@ -589,7 +513,6 @@ public abstract class UIComponentBase extends UIComponent {
                         if (super.remove(element)) {
                             UIComponent child = (UIComponent) element;
                             child.setParent(null);
-                            removeRecursive(getNamingContainer(), child);
                             return (true);
                         } else {
                             return (false);
@@ -625,62 +548,12 @@ public abstract class UIComponentBase extends UIComponent {
                             eraseParent(child);
                             String id = child.getId();
                             validateId(id);
-                            NamingContainer naming = getNamingContainer();
                             UIComponent previous =
                                 (UIComponent) get(index);
                             previous.setParent(null);
-                            if (naming != null) {
-                                removeRecursive(naming, previous);
-                                addRecursive(naming, child);
-                            }
                             child.setParent(UIComponentBase.this);
                             super.set(index, element);
                             return (previous);
-                        }
-                    }
-
-                    // Add any named children to this naming container
-                    private void addRecursive(NamingContainer naming,
-                                              UIComponent component) {
-                        if ((naming == null) || (component == null)) {
-                            return;
-                        }
-                        String id = component.getId();
-                        if (id != null) {
-                            validateId(id);
-                            validateMissing(naming, id);
-                            naming.addComponentToNamespace(component);
-                        }
-                        Iterator kids = component.getChildren().iterator();
-                        while (kids.hasNext()) {
-                            addRecursive(naming, (UIComponent) kids.next());
-                        }
-                    }
-
-
-                    // Remove any named children from this naming container
-                    private void removeRecursive(NamingContainer naming,
-                                                 UIComponent component) {
-                        if ((naming == null) || (component == null)) {
-                            return;
-                        }
-                        if (component.getId() != null) {
-                            naming.removeComponentFromNamespace(component);
-                        }
-                        Iterator kids = component.getChildren().iterator();
-                        while (kids.hasNext()) {
-                            removeRecursive(naming, (UIComponent) kids.next());
-                        }
-                    }
-
-                    // Throw IllegalStateException if id already present
-                    private void validateMissing(NamingContainer naming,
-                                                 String id) {
-                        if ((naming == null) || (id == null)) {
-                            return;
-                        }
-                        if (naming.findComponentInNamespace(id) != null) {
-                            throw new IllegalStateException(id);
                         }
                     }
 
@@ -741,32 +614,10 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
-
-    /**
-     * <p>Find and return the closest parent {@link UIComponent} (which might
-     * in fact be this one) that implements {@link NamingContainer}.  If no
-     * such {@link NamingContainer} can be found, return <code>null</code>.</p>
-     */
-    private NamingContainer getNamingContainer() {
-
-        NamingContainer closest = null;
-        UIComponent component = UIComponentBase.this;
-        while ((closest == null) && (component != null)) {
-            if (component instanceof NamingContainer) {
-                closest = (NamingContainer) component;
-                break;
-            }
-            component = component.getParent();
-        }
-        return (closest);
-
-    }
-
-
     /**
      * <p>Throw <code>IllegalArgumentException</code> if the specified
-     * component identifier is not syntactically valie or <code>null</code>.
-     * </p>
+     * component identifier is non-<code>null</code> and not
+     * syntactically valid.  </p>
      *
      * @param id The component identifier to test
      */
@@ -776,7 +627,9 @@ public abstract class UIComponentBase extends UIComponent {
             return;
         }
 
-	if (-1 != id.indexOf(UIComponent.SEPARATOR_CHAR)) {
+	if (0 == id.length() || 
+	    NamingContainer.SEPARATOR_CHAR == id.charAt(0) ||
+	    id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
 	    throw new IllegalArgumentException();
         }
 	    
@@ -798,24 +651,86 @@ public abstract class UIComponentBase extends UIComponent {
                 }
             }
         }
-
     }
 
     /**
      * @exception NullPointerException {@inheritDoc}
      */ 
-    public UIComponent findComponent(String expr) {
+    public UIComponent findComponent(String id) {
+	if (id ==  null) {
+	    throw new NullPointerException();
+	}
+	
+	UIComponent from;
+	
+	if (this instanceof NamingContainer) {
+	    UIComponent result = _findCompoundIdInsideOf(this, id);
+	    if (result != null) {
+		return result;
+	    }
+	    from = getParent();
+	}
+	else {
+	    from = this;
+	}
 
-        if (expr == null) {
-            throw new NullPointerException();
-        }
-	NamingContainer naming = getNamingContainer();
-        if (naming != null) {
-	    return (naming.findComponentInNamespace(expr));
-	} else {
-            return (null);
-        }
+	// Go up 'til we find a parent that is one of a NamingContainer or
+	// the root (whether a UIViewRoot or we're in an unattached subtree)
+	while (from != null) {
+	    if ((from instanceof NamingContainer) ||
+		// Intentionally not checking for instanceof UIViewRoot;
+		// that's handled by the next line
+		(from.getParent() == null)) {
+		break;
+	    }
+	    from = from.getParent();
+	}
+	
+	return _findCompoundIdInsideOf(from, id);
+    }
 
+    static private UIComponent _findCompoundIdInsideOf(UIComponent from,
+						       String id) {
+	while (from != null) {
+	    int separatorIndex = id.indexOf(NamingContainer.SEPARATOR_CHAR);
+	    String singleId;
+	    
+	    if (separatorIndex < 0) {
+		singleId = id;
+	    }
+	    else {
+		singleId = id.substring(0, separatorIndex);
+		id = id.substring(separatorIndex + 1);
+	    }
+	    
+	    from = _findInsideOf(from, singleId);
+	    
+	    // End of the road: return what we found
+	    if (separatorIndex < 0)
+		return from;
+	}
+	
+	return null;
+    }
+
+    static private UIComponent _findInsideOf(UIComponent from,
+					     String id) {
+	if (id.equals(from.getId())) {
+	    return from;
+	}
+	
+	Iterator kids = from.getFacetsAndChildren();
+	while (kids.hasNext()) {
+	    UIComponent kid = (UIComponent) kids.next();
+	    // Stop at NamingContainers
+	    if (!(kid instanceof NamingContainer)) {
+		UIComponent returned = _findInsideOf(kid, id);
+		if (returned != null)
+		    return returned;
+	    }
+	}
+	
+	return null;
     }
 
 

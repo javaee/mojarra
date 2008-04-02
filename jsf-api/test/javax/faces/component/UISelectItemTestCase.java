@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.2 2003/09/25 07:46:12 craigmcc Exp $
+ * $Id: UISelectItemTestCase.java,v 1.3 2003/09/30 22:04:48 eburns Exp $
  */
 
 /*
@@ -158,7 +158,7 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
 
     public void testStateHolder() {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UISelectItem
 	    preSave = null,
 	    postSave = null;

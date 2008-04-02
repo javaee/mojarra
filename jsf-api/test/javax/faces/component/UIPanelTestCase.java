@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelTestCase.java,v 1.8 2003/09/25 07:46:10 craigmcc Exp $
+ * $Id: UIPanelTestCase.java,v 1.9 2003/09/30 22:04:48 eburns Exp $
  */
 
 /*
@@ -98,7 +98,7 @@ public class UIPanelTestCase extends ValueHolderTestCaseBase {
     // Test saving and restoring state
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIPanel
 	    preSave = null,
 	    postSave = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.14 2003/09/29 22:20:58 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.15 2003/09/30 22:04:47 eburns Exp $
  */
 
 /*
@@ -335,7 +335,7 @@ public class UIInputTestCase extends UIOutputTestCase {
     }
 
     public void testStateHolder() {
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIInputSub
 	    preSave = null,
 	    postSave = null;

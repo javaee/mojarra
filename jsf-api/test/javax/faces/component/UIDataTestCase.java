@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.9 2003/09/25 07:46:08 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.10 2003/09/30 22:04:47 eburns Exp $
  */
 
 /*
@@ -164,7 +164,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
     // Test saving and restoring state
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIData
 	    preSave = null,
 	    postSave = null;

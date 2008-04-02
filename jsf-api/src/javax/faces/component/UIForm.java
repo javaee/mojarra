@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.34 2003/09/30 17:04:59 craigmcc Exp $
+ * $Id: UIForm.java,v 1.35 2003/09/30 22:04:40 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.context.FacesContext;
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIForm extends UIComponentBase implements NamingContainer {
+public class UIForm extends UIComponentBase {
 
 
     // ------------------------------------------------------------ Constructors
@@ -44,13 +44,6 @@ public class UIForm extends UIComponentBase implements NamingContainer {
 
 
     // ------------------------------------------------------ Instance Variables
-
-
-    /**
-     * <p>The {@link NamingContainer} implementation that we delegate to
-     */
-    private NamingContainerSupport namespace = new NamingContainerSupport();
-
 
     // -------------------------------------------------------------- Properties
 
@@ -180,48 +173,6 @@ public class UIForm extends UIComponentBase implements NamingContainer {
         }
 
     }
-
-
-    // ------------------------------------------------- NamingContainer Methods
-
-    /**
-     * @exception IllegalArgumentException {@inheritDoc}
-     * @exception IllegalStateException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
-    public void addComponentToNamespace(UIComponent namedComponent) {
-
-	namespace.addComponentToNamespace(namedComponent);
-
-    }
-
-    /**
-     * @exception IllegalArgumentException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}    
-     */ 
-    public UIComponent findComponentInNamespace(String name) {
-
-	return namespace.findComponentInNamespace(name);
-
-    }
-
-
-    public synchronized String generateClientId() {
-
-	return namespace.generateClientId();
-
-    }
-
-    /**
-     * @exception IllegalArgumentException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
-     */ 
-    public void removeComponentFromNamespace(UIComponent namedComponent) {
-
-	namespace.removeComponentFromNamespace(namedComponent);
-
-    }
-
 
     // ----------------------------------------------------- StateHolder Methods
 

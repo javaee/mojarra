@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.7 2003/09/30 17:05:01 craigmcc Exp $
+ * $Id: UIViewRoot.java,v 1.8 2003/09/30 22:04:40 eburns Exp $
  */
 
 /*
@@ -27,9 +27,13 @@ import javax.faces.render.RenderKitFactory;
  * just serves as the root of the component tree.</p>
  */
 
-public class UIViewRoot extends UIComponentBase implements NamingContainer {
+public class UIViewRoot extends UIComponentBase {
 
 
+    // ------------------------------------------------------ Constants
+    
+    static public final String UNIQUE_ID_PREFIX = "_id";
+    
     // ------------------------------------------------------------ Constructors
 
 
@@ -46,13 +50,7 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
 
 
     // ------------------------------------------------------ Instance Variables
-
-
-    /**
-     * <p>The {@link NamingContainer} implementation that we delegate to
-     */
-    private NamingContainerSupport namespace = new NamingContainerSupport();
-
+    private int lastId = 0;
 
     // -------------------------------------------------------------- Properties
 
@@ -259,52 +257,15 @@ public class UIViewRoot extends UIComponentBase implements NamingContainer {
 
     }
 
-
-
-
-
-
-    // ------------------------------------------------- NamingContainer Methods
-
     /**
-     * @exception IllegalArgumentException {@inheritDoc}
-     * @exception IllegalStateException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
-    public void addComponentToNamespace(UIComponent namedComponent) {
-
-	namespace.addComponentToNamespace(namedComponent);
-
+     * <p>Generate an identifier for a component.  The identifier will
+     * be prefixed with UNIQUE_ID_PREFIX, and will be unique within
+     * this UIViewRoot.</p>
+     */
+    public String createUniqueId() {
+	return UNIQUE_ID_PREFIX + lastId++;
     }
-
-    /**
-     * @exception IllegalArgumentException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
-     */ 
-    public UIComponent findComponentInNamespace(String name) {
-
-	return namespace.findComponentInNamespace(name);
-
-    }
-
-
-    public synchronized String generateClientId() {
-
-	return namespace.generateClientId();
-
-    }
-
-    /**
-     * @exception IllegalArgumentException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
-    public void removeComponentFromNamespace(UIComponent namedComponent) {
-
-	namespace.removeComponentFromNamespace(namedComponent);
-
-    }
-
-
+    
     // ----------------------------------------------------- StateHolder Methods
 
 

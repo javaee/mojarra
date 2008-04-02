@@ -1,5 +1,5 @@
 /*
- * $Id: UIColumnTestCase.java,v 1.5 2003/09/25 07:46:06 craigmcc Exp $
+ * $Id: UIColumnTestCase.java,v 1.6 2003/09/30 22:04:46 eburns Exp $
  */
 
 /*
@@ -109,7 +109,7 @@ public class UIColumnTestCase extends UIComponentBaseTestCase {
     // Test saving and restoring state
     public void testStateHolder() throws Exception {
 
-        UIComponent testParent = new TestComponentNamingContainer("root");
+        UIComponent testParent = new TestComponent("root");
 	UIColumn
 	    preSave = null,
 	    postSave = null;

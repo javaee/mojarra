@@ -176,7 +176,7 @@
 
     <java fork="yes" 
 	  classname="javax.faces.generate.GenerateConcreteClasses">
-      <jvmarg line="${debug.jvm.args}"/>
+      <!-- <jvmarg line="${debug.jvm.args}"/> -->
       <classpath refid="compile.classpath" />
       <classpath refid="test.classpath" />
       <arg line="-f ${basedir}/doc/standard-html-renderkit.xml"/>
@@ -267,7 +267,6 @@
                 test.UIForm,
                 test.UIGraphic,
                 test.UIInput,
-                test.UINamingContainer,
                 test.UIOutput,
                 test.UIPanel,
                 test.UIParameter,
@@ -391,16 +390,6 @@
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>
       <arg value="javax.faces.component.UIInputTestCase"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test.UINamingContainer" depends="build.test">
-    <echo message="Running UINamingContainer tests ..."/>
-    <java classname="${test.runner}" fork="yes"
-        failonerror="${test.failonerror}">
-      <jvmarg line="${debug.jvm.args}"/>
-      <arg value="javax.faces.component.UINamingContainerTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>
@@ -684,8 +673,14 @@
       <zipfileset dir="${src.dir}"
              excludes="**/CVS/**"
                prefix="jsf-api/src"/>
+      <zipfileset dir="${tools.dir}"
+             excludes="**/CVS/**"
+               prefix="jsf-api/tools"/>
+      <zipfileset dir="${test.dir}"
+             excludes="**/CVS/**"
+               prefix="jsf-api/test"/>
       <zipfileset dir="${doc.dir}"
-             includes="*.dtd"
+             includes="*.dtd,*.xml"
                prefix="jsf-api/doc"/>
     </zip>
 

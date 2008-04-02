@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.22 2003/09/25 23:21:46 craigmcc Exp $
+ * $Id: Renderer.java,v 1.23 2003/09/30 22:04:43 eburns Exp $
  */
 
 /*
@@ -144,18 +144,21 @@ public abstract class Renderer {
         throws IOException;
 
     /**
-     * <p>Generate and return a new client-side identifier for the
-     * specified component.</p>
+     * <p>Convert the component generated client id to a form suitable
+     * for transmission to the client.</p>
+     *
+     * <p>The default implementation must just return the argument
+     * <code>clientId</code> unchanged.</p>
      *
      * @param context {@link FacesContext} for the current request
-     * @param component {@link UIComponent} whose identifier is to be
-     *  returned
+     * @param clientId the client identifier to be converted to client a
+     * specific format.
      *
      * @exception NullPointerException if <code>context</code>
-     *  or <code>component</code> is <code>null</code>
+     *  or <code>clientId</code> is <code>null</code>
      */ 
-    public abstract String getClientId(FacesContext context,
-                                       UIComponent component);
+    public abstract String convertClientId(FacesContext context,
+					   String clientId);
 
 
 }

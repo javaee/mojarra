@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.11 2003/09/29 21:09:02 eburns Exp $
+ * $Id: ViewHandler.java,v 1.12 2003/09/30 22:04:36 eburns Exp $
  */
 
 /*
@@ -78,7 +78,18 @@ public interface ViewHandler {
      * javax.faces.context.ResponseStream} instances for the current
      * request.</p>
      *
-     * <p>The default implementation of <code>restoreView</code> must
+     * <p>Just before the state of the view is saved, the default
+     * implementation of <code>renderView</code> must walk through the
+     * component tree rooted at <code>viewToRender</code> and thow
+     * <code>IllegalStateException</code> if there is more than one
+     * component or facet in the tree with the same client id.  In the
+     * case where the <code>ViewHandler</code> implementation is
+     * rendering a JSP page, this <code>IllegalStateException</code>
+     * must be wrapped in a <code>JspException</code> and thrown to the
+     * Jsp engine.  Implementations are encouraged to use as effecient a
+     * means as possible to verify the id uniqueness property.</p>
+     *
+     * <p>The default implementation of <code>renderView</code> must
      * examine the deployment descriptor for this web application to
      * determine the manner in which the {@link
      * javax.faces.webapp.FacesServlet} has been mapped to incoming
