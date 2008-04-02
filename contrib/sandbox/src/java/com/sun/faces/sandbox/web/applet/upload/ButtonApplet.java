@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class ButtonApplet extends BaseApplet implements ActionListener {

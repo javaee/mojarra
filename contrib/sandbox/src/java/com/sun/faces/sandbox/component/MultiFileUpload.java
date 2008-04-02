@@ -11,7 +11,7 @@ import com.sun.faces.sandbox.model.FileHolder;
 import com.sun.faces.sandbox.model.FileHolderImpl;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class MultiFileUpload extends UIOutput {

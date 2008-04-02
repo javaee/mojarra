@@ -5,6 +5,7 @@ package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
 
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.sandbox.component.YuiContextMenu;
@@ -12,7 +13,7 @@ import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.model.Menu;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiContextMenuRenderer extends YuiMenuRenderer {
@@ -25,7 +26,8 @@ public class YuiContextMenuRenderer extends YuiMenuRenderer {
                 "var oMenu_%%%ID%%% = new YAHOO.widget.ContextMenu(\"%%%ID%%%\", {" + buildConstructorArgs(contextMenu) + "});" +
                 "oMenu_%%%ID%%%.render(document.getElementById(\"%%%TRIGGER%%%\"));";
         javaScript = javaScript.replaceAll("%%%ID%%%", component.getId())
-                .replaceAll("%%%TRIGGER%%%", getFullyQualifiedId(contextMenu.getTrigger()));
+                .replaceAll("%%%TRIGGER%%%", component.getParent().getClientId(FacesContext.getCurrentInstance())); 
+                        //getFullyQualifiedId(contextMenu.getTrigger()));
         
         writer.writeText(javaScript, null);
         writer.endElement("script");

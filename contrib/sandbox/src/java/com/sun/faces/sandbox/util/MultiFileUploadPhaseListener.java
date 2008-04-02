@@ -24,7 +24,7 @@ import com.sun.faces.sandbox.model.FileHolder;
 
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class MultiFileUploadPhaseListener implements PhaseListener {

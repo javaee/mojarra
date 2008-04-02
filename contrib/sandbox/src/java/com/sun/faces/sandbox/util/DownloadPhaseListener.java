@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sun.faces.sandbox.component.FileDownload;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 // TODO:  Can this be merged with the StaticResourcePhaseListener?

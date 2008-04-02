@@ -4,7 +4,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  */
 public class YuiCalendar extends UIInput {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.YuiCalendar";

@@ -6,7 +6,7 @@ package com.sun.faces.sandbox.taglib;
 import com.sun.faces.sandbox.component.YuiMenuBar;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiMenuBarTag extends YuiMenuTagBase {

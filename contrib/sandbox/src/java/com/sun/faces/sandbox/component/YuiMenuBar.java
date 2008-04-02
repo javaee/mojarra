@@ -5,7 +5,7 @@ package com.sun.faces.sandbox.component;
 
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiMenuBar  extends YuiMenuBase {

@@ -4,7 +4,7 @@
 package com.sun.faces.sandbox.model;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class MenuNode extends TreeNode {

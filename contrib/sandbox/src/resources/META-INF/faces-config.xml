@@ -97,7 +97,7 @@
         <renderer>
             <component-family>com.sun.faces.sandbox.YuiMenu</component-family>
             <renderer-type>com.sun.faces.sandbox.YuiMenuRenderer</renderer-type>
-            <renderer-class>com.sun.faces.sandbox.render.YuiRenderer</renderer-class>
+            <renderer-class>com.sun.faces.sandbox.render.YuiMenuRenderer</renderer-class>
         </renderer>    
     </render-kit>
     
@@ -131,7 +131,7 @@
         <renderer>
             <component-family>com.sun.faces.sandbox.YuiMenuBar</component-family>
             <renderer-type>com.sun.faces.sandbox.YuiMenuBarRenderer</renderer-type>
-            <renderer-class>com.sun.faces.sandbox.render.YuiBarRenderer</renderer-class>
+            <renderer-class>com.sun.faces.sandbox.render.YuiMenuBarRenderer</renderer-class>
         </renderer>    
     </render-kit>
     <component>

@@ -828,7 +828,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <tag>
         <name>calendar</name>
-        <tag-class>com.steeplesoft.jsf.components.yui.tag.CalendarTag</tag-class>
+        <tag-class>com.sun.faces.sandbox.taglib.YuiCalendarTag</tag-class>
         <body-content>JSP</body-content>
         <description>Display a JavaScript calendar</description>
         <attribute>
@@ -1068,7 +1068,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <tag>
         <name>menu</name>
-        <tag-class>com.steeplesoft.jsf.components.yui.tag.MenuTag</tag-class>
+        <tag-class>com.sun.faces.sandbox.taglib.YuiMenuTag</tag-class>
         <body-content>JSP</body-content>
         <description>Display a JavaScript Menu</description>
         <attribute>
@@ -1106,7 +1106,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <tag>
         <name>menuBar</name>
-        <tag-class>com.steeplesoft.jsf.components.yui.tag.MenuBarTag</tag-class>
+        <tag-class>com.sun.faces.sandbox.taglib.YuiMenuBarTag</tag-class>
         <body-content>JSP</body-content>
         <description>Display a JavaScript Menu</description>
         <attribute>
@@ -1144,7 +1144,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <tag>
         <name>contextMenu</name>
-        <tag-class>com.steeplesoft.jsf.components.yui.tag.ContextMenuTag</tag-class>
+        <tag-class>com.sun.faces.sandbox.taglib.YuiContextMenuTag</tag-class>
         <body-content>JSP</body-content>
         <description>Display a JavaScript context menu</description>
         <attribute>
@@ -1166,7 +1166,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         </attribute>
         <attribute>
             <name>trigger</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
                 <![CDATA[The trigger DOM element for the context menu.]]>
@@ -1253,14 +1253,14 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <!-- End FileDownload tag attributes                                     -->
     <!-- ******************************************************************* -->
+    
     <!-- ******************************************************************* -->
     <!-- Begin MultiFileUpload tag attributes                                -->
     <!-- ******************************************************************* -->
-    
     <tag>
         <description>Download an arbitrary binary object</description>
         <name>multiFileUpload</name>
-        <tag-class>com.sun.faces.sandbox.taglib.DownloadTag</tag-class>
+        <tag-class>com.sun.faces.sandbox.taglib.MultiFileUploadTag</tag-class>
         <body-content>JSP</body-content>
         <attribute>
             <name>id</name>

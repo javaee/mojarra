@@ -22,7 +22,7 @@ import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  */
 public class YuiCalendarRenderer extends Renderer {
     private static final String scriptIds[] = {

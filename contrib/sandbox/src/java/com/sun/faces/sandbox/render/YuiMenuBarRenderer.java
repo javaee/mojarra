@@ -11,7 +11,7 @@ import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.model.Menu;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiMenuBarRenderer extends YuiMenuRenderer {

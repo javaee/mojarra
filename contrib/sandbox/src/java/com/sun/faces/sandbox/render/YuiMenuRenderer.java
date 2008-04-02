@@ -20,7 +20,7 @@ import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiMenuRenderer extends Renderer {
@@ -38,12 +38,12 @@ public class YuiMenuRenderer extends Renderer {
     
     @Override
     public void encodeBegin(FacesContext context, UIComponent component) throws IOException {
-        for (int i = 0; i < cssIds.length; i++) {
-            Util.linkJavascript(context.getResponseWriter(), cssIds[i]);
+        for (int i = 0; i < scriptIds.length; i++) {
+            Util.linkJavascript(context.getResponseWriter(), scriptIds[i]);
         }
 
-        for (int i = 0; i < scriptIds.length; i++) {
-            Util.linkStyleSheet(context.getResponseWriter(), scriptIds[i]);
+        for (int i = 0; i < cssIds.length; i++) {
+            Util.linkStyleSheet(context.getResponseWriter(), cssIds[i]);
         }
     }
     @Override

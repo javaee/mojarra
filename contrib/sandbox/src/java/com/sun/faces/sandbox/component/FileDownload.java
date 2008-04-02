@@ -8,7 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  * http://svn.sourceforge.net/viewvc/wicket-stuff/trunk/wicket-contrib-jasperreports/src/examples/java/wicket/contrib/jasperreports/examples/ReportLinksPage.java?revision=1213&view=markup
  * http://svn.sourceforge.net/viewvc/wicket-stuff/trunk/wicket-contrib-jasperreports/src/examples/java/wicket/contrib/jasperreports/examples/ReportLinksPage.html?view=markup

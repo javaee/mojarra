@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class FileTableModel extends AbstractTableModel {

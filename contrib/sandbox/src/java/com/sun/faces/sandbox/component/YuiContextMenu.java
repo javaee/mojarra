@@ -6,7 +6,7 @@ package com.sun.faces.sandbox.component;
 import javax.el.ValueExpression;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiContextMenu  extends YuiMenuBase {

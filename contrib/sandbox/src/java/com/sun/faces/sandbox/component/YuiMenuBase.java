@@ -7,7 +7,7 @@ import javax.el.ValueExpression;
 import javax.faces.component.UIOutput;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public abstract class YuiMenuBase extends UIOutput {

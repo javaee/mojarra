@@ -10,7 +10,7 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class FullApplet extends BaseApplet {

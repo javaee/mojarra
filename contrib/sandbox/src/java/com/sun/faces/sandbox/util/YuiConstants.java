@@ -4,7 +4,7 @@
 package com.sun.faces.sandbox.util;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class YuiConstants {
@@ -15,7 +15,7 @@ public class YuiConstants {
 
     public static final String JS_AUTOCOMPLETE = YUI_ROOT + "autocomplete-min.js";
     public static final String JS_CALENDAR = YUI_ROOT + "calendar-min.js";
-    public static final String JS_CONTAINER = YUI_ROOT + "container.js";
+    public static final String JS_CONTAINER = YUI_ROOT + "container-min.js";
     public static final String JS_LOGGER = YUI_ROOT + "logger-min.js";
     public static final String JS_MENU = YUI_ROOT + "menu-min.js";
     public static final String JS_SLIDER = YUI_ROOT + "slider-min.js";

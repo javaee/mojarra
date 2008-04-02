@@ -15,7 +15,7 @@ import com.sun.faces.sandbox.component.FileDownload;
 import com.sun.faces.sandbox.util.Util;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public class FileDownloadRenderer extends Renderer {

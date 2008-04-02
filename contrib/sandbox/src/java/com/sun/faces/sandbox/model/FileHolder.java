@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * @author <a href="mailto:jdlee@dev.java.net">Jason Lee</a>
+ * @author Jason Lee
  *
  */
 public interface FileHolder {
