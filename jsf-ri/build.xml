@@ -12,7 +12,7 @@
 
   <property name="Name" value="JSF RI"/>
   <property name="name" value="jsf-ri"/>
-  <property name="version" value="20030219"/>
+  <property name="version" value="20030408"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -40,6 +40,9 @@
 
   <!-- The base directory for component sources -->
   <property name="source.home" value="${basedir}/src"/>
+
+  <!-- The base directory for component tests -->
+  <property name="test.home" value="${basedir}/test"/>
 
   <!-- The base directory for dependent jars -->
   <property name="lib.home" value="${basedir}/lib"/>
@@ -315,6 +318,25 @@
     </copy>
 
   </target>
+
+  <!-- Create the source distribution -->
+  <target name="ri.source">
+    <zip     destfile="${dist.home}/jsf-ri-src-${version}.zip">
+      <zipfileset dir="${basedir}"
+             includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
+               prefix="jsf-ri-src-${version}"/>
+      <zipfileset dir="${source.home}"
+             excludes="**/CVS/**"
+               prefix="jsf-ri-src-${version}/src"/>
+      <zipfileset dir="${test.home}"
+             excludes="**/CVS/**"
+               prefix="jsf-ri-src-${version}/test"/>
+      <zipfileset dir="${basedir}"
+             includes="conf/** web/**"
+               prefix="jsf-ri-src-${version}"/>
+    </zip>
+  </target>
+
 
   <target name="dist" depends="dist.binary">
     <echo> create the zip file </echo>
