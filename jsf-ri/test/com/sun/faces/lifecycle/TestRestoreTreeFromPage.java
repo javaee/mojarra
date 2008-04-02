@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreTreeFromPage.java,v 1.8 2003/03/11 05:38:00 rkitain Exp $
+ * $Id: TestRestoreTreeFromPage.java,v 1.9 2003/03/12 19:53:43 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import org.apache.cactus.WebRequest;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 
@@ -35,6 +34,8 @@ import java.io.PrintStream;
 import java.io.IOException;
 import com.sun.faces.CompareFiles;
 import com.sun.faces.FileOutputResponseWriter;
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.Phase;
 
 /**
  *
@@ -42,7 +43,7 @@ import com.sun.faces.FileOutputResponseWriter;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreTreeFromPage.java,v 1.8 2003/03/11 05:38:00 rkitain Exp $
+ * @version $Id: TestRestoreTreeFromPage.java,v 1.9 2003/03/12 19:53:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,18 +106,17 @@ public void beginRestoreTreeFromPage(WebRequest theRequest)
 
 public void testRestoreTreeFromPage()
 {
-    Phase reconstituteTree = new ReconstituteComponentTreePhase(null, 
-			RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
-    int result = -1;
+    Phase reconstituteTree = new ReconstituteComponentTreePhase();
 
     try {
-	result = reconstituteTree.execute(getFacesContext());
+	reconstituteTree.execute(getFacesContext());
     }
     catch (Throwable e) {
         e.printStackTrace();
 	assertTrue(false);
     }
-    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(null != getFacesContext().getTree());
     assertTrue(null != getFacesContext().getTree().getRoot());

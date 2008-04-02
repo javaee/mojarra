@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.9 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestSaveStateInPage.java,v 1.10 2003/03/12 19:53:44 rkitain Exp $
  */
 
 /*
@@ -16,11 +16,11 @@ import org.apache.cactus.WebRequest;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
-import com.sun.faces.RIConstants;
 
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import javax.faces.tree.Tree;
@@ -33,7 +33,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.9 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.10 2003/03/12 19:53:44 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -108,13 +108,10 @@ public void testSaveStateInPage()
     System.setProperty(RIConstants.DISABLE_RENDERERS, "");
 
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+    Phase renderResponse = new RenderResponsePhase(lifecycle);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -127,8 +124,9 @@ public void testSaveStateInPage()
             TEST_URI );
     getFacesContext().setTree(requestTree);
 
-    rc = renderResponse.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    renderResponse.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(verifyExpectedOutput());
 }

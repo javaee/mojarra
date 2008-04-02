@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.5 2003/02/20 22:49:56 ofung Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.6 2003/03/12 19:53:42 rkitain Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.5 2003/02/20 22:49:56 ofung Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.6 2003/03/12 19:53:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,88 +112,13 @@ public void testIdIterator()
     assertTrue(4 == i);
 }
 
-public void testIllegalStateException()
-{
-    LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
-    Lifecycle life = null;
-    boolean exceptionThrown = false;
-
-    assertTrue(factory != null);
-
-    // try to register before create
-    try {
-	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
-			       LifecycleFactoryImpl.LAST_PHASE, 
-			       new GenericPhaseImpl(null, RIConstants.RENDER_RESPONSE_PHASE));
-    }
-    catch (IllegalStateException e) {
-	exceptionThrown = true;
-    }
-    catch (UnsupportedOperationException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-    
-
-    // Make sure the default instance exists
-    life = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-    assertTrue(null != life);
-
-    exceptionThrown = false;
-    // test for IllegalStateException exception
-    try {
-	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
-			       LifecycleFactoryImpl.LAST_PHASE, 
-			       new GenericPhaseImpl(life, RIConstants.RENDER_RESPONSE_PHASE));
-    }
-    catch (IllegalStateException e) {
-	exceptionThrown = true;
-    }
-    catch (UnsupportedOperationException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-
-}
-
 public void testIllegalArgumentException()
 {
     LifecycleFactoryImpl factory = new LifecycleFactoryImpl();
     Lifecycle life = null;
-    boolean exceptionThrown = false;
-
     assertTrue(factory != null);
 
-    // Try to get an IllegalArgumentException
-    try {
-	factory.registerBefore("BOGUS",
-			       LifecycleFactoryImpl.LAST_PHASE, 
-			       new GenericPhaseImpl(null, RIConstants.RENDER_RESPONSE_PHASE));
-    }
-    catch (IllegalArgumentException e) {
-	exceptionThrown = true;
-    }
-    catch (UnsupportedOperationException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-
-    exceptionThrown = false;
-    // Try to get an IllegalArgumentException
-    try {
-	factory.registerBefore(LifecycleFactory.DEFAULT_LIFECYCLE,
-			       LifecycleFactoryImpl.LAST_PHASE + 1, 
-			       new GenericPhaseImpl(null, RIConstants.RENDER_RESPONSE_PHASE));
-    }
-    catch (IllegalArgumentException e) {
-	exceptionThrown = true;
-    }
-    catch (UnsupportedOperationException e) {
-	exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
-
-    exceptionThrown = false;
+    boolean exceptionThrown = false;
     // Try to get an IllegalArgumentException
     try {
 	LifecycleImpl lifecycle = new LifecycleImpl();

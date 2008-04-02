@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.11 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.12 2003/03/12 19:53:42 rkitain Exp $
  */
 
 /*
@@ -15,7 +15,6 @@ import org.apache.cactus.WebRequest;
 
 
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.Phase;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.RIConstants;
@@ -28,7 +27,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.11 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.12 2003/03/12 19:53:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

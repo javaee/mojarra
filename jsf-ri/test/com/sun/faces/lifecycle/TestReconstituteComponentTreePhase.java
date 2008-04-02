@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:59 rkitain Exp $
+ * $Id: TestReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:53:43 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -29,7 +28,8 @@ import com.sun.faces.tree.SimpleTreeImpl;
 import javax.faces.tree.TreeFactory;
 import javax.faces.tree.Tree;
 import com.sun.faces.RIConstants;
-
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
 import javax.servlet.http.HttpSession;
 import javax.faces.render.RenderKitFactory;
@@ -41,7 +41,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:59 rkitain Exp $
+ * @version $Id: TestReconstituteComponentTreePhase.java,v 1.2 2003/03/12 19:53:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,18 +100,17 @@ public void beginReconstituteRequestSubmit(WebRequest theRequest)
 
 public void testReconstituteRequestInitial()
 {
-    Phase reconstituteTree = new ReconstituteComponentTreePhase(null, 
-			RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
-    int result = -1;
+    Phase reconstituteTree = new ReconstituteComponentTreePhase();
 
     try {
-	result = reconstituteTree.execute(getFacesContext());
+        reconstituteTree.execute(getFacesContext());
     }
     catch (Throwable e) {
         e.printStackTrace();
 	assertTrue(false);
     }
-    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(null != getFacesContext().getTree());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 
@@ -155,17 +154,16 @@ public void testReconstituteRequestSubmit()
     Locale locale = new Locale("France", "french");
     session.setAttribute(RIConstants.REQUEST_LOCALE, locale);
     
-    Phase reconstituteTree = new ReconstituteComponentTreePhase(null, 
-			RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
-    int result = -1;
+    Phase reconstituteTree = new ReconstituteComponentTreePhase();
 
     try {
-	result = reconstituteTree.execute(getFacesContext());
+	reconstituteTree.execute(getFacesContext());
     }
     catch (Throwable e) {
 	assertTrue(false);
     }
-    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(null != getFacesContext().getTree());
     assertTrue(RenderKitFactory.DEFAULT_RENDER_KIT == 

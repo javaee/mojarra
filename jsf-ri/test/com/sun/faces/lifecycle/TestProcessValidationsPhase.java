@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.13 2003/03/11 05:37:59 rkitain Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.14 2003/03/12 19:53:43 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,6 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -28,7 +27,8 @@ import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.RIConstants;
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.Phase;
 import java.io.IOException;
 
 import java.util.Iterator;
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.13 2003/03/11 05:37:59 rkitain Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.14 2003/03/12 19:53:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,27 +97,23 @@ public void beginCallback(WebRequest theRequest)
 
 public void testCallback()
 {
-    int rc = Phase.GOTO_NEXT;
     UIComponent root = null;
     userName = null;
     String value = null;
     Phase 
-        reconstituteTree = new ReconstituteComponentTreePhase(null,
-            RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE),
-	applyValues = new ApplyRequestValuesPhase(null, 
-            RIConstants.APPLY_REQUEST_VALUES_PHASE), 
-	processValidations = new ProcessValidationsPhase(null, 
-            RIConstants.PROCESS_VALIDATIONS_PHASE);
+        reconstituteTree = new ReconstituteComponentTreePhase(),
+	applyValues = new ApplyRequestValuesPhase(), 
+	processValidations = new ProcessValidationsPhase();
 
-    int result = -1;
     try {
-        result = reconstituteTree.execute(getFacesContext());
+        reconstituteTree.execute(getFacesContext());
     }
     catch (Throwable e) {
         e.printStackTrace();
         assertTrue(false);
     }
-    assertTrue(Phase.GOTO_NEXT == result);
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
     assertTrue(null != getFacesContext().getTree());
 
     root = getFacesContext().getTree().getRoot();
@@ -158,10 +154,11 @@ public void testCallback()
 
     assertTrue(!userName.isValid());
 
-    rc = applyValues.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    applyValues.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
     
-    rc = processValidations.execute(getFacesContext());
+    processValidations.execute(getFacesContext());
     assertTrue(!System.getProperty(DID_VALIDATE).equals(EMPTY));
     assertTrue(userName.isValid());
     

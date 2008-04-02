@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.17 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.18 2003/03/12 19:53:44 rkitain Exp $
  */
 
 /*
@@ -21,13 +21,13 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.tree.Tree;
-import com.sun.faces.RIConstants;
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.tree.SimpleTreeImpl;
@@ -42,7 +42,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.17 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.18 2003/03/12 19:53:44 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -89,7 +89,6 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase
 
 public void testUpdateNormal()
 {
-    int rc = Phase.GOTO_NEXT;
     UIForm form = null;
     TestUIInput userName = null;
     TestUIInput userName1 = null;
@@ -98,9 +97,7 @@ public void testUpdateNormal()
     TestBean testBean = (TestBean)
 	(getFacesContext().getHttpSession()).getAttribute("TestBean");
     String value = null;
-    Phase 
-	updateModelValues = new UpdateModelValuesPhase(null, 
-				       RIConstants.UPDATE_MODEL_VALUES_PHASE);
+    Phase updateModelValues = new UpdateModelValuesPhase();
     form = new UIForm();
     form.setComponentId("form");
     form.setValid(true);
@@ -126,8 +123,9 @@ public void testUpdateNormal()
     tree = new SimpleTreeImpl(getFacesContext(), form, 
 			   "updateModel.xul");
     getFacesContext().setTree(tree);
-    rc = updateModelValues.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);    
+    updateModelValues.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(null == userName.getValue());
 
@@ -137,7 +135,6 @@ public void testUpdateNormal()
 
 public void testUpdateFailed()
 {
-    int rc = Phase.GOTO_NEXT;
     UIForm form = null;
     TestUIInput userName = null;
     TestUIInput userName1 = null;
@@ -145,8 +142,7 @@ public void testUpdateFailed()
     Tree tree = null;
     String value = null;
     Phase 
-	updateModelValues = new UpdateModelValuesPhase(null, 
-				       RIConstants.UPDATE_MODEL_VALUES_PHASE);
+	updateModelValues = new UpdateModelValuesPhase();
     form = new UIForm();
     form.setComponentId("form");
     userName = new TestUIInput();
@@ -174,8 +170,8 @@ public void testUpdateFailed()
 
     // This stage will go to render, since there was at least one error
     // during component updates... 
-    rc = updateModelValues.execute(getFacesContext());
-    assertTrue(Phase.GOTO_RENDER == rc);    
+    updateModelValues.execute(getFacesContext());
+    assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
 
     assertTrue(null != userName.getValue());
     assertTrue(true == (getFacesContext().getMessages().hasNext()));

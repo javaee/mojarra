@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.12 2003/03/12 19:53:41 rkitain Exp $
+ * $Id: TestPhase.java,v 1.1 2003/03/12 19:53:43 rkitain Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TestApplyRequestValuesPhase.java
+// TestPhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -16,33 +16,43 @@ import org.apache.cactus.WebRequest;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.context.FacesContext;
-//import javax.faces.lifecycle.Phase;
+import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.ApplicationHandler;
+import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 
+import java.util.Iterator;
+
+import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.CompareFiles;
+import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.Phase;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.tree.SimpleTreeImpl;
+import java.io.PrintStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 
 /**
  *
- *  <B>TestApplyRequestValuesPhase</B> is a class ...
+ *  <B>TestPhase</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.12 2003/03/12 19:53:41 rkitain Exp $
+ * @version $Id: TestPhase.java,v 1.1 2003/03/12 19:53:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestApplyRequestValuesPhase extends ServletFacesTestCase
+public class TestPhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -66,13 +76,8 @@ public static final String TEST_URI = "/components.jsp";
 // Constructors and Initializers    
 //
 
-    public TestApplyRequestValuesPhase() {
-	super("TestApplyRequestValuesPhase");
-    }
-
-    public TestApplyRequestValuesPhase(String name) {
-	super(name);
-    }
+    public TestPhase() {super("TestPhase");}
+    public TestPhase(String name) {super(name);}
 
 //
 // Class methods
@@ -82,22 +87,16 @@ public static final String TEST_URI = "/components.jsp";
 // General Methods
 //
 
-public void beginCallback(WebRequest theRequest)
+public void beginExecute(WebRequest theRequest)
 {
     theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
     theRequest.addParameter("userName", "jerry");
 }
 
-public void testCallback()
+public void testExecute()
 {
-    UIComponent root = null;
-    String value = null;
-    Phase 
-        reconstituteTree = new ReconstituteComponentTreePhase(),
-	applyValues = new ApplyRequestValuesPhase();
 
-    // 1. Set the root of the tree ...
-    //
+    Phase reconstituteTree = new ReconstituteComponentTreePhase();
     try {
         reconstituteTree.execute(getFacesContext());
     }
@@ -105,40 +104,36 @@ public void testCallback()
         e.printStackTrace();
         assertTrue(false);
     }
+
     assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
         !((FacesContextImpl)getFacesContext()).getResponseComplete());
     assertTrue(null != getFacesContext().getTree());
 
     // 2. Add components to tree
     //
-    root = getFacesContext().getTree().getRoot();
+    UIComponent root = getFacesContext().getTree().getRoot();
     UIForm basicForm = new UIForm();
     basicForm.setComponentId("basicForm");
     UIInput userName = new UIInput();
     userName.setComponentId("userName");
     root.addChild(basicForm);
     basicForm.addChild(userName);
+    SimpleTreeImpl tree = new SimpleTreeImpl(getFacesContext(), root,
+                           "root");
+    getFacesContext().setTree(tree);
 
-    // 3. Apply values
-    //
-    applyValues.execute(getFacesContext());
-    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
-        !((FacesContextImpl)getFacesContext()).getResponseComplete());
-    
-    root = getFacesContext().getTree().getRoot();
+    Phase applyValues = new ApplyRequestValuesPhase();
+
     try {
-	userName = (UIInput) root.findComponent("userName");
+	applyValues.execute(getFacesContext());
     }
     catch (Throwable e) {
-	System.out.println(e.getMessage());
-	assertTrue("Can't find userName in tree", false);
+	System.out.println("Throwable: " + e.getMessage());
+	e.printStackTrace();
+	assertTrue(false);
     }
-    assertTrue(null != userName);
-    assertTrue(null != (value = (String) userName.getValue()));
-    assertTrue(value.equals("jerry"));
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 }
 
-
-
-
-} // end of class TestApplyRequestValuesPhase
+} // end of class TestPhase

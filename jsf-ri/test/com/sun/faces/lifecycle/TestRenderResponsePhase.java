@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.46 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.47 2003/03/12 19:53:43 rkitain Exp $
  */
 
 /*
@@ -21,12 +21,13 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponentBase;
 import javax.faces.validator.Validator;
 import javax.faces.component.AttributeDescriptor;
 
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.FileOutputResponseWrapper;
 import com.sun.faces.RIConstants;
@@ -51,7 +52,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.46 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.47 2003/03/12 19:53:43 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,13 +130,10 @@ public void testHtmlBasicRenderKit()
     System.setProperty(RIConstants.DISABLE_RENDERERS, "");
 
     boolean result = false;
-    int rc = Phase.GOTO_NEXT;
     UIComponentBase root = null;
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
-    Phase 
-	renderResponse = new RenderResponsePhase(lifecycle, 
-				       RIConstants.RENDER_RESPONSE_PHASE);
+    Phase renderResponse = new RenderResponsePhase(lifecycle);
     root = new UIComponentBase() {
 	    public String getComponentType() { return "Root"; }
 	};
@@ -148,8 +146,9 @@ public void testHtmlBasicRenderKit()
             TEST_URI );
     getFacesContext().setTree(requestTree);
 
-    rc = renderResponse.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    renderResponse.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(verifyExpectedOutput());
 }

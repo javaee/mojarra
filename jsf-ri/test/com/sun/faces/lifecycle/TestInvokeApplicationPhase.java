@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.11 2003/02/20 22:49:56 ofung Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.12 2003/03/12 19:53:42 rkitain Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import org.mozilla.util.ParameterCheck;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Phase;
+//import javax.faces.lifecycle.Phase;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.component.UIInput;
@@ -28,7 +28,9 @@ import javax.faces.event.FacesEvent;
 import javax.faces.event.FormEvent;
 import javax.faces.event.CommandEvent;
 import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.LifecycleImpl;
+import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.RIConstants;
 import java.io.IOException;
@@ -41,7 +43,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.11 2003/02/20 22:49:56 ofung Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.12 2003/03/12 19:53:42 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,17 +107,16 @@ public void testInvokeNormal()
                 return true;
 	    }
 	};
-    Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
-				      RIConstants.INVOKE_APPLICATION_PHASE);
-    int rc = Phase.GOTO_NEXT;
+    Phase invokeApplicationPhase = new InvokeApplicationPhase(life);
     getFacesContext().setTree(tree);
 
     life.setApplicationHandler(appHandler);
     getFacesContext().addApplicationEvent(new CommandEvent(root, "command"));
     getFacesContext().addApplicationEvent(new FormEvent(root, "formName",
 							"commandName"));
-    rc = invokeApplicationPhase.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    invokeApplicationPhase.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
     assertTrue(System.getProperty(DID_COMMAND).equals(DID_COMMAND));
     assertTrue(System.getProperty(DID_FORM).equals(DID_FORM));
 }
@@ -126,13 +127,12 @@ public void testInvokeNoOp()
     Lifecycle life = new LifecycleImpl();
     Tree tree = new SimpleTreeImpl(getFacesContext(),
 				root, "default.xul");
-    Phase invokeApplicationPhase = new InvokeApplicationPhase(life, 
-				      RIConstants.INVOKE_APPLICATION_PHASE);
-    int rc = Phase.GOTO_NEXT;
+    Phase invokeApplicationPhase = new InvokeApplicationPhase(life);
     getFacesContext().setTree(tree);
 
-    rc = invokeApplicationPhase.execute(getFacesContext());
-    assertTrue(Phase.GOTO_NEXT == rc);
+    invokeApplicationPhase.execute(getFacesContext());
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 }
 
 } // end of class TestInvokeApplicationPhase

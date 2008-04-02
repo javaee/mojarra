@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.13 2003/02/20 22:49:58 ofung Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.14 2003/03/12 19:53:44 rkitain Exp $ 
  */ 
 
 
@@ -27,7 +27,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder; 
 import javax.faces.context.FacesContext; 
 import javax.faces.context.FacesContextFactory; 
-import javax.faces.lifecycle.Phase; 
 import javax.faces.lifecycle.Lifecycle; 
 import javax.faces.component.UIComponentBase; 
 import javax.faces.validator.Validator; 
@@ -36,11 +35,11 @@ import javax.servlet.ServletException;
 
 import com.sun.faces.JspFacesTestCase; 
 import com.sun.faces.FileOutputResponseWrapper; 
-import com.sun.faces.RIConstants; 
 import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util; 
 import com.sun.faces.CompareFiles; 
 
+import com.sun.faces.context.FacesContextImpl; 
 import com.sun.faces.tree.SimpleTreeImpl; 
 
 
@@ -63,7 +62,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.13 2003/02/20 22:49:58 ofung Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.14 2003/03/12 19:53:44 rkitain Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -152,7 +151,6 @@ public void beginRender(WebRequest theRequest)
 public void testRender() 
 { 
     boolean result = false; 
-    int rc = Phase.GOTO_NEXT; 
     UIComponentBase root = null; 
     String value = null; 
     SimpleTreeImpl newTree = new SimpleTreeImpl(getFacesContext(),
@@ -164,14 +162,12 @@ public void testRender()
         viewHandler.renderView(getFacesContext()); 
     } catch (IOException e) { 
         System.out.println("ViewHandler IOException:"+e); 
-        rc = -1; 
     } catch (ServletException se) { 
         System.out.println("ViewHandler ServletException: "+se); 
-        rc = -1; 
     }
-    
-    assertTrue(Phase.GOTO_NEXT == rc); 
 
+    assertTrue(!((FacesContextImpl)getFacesContext()).getRenderResponse() &&
+        !((FacesContextImpl)getFacesContext()).getResponseComplete());
 
     assertTrue(verifyExpectedOutput()); 
 } 
