@@ -12,51 +12,51 @@
     </head>
     <body>
         
-<form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=b934b741c0f490b6648ca90b981c" enctype="application/x-www-form-urlencoded">
+<form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=cb9cbd31a3a311b385b1991b8cc3" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="j_id_id16" value="j_id_id16" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id327:j_id328" />
 
 <script type="text/javascript" language="Javascript">
 <!--
 for (var f = 0; f < document.forms.length; f++) {
-    var form = document.forms[f];
-    form.deleteParams = function() {
-        var addedParams = this.addedParams;
-        if (addedParams != null) {
-            for (var i = 0; i < addedParams.length; i++) {
-                this.removeChild(addedParams[i]);
+    var fm = document.forms[f];
+    fm.dpf = function() {
+        var adp = this.adp;
+        if (adp != null) {
+            for (var i = 0; i < adp.length; i++) {
+                this.removeChild(adp[i]);
             }
         }
-        this.addedParams = null;
-    }
-    var oldOnSubmit = form.onsubmit
-    if (oldOnSubmit == null) {
-        form.onsubmit = form.deleteParams
+        this.adp = null;
+    };
+    var mos = fm.onsubmit;
+    if (mos == null) {
+        fm.onsubmit = fm.dpf;
     } else {
-        form.onsubmit = function() {
-            form.deleteParams();
-            oldOnSubmit();
+        fm.onsubmit = function() {
+            fm.dpf();
+            mos();
         }
     }
-    form.addParams = function(paramValuePairs) {
-        this.deleteParams();
-        var addedParams = new Array();
-        this.addedParams = addedParams;
-        var params = paramValuePairs.split(',');
-        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
-            var param = document.createElement("input");
-            param.type = "hidden";
-            param.name = params[i];
-            param.value = params[i + 1];
-            this.appendChild(param);
-            addedParams[ii] = param
-            i = i + 1;
+    fm.apf = function(pvp) {
+        this.dpf();
+        var adp = new Array();
+        this.adp = adp;
+        var ps = pvp.split(',');
+        for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
+            var p = document.createElement("input");
+            p.type = "hidden";
+            p.name = ps[i];
+            p.value = ps[i + 1];
+            this.appendChild(p);
+            adp[ii] = p;
+            i += 1;
         }
-    }
+    };
 }
 //-->
 </script>
-<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){document.forms['j_id_id16'].addParams('j_id_id16:j_id_id18,j_id_id16:j_id_id18'); document.forms['j_id_id16'].submit(); return false;};return (a()==false) ? false : b();">Link</a><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="alert('Are you sure?')" />
+<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){document.forms['j_id_id16'].apf('j_id_id16:j_id_id18,j_id_id16:j_id_id18'); document.forms['j_id_id16'].submit(); return false;};return (a()==false) ? false : b();">Link</a><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="alert('Are you sure?')" />
 </form>
     </body>
 </html>

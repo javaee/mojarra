@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.53 2006/07/31 23:07:00 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.54 2006/08/02 15:22:14 rlubke Exp $
  */
 
 /*
@@ -159,7 +159,8 @@ public class CommandLinkRenderer extends LinkRenderer {
             if (!hasScriptBeenRendered(context)) {
                 RenderKitUtils
                       .renderFormInitScript(
-                            context.getResponseWriter());
+                            context.getResponseWriter(),
+                            context);
                 setScriptAsRendered(context);
             }
             renderAsActive(context, command);

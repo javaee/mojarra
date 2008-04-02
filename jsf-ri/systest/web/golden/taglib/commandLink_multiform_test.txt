@@ -7,56 +7,56 @@
 <html>
   <body>
      
-<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=b8a8f9bfe168405db921befbd958" enctype="application/x-www-form-urlencoded">
+<form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=cb78c621b864de825c27661f629d" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form01" value="form01" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
 
 <script type="text/javascript" language="Javascript">
 <!--
 for (var f = 0; f < document.forms.length; f++) {
-    var form = document.forms[f];
-    form.deleteParams = function() {
-        var addedParams = this.addedParams;
-        if (addedParams != null) {
-            for (var i = 0; i < addedParams.length; i++) {
-                this.removeChild(addedParams[i]);
+    var fm = document.forms[f];
+    fm.dpf = function() {
+        var adp = this.adp;
+        if (adp != null) {
+            for (var i = 0; i < adp.length; i++) {
+                this.removeChild(adp[i]);
             }
         }
-        this.addedParams = null;
-    }
-    var oldOnSubmit = form.onsubmit
-    if (oldOnSubmit == null) {
-        form.onsubmit = form.deleteParams
+        this.adp = null;
+    };
+    var mos = fm.onsubmit;
+    if (mos == null) {
+        fm.onsubmit = fm.dpf;
     } else {
-        form.onsubmit = function() {
-            form.deleteParams();
-            oldOnSubmit();
+        fm.onsubmit = function() {
+            fm.dpf();
+            mos();
         }
     }
-    form.addParams = function(paramValuePairs) {
-        this.deleteParams();
-        var addedParams = new Array();
-        this.addedParams = addedParams;
-        var params = paramValuePairs.split(',');
-        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
-            var param = document.createElement("input");
-            param.type = "hidden";
-            param.name = params[i];
-            param.value = params[i + 1];
-            this.appendChild(param);
-            addedParams[ii] = param
-            i = i + 1;
+    fm.apf = function(pvp) {
+        this.dpf();
+        var adp = new Array();
+        this.adp = adp;
+        var ps = pvp.split(',');
+        for (var i = 0, ii = 0; i < ps.length; i++, ii++) {
+            var p = document.createElement("input");
+            p.type = "hidden";
+            p.name = ps[i];
+            p.value = ps[i + 1];
+            this.appendChild(p);
+            adp[ii] = p;
+            i += 1;
         }
-    }
+    };
 }
 //-->
 </script>
-<a id="form01:Link1" href="#" onclick="document.forms['form01'].addParams('form01:Link1,form01:Link1,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link1</a><a id="form01:Link2" href="#" onclick="document.forms['form01'].addParams('form01:Link2,form01:Link2,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link2</a>
+<a id="form01:Link1" href="#" onclick="document.forms['form01'].apf('form01:Link1,form01:Link1,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link1</a><a id="form01:Link2" href="#" onclick="document.forms['form01'].apf('form01:Link2,form01:Link2,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link2</a>
 </form>
-<form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=b8a8f9bfe168405db921befbd958" enctype="application/x-www-form-urlencoded">
+<form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=cb78c621b864de825c27661f629d" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="form02" value="form02" />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id235:j_id236" />
-<a id="form02:Link3" href="#" onclick="document.forms['form02'].addParams('form02:Link3,form02:Link3,param3,value3,param4,value4'); document.forms['form02'].submit(); return false;">Link3</a><a id="form02:Link4" href="#" onclick="document.forms['form02'].addParams('form02:Link4,form02:Link4'); document.forms['form02'].submit(); return false;">Link4</a>
+<a id="form02:Link3" href="#" onclick="document.forms['form02'].apf('form02:Link3,form02:Link3,param3,value3,param4,value4'); document.forms['form02'].submit(); return false;">Link3</a><a id="form02:Link4" href="#" onclick="document.forms['form02'].apf('form02:Link4,form02:Link4'); document.forms['form02'].submit(); return false;">Link4</a>
 </form>
   </body>
 </html>

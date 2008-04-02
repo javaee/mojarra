@@ -37,7 +37,10 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,6 +49,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import static com.sun.faces.config.WebConfiguration.BooleanWebContextInitParameter;
 import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -183,41 +188,47 @@ public class RenderKitUtils {
     
     private final static String FORM_INIT_JS =
         "\nfor (var f = 0; f < document.forms.length; f++) {"
-          + "\n    var form = document.forms[f];"
-          + "\n    form.deleteParams = function() {"      
-          + "\n        var addedParams = this.addedParams;"
-          + "\n        if (addedParams != null) {"        
-          + "\n            for (var i = 0; i < addedParams.length; i++) {"
-          + "\n                this.removeChild(addedParams[i]);"
+          + "\n    var fm = document.forms[f];"
+          + "\n    fm.dpf = function() {"      
+          + "\n        var adp = this.adp;"
+          + "\n        if (adp != null) {"        
+          + "\n            for (var i = 0; i < adp.length; i++) {"
+          + "\n                this.removeChild(adp[i]);"
           + "\n            }"
           + "\n        }"
-          + "\n        this.addedParams = null;"
-          + "\n    }"        
-          + "\n    var oldOnSubmit = form.onsubmit"
-          + "\n    if (oldOnSubmit == null) {"       
-          + "\n        form.onsubmit = form.deleteParams"
+          + "\n        this.adp = null;"
+          + "\n    };"        
+          + "\n    var mos = fm.onsubmit;"
+          + "\n    if (mos == null) {"       
+          + "\n        fm.onsubmit = fm.dpf;"
           + "\n    } else {"      
-          + "\n        form.onsubmit = function() {"
-          + "\n            form.deleteParams();"
-          + "\n            oldOnSubmit();"       
+          + "\n        fm.onsubmit = function() {"
+          + "\n            fm.dpf();"
+          + "\n            mos();"       
           + "\n        }"
           + "\n    }"
-          + "\n    form.addParams = function(paramValuePairs) {"
-          + "\n        this.deleteParams();"
-          + "\n        var addedParams = new Array();"
-          + "\n        this.addedParams = addedParams;"
-          + "\n        var params = paramValuePairs.split(',');"
-          + "\n        for (var i = 0, ii = 0; i < params.length; i++, ii++) {"        
-          + "\n            var param = document.createElement(\"input\");"
-          + "\n            param.type = \"hidden\";"
-          + "\n            param.name = params[i];"
-          + "\n            param.value = params[i + 1];"
-          + "\n            this.appendChild(param);"
-          + "\n            addedParams[ii] = param"
-          + "\n            i = i + 1;"
+          + "\n    fm.apf = function(pvp) {"
+          + "\n        this.dpf();"
+          + "\n        var adp = new Array();"
+          + "\n        this.adp = adp;"
+          + "\n        var ps = pvp.split(',');"
+          + "\n        for (var i = 0, ii = 0; i < ps.length; i++, ii++) {"        
+          + "\n            var p = document.createElement(\"input\");"
+          + "\n            p.type = \"hidden\";"
+          + "\n            p.name = ps[i];"
+          + "\n            p.value = ps[i + 1];"
+          + "\n            this.appendChild(p);"
+          + "\n            adp[ii] = p;"
+          + "\n            i += 1;"
           + "\n        }"
-          + "\n    }"
-          + "\n}";
+          + "\n    };"
+          + "\n}";    
+    
+    /**
+     * <p>A <code>compressed</code> version of <code>FORM_INIT_JS</code>.</p>
+     */
+    private static final String FORM_INIT_JS_COMPRESSED = 
+          compressJS(FORM_INIT_JS);
 
     // ------------------------------------------------------------ Constructors
 
@@ -880,9 +891,11 @@ public class RenderKitUtils {
      * <p>Renders the Javascript necessary to add and remove request
      * parameters to the current form.</p>
      * @param writer the <code>ResponseWriter</code>
+     * @param context the <code>FacesContext</code> for the current request
      * @throws java.io.IOException if an error occurs writing to the response
      */
-    public static void renderFormInitScript(ResponseWriter writer) 
+    public static void renderFormInitScript(ResponseWriter writer,
+                                            FacesContext context) 
     throws IOException {
         
         boolean isXhtml = 
@@ -897,8 +910,14 @@ public class RenderKitUtils {
         } else {
             writer.write("\n<!--");
         }
-        
-        writer.write(FORM_INIT_JS);
+
+        if (WebConfiguration.getInstance(context.getExternalContext())
+              .getBooleanContextInitParameter(BooleanWebContextInitParameter.CompressJavaScript)
+            && FORM_INIT_JS_COMPRESSED != null) {
+            writer.write(FORM_INIT_JS_COMPRESSED);
+        } else {
+            writer.write(FORM_INIT_JS);
+        }
         
         if (isXhtml) {
             writer.write("\n//]]>\n");            
@@ -923,12 +942,13 @@ public class RenderKitUtils {
      */
     public static String getCommandLinkParamScript(String formClientId,
                                                    String commandClientId,
-                                                   Param[] params) {
+                                                   Param[] params
+    ) {
 
         StringBuilder sb = new StringBuilder(64);       
         sb.append("document.forms['");
-        sb.append(formClientId);
-        sb.append("'].addParams('");
+        sb.append(formClientId);        
+        sb.append("'].apf('");        
         sb.append(commandClientId);
         sb.append(',');
         sb.append(commandClientId);               
@@ -944,6 +964,39 @@ public class RenderKitUtils {
 
         return sb.toString();
         
-    }    
+    }
+
+
+    /**
+     * <p>This is a utility method for compressing multi-lined javascript.
+     * In the case of {@link #FORM_INIT_JS} it offers about a 47% decrease
+     * in length.</p>
+     * 
+     * <p>For our purposes, compression is just trimming each line and 
+     * then writing it out.  It's pretty simplistic, but it works.</p>
+     * 
+     * @param JSString the string to compress
+     * @return the compressed string
+     */
+    public static String compressJS(String JSString) {
+
+        BufferedReader reader = new BufferedReader(new StringReader(JSString));
+        StringWriter writer = new StringWriter(1024);   
+        writer.write('\n');
+        try {
+            for (String line = reader.readLine();
+                 line != null;
+                 line = reader.readLine()) {
+
+                line = line.trim();
+                writer.write(line);
+            }
+            return writer.toString();
+        } catch (IOException ioe) {
+            // won't happen
+        }
+        return null;
+
+    }
                            
 } // END RenderKitUtils
