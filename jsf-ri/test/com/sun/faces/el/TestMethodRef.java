@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.8 2005/06/02 00:00:39 edburns Exp $
+ * $Id: TestMethodRef.java,v 1.9 2005/06/13 02:47:43 jhook Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package com.sun.faces.el;
 
 import com.sun.faces.ServletFacesTestCase;
 
+import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
@@ -20,7 +21,7 @@ import javax.faces.el.ReferenceSyntaxException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodRef.java,v 1.8 2005/06/02 00:00:39 edburns Exp $
+ * @version $Id: TestMethodRef.java,v 1.9 2005/06/13 02:47:43 jhook Exp $
  */
 
 public class TestMethodRef extends ServletFacesTestCase
@@ -101,7 +102,7 @@ public class TestMethodRef extends ServletFacesTestCase
         catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
     }
 
-    public void NOTtestInvalidTrailing() throws Exception
+    public void testInvalidTrailing() throws Exception
     {
         MethodBinding mb = this.create(
                 "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
@@ -119,6 +120,9 @@ public class TestMethodRef extends ServletFacesTestCase
 
         mb = this.create("#{nonexistentBean.redLectroidsMmmm}", new Class[0]);
         
+        // page 80 of the EL Spec, since nonexistentBean is null, the target
+        // method is never reached and should catch a PropertyNotFoundException
+        // and rethrow as a MethodNotFoundException
         exceptionThrown = false;
         try
         {
@@ -126,6 +130,10 @@ public class TestMethodRef extends ServletFacesTestCase
         }
         catch (MethodNotFoundException e)
         {
+            exceptionThrown = true;
+        }
+        catch (EvaluationException e) {
+            //TODO remove once adaptor is fixed
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);

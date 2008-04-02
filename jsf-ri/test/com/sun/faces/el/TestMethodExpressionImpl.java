@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodExpressionImpl.java,v 1.2 2005/06/02 00:00:38 edburns Exp $
+ * $Id: TestMethodExpressionImpl.java,v 1.3 2005/06/13 02:47:43 jhook Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.el.PropertyNotFoundException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodExpressionImpl.java,v 1.2 2005/06/02 00:00:38 edburns Exp $
+ * @version $Id: TestMethodExpressionImpl.java,v 1.3 2005/06/13 02:47:43 jhook Exp $
  */
 
 public class TestMethodExpressionImpl extends ServletFacesTestCase
@@ -107,7 +107,7 @@ public class TestMethodExpressionImpl extends ServletFacesTestCase
         assertTrue(exceptionThrown);
     }
 
-    public void NOTtestInvalidTrailing() throws Exception
+    public void testInvalidTrailing() throws Exception
     {
         MethodExpression mb = this.create(
                 "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
@@ -132,6 +132,9 @@ public class TestMethodExpressionImpl extends ServletFacesTestCase
         }
         catch (PropertyNotFoundException ne)
         {
+            exceptionThrown = true;
+        }
+        catch (ELException e) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
