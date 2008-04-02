@@ -93,6 +93,7 @@
                 <include name="*.jpg"/>
                 <include name="*.jsp"/>
                 <include name="*.xml"/>
+                <include name="*.txt"/>
             </fileset>
         </copy>
         <copy todir="${build}/${example}/WEB-INF/classes/${example}">

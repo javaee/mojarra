@@ -59,6 +59,11 @@
     <!-- Misc -->
     <property name="conf.share.dir" value="${basedir}/conf/share"/>
     <property name="name" value="jsf-impl"/>
+    
+    <path id="impl.compile.classpath">
+        <pathelement location="${jsf-api.jar}"/>
+        <path refid="compile.classpath"/>
+    </path>
 
 
     <!-- ************ Executable Targets ************************************** -->
@@ -149,7 +154,7 @@
         <javac srcdir="${tools.dir}/src"
                destdir="${tools.dir}/build/classes">
             <classpath>
-                <path refid="compile.classpath"/>
+                <path refid="impl.compile.classpath"/>
             </classpath>
         </javac>
         <copy todir="${tools.dir}/build/classes">
@@ -176,7 +181,7 @@
               facesConfig="${standard.renderkit.xml}"
               fork="true">
             <classpath>
-                <path refid="compile.classpath"/>                
+                <path refid="impl.compile.classpath"/>                
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
@@ -205,7 +210,7 @@
         <jsf.javac srcdir="${source.dir}:${build.generate.dir}"
                    destdir="${build.classes.dir}">
             <classpath>
-                <path refid="compile.classpath"/>
+                <path refid="impl.compile.classpath"/>
             </classpath>            
         </jsf.javac>
 

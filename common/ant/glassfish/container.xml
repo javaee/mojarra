@@ -61,7 +61,10 @@
             </condition>
             <property name="exec.name" value="${container.home}/bin/asadmin"/>
             <property name="exec.arg.1" value=""/>
-            <echo message=" ------- Deploying @{appName} ------- "/>
+            <echo>
+---------------- Glassfish - Deploying @{appName} ---------------- 
+                
+            </echo>
             <exec executable="${exec.name}" failonerror="true">
                 <arg line="${exec.arg.1}"/>
                 <arg line="deploy"/>
@@ -89,7 +92,10 @@
             </condition>
             <property name="exec.name" value="${container.home}/bin/asadmin"/>
             <property name="exec.arg.1" value=""/>
-            <echo message=" ------- Undeploying @{appName} ------- "/>
+            <echo>
+---------------- Glassfish - Undeploying @{appName} ---------------- 
+                
+            </echo>
             <exec executable="${exec.name}">
                 <arg line="${exec.arg.1}"/>
                 <arg line="undeploy"/>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.98 2005/12/14 22:27:55 rlubke Exp $
+ $Id: build-tests.xml,v 1.99 2005/12/20 16:59:56 rlubke Exp $
 -->
 
 <!--
@@ -59,6 +59,8 @@
 
     <!-- SystestClient taskdef classpath -->
     <path id="test.classpath">
+        <pathelement location="${jsf-api.jar}"/>
+        <pathelement location="${jsf-impl.jar}"/>
         <pathelement location="${basedir}/build/classes"/>
         <path refid="compile.classpath"/>
     </path>

@@ -43,11 +43,11 @@
 
     <!-- Construct compile classpath -->
     <path id="test.compile.classpath">
-        <path refid="compile.classpath"/>
-        <pathelement location="${basedir}/build/classes"/>
         <pathelement location="${jsf-api.jar}"/>
         <pathelement location="${jsf-impl.jar}"/>
         <pathelement location="${jsf.test.jar}"/>
+        <path refid="compile.classpath"/>
+        <pathelement location="${basedir}/build/classes"/>       
         <path refid="htmlunit.compile.classpath"/>
     </path>
 
