@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.50 2003/08/21 14:18:24 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.51 2003/08/22 16:51:51 eburns Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.50 2003/08/21 14:18:24 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.51 2003/08/22 16:51:51 eburns Exp $
  * 
  *
  */
@@ -121,8 +121,8 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void setUp() {
 	super.setUp();
         UIPage page = new UIPageBase();
-        page.setTreeId("treeId");       
-        getFacesContext().setRoot(page);
+        page.setViewId("viewId");       
+        getFacesContext().setViewRoot(page);
 	assertTrue(null != getFacesContext().getResponseWriter());
     }     
 

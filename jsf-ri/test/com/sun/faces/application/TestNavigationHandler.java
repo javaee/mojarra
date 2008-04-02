@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.6 2003/08/21 14:18:08 rlubke Exp $
+ * $Id: TestNavigationHandler.java,v 1.7 2003/08/22 16:50:33 eburns Exp $
  */
 
 /*
@@ -50,12 +50,12 @@ import com.sun.faces.ServletFacesTestCase;
  * It uses two xml files:
  *     1) faces-navigation.xml --> contains the navigation cases themselves.
  *     2) navigation-cases.xml --> contains the test cases including expected
- *        tree identifier outcomes for this test to validate against. 
+ *        view identifier outcomes for this test to validate against. 
  * Both files exist under <code>web/test/WEB-INF</code>.
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.6 2003/08/21 14:18:08 rlubke Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.7 2003/08/22 16:50:33 eburns Exp $
  * 
  */
 
@@ -113,10 +113,10 @@ public class TestNavigationHandler extends ServletFacesTestCase
         }
 
         digester.addRule("*/test", new CallMethodRule("createAndAccrueTestResult", 4));
-        digester.addRule("*/test", new CallParamRule(0, "fromTreeId"));
+        digester.addRule("*/test", new CallParamRule(0, "fromViewId"));
         digester.addRule("*/test", new CallParamRule(1, "fromActionRef"));
         digester.addRule("*/test", new CallParamRule(2, "fromOutcome"));
-        digester.addRule("*/test", new CallParamRule(3, "toTreeId"));
+        digester.addRule("*/test", new CallParamRule(3, "toViewId"));
 
         String fileName = "/WEB-INF/navigation-cases.xml";
         InputStream input = null;
@@ -138,16 +138,16 @@ public class TestNavigationHandler extends ServletFacesTestCase
         }
     }
 
-    public void createAndAccrueTestResult(String fromTreeId, String fromActionRef,
-        String fromOutcome, String toTreeId) {
+    public void createAndAccrueTestResult(String fromViewId, String fromActionRef,
+        String fromOutcome, String toViewId) {
         if (testResultList == null) {
             testResultList = new ArrayList();
         }
         TestResult testResult = new TestResult();
-        testResult.fromTreeId = fromTreeId;
+        testResult.fromViewId = fromViewId;
         testResult.fromActionRef = fromActionRef;
         testResult.fromOutcome = fromOutcome;
-        testResult.toTreeId = toTreeId;
+        testResult.toViewId = toViewId;
         testResultList.add(testResult);
     }
 
@@ -160,28 +160,28 @@ public class TestNavigationHandler extends ServletFacesTestCase
 	((com.sun.faces.TestNavigationHandler)navHandler).getCaseListMap().size();
         FacesContext context = getFacesContext();
 
-        String newTreeId = null;
+        String newViewId = null;
         UIPage page = null;
         for (int i=0; i<testResultList.size(); i++) {
             TestResult testResult = (TestResult)testResultList.get(i);
-            System.out.println("Testing from-tree-id="+testResult.fromTreeId+
+            System.out.println("Testing from-view-id="+testResult.fromViewId+
                 " from-action-ref="+testResult.fromActionRef+
                 " from-outcome="+testResult.fromOutcome);
             page = new UIPageBase();
-            page.setTreeId(testResult.fromTreeId);
-            context.setRoot(page);
+            page.setViewId(testResult.fromViewId);
+            context.setViewRoot(page);
             navHandler.handleNavigation(
 	        context, testResult.fromActionRef, testResult.fromOutcome);
-            newTreeId = context.getRoot().getTreeId();
-            System.out.println("assertTrue("+newTreeId+".equals("+testResult.toTreeId+"))");
-            assertTrue(newTreeId.equals(testResult.toTreeId));
+            newViewId = context.getViewRoot().getViewId();
+            System.out.println("assertTrue("+newViewId+".equals("+testResult.toViewId+"))");
+            assertTrue(newViewId.equals(testResult.toViewId));
         }
     }
 
-    // This tests that the same <from-tree-id> element value existing in a seperate
-    // navigation rule, gets combined with the other rules with the same <from-tree-id>.
+    // This tests that the same <from-view-id> element value existing in a seperate
+    // navigation rule, gets combined with the other rules with the same <from-view-id>.
     // Specifically, it will to make sure that after loading, there are the correct number of
-    // cases with the common <from-tree-id>;
+    // cases with the common <from-view-id>;
  
     public void testSeperateRule() {
         int cnt = 0;
@@ -193,12 +193,12 @@ public class TestNavigationHandler extends ServletFacesTestCase
 	Map caseListMap = ((com.sun.faces.TestNavigationHandler)navHandler).getCaseListMap();
 	Iterator iter = caseListMap.keySet().iterator();
 	while (iter.hasNext()) {
-	    String fromTreeId = (String)iter.next();
-	    if (fromTreeId.equals("/login.jsp")) {
-                List caseList = (List)caseListMap.get(fromTreeId);
+	    String fromViewId = (String)iter.next();
+	    if (fromViewId.equals("/login.jsp")) {
+                List caseList = (List)caseListMap.get(fromViewId);
 		for (int i=0; i<caseList.size();i++) {
 		    ConfigNavigationCase cnc = (ConfigNavigationCase)caseList.get(i);
-		    if (cnc.getFromTreeId().equals("/login.jsp")) {
+		    if (cnc.getFromViewId().equals("/login.jsp")) {
 	                cnt++;
 		    }
 		}
@@ -208,10 +208,10 @@ public class TestNavigationHandler extends ServletFacesTestCase
     }
 
     class TestResult extends Object {
-        public String fromTreeId = null;
+        public String fromViewId = null;
         public String fromActionRef = null;
         public String fromOutcome = null;
-        public String toTreeId = null;
+        public String toViewId = null;
     }
 
 } // end of class TestNavigationHandler

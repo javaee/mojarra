@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.41 2003/08/19 19:31:26 rlubke Exp $
+ * $Id: FormTag.java,v 1.42 2003/08/22 16:50:24 eburns Exp $
  */
 
 /*
@@ -95,7 +95,7 @@ public class FormTag extends FacesTag
 //                // it is available to children and doesn't have to be repeated
 //                // in every tag.
 //                FacesContext context = FacesContext.getCurrentInstance();
-//                UIComponent root = context.getRoot();
+//                UIComponent root = context.getViewRoot();
 //                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
 //            }
 //	}

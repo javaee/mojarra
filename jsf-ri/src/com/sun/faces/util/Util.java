@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.75 2003/08/19 21:41:01 horwat Exp $
+ * $Id: Util.java,v 1.76 2003/08/22 16:50:28 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.75 2003/08/19 21:41:01 horwat Exp $
+ * @version $Id: Util.java,v 1.76 2003/08/22 16:50:28 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,14 +102,14 @@ public class Util extends Object
     public static final String NULL_COMPONENT_ERROR_MESSAGE_ID = 
 	"com.sun.faces.NULL_COMPONENT_ERROR";
 
-    public static final String NULL_REQUEST_TREE_ERROR_MESSAGE_ID = 
-	"com.sun.faces.NULL_REQUEST_TREE_ERROR";
+    public static final String NULL_REQUEST_VIEW_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_REQUEST_VIEW_ERROR";
 
-    public static final String NULL_RESPONSE_TREE_ERROR_MESSAGE_ID = 
-	"com.sun.faces.NULL_RESPONSE_TREE_ERROR";
+    public static final String NULL_RESPONSE_VIEW_ERROR_MESSAGE_ID = 
+	"com.sun.faces.NULL_RESPONSE_VIEW_ERROR";
 
-    public static final String REQUEST_TREE_ALREADY_SET_ERROR_MESSAGE_ID = 
-	"com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR";
+    public static final String REQUEST_VIEW_ALREADY_SET_ERROR_MESSAGE_ID = 
+	"com.sun.faces.REQUEST_VIEW_ALREADY_SET_ERROR";
     
     public static final String NULL_MESSAGE_ERROR_MESSAGE_ID = 
 	"com.sun.faces.NULL_MESSAGE_ERROR";

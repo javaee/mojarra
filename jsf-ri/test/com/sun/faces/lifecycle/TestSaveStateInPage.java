@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.13 2003/08/21 14:18:17 rlubke Exp $
+ * $Id: TestSaveStateInPage.java,v 1.14 2003/08/22 16:51:47 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.13 2003/08/21 14:18:17 rlubke Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.14 2003/08/22 16:51:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -112,8 +112,8 @@ public void testSaveStateInPage()
     Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());   
     UIPage page = new UIPageBase();
     page.setId("root");
-    page.setTreeId(TEST_URI);
-    getFacesContext().setRoot(page);
+    page.setViewId(TEST_URI);
+    getFacesContext().setViewRoot(page);
 
     renderResponse.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&

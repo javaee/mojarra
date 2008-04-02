@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.14 2003/08/21 14:18:16 rlubke Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.15 2003/08/22 16:50:38 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.14 2003/08/21 14:18:16 rlubke Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.15 2003/08/22 16:50:38 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,10 +94,10 @@ public void testCallback()
     UIComponent root = null;
     String value = null;
     Phase 
-        reconstituteTree = new RestoreComponentTreePhase(),
+        reconstituteTree = new RestoreViewPhase(),
 	applyValues = new ApplyRequestValuesPhase();
 
-    // 1. Set the root of the tree ...
+    // 1. Set the root of the view ...
     //
     try {
         reconstituteTree.execute(getFacesContext());
@@ -108,11 +108,11 @@ public void testCallback()
     }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getRoot());
+    assertTrue(null != getFacesContext().getViewRoot());
 
     // 2. Add components to tree
     //
-    root = getFacesContext().getRoot();
+    root = getFacesContext().getViewRoot();
     UIForm basicForm = new UIFormBase();
     basicForm.setId("basicForm");
     UIInput userName = new UIInputBase();
@@ -126,7 +126,7 @@ public void testCallback()
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
     
-    root = getFacesContext().getRoot();
+    root = getFacesContext().getViewRoot();
     try {
 	userName = (UIInput) root.findComponent("userName");
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.11 2003/08/19 20:04:46 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.12 2003/08/22 16:49:39 eburns Exp $
  */
 
 /*
@@ -50,9 +50,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
     private List navigationCases = null;
 
     /**
-     * Overall Map containing <code>from-tree-id</code> key and <code>ArrayList</code>
+     * Overall Map containing <code>from-view-id</code> key and <code>ArrayList</code>
      *  of <code>ConfigNavigationCase</code> objects for that key; 
-     * The <code>from-tree-id</code> strings in this map will be stored as specified
+     * The <code>from-view-id</code> strings in this map will be stored as specified
      * in the configuration file - some of them will have a trailing asterisk "*"
      * signifying wild card, and some may be specified as an asterisk "*".
      */ 
@@ -61,13 +61,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
     /**
      * The List that contains the <code>ConfigNavigationCase</code> objects for a
-     * <code>from-tree-id</code>.
+     * <code>from-view-id</code>.
      */ 
 
     private List caseList = null;
 
     /**
-     * The List that contains all tree identifier strings ending in an asterisk "*".
+     * The List that contains all view identifier strings ending in an asterisk "*".
      * The entries are stored without the trailing asterisk. 
      */
 
@@ -89,9 +89,9 @@ public class NavigationHandlerImpl extends NavigationHandler {
     }
 
     /**
-     * This method uses helper methods to set the new <code>tree</code> identifier;
-     * If the new <code>tree</code> identifier could not be determined, then the original
-     * <code>tree</code> identifier is left alone.
+     * This method uses helper methods to set the new <code>view</code> identifier;
+     * If the new <code>view</code> identifier could not be determined, then the original
+     * <code>view</code> identifier is left alone.
      *
      * @param context The Faces Context
      * @param actionRef The action reference string
@@ -103,79 +103,79 @@ public class NavigationHandlerImpl extends NavigationHandler {
     }
     
     /**
-     * This method uses helper methods to determine the new <code>tree</code> identifier.
+     * This method uses helper methods to determine the new <code>view</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.
      *
      * @param context The Faces Context
      * @param actionRef The action reference string
      * @param outcome The outcome string
      *
-     * @return The <code>tree</code> identifier. 
+     * @return The <code>view</code> identifier. 
      */
-     private String getTreeId(FacesContext context, String actionRef, String outcome) {
-        String nextTreeId = null;
-        String treeId = context.getRoot().getTreeId();
-        nextTreeId = findExactMatch(treeId, actionRef, outcome);
+     private String getViewId(FacesContext context, String actionRef, String outcome) {
+        String nextViewId = null;
+        String viewId = context.getViewRoot().getViewId();
+        nextViewId = findExactMatch(viewId, actionRef, outcome);
       
-        if (nextTreeId == null) {
-            nextTreeId = findWildCardMatch(treeId, actionRef, outcome);        
+        if (nextViewId == null) {
+            nextViewId = findWildCardMatch(viewId, actionRef, outcome);        
         }
       
-        if (nextTreeId == null) {
-            nextTreeId = findDefaultMatch(actionRef, outcome);            
+        if (nextViewId == null) {
+            nextViewId = findDefaultMatch(actionRef, outcome);            
         }
-        return nextTreeId;
+        return nextViewId;
     }
 
 
     public void addNavigationCase(ConfigNavigationCase navigationCase) {
 
-        String fromTreeId = navigationCase.getFromTreeId();
-        if (fromTreeId == null) {
-            fromTreeId = "*";
+        String fromViewId = navigationCase.getFromViewId();
+        if (fromViewId == null) {
+            fromViewId = "*";
         }
-        if (fromTreeId != null) {
-            caseList = (List)caseListMap.get(fromTreeId);
+        if (fromViewId != null) {
+            caseList = (List)caseListMap.get(fromViewId);
             if (caseList == null) {
                 caseList = new ArrayList();
                 caseList.add(navigationCase);
-                caseListMap.put(fromTreeId, caseList);
+                caseListMap.put(fromViewId, caseList);
             } else {
                 caseList.add(navigationCase);
             }
-            if (fromTreeId.endsWith("*")) {
-                fromTreeId = fromTreeId.substring(0,fromTreeId.lastIndexOf("*"));
-                wildcardMatchList.add(fromTreeId);
+            if (fromViewId.endsWith("*")) {
+                fromViewId = fromViewId.substring(0,fromViewId.lastIndexOf("*"));
+                wildcardMatchList.add(fromViewId);
             }
         }
     }
         
         
     /**
-     * This method finds the List of cases for the current <code>tree</code> identifier.
+     * This method finds the List of cases for the current <code>view</code> identifier.
      * After the cases are found, the <code>from-action-ref</code> and <code>from-outcome</code>
-     * values are evaluated to determine the new <code>tree</code> identifier.
+     * values are evaluated to determine the new <code>view</code> identifier.
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param treeId  The current <code>tree</code> identifier.
+     * @param viewId  The current <code>view</code> identifier.
      * @param actionRef The action reference string.
      * @param outcome The outcome string.
      *
-     * @return The <code>tree</code> identifier.
+     * @return The <code>view</code> identifier.
      */
 
-    private String findExactMatch(String treeId, String actionRef, String outcome) {
-        String returnTreeId = null;
+    private String findExactMatch(String viewId, String actionRef, String outcome) {
+        String returnViewId = null;
 
         Assert.assert_it(null != caseListMap);
 
-        List caseList = (List)caseListMap.get(treeId);
+        List caseList = (List)caseListMap.get(viewId);
 
         if (caseList == null) {
             return null;
         }
 
-        // We've found an exact match for the treeId.  Now we need to evaluate
+        // We've found an exact match for the viewId.  Now we need to evaluate
         // actionref/outcome in the following order:
         // 1) elements specifying both from-action-ref and from-outcome
         // 2) elements specifying only from-outcome
@@ -183,45 +183,45 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // 4) elements where both from-action-ref and from-outcome are null
 
 
-        returnTreeId = determineTreeFromActionRefOutcome(caseList, actionRef, outcome);
+        returnViewId = determineViewFromActionRefOutcome(caseList, actionRef, outcome);
 
-        return returnTreeId;
+        return returnViewId;
     }
 
     /**
-     * This method traverses the wild card match List (containing <code>from-tree-id</code>
-     * strings and finds the List of cases for each <code>from-tree-id</code> string.
+     * This method traverses the wild card match List (containing <code>from-view-id</code>
+     * strings and finds the List of cases for each <code>from-view-id</code> string.
      * Refer to section 7.4.2 of the specification for more details.
      *
-     * @param treeId  The current <code>tree</code> identifier.
+     * @param viewId  The current <code>view</code> identifier.
      * @param actionRef The action reference string.
      * @param outcome The outcome string.
      *
-     * @return The <code>tree</code> identifier.
+     * @return The <code>view</code> identifier.
      */
 
-    private String findWildCardMatch(String treeId, String actionRef, String outcome) {
-        String returnTreeId = null;
+    private String findWildCardMatch(String viewId, String actionRef, String outcome) {
+        String returnViewId = null;
 
         Assert.assert_it(null != wildcardMatchList);
 
 	Iterator iter = wildcardMatchList.iterator();
 	while (iter.hasNext()) {
-	    String fromTreeId = (String)iter.next();  
+	    String fromViewId = (String)iter.next();  
 	    
             // See if the entire wildcard string (without the trailing "*" is
-            // contained in the incoming treeId.  Ex: /foobar is contained with /foobarbaz
+            // contained in the incoming viewId.  Ex: /foobar is contained with /foobarbaz
             // If so, then we have found our largest pattern match..
             // If not, then continue on to the next case;
 
-            if (treeId.indexOf(fromTreeId, 0) == -1) {
+            if (viewId.indexOf(fromViewId, 0) == -1) {
                 continue;
             }
 
             // Append the trailing "*" so we can do our map lookup;
 
-            String wcFromTreeId = fromTreeId + "*"; 
-            List caseList = (List)caseListMap.get(wcFromTreeId);
+            String wcFromViewId = fromViewId + "*"; 
+            List caseList = (List)caseListMap.get(wcFromViewId);
 
             if (caseList == null) {
                 return null;
@@ -233,27 +233,27 @@ public class NavigationHandlerImpl extends NavigationHandler {
             // 3) elements specifying only from-action-ref
             // 4) elements where both from-action-ref and from-outcome are null
 
-            returnTreeId = determineTreeFromActionRefOutcome(caseList, actionRef, outcome);
-            if (returnTreeId != null) {
+            returnViewId = determineViewFromActionRefOutcome(caseList, actionRef, outcome);
+            if (returnViewId != null) {
                 break;
             }
         } 
-        return returnTreeId;
+        return returnViewId;
     }
 
     /**
-     * This method will extract the cases for which a <code>from-tree-id</code> is
+     * This method will extract the cases for which a <code>from-view-id</code> is
      * an asterisk "*".
      * Refer to section 7.4.2 of the specification for more details.
      *
      * @param actionRef The action reference string.
      * @param outcome The outcome string.
      *
-     * @return The <code>tree</code> identifier.
+     * @return The <code>view</code> identifier.
      */
 
     private String findDefaultMatch(String actionRef, String outcome) {
-        String returnTreeId = null;
+        String returnViewId = null;
 
         Assert.assert_it(null != caseListMap);
 
@@ -269,36 +269,36 @@ public class NavigationHandlerImpl extends NavigationHandler {
         // 3) elements specifying only from-action-ref
         // 4) elements where both from-action-ref and from-outcome are null
 
-        returnTreeId = determineTreeFromActionRefOutcome(caseList, actionRef, outcome);
-        return returnTreeId;
+        returnViewId = determineViewFromActionRefOutcome(caseList, actionRef, outcome);
+        return returnViewId;
     }
         
     /**
-     * This method will attempt to find the <code>tree</code> identifier based on action reference
+     * This method will attempt to find the <code>view</code> identifier based on action reference
      * and outcome.  Refer to section 7.4.2 of the specification for more details.
      *
      * @param caseList The list of navigation cases.
      * @param actionRef The action reference string.
      * @param outcome The outcome string.
      *
-     * @return The <code>tree</code> identifier.
+     * @return The <code>view</code> identifier.
      */
      
-    private String determineTreeFromActionRefOutcome(List caseList, String actionRef, String outcome) {
+    private String determineViewFromActionRefOutcome(List caseList, String actionRef, String outcome) {
 
-        String returnTreeId = null;
+        String returnViewId = null;
 
         String fromActionRef = null;
         String fromOutcome = null;
-        String toTreeId = null;
+        String toViewId = null;
         for (int i = 0; i < caseList.size(); i++) {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
             fromActionRef = cnc.getFromActionRef();
             fromOutcome = cnc.getFromOutcome();
-            toTreeId = cnc.getToTreeId();
+            toViewId = cnc.getToViewId();
             if ((fromActionRef != null) && (fromOutcome != null)) {
                 if ((fromActionRef.equals(actionRef)) && (fromOutcome.equals(outcome))) {
-                    return toTreeId;
+                    return toViewId;
                 }
             }
         }
@@ -307,10 +307,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
             fromActionRef = cnc.getFromActionRef();
             fromOutcome = cnc.getFromOutcome();
-            toTreeId = cnc.getToTreeId();
+            toViewId = cnc.getToViewId();
             if ((fromActionRef == null) && (fromOutcome != null)) {
                 if (fromOutcome.equals(outcome)) {
-                    return toTreeId;
+                    return toViewId;
                 }
             }
         }
@@ -319,10 +319,10 @@ public class NavigationHandlerImpl extends NavigationHandler {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
             fromActionRef = cnc.getFromActionRef();
             fromOutcome = cnc.getFromOutcome();
-            toTreeId = cnc.getToTreeId();
+            toViewId = cnc.getToViewId();
             if ((fromActionRef != null) && (fromOutcome == null)) {
                 if (fromActionRef.equals(actionRef)) {
-                    return toTreeId;
+                    return toViewId;
                 }
             }
         }
@@ -331,25 +331,25 @@ public class NavigationHandlerImpl extends NavigationHandler {
             ConfigNavigationCase cnc = (ConfigNavigationCase) caseList.get(i);
             fromActionRef = cnc.getFromActionRef();
             fromOutcome = cnc.getFromOutcome();
-            toTreeId = cnc.getToTreeId();
+            toViewId = cnc.getToViewId();
             if ((fromActionRef == null) && (fromOutcome == null)) {
-                return toTreeId;
+                return toViewId;
             }
         }
 
-        return returnTreeId;
+        return returnViewId;
     }
 
     /**
      * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
-     * based on their <code>fromTreeId</code> properties in descending order -
+     * based on their <code>fromViewId</code> properties in descending order -
      * largest string to smallest string.
      */
     class SortIt implements Comparator {
         public int compare(Object o1, Object o2) {
-            String fromTreeId1 = (String)o1;
-            String fromTreeId2 = (String)o2;
-            return -(fromTreeId1.compareTo(fromTreeId2));
+            String fromViewId1 = (String)o1;
+            String fromViewId2 = (String)o2;
+            return -(fromViewId1.compareTo(fromViewId2));
         }
     }
 

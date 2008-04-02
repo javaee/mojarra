@@ -364,30 +364,30 @@
     </message>
 
     <message>
-      <message-id>com.sun.faces.NULL_REQUEST_TREE_ERROR</message-id>
+      <message-id>com.sun.faces.NULL_REQUEST_VIEW_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Argument Error: RequestTree argument is null.</summary>
-      <summary xml:lang="de">Parameter-Fehler: requestTree-Parameter ist Null.</summary>
-      <summary xml:lang="es">Error de argumento: Argumento requestTree es nulo.</summary>
-      <summary xml:lang="fr">Erreur dans les arguments: L''argument requestTree est nul.</summary>
+      <summary xml:lang="en">Argument Error: Request View argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: RequestView-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: Argumento requestView es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument requestView est nul.</summary>
     </message>
 
     <message>
-      <message-id>com.sun.faces.NULL_RESPONSE_TREE_ERROR</message-id>
+      <message-id>com.sun.faces.NULL_RESPONSE_VIEW_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Argument Error: ResponseTree argument is null.</summary>
-      <summary xml:lang="de">Parameter-Fehler: responseTree-Parameter ist Null.</summary>
-      <summary xml:lang="es">Error de argumento: Argumento responseTree es nulo.</summary>
-      <summary xml:lang="fr">Erreur dans les arguments: L''argument responseTree est nul.</summary>
+      <summary xml:lang="en">Argument Error: ResponseView argument is null.</summary>
+      <summary xml:lang="de">Parameter-Fehler: responseView-Parameter ist Null.</summary>
+      <summary xml:lang="es">Error de argumento: Argumento responseView es nulo.</summary>
+      <summary xml:lang="fr">Erreur dans les arguments: L''argument responseView est nul.</summary>
     </message>
 
     <message>
-      <message-id>com.sun.faces.REQUEST_TREE_ALREADY_SET_ERROR</message-id>
+      <message-id>com.sun.faces.REQUEST_VIEW_ALREADY_SET_ERROR</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">State Error: RequestTree has already been set for this request.</summary>
-      <summary xml:lang="de">Status-Fehler: requestTree ist schon f&#252;r diesen Request angelegt.</summary>
-      <summary xml:lang="es">Error de Estado: requestTree fue establacida para esta petici&#243;n.</summary>
-      <summary xml:lang="fr">Erreur d''&#233;tat: requestTree a d&#233;j&#224; &#233;t&#233; sp&#233;cifi&#233; pour cette requete.</summary>
+      <summary xml:lang="en">State Error: RequestView has already been set for this request.</summary>
+      <summary xml:lang="de">Status-Fehler: requestView ist schon f&#252;r diesen Request angelegt.</summary>
+      <summary xml:lang="es">Error de Estado: requestView fue establacida para esta petici&#243;n.</summary>
+      <summary xml:lang="fr">Erreur d''&#233;tat: requestView a d&#233;j&#224; &#233;t&#233; sp&#233;cifi&#233; pour cette requete.</summary>
     </message>
 
     <message>

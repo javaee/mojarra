@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.6 2003/08/21 14:18:25 rlubke Exp $
+ * $Id: TestRenderers_4.java,v 1.7 2003/08/22 16:51:52 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -43,7 +43,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.6 2003/08/21 14:18:25 rlubke Exp $
+ * @version $Id: TestRenderers_4.java,v 1.7 2003/08/22 16:51:52 eburns Exp $
  * 
  *
  */
@@ -93,8 +93,8 @@ public class TestRenderers_4 extends JspFacesTestCase {
     public void setUp() {
         super.setUp();
         UIPage page = new UIPageBase();
-        page.setTreeId("treeId");       
-        getFacesContext().setRoot(page);
+        page.setViewId("viewId");       
+        getFacesContext().setViewRoot(page);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 

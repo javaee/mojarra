@@ -2,10 +2,9 @@
 %><%@ page import="javax.faces.FactoryFinder"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%@ page import="javax.faces.context.FacesContextFactory"
+%><%@ page import="javax.faces.component.UIViewRoot"
 %><%@ page import="javax.faces.lifecycle.Lifecycle"
 %><%@ page import="javax.faces.lifecycle.LifecycleFactory"
-%><%@ page import="javax.faces.tree.Tree"
-%><%@ page import="javax.faces.tree.TreeFactory"
 %><%
 
 // This test demonstrates the request processing lifecycle of
@@ -32,17 +31,12 @@
         return;
     }
 
-    // Acquire a tree..
-    TreeFactory treeFactory = (TreeFactory)
-         FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-    Tree requestTree = treeFactory.getTree(facesContext, "/renderkit03A.jsp");
+    // Acquire a view
+    UIViewRoot view = facesContext.getApplication().getViewHandler().restoreView(facesContext, "/renderkit03A.jsp");
 
     // Set the "DEFAULT" renderkit Id
-    requestTree.setRenderKitId("CUSTOM");
+    view.setRenderKitId("CUSTOM");
 
-    // Set the tree
-    facesContext.setTree(requestTree);
-    
     facesContext.renderResponse();
 
     lifecycle.execute(facesContext);

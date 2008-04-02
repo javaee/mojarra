@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.40 2003/08/19 19:31:01 rlubke Exp $
+ * $Id: RIConstants.java,v 1.41 2003/08/22 16:49:37 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ public class RIConstants {
     /**
 
     * If the following name=value pair appears in the request query
-    * string, the CreateRequestTreePhase will proceed directly to
+    * string, the RestoreViewPhase will proceed directly to
     * RenderResponsePhase.
 
     */
@@ -38,7 +38,7 @@ public class RIConstants {
     public final static String INITIAL_REQUEST_VALUE = "true";
     
     // PENDING (rlubke) Is this still needed?
-    public final static String FACES_TREE = FACES_PREFIX + "TREE";
+    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
     public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
    
     /**

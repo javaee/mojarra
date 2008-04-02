@@ -119,51 +119,51 @@
   <!-- First navigation rule (global) -->
   <navigation-rule>
     <!-- Can also be omitted, since this is the default -->
-    <from-tree-id> * </from-tree-id>
+    <from-view-id> * </from-view-id>
     <!-- Logout button on every page -->
     <navigation-case>
       <from-action-ref>UserBean.Logout</from-action-ref>
-      <to-tree-id>/logout.jsp</to-tree-id>
+      <to-view-id>/logout.jsp</to-view-id>
     </navigation-case>
     <!-- Generic "not logged in" handler -->
     <navigation-case>
       <from-outcome>loginRequired</from-outcome>
-      <to-tree-id>/must-login-first.jsp</to-tree-id>
+      <to-view-id>/must-login-first.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
 
   <!-- Second navigation rule (login page only) -->
   <navigation-rule>
-    <from-tree-id> /login.jsp </from-tree-id>
+    <from-view-id> /login.jsp </from-view-id>
     <!-- Login action was invoked successfully -->
     <navigation-case>
       <from-action-ref>UserBean.login</from-action-ref>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/home.jsp</to-tree-id>
+      <to-view-id>/home.jsp</to-view-id>
     </navigation-case>
     <!-- User registration required -->
     <navigation-case>
       <from-action-ref>UserBean.register</from-action-ref>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/get-user-info.jsp</to-tree-id>
+      <to-view-id>/get-user-info.jsp</to-view-id>
     </navigation-case>
     <!-- User registration failed -->
     <navigation-case>
       <from-action-ref>UserBean.register</from-action-ref>
       <from-outcome>duplicate</from-outcome>
-      <to-tree-id>/try-another-name.jsp</to-tree-id>
+      <to-view-id>/try-another-name.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
 
   <!-- Third navigation rule (more global stuff) -->
   <navigation-rule>
-    <!-- Omit the request tree id this time -->
+    <!-- Omit the request view id this time -->
     <!-- General search form handling -->
     <navigation-case>
       <from-action-ref>SearchForm.go</from-action-ref>
-      <to-tree-id>/search-results.jsp</to-tree-id>
+      <to-view-id>/search-results.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
@@ -171,11 +171,11 @@
   <!-- Fourth navigation rule (special search handling) -->
   <navigation-rule>
     <!-- Search works differently for part of the app -->
-    <from-tree-id>/movies/*</from-tree-id>
+    <from-view-id>/movies/*</from-view-id>
     <!-- Special search form handling -->
     <navigation-case>
       <from-action-ref>SearchForm.go</from-action-ref>
-      <to-tree-id>/movies/movie-search-results.jsp</to-tree-id>
+      <to-view-id>/movies/movie-search-results.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestInvokeApplicationPhase.java,v 1.15 2003/08/21 14:18:16 rlubke Exp $
+ * $Id: TestInvokeApplicationPhase.java,v 1.16 2003/08/22 16:50:39 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInvokeApplicationPhase.java,v 1.15 2003/08/21 14:18:16 rlubke Exp $
+ * @version $Id: TestInvokeApplicationPhase.java,v 1.16 2003/08/22 16:50:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -96,9 +96,9 @@ public void testInvokeNoOp()
     UIInput root = new UIInputBase();
     Lifecycle life = new LifecycleImpl();
     UIPage page = new UIPageBase();
-    page.setTreeId("default.xul");   
+    page.setViewId("default.xul");   
     Phase invokeApplicationPhase = new InvokeApplicationPhase(life);
-    getFacesContext().setRoot(page);
+    getFacesContext().setViewRoot(page);
 
     invokeApplicationPhase.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&

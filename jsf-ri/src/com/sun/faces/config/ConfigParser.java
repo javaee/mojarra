@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.26 2003/08/19 14:50:51 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.27 2003/08/22 16:49:42 eburns Exp $
  */
 
 /*
@@ -512,12 +512,12 @@ public class ConfigParser {
     protected void configureRulesNavigationCase(Digester digester) {
 	String prefix = "faces-config/navigation-rule";
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigNavigationRule");
-        digester.addCallMethod("faces-config/navigation-rule/from-tree-id", "setFromTreeId", 0);
+        digester.addCallMethod("faces-config/navigation-rule/from-view-id", "setFromViewId", 0);
         prefix = "faces-config/navigation-rule/navigation-case";
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigNavigationCase");
         digester.addCallMethod(prefix + "/from-action-ref", "setFromActionRef", 0);
         digester.addCallMethod(prefix + "/from-outcome", "setFromOutcome", 0);
-        digester.addCallMethod(prefix + "/to-tree-id", "setToTreeId", 0);
+        digester.addCallMethod(prefix + "/to-view-id", "setToViewId", 0);
 
         // This custom rule will....
         //
@@ -802,7 +802,7 @@ final class NavigationCaseRule extends Rule {
     public void end(String namespace, String name) throws Exception {
         ConfigNavigationCase cnc = (ConfigNavigationCase)digester.pop();
         ConfigNavigationRule cnr = (ConfigNavigationRule)digester.peek();
-        cnc.setFromTreeId(cnr.getFromTreeId());
+        cnc.setFromViewId(cnr.getFromViewId());
         digester.push(cnc);
         ApplicationFactory aFactory =
             (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationRule.java,v 1.2 2003/07/08 15:38:30 eburns Exp $
+ * $Id: ConfigNavigationRule.java,v 1.3 2003/08/22 16:49:41 eburns Exp $
  */
 
 /*
@@ -15,12 +15,12 @@ package com.sun.faces.config;
  */
 public class ConfigNavigationRule {
 
-    private String fromTreeId = null;
+    private String fromViewId = null;
 
-    public String getFromTreeId() {
-        return (this.fromTreeId);
+    public String getFromViewId() {
+        return (this.fromViewId);
     }
-    public void setFromTreeId(String fromTreeId) {
-        this.fromTreeId = fromTreeId;
+    public void setFromViewId(String fromViewId) {
+        this.fromViewId = fromViewId;
     }
 }

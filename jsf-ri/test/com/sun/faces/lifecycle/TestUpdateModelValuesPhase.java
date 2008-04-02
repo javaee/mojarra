@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.23 2003/08/21 14:18:17 rlubke Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.24 2003/08/22 16:51:47 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.23 2003/08/21 14:18:17 rlubke Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.24 2003/08/22 16:51:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,8 +124,8 @@ public void testUpdateNormal()
     form.getChildren().add(userName2);
 
     UIPage page = new UIPageBase();
-    page.setTreeId("updateModel.xul");
-    getFacesContext().setRoot(page);
+    page.setViewId("updateModel.xul");
+    getFacesContext().setViewRoot(page);
     
     updateModelValues.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&
@@ -170,8 +170,8 @@ public void testUpdateFailed()
     form.getChildren().add(userName2);
 
     UIPage page = new UIPageBase();
-    page.setTreeId("updateModel.xul");
-    getFacesContext().setRoot(page);
+    page.setViewId("updateModel.xul");
+    getFacesContext().setViewRoot(page);
 
     // This stage will go to render, since there was at least one error
     // during component updates... 

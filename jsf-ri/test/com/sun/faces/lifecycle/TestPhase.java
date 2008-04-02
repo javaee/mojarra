@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.4 2003/08/21 14:18:16 rlubke Exp $
+ * $Id: TestPhase.java,v 1.5 2003/08/22 16:50:39 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.4 2003/08/21 14:18:16 rlubke Exp $
+ * @version $Id: TestPhase.java,v 1.5 2003/08/22 16:50:39 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -97,9 +97,9 @@ public void beginExecute(WebRequest theRequest)
 public void testExecute()
 {
 
-    Phase reconstituteTree = new RestoreComponentTreePhase();
+    Phase restoreView = new RestoreViewPhase();
     try {
-        reconstituteTree.execute(getFacesContext());
+        restoreView.execute(getFacesContext());
     }
     catch (Throwable e) {
         e.printStackTrace();
@@ -108,11 +108,11 @@ public void testExecute()
 
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getRoot());
+    assertTrue(null != getFacesContext().getViewRoot());
 
     // 2. Add components to tree
     //
-    UIComponent root = getFacesContext().getRoot();
+    UIComponent root = getFacesContext().getViewRoot();
     UIForm basicForm = new UIFormBase();
     basicForm.setId("basicForm");
     UIInput userName = new UIInputBase();
@@ -120,8 +120,8 @@ public void testExecute()
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
     UIPage page = new UIPageBase();
-    page.setTreeId("root");    
-    getFacesContext().setRoot(page);
+    page.setViewId("root");    
+    getFacesContext().setViewRoot(page);
 
     Phase applyValues = new ApplyRequestValuesPhase();
 

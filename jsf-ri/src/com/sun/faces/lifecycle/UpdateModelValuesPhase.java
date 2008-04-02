@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.23 2003/08/19 19:31:11 rlubke Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.24 2003/08/22 16:49:29 eburns Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.23 2003/08/19 19:31:11 rlubke Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.24 2003/08/22 16:49:29 eburns Exp $
  * 
  */
 
@@ -82,7 +82,7 @@ public void execute(FacesContext facesContext) throws FacesException
 {
     Iterator messageIter = null;
 
-    UIComponent component = facesContext.getRoot();
+    UIComponent component = facesContext.getViewRoot();
     Assert.assert_it(null != component);
     
     try {

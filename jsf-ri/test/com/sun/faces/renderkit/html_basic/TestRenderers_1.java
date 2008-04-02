@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.35 2003/08/21 14:18:23 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.36 2003/08/22 16:51:50 eburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import javax.faces.component.UISelectItems;
 import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.base.UICommandBase;
 import javax.faces.component.base.UIParameterBase;
 import javax.faces.component.base.UIFormBase;
@@ -39,7 +40,6 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
@@ -52,7 +52,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.35 2003/08/21 14:18:23 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.36 2003/08/22 16:51:50 eburns Exp $
  * 
  *
  */
@@ -97,11 +97,10 @@ public class TestRenderers_1 extends JspFacesTestCase
     
     public void setUp() {
         super.setUp();
-        
-	SimpleTreeImpl xmlTree = 
-	    new SimpleTreeImpl(getFacesContext(),
-			    new UICommand(), "treeId");
-	getFacesContext().setTree(xmlTree);
+
+	UIViewRootBase xmlView = new UIViewRootBase();
+	xmlView.setTreeId("viewId");
+	getFacesContext().setViewRoot(xmlView);
         assertTrue(getFacesContext().getResponseWriter() != null);
      }     
 
@@ -116,8 +115,8 @@ public class TestRenderers_1 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<form id=\"formRenderer0\" method=\"post\" action=\"/test/facestreeId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A\">",
-	    "<form id=\"formRenderer1\" method=\"post\" action=\"/test/facestreeId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A\">"
+	    "<form id=\"formRenderer0\" method=\"post\" action=\"/test/facesviewId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A\">",
+	    "<form id=\"formRenderer1\" method=\"post\" action=\"/test/facesviewId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A\">"
 	};
         return lines;
     }    

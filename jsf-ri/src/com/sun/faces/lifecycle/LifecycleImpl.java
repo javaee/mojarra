@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.29 2003/08/19 19:31:09 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.30 2003/08/22 16:49:28 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.29 2003/08/19 19:31:09 rlubke Exp $
+ * @version $Id: LifecycleImpl.java,v 1.30 2003/08/22 16:49:28 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -107,7 +107,7 @@ public class LifecycleImpl extends Lifecycle
     //
 
     protected void initPhases() {
-        phaseWrappers.add(new PhaseWrapper(new RestoreComponentTreePhase()));
+        phaseWrappers.add(new PhaseWrapper(new RestoreViewPhase()));
         phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase()));
         phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase()));
         phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase()));

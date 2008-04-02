@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.27 2003/08/21 14:18:10 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.28 2003/08/22 16:50:34 eburns Exp $
  */
 
 /*
@@ -252,12 +252,12 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication(); 
 	NavigationHandler navHandler = application.getNavigationHandler();
         UIPage page = new UIPageBase();
-        page.setTreeId("/login.jsp");
-	getFacesContext().setRoot(page);
+        page.setViewId("/login.jsp");
+	getFacesContext().setViewRoot(page);
         navHandler.handleNavigation(getFacesContext(), "UserBean.login",
 	    "success");
-        String newTreeId = getFacesContext().getRoot().getTreeId();
-        assertTrue(newTreeId.equals("/home.jsp"));	
+        String newViewId = getFacesContext().getViewRoot().getViewId();
+        assertTrue(newViewId.equals("/home.jsp"));	
      }
 
     public void testRenderKit() {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.55 2003/08/21 14:18:16 rlubke Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.56 2003/08/22 16:51:46 eburns Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.55 2003/08/21 14:18:16 rlubke Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.56 2003/08/22 16:51:46 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,8 +133,8 @@ public void testHtmlBasicRenderKit()
     Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());    
     UIPage page = new UIPageBase();
     page.setId("root");
-    page.setTreeId(TEST_URI)
-    getFacesContext().setRoot(page);
+    page.setViewId(TEST_URI)
+    getFacesContext().setViewRoot(page);
 
     renderResponse.execute(getFacesContext());
     assertTrue(!(getFacesContext().getRenderResponse()) &&

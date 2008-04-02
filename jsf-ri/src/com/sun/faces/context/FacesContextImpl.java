@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.41 2003/08/19 19:31:05 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.42 2003/08/22 16:49:44 eburns Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.FacesEvent;
 
@@ -269,12 +269,12 @@ public class FacesContextImpl extends FacesContext
     }
 
     // PENDING (rlubke): PROVIDE IMPLEMENTATION
-    public UIPage getRoot() {
+    public UIViewRoot getViewRoot() {
         return null;  //To change body of implemented methods use Options | File Templates.
     }
    
     // PENDING (rlubke): PROVIDE IMPLEMENTATION
-    public void setRoot(UIPage root) {
+    public void setViewRoot(UIViewRoot root) {
         //To change body of implemented methods use Options | File Templates.
     }
     

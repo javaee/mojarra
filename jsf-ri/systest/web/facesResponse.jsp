@@ -1,13 +1,13 @@
 <%@ page import="javax.servlet.RequestDispatcher" %><%
 
-  // Generically link to a Faces Response for a Tree Id
+  // Generically link to a Faces Response for a View Id
   //
   // Query Parameters:
-  //  responseTreeId           Tree Id to display via Faces
+  //  responseViewId           View Id to display via Faces
 
-  String toTreeId = request.getParameter("responseTreeId");
+  String toViewId = request.getParameter("responseViewId");
   RequestDispatcher rd = application.getRequestDispatcher
-    ("/faces" + toTreeId);
+    ("/faces" + toViewId);
   rd.forward(request, response);
 
   // Should always forward or throw an exception

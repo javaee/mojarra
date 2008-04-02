@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.12 2003/08/13 18:15:40 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.13 2003/08/22 16:49:45 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ public class ValueBindingImpl extends ValueBinding
         "initParam",
         "param",
         "paramValues",
-        "tree"
+        "view"
     };
 
     static {

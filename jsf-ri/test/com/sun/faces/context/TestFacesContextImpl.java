@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.30 2003/08/21 14:18:11 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.31 2003/08/22 16:50:35 eburns Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.30 2003/08/21 14:18:11 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.31 2003/08/22 16:50:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,11 +115,11 @@ public void testAccessors()
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
     UIPage page = new UIPageBase();
-    page.setTreeId("treeId");
-    getFacesContext().setRoot(page);
-    UIPage root = getFacesContext().getRoot();
+    page.setViewId("viewId");
+    getFacesContext().setViewRoot(page);
+    UIPage root = getFacesContext().getViewRoot();
     result = null != root;
-    System.out.println("Testing getTree: " + result);
+    System.out.println("Testing getViewRoot: " + result);
     assertTrue(result);
 
     ResponseStream responseStream = new ResponseStream() {
@@ -336,7 +336,7 @@ public void testRelease() {
     System.out.println("Testing release method");
     getFacesContext().release();
     assertTrue(getFacesContext().getLocale() == null);
-    assertTrue(getFacesContext().getRoot() == null);
+    assertTrue(getFacesContext().getViewRoot() == null);
     assertTrue(getFacesContext().getResponseStream() == null);
     assertTrue(getFacesContext().getResponseWriter() == null);
     assertTrue(((FacesContextImpl)getFacesContext()).getViewHandler() == null);

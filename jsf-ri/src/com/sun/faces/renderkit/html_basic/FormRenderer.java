@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.52 2003/08/19 19:31:16 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.53 2003/08/22 16:50:23 eburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.52 2003/08/19 19:31:16 rlubke Exp $
+ * @version $Id: FormRenderer.java,v 1.53 2003/08/22 16:50:23 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -142,7 +142,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         String contextPath = context.getExternalContext().getRequestContextPath();
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
-	    sb.append(context.getRoot().getTreeId());
+	    sb.append(context.getViewRoot().getViewId());
         return (context.getExternalContext().encodeURL(sb.toString()));
     }     
 

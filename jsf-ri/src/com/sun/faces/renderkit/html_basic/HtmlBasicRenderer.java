@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.49 2003/08/21 22:32:50 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.50 2003/08/22 16:50:23 eburns Exp $
  */
 
 /*
@@ -189,7 +189,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // if the bundleName is null for this component, it might have
         // been set on the root component.
         if ( bundleName == null ) {
-            UIComponent root = context.getRoot();
+            UIComponent root = context.getViewRoot();
             Assert.assert_it(root != null);
             bundleName = (String)root.getAttribute(RIConstants.BUNDLE_ATTR);
         }

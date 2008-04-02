@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.17 2003/08/19 21:41:02 horwat Exp $
+ $Id: build-tests.xml,v 1.18 2003/08/22 16:50:30 eburns Exp $
 -->
 
 
@@ -97,7 +97,7 @@
 
     <!-- Simple Faces Response (Indirect) -->
     <tester host="${host}" port="${port}" protocol="${protocol}"
-         request="${context.path}/facesResponse.jsp?responseTreeId=/hello.jsp"
+         request="${context.path}/facesResponse.jsp?responseViewId=/hello.jsp"
       outContent="/hello.jsp PASSED"/>
 
     <!-- Simple Faces Response (Direct) -->

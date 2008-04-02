@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.13 2003/08/19 21:41:03 horwat Exp $
+ * $Id: TestUtil_messages.java,v 1.14 2003/08/22 16:51:55 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.13 2003/08/19 21:41:03 horwat Exp $
+ * @version $Id: TestUtil_messages.java,v 1.14 2003/08/22 16:51:55 eburns Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -49,9 +49,9 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.MODEL_UPDATE_ERROR_MESSAGE_ID, "2"},
         {Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID, "0"},
         {Util.NULL_COMPONENT_ERROR_MESSAGE_ID, "0"},
-        {Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID, "0"},
-        {Util.NULL_RESPONSE_TREE_ERROR_MESSAGE_ID, "0"},
-        {Util.REQUEST_TREE_ALREADY_SET_ERROR_MESSAGE_ID, "0"},
+        {Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID, "0"},
+        {Util.NULL_RESPONSE_VIEW_ERROR_MESSAGE_ID, "0"},
+        {Util.REQUEST_VIEW_ALREADY_SET_ERROR_MESSAGE_ID, "0"},
         {Util.NULL_MESSAGE_ERROR_MESSAGE_ID, "0"},
         {Util.NULL_PARAMETERS_ERROR_MESSAGE_ID, "0"},
         {Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, "1"},

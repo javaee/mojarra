@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.19 2003/08/21 14:18:16 rlubke Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.20 2003/08/22 16:51:46 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.19 2003/08/21 14:18:16 rlubke Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.20 2003/08/22 16:51:46 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,12 +101,12 @@ public void testCallback()
     userName = null;
     String value = null;
     Phase 
-        reconstituteTree = new RestoreComponentTreePhase(),
+        restoreView = new RestoreViewPhase(),
 	applyValues = new ApplyRequestValuesPhase(), 
 	processValidations = new ProcessValidationsPhase();
 
     try {
-        reconstituteTree.execute(getFacesContext());
+        restoreView.execute(getFacesContext());
     }
     catch (Throwable e) {
         e.printStackTrace();
@@ -114,9 +114,9 @@ public void testCallback()
     }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
-    assertTrue(null != getFacesContext().getRoot());
+    assertTrue(null != getFacesContext().getViewRoot());
 
-    root = getFacesContext().getRoot();
+    root = getFacesContext().getViewRoot();
     UIForm basicForm = new UIFormBase();
     basicForm.setId("basicForm");
     UIInput userName1 = new UIInputBase();

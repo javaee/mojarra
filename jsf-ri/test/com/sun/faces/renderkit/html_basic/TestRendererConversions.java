@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.4 2003/08/21 14:18:23 rlubke Exp $
+ * $Id: TestRendererConversions.java,v 1.5 2003/08/22 16:51:50 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.4 2003/08/21 14:18:23 rlubke Exp $
+ * @version $Id: TestRendererConversions.java,v 1.5 2003/08/22 16:51:50 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,8 +95,8 @@ public void beginEmptyStrings(WebRequest theRequest)
 public void setUp() {
     super.setUp();
     UIPage page = new UIPageBase();
-    page.setTreeId("treeId");    
-    getFacesContext().setRoot(page);
+    page.setViewId("viewId");    
+    getFacesContext().setViewRoot(page);
  }
     /**
 

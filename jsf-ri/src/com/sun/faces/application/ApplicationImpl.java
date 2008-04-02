@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.21 2003/08/19 19:31:02 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.22 2003/08/22 16:49:38 eburns Exp $
  */
 
 /*
@@ -105,7 +105,7 @@ public class ApplicationImpl extends Application {
     /**
      * <p>Return the {@link ActionListener} that will be the default
      * {@link ActionListener} to be registered with relevant components
-     * during the <em>Reconstitute Component Tree</em> phase of the
+     * during the <em>Restore View</em> phase of the
      * request processing lifecycle.
      */
     public ActionListener getActionListener() {
@@ -160,7 +160,7 @@ public class ApplicationImpl extends Application {
 
     /**
      * <p>Replace the default {@link ActionListener} that will be registered
-     * with relevant components during the <em>Reconstitute Component Tree</em>
+     * with relevant components during the <em>Restore View</em>
      * phase of the requset processing lifecycle.  This
      * listener must return <code>PhaseId.INVOKE_APPLICATION</code> from its
      * <code>getPhaseId()</code> method.</p>

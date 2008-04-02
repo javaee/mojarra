@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.13 2003/08/21 14:18:13 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.14 2003/08/22 16:50:36 eburns Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.13 2003/08/21 14:18:13 rlubke Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.14 2003/08/22 16:50:36 eburns Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -447,8 +447,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	// create a dummy root for the tree.	
     UIPage page = new UIPageBase();
     page.setId("root");
-    page.setTreeId("newTree");
-	getFacesContext().setRoot(page);
+    page.setViewId("newTree");
+	getFacesContext().setViewRoot(page);
     // PENDING (rlubke) is the TREE implicit variable still valid?
 	valueBinding.setRef("tree.root");
 	assertTrue(valueBinding.isReadOnly(getFacesContext()));
@@ -542,8 +542,8 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	// create a dummy root for the tree.
 	UIPage page = new UIPageBase();
     page.setId("root");
-    page.setTreeId("newTree");
-	getFacesContext().setRoot(page);
+    page.setViewId("newTree");
+	getFacesContext().setViewRoot(page);
 	valueBinding.setRef("tree.root");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.faces.component.UIComponent"));
 	

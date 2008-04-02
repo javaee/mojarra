@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.2 2003/08/21 14:16:27 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.3 2003/08/22 16:49:40 eburns Exp $ 
  */ 
 
 
@@ -18,7 +18,7 @@ import com.sun.faces.util.Util;
 import java.io.IOException; 
 
 import javax.faces.FacesException;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.application.ViewHandler;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;  
@@ -26,7 +26,7 @@ import javax.faces.context.FacesContext;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.2 2003/08/21 14:16:27 rlubke Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.3 2003/08/22 16:49:40 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -42,14 +42,14 @@ public class ViewHandlerImpl implements ViewHandler {
         } 
 
         // PENDING (rlubke): CORRECT IMPLEMENTATION
-//        Tree tree = context.getTree(); 
+//        UIViewRoot root = context.getViewRoot(); 
 //        
-//        String requestURI = context.getTree().getTreeId();
+//        String requestURI = context.getViewRoot().getViewId();
 //        context.getExternalContext().dispatchMessage(requestURI);
     }
 
     // PENDING (rlubke): PROVIDE IMPLEMENTATION
-    public UIPage restoreView(FacesContext context, String treeId) {
+    public UIViewRoot restoreView(FacesContext context, String viewId) {
         return null;  //To change body of implemented methods use Options | File Templates.
     }
 

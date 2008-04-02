@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.17 2003/08/19 19:31:29 rlubke Exp $
+ * $Id: UseFacesTag.java,v 1.18 2003/08/22 16:50:26 eburns Exp $
  */
 
 /*
@@ -32,11 +32,11 @@ import org.mozilla.util.Assert;
 /**
  *
  *  All JSF component tags must be nested within UseFacesTag.  This tag
- *  corresponds to the root of the UIComponent tree.  It does not have
+ *  corresponds to the root of the UIComponent view.  It does not have
  *  any renderers or attributes. It exists mainly to save the state of
- *  the response tree once all tags have been rendered.
+ *  the response view once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.17 2003/08/19 19:31:29 rlubke Exp $
+ * @version $Id: UseFacesTag.java,v 1.18 2003/08/22 16:50:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -116,7 +116,7 @@ public class UseFacesTag extends UIComponentBodyTag
         }
         
         // look up saveStateInClient parameter to check whether to save
-        // state of tree in client or server. Default is server.
+        // state of view in client or server. Default is server.
         String saveState = facesContext.getExternalContext().getInitParameter
                 (RIConstants.SAVESTATE_INITPARAM);
         if ( saveState != null ) {
@@ -148,7 +148,7 @@ public class UseFacesTag extends UIComponentBodyTag
             throws JspException {
         Map sessionMap = Util.getSessionMap(facesContext);
         sessionMap.put(RIConstants.REQUEST_LOCALE, facesContext.getLocale());        
-        // write buffered response to output. Since we are saving tree in session
+        // write buffered response to output. Since we are saving view in session
         // no manipulation is necessary.
         try {
             getPreviousOut().write(getBodyContent().getString());
@@ -156,7 +156,7 @@ public class UseFacesTag extends UIComponentBodyTag
             ioe.printStackTrace();
             throw new JspException(ioe.getMessage());
         } 
-        // com.sun.faces.util.DebugUtil.printTree(treeRoot, System.out); 
+        // com.sun.faces.util.DebugUtil.printTree(viewRoot, System.out); 
     }
     
     protected void saveStateInPage(FacesContext facesContext ) throws JspException {
@@ -166,8 +166,8 @@ public class UseFacesTag extends UIComponentBodyTag
                 throw new JspException(Util.getExceptionMessage(Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
             }    
             // long beginTime = System.currentTimeMillis();
-            // replace the marker in the buffered response, with response tree's
-            // state info. To do this we we first serialize the tree and encode
+            // replace the marker in the buffered response, with response view's
+            // state info. To do this we we first serialize the view and encode
             // it using Apache's utility and write it to the page using an
             // hidden field.
             String content = getBodyContent().getString();
@@ -179,18 +179,18 @@ public class UseFacesTag extends UIComponentBodyTag
           
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(bos);
-            out.writeObject(facesContext.getRoot());
+            out.writeObject(facesContext.getViewRoot());
             //write out the locale.
             out.writeObject(facesContext.getLocale());
             out.close();
             
-            String facesTree = " <input type=\"hidden\" name=\"" 
-                   + RIConstants.FACES_TREE +  "\"" + " value=\"" +
+            String facesView = " <input type=\"hidden\" name=\"" 
+                   + RIConstants.FACES_VIEW +  "\"" + " value=\"" +
             new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")  + "\" />";
             
             StringBuffer sb = new StringBuffer(content);
             int markeridxend = markeridx + ((RIConstants.SAVESTATE_MARKER).length());
-            sb.replace( markeridx, markeridxend, facesTree);   
+            sb.replace( markeridx, markeridxend, facesView);   
             content = sb.toString(); 
             // write the buffered response along with the state information
             // to output.

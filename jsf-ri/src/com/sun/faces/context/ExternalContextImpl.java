@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.11 2003/07/23 16:30:31 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.12 2003/08/22 16:49:43 eburns Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.11 2003/07/23 16:30:31 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.12 2003/08/22 16:49:43 eburns Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -295,13 +295,6 @@ public class ExternalContextImpl extends ExternalContext {
         return ((HttpServletResponse) response).encodeURL(url);
     };
 
-    /**
-     * <p>Dispatch a request to the apropriate context. In the
-     * case of servlets, this is done via "forward", but for
-     * portlets, it must use "include".</p>
-     *
-     * @param requestURI The input URI of the request tree.
-     */
     public void dispatchMessage(String requestURI) throws IOException, FacesException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(requestURI);
         try {

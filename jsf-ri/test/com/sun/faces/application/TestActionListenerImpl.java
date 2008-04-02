@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.10 2003/08/21 14:18:08 rlubke Exp $
+ * $Id: TestActionListenerImpl.java,v 1.11 2003/08/22 16:50:33 eburns Exp $
  */
 
 /*
@@ -44,7 +44,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.10 2003/08/21 14:18:08 rlubke Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.11 2003/08/22 16:50:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,16 +101,16 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         UICommand command = new UICommandBase();
         command.setAction("loginRequired");
         UIPage page = new UIPageBase();
-        page.setTreeId("/login.jsp");
-        context.setRoot(page);
+        page.setViewId("/login.jsp");
+        context.setViewRoot(page);
 
         ActionListenerImpl actionListener = new ActionListenerImpl();
         ActionEvent actionEvent = new ActionEvent(command);
 
         actionListener.processAction(actionEvent);
 
-        String newTreeId = context.getRoot().getTreeId();
-        assertTrue(newTreeId.equals("/must-login-first.jsp"));
+        String newViewId = context.getViewRoot().getViewId();
+        assertTrue(newViewId.equals("/must-login-first.jsp"));
 
         System.out.println("Testing With ActionRef Set...");
 
@@ -124,16 +124,16 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         assertTrue(user == context.getExternalContext().getSessionMap().get("userBean"));
 
         page = new UIPageBase();
-        page.setTreeId("/login.jsp");
-        context.setRoot(page);
+        page.setViewId("/login.jsp");
+        context.setViewRoot(page);
 
         actionEvent = new ActionEvent(command);
         actionListener.processAction(actionEvent);
 
-        newTreeId = context.getRoot().getTreeId();
-        // expected outcome should be tree id corresponding to "page/outcome" search..
+        newViewId = context.getViewRoot().getViewId();
+        // expected outcome should be view id corresponding to "page/outcome" search..
 
-        assertTrue(newTreeId.equals("/home.jsp"));
+        assertTrue(newViewId.equals("/home.jsp"));
     }
 
     public void testIllegalArgException() {
@@ -141,8 +141,8 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         FacesContext context = FacesContext.getCurrentInstance();
         UIPage page = new UIPageBase();
-        page.setTreeId("/login.jsp");
-        context.setRoot(page);
+        page.setViewId("/login.jsp");
+        context.setViewRoot(page);
         UserBean user = new UserBean();
         context.getExternalContext().getApplicationMap().put("UserBean", user);
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.13 2003/08/21 14:18:28 rlubke Exp $
+ * $Id: TestValidatorTags.java,v 1.14 2003/08/22 16:51:54 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.13 2003/08/21 14:18:28 rlubke Exp $
+ * @version $Id: TestValidatorTags.java,v 1.14 2003/08/22 16:51:54 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,8 +149,8 @@ public void testValidators()
 	applyRequestValues = new ApplyRequestValuesPhase();
    
     UIPage page = new UIPageBase();
-    page.setTreeId(TEST_URI);
-    getFacesContext().setRoot(page);
+    page.setViewId(TEST_URI);
+    getFacesContext().setViewRoot(page);
 
     // This builds the tree, and usefaces saves it in the session
     renderResponse.execute(getFacesContext());
@@ -177,61 +177,61 @@ public void testValidators()
     // check the messages for each component in the page
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(OUTOFBOUNDS1_ID)));
+		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(INBOUNDS1_ID)));
+		getFacesContext().getViewRoot().findComponent(INBOUNDS1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(OUTOFBOUNDS2_ID)));
+		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS2_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(INBOUNDS2_ID)));
+		getFacesContext().getViewRoot().findComponent(INBOUNDS2_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(OUTOFBOUNDS3_ID)));
+		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS3_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(INBOUNDS3_ID)));
+		getFacesContext().getViewRoot().findComponent(INBOUNDS3_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(REQUIRED1_ID)));
+		getFacesContext().getViewRoot().findComponent(REQUIRED1_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(OUTOFBOUNDS4_ID)));
+		getFacesContext().getViewRoot().findComponent(OUTOFBOUNDS4_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(INBOUNDS4_ID)));
+		getFacesContext().getViewRoot().findComponent(INBOUNDS4_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(!messages.hasNext());
 
     assertTrue(null != 
 	       (comp = 
-		getFacesContext().getRoot().findComponent(REQUIRED2_ID)));
+		getFacesContext().getViewRoot().findComponent(REQUIRED2_ID)));
     assertTrue(null != (messages = getFacesContext().getMessages(comp)));
     assertTrue(messages.hasNext());
 

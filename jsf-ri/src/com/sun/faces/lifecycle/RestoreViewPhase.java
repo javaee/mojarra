@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreComponentTreePhase.java,v 1.1 2003/08/19 19:31:10 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.1 2003/08/22 16:49:28 eburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// ReconstituteComponentTreePhase.java
+// RestoreViewPhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -21,7 +21,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
-import javax.faces.component.UIPage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 import javax.faces.application.StateManager;
@@ -46,16 +46,16 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreComponentTreePhase.java,v 1.1 2003/08/19 19:31:10 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.1 2003/08/22 16:49:28 eburns Exp $
  * 
  */
 
-public class RestoreComponentTreePhase extends Phase {
+public class RestoreViewPhase extends Phase {
 //
 // Protected Constants
 //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(RestoreComponentTreePhase.class);
+    protected static Log log = LogFactory.getLog(RestoreViewPhase.class);
 
 //
 // Class Variables
@@ -74,7 +74,7 @@ private ActionListener actionListener = null;
 // Constructors and Genericializers    
 //
 
-public RestoreComponentTreePhase() {    
+public RestoreViewPhase() {    
     ApplicationFactory aFactory = (ApplicationFactory)
         FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
     if (aFactory != null) {
@@ -96,7 +96,7 @@ public RestoreComponentTreePhase() {
 
 
 public PhaseId getId() {
-    return PhaseId.RESTORE_COMPONENT_TREE;
+    return PhaseId.RESTORE_VIEW;
 }
 
 /**
@@ -104,7 +104,7 @@ public PhaseId getId() {
 * PRECONDITION: the necessary factories have been installed in the
 * ServletContext attr set. <P>
 
-* POSTCONDITION: The facesContext has been initialized with a tree. 
+* POSTCONDITION: The facesContext has been initialized with a view. 
 
 */
 
@@ -116,20 +116,20 @@ public void execute(FacesContext facesContext) throws FacesException
 
     // If an app had explicitely set the root component in the context, use that;
     //
-    UIComponent componentTree = facesContext.getRoot();
+    UIComponent view = facesContext.getViewRoot();
     Locale locale = null;
-    if (componentTree != null) {
+    if (view != null) {
         locale = facesContext.getExternalContext().getRequestLocale();
         facesContext.setLocale(locale);
-        processTree(facesContext);
+        processView(facesContext);
 	return;
     }
 
-    // Otherwise, we will look to get the tree from the page or session;
-    // Create the requested component tree    
+    // Otherwise, we will look to get the view from the page or session;
+    // Create the requested component view    
     
     // look up saveStateInClient parameter to check whether to restore
-    // state of tree from client or server. Default is server.
+    // state of view from client or server. Default is server.
     String saveState = facesContext.getExternalContext().
         getInitParameter(RIConstants.SAVESTATE_INITPARAM);
     if ( saveState != null ) {
@@ -137,14 +137,14 @@ public void execute(FacesContext facesContext) throws FacesException
             saveState.equalsIgnoreCase("false"));
     }     
     if (saveState == null || saveState.equalsIgnoreCase("false")) {
-        restoreTreeFromSession(facesContext);
+        restoreViewFromSession(facesContext);
     } else {
-        restoreTreeFromPage(facesContext);           
+        restoreViewFromPage(facesContext);           
     }
 }    
         
-public void restoreTreeFromPage(FacesContext facesContext) {
-    UIPage requestTree = null;
+public void restoreViewFromPage(FacesContext facesContext) {
+    UIViewRoot requestView = null;
     Locale locale = null;
     long beginTime = 0;
 
@@ -152,30 +152,30 @@ public void restoreTreeFromPage(FacesContext facesContext) {
         beginTime = System.currentTimeMillis();
     }
    
-    // reconstitute tree from page. 
+    // reconstitute view from page. 
     Map requestMap = facesContext.getExternalContext().getRequestParameterMap();
-    String treeId = (String)requestMap.get("javax.servlet.include.path_info");
-    if (treeId == null) {
-        treeId = facesContext.getExternalContext().getRequestPathInfo();
+    String viewId = (String)requestMap.get("javax.servlet.include.path_info");
+    if (viewId == null) {
+        viewId = facesContext.getExternalContext().getRequestPathInfo();
     }
     
-    if (treeId == null) {
-        throw new FacesException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
+    if (viewId == null) {
+        throw new FacesException(Util.getExceptionMessage(Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
     }
 
-    String treeRootString = (String)requestMap.get(RIConstants.FACES_TREE);
-    if ( treeRootString == null ) {
-        requestTree = facesContext.getRoot();
+    String viewRootString = (String)requestMap.get(RIConstants.FACES_VIEW);
+    if ( viewRootString == null ) {
+        requestView = facesContext.getViewRoot();
     } else {    
-        byte[] bytes  = Base64.decode(treeRootString.getBytes());
+        byte[] bytes  = Base64.decode(viewRootString.getBytes());
         try {
             ObjectInputStream ois = new ObjectInputStream(
                     new ByteArrayInputStream(bytes));
-            requestTree = (UIPage) ois.readObject();
+            requestView = (UIViewRoot) ois.readObject();
             locale = (Locale) ois.readObject();
             ois.close();
             if (log.isDebugEnabled()) {
-                DebugUtil.printTree(requestTree, System.out);
+                DebugUtil.printTree(requestView, System.out);
             }
         } catch (java.io.OptionalDataException ode) {
             log.error(ode.getMessage(), ode);
@@ -185,65 +185,65 @@ public void restoreTreeFromPage(FacesContext facesContext) {
             log.error(iox.getMessage(), iox);
         }
     }
-    facesContext.setRoot(requestTree);
+    facesContext.setViewRoot(requestView);
     if ( locale != null ) {
         facesContext.setLocale(locale);
     }
-    processTree(facesContext);
+    processView(facesContext);
     // PENDING(visvan): If we wanted to track time, here is where we'd do it
     if (log.isTraceEnabled()) {
         long endTime = System.currentTimeMillis();
-        log.trace("Time to reconstitute tree " + (endTime-beginTime));
+        log.trace("Time to reconstitute view " + (endTime-beginTime));
     }
 }
 
-protected void restoreTreeFromSession(FacesContext facesContext) {
-    UIPage requestTree = null;
+protected void restoreViewFromSession(FacesContext facesContext) {
+    UIViewRoot requestView = null;
     
     // PENDING(visvan) - will not deal with simultaneous requests
     // for the same session
     Map sessionMap = Util.getSessionMap(facesContext);
 
-    // Reconstitute or create the request tree
+    // Reconstitute or create the request view
     Map requestMap = facesContext.getExternalContext().getRequestMap();
-    String treeId = (String) 
+    String viewId = (String) 
                requestMap.get("javax.servlet.include.path_info");
-    if (treeId == null) {
-        treeId = facesContext.getExternalContext().getRequestPathInfo();
+    if (viewId == null) {
+        viewId = facesContext.getExternalContext().getRequestPathInfo();
     }
 
     //PENDING (rogerk) throw exception
-    if (treeId == null) {
-        throw new FacesException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
+    if (viewId == null) {
+        throw new FacesException(Util.getExceptionMessage(Util.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
 	// throw exception;
     }
 
-    requestTree = (UIPage) sessionMap.get(RIConstants.FACES_TREE);
+    requestView = (UIViewRoot) sessionMap.get(RIConstants.FACES_VIEW);
     // If there is nothing in the session, 
-    if (requestTree == null) {
-	// create the tree from the pathInfo
-        requestTree = facesContext.getRoot();
+    if (requestView == null) {
+	// create the view from the pathInfo
+        requestView = facesContext.getViewRoot();
     } 
     else {
-	// There is something in the session.  Make sure its TreeId,
-	// matches the treeId from the pathInfo.
+	// There is something in the session.  Make sure its ViewId,
+	// matches the viewId from the pathInfo.
         // PENDING (rlubke) CORRECT IMPLEMENTATION
-	if ((null != treeId) && !treeId.equals(requestTree.getTreeId())) {
+	if ((null != viewId) && !viewId.equals(requestView.getViewId())) {
 	    // If it doesn't match, use the pathInfo
         StateManager manager = Application.getCurrentInstance().getViewHandler().getStateManager();
         try {
-            manager.restoreTree(facesContext, treeId);
+            manager.getView(facesContext, viewId);
         } catch (IOException ioe) {
             // pending (rlubke) Localize
-            throw new FacesException("Unable to restore tree.", ioe);    
+            throw new FacesException("Unable to restore view.", ioe);    
         }
-	    requestTree = facesContext.getRoot();
+	    requestView = facesContext.getViewRoot();
 	}
-	// If it does match, use the tree from the Session
+	// If it does match, use the view from the Session
     }
 	
-    facesContext.setRoot(requestTree);
-    sessionMap.remove(RIConstants.FACES_TREE);
+    facesContext.setViewRoot(requestView);
+    sessionMap.remove(RIConstants.FACES_VIEW);
 
     // Set up the request locale if needed
     Locale locale = (Locale)sessionMap.get(RIConstants.REQUEST_LOCALE);
@@ -252,11 +252,11 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     }
     facesContext.setLocale(locale);
     sessionMap.remove(RIConstants.REQUEST_LOCALE);
-    processTree(facesContext);
+    processView(facesContext);
 }
 
-protected void processTree(FacesContext facesContext) {
-    UIComponent root = facesContext.getRoot();
+protected void processView(FacesContext facesContext) {
+    UIComponent root = facesContext.getViewRoot();
     // PENDING (rlubke) CORRECT IMPLEMENTATION
 //    try {        
 //        root.processRestoreState(facesContext, );
@@ -298,7 +298,7 @@ protected void doPerComponentActions(FacesContext context, UIComponent uic) {
     }
 }
 
-// The testcase for this class is TestReconstituteComponentTreePhase.java
+// The testcase for this class is TestReconstituteComponentViewPhase.java
 
 
-} // end of class ReconstituteComponentTreePhase
+} // end of class ReconstituteComponentViewPhase

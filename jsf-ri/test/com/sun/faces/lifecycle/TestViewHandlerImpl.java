@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.19 2003/08/21 14:18:17 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.20 2003/08/22 16:51:47 eburns Exp $ 
  */ 
 
 
@@ -30,17 +30,14 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle; 
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.validator.Validator; 
 import javax.servlet.ServletException;
 
 import com.sun.faces.JspFacesTestCase; 
 import com.sun.faces.FileOutputResponseWrapper; 
-import com.sun.faces.tree.SimpleTreeImpl;
 import com.sun.faces.util.Util; 
 import com.sun.faces.CompareFiles; 
-
-import com.sun.faces.tree.SimpleTreeImpl; 
-
 
 import com.sun.faces.TestBean;
 import com.sun.faces.application.ViewHandlerImpl;
@@ -62,7 +59,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.19 2003/08/21 14:18:17 rlubke Exp $ 
+ * @version $Id: TestViewHandlerImpl.java,v 1.20 2003/08/22 16:51:47 eburns Exp $ 
  * 
  * @see Blah 
  * @see Bloo 
@@ -152,9 +149,9 @@ public void testRender()
     boolean result = false; 
     UIComponentBase root = null; 
     String value = null; 
-    SimpleTreeImpl newTree = new SimpleTreeImpl(getFacesContext(),
-						TEST_URI);
-    getFacesContext().setTree(newTree);
+    UIViewRootBase newView = new UIViewRootBase();
+    newView.setViewId(TEST_URI);
+    getFacesContext().setViewRoot(newView);
 
     try { 
         ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 

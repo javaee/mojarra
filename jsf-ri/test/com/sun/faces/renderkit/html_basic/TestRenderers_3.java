@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.17 2003/08/21 14:18:25 rlubke Exp $
+ * $Id: TestRenderers_3.java,v 1.18 2003/08/22 16:51:51 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -30,6 +30,7 @@ import javax.faces.component.base.UISelectItemsBase;
 import javax.faces.component.base.UINamingContainerBase;
 import javax.faces.component.base.UISelectOneBase;
 import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.model.SelectItem;
 
@@ -41,7 +42,6 @@ import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.JspFacesTestCase;
-import com.sun.faces.tree.SimpleTreeImpl;
 
 /**
  *
@@ -49,7 +49,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.17 2003/08/21 14:18:25 rlubke Exp $
+ * @version $Id: TestRenderers_3.java,v 1.18 2003/08/22 16:51:51 eburns Exp $
  * 
  *
  */
@@ -102,12 +102,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
     public void setUp() {
         super.setUp();
 
-        SimpleTreeImpl xmlTree =
-            new SimpleTreeImpl(
-                getFacesContext(),
-                new UICommandBase(),
-                "treeId");
-        getFacesContext().setTree(xmlTree);
+	UIViewRootBase xmlTree = new UIViewRootBase();
+	xmlTree.setViewId("viewId");
+	xmlTree.getChildren().add(new UICommandBase());
+        getFacesContext().setViewRoot(xmlTree);
         assertTrue(null != getFacesContext().getResponseWriter());
     }
 

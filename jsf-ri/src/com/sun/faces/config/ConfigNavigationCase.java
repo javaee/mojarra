@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigNavigationCase.java,v 1.1 2003/05/01 07:20:17 rkitain Exp $
+ * $Id: ConfigNavigationCase.java,v 1.2 2003/08/22 16:49:41 eburns Exp $
  */
 
 /*
@@ -22,16 +22,16 @@ import java.util.Map;
  */
 public class ConfigNavigationCase {
 
-    private String fromTreeId = null;
+    private String fromViewId = null;
     private String fromActionRef = null;
     private String fromOutcome = null;
-    private String toTreeId = null;
+    private String toViewId = null;
 
-    public String getFromTreeId() {
-        return (this.fromTreeId);
+    public String getFromViewId() {
+        return (this.fromViewId);
     }
-    public void setFromTreeId(String fromTreeId) {
-        this.fromTreeId = fromTreeId;
+    public void setFromViewId(String fromViewId) {
+        this.fromViewId = fromViewId;
     }
 
     public String getFromActionRef() {
@@ -48,19 +48,19 @@ public class ConfigNavigationCase {
         this.fromOutcome = fromOutcome;
     }
 
-    public String getToTreeId() {
-        return (this.toTreeId);
+    public String getToViewId() {
+        return (this.toViewId);
     }
-    public void setToTreeId(String toTreeId) {
-        this.toTreeId = toTreeId;
+    public void setToViewId(String toViewId) {
+        this.toViewId = toViewId;
     }
 
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append("FROM TREE ID:"+getFromTreeId());
+        sb.append("FROM VIEW ID:"+getFromViewId());
         sb.append("\nFROM ACTION REF:"+getFromActionRef());
         sb.append("\nFROM OUTCOME:"+getFromOutcome());
-        sb.append("\nTO TREE ID:"+getToTreeId());
+        sb.append("\nTO VIEW ID:"+getToViewId());
         return sb.toString();
     }
 }

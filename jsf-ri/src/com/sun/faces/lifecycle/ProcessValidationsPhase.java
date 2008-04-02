@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.14 2003/08/19 19:31:10 rlubke Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.15 2003/08/22 16:49:28 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.14 2003/08/19 19:31:10 rlubke Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.15 2003/08/22 16:49:28 eburns Exp $
  * 
  */
 
@@ -74,7 +74,7 @@ public void execute(FacesContext facesContext) throws FacesException
 {
     Iterator messageIter = null;
 
-    UIComponent component = facesContext.getRoot();
+    UIComponent component = facesContext.getViewRoot();
     Assert.assert_it(null != component);
 
     component.processValidators(facesContext);
