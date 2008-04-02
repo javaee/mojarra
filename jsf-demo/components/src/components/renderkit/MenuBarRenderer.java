@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.14 2003/12/24 23:44:19 jvisvanathan Exp $
+ * $Id: MenuBarRenderer.java,v 1.15 2004/01/25 02:06:30 jvisvanathan Exp $
  */
 
 /*
@@ -232,12 +232,12 @@ public class MenuBarRenderer extends BaseRenderer {
      * the form so that we have the state information to reconstitute the tree.
      */
     protected String getSubmitScript(String path, FacesContext context) {
-         int formNumber = 0;
-         formNumber = getMyFormNumber(context);
+         UIForm uiform = getMyForm();
+         String formClientId = uiform.getClientId(context);
          StringBuffer sb = new StringBuffer();
-         sb.append("#\" onmousedown=\"document.forms[" + formNumber + "]['" + 
+         sb.append("#\" onclick=\"document.forms['" + formClientId + "']['" + 
 		     clientId + "'].value='" + path + 
-		     "';document.forms[" + formNumber + "].submit()\"");
+		     "';document.forms['" + formClientId + "'].submit()\"");
          return sb.toString();
     }     
     
@@ -255,24 +255,6 @@ public class MenuBarRenderer extends BaseRenderer {
 	return (UIForm) parent;
     }
 
-    /**
-     * Returns the form number of the parent form of graph component.
-     */
-    protected int getMyFormNumber(FacesContext context) {
-	
-	Map requestMap = context.getExternalContext().getRequestMap();
-	int numForms = 0;
-	Integer formsInt = null;
-	// find out the current number of forms in the page.
-	if (null != (formsInt = (Integer) 
-		     requestMap.get(FORM_NUMBER_ATTR))) {
-	    numForms = formsInt.intValue();
-            // since the form index in the document starts from 0.
-            numForms--;
-	}
-	return numForms;
-    }
-    
     /**
      * Returns a string that is rendered as the value of
      * href attribute after prepending the contextPath if necessary.

@@ -114,7 +114,7 @@ public class CalendarBean {
     
     private void setLocale(String locale) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getViewRoot().setLocale(new Locale(locale));
+        context.getViewRoot().setLocale(new Locale(locale, ""));
     }
 
     /**
