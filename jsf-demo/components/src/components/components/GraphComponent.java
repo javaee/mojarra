@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.4 2003/08/25 21:39:32 craigmcc Exp $
+ * $Id: GraphComponent.java,v 1.5 2003/08/27 23:15:39 eburns Exp $
  */
 
 /*
@@ -74,33 +74,11 @@ public class GraphComponent extends UIOutputBase {
     private static Log log = LogFactory.getLog(GraphComponent.class);
 
 
-    protected List listeners[] = null;
-
-
     public GraphComponent() {
         GraphListener listener = new GraphListener();
-        addGraphListener(listener);    
+        addFacesListener(listener);    
     }   
     
-
-    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
-    // adds a listener
-    public void addGraphListener(GraphListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            listeners = new List[PhaseId.VALUES.size()];
-        }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            listeners[ordinal] = new ArrayList();
-        }
-        listeners[ordinal].add(listener);
-    }
-
-
     // PENDING(craigmcc) - reflect the "untangling broadcast" changes
     // invokes listener method passing event as argument 
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
