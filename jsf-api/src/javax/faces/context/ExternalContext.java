@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.2 2003/03/20 21:38:16 eburns Exp $
+ * $Id: ExternalContext.java,v 1.3 2003/03/22 01:09:33 eburns Exp $
  */
  
 /*
@@ -188,6 +188,23 @@ public abstract class ExternalContext {
 
     /**
 
+    * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+    * from this method is equivalent to getting the
+    * <code>ServletRequest</code> for this request and looking through
+    * the <code>Cookie[]</code> returned by calling
+    * <code>getCookies()</code> and finding a cookie with the name of
+    * <code>key</code>.  Similar rules apply for other Map methods where
+    * they make sense.</p>
+    
+    * @return a <code>Map</code> that wraps the Cookie set for this
+    * request.
+
+    */ 
+
+    public abstract Map getRequestCookieMap();
+
+    /**
+
     * <p>A wrapper for <code>ServletRequest.getLocale()</code>.</p>
 
     */
@@ -225,6 +242,21 @@ public abstract class ExternalContext {
     */
     
     public abstract String getInitParameter(String name);
+
+    /**
+     
+     * <p>Calling <code>get(key)</code> on the <code>Map</code> obtained
+     * from this method is equivalent to getting the
+     * <code>ServletContext</code> for this request and calling
+     * <code>getInitParam(key)</code> on it.  Similar rules apply for
+     * other <code>Map</code> methods where they make sense.</p>
+     
+    * @return a <code>Map</code> that wraps the ServletContext's
+    * init parameter set.
+    
+    */
+
+    public abstract Map getInitParameterMap();
 
     /**
 
