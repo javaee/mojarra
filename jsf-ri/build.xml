@@ -405,6 +405,14 @@
             path="${context.path}"/>
   </target>
 
+  <target name="deploy.tomcat" depends="build.basic.war"
+   description="Deploy the basic.war to tomcat">
+     <copy file="${dist.home}/${dist.war}"
+       toDir="${tomcat.home}/webapps"/>
+
+  </target>
+
+
 
   <!-- 
        =================================================================== 
