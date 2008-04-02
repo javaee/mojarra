@@ -138,7 +138,7 @@
         <!-- TAGLIBDOC -->
         <if>
             <not>
-                <available file="${taglibdoc.jar}" property="ignored"/>
+                <available file="${tlddoc.jar}" property="ignored"/>
             </not>
             <then>
                 <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
@@ -151,7 +151,7 @@
         <!-- MAVEN REPOSITORY IMPORTER -->
         <if>
             <not>
-                <available file="${maven.repository.importer.home}" property="ignored"/>
+                <available file="${maven.repository.importer.jar}" property="ignored"/>
             </not>
             <then>
                 <get src="${java.net.maven}/com.sun.wts.tools.mri/jars/maven-repository-importer-${maven.repository.importer.version}.jar"
