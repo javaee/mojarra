@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.23 2002/12/03 23:02:00 jvisvanathan Exp $
+ * $Id: UICommand.java,v 1.24 2002/12/03 23:19:30 craigmcc Exp $
  */
 
 /*
@@ -156,9 +156,7 @@ public class UICommand extends UIComponentBase {
 
         // Perform default encoding
         ResponseWriter writer = context.getResponseWriter();
-        writef (!isRendered()) {
-            return;
-        }r.write("<button name=\"");
+        writer.write("<button name=\"");
         writer.write(getCompoundId());
         writer.write("\" type=\"submit\" value=\"submit\">\n");
 
