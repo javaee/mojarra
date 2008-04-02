@@ -310,7 +310,7 @@ escape&lt;p&gt;this markup&lt;/p&gt;<span id="basicForm:outputlabel8">andsometex
 	    <table id="basicForm:shipType" class="someStyleClass" style="someStyle">
 	<tr>
 <td>
-<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
+<input type="radio" name="basicForm:shipType" id="basicForm:shipType:0" value="nextDay@" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:0" class="disabledClass"> Next Day</label></td>
 <td>
 <input type="radio" name="basicForm:shipType" id="basicForm:shipType:1" value="nextWeek" accesskey="A" tabindex="3" disabled="disabled" /><label for="basicForm:shipType:1" class="disabledClass"> &lt;Next Week&gt;</label></td>
 <td>

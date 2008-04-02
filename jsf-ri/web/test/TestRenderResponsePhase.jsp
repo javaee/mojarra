@@ -375,7 +375,7 @@
                 enabledClass="enabledClass" accesskey="A" 
                 styleClass = "someStyleClass" style="someStyle" disabled="true">
 
-                <f:selectItem itemValue="nextDay" itemLabel="Next Day" itemDisabled="true"/>
+                <f:selectItem itemValue="nextDay@" itemLabel="Next Day" itemDisabled="true"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="<Next Week>" />
                 <f:selectItem itemValue="nextMonth" itemLabel="<Next Month>" escape="false"/>
                  

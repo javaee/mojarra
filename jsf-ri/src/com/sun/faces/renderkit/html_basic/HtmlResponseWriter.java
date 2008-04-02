@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.42 2006/11/17 22:31:28 edburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.43 2007/01/26 19:34:24 rlubke Exp $
  */
 
 /*
@@ -82,6 +82,9 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // flag to indicate that we're writing a 'style' element
     private boolean isStyle;
+
+   // flag to indicate that we're writing an 'option' element
+    private boolean isOption;
 
     // flag to indicate that we're writing a 'src' attribute as part of
     // 'script' or 'style' element 
@@ -454,6 +457,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
         closeStartIfNecessary();
         isScriptOrStyle(name);
+        isOption(name);
         scriptOrStyleSrc = false;
         if ("cdata".equalsIgnoreCase(name)) {
             writingCdata = true;
@@ -570,7 +574,11 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write("=\"");
 
             // write the attribute value
-            HtmlUtils.writeAttribute(writer, buffer, value.toString());
+            if (isOption && "value".equals(name)) {
+                writer.write(value.toString());
+            } else {
+                HtmlUtils.writeAttribute(writer, buffer, value.toString());
+            }
             writer.write('"');
         }
 
@@ -852,6 +860,12 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         return (isScript || isStyle);
+    }
+
+    private void isOption(String name) {
+        if ("option".equalsIgnoreCase(name)) {
+            isOption = true;
+        }
     }
 
     private boolean isScriptOrStyle() {
