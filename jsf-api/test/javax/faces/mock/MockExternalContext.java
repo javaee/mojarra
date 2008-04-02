@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.7 2003/10/22 20:43:34 eburns Exp $
+ * $Id: MockExternalContext.java,v 1.8 2003/10/22 23:25:43 craigmcc Exp $
  */
 
 /*
@@ -91,8 +91,16 @@ public class MockExternalContext extends ExternalContext {
     }
     
 
+    private Map requestParameterMap = null;
     public Map getRequestParameterMap() {
-        throw new UnsupportedOperationException();
+        if (requestParameterMap != null) {
+            return (requestParameterMap);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+    public void setRequestParameterMap(Map requestParameterMap) {
+        this.requestParameterMap = requestParameterMap;
     }
 
 
