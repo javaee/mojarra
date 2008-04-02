@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractJsfParserVisitor.java,v 1.2 2004/11/09 04:23:11 jhook Exp $
+ * $Id: AbstractJsfParserVisitor.java,v 1.3 2005/02/09 00:45:21 jhook Exp $
  */
 
 /*
@@ -436,11 +436,6 @@ public abstract class AbstractJsfParserVisitor extends ELSupport implements JsfP
     public Object visit(AstMinus node, Object data) throws EvaluationException
     {
         Object obj0 = node.jjtGetChild(0).jjtAccept(this, data);
-        Number num0 = coerceToNumber(obj0);
-        if (num0.doubleValue() == 0.0)
-        {
-            return num0;
-        }
         Object obj1 = node.jjtGetChild(1).jjtAccept(this, data);
         return ELArithmetic.subtract(obj0, obj1);
     }
@@ -596,11 +591,6 @@ public abstract class AbstractJsfParserVisitor extends ELSupport implements JsfP
     public Object visit(AstPlus node, Object data) throws EvaluationException
     {
         Object obj0 = node.jjtGetChild(0).jjtAccept(this, data);
-        Number num0 = coerceToNumber(obj0);
-        if (num0.doubleValue() == 0.0)
-        {
-            return num0;
-        }
         Object obj1 = node.jjtGetChild(1).jjtAccept(this, data);
         return ELArithmetic.add(obj0, obj1);
     }
