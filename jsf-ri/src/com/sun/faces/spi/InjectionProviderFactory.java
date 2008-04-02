@@ -25,18 +25,21 @@
 
 package com.sun.faces.spi;
 
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
+import javax.faces.context.ExternalContext;
 
 /**
  * <p>A factory for creating <code>InjectionProvider</code>
  * instances.</p>
  */
 public class InjectionProviderFactory {
-
+    
     /**
      * <p>Our no-op <code>InjectionProvider</code>.</p>
      */
@@ -44,13 +47,12 @@ public class InjectionProviderFactory {
           new NoopInjectionProvider();
 
     /**
-     * <p>The system property that will be checked for alternate
-     * <code>InjectionProvider</code> implementations.</p>
-     */
-    private static final String INJECTION_PROVIDER_PROPERTY =
-          RIConstants.FACES_PREFIX + "InjectionProvider";
-    
-    
+      * <p>The system property that will be checked for alternate
+      * <code>InjectionProvider</code> implementations.</p>
+      */
+     private static final String INJECTION_PROVIDER_PROPERTY =
+           RIConstants.FACES_PREFIX + "InjectionProvider";
+
     private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.APPLICATION_LOGGER);
 
@@ -63,10 +65,11 @@ public class InjectionProviderFactory {
      * @return an implementation of the <code>InjectionProvider</code>
      *  interfaces
      */
-    public static InjectionProvider createInstance() {
-
-        InjectionProvider provider =
-              getProviderInstance(System.getProperty(INJECTION_PROVIDER_PROPERTY));
+    public static InjectionProvider createInstance(ExternalContext extContext) {
+        String providerClass = findProviderClass(extContext);
+                
+        
+        InjectionProvider provider = getProviderInstance(providerClass);
 
         if (provider.getClass() != NoopInjectionProvider.class) {
             if (LOGGER.isLoggable(Level.INFO)) {
@@ -142,6 +145,28 @@ public class InjectionProviderFactory {
      */
     private static boolean implementsInjectionProvider(Class<?> clazz) {
         return InjectionProvider.class.isAssignableFrom(clazz);
+    }
+    
+    /**
+     * Tries to find a provider class in a web context parameter.  If not
+     * present it tries to find it as a System property.  If still not found
+     * returns null.
+     *
+     * @param extContext The ExternalContext for this request
+     * @return The provider class name specified in the container configuration, 
+     *         or <code>null</code> if not found.
+     */
+    private static String findProviderClass(ExternalContext extContext) {
+        
+        WebConfiguration webConfig = WebConfiguration.getInstance(extContext);
+        
+        String provider = webConfig.getContextInitParameter(WebContextInitParameter.InjectionProviderClass);
+        
+        if (provider != null) {
+            return provider;
+        } else {
+            return System.getProperty(INJECTION_PROVIDER_PROPERTY);
+        }
     }
 
     /**

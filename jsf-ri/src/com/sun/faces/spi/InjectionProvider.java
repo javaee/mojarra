@@ -17,7 +17,7 @@ public interface InjectionProvider {
      *    <ul>
      *        <li>Inject the supported resources per the Servlet 2.5
      *           specification into the provided object</li>
-     *        <li>Inoke any method marked with the <code>@PreDestroy</code>
+     *        <li>Inoke any method marked with the <code>@PostConstruct</code>
      *          annotation (per the Common Annotations Specification)</li>
      *    </ul>
      * </p>

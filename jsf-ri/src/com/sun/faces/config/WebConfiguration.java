@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.3 2006/05/18 17:02:16 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.4 2006/05/22 15:05:56 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -459,6 +459,10 @@ public class WebConfiguration {
               "15",
               true,
               NumberOfLogicalViews
+        ),
+        InjectionProviderClass(
+                "com.sun.faces.InjectionProvider",
+                ""
         );
 
         private String defaultValue;

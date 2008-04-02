@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.30 2006/05/17 17:31:27 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.31 2006/05/22 15:05:55 rlubke Exp $
  */
 
 /*
@@ -155,7 +155,7 @@ public class ApplicationAssociate {
         managedBeanFactoriesMap = new HashMap<String, ManagedBeanFactory>();       
         caseListMap = new HashMap<String,List<ConfigNavigationCase>>();
         wildcardMatchList = new TreeSet<String>(new SortIt());
-        injectionProvider = InjectionProviderFactory.createInstance();
+        injectionProvider = InjectionProviderFactory.createInstance(externalContext);
     }
 
     public static ApplicationAssociate getInstance(ExternalContext
