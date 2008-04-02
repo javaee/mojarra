@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.16 2003/09/20 00:48:16 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.17 2003/09/23 21:33:47 jvisvanathan Exp $
  */
 
 /*
@@ -305,6 +305,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("command");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -328,6 +329,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setAction("action");
 	preSave.setActionRef("actionRef");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -346,6 +348,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setAction("action");
 	preSave.setActionRef("actionRef");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	preSave.addActionListener(new TestActionListener("ANY",
 							 PhaseId.ANY_PHASE));
 	preSave.addActionListener(new TestActionListener("APR0",
@@ -377,6 +380,7 @@ public class UICommandBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();

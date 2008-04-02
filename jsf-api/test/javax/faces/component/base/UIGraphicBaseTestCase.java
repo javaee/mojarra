@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBaseTestCase.java,v 1.6 2003/09/20 00:48:18 craigmcc Exp $
+ * $Id: UIGraphicBaseTestCase.java,v 1.7 2003/09/23 21:33:47 jvisvanathan Exp $
  */
 
 /*
@@ -140,6 +140,7 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("graphic");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -156,6 +157,7 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -173,6 +175,7 @@ public class UIGraphicBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();

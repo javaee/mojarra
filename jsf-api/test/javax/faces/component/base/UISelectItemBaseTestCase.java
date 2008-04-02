@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBaseTestCase.java,v 1.8 2003/09/20 00:48:18 craigmcc Exp $
+ * $Id: UISelectItemBaseTestCase.java,v 1.9 2003/09/23 21:33:49 jvisvanathan Exp $
  */
 
 /*
@@ -170,6 +170,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("selectItem");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -177,7 +178,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	postSave = new UISelectItemBase();
 	postSave.setId("selectItem");
 	testParent.getChildren().add(postSave);
-	try {
+        try {
 	    postSave.restoreState(facesContext, state);
 	}
 	catch (Throwable e) {
@@ -192,6 +193,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setItemValue("value");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -216,6 +218,7 @@ public class UISelectItemBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setItemLabel("label");
 	preSave.setItemValue("value");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();

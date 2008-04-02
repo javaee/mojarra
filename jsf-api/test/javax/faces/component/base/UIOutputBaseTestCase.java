@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.12 2003/09/22 19:03:46 eburns Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.13 2003/09/23 21:33:48 jvisvanathan Exp $
  */
 
 /*
@@ -130,6 +130,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -147,6 +148,7 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setValue(new Integer(1));
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -164,8 +166,9 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
-	assertTrue(null != state);
+        assertTrue(null != state);
 	testParent.getChildren().clear();
 	
 	postSave = new UIOutputBase();

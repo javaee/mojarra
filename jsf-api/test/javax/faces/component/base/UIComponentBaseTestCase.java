@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.17 2003/09/23 20:35:55 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.18 2003/09/23 21:33:47 jvisvanathan Exp $
  */
 
 /*
@@ -371,7 +371,8 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 	// test component with componentId and clientId
 	preSave = new TestComponent("componentId");
-	testParent.getChildren().add(preSave);
+        testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -384,8 +385,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	// test component with componentId, clientId and componentRef
 	testParent.getChildren().clear();
 	preSave = new TestComponent("componentId");
-	preSave.setComponentRef("blah");
+        preSave.setComponentRef("blah");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -401,9 +403,12 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 	preSave.setComponentRef("blah");
 	preSave.setRendered(false);
 	preSave.setTransient(true);
+
 	preSave.getAttributes().put("buckaroo", "perfectTommy");
 	preSave.getAttributes().put("reno", "nevada");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
+
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();

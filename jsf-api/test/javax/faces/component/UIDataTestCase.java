@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.6 2003/09/22 19:03:43 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.7 2003/09/23 21:33:46 jvisvanathan Exp $
  */
 
 /*
@@ -178,6 +178,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	preSave.setId("data");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -194,6 +195,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -211,6 +213,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 	preSave.setValueRef("valueRefString");
 	preSave.setConverter(new StateSavingConverter("testCase State"));
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();
@@ -229,6 +232,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         preSave.setRows(20);
         preSave.setVar("foo");
 	testParent.getChildren().add(preSave);
+        preSave.getClientId(facesContext);
 	state = preSave.saveState(facesContext);
 	assertTrue(null != state);
 	testParent.getChildren().clear();

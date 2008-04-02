@@ -520,7 +520,9 @@ public class RepeaterSupport implements Serializable {
 
     }
 
-
+    public int getRowCount() {
+        return list.size();
+    }
 }
 
 

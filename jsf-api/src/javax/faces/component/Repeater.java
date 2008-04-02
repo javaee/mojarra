@@ -160,6 +160,11 @@ public interface Repeater {
      *  is <code>negative</code>
      */
     public void setRowIndex(int index);
+    
+    /**
+     * Return the number of rows of data in a source.
+     */
+    public int getRowCount();
 
 
 }

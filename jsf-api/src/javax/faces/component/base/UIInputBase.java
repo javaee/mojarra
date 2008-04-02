@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.10 2003/09/19 00:57:08 craigmcc Exp $
+ * $Id: UIInputBase.java,v 1.11 2003/09/23 21:33:44 jvisvanathan Exp $
  */
 
 /*
@@ -321,9 +321,26 @@ public class UIInputBase extends UIOutputBase implements UIInput {
 
         Object values[] = new Object[5];
         values[0] = super.saveState(context);
-        values[1] = previous;
-        values[2] = required ? Boolean.TRUE : Boolean.FALSE;
-        values[3] = valid ? Boolean.TRUE : Boolean.FALSE;
+        values[1] = required ? Boolean.TRUE : Boolean.FALSE;
+       
+        int rowCount = 0;
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null && repeater.getRowIndex() > 0) {
+            rowCount = repeater.getRowCount();
+            Object[] previousValues = new Object[rowCount];
+            Object[] validValues = new Object[rowCount];
+            for (int i = 0; i < rowCount; ++i ) {
+                repeater.setRowIndex(i+1);
+                previousValues[i] = repeater.getChildPrevious(this);
+                validValues[i] = new Boolean(repeater.isChildValid(this));
+            }
+            values[2] = previousValues;
+            values[3] = validValues;
+        } else {
+            values[2] = previous;
+            values[3] = valid ? Boolean.TRUE : Boolean.FALSE;
+        }
+        
         List validatorsList[] = new List[1];
         validatorsList[0] = validators;
         values[4] =
@@ -339,9 +356,27 @@ public class UIInputBase extends UIOutputBase implements UIInput {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        previous = values[1];
-        required = ((Boolean) values[2]).booleanValue();
-        valid = ((Boolean) values[3]).booleanValue();
+        required = ((Boolean) values[1]).booleanValue();
+        
+        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        if (repeater != null && repeater.getRowIndex() > 0) {
+            Object[] previousValues = (Object[])values[2];
+            if ( previousValues != null ) {
+                for (int i = 0; i < previousValues.length; ++i ) {
+                    repeater.setRowIndex(i+1);
+                    repeater.setChildPrevious(this, previousValues[i]);
+                }
+            }
+            Object[] validValues = (Object[])values[3];
+            for (int i = 0; i < validValues.length; ++i ) {
+                repeater.setRowIndex(i+1);
+                repeater.setChildValid(this,
+                        (((Boolean)validValues[i]).booleanValue()));
+            }
+        } else {
+            previous = values[2];
+            valid = ((Boolean) values[3]).booleanValue();
+        }
         // if there were some validators registered prior to this method being 
         // invoked, merge them with the list to be restored.
         List validatorsList[] = new List[1];

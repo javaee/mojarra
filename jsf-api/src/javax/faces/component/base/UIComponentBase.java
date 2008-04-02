@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.24 2003/09/23 21:21:26 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.25 2003/09/23 21:33:44 jvisvanathan Exp $
  */
 
 /*
@@ -1282,6 +1282,9 @@ public abstract class UIComponentBase implements UIComponent {
 	Object [] stateStruct = new Object[2];
 	Object [] childState = null;
 	
+        // Process this component itself
+        stateStruct[MY_STATE] = saveState(context);
+        
         // Process all the children of this component
 	int i = 0, len = getChildren().size() + getFacets().keySet().size();
 
@@ -1313,9 +1316,6 @@ public abstract class UIComponentBase implements UIComponent {
 	    }
 	    i++;
         }
-	
-        // Process this component itself
-        stateStruct[MY_STATE] = saveState(context);
 	return stateStruct;
     }
     
@@ -1328,6 +1328,15 @@ public abstract class UIComponentBase implements UIComponent {
 	
 	Object [] stateStruct = (Object []) state;
 	Object [] childState = (Object []) stateStruct[CHILD_STATE];
+        
+        // Process this component itself
+	try {
+	    restoreState(context, stateStruct[MY_STATE]);
+	}
+	catch (IOException ioe) {
+	    throw new FacesException(ioe);
+	}
+        
 	int i = 0;
 	
         // Process all the children of this component
@@ -1352,14 +1361,6 @@ public abstract class UIComponentBase implements UIComponent {
 	    }
             ++j;
         }
-	
-        // Process this component itself
-	try {
-	    restoreState(context, stateStruct[MY_STATE]);
-	}
-	catch (IOException ioe) {
-	    throw new FacesException(ioe);
-	}
     }
     
     // ------------------------------------------------------- Protected Methods
@@ -1394,7 +1395,7 @@ public abstract class UIComponentBase implements UIComponent {
 
         Object values[] = new Object[7];
         values[0] = attributes;
-        values[1] = getClientId(context);
+        values[1] = clientId;
         values[2] = componentRef;
         values[3] = id;
         values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;

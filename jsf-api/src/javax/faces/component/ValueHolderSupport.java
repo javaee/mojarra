@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.3 2003/09/22 19:03:34 eburns Exp $
+ * $Id: ValueHolderSupport.java,v 1.4 2003/09/23 21:33:42 jvisvanathan Exp $
  */
 
 /*
@@ -209,7 +209,20 @@ public class ValueHolderSupport
             context.getApplication().getViewHandler().getStateManager().
             getAttachedObjectState(context, component,
                                    "converter", converterList);
-        values[1] = value;
+        int rowCount = 0;
+        Repeater repeater = RepeaterSupport.findParentRepeater(component);
+        if (repeater != null && repeater.getRowIndex() > 0) {
+            rowCount = repeater.getRowCount();
+            Object[] currentValues = new Object[rowCount];
+            for (int i = 0; i < rowCount; ++i ) {
+                repeater.setRowIndex(i+1);
+                currentValues[i] = repeater.getChildValue(component);
+            }
+            values[1] = currentValues;
+
+        } else {
+            values[1] = value;
+        }
         values[2] = valueRef;
         return (values);
 
@@ -230,7 +243,19 @@ public class ValueHolderSupport
                 converter = (Converter) theConverter.get(0);
             }
 	}
-        value = values[1];
+    
+        Repeater repeater = RepeaterSupport.findParentRepeater(component);
+        if (repeater != null && repeater.getRowIndex() > 0) {
+            Object[] currentValues = (Object[])values[1];
+            if ( currentValues != null ) {
+                for (int i = 0; i < currentValues.length; ++i ) {
+                    repeater.setRowIndex(i+1);
+                    repeater.setChildValue(component, currentValues[i]);
+                }
+            }
+        } else {
+            value = values[1];
+        }
         valueRef = (String) values[2];
 
     }
