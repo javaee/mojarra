@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.16 2003/08/22 19:25:12 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.17 2003/08/22 22:30:03 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import com.sun.faces.el.VariableResolverImpl;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
@@ -52,7 +53,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.16 2003/08/22 19:25:12 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.17 2003/08/22 22:30:03 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -221,29 +222,29 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	application.addConverter(testConverter.getConverterId(),
 				 "com.sun.faces.TestConverter");
 	assertTrue(null != (newTestConverter = (TestConverter)
-			    application.getConverter(testConverter.getConverterId())));
+			    application.createConverter(testConverter.getConverterId())));
 	assertTrue(newTestConverter != testConverter);
 
 	// built-in components
-	assertTrue(null != (conv = application.getConverter("Date")));
+	assertTrue(null != (conv = application.createConverter("Date")));
 	assertTrue(conv instanceof DateConverter);
 
-	assertTrue(null != (conv = application.getConverter("DateFormat")));
+	assertTrue(null != (conv = application.createConverter("DateFormat")));
 	assertTrue(conv instanceof DateConverter);
 
-	assertTrue(null != (conv = application.getConverter("DateTime")));
+	assertTrue(null != (conv = application.createConverter("DateTime")));
 	assertTrue(conv instanceof DateTimeConverter);
 
-	assertTrue(null != (conv = application.getConverter("Number")));
+	assertTrue(null != (conv = application.createConverter("Number")));
 	assertTrue(conv instanceof NumberConverter);
 
-	assertTrue(null != (conv = application.getConverter("NumberFormat")));
+	assertTrue(null != (conv = application.createConverter("NumberFormat")));
 	assertTrue(conv instanceof NumberConverter);
 
-	assertTrue(null != (conv = application.getConverter("Time")));
+	assertTrue(null != (conv = application.createConverter("Time")));
 	assertTrue(conv instanceof TimeConverter);
 
-	assertTrue(null != (conv = application.getConverter("Boolean")));
+	assertTrue(null != (conv = application.createConverter("Boolean")));
 	assertTrue(conv instanceof BooleanConverter);
 	
     }
@@ -255,7 +256,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	try {
 	    application.addConverter("William",
 				     "BillyBoy");
-	    application.getConverter("William");
+	    application.createConverter("William");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;
@@ -265,7 +266,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	// non-existent mapping
 	exceptionThrown = false;
 	try {
-	    application.getConverter("Joebob");
+	    application.createConverter("Joebob");
 	}
 	catch (FacesException e) {
 	    exceptionThrown = true;
@@ -423,6 +424,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	NavigationHandler navHandler = null;
 	PropertyResolver propResolver = null;
 	VariableResolver varResolver = null;
+	ViewHandler viewHandler = null;
 	
 	assertTrue(null != (actionListener = 
 			    application.getActionListener()));
@@ -439,6 +441,10 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (varResolver = 
 			    application.getVariableResolver()));
 	assertTrue(varResolver instanceof VariableResolverTestImpl);
+
+	assertTrue(null != (viewHandler = 
+			    application.getViewHandler()));
+	assertTrue(viewHandler instanceof ViewHandlerTestImpl);
     }
 
 

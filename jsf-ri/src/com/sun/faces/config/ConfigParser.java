@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.27 2003/08/22 16:49:42 eburns Exp $
+ * $Id: ConfigParser.java,v 1.28 2003/08/22 22:30:01 eburns Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import javax.faces.application.Message;
 import javax.faces.application.MessageImpl;
 import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
@@ -283,6 +284,8 @@ public class ConfigParser {
                                "setActionListener", 0);
         digester.addCallMethod(prefix+"/navigation-handler",
                                "setNavigationHandler", 0);
+        digester.addCallMethod(prefix+"/view-handler",
+                               "setViewHandler", 0);
         digester.addCallMethod(prefix+"/property-resolver",
                                "setPropertyResolver", 0);
         digester.addCallMethod(prefix+"/variable-resolver",
@@ -761,6 +764,11 @@ final class ApplicationRule extends Rule {
 	returnObject = createInstance(ca.getVariableResolver());
 	if (returnObject != null) {
 	    application.setVariableResolver((VariableResolver)returnObject);
+	}
+
+	returnObject = createInstance(ca.getViewHandler());
+	if (returnObject != null) {
+	    application.setViewHandler((ViewHandler)returnObject);
 	}
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.30 2003/08/22 19:25:13 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.31 2003/08/22 22:30:06 eburns Exp $
  */
 
 /*
@@ -156,7 +156,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         UIComponent command = application.createComponent("Command");
         assertNotNull(command);
         comp = null;
-        application.addComponent("fooType", "javax.faces.component.UICommand");
+        application.addComponent("fooType", "javax.faces.component.base.UICommandBase");
         comp = application.createComponent("fooType");
         assertNotNull(comp);
 
@@ -168,14 +168,14 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         Converter conv = null;
         while (iter.hasNext()) {
             convId = (String)iter.next();
-            conv = application.getConverter(convId);
+            conv = application.createConverter(convId);
             assertNotNull(conv);
         }
-        Converter first = application.getConverter("First");
+        Converter first = application.createConverter("First");
         assertNotNull(first);
         conv = null;
         application.addConverter("fooId", "com.sun.faces.convert.DateConverter");
-        conv = application.getConverter("fooId");
+        conv = application.createConverter("fooId");
         assertNotNull(conv);
 
         // <validator>

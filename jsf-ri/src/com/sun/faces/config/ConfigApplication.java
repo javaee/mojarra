@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigApplication.java,v 1.2 2003/07/08 15:38:29 eburns Exp $
+ * $Id: ConfigApplication.java,v 1.3 2003/08/22 22:30:01 eburns Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ public class ConfigApplication {
     private String navigationHandler = null;
     private String propertyResolver = null;
     private String variableResolver = null;
+    private String viewHandler = null;
 
     public String getActionListener() {
         return (this.actionListener);
@@ -55,12 +56,20 @@ public class ConfigApplication {
         this.variableResolver = variableResolver;
     }
 
+    public String getViewHandler() {
+        return (this.viewHandler);
+    }
+    public void setViewHandler(String viewHandler) {
+        this.viewHandler = viewHandler;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append("Action Listener:"+getActionListener());
         sb.append("\nNavigation Handler:"+getNavigationHandler());
         sb.append("\nProperty Resolver:"+getPropertyResolver());
         sb.append("\nVariable Resolver:"+getVariableResolver());
+        sb.append("\nView Handler:"+getViewHandler());
         return sb.toString();
     }
 }

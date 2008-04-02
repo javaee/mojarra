@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.43 2003/08/22 20:25:57 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.44 2003/08/22 22:30:02 eburns Exp $
  */
 
 /*
@@ -63,6 +63,7 @@ public class FacesContextImpl extends FacesContext
     private CursorableLinkedList facesEvents = null;
     private ExternalContext externalContext = null;
     private Application application = null; 
+    private UIViewRoot viewRoot = null;
 
     /**
 
@@ -268,14 +269,12 @@ public class FacesContextImpl extends FacesContext
 	responseStream = newResponseStream;
     }
 
-    // PENDING (rlubke): PROVIDE IMPLEMENTATION
     public UIViewRoot getViewRoot() {
-        return null;  //To change body of implemented methods use Options | File Templates.
+	return viewRoot;
     }
    
-    // PENDING (rlubke): PROVIDE IMPLEMENTATION
     public void setViewRoot(UIViewRoot root) {
-        //To change body of implemented methods use Options | File Templates.
+	viewRoot = root;
     }
     
 
@@ -327,6 +326,12 @@ public class FacesContextImpl extends FacesContext
         viewHandler = null;
         renderResponse = false;
         responseComplete = false;
+	viewRoot = null;
+
+	// PENDING(edburns): write testcase that verifies that release
+	// actually works.  This will be important to keep working as
+	// ivars are added and removed on this class over time.
+
 	// Make sure to clear our ThreadLocal instance.
 	setCurrentInstance(null);
     }

@@ -165,6 +165,7 @@
 
         <javac srcdir="${src.test.dir}"
             destdir="${out.test.dir}/WEB-INF/classes"
+            includes="com/sun/faces/config/*.java,com/sun/faces/*.java,com/sun/faces/application/*.java,**/ConfigFileTestCase.java"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
             deprecation="${compile.deprecation}">
@@ -261,6 +262,7 @@
             <!-- Suite of tests -->
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test name="com.sun.faces.config.ConfigFileTestCase"/>
+<!--
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
             <test name="com.sun.faces.application.TestActionListenerImpl"/>
             <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
@@ -301,7 +303,7 @@
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
-
+-->
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in
                  conf/test/web.xml to true

@@ -18,6 +18,7 @@
     <navigation-handler>com.sun.faces.application.NavigationHandlerTestImpl</navigation-handler>
     <property-resolver>com.sun.faces.application.PropertyResolverTestImpl</property-resolver>
     <variable-resolver>com.sun.faces.application.VariableResolverTestImpl</variable-resolver>
+    <view-handler>com.sun.faces.application.ViewHandlerTestImpl</view-handler>
   </application>
 
 </faces-config>
