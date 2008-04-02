@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.18 2007/01/29 06:44:04 rlubke Exp $
+ * $Id: FacesMessage.java,v 1.19 2007/01/29 21:07:52 rlubke Exp $
  */
 
 /*
@@ -347,6 +347,9 @@ public class FacesMessage implements Serializable {
      */
     private void readObject(ObjectInputStream in)
         throws IOException, ClassNotFoundException {
+        severity = SEVERITY_INFO;
+        summary = null;
+        detail = null;
         int ordinal = in.readInt();
         if (ordinal == SEVERITY_INFO.getOrdinal()) {
             setSeverity(FacesMessage.SEVERITY_INFO);
