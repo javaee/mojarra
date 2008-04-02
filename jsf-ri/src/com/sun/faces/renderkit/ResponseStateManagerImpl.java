@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.38 2006/09/06 20:44:04 rlubke Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.39 2006/11/29 22:36:56 rlubke Exp $
  */
 
 /*
@@ -70,7 +70,10 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     // Log instance for this class
     private static final Logger LOGGER =
-          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);    
+          Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+
+    private static final String FACES_VIEW_STATE =
+           "com.sun.faces.FACES_VIEW_STATE"; 
 
     private static final char[] STATE_FIELD_START =
           ("<input type=\"hidden\" name=\""
@@ -94,6 +97,17 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
         init();
 
     }      
+
+    /** @see {@link ResponseStateManager#getComponentStateToRestore(javax.faces.context.FacesContext)} */
+    @Override
+    @SuppressWarnings("deprecation")
+    public Object getComponentStateToRestore(FacesContext context) {
+                 
+        return context.getExternalContext().getRequestMap()
+              .remove(FACES_VIEW_STATE);
+
+    }
+
 
 
     /** @see {@link ResponseStateManager#isPostback(javax.faces.context.FacesContext)} */
@@ -146,10 +160,9 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                 } else {
                     ois = serialProvider.createObjectInputStream(bis);
                 }
-                Object structure = ois.readObject();               
-                              
-                ois.close();
-                
+                Object structure = ois.readObject();
+                Object state = ois.readObject();
+                storeStateInRequest(context, state);                                       
                 return structure;
 
             } catch (java.io.OptionalDataException ode) {
@@ -216,7 +229,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
                                 1024));
                 }
 
-                oos.writeObject(view.getStructure());                
+                oos.writeObject(view.getStructure());
+                oos.writeObject(view.getState());
                 oos.flush();
                 oos.close();
 
@@ -246,7 +260,25 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
         writeRenderKitIdField(context, writer);
 
-    }    
+    }
+
+
+    /**
+     * <p>Store the state for this request into a temporary attribute
+     * within the same request.</p>
+     *
+     * @param context the <code>FacesContext</code> of the current request
+     * @param state   the view state
+     */
+    private void storeStateInRequest(FacesContext context, Object state) {
+
+        // store the state object temporarily in request scope
+        // until it is processed by getComponentStateToRestore
+        // which resets it.
+        context.getExternalContext().getRequestMap()
+              .put(FACES_VIEW_STATE, state);
+
+    }
 
 
     /**

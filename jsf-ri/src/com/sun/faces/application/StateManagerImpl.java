@@ -39,7 +39,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,8 +65,7 @@ import com.sun.faces.util.Util;
 public class StateManagerImpl extends StateManager {
 
     private static final Logger LOGGER =
-              Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
-    private static final Object[] STATE_PLACEHOLDER = new Object[0];   
+              Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);       
     
     private char requestIdSerial;
 
@@ -87,7 +85,10 @@ public class StateManagerImpl extends StateManager {
 
         UIViewRoot viewRoot = null;
         if (isSavingStateInClient(context)) {
-            viewRoot = restoreTree(context, viewId, renderKitId);           
+            viewRoot = restoreTree(context, viewId, renderKitId);
+            if (viewRoot != null) {
+                restoreState(context, viewRoot, renderKitId);
+            } 
         } else {
             // restore tree from session.
             // The ResponseStateManager implementation may be using the new 
@@ -168,7 +169,8 @@ public class StateManagerImpl extends StateManager {
                 // for servers that persist session data since 
                 // UIComponent instances are not serializable.
                 viewRoot = restoreTree(((Object[]) stateArray[0]).clone(), 
-                                       context);                
+                                       context);
+                viewRoot.processRestoreState(context, stateArray[1]); 
 
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("End restoring view in session for viewId "
@@ -204,7 +206,8 @@ public class StateManagerImpl extends StateManager {
                         + viewRoot.getViewId());
         }
         List<TreeNode> treeList = new ArrayList<TreeNode>(32);
-        captureChild(treeList, 0, viewRoot, context);        
+        Object state = viewRoot.processSaveState(context);
+        captureChild(treeList, 0, viewRoot);        
         Object[] tree = treeList.toArray();      
         
         if (LOGGER.isLoggable(Level.FINE)) {
@@ -268,13 +271,13 @@ public class StateManagerImpl extends StateManager {
                 // reuse the array if possible
                 if (stateArray != null) {                    
                     stateArray[0] = tree;
-                    stateArray[1] = STATE_PLACEHOLDER;
+                    stateArray[1] = state;
                 } else {
-                    actualMap.put(idInActualMap, new Object[] { tree, STATE_PLACEHOLDER });
+                    actualMap.put(idInActualMap, new Object[] { tree, state });
                 }                
             }
         } else {
-            result = new SerializedView(tree, STATE_PLACEHOLDER);
+            result = new SerializedView(tree, state);
         }
 
         return result;           
@@ -425,14 +428,13 @@ public class StateManagerImpl extends StateManager {
     
     private static void captureChild(List<TreeNode> tree, 
                                      int parent,
-                                     UIComponent c,
-                                     FacesContext ctx) {
+                                     UIComponent c) {
 
         if (!c.isTransient()) {
-            TreeNode n = new TreeNode(parent, c, ctx);
+            TreeNode n = new TreeNode(parent, c);
             int pos = tree.size();
             tree.add(n);
-            captureRest(tree, pos, c, ctx);
+            captureRest(tree, pos, c);
         }
 
     }
@@ -441,14 +443,13 @@ public class StateManagerImpl extends StateManager {
     private static void captureFacet(List<TreeNode> tree, 
                                      int parent, 
                                      String name,
-                                     UIComponent c,
-                                     FacesContext ctx) {
+                                     UIComponent c) {
 
         if (!c.isTransient()) {
-            FacetNode n = new FacetNode(parent, name, c, ctx);
+            FacetNode n = new FacetNode(parent, name, c);
             int pos = tree.size();
             tree.add(n);
-            captureRest(tree, pos, c, ctx);
+            captureRest(tree, pos, c);
         }
 
     }
@@ -456,15 +457,14 @@ public class StateManagerImpl extends StateManager {
 
     private static void captureRest(List<TreeNode> tree, 
                                     int pos, 
-                                    UIComponent c,
-                                    FacesContext ctx) {
+                                    UIComponent c) {
 
         // store children
         int sz = c.getChildCount();
         if (sz > 0) {
             List<UIComponent> child = c.getChildren();
             for (int i = 0; i < sz; i++) {
-                captureChild(tree, pos, child.get(i), ctx);
+                captureChild(tree, pos, child.get(i));
             }
         }
 
@@ -475,8 +475,7 @@ public class StateManagerImpl extends StateManager {
                 captureFacet(tree,
                              pos,
                              entry.getKey(),
-                             entry.getValue(),
-                             ctx);
+                             entry.getValue());
             }
         }
 
@@ -521,9 +520,7 @@ public class StateManagerImpl extends StateManager {
             
             UIComponent c = (UIComponent) t.newInstance();
             c.setId(n.id);
-            if (!n.trans) {
-                c.restoreState(ctx, n.state);
-            }
+
             if (ctx.getExternalContext().getRequestMap()
                   .get(RIConstants.DEFAULT_LIFECYCLE) != null) {
                 ValueExpression ve = c.getValueExpression("binding");
@@ -573,7 +570,28 @@ public class StateManagerImpl extends StateManager {
     }
 
 
-    private UIViewRoot restoreTree(Object[] tree, FacesContext ctx) 
+    @SuppressWarnings("deprecation")
+    private void restoreState(FacesContext context,
+                              UIViewRoot root,
+                              String renderKitId) {
+        ResponseStateManager rsm =
+              RenderKitUtils.getResponseStateManager(context, renderKitId);
+        Object state;
+        if (ReflectionUtils.lookupMethod(rsm.getClass(),
+                                         "getState",
+                                         FacesContext.class,
+                                         String.class) != null) {        
+            Object[] stateArray =
+                  (Object[]) rsm.getState(context, root.getViewId());
+            state = stateArray[1];
+        } else {
+            state = rsm.getComponentStateToRestore(context);
+        }
+        root.processRestoreState(context, state);
+    }
+
+
+    private UIViewRoot restoreTree(Object[] tree, FacesContext ctx)
     throws FacesException {
 
         UIComponent c;
@@ -610,9 +628,7 @@ public class StateManagerImpl extends StateManager {
         private static final String NULL_ID = "";
 
         public String componentType;
-        public String id;
-        public Serializable state;
-        public boolean trans;
+        public String id;       
 
         public int parent;
 
@@ -625,15 +641,11 @@ public class StateManagerImpl extends StateManager {
         public TreeNode() { }
 
 
-        public TreeNode(int parent, UIComponent c, FacesContext ctx) {
+        public TreeNode(int parent, UIComponent c) {
 
             this.parent = parent;
             this.id = c.getId();
-            this.componentType = c.getClass().getName(); 
-            this.trans = c.isTransient();
-            if (!trans) {
-                this.state = (Serializable) c.saveState(ctx);
-            } 
+            this.componentType = c.getClass().getName();
 
         }
 
@@ -644,16 +656,11 @@ public class StateManagerImpl extends StateManager {
 
             out.writeInt(this.parent);
             out.writeUTF(this.componentType);
-            out.writeBoolean(this.trans);
             if (this.id != null) {
                 out.writeUTF(this.id);
             } else {
                 out.writeUTF(NULL_ID);
             }
-            if (!trans) {
-                out.writeObject(state);
-            }
-
         }
 
 
@@ -662,15 +669,10 @@ public class StateManagerImpl extends StateManager {
 
             this.parent = in.readInt();
             this.componentType = in.readUTF();
-            this.trans = in.readBoolean();
             this.id = in.readUTF();
             if (id.length() == 0) {
                 id = null;
-            }            
-            if (!trans) {
-                state = (Serializable) in.readObject();
             }
-
         }
 
     }
@@ -689,10 +691,9 @@ public class StateManagerImpl extends StateManager {
 
         public FacetNode(int parent, 
                          String name, 
-                         UIComponent c, 
-                         FacesContext ctx) {
+                         UIComponent c) {
 
-            super(parent, c, ctx);
+            super(parent, c);
             this.facetName = name;
 
         }
