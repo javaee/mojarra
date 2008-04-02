@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.3 2003/10/30 21:53:55 eburns Exp $
+ * $Id: FacesMessage.java,v 1.4 2003/10/30 22:46:26 rlubke Exp $
  */
 
 /*
@@ -37,13 +37,13 @@ import java.util.HashMap;
  *
  * <ul>
  *
- * <p>Call {@link javax.faces.Application.getMessageBundle}.  If
+ * <p>Call {@link Application#getMessageBundle}.  If
  * non-<code>null</code>, locate the named <code>ResourceBundle</code>,
  * using the <code>Locale</code> from the current {@link
  * javax.faces.component.UIViewRoot} and see if it has a value for the
  * argument <code>messageId</code>.  If it does, treat the value as the
  * <code>summary</code> of the <code>FacesMessage</code>.  If it does
- * not, or if {@link Application.getMessageBundle} returned
+ * not, or if {@link Application#getMessageBundle} returned
  * <code>null</code>, look in the <code>ResourceBundle</code> named by
  * the value of the constant {@link #FACES_MESSAGES} and see if it has a
  * value for the argument <code>messageId</code>.  If it does, treat the
