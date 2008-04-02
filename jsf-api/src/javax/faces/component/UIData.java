@@ -1260,7 +1260,7 @@ public class UIData extends UIComponentBase
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    protected String getContainerClientId(FacesContext context) {
+    public String getContainerClientId(FacesContext context) {
         String baseClientId = super.getContainerClientId(context);
         if (rowIndex >= 0) {
             return (baseClientId + NamingContainer.SEPARATOR_CHAR + rowIndex);

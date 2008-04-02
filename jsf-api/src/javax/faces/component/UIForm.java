@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.47 2005/04/21 18:55:29 edburns Exp $
+ * $Id: UIForm.java,v 1.48 2005/08/03 21:43:11 edburns Exp $
  */
 
 /*
@@ -225,7 +225,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * its descendent's <code>clientIds</code> depending on the value of
      * this form's {@link #isPrependId} property.</p>
      */
-    protected String getContainerClientId(FacesContext context) {
+    public String getContainerClientId(FacesContext context) {
         if (this.isPrependId()) {
             return super.getContainerClientId(context);
         } else {

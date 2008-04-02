@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.112 2005/08/01 17:34:48 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.113 2005/08/03 21:43:10 edburns Exp $
  */
 
 /*
@@ -329,7 +329,7 @@ public abstract class UIComponentBase extends UIComponent {
     /**
      * @exception NullPointerException {@inheritDoc}
      */
-    protected String getContainerClientId(FacesContext context) {
+    public String getContainerClientId(FacesContext context) {
         if (context == null) {
             throw new NullPointerException();
         }

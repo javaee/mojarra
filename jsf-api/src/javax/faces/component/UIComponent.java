@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.131 2005/07/28 15:35:34 edburns Exp $
+ * $Id: UIComponent.java,v 1.132 2005/08/03 21:43:10 edburns Exp $
  */
 
 /*
@@ -225,7 +225,7 @@ public abstract class UIComponent implements StateHolder {
      *  @exception NullPointerException if <code>context</code> is
      *  <code>null</code>
      */
-    protected abstract String getContainerClientId(FacesContext context);
+    public abstract String getContainerClientId(FacesContext context);
 
 
     /**
