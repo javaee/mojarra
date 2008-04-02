@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.14 2006/08/08 15:02:03 rogerk Exp $
+ * $Id: SelectItem.java,v 1.15 2006/08/11 16:50:37 rogerk Exp $
  */
 
 /*
@@ -64,8 +64,9 @@ public class SelectItem implements Serializable {
      * <p>Construct a <code>SelectItem</code> with the specified value.  The
      * <code>label</code> property will be set to the value (converted to a
      * String, if necessary), the <code>description</code> property will be
-     * set to <code>null</code>, and the <code>disabled</code> property will
-     * be set to <code>false</code>.</p>
+     * set to <code>null</code>, the <code>disabled</code> property will be set to 
+     * <code>false</code>, and the <code>escape</code> property will be set to
+     ( <code>true</code>.</p>
      *
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
@@ -80,8 +81,9 @@ public class SelectItem implements Serializable {
     /**
      * <p>Construct a <code>SelectItem</code> with the specified value and
      * label.  The <code>description</code> property will be set to
-     * <code>null</code>, and the <code>disabled</code> property will be
-     * set to <code>false</code>.</p>
+     * <code>null</code>, the <code>disabled</code> property will be
+     * set to <code>false</code>, and the <code>escape</code> property will
+     * be set to <code>true</code>.</p>
      *
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
@@ -97,7 +99,8 @@ public class SelectItem implements Serializable {
     /**
      * <p>Construct a <code>SelectItem</code> instance with the specified
      * value, label and description.  This <code>disabled</code> property
-     * will be set to <code>false</code>.</p>
+     * will be set to <code>false</code>,  and the <code>escape</code> 
+     * property will be set to <code>true</code>.</p>
      *
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
@@ -113,7 +116,8 @@ public class SelectItem implements Serializable {
 
     /**
      * <p>Construct a <code>SelectItem</code> instance with the specified
-     * property values.</p>
+     * property values.   The <code>escape</code> property will be set 
+     * to <code>true</code>.</p>
      *
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
