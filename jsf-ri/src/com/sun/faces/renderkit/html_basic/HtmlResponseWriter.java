@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.34 2006/10/10 22:14:13 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.35 2006/10/12 20:19:08 rlubke Exp $
  */
 
 /*
@@ -218,13 +218,15 @@ public class HtmlResponseWriter extends ResponseWriter {
         dontEscape = false;
         isXhtml = getContentType().equals(
             RIConstants.XHTML_CONTENT_TYPE);
-        if (scriptOrStyle && !scriptOrStyleSrc) {
+        if (isScriptOrStyle(name) && !scriptOrStyleSrc) {
             if (isXhtml) {
                 writer.write("\n//]]>\n");
             } else {
                 writer.write("\n//-->\n");
             }
-        } 
+        }
+        scriptOrStyle = false;
+        scriptOrStyle = false;
         if ("cdata".equalsIgnoreCase(name)) {
             writer.write("]]>");
             writingCdata = false;
@@ -298,13 +300,9 @@ public class HtmlResponseWriter extends ResponseWriter {
                   MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "name"));
         }
         closeStartIfNecessary();
-        scriptOrStyle = false;
+        isScriptOrStyle(name);
         scriptOrStyleSrc = false;
-        if ("script".equalsIgnoreCase(name) ||
-            "style".equalsIgnoreCase(name)) {
-            scriptOrStyle = true;
-            dontEscape = true;
-        } else if ("cdata".equalsIgnoreCase(name)) {
+        if ("cdata".equalsIgnoreCase(name)) {
             writingCdata = true;
             dontEscape = true;
             writer.write("<![CDATA[");
@@ -318,15 +316,15 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     }
 
-
-    public void write(char cbuf) throws IOException {
+    @Override
+    public void write(char[] cbuf) throws IOException {
 
         closeStartIfNecessary();
         writer.write(cbuf);
 
     }
 
-
+    @Override
     public void write(int c) throws IOException {
 
         closeStartIfNecessary();
@@ -334,7 +332,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     }
 
-
+    @Override
     public void write(String str) throws IOException {
 
         closeStartIfNecessary();
@@ -350,7 +348,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     }
 
-
+    @Override
     public void write(String str, int off, int len) throws IOException {
 
         closeStartIfNecessary();
@@ -655,7 +653,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write('>');
             closeStart = false;
         }
-        if (scriptOrStyle && !scriptOrStyleSrc) {
+        if (isScriptOrStyle() && !scriptOrStyleSrc) {
             scriptOrStyle = false;
             isXhtml = getContentType().equals(
                 RIConstants.XHTML_CONTENT_TYPE);
@@ -665,6 +663,24 @@ public class HtmlResponseWriter extends ResponseWriter {
                 writer.write("\n<!--");
             }
         }
+    }
+
+
+    private boolean isScriptOrStyle(String name) {
+        if ("script".equalsIgnoreCase(name) ||
+            "style".equalsIgnoreCase(name)) {
+            scriptOrStyle = true;
+            dontEscape = true;
+        } else {
+            scriptOrStyle = false;
+            dontEscape = false;
+        }
+
+        return scriptOrStyle;
+    }
+
+    private boolean isScriptOrStyle() {
+        return scriptOrStyle;
     }
 
 }

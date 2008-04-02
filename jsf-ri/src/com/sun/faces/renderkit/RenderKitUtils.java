@@ -908,24 +908,12 @@ public class RenderKitUtils {
                                   null);
             writer.endElement("script");
             writer.write("\n");
-        } else {
-            boolean isXhtml =
-                  RIConstants.XHTML_CONTENT_TYPE
-                        .equals(writer.getContentType());
-
+        } else {           
             writer.write('\n');
             writer.startElement("script", null);
             writer.writeAttribute("type", "text/javascript", null);
-            writer.writeAttribute("language", "Javascript", null);
-            writer.writeText(' ', null);
-
+            writer.writeAttribute("language", "Javascript", null);           
             writeSunJS(context, writer);
-
-            if (isXhtml) {
-                writer.write("\n//]]>\n");
-            } else {
-                writer.write("\n//-->\n");
-            }
             writer.endElement("script");
             writer.write("\n");
         }
@@ -1009,9 +997,8 @@ public class RenderKitUtils {
      * @param context - the <code>FacesContext</code> for the current request
      * @param writer - the <code>Writer</code> to write the JS to
      * 
-     * @return the implemenation javascript as a String
      */
-    public static void writeSunJS(FacesContext context, Writer writer) 
+    public static void writeSunJS(FacesContext context, Writer writer)
     throws IOException {
         loadSunJsfJs(context);
         writer.write((char[]) context.getExternalContext().getApplicationMap()
