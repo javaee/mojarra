@@ -1,5 +1,5 @@
 /*
- * $Id: ApplyRequestValuesPhase.java,v 1.9 2003/07/07 20:52:54 eburns Exp $
+ * $Id: ApplyRequestValuesPhase.java,v 1.10 2003/08/19 19:31:08 rlubke Exp $
  */
 
 /*
@@ -11,18 +11,11 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.context.FacesContextImpl;
-
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.render.RenderKit;
-import javax.faces.render.Renderer;
-import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 
 import java.io.IOException;
@@ -32,7 +25,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ApplyRequestValuesPhase.java,v 1.9 2003/07/07 20:52:54 eburns Exp $
+ * @version $Id: ApplyRequestValuesPhase.java,v 1.10 2003/08/19 19:31:08 rlubke Exp $
  * 
  */
 
@@ -76,8 +69,7 @@ public class ApplyRequestValuesPhase extends Phase {
 
     public void execute(FacesContext facesContext) throws FacesException {
 
-        UIComponent component = 
-            (UIComponent)facesContext.getTree().getRoot();
+        UIComponent component = facesContext.getRoot();
         Assert.assert_it(null != component);
 
         try {

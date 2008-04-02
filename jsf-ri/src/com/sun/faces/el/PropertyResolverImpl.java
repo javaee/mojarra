@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.4 2003/04/01 21:59:56 eburns Exp $
+ * $Id: PropertyResolverImpl.java,v 1.5 2003/08/19 19:31:06 rlubke Exp $
  */
 
 /*
@@ -53,10 +53,10 @@ public class PropertyResolverImpl extends PropertyResolver {
         if (base instanceof Map) {
             return (((Map) base).get(name));
         } else if (base instanceof UIComponent) {
-            Iterator kids = ((UIComponent) base).getChildren();
+            Iterator kids = ((UIComponent) base).getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
-                if (name.equals(kid.getComponentId())) {
+                if (name.equals(kid.getId())) {
                     return (kid);
                 }
             }
@@ -89,7 +89,7 @@ public class PropertyResolverImpl extends PropertyResolver {
         } else if (base instanceof List) {
             return (((List) base).get(index));
         } else if (base instanceof UIComponent) {
-            return (((UIComponent) base).getChild(index));
+            return (((UIComponent) base).getChildren().get(index));
         } else {
             throw new PropertyNotFoundException("" + index);
         }

@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.9 2003/08/08 16:20:20 rkitain Exp $
+ * $Id: GroupRenderer.java,v 1.10 2003/08/19 19:31:17 rlubke Exp $
  */
 
 /*
@@ -15,14 +15,13 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 
 /**
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.9 2003/08/08 16:20:20 rkitain Exp $
+ * @version $Id: GroupRenderer.java,v 1.10 2003/08/19 19:31:17 rlubke Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {
@@ -85,7 +84,7 @@ public class GroupRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        Iterator kids = component.getChildren();
+        Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             encodeRecursive(context, kid);
@@ -103,7 +102,7 @@ public class GroupRenderer extends HtmlBasicRenderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = component.getChildren();
+            Iterator kids = component.getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 encodeRecursive(context, kid);

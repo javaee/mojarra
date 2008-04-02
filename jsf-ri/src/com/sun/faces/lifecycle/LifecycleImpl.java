@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.28 2003/08/13 21:07:25 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.29 2003/08/19 19:31:09 rlubke Exp $
  */
 
 /*
@@ -13,14 +13,14 @@ package com.sun.faces.lifecycle;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ViewHandlerImpl;
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
-import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.lifecycle.ViewHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.application.ViewHandler;
+import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.28 2003/08/13 21:07:25 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.29 2003/08/19 19:31:09 rlubke Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -107,12 +107,12 @@ public class LifecycleImpl extends Lifecycle
     //
 
     protected void initPhases() {
-        phaseWrappers.add(new PhaseWrapper(new ReconstituteComponentTreePhase()));
+        phaseWrappers.add(new PhaseWrapper(new RestoreComponentTreePhase()));
         phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase()));
         phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase()));
         phaseWrappers.add(new PhaseWrapper(new UpdateModelValuesPhase()));
         phaseWrappers.add(new PhaseWrapper(new InvokeApplicationPhase(this)));
-        phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(this)));
+        phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(Application.getCurrentInstance())));
     }
 
     protected void executeRender(FacesContext context) throws FacesException {
@@ -126,7 +126,7 @@ public class LifecycleImpl extends Lifecycle
             Assert.assert_it(wrapper != null);
             renderPhase = wrapper.instance;
             Assert.assert_it(renderPhase != null);
-            if (((Phase)renderPhase).getId() == PhaseId.RENDER_RESPONSE) {
+            if ((renderPhase).getId() == PhaseId.RENDER_RESPONSE) {
                 break;
             }
         }
@@ -140,8 +140,9 @@ public class LifecycleImpl extends Lifecycle
     //
 
     public ViewHandler getViewHandler() {
-        if (null == viewHandler) {
-	    viewHandler = new ViewHandlerImpl();
+        if (null == viewHandler) {  
+	        viewHandler = 
+                Application.getCurrentInstance().getViewHandler();
         }
         return viewHandler;
     }

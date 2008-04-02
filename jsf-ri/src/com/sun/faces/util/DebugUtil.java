@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.12 2003/05/13 22:55:24 eburns Exp $
+ * $Id: DebugUtil.java,v 1.13 2003/08/19 19:31:33 rlubke Exp $
  */
 
 /*
@@ -11,13 +11,9 @@ package com.sun.faces.util;
 
 // DebugUtil.java
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 
 import java.util.Iterator;
 
@@ -29,7 +25,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.12 2003/05/13 22:55:24 eburns Exp $
+ * @version $Id: DebugUtil.java,v 1.13 2003/08/19 19:31:33 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -125,7 +121,7 @@ public static void printTree(UIComponent root, PrintStream out)
 /* PENDING
     indentPrintln(out, "===>Type:" + root.getComponentType());
 */
-    indentPrintln(out, "id:"+root.getComponentId());
+    indentPrintln(out, "id:"+root.getId());
 
     if ( root instanceof UIOutput) {
         UIOutput uiOutput = (UIOutput) root;
@@ -191,7 +187,7 @@ public static void printTree(UIComponent root, PrintStream out)
     }
 
     curDepth++;
-    Iterator it = root.getChildren();
+    Iterator it = root.getChildren().iterator();
     while (it.hasNext()) {
 	printTree((UIComponent) it.next(), out);
     }

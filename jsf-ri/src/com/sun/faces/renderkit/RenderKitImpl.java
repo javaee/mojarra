@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.6 2003/08/08 16:20:17 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.7 2003/08/19 19:31:14 rlubke Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import org.xml.sax.Attributes;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -36,8 +37,10 @@ import java.util.NoSuchElementException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseStream;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
+import javax.faces.render.ResponseStateManager;
 
 /**
  *
@@ -45,7 +48,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.6 2003/08/08 16:20:17 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.7 2003/08/19 19:31:14 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -130,7 +133,7 @@ public class RenderKitImpl extends RenderKit {
      * This method returns a renderer instance given a renderer type.
      *
      * @param rendererType The renderer type.
-     * @returns Renderer A Renderer instance.
+     * @return Renderer A Renderer instance.
      * @throws FacesException If the renderer instance is not found for
      *         the given renderer type.
      */
@@ -150,6 +153,21 @@ public class RenderKitImpl extends RenderKit {
         }
 
         return renderer;
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public ResponseStateManager getResponseStateManager() {
+        return null;  //To change body of implemented methods use Options | File Templates.
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public ResponseWriter createResponseWriter(Writer writer, String contentTypeList, String characterEncoding) {
+        return null;  //To change body of implemented methods use Options | File Templates.
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public ResponseStream getResponseStream(OutputStream out) {
+        return null;  //To change body of implemented methods use Options | File Templates.
     }
 
     /**

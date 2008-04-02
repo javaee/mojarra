@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.54 2003/08/19 15:19:15 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.55 2003/08/19 19:31:15 rlubke Exp $
  */
 
 /*
@@ -13,10 +13,8 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
 import java.util.Map;
 
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
@@ -31,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.54 2003/08/19 15:19:15 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.55 2003/08/19 19:31:15 rlubke Exp $
  *
  */
 
@@ -109,7 +107,8 @@ public class ButtonRenderer extends BaseCommandRenderer {
             return;
         }
 
-        ((UICommand)component).fireActionEvent(context);
+        // PENDING (rlubke) is there an equiv.?
+        //((UICommand)component).fireActionEvent(context);
         return;
     }
     

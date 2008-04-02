@@ -1,5 +1,5 @@
 /*
- * $Id: RenderResponsePhase.java,v 1.7 2003/07/07 20:52:57 eburns Exp $
+ * $Id: RenderResponsePhase.java,v 1.8 2003/08/19 19:31:10 rlubke Exp $
  */
 
 /*
@@ -11,25 +11,15 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.lifecycle.ViewHandlerImpl; 
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
+import javax.faces.application.Application;
 import javax.faces.event.PhaseId;
-import javax.faces.tree.Tree;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIComponent;
 
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.Iterator;
 import java.io.IOException;
-import javax.servlet.ServletException;
-import com.sun.faces.RIConstants;
-import com.sun.faces.context.FacesContextImpl;
 
 
 /**
@@ -37,7 +27,7 @@ import com.sun.faces.context.FacesContextImpl;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RenderResponsePhase.java,v 1.7 2003/07/07 20:52:57 eburns Exp $
+ * @version $Id: RenderResponsePhase.java,v 1.8 2003/08/19 19:31:10 rlubke Exp $
  *
  */
 
@@ -53,7 +43,7 @@ public class RenderResponsePhase extends Phase {
 //
 // Instance Variables
 //
-private Lifecycle lifecycleDriver = null;
+private Application lifecycleDriver = null;
 
 // Attribute Instance Variables
 
@@ -63,7 +53,7 @@ private Lifecycle lifecycleDriver = null;
 // Constructors and Genericializers    
 //
 
-public RenderResponsePhase(Lifecycle newDriver) {
+public RenderResponsePhase(Application newDriver) {
     lifecycleDriver = newDriver;
 }
 

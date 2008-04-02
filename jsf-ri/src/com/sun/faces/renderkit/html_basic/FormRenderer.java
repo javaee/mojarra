@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.51 2003/08/19 15:19:18 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.52 2003/08/19 19:31:16 rlubke Exp $
  */
 
 /*
@@ -15,24 +15,13 @@ import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletRequest;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
 
 /**
  *
@@ -40,7 +29,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.51 2003/08/19 15:19:18 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.52 2003/08/19 19:31:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -153,7 +142,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         String contextPath = context.getExternalContext().getRequestContextPath();
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
-	sb.append(context.getTree().getTreeId());
+	    sb.append(context.getRoot().getTreeId());
         return (context.getExternalContext().encodeURL(sb.toString()));
     }     
 

@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.40 2003/08/15 19:15:08 rlubke Exp $
+ * $Id: FormTag.java,v 1.41 2003/08/19 19:31:26 rlubke Exp $
  */
 
 /*
@@ -81,23 +81,24 @@ public class FormTag extends FacesTag
 	super.overrideProperties(component);
 	UIForm form = (UIForm) component;
 
-	if (null == formName) {
-	    form.setFormName(formName);
-             // we set the bundle attribute on the root component here  
-             // so that we don't set it again during postback. 
-             // This cannot be done in FacesTag since this is specific
-             // to FormTag. Since formName is a required attribute,
-             // we can be sure that these statements will be executed
-             // the first time the tags are processed.
-            if ( bundle != null) { 
-                // set it as an attribute on the root component so that
-                // it is available to children and doesn't have to be repeated
-                // in every tag.
-                FacesContext context = FacesContext.getCurrentInstance();
-                UIComponent root = context.getTree().getRoot();
-                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
-            }
-	}
+        // PENDING (rlubke) CORRECT IMPLEMENTATION
+//	if (null == formName) {
+//	    form.setFormName(formName);
+//             // we set the bundle attribute on the root component here  
+//             // so that we don't set it again during postback. 
+//             // This cannot be done in FacesTag since this is specific
+//             // to FormTag. Since formName is a required attribute,
+//             // we can be sure that these statements will be executed
+//             // the first time the tags are processed.
+//            if ( bundle != null) { 
+//                // set it as an attribute on the root component so that
+//                // it is available to children and doesn't have to be repeated
+//                // in every tag.
+//                FacesContext context = FacesContext.getCurrentInstance();
+//                UIComponent root = context.getRoot();
+//                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
+//            }
+//	}
         // action, method, enctype, acceptcharset, accept, target, onsubmit, 
         // onreset
         if (onsubmit != null ) {

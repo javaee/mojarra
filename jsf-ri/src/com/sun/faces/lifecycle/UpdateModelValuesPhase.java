@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.22 2003/07/24 23:24:16 rkitain Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.23 2003/08/19 19:31:11 rlubke Exp $
  */
 
 /*
@@ -14,14 +14,12 @@ package com.sun.faces.lifecycle;
 import com.sun.faces.context.FacesContextImpl;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
 import com.sun.faces.util.Util;
 
 import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
@@ -35,7 +33,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.22 2003/07/24 23:24:16 rkitain Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.23 2003/08/19 19:31:11 rlubke Exp $
  * 
  */
 
@@ -84,8 +82,7 @@ public void execute(FacesContext facesContext) throws FacesException
 {
     Iterator messageIter = null;
 
-    UIComponent component = 
-        (UIComponent)facesContext.getTree().getRoot();
+    UIComponent component = facesContext.getRoot();
     Assert.assert_it(null != component);
     
     try {

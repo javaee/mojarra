@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.7 2003/08/13 02:08:03 eburns Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.8 2003/08/19 19:31:17 rlubke Exp $
  */
 
 /*
@@ -17,10 +17,8 @@ import javax.faces.component.UIInput;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 import com.sun.faces.util.Util;
-import java.io.IOException;
 
 /**
  *
@@ -77,8 +75,11 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
         Object result = null;
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
-        String converterId = component.getConverter();
-        converter = getConverter(converterId);
+        
+        // PENDING (rlubke) CORRECT IMPLEMENTATION
+        //String converterId = component.getConverter();
+       // converter = getConverter(converterId);
+        
 	if (converter == null && valueRef != null) {
             Class converterType = 
                     (Util.getValueBinding(valueRef)).getType(context);
@@ -88,9 +89,12 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
             }
             // if getType returns a type for which we support a default
             // conversion, acquire an appropriate converter instance.
-            converterId = Util.getDefaultConverterForType(
-                     (converterType.getName()));
-            converter = getConverter(converterId);
+        
+        // PENDING (rlubke) CORRECT IMPLEMENTATION
+//            converterId = Util.getDefaultConverterForType(
+//                     (converterType.getName()));
+//            converter = getConverter(converterId);
+        
 	} else if ( converter == null && valueRef == null ) {
             // if there is no valueRef and converter attribute set, assume the 
             // modelType as "String" since we have no way of figuring out the

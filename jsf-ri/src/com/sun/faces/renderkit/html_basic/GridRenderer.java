@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.13 2003/08/19 15:19:19 rkitain Exp $
+ * $Id: GridRenderer.java,v 1.14 2003/08/19 19:31:17 rlubke Exp $
  */
 
 /*
@@ -16,12 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 
 import org.mozilla.util.Assert;
 
@@ -31,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.13 2003/08/19 15:19:19 rkitain Exp $
+ * @version $Id: GridRenderer.java,v 1.14 2003/08/19 19:31:17 rlubke Exp $
  *  
  */
 
@@ -132,7 +129,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 	UIComponent facet = null;
 	Iterator kids = null;
 
-	if (null != (facet = component.getFacet("header"))) {
+	if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
 	    
 	    if (headerClass != null) {
 		writer.startElement("tr", null);
@@ -154,7 +151,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 
 	int i = 0;
 	writer.startElement("tbody", null);
-	if (null != (kids = component.getChildren())) {
+	if (null != (kids = component.getChildren().iterator())) {
 	    while (kids.hasNext()) {
 		if ((i % columns) == 0) {
 		    if (open) {
@@ -193,7 +190,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
 	writer.endElement("tbody");
 
-	if (null != (facet = component.getFacet("footer"))) {
+	if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
 
 	    if (footerClass != null) {
 		writer.startElement("tr", null);
@@ -246,7 +243,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = component.getChildren();
+            Iterator kids = component.getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 encodeRecursive(context, kid);

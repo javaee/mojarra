@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.10 2003/08/19 15:19:26 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.11 2003/08/19 19:31:19 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -23,10 +23,10 @@ import com.sun.faces.util.Util;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.model.SelectItem;
 
 import org.mozilla.util.Assert;
 
@@ -112,7 +112,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 	    writer.writeAttribute("name", component.getClientId(context), null);
 	    writer.writeAttribute("id", curComponent.getClientId(context), null);
 	    writer.writeAttribute("value",
-	        getFormattedValue(context, component, curItem.getValue()));
+	        getFormattedValue(context, component, curItem.getValue()), null);
 	    writer.writeAttribute("type", "checkbox", null);
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {

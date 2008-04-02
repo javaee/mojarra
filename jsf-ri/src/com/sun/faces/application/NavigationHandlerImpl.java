@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.9 2003/07/22 19:43:37 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.10 2003/08/19 19:31:03 rlubke Exp $
  */
 
 /*
@@ -10,10 +10,8 @@
 package com.sun.faces.application;
 
 import com.sun.faces.config.ConfigNavigationCase;
-import com.sun.faces.util.Util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,7 +22,6 @@ import java.util.TreeSet;
 import javax.faces.FactoryFinder;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.tree.TreeFactory;
 
 import org.mozilla.util.Assert;
 
@@ -102,16 +99,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
 
     public void handleNavigation(FacesContext context, String actionRef, String outcome) {
-
-
-        String newTreeId = getTreeId(context, actionRef, outcome);
-
-        if (newTreeId != null) {
-            TreeFactory treeFactory = (TreeFactory)
-                FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-            Assert.assert_it(null != treeFactory);
-            context.setTree(treeFactory.getTree(context, newTreeId)); 
-        }
+        // PENDING (rlubke) PROVIDE IMPLEMENTATION
     }
 
     public void addNavigationCase(ConfigNavigationCase navigationCase) {
@@ -135,34 +123,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
             }
         }
     }
-    
-    /**
-     * This method uses helper methods to determine the new <code>tree</code> identifier.
-     * Refer to section 7.4.2 of the specification for more details.
-     *
-     * @param context The Faces Context
-     * @param actionRef The action reference string
-     * @param outcome The outcome string
-     *
-     * @return The <code>tree</code> identifier. 
-     */
-
-    private String getTreeId(FacesContext context, String actionRef, String outcome) {
-        String nextTreeId = null;
-        String treeId = context.getTree().getTreeId();
-
-        nextTreeId = findExactMatch(treeId, actionRef, outcome);
-        if (nextTreeId == null) {
-            nextTreeId = findWildCardMatch(treeId, actionRef, outcome);
-        }
-
-        if (nextTreeId == null) {
-             nextTreeId = findDefaultMatch(actionRef, outcome);
-        }
-
-        return nextTreeId;
-    }
-
+        
         
     /**
      * This method finds the List of cases for the current <code>tree</code> identifier.

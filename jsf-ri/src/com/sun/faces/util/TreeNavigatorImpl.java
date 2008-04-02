@@ -1,5 +1,5 @@
 /*
- * $Id: TreeNavigatorImpl.java,v 1.1 2003/03/12 19:52:42 rkitain Exp $
+ * $Id: TreeNavigatorImpl.java,v 1.2 2003/08/19 19:31:34 rlubke Exp $
  */
 
 /*
@@ -11,7 +11,6 @@
 
 package com.sun.faces.util;
 
-import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
@@ -20,11 +19,8 @@ import java.util.Iterator;
 import java.util.Stack;
 
 /**
-
- * @version $Id: TreeNavigatorImpl.java,v 1.1 2003/03/12 19:52:42 rkitain Exp $
+ * @version $Id: TreeNavigatorImpl.java,v 1.2 2003/08/19 19:31:34 rlubke Exp $
  * 
- * @see	javax.faces.TreeNavigator
-
  */
 
 public class TreeNavigatorImpl extends Object implements TreeNavigator
@@ -97,7 +93,7 @@ public UIComponent getNextStart() {
     // if there is nothing on the stack, that means we're at the root
     if (startStack.empty()) {
 	cur = root;
-	iter = cur.getChildren();
+	iter = cur.getChildren().iterator();
 	if (iter.hasNext()) {
 	    startStack.push(iter);
 	}
@@ -110,7 +106,7 @@ public UIComponent getNextStart() {
 		// if there are children left
 		cur = (UIComponent) iter.next();
 		// return this child
-		childIter = cur.getChildren();
+		childIter = cur.getChildren().iterator();
 		// see if this child has children
 		if (null != childIter && childIter.hasNext()) {
 		    // if so, push them on the stack
@@ -170,12 +166,12 @@ protected UIComponent findComponentForId(UIComponent root, String componentId){
     if (null == root) {
 	return null;
     }
-    if (componentId.equals(root.getComponentId())) {
+    if (componentId.equals(root.getId())) {
 	result = root;
 	return result;
     }
 
-    Iterator it = root.getChildren();
+    Iterator it = root.getChildren().iterator();
     while (it.hasNext()&& null == result) {
 	result = findComponentForId((UIComponent) it.next(), componentId);
     }

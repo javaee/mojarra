@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.73 2003/08/13 18:18:25 rlubke Exp $
+ * $Id: Util.java,v 1.74 2003/08/19 19:31:34 rlubke Exp $
  */
 
 /*
@@ -26,11 +26,11 @@ import java.util.StringTokenizer;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.model.SelectItem;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
-import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
@@ -41,7 +41,6 @@ import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
-import javax.faces.tree.TreeFactory;
 
 import javax.servlet.ServletContext;
 
@@ -54,7 +53,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.73 2003/08/13 18:18:25 rlubke Exp $
+ * @version $Id: Util.java,v 1.74 2003/08/19 19:31:34 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -455,8 +454,7 @@ private Util()
 
     public static void verifyFactoriesAndInitDefaultRenderKit(ServletContext context) throws FacesException {
 	RenderKitFactory renderKitFactory = null;
-	LifecycleFactory lifecycleFactory = null;
-	TreeFactory treeFactory = null;
+	LifecycleFactory lifecycleFactory = null;	
 	FacesContextFactory facesContextFactory = null;
 	ApplicationFactory applicationFactory = null;
 	RenderKit defaultRenderKit = null;
@@ -467,11 +465,7 @@ private Util()
 
 	lifecycleFactory = (LifecycleFactory)
 	    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-	Assert.assert_it(null != lifecycleFactory);
-
-	treeFactory = (TreeFactory)
-	    FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-	Assert.assert_it(null != treeFactory);
+	Assert.assert_it(null != lifecycleFactory);	
 
 	facesContextFactory = (FacesContextFactory)
 	    FactoryFinder.getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
@@ -578,7 +572,7 @@ private Util()
 					  UIComponent component) {
 
         ArrayList list = new ArrayList();
-        Iterator kids = component.getChildren();
+        Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
@@ -712,7 +706,7 @@ private Util()
         for (i = 0; i < len; i++) {
             value = (String)component.getAttribute(booleanPassthruAttributes[i]);
 	    if (value != null && Boolean.valueOf(value).booleanValue()) {
-		writer.writeAttribute(booleanPassthruAttributes[i], new Boolean("true"));
+		writer.writeAttribute(booleanPassthruAttributes[i], new Boolean("true"), null);
 	    }
 	}
     }
@@ -734,7 +728,7 @@ private Util()
 	for (i = 0; i < len; i++) {
             value = (String)component.getAttribute(passthruAttributes[i]);
 	    if (value != null) {
-		writer.writeAttribute(passthruAttributes[i], value);
+		writer.writeAttribute(passthruAttributes[i], value, null);
 	    }
 	}
     }

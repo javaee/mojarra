@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.16 2003/08/08 16:20:35 rkitain Exp $
+ * $Id: UseFacesTag.java,v 1.17 2003/08/19 19:31:29 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.16 2003/08/08 16:20:35 rkitain Exp $
+ * @version $Id: UseFacesTag.java,v 1.17 2003/08/19 19:31:29 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -147,8 +147,7 @@ public class UseFacesTag extends UIComponentBodyTag
     protected void saveStateInSession(FacesContext facesContext) 
             throws JspException {
         Map sessionMap = Util.getSessionMap(facesContext);
-        sessionMap.put(RIConstants.REQUEST_LOCALE, facesContext.getLocale());
-        sessionMap.put(RIConstants.FACES_TREE, facesContext.getTree() ); 
+        sessionMap.put(RIConstants.REQUEST_LOCALE, facesContext.getLocale());        
         // write buffered response to output. Since we are saving tree in session
         // no manipulation is necessary.
         try {
@@ -180,7 +179,7 @@ public class UseFacesTag extends UIComponentBodyTag
           
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutput out = new ObjectOutputStream(bos);
-            out.writeObject(facesContext.getTree());
+            out.writeObject(facesContext.getRoot());
             //write out the locale.
             out.writeObject(facesContext.getLocale());
             out.close();

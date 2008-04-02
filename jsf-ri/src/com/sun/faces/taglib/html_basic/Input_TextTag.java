@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.11 2003/08/15 19:15:11 rlubke Exp $
+ * $Id: Input_TextTag.java,v 1.12 2003/08/19 19:31:27 rlubke Exp $
  */
 
 /*
@@ -63,8 +63,10 @@ public class Input_TextTag extends InputTag
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
+        UIInput input = (UIInput) component;
         if (converter != null) {
-            component.setConverter(converter);
+            // PENDING (rlubke) CORRECT IMPLEMENTATION
+            //input.setConverter(converter);
         }
     }
 

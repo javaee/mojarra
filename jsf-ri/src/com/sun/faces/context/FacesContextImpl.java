@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.40 2003/07/07 20:52:51 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.41 2003/08/19 19:31:05 rlubke Exp $
  */
 
 /*
@@ -9,39 +9,30 @@
 
 package com.sun.faces.context;
 
-import java.io.IOException;
+
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Properties;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.faces.FacesException;     
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Message;
+import javax.faces.application.ViewHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.UIPage;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.tree.Tree;
-import javax.faces.FactoryFinder;
 import javax.faces.event.FacesEvent;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.lifecycle.ViewHandler;
 
-import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CursorableLinkedList;
 
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.RIConstants;
@@ -66,9 +57,7 @@ public class FacesContextImpl extends FacesContext
     //
 
     // Relationship Instance Variables
-    private Locale locale = null;
-    private Tree tree = null;
-    private Tree responseTree = null;
+    private Locale locale = null;    
     private ResponseStream responseStream = null;
     private ResponseWriter responseWriter = null;
     private CursorableLinkedList facesEvents = null;
@@ -113,8 +102,8 @@ public class FacesContextImpl extends FacesContext
         
         this.externalContext = ec;
         this.locale = externalContext.getRequestLocale();
-
-        this.viewHandler = lifecycle.getViewHandler();
+         
+        this.viewHandler = application.getViewHandler();
 
 	// Verify the FormatPool is in the ApplicationMap
 
@@ -266,11 +255,7 @@ public class FacesContextImpl extends FacesContext
 	    }
         }
         return result;
-    }
-
-    public Tree getTree() {
-        return (this.tree);
-    }
+    }    
 
     public ResponseStream getResponseStream() {
 	return responseStream;
@@ -283,12 +268,16 @@ public class FacesContextImpl extends FacesContext
 	responseStream = newResponseStream;
     }
 
-    public void setTree(Tree tree) {
-        if (tree == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_REQUEST_TREE_ERROR_MESSAGE_ID));
-        }
-        this.tree = tree;
+    // PENDING (rlubke): PROVIDE IMPLEMENTATION
+    public UIPage getRoot() {
+        return null;  //To change body of implemented methods use Options | File Templates.
     }
+   
+    // PENDING (rlubke): PROVIDE IMPLEMENTATION
+    public void setRoot(UIPage root) {
+        //To change body of implemented methods use Options | File Templates.
+    }
+    
 
     public ResponseWriter getResponseWriter() {
 	return responseWriter;
@@ -331,8 +320,7 @@ public class FacesContextImpl extends FacesContext
 
     public void release() {
         externalContext = null;
-        locale = null;
-        tree = null;
+        locale = null;        
         responseStream = null;
         responseWriter = null;
         facesEvents = null;

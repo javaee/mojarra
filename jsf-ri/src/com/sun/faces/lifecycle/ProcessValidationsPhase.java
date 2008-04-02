@@ -1,5 +1,5 @@
 /*
- * $Id: ProcessValidationsPhase.java,v 1.13 2003/07/07 20:52:56 eburns Exp $
+ * $Id: ProcessValidationsPhase.java,v 1.14 2003/08/19 19:31:10 rlubke Exp $
  */
 
 /*
@@ -11,17 +11,12 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.context.FacesContextImpl;
-
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.validator.Validator;
 
 import java.util.Iterator;
 
@@ -31,7 +26,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ProcessValidationsPhase.java,v 1.13 2003/07/07 20:52:56 eburns Exp $
+ * @version $Id: ProcessValidationsPhase.java,v 1.14 2003/08/19 19:31:10 rlubke Exp $
  * 
  */
 
@@ -79,8 +74,7 @@ public void execute(FacesContext facesContext) throws FacesException
 {
     Iterator messageIter = null;
 
-    UIComponent component = 
-        (UIComponent)facesContext.getTree().getRoot();
+    UIComponent component = facesContext.getRoot();
     Assert.assert_it(null != component);
 
     component.processValidators(facesContext);

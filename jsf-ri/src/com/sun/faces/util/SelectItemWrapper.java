@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemWrapper.java,v 1.2 2003/02/20 22:49:42 ofung Exp $
+ * $Id: SelectItemWrapper.java,v 1.3 2003/08/19 19:31:33 rlubke Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package com.sun.faces.util;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.SelectItem;
+import javax.faces.model.SelectItem;
 
 /**
   * This class is a wrapper around UISelectItem/UISelectItems and SelectItem bean.

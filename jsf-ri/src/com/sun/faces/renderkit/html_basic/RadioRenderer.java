@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.45 2003/08/19 15:19:25 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.46 2003/08/19 19:31:19 rlubke Exp $
  */
 
 /*
@@ -15,9 +15,8 @@ import java.util.Iterator;
 
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
-import javax.faces.FacesException;
+import javax.faces.model.SelectItem;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.SelectItem;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;

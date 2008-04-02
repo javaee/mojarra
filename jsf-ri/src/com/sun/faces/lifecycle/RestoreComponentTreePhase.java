@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.10 2003/07/07 20:52:57 eburns Exp $
+ * $Id: RestoreComponentTreePhase.java,v 1.1 2003/08/19 19:31:10 rlubke Exp $
  */
 
 /*
@@ -12,34 +12,29 @@
 package com.sun.faces.lifecycle;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.FacesException;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.tree.Tree;
-import javax.faces.tree.TreeFactory;
 import javax.faces.el.ValueBinding;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIPage;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+import javax.faces.application.StateManager;
 import javax.faces.event.ActionListener;
 import java.util.Iterator;
 import java.util.Map;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Locale;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Base64;
-import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+
 import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.Util;
 
@@ -51,16 +46,16 @@ import org.apache.commons.logging.LogFactory;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.10 2003/07/07 20:52:57 eburns Exp $
+ * @version $Id: RestoreComponentTreePhase.java,v 1.1 2003/08/19 19:31:10 rlubke Exp $
  * 
  */
 
-public class ReconstituteComponentTreePhase extends Phase {
+public class RestoreComponentTreePhase extends Phase {
 //
 // Protected Constants
 //
     // Log instance for this class
-    protected static Log log = LogFactory.getLog(ReconstituteComponentTreePhase.class);
+    protected static Log log = LogFactory.getLog(RestoreComponentTreePhase.class);
 
 //
 // Class Variables
@@ -69,7 +64,6 @@ public class ReconstituteComponentTreePhase extends Phase {
 //
 // Instance Variables
 //
-private TreeFactory treeFactory = null;
 private ActionListener actionListener = null;
 
 // Attribute Instance Variables
@@ -80,11 +74,7 @@ private ActionListener actionListener = null;
 // Constructors and Genericializers    
 //
 
-public ReconstituteComponentTreePhase() {
-    treeFactory = (TreeFactory)
-         FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
-    Assert.assert_it(treeFactory != null);
-
+public RestoreComponentTreePhase() {    
     ApplicationFactory aFactory = (ApplicationFactory)
         FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
     if (aFactory != null) {
@@ -106,7 +96,7 @@ public ReconstituteComponentTreePhase() {
 
 
 public PhaseId getId() {
-    return PhaseId.RECONSTITUTE_REQUEST;
+    return PhaseId.RESTORE_COMPONENT_TREE;
 }
 
 /**
@@ -124,11 +114,11 @@ public void execute(FacesContext facesContext) throws FacesException
 	throw new FacesException(Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
     }
 
-    // If an app had explicitely set the tree in the context, use that;
+    // If an app had explicitely set the root component in the context, use that;
     //
-    Tree contextTree = facesContext.getTree();
+    UIComponent componentTree = facesContext.getRoot();
     Locale locale = null;
-    if (contextTree != null) {
+    if (componentTree != null) {
         locale = facesContext.getExternalContext().getRequestLocale();
         facesContext.setLocale(locale);
         processTree(facesContext);
@@ -136,8 +126,7 @@ public void execute(FacesContext facesContext) throws FacesException
     }
 
     // Otherwise, we will look to get the tree from the page or session;
-    // Create the requested component tree
-    Tree requestTree = null;
+    // Create the requested component tree    
     
     // look up saveStateInClient parameter to check whether to restore
     // state of tree from client or server. Default is server.
@@ -155,7 +144,7 @@ public void execute(FacesContext facesContext) throws FacesException
 }    
         
 public void restoreTreeFromPage(FacesContext facesContext) {
-    Tree requestTree = null;
+    UIPage requestTree = null;
     Locale locale = null;
     long beginTime = 0;
 
@@ -176,17 +165,17 @@ public void restoreTreeFromPage(FacesContext facesContext) {
 
     String treeRootString = (String)requestMap.get(RIConstants.FACES_TREE);
     if ( treeRootString == null ) {
-        requestTree = treeFactory.getTree(facesContext, treeId);
+        requestTree = facesContext.getRoot();
     } else {    
         byte[] bytes  = Base64.decode(treeRootString.getBytes());
         try {
             ObjectInputStream ois = new ObjectInputStream(
                     new ByteArrayInputStream(bytes));
-            requestTree = (Tree) ois.readObject();
+            requestTree = (UIPage) ois.readObject();
             locale = (Locale) ois.readObject();
             ois.close();
             if (log.isDebugEnabled()) {
-                DebugUtil.printTree(requestTree.getRoot(), System.out);
+                DebugUtil.printTree(requestTree, System.out);
             }
         } catch (java.io.OptionalDataException ode) {
             log.error(ode.getMessage(), ode);
@@ -196,7 +185,7 @@ public void restoreTreeFromPage(FacesContext facesContext) {
             log.error(iox.getMessage(), iox);
         }
     }
-    facesContext.setTree(requestTree);
+    facesContext.setRoot(requestTree);
     if ( locale != null ) {
         facesContext.setLocale(locale);
     }
@@ -209,7 +198,7 @@ public void restoreTreeFromPage(FacesContext facesContext) {
 }
 
 protected void restoreTreeFromSession(FacesContext facesContext) {
-    Tree requestTree = null;
+    UIPage requestTree = null;
     
     // PENDING(visvan) - will not deal with simultaneous requests
     // for the same session
@@ -229,23 +218,31 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
 	// throw exception;
     }
 
-    requestTree = (Tree) sessionMap.get(RIConstants.FACES_TREE);
+    requestTree = (UIPage) sessionMap.get(RIConstants.FACES_TREE);
     // If there is nothing in the session, 
     if (requestTree == null) {
 	// create the tree from the pathInfo
-        requestTree = treeFactory.getTree(facesContext, treeId);
+        requestTree = facesContext.getRoot();
     } 
     else {
 	// There is something in the session.  Make sure its TreeId,
 	// matches the treeId from the pathInfo.
+        // PENDING (rlubke) CORRECT IMPLEMENTATION
 	if ((null != treeId) && !treeId.equals(requestTree.getTreeId())) {
 	    // If it doesn't match, use the pathInfo
-	    requestTree = treeFactory.getTree(facesContext,treeId);
+        StateManager manager = Application.getCurrentInstance().getViewHandler().getStateManager();
+        try {
+            manager.restoreTree(facesContext, treeId);
+        } catch (IOException ioe) {
+            // pending (rlubke) Localize
+            throw new FacesException("Unable to restore tree.", ioe);    
+        }
+	    requestTree = facesContext.getRoot();
 	}
 	// If it does match, use the tree from the Session
     }
 	
-    facesContext.setTree(requestTree);
+    facesContext.setRoot(requestTree);
     sessionMap.remove(RIConstants.FACES_TREE);
 
     // Set up the request locale if needed
@@ -259,12 +256,13 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
 }
 
 protected void processTree(FacesContext facesContext) {
-    UIComponent root = facesContext.getTree().getRoot();
-    try {
-        root.processReconstitutes(facesContext);
-    } catch (java.io.IOException iox) {
-        log.error(iox.getMessage(), iox);
-    }
+    UIComponent root = facesContext.getRoot();
+    // PENDING (rlubke) CORRECT IMPLEMENTATION
+//    try {        
+//        root.processRestoreState(facesContext, );
+//    } catch (java.io.IOException iox) {
+//        log.error(iox.getMessage(), iox);
+//    }
     doPerComponentActions(facesContext, root);
 }
 

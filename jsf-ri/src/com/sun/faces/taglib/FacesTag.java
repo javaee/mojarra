@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.41 2003/08/15 19:15:03 rlubke Exp $
+ * $Id: FacesTag.java,v 1.42 2003/08/19 19:31:25 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.41 2003/08/15 19:15:03 rlubke Exp $
+ * @version $Id: FacesTag.java,v 1.42 2003/08/19 19:31:25 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1205,7 +1205,8 @@ protected void overrideProperties(UIComponent component)
 	    output.setValue(value);
 	}
         if (null != converter) {
-            output.setConverter(converter);
+            // PENDING (rlubke) CORRECT IMPELMENTATION
+            //output.setConverter(converter);
         }
     }    
 

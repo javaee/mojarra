@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.20 2003/08/13 18:16:14 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.21 2003/08/19 19:31:02 rlubke Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.el.VariableResolver;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.event.PhaseId;
 import javax.faces.validator.Validator;
 import javax.faces.FacesException;
@@ -109,6 +110,52 @@ public class ApplicationImpl extends Application {
      */
     public ActionListener getActionListener() {
         return actionListener;
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public Converter createConverter(String converterId) {
+        return null;  
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public ViewHandler getViewHandler() {
+        return null;  
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public void setViewHandler(ViewHandler handler) {
+        
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public UIComponent createComponent(String componentType) throws FacesException {
+        return null;  
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public UIComponent createComponent(ValueBinding componentRef, FacesContext context, String componentType)
+        throws FacesException {
+        return null;  
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public void addConverter(Class targetClass, String converterClass) {
+        
+    }
+    
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION    
+    public Converter createConverter(Class targetClass) {
+        return null;  
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public Iterator getConverterTypes() {
+        return null;  //To change body of implemented methods use Options | File Templates.
+    }
+
+    // PENDING (rlubke) PROVIDE IMPLEMENTATION
+    public Validator createValidator(String validatorId) throws FacesException {
+        return null;  //To change body of implemented methods use Options | File Templates.
     }
 
     /**

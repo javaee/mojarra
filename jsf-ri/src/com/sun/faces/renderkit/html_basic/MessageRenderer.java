@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.21 2003/08/19 15:19:23 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.22 2003/08/19 19:31:19 rlubke Exp $
  */
 
 /*
@@ -23,15 +23,8 @@ import javax.faces.component.UIOutput;
 import javax.faces.component.UIParameter;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
-import javax.faces.render.Renderer;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
 
 /**
  *
@@ -39,7 +32,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.21 2003/08/19 15:19:23 rkitain Exp $
+ * @version $Id: MessageRenderer.java,v 1.22 2003/08/19 19:31:19 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -140,7 +133,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
 
         // get UIParameter children...
 
-        Iterator kids = component.getChildren();
+        Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.51 2003/08/19 15:19:21 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.52 2003/08/19 19:31:18 rlubke Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.51 2003/08/19 15:19:21 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.52 2003/08/19 19:31:18 rlubke Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -96,7 +96,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         }
 
         //PENDING(rogerk) fire action event
-        command.fireActionEvent(context);
+        //command.fireActionEvent(context);
 	return;
     }
 
@@ -233,7 +233,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
     protected Param[] getParamList(FacesContext context, UIComponent command) {
         ArrayList parameterList = new ArrayList();
 
-	Iterator kids = command.getChildren();
+	Iterator kids = command.getChildren().iterator();
 	while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
 

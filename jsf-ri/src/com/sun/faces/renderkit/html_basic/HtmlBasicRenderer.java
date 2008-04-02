@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.47 2003/08/13 02:08:03 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.48 2003/08/19 19:31:17 rlubke Exp $
  */
 
 /*
@@ -24,12 +24,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIInput;
 import javax.faces.component.NamingContainer;
-import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
 
 import javax.faces.render.Renderer;
-import javax.faces.component.UIInput;
 import javax.faces.application.Message;
 import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
@@ -191,7 +189,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // if the bundleName is null for this component, it might have
         // been set on the root component.
         if ( bundleName == null ) {
-            UIComponent root = context.getTree().getRoot();
+            UIComponent root = context.getRoot();
             Assert.assert_it(root != null);
             bundleName = (String)root.getAttribute(RIConstants.BUNDLE_ATTR);
         }
@@ -350,7 +348,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    ApplicationFactory aFactory = 
 		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
 	    Application application = aFactory.getApplication();
-            return (application.getConverter(converterId));
+            return (application.createConverter(converterId));
         } catch (Exception e) {
             return (null);
         }
@@ -368,7 +366,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    ApplicationFactory aFactory = 
 		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
 	    Application application = aFactory.getApplication();
-            return (application.getConverter(converterId));
+            return (application.createConverter(converterId));
         } catch (Exception e) {
             return (null);
         }
@@ -396,12 +394,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (null != closestContainer) {
 
             // If there is no componentId, generate one and store it
-            if (component.getComponentId() == null) {
+            if (component.getId() == null) {
                 // Don't call setComponentId() because it checks for
                 // uniqueness.  No need.
                 clientId = closestContainer.generateClientId();
             } else {
-                clientId = component.getComponentId();
+                clientId = component.getId();
             }
 
             // build the client side id
@@ -452,8 +450,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
         Converter converter = null;
         // If there is a converter attribute, use it to to ask application
         // instance for a converter with this identifer.
-        String converterId = component.getConverter();
-        converter = getConverter(converterId);
+       
+       // PENDING (rlubke) CORRECT IMPLEMENTATION
+       // String converterId = component.getConverter();
+       // converter = getConverter(converterId);
+       
         // if value is null and no converter attribute is specified, then
         // return a zero length String.
         if ( converter == null && currentValue == null) {
@@ -467,15 +468,20 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
             // if getType returns a type for which we support a default
             // conversion, acquire an appropriate converter instance.
-            converterId = Util.getDefaultConverterForType(
-                     (converterType.getName()));
-            converter = getConverter(converterId);
+        
+            // PENDING (rlubke) CORRECT IMPLEMENTATION
+//            converterId = Util.getDefaultConverterForType(
+//                     (converterType.getName()));
+//            converter = getConverter(converterId);
             
 	} else if ( converter == null && valueRef == null ) {
             // if there is no valueRef and converter attribute set, try to acquire
             // a converter using its class type.
-            converterId = currentValue.getClass().getName();
-            converter = getConverter(converterId);
+        
+            // PENDING (rlubke) CORRECT IMPLEMENTATION
+            //converterId = currentValue.getClass().getName();
+            //converter = getConverter(converterId);
+        
             // if there is no default converter available for this identifier,
             // assume the model type to be String.
             if ( converter == null && currentValue != null) {

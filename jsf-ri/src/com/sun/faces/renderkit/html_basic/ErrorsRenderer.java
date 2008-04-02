@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.15 2003/08/19 15:19:18 rkitain Exp $
+ * $Id: ErrorsRenderer.java,v 1.16 2003/08/19 19:31:16 rlubke Exp $
  */
 
 /*
@@ -17,17 +17,11 @@ import java.util.Iterator;
 
 import javax.faces.application.Message;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 /**
@@ -36,7 +30,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.15 2003/08/19 15:19:18 rkitain Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.16 2003/08/19 19:31:16 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -127,7 +121,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
             if (forComponent.length() == 0) {
                 messageIter = context.getMessages(null);
             } else {
-                UIComponent root = context.getTree().getRoot();
+                UIComponent root = context.getRoot();
                 Assert.assert_it(null != root);
                 UIComponent comp = null;
                 try {

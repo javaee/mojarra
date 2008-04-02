@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.13 2003/08/15 19:15:10 rlubke Exp $
+ * $Id: Input_HiddenTag.java,v 1.14 2003/08/19 19:31:27 rlubke Exp $
  */
 
 /*
@@ -75,7 +75,8 @@ public class Input_HiddenTag extends FacesTag
 	super.overrideProperties(component);
         UIInput uiInput = (UIInput)component;
         if (converter != null) {
-            component.setConverter(converter);
+            // PENDING (rlubke) CORRECT IMPLEMENTATION
+            //uiInput.setConverter(converter);
         }
     }
     

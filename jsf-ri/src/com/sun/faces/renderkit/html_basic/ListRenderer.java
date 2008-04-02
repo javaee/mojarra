@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.13 2003/08/19 15:19:22 rkitain Exp $
+ * $Id: ListRenderer.java,v 1.14 2003/08/19 19:31:18 rlubke Exp $
  */
 
 /*
@@ -16,20 +16,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.mozilla.util.Assert;
 
@@ -39,7 +34,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.13 2003/08/19 15:19:22 rkitain Exp $
+ * @version $Id: ListRenderer.java,v 1.14 2003/08/19 19:31:18 rlubke Exp $
  *  
  */
 
@@ -140,12 +135,12 @@ public class ListRenderer extends HtmlBasicRenderer {
 	Iterator kids = null;
 
         // Process the table header (if any)
-        if (null != (facet = component.getFacet("header"))) {
+        if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
 	    writer.startElement("tr", null);
 	    writer.startElement("thead", null);
 	    writer.writeText("\n", null);
 	    // If the header has kids, render them recursively
-	    if (null != (kids = facet.getChildren())) {
+	    if (null != (kids = facet.getChildren().iterator())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table header
@@ -178,7 +173,7 @@ public class ListRenderer extends HtmlBasicRenderer {
         }
 
 	writer.startElement("tbody", null);
-	if (null != (kids = component.getChildren())) {
+	if (null != (kids = component.getChildren().iterator())) {
 	    // Process each grouping of data items to be processed
             Map requestMap = context.getExternalContext().getRequestMap();
 	    while (kids.hasNext()) {
@@ -206,7 +201,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    
 		    // Process each column to be rendered
 		    columnStyle = 0;
-		    Iterator columns = group.getChildren();
+		    Iterator columns = group.getChildren().iterator();
 		    // number of columns will equal the total number of elements
 		    // in the iterator. No of rows will be equal to the number of
 		    // rows in the list bean.
@@ -237,12 +232,12 @@ public class ListRenderer extends HtmlBasicRenderer {
 	writer.endElement("tbody");
 
         // Process the table footer (if any)
-        if (null != (facet = component.getFacet("footer"))) {
+        if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
 	    writer.startElement("tr", null);
 	    writer.startElement("tfoot", null);
 	    writer.writeText("\n", null);
 	    // If the footer has kids, render them recursively
-	    if (null != (kids = facet.getChildren())) {
+	    if (null != (kids = facet.getChildren().iterator())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table footer
@@ -306,7 +301,7 @@ public class ListRenderer extends HtmlBasicRenderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = component.getChildren();
+            Iterator kids = component.getChildren().iterator();
             while (kids.hasNext()) {
                 UIComponent kid = (UIComponent) kids.next();
                 encodeRecursive(context, kid);
