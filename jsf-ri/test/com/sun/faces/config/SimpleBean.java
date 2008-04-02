@@ -74,4 +74,19 @@ public class SimpleBean {
     public void setNonManagedBean(NonManagedBean nmb) {
         nonManagedBean = nmb;
     }
+
+    private String headerClass = "column-header";
+    public String getHeaderClass() {
+        return headerClass;
+    }
+    public void setHeaderClass(String headerClass) {
+        this.headerClass = headerClass;
+    }
+    private String footerClass = "column-footer";
+    public String getFooterClass() {
+        return footerClass;
+    }
+    public void setFooterClass(String footerClass) {
+        this.footerClass = footerClass;
+    }
 }

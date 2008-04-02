@@ -820,7 +820,7 @@ see the <i>angle brackets</i> on this text"></h:outputText>
      <h:outputText    value="Overall Table Footer"/>
    </f:facet>
 
-   <h:column headerClass="column-header" footerClass="column-footer">
+   <h:column headerClass="#{SimpleBean.headerClass}" footerClass="#{SimpleBean.footerClass}">
       <f:facet           name="header">
         <h:outputText  value="Account Id"/>
       </f:facet>

@@ -1,5 +1,5 @@
 /*
- * $Id: ColumnTag.java,v 1.13 2005/08/22 22:10:23 ofung Exp $
+ * $Id: ColumnTag.java,v 1.14 2006/03/10 19:49:00 rogerk Exp $
  */
 
 /*
@@ -30,10 +30,10 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import javax.el.ValueExpression;
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
-import javax.faces.el.ValueBinding;
-import javax.faces.webapp.UIComponentTag;
+import javax.faces.webapp.UIComponentELTag;
 import javax.servlet.jsp.JspException;
 
 import com.sun.faces.util.Util;
@@ -41,7 +41,7 @@ import com.sun.faces.util.Util;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-public class ColumnTag extends UIComponentTag {
+public class ColumnTag extends UIComponentELTag {
 
     // Log instance for this class
     private static final Logger logger = 
@@ -56,14 +56,14 @@ public class ColumnTag extends UIComponentTag {
     // Setter Methods
     //
     // PROPERTY: footerClass
-    private java.lang.String footerClass;
-    public void setFooterClass(java.lang.String footerClass) {
+    private javax.el.ValueExpression footerClass;
+    public void setFooterClass(javax.el.ValueExpression footerClass) {
         this.footerClass = footerClass;
     }
 
     // PROPERTY: headerClass
-    private java.lang.String headerClass;
-    public void setHeaderClass(java.lang.String headerClass) {
+    private javax.el.ValueExpression headerClass;
+    public void setHeaderClass(javax.el.ValueExpression headerClass) {
         this.headerClass = headerClass;
     }
 
@@ -89,21 +89,18 @@ public class ColumnTag extends UIComponentTag {
         } catch (ClassCastException cce) {
             throw new IllegalStateException("Component " + component.toString() + " not expected type.  Expected: UIColumn.  Perhaps you're missing a tag?");
         }
-
         if (footerClass != null) {
-            if (isValueReference(footerClass)) {
-                ValueBinding vb = Util.getValueBinding(footerClass);
-                column.setValueBinding("footerClass", vb);
+            if (!footerClass.isLiteralText()) {
+                column.setValueExpression("footerClass", footerClass);
             } else {
-                column.getAttributes().put("footerClass", footerClass);
+                column.getAttributes().put("footerClass", footerClass.getExpressionString());
             }
         }
         if (headerClass != null) {
-            if (isValueReference(headerClass)) {
-                ValueBinding vb = Util.getValueBinding(headerClass);
-                column.setValueBinding("headerClass", vb);
+            if (!headerClass.isLiteralText()) {
+                column.setValueExpression("headerClass", headerClass);
             } else {
-                column.getAttributes().put("headerClass", headerClass);
+                column.getAttributes().put("headerClass", headerClass.getExpressionString());
             }
         }
     }
@@ -149,6 +146,12 @@ public class ColumnTag extends UIComponentTag {
         return rc;
     }
 
+    // RELEASE
+    public void release() {
+        super.release();
+        this.headerClass = null;
+        this.footerClass = null;
+    }
 
     public String getDebugString() {
         String result = "id: " + this.getId() + " class: " +
