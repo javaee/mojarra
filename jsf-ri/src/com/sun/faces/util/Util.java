@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.55 2003/04/29 20:52:22 eburns Exp $
+ * $Id: Util.java,v 1.56 2003/04/30 18:39:45 rkitain Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.55 2003/04/29 20:52:22 eburns Exp $
+ * @version $Id: Util.java,v 1.56 2003/04/30 18:39:45 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -193,6 +193,15 @@ public class Util extends Object
 
    public static final String NULL_CONFIGURATION_ERROR_MESSAGE_ID = 
         "com.sun.faces.NULL_CONFIGURATION";
+
+   public static final String ERROR_OPENING_FILE_ERROR_MESSAGE_ID = 
+        "com.sun.faces.ERROR_OPENING_FILE";
+
+   public static final String ERROR_PARSING_FILE_ERROR_MESSAGE_ID = 
+        "com.sun.faces.ERROR_PARSING_FILE";
+
+   public static final String ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID = 
+        "com.sun.faces.ERROR_REGISTERING_DTD";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

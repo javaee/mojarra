@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.3 2003/04/01 17:39:16 rkitain Exp $
+ * $Id: TestUtil_messages.java,v 1.4 2003/04/30 18:40:27 rkitain Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.3 2003/04/01 17:39:16 rkitain Exp $
+ * @version $Id: TestUtil_messages.java,v 1.4 2003/04/30 18:40:27 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -87,7 +87,10 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.RENDERER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, "1"},
         {Util.NO_ACTION_FROM_ACTIONREF_ERROR_MESSAGE_ID, "1"},
-        {Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID, "0"}
+        {Util.NULL_CONFIGURATION_ERROR_MESSAGE_ID, "0"},
+        {Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, "1"},
+        {Util.ERROR_PARSING_FILE_ERROR_MESSAGE_ID, "1"},
+        {Util.ERROR_REGISTERING_DTD_ERROR_MESSAGE_ID, "1"}
         
     };
 
