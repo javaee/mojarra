@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.14 2006/10/18 17:11:56 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.15 2006/11/09 21:09:14 rlubke Exp $
  */
 
 /*
@@ -616,9 +616,7 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                                                               propertyName))) {
                                 // if the bean property class can't be
                                 // determined, use the fallback.
-                                valueClass =
-                                    getValueClassConsideringPrimitives(
-                                        propertyClass);
+                                valueClass = String.class;
                             }
                         } else {
                             // the config has a managed-property-class

@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.8 2006/09/15 17:19:18 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.9 2006/11/09 21:09:14 rlubke Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.io.Serializable;
 import javax.faces.context.ExternalContext;
 
 /**
@@ -82,12 +83,12 @@ com.sun.faces.application.ApplicationAssociate}.</p>
  * @author edburns
  */
 
-public class JSFVersionTracker {
+public class JSFVersionTracker implements Serializable {
     
-    private static Version DEFAULT_VERSION;
+    private static Version DEFAULT_VERSION = new Version(1,2);
     
     /**
-     * <p>The <code>Log</code> instance for this class.</p>
+     * <p>The <code>Logger</code> instance for this class.</p>
      */
     // Log instance for this class
     private static final Logger LOGGER = 
@@ -95,11 +96,6 @@ public class JSFVersionTracker {
                              "com.sun.faces.LogStrings");
     
     //------------------------------------------------------------------- Private Methods
-    
-    
-    JSFVersionTracker() {
-        DEFAULT_VERSION = new Version(1,2);
-    }
 
     private Map<String,Version> grammarToVersionMap = null;
     private List<Version> versionStack;
