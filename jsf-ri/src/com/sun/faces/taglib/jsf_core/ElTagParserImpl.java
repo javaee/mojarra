@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.1 2003/08/19 21:40:52 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.2 2003/10/08 04:23:23 horwat Exp $
  */
 
 /*
@@ -98,18 +98,11 @@ public class ElTagParserImpl implements TagParser {
         Attributes attrs = validatorInfo.getAttributes();
 
         for (int i = 0; i < attrs.getLength(); i++) {
-            if (attrs.getQName(i).equals(JSF_COMPONENTREF_QN) ||
-                attrs.getQName(i).equals(JSF_VALUEREF_QN) ||
-                attrs.getQName(i).equals(JSF_ACTIONREF_QN)) {
-                try {
-                    Application.getCurrentInstance().
-                        getValueBinding(attrs.getValue(i));
-                } catch (Throwable ex) {
-                    failed = true;
-                buildErrorMessage(qn, attrs.getQName(i), attrs.getValue(i));
+            String value = attrs.getValue(i);
 
-                }
-            } else if (attrs.getQName(i).equals(JSF_ID_QN)) {
+            //check to see if attribute has an expression
+            if ((value.indexOf("${") != -1) &&
+                (value.indexOf("${") < value.indexOf("}"))) {
                 ExpressionEvaluator evaluator = 
                     Util.getExpressionEvaluator(RIConstants.JSP_EL_PARSER);
                 ExpressionInfo exprInfo = new ExpressionInfo();
@@ -117,6 +110,17 @@ public class ElTagParserImpl implements TagParser {
                 try {
                     evaluator.parseExpression(exprInfo);
                 } catch (ElException ex) {
+                    failed = true;
+                    buildErrorMessage(qn, attrs.getQName(i), attrs.getValue(i));
+                }
+            }
+            else if (attrs.getQName(i).equals(JSF_COMPONENTREF_QN) ||
+                     attrs.getQName(i).equals(JSF_VALUEREF_QN) ||
+                     attrs.getQName(i).equals(JSF_ACTIONREF_QN)) {
+                try {
+                    Application.getCurrentInstance().
+                        getValueBinding(attrs.getValue(i));
+                } catch (Throwable ex) {
                     failed = true;
                     buildErrorMessage(qn, attrs.getQName(i), attrs.getValue(i));
                 }

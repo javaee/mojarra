@@ -23,7 +23,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid actionRef expression</p>
-  <h:command_button value="hello" actionRef="${ford}"/>
+  <h:command_button value="hello" actionRef="${ford < 1}"/>
 
 </f:view>
 
