@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.97 2003/10/06 22:48:08 eburns Exp $
+ * $Id: Util.java,v 1.98 2003/10/07 02:42:59 eburns Exp $
  */
 
 /*
@@ -64,7 +64,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.97 2003/10/06 22:48:08 eburns Exp $
+ * @version $Id: Util.java,v 1.98 2003/10/07 02:42:59 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -760,7 +760,7 @@ private Util()
 	Object value = null;
 	for (i = 0; i < len; i++) {
             value = component.getAttributes().get(passthruAttributes[i]);
-	    if (value != null) {
+	    if (value != null && shouldRenderAttribute(value)) {
                 if (!(value instanceof String)) {
                     value = value.toString();
                 }
@@ -770,6 +770,52 @@ private Util()
 	    }
 	}
     }
+
+    /**
+     * @return true if and only if the argument
+     * <code>attributeVal</code> is an instance of a wrapper for a
+     * primitive type and its value is equal to the default value for
+     * that type as given in the spec.
+     */
+
+    private static boolean shouldRenderAttribute(Object attributeVal) {
+	if (attributeVal instanceof Boolean && 
+	    ((Boolean)attributeVal).booleanValue() == 
+	    Boolean.FALSE.booleanValue()) {
+	    return false;
+	} 
+	else if (attributeVal instanceof Integer && 
+	    ((Integer)attributeVal).intValue() == Integer.MIN_VALUE) {
+	    return false;
+	}
+	else if (attributeVal instanceof Double && 
+	    ((Double)attributeVal).doubleValue() == Double.MIN_VALUE) {
+	    return false;
+	}
+	else if (attributeVal instanceof Character && 
+	    ((Character)attributeVal).charValue() == Character.MIN_VALUE) {
+	    return false;
+	}
+	else if (attributeVal instanceof Float && 
+	    ((Float)attributeVal).floatValue() == Float.MIN_VALUE) {
+	    return false;
+	}
+	else if (attributeVal instanceof Short && 
+	    ((Short)attributeVal).shortValue() == Short.MIN_VALUE) {
+	    return false;
+	}
+	else if (attributeVal instanceof Byte && 
+	    ((Byte)attributeVal).byteValue() == Byte.MIN_VALUE) {
+	    return false;
+	}
+	else if (attributeVal instanceof Long && 
+	    ((Long)attributeVal).longValue() == Long.MIN_VALUE) {
+	    return false;
+	}
+	return true;
+    }
+
+	
 
     /**
 

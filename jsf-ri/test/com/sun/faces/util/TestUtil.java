@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.14 2003/10/06 22:48:11 eburns Exp $
+ * $Id: TestUtil.java,v 1.15 2003/10/07 02:43:00 eburns Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -37,7 +38,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.14 2003/10/06 22:48:11 eburns Exp $
+ * @version $Id: TestUtil.java,v 1.15 2003/10/07 02:43:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,6 +104,55 @@ public class TestUtil extends ServletFacesTestCase
 	    input.getAttributes().remove("onchange");
 	    Util.renderPassThruAttributes(writer, input);
 	    assertTrue(0 == sw.toString().length());
+	} catch (IOException e) {
+	    assertTrue(false);
+	}
+    }
+
+    public void testRenderPassthruAttributesFromConcreteHtmlComponent() {
+	try {
+            RenderKitFactory renderKitFactory = (RenderKitFactory)
+	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	    StringWriter sw = new StringWriter();
+	    ResponseWriter writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+	    getFacesContext().setResponseWriter(writer);
+
+	    HtmlInputText input = new HtmlInputText();
+	    input.setId("testRenderPassthruAttributes");
+	    input.setSize(12);
+	    Util.renderPassThruAttributes(writer,input);
+	    String expectedResult = " size=\"12\"";
+	    assertEquals(expectedResult, sw.toString());
+
+	    sw = new StringWriter();
+	    writer = renderKit.createResponseWriter(sw, "text/html", 
+						    "ISO-8859-1");
+	    input.setReadonly(true);
+	    Util.renderBooleanPassThruAttributes(writer,input);
+	    expectedResult = " readonly=\"readonly\"";
+	    assertEquals(expectedResult, sw.toString());
+
+
+	    // test that setting the values to the default value causes
+	    // the attributes to not be rendered.
+	    sw = new StringWriter();
+	    writer = renderKit.createResponseWriter(sw, "text/html", 
+						    "ISO-8859-1");
+	    input.setSize(Integer.MIN_VALUE);
+	    Util.renderPassThruAttributes(writer,input);
+	    expectedResult = "";
+	    assertEquals(expectedResult, sw.toString());
+
+	    sw = new StringWriter();
+	    writer = renderKit.createResponseWriter(sw, "text/html", 
+						    "ISO-8859-1");
+	    input.setReadonly(false);
+	    Util.renderBooleanPassThruAttributes(writer,input);
+	    expectedResult = "";
+	    assertEquals(expectedResult, sw.toString());
+
+
 	} catch (IOException e) {
 	    assertTrue(false);
 	}
