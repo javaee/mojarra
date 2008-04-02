@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.21 2003/12/17 15:13:23 rkitain Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.22 2004/01/08 20:22:32 jvisvanathan Exp $
  */
 
 /*
@@ -112,7 +112,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 		// perform a 302 redirect.
 		HttpServletResponse response = 
 		    (HttpServletResponse) extContext.getResponse();
-		String newPath = extContext.getRequestContextPath() + "/" + 
+		String newPath = extContext.getRequestContextPath() + 
 		    viewHandler.getViewIdPath(context, caseStruct.viewId);
 		try {
                     if (log.isDebugEnabled()) {
