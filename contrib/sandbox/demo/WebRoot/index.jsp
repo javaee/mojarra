@@ -1,3 +1,4 @@
+<% response.sendRedirect("jsp/index.jsf"); %>
 <%@ include file="jsp/header.inc" %>
 <ul>
 <li><a href="faces/facelets/index.xhtml">Facelets Demo</a></li>

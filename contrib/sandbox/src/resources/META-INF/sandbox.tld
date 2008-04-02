@@ -812,7 +812,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         </attribute>
         <attribute>
             <name>model</name>
-            <required>true</required>
+            <required>false</required>
             <rtexprvalue>false</rtexprvalue>
              <description>
                 <![CDATA[Expression which returns a TreeNode representing the data for the tree.]]>
@@ -1474,8 +1474,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
     <!-- ******************************************************************* -->
     <tag>
         <name>selectItems</name>
-        <tag-class>com.sun.faces.taglib.jsf_core.SelectItemsTag</tag-class>
-<!--        <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>-->
+        <tag-class>com.sun.faces.sandbox.taglib.SelectItemsTag</tag-class>
         <body-content>empty</body-content>
         <description><![CDATA[
             <p>
@@ -1489,7 +1488,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             of toString() for both the value and the label.
             </p>
 
-            <pre><code>    &lt;fl:selectItems value="#{bean.listOfIntegers}" /&gt;</code></pre>
+            <pre><code>    &lt;risb:selectItems value="#{bean.listOfIntegers}" /&gt;</code></pre>
 
             <p>
             The value or label of the SelectItem can be controlled using EL in the
@@ -1498,7 +1497,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </p>
 
             <pre><code>
-    &lt;fl:selectItems value="#{bean.personList}"
+    &lt;risb:selectItems value="#{bean.personList}"
                     itemValue="#{item.id}"
                     itemLabel="#{item.lastName}, #{item.firstName}" /&gt;</code></pre>
 
@@ -1510,7 +1509,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </p>
             
             <pre><code>
-    &lt;fl:selectItems value="#{bean.personList}"
+    &lt;risb:selectItems value="#{bean.personList}"
                     itemVar="person"
                     itemValue="#{person.id}"
                     itemLabel="Foo #{item.foo} for #{person.lastName}" /&gt;</code></pre>]]>

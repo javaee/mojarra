@@ -92,6 +92,7 @@ public class YuiMenuRenderer extends Renderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
+        idCount = 0;
         renderMenu(writer, (YuiMenuBase)component);
         renderJavaScript(writer, (YuiMenuBase)component);
     }

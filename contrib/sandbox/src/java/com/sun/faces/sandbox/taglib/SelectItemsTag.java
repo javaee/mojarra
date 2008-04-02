@@ -20,6 +20,15 @@ public class SelectItemsTag extends UIComponentTag {
     protected String itemValue;
     protected String itemVar;
 
+    
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getItemLabel() {
         return itemLabel;
     }

@@ -168,6 +168,7 @@
         <copy file="${fileupload.jar}" todir="${build.webinf.dir}/lib" />
         <copy file="${codec.jar}" todir="${build.webinf.dir}/lib" />
         <copy file="${logging.jar}" todir="${build.webinf.dir}/lib" />
+        <copy file="${io.jar}" todir="${build.webinf.dir}/lib" />
         <copy file="${facelets.jar}" todir="${build.webinf.dir}/lib" />
         <copy file="${sandbox.dir}/build/lib/${name}-${sb.impl.version}.jar" todir="${build.webinf.dir}/lib" />
 
