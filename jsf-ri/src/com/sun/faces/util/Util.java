@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.74 2003/08/19 19:31:34 rlubke Exp $
+ * $Id: Util.java,v 1.75 2003/08/19 21:41:01 horwat Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.74 2003/08/19 19:31:34 rlubke Exp $
+ * @version $Id: Util.java,v 1.75 2003/08/19 21:41:01 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -243,6 +243,15 @@ public class Util extends Object
     
     public static final String ILLEGAL_IDENTIFIER_LVALUE_MODE =
         "com.sun.faces.ILLEGAL_IDENTIFIER_LVALUE_MODE";
+
+    public static final String VALIDATION_ID_ERROR_ID =
+        "com.sun.faces.VALIDATION_ID_ERROR";
+
+    public static final String VALIDATION_EL_ERROR_ID =
+        "com.sun.faces.VALIDATION_EL_ERROR";
+
+    public static final String VALIDATION_COMMAND_ERROR_ID =
+        "com.sun.faces.VALIDATION_COMMAND_ERROR";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution

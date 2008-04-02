@@ -1,5 +1,5 @@
 /*
- * $Id: FacesValidator.java,v 1.4 2003/08/15 19:15:04 rlubke Exp $
+ * $Id: FacesValidator.java,v 1.5 2003/08/19 21:40:48 horwat Exp $
  */
 
 /*
@@ -58,9 +58,6 @@ public abstract class FacesValidator extends TagLibraryValidator {
     // Prefix for JSTL CORE tags 
     protected String JSTL_CORE_PRE = null;
     public String getJSTL_CORE_PRE() { return JSTL_CORE_PRE; }
-
-    // Separator character
-    protected final char SPACE = ' ';
 
     // QName for JSTL conditional tag
     protected String JSTL_IF_QN = ":if";

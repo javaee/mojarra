@@ -1,5 +1,5 @@
 /*
- * $Id: CoreValidator.java,v 1.4 2003/05/20 16:35:09 jvisvanathan Exp $
+ * $Id: CoreValidator.java,v 1.5 2003/08/19 21:40:52 horwat Exp $
  */
 
 /*
@@ -10,17 +10,13 @@
 package com.sun.faces.taglib.jsf_core;
 
 import java.io.IOException;
-import javax.servlet.jsp.tagext.PageData;
-import javax.servlet.jsp.tagext.TagLibraryValidator;
-import javax.servlet.jsp.tagext.ValidationMessage;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.sun.faces.taglib.FacesValidator;
+import com.sun.faces.taglib.ValidatorInfo;
+
+import org.mozilla.util.Assert;
 
 /**
  * <p>A TagLibrary Validator class to allow a TLD to mandate that
@@ -37,26 +33,39 @@ public class CoreValidator extends FacesValidator {
     //*********************************************************************
     // Validation and configuration state (protected)
 
-    private boolean siblingSatisfied;		// is there a JSF sibling?
-    private int requiresIdCount;		// nested count
-    private StringBuffer requiresIdList;	// list of failing tags
+    private ValidatorInfo validatorInfo;
+    private IdTagParserImpl idTagParser;
+    private ElTagParserImpl elTagParser;
 
     //*********************************************************************
     // Constructor and lifecycle management
 
+    /**
+     * <p>CoreValidator constructor</p>
+     */
     public CoreValidator() {
         super();
         init();
     }
 
+    /**
+     * <p>Initialize state</p>
+     */
     protected void init() {
 	super.init();
         failed = false;
-        siblingSatisfied = true;
-        requiresIdCount = 0;
-        requiresIdList = new StringBuffer();
+        validatorInfo = new ValidatorInfo();
+
+        idTagParser = new IdTagParserImpl();
+        idTagParser.setValidatorInfo(validatorInfo);
+
+        elTagParser = new ElTagParserImpl();
+        elTagParser.setValidatorInfo(validatorInfo);
     }
 
+    /**
+     * <p>Release and re-initialize state</p>
+     */
     public void release() {
 	super.release();
         init();
@@ -66,18 +75,32 @@ public class CoreValidator extends FacesValidator {
     // Superclass overrides.
     // 
 
+    /**
+     * <p>Get the validator handler</p>
+     */
     protected DefaultHandler getSAXHandler() {
 	DefaultHandler h = new CoreValidatorHandler();
 	return h;
     }
 
+    /**
+     * <p>Create failure message from any failed validations</p>
+     *
+     * @param prefix Tag library prefix
+     * @param uri Tag library uri
+     */
     protected String getFailureMessage(String prefix, String uri) {
-	String result = 
-	    "The following JSF tags are required to contain IDs: '" + 
-	    requiresIdList.toString() +
-	    "' according to the TLV in taglib prefix: '" + 
-	    prefix + ":' with URI: (" + uri + ")";
-	return result;
+	// we should only get called if this Validator failed
+	Assert.assert_it(failed);
+        StringBuffer result = new StringBuffer();
+
+        if (idTagParser.hasFailed()) {
+            result.append(idTagParser.getMessage());
+        }
+        if (elTagParser.hasFailed()) {
+            result.append(elTagParser.getMessage());
+        }
+	return result.toString();
     }
 
 
@@ -85,7 +108,7 @@ public class CoreValidator extends FacesValidator {
     // SAX handler
 
     /**
-     * The handler that provides the base of the TLV implementation. 
+     * <p>The handler that provides the base of the TLV implementation.</p>
      */
     private class CoreValidatorHandler extends DefaultHandler {
 
@@ -99,44 +122,28 @@ public class CoreValidator extends FacesValidator {
          * @param a Element's Attribute list.
          *
          */
-	public void startElement(
-                String ns, String ln, String qn, Attributes a) {
-	    maybeSnagTLPrefixes(qn, a);
+	public void startElement(String ns, 
+                                 String ln, 
+                                 String qn, 
+                                 Attributes attrs) {
+	    maybeSnagTLPrefixes(qn, attrs);
 
-            if (isJstlTag(qn)) {
-                requiresIdCount++;
-            }
-            else if ((JSF_HTML_PRE != null) && (qn.startsWith(JSF_HTML_PRE)) &&
-                       (requiresIdCount > 0) ) {
-                //make sure that id is present in attributes
-                if (!hasIdAttribute(a)) {
-                    //add to list of jsf tags for error report
-                    failed = true;
-                    requiresIdList.append(qn).append(SPACE);
-                }
-            }
-            else if ((requiresIdCount == 0) && (!siblingSatisfied)) {
-                //make sure jsf sibling has an id
-                if ( (JSF_HTML_PRE != null) &&(qn.startsWith(JSF_HTML_PRE) ||
-                      qn.startsWith(JSF_CORE_PRE)) &&
-                      (!hasIdAttribute(a)) ) {
-                    //add to list of jsf tags for error report
-                    failed = true;
-                    requiresIdList.append(qn).append(SPACE);
-                }
-                siblingSatisfied = true;
-            }
-            else if (requiresIdCount == 0) {
-                // sibling is a non-JSF tag
-                // JSF tags no longer need id's
-                siblingSatisfied = true;
-            }
+            validatorInfo.setQName(qn);
+            validatorInfo.setAttributes(attrs);
+            validatorInfo.setValidator(CoreValidator.this);
 
+            idTagParser.parseStartElement();
+            elTagParser.parseStartElement();
+
+            if (idTagParser.hasFailed() || 
+                elTagParser.hasFailed()) {
+                failed = true;
+            }
         }
 
         /**
-         * Parse the ending element. If it is a specific JSTL tag
-         * make sure that the nested count is decreased.
+         * <p>Parse the ending element. If it is a specific JSTL tag
+         * make sure that the nested count is decreased.</p>
          *
          * @param ln Element local name.
          * @param qn Element QName.
@@ -144,46 +151,8 @@ public class CoreValidator extends FacesValidator {
          *
          */
 	public void endElement(String ns, String ln, String qn) {
-
-            if (isJstlTag(qn)) {
-                requiresIdCount--;
-                siblingSatisfied = false;
-            }
-        }
-
-        /**
-         * Check element to make sure that the id attribute is
-         * present.
-         *
-         * @param a Attribute list
-         *
-         * @return boolean True if id attribute found."id"
-         */
-        private boolean hasIdAttribute(Attributes a) {
-	    for (int i = 0; i < a.getLength(); i++) {
-                if (a.getQName(i).equals("id")) {
-                    return true;
-                }
-	    }
-            return false;
-        }
-
-        /**
-         * Check to make sure that the element is either a 
-         * conditional or iterator JSTL tag.
-         *
-         * @param qn Element to be checked.
-         *
-         * @return boolean True if JSTL tag is iterator or conditional
-         */
-        private boolean isJstlTag(String qn) {
-            if (qn.equals(JSTL_IF_QN) || 
-                qn.equals(JSTL_CHOOSE_QN) ||
-                qn.equals(JSTL_FOREACH_QN) ||
-                qn.equals(JSTL_FORTOKENS_QN)) {
-               return true;
-            }
-            return false;
+            validatorInfo.setQName(qn);
+            idTagParser.parseEndElement();
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.12 2003/08/13 18:22:00 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.13 2003/08/19 21:41:03 horwat Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.12 2003/08/13 18:22:00 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.13 2003/08/19 21:41:03 horwat Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -95,7 +95,10 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.CONVERTER_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.VALIDATOR_NOT_FOUND_ERROR_MESSAGE_ID, "1"},
         {Util.ENCODING_ERROR_MESSAGE_ID, "0"},
-        {Util.ILLEGAL_IDENTIFIER_LVALUE_MODE, "1"}
+        {Util.ILLEGAL_IDENTIFIER_LVALUE_MODE, "1"},
+        {Util.VALIDATION_ID_ERROR_ID, "1"},
+        {Util.VALIDATION_EL_ERROR_ID, "1"},
+        {Util.VALIDATION_COMMAND_ERROR_ID, "1"}
         
     };
 

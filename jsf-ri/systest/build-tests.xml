@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.16 2003/08/18 22:11:30 rkitain Exp $
+ $Id: build-tests.xml,v 1.17 2003/08/19 21:41:02 horwat Exp $
 -->
 
 
@@ -188,10 +188,44 @@
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestCoreValidatorIteratorFail.jsp"
       status="500"/>
+
     <!-- PENDING (horwat,rlubke) Disabled until JSP 'id' issue is resolved. 
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/TestCoreValidatorIteratorSucceed.jsp"
       status="200"/> -->
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestElValidatorActionRefFail.jsp"
+      status="500"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestElValidatorActionRefSucceed.jsp"
+      status="200"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/TestElValidatorComponentRefFail.jsp"
+      status="500"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+   	 request="${context.path}/faces/TestElValidatorComponentRefSucceed.jsp"
+      status="200"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+    	 request="${context.path}/faces/TestElValidatorIdFail.jsp"
+      status="500"/>
+
+    <!-- PENDING (horwat,rlubke) Disabled until JSP 'id' issue is resolved. 
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+    	 request="${context.path}/faces/TestElValidatorIdSucceed.jsp"
+      status="200"/>-->
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+    	 request="${context.path}/faces/TestElValidatorValueRefFail.jsp"
+      status="500"/>
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+    	 request="${context.path}/faces/TestElValidatorValueRefSucceed.jsp"
+      status="200"/>
 
   </target>
   

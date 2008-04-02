@@ -780,6 +780,33 @@
       <summary xml:lang="es">Uso ilegal del identificador implícito del objeto en modo del lValue: ''{0}''</summary>
       <summary xml:lang="fr">Utilisation illégale de marque implicite d''objet en mode de lValue: ''{0}''</summary>
     </message>
+
+    <message>
+      <message-id>com.sun.faces.VALIDATION_ID_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation error. The following JSF tags are required to contain IDs:''{0}''</summary>
+      <summary xml:lang="de">Validation error. The following JSF tags are required to contain IDs:''{0}''</summary>
+      <summary xml:lang="es">Validation error. The following JSF tags are required to contain IDs:''{0}''</summary>
+      <summary xml:lang="fr">Validation error. The following JSF tags are required to contain IDs:''{0}''</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.VALIDATION_EL_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation error. Expression invalid for:''{0}''</summary>
+      <summary xml:lang="de">Validation error. Expression invalid for:''{0}''</summary>
+      <summary xml:lang="es">Validation error. Expression invalid for:''{0}''</summary>
+      <summary xml:lang="fr">Validation error. Expression invalid for:''{0}''</summary>
+    </message>
+
+    <message>
+      <message-id>com.sun.faces.VALIDATION_COMMAND_ERROR</message-id>
+      <message-class>javax.faces.application.MessageImpl</message-class>
+      <summary xml:lang="en">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="de">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="es">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
+      <summary xml:lang="fr">Validation error. ''{0}'' must have either key, label, image, imageKey, or valueRef attributes.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->

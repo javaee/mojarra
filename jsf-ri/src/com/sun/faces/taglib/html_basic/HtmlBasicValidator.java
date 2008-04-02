@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicValidator.java,v 1.3 2003/07/29 16:25:23 rlubke Exp $
+ * $Id: HtmlBasicValidator.java,v 1.4 2003/08/19 21:40:50 horwat Exp $
  */
 
 /*
@@ -13,6 +13,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.sun.faces.taglib.FacesValidator;
+import com.sun.faces.taglib.ValidatorInfo;
+
 
 import org.mozilla.util.Assert;
 
@@ -25,9 +27,9 @@ import org.mozilla.util.Assert;
 public class HtmlBasicValidator extends FacesValidator {
     //*********************************************************************
     // Validation and configuration state (protected)
+    private ValidatorInfo validatorInfo;
+    private CommandTagParserImpl commandTagParser;
 
-    // PENDING(edburns): Make this localizable
-    private StringBuffer failureMessages;	// failureMessages
 
     //*********************************************************************
     // Constructor and lifecycle management
@@ -39,7 +41,11 @@ public class HtmlBasicValidator extends FacesValidator {
 
     protected void init() {
 	super.init();
-	failureMessages = new StringBuffer();
+        failed = false;
+        validatorInfo = new ValidatorInfo();
+
+        commandTagParser = new CommandTagParserImpl();
+        commandTagParser.setValidatorInfo(validatorInfo);
     }
 
     public void release() {
@@ -55,8 +61,12 @@ public class HtmlBasicValidator extends FacesValidator {
     protected String getFailureMessage(String prefix, String uri) {
 	// we should only get called if this Validator failed
 	Assert.assert_it(failed);	
-	String result = failureMessages.toString();
-	return result;
+
+        StringBuffer result = new StringBuffer();
+        if (commandTagParser.hasFailed()) {
+            result.append(commandTagParser.getMessage());
+        }
+	return result.toString();
     }
 	    
     //*********************************************************************
@@ -77,12 +87,18 @@ public class HtmlBasicValidator extends FacesValidator {
          * @param a Element's Attribute list.
          *
          */
-	public void startElement(
-                String ns, String ln, String qn, Attributes a) {
-	    maybeSnagTLPrefixes(qn, a);
-	    if (-1 != (qn.indexOf("command_button"))) {
-		handleCommandButton(ns, ln, qn, a);
-	    }
+	public void startElement(String ns, 
+                                 String ln, 
+                                 String qn, 
+                                 Attributes attrs) {
+	    maybeSnagTLPrefixes(qn, attrs);
+            validatorInfo.setQName(qn);
+            validatorInfo.setAttributes(attrs);
+  
+            commandTagParser.parseStartElement();
+            if (commandTagParser.hasFailed()) {
+                failed = true;
+            }
         }
 
         /**
@@ -96,43 +112,5 @@ public class HtmlBasicValidator extends FacesValidator {
          */
 	public void endElement(String ns, String ln, String qn) {
 	}
-
-	/*
-
-	* <p>set failed to true unless tag has a key, image, imageKey, label,
-	* or valueRef attribute</p>.
-
-	* <p>PRECONDITION: qn is a command_button</p>
-
-	*/
-
-	protected void handleCommandButton(String ns, String ln, 
-					   String qn, Attributes a) {
-	    boolean
-		hasKey = false,
-		hasImage = false,
-		hasLabel = false,
-        hasValueRef = false;
-	    for (int i = 0; i < a.getLength(); i++) {
-                if (a.getQName(i).equals("key")) {
-		    hasKey = true;
-                }
-                if (a.getQName(i).equals("image") ||
-                    a.getQName(i).equals("imageKey")) {
-		    hasImage = true;
-                }
-                if (a.getQName(i).equals("label")) {
-		    hasLabel = true;
-                }
-            if (a.getQName(i).equals("valueRef")) {
-                hasValueRef = true;
-            }
-	    }
-	    if (failed = ((hasKey || hasImage || hasLabel || hasValueRef ) != true)) {
-		failureMessages.append(qn + " must have either key, label, image, imageKey, or valueRef attributes\n");
-	    }
-
-	}
- 
     }
 }
