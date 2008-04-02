@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.33 2006/03/29 23:04:41 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.34 2006/08/15 17:19:05 rlubke Exp $ 
  */ 
 
 
@@ -35,14 +35,6 @@
 package com.sun.faces.application;
 
 
-import com.sun.faces.cactus.JspFacesTestCase;
-import com.sun.faces.context.ExternalContextImpl;
-import com.sun.faces.context.FacesContextImpl;
-import com.sun.faces.util.Util;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import org.apache.cactus.WebRequest;
-
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.StateManager;
@@ -57,8 +49,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
@@ -68,13 +60,21 @@ import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.cactus.WebRequest;
+
+import com.sun.faces.cactus.JspFacesTestCase;
+import com.sun.faces.context.ExternalContextImpl;
+import com.sun.faces.context.FacesContextImpl;
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.Util;
+
 
 /**
  * <B>TestViewHandlerImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.33 2006/03/29 23:04:41 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.34 2006/08/15 17:19:05 rlubke Exp $
  */
 
 
@@ -222,18 +222,18 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
         // if getServletPath() returns "" then the viewId path returned should
         // be the same as what was passed, prefixed by the context path.
-        testRequest.setServletPath("");
-        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-        String path = handler.getActionURL(facesContext, "/test.jsp");
-        System.out.println("VIEW ID PATH 1: " + path);
-        assertEquals(contextPath + "/test.jsp", path);
+        //testRequest.setServletPath("");
+        //testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
+        //String path = handler.getActionURL(facesContext, "/test.jsp");
+        //System.out.println("VIEW ID PATH 1: " + path);
+        //assertEquals(contextPath + "/test.jsp", path);
 
         // if getServletPath() returns a path prefix, then the viewId path
         // returned must have that path prefixed.
         testRequest.setServletPath("/faces");
         testRequest.setPathInfo("/path/test.jsp");
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-        path = handler.getActionURL(facesContext, "/path/test.jsp");
+        String path = handler.getActionURL(facesContext, "/path/test.jsp");
         System.out.println("VIEW ID PATH 2: " + path);
         assertEquals(contextPath + "/faces/path/test.jsp", path);
 
