@@ -1,5 +1,5 @@
 /*
- * $Id: TestDuplicateIds04.java,v 1.1 2004/05/04 19:19:24 eburns Exp $
+ * $Id: TestDuplicateIds04.java,v 1.2 2004/05/06 19:29:01 eburns Exp $
  */
 
 /*
@@ -89,10 +89,10 @@ public class TestDuplicateIds04 extends AbstractTestCase {
 
     /**
      *
-     * <p>Verify that the required validator works for SelectOne</p>
+     * <p>Verify duplicate ids are caught.</p>
      */
 
-    public void testSelectOneNoValue() throws Exception {
+    public void testDuplicateIdsFromBinding() throws Exception {
 	HtmlPage page = getPage("/faces/duplicateIds04.jsp");
 	List list = getAllElementsOfGivenClass(page, null, 
 					       HtmlSubmitInput.class); 
@@ -103,97 +103,6 @@ public class TestDuplicateIds04 extends AbstractTestCase {
 	assertTrue(-1 != page.asText().indexOf("Duplicate"));
 	client.setThrowExceptionOnFailingStatusCode(true);
     }
-
-    /**
-     *
-     * <p>Verify that the required validator works for SelectMany</p>
-     */
-
-    public void testSelectManyNoValue() throws Exception {
-	HtmlPage page = getPage("/faces/jsp/selectManyNoValue.jsp");
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	page = (HtmlPage) button.click();
-	assertTrue(-1 != page.asText().indexOf("equired"));
-	
-    }
-
-    /**
-     *
-     * <p>Verify that the conversion error works for SelectMany</p>
-     */
-
-    public void testSelectManyMismatchValue() throws Exception {
-	HtmlPage page = getPage("/faces/jsp/selectManyMismatchValue.jsp");
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	list = getAllElementsOfGivenClass(page, null, HtmlSelect.class);
-	HtmlSelect options = (HtmlSelect) list.get(0);
-	String chosen [] = {"one", "three"};
-	options.fakeSelectedAttribute(chosen);
-	page = (HtmlPage) button.click();
-	assertTrue(-1 != page.asText().indexOf("one three"));
-	assertTrue(-1 != page.asText().indexOf("#{test3.selection}"));
-	
-    }
-
-
-    /**
-     * On SelectMany, test that the membership test works and doesn't
-     * produce spurious ValueChangeEvent instances.
-     */
-    public void testSelectManyInvalidValue() throws Exception {
-	HtmlPage page = getPage("/faces/jsp/selectManyInvalidValue.jsp");
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	list = getAllElementsOfGivenClass(page, null, HtmlSelect.class);
-	HtmlSelect options = (HtmlSelect) list.get(0);
-	Random random = new Random(4143);
-	String str = new String((new Float(random.nextFloat())).toString());
-
-	String chosen [] = {
-	    (new Float(random.nextFloat())).toString(),
-	    (new Float(random.nextFloat())).toString()
-	};
-	options.fakeSelectedAttribute(chosen);
-	page = (HtmlPage) button.click();
-        ResourceBundle messages = ResourceBundle.getBundle(
-            "javax.faces.Messages");
-        String message = messages.getString("javax.faces.component.UISelectMany.INVALID");
-	// it does have a validation message
-        assertTrue(-1 != page.asText().indexOf(message));
-	// it does not have a value change message
-	assertTrue(-1 == page.asText().indexOf("value changed"));
-    }
-
-
-    /**
-     * run doInvalidTest on UISelectOne
-     */
-
-    public void testSelectOneInvalidValue() throws Exception {
-	HtmlPage page = getPage("/faces/jsp/selectOneInvalidValue.jsp");
-
-	List list = getAllElementsOfGivenClass(page, null, 
-					       HtmlSubmitInput.class); 
-	HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
-	list = getAllElementsOfGivenClass(page, null, 
-					  HtmlRadioButtonInput.class);
-	HtmlRadioButtonInput radio = (HtmlRadioButtonInput) list.get(0);
-	radio.setChecked(true);
-	page = (HtmlPage) button.click();
-        ResourceBundle messages = ResourceBundle.getBundle("javax.faces.Messages");
-        String message = messages.getString("javax.faces.component.UIInput.REQUIRED");
-	// it does not have a validation error
-	assertTrue(-1 == page.asText().indexOf(message));
-    }
-	
-
-
-
 
 
 }
