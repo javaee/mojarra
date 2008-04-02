@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.4 2003/01/17 18:07:20 rkitain Exp $
+ * $Id: ListRenderer.java,v 1.5 2003/01/21 20:40:09 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.4 2003/01/17 18:07:20 rkitain Exp $
+ * @version $Id: ListRenderer.java,v 1.5 2003/01/21 20:40:09 eburns Exp $
  *  
  */
 
@@ -142,95 +142,130 @@ public class ListRenderer extends HtmlBasicRenderer {
         String rowClasses[] = getRowClasses(component);
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
-        int count = component.getChildCount();
-        int first = ((headerClass == null) ? 0 : 1);
-        int last = ((footerClass == null) ? (count - 1) : (count - 2));
         ResponseWriter writer = context.getResponseWriter();
+	UIComponent facet = null;
+	Iterator kids = null;
 
         // Process the table header (if any)
-        if (headerClass != null) {
+        if (null != (facet = component.getFacet("header"))) {
             writer.write("<tr>\n");
-            Iterator kids = component.getChild(0).getChildren();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                writer.write("<td class=\"");
-                writer.write(headerClass);
-                writer.write("\">");
-                encodeRecursive(context, kid);
-                writer.write("</td>\n");
+	    // If the header has kids, render them recursively
+	    if (null != (kids = facet.getChildren())) {
+		while (kids.hasNext()) {
+		    UIComponent kid = (UIComponent) kids.next();
+		    // write out the table header
+		    if (null != headerClass) {
+			writer.write("<th class=\"");
+			writer.write(headerClass);
+			writer.write("\">");
+		    }
+		    else {
+			writer.write("<th>\n");
+		    }
+		    // encode the children
+		    encodeRecursive(context, kid);
+		    // write out the table footer
+		    writer.write("</th>\n");
+		}
+	    }
+	    else {
+		// if the header has no kids, just render it
+		facet.encodeBegin(context);
+		if (facet.getRendersChildren()) {
+		    facet.encodeChildren(context);
+		}
+		facet.encodeEnd(context);
             }
             writer.write("</tr>\n");
         }
 
-        // Process each grouping of data items to be processed
-        for (int i = first; i <= last; i++) {
-
-            UIComponent group = component.getChild(i);
-            String var = (String) group.getAttribute("var");
+	if (null != (kids = component.getChildren())) {
+	    // Process each grouping of data items to be processed
+	    while (kids.hasNext()) {
+		UIComponent group = (UIComponent) kids.next();
+		String var = (String) group.getAttribute("var");
             
-            Iterator rows = getIterator(context, group);
-            while (rows.hasNext()) {
-
-                // Start the next row to be rendered
-                Object row = rows.next(); // Model data from the list
-                if (var != null) {
-                    // set model bean in request scope. nested components
-                    // will use this to get their values.
-                    context.getServletRequest().setAttribute(var, row);
-                }
-                writer.write("<tr");
-                if (rowStyles > 0) {
-                    writer.write(" class=\"");
-                    writer.write(rowClasses[rowStyle++]);
-                    writer.write("\"");
-                    if (rowStyle >= rowStyles) {
-                        rowStyle = 0;
-                    }
-                }
-                writer.write(">\n");
-
-                // Process each column to be rendered
-                columnStyle = 0;
-                Iterator columns = group.getChildren();
-                // number of columns will equal the total number of elements
-                // in the iterator. No of rows will be equal to the number of
-                // rows in the list bean.
-                while (columns.hasNext()) {
-                    UIComponent column = (UIComponent) columns.next();
-                    writer.write("<td");
-                    if (columnStyles > 0) {
-                        writer.write(" class=\"");
-                        writer.write(columnClasses[columnStyle++]);
-                        writer.write("\"");
-                        if (columnStyle >= columnStyles) {
-                            columnStyle = 0;
-                        }
-                    }
-                    writer.write(">");
-                    encodeRecursive(context, column);
-                    writer.write("</td>\n");
-                }
-
-                // Finish the row that was just rendered
-                writer.write("</tr>\n");
-                if (var != null) {
-                    context.getServletRequest().removeAttribute(var);
-                }
-
+		Iterator rows = getIterator(context, group);
+		while (rows.hasNext()) {
+		    
+		    // Start the next row to be rendered
+		    Object row = rows.next(); // Model data from the list
+		    if (var != null) {
+			// set model bean in request scope. nested components
+			// will use this to get their values.
+			context.getServletRequest().setAttribute(var, row);
+		    }
+		    writer.write("<tr");
+		    if (rowStyles > 0) {
+			writer.write(" class=\"");
+			writer.write(rowClasses[rowStyle++]);
+			writer.write("\"");
+			if (rowStyle >= rowStyles) {
+			    rowStyle = 0;
+			}
+		    }
+		    writer.write(">\n");
+		    
+		    // Process each column to be rendered
+		    columnStyle = 0;
+		    Iterator columns = group.getChildren();
+		    // number of columns will equal the total number of elements
+		    // in the iterator. No of rows will be equal to the number of
+		    // rows in the list bean.
+		    while (columns.hasNext()) {
+			UIComponent column = (UIComponent) columns.next();
+			writer.write("<td");
+			if (columnStyles > 0) {
+			    writer.write(" class=\"");
+			    writer.write(columnClasses[columnStyle++]);
+			    writer.write("\"");
+			    if (columnStyle >= columnStyles) {
+				columnStyle = 0;
+			    }
+			}
+			writer.write(">");
+			encodeRecursive(context, column);
+			writer.write("</td>\n");
+		    }
+		    
+		    // Finish the row that was just rendered
+		    writer.write("</tr>\n");
+		    if (var != null) {
+			context.getServletRequest().removeAttribute(var);
+		    }
+		}
             }
         }
 
         // Process the table footer (if any)
-        if (footerClass != null) {
+        if (null != (facet = component.getFacet("footer"))) {
             writer.write("<tr>\n");
-            Iterator kids = component.getChild(count - 1).getChildren();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                writer.write("<td class=\"");
-                writer.write(footerClass);
-                writer.write("\">");
-                encodeRecursive(context, kid);
-                writer.write("</td>\n");
+	    // If the footer has kids, render them recursively
+	    if (null != (kids = facet.getChildren())) {
+		while (kids.hasNext()) {
+		    UIComponent kid = (UIComponent) kids.next();
+		    // write out the table footer
+		    if (null != footerClass) {
+			writer.write("<td class=\"");
+			writer.write(footerClass);
+			writer.write("\">");
+		    }
+		    else {
+			writer.write("<th>\n");
+		    }
+		    // encode the children
+		    encodeRecursive(context, kid);
+		    // write out the table footer
+		    writer.write("</th>\n");
+		}
+	    }
+	    else {
+		// if the footer has no kids, just render it
+		facet.encodeBegin(context);
+		if (facet.getRendersChildren()) {
+		    facet.encodeChildren(context);
+		}
+		facet.encodeEnd(context);
             }
             writer.write("</tr>\n");
         }

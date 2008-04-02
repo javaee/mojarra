@@ -18,16 +18,18 @@
 
                   <!-- Column Headings -->
 
-                  <h:panel_group   id="listHeadings1">
-                    <h:output_text id="accountIdHeading1"
-                                value="Account Id"/>
-                    <h:output_text id="nameHeading1"
-                                value="Customer Name"/>
-                    <h:output_text id="symbolHeading1"
-                                value="Symbol"/>
-                    <h:output_text id="totalSalesHeading1"
-                                value="Total Sales"/>
-                  </h:panel_group>
+                  <f:facet name="header">
+		    <h:panel_group>
+		      <h:output_text id="accountIdHeading1"
+				  value="Account Id"/>
+		      <h:output_text id="nameHeading1"
+				  value="Customer Name"/>
+		      <h:output_text id="symbolHeading1"
+				  value="Symbol"/>
+		      <h:output_text id="totalSalesHeading1"
+				  value="Total Sales"/>
+		    </h:panel_group>
+                  </f:facet>
 
                   <!-- List Data -->
 
@@ -53,7 +55,7 @@
              <td>
 
                <h:output_text id="panel2_label" 
-                     value="list with HTML 4.0 attributes and no stylesheets."/>
+                     value="list with HTML 4.0 attribute, headers, footers, and no stylesheets."/>
 
              </td>
                    
@@ -63,6 +65,21 @@
                   border="1" cellpadding="3" cellspacing="3"
                      summary="List with HTML attributes."
                      title="List with no stylesheets" >
+
+                  <!-- Headers -->
+
+                  <f:facet name="header">
+		    <h:panel_group>
+		      <h:output_text id="accountIdHeading1"
+				  value="Account Id"/>
+		      <h:output_text id="nameHeading1"
+				  value="Customer Name"/>
+		      <h:output_text id="symbolHeading1"
+				  value="Symbol"/>
+		      <h:output_text id="totalSalesHeading1"
+				  value="Total Sales"/>
+		    </h:panel_group>
+                  </f:facet>
 
                   <!-- List Data -->
 
@@ -77,6 +94,23 @@
                     <h:output_text id="totalSales2"
                        modelReference="customer.totalSales"/>
                   </h:panel_data>
+
+                  <!-- Footers -->
+
+                  <f:facet name="footer">
+		    <h:panel_group>
+		      <h:output_text id="accountIdFooting1"
+				  value="Account Id"/>
+		      <h:output_text id="nameFooting1"
+				  value="Customer Name"/>
+		      <h:output_text id="symbolFooting1"
+				  value="Symbol"/>
+		      <h:output_text id="totalSalesFooting1"
+				  value="Total Sales"/>
+		    </h:panel_group>
+                  </f:facet>
+
+
 
                  </h:panel_list> 
              </td>

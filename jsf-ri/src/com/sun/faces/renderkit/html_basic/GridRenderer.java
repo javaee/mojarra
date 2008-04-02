@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.5 2003/01/17 18:07:20 rkitain Exp $
+ * $Id: GridRenderer.java,v 1.6 2003/01/21 20:40:08 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.5 2003/01/17 18:07:20 rkitain Exp $
+ * @version $Id: GridRenderer.java,v 1.6 2003/01/21 20:40:08 eburns Exp $
  *  
  */
 
@@ -134,64 +134,82 @@ public class GridRenderer extends HtmlBasicRenderer {
         String rowClasses[] = getRowClasses(component);
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
-        int count = component.getChildCount();
-        int first = ((headerClass == null) ? 0 : 1);
-        int last = ((footerClass == null) ? (count - 1) : (count - 2));
         boolean open = false;
         ResponseWriter writer = context.getResponseWriter();
-        if (headerClass != null) {
-            writer.write("<tr><td class=\"");
-            writer.write(headerClass);
-            writer.write("\" colspan=\"");
-            writer.write("" + columns);
-            writer.write("\">");
-            encodeRecursive(context, component.getChild(0));
-            writer.write("</td></tr>\n");
-        }
-        for (int i = first; i <= last; i++) {
-            if (((i - first) % columns) == 0) {
-                if (open) {
-                    writer.write("</tr>\n");
-                    open = false;
-                }
-                writer.write("<tr");
-                if (rowStyles > 0) {
-                    writer.write(" class=\"");
-                    writer.write(rowClasses[rowStyle++]);
-                    writer.write("\"");
-                    if (rowStyle >= rowStyles) {
-                        rowStyle = 0;
-                    }
-                }
-                writer.write(">\n");
-                open = true;
-                columnStyle = 0;
-            }
-            writer.write("<td");
-            if (columnStyles > 0) {
-                writer.write(" class=\"");
-                writer.write(columnClasses[columnStyle++]);
-                writer.write("\"");
-                if (columnStyle >= columnStyles) {
-                    columnStyle = 0;
-                }
-            }
-            writer.write(">");
-            UIComponent child = component.getChild(i);
-            encodeRecursive(context, child);
-            writer.write("</td>\n");
-        }
+	UIComponent facet = null;
+	Iterator kids = null;
+
+	if (null != (facet = component.getFacet("header"))) {
+	    
+	    if (headerClass != null) {
+		writer.write("<tr><th class=\"");
+		writer.write(headerClass);
+		writer.write("\" colspan=\"");
+		writer.write("" + columns);
+		writer.write("\">");
+	    }
+	    else {
+		writer.write("<tr><th>");
+	    }
+	    encodeRecursive(context, facet);
+	    writer.write("</th></tr>\n");
+	}
+
+	int i = 0;
+	if (null != (kids = component.getChildren())) {
+	    while (kids.hasNext()) {
+		if ((i % columns) == 0) {
+		    if (open) {
+			writer.write("</tr>\n");
+			open = false;
+		    }
+		    writer.write("<tr");
+		    if (rowStyles > 0) {
+			writer.write(" class=\"");
+			writer.write(rowClasses[rowStyle++]);
+			writer.write("\"");
+			if (rowStyle >= rowStyles) {
+			    rowStyle = 0;
+			}
+		    }
+		    writer.write(">\n");
+		    open = true;
+		    columnStyle = 0;
+		}
+		writer.write("<td");
+		if (columnStyles > 0) {
+		    writer.write(" class=\"");
+		    writer.write(columnClasses[columnStyle++]);
+		    writer.write("\"");
+		    if (columnStyle >= columnStyles) {
+			columnStyle = 0;
+		    }
+		}
+		writer.write(">");
+		UIComponent child = (UIComponent) kids.next();
+		encodeRecursive(context, child);
+		writer.write("</td>\n");
+		i++;
+	    }
+	}
         if (open) {
             writer.write("</tr>\n");
         }
-        if (footerClass != null) {
-            writer.write("<tr><td class=\"");
-            writer.write(footerClass);
-            writer.write("\" colspan=\"");
-            writer.write("" + columns);
-            writer.write("\">");
-            encodeRecursive(context, component.getChild(count - 1));
-            writer.write("</td></tr>\n");
+
+	if (null != (facet = component.getFacet("footer"))) {
+
+	    if (footerClass != null) {
+		writer.write("<tr><th class=\"");
+		writer.write(footerClass);
+		writer.write("\" colspan=\"");
+		writer.write("" + columns);
+		writer.write("\">");
+	    }
+	    else {
+		writer.write("<tr><th>");
+	    }
+            encodeRecursive(context, facet);
+            writer.write("</th></tr>\n");
         }
     }
 

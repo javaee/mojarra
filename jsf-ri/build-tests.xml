@@ -142,7 +142,7 @@
             destdir="${out.test.dir}/classes"
             debug="${compile.debug}"
             optimize="${compile.optimize}"
-            excludes="**/*.java"
+            includes="**/TestRenderers_4.java"
             deprecation="${compile.deprecation}">
 
             <classpath refid="compile.classpath"/>
@@ -300,6 +300,7 @@
 
             <formatter type="plain" usefile="false"/>
             <!-- Suite of tests -->
+<!--
             <test name="com.sun.faces.util.TestUtil"/>
             <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
@@ -318,7 +319,9 @@
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/> 
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
+-->
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
+<!--
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
@@ -329,7 +332,7 @@
             <test name="com.sun.faces.convert.TestConverterFactory"/>
             <test name="com.sun.faces.convert.TestConverters"/>
             <test name="javax.faces.validator.RequiredValidatorTestCase"/>
-
+-->
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
                  conf/test/web.xml to true 

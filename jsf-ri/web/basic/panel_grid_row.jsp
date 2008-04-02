@@ -2,7 +2,7 @@
 
              <td>
 
-               <h:output_text id="panel1_label" 
+               <h:output_text id="panel3_label" 
                      value="Grid with hardcoded data and HTML attributes. "/>
 
              </td>
@@ -42,7 +42,7 @@
 
              <td>
 
-               <h:output_text id="panel2_label"
+               <h:output_text id="panel4_label"
                      value="Grid with model data and stylesheets "/>
 
              </td>
@@ -56,10 +56,12 @@
                 panelClass="form-background"
              columnClasses="form-prompt,form-field">
 
-            <h:panel_group id="form_header2">
-              <h:output_text id="A2" value="Logon&nbsp;"/>
-              <h:output_text id="B2" value="Form"/>
-            </h:panel_group>
+            <f:facet name="header">
+	      <h:panel_group>
+		<h:output_text id="A2" value="Logon&nbsp;"/>
+		<h:output_text id="B2" value="Form"/>
+	      </h:panel_group>
+            </f:facet>
 
             <!-- Panel data elements -->
 
@@ -82,9 +84,12 @@
             </h:command_button>
 
             <!-- Panel footer element -->
-
-                    <h:output_text id="form_footer"
-                           value="Enter username and password to Login" />
+            <f:facet name="footer">
+	      <h:panel_group>
+		      <h:output_text
+			     value="Enter username and password to Login" />
+	      </h:panel_group>
+            </f:facet>
          </h:panel_grid>
              </td>
 
