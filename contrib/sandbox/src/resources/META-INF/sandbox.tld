@@ -818,6 +818,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
                 <![CDATA[Expression which returns a TreeNode representing the data for the tree.]]>
             </description>
         </attribute>
+        <attribute>
+            <name>binding</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>The ValueExpression linking this component to a property in a backing bean</description>
+        </attribute>
     </tag>
     <!-- ******************************************************************* -->
     <!-- End Tree tag attributes                                             -->

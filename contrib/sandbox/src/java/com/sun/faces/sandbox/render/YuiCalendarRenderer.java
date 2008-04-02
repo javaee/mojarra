@@ -110,7 +110,8 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         writer.startElement("img", component);
         writer.writeAttribute("id", component.getId() + "Trigger", "id");
         writer.writeAttribute("alt", "calendar", "alt");
-        writer.writeAttribute("src", Util.generateStaticUri("/yui/assets/calendar_icon.gif"), "src");
+        writer.writeAttribute("src", 
+                Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE,"/yui/assets/calendar_icon.gif"), "src");
         writer.endElement("img");
 
         writer.startElement("div", component);
