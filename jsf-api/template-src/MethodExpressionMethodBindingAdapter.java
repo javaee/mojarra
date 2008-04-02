@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionMethodBindingAdapter.java,v 1.5 2006/07/31 20:55:30 rlubke Exp $
+ * $Id: MethodExpressionMethodBindingAdapter.java,v 1.6 2006/08/09 18:26:03 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,12 @@ import javax.el.MethodInfo;
 import javax.faces.el.MethodBinding;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 
+import java.util.Arrays;
+import java.lang.reflect.Method;
 import java.io.Serializable;
 
 /**
@@ -65,14 +70,18 @@ import java.io.Serializable;
 
     public MethodInfo getMethodInfo(ELContext context) throws ELException {
 	assert(null != binding);
+	
+	if (context == null) {
+	    throw new NullPointerException("ELContext -> null");
+    }
 
 	if (null == info) {
 	    FacesContext facesContext = (FacesContext) 
 		context.getContext(FacesContext.class);
 	    if (null != facesContext) {
 		try {
-		    info = new MethodInfo(null, binding.getType(facesContext), 
-					  null);
+		    //PENDING - we should find a way to provide more information
+		    info = new MethodInfo(null, binding.getType(facesContext), null);
 		}
 		catch (Exception e) {
 		    throw new ELException(e);
@@ -85,6 +94,10 @@ import java.io.Serializable;
     
     public Object invoke(ELContext context, Object[] params) throws ELException {
 	assert(null != binding);
+	
+	if (context == null) {
+	    throw new NullPointerException("ELContext -> null");
+    }
 
 	Object result = null;
 	FacesContext facesContext = (FacesContext) 
@@ -113,17 +126,65 @@ import java.io.Serializable;
             && expr.endsWith("}")));    
     }
 
-    public boolean equals(Object other) {
+    public boolean equals(Object other) {              
         
-        if (other == null) {
-            return false;
+        if (other == this) {
+            return true;
         }
-
-        // don't bother even trying to compare, if we're not assignment
-        // compatabile with "other"
-        if (MethodExpression.class.isAssignableFrom(other.getClass())) {
-            MethodExpression otherVE = (MethodExpression) other;
-            return this.getExpressionString().equals(otherVE.getExpressionString());
+        
+        if (other instanceof MethodExpressionMethodBindingAdapter) {
+            MethodBinding ob = ((MethodExpressionMethodBindingAdapter) other).getWrapped();
+            return (binding.equals(ob));
+        } else if (other instanceof MethodExpression) {
+            MethodExpression expression = (MethodExpression) other;
+            
+            // We'll need to do a little leg work to determine
+            // if the MethodBinding is equivalent to the 
+            // wrapped MethodExpression
+            String expr = binding.getExpressionString();
+            int idx = expr.indexOf('.');
+            String target = expr.substring(0, idx).substring(2);
+            String t = expr.substring(idx + 1);
+            String method = t.substring(0, (t.length() - 1));
+            
+            FacesContext context = FacesContext.getCurrentInstance();
+            ELContext elContext = context.getELContext();
+            MethodInfo controlInfo = expression.getMethodInfo(elContext);
+            
+            // ensure the method names are the same
+            if (!controlInfo.getName().equals(method)) {
+                return false;
+            }
+            
+            // Using the target, create an expression and evaluate
+            // it.           
+            ExpressionFactory factory = context.getApplication().getExpressionFactory();
+            ValueExpression ve = factory.createValueExpression(elContext,
+                                                               "#{" + target + '}',
+                                                               Object.class);
+            if (ve == null) {
+                return false;
+            }                
+                                              
+            Object result = ve.getValue(elContext);
+            
+            if (result == null) {
+                return false;
+            }
+            
+            
+            // Get all of the methods with the matching name and try
+            // to find a match based on controlInfo's return and parameter
+            // types
+            Method[] methods = result.getClass().getMethods();
+            for (Method meth : methods) {
+                if (meth.getName().equals(method)
+                     && meth.getReturnType().equals(controlInfo.getReturnType())
+                     && Arrays.equals(meth.getParameterTypes(), 
+                                      controlInfo.getParamTypes())) {
+                    return true;                      
+                }
+            }
         }
         return false;
         
@@ -235,7 +296,7 @@ import java.io.Serializable;
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+         return Class.forName(name, true, loader);
     }
  
 

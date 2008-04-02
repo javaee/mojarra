@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingValueExpressionAdapter.java,v 1.3 2005/08/22 22:08:13 ofung Exp $
+ * $Id: ValueBindingValueExpressionAdapter.java,v 1.4 2006/08/09 18:26:04 rlubke Exp $
  */
 
 /*
@@ -74,7 +74,11 @@ import javax.el.ELException;
      */
     public Class getType(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
-       Class result = null;
+            
+        if (context == null) {
+	        throw new NullPointerException("FacesContext -> null");
+        }
+        Class result = null;
         try {
             result = valueExpression.getType(context.getELContext());
         } catch (javax.el.PropertyNotFoundException pnfe) {
@@ -90,6 +94,9 @@ import javax.el.ELException;
      */
     public Object getValue(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
+        if (context == null) {
+	        throw new NullPointerException("FacesContext -> null");
+        }
         Object result = null;
         try {
             result = valueExpression.getValue(context.getELContext());
@@ -106,6 +113,10 @@ import javax.el.ELException;
      */
     public boolean isReadOnly(FacesContext context) throws EvaluationException,
             PropertyNotFoundException {
+            
+        if (context == null) {
+	        throw new NullPointerException("FacesContext -> null");
+        }
         boolean result = false;
         try {
             result = valueExpression.isReadOnly(context.getELContext());
@@ -122,6 +133,10 @@ import javax.el.ELException;
      */
     public void setValue(FacesContext context, Object value)
             throws EvaluationException, PropertyNotFoundException {
+            
+        if (context == null) {
+	        throw new NullPointerException("FacesContext -> null");
+        }
         try {
             valueExpression.setValue(context.getELContext(), value);
         } catch (javax.el.PropertyNotFoundException pnfe) {
@@ -209,6 +224,37 @@ import javax.el.ELException;
 	    valueExpression = (ValueExpression) state;
 	}
     }
+    
+    public boolean equals(Object other) {
+    
+        if (other == this) {
+            return true;
+        }
+        
+        if (other instanceof ValueExpressionValueBindingAdapter) {
+            ValueExpression expr = 
+                ((ValueBindingValueExpressionAdapter) other).getWrapped();
+            return (valueExpression.equals(expr));
+        } else if (other instanceof ValueBinding) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            ValueBinding otherVB = (ValueBinding) other;
+            Class type = otherVB.getType(context);
+            if (type != null) {
+                return type.equals(valueExpression.getType(context.getELContext()));               
+            }            
+        }
+        return false;
+        
+    }
+
+    public int hashCode() {    
+        assert(null != valueExpression);
+        return valueExpression.hashCode();
+    }
+    
+    public ValueExpression getWrapped() {
+        return valueExpression;
+    }
 
     //
     // Helper methods for StateHolder
@@ -221,7 +267,7 @@ import javax.el.ELException;
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+        return Class.forName(name, true, loader);
     }
  
 

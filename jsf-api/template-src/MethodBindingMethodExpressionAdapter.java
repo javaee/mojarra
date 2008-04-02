@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingMethodExpressionAdapter.java,v 1.4 2006/07/31 20:55:30 rlubke Exp $
+ * $Id: MethodBindingMethodExpressionAdapter.java,v 1.5 2006/08/09 18:26:03 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,12 @@ import javax.faces.el.MethodBinding;
 import javax.el.MethodExpression;
 import javax.el.MethodInfo;
 import javax.el.ELException;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+
+import java.util.Arrays;
+import java.lang.reflect.Method;
 
 /**
  * <p>Wrap a MethodExpression instance and expose it as a MethodBinding</p>
@@ -63,7 +69,7 @@ import javax.el.ELException;
         throws javax.faces.el.EvaluationException, javax.faces.el.MethodNotFoundException {
 	assert(null != methodExpression);
         if ( context == null ) {
-            throw new NullPointerException();
+            throw new NullPointerException("FacesConext -> null");
         }
         
 	Object result = null;
@@ -97,6 +103,9 @@ import javax.el.ELException;
 
     public Class getType(FacesContext context) throws javax.faces.el.MethodNotFoundException {
 	assert(null != methodExpression);
+	if (context == null) {
+	        throw new NullPointerException("FacesConext -> null");
+    }
 	Class result = null;
         if ( context == null ) {
             throw new NullPointerException();
@@ -126,16 +135,63 @@ import javax.el.ELException;
     }
 
     public boolean equals(Object other) {
-
-        if (other == null) {
-            return false;
+        if (this == other) {
+            return true;       
         }
-        // don't bother even trying to compare, if we're not assignment
-        // compatabile with "other"
-        if (MethodExpression.class.isAssignableFrom(other.getClass())) {
-            MethodExpression otherVE = (MethodExpression) other;
-            return this.getExpressionString().equals(otherVE.getExpressionString());
+        if (other instanceof MethodBindingMethodExpressionAdapter) {
+            return methodExpression.equals(((MethodBindingMethodExpressionAdapter) other).getWrapped());                        
+        } else if (other instanceof MethodBinding) {
+            MethodBinding binding = (MethodBinding) other;
+            
+            // We'll need to do a little leg work to determine
+            // if the MethodBinding is equivalent to the 
+            // wrapped MethodExpression
+            String expr = binding.getExpressionString();
+            int idx = expr.indexOf('.');
+            String target = expr.substring(0, idx).substring(2);
+            String t = expr.substring(idx + 1);
+            String method = t.substring(0, (t.length() - 1));
+            
+            FacesContext context = FacesContext.getCurrentInstance();
+            ELContext elContext = context.getELContext();
+            MethodInfo controlInfo = methodExpression.getMethodInfo(elContext);
+            
+            // ensure the method names are the same
+            if (!controlInfo.getName().equals(method)) {
+                return false;
+            }
+            
+            // Using the target, create an expression and evaluate
+            // it.           
+            ExpressionFactory factory = context.getApplication().getExpressionFactory();
+            ValueExpression ve = factory.createValueExpression(elContext,
+                                                               "#{" + target + '}',
+                                                               Object.class);
+            if (ve == null) {
+                return false;                                                               
+            }
+            
+            Object result = ve.getValue(elContext);
+            
+            if (result == null) {
+                return false;
+            }
+            
+            // Get all of the methods with the matching name and try
+            // to find a match based on controlInfo's return and parameter
+            // types
+            Class type = binding.getType(context);
+            Method[] methods = result.getClass().getMethods();
+            for (Method meth : methods) {
+                if (meth.getName().equals(method)
+                     && type.equals(controlInfo.getReturnType())
+                     && Arrays.equals(meth.getParameterTypes(), 
+                                      controlInfo.getParamTypes())) {
+                    return true;                      
+                }
+            }
         }
+        
         return false;
         
     }
@@ -223,6 +279,10 @@ import javax.el.ELException;
 	    methodExpression = (MethodExpression) state;
 	}
     }
+    
+    public MethodExpression getWrapped() {
+        return methodExpression;
+    }
 
     //
     // Helper methods for StateHolder
@@ -235,7 +295,7 @@ import javax.el.ELException;
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+        return Class.forName(name, true, loader);
     }
  
 

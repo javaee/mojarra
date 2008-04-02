@@ -129,11 +129,45 @@
             Compile unit tests
     -->
     <target name="compile.test" depends="prepare.test">
+        <mkdir dir="${out.test.dir}/classes/com/sun/faces/application"/>
+        <filter token="package" value="com.sun.faces.application"/>
+        <filter token="protection" value="public"/>
+        <copy todir="${out.test.dir}/classes/com/sun/faces/application"
+              filtering="true">
+            <fileset dir="${api.dir}/template-src">
+                <include name="*Adapter.java"/>
+            </fileset>
+        </copy>
+        <replace
+              file="${out.test.dir}/classes/com/sun/faces/application/MethodBindingMethodExpressionAdapter.java"
+              token="@serialVersionUID@"
+              value="6351778415298720238L"/>
+
+        <replace
+              file="${out.test.dir}/classes/com/sun/faces/application/MethodExpressionMethodBindingAdapter.java"
+              token="@serialVersionUID@"
+              value="5639227653537610567L"/>
+
+        <replace
+              file="${out.test.dir}/classes/com/sun/faces/application/ValueExpressionValueBindingAdapter.java"
+              token="@serialVersionUID@"
+              value="2990621816592041196L"/>
+
+        <replace
+              file="${out.test.dir}/classes/com/sun/faces/application/ValueBindingValueExpressionAdapter.java"
+              token="@serialVersionUID@"
+              value="7410146713650507654L"/>
         <jsf.javac srcdir="${src.test.dir}"
                    destdir="${out.test.dir}/classes">
             <classpath>
                 <path refid="test.compile.classpath"/>
             </classpath>
+        </jsf.javac>
+        <jsf.javac srcdir="${out.test.dir}/classes"
+                   destdir="${out.test.dir}/classes">
+            <classpath>
+                <path refid="test.compile.classpath"/>
+            </classpath>    
         </jsf.javac>
     </target>    
 
@@ -220,7 +254,9 @@
                 <sysproperty key="cactus.contextURL"
                              value="http://${container.host}:${container.port}/test"/>
             </custom-sysproperties>
-            <suite>    
+            <suite>   
+                <test todir="${impl.test.results.dir}"
+                       name="com.sun.faces.application.TestAdapters"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.io.TestIO"/>
                 <test todir="${impl.test.results.dir}"

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueExpressionValueBindingAdapter.java,v 1.4 2006/07/31 20:55:30 rlubke Exp $
+ * $Id: ValueExpressionValueBindingAdapter.java,v 1.5 2006/08/09 18:26:04 rlubke Exp $
  */
 
 /*
@@ -62,6 +62,9 @@ import java.io.Serializable;
 
     public Object getValue(ELContext context) throws ELException {
 	assert(null != binding);
+	if (context == null) {
+	    throw new NullPointerException("ELContext -> null");
+    }
 	Object result = null;
 	FacesContext facesContext = (FacesContext) 
 	    context.getContext(FacesContext.class);
@@ -77,6 +80,9 @@ import java.io.Serializable;
 
     public void setValue(ELContext context, Object value) throws ELException {
 	assert(null != binding);
+	if (context == null) {
+	    throw new NullPointerException("ELContext -> null");
+    }
 	FacesContext facesContext = (FacesContext) 
 	    context.getContext(FacesContext.class);
 	assert(null != facesContext);
@@ -91,6 +97,9 @@ import java.io.Serializable;
 
     public boolean isReadOnly(ELContext context) throws ELException {
 	assert(null != binding);
+	if (context == null) {
+	    throw new NullPointerException("ELContext -> null");
+    }
 	boolean result = false;
 	FacesContext facesContext = (FacesContext) 
 	    context.getContext(FacesContext.class);
@@ -106,6 +115,9 @@ import java.io.Serializable;
 
     public Class getType(ELContext context) throws ELException {
 	assert(null != binding);
+	if (context == null) {
+	    throw new NullPointerException("ELContext -> null");
+    }
 	Class result = null;
 	FacesContext facesContext = (FacesContext) 
 	    context.getContext(FacesContext.class);
@@ -150,15 +162,21 @@ import java.io.Serializable;
 
     public boolean equals(Object other) {
     
-        if (other == null) {
-            return false;
+        if (other == this) {
+            return true;
         }
-
-        // don't bother even trying to compare, if we're not assignment
-        // compatabile with "other"
-        if (ValueExpression.class.isAssignableFrom(other.getClass())) {
+        
+        if (other instanceof ValueExpressionValueBindingAdapter) {
+            ValueBinding vb = 
+                ((ValueExpressionValueBindingAdapter) other).getWrapped();
+            return (binding.equals(vb));
+        } else if (other instanceof ValueExpression) {
+            FacesContext context = FacesContext.getCurrentInstance();
             ValueExpression otherVE = (ValueExpression) other;
-            return this.getExpressionString().equals(otherVE.getExpressionString());
+            Class type = binding.getType(context);
+            if (type != null) {
+                return type.equals(otherVE.getType(context.getELContext()));
+            }            
         }
         return false;
         
@@ -270,7 +288,7 @@ import java.io.Serializable;
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+        return Class.forName(name, true, loader);
     }
  
 
