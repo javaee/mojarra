@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.13 2003/10/15 02:03:25 eburns Exp $
+ * $Id: Application.java,v 1.14 2003/10/15 22:09:54 rlubke Exp $
  */
 
 /*
@@ -275,7 +275,7 @@ public abstract class Application {
      *  does not return a component instance
      *
      * @exception FacesException if a {@link UIComponent} cannot be created
-     * @exception NullPointerExcepton if any parameter is <code>null</code>
+     * @exception NullPointerException if any parameter is <code>null</code>
      */
     public abstract UIComponent createComponent(ValueBinding componentRef,
                                                 FacesContext context,
@@ -331,6 +331,8 @@ public abstract class Application {
      * @param converterId The converter id for which to create and
      *  return a new {@link Converter} instance
      *
+     * @exception FacesException if the {@link Converter} cannot be
+     *  created
      * @exception NullPointerException if <code>converterId</code>
      *  is <code>null</code>
      */ 
@@ -358,8 +360,8 @@ public abstract class Application {
      *
      * @param targetClass Target class for which to return a {@link Converter}
      *
-     * @exception IllegalArgumentException if <code>targetClass</code>
-     *  is an interface
+     * @exception FacesException if the {@link Converter} cannot be
+     *  created
      * @exception NullPointerException if <code>targetClass</code>
      *  is <code>null</code>
      */
