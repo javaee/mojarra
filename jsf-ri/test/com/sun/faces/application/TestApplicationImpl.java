@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.5 2003/08/13 18:21:46 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.6 2003/08/14 16:05:00 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.5 2003/08/13 18:21:46 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.6 2003/08/14 16:05:00 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -211,6 +211,83 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.getValueBinding("improper\texpression");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.getValueBinding("improper\rexpression");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.getValueBinding("improper\nexpression");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        thrown = false;
+        try {
+            application.getValueBinding("proper[\"a key\"]");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(!thrown); 
+        
+        try {
+            application.getValueBinding("proper[\"a { } key\"]");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(!thrown);
+        
+        try {
+            application.getValueBinding("bean.a{indentifer");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.getValueBinding("bean['invalid'");            
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.getValueBinding("bean[[\"invalid\"]].foo");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+        
+        thrown = false;
+        try {
+            application.getValueBinding("bean[\"[a\"]");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(!thrown);
+        
+        try {
+            application.getValueBinding("bean[\".a\"]");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(!thrown);             
     }
 
             
