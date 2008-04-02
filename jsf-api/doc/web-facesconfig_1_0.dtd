@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.4 2003/07/28 22:18:36 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.5 2003/08/14 18:16:59 craigmcc Exp $
 
 -->
 
@@ -177,7 +177,7 @@
     properties of the Converter implementation class that may be configured
     to affect the operation of the Converter.
 -->
-<!ELEMENT converter       (description*, display-name*, icon*, converter-id, converter-class, attribute*, property*)>
+<!ELEMENT converter       (description*, display-name*, icon*, (converter-id | converter-for-class), converter-class, attribute*, property*)>
 
 
 <!--
@@ -390,6 +390,14 @@
     type "ClassName".
 -->
 <!ELEMENT converter-class (#PCDATA)>
+
+
+<!--
+    The "converter-for-class" element represents the fully qualified class name
+    for which a Converter class will be registered.  It must be of
+    type "ClassName".
+-->
+<!ELEMENT converter-for-class (#PCDATA)>
 
 
 <!--
