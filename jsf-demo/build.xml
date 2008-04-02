@@ -78,7 +78,7 @@
   
   <property name="Name" value="JavaServer Faces"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="1_1"/>
+  <property name="version" value="1_1_01"/>
   
   <property name="build.home" value="${basedir}/build"/>
 
@@ -415,9 +415,6 @@
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/docs"/>
     <mkdir dir="${dist.home}/docs/style"/>
-    <copy todir="${dist.home}/docs">
-      <fileset dir="${jsf-ri.home}" includes="README"/>
-    </copy>
     <copy todir="${dist.home}/docs">
       <fileset dir="${jsf-ri.home}/docs"
                includes="index.html,samples.html,ReleaseNotes.html, Installation.html,Copyright.html"/>
