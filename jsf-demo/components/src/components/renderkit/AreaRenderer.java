@@ -49,10 +49,11 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer;
+
 import java.io.IOException;
-
 import components.components.UIArea;
-
+import components.model.ImageArea;
 
 /**
  * This class converts the internal representation of a <code>UIArea</code>
@@ -61,7 +62,7 @@ import components.components.UIArea;
  *
  */
 
-public class AreaRenderer extends BaseRenderer {
+public class AreaRenderer extends HtmlBasicRenderer {
 
        public AreaRenderer() {
         super();
@@ -103,7 +104,8 @@ public class AreaRenderer extends BaseRenderer {
             throw new NullPointerException();
         }
      
-	ImageArea ia = (ImageArea) context.getHttpSession().getAttribute(component.getModelReference());
+	// ImageArea ia = (ImageArea) context.getServletContext().getAttribute(component.getModelReference());
+        ImageArea ia = (ImageArea) context.getModelValue(component.getModelReference());
         if ( ia == null) {
             return;
         }

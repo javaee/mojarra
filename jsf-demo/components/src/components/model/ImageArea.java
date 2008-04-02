@@ -38,39 +38,47 @@
  * 
  */
 
-package cardemo;
+package components.model;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+public class ImageArea
+{
+    public String shape = null;
+    public String coords = null;
+    public String alt = null;
 
-import components.renderkit.ImageArea;
+// Constructors and Initializers    
+//
 
-/**
- * <p>This <code>HttpSessionListener</code> is a simulation of
- * business logic that would look up the hot spots of an image
- * map from a database, so that image maps could be rendered
- * dynamically.  In a real application, these values would probably
- * be stored in a list that is iterated over in the JSP page with
- * a JSTL <code>&lt;c:forEach&gt;</code> tag.</p>
- */
-public class ImageAreaSetup implements HttpSessionListener {
-
-
-    public ImageAreaSetup() {
-    }
-
-    public void sessionCreated(HttpSessionEvent event) {
-
-        HttpSession session = event.getSession();
-        session.setAttribute("NA", new ImageArea("poly", "NAmericas", "6,15,6,28,2,30,6,34,13,28,17,28,25,35,25,44,37,45,45,46,45,48,48,49,48,44,60,35,55,21,48,16,6,15"));
-        session.setAttribute("SA", new ImageArea("poly", "SAmericas", "29,44,49,71,49,91,54,91,73,63,57,52,46,51,39,45"));
-        session.setAttribute("gerA", new ImageArea("poly", "Germany", "90,28,96,28,96,39,90,39,90,28"));
-        session.setAttribute("fraA", new ImageArea("poly", "France", "84,31,84,39,90,39,90,30,84,31"));
-
-    }
-    public void sessionDestroyed(HttpSessionEvent event) {
-    }
-
+public ImageArea(String shape, String alt, String coords)
+{
+ this.shape = shape;
+ this.coords = coords;
+ this.alt = alt;
 
 }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String newshape) {
+        shape = newshape;
+    }
+
+    public String getCoords() {
+        return coords;
+    }
+
+    public void setCoords(String newcoords) {
+        coords = newcoords;
+    }
+
+    public String getAlt() {
+        return alt;
+    }
+
+    public void setAlt(String newalt) {
+        alt = newalt;
+    }
+
+} // end of class

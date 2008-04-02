@@ -50,8 +50,15 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import com.sun.faces.RIConstants;
+import javax.faces.tree.Tree;
+import javax.faces.tree.TreeFactory;
+import javax.faces.FactoryFinder;
 
 import components.components.UIMap;
+
+import org.mozilla.util.Assert;
+import org.mozilla.util.Debug;
+import org.mozilla.util.ParameterCheck;
 
 /**
  * The listener interface for handling the ActionEvent generated
@@ -79,6 +86,7 @@ public class ImageMapEventHandler implements ActionListener {
 
 // Processes the event queued on the specified component.
     public void processAction(ActionEvent event) {
+
 	UIMap map = (UIMap)event.getSource();
 	String value = (String) map.getAttribute("currentArea");
 	UIOutput welcome = (UIOutput) map.findComponent("welcomeLabel");
@@ -86,6 +94,12 @@ public class ImageMapEventHandler implements ActionListener {
         if ( curLocale != null) { 
             FacesContext context = FacesContext.getCurrentInstance();
 	    context.setLocale(curLocale);
+   
+            String treeId = "/Storefront.jsp";
+            TreeFactory treeFactory = (TreeFactory)
+            FactoryFinder.getFactory(FactoryFinder.TREE_FACTORY);
+            Assert.assert_it(null != treeFactory);
+            context.setTree(treeFactory.getTree(context,treeId));
         }
     }
     
