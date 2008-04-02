@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueChangedListener.java,v 1.5 2003/09/18 00:53:48 eburns Exp $
+ * $Id: TestValueChangedListener.java,v 1.6 2003/09/18 01:21:15 eburns Exp $
  */
 
 /*
@@ -14,15 +14,13 @@ import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
 import javax.faces.event.PhaseId;
 import javax.faces.context.FacesContext;
-import javax.faces.component.StateHolderWithBackReference;
-import javax.faces.component.UIComponent;
-import javax.faces.TestUtil;
+import javax.faces.component.StateHolder;
 
 /**
  * <p>Test {@link ValueChangedListener} implementation.</p>
  */
 
-public class TestValueChangedListener implements ValueChangedListener, StateHolderWithBackReference {
+public class TestValueChangedListener implements ValueChangedListener, StateHolder {
 
     // ------------------------------------------------------------ Constructors
 
@@ -37,14 +35,6 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
     public TestValueChangedListener(String id, PhaseId phaseId) {
         this.id = id;
         this.phaseId = phaseId;
-	this.yourComponent = null;
-    }
-
-    public TestValueChangedListener(String id, PhaseId phaseId, 
-				    UIComponent yourComponent) {
-        this.id = id;
-        this.phaseId = phaseId;
-	this.yourComponent = yourComponent;
     }
 
 
@@ -55,7 +45,6 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
 
     private String id = null;
     private PhaseId phaseId = null;
-    private UIComponent yourComponent = null;
 
 
     // ----------------------------------------------------------- Pubic Methods
@@ -110,19 +99,8 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
 	if (null != id) {
 	    idsAreEqual = id.equals(other.id);
 	}
-	boolean yourComponentsIdsAreEqual = false;
-	if (null == yourComponent && null == other.yourComponent) {
-	    yourComponentsIdsAreEqual = true;
-	}
-	else if (null != yourComponent && null != other.yourComponent) {
-	    yourComponentsIdsAreEqual = 
-		TestUtil.equalsWithNulls(yourComponent.getId(),
-					 other.yourComponent.getId());
-	}
-	
 	boolean result = 
-	    idsAreEqual && yourComponentsIdsAreEqual && 
-	    other.phaseId == this.phaseId;
+	    idsAreEqual && other.phaseId == this.phaseId;
 	return result;
     }
 
@@ -144,18 +122,7 @@ public class TestValueChangedListener implements ValueChangedListener, StateHold
 	    PhaseId.VALUES.get(Integer.
 			       valueOf(stateStr.
 				       substring(i+SEP.length())).intValue());
-	    
     }
-
-    public void restoreState(FacesContext context, Object state, 
-			     UIComponent toAttachTo) {
-	restoreState(context, state);
-
-	if (null != toAttachTo) {
-	    yourComponent = (UIComponent) toAttachTo;
-	}
-    }
-
 
     public boolean isTransient() { return false;
     }
