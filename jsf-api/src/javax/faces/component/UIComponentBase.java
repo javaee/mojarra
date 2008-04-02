@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.98 2004/02/04 23:37:44 ofung Exp $
+ * $Id: UIComponentBase.java,v 1.99 2004/02/23 20:30:33 rlubke Exp $
  */
 
 /*
@@ -20,7 +20,6 @@ import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1310,8 +1309,8 @@ public abstract class UIComponentBase extends UIComponent {
 	    states.add(saveAttachedState(context, binding));
 	}
 	Object values[] = new Object[2];
-	values[0] = (String[]) names.toArray(new String[names.size()]);
-	values[1] = (Object[]) states.toArray(new Object[states.size()]);
+	values[0] = names.toArray(new String[names.size()]);
+	values[1] = states.toArray(new Object[states.size()]);
 	return (values);
 
     }
@@ -1387,7 +1386,7 @@ public abstract class UIComponentBase extends UIComponent {
                             (UIComponentBase.this,
                              new Object[] { value });
                     } else {
-                        throw new IllegalArgumentException(null);
+                        throw new IllegalArgumentException();
                     }
                     return (result);
                 } catch (IllegalAccessException e) {
