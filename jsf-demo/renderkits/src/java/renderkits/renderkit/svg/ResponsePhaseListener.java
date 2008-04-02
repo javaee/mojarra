@@ -43,7 +43,7 @@ public class ResponsePhaseListener implements PhaseListener {
         String actionURL = context.getApplication().getViewHandler().getActionURL(context, viewId); 
         HttpServletResponse response = (HttpServletResponse)context.getExternalContext().getResponse();
         response.setHeader("Cache-Control", "no-cache");
-        response.addHeader(VIEW_URI, actionURL);
+        response.setHeader(VIEW_URI, actionURL);
     }
 
     public void beforePhase(PhaseEvent event) {
