@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetBean.java,v 1.1 2003/10/28 20:11:02 jvisvanathan Exp $
+ * $Id: ResultSetBean.java,v 1.2 2003/10/29 22:48:29 craigmcc Exp $
  */
 
 /*
@@ -45,7 +45,6 @@ package components.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.faces.application.Action;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 
@@ -57,7 +56,11 @@ import javax.faces.context.FacesContext;
 public class ResultSetBean {
 
 
+
     // -------------------------------------------------------- Bound Components
+
+
+
     /**
      * <p>The <code>UIData</code> component representing the entire table.</p>
      */
@@ -66,10 +69,13 @@ public class ResultSetBean {
     public void setData(UIData data) { this.data = data; }
 
 
-   /**
+    // ---------------------------------------------------------- Action Methods
+
+
+    /**
      * <p>Scroll directly to the first page.</p>
      */
-    private String first() {
+    public String first() {
 	scroll(0);
 	return (null);
 
@@ -79,7 +85,7 @@ public class ResultSetBean {
     /**
      * <p>Scroll directly to the last page.</p>
      */
-    private String last() {
+    public String last() {
 	scroll(data.getRowCount() - 1);
 	return (null);
 
@@ -89,7 +95,7 @@ public class ResultSetBean {
     /**
      * <p>Scroll forwards to the next page.</p>
      */
-    private String next() {
+    public String next() {
         int first = data.getFirst();
         scroll(first + data.getRows());
 	return (null);
@@ -100,7 +106,7 @@ public class ResultSetBean {
     /**
      * <p>Scroll backwards to the previous page.</p>
      */
-    private String previous() {
+    public String previous() {
 	int first = data.getFirst();
         scroll(first - data.getRows());
 	return (null);
@@ -111,11 +117,15 @@ public class ResultSetBean {
     /**
      * <p>Handle a "reset" button by clearing local component values.</p>
      */
-    private String reset() {
+    public String reset() {
 	clear();
 	return (null);
 
     }
+
+
+    // --------------------------------------------------------- Private Methods
+
 
     /**
      * <p>Clear the checked state for all customers.</p>
@@ -181,50 +191,5 @@ public class ResultSetBean {
 
     }
 
-
-    // ------------------------------------------------------- Action Properties
-
-    public Action getFirst() {
-	return new Action() {
-		public String invoke() {
-		    return (first());
-		}
-	    };
-    }
-
-
-    public Action getLast() {
-	return new Action() {
-		public String invoke() {
-		    return (last());
-		}
-	    };
-    }
-
-
-    public Action getNext() {
-	return new Action() {
-		public String invoke() {
-		    return (next());
-		}
-	    };
-    }
-
-    public Action getPrevious() {
-	return new Action() {
-		public String invoke() {
-		    return (previous());
-		}
-	    };
-    }
-
-
-    public Action getReset() {
-	return new Action() {
-		public String invoke() {
-		    return (reset());
-		}
-	    };
-    }
 
 }
