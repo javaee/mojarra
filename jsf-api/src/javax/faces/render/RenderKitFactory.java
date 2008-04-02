@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.22 2005/12/05 16:42:59 edburns Exp $
+ * $Id: RenderKitFactory.java,v 1.23 2007/01/29 07:06:41 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,6 @@ package javax.faces.render;
 
 
 import java.util.Iterator;
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 
 

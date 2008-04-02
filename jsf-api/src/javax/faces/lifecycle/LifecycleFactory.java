@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.16 2005/12/05 16:42:56 edburns Exp $
+ * $Id: LifecycleFactory.java,v 1.17 2007/01/29 07:05:34 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,6 @@
 package javax.faces.lifecycle;
 
 import java.util.Iterator;
-import javax.faces.FacesException;     // PENDING - subpackage?
 
 
 /**

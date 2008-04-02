@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.18 2005/12/05 16:42:58 edburns Exp $
+ * $Id: DataModel.java,v 1.19 2007/01/29 07:05:34 rlubke Exp $
  */
 
 /*
@@ -66,6 +66,9 @@ import javax.faces.component.UIData;
 
 public abstract class DataModel {
 
+
+    private static final DataModelListener[] EMPTY_DATA_MODEL_LISTENER =
+         new DataModelListener[0];
 
     // -------------------------------------------------------------- Properties
 
@@ -194,6 +197,7 @@ public abstract class DataModel {
             throw new NullPointerException();
         }
         if (listeners == null) {
+            //noinspection CollectionWithoutInitialCapacity
             listeners = new ArrayList<DataModelListener>();
         }
         listeners.add(listener);
@@ -209,10 +213,10 @@ public abstract class DataModel {
     public DataModelListener[] getDataModelListeners() {
 
 	if (listeners == null) {
-	    return (new DataModelListener[0]);
+	    return EMPTY_DATA_MODEL_LISTENER;
 	} else {
-	    return ((DataModelListener[]) listeners.toArray
-		    (new DataModelListener[listeners.size()]));
+	    return listeners.toArray
+		    (new DataModelListener[listeners.size()]);
 	}
 
     }
@@ -234,7 +238,7 @@ public abstract class DataModel {
         }
         if (listeners != null) {
             listeners.remove(listener);
-            if (listeners.size() == 0) {
+            if (listeners.isEmpty()) {
                 listeners = null;
             }
         }

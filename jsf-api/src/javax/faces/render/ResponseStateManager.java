@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.28 2006/09/01 01:22:24 tony_robertson Exp $
+ * $Id: ResponseStateManager.java,v 1.29 2007/01/29 07:06:41 rlubke Exp $
  */
 
 /*
@@ -125,7 +125,7 @@ public abstract class ResponseStateManager {
     public void writeState(FacesContext context,
         Object state) throws IOException {
         
-	SerializedView view = null;
+	SerializedView view;
 	if (state instanceof SerializedView) {
 	    view = (SerializedView) state;
 	}
@@ -278,7 +278,7 @@ public abstract class ResponseStateManager {
      */
 
     public boolean isPostback(FacesContext context) {
-        return (0 < context.getExternalContext().getRequestParameterMap().size());
+        return (!context.getExternalContext().getRequestParameterMap().isEmpty());
     }
 
 
