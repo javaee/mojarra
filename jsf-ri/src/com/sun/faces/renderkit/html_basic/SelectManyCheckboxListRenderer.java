@@ -25,7 +25,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.42 2005/08/22 22:10:21 ofung Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.43 2005/10/18 00:27:06 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -193,12 +193,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 
         // disable the check box if the attribute is set.
         String labelClass = null;
-	boolean componentDisabled = false;
-	if (component.getAttributes().get("disabled") != null) {
-            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
-	        componentDisabled = true;
-	    }
-	}
+        boolean componentDisabled = Util.componentIsDisabled(component);
+
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                 getAttributes().get("disabledClass");
@@ -251,8 +247,13 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         if (isSelected) {
             writer.writeAttribute(getSelectedTextString(), Boolean.TRUE, null);
         }
-        if (curItem.isDisabled()) {
-            writer.writeAttribute("disabled", "disabled", "disabled");
+
+        // Don't render the disabled attribute twice if the 'parent'
+        // component is already marked disabled.
+        if (!Util.componentIsDisabled(component)) {
+            if (curItem.isDisabled()) {
+                writer.writeAttribute("disabled", true, "disabled");
+            }
         }
 
         // Apply HTML 4.x attributes specified on UISelectMany component to all 

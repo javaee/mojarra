@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.174 2005/09/30 03:57:21 edburns Exp $
+ * $Id: Util.java,v 1.175 2005/10/18 00:27:06 rlubke Exp $
  */
 
 /*
@@ -64,7 +64,6 @@ import javax.faces.el.ValueBinding;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -89,7 +88,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.174 2005/09/30 03:57:21 edburns Exp $
+ * @version $Id: Util.java,v 1.175 2005/10/18 00:27:06 rlubke Exp $
  */
 
 public class Util extends Object {
@@ -940,7 +939,7 @@ public class Util extends Object {
                 if (result) {
                     // NOTE:  render things like readonly="readonly" here
                     writer.writeAttribute(booleanPassthruAttributes[i],
-                                          booleanPassthruAttributes[i],
+                                          result,
                                           booleanPassthruAttributes[i]);
                     // NOTE:  otherwise render nothing
                 }
@@ -1282,9 +1281,24 @@ public class Util extends Object {
 				      context.getViewRoot().getRenderKitId());
 	return renderKit;
     }
+    
+    public static boolean componentIsDisabled(UIComponent component) {
+        Object disabled = null;
+        boolean result = false;
+        if (null !=
+            (disabled = component.getAttributes().get("disabled"))) {
+            if (disabled instanceof String) {
+                result = ((String) disabled).equalsIgnoreCase("true");
+            } else {
+                result = disabled.equals(Boolean.TRUE);
+            }
+        }
+        
+        return result;
+    }
 
 
-    public static boolean componentIsDisabledOnReadonly(UIComponent component) {
+    public static boolean componentIsDisabledOrReadonly(UIComponent component) {
         Object disabledOrReadonly = null;
         boolean result = false;
         if (null !=

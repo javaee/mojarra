@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.62 2005/09/26 14:11:46 rogerk Exp $
+ * $Id: MenuRenderer.java,v 1.63 2005/10/18 00:27:05 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -114,7 +114,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOnReadonly(component)) {
+        if (Util.componentIsDisabledOrReadonly(component)) {
             if (logger.isLoggable(Level.FINE)) {
                  logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");
@@ -599,7 +599,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         // if the component is disabled, "disabled" attribute would be rendered 
         // on "select" tag, so don't render "disabled" on every option.
         if ((!componentDisabled) && curItem.isDisabled()) {
-            writer.writeAttribute("disabled", "disabled", "disabled");
+            writer.writeAttribute("disabled", true, "disabled");
         }
         
         if (componentDisabled || curItem.isDisabled()) {

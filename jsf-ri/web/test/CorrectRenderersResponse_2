@@ -8,4 +8,4 @@
 </select>
 <input id="mySecret" type="password" name="mySecret" value="" />
 <input id="myInputText" type="text" name="myInputText" value="text" /><span id="myOutputText"></span><textarea id="myTextarea" name="myTextarea" class="bar" style="foo">TextareaRenderer</textarea>
-<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=059BAE8BD400E6DD20A675D2ACEF8C75" usemap="usemap" ismap="ismap" /><img src="/test/foo/modelReferenceImage.gif;jsessionid=059BAE8BD400E6DD20A675D2ACEF8C75" usemap="usemap" ismap="ismap" /><span id="myOutputMessage">My name is Bobby Orr</span>
+<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=059BAE8BD400E6DD20A675D2ACEF8C75" usemap="usemap" ismap /><img src="/test/foo/modelReferenceImage.gif;jsessionid=059BAE8BD400E6DD20A675D2ACEF8C75" usemap="usemap" ismap /><span id="myOutputMessage">My name is Bobby Orr</span>

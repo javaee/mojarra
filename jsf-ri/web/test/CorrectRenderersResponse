@@ -7,7 +7,7 @@ com.sun.faces.saveStateFieldMarker<input type="hidden" name="formRenderer1" valu
 <table border="0" id="radioRenderer" class="styleClass">
 	<tr>
 <td>
-<input type="radio" name="radioRenderer" id="radioRenderer:0" value="One" disabled="disabled" tabindex="5" title="title" /><label for="radioRenderer:0" class="disabledClass"> One</label></td>
+<input type="radio" name="radioRenderer" id="radioRenderer:0" value="One" disabled tabindex="5" title="title" /><label for="radioRenderer:0" class="disabledClass"> One</label></td>
 <td>
 <input type="radio" checked name="radioRenderer" id="radioRenderer:1" value="Two" tabindex="5" title="title" /><label for="radioRenderer:1" class="enabledClass"> Two</label></td>
 <td>

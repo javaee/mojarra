@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.100 2005/09/14 21:27:18 jayashri Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.101 2005/10/18 00:27:05 rlubke Exp $
  */
 
 /*
@@ -145,7 +145,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOnReadonly(component)) {
+        if (Util.componentIsDisabledOrReadonly(component)) {
             if (logger.isLoggable(Level.FINE)) {
                  logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");

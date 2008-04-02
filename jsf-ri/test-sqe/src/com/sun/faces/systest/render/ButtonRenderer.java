@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.2 2005/08/22 22:11:40 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.3 2005/10/18 00:27:07 rlubke Exp $
  */
 
 /*
@@ -105,7 +105,7 @@ public class ButtonRenderer extends Renderer {
         
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOnReadonly(component)) {
+        if (Util.componentIsDisabledOrReadonly(component)) {
             if (log.isTraceEnabled()) {
                 log.trace("No decoding necessary since the component " +
                           component.getId() + " is disabled");

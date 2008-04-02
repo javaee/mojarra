@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.73 2005/09/26 14:11:47 rogerk Exp $
+ * $Id: RadioRenderer.java,v 1.74 2005/10/18 00:27:05 rlubke Exp $
  */
 
 /*
@@ -115,12 +115,8 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         
         // disable the radio button if the attribute is set.
         String labelClass = null;
-	boolean componentDisabled = false;
-	if (component.getAttributes().get("disabled") != null) {
-            if ((component.getAttributes().get("disabled")).equals(Boolean.TRUE)) {
-	        componentDisabled = true;
-	    }
-	}
+        boolean componentDisabled = Util.componentIsDisabled(component);
+        
         if (componentDisabled || curItem.isDisabled()) {
             labelClass = (String) component.
                 getAttributes().get("disabledClass");
@@ -145,9 +141,13 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
 
         writer.writeAttribute("value", (getFormattedValue(context, component,
                                                           curItem.getValue())), "value");
-
-        if (curItem.isDisabled()) {
-            writer.writeAttribute("disabled", "disabled", "disabled");
+        
+        // Don't render the disabled attribute twice if the 'parent'
+        // component is already marked disabled.
+        if (!Util.componentIsDisabled(component)) {
+            if (curItem.isDisabled()) {
+                writer.writeAttribute("disabled", true, "disabled");
+            }
         }
         // Apply HTML 4.x attributes specified on UISelectMany component to all 
         // items in the list except styleClass and style which are rendered as

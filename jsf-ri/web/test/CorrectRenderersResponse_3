@@ -11,7 +11,7 @@
 <table border="0" id="myCheckboxlist" class="styleClass">
 	<tr>
 <td>
-<input name="myCheckboxlist" id="myCheckboxlist:0" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title" /><label for="myCheckboxlist:0" class="disabledClass"> Red</label></td>
+<input name="myCheckboxlist" id="myCheckboxlist:0" value="Red" type="checkbox" disabled tabindex="5" title="title" /><label for="myCheckboxlist:0" class="disabledClass"> Red</label></td>
 <td>
 <input name="myCheckboxlist" id="myCheckboxlist:1" value="Blue" type="checkbox"  checked tabindex="5" title="title" /><label for="myCheckboxlist:1" class="enabledClass"> Blue</label></td>
 <td>group</td><td>

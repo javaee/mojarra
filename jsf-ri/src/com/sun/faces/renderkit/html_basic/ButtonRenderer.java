@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.90 2005/08/26 15:27:12 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.91 2005/10/18 00:27:05 rlubke Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         
         // If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
-        if (Util.componentIsDisabledOnReadonly(component)) {
+        if (Util.componentIsDisabledOrReadonly(component)) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");

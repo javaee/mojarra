@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.19 2005/08/22 22:10:19 ofung Exp $
+ * $Id: HtmlResponseWriter.java,v 1.20 2005/10/18 00:27:05 rlubke Exp $
  */
 
 /*
@@ -48,6 +48,9 @@ import java.io.Writer;
  */
 public class HtmlResponseWriter extends ResponseWriter {
 
+    // XHTML content type that will be passed from RenderKitImpl    
+    private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
+
     // Content Type for this Writer.
     //
     private String contentType = "text/html";
@@ -69,6 +72,9 @@ public class HtmlResponseWriter extends ResponseWriter {
     // inside of <script> and <style> elements).
     //
     private boolean dontEscape;
+    
+    // Flag controlling the rendering of element attributes
+    private boolean usingXhtmlStyle;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -84,7 +90,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
      * @param encoding    the character encoding.
-     * @throws if the encoding is not recognized.
+     * @throws FacesException the encoding is not recognized.
      */
     public HtmlResponseWriter(Writer writer, String contentType, String encoding)
         throws FacesException {
@@ -100,7 +106,12 @@ public class HtmlResponseWriter extends ResponseWriter {
         if (null != contentType) {
             this.contentType = contentType;
         }
-        this.encoding = encoding;
+
+        if (XHTML_CONTENT_TYPE.equals(this.contentType)) {
+            usingXhtmlStyle = true;
+        }
+        
+        this.encoding = encoding;               
 
         // Check the character encoding
         try {
@@ -276,15 +287,19 @@ public class HtmlResponseWriter extends ResponseWriter {
         // Output Boolean values specially
         if (valueClass == Boolean.class) {
             if (Boolean.TRUE.equals(value)) {
-                //PENDING (horwat) using String as a result of
-                //Tomcat char writer ArrayIndexOutOfBoundsException (3584)
-                writer.write(" ");
-                writer.write(name);
-            } else {
-                // Don't write anything for "false" booleans
+                if (!usingXhtmlStyle) {
+                    writer.write(' ');
+                    writer.write(name);
+                } else {
+                    writer.write(' ');
+                    writer.write(name);
+                    writer.write("=\"");
+                    writer.write(name);
+                    writer.write('"');
+                }
             }
         } else {
-            writer.write(" ");
+            writer.write(' ');
             writer.write(name);
             writer.write("=\"");
             
@@ -292,7 +307,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             HtmlUtils.writeAttribute(writer, buffer, value.toString());
             //PENDING (horwat) using String as a result of Tomcat char 
             //        writer ArrayIndexOutOfBoundsException (3584)
-            writer.write("\"");
+            writer.write('"');
         }
     }
 

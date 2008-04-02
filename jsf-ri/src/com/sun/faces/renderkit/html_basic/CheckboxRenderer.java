@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.75 2005/08/26 15:27:13 rlubke Exp $
+ * $Id: CheckboxRenderer.java,v 1.76 2005/10/18 00:27:05 rlubke Exp $
  *
  */
 
@@ -104,7 +104,7 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         // request even if the checkbox is checked. So do not change the
         // value of the checkbox, if it is disabled since its state
         // cannot be changed.
-        if (Util.componentIsDisabledOnReadonly(component)) {
+        if (Util.componentIsDisabledOrReadonly(component)) {
              if (logger.isLoggable(Level.FINE)) {
                  logger.fine("No decoding necessary since the component " +
                           component.getId() + " is disabled");
