@@ -88,6 +88,9 @@
   <property name="dist.home" value="${basedir}/dist"/>
 
   <property name="wspack.home" value="${tomcat.home}"/>
+  
+  <!-- Use LICENSE.txt for FCS release. -->
+  <property name="license" value="PRE-RELEASE-LICENSE.txt"/>
 
   <property name="build.properties.demo" value="build.properties.demo" />
 
@@ -352,7 +355,7 @@
     <mkdir dir="${dist.home}/renderkitdocs"/>
 
     <echo> Handle the top level files </echo>
-    <copy file="${jsf-ri.home}/LICENSE.txt" todir="${dist.home}"/>
+    <copy file="${jsf-ri.home}/${license}" todir="${dist.home}"/>
     <copy file="${jsf-ri.home}/LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="${jsf-ri.home}/THIRDPARTYLICENSEREADME.txt" todir="${dist.home}"/>
     <copy file="${commons-beanutils.jar}" todir="${dist.home}/lib"/>
