@@ -71,7 +71,7 @@
           A mutable Map of the facets associated with
           this component, keyed by facet name.
         </description>
-        <display-name>Attributes Map</display-name>
+        <display-name>Facets Map</display-name>
         <icon></icon>
         <property-name>facets</property-name>
         <property-class>java.util.Map</property-class>
@@ -156,7 +156,7 @@
           for rendering its own children.  This decision is normally delegated
           to the associated Renderer, if there is one.
         </description>
-        <display-name>rendersChildren</display-name>
+        <display-name>Renders Children</display-name>
         <icon></icon>
         <property-name>rendersChildren</property-name>
         <property-class>boolean</property-class>
