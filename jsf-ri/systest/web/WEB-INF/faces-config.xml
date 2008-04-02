@@ -337,6 +337,19 @@
   </managed-bean>
 
   <managed-bean>
+    <description>immediate01</description>
+    <managed-bean-name>immediateBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.TestBean
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>stringProperty</property-name>
+      <null-value />
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>propertyOrder</managed-bean-name>
     <managed-bean-class>
       com.sun.faces.systest.model.PropertyOrderBean
