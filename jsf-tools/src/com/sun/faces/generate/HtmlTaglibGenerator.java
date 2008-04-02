@@ -35,7 +35,7 @@ import java.util.TreeMap;
  * package.
  */
 public class HtmlTaglibGenerator extends AbstractGenerator {
-
+    
     // -------------------------------------------------------- Static Variables
     
     // Log instance for this class
@@ -544,6 +544,72 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
 
 	// Generate Log declaration
 	writer.write("    public static Log log = LogFactory.getLog("+tagClassName+".class);\n\n");
+    }
+    
+    private static void tagHandlerReleaseMethod() throws Exception {
+        writer.write("    //\n    // Release Method\n    //\n\n");
+        
+        writer.write("    public void release() {\n");
+        writer.write("        super.release();\n\n");
+        writer.write("        // component properties\n");
+
+        // Generate from component properties
+        //
+        PropertyBean[] properties = component.getProperties();
+        PropertyBean property = null;
+        String propertyName = null;
+        String propertyType = null;
+        String ivar = null;
+        for (int i = 0, len = properties.length; i < len; i++) {
+            if (null == (property = properties[i])) {
+                continue;
+            }
+            if (!property.isTagAttribute()) {
+                continue;
+            }
+            propertyName = property.getPropertyName();
+            propertyType = property.getPropertyClass();
+
+            // SPECIAL - Don't generate these properties
+            if (propertyName.equals("binding") || propertyName.equals("id")
+                    || propertyName.equals("rendered")) {
+                continue;
+            }
+
+            ivar = mangle(propertyName);
+            writer.write("        this." + ivar + " = ");
+            if (primitive(propertyType) && !(valueBindingEnabledProperties.contains(propertyName)
+                    || methodBindingEnabledProperties.contains(propertyName))) {
+                writer.write((String) defaults.get(propertyType));
+            } else {
+                writer.write("null");
+            }
+            writer.write(";\n");
+        }
+
+        writer.write("\n");
+        writer.write("        // rendered attributes\n");
+
+        // Generate from renderer attributes..
+        //
+        AttributeBean[] attributes = renderer.getAttributes();
+        AttributeBean attribute = null;
+        String attributeName = null;
+        String attributeType = null;
+        for (int i = 0, len = attributes.length; i < len; i++) {
+            if (null == (attribute = attributes[i])) {
+                continue;
+            }
+            if (!attribute.isTagAttribute()) {
+                continue;
+            }
+            attributeName = attribute.getAttributeName();
+            attributeType = attribute.getAttributeClass();
+
+            ivar = mangle(attributeName);
+            writer.write("        this." + ivar + " = null;\n");
+        }
+        writer.write("    }\n\n"); 
     }
 
     /**
@@ -1133,6 +1199,7 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
                 } else {
 		    tagHandlerSupportMethods();
                 }
+        tagHandlerReleaseMethod();
 		tagHandlerSuffix();
 	    
                 // Flush and close the Writer 
