@@ -46,5 +46,36 @@
     </message>
   </message-resources>
 
+  <navigation-rule>
+    <from-tree-id>/Storefront.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/more.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/more.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/buy.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/buy.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/Customer.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-tree-id>/Customer.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/thanks.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
 
 </faces-config>
