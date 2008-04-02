@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.41 2006/11/30 17:41:01 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.42 2006/12/06 19:52:51 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,6 @@ import javax.faces.render.ResponseStateManager;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,13 +53,12 @@ import com.sun.faces.config.JSFVersionTracker.Version;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
 
 /**
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.41 2006/11/30 17:41:01 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.42 2006/12/06 19:52:51 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -87,20 +85,17 @@ public class RestoreViewPhase extends Phase {
         if (null == facesContext) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
                   MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
-        }
-
-        Util.getViewHandler(facesContext).initView(facesContext);
+        }        
 
         // If an app had explicitely set the tree in the context, use that;
         //
         UIViewRoot viewRoot = facesContext.getViewRoot();
-        Locale locale = null;
         if (viewRoot != null) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Found a pre created view in FacesContext");
             }
-            locale = facesContext.getExternalContext().getRequestLocale();
-            facesContext.getViewRoot().setLocale(locale);
+            facesContext.getViewRoot().setLocale(
+                 facesContext.getExternalContext().getRequestLocale());
             doPerComponentActions(facesContext, viewRoot);
             return;
         }
@@ -157,8 +152,8 @@ public class RestoreViewPhase extends Phase {
                           getVersionForTrackedClassName(viewHandler
                                 .getClass().getName());
                     Version currentVersion = tracker.getCurrentVersion();
-                    boolean viewHandlerIsOld = false,
-                          stateManagerIsOld = false;
+                    boolean viewHandlerIsOld;
+                    boolean stateManagerIsOld;
 
                     viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
                     toTest = tracker.
@@ -217,19 +212,24 @@ public class RestoreViewPhase extends Phase {
     // ------------------------------------------------------- Protected Methods
 
 
-    /** <p>Do any per-component actions necessary during reconstitute</p> */
+    /**
+     * <p>Do any per-component actions necessary during reconstitute</p>
+     * @param context the <code>FacesContext</code> for the current request
+     * @param uic the <code>UIComponent</code> to process the
+     *  <code>binding</code> attribute
+     */
     protected void doPerComponentActions(FacesContext context,
                                          UIComponent uic) {
 
         // if this component has a component value reference expression,
         // make sure to populate the ValueExpression for it.
-        ValueExpression valueExpression = null;
+        ValueExpression valueExpression;
         if (null != (valueExpression = uic.getValueExpression("binding"))) {
             valueExpression.setValue(context.getELContext(), uic);
         }
 
-        Iterator<UIComponent> kids = uic.getFacetsAndChildren();
-        while (kids.hasNext()) {
+        for (Iterator<UIComponent> kids =  uic.getFacetsAndChildren();
+             kids.hasNext(); ) {
             doPerComponentActions(context, kids.next());
         }
 
@@ -239,6 +239,7 @@ public class RestoreViewPhase extends Phase {
 
 
     /**
+     * @param context the <code>FacesContext</code> for the current request
      * @return true if the request method is POST or PUT, or the method
      *         is GET but there are query parameters, or the request is not an
      *         instance of HttpServletRequest.

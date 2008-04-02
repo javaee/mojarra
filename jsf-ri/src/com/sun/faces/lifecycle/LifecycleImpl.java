@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.70 2006/10/03 23:32:13 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.71 2006/12/06 19:52:51 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
+
 
 /**
  * <p><b>LifecycleImpl</b> is the stock implementation of the standard
@@ -104,9 +104,6 @@ public class LifecycleImpl extends Lifecycle {
             LOGGER.fine("execute(" + context + ")");
         }
         
-        context.getExternalContext().getRequestMap().put(RIConstants.DEFAULT_LIFECYCLE,
-                                                         Boolean.TRUE);
-        
         for (int i = 1; i < phases.length; i++) { // Skip ANY_PHASE placeholder
 
             if (context.getRenderResponse() ||
@@ -114,9 +111,10 @@ public class LifecycleImpl extends Lifecycle {
                 break;
             }
 
-            phase((PhaseId) PhaseId.VALUES.get(i), phases[i], context);
+            PhaseId phaseId = (PhaseId) PhaseId.VALUES.get(i);
+            phase(phaseId, phases[i], context);
 
-            if (reload((PhaseId) PhaseId.VALUES.get(i), context)) {
+            if (reload(phaseId, context)) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Skipping rest of execute() because of a reload");
                 }
@@ -188,7 +186,6 @@ public class LifecycleImpl extends Lifecycle {
 
         listeners.remove(listener);
 
-
     }
 
 
@@ -197,11 +194,16 @@ public class LifecycleImpl extends Lifecycle {
 
     // Execute the specified phase, calling all listeners as well
     private void phase(PhaseId phaseId, Phase phase, FacesContext context)
-          throws FacesException {
+   throws FacesException {
+
         boolean exceptionThrown = false;
         Throwable ex = null;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("phase(" + phaseId.toString() + ',' + context + ')');
+        }
+
+        if (PhaseId.RESTORE_VIEW.equals(phaseId)) {
+            Util.getViewHandler(context).initView(context);
         }
                
         ListIterator<PhaseListener> listenersIterator = listeners.listIterator();
@@ -219,8 +221,7 @@ public class LifecycleImpl extends Lifecycle {
                     }                   
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.warning("phase("
                                + phaseId.toString()
@@ -264,8 +265,7 @@ public class LifecycleImpl extends Lifecycle {
             }
             ex = e;
             exceptionThrown = true;
-        }
-        finally {
+        } finally {
             try {
                 // Notify the "afterPhase" method of interested listeners
                 // (descending)
@@ -279,8 +279,7 @@ public class LifecycleImpl extends Lifecycle {
                         }
                     }
                 }
-            }
-            catch (Throwable e) {
+            } catch (Throwable e) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.warning("phase("
                                    + phaseId.toString()
@@ -318,7 +317,7 @@ public class LifecycleImpl extends Lifecycle {
     // completed the Restore View phase
     private boolean reload(PhaseId phaseId, FacesContext context) {
 
-        if (!phaseId.equals(PhaseId.RESTORE_VIEW)) {
+        if (!PhaseId.RESTORE_VIEW.equals(phaseId)) {
             return (false);
         }
         if (!(context.getExternalContext().getRequest()instanceof
@@ -346,7 +345,7 @@ public class LifecycleImpl extends Lifecycle {
         if (context.getResponseComplete()) {
             return (true);
         } else if (context.getRenderResponse() &&
-                   !phaseId.equals(PhaseId.RENDER_RESPONSE)) {
+                   !PhaseId.RENDER_RESPONSE.equals(phaseId)) {
             return (true);
         } else {
             return (false);
