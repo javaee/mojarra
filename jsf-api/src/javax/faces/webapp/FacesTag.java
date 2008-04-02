@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.29 2003/01/17 01:11:59 eburns Exp $
+ * $Id: FacesTag.java,v 1.30 2003/01/17 02:30:16 craigmcc Exp $
  */
 
 /*
@@ -149,7 +149,7 @@ public abstract class FacesTag extends TagSupport {
     }    
     
     /**
-     * <p>Set an override for the rendered attribute</p>
+     * <p>Set an override for the rendered attribute.</p>
      *
      * @param rendered The new value for rendered attribute
      */
@@ -520,14 +520,15 @@ public abstract class FacesTag extends TagSupport {
     protected int childIndex = 0; 
 
     /**
-     * <p>Override this to do three things</p>
-     * <p><code>super.setParent(t)</code></p>
-     * <p>find the closest enclosing <ocde>FacesTag</code> and increment its
-     * <code>numChildren</code>.</p>
-     * <p>save our <code>childIndex</code> as 
-     * <code>enclosingFacesTag.numChildren - 1</code>.</p>
+     * <p>Override this method to do three things.</p>
+     * <ul>
+     * <li>Call <code>super.setParent(t)</code>.</li>
+     * <li>Find the closest enclosing <code>FacesTag</code> and increment its
+     *     <code>numChildren</code> counter.</li>
+     * <li>save our <code>childIndex</code> as
+     *     <code>enclosingFacesTag.numChildren - 1</code>.</li>
+     * </ul>
      */ 
-
     public void setParent(Tag t ) {
         
         super.setParent(t);
