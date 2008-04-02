@@ -97,20 +97,6 @@
   <!ELEMENT tag-attribute           (#PCDATA)>
   <!ELEMENT tag-name                (#PCDATA)>
 
-  <!ELEMENT a                       ANY>
-  <!ATTLIST a            name CDATA #IMPLIED>
-  <!ATTLIST a            href CDATA #IMPLIED>
-  <!ELEMENT br                      EMPTY>
-  <!ELEMENT code                    ANY>
-  <!ELEMENT em                      ANY>
-  <!ELEMENT hr                      EMPTY>
-  <!ELEMENT li                      ANY>
-  <!ELEMENT ol                      ANY>
-  <!ELEMENT p                       ANY>
-  <!ELEMENT pre                     ANY>
-  <!ELEMENT strong                  ANY>
-  <!ELEMENT ul                      ANY>
-
   <!ENTITY % impl SYSTEM "standard-html-renderkit-impl.xml">
   %impl;
 
@@ -363,7 +349,7 @@
     </component-extension>
 
   </component>
-    
+
   <component>
 
     <component-type>javax.faces.ViewRoot</component-type>
@@ -384,9 +370,9 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>input</code> element
+      <![CDATA[<p>Represents an HTML <code>input</code> element
       for a button of type <code>submit</code> or <code>reset</code>.
-      The label text is specified by the component value.</p>
+      The label text is specified by the component value.</p>]]>
     </description>
     <display-name>Command Button</display-name>
     <component-type>javax.faces.HtmlCommandButton</component-type>
@@ -410,9 +396,9 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>a</code> element for a hyperlink that acts
+      <![CDATA[<p>Represents an HTML <code>a</code> element for a hyperlink that acts
       like a submit button.  This component must be placed inside
-      a form, and requires JavaScript to be enabled in the client.</p>
+      a form, and requires JavaScript to be enabled in the client.</p>]]>
     </description>
     <display-name>Command Hyperlink</display-name>
     <component-type>javax.faces.HtmlCommandLink</component-type>
@@ -435,9 +421,9 @@
   <component>
 
     <description>
-      <p>Represents a set of repeating data (segregated into
+      <![CDATA[<p>Represents a set of repeating data (segregated into
       columns by child UIColumn components) that will
-      be rendered in an HTML <code>table</code> element.</p>
+      be rendered in an HTML <code>table</code> element.</p>]]>
     </description>
     <display-name>Data Table</display-name>
     <component-type>javax.faces.HtmlDataTable</component-type>
@@ -459,8 +445,8 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>form</code> element.  Child input components
-      will be submitted unless they have been disabled.</p>
+      <![CDATA[<p>Represents an HTML <code>form</code> element.  Child input components
+      will be submitted unless they have been disabled.</p>]]>
     </description>
     <display-name>Form</display-name>
     <component-type>javax.faces.HtmlForm</component-type>
@@ -482,8 +468,8 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>img</code> element, used to retrieve
-      and render a graphical image.</p>
+      <![CDATA[<p>Represents an HTML <code>img</code> element, used to retrieve
+      and render a graphical image.</p>]]>
     </description>
     <display-name>Graphic Image</display-name>
     <component-type>javax.faces.HtmlGraphicImage</component-type>
@@ -505,8 +491,8 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>input</code> element
-      of type <code>hidden</code>.</p>
+      <![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>hidden</code>.</p>]]>
     </description>
     <display-name>Input Hidden</display-name>
     <component-type>javax.faces.HtmlInputHidden</component-type>
@@ -524,12 +510,12 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>input</code> element
+      <![CDATA[<p>Represents an HTML <code>input</code> element
       of type <code>password</code>.  On a redisplay,
       any previously entered value will <em>not</em>
       be rendered (for security reasons) unless the
       <code>redisplay</code> property is set to
-      <code>true</code>.</p>
+      <code>true</code>.</p>]]>
     </description>
     <display-name>Input Secret</display-name>
     <component-type>javax.faces.HtmlInputSecret</component-type>
@@ -554,8 +540,8 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>input</code> element
-      of type <code>text</code>.</p>
+      <![CDATA[<p>Represents an HTML <code>input</code> element
+      of type <code>text</code>.</p>]]>
     </description>
     <display-name>Input Text</display-name>
     <component-type>javax.faces.HtmlInputText</component-type>
@@ -579,7 +565,7 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>textarea</code> element.</p>
+      <![CDATA[<p>Represents an HTML <code>textarea</code> element.</p>]]>
     </description>
     <display-name>Input Textarea</display-name>
     <component-type>javax.faces.HtmlInputTextarea</component-type>
@@ -639,13 +625,13 @@
   <component>
 
     <description>
-      <p>Represents a component that looks up a localized message in a
+      <![CDATA[<p>Represents a component that looks up a localized message in a
       resource bundle, optionally uses it as a
       <code>MessageFormat</code> pattern string and substitutes in
       parameter values from nested <em>UIParameter</em> components, and
       renders the result.  If the "dir" or "lang" attributes are
       present, render a <code>span</code> element and pass them through
-      as attributes on the span.</p>
+      as attributes on the span.</p>]]>
     </description>
     <display-name>Output Format</display-name>
     <component-type>javax.faces.HtmlOutputFormat</component-type>
@@ -666,8 +652,8 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>label</code> element, used to define
-      an accessible label for a corresponding input element.</p>
+      <![CDATA[<p>Represents an HTML <code>label</code> element, used to define
+      an accessible label for a corresponding input element.</p>]]>
     </description>
     <display-name>Output Label</display-name>
     <component-type>javax.faces.HtmlOutputLabel</component-type>
@@ -690,9 +676,9 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>a</code> (hyperlink) element that may be
+      <![CDATA[<p>Represents an HTML <code>a</code> (hyperlink) element that may be
       used to link to an arbitrary URL defined by the <code>value</code>
-      property.</p>
+      property.</p>]]>
     </description>
     <display-name>Output Hyperlink</display-name>
     <component-type>javax.faces.HtmlOutputLink</component-type>
@@ -715,9 +701,9 @@
   <component>
 
     <description>
-      <p>Renders the component value as text, optionally wrapping in a
+      <![CDATA[<p>Renders the component value as text, optionally wrapping in a
       <code>span</code> element if I18N attributes, CSS styles or style
-      classes are specified.</p>
+      classes are specified.</p>]]>
     </description>
     <display-name>Output Text</display-name>
     <component-type>javax.faces.HtmlOutputText</component-type>
@@ -738,8 +724,8 @@
   <component>
 
     <description>
-      <p>Renders child components in a table, starting a new
-      row after the specified number of columns.</p>
+      <![CDATA[<p>Renders child components in a table, starting a new
+      row after the specified number of columns.</p>]]>
     </description>
     <display-name>Panel Grid</display-name>
     <component-type>javax.faces.HtmlPanelGrid</component-type>
@@ -762,11 +748,11 @@
   <component>
 
     <description>
-      <p>Causes all child components of this component
+      <![CDATA[<p>Causes all child components of this component
       to be rendered.  This is useful in scenarios
       where a parent component is expecting a single
       component to be present, but the application
-      wishes to render more than one.</p>
+      wishes to render more than one.</p>]]>
     </description>
     <display-name>Panel Group</display-name>
     <component-type>javax.faces.HtmlPanelGroup</component-type>
@@ -785,10 +771,10 @@
   <component>
 
     <description>
-      <p>Represents an HTML <code>input</code> element
+      <![CDATA[<p>Represents an HTML <code>input</code> element
       of type <code>checkbox</code>.  The checkbox will
       be rendered as checked, or not, based on the value
-      of the <code>value</code> property.</p>
+      of the <code>value</code> property.</p>]]>
     </description>
     <display-name>Checkbox</display-name>
     <component-type>javax.faces.HtmlSelectBooleanCheckbox</component-type>
@@ -811,9 +797,9 @@
   <component>
 
     <description>
-      <p>Represents a multiple-selection component that is rendered
+      <![CDATA[<p>Represents a multiple-selection component that is rendered
       as a set of HTML <code>input</code> elements of type
-      <code>checkbox</code>.</p>
+      <code>checkbox</code>.</p>]]>
     </description>
     <display-name>Multi-Select Checkbox</display-name>
     <component-type>javax.faces.HtmlSelectManyCheckbox</component-type>
@@ -837,9 +823,9 @@
   <component>
 
     <description>
-      <p>Represents a multiple-selection component that is rendered
+      <![CDATA[<p>Represents a multiple-selection component that is rendered
       as an HTML <code>select</code> element, showing either all
-      available options or the specified number of options.</p>
+      available options or the specified number of options.</p>]]>
     </description>
     <display-name>Multi-Select Listbox</display-name>
     <component-type>javax.faces.HtmlSelectManyListbox</component-type>
@@ -863,9 +849,9 @@
   <component>
 
     <description>
-      <p>Represents a multiple-selection component that is rendered
+      <![CDATA[<p>Represents a multiple-selection component that is rendered
       as an HTML <code>select</code> element, showing a single
-      available option at a time.</p>
+      available option at a time.</p>]]>
     </description>
     <display-name>Multi-Select Menu</display-name>
     <component-type>javax.faces.HtmlSelectManyMenu</component-type>
@@ -889,9 +875,9 @@
   <component>
 
     <description>
-      <p>Represents a single-selection component that is rendered
+      <![CDATA[<p>Represents a single-selection component that is rendered
       as an HTML <code>select</code> element, showing either all
-      available options or the specified number of options.</p>
+      available options or the specified number of options.</p>]]>
     </description>
     <display-name>Listbox</display-name>
     <component-type>javax.faces.HtmlSelectOneListbox</component-type>
@@ -915,9 +901,9 @@
   <component>
 
     <description>
-      <p>Represents a single-selection component that is rendered
+      <![CDATA[<p>Represents a single-selection component that is rendered
       as an HTML <code>select</code> element, showing a single
-      available option at a time.</p>
+      available option at a time.</p>]]>
     </description>
     <display-name>Menu</display-name>
     <component-type>javax.faces.HtmlSelectOneMenu</component-type>
@@ -941,9 +927,9 @@
   <component>
 
     <description>
-      <p>Represents a single-selection component that is rendered
+      <![CDATA[<p>Represents a single-selection component that is rendered
       as a set of HTML <code>input</code> elements of type
-      <code>radio</code>.</p>
+      <code>radio</code>.</p>]]>
     </description>
     <display-name>Radio</display-name>
     <component-type>javax.faces.HtmlSelectOneRadio</component-type>
@@ -969,7 +955,7 @@
   <render-kit>
 
     <description>
-
+     <![CDATA[
      The standard HTML RenderKit.  Please see the spec for additional
      details for the standard render-kit.
 
@@ -1040,13 +1026,13 @@
 
     </ul>
 
-    </ul>
+    </ul>]]>
 
     </description>
 
     <renderer>
 
-      <description><p>Renders an HTML "input" element.</p>
+      <description><![CDATA[<p>Renders an HTML "input" element.</p>
 
       <p>Decode Behavior</p>
 
@@ -1075,7 +1061,7 @@
 
 
 
-      <p>Encode Behavior</p>  
+      <p>Encode Behavior</p>
 
       <ul>
 
@@ -1086,7 +1072,7 @@
       attribute.</p>
 
       </ul>
-   
+      ]]>
       </description>
       <component-family>javax.faces.Command</component-family>
       <renderer-type>javax.faces.Button</renderer-type>
@@ -1103,7 +1089,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML "a" anchor element that acts like a
+      <description><![CDATA[<p>Render an HTML "a" anchor element that acts like a
       form submit button when clicked.</p>
 
       <p>General Behaviour</p>
@@ -1152,9 +1138,9 @@
 
       <ul>
 
-      <p>Render "#" as the value of the "href" attribute. Render the current 
-      value of the component as the link text if it is specified. Render 
-      javascript that is functionally equivalent to the following as the value 
+      <p>Render "#" as the value of the "href" attribute. Render the current
+      value of the component as the link text if it is specified. Render
+      javascript that is functionally equivalent to the following as the value
       of the "onclick" attribute:</p>
 
       <p><code>document.forms['CLIENT_ID']['hiddenFieldName'].value='CLIENT_ID';
@@ -1180,7 +1166,7 @@
       UIParameter children, taking the name property (but not the value)
       from each one in turn.</p>
 
-      </ul>
+      </ul>]]>
       </description>
       <component-family>javax.faces.Command</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
@@ -1202,7 +1188,7 @@
     <renderer>
 
       <description>
-
+      <![CDATA[
       <p>Renders an HTML "table" element compliant with the HTML 401
       specification.  Please consult the javadoc for <code>UIData</code>
       to supplement this specification.  If the "styleClass" attribute
@@ -1253,7 +1239,7 @@
       </ul>
 
       <p>Rendering the table body</p>
- 
+
       <ul>
 
       <p>Render a "tbody" element.  Keep track of the result of the
@@ -1277,7 +1263,7 @@
      <p>When done rendering all the rows, set the "rowIndex" property of
      the <code>UIData</code> to -1, and close out the "table"
      element.</p>
-
+      ]]>
       </description>
 
       <component-family>javax.faces.Data</component-family>
@@ -1303,7 +1289,7 @@
 
     <renderer>
 
-      <description><p>Renders an HTML "form" element.</p>  
+      <description><![CDATA[<p>Renders an HTML "form" element.</p>
 
       <p>Decode Behavior</p>
 
@@ -1335,9 +1321,9 @@
       necessary hidden fields for all commandLink instances in the page
       just before the close of the "form" element.</p>
 
-      </ul>
+      </ul>]]>
 
-      </description> 
+      </description>
       <component-family>javax.faces.Form</component-family>
       <renderer-type>javax.faces.Form</renderer-type>
       <renderer-class>&form-form-renderer-class;</renderer-class>
@@ -1355,7 +1341,7 @@
 
     <renderer>
 
-      <description>Renders an HTML "img" element.  Render the clientId
+      <description><![CDATA[Renders an HTML "img" element.  Render the clientId
       as the value of the "id" attribute.  Render the value of the
       component as the value of the "src" attribute, after passing it
       to the <code>getResourceUR()</code> method of the <code>ViewHandler</code>
@@ -1364,7 +1350,7 @@
       <code>ExternalContext</code>.  If present, render the value of the
       alt attribute as the value of the "alt" attribute.  If the
       "styleClass" attribute is specified, render its value as the value
-      of the "class" attribute.</description>
+      of the "class" attribute.]]></description>
       <component-family>javax.faces.Graphic</component-family>
       <renderer-type>javax.faces.Image</renderer-type>
       <renderer-class>&graphic-image-renderer-class;</renderer-class>
@@ -1378,7 +1364,7 @@
 
     <renderer>
 
-      <description><p>Renders an HTML "input" element of type
+      <description><![CDATA[<p>Renders an HTML "input" element of type
       "hidden".</p>
 
       <p>Decode Behavior</p>
@@ -1391,7 +1377,7 @@
 
       </ul>
 
-      <p>Encode Behavior</p>     
+      <p>Encode Behavior</p>
 
       <ul>
 
@@ -1399,7 +1385,7 @@
       "name" attribute.  Render the current value of the component as
       the value of the "value" attribute.</p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.Input</component-family>
@@ -1410,7 +1396,7 @@
 
     <renderer>
 
-      <description><p>Renders an HTML "input" element of "type" "password".</p>
+      <description><![CDATA[<p>Renders an HTML "input" element of "type" "password".</p>
 
       <p>Decode Behavior</p>
 
@@ -1422,7 +1408,7 @@
 
       </ul>
 
-      <p>Encode Behavior</p>     
+      <p>Encode Behavior</p>
 
       <ul>
 
@@ -1434,8 +1420,8 @@
       specified, render its value as the value of the "class"
       attribute.</p>
 
-      </ul> 
- 
+      </ul>]]>
+
       </description>
       <component-family>javax.faces.Input</component-family>
       <renderer-type>javax.faces.Secret</renderer-type>
@@ -1453,7 +1439,7 @@
 
     <renderer>
 
-      <description><p>Renders an HTML "input"
+      <description><![CDATA[<p>Renders an HTML "input"
       element of "type" "text".</p>
 
       <p><a name="decode">Decode Behavior</a></p>
@@ -1469,7 +1455,7 @@
 
       </ul>
 
-      <p>Encode Behavior</p>     
+      <p>Encode Behavior</p>
 
       <ul>
 
@@ -1478,9 +1464,9 @@
       the component as the value of the "value" attribute.  If the
       "styleClass" attribute is specified, render its value as the value
       of the "class" attribute.
-      </p> 
+      </p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.Input</component-family>
@@ -1498,7 +1484,7 @@
 
     <renderer>
 
-      <description><p>Renders an HTML "textarea" element.</p>
+      <description><![CDATA[<p>Renders an HTML "textarea" element.</p>
 
       <p>Decode Behavior</p>
 
@@ -1510,14 +1496,14 @@
 
       </ul>
 
-      <p>Encode Behavior</p>     
+      <p>Encode Behavior</p>
 
       <ul>
 
       <p>  Render the
       clientId as the value of the "name" attribute.  Render the current
       valu eof the component inside the "textarea"
-      element.</p> </ul> </description>
+      element.</p> </ul>]]> </description>
       <component-family>javax.faces.Input</component-family>
       <renderer-type>javax.faces.Textarea</renderer-type>
       <renderer-class>&input-textarea-renderer-class;</renderer-class>
@@ -1533,7 +1519,7 @@
 
     <renderer>
 
-      <description><p>Render a single message for a specific component.</p>
+      <description><![CDATA[<p>Render a single message for a specific component.</p>
 
       <p>Set-up for Rendering</p>
 
@@ -1588,7 +1574,7 @@
       the summary.  If "showDetail" is true, output the detail.  Close
       out the span if necessary.</p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.Message</component-family>
@@ -1604,7 +1590,7 @@
     <renderer>
 
      <description>
-
+     <![CDATA[
      <p>The same as for the Message renderer, but output all the
      messages.  If the value of the "layout" attribute is "table",
      render nested "table", "tr", and "td" elements, in that order,
@@ -1614,7 +1600,7 @@
      the <code>FacesContext</code> or the empty string if the components
      "globalOnly" property is <code>true</code>.  If the layout was
      "table" close out the table elements.  </p>
-
+     ]]>
      </description>
 
       <component-family>javax.faces.Messages</component-family>
@@ -1629,7 +1615,7 @@
 
     <renderer>
 
-      <description><p>Render parameterized text.  Obtain the
+      <description><![CDATA[<p>Render parameterized text.  Obtain the
       <code>style</code>, <code>styleClass</code>, <code>dir</code>, and
       <code>lang</code> attributees from this component.  If any are
       present, render a "span" element.  Output the
@@ -1645,7 +1631,7 @@
       <code>value</code> of this component as the first argument, and
       the array of parameter values as the second argument, and render
       the result.  Otherwise, render the <code>value</code> of this
-      component unmodified.</p>
+      component unmodified.</p>]]>
       </description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Format</renderer-type>
@@ -1659,10 +1645,10 @@
 
     <renderer>
 
-      <description>Renders an HTML "label" element.  Render the current value 
-      of the component as label text if it is specified. If a "for" attribute is 
-      specified, find the component specified by the value of the "for" 
-      attribute, and render its client id as the value of the "for" attribute.  
+      <description>Renders an HTML "label" element.  Render the current value
+      of the component as label text if it is specified. If a "for" attribute is
+      specified, find the component specified by the value of the "for"
+      attribute, and render its client id as the value of the "for" attribute.
       If "styleClass" attribute is specified, render its value as the value
       of the "class" attribute.</description>
       <component-family>javax.faces.Output</component-family>
@@ -1679,7 +1665,7 @@
 
     <renderer>
 
-      <description>Render an HTML "a" anchor element.  The value of the
+      <description><![CDATA[Render an HTML "a" anchor element.  The value of the
       component is rendered as the value of the "href" attribute.  Any
       child UIParameter components are appended to the String to be
       output as the value of the "href" attribute as query parameters
@@ -1690,7 +1676,7 @@
       hand side.  The name and the value must be URLEncoded.  Each
       UIParameter instance is separeted by an ampersand, as dictated in
       the URL spec.  If the "styleClass" attribute is specified, render
-      its value as the value of the "class" attribute.
+      its value as the value of the "class" attribute.]]>
       </description>
       <component-family>javax.faces.Output</component-family>
       <renderer-type>javax.faces.Link</renderer-type>
@@ -1733,7 +1719,7 @@
 
     <renderer>
 
-      <description>Renders an HTML "table" element, conforming to the
+      <description><![CDATA[Renders an HTML "table" element, conforming to the
       rules in the HTML 401 specification.  If the "styleClass"
       attribute is specified, render its value as the value of the
       "class" attribute.  Render the pass-through attributes in the
@@ -1751,7 +1737,7 @@
       the "columns" attribute, creating a new row each time a "columns"
       worth of children have been rendered.  Each child is rendered
       inside of a "td" element.  If a child has "rendered==false" it is
-      not rendered, and the column counter must not be incremented.
+      not rendered, and the column counter must not be incremented.]]>
       </description>
       <component-family>javax.faces.Panel</component-family>
       <renderer-type>javax.faces.Grid</renderer-type>
@@ -1798,7 +1784,7 @@
 
     <renderer>
 
-      <description><p>Renders an HTML "input" element of type "checkbox".</p>
+      <description><![CDATA[<p>Renders an HTML "input" element of type "checkbox".</p>
 
       <p>Decode Behavior</p>
 
@@ -1816,7 +1802,7 @@
 
       </ul>
 
-      <p>Encode Behavior</p>     
+      <p>Encode Behavior</p>
 
       <ul>
 
@@ -1825,7 +1811,7 @@
       attribute.  If the current value of the component is "true",
       output the "checked" attribute.  If the "styleClass" attribute is
       specified, render its value as the value of the "class"
-      attribute.</p> </ul></description>
+      attribute.</p> </ul>]]></description>
       <component-family>javax.faces.SelectBoolean</component-family>
       <renderer-type>javax.faces.Checkbox</renderer-type>
       <renderer-class>&selectboolean-checkbox-renderer-class;</renderer-class>
@@ -1840,7 +1826,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML checkbox list.</p>
+      <description><![CDATA[<p>Render an HTML checkbox list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -1855,8 +1841,8 @@
       <p>Encode Behavior</p>
 
       <ul>
-      <p>Render a "table" element.  If the "styleClass" is specified, render the 
-      value of the "styleClass" attribute as the value of the "class" attribute 
+      <p>Render a "table" element.  If the "styleClass" is specified, render the
+      value of the "styleClass" attribute as the value of the "class" attribute
       on the "table" element. If the "style", "border" attributes are specified,
       pass them thru.  If the "layout" attribute is specified, and its
       value is "pageDirection", render the children elements vertically,
@@ -1866,9 +1852,9 @@
       a "label" element. Inside of the "label", render an "input" element
       of "type" "checkbox" for each child component.  As an exception to
       the general rules about how to handle the "id" attribute, render it
-      as an attribute on the outer "table" element, the value of which is the 
-      <code>clientId</code> of the component per the rules at the beginning 
-      of this specification.The "id" attribute must not be output on each "input" 
+      as an attribute on the outer "table" element, the value of which is the
+      <code>clientId</code> of the component per the rules at the beginning
+      of this specification.The "id" attribute must not be output on each "input"
       element. The value of the current SelectItem is rendered as the value of
       the "value" attribute.  If the value of the enclosing UISelectMany
       matches the current value, render "checked" as the value of the
@@ -1882,7 +1868,7 @@
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.SelectMany</component-family>
@@ -1900,7 +1886,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML option list.</p>
+      <description><![CDATA[<p>Render an HTML option list.</p>
 
       <p>Decode Behavior</p>
 
@@ -1941,22 +1927,22 @@
 
       </ul>
 
-      <p>Encode Behavior</p>     
+      <p>Encode Behavior</p>
 
       <ul>
 
       <p>Render an HTML "select" element. Render the clientId of
-      the component as the value of the "name" attribute.  If the "styleClass" 
-      attribute is specified, render its value as the value of the "class" 
-      attribute on the "select" element.  If the component is a 
-      <code>UISelectMany</code> instance, render "multiple" as the value of the 
-      "multiple" attribute.  If the "size" attribute is specified, render its 
-      value as the value of the "size" attribute.  Otherwise use the number of 
+      the component as the value of the "name" attribute.  If the "styleClass"
+      attribute is specified, render its value as the value of the "class"
+      attribute on the "select" element.  If the component is a
+      <code>UISelectMany</code> instance, render "multiple" as the value of the
+      "multiple" attribute.  If the "size" attribute is specified, render its
+      value as the value of the "size" attribute.  Otherwise use the number of
       items as the value of the "size" attribute.</p>
 
       </ul>
 
-      <p><a name="option">Rendering the "option" elements</a></p> 
+      <p><a name="option">Rendering the "option" elements</a></p>
 
       <ul>
 
@@ -2014,7 +2000,7 @@
 
       </ul>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.SelectMany</component-family>
@@ -2032,7 +2018,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML option list.</p>
+      <description><![CDATA[<p>Render an HTML option list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -2049,8 +2035,8 @@
       <ul>
 
       <p>Render an HTML "select" element.  Render the clientId of
-      the component as the value of the "name" attribute.  If the "styleClass" 
-      attribute is specified, render its value as the value of the "class" 
+      the component as the value of the "name" attribute.  If the "styleClass"
+      attribute is specified, render its value as the value of the "class"
       attribute on the "select" element. If the component
       to be rendered is a UISelectMany, render "true" as the value of
       the "multiple" attribute.  Render "1" as the value of the "size"
@@ -2060,7 +2046,7 @@
       more detail on how to render the "option" elements in this
       renderer.</p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.SelectMany</component-family>
@@ -2078,7 +2064,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML option list.</p>
+      <description><![CDATA[<p>Render an HTML option list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -2094,8 +2080,8 @@
 
       <ul>
       <p>Render an HTML "select" element.  Render the clientId of
-      the component as the value of the "name" attribute.  If the "styleClass" 
-      attribute is specified, render its value as the value of the "class" 
+      the component as the value of the "name" attribute.  If the "styleClass"
+      attribute is specified, render its value as the value of the "class"
       attribute on the "select" element. If the component
       to be rendered is a UISelectMany, render "true" as the value of
       the "multiple" attribute.  If the "size" attribute is specified,
@@ -2106,7 +2092,7 @@
       more detail on how to render the "option" elements in this
       renderer.</p>
 
-      </ul>
+      </ul>]]>
       </description>
       <component-family>javax.faces.SelectOne</component-family>
       <renderer-type>javax.faces.Listbox</renderer-type>
@@ -2123,7 +2109,7 @@
 
     <renderer>
 
-      <description><p>Render an HTML option list.</p>
+      <description><![CDATA[<p>Render an HTML option list.</p>
 
       <p><a name="decode">Decode Behavior</a></p>
 
@@ -2151,7 +2137,7 @@
       <code>ListboxRenderer</code> for more detail on how to render the
       "option" elements in this renderer.</p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.SelectOne</component-family>
@@ -2169,7 +2155,7 @@
 
     <renderer>
 
-      <description><p>Render a set of html "input" elements of type
+      <description><![CDATA[<p>Render a set of html "input" elements of type
       "radio".</p>
 
       <p><a name="decode">Decode Behavior</a></p>
@@ -2186,18 +2172,18 @@
 
       <ul>
 
-      <p>Render a "table" element. If the "styleClass" is specified, render the 
-      value of the "styleClass" attribute as the value of the "class" attribute 
+      <p>Render a "table" element. If the "styleClass" is specified, render the
+      value of the "styleClass" attribute as the value of the "class" attribute
       on the "table" element. If the "style", "border" attributes are specified,
       pass them thru. If the "layout" attribute is specified, and its
       value is "pageDirection", render the children elements
       vertically, otherwise horizontally, in the table.  If any of the
       children are an instance of SelectItemGroup, render them as a
       nested table.  Render a "label" element.  Each of the children are
-      ultimately rendererd as an "input" element of "type" "radio". As an 
-      exception to the general rules about how to handle the "id" attribute, 
-      render it as an attribute on the outer "table" element, the value of which 
-      is the <code>clientId</code> of the component per the rules at the 
+      ultimately rendererd as an "input" element of "type" "radio". As an
+      exception to the general rules about how to handle the "id" attribute,
+      render it as an attribute on the outer "table" element, the value of which
+      is the <code>clientId</code> of the component per the rules at the
       beginning  of this specification.  The "id" attribute must not be
       output on each "input" element.  Output the value of the "label"
       attribute of the <code>SelectItem</code> after the "input"
@@ -2211,7 +2197,7 @@
       more detail on how to render the "option" elements in this
       renderer.  Close out the "label" element. </p>
 
-      </ul>
+      </ul>]]>
 
       </description>
       <component-family>javax.faces.SelectOne</component-family>
