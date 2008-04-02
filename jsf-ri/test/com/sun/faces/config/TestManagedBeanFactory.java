@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.3 2003/05/04 21:39:36 horwat Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.4 2003/05/07 18:16:33 horwat Exp $
  */
 
 /*
@@ -66,19 +66,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
 
     // --------------------------------------------------- Overall Test Methods
-
-
-    /**
-     * Set up instance variables required by this test case.
-     */
-    public void setUp() {
-    }
-
-    /**
-     * Over-ride method to avoid conflicts
-     */
-    public void tearDown() {
-    }
 
 
     // ------------------------------------------------ Individual Test Methods
@@ -265,10 +252,6 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         assertTrue(mbf.getScope().equals("session"));
     }
 
-/**
- * PENDING: horwat: getFacesContext() is returning a NULL FacesContext making
- * this test non-workable. Must find a way to get a FacesContext.
-
     public void testValueRefProperty() throws Exception {
         //Testing simple value ref property
 
@@ -308,6 +291,5 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
     }
 
-** END testValueRefProperty */
 
 }
