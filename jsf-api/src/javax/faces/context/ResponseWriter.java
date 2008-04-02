@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.17 2005/12/05 16:42:48 edburns Exp $
+ * $Id: ResponseWriter.java,v 1.18 2006/03/24 19:05:33 edburns Exp $
  */
 
 /*
@@ -216,6 +216,37 @@ public abstract class ResponseWriter extends Writer {
      */
     public abstract void writeText(Object text, String property)
         throws IOException;
+
+    /**
+     * <p>Write an object, after converting it to a String (if
+     * necessary), and after performing any escaping appropriate for the
+     * markup language being rendered.  This method is equivalent to
+     * {@link #writeText(java.lang.Object,java.lang.String)} but adds a
+     * <code>component</code> property to allow custom
+     * <code>ResponseWriter</code> implementations to associate a
+     * component with an arbitrary portion of text.</p>
+     *
+     * <p>The default implementation simply ignores the
+     * <code>component</code> argument and calls through to {@link
+     * #writeText(java.lang.Object,java.lang.String)}</p>
+     *
+     * @param text Text to be written
+     * @param component The {@link UIComponent} (if any) to which
+     *  this element corresponds
+     * @param property Name of the property or attribute (if any) of the
+     *  {@link UIComponent} associated with the containing element,
+     *  to which this generated text corresponds
+     * 
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>text</code>
+     *  is <code>null</code>
+     *
+     * @since 1.2
+     */
+    public void writeText(Object text, UIComponent component, String property)
+        throws IOException {
+	writeText(text, property);
+    }
 
 
     /**
