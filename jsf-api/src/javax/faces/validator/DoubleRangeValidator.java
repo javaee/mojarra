@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.40 2004/05/12 02:00:44 eburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.41 2004/05/13 20:14:35 eburns Exp $
  */
 
 /*
@@ -44,6 +44,14 @@ import javax.faces.convert.Converter;
  *     specified minimum, throw a {@link ValidatorException} containing a
  *     MINIMUM_MESSAGE_ID message.</li>
  * </ul>
+ * 
+ * <p>For all of the above cases that cause a {@link ValidatorException}
+ * to be thrown, if there are parameters to the message that match up
+ * with validator parameters, the values of these parameters must be
+ * converted using the {@link Converter} registered in the application
+ * under the converter id <code>javax.faces.Number</code>.  This allows
+ * the values to be localized according to the current
+ * <code>Locale</code>.</p>
  */
 
 public class DoubleRangeValidator implements Validator, StateHolder {
