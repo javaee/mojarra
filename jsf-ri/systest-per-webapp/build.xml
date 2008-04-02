@@ -203,6 +203,9 @@
     <copy todir="${webapp.build.home}/WEB-INF/classes">
       <fileset dir="${basedir}/../build/test/WEB-INF/classes" />
     </copy>
+    <!-- delete references to the ResourceInjection, since they seem to be tripping things up -->
+    <delete file="${webapp.build.home}/WEB-INF/sun-web.xml" />
+    <delete file="${webapp.build.home}/WEB-INF/classes/com/sun/faces/systest/model/ResourceInjectionBean.class" />
   </target>
 
   <target name="compile.base.sources">

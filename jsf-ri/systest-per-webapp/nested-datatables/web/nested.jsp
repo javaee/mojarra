@@ -43,6 +43,8 @@
 	    </h:dataTable>  
 <hr />
           <h:commandButton id="reload" value="reload" action="#{testbean.printTree}"/>
+          
+          <p>Current state after previous load: <h:outputText escape="false" value="#{testbean.currentStateTable}" /></p>
       </h:form>
     </body>
   </html>
