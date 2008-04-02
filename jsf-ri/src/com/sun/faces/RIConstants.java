@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.26 2003/03/10 20:23:49 eburns Exp $
+ * $Id: RIConstants.java,v 1.27 2003/03/11 05:37:54 rkitain Exp $
  */
 
 /*
@@ -73,7 +73,7 @@ public class RIConstants {
     /**
      * <p>Phase identifier for <em>Reconstitute Request Tree</em>.</p>
      */
-    public static final int RECONSTITUTE_REQUEST_TREE_PHASE = 0;
+    public static final int RECONSTITUTE_COMPONENT_TREE_PHASE = 0;
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: TestGenericPhaseImpl.java,v 1.10 2003/02/20 22:49:56 ofung Exp $
+ * $Id: TestGenericPhaseImpl.java,v 1.11 2003/03/11 05:37:59 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestGenericPhaseImpl.java,v 1.10 2003/02/20 22:49:56 ofung Exp $
+ * @version $Id: TestGenericPhaseImpl.java,v 1.11 2003/03/11 05:37:59 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -115,8 +115,8 @@ public void testExecute()
     out = new PrintStream(fs);
 
     Phase
-        reconstituteTree = new ReconstituteRequestTreePhase(null,
-            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
+        reconstituteTree = new ReconstituteComponentTreePhase(null,
+            RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
     try {
         result = reconstituteTree.execute(getFacesContext());
     }

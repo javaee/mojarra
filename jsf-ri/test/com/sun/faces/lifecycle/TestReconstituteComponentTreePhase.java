@@ -1,5 +1,5 @@
 /*
- * $Id: TestReconstituteRequestTreePhase.java,v 1.8 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:59 rkitain Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TestReconstituteRequestTreePhase.java
+// TestReconstituteComponentTreePhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -37,18 +37,18 @@ import java.util.Locale;
 
 /**
  *
- *  <B>TestReconstituteRequestTreePhase</B> is a class ...
+ *  <B>TestReconstituteComponentTreePhase</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestReconstituteRequestTreePhase.java,v 1.8 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:59 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestReconstituteRequestTreePhase extends ServletFacesTestCase
+public class TestReconstituteComponentTreePhase extends ServletFacesTestCase
 {
 //
 // Protected Constants
@@ -72,11 +72,11 @@ public static final String TEST_URI = "/components.jsp";
 // Constructors and Initializers    
 //
 
-    public TestReconstituteRequestTreePhase() {
-	super("TestReconstituteRequestTreePhase");
+    public TestReconstituteComponentTreePhase() {
+	super("TestReconstituteComponentTreePhase");
     }
 
-    public TestReconstituteRequestTreePhase(String name) {
+    public TestReconstituteComponentTreePhase(String name) {
 	super(name);
     }
 
@@ -100,8 +100,8 @@ public void beginReconstituteRequestSubmit(WebRequest theRequest)
 
 public void testReconstituteRequestInitial()
 {
-    Phase reconstituteTree = new ReconstituteRequestTreePhase(null, 
-			RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
+    Phase reconstituteTree = new ReconstituteComponentTreePhase(null, 
+			RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
     int result = -1;
 
     try {
@@ -155,8 +155,8 @@ public void testReconstituteRequestSubmit()
     Locale locale = new Locale("France", "french");
     session.setAttribute(RIConstants.REQUEST_LOCALE, locale);
     
-    Phase reconstituteTree = new ReconstituteRequestTreePhase(null, 
-			RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
+    Phase reconstituteTree = new ReconstituteComponentTreePhase(null, 
+			RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
     int result = -1;
 
     try {
@@ -185,4 +185,4 @@ public void testReconstituteRequestSubmit()
 
 
 
-} // end of class TestReconstituteRequestTreePhase
+} // end of class TestReconstituteComponentTreePhase

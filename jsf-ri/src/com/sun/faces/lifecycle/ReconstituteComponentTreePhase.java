@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteRequestTreePhase.java,v 1.10 2003/02/20 22:48:48 ofung Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:56 rkitain Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// ReconstituteRequestTreePhase.java
+// ReconstituteComponentTreePhase.java
 
 package com.sun.faces.lifecycle;
 
@@ -40,14 +40,14 @@ import com.sun.faces.util.DebugUtil;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteRequestTreePhase.java,v 1.10 2003/02/20 22:48:48 ofung Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.1 2003/03/11 05:37:56 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#CREATE_REQUEST_TREE_PHASE
  *
  */
 
-public class ReconstituteRequestTreePhase extends GenericPhaseImpl
+public class ReconstituteComponentTreePhase extends GenericPhaseImpl
 {
 //
 // Protected Constants
@@ -70,7 +70,7 @@ private TreeFactory treeFactory = null;
 // Constructors and Genericializers    
 //
 
-public ReconstituteRequestTreePhase(Lifecycle newDriver, int newId)
+public ReconstituteComponentTreePhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
     
@@ -215,7 +215,7 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     session.removeAttribute(RIConstants.REQUEST_LOCALE);
 }
 
-// The testcase for this class is TestReconstituteRequestTreePhase.java
+// The testcase for this class is TestReconstituteComponentTreePhase.java
 
 
-} // end of class ReconstituteRequestTreePhase
+} // end of class ReconstituteComponentTreePhase

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreTreeFromPage.java,v 1.7 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestRestoreTreeFromPage.java,v 1.8 2003/03/11 05:38:00 rkitain Exp $
  */
 
 /*
@@ -38,11 +38,11 @@ import com.sun.faces.FileOutputResponseWriter;
 
 /**
  *
- *  <B>TestReconstituteRequestTreePhase</B> is a class ...
+ *  <B>TestRestoreTreeFromPage</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreTreeFromPage.java,v 1.7 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestRestoreTreeFromPage.java,v 1.8 2003/03/11 05:38:00 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -105,8 +105,8 @@ public void beginRestoreTreeFromPage(WebRequest theRequest)
 
 public void testRestoreTreeFromPage()
 {
-    Phase reconstituteTree = new ReconstituteRequestTreePhase(null, 
-			RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE);
+    Phase reconstituteTree = new ReconstituteComponentTreePhase(null, 
+			RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE);
     int result = -1;
 
     try {
@@ -145,4 +145,4 @@ public void testRestoreTreeFromPage()
 
 }
 
-} // end of class TestReconstituteRequestTreePhase
+} // end of class TestRestoreTreeFromPage

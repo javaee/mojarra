@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.12 2003/02/20 22:49:57 ofung Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.13 2003/03/11 05:37:59 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.12 2003/02/20 22:49:57 ofung Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.13 2003/03/11 05:37:59 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,8 +102,8 @@ public void testCallback()
     userName = null;
     String value = null;
     Phase 
-        reconstituteTree = new ReconstituteRequestTreePhase(null,
-            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE),
+        reconstituteTree = new ReconstituteComponentTreePhase(null,
+            RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE),
 	applyValues = new ApplyRequestValuesPhase(null, 
             RIConstants.APPLY_REQUEST_VALUES_PHASE), 
 	processValidations = new ProcessValidationsPhase(null, 

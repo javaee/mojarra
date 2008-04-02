@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.18 2003/02/20 22:48:48 ofung Exp $
+ * $Id: LifecycleImpl.java,v 1.19 2003/03/11 05:37:55 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.18 2003/02/20 22:48:48 ofung Exp $
+ * @version $Id: LifecycleImpl.java,v 1.19 2003/03/11 05:37:55 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -105,8 +105,8 @@ public LifecycleImpl()
 
 protected void initPhases()
 {
-    phaseWrappers.add(new PhaseWrapper(new ReconstituteRequestTreePhase(this, 
-            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE)));
+    phaseWrappers.add(new PhaseWrapper(new ReconstituteComponentTreePhase(this, 
+            RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ApplyRequestValuesPhase(this, 
             RIConstants.APPLY_REQUEST_VALUES_PHASE)));
     phaseWrappers.add(new PhaseWrapper(new ProcessValidationsPhase(this, 

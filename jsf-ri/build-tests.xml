@@ -334,7 +334,7 @@
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
 
-            <test name="com.sun.faces.lifecycle.TestReconstituteRequestTreePhase"/>
+            <test name="com.sun.faces.lifecycle.TestReconstituteComponentTreePhase"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.convert.TestConverterFactory"/>
             <test name="com.sun.faces.convert.TestConverters"/>

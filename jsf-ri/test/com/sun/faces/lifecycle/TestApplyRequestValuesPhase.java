@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.10 2003/02/20 22:49:55 ofung Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.11 2003/03/11 05:37:58 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.10 2003/02/20 22:49:55 ofung Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.11 2003/03/11 05:37:58 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,8 +93,8 @@ public void testCallback()
     UIComponent root = null;
     String value = null;
     Phase 
-        reconstituteTree = new ReconstituteRequestTreePhase(null,
-            RIConstants.RECONSTITUTE_REQUEST_TREE_PHASE),
+        reconstituteTree = new ReconstituteComponentTreePhase(null,
+            RIConstants.RECONSTITUTE_COMPONENT_TREE_PHASE),
 	applyValues = new ApplyRequestValuesPhase(null, 
 					RIConstants.APPLY_REQUEST_VALUES_PHASE);
 
