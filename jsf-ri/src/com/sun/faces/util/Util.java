@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.86 2003/09/11 21:19:03 rkitain Exp $
+ * $Id: Util.java,v 1.87 2003/09/11 23:13:00 eburns Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import javax.faces.component.UISelectItems;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -60,7 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.86 2003/09/11 21:19:03 rkitain Exp $
+ * @version $Id: Util.java,v 1.87 2003/09/11 23:13:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -354,25 +355,6 @@ public class Util extends Object
         "onreset"
     };
 
-    private static String defaultConverters[][] = {
-        // PENDING (visvan) how do we decide whether to use date, datetime,
-        // or time renderers ?
-        {"java.util.Date", "Date"},
-        {"java.lang.Boolean", "Boolean"},
-        {"java.lang.Byte", "Number"},
-        {"java.lang.Double", "Number"},
-        {"java.lang.Float", "Number"},
-        {"java.lang.Integer", "Number"},
-        {"java.lang.Short", "Number"},
-        {"java.lang.Long", "Number"},
-        {"byte", "Number"},
-        {"boolean", "Boolean"},
-        {"double", "Number"},
-        {"float", "Number"},
-        {"int", "Number"},
-        {"long", "Number"},
-        {"short", "Number"}
-    };
 private static long id = 0;
 
 //
@@ -807,21 +789,35 @@ private Util()
         }
 	return sessionMap;
     }
-    
-    /**
-     * Returns the converter identifier for a given converter class name.
-     */
-    public static String getDefaultConverterForType(String converterClassName) {
-        // PENDING (visvan) This method is temporary until the lookup moves
-        // to API. 
-        for ( int i = 0; i < defaultConverters.length; ++i ) {
-            if ( (defaultConverters[i][0]).equals(converterClassName)) {
-                return (defaultConverters[i][1]);
-            }
+
+    public static Converter getConverterForClass(Class converterClass) {
+        if (converterClass == null) {
+            return null;
         }
-        return null;
-        
+        try {
+	    ApplicationFactory aFactory = 
+		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application application = aFactory.getApplication();
+            return (application.createConverter(converterClass));
+        } catch (Exception e) {
+            return (null);
+        }
     }
+
+    public static Converter getConverterForIdentifer(String converterId) {
+        if (converterId == null) {
+            return null;
+        }
+        try {
+	    ApplicationFactory aFactory = 
+		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application application = aFactory.getApplication();
+            return (application.createConverter(converterId));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
+    
     
     /**
      * <p>Return an {@link ExpressionEvaluator} instance using the specified parser.</p>

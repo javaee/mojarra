@@ -141,6 +141,15 @@
             </classpath>
         </taskdef>
 
+      <uptodate property="skip.build" 
+                targetfile="${out.test.dir}/last-testrun">
+        <srcfiles dir="${basedir}">
+          <include name="src/**/*.*"/>
+          <include name="test/**/*.*"/>
+          <include name="conf/**/*.*"/>
+          <include name="web/test/**/*.*"/>
+        </srcfiles>
+      </uptodate>
     </target>
 
     <target name="remove.jsp.incompat.workaround">
@@ -204,7 +213,7 @@
       <antcall target="remove.jsp.incompat.workaround"/>
     </target>
 
-    <target name="prepare.test.webapp" 
+    <target name="prepare.test.webapp" unless="skip.build" 
             description="put the test webapp in the WAR file format in out.test.dir"
             depends="compile.test">
 
@@ -228,14 +237,19 @@
 
         <!-- copy the test data files -->
         <antcall target="copy-test-data-files"/>
-
+        <jar jarfile="${build.home}/test.war" basedir="${out.test.dir}"/>
     </target>
 
     <target name="execute.cactus.tests" depends="prepare.test.webapp">
+      <echo message="${skip.build}"/>
       <antcall target="safe.remove"/>
       <antcall target="install"/>
+      <touch file="${out.test.dir}/last-testrun"/>
       <antcall target="run.cactus.test"/>
-      <antcall target="remove"/>
+    </target>
+
+    <target name="remove.tstamp">
+      <delete file="${out.test.dir}/last-testrun"/>
     </target>
 
     <target name="copy-test-data-files">
@@ -246,20 +260,21 @@
        </copy>
     </target>
 
-    <target name="install" depends="prepare.test.webapp"
+    <target name="install" unless="skip.build" depends="prepare.test.webapp"
             description="Install cactus unit test webapp">
        <install url="${url}" username="${username}" password="${password}"
                 path="/test"
                 war="file://${out.test.dir}"/>
     </target>
 
-    <target name="remove"
+    <target name="remove" unless="skip.build"
             description="Remove cactus unit test webapp"> 
+      <echo message="${skip.build}" />
       <remove url="${url}" username="${username}" password="${password}"
             path="/test"/>
     </target>
 
-    <target name="safe.remove"
+    <target name="safe.remove" unless="skip.build"
             description="Remove cactus unit test webapp, don't fail on error">
       <exec executable="ant.bat" os="Windows 2000" failonerror="false">
         <arg line="-f build-tests.xml -Dusername=${username} -Dpassword=${password} remove"/>
@@ -326,7 +341,6 @@
             <test name="com.sun.faces.util.TestUtil_messages"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
-
             <!-- To run the following tests, uncomment
                  following tests and set javax.faces.STATE_SAVING_METHOD 
                  property in conf/test/web.xml to client. Tests that 

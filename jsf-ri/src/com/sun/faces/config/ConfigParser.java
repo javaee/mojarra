@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.34 2003/09/08 22:03:13 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.35 2003/09/11 23:12:57 eburns Exp $
  */
 
 /*
@@ -748,7 +748,54 @@ final class ConvertersRule extends Rule {
 	    }
 	    // store by class
 	    application.addConverter(theClass, cc.getConverterClass());
+	    // make sure we also handle things of <WRAPPER>.TYPE, where
+	    // wrapper is Byte, Boolean, Integer, etc.
+	    if (null != 
+		(theClass = 
+		 getCorrespondingPrimitive(cc.getConverterForClass()))) {
+		application.addConverter(theClass, cc.getConverterClass());
+	    }
 	}
+    }
+
+    /**
+     * @return the appropriate primitive Class for the argument.  For
+     * example, if the argument is <code>java.lang.Boolean</code>, this
+     * method will return <code>Boolean.TYPE</code>.
+     */
+
+    protected Class getCorrespondingPrimitive(String converterClassName) {
+	Class result = null;
+	if (null == converterClassName) {
+	    return null;
+	}
+	// an if-else chain is appropriate since the set of primitives
+	// in the Java Language is never going to change.
+	if (converterClassName.equals("java.lang.Boolean")) {
+	    result = Boolean.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Byte")) {
+	    result = Byte.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Double")) {
+	    result = Double.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Float")) {
+	    result = Float.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Integer")) {
+	    result = Integer.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Character")) {
+	    result = Character.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Short")) {
+	    result = Short.TYPE;
+	}
+	else if (converterClassName.equals("java.lang.Long")) {
+	    result = Long.TYPE;
+	}
+	return result;
     }
 }
 

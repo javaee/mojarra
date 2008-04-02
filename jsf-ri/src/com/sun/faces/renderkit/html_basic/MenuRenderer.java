@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.25 2003/09/04 19:52:17 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.26 2003/09/11 23:12:58 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -24,8 +24,10 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
 
@@ -33,6 +35,7 @@ import org.mozilla.util.Assert;
 
 import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
+import java.lang.reflect.Array;
 
 /**
  * <B>MenuRenderer</B> is a class that renders the current value of 
@@ -136,31 +139,157 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     
     public void setSelectManyValue(FacesContext context, UISelectMany uiSelectMany,
             String[] newValues) throws ConverterException {
-        if ( newValues == null ) {
-            uiSelectMany.setValue(null);
-            return;
-        }
-        Object[] convertedValues = new Object[newValues.length];
-        // PENDING (visvan) One restriction for UISelectMany component is that
-        // if there is converter set, we can't figure out the type using 
-        // valueRef since valueRef is not pointing to array of selectedValues.
-        // So, one has to explicitly set the connverter attribute for encoding
-        // and decoding to happen correctly.
-        for ( int i = 0; i < newValues.length; ++i ) {
-            try {
-                convertedValues[i] = getConvertedValue(context, uiSelectMany, 
-                        newValues[i]); 
-            } catch (ConverterException ce) {
-                uiSelectMany.setValue(newValues);
-                addConversionErrorMessage(context, uiSelectMany, 
-                        ce.getMessage());
-                uiSelectMany.setValid(false);
-                return;
-            }
-        }
-        uiSelectMany.setValue(convertedValues);
+        String valueRef = uiSelectMany.getValueRef();
+	Object result = newValues; // default case, set local value
+	Class modelType = null;
+	
+	// If we have a valueRef
+	if (null != valueRef) {
+            modelType = (Util.getValueBinding(valueRef)).getType(context);
+	    // Does the valueRef resolve properly to something with a type?
+	    if (null != modelType) {
+		if (modelType.isArray()) {
+		    try {
+			result = handleArrayCase(context, uiSelectMany, 
+						 modelType, newValues);
+			uiSelectMany.setValid(true);
+		    }
+		    catch (ConverterException e) {
+			addConversionErrorMessage(context, uiSelectMany,
+						  e.getMessage());
+			uiSelectMany.setValid(false);
+		    }
+		}
+		else {
+		    // the model type must be an array.
+		    addConversionErrorMessage(context, uiSelectMany,
+					      Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
+		    uiSelectMany.setValid(false);
+		}
+	    } else {
+		// We have a valueRef, but no modelType.  Error.
+		addConversionErrorMessage(context, uiSelectMany,
+					  Util.getExceptionMessage(Util.CONVERSION_ERROR_MESSAGE_ID));
+		uiSelectMany.setValid(false);
+	    }
+	}
+	else {
+	    // No valueRef, just use Object array.
+	    Object [] convertedValues = new Object[1];
+	    try {
+		result = handleArrayCase(context, uiSelectMany, 
+					 convertedValues.getClass(), 
+					 newValues);
+	    }
+	    catch (ConverterException e) {
+		addConversionErrorMessage(context, uiSelectMany,
+					  e.getMessage());
+		uiSelectMany.setValid(false);
+	    }
+	}
+	
+	// At this point, result is ready to be set as the value
+	uiSelectMany.setValue(result);
     }
     
+    protected Object handleArrayCase(FacesContext context, 
+				     UISelectMany uiSelectMany,
+				     Class arrayClass,
+				     String [] newValues) throws ConverterException {
+	Object result = null;
+	Class elementType = null;
+	Converter converter = null;
+	int 
+	    i = 0, 
+	    len = (null != newValues ? newValues.length : 0);
+	
+	elementType = arrayClass.getComponentType();
+
+	// Optimization: If the elemntType is String, we don't need
+	// conversion.  Just return newValues.
+	if (elementType.equals(String.class)) {
+	    return newValues;
+	}
+	
+	try {
+	    result = Array.newInstance(elementType, len);
+	}
+	catch (Exception e) {
+	    throw new ConverterException(e);	
+	}
+
+	// bail out now if we have no new values, returning our
+	// oh-so-useful zero-length array.
+	if (null == newValues) {
+	    return result;
+	}
+
+	// obtain a converter.
+
+	// attached converter takes priority
+	if (null == (converter = uiSelectMany.getConverter())) {
+	    // if that fails, look for a by-type converter
+	    if (null == (converter = Util.getConverterForClass(elementType))) {
+		throw new ConverterException("null Converter");
+	    }
+	}
+	
+	Assert.assert_it(null != result);
+	if (elementType.isPrimitive()) {
+	    for (i = 0; i < len; i++) {
+		if (elementType.equals(Boolean.TYPE)) {
+		    Array.setBoolean(result, i, 
+				     ((Boolean) converter.getAsObject(context,
+								      uiSelectMany,
+								      newValues[i])).booleanValue());
+		} else if (elementType.equals(Byte.TYPE)) {
+		    Array.setByte(result, i, 
+				  ((Byte) converter.getAsObject(context,
+								uiSelectMany,
+								newValues[i])).byteValue());
+		} else if (elementType.equals(Double.TYPE)) {
+		    Array.setDouble(result, i, 
+				  ((Double) converter.getAsObject(context,
+								uiSelectMany,
+								newValues[i])).doubleValue());
+		} else if (elementType.equals(Float.TYPE)) {
+		    Array.setFloat(result, i, 
+				  ((Float) converter.getAsObject(context,
+								uiSelectMany,
+								newValues[i])).floatValue());
+		} else if (elementType.equals(Integer.TYPE)) {
+		    Array.setInt(result, i, 
+				 ((Integer) converter.getAsObject(context,
+								  uiSelectMany,
+								  newValues[i])).intValue());
+		} else if (elementType.equals(Character.TYPE)) {
+		    Array.setChar(result, i, 
+				 ((Character) converter.getAsObject(context,
+								  uiSelectMany,
+								  newValues[i])).charValue());
+		} else if (elementType.equals(Short.TYPE)) {
+		    Array.setShort(result, i, 
+				 ((Short) converter.getAsObject(context,
+								  uiSelectMany,
+								  newValues[i])).shortValue());
+		} else if (elementType.equals(Long.TYPE)) {
+		    Array.setLong(result, i, 
+				  ((Long) converter.getAsObject(context,
+								uiSelectMany,
+								newValues[i])).longValue());
+		}
+	    }
+	}
+	else {
+	    for (i = 0; i < len; i++) {
+		Array.set(result, i, converter.getAsObject(context,
+							   uiSelectMany,
+							   newValues[i]));
+	    }
+	}
+	return result;
+    }
+	
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {

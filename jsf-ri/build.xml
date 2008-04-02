@@ -179,6 +179,7 @@
   <target name="clean" 
    description="Clean build and distribution directories">
     <ant antfile="build-tests.xml" target="safe.remove"/>
+    <ant antfile="build-tests.xml" target="remove.tstamp"/>
     <delete    dir="${build.home}"/>
     <delete    dir="${dist.home}"/>
     <delete> 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.12 2003/08/26 00:46:49 rlubke Exp $
+ * $Id: TestConverters.java,v 1.13 2003/09/11 23:13:01 eburns Exp $
  */
 
 /*
@@ -17,7 +17,9 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIComponent;
 import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UISelectManyBase;
 import javax.faces.component.base.UIViewRootBase;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
@@ -26,9 +28,15 @@ import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -36,7 +44,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.12 2003/08/26 00:46:49 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.13 2003/09/11 23:13:01 eburns Exp $
  * 
  *
  */
@@ -102,6 +110,339 @@ public class TestConverters extends JspFacesTestCase
             assertTrue(false);
             return;
         }
+    }
+
+    public static class TestBean extends Object {
+	boolean [] booleans = null;
+	public boolean [] getBooleans() {
+	    return booleans;
+	}
+	public void setBooleans(boolean [] newBooleans) {
+	    booleans = newBooleans;
+	}
+
+	byte [] bytes = null;
+	public byte [] getBytes() {
+	    return bytes;
+	}
+	public void setBytes(byte [] newBytes) {
+	    bytes = newBytes;
+	}
+
+	char [] chars = null;
+	public char [] getChars() {
+	    return chars;
+	}
+	public void setChars(char [] newChars) {
+	    chars = newChars;
+	}
+
+	short [] shorts = null;
+	public short [] getShorts() {
+	    return shorts;
+	}
+	public void setShorts(short [] newShorts) {
+	    shorts = newShorts;
+	}
+
+	int [] ints = null;
+	public int [] getInts() {
+	    return ints;
+	}
+	public void setInts(int [] newInts) {
+	    ints = newInts;
+	}
+
+	long [] longs = null;
+	public long [] getLongs() {
+	    return longs;
+	}
+	public void setLongs(long [] newLongs) {
+	    longs = newLongs;
+	}
+
+	float [] floats = null;
+	public float [] getFloats() {
+	    return floats;
+	}
+	public void setFloats(float [] newFloats) {
+	    floats = newFloats;
+	}
+
+	double [] doubles = null;
+	public double [] getDoubles() {
+	    return doubles;
+	}
+	public void setDoubles(double [] newDoubles) {
+	    doubles = newDoubles;
+	}
+
+	String [] strings = null;
+	public String [] getStrings() {
+	    return strings;
+	}
+	public void setStrings(String [] newStrings) {
+	    strings = newStrings;
+	}
+
+	Date [] dates = null;
+	public Date [] getDates() {
+	    return dates;
+	}
+	public void setDates(Date [] newDates) {
+	    dates = newDates;
+	}
+
+	Number [] numbers = null;
+	public Number [] getNumbers() {
+	    return numbers;
+	}
+	public void setNumbers(Number [] newNumbers) {
+	    numbers = newNumbers;
+	}
+
+    }
+
+    public void beginUISelectMany(WebRequest theRequest)
+    {
+
+	// primitives
+	theRequest.addParameter("bool", "false");
+	theRequest.addParameter("bool", "true");
+	theRequest.addParameter("bool", "false");
+	theRequest.addParameter("bool2", "false");
+
+	theRequest.addParameter("byte", Byte.toString(Byte.MIN_VALUE));
+	theRequest.addParameter("byte", Byte.toString(Byte.MAX_VALUE));
+	theRequest.addParameter("byte", "1");
+
+	theRequest.addParameter("char", 
+				Character.toString(Character.MIN_VALUE));
+	theRequest.addParameter("char", 
+				Character.toString('A'));
+	theRequest.addParameter("char", 
+			        Character.toString('z'));
+
+	theRequest.addParameter("short", Short.toString(Short.MIN_VALUE));
+	theRequest.addParameter("short", Short.toString(Short.MAX_VALUE));
+	theRequest.addParameter("short", 
+				Short.toString((short) (Byte.MAX_VALUE + 1)));
+
+	theRequest.addParameter("int", Integer.toString(Integer.MIN_VALUE));
+	theRequest.addParameter("int", Integer.toString(Integer.MAX_VALUE));
+	theRequest.addParameter("int", 
+				Integer.toString(Short.MAX_VALUE + 1));
+
+	theRequest.addParameter("float", Float.toString(Float.MIN_VALUE));
+	theRequest.addParameter("float", Float.toString(Float.MAX_VALUE));
+	theRequest.addParameter("float", 
+				Float.toString(Integer.MAX_VALUE + 1));
+
+	theRequest.addParameter("long", Long.toString(Long.MIN_VALUE));
+	theRequest.addParameter("long", Long.toString(Long.MAX_VALUE));
+	theRequest.addParameter("long", 
+				Long.toString(Integer.MAX_VALUE + 1));
+
+	theRequest.addParameter("double", Double.toString(Double.MIN_VALUE));
+	theRequest.addParameter("double", Double.toString(Double.MAX_VALUE));
+	theRequest.addParameter("double", 
+				Double.toString(Long.MAX_VALUE + 1));
+	
+	// Objects
+	theRequest.addParameter("str", "value1");
+	theRequest.addParameter("str", "value2");
+	theRequest.addParameter("str", "value3");
+
+	theRequest.addParameter("str2", "");
+
+	theRequest.addParameter("date", "Jan 1, 1967");
+	theRequest.addParameter("date", "May 26, 2003");
+	theRequest.addParameter("date", "Aug 19, 1946");
+
+	theRequest.addParameter("num", "12%");
+	theRequest.addParameter("num", "3.14");
+	theRequest.addParameter("num", "49.99");
+    }
+
+    public void testUISelectMany() throws Exception {
+	// create the test bean
+	TestBean bean = new TestBean();
+	getFacesContext().getExternalContext().getRequestMap().put("bean",
+								   bean);
+	// create a dummy root for the tree.
+	UIViewRoot root = new UIViewRootBase();
+	root.setId("root");
+	getFacesContext().setViewRoot(root);
+
+	// test model type of boolean []
+	UISelectManyBase booleanv = new UISelectManyBase();
+	booleanv.setId("bool");
+	booleanv.setRendererType("SelectManyCheckbox");
+	booleanv.setValueRef("bean.booleans");
+	root.getChildren().add(booleanv);
+	booleanv.decode(getFacesContext());
+	booleanv.updateModel(getFacesContext());
+	assertNotNull(bean.getBooleans());
+	assertTrue(bean.getBooleans()[0] == false);
+	assertTrue(bean.getBooleans()[1] == true);
+	assertTrue(bean.getBooleans()[2] == false);
+
+	// test model type of boolean []
+	booleanv = new UISelectManyBase();
+	booleanv.setId("bool2");
+	booleanv.setRendererType("SelectManyCheckbox");
+	booleanv.setValueRef("bean.booleans");
+	root.getChildren().add(booleanv);
+	booleanv.decode(getFacesContext());
+	booleanv.updateModel(getFacesContext());
+	assertNotNull(bean.getBooleans());
+	assertTrue(bean.getBooleans()[0] == false);
+	assertTrue(bean.getBooleans().length == 1);
+
+	// test model type of byte []
+	UISelectManyBase bytev = new UISelectManyBase();
+	bytev.setId("byte");
+	bytev.setRendererType("SelectManyCheckbox");
+	bytev.setValueRef("bean.bytes");
+	root.getChildren().add(bytev);
+	bytev.decode(getFacesContext());
+	bytev.updateModel(getFacesContext());
+	assertNotNull(bean.getBytes());
+	assertTrue(bean.getBytes()[0] == Byte.MIN_VALUE);
+	assertTrue(bean.getBytes()[1] == Byte.MAX_VALUE);
+	assertTrue(bean.getBytes()[2] == 1);
+
+	// test model type of char []
+	UISelectManyBase charv = new UISelectManyBase();
+	charv.setId("char");
+	charv.setRendererType("SelectManyCheckbox");
+	charv.setValueRef("bean.chars");
+	root.getChildren().add(charv);
+	charv.decode(getFacesContext());
+	charv.updateModel(getFacesContext());
+	assertNotNull(bean.getChars());
+	assertTrue(bean.getChars()[0] == Character.MIN_VALUE);
+	assertTrue(bean.getChars()[1] == 'A');
+	assertTrue(bean.getChars()[2] == 'z');
+
+	// test model type of short []
+	UISelectManyBase shortv = new UISelectManyBase();
+	shortv.setId("short");
+	shortv.setRendererType("SelectManyCheckbox");
+	shortv.setValueRef("bean.shorts");
+	root.getChildren().add(shortv);
+	shortv.decode(getFacesContext());
+	shortv.updateModel(getFacesContext());
+	assertNotNull(bean.getShorts());
+	assertTrue(bean.getShorts()[0] == Short.MIN_VALUE);
+	assertTrue(bean.getShorts()[1] == Short.MAX_VALUE);
+	assertTrue(bean.getShorts()[2] == Byte.MAX_VALUE + 1);
+
+	// test model type of int []
+	UISelectManyBase intv = new UISelectManyBase();
+	intv.setId("int");
+	intv.setRendererType("SelectManyCheckbox");
+	intv.setValueRef("bean.ints");
+	root.getChildren().add(intv);
+	intv.decode(getFacesContext());
+	intv.updateModel(getFacesContext());
+	assertNotNull(bean.getInts());
+	assertTrue(bean.getInts()[0] == Integer.MIN_VALUE);
+	assertTrue(bean.getInts()[1] == Integer.MAX_VALUE);
+	assertTrue(bean.getInts()[2] == Short.MAX_VALUE + 1);
+
+	// test model type of float []
+	UISelectManyBase floatv = new UISelectManyBase();
+	floatv.setId("float");
+	floatv.setRendererType("SelectManyCheckbox");
+	floatv.setValueRef("bean.floats");
+	root.getChildren().add(floatv);
+	floatv.decode(getFacesContext());
+	floatv.updateModel(getFacesContext());
+	assertNotNull(bean.getFloats());
+	assertTrue(bean.getFloats()[0] == Float.MIN_VALUE);
+	assertTrue(bean.getFloats()[1] == Float.MAX_VALUE);
+	assertTrue(bean.getFloats()[2] == Integer.MAX_VALUE + 1);
+
+	// test model type of long []
+	UISelectManyBase longv = new UISelectManyBase();
+	longv.setId("long");
+	longv.setRendererType("SelectManyCheckbox");
+	longv.setValueRef("bean.longs");
+	root.getChildren().add(longv);
+	longv.decode(getFacesContext());
+	longv.updateModel(getFacesContext());
+	assertNotNull(bean.getLongs());
+	assertTrue(bean.getLongs()[0] == Long.MIN_VALUE);
+	assertTrue(bean.getLongs()[1] == Long.MAX_VALUE);
+	assertTrue(bean.getLongs()[2] == Integer.MAX_VALUE + 1);
+
+	// test model type of double []
+	UISelectManyBase doublev = new UISelectManyBase();
+	doublev.setId("double");
+	doublev.setRendererType("SelectManyCheckbox");
+	doublev.setValueRef("bean.doubles");
+	root.getChildren().add(doublev);
+	doublev.decode(getFacesContext());
+	doublev.updateModel(getFacesContext());
+	assertNotNull(bean.getDoubles());
+	assertTrue(bean.getDoubles()[0] == Double.MIN_VALUE);
+	assertTrue(bean.getDoubles()[1] == Double.MAX_VALUE);
+	assertTrue(bean.getDoubles()[2] == Long.MAX_VALUE + 1);
+
+	// test model type of String []
+	UISelectManyBase str = new UISelectManyBase();
+	str.setId("str");
+	str.setRendererType("SelectManyCheckbox");
+	str.setValueRef("bean.strings");
+	root.getChildren().add(str);
+	str.decode(getFacesContext());
+	str.updateModel(getFacesContext());
+	assertNotNull(bean.getStrings());
+	assertTrue("value1".equals(bean.getStrings()[0]));
+
+	// test model type of Date []
+	UISelectManyBase date = new UISelectManyBase();
+	Converter dateConv = Util.getConverterForIdentifer("DateTime");
+	assertNotNull(dateConv);
+	date.setConverter(dateConv);
+	date.setId("date");
+	date.setRendererType("SelectManyCheckbox");
+	date.setValueRef("bean.dates");
+	root.getChildren().add(date);
+	date.decode(getFacesContext());
+	date.updateModel(getFacesContext());
+	assertNotNull(bean.getDates());
+	Object expected = null;
+	try {
+	    SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+	    expected = df.parse("19460819");
+	}
+	catch (ParseException e) {
+	    assertTrue(e.getMessage(), false);
+	}
+	assertTrue(expected.equals(bean.getDates()[2]));
+
+	// test model type of Number []
+	UISelectManyBase number = new UISelectManyBase();
+	Converter numberConv = Util.getConverterForIdentifer("Number");
+	assertNotNull(numberConv);
+	number.setConverter(numberConv);
+	number.setId("num");
+	number.setRendererType("SelectManyCheckbox");
+	number.setValueRef("bean.numbers");
+	root.getChildren().add(number);
+	number.decode(getFacesContext());
+	number.updateModel(getFacesContext());
+	assertNotNull(bean.getNumbers());
+	try {
+	    DecimalFormat df = new DecimalFormat("'$'##.##");
+	    expected = df.parse("$49.99");
+	}
+	catch (ParseException e) {
+	    assertTrue(e.getMessage(), false);
+	}
+	assertTrue(expected.equals(bean.getNumbers()[2]));
     }
     
     //

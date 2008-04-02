@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.54 2003/09/08 20:10:09 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.55 2003/09/11 23:12:58 eburns Exp $
  */
 
 /*
@@ -314,42 +314,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         return;
     }
    
-    /**
-     * This method gets a converter instance.  This method only applies to
-     * input and output renderers.
-     */
-    protected Converter getConverter(Class converterType) {
-        if (converterType == null) {
-            return null;
-        }
-        try {
-	    ApplicationFactory aFactory = 
-		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	    Application application = aFactory.getApplication();
-            return (application.createConverter(converterType));
-        } catch (Exception e) {
-            return (null);
-        }
-    }
-    
-    /**
-     * This method gets a converter instance given a converter 
-     * identifier
-     */
-    protected Converter getConverterForIdentifer(String converterId) {
-        if (converterId == null) {
-            return null;
-        }
-        try {
-	    ApplicationFactory aFactory = 
-		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	    Application application = aFactory.getApplication();
-            return (application.createConverter(converterId));
-        } catch (Exception e) {
-            return (null);
-        }
-    }
-
     public String getClientId(FacesContext context, UIComponent component){
 	String clientId = null;
 	NamingContainer closestContainer = null;
@@ -443,7 +407,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
             // try to acquire a converter using its class type.
         
             Class converterType = currentValue.getClass();
-            converter = getConverter(converterType);
+            converter = Util.getConverterForClass(converterType);
         
             // if there is no default converter available for this identifier,
             // assume the model type to be String.
