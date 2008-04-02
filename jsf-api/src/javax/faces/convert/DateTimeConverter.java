@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.25 2004/06/11 20:47:28 rogerk Exp $
+ * $Id: DateTimeConverter.java,v 1.26 2005/01/03 18:15:35 rogerk Exp $
  */
 
 /*
@@ -274,6 +274,10 @@ public class DateTimeConverter implements Converter, StateHolder {
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
+
         try {
 
             // If the specified value is null or zero-length, return null
@@ -316,6 +320,10 @@ public class DateTimeConverter implements Converter, StateHolder {
      */ 
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
+
+        if (context == null || component == null) {
+            throw new NullPointerException();
+        }
 
         try {
             
