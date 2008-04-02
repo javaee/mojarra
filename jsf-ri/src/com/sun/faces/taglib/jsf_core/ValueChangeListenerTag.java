@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.22 2006/05/10 23:26:09 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.23 2006/08/24 12:00:12 rogerk Exp $
  */
 
 /*
@@ -111,8 +111,6 @@ public class ValueChangeListenerTag extends TagSupport {
      * <p>Set the value binding expression  for this listener.</p>
      *
      * @param binding The new value binding expression
-     *
-     * @throws JspException if a JSP error occurs
      */
     public void setBinding(ValueExpression binding) {
         this.binding = binding;

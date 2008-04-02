@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.7 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: PhaseListenerTag.java,v 1.8 2006/08/24 12:00:12 rogerk Exp $
  */
 
 /*
@@ -88,8 +88,6 @@ public class PhaseListenerTag extends TagSupport {
      * <p>Set the value binding expression  for this listener.</p>
      *
      * @param binding The new value binding expression
-     *
-     * @throws JspException if a JSP error occurs
      */
     public void setBinding(ValueExpression binding) {
         this.binding = binding;
