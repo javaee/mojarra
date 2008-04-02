@@ -1,5 +1,5 @@
 /*
- * $Id: RequestEventHandler.java,v 1.2 2002/07/26 19:02:37 craigmcc Exp $
+ * $Id: RequestEventHandler.java,v 1.3 2002/09/19 23:16:35 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.event;
 
 
+import java.io.Serializable;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -23,7 +24,7 @@ import javax.faces.context.FacesContext;
  * <em>Handle Request Events Phase</em>.</p>
  */
 
-public abstract class RequestEventHandler {
+public abstract class RequestEventHandler implements Serializable {
 
     /**
      * <p>Process an individual event queued to the specified
