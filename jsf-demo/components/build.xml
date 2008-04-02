@@ -241,6 +241,11 @@
     </copy>
 
 
+    <!-- copy over the application configuration resource -->
+    <mkdir  dir="${build}/classes/components/META-INF"/>
+    <copy todir="${build}/classes/components/META-INF"
+           file="conf/faces-config.xml"/>
+
     <!-- copy the java source to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/components">
       <fileset dir="src/components" />

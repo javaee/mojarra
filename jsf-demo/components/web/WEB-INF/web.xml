@@ -60,10 +60,6 @@
     </context-param>
 
     <listener>
-        <listener-class>components.renderkit.ComponentsSetupListener</listener-class>
-    </listener>
-
-    <listener>
         <listener-class>demo.model.ImageAreaSetup</listener-class>
     </listener>
 
@@ -86,4 +82,5 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
 </web-app>

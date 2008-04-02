@@ -9,7 +9,7 @@
   "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
   "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-<!-- =========== FULL CONFIGURATION FILE ================================== -->
+<!-- =========== DEMO COMPONENTS CONFIGURATION FILE ======================= -->
 
 <faces-config>
 
@@ -38,8 +38,6 @@
   <!-- Custom Renderers -->
 
   <render-kit>
-    <render-kit-id>DEFAULT</render-kit-id>
-    <render-kit-class>com.sun.faces.renderkit.html_basic.HtmlBasicRenderKit</render-kit-class>
     <renderer>
       <renderer-type>MenuBar</renderer-type>
       <renderer-class>components.renderkit.MenuBarRenderer</renderer-class>
@@ -53,8 +51,8 @@
       <renderer-class>components.renderkit.ResultSetRenderer</renderer-class>
     </renderer>
     <renderer>
-      <renderer-type>StyleSheet</renderer-type>
-      <renderer-class>components.renderkit.StyleSheetRenderer</renderer-class>
+      <renderer-type>Stylesheet</renderer-type>
+      <renderer-class>components.renderkit.StylesheetRenderer</renderer-class>
     </renderer>
     <renderer>
       <renderer-type>Area</renderer-type>
