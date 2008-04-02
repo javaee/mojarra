@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.21 2003/08/22 21:03:00 rkitain Exp $
+ * $Id: MenuRenderer.java,v 1.22 2003/08/25 15:36:41 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -197,7 +197,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         if (null != (styleClass = (String) component.getAttribute("selectmanyClass"))) {
 	    writer.writeAttribute("class", styleClass, "selectmanyClass");
 	    writer.startElement("span", component);
-	} else {
+	} else if (null != (styleClass = 
+	    (String) component.getAttribute("selectoneClass"))) {
 	    writer.writeAttribute("class", styleClass, "selectoneClass");
 	    writer.startElement("span", component);
 	}
