@@ -616,13 +616,14 @@
     <zip     destfile="${dist.dir}/jsf-api-src-${version}.zip">
       <zipfileset dir="${basedir}"
              includes="build.xml COPYRIGHT LICENSE.html"
-               prefix="jsf-api-src-${version}"/>
+               prefix="jsf-api"/> 
+
       <zipfileset dir="${src.dir}"
              excludes="**/CVS/**"
-               prefix="jsf-api-src-${version}/src"/>
+               prefix="jsf-api/src"/>
       <zipfileset dir="${doc.dir}"
              includes="*.dtd"
-               prefix="jsf-api-src-${version}/doc"/>
+               prefix="jsf-api/doc"/>
     </zip>
 
   </target>
