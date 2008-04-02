@@ -2897,7 +2897,7 @@
         <name>converter</name>
         <required>false</required>
         <rtexprvalue>true</rtexprvalue>
-        <type>javax.faces.convert.Conveter</type>
+        <type>javax.faces.convert.Converter</type>
     </attribute>
     <attribute>
       <name>rendered</name>
