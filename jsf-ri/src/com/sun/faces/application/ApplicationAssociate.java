@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.12 2005/06/09 22:37:45 jayashri Exp $
+ * $Id: ApplicationAssociate.java,v 1.13 2005/06/15 20:42:24 jayashri Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -95,6 +96,7 @@ public class ApplicationAssociate extends Object {
     
     private PropertyResolver legacyPropertyResolver = null;
     private VariableResolver legacyVariableResolver = null;
+    private CompositeELResolver facesELResolverForJsp = null;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
 	app = appImpl;
@@ -132,27 +134,34 @@ public class ApplicationAssociate extends Object {
 	applicationMap.remove(ASSOCIATE_KEY);
     }
 
-    
     public void setLegacyVRChainHead(VariableResolver resolver) {
         this.legacyVRChainHead = resolver;   
-    }
-    
-    public void setLegacyPRChainHead(PropertyResolver resolver) {
-        this.legacyPRChainHead = resolver;   
-    }
-    
-    public void setELResolversFromFacesConfig(ArrayList resolvers) {
-        this.elResolversFromFacesConfig = resolvers;
     }
     
     public VariableResolver getLegacyVRChainHead() {
         return legacyVRChainHead;
     }
-    
+        
+    public void setLegacyPRChainHead(PropertyResolver resolver) {
+        this.legacyPRChainHead = resolver;   
+    }
+           
     public PropertyResolver getLegacyPRChainHead() {
         return legacyPRChainHead;
     }
     
+    public CompositeELResolver getFacesELResolverForJsp() {
+        return facesELResolverForJsp;
+    }
+        
+    public void setFacesELResolverForJsp(CompositeELResolver celr) {
+        facesELResolverForJsp = celr;
+    }
+    
+    public void setELResolversFromFacesConfig(ArrayList resolvers) {
+        this.elResolversFromFacesConfig = resolvers;
+    }
+     
     public ArrayList geELResolversFromFacesConfig() {
          return elResolversFromFacesConfig;
     }
@@ -177,6 +186,22 @@ public class ApplicationAssociate extends Object {
         this.legacyPropertyResolver = resolver;
     }
     
+     /**
+     * Returns the PropertyResolver called through 
+     * Application.getPropertyResolver()
+     */
+    public PropertyResolver getLegacyPropertyResolver(){
+        // place DummyPropertyResolver at the chain that sets the
+        // propertyResolved to true to satisfy the requirements of unified EL.
+        if (legacyPropertyResolver != null) {
+            Object instance = Util.createInstance(
+                    "com.sun.faces.el.DummyPropertyResolverImpl",
+                    PropertyResolver.class, legacyPropertyResolver);
+            return ((PropertyResolver) instance);        
+        } 
+        return null;
+    }
+    
     /**
      * Maintains the PropertyResolver called through 
      * Application.setVariableResolver()
@@ -186,19 +211,19 @@ public class ApplicationAssociate extends Object {
     }
     
     /**
-     * Returns the PropertyResolver called through 
-     * Application.getPropertyResolver()
-     */
-    public PropertyResolver getLegacyPropertyResolver(){
-        return legacyPropertyResolver;
-    }
-    
-    /**
      * Returns the VariableResolver called through 
      * Application.getVariableResolver()
      */
     public VariableResolver getLegacyVariableResolver(){
-        return legacyVariableResolver;
+        // place DummyVariableResolver at the chain that sets the
+        // propertyResolved to true to satisfy the requirements of new EL.
+        if (legacyVariableResolver != null) {
+            Object instance = Util.createInstance(
+                    "com.sun.faces.el.DummyVariableResolverImpl",
+                    VariableResolver.class, legacyVariableResolver);
+            return ((VariableResolver) instance);
+        }
+        return null;
     }
     
 

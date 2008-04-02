@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.48 2005/04/11 18:03:57 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.49 2005/06/15 20:42:26 jayashri Exp $
  */
 
 /*
@@ -21,11 +21,23 @@ import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.http.HttpServletRequest;
 import javax.faces.render.ResponseStateManager;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import com.sun.faces.el.FacesCompositeELResolver;
+import com.sun.faces.el.ImplicitObjectELResolverForJsp;
+import com.sun.faces.el.ManagedBeanELResolver;
+import com.sun.faces.el.PropertyResolverChainWrapper;
+import com.sun.faces.el.VariableResolverChainWrapper;
+import com.sun.faces.application.ApplicationAssociate;
+
+import javax.el.CompositeELResolver;
+import javax.el.ELResolver;
 
 /**
  * <p><b>LifecycleImpl</b> is the stock implementation of the standard
@@ -63,6 +75,10 @@ public class LifecycleImpl extends Lifecycle {
 
     // The Phase instance for the render() method
     private Phase response = new RenderResponsePhase();
+    
+    // used to track if the first request has been serviced.
+    protected static final String FIRST_REQUEST_SERVICED = 
+            "com.sun.faces.FIRST_REQUEST_SERVICED";
 
 
     // ------------------------------------------------------- Lifecycle Methods
@@ -80,7 +96,11 @@ public class LifecycleImpl extends Lifecycle {
         if (log.isDebugEnabled()) {
             log.debug("execute(" + context + ")");
         }
-
+        
+        // populate the FacesCompositeELResolver stack if a request is being
+        // processed for the very first time.
+        populateFacesELResolverForJsp(context);
+        
         for (int i = 1; i < phases.length; i++) { // Skip ANY_PHASE placeholder
 
             if (context.getRenderResponse() ||
@@ -288,6 +308,75 @@ public class LifecycleImpl extends Lifecycle {
         }
 
     }
+    
+    /**
+     * Populate the FacesCompositeELResolver stack registered with JSP 
+     * if a request is being processed for the very first time. At the 
+     * application initialiazation time, an empty CompositeELResolver is
+     * registered with JSP because ELResolvers can be added until the first
+     * request is serviced.
+     */
+    protected void populateFacesELResolverForJsp(FacesContext context) {
+        
+        Map applicationMap =  context.getExternalContext().getApplicationMap();
+        String requestServiced = (String) 
+            applicationMap.get(this.FIRST_REQUEST_SERVICED);
+        if (requestServiced != null) {
+            // first request has been serviced, so ELResolvers have
+            // been populated already.
+            return;
+        }
+        ApplicationAssociate appAssociate =  
+            ApplicationAssociate.getInstance(context.getExternalContext());
+        synchronized(this) { 
+            requestServiced = (String) 
+                applicationMap.get(this.FIRST_REQUEST_SERVICED);
+            if (requestServiced == null) {
+                CompositeELResolver compositeELResolverForJsp = 
+                        appAssociate.getFacesELResolverForJsp();
+                compositeELResolverForJsp.add(new ImplicitObjectELResolverForJsp());
+                compositeELResolverForJsp.add(new ManagedBeanELResolver());
 
+                // add ELResolvers from faces-config.xml
+                ArrayList elResolversFromFacesConfig = 
+                        appAssociate.geELResolversFromFacesConfig();
+                if (elResolversFromFacesConfig != null) {
+                    Iterator it = elResolversFromFacesConfig.iterator();
+                    while (it.hasNext()) {
+                        compositeELResolverForJsp.add((ELResolver) it.next());
+                    }
+                }
+
+                // register legacy VariableResolver if any.
+                if (appAssociate.getLegacyVariableResolver() != null ) {
+                    compositeELResolverForJsp.add(new VariableResolverChainWrapper(
+                            appAssociate.getLegacyVariableResolver()));
+                } else if (appAssociate.getLegacyVRChainHead() != null) {
+                    compositeELResolverForJsp.add(new VariableResolverChainWrapper(
+                            appAssociate.getLegacyVRChainHead()));   
+                }
+
+                // add legacy PropertyResolvers if any
+                if (appAssociate.getLegacyPropertyResolver() != null ) {
+                    compositeELResolverForJsp.add(new PropertyResolverChainWrapper(
+                            appAssociate.getLegacyPropertyResolver()));
+                } else if (appAssociate.getLegacyPRChainHead() != null) {
+                    compositeELResolverForJsp.add(new PropertyResolverChainWrapper(
+                            appAssociate.getLegacyPRChainHead()));   
+                }
+
+                // add ELResolvers added via Application.addELResolver()
+                ArrayList elResolversFromApplication = 
+                    appAssociate.getApplicationELResolvers();
+                if (elResolversFromApplication != null) {
+                    Iterator it = elResolversFromApplication.iterator();
+                    while (it.hasNext()) {
+                        compositeELResolverForJsp.add((ELResolver) it.next());
+                    }
+                }
+                applicationMap.put(this.FIRST_REQUEST_SERVICED, "true");  
+            }
+        }
+    }
 
 }

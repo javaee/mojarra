@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.62 2005/06/09 22:37:45 jayashri Exp $
+ * $Id: ApplicationImpl.java,v 1.63 2005/06/15 20:42:25 jayashri Exp $
  */
 
 /*
@@ -205,19 +205,26 @@ public class ApplicationImpl extends Application {
             }
         }
         // add legacy VariableResolvers if any.
+        
         // wrap the head of the legacyVR in ELResolver and add it to the
         // compositeELResolver.
-        VariableResolver VR = associate.getLegacyVRChainHead();
-        if (VR != null) {
-            compositeELResolver.add(new VariableResolverChainWrapper(VR));
+        if (associate.getLegacyVariableResolver() != null ) {
+            compositeELResolver.add(new VariableResolverChainWrapper(
+                    associate.getLegacyVariableResolver()));
+        } else if (associate.getLegacyVRChainHead() != null) {
+            compositeELResolver.add(new VariableResolverChainWrapper(
+                    associate.getLegacyVRChainHead()));   
         }
         
-        // add legacy PropertyResolvers if any.
-        PropertyResolver PR = associate.getLegacyPRChainHead();
-        if ( PR!= null) {
-            compositeELResolver.add(new PropertyResolverChainWrapper(PR));
+        // add legacy PropertyResolvers if any
+        if (associate.getLegacyPropertyResolver() != null ) {
+            compositeELResolver.add(new PropertyResolverChainWrapper(
+                    associate.getLegacyPropertyResolver()));
+        } else if (associate.getLegacyPRChainHead() != null) {
+            compositeELResolver.add(new PropertyResolverChainWrapper(
+                    associate.getLegacyPRChainHead()));   
         }
-        
+
         if (elResolvers != null) {
             it = elResolvers.iterator();
             while (it.hasNext()) {
