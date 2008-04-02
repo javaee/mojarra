@@ -1,11 +1,11 @@
-<input type="checkbox" name="myCheckbox" checked>
-<input type="checkbox" name="myCheckbox">
-<input type="checkbox" name="myCheckbox">
+<input type="checkbox" name="myCheckbox" checked />
+<input type="checkbox" name="myCheckbox" />
+<input type="checkbox" name="myCheckbox" />
 <select name="myListbox" size="4">	<option value="100"  selected>Long1</option>
 	<option value="101">Long2</option>
 	<option value="102">Long3</option>
 	<option value="103">Long4</option>
 </select>
-<input type="password" name="mySecret" value="">
-<input type="text" name="myInputText" value="text"><textarea name="myTextarea">TextAreaRenderer</textarea>
-<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D"><img id="id0" src="/test/foo/modelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D">My name is Bobby Orr
+<input type="password" name="mySecret" value="" />
+<input type="text" name="myInputText" value="text" /><textarea name="myTextarea">TextAreaRenderer</textarea>
+<img id="myGraphicImage" src="/test/nonModelReferenceImage.gif;jsessionid=CE3C052680005E352476DAD1A410AAC9" /><img id="id0" src="/test/foo/modelReferenceImage.gif;jsessionid=CE3C052680005E352476DAD1A410AAC9" />My name is Bobby Orr

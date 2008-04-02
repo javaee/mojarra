@@ -10,7 +10,7 @@
   </head>
   <body>
       
-          <input type="text" name="username" maxlength="32" size="20"> 
+          <input type="text" name="username" maxlength="32" size="20" /> 
       
   </body>
 </html>

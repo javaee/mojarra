@@ -1,26 +1,26 @@
-<form id="formRenderer0" method="post" action="/test/facesviewId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A">
+<form id="formRenderer0" method="post" action="/test/facesviewId;jsessionid=044D15D2914EAB59DCEA0FCE8A4A93BE">
 
 </form>
-<form id="formRenderer1" method="post" action="/test/facesviewId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A">
+<form id="formRenderer1" method="post" action="/test/facesviewId;jsessionid=044D15D2914EAB59DCEA0FCE8A4A93BE">
 
 </form>
 <table border="0">
 	<tr>
-<td><input type="radio" name="radioRenderer" value="One"> One</td>
-<td><input type="radio" checked name="radioRenderer" value="Two"> Two</td>
-<td><input type="radio" name="radioRenderer" value="Three"> Three</td>
+<td><input type="radio" name="radioRenderer" value="One" /> One</td>
+<td><input type="radio" checked name="radioRenderer" value="Two" /> Two</td>
+<td><input type="radio" name="radioRenderer" value="Three" /> Three</td>
 	</tr>
 </table>
-<input type="image" src="duke.gif" name="imageButton">
-<input type="image" src="resduke.gif" name="imageButton2">
-<input type="submit" name="labelButton1" value="PASSED">
-<input type="reset" name="labelButton2" value="model label">
-<input type="submit" name="labelButton3" value="RES-BUNDLE PASSED">
-<input type="reset" name="labelButton4" value="">
-<a href="#" onmousedown="document.forms[0].labelLink1.value='labelLink1'; document.forms[0].submit()">PASSED</a><input type="hidden" name="labelLink1">
-<a href="#" onmousedown="document.forms[0].labelLink2.value='labelLink2'; document.forms[0].submit()">model label</a><input type="hidden" name="labelLink2">
-<a href="#" onmousedown="document.forms[0].labelLink3.value='labelLink3'; document.forms[0].submit()">RES-BUNDLE PASSED</a><input type="hidden" name="labelLink3">
-<a href="#" onmousedown="document.forms[0].labelLink4.value='labelLink4'; document.forms[0].submit()"></a><input type="hidden" name="labelLink4">
-<a href="#" onmousedown="document.forms[0].hyperlinkImage.value='hyperlinkImage'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="hyperlinkImage">
-<a href="#" onmousedown="document.forms[0].hyperlinkImage2.value='hyperlinkImage2'; document.forms[0].submit()"><img src="resduke.gif"></a><input type="hidden" name="hyperlinkImage2">
-<a href="#" onmousedown="document.forms[0].paramLink.value='paramLink'; document.forms[0].submit()">hyperlink with parameters</a><input type="hidden" name="paramLink"><input type="hidden" name="parameter1" value="param_value1"><input type="hidden" name="parameter2" value="param_value2">
+<input type="image" src="duke.gif" name="imageButton" />
+<input type="image" src="resduke.gif" name="imageButton2" />
+<input type="submit" name="labelButton1" value="PASSED" />
+<input type="reset" name="labelButton2" value="model label" />
+<input type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
+<input type="reset" name="labelButton4" value="" />
+<a href="#" onmousedown="document.forms[0].labelLink1.value='labelLink1'; document.forms[0].submit()">PASSED</a><input type="hidden" name="labelLink1" />
+<a href="#" onmousedown="document.forms[0].labelLink2.value='labelLink2'; document.forms[0].submit()">model label</a><input type="hidden" name="labelLink2" />
+<a href="#" onmousedown="document.forms[0].labelLink3.value='labelLink3'; document.forms[0].submit()">RES-BUNDLE PASSED</a><input type="hidden" name="labelLink3" />
+<a href="#" onmousedown="document.forms[0].labelLink4.value='labelLink4'; document.forms[0].submit()"></a><input type="hidden" name="labelLink4" />
+<a href="#" onmousedown="document.forms[0].hyperlinkImage.value='hyperlinkImage'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="hyperlinkImage" />
+<a href="#" onmousedown="document.forms[0].hyperlinkImage2.value='hyperlinkImage2'; document.forms[0].submit()"><img src="resduke.gif"></a><input type="hidden" name="hyperlinkImage2" />
+<a href="#" onmousedown="document.forms[0].paramLink.value='paramLink'; document.forms[0].submit()">hyperlink with parameters</a><input type="hidden" name="paramLink" /><input type="hidden" name="parameter1" value="param_value1" /><input type="hidden" name="parameter2" value="param_value2" />

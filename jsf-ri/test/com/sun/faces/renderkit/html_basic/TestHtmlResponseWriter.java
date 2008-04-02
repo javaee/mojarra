@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.2 2003/08/22 21:05:32 rkitain Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.3 2003/09/09 20:45:57 rkitain Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.2 2003/08/22 21:05:32 rkitain Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.3 2003/09/09 20:45:57 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -136,9 +136,15 @@ import org.mozilla.util.Assert;
 	    assertTrue(sw.toString().equals("</input>"));
 	    writer.startElement("frame", new UIInputBase());
 	    writer.endElement("frame");
-	    assertTrue(sw.toString().equals("</input><frame>"));
+	    assertTrue(sw.toString().equals("</input><frame />"));
 	    writer.endElement("frame");
-	    assertTrue(sw.toString().equals("</input><frame></frame>"));
+	    assertTrue(sw.toString().equals("</input><frame /></frame>"));
+            sw = new StringWriter();
+            writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
+	    writer.startElement("br", null);
+	    writer.endElement("br");
+	    assertTrue(sw.toString().equals("<br />"));
+
         } catch (IOException e) {
             assertTrue(false);
 	}
@@ -181,7 +187,7 @@ import org.mozilla.util.Assert;
 	    writer.writeURIAttribute("src", "/mygif/foo.gif", "src");
 	    writer.endElement("input");
 	    assertTrue(sw.toString().equals("<input type="+"\"image\""+
-	        " src="+"\"/mygif/foo.gif\""+">")); 
+	        " src="+"\"/mygif/foo.gif\""+" />")); 
 	    //
 	    // test URL encoding
 	    //

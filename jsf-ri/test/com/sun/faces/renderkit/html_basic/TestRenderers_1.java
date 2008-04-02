@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.39 2003/08/27 18:52:08 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.40 2003/09/09 20:45:57 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.39 2003/08/27 18:52:08 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.40 2003/09/09 20:45:57 rkitain Exp $
  * 
  *
  */
@@ -114,8 +114,8 @@ public class TestRenderers_1 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<form id=\"formRenderer0\" method=\"post\" action=\"/test/facesviewId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A\">",
-	    "<form id=\"formRenderer1\" method=\"post\" action=\"/test/facesviewId;jsessionid=989BF6EB8D035AFE54F6BF8C1A24C36A\">"
+	    "<form id=\"formRenderer0\" method=\"post\" action=\"/test/facesviewId;jsessionid=044D15D2914EAB59DCEA0FCE8A4A93BE\">",
+	    "<form id=\"formRenderer1\" method=\"post\" action=\"/test/facesviewId;jsessionid=044D15D2914EAB59DCEA0FCE8A4A93BE\">"
 	};
         return lines;
     }    
