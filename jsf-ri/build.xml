@@ -60,7 +60,6 @@
   <!-- ************ Dependencies **** *************************************** -->
 
   <!-- The locations of necessary jar files -->
-  <property name="jstl_el.jar" value="${lib.home}/jstl_el.jar"/>
   <property name="mozutil.jar" value="${lib.home}/mozutil.jar"/>
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
   <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
@@ -99,7 +98,6 @@
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${xerces.jar}"/>
     <pathelement location="${jstl.jar}"/>
-    <pathelement location="${jstl_el.jar}"/>
   </path>
 
   <path id="catalina-ant.classpath">
@@ -245,7 +243,6 @@
     <copy file="${commons-collections.jar}" todir="${dist.home}/lib"/>
     <copy file="${commons-digester.jar}" todir="${dist.home}/lib"/>
     <copy file="${commons-logging.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
     <copy file="${jstl.jar}" todir="${dist.home}/lib"/>
     <copy file="${standard.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
@@ -256,7 +253,6 @@
 
   <target name="wspack.copyJars" depends="prepare.dist" if="build.wspack">
     <echo> copy the necessary libs </echo>
-    <copy file="${jstl_el.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
     <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
@@ -423,7 +419,6 @@
     <copy  file="${commons-logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${standard.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${jstl_el.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
 
     <copy file="${jsf.api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
     <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
@@ -473,7 +468,6 @@
     <mkdir dir="${tomcat.home}/jsf-${version}"/>
     <mkdir dir="${tomcat.home}/jsf-${version}/lib"/>
 
-    <copy file="${jstl_el.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
     <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf-${version}/lib"/>
     <copy file="${jsf.api.jar}" todir="${tomcat.home}/jsf-${version}/lib"/>
 
