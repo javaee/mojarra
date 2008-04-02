@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.9 2004/02/05 16:24:51 rlubke Exp $
+ * $Id: XmlDialectProvider.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
  */
 
 /*
@@ -40,29 +40,33 @@
  * maintenance of any nuclear facility.
  */
 
-package nonjsp.util;
+// XmlDialectProvider.java
 
-import javax.faces.render.RenderKitFactory;
+package nonjsp.application;
+
+import org.apache.commons.digester.RuleSetBase;
 
 /**
- * This class contains literal strings used throughout the Faces RI.
+ * <B>XmlDialectProvider</B> encapsulates the Xml Dialect specific
+ * logic required for creating a tree of UIComponent instances from an
+ * Xml file. <P>
  *
- * Based on com.sun.faces.RIConstants
- *
- * @version $Id: RIConstants.java,v 1.9 2004/02/05 16:24:51 rlubke Exp $
- * @see com.sun.faces.RIConstants
+ * @version $Id: XmlDialectProvider.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
  */
-public class RIConstants {
+public interface XmlDialectProvider {
 
     /**
-     * Used to add uniqueness to the names.
+     * @return the Digester rule set for use in this implementation
      */
-    public final static String FACES_PREFIX = "com.sun.faces.";
 
-    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
-        RenderKitFactory.HTML_BASIC_RENDER_KIT;
+    public RuleSetBase getRuleSet();
 
-    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
-    public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
 
-}
+    /**
+     * @return the file suffix for files of this Xml type.  For example
+     *         ".xul" or ".uiml".
+     */
+
+    public String getSuffix();
+
+} // end of interface XmlDialectProvider

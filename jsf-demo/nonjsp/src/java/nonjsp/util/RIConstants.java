@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTag.java,v 1.2 2004/02/05 16:24:37 rlubke Exp $
+ * $Id: RIConstants.java,v 1.1 2004/05/20 21:24:56 rkitain Exp $
  */
 
 /*
@@ -40,49 +40,29 @@
  * maintenance of any nuclear facility.
  */
 
-// BuildComponentFromTag.java
+package nonjsp.util;
 
-package nonjsp.application;
-
-import org.xml.sax.Attributes;
-
-import javax.faces.component.UIComponent;
+import javax.faces.render.RenderKitFactory;
 
 /**
- * An instance of this class knows how to build a UIComponent instance
- * from a JSP tag.  This allows locating this knowledge near the tag
- * handlers.  <P>
+ * This class contains literal strings used throughout the Faces RI.
  *
- * The implementation must be modified if the tags change. <P>
+ * Based on com.sun.faces.RIConstants
  *
- * Copy of com.sun.faces.tree.BuildComponentFromTag in order to remove
- * demo dependancy on RI.
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * Has the same scope as the ViewEngine instance.  The ViewEngine has a
- * BuildComponentFromTag instance. <P>
- *
- * @version $Id: BuildComponentFromTag.java,v 1.2 2004/02/05 16:24:37 rlubke Exp $
+ * @version $Id: RIConstants.java,v 1.1 2004/05/20 21:24:56 rkitain Exp $
+ * @see com.sun.faces.RIConstants
  */
+public class RIConstants {
 
-public interface BuildComponentFromTag {
+    /**
+     * Used to add uniqueness to the names.
+     */
+    public final static String FACES_PREFIX = "com.sun.faces.";
 
-    public UIComponent createComponentForTag(String shortTagName);
+    public final static String HTML_BASIC_RENDER_KIT = FACES_PREFIX +
+        RenderKitFactory.HTML_BASIC_RENDER_KIT;
 
+    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
+    public final static String REQUEST_LOCALE = FACES_PREFIX + "LOCALE";
 
-    public boolean tagHasComponent(String shortTagName);
-
-
-    public boolean isNestedComponentTag(String shortTagName);
-
-
-    public void handleNestedComponentTag(UIComponent parent,
-                                         String shortTagName, Attributes attrs);
-
-
-    public void applyAttributesToComponentInstance(UIComponent child,
-                                                   Attributes attrs);
-
-} // end of interface BuildComponentFromTag
-
+}

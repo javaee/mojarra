@@ -112,7 +112,7 @@ import java.io.Writer;
  * <p>Tag handler for &lt;escapeHtml&gt;
  *
  * @author Pierre Delisle
- * @version $Revision: 1.2 $ $Date: 2004/02/05 16:24:48 $
+ * @version $Revision: 1.1 $ $Date: 2004/05/20 21:24:55 $
  */
 public class EscapeHtmlTag extends BodyTagSupport {
 

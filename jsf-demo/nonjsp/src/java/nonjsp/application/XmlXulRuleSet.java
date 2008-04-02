@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.4 2004/02/05 16:24:39 rlubke Exp $
+ * $Id: XmlXulRuleSet.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $
  */
 
 /*

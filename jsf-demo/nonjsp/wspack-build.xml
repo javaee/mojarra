@@ -133,18 +133,20 @@
 
   <target name="build" depends="prepare,deploy.copyJars"
      description="Compile Java files and copy static files." >
-    <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+     <javac srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>
     </javac>
     <copy todir="${build}/${example}/WEB-INF">
       <fileset dir="web/WEB-INF"    >
         <include name="*.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${build}/${example}/WEB-INF">
+      <fileset dir="web/WEB-INF/tlds"    >
         <include name="*.tld" />
       </fileset>
     </copy>
-
-    <copy todir="${build}/${example}/WEB-INF" file="src/nonjsp/taglib/nonjsp.tld"/>
 
      <copy todir="${build}/${example}/">
       <fileset dir="web">
@@ -165,10 +167,10 @@
     </copy>
 
     <copy todir="${build}/${example}/WEB-INF/classes/nonjsp" >
-      <fileset dir="src/nonjsp" >
+	    <fileset dir="src/java/nonjsp" >
          <include name="*properties"/>
       </fileset>
-      <fileset dir="src/nonjsp" >
+      <fileset dir="src/java/nonjsp" >
          <include name="*.xml"/>
       </fileset>
     </copy>

@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.8 2004/02/05 16:24:38 rlubke Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import java.util.Hashtable;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.8 2004/02/05 16:24:38 rlubke Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
  */
 
 public class BuildComponentFromTagImpl extends Object

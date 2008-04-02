@@ -56,7 +56,7 @@ import javax.servlet.ServletContextListener;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: XulServletContextListener.java,v 1.5 2004/02/05 16:24:47 rlubke Exp $
+ * @version $Id: XulServletContextListener.java,v 1.1 2004/05/20 21:24:55 rkitain Exp $
  */
 
 public class XulServletContextListener implements ServletContextListener {

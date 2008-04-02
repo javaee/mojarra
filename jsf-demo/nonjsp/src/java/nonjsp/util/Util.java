@@ -1,5 +1,5 @@
 /*
- * $Id: XmlDialectProvider.java,v 1.2 2004/02/05 16:24:39 rlubke Exp $
+ * $Id: Util.java,v 1.1 2004/05/20 21:24:57 rkitain Exp $
  */
 
 /*
@@ -40,33 +40,81 @@
  * maintenance of any nuclear facility.
  */
 
-// XmlDialectProvider.java
+// Util.java
 
-package nonjsp.application;
-
-import org.apache.commons.digester.RuleSetBase;
+package nonjsp.util;
 
 /**
- * <B>XmlDialectProvider</B> encapsulates the Xml Dialect specific
- * logic required for creating a tree of UIComponent instances from an
- * Xml file. <P>
+ * <B>Util</B> is a class ...
  *
- * @version $Id: XmlDialectProvider.java,v 1.2 2004/02/05 16:24:39 rlubke Exp $
+ * Copy of com.sun.faces.util.Util in order to remove
+ * demo dependancy on RI.
+ *
+ *
+ * <B>Lifetime And Scope</B> <P>
+ *
+ * @version $Id: Util.java,v 1.1 2004/05/20 21:24:57 rkitain Exp $
+ * @see	com.sun.faces.util.Util
  */
-public interface XmlDialectProvider {
+
+public class Util extends Object {
+
+//
+// Protected Constants
+//
+
+//
+// Class Variables
+//
+
+    private static long id = 0;
+
+
+//
+// Instance Variables
+//
+
+// Attribute Instance Variables
+
+// Relationship Instance Variables
+
+//
+// Constructors and Initializers    
+//
+
+    private Util() {
+        throw new IllegalStateException();
+    }
+
+//
+// Class methods
+//
+    public static Class loadClass(String name) throws ClassNotFoundException {
+        ClassLoader loader =
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            return Class.forName(name);
+        } else {
+            return loader.loadClass(name);
+        }
+    }
+
 
     /**
-     * @return the Digester rule set for use in this implementation
+     * Generate a new identifier currently used to uniquely identify
+     * components.
      */
+    public static synchronized String generateId() {
+        if (id == Long.MAX_VALUE) {
+            id = 0;
+        } else {
+            id++;
+        }
+        return Long.toHexString(id);
+    }
 
-    public RuleSetBase getRuleSet();
+//
+// General Methods
+//
 
-
-    /**
-     * @return the file suffix for files of this Xml type.  For example
-     *         ".xul" or ".uiml".
-     */
-
-    public String getSuffix();
-
-} // end of interface XmlDialectProvider
+} // end of class Util

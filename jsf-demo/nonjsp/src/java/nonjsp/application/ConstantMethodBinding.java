@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.3 2004/02/05 16:24:52 rlubke Exp $
+ * $Id: ConstantMethodBinding.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
  */
 
 /*
@@ -40,81 +40,59 @@
  * maintenance of any nuclear facility.
  */
 
-// Util.java
+// BuildComponentFromTagImpl.java
 
-package nonjsp.util;
+package nonjsp.application;
 
-/**
- * <B>Util</B> is a class ...
- *
- * Copy of com.sun.faces.util.Util in order to remove
- * demo dependancy on RI.
- *
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: Util.java,v 1.3 2004/02/05 16:24:52 rlubke Exp $
- * @see	com.sun.faces.util.Util
- */
+import javax.faces.component.StateHolder;
+import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
 
-public class Util extends Object {
+public class ConstantMethodBinding extends MethodBinding
+    implements StateHolder {
 
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-    private static long id = 0;
+    private String outcome = null;
 
 
-//
-// Instance Variables
-//
-
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-
-    private Util() {
-        throw new IllegalStateException();
-    }
-
-//
-// Class methods
-//
-    public static Class loadClass(String name) throws ClassNotFoundException {
-        ClassLoader loader =
-            Thread.currentThread().getContextClassLoader();
-        if (loader == null) {
-            return Class.forName(name);
-        } else {
-            return loader.loadClass(name);
-        }
+    public ConstantMethodBinding() {
     }
 
 
-    /**
-     * Generate a new identifier currently used to uniquely identify
-     * components.
-     */
-    public static synchronized String generateId() {
-        if (id == Long.MAX_VALUE) {
-            id = 0;
-        } else {
-            id++;
-        }
-        return Long.toHexString(id);
+    public ConstantMethodBinding(String yourOutcome) {
+        outcome = yourOutcome;
     }
 
-//
-// General Methods
-//
 
-} // end of class Util
+    public Object invoke(FacesContext context, Object params[]) {
+        return outcome;
+    }
+
+
+    public Class getType(FacesContext context) {
+        return String.class;
+    }
+
+    // ----------------------------------------------------- StateHolder Methods
+
+    public Object saveState(FacesContext context) {
+        return outcome;
+    }
+
+
+    public void restoreState(FacesContext context, Object state) {
+        outcome = (String) state;
+    }
+
+
+    private boolean transientFlag = false;
+
+
+    public boolean isTransient() {
+        return (this.transientFlag);
+    }
+
+
+    public void setTransient(boolean transientFlag) {
+        this.transientFlag = transientFlag;
+    }
+}

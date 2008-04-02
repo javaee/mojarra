@@ -1,5 +1,5 @@
 /*
- * $Id: XulDialectProvider.java,v 1.3 2004/02/05 16:24:39 rlubke Exp $
+ * $Id: XulDialectProvider.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import org.apache.commons.digester.RuleSetBase;
  * specific logic required for creating a tree of UIComponent instances
  * from an Xml file. <P>
  *
- * @version $Id: XulDialectProvider.java,v 1.3 2004/02/05 16:24:39 rlubke Exp $
+ * @version $Id: XulDialectProvider.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $
  */
 public class XulDialectProvider extends Object implements XmlDialectProvider {
 

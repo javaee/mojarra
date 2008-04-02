@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.20 2004/04/07 17:53:35 rkitain Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $ 
  */ 
 
 
@@ -78,7 +78,7 @@ import java.util.Map;
 /**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.20 2004/04/07 17:53:35 rkitain Exp $ *
+ * @version $Id: XulViewHandlerImpl.java,v 1.1 2004/05/20 21:24:52 rkitain Exp $ *
  * @see javax.faces.application.ViewHandler
  */
 public class XulViewHandlerImpl extends ViewHandler {

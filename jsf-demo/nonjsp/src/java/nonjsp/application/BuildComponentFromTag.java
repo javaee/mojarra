@@ -1,5 +1,5 @@
 /*
- * $Id: ConstantMethodBinding.java,v 1.3 2004/02/05 16:24:38 rlubke Exp $
+ * $Id: BuildComponentFromTag.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
  */
 
 /*
@@ -40,59 +40,49 @@
  * maintenance of any nuclear facility.
  */
 
-// BuildComponentFromTagImpl.java
+// BuildComponentFromTag.java
 
 package nonjsp.application;
 
-import javax.faces.component.StateHolder;
-import javax.faces.context.FacesContext;
-import javax.faces.el.MethodBinding;
+import org.xml.sax.Attributes;
 
-public class ConstantMethodBinding extends MethodBinding
-    implements StateHolder {
+import javax.faces.component.UIComponent;
 
-    private String outcome = null;
+/**
+ * An instance of this class knows how to build a UIComponent instance
+ * from a JSP tag.  This allows locating this knowledge near the tag
+ * handlers.  <P>
+ *
+ * The implementation must be modified if the tags change. <P>
+ *
+ * Copy of com.sun.faces.tree.BuildComponentFromTag in order to remove
+ * demo dependancy on RI.
+ *
+ * <B>Lifetime And Scope</B> <P>
+ *
+ * Has the same scope as the ViewEngine instance.  The ViewEngine has a
+ * BuildComponentFromTag instance. <P>
+ *
+ * @version $Id: BuildComponentFromTag.java,v 1.1 2004/05/20 21:24:51 rkitain Exp $
+ */
 
+public interface BuildComponentFromTag {
 
-    public ConstantMethodBinding() {
-    }
-
-
-    public ConstantMethodBinding(String yourOutcome) {
-        outcome = yourOutcome;
-    }
-
-
-    public Object invoke(FacesContext context, Object params[]) {
-        return outcome;
-    }
-
-
-    public Class getType(FacesContext context) {
-        return String.class;
-    }
-
-    // ----------------------------------------------------- StateHolder Methods
-
-    public Object saveState(FacesContext context) {
-        return outcome;
-    }
+    public UIComponent createComponentForTag(String shortTagName);
 
 
-    public void restoreState(FacesContext context, Object state) {
-        outcome = (String) state;
-    }
+    public boolean tagHasComponent(String shortTagName);
 
 
-    private boolean transientFlag = false;
+    public boolean isNestedComponentTag(String shortTagName);
 
 
-    public boolean isTransient() {
-        return (this.transientFlag);
-    }
+    public void handleNestedComponentTag(UIComponent parent,
+                                         String shortTagName, Attributes attrs);
 
 
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
-    }
-}
+    public void applyAttributesToComponentInstance(UIComponent child,
+                                                   Attributes attrs);
+
+} // end of interface BuildComponentFromTag
+

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.5 2004/05/12 18:46:52 ofung Exp $
+ * $Id: MessageFactory.java,v 1.1 2004/05/20 21:24:48 rkitain Exp $
  */
 
 /*
