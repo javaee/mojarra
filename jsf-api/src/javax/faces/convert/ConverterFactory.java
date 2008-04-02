@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactory.java,v 1.4 2003/02/13 00:18:11 craigmcc Exp $
+ * $Id: ConverterFactory.java,v 1.5 2003/02/13 03:49:45 craigmcc Exp $
  */
 
 /*
@@ -59,6 +59,9 @@ public abstract class ConverterFactory {
      * @param clazz Class for which Object-to-String and String-to-Object
      *  conversions are supported by this {@link Converter}
      * @param converter {@link Converter} instance that we are registering
+     *
+     * @exception NullPointerException if <code>clazz</code> or
+     *  <code>converter</code> is <code>null</code>
      */
     public abstract void addConverter(Class clazz, Converter converter);
 
@@ -70,17 +73,22 @@ public abstract class ConverterFactory {
      * {@link Converters} is performed in the following order:</p>
      * <ul>
      * <li>An exact match on the original class.</li>
-     * <li>An exact match on the superclasses of this class, starting with
-     *     the immediate parent.</li>
-     * <li>An exact match for each interface directly implemented by the
-     *     original class.</li>
-     * <li>An exact match for each interface directly implemented by
-     *     superclasses of this class, starting with the immediate
-     *     parent.</li>
+     * <li>An exact match on one of the interfaces directly implemented
+     *     by the original class, checked in the order they are returned
+     *     by <code>Class.getInterfaces()</code>.</li>
+     * <li>Recursively for each superclass of the original class:
+     *     <ul>
+     *     <li>An exact match on this superclass.</li>
+     *     <li>An exact match on one of the interfaces directly implemented
+     *         by this superclass.</li>
+     *     </ul></li>
      * </ul>
-     *
      * <p>If a {@link Converter} is discovered during the search described
      * above, it is returned; otherwise <code>null</code> is returned.</p>
+     *
+     * <p>Each call to <code>getConverter()</code> for the same
+     * <code>clazz</code>, from within the same web application,
+     * must return the same {@link Converter} instance.</p>
      *
      * @param clazz Class for which a {@link Converter} is requested
      *
@@ -95,7 +103,9 @@ public abstract class ConverterFactory {
      * may be used to perform Object-to-String and String-to-Object
      * conversions for web applications based on JavaServer Faces.  The
      * set of available converter identifiers is available via the
-     * <code>getConverterIds()</code> method.</p>
+     * <code>getConverterIds()</code> method.  If no {@link Converter}
+     * has been registered for the specified converter identifier,
+     * return <code>null</code>.</p>
      *
      * <p>Each call to <code>getConverter()</code> for the same
      * <code>converterId</code>, from within the same web application,
@@ -104,8 +114,6 @@ public abstract class ConverterFactory {
      * @param converterId Converter identifier of the requested
      *  {@link Converter} instance
      *
-     * @exception IllegalArgumentException if no {@link Converter} instance
-     *  can be returned for the specified identifier
      * @exception NullPointerException if <code>converterId</code>
      *  is <code>null</code>
      */
