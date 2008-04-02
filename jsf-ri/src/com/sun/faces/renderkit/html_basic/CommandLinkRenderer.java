@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.42 2006/01/11 15:28:07 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.43 2006/03/17 01:03:50 rlubke Exp $
  */
 
 /*
@@ -488,14 +488,15 @@ public class CommandLinkRenderer extends LinkRenderer {
 	    requestMap.put(keyName, keyName);
         }
         // PENDING(edburns): not sure if the JSFA59 back button problem
-        // manifests itself with param children as well...
-        ArrayList<String> renderedFields = null;
+        // manifests itself with param children as well...      
         // get UIParameter children...
         Param paramList[] = getParamList(context, component);
         if (paramList != null && paramList.length > 0) {            
-            renderedFields = (ArrayList<String>)requestMap.get(RENDERED_HIDDEN_FIELDS);           
+            ArrayList<String> renderedFields = 
+                  (ArrayList<String>)requestMap.get(RENDERED_HIDDEN_FIELDS);           
             if (renderedFields == null) {
                 renderedFields = new ArrayList<String>();
+                requestMap.put(RENDERED_HIDDEN_FIELDS, renderedFields);                
             }
 
             // render any hidden fields that haven't been already for this form.
@@ -512,11 +513,10 @@ public class CommandLinkRenderer extends LinkRenderer {
                     writer.endElement("input");
                     renderedFields.add(keyName);
                 }
-            }
+            }            
         }
-        
-        requestMap.put(RENDERED_HIDDEN_FIELDS, renderedFields);
-	writeScriptContent(context, writer, component);
+                
+        writeScriptContent(context, writer, component);
     }
 
     
