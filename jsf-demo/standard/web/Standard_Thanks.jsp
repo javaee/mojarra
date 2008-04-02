@@ -29,7 +29,8 @@
         </c:if>
 
           </TR>
-            <td><a href="index.html">Back To RenderKit Demo</a></td>
+            <td><a href='<%= request.getContextPath() + "/" %>'>
+                Back To RenderKit Demo</a></td>
           </TR>
 
           </table>
