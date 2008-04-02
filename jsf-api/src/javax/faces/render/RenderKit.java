@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.22 2003/08/21 16:21:31 eburns Exp $
+ * $Id: RenderKit.java,v 1.23 2003/09/11 19:54:21 craigmcc Exp $
  */
 
 /*
@@ -50,8 +50,6 @@ public abstract class RenderKit {
      * @param rendererType Renderer type of the new {@link Renderer}
      * @param renderer The new {@link Renderer} instance
      *
-     * @exception IllegalArgumentException if a {@link Renderer} with the
-     *  specified <code>rendererType</code> has already been registered
      * @exception NullPointerException if <code>rendererType</code> or
      *  <code>renderer</code> is null
      */
