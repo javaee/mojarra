@@ -44,7 +44,7 @@
 # modules that the jsf-demo depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.6 2003/04/08 00:40:49 jvisvanathan Exp $
+# $Id: build.properties.sample,v 1.7 2003/04/11 00:36:34 jvisvanathan Exp $
 # -----------------------------------------------------------------------------
 
 # Make these values be correct on your system, then rename to
@@ -75,6 +75,6 @@ build.standalone=true
 #   PROPERTIES FOR JWSDP 1.2 NIGHTLY BUILDS
 # --------------------------------------------------
 # 
-#jsf.api.jar=<location of jsf-api.jar>
-#jsf.ri.jar=<location of jsf-ri.jar>
+#jsf-api.jar=<location of jsf-api.jar>
+#jsf-ri.jar=<location of jsf-ri.jar>
 

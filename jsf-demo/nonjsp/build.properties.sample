@@ -53,6 +53,10 @@ standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
 # or TOMCAT 5.x 
 #servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
 
+# Set the following only if you are using JWSDP1.2.x
+#jsf-api.jar=${tomcat.home}/jsf-${version}/jsf-api.jar
+#jsf-ri.jar=${tomcat.home}/jsf-${version}/jsf-ri.jar
+
 username=<your management tool username>
 password=<your management tool password>
 
