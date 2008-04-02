@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.3 2003/10/07 20:16:04 horwat Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.4 2003/10/24 17:46:32 rlubke Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ import com.sun.faces.util.Util;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for 
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.3 2003/10/07 20:16:04 horwat Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.4 2003/10/24 17:46:32 rlubke Exp $
  * 
  */
 
@@ -44,7 +44,7 @@ public class ConvertDateTimeTag extends ConverterTag {
     //
     private String dateStyle;
     private String dateStyle_;
-    private Locale parseLocale;
+    private Locale locale;
     private String pattern;
     private String pattern_;
     private String timeStyle;
@@ -74,7 +74,7 @@ public class ConvertDateTimeTag extends ConverterTag {
     private void init() {
         dateStyle = "default";
         dateStyle_ = "default";
-        parseLocale = null;
+        locale = null;
         pattern = null;
         pattern_ = null;
         timeStyle = "default";
@@ -100,12 +100,12 @@ public class ConvertDateTimeTag extends ConverterTag {
         this.dateStyle_ = dateStyle;
     }
 
-    public Locale getParseLocale() {
-        return (this.parseLocale);
+    public Locale getLocale() {
+        return (this.locale);
     }
 
-    public void setParseLocale(Locale parseLocale) {
-        this.parseLocale = parseLocale;
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public String getPattern() {
@@ -153,7 +153,7 @@ public class ConvertDateTimeTag extends ConverterTag {
         Assert.assert_it(null != result);
 
         result.setDateStyle(dateStyle);
-        result.setLocale(parseLocale);
+        result.setLocale(locale);
         result.setPattern(pattern);
         result.setTimeStyle(timeStyle);
         result.setTimeZone(timeZone);

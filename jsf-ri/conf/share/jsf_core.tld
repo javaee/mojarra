@@ -217,7 +217,7 @@
           <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
-          <name>parseLocale</name>
+          <name>locale</name>
           <required>false</required>
           <rtexprvalue>true</rtexprvalue>
       </attribute>
@@ -289,7 +289,7 @@
           <rtexprvalue>true</rtexprvalue>
       </attribute>
       <attribute>
-          <name>parseLocale</name>
+          <name>locale</name>
           <required>false</required>
           <rtexprvalue>true</rtexprvalue>
       </attribute>

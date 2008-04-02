@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.2 2003/10/07 20:16:04 horwat Exp $
+ * $Id: ConvertNumberTag.java,v 1.3 2003/10/24 17:46:33 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import com.sun.faces.util.Util;
  * javax.faces.convert.NumberConverter</p>
  *
  *
- * @version $Id: ConvertNumberTag.java,v 1.2 2003/10/07 20:16:04 horwat Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.3 2003/10/24 17:46:33 rlubke Exp $
  * 
  */
 
@@ -54,7 +54,7 @@ public class ConvertNumberTag extends ConverterTag {
     private boolean minFractionDigitsSpecified;
     private int minIntegerDigits;
     private boolean minIntegerDigitsSpecified;
-    private Locale parseLocale;
+    private Locale locale;
     private String pattern;
     private String pattern_;
     private String type;
@@ -94,7 +94,7 @@ public class ConvertNumberTag extends ConverterTag {
         minFractionDigitsSpecified = false;
         minIntegerDigits = 0;
         minIntegerDigitsSpecified = false;
-        parseLocale = null;
+        locale = null;
         pattern = null;
         pattern_ = null;
         type = "number";
@@ -178,12 +178,12 @@ public class ConvertNumberTag extends ConverterTag {
         this.minIntegerDigitsSpecified = true;
     }
 
-    public Locale getParseLocale() {
-        return (this.parseLocale);
+    public Locale getLocale() {
+        return (this.locale);
     }
 
-    public void setParseLocale(Locale parseLocale) {
-        this.parseLocale = parseLocale;
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public String getPattern() {
@@ -230,7 +230,7 @@ public class ConvertNumberTag extends ConverterTag {
         if (minIntegerDigitsSpecified) {
             result.setMinIntegerDigits(minIntegerDigits);
         }
-        result.setParseLocale(parseLocale);
+        result.setLocale(locale);
         result.setPattern(pattern);
         result.setType(type);
 
