@@ -1,5 +1,5 @@
 /*
- * $Id: FastStringWriter.java,v 1.5 2006/10/31 19:21:40 rlubke Exp $
+ * $Id: FastStringWriter.java,v 1.6 2006/11/13 06:19:07 rlubke Exp $
  */
 
 /*
@@ -138,6 +138,10 @@ public class FastStringWriter extends Writer {
     /** @return the buffer's current value as a string. */
     public String toString() {
         return builder.toString();
+    }
+
+    public void reset() {
+        builder.setLength(0);
     }
 
 }

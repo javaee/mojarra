@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.39 2006/11/13 01:40:57 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.40 2006/11/13 06:19:08 rlubke Exp $
  */
 
 /*
@@ -32,11 +32,13 @@ package com.sun.faces.renderkit.html_basic;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.FacesContext;
 
 import java.io.IOException;
 import java.io.Writer;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
@@ -90,6 +92,13 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // HtmlResponseWriter to use when buffering is required
     private Writer origWriter;
+
+    // Keep one instance of the script buffer per Writer
+    private FastStringWriter scriptBuffer;
+
+    // Enables hiding of inlined script and style
+    // elements from old browsers
+    private Boolean enableJSScriptHiding;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -259,7 +268,18 @@ public class HtmlResponseWriter extends ResponseWriter {
                     writer.write("\n]]>\n");
                 }
             } else {
-                writer.write("\n//-->\n");
+                if (enableJSScriptHiding == null) {
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    WebConfiguration webConfig =
+                         WebConfiguration.getInstance(
+                              context.getExternalContext());
+                    enableJSScriptHiding = webConfig
+                         .getBooleanContextInitParameter(
+                              WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding);
+                }
+                if (enableJSScriptHiding) {
+                    writer.write("\n//-->\n");
+                }                
             }
         }
         isScript = false;
@@ -687,6 +707,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     /**
      * This method automatically closes a previous element (if not
      * already closed).
+     * @throws IOException if an error occurs writing
      */
     private void closeStartIfNecessary() throws IOException {
 
@@ -703,10 +724,25 @@ public class HtmlResponseWriter extends ResponseWriter {
                         writer.write("\n<![CDATA[\n");
                     }
                 } else {
-                    writer.write("\n<!--\n");
+                    if (enableJSScriptHiding == null) {
+                        FacesContext context = FacesContext.getCurrentInstance();
+                        WebConfiguration webConfig =
+                             WebConfiguration.getInstance(
+                                  context.getExternalContext());
+                        enableJSScriptHiding = webConfig
+                             .getBooleanContextInitParameter(
+                                  WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding);
+                    }
+                    if (enableJSScriptHiding) {
+                        writer.write("\n<!--\n");
+                    }
                 }
                 origWriter = writer;
-                writer = new FastStringWriter(1024);
+                if (scriptBuffer == null) {
+                    scriptBuffer = new FastStringWriter(1024);
+                }
+                scriptBuffer.reset();
+                writer = scriptBuffer;
                 isScript = false;
                 isStyle = false;
             }

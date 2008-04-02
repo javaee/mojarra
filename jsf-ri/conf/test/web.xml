@@ -43,6 +43,10 @@
         <param-value>20</param-value>
     </context-param>
     <context-param>
+        <param-name>com.sun.faces.enableJSStyleHiding</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
         <param-name>minimumCustomerAge</param-name>
         <param-value>18</param-value>
     </context-param>

@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.14 2006/09/06 20:44:05 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.15 2006/11/13 06:19:07 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -690,6 +690,10 @@ public class WebConfiguration {
         SendPoweredByHeader(
               "com.sun.faces.sendPoweredByHeader",
               true
+        ),
+        EnableJSStyleHiding(
+            "com.sun.faces.enableJSStyleHiding",
+             false
         );
 
         private BooleanWebContextInitParameter alternate;
