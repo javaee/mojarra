@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.10 2003/02/20 22:49:01 ofung Exp $
+ * $Id: MenuRenderer.java,v 1.11 2003/03/19 21:16:34 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -38,7 +38,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.10 2003/02/20 22:49:01 ofung Exp $
+ * @version $Id: MenuRenderer.java,v 1.11 2003/03/19 21:16:34 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -100,7 +100,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
-        setPreviousValue(component, component.currentValue(context));
+        setPreviousValue(component, ((UIInput)component).currentValue(context));
 
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null);
@@ -110,11 +110,11 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             (component instanceof UISelectMany)) {
             String newValues[] =
                 context.getServletRequest().getParameterValues(clientId);
-            component.setValue(newValues);
+            ((UISelectMany)component).setValue(newValues);
         } else {
             String newValue =
                 context.getServletRequest().getParameter(clientId);
-            component.setValue(newValue);
+            ((UISelectOne)component).setValue(newValue);
         }    
         component.setValid(true);
 	return;

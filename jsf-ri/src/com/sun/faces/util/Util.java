@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.47 2003/03/15 05:40:52 rkitain Exp $
+ * $Id: Util.java,v 1.48 2003/03/19 21:16:44 jvisvanathan Exp $
  */
 
 /*
@@ -29,6 +29,11 @@ import javax.faces.context.MessageResourcesFactory;
 import javax.faces.context.MessageResources;
 import javax.faces.context.Message;
 
+
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.el.ValueBinding;
+
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectItems;
@@ -51,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.47 2003/03/15 05:40:52 rkitain Exp $
+ * @version $Id: Util.java,v 1.48 2003/03/19 21:16:44 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -491,7 +496,7 @@ private Util()
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
-                Object value = kid.currentValue(context);
+                Object value = ((UISelectItem)kid).currentValue(context);
                 if ( value == null ) {
                     UISelectItem item = (UISelectItem) kid;
                     list.add(new SelectItemWrapper( kid,
@@ -506,7 +511,7 @@ private Util()
                         Util.CONVERSION_ERROR_MESSAGE_ID));
                 }
             } else if (kid instanceof UISelectItems && null != context) {
-                Object value = kid.currentValue(context);
+                Object value = ((UISelectItems)kid).currentValue(context);
                 if (value instanceof SelectItem) {
                     SelectItem item = (SelectItem) kid;
                     list.add(new SelectItemWrapper( kid, item));
@@ -589,12 +594,12 @@ private Util()
 	
 	// verify our component has the proper attributes for bundle.
 	if (null != (bundleName = (String)component.getAttribute(bundleAttr))){
-	    // verify there is a Locale for this modelReference
+	    // verify there is a Locale for this localizationContext
 	    javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	    if (null != (locCtx = 
 			 (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
-			 context.getModelValue(bundleName))) {
-		result = locCtx.getLocale();
+                         (Util.getValueBinding(bundleName)).getValue(context))) {
+                result = locCtx.getLocale();
 		Assert.assert_it(null != result);
 	    }
 	}
@@ -708,6 +713,14 @@ private Util()
 	
 	return result.toString();
     }
+    
+    public static ValueBinding getValueBinding(String valueRef) {
+        ApplicationFactory factory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application application = factory.getApplication();
+        ValueBinding binding = application.getValueBinding(valueRef);
+        return binding;
+    }         
 
 //
 // General Methods

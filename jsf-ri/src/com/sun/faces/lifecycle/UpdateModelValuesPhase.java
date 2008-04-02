@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.18 2003/03/12 19:51:07 rkitain Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.19 2003/03/19 21:16:30 jvisvanathan Exp $
  */
 
 /*
@@ -24,6 +24,7 @@ import javax.faces.FacesException;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 
 import java.util.Iterator;
 
@@ -33,7 +34,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.18 2003/03/12 19:51:07 rkitain Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.19 2003/03/19 21:16:30 jvisvanathan Exp $
  * 
  */
 
@@ -85,13 +86,17 @@ public void execute(FacesContext facesContext) throws FacesException
     UIComponent component = 
         (UIComponent)facesContext.getTree().getRoot();
     Assert.assert_it(null != component);
-
+    
     try {
         component.processUpdates(facesContext);
     } catch (Throwable e) {
         Object[] params = new Object[3];
-        params[0] = component.getValue();
-        params[1] = component.getModelReference();
+        UIOutput uiOutput = null;
+        if ( component instanceof UIOutput) {
+            uiOutput= (UIOutput) component;
+            params[0] = uiOutput.getValue();
+            params[1] = uiOutput.getValueRef();
+        }  
         params[2] = e.getMessage();
         MessageResources resources = Util.getMessageResources();
         Assert.assert_it( resources != null );

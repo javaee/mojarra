@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.44 2003/02/20 22:48:56 ofung Exp $
+ * $Id: ButtonRenderer.java,v 1.45 2003/03/19 21:16:31 jvisvanathan Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.44 2003/02/20 22:48:56 ofung Exp $
+ * @version $Id: ButtonRenderer.java,v 1.45 2003/03/19 21:16:31 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -200,13 +200,13 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             return;
         }
 
-        // Construct and enqueue a FormEvent for the application
-        String commandName = (String) component.currentValue(context);
+        // Construct and enqueue a FormEvent for the application 
+        String commandName = ((UICommand)component).getCommandName();
         String formName = null;
         UIComponent parent = component.getParent();
         while (parent != null) {
             if (parent instanceof UIForm) {
-                formName = (String) parent.currentValue(context);
+                formName = (String) ((UIForm)parent).getFormName();
                 break;
             }
             parent = parent.getParent();

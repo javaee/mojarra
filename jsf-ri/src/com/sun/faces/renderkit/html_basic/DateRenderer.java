@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.19 2003/03/11 01:20:23 jvisvanathan Exp $
+ * $Id: DateRenderer.java,v 1.20 2003/03/19 21:16:33 jvisvanathan Exp $
  */
 
 /*
@@ -26,6 +26,7 @@ import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.FacesException;
 import javax.faces.convert.ConverterException;
+import javax.faces.el.ValueBinding;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -49,7 +50,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.19 2003/03/11 01:20:23 jvisvanathan Exp $
+ * @version $Id: DateRenderer.java,v 1.20 2003/03/19 21:16:33 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -126,15 +127,14 @@ public class DateRenderer extends HtmlBasicInputRenderer {
             String newValue) throws ConverterException {
 	
         Object convertedValue = null;
-        Class modelType = null;
-        String modelRef = null;
+        Class valueType = null;
+        String valueRef = null;
 	Date newDateValue = null;
         
         if ( newValue == null || newValue.length() == 0) {
             return null;
         }
-	modelRef = component.getModelReference();
-	
+      
 	// Try to get the newValue as a Date
 	try {
 	    newDateValue = this.parseDate(context, component, newValue);
@@ -142,21 +142,21 @@ public class DateRenderer extends HtmlBasicInputRenderer {
 	catch (ParseException pe) {
 	    throw new ConverterException(pe.getMessage());
 	}
-	
-	if (null != modelRef) {
+        valueRef = ((UIInput)component).getValueRef();
+	if (null != valueRef) {
 	    try {
-		modelType = context.getModelType(modelRef);
+		valueType = (Util.getValueBinding(valueRef)).getType(context);
 	    } catch (FacesException fe ) {
 		throw new ConverterException(Util.getExceptionMessage(
                         Util.CONVERSION_ERROR_MESSAGE_ID));
 	    }    
-	    Assert.assert_it(modelType != null );
+	    Assert.assert_it(valueType != null );
 	    
 	    // Verify the modelType is one of the supported types
-	    if (modelType.isAssignableFrom(Date.class)) {
+	    if (valueType.isAssignableFrom(Date.class)) {
 		convertedValue = newDateValue;
 	    }	    
-	    else if (modelType.isAssignableFrom(Long.class)) {
+	    else if (valueType.isAssignableFrom(Long.class)) {
 		convertedValue = (new Long(newDateValue.getTime()));
 	    }
 	    else {

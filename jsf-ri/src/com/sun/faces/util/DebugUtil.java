@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.9 2003/02/20 22:49:41 ofung Exp $
+ * $Id: DebugUtil.java,v 1.10 2003/03/19 21:16:43 jvisvanathan Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.component.SelectItem;
 
 import java.util.Iterator;
@@ -28,7 +29,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.9 2003/02/20 22:49:41 ofung Exp $
+ * @version $Id: DebugUtil.java,v 1.10 2003/03/19 21:16:43 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,12 +120,17 @@ public static void printTree(UIComponent root, PrintStream out)
 	return;
     }
     int i = 0;
+    Object value = null;
     
     indentPrintln(out, "===>Type:" + root.getComponentType());
     indentPrintln(out, "id:"+root.getComponentId());
 
-    if (root.getModelReference() != null) {
-	indentPrintln(out, "modelReference:"+root.getModelReference());
+    if ( root instanceof UIOutput) {
+        UIOutput uiOutput = (UIOutput) root;
+        value = uiOutput.getValue();
+        if (uiOutput.getValueRef() != null) {
+	    indentPrintln(out, "valueReference: "+ uiOutput.getValueRef());
+        }
     }
     
     Iterator items = null;
@@ -144,7 +150,7 @@ public static void printTree(UIComponent root, PrintStream out)
 	}
 	indentPrintln(out, " }");
     } else {
-	indentPrintln(out, "value=" + root.getValue());
+        indentPrintln(out, "value= " + value );
 	
 	Iterator it = root.getAttributeNames();
 	if (it != null) {

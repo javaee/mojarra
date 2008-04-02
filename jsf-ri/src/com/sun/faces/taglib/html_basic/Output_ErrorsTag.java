@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.5 2003/02/20 22:49:17 ofung Exp $
+ * $Id: Output_ErrorsTag.java,v 1.6 2003/03/19 21:16:40 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UIOutput;
 
  *
 
- * @version $Id: Output_ErrorsTag.java,v 1.5 2003/02/20 22:49:17 ofung Exp $
+ * @version $Id: Output_ErrorsTag.java,v 1.6 2003/03/19 21:16:40 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,9 +102,10 @@ public class Output_ErrorsTag extends FacesTag {
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         UIOutput output = (UIOutput) component;
-
-        if (null == component.getAttribute(UIComponent.CLIENT_ID_ATTR)) {
-            component.setAttribute(UIComponent.CLIENT_ID_ATTR, getClientId());
+        // PENDING (visvan) change "clientId" attribute to "for" along
+        // with other tld changes.
+        if (null == component.getAttribute("for") && null != getClientId()) {
+            component.setAttribute("for", getClientId());
         }
         if (null == component.getAttribute("color")) {
             component.setAttribute("color", getColor());

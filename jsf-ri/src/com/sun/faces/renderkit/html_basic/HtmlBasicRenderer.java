@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.32 2003/03/13 01:06:32 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.33 2003/03/19 21:16:33 jvisvanathan Exp $
  */
 
 /*
@@ -22,10 +22,12 @@ import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UISelectItems;
-import javax.faces.component.UIOutput;
+import javax.faces.component.UIInput;
 import javax.faces.component.NamingContainer;
+import javax.faces.el.ValueBinding;
 
 import javax.faces.render.Renderer;
 import javax.faces.component.UIInput;
@@ -203,8 +205,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public void addConversionErrorMessage( FacesContext facesContext, 
             UIComponent comp, String errorMessage ) {
         Object[] params = new Object[3];
-        params[0] = comp.getValue();
-        params[1] = comp.getModelReference();
+        UIOutput uiOutput = null;
+        if ( comp instanceof UIOutput) {
+            uiOutput= (UIOutput) comp;
+            params[0] = uiOutput.getValue();
+            params[1] = uiOutput.getValueRef();
+        }
         params[2] = errorMessage; 
         MessageResources resources = Util.getMessageResources();
         Assert.assert_it( resources != null );
@@ -267,10 +273,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_CLASS_ERROR_MESSAGE_ID, params), bundleName, key);
 	}
 	    
-	// verify there is a ResourceBundle for this modelReference
+	// verify there is a ResourceBundle in scoped namescape.
 	javax.servlet.jsp.jstl.fmt.LocalizationContext locCtx = null;
 	if (null == (locCtx = (javax.servlet.jsp.jstl.fmt.LocalizationContext) 
-		     context.getModelValue(bundleName)) ||
+            (Util.getValueBinding(bundleName)).getValue(context)) ||
 	    null == (bundle = locCtx.getResourceBundle())) {
 	    throw new MissingResourceException(Util.getExceptionMessage(Util.MISSING_RESOURCE_ERROR_MESSAGE_ID), bundleName, key);
 	}
@@ -288,12 +294,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
-        if ((UIOutput.TYPE.equals(component.getComponentType())) ||
-            (component instanceof UIOutput)) {
+        if ((UIOutput.TYPE.equals(component.getComponentType()))) {
             // do nothing in output case
             return;
         }
 
+        UIInput uiInput = null;
+        if ( component instanceof UIInput) {
+            uiInput= (UIInput) component;
+        }
         String clientId = component.getClientId(context);
         Assert.assert_it(clientId != null );
         
@@ -301,8 +310,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
         // we should convert because we want to compare the converted
         // previous (current) value with the converted new value;
         // ex: we don't want to compare "48%" with 0.48;
-
-        Object curValue = component.currentValue(context);
+        
+        Object curValue = uiInput.currentValue(context);
         if (curValue instanceof String) {
             try {
                 Object convertedCurrentValue = 
@@ -318,12 +327,12 @@ public abstract class HtmlBasicRenderer extends Renderer {
         try {
             convertedValue = getConvertedValue(context, component, newValue);   
         } catch (ConverterException ce) {
-            component.setValue(newValue);
+            uiInput.setValue(newValue);
             addConversionErrorMessage(context, component, ce.getMessage());
             component.setValid(false);
             return;
         }    
-        component.setValue(convertedValue);
+        uiInput.setValue(convertedValue);
         component.setValid(true);
     }
     
@@ -371,8 +380,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
      */
     protected String getCurrentValue(FacesContext context,UIComponent component) {
         
+        UIOutput uiOutput = null;
+        if ( component instanceof UIOutput) {
+            uiOutput= (UIOutput) component;
+        }
+        
         String currentValue = null;
-        Object currentObj = component.currentValue(context);
+        Object currentObj = uiOutput.currentValue(context);
         if ( currentObj != null) {
             currentValue = getFormattedValue(context, component, currentObj);
         } 
@@ -419,71 +433,49 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
 
     public String getClientId(FacesContext context, UIComponent component){
-	String result = null;
-	
-	if (null != (result = (String) component.getAttribute(UIComponent.CLIENT_ID_ATTR))) {
-	    return result;
-	}
-
-        Object facetParent = null;
-
+	String clientId = null;
 	NamingContainer closestContainer = null;
 	UIComponent containerComponent = component;
 
-        // check if its a facet (facets are not containers)
-        // this also checks if we start off with nested facets
-        facetParent = containerComponent.getAttribute(
-            UIComponent.FACET_PARENT_ATTR);
-        while (facetParent != null) {
-            containerComponent = (UIComponent) facetParent;
-            facetParent = containerComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
+        // Search for an ancestor that is a naming container
+        while (null != (containerComponent = 
+                        containerComponent.getParent())) {
+            if (containerComponent instanceof NamingContainer) {
+                closestContainer = (NamingContainer) containerComponent;
+                break;
+            }
         }
 
-	// Search for an ancestor that is a naming container
-	while (null != (containerComponent = 
-			containerComponent.getParent())) {
-            facetParent = containerComponent.getAttribute(
-                UIComponent.FACET_PARENT_ATTR);
-            if (facetParent != null) {
-                containerComponent = (UIComponent) facetParent;
+        // If none is found, see if this is a naming container
+        if (null == closestContainer && component instanceof NamingContainer) {
+            closestContainer = (NamingContainer) component;
+        }
+
+        if (null != closestContainer) {
+
+            // If there is no componentId, generate one and store it
+            if (component.getComponentId() == null) {
+                // Don't call setComponentId() because it checks for
+                // uniqueness.  No need.
+                clientId = closestContainer.generateClientId();
+            } else {
+                clientId = component.getComponentId();
             }
-	    if (containerComponent instanceof NamingContainer) {
-		closestContainer = (NamingContainer) containerComponent;
-		break;
-	    }
-	}
-	
-	// If none is found, see if this is a naming container
-	if (null == closestContainer && component instanceof NamingContainer) {
-	    closestContainer = (NamingContainer) component;
-	}
-	
-	if (null != closestContainer) {
-	    // If there is no componentId, generate one and store it
-	    if (null == (result = component.getComponentId())) {
-		// Don't call setComponentId() because it checks for
-		// uniqueness.  No need.
-		component.setAttribute("componentId",
-				       result = closestContainer.generateClientId());
-	    }
-	    //
-	    // build the client side id
-	    //
-	    
-	    containerComponent = (UIComponent) closestContainer;
-	    // If this is the root naming container, break
-	    if (null != containerComponent.getParent()) {
-		result = containerComponent.getClientId(context) +
-		    UIComponent.SEPARATOR_CHAR + result;
-	    }
-	}
-	
-	if (null == result) {
+
+            // build the client side id
+            containerComponent = (UIComponent) closestContainer;
+
+            // If this is the root naming container, break
+            if (null != containerComponent.getParent()) {
+                clientId = containerComponent.getClientId(context) +
+                    UIComponent.SEPARATOR_CHAR + clientId;
+            }
+        }
+
+        if (null == clientId) {
 	    throw new NullPointerException();
 	}
-	component.setAttribute(UIComponent.CLIENT_ID_ATTR, result);
-	return result;
+	return (clientId);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.2 2003/02/20 22:48:44 ofung Exp $
+ * $Id: NumberConverter.java,v 1.3 2003/03/19 21:16:29 jvisvanathan Exp $
  */
 
 /*
@@ -21,9 +21,12 @@ import java.text.ParseException;
 import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.component.UIOutput;
+import javax.faces.el.ValueBinding;
 
 import org.mozilla.util.Assert;
 
@@ -38,8 +41,9 @@ public class NumberConverter implements Converter {
 
         Object convertedValue = null;
         Number parsedValue = null;
-        Class modelType = null;
-
+        Class valueType = null;
+        String valueRef = null;
+        
         if (null == newValue || newValue.length() == 0) {
             return (newValue);
         }
@@ -58,27 +62,29 @@ public class NumberConverter implements Converter {
         }
 
         // if modelReference is null, store value as Number.
-        String modelRef = component.getModelReference();
-        if ( modelRef == null ) {
+       if ( component instanceof UIInput) {
+            valueRef = ((UIInput)component).getValueRef();
+        }
+        if ( valueRef == null ) {
              return parsedValue;
         }
         // convert the parsed value to model property type.
         try {
-            modelType = context.getModelType(modelRef);
+            valueType = (Util.getValueBinding(valueRef)).getType(context);
         } catch (FacesException fe ) {
             throw new ConverterException(Util.getExceptionMessage(
                 Util.CONVERSION_ERROR_MESSAGE_ID));
         }
-        Assert.assert_it(modelType != null);
+        Assert.assert_it(valueType != null);
         Assert.assert_it(parsedValue != null);
 
-        if ( (modelType.getName()).equals("java.lang.Character") ||
-                (modelType.getName()).equals("char")) {
+        if ( (valueType.getName()).equals("java.lang.Character") ||
+                (valueType.getName()).equals("char")) {
             // 36 is the maximum value allowed for radix.
             char charvalue = Character.forDigit(parsedValue.intValue(),36);
             convertedValue = (new Character(charvalue));
         } else {
-            convertedValue = convertToModelType(modelType, parsedValue);
+            convertedValue = convertToModelType(valueType, parsedValue);
         }
         return convertedValue;
     }
@@ -99,28 +105,28 @@ public class NumberConverter implements Converter {
         return formatNumber(context, component, number);
     }
 
-    private Number convertToModelType(Class modelType, Number parsedValue) {
+    private Number convertToModelType(Class valueType, Number parsedValue) {
         Assert.assert_it(parsedValue != null);
 
         // PENDING (visvan) If it comes to rounding should we throw
         // an exception
-        if ( (modelType.getName()).equals("java.lang.Byte") ||
-                (modelType.getName()).equals("byte")) {
+        if ( (valueType.getName()).equals("java.lang.Byte") ||
+                (valueType.getName()).equals("byte")) {
             return (new Byte(parsedValue.byteValue()));
-        } else if ( (modelType.getName()).equals("java.lang.Double") ||
-                (modelType.getName()).equals("double")) {
+        } else if ( (valueType.getName()).equals("java.lang.Double") ||
+                (valueType.getName()).equals("double")) {
             return (new Double(parsedValue.doubleValue()));
-        } else if ( (modelType.getName()).equals("java.lang.Float") ||
-                (modelType.getName()).equals("float") ) {
+        } else if ( (valueType.getName()).equals("java.lang.Float") ||
+                (valueType.getName()).equals("float") ) {
             return (new Float(parsedValue.floatValue()));
-        } else if ( (modelType.getName()).equals("java.lang.Integer") ||
-               (modelType.getName()).equals("int")) {
+        } else if ( (valueType.getName()).equals("java.lang.Integer") ||
+               (valueType.getName()).equals("int")) {
             return (new Integer(parsedValue.intValue()));
-        } else if ( (modelType.getName()).equals("java.lang.Short") ||
-                (modelType.getName()).equals("short") ) {
+        } else if ( (valueType.getName()).equals("java.lang.Short") ||
+                (valueType.getName()).equals("short") ) {
             return (new Short(parsedValue.shortValue()));
-        } else if ( (modelType.getName()).equals("java.lang.Long") ||
-                (modelType.getName()).equals("long")) {
+        } else if ( (valueType.getName()).equals("java.lang.Long") ||
+                (valueType.getName()).equals("long")) {
             return (new Long(parsedValue.longValue()));
         }
         return parsedValue;

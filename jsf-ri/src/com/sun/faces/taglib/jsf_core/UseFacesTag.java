@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.6 2003/03/13 01:06:35 eburns Exp $
+ * $Id: UseFacesTag.java,v 1.7 2003/03/19 21:16:42 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.6 2003/03/13 01:06:35 eburns Exp $
+ * @version $Id: UseFacesTag.java,v 1.7 2003/03/19 21:16:42 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,6 +73,8 @@ public class UseFacesTag extends FacesBodyTag
     // Constructors and Initializers    
     //
 
+    // PENDING (visvan) extend from BodyTag instead of FacesBodyTag since
+    // this tag handler doesn't correspond any component.
     public UseFacesTag()
     {
         super();
@@ -100,9 +102,7 @@ public class UseFacesTag extends FacesBodyTag
     public int doAfterBody() throws JspException {
        
         // Look up the FacesContext instance for this request
-        FacesContext facesContext = (FacesContext)
-            pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
-                                     PageContext.REQUEST_SCOPE);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext == null) { 
             throw new JspException(Util.getExceptionMessage(Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
@@ -194,8 +194,6 @@ public class UseFacesTag extends FacesBodyTag
     }
     
     public int doEndTag() throws JspException {
-        this.numChildren = 0;
-        this.childIndex = 0;
         return (EVAL_PAGE);
     }
     

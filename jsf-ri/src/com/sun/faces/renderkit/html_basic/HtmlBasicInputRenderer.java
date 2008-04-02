@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicInputRenderer.java,v 1.4 2003/03/11 01:20:23 jvisvanathan Exp $
+ * $Id: HtmlBasicInputRenderer.java,v 1.5 2003/03/19 21:16:33 jvisvanathan Exp $
  */
 
 /*
@@ -69,7 +69,7 @@ public abstract class HtmlBasicInputRenderer extends HtmlBasicRenderer {
 
     public void setPreviousValue(UIComponent component, Object value) {
         if (component instanceof UIInput) {
-            component.setAttribute(UIInput.PREVIOUS_VALUE, value);
+            ((UIInput)component).setPrevious(value);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.41 2003/02/25 04:24:12 craigmcc Exp $
+ * $Id: HyperlinkRenderer.java,v 1.42 2003/03/19 21:16:34 jvisvanathan Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.41 2003/02/25 04:24:12 craigmcc Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.42 2003/03/19 21:16:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -124,11 +124,11 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
         }
 
         // Construct and enqueue a FormEvent for the application
-        String commandName = (String) command.currentValue(context);
+        String commandName = (String) command.getCommandName();
         String formName = null;
 	UIForm form = getMyForm(context, command);
 
-        if (null == (formName = (String) form.currentValue(context))) {
+        if (null == (formName = (String) form.getFormName())) {
 	    addGenericErrorMessage(context, component, 
 				   Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,
 				   "formName");
@@ -279,7 +279,7 @@ public class HyperlinkRenderer extends HtmlBasicRenderer {
 
             if (kid instanceof UIParameter) {
                 Param param = new Param(((UIParameter)kid).getName(),
-                    ((String)kid.currentValue(context)));
+                    ((String)((UIParameter)kid).currentValue(context)));
                 parameterList.add(param);
             }
 	}

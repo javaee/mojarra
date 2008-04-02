@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.6 2003/02/20 22:49:00 ofung Exp $
+ * $Id: ListRenderer.java,v 1.7 2003/03/19 21:16:34 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.6 2003/02/20 22:49:00 ofung Exp $
+ * @version $Id: ListRenderer.java,v 1.7 2003/03/19 21:16:34 jvisvanathan Exp $
  *  
  */
 
@@ -344,7 +344,7 @@ public class ListRenderer extends HtmlBasicRenderer {
     private Iterator getIterator(FacesContext context, UIComponent component) {
 
         // Process the current value of this component appropriately
-        Object value = component.currentValue(context);
+        Object value = ((UIPanel)component).currentValue(context);
         if (value == null) {
             return (Collections.EMPTY_LIST.iterator());
         } else if (value instanceof Collection) {

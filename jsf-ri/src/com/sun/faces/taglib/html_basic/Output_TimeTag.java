@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TimeTag.java,v 1.5 2003/02/20 22:49:18 ofung Exp $
+ * $Id: Output_TimeTag.java,v 1.6 2003/03/19 21:16:41 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_TimeTag.java,v 1.5 2003/02/20 22:49:18 ofung Exp $
+ * @version $Id: Output_TimeTag.java,v 1.6 2003/03/19 21:16:41 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,10 +79,10 @@ public Output_TimeTag()
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
-	
-        // if component has non null value, do not call setValue().
-	if (null == component.getValue() && null != getValue()) {
-	    component.setValue(getValue());
+	UIOutput uiOutput = (UIOutput)component;
+	// if component has non null value, do not call setValue().
+        if (null == uiOutput.getValue() && null != getValue()) {
+	    uiOutput.setValue(getValue());
 	}
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.15 2003/02/20 22:49:01 ofung Exp $
+ * $Id: MessageRenderer.java,v 1.16 2003/03/19 21:16:34 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.15 2003/02/20 22:49:01 ofung Exp $
+ * @version $Id: MessageRenderer.java,v 1.16 2003/03/19 21:16:34 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -129,7 +129,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        Object currentObj = component.currentValue(context);
+        Object currentObj = ((UIOutput)component).currentValue(context);
         if ( currentObj != null) {
             if (currentObj instanceof String) {
                 currentValue = (String)currentObj;
@@ -166,7 +166,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
                 continue;
             }
 
-            parameterList.add(kid.currentValue(context));
+            parameterList.add(((UIOutput)kid).currentValue(context));
         }
 
         String message = null;
