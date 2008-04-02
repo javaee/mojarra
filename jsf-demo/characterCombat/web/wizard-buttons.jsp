@@ -13,7 +13,7 @@
     <h:commandButton value="< Back" action="back" 
                      disabled="#{wizardButtons.hasBack}" />
 
-    <h:commandButton value="Next >" action="next" 
+    <h:commandButton value="#{wizardButtons.nextLabel}" action="next" 
                      disabled="#{wizardButtons.hasNext}"/>
 
   </h:panelGrid>

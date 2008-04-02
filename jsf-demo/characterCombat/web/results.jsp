@@ -27,6 +27,7 @@
   </p>
 
   <h:form>
+    <h:commandButton value="Start Over" action="startOver" />
     <jsp:include page="wizard-buttons.jsp"/>
   </h:form>
 

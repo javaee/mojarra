@@ -51,6 +51,34 @@ public class WizardButtons {
 				  copyContext.getViewRoot());
     }
 
+    /**
+     * @return true if the current page should have a "finish" button
+     * instead of a "next" button
+     */
+
+    public boolean isFinishPage() {
+	FacesContext 
+	    realContext = FacesContext.getCurrentInstance(),
+	    copyContext = createShadowFacesContext(realContext),
+	    nextCopyContext = null;
+	NavigationHandler nav = 
+	    copyContext.getApplication().getNavigationHandler();
+	// get the next outcome
+	nav.handleNavigation(copyContext, null, "next");
+	nextCopyContext = createShadowFacesContext(copyContext);
+	nav.handleNavigation(nextCopyContext, null, "next");
+	return compareUIViewRoots(copyContext.getViewRoot(),
+				  nextCopyContext.getViewRoot());
+    }
+
+    public String getNextLabel() {
+	String result = "Next >";
+	if (isFinishPage()) {
+	    result = "Finish";
+	}
+	return result;
+    }
+
     public boolean compareUIViewRoots(UIViewRoot one, UIViewRoot two) {
 	if (null == one && null == two) {
 	    return true;

@@ -80,7 +80,7 @@
         If the action returns "next", goto
         main.jsp
       </description>
-      <from-outcome>next</from-outcome>
+      <from-outcome>startOver</from-outcome>
       <to-view-id>/main.jsp</to-view-id>
     </navigation-case>
     <navigation-case>

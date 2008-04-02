@@ -161,6 +161,9 @@ public class ModelBean {
      * @return first selected character name String
      */
     public String getFirstSelection() {
+	if (null == firstSelection) {
+	    firstSelection = ((CharacterBean)dataList.get(0)).getName();
+	}
         return firstSelection;
     }
 
@@ -181,6 +184,10 @@ public class ModelBean {
      * @return second selected character name String
      */
     public String getSecondSelection() {
+	if (null == secondSelection) {
+	    List available = getCharactersToSelect();
+	    secondSelection = (String) ((SelectItem)available.get(0)).getValue();
+	}
         return secondSelection;
     }
 
