@@ -129,6 +129,13 @@
 
     <component-type>javax.faces.Column</component-type>
     <component-class>javax.faces.component.UIColumn</component-class>
+    <facet>
+      <facet-name>header</facet-name>
+    </facet>
+    <facet>
+      <facet-name>footer</facet-name>
+    </facet>
+
 
     &uicolumn-props;
 
