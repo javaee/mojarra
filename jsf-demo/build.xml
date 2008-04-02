@@ -75,7 +75,7 @@
   <property name="jsf-api.jar"
             value="${jsf.api.home}/build/lib/jsf-api.jar" />
   <property name="jsf-ri.jar"
-            value="${jsf.ri.home}/lib/jsf-ri.jar" />
+            value="${jsf.ri.home}/build/lib/jsf-ri.jar" />
 
   <property name="webapp" value="demo" />
 
