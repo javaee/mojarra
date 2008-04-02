@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.15 2002/08/15 17:55:08 jvisvanathan Exp $
+ * $Id: UseFacesTag.java,v 1.1 2002/09/20 00:59:46 eburns Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 // UseFacesTag.java
 
-package com.sun.faces.taglib.html_basic;
+package com.sun.faces.taglib.jsf_core;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
@@ -42,7 +42,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.15 2002/08/15 17:55:08 jvisvanathan Exp $
+ * @version $Id: UseFacesTag.java,v 1.1 2002/09/20 00:59:46 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo

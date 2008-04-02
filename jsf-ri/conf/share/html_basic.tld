@@ -26,11 +26,6 @@
 
   <!-- ===================== HTML 4.0 basic tags ====================== -->
   <tag>
-      <name>usefaces</name>
-      <tagclass>com.sun.faces.taglib.html_basic.UseFacesTag</tagclass>
-      <bodycontent>JSP</bodycontent>
-  </tag>
-  <tag>
     <name>form</name>
     <tagclass>com.sun.faces.taglib.html_basic.FormTag</tagclass>
     <bodycontent>JSP</bodycontent>
@@ -1236,34 +1231,6 @@
   </tag>
 
 
-<!-- PENDING(rogerk) "parameter" tag will be moved into "api" taglib -->
-
-  <tag>
-      <name>parameter</name>
-      <tagclass>com.sun.faces.taglib.html_basic.ParameterTag</tagclass>
-      <bodycontent>JSP</bodycontent>
-    <attribute>
-      <name>id</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>modelReference</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>name</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>value</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-  </tag>
-
   <tag>
       <name>output_text</name>
       <tagclass>com.sun.faces.taglib.html_basic.Output_TextTag</tagclass>
@@ -2394,35 +2361,6 @@
     </attribute>
  </tag>
 
-
-
- <tag>
-      <name>validator</name>
-      <tagclass>javax.faces.webapp.ValidatorTag</tagclass>
-      <bodycontent>JSP</bodycontent>
-    <attribute>
-      <name>type</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
- </tag>
-
- <tag>
-      <name>attribute</name>
-      <tagclass>javax.faces.webapp.AttributeTag</tagclass>
-      <bodycontent>JSP</bodycontent>
-    <attribute>
-      <name>name</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>value</name>
-      <required>true</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
- </tag>
-
  <tag>
    <name>output_errors</name>
    <tagclass>com.sun.faces.taglib.html_basic.Output_ErrorsTag</tagclass>
@@ -2442,20 +2380,6 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
    </attribute>
- </tag>
-
- <tag>
-   <name>eventhandler</name>
-   <tagclass>javax.faces.webapp.EventHandlerTag</tagclass>
-   <bodycontent>JSP</bodycontent>
-
-   <attribute>
-  
-     <name>type</name>
-     <required>true</required> 
-     <rtexprvalue>false</rtexprvalue>
-   </attribute>
-
  </tag>
 
  <tag>

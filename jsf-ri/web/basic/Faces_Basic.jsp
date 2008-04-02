@@ -7,6 +7,7 @@
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="WEB-INF/lib/basic.tld" prefix="basic" %>
 
     <H3> JSF Basic Components Test Page </H3>
@@ -17,7 +18,7 @@
 
 	<jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
 
-       <faces:usefaces>  
+       <f:usefaces>  
         <faces:form id="basicForm" formName="basicForm" >
 
             <table> 
@@ -40,7 +41,7 @@
 
              <td><basic:textentry_input_valuechange id="custom">
 
-                   <faces:eventhandler type="basic.EventHandler"/>
+                   <f:eventhandler type="basic.EventHandler"/>
 
                  </basic:textentry_input_valuechange>
                  
@@ -52,17 +53,10 @@
                                       bundle="basicBundle"/> </td>
               <td> 
 
-                   <faces:input_text id="userName" modelReference="LoginBean.userName">
-
-		     <faces:validator type="javax.faces.validator.LengthValidator"/>
-		     <faces:validator type="javax.faces.validator.RequiredValidator"/>
-		     <faces:attribute 
-                         name="javax.faces.validator.LengthValidator.MINIMUM"
-                         value="6"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.LengthValidator.MAXIMUM"
-                         value="10"/>
+                   <faces:input_text id="userName" 
+                                     modelReference="LoginBean.userName">
+		     <f:validate_length minimum="6" maximum="10"/>
+		     <f:validate_required/>
                    </faces:input_text>
 
               </td>
@@ -78,17 +72,8 @@
                <td> 
 
                     <faces:input_secret id="password"> 
-
-		     <faces:validator type="javax.faces.validator.LengthValidator"/>
-		     <faces:validator type="javax.faces.validator.RequiredValidator"/>
-		     <faces:attribute 
-                         name="javax.faces.validator.LengthValidator.MINIMUM"
-                         value="6"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.LengthValidator.MAXIMUM"
-                         value="10"/>
-
+		     <f:validate_length maximum="10" minimum="6"/>
+		     <f:validate_required/>
                     </faces:input_secret>
 
                </td>
@@ -104,18 +89,7 @@
                <td> 
 
                     <faces:input_number id="double">
-
-		     <faces:validator 
-                       type="javax.faces.validator.DoubleRangeValidator"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.DoubleRangeValidator.MINIMUM"
-                         value="3.2"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.DoubleRangeValidator.MAXIMUM"
-                         value="3.9"/>
-
+		     <f:validate_doublerange minimum="3.2" maximum="3.9"/>
                     </faces:input_number>
 
                </td>
@@ -133,16 +107,7 @@
 
                     <faces:input_number id="integer">
 
-		     <faces:validator 
-                       type="javax.faces.validator.LongRangeValidator"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.LongRangeValidator.MINIMUM"
-                         value="1"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.LongRangeValidator.MAXIMUM"
-                         value="10"/>
+		     <f:validate_longrange minimum="1" maximum="10"/>
 
                     </faces:input_number>
 
@@ -161,18 +126,7 @@
 
                     <faces:input_text id="string" size="1"
                                   modelReference="LoginBean.string"> 
-
-		     <faces:validator 
-                       type="javax.faces.validator.StringRangeValidator"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.StringRangeValidator.MINIMUM"
-                         value="a"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.StringRangeValidator.MAXIMUM"
-                         value="f"/>
-
+		     <f:validate_stringrange maximum="f" minimum="a"/>
                     </faces:input_text>
 
                </td>
@@ -463,5 +417,5 @@
     </TABLE>
 
     </faces:form>
-   </faces:usefaces>
+   </f:usefaces>
 </HTML>

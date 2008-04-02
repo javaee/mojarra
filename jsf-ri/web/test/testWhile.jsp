@@ -5,6 +5,7 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
     <H3> JSF Tree Test </H3>
     <hr>
@@ -13,11 +14,11 @@
 the tree navigation mechanism.  Test using getNextStart() inside while
 loop.</P>
 
-  <faces:usefaces>
+  <f:usefaces>
   <faces:form id="1" >
 
             <faces:output_text id="5"  text="5" />
 
   </faces:form>
-</faces:usefaces>
+</f:usefaces>
 </HTML>

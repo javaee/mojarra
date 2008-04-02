@@ -12,6 +12,7 @@
    <title>FruitStand.com</title>
 </head>
     <%@ page extends="com.sun.faces.Page" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
 <font color="#0000FF"> <h2> FruitStand.com </h2>

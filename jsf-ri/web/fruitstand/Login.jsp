@@ -10,6 +10,7 @@
    <meta name="GENERATOR" content="Mozilla/4.75 [en] (WinNT; U) [Netscape]">
    <title>Login</title>
     <%@ page extends="com.sun.faces.Page" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 </head>
 <body>

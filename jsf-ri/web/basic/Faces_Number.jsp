@@ -7,6 +7,7 @@
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="WEB-INF/lib/basic.tld" prefix="basic" %>
 
     <H3> JSF NumberFormat Renderer Test Page </H3>
@@ -16,7 +17,7 @@
 	    scope="session" var="basicBundle"/>
 
        <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
-       <faces:usefaces>  
+       <f:usefaces>  
         <faces:form id="numberForm" formName="numberForm" >
 
             <table>
@@ -130,5 +131,5 @@
             </tr>
           </table>
         </faces:form>
-       </faces:usefaces>
+       </f:usefaces>
 </HTML>

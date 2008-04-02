@@ -9,6 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
     <%@ page extends="com.sun.faces.Page" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 <h2><font color="#0000FF"> FruitStand.com </font></h2>
 <hr>

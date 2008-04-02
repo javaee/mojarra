@@ -6,10 +6,10 @@
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
-
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <H3> Basic Components Thank You Page </H3>
     <hr>
-       <faces:usefaces>
+       <f:usefaces>
         <faces:form id="basicForm" formName="basicForm" >
 
             <table> 
@@ -27,5 +27,5 @@
           </table>
 
         </faces:form>
-     </faces:usefaces>
+     </f:usefaces>
 </HTML>

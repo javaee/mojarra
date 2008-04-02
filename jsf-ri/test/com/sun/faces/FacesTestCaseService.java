@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.7 2002/08/08 00:46:16 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.8 2002/09/20 00:59:49 eburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.7 2002/08/08 00:46:16 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.8 2002/09/20 00:59:49 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -134,7 +134,8 @@ public void setUp()
     Assert.assert_it(null != factory);
     lifecycle = factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
     Assert.assert_it(null != lifecycle);
-    
+
+
     facesContext = 
 	facesContextFactory.getFacesContext(facesTestCase.getConfig().
 					    getServletContext(),
@@ -157,6 +158,14 @@ public void setUp()
     if (null != (pageContext = facesTestCase.getPageContext())) {
 	pageContext.setAttribute(FacesContext.FACES_CONTEXT_ATTR, facesContext,
 				 PageContext.REQUEST_SCOPE);
+    }
+
+    java.util.Enumeration paramNames = getFacesContext().getServletRequest().getParameterNames();
+    while (paramNames.hasMoreElements()) {
+	String curName = (String) paramNames.nextElement();
+	
+	System.out.println(curName + "=" +
+			   getFacesContext().getServletRequest().getParameter(curName));
     }
 }
 

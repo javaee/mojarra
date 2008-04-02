@@ -1,5 +1,5 @@
 /*
- * $Id: ParameterTag.java,v 1.3 2002/09/09 23:52:26 visvan Exp $
+ * $Id: ParameterTag.java,v 1.1 2002/09/20 00:59:46 eburns Exp $
  */
 
 /*
@@ -9,7 +9,7 @@
 
 // ParameterTag.java
 
-package com.sun.faces.taglib.html_basic;
+package com.sun.faces.taglib.jsf_core;
 
 import com.sun.faces.taglib.FacesTag;
 

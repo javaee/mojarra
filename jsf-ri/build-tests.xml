@@ -316,6 +316,7 @@
             <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
             <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
+            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
             <!-- To run the following tests, comment above tests, uncomment
                  following tests and set saveStateInClient property in 
                  conf/test/web.xml to true

@@ -27,9 +27,10 @@
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
-<faces:usefaces>
+<f:usefaces>
 <faces:form formName="basicForm" id="basicForm">
   <TABLE BORDER="1">
 
@@ -447,6 +448,6 @@
   <TABLE>
 
 </faces:form>
-</faces:usefaces>
+</f:usefaces>
     </BODY>
 </HTML>

@@ -8,15 +8,16 @@
 
     <h1>UIGraphic</h1>
 
-    <h3>$Id: UIGraphic.jsp,v 1.2 2002/09/13 19:23:14 visvan Exp $</h3>
+    <h3>$Id: UIGraphic.jsp,v 1.3 2002/09/20 00:59:53 eburns Exp $</h3>
 
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
 
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>
 
-     <faces:usefaces>  
+     <f:usefaces>  
 
        <p>Form is rendered after this.</p>
      
@@ -47,7 +48,7 @@
 
        </faces:form>
 
-     </faces:usefaces>   
+     </f:usefaces>   
 
 
   </body>

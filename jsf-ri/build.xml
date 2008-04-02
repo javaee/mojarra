@@ -150,6 +150,8 @@
     <mkdir dir="${build.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld"
          toDir="${build.home}/classes/META-INF"/>
+    <copy file="${conf.share.dir}/jsf_core.tld"
+         toDir="${build.home}/classes/META-INF"/>
     <!-- unjar mozutil to classes, so we don't have to expose it -->
     <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
@@ -327,6 +329,7 @@
     <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
     <copy file="${build.home}/lib/${name}.jar" todir="${dist.home}/lib"/>
     <copy file="${conf.share.dir}/html_basic.tld" todir="${dist.home}/lib"/>
+    <copy file="${conf.share.dir}/jsf_core.tld" todir="${dist.home}/lib"/>
 
     <!-- Build the demos from the jsf-demo repository -->
     <ant dir="${jsf.demo.home}" inheritAll="false"
