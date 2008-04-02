@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.23 2005/08/08 22:44:03 rogerk Exp $
+ * $Id: ResponseStateManager.java,v 1.24 2005/08/10 13:32:04 rogerk Exp $
  */
 
 /*
@@ -18,6 +18,9 @@ import javax.faces.application.StateManager.SerializedView;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 
 
@@ -31,6 +34,8 @@ import java.io.Writer;
  */
 
 public abstract class ResponseStateManager {
+    
+    private static Logger log = Logger.getLogger("javax.faces.render");
 
     /**
      * <p>The name of the request parameter used by the default
@@ -85,7 +90,8 @@ public abstract class ResponseStateManager {
      * instance of <code>SerializedView</code>.  If so, it calls through
      * to {@link
      * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView}.
-     * If not, it creates an instance of <code>SerializedView</code> and
+     * If not, it expects the state to be a two element Object array.  It creates 
+     * an instance of <code>SerializedView</code> and
      * stores the state as the treeStructure, and passes it to {@link
      * #writeState(javax.faces.context.FacesContext,javax.faces.application.StateManager.SerializedView}.</p>
      *
@@ -94,19 +100,38 @@ public abstract class ResponseStateManager {
      *
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved
+     * @throws IOException if the state argument is not an array of length 2.
      *
      */
     public void writeState(FacesContext context,
-			   Object state) throws IOException {
+        Object state) throws IOException {
+        
 	SerializedView view = null;
 	if (state instanceof SerializedView) {
 	    view = (SerializedView) state;
 	}
 	else {
-            Object[] stateArray = (Object[])state;
-	    StateManager stateManager = 
-		context.getApplication().getStateManager();
-	    view = stateManager.new SerializedView(stateArray[0], null);
+            if (state instanceof Object[]) {
+                Object[] stateArray = (Object[])state;
+                if (2 == stateArray.length) {
+	            StateManager stateManager = 
+		        context.getApplication().getStateManager();
+	            view = stateManager.new SerializedView(stateArray[0], 
+                        stateArray[1]);
+                } else {
+                    //PENDING - I18N
+                    if (log.isLoggable(Level.SEVERE)) {
+                        log.log(Level.SEVERE, "State is not an expected array of length 2.");
+                    }
+                    throw new IOException("State is not an expected array of length 2.");
+                }
+            } else {
+                //PENDING - I18N
+                if (log.isLoggable(Level.SEVERE)) {
+                    log.log(Level.SEVERE, "State is not an expected array of length 2.");
+                }
+                throw new IOException("State is not an expected array of length 2.");
+            }
 	}
 	writeState(context, view);
     }
