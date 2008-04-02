@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.1 2003/10/30 20:30:11 eburns Exp $
+ * $Id: FacesMessage.java,v 1.2 2003/10/30 21:47:12 eburns Exp $
  */
 
 /*
@@ -296,7 +296,7 @@ public class FacesMessage implements Serializable {
 
     }
 
-    public static class Severity extends Object {
+    public static class Severity extends Object implements Comparable {
 
 	// ------------------------------------------------------  Constructors
 
