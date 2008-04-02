@@ -199,7 +199,7 @@
 
       </font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
-      <h:input_text id="ccno" modelReference="CustomerBean.month" size="16"
+      <h:input_text id="ccno" size="16"
            converter="creditcard" >
           <f:validate_required/>
           <f:validate_length minimum="16" maximum="16"/>
