@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.28 2003/09/12 19:48:45 rkitain Exp $
+ * $Id: FacesTestCaseService.java,v 1.29 2003/09/16 18:12:00 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,6 @@ import javax.servlet.jsp.PageContext;
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigListener;
-import com.sun.faces.config.ConfigListenerReset;
 
 import org.mozilla.util.Assert;
 
@@ -55,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.28 2003/09/12 19:48:45 rkitain Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.29 2003/09/16 18:12:00 rkitain Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -191,22 +190,19 @@ public void setUp()
 			   getRequestParameterMap().get(curName));
     }
 
+    ConfigListener configListener = new ConfigListener();
+    ServletContextEvent e = 
+        new ServletContextEvent(facesTestCase.getConfig().getServletContext());
+
     // make sure this gets called once per ServletContext instance.
     if (null == 
 	(facesTestCase.getConfig().getServletContext().
 	 getAttribute(RIConstants.CONFIG_ATTR))) {
 	
-	ConfigListener configListener = new ConfigListener();
-	ServletContextEvent e = 
-	    new ServletContextEvent(facesTestCase.getConfig().getServletContext());
 	configListener.contextInitialized(e);
     }
 
-    // Do this to ensure that the contents of ConfigListener.contextInitialized gets
-    // executed for each test;
-    //
-    ConfigListenerReset clr = new ConfigListenerReset();
-    clr.resetConfigListenerSet();
+    configListener.contextDestroyed(e);
 }
 
 public void tearDown()
