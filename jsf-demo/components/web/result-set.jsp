@@ -48,7 +48,7 @@ Rendered via Faces components:
                  headerClass="list-header"
                   panelClass="list-background"
                   rowClasses="list-row-even,list-row-odd"
-                  navFacetOrientation="SOUTH"
+                  navFacetOrientation="NORTH"
                   rowsPerPage="20">
 
                   <f:facet name="header">
@@ -106,6 +106,191 @@ Rendered via Faces components:
 <hr>
 </h:form>
 <a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
+
+
+<h1>How to Use this Component</h1>
+
+<p>This component produces a search-engine style result set scroller
+given a back end model object of type <code>java.util.List</code>.
+</p>
+
+<h2>JSP Attributes</h2>
+
+<p>This component allows the user to define CSS classes via JSP
+attributes that are output in the rendered markup.  This makes it
+possible to produce highly customizable output.  You can compare the
+rendered source of this page, using the "View Source" feature of your
+browser, with <a href="ShowSource.jsp?filename=/result-set.jsp">the JSP
+source</A> for this page.</p>
+
+<table border="1">
+
+<tr>
+<th>JSP Attribute Name
+</th>
+<th>What it Does
+</th>
+</tr>
+
+<tr>
+
+<td><code>columnClasses</code>
+</td>
+
+<td>A comma separated list of style classes.  The number of entries in
+the list must match the number of columns in your data.  The first entry
+in the list is output with the first column, the second with the second
+column, and so on.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>headerClass</code>
+</td>
+
+<td>This class is output with each column header.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>panelClass</code>
+</td>
+
+<td>This class is output as the class on the table enclosing the results.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>rowClasses</code>
+</td>
+
+<td>If this attribute has a value, it must by a comma separated list
+with exactly two (2) entries.  The first entry is output as the class
+for even rows, the second for odd rows.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>navFacetOrientation</code>
+</td>
+
+<td>"NORTH", "SOUTH", "EAST", or "WEST".  This attribute tells where to
+put the number that means "skip to page N in the result set" in relation
+the facet.
+</td>
+
+
+</tr>
+
+<tr>
+
+<td><code>rowsPerPage</code>
+</td>
+
+<td>Controls the number of rows shown in a page of results.
+</td>
+
+</tr>
+
+</table>
+
+<h2>Facets</h2>
+
+<p>You can define Facets for each of the following elements of the
+result set component.</p>
+
+<table border="1">
+
+<tr>
+<th>Facet Name
+</th>
+<th>What it Does
+</th>
+</tr>
+
+<tr>
+
+<td><code>header</code>
+</td>
+
+<td>If present, this should be a <code>panel_group</code> that contains
+a number of children equal to the number of columns in your data.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>next</code>
+</td>
+
+<td>If present, this facet is output as the "Next" widget.  If absent,
+the word "Next" is used.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>previous</code>
+</td>
+
+<td>If present, this facet is output as the "Previous" widget.  If absent,
+the word "Previous" is used.
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>number</code>
+</td>
+
+<td>If present, this facet is output, leveraging the
+<code>navFacetOrientation</code> attribute, to represent "skip to page N
+in the result set".
+</td>
+
+</tr>
+
+<tr>
+
+<td><code>current</code>
+</td>
+
+<td>If present, this facet is output, leveraging the
+<code>navFacetOrientation</code> attribute, to represent the "current
+page" in the result set.
+</td>
+
+</tr>
+
+
+</table>
+
+<h2>Model Data</h2>
+
+<p>The <code>panel_resultset</code> tag must have a single child
+component, a <code>panel_data</code> tag, whose model reference points
+to a <code>java.util.List</code> reference.  The <code>panel_data</code>
+tag must have a number of child components equal to the number of
+columns you wish to display in your data.  See <a
+href="ShowSource.jsp?filename=/result-set.jsp">the JSP source</A> for an
+example of how to do this.</p>
+
+<hr>
+
+<a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
+
+
 
 </body>
 </html>
