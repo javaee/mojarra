@@ -1,5 +1,5 @@
 /*
- * $Id: TestListener.java,v 1.2 2003/10/15 01:45:58 craigmcc Exp $
+ * $Id: TestListener.java,v 1.3 2003/10/15 02:02:18 craigmcc Exp $
  */
 
 /*
@@ -24,13 +24,13 @@ public class TestListener implements DataModelListener {
         Object rowData = event.getRowData();
         int rowIndex = event.getRowIndex();
         trace("" + rowIndex);
-        if ((rowIndex > 0) && (rowData == null)) {
+        if ((rowIndex >= 0) && (rowData == null)) {
             throw new IllegalArgumentException("rowIndex=" + rowIndex +
                                                " but rowData is null");
-        } else if ((rowIndex == 0) && (rowData != null)) {
+        } else if ((rowIndex == -1) && (rowData != null)) {
             throw new IllegalArgumentException("rowIndex=" + rowIndex +
                                                " but rowData is not null");
-        } else if (rowIndex < 0) {
+        } else if (rowIndex < -1) {
             throw new IllegalArgumentException("rowIndex=" + rowIndex);
         }
             

@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.3 2003/10/15 01:45:53 craigmcc Exp $
+ * $Id: DataModel.java,v 1.4 2003/10/15 02:02:14 craigmcc Exp $
  */
 
 /*
@@ -56,14 +56,13 @@ import javax.faces.component.Repeater;
  *
  * <p>The data collection underlying a {@link DataModel} instance is
  * modeled as a collection of row objects that can be accessed by
- * a one-relative cursor (row index).  The APIs provide mechanisms to
- * position to a specified one-relative row index, and to retrieve an
+ * a zero-relative cursor (row index).  The APIs provide mechanisms to
+ * position to a specified zero-relative row index, and to retrieve an
  * object that represents the data that corresponds to the current
  * row index.</p>
  *
  * <p>Event listeners may be registered to receive notifications
- * of when access to the underlying data is initiated or terminated, as well
- * as when a new row index is selected.</p>
+ * of when a new row index is selected.</p>
  */
 
 public abstract class DataModel {
@@ -83,7 +82,7 @@ public abstract class DataModel {
 
     /**
      * <p>Return an object representing the data for the currenty selected
-     * row index.  If row index is zero, <code>null</code> is returned.</p>
+     * row index.  If row index is -1, <code>null</code> is returned.</p>
      *
      * @exception FacesException if an error occurs getting the data
      */
@@ -91,10 +90,10 @@ public abstract class DataModel {
 
 
     /**
-     * <p>Return the one-relative index of the currently selected row.
-     * If we are positioned before the first row, zero will be returned.
-     * If we are positioned after the last row, the value
-     * <code>getRowCount() + 1</code> will be returned.</p>.
+     * <p>Return the zero-relative index of the currently selected row.
+     * If we are positioned before the first row (as will be the case
+     * when a {@link DataModel} instance is first created), -1 will be returned.
+     * </p>
      *
      * @exception FacesException if an error occurs getting the row index
      */
@@ -102,17 +101,17 @@ public abstract class DataModel {
 
 
     /**
-     * <p>Set the one-relative index of the currently selected row.  Setting
-     * the index to zero indicates that no row is currently selected.  If
+     * <p>Set the zero-relative index of the currently selected row.  Setting
+     * the index to -1 indicates that no row is currently selected.  If
      * the current index is changed by this method, send a
      * {@link DataModelEvent} to the <code>rowSelected()</code> method of each
      * registered {@link DataModelListener}.</p>
      *
-     * @param rowIndex The new one-relative index, or zero to select no row
+     * @param rowIndex The new zero-relative index, or -1 to select no row
      *
      * @exception FacesException if an error occurs setting the row index
      * @exception IllegalArgumentException if <code>rowIndex</code>
-     *  is negative or exceeds the number of available rows
+     *  is &lt; -1 or &gt;= the number of available rows
      */
     public abstract void setRowIndex(int rowIndex);
 

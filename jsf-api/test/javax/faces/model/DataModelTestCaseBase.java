@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.2 2003/10/15 01:45:58 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.3 2003/10/15 02:02:18 craigmcc Exp $
  */
 
 /*
@@ -132,7 +132,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
         TestListener.trace(null);
 
         int n = model.getRowCount();
-        for (int i = 1; i <= n; i++) {
+        for (int i = 0; i < n; i++) {
             checkRow(i);
             sb.append("/" + i);
         }
@@ -149,7 +149,7 @@ public abstract class DataModelTestCaseBase extends TestCase {
         TestListener.trace(null);
 
         int n = model.getRowCount();
-        for (int i = n; i > 0; i--) {
+        for (int i = (n - 1); i >= 0; i--) {
             checkRow(i);
             sb.append("/" + i);
         }
@@ -177,12 +177,12 @@ public abstract class DataModelTestCaseBase extends TestCase {
         TestListener listener = new TestListener();
         TestListener.trace(null);
         model.addDataModelListener(listener);
-        model.setRowIndex(1);
-        model.setRowIndex(1); // No movement so no event
         model.setRowIndex(0);
+        model.setRowIndex(0); // No movement so no event
+        model.setRowIndex(-1);
         model.removeDataModelListener(listener);
-        model.setRowIndex(1);
-        assertEquals("/1/0", TestListener.trace());
+        model.setRowIndex(0);
+        assertEquals("/0/-1", TestListener.trace());
 
     }
 
@@ -190,21 +190,21 @@ public abstract class DataModelTestCaseBase extends TestCase {
     // Test row index manipulations
     public void testRowIndex() throws Exception {
 
-        assertEquals("correct row index", 0, model.getRowIndex());
+        assertEquals("correct row index", -1, model.getRowIndex());
 
         // Positive setRowIndex() tests
-        model.setRowIndex(1);
         model.setRowIndex(0);
+        model.setRowIndex(-1);
 
         // Negative setRowIndex() tests
         try {
-            model.setRowIndex(-1);
+            model.setRowIndex(-2);
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
         try {
-            model.setRowIndex(model.getRowCount() + 1);
+            model.setRowIndex(model.getRowCount());
             fail("Should have thrown IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             ; // Expected result
@@ -233,40 +233,40 @@ public abstract class DataModelTestCaseBase extends TestCase {
         TestBean bean = data();
         assertNotNull("Row " + i + " data", bean);
         assertEquals(prompt + "booleanProperty",
-                     beans[i-1].getBooleanProperty(),
+                     beans[i].getBooleanProperty(),
                      bean.getBooleanProperty());
         assertEquals(prompt + "booleanSecond",
-                     beans[i-1].isBooleanSecond(),
+                     beans[i].isBooleanSecond(),
                      bean.isBooleanSecond());
         assertEquals(prompt + "byteProperty",
-                     beans[i-1].getByteProperty(),
+                     beans[i].getByteProperty(),
                      bean.getByteProperty());
         assertEquals(prompt + "doubleProperty",
-                     "" + beans[i-1].getDoubleProperty(),
+                     "" + beans[i].getDoubleProperty(),
                      "" + bean.getDoubleProperty());
         assertEquals(prompt + "floatProperty",
-                     "" + beans[i-1].getFloatProperty(),
+                     "" + beans[i].getFloatProperty(),
                      "" + bean.getFloatProperty());
         assertEquals(prompt + "intProperty",
-                     beans[i-1].getIntProperty(),
+                     beans[i].getIntProperty(),
                      bean.getIntProperty());
         assertEquals(prompt + "longProperty",
-                     beans[i-1].getLongProperty(),
+                     beans[i].getLongProperty(),
                      bean.getLongProperty());
         assertEquals(prompt + "nullProperty",
-                     beans[i-1].getNullProperty(),
+                     beans[i].getNullProperty(),
                      bean.getNullProperty());
         assertEquals(prompt + "readOnlyProperty",
-                     beans[i-1].getReadOnlyProperty(),
+                     beans[i].getReadOnlyProperty(),
                      bean.getReadOnlyProperty());
         assertEquals(prompt + "shortProperty",
-                     beans[i-1].getShortProperty(),
+                     beans[i].getShortProperty(),
                      bean.getShortProperty());
         assertEquals(prompt + "stringProperty",
-                     beans[i-1].getStringProperty(),
+                     beans[i].getStringProperty(),
                      bean.getStringProperty());
         assertEquals(prompt + "writeOnlyProperty",
-                     beans[i-1].getWriteOnlyPropertyValue(),
+                     beans[i].getWriteOnlyPropertyValue(),
                      bean.getWriteOnlyPropertyValue());
 
     }

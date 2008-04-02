@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.2 2003/10/15 01:45:54 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.3 2003/10/15 02:02:14 craigmcc Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public class ListDataModel extends DataModel {
 
 
     // The current row index (one relative)
-    private int index = 0;
+    private int index = -1;
 
 
     // The list we are wrapping
@@ -106,10 +106,10 @@ public class ListDataModel extends DataModel {
      */ 
     public Object getRowData() {
 
-        if (index == 0) {
+        if (index == -1) {
             return (null);
         } else {
-            return (list.get(index - 1));
+            return (list.get(index));
         }
 
     }
@@ -131,7 +131,7 @@ public class ListDataModel extends DataModel {
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < 0) || (rowIndex > getRowCount())) {
+        if ((rowIndex < -1) || (rowIndex >= getRowCount())) {
             throw new IllegalArgumentException();
         }
         int old = index;

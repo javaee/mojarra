@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelEvent.java,v 1.3 2003/10/15 01:45:54 craigmcc Exp $
+ * $Id: DataModelEvent.java,v 1.4 2003/10/15 02:02:14 craigmcc Exp $
  */
 
 /*
@@ -62,8 +62,8 @@ public class DataModelEvent extends EventObject {
      * row index and associated data.</p>
      *
      * @param model The [@link DataModel} on which this event occurred
-     * @param index The one relative row index for which this event occurred,
-     *   or zero for no specific row association
+     * @param index The zero relative row index for which this event occurred,
+     *   or -1 for no specific row association
      * @param data Representation of the data for the row specified by
      *  <code>index</code>, or <code>null</code> for no particular row data
      */

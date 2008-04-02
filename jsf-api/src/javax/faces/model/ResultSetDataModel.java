@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.4 2003/10/15 01:45:55 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.5 2003/10/15 02:02:15 craigmcc Exp $
  */
 
 /*
@@ -102,7 +102,7 @@ public class ResultSetDataModel extends DataModel {
 
 
     // The current row index (one relative)
-    private int index = 0;
+    private int index = -1;
 
 
     // The metadata for the ResultSet we are wrapping (lazily instantiated)
@@ -145,7 +145,7 @@ public class ResultSetDataModel extends DataModel {
      */ 
     public Object getRowData() {
 
-        if (index == 0) {
+        if (index == -1) {
             return (null);
         } else {
             current = index;
@@ -171,11 +171,11 @@ public class ResultSetDataModel extends DataModel {
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < 0) || (rowIndex > getRowCount())) {
+        if ((rowIndex < -1) || (rowIndex >= getRowCount())) {
             throw new IllegalArgumentException();
         }
         try {
-            if ((rowIndex > 0) && (!resultSet.absolute(rowIndex))) {
+            if ((rowIndex >= 0) && (!resultSet.absolute(rowIndex + 1))) {
                 throw new IllegalArgumentException();
             }
         } catch (SQLException e) {

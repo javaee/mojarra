@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.2 2003/10/15 01:45:55 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.3 2003/10/15 02:02:15 craigmcc Exp $
  */
 
 /*
@@ -81,7 +81,7 @@ public class ScalarDataModel extends DataModel {
 
 
     // The current row index (one relative)
-    private int index = 0;
+    private int index = -1;
 
 
     // The object instance we are wrapping
@@ -106,7 +106,7 @@ public class ScalarDataModel extends DataModel {
      */ 
     public Object getRowData() {
 
-        if (index == 0) {
+        if (index == -1) {
             return (null);
         } else {
             return (instance);
@@ -131,7 +131,7 @@ public class ScalarDataModel extends DataModel {
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if ((rowIndex < 0) || (rowIndex > 1)) {
+        if ((rowIndex < -1) || (rowIndex >= 1)) {
             throw new IllegalArgumentException();
         }
         int old = index;
