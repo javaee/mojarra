@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.2 2003/02/20 22:50:06 ofung Exp $
+ * $Id: TestRendererConversions.java,v 1.3 2003/04/01 19:25:44 jvisvanathan Exp $
  */
 
 /*
@@ -26,13 +26,15 @@ import javax.faces.component.UIInput;
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
 
+import com.sun.faces.tree.SimpleTreeImpl;
+
 /**
  *
  *  <B>TestRendererConversions</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.2 2003/02/20 22:50:06 ofung Exp $
+ * @version $Id: TestRendererConversions.java,v 1.3 2003/04/01 19:25:44 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,6 +90,16 @@ public void beginEmptyStrings(WebRequest theRequest)
     theRequest.addParameter("secret", "");
 }
 
+public void setUp() {
+    super.setUp();
+
+    SimpleTreeImpl xmlTree =
+        new SimpleTreeImpl(
+            getFacesContext(),
+            new UIInput(),
+            "treeId");
+    getFacesContext().setTree(xmlTree);
+ }
     /**
 
     * Test the built-in conversion for those renderers that have it.
@@ -105,6 +117,19 @@ public void testEmptyStrings()
 	text = new UIInput(),
 	hidden = new UIInput(),
 	secret = new UIInput();
+    
+    number.setComponentId("number");
+    date.setComponentId("date");
+    text.setComponentId("text");
+    hidden.setComponentId("hidden");
+    secret.setComponentId("secret");
+    
+    number.setRendererType("Number");
+    date.setRendererType("Date");
+    text.setRendererType("Text");
+    hidden.setRendererType("Hidden");
+    secret.setRendererType("Secret"); 
+    
     root.addChild(number);
     root.addChild(date);
     root.addChild(text);
@@ -116,11 +141,6 @@ public void testEmptyStrings()
     HiddenRenderer hiddenRenderer = new HiddenRenderer();
     SecretRenderer secretRenderer = new SecretRenderer();
 
-    number.setComponentId("number");
-    date.setComponentId("date");
-    text.setComponentId("text");
-    hidden.setComponentId("hidden");
-    secret.setComponentId("secret");
     try {
 	numberRenderer.decode(getFacesContext(), number);
 	dateRenderer.decode(getFacesContext(), date);
@@ -129,7 +149,7 @@ public void testEmptyStrings()
 	secretRenderer.decode(getFacesContext(), secret);
     }
     catch (Throwable e) {
-	assertTrue(false);
+        assertTrue(false);
     }
     assertTrue(number.isValid());
     assertTrue(date.isValid());

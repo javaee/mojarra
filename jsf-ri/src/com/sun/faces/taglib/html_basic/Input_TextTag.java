@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.6 2003/02/20 22:49:17 ofung Exp $
+ * $Id: Input_TextTag.java,v 1.7 2003/04/01 19:25:41 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextTag.java,v 1.6 2003/02/20 22:49:17 ofung Exp $
+ * @version $Id: Input_TextTag.java,v 1.7 2003/04/01 19:25:41 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,8 +73,8 @@ public class Input_TextTag extends InputTag
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         if ((converter != null) &&
-            (component.getAttribute("converter") == null)) {
-            component.setAttribute("converter", converter);
+            (component.getConverter() == null)) {
+            component.setConverter(converter);
         }
     }
 

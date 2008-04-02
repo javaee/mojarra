@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.5 2003/03/19 21:16:39 jvisvanathan Exp $
+ * $Id: Input_HiddenTag.java,v 1.6 2003/04/01 19:25:41 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Input_HiddenTag.java,v 1.5 2003/03/19 21:16:39 jvisvanathan Exp $
+ * @version $Id: Input_HiddenTag.java,v 1.6 2003/04/01 19:25:41 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -95,8 +95,8 @@ public class Input_HiddenTag extends FacesTag
 	    uiInput.setValue(getValue());
 	}
         if ((converter != null) &&
-            (component.getAttribute("converter") == null)) {
-            component.setAttribute("converter", converter);
+            (component.getConverter() == null)) {
+            component.setConverter(converter);
         }
     }
     

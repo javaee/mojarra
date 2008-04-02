@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.13 2003/02/20 22:50:06 ofung Exp $
+ * $Id: TestRenderers_3.java,v 1.14 2003/04/01 19:25:45 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -43,7 +43,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.13 2003/02/20 22:50:06 ofung Exp $
+ * @version $Id: TestRenderers_3.java,v 1.14 2003/04/01 19:25:45 jvisvanathan Exp $
  * 
  *
  */
@@ -339,7 +339,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UIInput input1 = new UIInput();
         input1.setValue(null);
         input1.setComponentId("my_input_date_hidden");
-        input1.setAttribute("converter", "Date");
+        input1.setConverter("Date");
 	input1.setAttribute("dateStyle", "medium");
         root.addChild(input1);
         HiddenRenderer hiddenRenderer = new HiddenRenderer();
@@ -366,7 +366,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         UIInput input2 = new UIInput();
         input2.setValue(null);
         input2.setComponentId("my_number_hidden");
-        input2.setAttribute("converter", "Number");
+        input2.setConverter("Number");
 	input2.setAttribute("numberStyle", "percent");
         root.addChild(input2);
 

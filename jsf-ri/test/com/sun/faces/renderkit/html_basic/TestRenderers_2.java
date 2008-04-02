@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.41 2003/03/28 18:01:41 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.42 2003/04/01 19:25:44 jvisvanathan Exp $
  */
 
 /*
@@ -54,7 +54,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.41 2003/03/28 18:01:41 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.42 2003/04/01 19:25:44 jvisvanathan Exp $
  * 
  *
  */
@@ -129,7 +129,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("my_checkbox_true", "true");
         // for HyperlinkRenderer
         theRequest.addParameter("action", "command");
-        theRequest.addParameter("name", "HyperlinkRenderer");
+        theRequest.addParameter("my_command", "HyperlinkRenderer");
         // for Listbox
         theRequest.addParameter("my_listbox", "Blue");
         // for TextEntry_Secret
@@ -188,7 +188,7 @@ public class TestRenderers_2 extends JspFacesTestCase
             
             testOutputNumberRenderer(root);
 	    testOutputNumberRendererWithPattern(root);
-
+          
             testGraphicImageRenderer(root);
 
             testOutputErrorsRenderer(root);
@@ -291,6 +291,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         UICommand command = new UICommand();
         command.setCommandName("HyperlinkRenderer");
         command.setComponentId("my_command");
+        command.setRendererType("Hyperlink");
         root.addChild(command);
 
         HyperlinkRenderer hyperlinkRenderer = new HyperlinkRenderer();
@@ -307,7 +308,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing encode method...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), command);
-         hyperlinkRenderer.encodeEnd(getFacesContext(), command);
+        hyperlinkRenderer.encodeEnd(getFacesContext(), command);
         getFacesContext().getResponseWriter().write("\n");
 
         System.out.println("    Testing supportsComponentType methods..");

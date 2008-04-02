@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.6 2003/02/20 22:48:59 ofung Exp $
+ * $Id: HiddenRenderer.java,v 1.7 2003/04/01 19:25:40 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HiddenRenderer.java,v 1.6 2003/02/20 22:48:59 ofung Exp $
+ * @version $Id: HiddenRenderer.java,v 1.7 2003/04/01 19:25:40 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -139,7 +139,7 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
         }
     }
 
-    // The testcase for this class is TestRenderers_2.java 
+    // The testcase for this class is TestRenderers_3.java 
 
 } // end of class TextRenderer
 

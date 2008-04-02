@@ -1,5 +1,5 @@
 /*
- * $Id: TestFormatPoolImpl.java,v 1.8 2003/02/20 22:50:03 ofung Exp $
+ * $Id: TestFormatPoolImpl.java,v 1.9 2003/04/01 19:25:43 jvisvanathan Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.ServletFacesTestCase;
 
+import java.util.Map;
 import java.util.Date;
 import java.util.Locale;
 import java.text.DateFormat;
@@ -30,6 +31,7 @@ import javax.faces.component.UIInput;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 /**
  *
@@ -37,7 +39,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFormatPoolImpl.java,v 1.8 2003/02/20 22:50:03 ofung Exp $
+ * @version $Id: TestFormatPoolImpl.java,v 1.9 2003/04/01 19:25:43 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -325,8 +327,9 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
 
 	LocalizationContext locCtx = 
 	    new LocalizationContext(null, Locale.FRANCE);
-	getFacesContext().getHttpSession().setAttribute("basicBundle", locCtx);
-	
+        Map requestMap = getFacesContext().getExternalContext().getRequestMap();
+        requestMap.put("basicBundle", locCtx);
+      
 	input1.setAttribute("bundle", "basicBundle");
 	input2.setAttribute("bundle", "basicBundle");
 	dateFormat1 = formatPool.getDateFormat(getFacesContext(), input1,
@@ -339,9 +342,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
     }
 
     public void testFormatPoolInServletContext() {
-	assertTrue(null !=
-		   getFacesContext().getServletContext().
-		   getAttribute(RIConstants.FORMAT_POOL));
+        assertTrue(null != ((getFacesContext().getExternalContext()).getApplicationMap().
+                get(RIConstants.FORMAT_POOL)));
     }
     
     public void testNumberFormat() {
@@ -439,8 +441,8 @@ public class TestFormatPoolImpl extends ServletFacesTestCase
         //style="percent", get locale from attribute.
         LocalizationContext locCtx = 
 	    new LocalizationContext(null, Locale.FRANCE);
-	getFacesContext().getHttpSession().setAttribute("basicBundle", locCtx);
-	
+	Map requestMap = getFacesContext().getExternalContext().getRequestMap();
+        requestMap.put("basicBundle", locCtx);
 	input1.setAttribute("bundle", "basicBundle");
 	input2.setAttribute("bundle", "basicBundle");
 	numberFormat1 = formatPool.getNumberFormat(getFacesContext(), input1);

@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.4 2003/02/20 22:50:06 ofung Exp $
+ * $Id: TestRenderers_4.java,v 1.5 2003/04/01 19:25:45 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -37,7 +37,7 @@ import java.util.ArrayList;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.4 2003/02/20 22:50:06 ofung Exp $
+ * @version $Id: TestRenderers_4.java,v 1.5 2003/04/01 19:25:45 jvisvanathan Exp $
  * 
  *
  */
@@ -209,7 +209,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	
 	headerGroup = new UIPanel();
 	headerGroup.setComponentId("header");
-	headerGroup.setAttribute("rendererType", "Group");
+	headerGroup.setRendererType("Group");
 	header1 = new UIOutput();
 	header1.setValue("header1 ");
 	headerGroup.addChild(header1);
@@ -220,7 +220,7 @@ public class TestRenderers_4 extends JspFacesTestCase {
 	
 	footerGroup = new UIPanel();
 	footerGroup.setComponentId("footer");
-	footerGroup.setAttribute("rendererType", "Group");
+	footerGroup.setRendererType("Group");
 	footer1 = new UIOutput();
 	footer1.setValue("footer1 ");
 	footerGroup.addChild(footer1);
