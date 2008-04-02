@@ -44,6 +44,19 @@ Faces technology.</p>
 
 </tr>
 
+<tr>
+
+<td>Tabbed Pane
+</td>
+
+<td><a href="ShowSource.jsp?filename=/tabbedpanes.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td><a href="faces/tabbedpanes.jsp"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
 </table>
 
 </body>
