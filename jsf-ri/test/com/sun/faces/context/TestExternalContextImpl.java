@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.15 2005/05/06 22:02:06 edburns Exp $
+ * $Id: TestExternalContextImpl.java,v 1.16 2005/07/22 19:38:10 rlubke Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,13 +30,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collection;
 
 /**
  * <B>TestExternalContextImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.15 2005/05/06 22:02:06 edburns Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.16 2005/07/22 19:38:10 rlubke Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -336,6 +338,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         supported[IS_EMPTY] = true;
         supported[KEY_SET] = true;
         supported[SIZE] = true;
+        supported[PUT_ALL] = true;
+        supported[CLEAR] = true;
 
         testUnsupportedExceptions(applicationMap, supported);
 
@@ -363,6 +367,150 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         assertTrue(!applicationMap.equals(null));
         assertTrue(!applicationMap.equals(new HashMap()));
         applicationMap.remove("foo");
+
+       if (applicationMap.isEmpty()) {
+            applicationMap.put("some", "value");
+        }
+        /* Commented out since it appears that certain attributes
+           cannot be removed from the ServletContext when running against
+           glassfish
+        Map cloneMap = new HashMap(applicationMap);
+        applicationMap.clear();
+        assertTrue(applicationMap.isEmpty());
+        applicationMap.putAll(cloneMap);
+        assertTrue(!applicationMap.isEmpty());*/
+
+        // ensure EntrySet operations reflect on the underlying map.
+        applicationMap.put("key1", "value1");
+        Set entrySet = applicationMap.entrySet();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                entrySet.remove(entry);
+            }
+        }
+        assertTrue(applicationMap.get("key1") == null);
+
+        applicationMap.put("key1", "value1");
+
+        entrySet = applicationMap.entrySet();
+        int currentSize = applicationMap.size();
+        ArrayList list = new ArrayList();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                list.add(entry);
+                break;
+            }
+        }
+        entrySet.removeAll(list);
+        assertTrue(applicationMap.size() == (currentSize - 1));
+
+        //Map cloneMap = new HashMap(applicationMap);
+        applicationMap.put("key1", "value1");
+        list = new ArrayList();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                list.add(entry);
+                break;
+            }
+        }
+         /* Commented out since it appears that certain attributes
+           cannot be removed from the ServletContext when running against
+           glassfish
+        assertTrue(entrySet.retainAll(list));
+        assertTrue(applicationMap.size() == 1);
+        applicationMap.clear();
+        applicationMap.putAll(cloneMap); */
+
+        // next validate Iterator.remove goes through to the backing Map.
+        applicationMap.put("key1", "value1");
+        for (Iterator i = applicationMap.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                i.remove();
+            }
+        }
+        assertTrue(applicationMap.get("key1") == null);
+
+        applicationMap.put("key1", "value1");
+        for (Iterator i = applicationMap.keySet().iterator(); i.hasNext(); ) {
+            String entry = (String) i.next();
+            if ("key1".equals(entry)) {
+                i.remove();
+            }
+        }
+        assertTrue(applicationMap.get("key1") == null);
+
+        applicationMap.put("key1", "value1");
+        applicationMap.put("key2", "value1");
+        for (Iterator i = applicationMap.values().iterator(); i.hasNext(); ) {
+            Object val = i.next();
+            if ("value1".equals(val)) {
+                i.remove();
+            }
+        }
+        assertTrue(applicationMap.get("key1") == null);
+        assertTrue(applicationMap.get("key2") == null);
+
+
+        // ensure IllegalStateException if Iterator isn't properly positioned
+        Iterator i = applicationMap.entrySet().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        i = applicationMap.keySet().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        i = applicationMap.values().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        // ensure IllegalStateException if Iterator.remove() is called more than
+        // once per each next() call
+        i = applicationMap.entrySet().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        i = applicationMap.keySet().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        i = applicationMap.values().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
     }
 
 
@@ -382,6 +530,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         supported[IS_EMPTY] = true;
         supported[KEY_SET] = true;
         supported[SIZE] = true;
+        supported[PUT_ALL] = true;
+        supported[CLEAR] = true;
 
         testUnsupportedExceptions(sessionMap, supported);
 
@@ -407,6 +557,144 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         assertTrue(!sessionMap.equals(null));
         assertTrue(!sessionMap.equals(new HashMap()));
         sessionMap.remove("foo");
+        if (sessionMap.isEmpty()) {
+            sessionMap.put("some", "value");
+        }
+        Map cloneMap = new HashMap(sessionMap);
+        sessionMap.clear();
+        assertTrue(sessionMap.isEmpty());
+        sessionMap.putAll(cloneMap);
+        assertTrue(!sessionMap.isEmpty());
+
+        // ensure EntrySet operations reflect on the underlying map.
+        sessionMap.put("key1", "value1");
+        Set entrySet = sessionMap.entrySet();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                entrySet.remove(entry);
+            }
+        }
+        assertTrue(sessionMap.get("key1") == null);
+
+        sessionMap.put("key1", "value1");
+
+        entrySet = sessionMap.entrySet();
+        int currentSize = sessionMap.size();
+        ArrayList list = new ArrayList();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                list.add(entry);
+                break;
+            }
+        }
+        entrySet.removeAll(list);
+        assertTrue(sessionMap.size() == (currentSize - 1));
+
+        cloneMap = new HashMap(sessionMap);
+        sessionMap.put("key1", "value1");
+        list = new ArrayList();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                list.add(entry);
+                break;
+            }
+        }
+        assertTrue(entrySet.retainAll(list));
+        assertTrue(sessionMap.size() == 1);
+        sessionMap.clear();
+        sessionMap.putAll(cloneMap);
+
+        // next validate Iterator.remove goes through to the backing Map.
+        cloneMap = new HashMap(sessionMap);
+        for (Iterator i = sessionMap.entrySet().iterator(); i.hasNext(); ) {
+            i.next();
+            i.remove();
+        }
+        assertTrue(sessionMap.isEmpty());
+        sessionMap.putAll(cloneMap);
+
+        sessionMap.put("key1", "value1");
+        for (Iterator i = sessionMap.keySet().iterator(); i.hasNext(); ) {
+            String entry = (String) i.next();
+            if ("key1".equals(entry)) {
+                i.remove();
+            }
+        }
+        assertTrue(sessionMap.get("key1") == null);
+
+        sessionMap.put("key1", "value1");
+        sessionMap.put("key2", "value1");
+        for (Iterator i = sessionMap.values().iterator(); i.hasNext(); ) {
+            Object val = i.next();
+            if ("value1".equals(val)) {
+                i.remove();
+            }
+        }
+        assertTrue(sessionMap.get("key1") == null);
+        assertTrue(sessionMap.get("key2") == null);
+
+        // ensure IllegalStateException if Iterator isn't properly positioned
+        Iterator i = sessionMap.entrySet().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        i = sessionMap.keySet().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        i = sessionMap.values().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        // ensure IllegalStateException if Iterator.remove() is called more than
+        // once per each next() call
+        sessionMap.put("key1", "value1");
+        i = sessionMap.entrySet().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        sessionMap.put("key1", "value1");
+        i = sessionMap.keySet().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        sessionMap.put("key1", "value1");
+        i = sessionMap.values().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
     }
 
 
@@ -426,6 +714,8 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         supported[IS_EMPTY] = true;
         supported[KEY_SET] = true;
         supported[SIZE] = true;
+        supported[PUT_ALL] = true;
+        supported[CLEAR] = true;
         testUnsupportedExceptions(requestMap, supported);
 
         System.out.println("    Testing supported methods of RequestMap...");
@@ -450,6 +740,148 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         assertTrue(!requestMap.equals(null));
         assertTrue(!requestMap.equals(new HashMap()));
         requestMap.remove("foo");
+
+        if (requestMap.isEmpty()) {
+            requestMap.put("some", "value");
+        }
+        Map cloneMap = new HashMap(requestMap);
+        requestMap.clear();
+        assertTrue(requestMap.isEmpty());
+        requestMap.putAll(cloneMap);
+        assertTrue(!requestMap.isEmpty());
+
+        // ensure EntrySet operations reflect on the underlying map.
+        requestMap.put("key1", "value1");
+        Set entrySet = requestMap.entrySet();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                entrySet.remove(entry);
+            }
+        }
+        assertTrue(requestMap.get("key1") == null);
+
+        requestMap.put("key1", "value1");
+
+        entrySet = requestMap.entrySet();
+        int currentSize = requestMap.size();
+        ArrayList list = new ArrayList();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                list.add(entry);
+                break;
+            }
+        }
+        entrySet.removeAll(list);
+        assertTrue(requestMap.size() == (currentSize - 1));
+
+        cloneMap = new HashMap(requestMap);
+        requestMap.put("key1", "value1");
+        list = new ArrayList();
+        for (Iterator i = entrySet.iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            if ("key1".equals(entry.getKey())) {
+                list.add(entry);
+                break;
+            }
+        }
+        assertTrue(entrySet.retainAll(list));
+        assertTrue(requestMap.size() == 1);
+        requestMap.clear();
+        requestMap.putAll(cloneMap);
+
+        // next validate Iterator.remove goes through to the backing Map.
+        cloneMap = new HashMap(requestMap);
+        for (Iterator i = requestMap.entrySet().iterator(); i.hasNext(); ) {
+            i.next();
+            i.remove();
+        }
+        assertTrue(requestMap.isEmpty());
+        requestMap.putAll(cloneMap);
+
+        requestMap.put("key1", "value1");
+        for (Iterator i = requestMap.keySet().iterator(); i.hasNext(); ) {
+            String entry = (String) i.next();
+            if ("key1".equals(entry)) {
+                i.remove();
+            }
+        }
+        assertTrue(requestMap.get("key1") == null);
+
+        requestMap.put("key1", "value1");
+        requestMap.put("key2", "value1");
+        for (Iterator i = requestMap.values().iterator(); i.hasNext(); ) {
+            Object val = i.next();
+            if ("value1".equals(val)) {
+                i.remove();
+            }
+        }
+        assertTrue(requestMap.get("key1") == null);
+        assertTrue(requestMap.get("key2") == null);
+
+        // ensure IllegalStateException if Iterator isn't properly positioned
+        requestMap.put("key1", "value1");
+        Iterator i = requestMap.entrySet().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        requestMap.put("key1", "value1");
+        i = requestMap.keySet().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        requestMap.put("key1", "value1");
+        i = requestMap.values().iterator();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        // ensure IllegalStateException if Iterator.remove() is called more than
+        // once per each next() call
+        requestMap.put("key1", "value1");
+        i = requestMap.entrySet().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        requestMap.put("key1", "value1");
+        i = requestMap.keySet().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
+
+        requestMap.put("key1", "value1");
+        i = requestMap.values().iterator();
+        i.next();
+        i.remove();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof IllegalStateException);
+        }
     }
 
 
@@ -494,6 +926,58 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             getFacesContext().getExternalContext().getRequestParameterMap()));
         assertTrue(!requestParameterMap.equals(null));
         assertTrue(!requestParameterMap.equals(new HashMap()));
+
+        // ensure we can't modify the map using Iterator.remove();
+        Iterator i = requestParameterMap.entrySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestParameterMap.keySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestParameterMap.values().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        // ensure we can't remove elements from the Set.
+        try {
+            requestParameterMap.entrySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestParameterMap.keySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestParameterMap.values().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
     }
 
 
@@ -546,6 +1030,58 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
                 .getRequestParameterValuesMap()));
         assertTrue(!requestParameterValuesMap.equals(null));
         assertTrue(!requestParameterValuesMap.equals(new HashMap()));
+
+        // ensure we can't modify the map using Iterator.remove();
+        Iterator i = requestParameterValuesMap.entrySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestParameterValuesMap.keySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestParameterValuesMap.values().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        // ensure we can't remove elements from the Set.
+        try {
+            requestParameterValuesMap.entrySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestParameterValuesMap.keySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestParameterValuesMap.values().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
     }
 
 
@@ -590,6 +1126,58 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             getFacesContext().getExternalContext().getRequestHeaderMap()));
         assertTrue(!requestHeaderMap.equals(null));
         assertTrue(!requestHeaderMap.equals(new HashMap()));
+
+         // ensure we can't modify the map using Iterator.remove();
+        Iterator i = requestHeaderMap.entrySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestHeaderMap.keySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestHeaderMap.values().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        // ensure we can't remove elements from the Set.
+        try {
+            requestHeaderMap.entrySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestHeaderMap.keySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestHeaderMap.values().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
     }
 
 
@@ -656,11 +1244,60 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
                 .getRequestHeaderValuesMap())); */
         assertTrue(!requestHeaderValuesMap.equals(null));
         assertTrue(!requestHeaderValuesMap.equals(new HashMap()));
+
+         // ensure we can't modify the map using Iterator.remove();
+        Iterator i = requestHeaderValuesMap.entrySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestHeaderValuesMap.keySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestHeaderValuesMap.values().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        // ensure we can't remove elements from the Set.
+        try {
+            requestHeaderValuesMap.entrySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestHeaderValuesMap.keySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestHeaderValuesMap.values().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
     }
 
-    // PENDING(craigmcc) - Comment out this test because on my platform
-    // the getRequestCookies() call returns null
-    /*
     public void beginRequestCookieMap(WebRequest theRequest) {
         theRequest.addCookie("foo", "bar");
     }
@@ -682,11 +1319,12 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         testUnsupportedExceptions(requestCookieMap, supported);
 
         System.out.println("    Testing supported methods of RequestCookieMap...");
+        System.out.println("COOKIE MAP : " + requestCookieMap.toString());
         assertTrue(requestCookieMap.get("foo") instanceof Cookie);
         Cookie value = (Cookie)requestCookieMap.get("foo");
         assertTrue(value.getValue().equals("bar"));
         assertTrue(requestCookieMap.containsKey("foo"));
-        assertTrue(requestCookieMap.containsValue("bar"));
+        assertTrue(requestCookieMap.containsValue(requestCookieMap.get("foo")));        
         assertTrue(!requestCookieMap.entrySet().isEmpty());
         assertTrue(!requestCookieMap.values().isEmpty());
         assertTrue(!requestCookieMap.keySet().isEmpty());
@@ -697,8 +1335,60 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
         getFacesContext().getExternalContext().getRequestCookieMap()));
         assertTrue(!requestCookieMap.equals(null));
         assertTrue(!requestCookieMap.equals(new HashMap()));
+
+         // ensure we can't modify the map using Iterator.remove();
+        Iterator i = requestCookieMap.entrySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestCookieMap.keySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = requestCookieMap.values().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        // ensure we can't remove elements from the Set.
+        try {
+            requestCookieMap.entrySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestCookieMap.keySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            requestCookieMap.values().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
     }
-    */
+
 
     public void testInitParameterMap() {
         System.out.println("Testing InitParameterMap...");
@@ -738,6 +1428,58 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             getFacesContext().getExternalContext().getInitParameterMap()));
         assertTrue(!initParameterMap.equals(null));
         assertTrue(!initParameterMap.equals(new HashMap()));
+
+         // ensure we can't modify the map using Iterator.remove();
+        Iterator i = initParameterMap.entrySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = initParameterMap.keySet().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        i = initParameterMap.values().iterator();
+        i.next();
+        try {
+            i.remove();
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+        // ensure we can't remove elements from the Set.
+        try {
+            initParameterMap.entrySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            initParameterMap.keySet().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
+
+         // ensure we can't remove elements from the Set.
+        try {
+            initParameterMap.values().remove("test");
+            assertTrue(false);
+        } catch (Exception e) {
+            assertTrue(e instanceof UnsupportedOperationException);
+        }
     }
 
 

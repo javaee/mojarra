@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.33 2005/07/18 22:49:02 jayashri Exp $
+ * $Id: ExternalContextImpl.java,v 1.34 2005/07/22 19:38:10 rlubke Exp $
  */
 
 /*
@@ -17,11 +17,14 @@ import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.AbstractSet;
+import java.util.NoSuchElementException;
+import java.util.AbstractCollection;
+import java.util.Collection;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
@@ -46,7 +49,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.33 2005/07/18 22:49:02 jayashri Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.34 2005/07/22 19:38:10 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -148,8 +151,9 @@ public class ExternalContextImpl extends ExternalContext {
 
 
     public Map getSessionMap() {
-        if (sessionMap == null)
+        if (sessionMap == null) {
             sessionMap = new SessionMap((HttpServletRequest) request);
+        }
         return sessionMap;
     }
 
@@ -219,7 +223,7 @@ public class ExternalContextImpl extends ExternalContext {
     public Iterator getRequestParameterNames() {
         final Enumeration namEnum = request.getParameterNames();
 
-        Iterator result = new Iterator() {
+        return new Iterator() {
             public boolean hasNext() {
                 return namEnum.hasMoreElements();
             }
@@ -234,8 +238,6 @@ public class ExternalContextImpl extends ExternalContext {
                 throw new UnsupportedOperationException();
             }
         };
-
-        return result;
     }
 
 
@@ -270,11 +272,11 @@ public class ExternalContextImpl extends ExternalContext {
 
      
     public String getRequestContentType() {
-        return (((HttpServletRequest) request).getContentType());
+        return (request.getContentType());
     }
 
     public String getResponseContentType() {
-        return (((HttpServletResponse) response).getContentType());
+        return (response.getContentType());
     }
 
     /**
@@ -297,7 +299,7 @@ public class ExternalContextImpl extends ExternalContext {
 
 
     public URL getResource(String path) {
-        URL url = null;
+        URL url;
         try {
             url = servletContext.getResource(path);
         } catch (MalformedURLException e) {
@@ -421,27 +423,218 @@ public class ExternalContextImpl extends ExternalContext {
         }
 
     }
-
-
 }
 
 abstract class BaseContextMap extends AbstractMap {
 
-    // Unsupported by all Maps.
+    private Set entrySet;
+    private Set keySet;
+    private Collection values;
+
+    // Supported by maps if overridden
     public void clear() {
         throw new UnsupportedOperationException();
     }
 
 
-    // Unsupported by all Maps.
+    // Supported by maps if overridden
     public void putAll(Map t) {
         throw new UnsupportedOperationException();
+    }
+
+    public Set entrySet() {
+        if (entrySet == null) {
+            entrySet = new EntrySet();
+        }
+
+        return entrySet;
+    }
+
+    public Set keySet() {
+        if (keySet == null) {
+            keySet = new KeySet();
+        }
+
+        return keySet;
+    }
+
+    public Collection values() {
+        if (values == null) {
+            values = new ValueCollection();
+        }
+
+        return values;
     }
 
 
     // Supported by maps if overridden
     public Object remove(Object key) {
         throw new UnsupportedOperationException();
+    }
+
+    protected boolean removeKey(String key) {
+        return (this.remove(key) != null);
+    }
+
+    protected boolean removeValue(Object value) {
+        boolean valueRemoved = false;
+        if (value == null) {
+            return false;
+        }
+        if (containsValue(value)) {
+            for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+                Map.Entry e = (Map.Entry) i.next();
+                if (value.equals(e.getValue())) {                    
+                    valueRemoved = (remove(e.getKey()) != null);
+                }
+            }
+        }
+        return valueRemoved;
+    }
+
+    protected abstract Iterator getEntryIterator();
+    protected abstract Iterator getKeyIterator();
+    protected abstract Iterator getValueIterator();
+
+    abstract class BaseSet extends AbstractSet {
+
+        public int size() {
+            int size = 0;
+            for (Iterator i = iterator(); i.hasNext(); size++) {
+                i.next();
+            }
+            return size;
+        }
+
+    }
+
+    class EntrySet extends BaseSet {
+
+        public Iterator iterator() {
+            return getEntryIterator();
+        }
+
+        public boolean remove(Object o) {
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
+            return removeKey((String) ((Map.Entry) o).getKey());
+        }
+
+    }
+
+    class KeySet extends BaseSet {
+
+        public Iterator iterator() {
+            return getKeyIterator();
+        }
+
+        public boolean remove(Object o) {
+            if (!(o instanceof String)) {
+                return false;
+            }
+            return removeKey((String) o);
+        }
+    }
+
+    class ValueCollection extends AbstractCollection {
+
+        public int size() {
+            int size = 0;
+            for (Iterator i = iterator(); i.hasNext(); size++) {
+                i.next();
+            }
+            return size;
+        }
+
+        public Iterator iterator() {
+            return getValueIterator();
+        }
+
+        public boolean remove(Object o) {
+            return removeValue(o);
+        }
+    }
+
+    abstract class BaseIterator implements Iterator {
+
+        protected Enumeration e;
+        protected String currentKey;
+        protected boolean removeCalled = false;
+
+        BaseIterator(Enumeration e) {
+            this.e = e;
+        }
+
+        public boolean hasNext() {
+            return e.hasMoreElements();
+        }
+    }
+
+    class EntryIterator extends BaseIterator {
+
+        EntryIterator(Enumeration e) {
+            super(e);
+        }
+
+        public void remove() {
+            if (currentKey != null && !removeCalled) {
+                removeCalled = true;
+                removeKey(currentKey);
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+
+        public Object next() {
+            removeCalled = false;
+            currentKey = (String) e.nextElement();
+            return new Entry(currentKey, get(currentKey));
+        }
+    }
+
+     class KeyIterator extends BaseIterator {
+
+        KeyIterator(Enumeration e) {
+            super(e);
+        }
+
+        public void remove() {
+            if (currentKey != null && !removeCalled) {
+                removeCalled = true;
+                removeKey(currentKey);
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+
+        public Object next() {
+            removeCalled = false;
+            currentKey = (String) e.nextElement();
+            return currentKey;
+        }
+    }
+
+    class ValueIterator extends BaseIterator {
+
+        ValueIterator(Enumeration e) {
+            super(e);
+        }
+
+        public void remove() {
+            if (currentKey != null && !removeCalled) {
+                removeCalled = true;
+                removeValue(get(currentKey));
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+
+        public Object next() {
+            removeCalled = false;
+            currentKey = (String) e.nextElement();
+            return get(currentKey);
+        }
     }
 
 
@@ -481,8 +674,9 @@ abstract class BaseContextMap extends AbstractMap {
 
 
         public boolean equals(Object obj) {
-            if (obj == null || !(obj instanceof Map.Entry))
+            if (obj == null || !(obj instanceof Map.Entry)) {
                 return false;
+            }
 
             Map.Entry input = (Map.Entry) obj;
             Object inputKey = input.getKey();
@@ -504,11 +698,25 @@ class ApplicationMap extends BaseContextMap {
 
     private final ServletContext servletContext;
 
-
     ApplicationMap(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
+    public void clear() {
+        for (Enumeration e = servletContext.getAttributeNames();
+             e.hasMoreElements(); ) {
+            servletContext.removeAttribute((String) e.nextElement());
+        }
+    }
+
+    // Supported by maps if overridden
+    public void putAll(Map t) {
+        for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            servletContext.setAttribute((String) entry.getKey(),
+                                        entry.getValue());
+        }
+    }
 
     public Object get(Object key) {
         if (key == null) {
@@ -540,20 +748,10 @@ class ApplicationMap extends BaseContextMap {
     }
 
 
-    public Set entrySet() {
-        Set entries = new HashSet();
-        for (Enumeration e = servletContext.getAttributeNames();
-             e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            entries.add(new Entry(key, servletContext.getAttribute(key)));
-        }
-        return entries;
-    }
-
-
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof ApplicationMap))
+        if (obj == null || !(obj instanceof ApplicationMap)) {
             return false;
+        }
         return super.equals(obj);
     }
 
@@ -566,17 +764,49 @@ class ApplicationMap extends BaseContextMap {
         return hashCode;
     }
 
+    // --------------------------------------------- Methods from BaseContextMap
+
+
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(servletContext.getAttributeNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(servletContext.getAttributeNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(servletContext.getAttributeNames());
+    }
+
 } // END ApplicationMap
 
 class SessionMap extends BaseContextMap {
 
     private final HttpServletRequest request;
 
-
     SessionMap(HttpServletRequest request) {
         this.request = request;
     }
 
+    public void clear() {
+         HttpSession session = getSession();
+        for (Enumeration e = getSession().getAttributeNames();
+             e.hasMoreElements(); ) {
+            session.removeAttribute((String) e.nextElement());
+        }
+    }
+
+    // Supported by maps if overridden
+    public void putAll(Map t) {
+        HttpSession session = getSession();
+        for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            session.setAttribute((String) entry.getKey(),
+                                 entry.getValue());
+        }
+    }
 
     public Object get(Object key) {
         if (key == null) {
@@ -609,22 +839,10 @@ class SessionMap extends BaseContextMap {
         return (result);
     }
 
-
-    public Set entrySet() {
-        Set entries = new HashSet();
-        HttpSession session = getSession();
-        for (Enumeration e = session.getAttributeNames();
-             e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            entries.add(new Entry(key, session.getAttribute(key)));
-        }
-        return entries;
-    }
-
-
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof SessionMap))
+        if (obj == null || !(obj instanceof SessionMap)) {
             return false;
+        }
         return super.equals(obj);
     }
 
@@ -641,6 +859,20 @@ class SessionMap extends BaseContextMap {
         return hashCode;
     }
 
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(getSession().getAttributeNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(getSession().getAttributeNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(getSession().getAttributeNames());
+    }
+
 } // END SessionMap
 
 class RequestMap extends BaseContextMap {
@@ -652,6 +884,21 @@ class RequestMap extends BaseContextMap {
         this.request = request;
     }
 
+    public void clear() {
+        for (Enumeration e = request.getAttributeNames();
+             e.hasMoreElements(); ) {
+            request.removeAttribute((String) e.nextElement());
+        }
+    }
+
+    // Supported by maps if overridden
+    public void putAll(Map t) {
+        for (Iterator i = t.entrySet().iterator(); i.hasNext(); ) {
+            Map.Entry entry = (Map.Entry) i.next();
+            request.setAttribute((String) entry.getKey(),
+                                        entry.getValue());
+        }
+    }
 
     public Object get(Object key) {
         if (key == null) {
@@ -682,21 +929,10 @@ class RequestMap extends BaseContextMap {
         return (result);
     }
 
-
-    public Set entrySet() {
-        Set entries = new HashSet();
-        for (Enumeration e = request.getAttributeNames();
-             e.hasMoreElements();) {
-            String key = (String) e.nextElement();
-            entries.add(new Entry(key, request.getAttribute(key)));
-        }
-        return entries;
-    }
-
-
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof RequestMap))
+        if (obj == null || !(obj instanceof RequestMap)) {
             return false;
+        }
         return super.equals(obj);
     }
 
@@ -706,6 +942,20 @@ class RequestMap extends BaseContextMap {
             hashCode += i.next().hashCode();
         }
         return hashCode;
+    }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(request.getAttributeNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(request.getAttributeNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(request.getAttributeNames());
     }
 
 } // END RequestMap
@@ -730,17 +980,17 @@ class RequestParameterMap extends BaseContextMap {
         return request.getParameter(key.toString());
     }
 
-
     public Set entrySet() {
-        Set entries = new HashSet();
-        for (Enumeration e = request.getParameterNames();
-             e.hasMoreElements();) {
-            String paramName = (String) e.nextElement();
-            entries.add(new Entry(paramName, request.getParameter(paramName)));
-        }
-        return entries;
+        return Collections.unmodifiableSet(super.entrySet());
     }
 
+    public Set keySet() {
+        return Collections.unmodifiableSet(super.keySet());
+    }
+
+    public Collection values() {
+        return Collections.unmodifiableCollection(super.values());
+    }
 
     public boolean equals(Object obj) {
         if (obj == null || 
@@ -756,6 +1006,20 @@ class RequestParameterMap extends BaseContextMap {
             hashCode += i.next().hashCode();
         }
         return hashCode;
+    }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(request.getParameterNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(request.getParameterNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(request.getParameterNames());
     }
 
 } // END RequestParameterMap
@@ -780,18 +1044,17 @@ class RequestParameterValuesMap extends BaseContextMap {
         return request.getParameterValues(key.toString());
     }
 
-
     public Set entrySet() {
-        Set entries = new HashSet();
-        for (Enumeration e = request.getParameterNames();
-             e.hasMoreElements();) {
-            String paramName = (String) e.nextElement();
-            entries.add(
-                new Entry(paramName, request.getParameterValues(paramName)));
-        }
-        return entries;
+        return Collections.unmodifiableSet(super.entrySet());
     }
 
+    public Set keySet() {
+        return Collections.unmodifiableSet(super.keySet());
+    }
+
+    public Collection values() {
+        return Collections.unmodifiableCollection(super.values());
+    }
 
     public boolean equals(Object obj) {
         if (obj == null || 
@@ -807,6 +1070,20 @@ class RequestParameterValuesMap extends BaseContextMap {
             hashCode += i.next().hashCode();
         }
         return hashCode;
+    }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(request.getParameterNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(request.getParameterNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(request.getParameterNames());
     }
 
 } // END RequestParameterValuesMap
@@ -831,15 +1108,16 @@ class RequestHeaderMap extends BaseContextMap {
         return (request.getHeader(key.toString()));
     }
 
-
     public Set entrySet() {
-        Set entries = new HashSet();
-        for (Enumeration e = request.getHeaderNames();
-             e.hasMoreElements();) {
-            String headerName = (String) e.nextElement();
-            entries.add(new Entry(headerName, request.getHeader(headerName)));
-        }
-        return entries;
+        return Collections.unmodifiableSet(super.entrySet());
+    }
+
+    public Set keySet() {
+        return Collections.unmodifiableSet(super.keySet());
+    }
+
+    public Collection values() {
+        return Collections.unmodifiableCollection(super.values());
     }
 
 
@@ -857,6 +1135,20 @@ class RequestHeaderMap extends BaseContextMap {
             hashCode += i.next().hashCode();
         }
         return hashCode;
+    }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(request.getHeaderNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(request.getHeaderNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(request.getHeaderNames());
     }
 
 } // END RequestHeaderMap
@@ -881,17 +1173,17 @@ class RequestHeaderValuesMap extends BaseContextMap {
         return (request).getHeaders(key.toString());
     }
 
-
     public Set entrySet() {
-        Set entries = new HashSet();
-        for (Enumeration e = request.getHeaderNames();
-             e.hasMoreElements();) {
-            String headerName = (String) e.nextElement();
-            entries.add(new Entry(headerName, request.getHeaders(headerName)));
-        }
-        return entries;
+        return Collections.unmodifiableSet(super.entrySet());
     }
 
+    public Set keySet() {
+        return Collections.unmodifiableSet(super.keySet());
+    }
+
+    public Collection values() {
+        return Collections.unmodifiableCollection(super.values());
+    }
 
     public boolean equals(Object obj) {
         if (obj == null || 
@@ -905,8 +1197,9 @@ class RequestHeaderValuesMap extends BaseContextMap {
     // Override of containsValue was necessary as Enumeration.equals(Enumeration)
     // returned false.
     public boolean containsValue(Object value) {
-        if (value == null || !(value instanceof Enumeration))
+        if (value == null || !(value instanceof Enumeration)) {
             return false;
+        }
 
         int valHash = 0;
         int valCount = 0;
@@ -933,8 +1226,9 @@ class RequestHeaderValuesMap extends BaseContextMap {
                 thisHash += thisMap.nextElement().hashCode();
                 thisCount++;
             }
-            if (thisCount == valCount && thisHash == valHash)
+            if (thisCount == valCount && thisHash == valHash) {
                 return true;
+            }
         }
         return false;
     }
@@ -956,6 +1250,21 @@ class RequestHeaderValuesMap extends BaseContextMap {
         }
         return hashSum;
     }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(request.getHeaderNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(request.getHeaderNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(request.getHeaderNames());
+    }
+
 } // END RequestHeaderValuesMap
 
 class RequestCookieMap extends BaseContextMap {
@@ -994,19 +1303,17 @@ class RequestCookieMap extends BaseContextMap {
         return result;
     }
 
-
     public Set entrySet() {
-        Set entries = new HashSet();
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                entries.add(new Entry(cookies[i].getName(), cookies[i]));
-            }
-        }
-        return entries;
+        return Collections.unmodifiableSet(super.entrySet());
     }
 
+    public Set keySet() {
+        return Collections.unmodifiableSet(super.keySet());
+    }
+
+    public Collection values() {
+        return Collections.unmodifiableCollection(super.values());
+    }
 
     public boolean equals(Object obj) {
         if (obj == null || 
@@ -1022,6 +1329,49 @@ class RequestCookieMap extends BaseContextMap {
             hashCode += i.next().hashCode();
         }
         return hashCode;
+    }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(
+                new CookieArrayEnumerator(request.getCookies()));
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(
+                new CookieArrayEnumerator(request.getCookies()));
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(
+            new CookieArrayEnumerator(request.getCookies()));
+    }
+
+    private static class CookieArrayEnumerator implements Enumeration {
+
+        Cookie[] cookies;
+        int curIndex = -1;
+        int upperBound;
+
+        public CookieArrayEnumerator(Cookie[] cookies) {
+            this.cookies = cookies;
+            upperBound = cookies.length;
+        }
+
+        public boolean hasMoreElements() {
+            return (curIndex + 2 <= upperBound);
+        }
+
+        public Object nextElement() {
+            curIndex++;
+            if (curIndex < upperBound) {
+                return cookies[curIndex].getName();
+            } else {
+                throw new NoSuchElementException();
+            }
+        }
     }
 
 } // END RequestCookiesMap
@@ -1047,20 +1397,17 @@ class InitParameterMap extends BaseContextMap {
         return servletContext.getInitParameter(keyString);
     }
 
-
     public Set entrySet() {
-        Set entries = new HashSet();
-
-        for (Enumeration e = servletContext.getInitParameterNames();
-             e.hasMoreElements();) {
-            String initParamName = (String) e.nextElement();
-            entries.add(new Entry(initParamName,
-                                  servletContext.getInitParameter(
-                                      initParamName)));
-        }
-        return entries;
+        return Collections.unmodifiableSet(super.entrySet());
     }
 
+    public Set keySet() {
+        return Collections.unmodifiableSet(super.keySet());
+    }
+
+    public Collection values() {
+        return Collections.unmodifiableCollection(super.values());
+    }
 
     public boolean equals(Object obj) {
         if (obj == null || 
@@ -1077,6 +1424,21 @@ class InitParameterMap extends BaseContextMap {
         }
         return hashCode;
     }
+
+    // --------------------------------------------- Methods from BaseContextMap
+
+    protected Iterator getEntryIterator() {
+        return new EntryIterator(servletContext.getInitParameterNames());
+    }
+
+    protected Iterator getKeyIterator() {
+        return new KeyIterator(servletContext.getInitParameterNames());
+    }
+
+    protected Iterator getValueIterator() {
+        return new ValueIterator(servletContext.getInitParameterNames());
+    }
+
 } // END InitParameterMap
 
 
