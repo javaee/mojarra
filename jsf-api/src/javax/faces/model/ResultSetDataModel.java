@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.24 2004/04/06 16:10:31 eburns Exp $
+ * $Id: ResultSetDataModel.java,v 1.25 2004/04/08 16:41:10 eburns Exp $
  */
 
 /*
@@ -265,7 +265,9 @@ public class ResultSetDataModel extends DataModel {
         // Tell the ResultSet that the previous row was updated if necessary
         if (updated && (resultSet != null)) {
             try {
-                resultSet.updateRow();
+		if (!resultSet.rowDeleted()) {
+		    resultSet.updateRow();
+		}
                 updated = false;
             } catch (SQLException e) {
                 throw new FacesException(e);
