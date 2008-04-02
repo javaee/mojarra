@@ -65,4 +65,37 @@
 								value="#{LoginBean.optionsGroup}" />
 						</h:selectManyCheckbox></td>
                                                 <td><h:message id="Error5" for="checklistmodelGroup"/></td>
-				</tr
+				</tr>
+
+<tr>
+
+  <td>
+    <h:outputText             id="disabledsCheckboxLabel"
+                           value="Checkboxes with even numbered options disabled"/>
+  </td>
+
+  <td>
+    <h:selectManyCheckbox    id="disabledsCheckbox"
+                           value="#{SelectItemsData.disabled}">
+      <f:selectItems       value="#{SelectItemsData.disableds}"/>
+    </h:selectManyCheckbox>
+  </td>
+
+</tr>
+
+
+<tr>
+
+  <td>
+    <h:outputText             id="nestedsCheckboxLabel"
+                           value="Checkboxes with nested options"/>
+  </td>
+
+  <td>
+    <h:selectManyCheckbox     id="nestedsCheckbox"
+                           value="#{SelectItemsData.nested}">
+      <f:selectItems       value="#{SelectItemsData.nesteds}"/>
+    </h:selectManyCheckbox>
+  </td>
+
+</tr>

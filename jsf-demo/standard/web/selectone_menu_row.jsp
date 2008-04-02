@@ -29,3 +29,35 @@
 							value="#{LoginBean.booleanList}" />
 					</h:selectOneMenu></td>
 				</tr>
+<tr>
+
+  <td>
+    <h:outputText             id="disabledsMenuLabel"
+                           value="Menu with even numbered options disabled"/>
+  </td>
+
+  <td>
+    <h:selectOneMenu          id="disabledsMenu"
+                           value="#{SelectItemsData.disabled}">
+      <f:selectItems       value="#{SelectItemsData.disableds}"/>
+    </h:selectOneMenu>
+  </td>
+
+</tr>
+
+
+<tr>
+
+  <td>
+    <h:outputText             id="nestedsMenuLabel"
+                           value="Menu with nested options"/>
+  </td>
+
+  <td>
+    <h:selectOneMenu          id="nestedsMenu"
+                           value="#{SelectItemsData.nested}">
+      <f:selectItems       value="#{SelectItemsData.nesteds}"/>
+    </h:selectOneMenu>
+  </td>
+
+</tr>

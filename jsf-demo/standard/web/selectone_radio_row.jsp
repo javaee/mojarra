@@ -119,5 +119,35 @@
 
             </tr>
 
+<tr>
+
+  <td>
+    <h:outputText             id="disabledsRadioLabel"
+                           value="Radio Buttons with even numbered options disabled"/>
+  </td>
+
+  <td>
+    <h:selectOneRadio         id="disabledsRadio"
+                           value="#{SelectItemsData.disabled}">
+      <f:selectItems       value="#{SelectItemsData.disableds}"/>
+    </h:selectOneRadio>
+  </td>
+
+</tr>
 
 
+<tr>
+
+  <td>
+    <h:outputText             id="nestedsRadioLabel"
+                           value="Radio Buttons with nested options"/>
+  </td>
+
+  <td>
+    <h:selectOneRadio         id="nestedsRadio"
+                           value="#{SelectItemsData.nested}">
+      <f:selectItems       value="#{SelectItemsData.nesteds}"/>
+    </h:selectOneRadio>
+  </td>
+
+</tr>

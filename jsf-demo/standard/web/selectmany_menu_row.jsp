@@ -44,3 +44,36 @@
 							value="#{LoginBean.optionsGroup}" />
 					</h:selectManyMenu></td>
 				</tr>
+
+<tr>
+
+  <td>
+    <h:outputText             id="disabledsMenuLabel"
+                           value="Listbox with even numbered options disabled"/>
+  </td>
+
+  <td>
+    <h:selectManyMenu         id="disabledsMenu"
+                           value="#{SelectItemsData.disabled}">
+      <f:selectItems       value="#{SelectItemsData.disableds}"/>
+    </h:selectManyMenu>
+  </td>
+
+</tr>
+
+
+<tr>
+
+  <td>
+    <h:outputText             id="nestedsMenuLabel"
+                           value="Listbox with nested options"/>
+  </td>
+
+  <td>
+    <h:selectManyMenu         id="nestedsMenu"
+                           value="#{SelectItemsData.nested}">
+      <f:selectItems       value="#{SelectItemsData.nesteds}"/>
+    </h:selectManyMenu>
+  </td>
+
+</tr>

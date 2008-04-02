@@ -86,7 +86,7 @@
 <tr>
 
   <td>
-    <h:outputText             id="disabledsLabel"
+    <h:outputText             id="disabledsListboxLabel"
                            value="Listbox with even numbered options disabled"/>
   </td>
 
@@ -103,7 +103,7 @@
 <tr>
 
   <td>
-    <h:outputText             id="nestedsLabel"
+    <h:outputText             id="nestedsListboxLabel"
                            value="Listbox with nested options"/>
   </td>
 
