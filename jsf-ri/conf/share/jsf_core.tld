@@ -80,8 +80,10 @@
 
  <tag>
      <description>
-        Register an ActionListener instance on the UIComponent associated
-        with the closest parent UIComponent custom action.
+
+        <![CDATA[<p>Register an ActionListener instance on the
+        UIComponent associated with the closest parent UIComponent
+        custom action.</p>]]>
      </description>
      <name>actionListener</name>
      <tag-class>com.sun.faces.taglib.jsf_core.ActionListenerTag</tag-class>
@@ -742,11 +744,42 @@
 
     <tag>
         <description>
-        Register an ActionListener instance on the UIComponent
+        <![CDATA[<p>Register an ActionListener instance on the UIComponent
         associated with the closest parent UIComponent custom action.
         This actionListener will cause the value given by the "value"
         attribute to be set into the ValueExpression given by the "target"
-        attribute.
+        attribute.</p>]]>
+
+<![CDATA[ <p>The implementation of this tag creates a special
+<code>ActionListener</code> instance and registers it on the
+<code>ActionSource</code> associated with our most immediate surrounding
+instance of a tag whose implementation class is a subclass of
+<code>UIComponentTag</code>.  This tag creates no output to the page
+currently being created.</p>
+
+<p>The <code>ActionListener</code> instance created and installed by
+this tag has the following behavior and contract.</p>
+
+<ul>
+
+<li>Only create and register the <code>ActionListener</code> instance
+the first time the component for this tag is created</li>
+
+<li>The "target" and "value" tag attributes are ValueExpression
+instances and are stored unevaluated as instance variables of the
+listener.</li>
+
+<li>When the listener executes, call <code>getValue()</code> on the
+"value" ValueExpression.  Pass the result to a call to
+<code>setValue()</code> on the "target" ValueExpression</li>
+
+</ul>
+
+<p>This tag creates no output to the page currently being created.  It
+is used solely for the side effect of <code>ActionListener</code>
+creation.</p>
+]]>
+
         </description>
         <name>setPropertyActionListener</name>
         <tag-class>com.sun.faces.taglib.jsf_core.SetPropertyActionListenerTag</tag-class>
