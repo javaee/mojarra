@@ -82,7 +82,7 @@
         </jsf.javac>
         <copy todir="${build}/${example}/WEB-INF">
             <fileset dir="web/WEB-INF">
-                <include name="*.xml"/>
+                <include name="**/*"/>
             </fileset>
         </copy>
 

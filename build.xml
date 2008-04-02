@@ -290,7 +290,7 @@
         </if>
     </target>    
 
-    <target name="build.samples.zip" depends="main">       
+    <target name="build.samples.zip" depends="main" description="Build the demo distribution">       
 
         <ant dir="${demo.dir}" 
              antfile="build.xml"

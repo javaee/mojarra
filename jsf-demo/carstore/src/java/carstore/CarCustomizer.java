@@ -36,6 +36,8 @@ import javax.faces.convert.Converter;
 
 import java.util.Enumeration;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p>A helper class that customizes a CarBean for a set of options
@@ -46,7 +48,7 @@ import java.util.ResourceBundle;
 
 public class CarCustomizer extends Object {
 
-    protected static final Log log = LogFactory.getLog(CarCustomizer.class);
+    private static final Logger LOGGER = Logger.getLogger("carstore");
 
     //
     // Relationship Instance Variables
@@ -68,8 +70,8 @@ public class CarCustomizer extends Object {
     private void init(String bundleName) {
         FacesContext context = FacesContext.getCurrentInstance();
 
-        if (log.isDebugEnabled()) {
-            log.debug("Loading bundle: " + bundleName + ".");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Loading bundle: " + bundleName + ".");
         }
         bundle = ResourceBundle.getBundle(bundleName);
     }

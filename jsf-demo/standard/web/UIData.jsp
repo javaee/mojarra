@@ -23,14 +23,14 @@
  Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 -->
 
-<%-- $Id: UIData.jsp,v 1.19 2005/08/22 22:09:44 ofung Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.20 2006/03/07 17:21:03 rlubke Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt"  prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 
 <%

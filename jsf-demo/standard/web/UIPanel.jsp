@@ -24,10 +24,10 @@
 -->
 
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 
-<%-- $Id: UIPanel.jsp,v 1.7 2005/08/22 22:09:45 ofung Exp $ --%>
+<%-- $Id: UIPanel.jsp,v 1.8 2006/03/07 17:21:03 rlubke Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>  

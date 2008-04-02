@@ -48,12 +48,14 @@
     <attribute>
         <name>reader</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.io.Reader</type>
     </attribute>  
     <attribute>
         <name>writer</name>
         <required>false</required>
-        <rtexprvalue>false</rtexprvalue>
+        <rtexprvalue>true</rtexprvalue>
+        <type>java.io.Writer</type>
     </attribute>  
   </tag>
 

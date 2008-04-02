@@ -31,14 +31,11 @@
 # and the ant-contrib tasks installed as an extension to your ant
 # installation.
 #
-# $Id: build.properties.sample,v 1.2 2005/12/15 23:40:27 rlubke Exp $
+# $Id: build.properties.sample,v 1.3 2006/03/07 17:21:02 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # -------------------------------------
-#  Compile dependencies
-#    commons-digester (version 1.5)
-#    commons-beanutils (version 1.6.1)
-#    commons-logging (latest)
+#  Compile dependencies    
 #    Servlet (version 2.5)
 #    JSP (version 2.1)
 #    JSTL (version 1.2)
@@ -54,13 +51,6 @@ compile.classpath=
 #    case where the target container doesn't
 #    include the required dependencies 
 #    for Sun's JSF implementation.
-#
-#    As an example, if using Sun's implementation
-#    with a container that doesn't include it already,
-#    you would specify the following dependencies:
-#       commons-digester (version 1.5)
-#       commons-beanutils (version 1.6.1)
-#       commons-logging (latest)
 #
 #    If the container already has the necessary dependencies,
 #    then leave this property blank.

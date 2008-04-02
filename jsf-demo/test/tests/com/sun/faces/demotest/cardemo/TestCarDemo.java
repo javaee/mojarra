@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.11 2005/12/14 22:27:50 rlubke Exp $
+ * $Id: TestCarDemo.java,v 1.12 2006/03/07 17:21:03 rlubke Exp $
  */
 
 /*
@@ -33,9 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -49,10 +48,8 @@ import com.sun.faces.demotest.HtmlUnitTestCase;
  */
 
 public class TestCarDemo extends HtmlUnitTestCase {
-
-    // Log instance for this class
-    private static final Log log = LogFactory.getLog(TestCarDemo.class);
-
+    
+    private static final Logger LOGGER = Logger.getLogger("com.sun.faces.demotest.cardemo");    
 
     public TestCarDemo() {
     }
@@ -109,8 +106,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
             }
 
             button = (HtmlSubmitInput) buttons.get(i);
-            if (log.isTraceEnabled()) {
-                log.trace("Running test for language: " + button.asText());
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Running test for language: " + button.asText());
             }
             doStoreFront((HtmlPage) button.click());
         }
@@ -157,8 +154,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
             while (iter.hasNext()) {
                 cell = (HtmlTableDataCell) iter.next();
                 if (-1 != cell.asText().indexOf(description)) {
-                    if (log.isTraceEnabled()) {
-                        log.trace("Found description " + description + ".");
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Found description " + description + ".");
                     }
                     found = true;
                     break;
@@ -173,8 +170,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
             button = (HtmlSubmitInput) iter.next();
             assertTrue(-1 !=
                        button.asText().indexOf(moreButton));
-            if (log.isTraceEnabled()) {
-                log.trace("Button text of " + moreButton + " confirmed.");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Button text of " + moreButton + " confirmed.");
             }
             doCarDetail((HtmlPage) button.click());
         }
@@ -202,8 +199,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
 
         assertEquals(basePrice, currentPrice);
 
-        if (log.isTraceEnabled()) {
-            log.trace("No package selected: base price: " + basePrice +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("No package selected: base price: " + basePrice +
                       " current price: " + currentPrice);
         }
 
@@ -222,8 +219,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
                     // resample yourPrice
                     currentPrice = getNumberNearLabel("yourPriceLabel",
                                                       carDetail);
-                    if (log.isTraceEnabled()) {
-                        log.trace("Package: " + label + " currentPrice: " +
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                        LOGGER.fine("Package: " + label + " currentPrice: " +
                                   currentPrice);
                     }
 
@@ -259,8 +256,8 @@ public class TestCarDemo extends HtmlUnitTestCase {
                     checkbox = (HtmlCheckBoxInput) checkboxIter.next();
                     if (null != (disabledValue =
                           checkbox.getDisabledAttribute())) {
-                        if (log.isTraceEnabled()) {
-                            log.trace("Checkbox disabled: " + disabledValue);
+                        if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.fine("Checkbox disabled: " + disabledValue);
                         }
                         foundDisabled = true;
                     }

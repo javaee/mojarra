@@ -28,7 +28,7 @@
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
     <H3> Standard RenderKit Thank You Page </H3>
     <hr>

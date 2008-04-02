@@ -1,5 +1,5 @@
 /*
- * $Id: GraphBean.java,v 1.4 2005/12/14 22:27:22 rlubke Exp $
+ * $Id: GraphBean.java,v 1.5 2006/03/07 17:21:00 rlubke Exp $
  */
 
 /*
@@ -32,6 +32,8 @@ package demo.model;
 import javax.faces.event.ActionEvent;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +46,8 @@ import com.sun.javaee.blueprints.components.ui.model.Node;
 
 public class GraphBean {
 
-    private static Log log = LogFactory.getLog(GraphBean.class);
+    private static Logger LOGGER = Logger.getLogger("demo.model");    
+    
     Graph menuGraph = null;
     Graph treeGraph = null;
 
@@ -174,8 +177,8 @@ public class GraphBean {
      * node in the tree control is to be expanded or collapsed.
      */
     public void processGraphEvent(ActionEvent event) {
-        if (log.isTraceEnabled()) {
-            log.trace("TRACE: GraphBean.processGraphEvent ");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("TRACE: GraphBean.processGraphEvent ");
         }
         Graph graph = null;
         GraphComponent component = (GraphComponent) event.getSource();
@@ -184,15 +187,15 @@ public class GraphBean {
         // Acquire the root node of the graph representing the menu
         graph = (Graph) component.getValue();
         if (graph == null) {
-            if (log.isErrorEnabled()) {
-                log.error("ERROR: Graph could not located in scope ");
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.severe("ERROR: Graph could not located in scope ");
             }
         }
         // Toggle the expanded state of this node
         Node node = graph.findNode(path);
         if (node == null) {
-            if (log.isErrorEnabled()) {
-                log.error("ERROR: Node " + path + "could not be located. ");
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.severe("ERROR: Node " + path + "could not be located. ");
             }
             return;
         }

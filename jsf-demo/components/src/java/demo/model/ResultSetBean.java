@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetBean.java,v 1.3 2005/12/14 22:27:22 rlubke Exp $
+ * $Id: ResultSetBean.java,v 1.4 2006/03/07 17:21:00 rlubke Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ import javax.faces.event.ActionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,8 +46,8 @@ import org.apache.commons.logging.LogFactory;
 
 public class ResultSetBean {
 
-    private static Log log = LogFactory.getLog(ResultSetBean.class);
-
+    private static Logger LOGGER = Logger.getLogger("demo.model");
+    
     private List<CustomerBean> list = null;
 
 
@@ -151,8 +153,8 @@ public class ResultSetBean {
      */
     public void processScrollEvent(ActionEvent event) {
         int currentRow = 1;
-        if (log.isTraceEnabled()) {
-            log.trace("TRACE: ResultSetBean.processScrollEvent ");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("TRACE: ResultSetBean.processScrollEvent ");
         }
         FacesContext context = FacesContext.getCurrentInstance();
         UIComponent component = event.getComponent();

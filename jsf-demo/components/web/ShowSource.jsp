@@ -32,7 +32,7 @@
        (even as an experiment) into this application --%>
 -->
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="ex" uri="/WEB-INF/demo.tld" %>
 
 <%-- 

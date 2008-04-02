@@ -93,21 +93,19 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
 
-import org.apache.taglibs.standard.lang.support.ExpressionEvaluatorManager;
-
 /**
  * <p>Tag handler for &lt;escapeHtml&gt;
  *
  * @author Pierre Delisle
- * @version $Revision: 1.3 $ $Date: 2005/12/14 22:27:23 $
+ * @version $Revision: 1.4 $ $Date: 2006/03/07 17:21:01 $
  */
 public class EscapeHtmlTag extends BodyTagSupport {
 
     //*********************************************************************
     // Instance variables
 
-    private String reader;
-    private String writer;
+    private Reader reader;
+    private Writer writer;
 
     //*********************************************************************
     // Constructors
@@ -127,13 +125,13 @@ public class EscapeHtmlTag extends BodyTagSupport {
     // Tag's properties
 
     /** Tag's 'reader' attribute */
-    public void setReader(String reader) {
+    public void setReader(Reader reader) {
         this.reader = reader;
     }
 
 
     /** Tag's 'writer' attribute */
-    public void setWriter(String reader) {
+    public void setWriter(Writer writer) {
         this.writer = writer;
     }
 
@@ -152,13 +150,13 @@ public class EscapeHtmlTag extends BodyTagSupport {
             }
             in = castToReader(bcs);
         } else {
-            in = castToReader(eval("reader", reader, Object.class));
+            in = reader;
         }
 
         if (writer == null) {
             out = pageContext.getOut();
         } else {
-            out = castToWriter(eval("writer", writer, Object.class));
+            out = writer;
         }
 
         transform(in, out);
@@ -198,20 +196,7 @@ public class EscapeHtmlTag extends BodyTagSupport {
     }
 
     //*********************************************************************
-    // Utility methods
-
-    /** Evaluate elexprvalue */
-    private Object eval(String attName, String attValue, Class clazz)
-          throws JspException {
-        Object obj = ExpressionEvaluatorManager.evaluate(attName, attValue,
-                                                         clazz, this,
-                                                         pageContext);
-        if (obj == null) {
-            throw new JspException("escapeHtml");
-        } else {
-            return obj;
-        }
-    }
+    // Utility methods   
 
 
     public static Reader castToReader(Object obj) throws JspException {

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.10 2005/12/14 22:27:49 rlubke Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.11 2006/03/07 17:21:03 rlubke Exp $
  */
 
 /*
@@ -34,9 +34,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -45,8 +42,6 @@ import junit.framework.TestCase;
 
 
 public class HtmlUnitTestCase extends TestCase {
-
-    private static final Log log = LogFactory.getLog(HtmlUnitTestCase.class);
 
     // target host
     protected String host;
@@ -102,10 +97,7 @@ public class HtmlUnitTestCase extends TestCase {
      *
      * @param path Context-relative part of the path
      */
-    protected HtmlPage getPage(String path) throws Exception {
-        if (log.isTraceEnabled()) {
-            log.trace("Getting URL: " + getURL(path).toString());
-        }
+    protected HtmlPage getPage(String path) throws Exception {       
 
         /* Cookies seem to be maintained automatically now
         if (sessionId != null) {

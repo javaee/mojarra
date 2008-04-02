@@ -47,6 +47,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p>This bean encapsulates a car model, including pricing and package
@@ -123,7 +125,7 @@ import java.util.StringTokenizer;
 
 public class CarBean extends Object {
 
-    protected static final Log log = LogFactory.getLog(CarBean.class);
+    private static final Logger LOGGER = Logger.getLogger("carstore");
 
     /**
      * <p>The message identifier of the Message to be created if
@@ -138,7 +140,7 @@ public class CarBean extends Object {
     //
     // Relationship Instance Variables
     //
-    
+
     /**
      * Localized labels
      */
@@ -163,7 +165,7 @@ public class CarBean extends Object {
      */
 
     private Map attributes = null;
-    
+
     // 
     // Constructors
     //
@@ -204,46 +206,46 @@ public class CarBean extends Object {
                                              ".bundles.OptionPrices");
 
         // populate the locale-specific information
-        if (log.isDebugEnabled()) {
-            log.debug("Loading bundle: " + bundleName + ".");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Loading bundle: " + bundleName + ".");
         }
         data = ResourceBundle.getBundle(bundleName,
                                         context.getViewRoot().getLocale());
-        if (log.isDebugEnabled()) {
-            log.debug("Bundle " + bundleName +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Bundle " + bundleName +
                       " loaded. Reading properties...");
         }
         initComponentsFromProperties(context, data);
-        if (log.isDebugEnabled()) {
-            log.debug("done.");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("done.");
         }
 
         // populate the non-locale-specific information common to all cars
-        if (log.isDebugEnabled()) {
-            log.debug("Loading bundle: Common_options.");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Loading bundle: Common_options.");
         }
         data = ResourceBundle.getBundle(CarStore.CARSTORE_PREFIX +
                                         ".bundles.Common_options");
-        if (log.isDebugEnabled()) {
-            log.debug("Bundle Common_options loaded. Reading properties...");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Bundle Common_options loaded. Reading properties...");
         }
         initComponentsFromProperties(context, data);
-        if (log.isDebugEnabled()) {
-            log.debug("done.");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("done.");
         }
 
         // populate the non-locale-specific information specific to each car
-        if (log.isDebugEnabled()) {
-            log.debug("Loading bundle: " + bundleName + "_options.");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Loading bundle: " + bundleName + "_options.");
         }
         data = ResourceBundle.getBundle(bundleName + "_options");
-        if (log.isDebugEnabled()) {
-            log.debug("Bundle " + bundleName +
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Bundle " + bundleName +
                       "_options loaded. Reading properties...");
         }
         initComponentsFromProperties(context, data);
-        if (log.isDebugEnabled()) {
-            log.debug("done.");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("done.");
         }
 
         // create a read-only Map exposing the values of all of our
@@ -385,8 +387,8 @@ public class CarBean extends Object {
             value = data.getString(key);
             componentType = data.getString(key + "_componentType");
             valueType = data.getString(key + "_valueType");
-            if (log.isDebugEnabled()) {
-                log.debug("populating map for " + key + "\n" +
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("populating map for " + key + "\n" +
                           "\n\tvalue: " + value +
                           "\n\tcomponentType: " + componentType +
                           "\n\tvalueType: " + valueType);
@@ -463,7 +465,7 @@ public class CarBean extends Object {
             return false;
         }
         return (componentType.startsWith("javax.faces.SelectMany") ||
-            componentType.startsWith("javax.faces.SelectOne"));
+                componentType.startsWith("javax.faces.SelectOne"));
     }
 
 
@@ -545,7 +547,7 @@ public class CarBean extends Object {
             }
             // if the value is a Boolean, look up the price by name
             else if (value instanceof Boolean &&
-                ((Boolean) value).booleanValue()) {
+                     ((Boolean) value).booleanValue()) {
                 try {
                     sum +=
                         Integer.valueOf(priceData.getString(key)).intValue();

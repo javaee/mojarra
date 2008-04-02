@@ -82,8 +82,7 @@
         <ant target="clean" dir="guessNumber"/>
         <ant target="clean" dir="helloDuke"/>
         <ant target="clean" dir="components"/>
-        <ant target="clean" dir="carstore"/>
-        <ant target="clean" dir="nonjsp"/>
+        <ant target="clean" dir="carstore"/>       
         <ant target="clean" dir="renderkits"/>
         <ant target="clean" dir="standard"/>
         <ant target="clean" dir="webtier-sample"/>
@@ -112,9 +111,7 @@
         <copy todir="${dist.home}/samples"
               file="${basedir}/carstore/build/jsf-cardemo.war"/>
         <copy todir="${dist.home}/samples"
-              file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
-        <copy todir="${dist.home}/samples"
-              file="${basedir}/nonjsp/build/jsf-nonjsp.war"/>
+              file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>       
         <copy todir="${dist.home}/samples"
               file="${basedir}/renderkits/build/jsf-renderkits.war"/>
         <copy todir="${dist.home}/samples"
@@ -140,10 +137,7 @@
         <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
             <fileset dir="${basedir}/carstore"
                      excludes="build.xml"/>
-        </copy>
-        <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
-            <fileset dir="${basedir}/nonjsp" excludes="build.xml"/>
-        </copy>
+        </copy>       
         <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
             <fileset dir="${basedir}/components"
                      excludes="build.xml"/>
@@ -263,9 +257,7 @@
         <ant dir="${basedir}/helloDuke" inheritAll="false">
         </ant>
         <ant dir="${basedir}/guessNumber" inheritAll="false">
-        </ant>
-        <ant dir="${basedir}/nonjsp" inheritAll="false">
-        </ant>
+        </ant>      
         <ant dir="${basedir}/standard" inheritAll="false">
         </ant>
         <ant dir="${basedir}/test/mappingDemo" inheritAll="false">

@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * <p>This is the main bean for the application.  It maintains a
@@ -71,7 +73,7 @@ import java.util.Map;
 
 public class CarStore extends Object {
 
-    protected static final Log log = LogFactory.getLog(CarStore.class);
+    private static final Logger LOGGER = Logger.getLogger("carstore");
 
     static final String CARSTORE_PREFIX = "carstore";
 
@@ -80,10 +82,10 @@ public class CarStore extends Object {
     static final String DEFAULT_PACKAGE = "Custom";
 
     static final String DEFAULT_MODEL_PROPERTIES = CARSTORE_PREFIX +
-        ".bundles." + DEFAULT_MODEL;
+                                                   ".bundles." + DEFAULT_MODEL;
 
     static final String DEFAULT_PACKAGE_PROPERTIES = CARSTORE_PREFIX +
-        ".bundles." + DEFAULT_PACKAGE;
+                                                     ".bundles." + DEFAULT_PACKAGE;
 
     // 
     // Relationship Instance Variables
@@ -122,9 +124,9 @@ public class CarStore extends Object {
 
 
     public CarStore() {
-        if (log.isDebugEnabled()) {
-            log.debug("Creating main CarStore bean");
-            log.debug("Populating locale map");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("Creating main CarStore bean");
+            LOGGER.fine("Populating locale map");
         }
         locales = new HashMap();
         locales.put("NAmerica", Locale.ENGLISH);
@@ -197,7 +199,7 @@ public class CarStore extends Object {
     // 
     // action handlers
     // 
-    
+
     public String storeFrontJalopyPressed() {
         setCurrentModelName("Jalopy");
         return "carDetail";
@@ -240,8 +242,8 @@ public class CarStore extends Object {
     public Map getModels() {
         if (null == carModels) {
             carModels = new HashMap();
-            if (log.isDebugEnabled()) {
-                log.debug("Populating carModel map");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Populating carModel map");
             }
             carModels.put(DEFAULT_MODEL,
                           new CarBean(DEFAULT_MODEL_PROPERTIES));
@@ -261,8 +263,8 @@ public class CarStore extends Object {
         getModels();
         if (null == carCustomizers) {
             carCustomizers = new HashMap();
-            if (log.isDebugEnabled()) {
-                log.debug("Populating carCustomizers map");
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Populating carCustomizers map");
             }
             carCustomizers.put("Custom", new CarCustomizer(CARSTORE_PREFIX +
                                                            ".bundles.Custom"));
@@ -280,7 +282,7 @@ public class CarStore extends Object {
         return carCustomizers;
     }
 
-	
+
 
     //
     // private methods
