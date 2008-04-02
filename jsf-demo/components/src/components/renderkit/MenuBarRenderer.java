@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.13 2003/12/17 15:19:08 rkitain Exp $
+ * $Id: MenuBarRenderer.java,v 1.14 2003/12/24 23:44:19 jvisvanathan Exp $
  */
 
 /*
@@ -151,7 +151,7 @@ public class MenuBarRenderer extends BaseRenderer {
             // node can be toggled
             if (menu.isEnabled()) {
                 writer.write("<a href=\"");
-                writer.write(getSubmitScript(menu.getPath()));
+                writer.write(getSubmitScript(menu.getPath(), context));
                 writer.write(" >");
                 writer.write(menu.getLabel());
                 writer.write("</a>");
@@ -231,9 +231,9 @@ public class MenuBarRenderer extends BaseRenderer {
      * the track the node that was clicked using a hidden field, then submits
      * the form so that we have the state information to reconstitute the tree.
      */
-    protected String getSubmitScript(String path) {
+    protected String getSubmitScript(String path, FacesContext context) {
          int formNumber = 0;
-         formNumber = getMyFormNumber(getMyForm());
+         formNumber = getMyFormNumber(context);
          StringBuffer sb = new StringBuffer();
          sb.append("#\" onmousedown=\"document.forms[" + formNumber + "]['" + 
 		     clientId + "'].value='" + path + 
@@ -258,15 +258,19 @@ public class MenuBarRenderer extends BaseRenderer {
     /**
      * Returns the form number of the parent form of graph component.
      */
-    protected int getMyFormNumber(UIForm form) {
-	// If we don't have a form, return 0
-	if (null == form) {
-	    return 0;
+    protected int getMyFormNumber(FacesContext context) {
+	
+	Map requestMap = context.getExternalContext().getRequestMap();
+	int numForms = 0;
+	Integer formsInt = null;
+	// find out the current number of forms in the page.
+	if (null != (formsInt = (Integer) 
+		     requestMap.get(FORM_NUMBER_ATTR))) {
+	    numForms = formsInt.intValue();
+            // since the form index in the document starts from 0.
+            numForms--;
 	}
-	Integer formsInt = (Integer) 
-	    form.getAttributes().get(FORM_NUMBER_ATTR);
-	// Assert.assert_it(null != formsInt);
-	return formsInt.intValue();
+	return numForms;
     }
     
     /**

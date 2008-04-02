@@ -1,5 +1,5 @@
 /*
- * $Id: ScrollerComponent.java,v 1.2 2003/12/17 15:19:01 rkitain Exp $
+ * $Id: ScrollerComponent.java,v 1.3 2003/12/24 23:44:18 jvisvanathan Exp $
  */
 
 /*
@@ -328,7 +328,7 @@ public class ScrollerComponent extends UICommand {
      private String getAnchorAttrs(FacesContext context, String clientId,  
              int action) {
         int currentPage = 1;                           
-	int formNumber = getFormNumber(context, getForm(context));
+	int formNumber = getFormNumber(context);
         Integer curPage = (Integer)getAttributes().get("currentPage");
         if ( curPage != null) {
             currentPage = curPage.intValue();
@@ -364,15 +364,18 @@ public class ScrollerComponent extends UICommand {
 	return (UIForm) parent;
     }
 
-    protected int getFormNumber(FacesContext context, UIForm form) {
-	// If we don't have a form, return 0
-	if (null == form) {
-	    return 0;
+    protected int getFormNumber(FacesContext context) {
+	Map requestMap = context.getExternalContext().getRequestMap();
+	int numForms = 0;
+	Integer formsInt = null;
+	// find out the current number of forms in the page.
+	if (null != (formsInt = (Integer) 
+		     requestMap.get(FORM_NUMBER_ATTR))) {
+	    numForms = formsInt.intValue();
+            // since the form index in the document starts from 0.
+            numForms--;
 	}
-	Integer formsInt = (Integer) 
-	    form.getAttributes().get(FORM_NUMBER_ATTR);
-
-	return formsInt.intValue();
+	return numForms;
     }
 
     /**

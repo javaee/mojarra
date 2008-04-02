@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.8 2003/12/17 15:19:08 rkitain Exp $
+ * $Id: MenuTreeRenderer.java,v 1.9 2003/12/24 23:44:19 jvisvanathan Exp $
  */
 
 /*
@@ -155,7 +155,7 @@ public class MenuTreeRenderer extends MenuBarRenderer {
             // command buttons causing the form to be submitted so the state of 
             // node can be toggled
             writer.write("<a href=\"");
-            writer.write(getSubmitScript(node.getPath()));
+            writer.write(getSubmitScript(node.getPath(), context));
             writer.write(" >");
             writer.write("<img src=\"");
             writer.write(imageLocation);
