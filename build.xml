@@ -311,12 +311,12 @@
           todir="${tomcat.home}/lib" />
     <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
           todir="${tomcat.home}/lib" />
-    <mkdir dir="${myenv.HOME}/.maven/repository/jsf" />
-    <mkdir dir="${myenv.HOME}/.maven/repository/jsf/jars" />
+    <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces" />
+    <mkdir dir="${myenv.HOME}/.maven/repository/javax.faces/jars" />
     <copy file="${basedir}/jsf-api/build/lib/jsf-api.jar" 
-          tofile="${myenv.HOME}/.maven/repository/jsf/jars/jsf-api-1.2a1.jar" />
+          tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-api-1.2a1.jar" />
     <copy file="${basedir}/jsf-ri/build/lib/jsf-impl.jar" 
-          tofile="${myenv.HOME}/.maven/repository/jsf/jars/jsf-impl-1.2a1.jar" />
+          tofile="${myenv.HOME}/.maven/repository/javax.faces/jars/jsf-impl-1.2a1.jar" />
 
   </target>
 
