@@ -1,5 +1,5 @@
 /*
- * $Id: NewStateManager.java,v 1.1 2005/03/18 22:12:51 edburns Exp $
+ * $Id: NewStateManager.java,v 1.2 2005/07/29 17:42:28 jayashri Exp $
  */
 
 /*
@@ -41,14 +41,7 @@ public class NewStateManager extends StateManagerWrapper {
      */
 
     public Object saveView(FacesContext context) {    
-	String id = null;
-	
-	synchronized (this) {
-	    id = createUniqueRequestId();
-	}
-	context.getExternalContext().getSessionMap().put(id, 
-							 context.getViewRoot());
-	return id;
+        return oldStateManager.saveView(context);
     }
 
     /**
@@ -63,14 +56,8 @@ public class NewStateManager extends StateManagerWrapper {
 
     public UIViewRoot restoreView(FacesContext context, String viewId,
                                   String renderKitId) {
-	Object [] stateArray = (Object [])
-	    getResponseStateManager(context).getState(context, viewId);	
-	String id = (String) stateArray[0];
-
-	UIViewRoot result = (UIViewRoot)
-	    context.getExternalContext().getSessionMap().get(id);
-
-	return result;
+	
+        return oldStateManager.restoreView(context, viewId, renderKitId);
     }
 
     private ResponseStateManager getResponseStateManager(FacesContext context){

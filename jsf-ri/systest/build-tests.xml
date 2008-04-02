@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.84 2005/07/26 14:09:29 edburns Exp $
+ $Id: build-tests.xml,v 1.85 2005/07/29 17:42:22 jayashri Exp $
 -->
 
 <!--
@@ -406,6 +406,14 @@
          ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
             request="${context.path}/faces/managed07.jsp"
              status="500" failonerror="${failonerror}"/> 
+            
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+        request="${context.path}/faces/resourceInjection01.jsp"
+        golden="${golden.path}/resourceInjection01.txt"
+        ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+        recordGolden="${local.golden.path}/resourceInjection01.txt"
+        failonerror="${failonerror}"/> 
+        
   </target>
 
 

@@ -376,6 +376,14 @@
     </managed-bean-class>
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
+  
+  <managed-bean>
+    <managed-bean-name>resourceInjectionBean</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.ResourceInjectionBean
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+  </managed-bean>
 
   <managed-bean>
     <managed-bean-name>ResetUniqueRequestIdBean</managed-bean-name>

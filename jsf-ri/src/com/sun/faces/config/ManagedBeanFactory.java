@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.31 2005/06/23 20:29:32 jayashri Exp $
+ * $Id: ManagedBeanFactory.java,v 1.32 2005/07/29 17:42:21 jayashri Exp $
  */
 
 /*
@@ -227,6 +227,11 @@ public class ManagedBeanFactory extends Object {
             }
             bean = java.beans.Beans.instantiate(loader,
                                                 managedBean.getManagedBeanClass());
+            FacesInjectionManager manager = 
+                    FacesInjectionManager.getInjectionManager();
+            if (manager != null) {
+                manager.injectInstance(bean);    
+            }
         } catch (Exception ex) {
             Object[] obj = new Object[2];
             obj[0] = managedBean.getManagedBeanClass();
