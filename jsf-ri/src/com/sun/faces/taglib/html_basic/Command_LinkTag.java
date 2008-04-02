@@ -1,5 +1,5 @@
 /*
- * $Id: Command_LinkTag.java,v 1.1 2003/10/23 05:17:44 eburns Exp $
+ * $Id: Command_LinkTag.java,v 1.2 2003/10/28 04:30:00 eburns Exp $
  */
 
 /*
@@ -16,16 +16,17 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.taglib.BaseComponentTag;
+import com.sun.faces.taglib.BaseComponentBodyTag;
 import com.sun.faces.util.Util;
 
+import java.io.IOException;
 
 /**
  * This class is the tag handler that evaluates the 
  * <code>command_link</code> custom tag.
  */
 
-public class Command_LinkTag extends BaseComponentTag
+public class Command_LinkTag extends BaseComponentBodyTag
 {
     //
     // Protected Constants
@@ -154,5 +155,29 @@ public class Command_LinkTag extends BaseComponentTag
         // chain to the parent implementation
         return super.doStartTag();
     }
+
+    public int doEndTag() throws JspException {
+	String content = null;     
+
+        try {
+            if (null == (bodyContent = getBodyContent())) {
+		Object params [] = { this.getClass().getName() };
+                throw new JspException(Util.getExceptionMessage(
+                        Util.NULL_BODY_CONTENT_ERROR_MESSAGE_ID, params));
+            }    
+	    content = bodyContent.getString();
+            
+	    getPreviousOut().write(content);
+        } catch (IOException iox) {
+            Object [] params = { "session", iox.getMessage() };
+            throw new JspException(Util.getExceptionMessage(
+                    Util.SAVING_STATE_ERROR_MESSAGE_ID, params));
+        }  
+
+	int rc = super.doEndTag();
+
+	return rc;
+    }
+
 
 } // end of class Command_LinkTag

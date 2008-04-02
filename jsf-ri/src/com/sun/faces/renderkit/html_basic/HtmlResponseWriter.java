@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.9 2003/10/22 04:43:34 eburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.10 2003/10/28 04:29:57 eburns Exp $
  */
 
 /*
@@ -207,6 +207,14 @@ public class HtmlResponseWriter extends ResponseWriter {
         //         ArrayIndexOutOfBoundsException (3584)
         writer.write(">");
     }
+
+    public void closeStartTag(UIComponent component) throws IOException {
+	if (closeStart) {
+            writer.write(">");
+            closeStart = false;
+	}
+    }
+
 
     /**
      * <p>Write a properly escaped attribute name and the corresponding 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.47 2003/10/23 05:17:53 eburns Exp $
+ * $Id: TestRenderers_1.java,v 1.48 2003/10/28 04:30:04 eburns Exp $
  */
 
 /*
@@ -26,6 +26,8 @@ import java.util.ArrayList;
 
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
+import javax.faces.component.UIOutput;
+import javax.faces.component.UIGraphic;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UIComponent;
@@ -49,7 +51,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.47 2003/10/23 05:17:53 eburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.48 2003/10/28 04:30:04 eburns Exp $
  * 
  *
  */
@@ -180,14 +182,17 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing Link Renderer...");
         LinkRenderer hyperlinkRenderer = new LinkRenderer();
         UICommand uiCommand = new UICommand();
+	UIOutput output = new UIOutput();
         uiCommand.setId("labelLink1");
-        uiCommand.setValue("PASSED");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "failed.key");
-        uiCommand.setValueRef("TestBean.modelLabel");
+        output.setValue("PASSED");
+        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        output.getAttributes().put("key", "failed.key");
+        output.setValueRef("TestBean.modelLabel");
+	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
@@ -195,64 +200,78 @@ public class TestRenderers_1 extends JspFacesTestCase
         // is pulled from the model
         uiCommand = new UICommand();
         uiCommand.setId("labelLink2");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "failed.key");
-        uiCommand.setValueRef("TestBean.modelLabel");
+	output = new UIOutput();
+        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        output.getAttributes().put("key", "failed.key");
+        output.setValueRef("TestBean.modelLabel");
+	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
         // No valueRef or explicit label.  Pull value from the
         // specified ResourceBundle using the key
         uiCommand = new UICommand();
+	output = new UIOutput();
         uiCommand.setId("labelLink3");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "passed.key");
+        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        output.getAttributes().put("key", "passed.key");
+	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
         // All lookup methods fail, test of hyperlink should be empty
         
         uiCommand = new UICommand();
+	output = new UIOutput();
         uiCommand.setId("labelLink4");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
-        uiCommand.getAttributes().put("key", "non.key");
+        output.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        output.getAttributes().put("key", "non.key");
         uiCommand.getAttributes().put("rel", "rel");
         uiCommand.getAttributes().put("rev", "rev");
         uiCommand.getAttributes().put("shape", "shape");
         uiCommand.getAttributes().put("coords", "coords");
         uiCommand.getAttributes().put("hreflang", "hreflang");
-        uiCommand.setValueRef("NonBean.label");
+        output.setValueRef("NonBean.label");
+	uiCommand.getChildren().add(output);
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
         // Test hyperlink as image
         uiCommand = new UICommand();
+	UIGraphic graphic = new UIGraphic();
         uiCommand.setId("hyperlinkImage");
-        uiCommand.getAttributes().put("image", "duke.gif");
-        uiCommand.setValue("SHOUD NOT BE HERE");
-        root.getChildren().add(uiCommand);
+        graphic.setValue("duke.gif");
+	uiCommand.getChildren().add(graphic);
+	root.getChildren().add(uiCommand);
         System.out.println("Testing hyperlink as image");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
         // Test hyperlink as image with image specified in resource bundle
         uiCommand = new UICommand();
+	graphic = new UIGraphic();
         uiCommand.setId("hyperlinkImage2");
-        uiCommand.getAttributes().put("imageKey", "image.key");
-        uiCommand.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+        graphic.getAttributes().put("key", "image.key");
+        graphic.getAttributes().put(RIConstants.BUNDLE_ATTR, "Messages");
+	uiCommand.getChildren().add(graphic);
         root.getChildren().add(uiCommand);
         System.out.println("Testing hyperlink image via resource lookup");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
 
@@ -273,6 +292,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.getChildren().add(parameter2);
         System.out.println("Testing hyperlink with UIParameters...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
+        hyperlinkRenderer.encodeChildren(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().writeText("\n", null);
     }

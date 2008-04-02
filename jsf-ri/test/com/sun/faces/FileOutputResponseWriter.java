@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.8 2003/08/22 19:33:04 rkitain Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.9 2003/10/28 04:30:01 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.io.Writer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.8 2003/08/22 19:33:04 rkitain Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.9 2003/10/28 04:30:01 eburns Exp $
  * 
  *
  */
@@ -168,6 +168,10 @@ public void startElement(String name, UIComponent componentForElement)
 public void endElement(String name) throws IOException {
     writer.endElement(name);
 }    
+
+public void closeStartTag(UIComponent component) throws IOException {
+    writer.closeStartTag(component);
+}
 
 public void startDocument() throws IOException {
     writer.startDocument();

@@ -103,7 +103,9 @@
 
 	<TD>
 
-	      <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img src="duke.gif" /></a><input type="hidden" name="basicForm:imageLink" />
+	      
+                
+              <a href="#" onmousedown="document.forms[0]['basicForm:imageLink'].value='basicForm:imageLink'; document.forms[0].submit()"><img id="basicForm:_id1" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:imageLink" />
 
 	</TD>
 
@@ -115,31 +117,34 @@
 
       <TR>
         <TD>
+            
             <a href="#" onmousedown="document.forms[0]['basicForm:commandLink'].value='basicForm:commandLink'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:commandLink" />
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0]['basicForm:commandParamLink'].value='basicForm:commandParamLink'; document.forms[0].submit()" class="hyperlinkClass"
+            
               
               
-            >link text</a><input type="hidden" name="basicForm:commandParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
+              
+            <a href="#" onmousedown="document.forms[0]['basicForm:commandParamLink'].value='basicForm:commandParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()" class="hyperlinkClass">link text</a><input type="hidden" name="basicForm:commandParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif" /></a><input type="hidden" name="basicForm:hrefLink" />
+            <a href="#" onmousedown="document.forms[0]['basicForm:hrefLink'].value='basicForm:hrefLink'; document.forms[0].submit()"><img src="duke.gif"></a><input type="hidden" name="basicForm:hrefLink" />
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink'; document.forms[0].submit()"
+            
               
               
-            ><img src="duke.gif" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
+              
+            <a href="#" onmousedown="document.forms[0]['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms[0]['name'].value='horwat';document.forms[0]['value'].value='password'; document.forms[0].submit()"><img id="basicForm:_id5" src="duke.gif" alt="" /></a><input type="hidden" name="basicForm:hrefParamLink" /><input type="hidden" name="name" value="horwat" /><input type="hidden" name="value" value="password" />
         </TD>
       </TR>
 
@@ -159,7 +164,7 @@
 
 	<TD>
 
-            <input type="checkbox" name="basicForm:_id1" class="selectbooleanClass" />
+            <input type="checkbox" name="basicForm:_id7" class="selectbooleanClass" />
 	</TD>
 
       </TR>
@@ -181,7 +186,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id2" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
+              <span class="selectoneClass"><select name="basicForm:_id8" size="10" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
 	<option value="1" title="One">1</option>
 	<option value="2" title="Two">2</option>
 	<option value="3" title="Three">3</option>
@@ -251,7 +256,7 @@
 
 	<TD>
                 
-            <span class="inputClass"><input type="text" name="basicForm:_id19" value="Wed, Jul 10, 1996" /></span>
+            <span class="inputClass"><input type="text" name="basicForm:_id25" value="Wed, Jul 10, 1996" /></span>
 	</TD>
 
       </TR>
@@ -439,7 +444,7 @@
 						
 						
 						
-					<select name="basicForm:_id30" multiple size="10">	<option value="0">zero</option>
+					<select name="basicForm:_id36" multiple size="10">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -465,21 +470,21 @@
 						
 						
 					<span class="selectmanyClass">
-<label for="basicForm:_id41"><input name="basicForm:ManyApples3" id="basicForm:_id41" value="0" type="checkbox">zero</label>
-<label for="basicForm:_id42"><input name="basicForm:ManyApples3" id="basicForm:_id42" value="1" type="checkbox">one</label>
-<label for="basicForm:_id43"><input name="basicForm:ManyApples3" id="basicForm:_id43" value="2" type="checkbox">two</label>
-<label for="basicForm:_id44"><input name="basicForm:ManyApples3" id="basicForm:_id44" value="3" type="checkbox">three</label>
-<label for="basicForm:_id45"><input name="basicForm:ManyApples3" id="basicForm:_id45" value="4" type="checkbox">four</label>
-<label for="basicForm:_id46"><input name="basicForm:ManyApples3" id="basicForm:_id46" value="5" type="checkbox">five</label>
-<label for="basicForm:_id47"><input name="basicForm:ManyApples3" id="basicForm:_id47" value="6" type="checkbox">six</label>
-<label for="basicForm:_id48"><input name="basicForm:ManyApples3" id="basicForm:_id48" value="7" type="checkbox">seven</label>
-<label for="basicForm:_id49"><input name="basicForm:ManyApples3" id="basicForm:_id49" value="8" type="checkbox">eight</label>
-<label for="basicForm:_id50"><input name="basicForm:ManyApples3" id="basicForm:_id50" value="9" type="checkbox">nine</label></TD>
+<label for="basicForm:_id47"><input name="basicForm:ManyApples3" id="basicForm:_id47" value="0" type="checkbox">zero</label>
+<label for="basicForm:_id48"><input name="basicForm:ManyApples3" id="basicForm:_id48" value="1" type="checkbox">one</label>
+<label for="basicForm:_id49"><input name="basicForm:ManyApples3" id="basicForm:_id49" value="2" type="checkbox">two</label>
+<label for="basicForm:_id50"><input name="basicForm:ManyApples3" id="basicForm:_id50" value="3" type="checkbox">three</label>
+<label for="basicForm:_id51"><input name="basicForm:ManyApples3" id="basicForm:_id51" value="4" type="checkbox">four</label>
+<label for="basicForm:_id52"><input name="basicForm:ManyApples3" id="basicForm:_id52" value="5" type="checkbox">five</label>
+<label for="basicForm:_id53"><input name="basicForm:ManyApples3" id="basicForm:_id53" value="6" type="checkbox">six</label>
+<label for="basicForm:_id54"><input name="basicForm:ManyApples3" id="basicForm:_id54" value="7" type="checkbox">seven</label>
+<label for="basicForm:_id55"><input name="basicForm:ManyApples3" id="basicForm:_id55" value="8" type="checkbox">eight</label>
+<label for="basicForm:_id56"><input name="basicForm:ManyApples3" id="basicForm:_id56" value="9" type="checkbox">nine</label></TD>
 </tr>
 
 
     
-<input type="hidden" name="basicForm:_id51" value="48%" />
+<input type="hidden" name="basicForm:_id57" value="48%" />
 
   <TABLE>
 

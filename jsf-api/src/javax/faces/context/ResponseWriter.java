@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.11 2003/10/22 04:43:04 eburns Exp $
+ * $Id: ResponseWriter.java,v 1.12 2003/10/28 04:29:49 eburns Exp $
  */
 
 /*
@@ -109,6 +109,18 @@ public abstract class ResponseWriter extends Writer {
      *  is <code>null</code>
      */
     public abstract void endElement(String name) throws IOException;
+
+    /**
+     * <p>Force the closing of the start tag currently being
+     * written, if it has not already been closed.</p>
+     *
+     * @param component the {@link UIComponent} (if any) to which this
+     * tag corresponds.
+     *
+     * @exception IOException if an input/output error occurs
+     */ 
+
+    public abstract void closeStartTag(UIComponent component) throws IOException;
 
 
     /**

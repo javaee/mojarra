@@ -15,8 +15,8 @@
 
              <td>
 
-	       <h:command_link id="commandLink1" action="success"
-                  value="Submit Form">
+	       <h:command_link id="commandLink1" action="success">
+                 <f:verbatim>Submit Form</f:verbatim>
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_link>
 
@@ -35,8 +35,8 @@
 
              <td>
 
-	      <h:command_link id="valueRefLink" action="success"
-                  valueRef="model.label">
+	      <h:command_link id="valueRefLink" action="success">
+                 <h:output_text valueRef="model.label"/>
                  <f:action_listener type="standard.DefaultListener"/>
               </h:command_link>
 
@@ -55,8 +55,9 @@
 
              <td>
 
-	      <h:command_link id="resBundleLableLink" action="success"
-                  key="standardRenderKitSubmitLabel" bundle="standardBundle">
+	      <h:command_link id="resBundleLableLink" action="success">
+                 <h:output_text 
+                  key="standardRenderKitSubmitLabel" bundle="standardBundle"/>
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_link>
 
@@ -75,8 +76,8 @@
 
              <td>
 
-	      <h:command_link id="imageLink" action="success"
-                  image="duke.gif">
+	      <h:command_link id="imageLink" action="success">
+                 <h:graphic_image url="duke.gif"/>
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_link>
 
@@ -96,8 +97,9 @@
 
              <td>
 
-	      <h:command_link id="imageResourceBundleLink" 
-                  imageKey="imageurl" bundle="standardBundle" action="success">
+	      <h:command_link id="imageResourceBundleLink" action="success">
+                 <h:graphic_image  
+                  key="imageurl" bundle="standardBundle" />
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_link>
 

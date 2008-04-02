@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.74 2003/10/27 20:08:25 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.75 2003/10/28 04:29:48 eburns Exp $
  */
 
 /*
@@ -380,10 +380,15 @@ public abstract class UIComponentBase extends UIComponent {
 
     public boolean getRendersChildren() {
 	boolean result = false;
+
 	Renderer renderer = null;
-	if (null != 
-	    (renderer = getRenderer(FacesContext.getCurrentInstance()))) {
-	    result = renderer.getRendersChildren();
+        String rendererType = getRendererType();
+	
+        if (rendererType != null) {
+	    if (null != 
+		(renderer = getRenderer(FacesContext.getCurrentInstance()))) {
+		result = renderer.getRendersChildren();
+	    }
 	}
 	return result;
     }

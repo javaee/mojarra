@@ -1,5 +1,5 @@
 /*
- * $Id: MockResponseWriter.java,v 1.4 2003/10/22 04:43:06 eburns Exp $
+ * $Id: MockResponseWriter.java,v 1.5 2003/10/28 04:29:50 eburns Exp $
  */
 
 /*
@@ -98,6 +98,9 @@ public class MockResponseWriter extends ResponseWriter {
         throw new UnsupportedOperationException();
     }
 
+    public void closeStartTag(UIComponent component) throws IOException {
+        throw new UnsupportedOperationException();
+    }
 
     public void writeAttribute(String name, Object value, 
 			       String componentPropertyName) throws IOException {
