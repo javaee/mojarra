@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.183 2006/01/13 19:19:22 rlubke Exp $
+ * $Id: Util.java,v 1.184 2006/03/07 19:39:54 rlubke Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.183 2006/01/13 19:19:22 rlubke Exp $
+ * @version $Id: Util.java,v 1.184 2006/03/07 19:39:54 rlubke Exp $
  */
 
 public class Util {
@@ -614,25 +614,28 @@ public class Util {
                                 clazz.getConstructor(parameterTypes);
                             Object[] parameters = new Object[]{root};
                             returnObject = construct.newInstance(parameters);
-                        } catch (Exception ex) {
-                            // OK - there's no adapter constructor
-                            if ( LOGGER.isLoggable(Level.FINE)) {
-                                LOGGER.log(Level.FINE, ex.getMessage(), ex);
+                        } catch (NoSuchMethodException nsme) {
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                
+                                LOGGER.log(Level.FINE,
+                                           "jsf.util.no.adapter.ctor.available",
+                                           new Object[] {
+                                                 clazz.getName(),
+                                                 rootType.getName()
+                                           });
                             }
+                            returnObject = clazz.newInstance();
                         }
-                    }
-
-                    if (returnObject == null) {
-                        returnObject = clazz.newInstance();
                     }
                 }
             } catch (Exception e) {
-                Object[] params = new Object[1];
-                params[0] = className;                
-                String msg = MessageUtils.getExceptionMessageString(
-                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params);
-                if ( LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.log(Level.FINE, msg, e);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    Object[] params = new Object[1];
+                    params[0] = className;
+                    String msg = MessageUtils.getExceptionMessageString(
+                          MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
+                          params);
+                    LOGGER.log(Level.SEVERE, msg, e);
                 }
             }
         }
