@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_local.java,v 1.1 2003/03/10 20:23:55 eburns Exp $
+ * $Id: TestUtil_local.java,v 1.2 2003/08/08 23:34:48 eburns Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_local.java,v 1.1 2003/03/10 20:23:55 eburns Exp $
+ * @version $Id: TestUtil_local.java,v 1.2 2003/08/08 23:34:48 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -74,5 +74,33 @@ public class TestUtil_local extends TestCase
 		   equals("hello%20hello"));
 	
     }
+
+    public void testGetDefaultConverterForType() {
+        String expectedConverters[][] = {
+	    {"java.util.Date", "Date"},
+	    {"java.lang.Boolean", "Boolean"},
+	    {"java.lang.Byte", "Number"},
+	    {"java.lang.Double", "Number"},
+	    {"java.lang.Float", "Number"},
+	    {"java.lang.Integer", "Number"},
+	    {"java.lang.Short", "Number"},
+	    {"java.lang.Long", "Number"},
+	    {"byte", "Number"},
+	    {"double", "Number"},
+	    {"float", "Number"},
+	    {"int", "Number"},
+	    {"long", "Number"},
+	    {"short", "Number"}
+	};
+	int i, len = expectedConverters[0].length;
+	String result = null;
+	for (i = 0; i < len; i++) {
+	    result = Util.getDefaultConverterForType(expectedConverters[i][0]);
+	    assertTrue(null != result);
+	    assertTrue(result.equals(expectedConverters[i][1]));
+	}
+	assertTrue(null == Util.getDefaultConverterForType("yoyodyne"));
+    }
+
 
 } // end of class TestUtil_local

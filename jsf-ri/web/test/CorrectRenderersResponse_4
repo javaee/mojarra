@@ -1,11 +1,11 @@
 <table>
-<tr>
+<tr><thead>
 <th>
 header1</th>
 <th>
 header2</th>
-</tr>
-<tr>
+</thead></tr>
+<tbody><tr>
 <td>body1</td>
 <td>body2</td>
 </tr>
@@ -17,18 +17,18 @@ header2</th>
 <td>body1</td>
 <td>body2</td>
 </tr>
-<tr>
+</tbody><tr><tfoot>
 <th>
 footer1</th>
 <th>
 footer2</th>
-</tr>
+</tfoot></tr>
 </table>
 <table>
-<tr><th colspan="2">header1 header2 </th></tr>
-<tr>
+<tr><th colspan="2"><thead>header1 header2 </thead></th></tr>
+<tbody><tr>
 <td>body1</td>
 <td>body2</td>
 </tr>
-<tr><th colspan="2">footer1 footer2 </th></tr>
+</tbody><tr><th colspan="2"><tfoot>footer1 footer2 </tfoot></th></tr>
 </table>

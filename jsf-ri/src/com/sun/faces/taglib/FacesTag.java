@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.37 2003/07/29 18:23:29 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.38 2003/08/08 23:34:45 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.37 2003/07/29 18:23:29 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.38 2003/08/08 23:34:45 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -1352,6 +1352,7 @@ public int doStartTag() throws JspException {
 	if (log.isDebugEnabled()) {
 	    log.debug(getDebugString());
 	}
+	throw new JspException(t);
     }
     return rc;
 }
@@ -1371,6 +1372,7 @@ public int doEndTag() throws JspException {
 	if (log.isDebugEnabled()) {
 	    log.debug(getDebugString());
 	}
+	throw new JspException(t);
     }
     return rc;
 }

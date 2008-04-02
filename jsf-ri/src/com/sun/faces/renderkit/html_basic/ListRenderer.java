@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.11 2003/08/08 16:20:22 rkitain Exp $
+ * $Id: ListRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.11 2003/08/08 16:20:22 rkitain Exp $
+ * @version $Id: ListRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
  *  
  */
 
@@ -142,6 +142,7 @@ public class ListRenderer extends HtmlBasicRenderer {
         // Process the table header (if any)
         if (null != (facet = component.getFacet("header"))) {
 	    writer.startElement("tr");
+	    writer.startElement("thead");
 	    writer.writeText('\n');
 	    // If the header has kids, render them recursively
 	    if (null != (kids = facet.getChildren())) {
@@ -171,10 +172,12 @@ public class ListRenderer extends HtmlBasicRenderer {
 		}
 		facet.encodeEnd(context);
             }
+	    writer.endElement("thead");
 	    writer.endElement("tr");
 	    writer.writeText('\n');
         }
 
+	writer.startElement("tbody");
 	if (null != (kids = component.getChildren())) {
 	    // Process each grouping of data items to be processed
             Map requestMap = context.getExternalContext().getRequestMap();
@@ -230,10 +233,12 @@ public class ListRenderer extends HtmlBasicRenderer {
 		}
             }
         }
+	writer.endElement("tbody");
 
         // Process the table footer (if any)
         if (null != (facet = component.getFacet("footer"))) {
 	    writer.startElement("tr");
+	    writer.startElement("tfoot");
 	    writer.writeText('\n');
 	    // If the footer has kids, render them recursively
 	    if (null != (kids = facet.getChildren())) {
@@ -263,6 +268,7 @@ public class ListRenderer extends HtmlBasicRenderer {
 		}
 		facet.encodeEnd(context);
             }
+	    writer.endElement("tfoot");
 	    writer.endElement("tr");
 	    writer.writeText('\n');
         }

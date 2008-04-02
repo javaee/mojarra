@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.70 2003/08/08 16:20:36 rkitain Exp $
+ * $Id: Util.java,v 1.71 2003/08/08 23:34:47 eburns Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.70 2003/08/08 16:20:36 rkitain Exp $
+ * @version $Id: Util.java,v 1.71 2003/08/08 23:34:47 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -325,9 +325,14 @@ public class Util extends Object
         {"java.lang.Integer", "Number"},
         {"java.lang.Short", "Number"},
         {"java.lang.Long", "Number"},
+        {"byte", "Number"},
+        {"double", "Number"},
+        {"float", "Number"},
+        {"int", "Number"},
+        {"long", "Number"},
+        {"short", "Number"}
     };
 private static long id = 0;
-
 
 //
 // Instance Variables
@@ -406,9 +411,13 @@ private Util()
 	// getExceptionMessage().
 
 	if (null != resources) {
-	    result = resources.getMessage(messageId, params).getSummary();
+	    Message message = resources.getMessage(messageId, params);
+	    if (null != message) {
+		result = message.getSummary();
+	    }
 	}
-	else {
+
+	if (null == result) {
 	    result = "null MessageResources";
 	}
 	return result;

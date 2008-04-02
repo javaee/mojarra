@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.11 2003/08/08 16:20:20 rkitain Exp $
+ * $Id: GridRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.11 2003/08/08 16:20:20 rkitain Exp $
+ * @version $Id: GridRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
  *  
  */
 
@@ -143,14 +143,17 @@ public class GridRenderer extends HtmlBasicRenderer {
                 writer.startElement("th");
 	    }
 	    writer.writeAttribute("colspan", new Integer(columns));
-	    
+	    writer.startElement("thead");
+
 	    encodeRecursive(context, facet);
+	    writer.endElement("thead");
             writer.endElement("th");
             writer.endElement("tr");
 	    writer.writeText('\n');
 	}
 
 	int i = 0;
+	writer.startElement("tbody");
 	if (null != (kids = component.getChildren())) {
 	    while (kids.hasNext()) {
 		if ((i % columns) == 0) {
@@ -188,6 +191,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             writer.endElement("tr");
 	    writer.writeText('\n');
         }
+	writer.endElement("tbody");
 
 	if (null != (facet = component.getFacet("footer"))) {
 
@@ -201,8 +205,10 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    }
 	    
 	    writer.writeAttribute("colspan", new Integer(columns));
+	    writer.startElement("tfoot");
 
             encodeRecursive(context, facet);
+	    writer.endElement("tfoot");
 	    writer.endElement("th");
 	    writer.endElement("tr");
 	    writer.writeText('\n');
