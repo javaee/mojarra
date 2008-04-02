@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.31 2006/01/11 15:28:11 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.32 2006/01/13 22:16:54 rogerk Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.31 2006/01/11 15:28:11 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.32 2006/01/13 22:16:54 rogerk Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -179,8 +179,6 @@ public class RenderKitImpl extends RenderKit {
             { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE, 
               APPLICATION_XML_CONTENT_TYPE, TEXT_XML_CONTENT_TYPE };
         String [] desiredTypes = null;
-            
-
         // Obtain the desired content type list
 	// first crack is the passed in list
 	if (null == desiredContentTypeList) {
@@ -188,10 +186,27 @@ public class RenderKitImpl extends RenderKit {
 	    desiredContentTypeList = 
                     context.getExternalContext().getResponseContentType();
 	}
+        // third crack is the Accept header.
+        // Evaluate the accept header in accordance with HTTP specification - 
+        // Section 14.1
         if (null == desiredContentTypeList) {
-            // third crack is the Accept header.
-            desiredContentTypeList = (String)
-	      context.getExternalContext().getRequestHeaderMap().get("Accept");
+            String[] typeArray = (String[])
+                context.getExternalContext().getRequestHeaderValuesMap().get("Accept");
+            if (typeArray.length > 0) {
+                desiredContentTypeList = typeArray[0];
+                for (int i=1; i<typeArray.length; i++) {
+                    desiredContentTypeList += ',';
+                    desiredContentTypeList += typeArray[i];
+                }
+            }
+            
+            if (null != desiredContentTypeList) {
+                String supportedTypeString = 
+                    HTML_CONTENT_TYPE + ',' + XHTML_CONTENT_TYPE + ',' +
+                    APPLICATION_XML_CONTENT_TYPE + ',' + TEXT_XML_CONTENT_TYPE;
+                desiredContentTypeList = RenderKitUtils.determineContentType(
+                    desiredContentTypeList, supportedTypeString); 
+            }
         }
 
         // fourth, default to text/html

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.20 2005/10/19 19:51:36 edburns Exp $
+ * $Id: TestRenderKit.java,v 1.21 2006/01/13 22:16:55 rogerk Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.faces.render.Renderer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Writer;
+import java.io.StringWriter;
 
 import org.apache.cactus.WebRequest;
 
@@ -55,7 +55,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.20 2005/10/19 19:51:36 edburns Exp $
+ * @version $Id: TestRenderKit.java,v 1.21 2006/01/13 22:16:55 rogerk Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {
@@ -208,40 +208,9 @@ public class TestRenderKit extends ServletFacesTestCase {
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
-	Writer wrappedWriter = new Writer() {
-                public void close() throws IOException {
-                }
-
-
-                public void flush() throws IOException {
-                }
-
-
-                public void write(char cbuf) throws IOException {
-                }
-
-
-                public void write(char[] cbuf, int off,
-                                  int len) throws IOException {
-                }
-
-
-                public void write(int c) throws IOException {
-                }
-
-
-                public void write(String str) throws IOException {
-                }
-
-
-                public void write(String str, int off,
-                                  int len) throws IOException {
-                }
-            };
-
 	// use an invalid encoding
         try {
-            renderKit.createResponseWriter(wrappedWriter, null, "foo");
+            renderKit.createResponseWriter(new StringWriter(), null, "foo");
 
             fail("IllegalArgumentException Should Have Been Thrown!");
 
@@ -252,18 +221,18 @@ public class TestRenderKit extends ServletFacesTestCase {
 
 	// see that the proper content type is picked up based on the
 	// contentTypeList param
-	writer = renderKit.createResponseWriter(wrappedWriter, 
+	writer = renderKit.createResponseWriter(new StringWriter(), 
 						"application/xhtml+xml,text/html", 
 						"ISO-8859-1");
 	assertEquals(writer.getContentType(), "application/xhtml+xml");
-	writer = renderKit.createResponseWriter(wrappedWriter, 
+	writer = renderKit.createResponseWriter(new StringWriter(), 
 						"text/html,application/xhtml+xml",
 						"ISO-8859-1");
 	assertEquals(writer.getContentType(), "text/html");
 
 	// see that IAE is thrown if the content type isn't known
 	try {
-	    writer = renderKit.createResponseWriter(wrappedWriter, 
+	    writer = renderKit.createResponseWriter(new StringWriter(), 
 						    "application/pdf",
 						    "ISO-8859-1");
 	    
@@ -279,38 +248,85 @@ public class TestRenderKit extends ServletFacesTestCase {
     }
 
     public void testCreateResponseWriterAllMedia() throws Exception {
-System.out.println("ACCEPT:"+getFacesContext().getExternalContext().getRequestHeaderMap().get("Accept"));
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
                                                             RenderKitFactory.HTML_BASIC_RENDER_KIT);
-        Writer wrappedWriter = new Writer() {
-                public void close() throws IOException {
-                }
-                public void flush() throws IOException {
-                }
-                public void write(char cbuf) throws IOException {
-                }
-                public void write(char[] cbuf, int off,
-                                  int len) throws IOException {
-                }
-                public void write(int c) throws IOException {
-                }
-                public void write(String str) throws IOException {
-                }
-                public void write(String str, int off,
-                                  int len) throws IOException {
-                }
-            };
-
         ResponseWriter writer = null;
-                                                                                                                          
+
         // see that the proper content type is picked up based on the
         // accept header  
-            writer = renderKit.createResponseWriter(wrappedWriter, null, "ISO-8859-1");
-            assertEquals(writer.getContentType(), "text/html");
-
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "text/html");
     }
 
+    public void beginCreateResponseWriter1(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/html; q=0.2, application/xhtml+xml; q=0.8, application/xml; q=0.5, */*");
+    }
+
+    public void testCreateResponseWriter1() throws Exception {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+
+        // see that the proper content type is picked up based on the
+        // accept header  
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "application/xhtml+xml");
+    }
+
+    public void beginCreateResponseWriter2(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/html; q=0.2, application/xhtml+xml; q=0.8, application/xml; q=0.9, */*");
+    }
+
+    public void testCreateResponseWriter2() throws Exception {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+                                                                                                                   
+        // see that the proper content type is picked up based on the
+        // accept header
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "application/xhtml+xml");
+    }
+
+    public void beginCreateResponseWriter3(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "text/html, application/xhtml+xml; q=0.8, application/xml; q=0.9, */*");
+    }
+                                                                                                                   
+    public void testCreateResponseWriter3() throws Exception {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+                                                                                                                   
+        // see that the proper content type is picked up based on the
+        // accept header
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "text/html");
+    }
+
+    public void beginCreateResponseWriter4(WebRequest theRequest) {
+        theRequest.addHeader("Accept", "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, */*");
+        theRequest.addHeader("Accept", "text/html; level=1");
+    }
+                                                                                                                           
+    public void testCreateResponseWriter4() throws Exception {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+            FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        RenderKit renderKit = renderKitFactory.getRenderKit(getFacesContext(),
+                                                            RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        ResponseWriter writer = null;
+                                                                                                                           
+        // see that the proper content type is picked up based on the
+        // accept header
+        writer = renderKit.createResponseWriter(new StringWriter(), null, "ISO-8859-1");
+        assertEquals(writer.getContentType(), "text/html");
+    }
 
 } // end of class TestRenderKit

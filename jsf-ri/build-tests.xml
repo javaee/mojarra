@@ -310,6 +310,8 @@
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
                 <test todir="${impl.test.results.dir}"
+                      name="com.sun.faces.renderkit.TestContentTypes"/>
+                <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.TestRenderKit"/>
                 <test todir="${impl.test.results.dir}"
                       name="com.sun.faces.renderkit.TestRenderKitFactory"/>
