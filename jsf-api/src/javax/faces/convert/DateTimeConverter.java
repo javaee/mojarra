@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.16 2003/10/20 03:03:59 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.17 2003/10/22 18:40:13 rlubke Exp $
  */
 
 /*
@@ -205,7 +205,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the <code>TimeZone</code> used to interpret a time value.
-     * If not explicitly set, the default time zone of the server is 
+     * If not explicitly set, the default time zone of <code>GMT</code> 
      * returned.</p>
      */
     public TimeZone getTimeZone() {
