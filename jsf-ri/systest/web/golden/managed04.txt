@@ -9,8 +9,12 @@
   <body>
     <h1>Verify property ordering</h1>
 
-<form id="j_id_id15" name="j_id_id15" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=739E6A866D7DBF73CB26F66256C73ED7" enctype="application/x-www-form-urlencoded">
- one two three fourfivesixseveneight<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id12:_id13" /><input type="hidden" name="j_id_id15" value="j_id_id15" /></form>
+
+<form id="j_id_id15" name="j_id_id15" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=b76d0071bbe2d0ec398b04d50039" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id_id15" value="j_id_id15" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id85:j_id86" />
+ one two three fourfivesixseveneight
+</form>
 
     <hr>
   </body>

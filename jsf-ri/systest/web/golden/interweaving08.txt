@@ -6,7 +6,10 @@
 
     <html>
         <body>
-            <form id="form" name="form" method="post" action="/jsf-systest/faces/interweaving08.jsp;jsessionid=1d1ece01226445a33baa0da4d0ff3" enctype="application/x-www-form-urlencoded">
+            
+<form id="form" name="form" method="post" action="/jsf-systest/faces/interweaving08.jsp;jsessionid=b6a55da92c55d06c043b90f68e43" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form" value="form" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id21:j_id22" />
 <table>
 <tbody>
 <tr>
@@ -17,7 +20,8 @@
 </tr>
 </tbody>
 </table>
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id37:j_id38" /><input type="hidden" name="form" value="form" /></form>
+
+</form>
         </body>
     </html>
 

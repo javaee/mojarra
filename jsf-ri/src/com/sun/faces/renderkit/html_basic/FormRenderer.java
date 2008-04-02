@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.98 2006/07/25 21:06:05 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.99 2006/08/02 00:21:52 rlubke Exp $
  */
 
 /*
@@ -140,6 +140,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         String clientId = component.getClientId(context);
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
+        writer.write('\n');
         writer.startElement("form", component);
         writer.writeAttribute("id", clientId, "clientId");
         writer.writeAttribute("name", clientId, "name");
@@ -156,8 +157,23 @@ public class FormRenderer extends HtmlBasicRenderer {
                     "acceptcharset");
         }               
         
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);        
         writer.writeText("\n", component, null);
+        
+        // this hidden field will be checked in the decode method to
+        // determine if this form has been submitted.         
+        writer.startElement("input", component);
+        writer.writeAttribute("type", "hidden", "type");
+        writer.writeAttribute("name", clientId,
+                              "clientId");
+        writer.writeAttribute("value", clientId, "value");
+        writer.endElement("input");        
+        writer.write('\n');
+        
+        // FIX 382
+        // Write out the state marker *before* rendering any children
+        context.getApplication().getViewHandler().writeState(context);
+        writer.write('\n');
                  
     }
 
@@ -196,25 +212,13 @@ public class FormRenderer extends HtmlBasicRenderer {
                           "rendered attribute is set to false ");
             }
             return;
-        }
-
-        context.getApplication().getViewHandler().writeState(context);
+        }        
 
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);        
-
-        // this hidden field will be checked in the decode method to
-        // determine if this form has been submitted. 
-        String clientId = component.getClientId(context);
-        writer.startElement("input", component);
-        writer.writeAttribute("type", "hidden", "type");
-        writer.writeAttribute("name", clientId,
-                              "clientId");
-        writer.writeAttribute("value", clientId, "value");
-        writer.endElement("input");        
-        
-        writer.endElement("form");               
+        assert (writer != null);     
+        writer.writeText("\n", component, null);
+        writer.endElement("form");        
                
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "End encoding component " + component.getId());

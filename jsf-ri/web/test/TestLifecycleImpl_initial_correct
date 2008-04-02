@@ -10,9 +10,13 @@
     <body bgcolor="white">
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
-    <form id="helloForm" name="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=0EA6D577F3E6F6F3433BC214E7C8B6FC" enctype="application/x-www-form-urlencoded">
+    
+<form id="helloForm" name="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=baec757140d9c6026c208ec78da0" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="helloForm" value="helloForm" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" />
 <input id="helloForm:userNo" type="text" name="helloForm:userNo" value="NUMBER" />
   	 <BR>
 
-	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="helloForm" value="helloForm" /></form>
+	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" />
+</form>
 </HTML>  

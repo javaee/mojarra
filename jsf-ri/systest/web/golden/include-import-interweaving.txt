@@ -9,7 +9,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         
     
     <body bgcolor="white">
-    <form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp;jsessionid=66219cd139bf8d7efd3ea0adce62d" enctype="application/x-www-form-urlencoded">
+    
+<form id="form" name="form" method="post" action="/jsf-systest/faces/include-import-interweaving.jsp;jsessionid=bc2576d426f8000866901808a81f" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="form" value="form" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id41:j_id42" />
 
     
         <p>Outer Template Text followed by 
@@ -168,6 +171,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 </table>
 	 
 
-    <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id17:_id18" /><input type="hidden" name="form" value="form" /></form>
+    
+</form>
     </body>
 </html>  

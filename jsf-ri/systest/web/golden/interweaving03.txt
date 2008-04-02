@@ -7,7 +7,10 @@
 
 
 
-<form id="j_id_id10" name="j_id_id10" method="post" action="/jsf-systest/faces/interweaving03.jsp;jsessionid=D623839373C2B21D75B00AA4D67477BA" enctype="application/x-www-form-urlencoded">
+
+<form id="j_id_id10" name="j_id_id10" method="post" action="/jsf-systest/faces/interweaving03.jsp;jsessionid=b685a9f1d31c72652f9b7619cbcf" enctype="application/x-www-form-urlencoded">
+<input type="hidden" name="j_id_id10" value="j_id_id10" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id11:j_id12" />
 <table>
 <tbody>
 <tr>
@@ -25,4 +28,5 @@
 </tr>
 </tbody>
 </table>
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id5:_id6" /><input type="hidden" name="j_id_id10" value="j_id_id10" /></form>
+
+</form>
