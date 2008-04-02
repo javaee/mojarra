@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.3 2005/05/05 20:51:13 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.4 2005/05/12 22:10:55 jayashri Exp $
  */
 
 /*
@@ -553,6 +553,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 		}
                 parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
                                                     CURRENT_VIEW_ROOT);
+                created = true;
             }
             else if (hasBinding()) {
 		try {
