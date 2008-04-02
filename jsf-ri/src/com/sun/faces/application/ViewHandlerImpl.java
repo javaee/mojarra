@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.64 2006/01/23 21:01:43 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.65 2006/02/10 22:29:01 rlubke Exp $ 
  */ 
 
 
@@ -66,7 +66,7 @@ import com.sun.faces.util.MessageUtils;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.64 2006/01/23 21:01:43 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.65 2006/02/10 22:29:01 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -374,12 +374,24 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
-        String requestURI = viewToExecute.getViewId();
-    if (logger.isLoggable(Level.FINE)) {
+        String mapping = getFacesMapping(context);
+        String requestURI = 
+              updateRequestURI(viewToExecute.getViewId(), mapping);
+        
+        if (mapping.equals(requestURI)) {
+            // The request was to the FacesServlet only - no path info
+            // on some containers this causes a recursion in the 
+            // RequestDispatcher and the request appears to hang.
+            // If this is detected, return status 404
+            HttpServletResponse response = (HttpServletResponse) 
+                  context.getExternalContext().getResponse();
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        if (logger.isLoggable(Level.FINE)) {
             logger.fine("About to execute view " + requestURI);
         }
-
-        String mapping = getFacesMapping(context);
+        
         String newViewId = requestURI;
         // If we have a valid mapping (meaning we were invoked via the
         // FacesServlet) and we're extension mapped, do the replacement.
@@ -746,6 +758,39 @@ public class ViewHandlerImpl extends ViewHandler {
         } else {
            // Servlet invoked using extension mapping
             return servletPath.substring(servletPath.lastIndexOf('.'));
+        }
+    }
+
+    /**
+     * <p>if the specified mapping is a prefix mapping, and the provided 
+     * request URI (usually the value from <code>ExternalContext.getRequestServletPath()</code>)
+     * starts with <code>mapping + '/'</code>, prune the mapping from the
+     * URI and return it, otherwise, return the original URI. 
+     * @param uri the servlet request path
+     * @param mapping the FacesServlet mapping used for this request
+     * @return the URI without additional FacesServlet mappings
+     * @since 1.2
+     */
+    private String updateRequestURI(String uri, String mapping) {
+        
+        if (!isPrefixMapped(mapping)) {
+            return uri;
+        } else {
+            int length = mapping.length() + 1;
+            StringBuilder builder = new StringBuilder(length);
+            builder.append(mapping).append('/');
+            String mappingMod = builder.toString();
+            boolean logged = false;
+            while (uri.startsWith(mappingMod)) {
+                if (!logged && logger.isLoggable(Level.WARNING)) {
+                    logged = true;
+                    logger.log(Level.WARNING,
+                               "jsf.viewhandler.requestpath.recursion",
+                               new Object[] {uri, mapping});
+                }
+                uri = uri.substring(length - 1);
+            }
+            return uri;
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.60 2006/02/09 20:18:38 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.61 2006/02/10 22:29:02 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -273,6 +273,10 @@ public class ConfigureListener implements ServletRequestListener,
     private PropertyResolver legacyPRChainHead = null;
     private ArrayList<ELResolver> elResolversFromFacesConfig = null;
     
+    // flag to disable web.xml scanning completely - to be used
+    // by subclasses of ConfigureListener.
+    private boolean shouldScanWebXml = true;
+    
     // ------------------------------------------ ServletContextListener Methods
 
     /**
@@ -365,7 +369,8 @@ public class ConfigureListener implements ServletRequestListener,
             // Check to see if the FacesServlet is present in the
             // web.xml.   If it is, perform faces configuration as normal,
             // otherwise, simply return.
-            if (!isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {
+            if (shouldScanWebXml && 
+                !isFeatureEnabled(context, FORCE_LOAD_CONFIG)) {                
                 WebXmlProcessor processor = new WebXmlProcessor(context);
                 if (!processor.isFacesServletPresent()) {
                     if (LOGGER.isLoggable(Level.FINE)) {
@@ -691,6 +696,11 @@ public class ConfigureListener implements ServletRequestListener,
         return afactory.getApplication();
 
     }
+    
+    
+    protected void scanWebXml(boolean shouldScan) {
+        this.shouldScanWebXml = shouldScan;
+    }
 
 
     /**
@@ -811,7 +821,9 @@ public class ConfigureListener implements ServletRequestListener,
                 prevInChain = instance;
             }
             legacyPRChainHead = (PropertyResolver) instance; 
-            associate.setLegacyPRChainHead(legacyPRChainHead); 
+            if (associate != null) {
+                associate.setLegacyPRChainHead(legacyPRChainHead);
+            }
         }
         
         // process custom el-resolver elements if any
@@ -864,7 +876,9 @@ public class ConfigureListener implements ServletRequestListener,
                 prevInChain = instance;
             }
             legacyVRChainHead = (VariableResolver) instance; 
-            associate.setLegacyVRChainHead(legacyVRChainHead); 
+            if (associate != null) {
+                associate.setLegacyVRChainHead(legacyVRChainHead);
+            }
         }
 
         values = config.getViewHandlers();
@@ -1741,15 +1755,19 @@ public class ConfigureListener implements ServletRequestListener,
             // register an empty resolver for now. It will be populated after the 
             // first request is serviced.
             CompositeELResolver compositeELResolverForJsp = 
-                new FacesCompositeELResolver();    
-            appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
+                new FacesCompositeELResolver();   
+            if (appAssociate != null) {
+                appAssociate.setFacesELResolverForJsp(compositeELResolverForJsp);
+            }
                     
             // get JspApplicationContext.
             JspApplicationContext jspAppContext = JspFactory.getDefaultFactory()
                     .getJspApplicationContext(context);
     
             // cache the ExpressionFactory instance in ApplicationAssociate
-            appAssociate.setExpressionFactory(jspAppContext.getExpressionFactory());
+            if (appAssociate != null) {
+                appAssociate.setExpressionFactory(jspAppContext.getExpressionFactory());
+            }
     
             // register compositeELResolver with JSP
             try {
