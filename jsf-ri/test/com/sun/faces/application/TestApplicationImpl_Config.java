@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.24 2003/10/30 16:14:35 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.25 2003/10/31 22:30:15 eburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.24 2003/10/30 16:14:35 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.25 2003/10/31 22:30:15 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -218,7 +218,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "SelectManyMenu",
 	    "SelectOneListbox",
 	    "SelectOneMenu",
-	    "SelectOneRadioButtonList",
+	    "SelectOneRadio",
 	    "SelectItem",
 	    "SelectItems",
 	    "SelectMany",

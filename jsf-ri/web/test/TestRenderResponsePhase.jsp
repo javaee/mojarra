@@ -3,27 +3,6 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%@ page import="com.sun.faces.CustomerBean" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %>
-
-<%
-
-  // Construct a preconfigured customer list in session scope
-  List list = (List)
-    pageContext.getAttribute("ListBean", PageContext.SESSION_SCOPE);
-  if (list == null) {
-    list = new ArrayList();
-    list.add(new CustomerBean("123456", "Alpha Beta Company", "ABC", 1234.56));
-    list.add(new CustomerBean("445566", "General Services, Ltd.", "GS", 33.33));
-    list.add(new CustomerBean("654321", "Summa Cum Laude, Inc.", "SCL", 76543.21));
-    list.add(new CustomerBean("333333", "Yabba Dabba Doo", "YDD",  333.33));
-    pageContext.setAttribute("ListBean", list,
-                             PageContext.SESSION_SCOPE);
-  }
-
-%>
-
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
 

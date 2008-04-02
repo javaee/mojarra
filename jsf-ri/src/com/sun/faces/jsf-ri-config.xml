@@ -258,8 +258,8 @@
   </component>
 
   <component>
-    <component-type>SelectOneRadioButtonList</component-type>
-    <component-class>javax.faces.component.html.HtmlSelectOneRadioButtonList</component-class>
+    <component-type>SelectOneRadio</component-type>
+    <component-class>javax.faces.component.html.HtmlSelectOneRadio</component-class>
   </component>
 
   <component>
@@ -958,7 +958,7 @@
     </renderer>
 
     <renderer>
-      <renderer-type>RadioButtonList</renderer-type>
+      <renderer-type>Radio</renderer-type>
       <renderer-class>com.sun.faces.renderkit.html_basic.RadioRenderer</renderer-class>
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
            attrs there, as appropriate.  -->
