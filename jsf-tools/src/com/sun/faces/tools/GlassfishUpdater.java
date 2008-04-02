@@ -29,11 +29,13 @@
 
 package com.sun.faces.tools;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
@@ -80,9 +82,30 @@ public class GlassfishUpdater {
             printUsage();
             return;
         }
-        stripJsfFromJavaEEJar(libDir);
-        unpackJsfJarsToLib(libDir);
         
+        if (licenseAccepted()) {
+            System.out.println("Updating glassfish at\n" + gfInstallDir.toString());
+            System.out.println("with new JSF jars.");
+            stripJsfFromJavaEEJar(libDir);
+            unpackJsfJarsToLib(libDir);
+        }
+        
+    }
+    
+    public static boolean licenseAccepted() throws IOException {
+        boolean result = false;
+        InputStream is = Thread.currentThread().getContextClassLoader().
+                getResourceAsStream("CDDLv1.0.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String line = null;
+        while (null != (line = br.readLine())) {
+            System.out.println(line);
+        }
+        System.out.print("Do you accept the above license terms? (type yes or no):");
+        br = new BufferedReader(new InputStreamReader(System.in));
+        line = br.readLine();
+        result = (null != line) && line.equals("yes");
+        return result;
     }
     
     public static void printUsage() {
