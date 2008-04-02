@@ -32,7 +32,7 @@
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
@@ -172,7 +172,7 @@
     <tag-class>com.sun.faces.taglib.html_basic.Command_ButtonTag</tag-class>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
@@ -324,7 +324,7 @@
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
@@ -380,7 +380,7 @@
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
@@ -548,7 +548,7 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -715,7 +715,7 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -837,7 +837,7 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -968,7 +968,7 @@
     <body-content>JSP</body-content>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -1109,7 +1109,7 @@
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
@@ -1265,7 +1265,7 @@
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
@@ -1306,7 +1306,7 @@
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
@@ -1418,7 +1418,7 @@
       <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
@@ -1465,7 +1465,7 @@
       <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -1628,7 +1628,7 @@
       <attribute>
         <name>id</name>
         <!-- Replaces HTML 4.0 name attribute -->
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
@@ -1796,7 +1796,7 @@
       <attribute>
         <name>id</name>
         <!-- Replaces HTML 4.0 name attribute -->
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
     <attribute>
@@ -1955,7 +1955,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2125,7 +2125,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2305,7 +2305,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2476,7 +2476,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2519,7 +2519,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2572,7 +2572,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2613,7 +2613,7 @@
    <body-content>JSP</body-content>
    <attribute>
      <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
    </attribute>
    <attribute>
@@ -2636,7 +2636,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2806,7 +2806,7 @@
     <attribute>
       <name>id</name>
       <!-- Replaces HTML 4.0 name attribute -->
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -2849,7 +2849,7 @@
 
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
   </tag>
@@ -2861,7 +2861,7 @@
 
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
 
@@ -2927,7 +2927,7 @@
     
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
 
@@ -3069,7 +3069,7 @@
     </attribute>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -3200,7 +3200,7 @@
     </attribute>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -3326,7 +3326,7 @@
     </attribute>
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
@@ -3473,7 +3473,7 @@
     
     <attribute>
       <name>id</name>
-      <required>true</required>
+      <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
 
@@ -3601,7 +3601,7 @@
     <body-content>JSP</body-content>
       <attribute>
         <name>id</name>
-        <required>true</required>
+        <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>

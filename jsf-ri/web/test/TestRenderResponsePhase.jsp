@@ -153,7 +153,7 @@
 
 	<TD>
 
-	      <h:output_text id="userLabel" value="Output Text" />
+	      <h:output_text value="Output Text" />
               <h:output_text id="testvisible1" value="This should not be visible"
                                rendered="false" />
               <h:graphic_image id="testvisible2" url="/duke.gif" rendered="false"  />
@@ -166,7 +166,7 @@
 
 	<TD>
 
-            <h:selectboolean_checkbox id="validUser" rendered="true"
+            <h:selectboolean_checkbox  rendered="true"
                    selectbooleanClass="selectbooleanClass"/>
 	</TD>
 
@@ -176,7 +176,7 @@
 
 	<TD>
 
-	     <h:selectone_listbox id="appleQuantity" selectoneClass="selectoneClass"
+	     <h:selectone_listbox selectoneClass="selectoneClass"
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -238,7 +238,7 @@
         <TD>Date: 
         </TD>
 
-	<TD><h:input_date id="date1" value="Wed, Jul 10, 1996"
+	<TD><h:input_date value="Wed, Jul 10, 1996"
                               inputClass="inputClass"
                               dateStyle="long" />
 	</TD>
@@ -415,7 +415,7 @@
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><h:selectmany_listbox id="ManyApples2">
+					<TD><h:selectmany_listbox >
 						<h:selectitem itemValue="0" itemLabel="zero" />
 						<h:selectitem itemValue="1" itemLabel="one" />
 						<h:selectitem itemValue="2" itemLabel="two" />
@@ -445,7 +445,7 @@
 					</h:selectmany_checkboxlist></TD>
 </tr>
 
-<h:input_hidden id = "basicHidden" converter="number"
+<h:input_hidden converter="number"
                   value="48%" >
                      <f:attribute name="numberStyle" value="percent" />
               </h:input_hidden>

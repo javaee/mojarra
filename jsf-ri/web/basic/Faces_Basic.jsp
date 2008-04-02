@@ -22,7 +22,7 @@
 
 
        <f:use_faces>  
-        <h:form id="basicForm" formName="basicForm" >
+        <h:form formName="basicForm" >
 
             <table> 
 
@@ -72,7 +72,7 @@
                                       bundle="basicBundle" /> </td>
 
                <td> 
-                    <h:input_secret id="password"> 
+                    <h:input_secret id="password" > 
 		     <f:validate_length maximum="10" minimum="6"/>
 		     <f:validate_required/>
                     </h:input_secret>
@@ -126,7 +126,7 @@
 
                <td> 
 
-                    <h:input_text id="string" size="1"
+                    <h:input_text size="1" id="string" 
                                   modelReference="LoginBean.string"> 
 
 		     <f:validate_stringrange maximum="f" minimum="a"/>
@@ -148,7 +148,7 @@
              </tr>
 
               <tr>
-             <td> <h:selectboolean_checkbox id="validUser" rendered="true"
+             <td> <h:selectboolean_checkbox rendered="true"
                        modelReference="LoginBean.validUser"/> 
                   <h:output_text id="checkLabel" 
                                      key="validUserLabel"
@@ -298,7 +298,7 @@
       </TR>
       <TR>
         <TD><h:output_text id="graphicLabel1" value="Graphic Image (url From Resource Bundle): " /></TD>
-        <TD><h:graphic_image id="graphicImage1" key="imageurl"
+        <TD><h:graphic_image key="imageurl"
                 bundle="basicBundle" /></TD>
       </TR>
 
@@ -321,7 +321,7 @@
         </TD>
       </TR>
       <TR>
-        <TD><h:output_text id="buttonlabel3" value="Reset Button rendered with label from resource:" /> 
+        <TD><h:output_text  value="Reset Button rendered with label from resource:" /> 
             <h:command_button id="resetButton"  title="Click to reset form"
                 commandName="reset" type="reset" 
                 key="resetButton" bundle="basicBundle">
@@ -330,7 +330,7 @@
       </TR>
       <TR>
         <TD><h:output_text id="buttonlabel4" value="Submit Button rendered with label from resource:" /> 
-            <h:command_button id="login" type="submit" 
+            <h:command_button type="submit" 
                 commandName="login" key="loginButton"  bundle="basicBundle">
             </h:command_button>
         </TD>
@@ -386,7 +386,7 @@
       </TR>
       <TR>
         <TD>Multi-select checkbox:</TD>
-        <TD><h:selectmany_checkboxlist id="ManyApples3">
+        <TD><h:selectmany_checkboxlist >
                 <h:selectitem itemValue="0" itemLabel="zero" />
                 <h:selectitem itemValue="1" itemLabel="one" />
                 <h:selectitem itemValue="2" itemLabel="two" />
@@ -409,7 +409,7 @@
       </TR>
       <TR>
         <TD>Single-select menu: </TD>
-        <TD><h:selectone_menu id="players" size="3">
+        <TD><h:selectone_menu size="3">
                 <h:selectitem itemValue="99" itemLabel="Wayne Gretzky" /> 
                 <h:selectitem itemValue="4" itemLabel="Bobby Orr" /> 
                 <h:selectitem itemValue="9" itemLabel="Gordie Howe" /> 

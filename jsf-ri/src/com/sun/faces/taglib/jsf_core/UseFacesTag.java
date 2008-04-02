@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.2 2002/11/25 19:56:40 jvisvanathan Exp $
+ * $Id: UseFacesTag.java,v 1.3 2002/12/23 23:01:43 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  * does not have any renderers or attributes. It exists mainly to
  * save the state of the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.2 2002/11/25 19:56:40 jvisvanathan Exp $
+ * @version $Id: UseFacesTag.java,v 1.3 2002/12/23 23:01:43 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -192,6 +192,8 @@ public class UseFacesTag extends FacesBodyTag
     }
     
     public int doEndTag() throws JspException {
+        this.numChildren = 0;
+        this.childIndex = 0;
         return (EVAL_PAGE);
     }
     
