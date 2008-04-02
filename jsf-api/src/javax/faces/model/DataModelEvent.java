@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelEvent.java,v 1.8 2004/02/26 20:31:07 eburns Exp $
+ * $Id: DataModelEvent.java,v 1.9 2004/05/04 20:38:09 eburns Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ public class DataModelEvent extends EventObject {
 
 
     /**
-     * <p>Return the row index for this event, or zero for no specific row.</p>
+     * <p>Return the row index for this event, or -1 for no specific row.</p>
      */
     public int getRowIndex() {
 
