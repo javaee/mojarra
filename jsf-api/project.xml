@@ -24,7 +24,7 @@
 
 -->
 
-<project>
+<project xmlns="http://maven.apache.org/POM/3.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
     <extend>../common/mvn/project.xml</extend>
     <!-- a unique name for this project -->
     <artifactId>jsf-api</artifactId>

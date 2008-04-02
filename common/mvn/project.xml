@@ -24,41 +24,112 @@
 
 -->
 
-<project>
+<project xmlns="http://maven.apache.org/POM/3.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    xsi:schemaLocation="http://maven.apache.org/POM/3.0.0 http://maven.apache.org/maven-v3_0_0.xsd">
     <!-- the version of maven's project object model -->
     <pomVersion>3</pomVersion>
+    <id>jsf-api</id>
     <!-- a unique name for this project -->
     <groupId>javax.faces</groupId>
+    <artifactId />
     <!-- a short but descriptive name for the project -->
     <name>Sun's JSF Implementation</name>
     <!-- PENDING(edburns): figure out how to pull this from common.xml
          ${impl.version} -->
     <currentVersion>1.2-b19</currentVersion>
+    <shortDescription>
+      Sun's Product Quality JSF Implementation
+    </shortDescription>
+    <description>
+      This is Sun Microsystems's JSF implementation.  It is product quality.
+    </description>
+    <url>https://javaserverfaces.dev.java.net/</url>
+    <logo>http://www.sun.com/im/a.gif</logo>
+    <issueTrackingUrl>https://javaserverfaces.dev.java.net/servlets/ProjectIssues</issueTrackingUrl>
+    <inceptionYear>2005</inceptionYear>
+    <siteAddress>javaserverfaces.dev.java.net</siteAddress>
+    <siteDirectory>/</siteDirectory>
+    <distributionDirectory>/servlets/ProjectDocumentList</distributionDirectory>
+    <mailingLists>
+      <mailingList>
+        <name>Developer Mailing List</name>
+        <subscribe>dev@javaserverfaces.dev.java.net</subscribe>
+        <unsubscribe>dev@javaserverfaces.dev.java.net</unsubscribe>
+        <post>dev@javaserverfaces.dev.java.net</post>
+        <archive/>
+        <otherArchives/>
+      </mailingList>
+    </mailingLists>
+    <developers>
+      <developer>
+        <id>edburns</id>
+        <name>Edward Burns</name>
+        <email>ed.burns@sun.com</email>
+        <organization>Sun Microsystems Inc.</organization>
+        <organizationUrl>http://www.sun.com/</organizationUrl>
+        <roles><role>Specification Lead</role></roles>
+        <timezone>-5</timezone>
+        <properties />
+      </developer>
+      <developer>
+        <id>rlubke</id>
+        <name>Ryan Lubke</name>
+        <email>Ryan.Lubke@sun.com</email>
+        <organization>Sun Microsystems Inc.</organization>
+        <organizationUrl>http://www.sun.com/</organizationUrl>
+        <roles><role>Implementation Lead</role></roles>
+        <timezone>-8</timezone>
+        <properties />
+      </developer>
+      <developer>
+        <id>rkitain</id>
+        <name>Roger Kitain</name>
+        <email>Roger.Kitain@sun.com</email>
+        <organization>Sun Microsystems Inc.</organization>
+        <organizationUrl>http://www.sun.com/</organizationUrl>
+        <roles><role>Implementation Lead</role></roles>
+        <timezone>-5</timezone>
+        <properties />
+      </developer>
+    </developers>
+    <contributors />
+    <licenses>
+      <license>
+        <name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
+        <url>http://www.opensource.org/licenses/cddl1.php</url>
+        <distribution>manual</distribution>
+        <comments />
+      </license>
+    </licenses>
+    <versions>
+      <version>
+        <name>1.2-b19</name>
+        <tag>HEAD</tag>
+        <id>1.2-b19</id>
+      </version>
+    </versions>
+    <branches>
+      <branch><tag>HEAD</tag></branch>
+    </branches>
+    <packageGroups>
+      <packageGroup>
+        <title>JavaServer Faces</title>
+        <packages>javax.faces</packages>
+      </packageGroup>
+    </packageGroups>
+    <reports />
+    <repository>
+        <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:javaserverfaces-sources</connection>
+        <developerConnection />
+        <url>http://cvs.apache.org/viewcvs/maven-plugins/examples/</url>
+    </repository>
     <!-- details about the organization that 'owns' the project -->
     <organization>
         <name>Sun Microsystems Inc</name>
         <url>https://javaserverfaces.dev.java.net/</url>
         <logo>http://www.sun.com/im/a.gif</logo>
     </organization>
-    <!-- the year the project started -->
-    <inceptionYear>2005</inceptionYear>
+    <properties />
     <package>com.sun.faces</package>
-    <logo>http://www.sun.com/im/a.gif</logo>
-    <description>Sun's implementation of JavaServer(tm) Faces Technology</description>
-    <!-- a short description of what the project does -->
-    <!-- the project home page -->
-    <url>https://javaserverfaces.dev.java.net/</url>
-    <issueTrackingUrl>https://javaserverfaces.dev.java.net/servlets/ProjectIssues</issueTrackingUrl>
-    <siteAddress>javaserverfaces.dev.java.net</siteAddress>
-    <siteDirectory>/</siteDirectory>
-    <distributionDirectory>/servlets/ProjectDocumentList</distributionDirectory>
-    <!-- the version control repository and http url for online access
-       the connection element has the form:
-       scm:<system>:<system specific connection string> -->
-    <repository>
-        <connection>scm:cvs:pserver:guest@cvs.dev.java.net:/cvs:javaserverfaces-sources</connection>
-        <url>http://cvs.apache.org/viewcvs/maven-plugins/examples/</url>
-    </repository>
     <!-- any mailing lists for the project -->
     <!-- who the developers are for the project -->
     <!-- jar files the project is dependent on -->
@@ -66,5 +137,6 @@
     <build>
         <nagEmailAddress>javaserverfowner@javaserverfaces.dev.java.net</nagEmailAddress>
     </build>
+    <dependencies />
 </project>
 
