@@ -1,5 +1,5 @@
 /*
- * $Id: PaneSelectedEvent.java,v 1.3 2003/08/25 21:39:32 craigmcc Exp $
+ * $Id: PaneSelectedEvent.java,v 1.4 2003/08/28 20:11:04 eburns Exp $
  */
 
 /*
@@ -76,9 +76,11 @@ public class PaneSelectedEvent extends FacesEvent {
     }
 
 
-    // PENDING(craigmcc)
-    public boolean isAppropriateListener(FacesListener listener) { return (false); }
-    public void processListener(FacesListener listener) { }
-
+    public boolean isAppropriateListener(FacesListener listener) { 
+	return (listener instanceof PaneComponent.PaneSelectedListener);
+    }
+    public void processListener(FacesListener listener) { 
+	((PaneComponent.PaneSelectedListener)listener).processPaneSelectedEvent(this);
+    }
 
 }

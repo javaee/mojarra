@@ -1,5 +1,5 @@
 /*
- * $Id: GraphEvent.java,v 1.3 2003/08/27 23:38:12 eburns Exp $
+ * $Id: GraphEvent.java,v 1.4 2003/08/28 20:11:04 eburns Exp $
  */
 
 /*
@@ -54,7 +54,6 @@ public class GraphEvent extends FacesEvent {
     }
 
 
-    // PENDING(craigmcc)
     public boolean isAppropriateListener(FacesListener listener) { 
 	return (listener instanceof GraphComponent.GraphListener);
     }

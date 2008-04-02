@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.5 2003/08/27 21:56:03 rlubke Exp $
+ * $Id: PaneComponent.java,v 1.6 2003/08/28 20:11:04 eburns Exp $
  */
 
 /*
@@ -69,13 +69,12 @@ public class PaneComponent extends UIComponentBase {
     private static Log log = LogFactory.getLog(PaneComponent.class);
     
     private boolean selected = false;
-    protected List listeners[] = null;
 
 
     // creates and adds a listener;
     public PaneComponent() {
         PaneSelectedListener listener = new PaneSelectedListener();
-        addPaneSelectedListener(listener);    
+        addFacesListener(listener);    
     }
 
 
@@ -97,69 +96,6 @@ public class PaneComponent extends UIComponentBase {
     // Ignore update model requests
     public void updateModel(FacesContext context) {
     }
-
-
-    // adds a listener
-    public void addPaneSelectedListener(PaneSelectedListener listener) {
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            listeners = new List[PhaseId.VALUES.size()];
-        }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            listeners[ordinal] = new ArrayList();
-        }
-        listeners[ordinal].add(listener);
-    }
-
-
-    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
-    // invokes listener method passing event as argument 
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
-        throws AbortProcessingException {
-
-        if ((event == null) || (phaseId == null)) {
-            throw new NullPointerException();
-        }
-        if (phaseId.equals(PhaseId.ANY_PHASE)) {
-            throw new IllegalStateException();
-        }
-        if (event instanceof PaneSelectedEvent) {
-            if (listeners == null) {
-                return (false);
-            }
-            PaneSelectedEvent aevent = (PaneSelectedEvent) event;
-            int ordinal = phaseId.getOrdinal();
-            broadcast(aevent, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
-            broadcast(aevent, listeners[ordinal]);
-            for (int i = ordinal + 1; i < listeners.length; i++) {
-                if ((listeners[i] != null) && (listeners[i].size() > 0)) {
-                    return (true);
-                }
-            }
-            return (false);
-        } else {
-            throw new IllegalArgumentException();
-        }
-    }
-
-
-    // PENDING(craigmcc) - reflect the "untangling broadcast" changes
-    protected void broadcast(PaneSelectedEvent event, List list) {
-
-        if (list == null) {
-            return;
-        }
-        Iterator listeners = list.iterator();
-        while (listeners.hasNext()) {
-            PaneSelectedListener listener = 
-                (PaneSelectedListener) listeners.next();
-            listener.processPaneSelectedEvent(event);
-        }
-    }
-
 
     /**
      * <p>Faces Listener implementation which sets the selected tab
