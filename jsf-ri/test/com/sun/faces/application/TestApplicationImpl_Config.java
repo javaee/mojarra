@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.6 2003/05/02 03:11:33 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.7 2003/05/20 20:57:13 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.6 2003/05/02 03:11:33 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.7 2003/05/20 20:57:13 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -433,6 +433,34 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	};
 	
 	assertTrue(isSubset(standardValidatorIds, iter));
+    }
+
+    public void testUpdateRuntimeComponents() {
+	loadFromInitParam("runtime-components.xml");
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (ApplicationImpl) aFactory.getApplication();
+
+	ActionListener actionListener = null;
+	NavigationHandler navHandler = null;
+	PropertyResolver propResolver = null;
+	VariableResolver varResolver = null;
+	
+	assertTrue(null != (actionListener = 
+			    application.getActionListener()));
+	assertTrue(actionListener instanceof ActionListenerTestImpl);
+
+	assertTrue(null != (navHandler = 
+			    application.getNavigationHandler()));
+	assertTrue(navHandler instanceof NavigationHandlerTestImpl);
+
+	assertTrue(null != (propResolver = 
+			    application.getPropertyResolver()));
+	assertTrue(propResolver instanceof PropertyResolverTestImpl);
+
+	assertTrue(null != (varResolver = 
+			    application.getVariableResolver()));
+	assertTrue(varResolver instanceof VariableResolverTestImpl);
     }
 
 

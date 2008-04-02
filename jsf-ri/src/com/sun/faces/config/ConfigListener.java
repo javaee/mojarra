@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.12 2003/05/06 01:54:12 craigmcc Exp $
+ * $Id: ConfigListener.java,v 1.13 2003/05/20 20:57:10 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -199,8 +199,7 @@ public class ConfigListener implements ServletContextListener
             log.trace("CONFIG BASE SET IN CONTEXT...");
         }
 
-        // Configure RenderKits and Renderers as well
-        configBase.updateRenderKits();
+        configBase.updateRuntimeComponents();
 
     }
 

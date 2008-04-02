@@ -293,6 +293,7 @@
         <echo message="${out.tomcat.dir}"/>
 
         <java classname="org.apache.catalina.startup.Bootstrap" fork="yes">
+            <jvmarg line="${debug.jvm.args}"/>
             <classpath refid="tomcat.classpath"/>
             <arg value="start"/>
             <sysproperty key="catalina.home" value="${tomcat.home}"/>

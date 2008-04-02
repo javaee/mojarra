@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigBase.java,v 1.10 2003/05/18 20:54:44 eburns Exp $
+ * $Id: ConfigBase.java,v 1.11 2003/05/20 20:57:10 eburns Exp $
  */
 
 /*
@@ -23,6 +23,11 @@ import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+import javax.faces.application.NavigationHandler;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.VariableResolver;
+import javax.faces.event.ActionListener;
 import javax.faces.context.MessageResources;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
@@ -270,7 +275,91 @@ public class ConfigBase {
         }
     }
 
-    public void updateRenderKits() {
+    /**
+
+    * This method causes the runtime components specified in the
+    * Application Configuration Resources DTD to be registered properly.
+
+    */ 
+
+    public void updateRuntimeComponents() {
+	updateRenderKits();
+	Class curClass = null;
+	String toLoad = null;
+        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        Application application = aFactory.getApplication();
+	Assert.assert_it(null != application);
+
+	try {
+	    if ((null != (toLoad = this.getActionListener())) &&
+		(null != (curClass = Util.loadClass(toLoad, this)))) {
+		application.setActionListener((ActionListener)
+					      curClass.newInstance());
+	    }
+	    
+	}
+	catch (Throwable e) {
+	    if (log.isErrorEnabled()) {
+                log.error("Can't set action-listener " + 
+			  this.getActionListener() + " exception: " + 
+			  e.getMessage());
+            }
+	}
+
+	try {
+	    if ((null != (toLoad = this.getNavigationHandler())) &&
+		(null != (curClass = Util.loadClass(toLoad, this)))) {
+		application.setNavigationHandler((NavigationHandler)
+					      curClass.newInstance());
+	    }
+	    
+	}
+	catch (Throwable e) {
+	    if (log.isErrorEnabled()) {
+                log.error("Can't set navigation-handler " + 
+			  this.getNavigationHandler() + " exception: " + 
+			  e.getMessage());
+            }
+	}
+
+	try {
+	    if ((null != (toLoad = this.getPropertyResolver())) &&
+		(null != (curClass = Util.loadClass(toLoad, this)))) {
+		application.setPropertyResolver((PropertyResolver)
+					      curClass.newInstance());
+	    }
+	    
+	}
+	catch (Throwable e) {
+	    if (log.isErrorEnabled()) {
+                log.error("Can't set property-resolver " + 
+			  this.getPropertyResolver() + " exception: " + 
+			  e.getMessage());
+            }
+	}
+
+	try {
+	    if ((null != (toLoad = this.getVariableResolver())) &&
+		(null != (curClass = Util.loadClass(toLoad, this)))) {
+		application.setVariableResolver((VariableResolver)
+						curClass.newInstance());
+	    }
+	    
+	}
+	catch (Throwable e) {
+	    if (log.isErrorEnabled()) {
+                log.error("Can't set variable-resolver " + 
+			  this.getVariableResolver() + " exception: " + 
+			  e.getMessage());
+            }
+	}
+
+
+
+    }
+
+    protected void updateRenderKits() {
         if (renderKits == null) {
             return;
         }

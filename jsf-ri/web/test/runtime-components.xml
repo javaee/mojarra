@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config>
+
+  <application>
+    <action-listener>com.sun.faces.application.ActionListenerTestImpl</action-listener>
+    <navigation-handler>com.sun.faces.application.NavigationHandlerTestImpl</navigation-handler>
+    <property-resolver>com.sun.faces.application.PropertyResolverTestImpl</property-resolver>
+    <variable-resolver>com.sun.faces.application.VariableResolverTestImpl</variable-resolver>
+  </application>
+
+</faces-config>
