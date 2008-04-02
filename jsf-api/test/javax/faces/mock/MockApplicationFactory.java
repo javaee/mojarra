@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplicationFactory.java,v 1.2 2003/04/29 18:52:01 eburns Exp $
+ * $Id: MockApplicationFactory.java,v 1.3 2003/07/29 00:42:33 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import javax.faces.application.ApplicationFactory;
 
 public class MockApplicationFactory extends ApplicationFactory {
 
+
     private Application application = null;
 
     public Application getApplication() {
@@ -28,6 +29,7 @@ public class MockApplicationFactory extends ApplicationFactory {
     public void setApplication(Application application) {
         this.application = application;
     }
+
 
 }
 

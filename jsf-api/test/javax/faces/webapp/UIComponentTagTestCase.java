@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.5 2003/07/28 22:22:37 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.6 2003/07/29 00:42:35 craigmcc Exp $
  */
 
 /*
@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPage;
@@ -32,6 +34,7 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.faces.mock.MockApplication;
 import javax.faces.mock.MockExternalContext;
 import javax.faces.mock.MockFacesContext;
 import javax.faces.mock.MockHttpServletRequest;
@@ -57,6 +60,7 @@ public class UIComponentTagTestCase extends TestCase {
     // ----------------------------------------------------- Instance Variables
 
 
+    protected MockApplication         application = null;
     protected MockServletConfig       config = null;
     protected MockExternalContext     externalContext = null;
     protected MockFacesContext        facesContext = null;
@@ -114,6 +118,13 @@ public class UIComponentTagTestCase extends TestCase {
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
         facesContext.setRoot(new UIPageBase("/root"));
+        // PENDING(craigmcc) - shouldn't UIPageBase default the render kit id?
+        facesContext.getRoot().setRenderKitId
+            (RenderKitFactory.DEFAULT_RENDER_KIT);
+        ApplicationFactory applicationFactory = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (MockApplication) applicationFactory.getApplication();
+        facesContext.setApplication(application);
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
@@ -141,6 +152,7 @@ public class UIComponentTagTestCase extends TestCase {
      */
     public void tearDown() {
 
+        application = null;
         config = null;
         externalContext = null;
         facesContext = null;
@@ -167,12 +179,12 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", "C2", true, false);
 
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
         reset();
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bC2/eC2/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
@@ -186,13 +198,13 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, null, true, false);
 
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/b/e/b/e/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/-c1/-c2/B3-b3", tree());
         verifyB2();
 
@@ -206,13 +218,13 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, "C2", true, false);
 
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/b/e/bC2/eC2/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
@@ -226,13 +238,13 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", null, true, false);
 
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b/e/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/-c2/B3-b3", tree());
         verifyB2();
 
@@ -263,13 +275,13 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", "C2", false, false);
 
         render();
-        assertEquals("/B/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/B/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bC1/eC1/bC2/eC2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
@@ -282,13 +294,13 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", "C2", true, true);
 
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/B/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA/E", text());
+        assertEquals("/bA/bB1/eB1/bB2/eB2/bB3/eB3/eA", text());
         assertEquals("//A-a/B1-b1/B2-b2/C1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
@@ -301,12 +313,12 @@ public class UIComponentTagTestCase extends TestCase {
         add(null, new TestTag("A", "a"));
 
         render();
-        assertEquals("/B/bA/eA/E", text());
+        assertEquals("/bA/eA", text());
         assertEquals("//A-a", tree());
 
         reset();
         render();
-        assertEquals("/B/bA/eA/E", text());
+        assertEquals("/bA/eA", text());
         assertEquals("//A-a", tree());
 
     }
@@ -318,12 +330,12 @@ public class UIComponentTagTestCase extends TestCase {
         add(null, new TestTag(null, "a"));
 
         render();
-        assertEquals("/B/b/e/E", text());
+        assertEquals("/b/e", text());
         assertEquals("//-a", tree());
 
         reset();
         render();
-        assertEquals("/B/b/e/E", text());
+        assertEquals("/b/e", text());
         assertEquals("//-a", tree());
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.4 2003/07/28 22:22:28 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.5 2003/07/29 00:42:32 craigmcc Exp $
  */
 
 /*
@@ -13,6 +13,8 @@ package javax.faces.component.base;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentTestCase;
 import javax.faces.component.base.UIPageBase;
@@ -49,6 +51,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
 
     // Mock object instances for our tests
+    protected MockApplication         application = null;
     protected MockServletConfig       config = null;
     protected MockExternalContext     externalContext = null;
     protected MockFacesContext        facesContext = null;
@@ -95,6 +98,10 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
         facesContext.setRoot(new UIPageBase("/treeId"));
+        ApplicationFactory applicationFactory = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = (MockApplication) applicationFactory.getApplication();
+        facesContext.setApplication(application);
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
@@ -104,7 +111,6 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         } catch (IllegalArgumentException e) {
             ;
         }
-	facesContext.setApplication(new MockApplication());
 
         // Set up the component under test
         super.setUp();
@@ -123,6 +129,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     public void tearDown() {
 
         super.tearDown();
+        application = null;
         config = null;
         externalContext = null;
         facesContext = null;
