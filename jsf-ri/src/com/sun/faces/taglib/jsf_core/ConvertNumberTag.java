@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertNumberTag.java,v 1.9 2004/02/26 20:33:17 eburns Exp $
+ * $Id: ConvertNumberTag.java,v 1.10 2004/04/06 14:18:19 eburns Exp $
  */
 
 /*
@@ -22,7 +22,7 @@ import java.util.Locale;
  * <p>ConvertNumberTag is a ConverterTag implementation for
  * javax.faces.convert.NumberConverter</p>
  *
- * @version $Id: ConvertNumberTag.java,v 1.9 2004/02/26 20:33:17 eburns Exp $
+ * @version $Id: ConvertNumberTag.java,v 1.10 2004/04/06 14:18:19 eburns Exp $
  */
 
 public class ConvertNumberTag extends ConverterTag {
@@ -75,7 +75,6 @@ public class ConvertNumberTag extends ConverterTag {
     //
     public ConvertNumberTag() {
         super();
-        super.setConverterId("javax.faces.Number");
         init();
     }
 
@@ -181,6 +180,10 @@ public class ConvertNumberTag extends ConverterTag {
         this.type_ = type;
     }
 
+    public int doStartTag() throws JspException {
+        super.setConverterId("javax.faces.Number");
+	return super.doStartTag();
+    }
 
     // 
     // Methods from ConverterTag
