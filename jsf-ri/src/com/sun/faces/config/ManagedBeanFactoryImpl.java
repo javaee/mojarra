@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.16 2007/02/04 19:32:26 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.17 2007/02/13 04:55:50 rlubke Exp $
  */
 
 /*
@@ -268,8 +268,10 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 loader = FacesContext.getCurrentInstance().
                     getClass().getClassLoader();
             }
-            bean = java.beans.Beans.instantiate(loader,
-                                                managedBean.getManagedBeanClass());            
+            Class mbClass = Class.forName(managedBean.getManagedBeanClass(),
+                                          true,
+                                          loader);
+            bean = mbClass.newInstance();
         } catch (Exception ex) {
             Object[] obj = new Object[2];
             obj[0] = managedBean.getManagedBeanClass();
