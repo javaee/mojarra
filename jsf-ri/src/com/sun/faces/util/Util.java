@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.197 2006/09/05 22:52:32 rlubke Exp $
+ * $Id: Util.java,v 1.198 2006/09/05 23:00:30 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.197 2006/09/05 22:52:32 rlubke Exp $
+ * @version $Id: Util.java,v 1.198 2006/09/05 23:00:30 rlubke Exp $
  */
 
 public class Util {
@@ -901,7 +901,7 @@ public class Util {
 	StackTraceElement[] stacks = e.getStackTrace();
 	StringBuffer sb = new StringBuffer();
 	for (int i = 0; i < stacks.length; i++) {
-	    sb.append(stacks[i].toString()).append('\nZZ');
+	    sb.append(stacks[i].toString()).append('\n');
 	}
 	return sb.toString();
     }
