@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.18 2005/08/22 22:08:05 ofung Exp $
+ * $Id: PhaseId.java,v 1.19 2006/08/30 19:14:19 edburns Exp $
  */
 
 /*
@@ -202,7 +202,7 @@ public class PhaseId implements Comparable {
      * <p>List of valid {@link PhaseId} instances, in ascending order
      * of their ordinal value.</p>
      */
-    public static final List VALUES =
+    public static final List<PhaseId> VALUES =
         Collections.unmodifiableList(Arrays.asList(values));
 
 
