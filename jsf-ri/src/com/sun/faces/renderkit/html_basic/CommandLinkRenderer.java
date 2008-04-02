@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.21 2004/05/12 04:35:05 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.22 2004/06/08 13:47:28 rogerk Exp $
  */
 
 /*
@@ -315,15 +315,8 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         //Handle hidden fields
 
         //Only need one hidden field for the link itself per form.
-	if (!context.getExternalContext().getRequestMap().
-	    containsKey(RIConstants.HAS_ONE_OR_MORE_COMMAND_LINKS)) {
-	    FormRenderer.addNeededHiddenField(context, 
-					      getHiddenFieldName(context, 
-								 command));
-	    context.getExternalContext().getRequestMap().
-		put(RIConstants.HAS_ONE_OR_MORE_COMMAND_LINKS, 
-		    RIConstants.HAS_ONE_OR_MORE_COMMAND_LINKS);
-	}
+	FormRenderer.addNeededHiddenField(context, 
+	    getHiddenFieldName(context, command));
 
 	// PENDING(edburns): not sure if the JSFA59 back button problem
 	// manifests itself with param children as well...
