@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.29 2004/01/15 07:34:03 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.30 2004/01/16 17:51:11 horwat Exp $
  */
 
 /*
@@ -227,6 +227,18 @@ public class UIInputTestCase extends UIOutputTestCase {
         input.removeValueChangeListener(listeners[2]);
         listeners = input.getValueChangeListeners();
         assertEquals(4, listeners.length);
+
+    }
+
+    // Test empty listener list
+    public void testEmptyListeners() {
+
+        TestInput input = new TestInput();
+        TestValueChangeListener listener = null;
+
+        //No listeners added, should be empty
+        ValueChangeListener listeners[] = input.getValueChangeListeners();
+	assertEquals(0, listeners.length);
 
     }
 

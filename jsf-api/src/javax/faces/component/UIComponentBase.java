@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.91 2004/01/15 21:33:57 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.92 2004/01/16 17:51:09 horwat Exp $
  */
 
 /*
@@ -1114,7 +1114,6 @@ public abstract class UIComponentBase extends UIComponent {
      * @exception NullPointerException {@inheritDoc}  
      */ 
     protected FacesListener[] getFacesListeners(Class clazz) {
-
         if (clazz == null) {
             throw new NullPointerException();
         }
@@ -1122,7 +1121,8 @@ public abstract class UIComponentBase extends UIComponent {
             throw new IllegalArgumentException();
         }
         if (listeners == null) {
-            return (new FacesListener[0]);
+            return ((FacesListener[]) 
+                java.lang.reflect.Array.newInstance(clazz, 0));
         }
 
         List results = new ArrayList();

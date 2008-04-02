@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.23 2004/01/10 18:52:15 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.24 2004/01/16 17:51:10 horwat Exp $
  */
 
 /*
@@ -290,6 +290,19 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
         assertEquals(4, listeners.length);
 
     }
+
+    // Test empty listener list
+    public void testEmptyListeners() {
+
+        TestCommand command = new TestCommand();
+        TestActionListener listener = null;
+
+        //No listeners added, should be empty
+        ActionListener listeners[] = command.getActionListeners();
+        assertEquals(0, listeners.length);
+
+    }
+
 
     // Suppress lifecycle tests since we do not have a renderer
     public void testLifecycleManagement() {
