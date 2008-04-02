@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.120 2004/01/06 04:28:47 eburns Exp $
+ * $Id: Util.java,v 1.121 2004/01/10 05:43:57 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -58,6 +59,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 import com.sun.faces.el.MixedELValueBinding;
+import com.sun.faces.el.MixedELValueParser;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.ExpressionInfo;
 import com.sun.faces.el.impl.JspVariableResolver;
@@ -68,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.120 2004/01/06 04:28:47 eburns Exp $ 
+ * @version $Id: Util.java,v 1.121 2004/01/10 05:43:57 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -850,16 +852,21 @@ private Util()
     
     public static ValueBinding getValueBinding(String valueRef) {
 	ValueBinding vb = null;
-	// Check if it's a single expression
-	if (valueRef.trim().startsWith("#{") && 
-	    valueRef.trim().endsWith("}")) {
-	    ApplicationFactory af = (ApplicationFactory)
-		FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-	    Application a = af.getApplication();
-	    vb = (a.createValueBinding(valueRef));
+	// Must parse the value to see if it contains more than
+	// one expression
+	FacesContext context = FacesContext.getCurrentInstance();
+	MixedELValueParser parser = new MixedELValueParser();
+	List l = null;
+	try {
+	    l = parser.parse(context, valueRef);
+	}
+	catch (Exception e) {
+	    // Ignore it here and deal with it in MixedELValueBinding
+	}
+	if (l != null && l.size() == 1 && !(l.get(0) instanceof String)) {
+	    vb = context.getApplication().createValueBinding(valueRef);
 	}
 	else {
-	    // It must be a mixed literal/expression
 	    vb = new MixedELValueBinding();
 	    ((MixedELValueBinding) vb).setRef(valueRef);
 	}

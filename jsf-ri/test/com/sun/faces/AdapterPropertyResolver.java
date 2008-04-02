@@ -1,5 +1,5 @@
 /*
- * $Id: AdapterPropertyResolver.java,v 1.1 2004/01/05 23:14:26 eburns Exp $
+ * $Id: AdapterPropertyResolver.java,v 1.2 2004/01/10 05:43:59 eburns Exp $
  */
 
 /*
@@ -26,7 +26,7 @@ public class AdapterPropertyResolver extends PropertyResolver {
 
     private PropertyResolver root;
 
-    public Object getValue(Object base, String name)
+    public Object getValue(Object base, Object name)
         throws EvaluationException, PropertyNotFoundException {
         return root.getValue(base, name);
     }
@@ -36,7 +36,7 @@ public class AdapterPropertyResolver extends PropertyResolver {
         return root.getValue(base, index);
     }
 
-    public void setValue(Object base, String name, Object value)
+    public void setValue(Object base, Object name, Object value)
         throws EvaluationException, PropertyNotFoundException {
         root.setValue(base, name, value);
     }
@@ -46,7 +46,7 @@ public class AdapterPropertyResolver extends PropertyResolver {
         root.setValue(base, index, value);
     }
 
-    public boolean isReadOnly(Object base, String name)
+    public boolean isReadOnly(Object base, Object name)
         throws PropertyNotFoundException {
         return root.isReadOnly(base, name);
     }
@@ -57,7 +57,7 @@ public class AdapterPropertyResolver extends PropertyResolver {
     }
 
 
-    public Class getType(Object base, String name)
+    public Class getType(Object base, Object name)
         throws PropertyNotFoundException {
         return root.getType(base, name);
     }

@@ -1,52 +1,16 @@
-# testing mixture of strings and expressions
-Attribute value: abc
-Parses to: abc
-Attribute value: ${ 3}
-Parses to: ${3}
-Attribute value: a${
-Causes an error: Encountered "<EOF>", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Attribute value: a${ 5 }
-Parses to: a${5}
-Attribute value: ${ 3 }b
-Parses to: ${3}b
-Attribute value: ${ 1 }${ 2 }
-Parses to: ${1}${2}
-Attribute value: abc ${ 1} ${ 2} def
-Parses to: abc ${1} ${2} def
+# Note! The parser is a modified JSP 2.0 parser that uses the JSP
+# delimiters rather than the JSF delimiters. 
+#
+# Even though the JSP spec states that only a single expression must
+# be parsable, the Apache Jakarta Commons EL parser used by Jasper2
+# handles parsing and evaluation of mixed literal and expression values
+# as well. While the JSF RI uses a modified version of the Commons EL parser,
+# it's only used for single expressions; mixed literal/expression
+# values are handled by the MixedELValueBinding class instead.
+# Hence, all mixed literal/expression tests have been moved to
+# the evaluationTests test case for JSF
 
-# testing values that end with or contain "$"
-Attribute value: $
-Parses to: $
-Attribute value: \$
-Parses to: \$
-Attribute value:   $  
-Parses to:   $  
-Attribute value: test$
-Parses to: test$
-Attribute value: $test
-Parses to: $test
-Attribute value: test$test
-Parses to: test$test
-Attribute value: test$$$
-Parses to: test$$$
-Attribute value: test$$${ 34 }
-Parses to: test$$${34}
-Attribute value: test$$${ 34 }$$
-Parses to: test$$${34}$$
-Attribute value: test$${ 34 }
-Parses to: test$${34}
-Attribute value: $${ 34 }
-Parses to: $${34}
-Attribute value: $$
-Parses to: $$
-Attribute value: test$$
-Parses to: test$$
-Attribute value: test$$test
-Parses to: test$$test
-Attribute value: ${ 34 }$${ 34 }
-Parses to: ${34}$${34}
-
-# literals
+# literal tests
 Attribute value: ${1}
 Parses to: ${1}
 Attribute value: ${-12}

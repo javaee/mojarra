@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: TestELImpl.java,v 1.2 2003/08/13 21:24:26 rlubke Exp $
+ * $Id: TestELImpl.java,v 1.3 2004/01/10 05:44:01 eburns Exp $
  */
 
 // TestELImpl
@@ -17,12 +17,20 @@ import com.sun.faces.el.impl.beans.Factory;
 import com.sun.faces.el.impl.ExpressionEvaluatorImpl;
 import com.sun.faces.el.impl.ElException;
 import com.sun.faces.el.impl.ExpressionInfo;
-import com.sun.faces.el.impl.JspVariableResolver;
+import com.sun.faces.el.VariableResolverImpl;
+import com.sun.faces.el.PropertyResolverImpl;
+import com.sun.faces.util.Util;
 
-import javax.servlet.jsp.PageContext;
 import javax.faces.FacesException;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,7 +87,9 @@ public class TestELImpl extends JspFacesTestCase {
         responseFile = PARSER_GOLDEN_FILE;
         LineNumberReader reader = getReaderForFile(PARSER_INPUT_FILE);
         Writer writer = getFacesContext().getResponseWriter();
-        ExpressionEvaluatorImpl e = new ExpressionEvaluatorImpl(RIConstants.JSP_EL_PARSER);
+	//Writer writer = new OutputStreamWriter(System.out);
+        ExpressionEvaluatorImpl e = 
+	    (ExpressionEvaluatorImpl) Util.getExpressionEvaluator();
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
             if (line.startsWith("#") ||
                 "".equals(line.trim())) {
@@ -110,12 +120,12 @@ public class TestELImpl extends JspFacesTestCase {
 
     public void testELEvaluation() throws Exception {
         responseFile = EVAL_GOLDEN_FILE;
-        PageContext context = createTestContext();
+	FacesContext fc = FacesContext.getCurrentInstance();
+        createTestContext(fc);
         LineNumberReader reader = getReaderForFile(EVAL_INPUT_FILE);
         Writer writer = getFacesContext().getResponseWriter(); 
-        ExpressionEvaluatorImpl e = new ExpressionEvaluatorImpl(RIConstants.JSP_EL_PARSER);
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-            if (line.startsWith("#") ||
+            if (line.startsWith("*") ||
                 "".equals(line.trim())) {
                 writer.write(line + "\n");
             } else {
@@ -124,24 +134,29 @@ public class TestELImpl extends JspFacesTestCase {
 
                 try {
                     Class cl = parseClassName(typeStr);
-                    writer.write("ExpectedType: " + cl + "\n");                    
-                    ExpressionInfo exprInfo = new ExpressionInfo();
-                    exprInfo.setExpressionString(line);
-                    exprInfo.setExpectedType(cl);
-                    exprInfo.setVariableResolver(new JspVariableResolver(context));
-                    Object val = e.evaluate(exprInfo);
+                    writer.write("ExpectedType: " + cl + "\n");
+		    Object val = null;
+		    Class type = null;
+		    if (Util.isVBExpression(line)) {
+			ValueBinding vb = Util.getValueBinding(line);
+			val = vb.getValue(fc);
+			type = val == null ? null : val.getClass();
+		    }
+		    else {
+			val = line;
+			type = String.class;
+		    }
+		    
                     writer.write("Evaluates to: " + val + "\n");
                     if (val != null) {
-                        writer.write("With type: " + val.getClass().getName() + "\n");
+                        writer.write("With type: " + type + "\n");
                     }
                     writer.write("\n");
-                } catch (ElException exc) {
+                } catch (Exception exc) {
                     writer.write("Causes an error: " + exc);
+		    //exc.printStackTrace(new PrintWriter(writer));
                     writer.write("\n");
-                } catch (ClassNotFoundException exc) {
-                    writer.write("Causes an error: " + exc);
-                    writer.write("\n");
-                }
+		}
             }
         }
         try {
@@ -185,19 +200,28 @@ public class TestELImpl extends JspFacesTestCase {
             return Float.TYPE;
         } else if ("double".equals(c)) {
             return Double.TYPE;
+        } else if ("null".equals(c)) {
+            return null;
         } else {
             return Class.forName(pClassName);
         }
     }
 
-    static PageContext createTestContext() {
-        PageContext ret = new PageContextImpl();
+    static void createTestContext(FacesContext context) {
+	UIViewRoot root = new UIViewRoot();
+	UIInput input = new UIInput();
+	input.setValue("inputValue");
+	root.getChildren().add(input);
+	context.setViewRoot(root);
+	ExternalContext ec = context.getExternalContext();
+	Map requestMap = ec.getRequestMap();
+	Map sessionMap = ec.getSessionMap();
+	Map applicationMap = ec.getApplicationMap();
 
         // Create some basic values for lookups
-        ret.setAttribute("val1a", "page-scoped1", ret.PAGE_SCOPE);
-        ret.setAttribute("val1b", "request-scoped1", ret.REQUEST_SCOPE);
-        ret.setAttribute("val1c", "session-scoped1", ret.SESSION_SCOPE);
-        ret.setAttribute("val1d", "app-scoped1", ret.APPLICATION_SCOPE);
+        requestMap.put("val1b", "request-scoped1");
+        sessionMap.put("val1c", "session-scoped1");
+        applicationMap.put("val1d", "app-scoped1");
 
         // Create a bean
         {
@@ -232,7 +256,7 @@ public class TestELImpl extends JspFacesTestCase {
                 m.put("recurse", b1);
                 b1.setMap1(m);
             }
-            ret.setAttribute("bean1a", b1);
+            requestMap.put("bean1a", b1);
 
             Bean1 b2 = new Bean1();
             b2.setInt2(new Integer(-224));
@@ -247,13 +271,13 @@ public class TestELImpl extends JspFacesTestCase {
 
         // Create the public/private beans
         {
-            ret.setAttribute("pbean1", Factory.createBean1());
-            ret.setAttribute("pbean2", Factory.createBean2());
-            ret.setAttribute("pbean3", Factory.createBean3());
-            ret.setAttribute("pbean4", Factory.createBean4());
-            ret.setAttribute("pbean5", Factory.createBean5());
-            ret.setAttribute("pbean6", Factory.createBean6());
-            ret.setAttribute("pbean7", Factory.createBean7());
+            requestMap.put("pbean1", Factory.createBean1());
+            requestMap.put("pbean2", Factory.createBean2());
+            requestMap.put("pbean3", Factory.createBean3());
+            requestMap.put("pbean4", Factory.createBean4());
+            requestMap.put("pbean5", Factory.createBean5());
+            requestMap.put("pbean6", Factory.createBean6());
+            requestMap.put("pbean7", Factory.createBean7());
         }
 
         // Create the empty tests
@@ -279,9 +303,7 @@ public class TestELImpl extends JspFacesTestCase {
                 s.add("hello");
                 m.put("nonemptySet", s);
             }
-            ret.setAttribute("emptyTests", m);
+            requestMap.put("emptyTests", m);
         }
-
-        return ret;
     }
 }

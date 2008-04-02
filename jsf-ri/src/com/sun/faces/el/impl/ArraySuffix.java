@@ -64,50 +64,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.el.PropertyResolver;
+import javax.faces.el.PropertyNotFoundException;
+import javax.faces.el.ReferenceSyntaxException;
 
 /**
  *
  * <p>Represents an operator that obtains a Map entry, an indexed
- * value, a property value, or an indexed property value of an object.
- * The following are the rules for evaluating this operator:
+ * value, a property value, or an indexed property value of an object,
+ * any other value types supported by a custom PropertyResolver.</p>
+ * <p>This class has been rewritten for JSF to delegate most of the
+ * evaluation to the provided PropertyResolver, so the rules depend
+ * on which PropertyResolver is used.
  *
- * <ul><pre>
- * Evaluating a[b] (assuming a.b == a["b"])
- *   a is null
- *     return null
- *   b is null
- *     return null
- *   a is Map
- *     !a.containsKey (b)
- *       return null
- *     a.get(b) == null
- *       return null
- *     otherwise
- *       return a.get(b)
- *   a is List or array
- *     coerce b to int (using coercion rules)
- *     coercion couldn't be performed
- *       error
- *     a.get(b) or Array.get(a, b) throws ArrayIndexOutOfBoundsException or IndexOutOfBoundsException
- *       return null
- *     a.get(b) or Array.get(a, b) throws other exception
- *       error
- *     return a.get(b) or Array.get(a, b)
- * 
- *   coerce b to String
- *   b is a readable property of a
- *     getter throws an exception
- *       error
- *     otherwise
- *       return result of getter call
- *
- *   otherwise
- *     error
- * </pre></ul>
- * 
- * @author Nathan Abramson - Art Technology Group
- * @author Shawn Bayern
- * @version $Change: 181177 $$DateTime: 2001/06/26 08:45:09 $$Author: eburns $
  **/
 
 public class ArraySuffix
@@ -184,203 +152,99 @@ public class ArraySuffix
      **/
     public Object evaluate(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
-        Object indexVal;
-
-        // Check for null value
-        if (pValue == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
-                return null;
-            }
-        }
-
-        // Evaluate the index
-        else if ((indexVal = evaluateIndex(exprInfo)) == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
-                return null;
-            }
-        }
-	else {
-	    // Let the PropertyResolver evaluate the property
-	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	    if (pValue instanceof List || pValue.getClass().isArray()) {
-		Integer indexObj = Coercions.coerceToInteger(indexVal);
-		if (indexObj == null) {
-		    if (log.isErrorEnabled()) {
-			String message = MessageUtil.getMessageWithArgs(
-			    Constants.BAD_INDEX_VALUE,
-                            getOperatorSymbol(),
-                            indexVal.getClass().getName());
-			log.error(message);
-			throw new ElException(message);
-		    }
-		    return null;
+	// Let the PropertyResolver evaluate the property
+	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	Object indexVal = evaluateIndex(exprInfo);
+	if (pValue != null && indexVal != null &&
+	    (pValue instanceof List || pValue.getClass().isArray())) {
+	    Integer indexObj = Coercions.coerceToInteger(indexVal);
+	    if (indexObj == null) {
+		String message = MessageUtil.getMessageWithArgs(
+		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+                    indexVal.getClass().getName());
+		if (log.isErrorEnabled()) {
+		    log.error(message);
 		}
-		return propertyResolver.getValue(pValue, indexObj.intValue());
+		throw new ReferenceSyntaxException(message);
 	    }
-	    else {
-		String name = Coercions.coerceToString(indexVal);
-		return propertyResolver.getValue(pValue, name);
-	    }
+	    return propertyResolver.getValue(pValue, indexObj.intValue());
 	}
-	return null;
+	else {
+	    return propertyResolver.getValue(pValue, indexVal);
+	}
     }
 
     public void setValue(Object pValue, Object newValue,
 			 ExpressionInfo exprInfo) throws ElException {
-
-        Object indexVal;
-
-        // Check for null value
-        if (pValue == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
-                return;
-            }
-        }
-        // Evaluate the index
-        else if ((indexVal = evaluateIndex(exprInfo))
-            == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
-                return;
-            }
-        }
-	else {
-	    // Let the PropertyResolver set the property
-	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	    if (pValue instanceof List || pValue.getClass().isArray()) {
-		Integer indexObj = Coercions.coerceToInteger(indexVal);
-		if (indexObj == null) {
-		    if (log.isErrorEnabled()) {
-			String message = MessageUtil.getMessageWithArgs(
-			    Constants.BAD_INDEX_VALUE,
-                            getOperatorSymbol(),
-                            indexVal.getClass().getName());
-			log.error(message);
-			throw new ElException(message);
-		    }
-		    return;
+	// Let the PropertyResolver set the property
+	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	Object indexVal = evaluateIndex(exprInfo);
+	if (pValue != null && indexVal != null &&
+	    (pValue instanceof List || pValue.getClass().isArray())) {
+	    Integer indexObj = Coercions.coerceToInteger(indexVal);
+	    if (indexObj == null) {
+		String message = MessageUtil.getMessageWithArgs(
+		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+                    indexVal.getClass().getName());
+		if (log.isErrorEnabled()) {
+		    log.error(message);
 		}
-		propertyResolver.setValue(pValue, indexObj.intValue(),
-					  newValue);
+		throw new ReferenceSyntaxException(message);
 	    }
-	    else {
-		String name = Coercions.coerceToString(indexVal);
-		propertyResolver.setValue(pValue, name, newValue);
+	    propertyResolver.setValue(pValue, indexObj.intValue(),
+				      newValue);
 	    }
+	else {
+	    propertyResolver.setValue(pValue, indexVal, newValue);
 	}
     }
 
     public boolean isReadOnly(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
-
-        Object indexVal;
-
-        // Check for null value
-        if (pValue == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
-                return true;
-            }
-        }
-        // Evaluate the index
-        else if ((indexVal = evaluateIndex(exprInfo))
-            == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
-                return true;
-            }
-        }
-	else {
-	    // Let the PropertyResolver test the property
-	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	    if (pValue instanceof List || pValue.getClass().isArray()) {
-		Integer indexObj = Coercions.coerceToInteger(indexVal);
-		if (indexObj == null) {
-		    if (log.isErrorEnabled()) {
-			String message = MessageUtil.getMessageWithArgs(
-			    Constants.BAD_INDEX_VALUE,
-                            getOperatorSymbol(),
-                            indexVal.getClass().getName());
+	// Let the PropertyResolver test the property
+	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	Object indexVal = evaluateIndex(exprInfo);
+	if (pValue != null && indexVal != null &&
+	    (pValue instanceof List || pValue.getClass().isArray())) {
+	    Integer indexObj = Coercions.coerceToInteger(indexVal);
+	    if (indexObj == null) {
+		String message = MessageUtil.getMessageWithArgs(
+		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+                    indexVal.getClass().getName());
+		if (log.isErrorEnabled()) {
 			log.error(message);
-			throw new ElException(message);
-		    }
-		    return true;
 		}
-		return propertyResolver.isReadOnly(pValue, 
-						   indexObj.intValue());
+		throw new ReferenceSyntaxException(message);
 	    }
-	    else {
-		String name = Coercions.coerceToString(indexVal);
-		return propertyResolver.isReadOnly(pValue, name);
-	    }
+	    return propertyResolver.isReadOnly(pValue, indexObj.intValue());
 	}
-	return true;
+	else {
+	    return propertyResolver.isReadOnly(pValue, indexVal);
+	}
     }
 
     public Class getType(Object pValue, ExpressionInfo exprInfo)
         throws ElException {
-
-        Object indexVal;
-
-        // Check for null value
-        if (pValue == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_INDEXED_VALUE_OF_NULL, getOperatorSymbol()));
-                return null;
-            }
-        }
-        // Evaluate the index
-        else if ((indexVal = evaluateIndex(exprInfo))
-            == null) {
-            if (log.isWarnEnabled()) {
-                log.warn(
-                    MessageUtil.getMessageWithArgs(
-                        Constants.CANT_GET_NULL_INDEX, getOperatorSymbol()));
-                return null;
-            }
-        }
-	else {
-	    // Let the PropertyResolver test the property
-	    PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
-	    if (pValue instanceof List || pValue.getClass().isArray()) {
-		Integer indexObj = Coercions.coerceToInteger(indexVal);
-		if (indexObj == null) {
-		    if (log.isErrorEnabled()) {
-			String message = MessageUtil.getMessageWithArgs(
-			    Constants.BAD_INDEX_VALUE,
-                            getOperatorSymbol(),
-                            indexVal.getClass().getName());
+	// Let the PropertyResolver get the type
+	PropertyResolver propertyResolver = exprInfo.getPropertyResolver();
+	Object indexVal = evaluateIndex(exprInfo);
+	if (pValue != null && indexVal != null &&
+	    (pValue instanceof List || pValue.getClass().isArray())) {
+	    Integer indexObj = Coercions.coerceToInteger(indexVal);
+	    if (indexObj == null) {
+		String message = MessageUtil.getMessageWithArgs(
+		    Constants.BAD_INDEX_VALUE, getOperatorSymbol(),
+                    indexVal.getClass().getName());
+		if (log.isErrorEnabled()) {
 			log.error(message);
-			throw new ElException(message);
-		    }
-		    return null;
 		}
-		return propertyResolver.getType(pValue, 
-						indexObj.intValue());
+		throw new ReferenceSyntaxException(message);
 	    }
-	    else {
-		String name = Coercions.coerceToString(indexVal);
-		return propertyResolver.getType(pValue, name);
-	    }
+	    return propertyResolver.getType(pValue, indexObj.intValue());
 	}
-	return null;
+	else {
+	    return propertyResolver.getType(pValue, indexVal);
+	}
     }
 
     //-------------------------------------

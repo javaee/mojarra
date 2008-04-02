@@ -171,31 +171,12 @@ public class NamedValue
         throws ElException {
 
 	Class type = null;
-	if ("applicationScope".equals(mName) ||
-	    "requestScope".equals(mName) ||
-	    "sessionScope".equals(mName) ||
-	    "param".equals(mName) ||
-	    "paramValues".equals(mName) ||
-	    "header".equals(mName) ||
-	    "headerValues".equals(mName) ||
-	    "cookie".equals(mName) ||
-	    "initParam".equals(mName)) {
-	    type = Map.class;
-	}
-	if (type == null) {
-	    ExternalContext ec = 
-		exprInfo.getFacesContext().getExternalContext();
-	    if (ec.getRequestMap().get(mName) != null) {
-		type = ec.getRequestMap().get(mName).getClass();
-	    }
-	    else if (ec.getSessionMap() != null &&
-		     ec.getSessionMap().get(mName) != null) {
-		type = ec.getSessionMap().get(mName).getClass();
-	    }
-	    else if (ec.getApplicationMap().get(mName) != null) {
-		type = ec.getApplicationMap().get(mName).getClass();
-	    }
-	}
+        VariableResolver resolver = exprInfo.getVariableResolver();
+	FacesContext context = exprInfo.getFacesContext();
+        if (resolver != null) {
+            Object o = resolver.resolveVariable(context, mName);
+	    type = o != null ? o.getClass() : null;
+        }
 	return type;
     }
     //-------------------------------------

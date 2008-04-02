@@ -143,7 +143,7 @@ public class ComplexValue
         // Apply the suffixes
         for (int i = 0; mSuffixes != null && i < mSuffixes.size(); i++) {
             ValueSuffix suffix = (ValueSuffix) mSuffixes.get(i);
-            ret = suffix.evaluate(ret, exprInfo);
+	    ret = suffix.evaluate(ret, exprInfo);
         }
 
         return ret;
@@ -169,7 +169,7 @@ public class ComplexValue
     public boolean isReadOnly(ExpressionInfo exprInfo)
         throws ElException {
         Object ret = mPrefix.evaluate(exprInfo);
-	boolean result = true;
+	boolean result = mPrefix.isReadOnly(exprInfo);
 
         // Apply the suffixes
         for (int i = 0; mSuffixes != null && i < mSuffixes.size() - 1; i++) {
@@ -187,7 +187,7 @@ public class ComplexValue
     public Class getType(ExpressionInfo exprInfo)
         throws ElException {
         Object ret = mPrefix.evaluate(exprInfo);
-	Class result = ret.getClass();
+	Class result = mPrefix.getType(exprInfo);
 
         // Apply the suffixes
         for (int i = 0; mSuffixes != null && i < mSuffixes.size() - 1; i++) {

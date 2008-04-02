@@ -1,5 +1,5 @@
 /*
- * $Id: MockPropertyResolver.java,v 1.3 2003/12/17 15:11:26 rkitain Exp $
+ * $Id: MockPropertyResolver.java,v 1.4 2004/01/10 05:43:51 eburns Exp $
  */
 
 /*
@@ -39,12 +39,13 @@ public class MockPropertyResolver extends PropertyResolver {
     // ------------------------------------------------ PropertyResolver Methods
 
 
-    public Object getValue(Object base, String name)
+    public Object getValue(Object base, Object property)
         throws EvaluationException, PropertyNotFoundException {
 
         if (base == null) {
             throw new NullPointerException();
         }
+	String name = property.toString();
         try {
             if (base instanceof Map) {
                 Map map = (Map) base;
@@ -75,12 +76,13 @@ public class MockPropertyResolver extends PropertyResolver {
     }
 
 
-    public void setValue(Object base, String name, Object value)
+    public void setValue(Object base, Object property, Object value)
         throws PropertyNotFoundException {
 
         if (base == null) {
             throw new NullPointerException();
         }
+	String name = property.toString();
         try {
             if (base instanceof Map) {
                 ((Map) base).put(name, value);
@@ -106,7 +108,7 @@ public class MockPropertyResolver extends PropertyResolver {
     }
 
 
-    public boolean isReadOnly(Object base, String name)
+    public boolean isReadOnly(Object base, Object property)
         throws PropertyNotFoundException {
 
         throw new UnsupportedOperationException();
@@ -122,7 +124,7 @@ public class MockPropertyResolver extends PropertyResolver {
     }
 
 
-    public Class getType(Object base, String name)
+    public Class getType(Object base, Object property)
         throws PropertyNotFoundException {
 
         throw new UnsupportedOperationException();

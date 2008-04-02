@@ -1,2304 +1,2190 @@
-# The set of evaluator tests
+* The set of evaluator tests
+* NOTE! Comment lines start with * instead of #, because # is used
+* as the first character in a JSF EL delimiter
+*######################################################
+* testing mixture of strings and expressions
+Expression: abc
+ExpectedType: class java.lang.String
+Evaluates to: abc
+With type: class java.lang.String
 
-#######################################################
-# basic literals
-Expression: ${1}
+Expression: #{ 3}
+ExpectedType: int
+Evaluates to: 3
+With type: class java.lang.Long
+
+Expression: a#{
+ExpectedType: class java.lang.String
+Evaluates to: a#{
+With type: class java.lang.String
+
+Expression: a#{ 5 }
+ExpectedType: class java.lang.String
+Evaluates to: a5
+With type: class java.lang.String
+
+Expression: #{ 3 }b
+ExpectedType: class java.lang.String
+Evaluates to: 3b
+With type: class java.lang.String
+
+Expression: #{ 1 }#{ 2 }
+ExpectedType: class java.lang.String
+Evaluates to: 12
+With type: class java.lang.String
+
+Expression: abc #{ 1} #{ 2} def
+ExpectedType: class java.lang.String
+Evaluates to: abc 1 2 def
+With type: class java.lang.String
+
+
+* testing values that end with or contain "#"
+Expression: #
+ExpectedType: class java.lang.String
+Evaluates to: #
+With type: class java.lang.String
+
+Expression: \#
+ExpectedType: class java.lang.String
+Evaluates to: \#
+With type: class java.lang.String
+
+Expression:   #  
+ExpectedType: class java.lang.String
+Evaluates to:   #  
+With type: class java.lang.String
+
+Expression: test#
+ExpectedType: class java.lang.String
+Evaluates to: test#
+With type: class java.lang.String
+
+Expression: #test
+ExpectedType: class java.lang.String
+Evaluates to: #test
+With type: class java.lang.String
+
+Expression: test#test
+ExpectedType: class java.lang.String
+Evaluates to: test#test
+With type: class java.lang.String
+
+Expression: test###
+ExpectedType: class java.lang.String
+Evaluates to: test###
+With type: class java.lang.String
+
+Expression: test###{ 34 }
+ExpectedType: class java.lang.String
+Evaluates to: test##34
+With type: class java.lang.String
+
+Expression: test###{ 34 }##
+ExpectedType: class java.lang.String
+Evaluates to: test##34##
+With type: class java.lang.String
+
+Expression: test##{ 34 }
+ExpectedType: class java.lang.String
+Evaluates to: test#34
+With type: class java.lang.String
+
+Expression: ##{ 34 }
+ExpectedType: class java.lang.String
+Evaluates to: #34
+With type: class java.lang.String
+
+Expression: ##
+ExpectedType: class java.lang.String
+Evaluates to: ##
+With type: class java.lang.String
+
+Expression: test##
+ExpectedType: class java.lang.String
+Evaluates to: test##
+With type: class java.lang.String
+
+Expression: test##test
+ExpectedType: class java.lang.String
+Evaluates to: test##test
+With type: class java.lang.String
+
+Expression: #{ 34 }##{ 34 }
+ExpectedType: class java.lang.String
+Evaluates to: 34#34
+With type: class java.lang.String
+
+
+
+*######################################################
+* basic literals
+Expression: #{1}
 ExpectedType: int
 Evaluates to: 1
-With type: java.lang.Integer
+With type: class java.lang.Long
 
-Expression: ${-12}
+Expression: #{-12}
 ExpectedType: int
 Evaluates to: -12
-With type: java.lang.Integer
+With type: class java.lang.Long
 
-Expression: ${true}
+Expression: #{true}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${false}
+Expression: #{false}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${null}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Expression: #{null}
+ExpectedType: null
+Evaluates to: null
 
-Expression: ${4.2}
+Expression: #{4.2}
 ExpectedType: double
 Evaluates to: 4.2
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${-21.3}
-ExpectedType: float
+Expression: #{-21.3}
+ExpectedType: double
 Evaluates to: -21.3
-With type: java.lang.Float
+With type: class java.lang.Double
 
-Expression: ${4.}
-ExpectedType: float
+Expression: #{4.}
+ExpectedType: double
 Evaluates to: 4.0
-With type: java.lang.Float
+With type: class java.lang.Double
 
-Expression: ${.21}
-ExpectedType: float
+Expression: #{.21}
+ExpectedType: double
 Evaluates to: 0.21
-With type: java.lang.Float
+With type: class java.lang.Double
 
-Expression: ${3e-1}
+Expression: #{3e-1}
 ExpectedType: double
 Evaluates to: 0.3
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${.2222222222}
+Expression: #{.2222222222}
 ExpectedType: double
 Evaluates to: 0.2222222222
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-#######################################################
-# basic relationals between literals
+*######################################################
+* basic relationals between literals
 
-Expression: ${1 < 2}
+Expression: #{1 < 2}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${1 > 2}
+Expression: #{1 > 2}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${1 >= 2}
+Expression: #{1 >= 2}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${1 <= 2}
+Expression: #{1 <= 2}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${1 == 2}
+Expression: #{1 == 2}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${1 != 2}
+Expression: #{1 != 2}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${3 >= 3}
+Expression: #{3 >= 3}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${3 <= 3}
+Expression: #{3 <= 3}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${3 == 3}
+Expression: #{3 == 3}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${3 < 3}
+Expression: #{3 < 3}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${3 > 3}
+Expression: #{3 > 3}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${3 != 3}
+Expression: #{3 != 3}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
 
-#######################################################
-# relationals between booleans
+*######################################################
+* relationals between booleans
 
-Expression: ${false < true}
+Expression: #{false < true}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Attempt to apply operator "<" to arguments of type "java.lang.Boolean" and "java.lang.Boolean"
-Expression: ${false > true}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.ElException: Attempt to apply operator "<" to arguments of type "java.lang.Boolean" and "java.lang.Boolean"
+Expression: #{false > true}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Attempt to apply operator ">" to arguments of type "java.lang.Boolean" and "java.lang.Boolean"
-Expression: ${true >= true}
-ExpectedType: class java.lang.Object
-Evaluates to: true
-With type: java.lang.Boolean
-
-Expression: ${true <= true}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.ElException: Attempt to apply operator ">" to arguments of type "java.lang.Boolean" and "java.lang.Boolean"
+Expression: #{true >= true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${true == true}
+Expression: #{true <= true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${true != true}
+Expression: #{true == true}
+ExpectedType: class java.lang.Object
+Evaluates to: true
+With type: class java.lang.Boolean
+
+Expression: #{true != true}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# looking up objects in scopes
+*######################################################
+* looking up objects in scopes
 
-# val1a - defined in page scope
-Expression: ${pageScope.val1a}
-ExpectedType: class java.lang.String
-Evaluates to: page-scoped1
-With type: java.lang.String
-
-Expression: ${requestScope.val1a}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
-
-Expression: ${sessionScope.val1a}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
-
-Expression: ${applicationScope.val1a}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
-
-Expression: ${val1a}
-ExpectedType: class java.lang.String
-Evaluates to: page-scoped1
-With type: java.lang.String
-
-
-# val1b - defined in request scope
-Expression: ${pageScope.val1b}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
-
-Expression: ${requestScope.val1b}
+* val1b - defined in request scope
+Expression: #{requestScope.val1b}
 ExpectedType: class java.lang.String
 Evaluates to: request-scoped1
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${sessionScope.val1b}
+Expression: #{sessionScope.val1b}
 ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Evaluates to: null
 
-Expression: ${applicationScope.val1b}
+Expression: #{applicationScope.val1b}
 ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Evaluates to: null
 
-Expression: ${val1b}
+Expression: #{val1b}
 ExpectedType: class java.lang.String
 Evaluates to: request-scoped1
-With type: java.lang.String
+With type: class java.lang.String
 
 
-# val1c - defined in session scope
-Expression: ${pageScope.val1c}
+* val1c - defined in session scope
+Expression: #{requestScope.val1c}
 ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Evaluates to: null
 
-Expression: ${requestScope.val1c}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
-
-Expression: ${sessionScope.val1c}
+Expression: #{sessionScope.val1c}
 ExpectedType: class java.lang.String
 Evaluates to: session-scoped1
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${applicationScope.val1c}
+Expression: #{applicationScope.val1c}
 ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Evaluates to: null
 
-Expression: ${val1c}
+Expression: #{val1c}
 ExpectedType: class java.lang.String
 Evaluates to: session-scoped1
-With type: java.lang.String
+With type: class java.lang.String
 
 
-# val1d - defined in application scope
-Expression: ${pageScope.val1d}
+* val1d - defined in application scope
+Expression: #{requestScope.val1d}
 ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Evaluates to: null
 
-Expression: ${requestScope.val1d}
+Expression: #{sessionScope.val1d}
 ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
+Evaluates to: null
 
-Expression: ${sessionScope.val1d}
-ExpectedType: class java.lang.String
-Evaluates to: 
-With type: java.lang.String
-
-Expression: ${applicationScope.val1d}
+Expression: #{applicationScope.val1d}
 ExpectedType: class java.lang.String
 Evaluates to: app-scoped1
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${val1d}
+Expression: #{val1d}
 ExpectedType: class java.lang.String
 Evaluates to: app-scoped1
-With type: java.lang.String
+With type: class java.lang.String
 
 
-#######################################################
-# accessing properties
+*######################################################
+* accessing properties
 
-Expression: ${bean1a.int1}
+Expression: #{bean1a.int1}
 ExpectedType: int
 Evaluates to: 4
-With type: java.lang.Integer
+With type: class java.lang.Integer
 
-Expression: ${bean1a.boolean1}
+Expression: #{bean1a.boolean1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.string1}
+Expression: #{bean1a.string1}
 ExpectedType: class java.lang.String
 Evaluates to: hello
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${bean1a.bean1.int2}
-ExpectedType: int
+Expression: #{bean1a.bean1.int2}
+ExpectedType: class java.lang.Integer
 Evaluates to: -224
-With type: java.lang.Integer
+With type: class java.lang.Integer
 
-Expression: ${bean1a.bean1.bean2.string2}
+Expression: #{bean1a.bean1.bean2.string2}
 ExpectedType: class java.lang.String
 Evaluates to: bean3's string
-With type: java.lang.String
+With type: class java.lang.String
 
-
-#######################################################
-# test the entire conversion matrix
-
-Expression: ${bean1a.byte1}
+Expression: #{bean1a.byte1}
 ExpectedType: byte
 Evaluates to: 12
-With type: java.lang.Byte
+With type: class java.lang.Byte
 
-Expression: ${bean1a.byte1}
-ExpectedType: char
-Evaluates to: 
-With type: java.lang.Character
-
-Expression: ${bean1a.byte1}
-ExpectedType: short
-Evaluates to: 12
-With type: java.lang.Short
-
-Expression: ${bean1a.byte1}
-ExpectedType: int
-Evaluates to: 12
-With type: java.lang.Integer
-
-Expression: ${bean1a.byte1}
-ExpectedType: long
-Evaluates to: 12
-With type: java.lang.Long
-
-Expression: ${bean1a.byte1}
-ExpectedType: float
-Evaluates to: 12.0
-With type: java.lang.Float
-
-Expression: ${bean1a.byte1}
-ExpectedType: double
-Evaluates to: 12.0
-With type: java.lang.Double
-
-
-Expression: ${bean1a.char1}
-ExpectedType: byte
-Evaluates to: 98
-With type: java.lang.Byte
-
-Expression: ${bean1a.char1}
+Expression: #{bean1a.char1}
 ExpectedType: char
 Evaluates to: b
-With type: java.lang.Character
+With type: class java.lang.Character
 
-Expression: ${bean1a.char1}
+Expression: #{bean1a.short1}
 ExpectedType: short
 Evaluates to: 98
-With type: java.lang.Short
+With type: class java.lang.Short
 
-Expression: ${bean1a.char1}
-ExpectedType: int
-Evaluates to: 98
-With type: java.lang.Integer
-
-Expression: ${bean1a.char1}
+Expression: #{bean1a.long1}
 ExpectedType: long
 Evaluates to: 98
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${bean1a.char1}
-ExpectedType: float
-Evaluates to: 98.0
-With type: java.lang.Float
-
-Expression: ${bean1a.char1}
-ExpectedType: double
-Evaluates to: 98.0
-With type: java.lang.Double
-
-
-Expression: ${bean1a.short1}
-ExpectedType: byte
-Evaluates to: 98
-With type: java.lang.Byte
-
-Expression: ${bean1a.short1}
-ExpectedType: char
-Evaluates to: b
-With type: java.lang.Character
-
-Expression: ${bean1a.short1}
-ExpectedType: short
-Evaluates to: 98
-With type: java.lang.Short
-
-Expression: ${bean1a.short1}
-ExpectedType: int
-Evaluates to: 98
-With type: java.lang.Integer
-
-Expression: ${bean1a.short1}
-ExpectedType: long
-Evaluates to: 98
-With type: java.lang.Long
-
-Expression: ${bean1a.short1}
-ExpectedType: float
-Evaluates to: 98.0
-With type: java.lang.Float
-
-Expression: ${bean1a.short1}
-ExpectedType: double
-Evaluates to: 98.0
-With type: java.lang.Double
-
-
-Expression: ${bean1a.int1}
-ExpectedType: byte
-Evaluates to: 4
-With type: java.lang.Byte
-
-Expression: ${bean1a.int1}
-ExpectedType: char
-Evaluates to: 
-With type: java.lang.Character
-
-Expression: ${bean1a.int1}
-ExpectedType: short
-Evaluates to: 4
-With type: java.lang.Short
-
-Expression: ${bean1a.int1}
-ExpectedType: int
-Evaluates to: 4
-With type: java.lang.Integer
-
-Expression: ${bean1a.int1}
-ExpectedType: long
-Evaluates to: 4
-With type: java.lang.Long
-
-Expression: ${bean1a.int1}
-ExpectedType: float
-Evaluates to: 4.0
-With type: java.lang.Float
-
-Expression: ${bean1a.int1}
-ExpectedType: double
-Evaluates to: 4.0
-With type: java.lang.Double
-
-
-Expression: ${bean1a.long1}
-ExpectedType: byte
-Evaluates to: 98
-With type: java.lang.Byte
-
-Expression: ${bean1a.long1}
-ExpectedType: char
-Evaluates to: b
-With type: java.lang.Character
-
-Expression: ${bean1a.long1}
-ExpectedType: short
-Evaluates to: 98
-With type: java.lang.Short
-
-Expression: ${bean1a.long1}
-ExpectedType: int
-Evaluates to: 98
-With type: java.lang.Integer
-
-Expression: ${bean1a.long1}
-ExpectedType: long
-Evaluates to: 98
-With type: java.lang.Long
-
-Expression: ${bean1a.long1}
-ExpectedType: float
-Evaluates to: 98.0
-With type: java.lang.Float
-
-Expression: ${bean1a.long1}
-ExpectedType: double
-Evaluates to: 98.0
-With type: java.lang.Double
-
-
-Expression: ${bean1a.float1}
-ExpectedType: byte
-Evaluates to: 12
-With type: java.lang.Byte
-
-Expression: ${bean1a.float1}
-ExpectedType: char
-Evaluates to: 
-With type: java.lang.Character
-
-Expression: ${bean1a.float1}
-ExpectedType: short
-Evaluates to: 12
-With type: java.lang.Short
-
-Expression: ${bean1a.float1}
-ExpectedType: int
-Evaluates to: 12
-With type: java.lang.Integer
-
-Expression: ${bean1a.float1}
-ExpectedType: long
-Evaluates to: 12
-With type: java.lang.Long
-
-Expression: ${bean1a.float1}
+Expression: #{bean1a.float1}
 ExpectedType: float
 Evaluates to: 12.4
-With type: java.lang.Float
+With type: class java.lang.Float
 
-Expression: ${bean1a.float1}
-ExpectedType: double
-Evaluates to: 12.399999618530273
-With type: java.lang.Double
-
-
-Expression: ${bean1a.double1}
-ExpectedType: byte
-Evaluates to: 89
-With type: java.lang.Byte
-
-Expression: ${bean1a.double1}
-ExpectedType: char
-Evaluates to: Y
-With type: java.lang.Character
-
-Expression: ${bean1a.double1}
-ExpectedType: short
-Evaluates to: 89
-With type: java.lang.Short
-
-Expression: ${bean1a.double1}
-ExpectedType: int
-Evaluates to: 89
-With type: java.lang.Integer
-
-Expression: ${bean1a.double1}
-ExpectedType: long
-Evaluates to: 89
-With type: java.lang.Long
-
-Expression: ${bean1a.double1}
-ExpectedType: float
-Evaluates to: 89.224
-With type: java.lang.Float
-
-Expression: ${bean1a.double1}
+Expression: #{bean1a.double1}
 ExpectedType: double
 Evaluates to: 89.224
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
-#######################################################
-# test the entire relational comparison type promotion matrix
+*######################################################
+* test the entire relational comparison type promotion matrix
 
-Expression: ${bean1a.byte1 < bean1a.byte1}
+Expression: #{bean1a.byte1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.byte1 < bean1a.char1}
+Expression: #{bean1a.byte1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.byte1 < bean1a.short1}
+Expression: #{bean1a.byte1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.byte1 < bean1a.int1}
+Expression: #{bean1a.byte1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.byte1 < bean1a.long1}
+Expression: #{bean1a.byte1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.byte1 < bean1a.float1}
+Expression: #{bean1a.byte1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.byte1 < bean1a.double1}
+Expression: #{bean1a.byte1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${bean1a.char1 < bean1a.byte1}
+Expression: #{bean1a.char1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.char1 < bean1a.char1}
+Expression: #{bean1a.char1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.char1 < bean1a.short1}
+Expression: #{bean1a.char1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.char1 < bean1a.int1}
+Expression: #{bean1a.char1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.char1 < bean1a.long1}
+Expression: #{bean1a.char1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.char1 < bean1a.float1}
+Expression: #{bean1a.char1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.char1 < bean1a.double1}
+Expression: #{bean1a.char1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${bean1a.short1 < bean1a.byte1}
+Expression: #{bean1a.short1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.short1 < bean1a.char1}
+Expression: #{bean1a.short1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.short1 < bean1a.short1}
+Expression: #{bean1a.short1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.short1 < bean1a.int1}
+Expression: #{bean1a.short1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.short1 < bean1a.long1}
+Expression: #{bean1a.short1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.short1 < bean1a.float1}
+Expression: #{bean1a.short1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.short1 < bean1a.double1}
+Expression: #{bean1a.short1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${bean1a.int1 < bean1a.byte1}
+Expression: #{bean1a.int1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.int1 < bean1a.char1}
+Expression: #{bean1a.int1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.int1 < bean1a.short1}
+Expression: #{bean1a.int1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.int1 < bean1a.int1}
+Expression: #{bean1a.int1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.int1 < bean1a.long1}
+Expression: #{bean1a.int1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.int1 < bean1a.float1}
+Expression: #{bean1a.int1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.int1 < bean1a.double1}
+Expression: #{bean1a.int1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${bean1a.long1 < bean1a.byte1}
+Expression: #{bean1a.long1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.long1 < bean1a.char1}
+Expression: #{bean1a.long1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.long1 < bean1a.short1}
+Expression: #{bean1a.long1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.long1 < bean1a.int1}
+Expression: #{bean1a.long1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.long1 < bean1a.long1}
+Expression: #{bean1a.long1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.long1 < bean1a.float1}
+Expression: #{bean1a.long1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.long1 < bean1a.double1}
+Expression: #{bean1a.long1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${bean1a.float1 < bean1a.byte1}
+Expression: #{bean1a.float1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.float1 < bean1a.char1}
+Expression: #{bean1a.float1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.float1 < bean1a.short1}
+Expression: #{bean1a.float1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.float1 < bean1a.int1}
+Expression: #{bean1a.float1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.float1 < bean1a.long1}
+Expression: #{bean1a.float1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.float1 < bean1a.float1}
+Expression: #{bean1a.float1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.float1 < bean1a.double1}
+Expression: #{bean1a.float1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${bean1a.double1 < bean1a.byte1}
+Expression: #{bean1a.double1 < bean1a.byte1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.double1 < bean1a.char1}
+Expression: #{bean1a.double1 < bean1a.char1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.double1 < bean1a.short1}
+Expression: #{bean1a.double1 < bean1a.short1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.double1 < bean1a.int1}
+Expression: #{bean1a.double1 < bean1a.int1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.double1 < bean1a.long1}
+Expression: #{bean1a.double1 < bean1a.long1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.double1 < bean1a.float1}
+Expression: #{bean1a.double1 < bean1a.float1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.double1 < bean1a.double1}
+Expression: #{bean1a.double1 < bean1a.double1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test other relational comparison rules
+*######################################################
+* test other relational comparison rules
 
-Expression: ${null == null}
+Expression: #{null == null}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${noSuchAttribute == noSuchAttribute}
+Expression: #{noSuchAttribute == noSuchAttribute}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${noSuchAttribute == null}
+Expression: #{noSuchAttribute == null}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${null == noSuchAttribute}
+Expression: #{null == noSuchAttribute}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a == null}
+Expression: #{bean1a == null}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${null == bean1a}
+Expression: #{null == bean1a}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a == bean1a}
+Expression: #{bean1a == bean1a}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a > "hello"}
+Expression: #{bean1a > "hello"}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.bean1 < 14}
+Expression: #{bean1a.bean1 < 14}
 ExpectedType: boolean
-Causes an error: com.sun.faces.el.impl.ElException: Attempt to coerce a value of type "com.sun.faces.el.impl.Bean1" to type "java.lang.Long"
-Expression: ${bean1a.bean1 == "hello"}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.ElException: Attempt to coerce a value of type "com.sun.faces.el.impl.Bean1" to type "java.lang.Long"
+Expression: #{bean1a.bean1 == "hello"}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test String comparisons
+*######################################################
+* test String comparisons
 
-Expression: ${bean1a.string1 == "hello"}
+Expression: #{bean1a.string1 == "hello"}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.string1 != "hello"}
+Expression: #{bean1a.string1 != "hello"}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.string1 == "goodbye"}
+Expression: #{bean1a.string1 == "goodbye"}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.string1 != "goodbye"}
+Expression: #{bean1a.string1 != "goodbye"}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${bean1a.string1 > "goodbye"}
+Expression: #{bean1a.string1 > "goodbye"}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${"hello" == bean1a.string1}
+Expression: #{"hello" == bean1a.string1}
 ExpectedType: boolean
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${"goodbye" > bean1a.string1}
+Expression: #{"goodbye" > bean1a.string1}
 ExpectedType: boolean
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test errors in property traversal
+*######################################################
+* test errors in property traversal
 
-Expression: ${noSuchAttribute.abc}
+Expression: #{noSuchAttribute.abc}
 ExpectedType: class java.lang.Object
 Evaluates to: null
 
-Expression: ${bean1a.bean2.byte1}
+Expression: #{bean1a.bean2.byte1}
 ExpectedType: class java.lang.Object
 Evaluates to: null
 
-Expression: ${bean1a.noProperty}
+Expression: #{bean1a.noProperty}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "noProperty" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.noGetter}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'noProperty' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.noGetter}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "noGetter" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.errorInGetter}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'noGetter' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.errorInGetter}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: An error occurred while getting property "errorInGetter" from an instance of class com.sun.faces.el.impl.Bean1
-Expression: ${bean1a.bean2.string2}
-ExpectedType: class java.lang.Object
-Evaluates to: null
-
-
-#######################################################
-# test accessing public properties from private classes
-
-Expression: ${pbean1.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-Expression: ${pbean2.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-Expression: ${pbean3.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-Expression: ${pbean4.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-Expression: ${pbean5.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-Expression: ${pbean6.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-Expression: ${pbean7.value}
-ExpectedType: class java.lang.Object
-Evaluates to: got the value
-With type: java.lang.String
-
-
-#######################################################
-# test literal conversions
-
-Expression: true
-ExpectedType: boolean
-Evaluates to: true
-With type: java.lang.Boolean
-
-Expression: false
-ExpectedType: boolean
-Evaluates to: false
-With type: java.lang.Boolean
-
-Expression: 12
-ExpectedType: byte
-Evaluates to: 12
-With type: java.lang.Byte
-
-Expression: 12
-ExpectedType: char
-Evaluates to: 1
-With type: java.lang.Character
-
-Expression: 12
-ExpectedType: short
-Evaluates to: 12
-With type: java.lang.Short
-
-Expression: 12
-ExpectedType: int
-Evaluates to: 12
-With type: java.lang.Integer
-
-Expression: 12
-ExpectedType: long
-Evaluates to: 12
-With type: java.lang.Long
-
-Expression: 12
-ExpectedType: float
-Evaluates to: 12.0
-With type: java.lang.Float
-
-Expression: 12
-ExpectedType: double
-Evaluates to: 12.0
-With type: java.lang.Double
-
-
-Expression: hello
-ExpectedType: class com.sun.faces.el.impl.Bean2
-Evaluates to: Bean2[hello]
-With type: com.sun.faces.el.impl.Bean2
-
-Expression: badvalue
-ExpectedType: class com.sun.faces.el.impl.Bean2
-Causes an error: com.sun.faces.el.impl.ElException: Unable to parse value "badvalue" into expected type "com.sun.faces.el.impl.Bean2"
-Expression: hello
-ExpectedType: class com.sun.faces.el.impl.Bean1
-Causes an error: com.sun.faces.el.impl.ElException: Attempt to convert String "hello" to type "com.sun.faces.el.impl.Bean1", but there is no PropertyEditor for that type
-
-#######################################################
-# test null values bumped up to constants
-
-Expression: ${null}
-ExpectedType: boolean
-Evaluates to: false
-With type: java.lang.Boolean
-
-Expression: ${null}
-ExpectedType: byte
-Evaluates to: 0
-With type: java.lang.Byte
-
-Expression: ${null}
-ExpectedType: short
-Evaluates to: 0
-With type: java.lang.Short
-
-Expression: ${null}
-ExpectedType: char
-Evaluates to:  
-With type: java.lang.Character
-
-Expression: ${null}
-ExpectedType: int
-Evaluates to: 0
-With type: java.lang.Integer
-
-Expression: ${null}
-ExpectedType: long
-Evaluates to: 0
-With type: java.lang.Long
-
-Expression: ${null}
-ExpectedType: float
-Evaluates to: 0.0
-With type: java.lang.Float
-
-Expression: ${null}
-ExpectedType: double
-Evaluates to: 0.0
-With type: java.lang.Double
-
-Expression: ${null}
-ExpectedType: class java.lang.Boolean
-Evaluates to: false
-With type: java.lang.Boolean
-
-Expression: ${null}
-ExpectedType: class java.lang.Byte
-Evaluates to: 0
-With type: java.lang.Byte
-
-Expression: ${null}
-ExpectedType: class java.lang.Short
-Evaluates to: 0
-With type: java.lang.Short
-
-Expression: ${null}
-ExpectedType: class java.lang.Character
-Evaluates to:  
-With type: java.lang.Character
-
-Expression: ${null}
-ExpectedType: class java.lang.Integer
-Evaluates to: 0
-With type: java.lang.Integer
-
-Expression: ${null}
-ExpectedType: class java.lang.Long
-Evaluates to: 0
-With type: java.lang.Long
-
-Expression: ${null}
-ExpectedType: class java.lang.Float
-Evaluates to: 0.0
-With type: java.lang.Float
-
-Expression: ${null}
-ExpectedType: class java.lang.Double
-Evaluates to: 0.0
-With type: java.lang.Double
-
-
-
-#######################################################
-# test reserved words as identifiers
-
-Expression: ${and}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "and", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${or}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "or", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${not}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "}", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${eq}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "eq", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${ne}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "ne", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${lt}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "lt", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${gt}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "gt", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${le}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "le", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${ge}
-ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "ge", expected one of [<INTEGER_LITERAL>, <FLOATING_POINT_LITERAL>, <STRING_LITERAL>, "true", "false", "null", "(", "-", "not", "!", "empty", <IDENTIFIER>]
-Expression: ${instanceof}
+Causes an error: javax.faces.el.EvaluationException: javax.faces.el.EvaluationException: Error getting property 'errorInGetter' from bean of type com.sun.faces.el.impl.Bean1: java.lang.NullPointerException: Error!
+Expression: #{bean1a.bean2.string2}
 ExpectedType: class java.lang.Object
 Evaluates to: null
 
-Expression: ${true}
+
+*######################################################
+* test accessing public properties from private classes
+
+Expression: #{pbean1.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+Expression: #{pbean2.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+Expression: #{pbean3.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+Expression: #{pbean4.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+Expression: #{pbean5.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+Expression: #{pbean6.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+Expression: #{pbean7.value}
+ExpectedType: class java.lang.Object
+Evaluates to: got the value
+With type: class java.lang.String
+
+
+
+*######################################################
+* test reserved words as identifiers
+
+Expression: #{and}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "and" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{or}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "or" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{not}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "}" at line 1, column 6.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{eq}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "eq" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{ne}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ne" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{lt}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "lt" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{gt}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "gt" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{le}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "le" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{ge}
+ExpectedType: class java.lang.Object
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ge" at line 1, column 3.
+Was expecting one of:
+    <INTEGER_LITERAL> ...
+    <FLOATING_POINT_LITERAL> ...
+    <STRING_LITERAL> ...
+    "true" ...
+    "false" ...
+    "null" ...
+    "(" ...
+    "-" ...
+    "not" ...
+    "!" ...
+    "empty" ...
+    <IDENTIFIER> ...
+    
+Expression: #{instanceof}
+ExpectedType: class java.lang.Object
+Evaluates to: null
+
+Expression: #{true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${false}
+Expression: #{false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${null}
+Expression: #{null}
 ExpectedType: class java.lang.Object
 Evaluates to: null
 
 
 
-#######################################################
-# test reserved words as property names
+*######################################################
+* test reserved words as property names
 
-Expression: ${bean1a.and}
+Expression: #{bean1a.and}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "and", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.or}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "and" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.or}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "or", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.not}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "or" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.not}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "not", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.eq}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "not" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.eq}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "eq", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.ne}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "eq" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.ne}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "ne", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.lt}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ne" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.lt}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "lt", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.gt}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "lt" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.gt}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "gt", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.le}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "gt" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.le}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "le", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.ge}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "le" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.ge}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "ge", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.instanceof}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "ge" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.instanceof}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "instanceof" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.page}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'instanceof' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.page}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "page" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.request}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'page' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.request}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "request" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.session}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'request' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.session}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "session" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.application}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'session' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.application}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "application" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${bean1a.true}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'application' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{bean1a.true}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "true", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.false}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "true" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.false}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "false", expected one of [<IDENTIFIER>]
-Expression: ${bean1a.null}
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "false" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
+Expression: #{bean1a.null}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Encountered "null", expected one of [<IDENTIFIER>]
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.parser.ParseException: Encountered "null" at line 1, column 10.
+Was expecting:
+    <IDENTIFIER> ...
+    
 
-#######################################################
-# test arithmetic
+*######################################################
+* test arithmetic
 
-Expression: ${3+5}
+Expression: #{3+5}
 ExpectedType: class java.lang.Object
 Evaluates to: 8
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${3-5}
+Expression: #{3-5}
 ExpectedType: class java.lang.Object
 Evaluates to: -2
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${3/5}
+Expression: #{3/5}
 ExpectedType: class java.lang.Object
 Evaluates to: 0.6
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${3*5}
+Expression: #{3*5}
 ExpectedType: class java.lang.Object
 Evaluates to: 15
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${3*5.0}
+Expression: #{3*5.0}
 ExpectedType: class java.lang.Object
 Evaluates to: 15.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${3.0*5}
+Expression: #{3.0*5}
 ExpectedType: class java.lang.Object
 Evaluates to: 15.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${3.0*5.0}
+Expression: #{3.0*5.0}
 ExpectedType: class java.lang.Object
 Evaluates to: 15.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${225 % 17}
+Expression: #{225 % 17}
 ExpectedType: class java.lang.Object
 Evaluates to: 4
-With type: java.lang.Long
+With type: class java.lang.Long
 
 
-Expression: ${ 1 + 2 + 3 * 5 + 6}
+Expression: #{ 1 + 2 + 3 * 5 + 6}
 ExpectedType: class java.lang.Object
 Evaluates to: 24
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 1 + (2 + 3) * 5 + 6}
+Expression: #{ 1 + (2 + 3) * 5 + 6}
 ExpectedType: class java.lang.Object
 Evaluates to: 32
-With type: java.lang.Long
+With type: class java.lang.Long
 
 
-#######################################################
-# test logical operators
+*######################################################
+* test logical operators
 
-Expression: ${ true}
+Expression: #{ true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ not true}
+Expression: #{ not true}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ not false}
+Expression: #{ not false}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ not not true}
+Expression: #{ not not true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ not not false}
+Expression: #{ not not false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ true and false}
+Expression: #{ true and false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ true and true}
+Expression: #{ true and true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ false and true}
+Expression: #{ false and true}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ false and false}
+Expression: #{ false and false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ true or false}
+Expression: #{ true or false}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ true or true}
+Expression: #{ true or true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ false or true}
+Expression: #{ false or true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ false or false}
+Expression: #{ false or false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${ false or false or false or true and false}
+Expression: #{ false or false or false or true and false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ false or false or false or true and false or true}
+Expression: #{ false or false or false or true and false or true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test indexed access operator
+*######################################################
+* test indexed access operator
 
-# Test as equivalent to property accessor
-Expression: ${ bean1a["double1"] }
+* Test as equivalent to property accessor
+Expression: #{ bean1a["double1"] }
 ExpectedType: class java.lang.Object
 Evaluates to: 89.224
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ bean1a["double1"].class }
+Expression: #{ bean1a["double1"].class }
 ExpectedType: class java.lang.Object
 Evaluates to: class java.lang.Double
-With type: java.lang.Class
+With type: class java.lang.Class
 
 
-# Test as array accessor
-Expression: ${ bean1a.stringArray1[-1]}
+* Test as array accessor
+Expression: #{ bean1a.stringArray1[-1]}
 ExpectedType: class java.lang.Object
 Evaluates to: null
 
-Expression: ${ bean1a.stringArray1[0]}
+Expression: #{ bean1a.stringArray1[0]}
 ExpectedType: class java.lang.Object
 Evaluates to: string1
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.stringArray1[1]}
+Expression: #{ bean1a.stringArray1[1]}
 ExpectedType: class java.lang.Object
 Evaluates to: string2
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.stringArray1[2]}
+Expression: #{ bean1a.stringArray1[2]}
 ExpectedType: class java.lang.Object
 Evaluates to: string3
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.stringArray1[3]}
+Expression: #{ bean1a.stringArray1[3]}
 ExpectedType: class java.lang.Object
 Evaluates to: string4
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.stringArray1[4]}
+Expression: #{ bean1a.stringArray1[4]}
 ExpectedType: class java.lang.Object
 Evaluates to: null
 
 
-# Test as list accessor
-Expression: ${ bean1a.list1 [0] }
+* Test as list accessor
+Expression: #{ bean1a.list1 [0] }
 ExpectedType: class java.lang.Object
 Evaluates to: 14
-With type: java.lang.Integer
+With type: class java.lang.Integer
 
-Expression: ${ bean1a.list1 [1] }
+Expression: #{ bean1a.list1 [1] }
 ExpectedType: class java.lang.Object
 Evaluates to: another value
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.list1 [2][2] }
+Expression: #{ bean1a.list1 [2][2] }
 ExpectedType: class java.lang.Object
 Evaluates to: string3
-With type: java.lang.String
+With type: class java.lang.String
 
 
-# Test as indexed property accessor
-Expression: ${ bean1a.indexed1[-1]}
+* Test as indexed property accessor
+Expression: #{ bean1a.indexed1[-1]}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "indexed1" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${ bean1a.indexed1[0]}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'indexed1' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{ bean1a.indexed1[0]}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "indexed1" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${ bean1a.indexed1[1]}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'indexed1' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{ bean1a.indexed1[1]}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "indexed1" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${ bean1a.indexed1[2]}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'indexed1' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{ bean1a.indexed1[2]}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "indexed1" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${ bean1a.indexed1[3]}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'indexed1' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{ bean1a.indexed1[3]}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "indexed1" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
-Expression: ${ bean1a.indexed1[4]}
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'indexed1' from bean of type com.sun.faces.el.impl.Bean1
+Expression: #{ bean1a.indexed1[4]}
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: Unable to find a value for "indexed1" in object of class "com.sun.faces.el.impl.Bean1" using operator "."
+Causes an error: javax.faces.el.PropertyNotFoundException: Error getting property 'indexed1' from bean of type com.sun.faces.el.impl.Bean1
 
-# Test as map accessor
-Expression: ${ bean1a.map1.key1 }
+* Test as map accessor
+Expression: #{ bean1a.map1.noKey }
+ExpectedType: class java.lang.Object
+Evaluates to: null
+
+Expression: #{ bean1a.map1.key1 }
 ExpectedType: class java.lang.Object
 Evaluates to: value1
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.map1 ["key1"] }
+Expression: #{ bean1a.map1 ["key1"] }
 ExpectedType: class java.lang.Object
 Evaluates to: value1
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.map1 [14] }
+Expression: #{ bean1a.map1 [14] }
 ExpectedType: class java.lang.Object
 Evaluates to: value3
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.map1 [2 * 7] }
+Expression: #{ bean1a.map1 [2 * 7] }
 ExpectedType: class java.lang.Object
 Evaluates to: value3
-With type: java.lang.String
+With type: class java.lang.String
 
-Expression: ${ bean1a.map1.recurse.list1[0] }
+Expression: #{ bean1a.map1.recurse.list1[0] }
 ExpectedType: class java.lang.Object
 Evaluates to: 14
-With type: java.lang.Integer
+With type: class java.lang.Integer
 
 
-#######################################################
-# test String concatenation
+* Test UIComponent as bean
+Expression: #{view.rendered}
+ExpectedType: class java.lang.Boolean
+Evaluates to: true
+With type: class java.lang.Boolean
 
-Expression: ${ "a" + "bcd" }
+Expression: #{view.attributes.rendered}
+ExpectedType: class java.lang.Boolean
+Evaluates to: true
+With type: class java.lang.Boolean
+
+Expression: #{view.children[0].value}
+ExpectedType: class java.lang.String
+Evaluates to: inputValue
+With type: class java.lang.String
+
+Expression: #{view.children[0].rendered}
+ExpectedType: class java.lang.Boolean
+Evaluates to: true
+With type: class java.lang.Boolean
+
+
+*######################################################
+* test String concatenation
+
+Expression: #{ "a" + "bcd" }
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: An exception occured trying to convert String "a" to type "java.lang.Long"
-Expression: ${ "a" + (4*3) }
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.ElException: An exception occured trying to convert String "a" to type "java.lang.Long"
+Expression: #{ "a" + (4*3) }
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: An exception occured trying to convert String "a" to type "java.lang.Long"
-Expression: ${ bean1a.map1 ["key" + (5-4)] }
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.ElException: An exception occured trying to convert String "a" to type "java.lang.Long"
+Expression: #{ bean1a.map1 ["key" + (5-4)] }
 ExpectedType: class java.lang.Object
-Causes an error: com.sun.faces.el.impl.ElException: An exception occured trying to convert String "key" to type "java.lang.Double"
+Causes an error: javax.faces.el.EvaluationException: com.sun.faces.el.impl.ElException: An exception occured trying to convert String "key" to type "java.lang.Double"
 
-#######################################################
-# test String comparisons
+*######################################################
+* test String comparisons
 
-Expression: ${ "30" < "4" }
+Expression: #{ "30" < "4" }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 30 < "4" }
+Expression: #{ 30 < "4" }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 30 > "4" }
+Expression: #{ 30 > "4" }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ "0004" == "4" }
+Expression: #{ "0004" == "4" }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test relational comparison with alternate symbols
+*######################################################
+* test relational comparison with alternate symbols
 
-Expression: ${ 4 eq 3}
+Expression: #{ 4 eq 3}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 ne 3}
+Expression: #{ 4 ne 3}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 eq 4}
+Expression: #{ 4 eq 4}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 ne 4}
+Expression: #{ 4 ne 4}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 lt 3}
+Expression: #{ 4 lt 3}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 gt 3}
+Expression: #{ 4 gt 3}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 le 3}
+Expression: #{ 4 le 3}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 ge 3}
+Expression: #{ 4 ge 3}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 le 4}
+Expression: #{ 4 le 4}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 4 ge 4}
+Expression: #{ 4 ge 4}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test expressions on the left side of a value suffix
+*######################################################
+* test expressions on the left side of a value suffix
 
-Expression: ${(3).class}
+Expression: #{(3).class}
 ExpectedType: class java.lang.Object
 Evaluates to: class java.lang.Long
-With type: java.lang.Class
+With type: class java.lang.Class
 
-Expression: ${(bean1a.map1)["key1"]}
+Expression: #{(bean1a.map1)["key1"]}
 ExpectedType: class java.lang.Object
 Evaluates to: value1
-With type: java.lang.String
+With type: class java.lang.String
 
 
 
-#######################################################
-# test String/boolean logical operators
+*######################################################
+* test String/boolean logical operators
 
-Expression: ${'true' and false}
+Expression: #{'true' and false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${'true' or true}
+Expression: #{'true' or true}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${false and 'true'}
+Expression: #{false and 'true'}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${false or 'true'}
+Expression: #{false or 'true'}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test empty operator
+*######################################################
+* test empty operator
 
-Expression: ${ empty "A"}
+Expression: #{ empty "A"}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty "" }
+Expression: #{ empty "" }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty null }
+Expression: #{ empty null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty false}
+Expression: #{ empty false}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty 0}
+Expression: #{ empty 0}
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ not empty 0}
+Expression: #{ not empty 0}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ not empty empty 0}
+Expression: #{ not empty empty 0}
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.emptyArray }
+Expression: #{ empty emptyTests.emptyArray }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.nonemptyArray }
+Expression: #{ empty emptyTests.nonemptyArray }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.emptyList }
+Expression: #{ empty emptyTests.emptyList }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.nonemptyList }
+Expression: #{ empty emptyTests.nonemptyList }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.emptyMap }
+Expression: #{ empty emptyTests.emptyMap }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.nonemptyMap }
+Expression: #{ empty emptyTests.nonemptyMap }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.emptySet }
+Expression: #{ empty emptyTests.emptySet }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ empty emptyTests.nonemptySet }
+Expression: #{ empty emptyTests.nonemptySet }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# test String arithmetic
+*######################################################
+* test String arithmetic
 
-Expression: ${ "6" / "3" }
+Expression: #{ "6" / "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 2.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 3 + "4" }
+Expression: #{ 3 + "4" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4" + 3 }
+Expression: #{ "4" + 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 3 + "4.5" }
+Expression: #{ 3 + "4.5" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.5
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.5" + 3 }
+Expression: #{ "4.5" + 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.5
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 3.0 + 6.0}
+Expression: #{ 3.0 + 6.0}
 ExpectedType: class java.lang.Object
 Evaluates to: 9.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 31121.0 * 61553.0 }
+Expression: #{ 31121.0 * 61553.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.915590913E9
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 31121 * 61553 }
+Expression: #{ 31121 * 61553 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1915590913
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 65536 * 65536 * 65536 * 32759 }
+Expression: #{ 65536 * 65536 * 65536 * 32759 }
 ExpectedType: class java.lang.Object
 Evaluates to: 9220838762064379904
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 9220838762064379904.0 - 9220838762064379900.0 }
+Expression: #{ 9220838762064379904.0 - 9220838762064379900.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 0.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 9220838762064379904 - 9220838762064379900 }
+Expression: #{ 9220838762064379904 - 9220838762064379900 }
 ExpectedType: class java.lang.Object
 Evaluates to: 4
-With type: java.lang.Long
+With type: class java.lang.Long
 
 
-#######################################################
-# test relational operators involving null
+*######################################################
+* test relational operators involving null
 
-Expression: ${ null == null }
+Expression: #{ null == null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null != null }
+Expression: #{ null != null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null > null }
+Expression: #{ null > null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null < null }
+Expression: #{ null < null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null >= null }
+Expression: #{ null >= null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null <= null }
+Expression: #{ null <= null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${ null == 3 }
+Expression: #{ null == 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null != 3 }
+Expression: #{ null != 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null > 3 }
+Expression: #{ null > 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null < 3 }
+Expression: #{ null < 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null >= 3 }
+Expression: #{ null >= 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null <= 3 }
+Expression: #{ null <= 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${ 3 == null }
+Expression: #{ 3 == null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 3 != null }
+Expression: #{ 3 != null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 3 > null }
+Expression: #{ 3 > null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 3 < null }
+Expression: #{ 3 < null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 3 >= null }
+Expression: #{ 3 >= null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ 3 <= null }
+Expression: #{ 3 <= null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-Expression: ${ null == "" }
+Expression: #{ null == "" }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ null != "" }
+Expression: #{ null != "" }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ "" == null }
+Expression: #{ "" == null }
 ExpectedType: class java.lang.Object
 Evaluates to: false
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
-Expression: ${ "" != null }
+Expression: #{ "" != null }
 ExpectedType: class java.lang.Object
 Evaluates to: true
-With type: java.lang.Boolean
+With type: class java.lang.Boolean
 
 
-#######################################################
-# arithmetic operators involving Strings
+*######################################################
+* arithmetic operators involving Strings
 
-Expression: ${ 4 + 3 }
+Expression: #{ 4 + 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 + 3 }
+Expression: #{ 4.0 + 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 + 3.0 }
+Expression: #{ 4 + 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 + 3.0 }
+Expression: #{ 4.0 + 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" + 3 }
+Expression: #{ "4" + 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" + 3 }
+Expression: #{ "4.0" + 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" + 3.0 }
+Expression: #{ "4" + 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" + 3.0 }
+Expression: #{ "4.0" + 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 + "3" }
+Expression: #{ 4 + "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 + "3" }
+Expression: #{ 4.0 + "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 + "3.0" }
+Expression: #{ 4 + "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 + "3.0" }
+Expression: #{ 4.0 + "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" + "3" }
+Expression: #{ "4" + "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" + "3" }
+Expression: #{ "4.0" + "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" + "3.0" }
+Expression: #{ "4" + "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" + "3.0" }
+Expression: #{ "4.0" + "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 7.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-Expression: ${ 4 - 3 }
+Expression: #{ 4 - 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 - 3 }
+Expression: #{ 4.0 - 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 - 3.0 }
+Expression: #{ 4 - 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 - 3.0 }
+Expression: #{ 4.0 - 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" - 3 }
+Expression: #{ "4" - 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" - 3 }
+Expression: #{ "4.0" - 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" - 3.0 }
+Expression: #{ "4" - 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" - 3.0 }
+Expression: #{ "4.0" - 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 - "3" }
+Expression: #{ 4 - "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 - "3" }
+Expression: #{ 4.0 - "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 - "3.0" }
+Expression: #{ 4 - "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 - "3.0" }
+Expression: #{ 4.0 - "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" - "3" }
+Expression: #{ "4" - "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" - "3" }
+Expression: #{ "4.0" - "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" - "3.0" }
+Expression: #{ "4" - "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" - "3.0" }
+Expression: #{ "4.0" - "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-Expression: ${ 4 * 3 }
+Expression: #{ 4 * 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 * 3 }
+Expression: #{ 4.0 * 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 * 3.0 }
+Expression: #{ 4 * 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 * 3.0 }
+Expression: #{ 4.0 * 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" * 3 }
+Expression: #{ "4" * 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" * 3 }
+Expression: #{ "4.0" * 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" * 3.0 }
+Expression: #{ "4" * 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" * 3.0 }
+Expression: #{ "4.0" * 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 * "3" }
+Expression: #{ 4 * "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 * "3" }
+Expression: #{ 4.0 * "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 * "3.0" }
+Expression: #{ 4 * "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 * "3.0" }
+Expression: #{ 4.0 * "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" * "3" }
+Expression: #{ "4" * "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" * "3" }
+Expression: #{ "4.0" * "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" * "3.0" }
+Expression: #{ "4" * "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" * "3.0" }
+Expression: #{ "4.0" * "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 12.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-Expression: ${ 4 / 3 }
+Expression: #{ 4 / 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 / 3 }
+Expression: #{ 4.0 / 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 / 3.0 }
+Expression: #{ 4 / 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 / 3.0 }
+Expression: #{ 4.0 / 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" / 3 }
+Expression: #{ "4" / 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" / 3 }
+Expression: #{ "4.0" / 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" / 3.0 }
+Expression: #{ "4" / 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" / 3.0 }
+Expression: #{ "4.0" / 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 / "3" }
+Expression: #{ 4 / "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 / "3" }
+Expression: #{ 4.0 / "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 / "3.0" }
+Expression: #{ 4 / "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 / "3.0" }
+Expression: #{ 4.0 / "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" / "3" }
+Expression: #{ "4" / "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" / "3" }
+Expression: #{ "4.0" / "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" / "3.0" }
+Expression: #{ "4" / "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" / "3.0" }
+Expression: #{ "4.0" / "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.3333333333333333
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-Expression: ${ 4 % 3 }
+Expression: #{ 4 % 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 % 3 }
+Expression: #{ 4.0 % 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 % 3.0 }
+Expression: #{ 4 % 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 % 3.0 }
+Expression: #{ 4.0 % 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" % 3 }
+Expression: #{ "4" % 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" % 3 }
+Expression: #{ "4.0" % 3 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" % 3.0 }
+Expression: #{ "4" % 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" % 3.0 }
+Expression: #{ "4.0" % 3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 % "3" }
+Expression: #{ 4 % "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ 4.0 % "3" }
+Expression: #{ 4.0 % "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4 % "3.0" }
+Expression: #{ 4 % "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ 4.0 % "3.0" }
+Expression: #{ 4.0 % "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" % "3" }
+Expression: #{ "4" % "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ "4.0" % "3" }
+Expression: #{ "4.0" % "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" % "3.0" }
+Expression: #{ "4" % "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4.0" % "3.0" }
+Expression: #{ "4.0" % "3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: 1.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-Expression: ${ "8" / "2" }
+Expression: #{ "8" / "2" }
 ExpectedType: class java.lang.Object
 Evaluates to: 4.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4e2" + "3" }
+Expression: #{ "4e2" + "3" }
 ExpectedType: class java.lang.Object
 Evaluates to: 403.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4" + "3e2" }
+Expression: #{ "4" + "3e2" }
 ExpectedType: class java.lang.Object
 Evaluates to: 304.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ "4e2" + "3e2" }
+Expression: #{ "4e2" + "3e2" }
 ExpectedType: class java.lang.Object
 Evaluates to: 700.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
 
 
-#######################################################
-# unary minus operator involving Strings
+*######################################################
+* unary minus operator involving Strings
 
-Expression: ${ -3 }
+Expression: #{ -3 }
 ExpectedType: class java.lang.Object
 Evaluates to: -3
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ -3.0 }
+Expression: #{ -3.0 }
 ExpectedType: class java.lang.Object
 Evaluates to: -3.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ -"3" }
+Expression: #{ -"3" }
 ExpectedType: class java.lang.Object
 Evaluates to: -3
-With type: java.lang.Long
+With type: class java.lang.Long
 
-Expression: ${ -"3.0" }
+Expression: #{ -"3.0" }
 ExpectedType: class java.lang.Object
 Evaluates to: -3.0
-With type: java.lang.Double
+With type: class java.lang.Double
 
-Expression: ${ -"3e2" }
+Expression: #{ -"3e2" }
 ExpectedType: class java.lang.Object
 Evaluates to: -300.0
-With type: java.lang.Double
+With type: class java.lang.Double
 

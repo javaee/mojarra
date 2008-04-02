@@ -1,8 +1,8 @@
 /*
 <<<<<<< variant A
- * $Id: ValueBindingImpl.java,v 1.24 2004/01/06 04:28:28 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.25 2004/01/10 05:43:52 eburns Exp $
 >>>>>>> variant B
- * $Id: ValueBindingImpl.java,v 1.24 2004/01/06 04:28:28 eburns Exp $
+ * $Id: ValueBindingImpl.java,v 1.25 2004/01/10 05:43:52 eburns Exp $
 ======= end
  */
 
@@ -161,26 +161,27 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
                 log.debug("getValue Result:" + result);
             }
         } catch (Throwable e) {        
-	    Object [] params = { toEvaluate };        
             if (e instanceof ElException) {
-                Throwable t = ((ElException) e).getCause();
-                if (t != null) {
-                    e = t;
-                }
                 if (log.isDebugEnabled()) {
-                    log.debug("getValue Evaluation threw exception:", e);
+		    Throwable l = e;
+		    Throwable t = ((ElException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("getValue Evaluation threw exception:", l);
                 }
 	        throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
-                Throwable t = ((PropertyNotFoundException) e).getCause();
-                if (t != null) {
-                    e = t;
-                }
                 if (log.isDebugEnabled()) {
-                    log.debug("getValue Evaluation threw exception:", e);
+		    Throwable l = e;
+		    Throwable t = ((PropertyNotFoundException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("getValue Evaluation threw exception:", l);
                 }
-	        throw new PropertyNotFoundException(Util.getExceptionMessage(
-		    Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+		// Just rethrow it to keep detailed message
+	        throw (PropertyNotFoundException) e;
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("getValue Evaluation threw exception:", e);
@@ -214,22 +215,33 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 	    expr.setValue(info, value);
             return;
         } catch (Throwable e) {
-            Object[] params = {ref};            
             if (e instanceof ElException) {
-                Throwable t = ((ElException) e).getCause();
-                if (t != null) {
-                    e = t;
+                if (log.isDebugEnabled()) {
+		    Throwable l = e;
+		    Throwable t = ((ElException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("setValue Evaluation threw exception:", l);
                 }
+	        throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
-                Throwable t = ((PropertyNotFoundException) e).getCause();
-                if (t != null) {
-                    e = t;
+                if (log.isDebugEnabled()) {
+		    Throwable l = e;
+		    Throwable t = ((PropertyNotFoundException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("setValue Evaluation threw exception:", l);
                 }
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("setValue Evaluation threw exception:", e);
-            }
-            throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+		// Just rethrow it to keep detailed message
+	        throw (PropertyNotFoundException) e;
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("setValue Evaluation threw exception:", e);
+                }
+	        throw new EvaluationException(e);
+	    }
         }
     }
 
@@ -250,22 +262,33 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 		Util.getExpressionEvaluator().parseExpression(info);
 	    return expr.isReadOnly(info);
         } catch (Throwable e) {
-            Object[] params = {ref};            
             if (e instanceof ElException) {
-                Throwable t = ((ElException) e).getCause();
-                if (t != null) {
-                    e = t;
+                if (log.isDebugEnabled()) {
+		    Throwable l = e;
+		    Throwable t = ((ElException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("isReadOnly Evaluation threw exception:", l);
                 }
+	        throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
-                Throwable t = ((PropertyNotFoundException) e).getCause();
-                if (t != null) {
-                    e = t;
+                if (log.isDebugEnabled()) {
+		    Throwable l = e;
+		    Throwable t = ((PropertyNotFoundException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("isReadOnly Evaluation threw exception:", l);
                 }
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("setValue Evaluation threw exception:", e);
-            }
-            throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+		// Just rethrow it to keep detailed message
+	        throw (PropertyNotFoundException) e;
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("isReadOnly Evaluation threw exception:", e);
+                }
+	        throw new EvaluationException(e);
+	    }
         }
     }
 
@@ -286,22 +309,33 @@ public class ValueBindingImpl extends ValueBinding implements StateHolder
 		Util.getExpressionEvaluator().parseExpression(info);
 	    return expr.getType(info);
         } catch (Throwable e) {
-            Object[] params = {ref};            
             if (e instanceof ElException) {
-                Throwable t = ((ElException) e).getCause();
-                if (t != null) {
-                    e = t;
+                if (log.isDebugEnabled()) {
+		    Throwable l = e;
+		    Throwable t = ((ElException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("getType Evaluation threw exception:", l);
                 }
+	        throw new EvaluationException(e);
             } else if (e instanceof PropertyNotFoundException) {
-                Throwable t = ((PropertyNotFoundException) e).getCause();
-                if (t != null) {
-                    e = t;
+                if (log.isDebugEnabled()) {
+		    Throwable l = e;
+		    Throwable t = ((PropertyNotFoundException) e).getCause();
+		    if (t != null) {
+			l = t;
+		    }
+                    log.debug("getType Evaluation threw exception:", l);
                 }
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("setValue Evaluation threw exception:", e);
-            }
-            throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+		// Just rethrow it to keep detailed message
+	        throw (PropertyNotFoundException) e;
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.debug("getType Evaluation threw exception:", e);
+                }
+	        throw new EvaluationException(e);
+	    }
         }
     }
 

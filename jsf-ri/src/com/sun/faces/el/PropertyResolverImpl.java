@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.9 2003/12/17 15:13:37 rkitain Exp $
+ * $Id: PropertyResolverImpl.java,v 1.10 2004/01/10 05:43:52 eburns Exp $
  */
 
 /*
@@ -11,6 +11,10 @@ package com.sun.faces.el;
 
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.el.impl.BeanInfoManager;
+import com.sun.faces.el.impl.BeanInfoProperty;
+import com.sun.faces.el.impl.Coercions;
+import com.sun.faces.el.impl.ElException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.el.EvaluationException;
@@ -46,44 +50,71 @@ public class PropertyResolverImpl extends PropertyResolver {
      */
     private static final Object readParams[] = new Object[0];
 
+    // Zero-argument array
+    private static final Object[] sNoArgs = new Object[0];
 
     // ----------------------------------------------- PropertyResolver Methods
 
 
     // Specified by javax.faces.el.PropertyResolver.getValue(Object,String)
-    public Object getValue(Object base, String name) {
+    public Object getValue(Object base, Object property) {
 
-        if ((base == null) || (name == null)) {
-            throw new NullPointerException();
+        if ((base == null) || (property == null)) {
+            return null;
         }
         if (base instanceof Map) {
-            return (((Map) base).get(name));
-        } else if (base instanceof UIComponent) {
-            Iterator kids = ((UIComponent) base).getChildren().iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                if (name.equals(kid.getId())) {
-                    return (kid);
-                }
-            }
-            return (null);
+            return (((Map) base).get(property));
         } else {
-            PropertyDescriptor descriptor = descriptor(base, name);
-            Method readMethod = descriptor.getReadMethod();
-            if (readMethod != null) {
-                try {
-                    return (readMethod.invoke(base, readParams));
-                } catch (IllegalAccessException e) {
-                    throw new EvaluationException(e);
-                } catch (InvocationTargetException ite) {
-	            throw new EvaluationException(ite.getTargetException());
+	    String name = null;
+	    BeanInfoProperty bip = null;
+	    try {
+		name = Coercions.coerceToString(property);
+		bip = 
+		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+	    } catch (Throwable t) {
+		// PENDING (hans) Align with std message handling
+		String message = "Error finding property '" +
+		    name + "' from bean of type " + 
+		    base.getClass().getName()  + ": " + t;
+		if (log.isDebugEnabled()) {
+		    log.debug(message, t);
 		}
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("getValue:Property not found:" + name);
+		throw new PropertyNotFoundException(message, t);
+	    }
+	    if (bip != null && bip.getReadMethod() != null) {
+		try {
+		    return bip.getReadMethod().invoke(base, sNoArgs);
+		} catch (InvocationTargetException exc) {
+		    // PENDING (hans) Align with std message handling
+		    Throwable t = exc.getTargetException();
+		    String message = "Error getting property '" +
+			name + "' from bean of type " + 
+			base.getClass().getName()  + ": " + t;
+		    if (log.isDebugEnabled()) {
+			log.debug(message, t);
+		    }
+		    throw new EvaluationException(message, t);
+		} 
+		catch (IllegalAccessException t) {
+		    // PENDING (hans) Align with std message handling
+		    String message = "Error getting property '" +
+			name + "' from bean of type " + 
+			base.getClass().getName()  + ": " + t;
+		    if (log.isDebugEnabled()) {
+			log.debug(message, t);
+		    }
+		    throw new EvaluationException(message, t);
                 }
-                throw new PropertyNotFoundException(name);
             }
+	    else {
+		// No readable property with this name
+		String message = "Error getting property '" +
+		    name + "' from bean of type " + base.getClass().getName();
+		if (log.isDebugEnabled()) {
+		    log.debug(message);
+		}
+		throw new PropertyNotFoundException(message);
+	    }
         }
 
     }
@@ -93,55 +124,100 @@ public class PropertyResolverImpl extends PropertyResolver {
     public Object getValue(Object base, int index) {
 
         if (base == null) {
-            throw new NullPointerException();
-        }
-        if (base.getClass().isArray()) {
-            return (Array.get(base, index));
-        } else if (base instanceof List) {
-            return (((List) base).get(index));
-        } else if (base instanceof UIComponent) {
-            return (((UIComponent) base).getChildren().get(index));
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("getValue:Property not found at index:" + index);
-            }
-            throw new PropertyNotFoundException("" + index);
+            return null;
         }
 
+	Object result = null;
+	try {
+	    if (base.getClass().isArray()) {
+		result = (Array.get(base, index));
+	    } else if (base instanceof List) {
+		result = (((List) base).get(index));
+	    } else {
+		if (log.isDebugEnabled()) {
+		    log.debug("getValue:Property not found at index:" + index);
+		}
+		throw new EvaluationException("Bean of type " +
+                    base.getClass().getName() + 
+		    " doesn't have indexed properties");
+	    }
+	}
+	catch (IndexOutOfBoundsException e) {
+	    // Ignore according to spec
+	}
+	catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+		log.debug("getValue:Property not found at index:" + index);
+	    }
+	    throw new EvaluationException("Error getting index " + index, t);
+	}
+	return result;
     }
 
 
     // Specified by javax.faces.el.PropertyResolver.setValue(Object,String,Object)
-    public void setValue(Object base, String name, Object value) {
+    public void setValue(Object base, Object property, Object value) {
 
-        if ((base == null) || (name == null)) {
-            throw new NullPointerException();
+        if ((base == null) || (property == null)) {
+	    String className = base == null ? 
+		"null" : base.getClass().getName();
+            throw new PropertyNotFoundException("Error setting property '" +
+                property + "' in bean of type " + className);
         }
+
         if (base instanceof Map) {
-            ((Map) base).put(name, value);
-        } else if (base instanceof UIComponent) {
-            if (log.isDebugEnabled()) {
-                log.debug("setValue:Property not found:" + name);
-            }
-            throw new PropertyNotFoundException(name);
+            ((Map) base).put(property, value);
         } else {
-            PropertyDescriptor descriptor = descriptor(base, name);
-            Method writeMethod = descriptor.getWriteMethod();
-            if (writeMethod != null) {
-                try {
-                    writeMethod.invoke(base, new Object[] { value });
-                } catch (Exception e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("setValue:Property not found error:", e);
-                    }
-                    throw new PropertyNotFoundException(e);
+	    String name = null;
+	    BeanInfoProperty bip = null;
+	    try {
+		name = Coercions.coerceToString(property);
+		bip = 
+		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+	    } catch (Throwable t) {
+		// PENDING (hans) Align with std message handling
+		String message = "Error finding property '" +
+		    name + "' in bean of type " + 
+		    base.getClass().getName()  + ": " + t;
+		if (log.isDebugEnabled()) {
+		    log.debug(message, t);
+		}
+		throw new PropertyNotFoundException(message, t);
+	    }
+	    if (bip != null && bip.getWriteMethod() != null) {
+		try {
+                    bip.getWriteMethod().invoke(base, new Object[] { value });
+		} catch (InvocationTargetException exc) {
+		    // PENDING (hans) Align with std message handling
+		    Throwable t = exc.getTargetException();
+		    String message = "Error setting property '" +
+			name + "' in bean of type " + 
+			base.getClass().getName()  + ": " + t;
+		    if (log.isDebugEnabled()) {
+			log.debug(message, t);
+		    }
+		    throw new EvaluationException(message, t);
+		} 
+		catch (IllegalAccessException t) {
+		    // PENDING (hans) Align with std message handling
+		    String message = "Error setting property '" +
+			name + "' in bean of type " + 
+			base.getClass().getName()  + ": " + t;
+		    if (log.isDebugEnabled()) {
+			log.debug(message, t);
+		    }
+		    throw new EvaluationException(message, t);
                 }
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("setValue:Property not found:" + name);
-                }
-                throw new PropertyNotFoundException(name);
             }
+	    else {
+		// No write property with this name
+		String message = "Error setting property '" +
+		    name + "' in bean of type " + base.getClass().getName();
+		if (log.isDebugEnabled()) {
+		    log.debug(message);
+		}
+		throw new PropertyNotFoundException(message);
+	    }
         }
 
     }
@@ -151,38 +227,85 @@ public class PropertyResolverImpl extends PropertyResolver {
     public void setValue(Object base, int index, Object value) {
 
         if (base == null) {
-            throw new NullPointerException();
+            throw new PropertyNotFoundException("Error setting index '" +
+                index + "' in bean of type null");
         }
-        if (base.getClass().isArray()) {
-            Array.set(base, index, value);
-        } else if (base instanceof List) {
-            ((List) base).set(index, value);
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("setValue:Property not found at index:" + index);
-            }
-            throw new PropertyNotFoundException("" + index);
-        }
+
+	try {
+	    if (base.getClass().isArray()) {
+		Array.set(base, index, value);
+	    } else if (base instanceof List) {
+		((List) base).set(index, value);
+	    } else {
+		if (log.isDebugEnabled()) {
+		    log.debug("setValue:Error setting index:" + index);
+		}
+		throw new EvaluationException("Bean of type " +
+                    base.getClass().getName() + 
+		    " doesn't have indexed properties");
+	    }
+	}
+	catch (IndexOutOfBoundsException e) {
+	    throw new PropertyNotFoundException("Error setting index " + 
+						index, e);
+	}
+	catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+		log.debug("setValue:Error setting index:" + index);
+	    }
+	    throw new EvaluationException("Error setting index " + index, t);
+	}
 
     }
 
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,String)
-    public boolean isReadOnly(Object base, String name) {
+    public boolean isReadOnly(Object base, Object property) {
 	boolean result = false;
 
-        if ((base == null) || (name == null)) {
-            throw new NullPointerException();
+        if ((base == null) || (property == null)) {
+	    String className = base == null ? 
+		"null" : base.getClass().getName();
+            throw new PropertyNotFoundException("Error testing property '" +
+                property + "' in bean of type " + className);
         }
+
         if (base instanceof Map) {
 	    // this marker is set in ExternalContextImpl when the Map is
 	    // created.
+	    // PENDING (hans) Isn't there a better way to handle this?
 	    result = RIConstants.IMMUTABLE_MARKER == 
 		((Map)base).get(RIConstants.IMMUTABLE_MARKER);
-        } else if (base instanceof UIComponent) {
-            result = true;
         } else {
-            result = (descriptor(base, name).getWriteMethod() == null);
+	    String name = null;
+	    BeanInfoProperty bip = null;
+	    try {
+		name = Coercions.coerceToString(property);
+		bip = 
+		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+	    } catch (Throwable t) {
+		// PENDING (hans) Align with std message handling
+		String message = "Error finding property '" +
+		    name + "' in bean of type " + 
+		    base.getClass().getName()  + ": " + t;
+		if (log.isDebugEnabled()) {
+		    log.debug(message, t);
+		}
+		throw new PropertyNotFoundException(message, t);
+	    }
+	    if (bip != null && bip.getWriteMethod() == null) {
+		result = true;
+            }
+	    else if (bip == null) {
+		// PENDING (hans) Align with std message handling
+		String message = "Error finding property '" +
+		    name + "' in bean of type " + 
+		    base.getClass().getName();
+		if (log.isDebugEnabled()) {
+		    log.debug(message);
+		}
+		throw new PropertyNotFoundException(message);
+	    }
         }
 	return result;
     }
@@ -190,45 +313,92 @@ public class PropertyResolverImpl extends PropertyResolver {
 
     // Specified by javax.faces.el.PropertyResolver.isReadOnly(Object,int)
     public boolean isReadOnly(Object base, int index) {
+	boolean result = false;
 
         if (base == null) {
-            throw new NullPointerException();
-        }
-        if (base.getClass().isArray()) {
-            return (false); // No way to know for sure
-        } else if (base instanceof List) {
-            return (false); // No way to know for sure
-        } else if (base instanceof UIComponent) {
-            return (true);
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("isReadOnly:Property not found at index:" + index);
-            }
-            throw new PropertyNotFoundException("" + index);
+            throw new PropertyNotFoundException("Error setting index '" +
+                index + "' in bean of type null");
         }
 
+	try {
+	    // Try to read the index, to trigger exceptions if any
+	    if (base.getClass().isArray()) {
+		Array.get(base, index);
+		result = false; // No way to know for sure
+	    } else if (base instanceof List) {
+		((List) base).get(index);
+		result = false; // No way to know for sure
+	    } else {
+		if (log.isDebugEnabled()) {
+		    log.debug("getValue:Property not found at index:" + index);
+		}
+		throw new EvaluationException("Bean of type " +
+                    base.getClass().getName() + 
+		    " doesn't have indexed properties");
+	    }
+        }
+	catch (IndexOutOfBoundsException e) {
+	    throw new PropertyNotFoundException("Error setting index " + 
+						index, e);
+	}
+	catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+		log.debug("setValue:Error setting index:" + index);
+	    }
+	    throw new EvaluationException("Error setting index " + index, t);
+	}
+	return result;
     }
 
 
     // Specified by javax.faces.el.PropertyResolver.getType(Object,String)
-    public Class getType(Object base, String name) {
+    public Class getType(Object base, Object property) {
 
-        if ((base == null) || (name == null)) {
-            throw new NullPointerException();
+        if ((base == null) || (property == null)) {
+	    String className = base == null ? 
+		"null" : base.getClass().getName();
+            throw new PropertyNotFoundException("Error testing property '" +
+                property + "' in bean of type " + className);
         }
+
         if (base instanceof Map) {
-            Object value = ((Map) base).get(name);
+            Object value = ((Map) base).get(property);
             if (value != null) {
                 return (value.getClass());
             } else {
                 return (null);
             }
-        } else if (base instanceof UIComponent) {
-            return (UIComponent.class);
         } else {
-            return (descriptor(base, name).getPropertyType());
+	    String name = null;
+	    BeanInfoProperty bip = null;
+	    try {
+		name = Coercions.coerceToString(property);
+		bip = 
+		    BeanInfoManager.getBeanInfoProperty(base.getClass(), name);
+	    } catch (Throwable t) {
+		// PENDING (hans) Align with std message handling
+		String message = "Error finding property '" +
+		    name + "' in bean of type " + 
+		    base.getClass().getName()  + ": " + t;
+		if (log.isDebugEnabled()) {
+		    log.debug(message, t);
+		}
+		throw new PropertyNotFoundException(message, t);
+	    }
+	    if (bip != null) {
+		return bip.getPropertyDescriptor().getPropertyType();
+            }
+	    else {
+		// PENDING (hans) Align with std message handling
+		String message = "Error finding property '" +
+		    name + "' in bean of type " + 
+		    base.getClass().getName();
+		if (log.isDebugEnabled()) {
+		    log.debug(message);
+		}
+		throw new PropertyNotFoundException(message);
+	    }
         }
-
     }
 
 
@@ -237,93 +407,40 @@ public class PropertyResolverImpl extends PropertyResolver {
         Class result = null;
 
         if (base == null) {
-            throw new NullPointerException();
+            throw new PropertyNotFoundException("Error setting index '" +
+                index + "' in bean of type null");
         }
-        if (base instanceof UIComponent) {
-            result = (UIComponent.class);
+
+	try {
+	    // Try to read the index, to trigger exceptions if any
+	    if (base.getClass().isArray()) {
+		Array.get(base, index);
+		result = base.getClass().getComponentType();
+	    } else if (base instanceof List) {
+		Object o = ((List) base).get(index);
+		if (o != null) {
+		    result = o.getClass();
+		}
+	    } else {
+		if (log.isDebugEnabled()) {
+		    log.debug("getValue:Property not found at index:" + index);
+		}
+		throw new EvaluationException("Bean of type " +
+                    base.getClass().getName() + 
+		    " doesn't have indexed properties");
+	    }
         }
-        Class baseClass = base.getClass();
-        if (baseClass.isArray()) {            
-            if (index >= 0 && index <= Array.getLength(base) - 1) {
-                return baseClass.getComponentType();
-            } else {                
-                if (log.isDebugEnabled()) {
-                    log.debug("getType:index out of bounds:" + index);
-                }
-                throw new IndexOutOfBoundsException("" + index);
-            }            
-        } else if (base instanceof List) {
-            result = ((List) base).get(index).getClass();
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("getType:Property not found at index:" + index);
-            }
-            throw new PropertyNotFoundException("" + index);
-        }
+	catch (IndexOutOfBoundsException e) {
+	    throw new PropertyNotFoundException("Error getting index " + 
+						index, e);
+	}
+	catch (Throwable t) {
+	    if (log.isDebugEnabled()) {
+		log.debug("getType:Error getting index:" + index);
+	    }
+	    throw new EvaluationException("Error getting index " + index, t);
+	}
         return result;
     }
-
-    // -------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return the <code>PropertyDescriptor</code> for the specified
-     * property of the specified base object's class.</p>
-     *
-     * @param base Base object for which to retrieve a descriptor
-     * @param name Name of the property to retrieve a descriptor for
-     *
-     * @exception PropertyNotFoundException if no PropertyDescriptor
-     *  for the specified property name can be found
-     */
-    private PropertyDescriptor descriptor(Object base, String name)
-        throws PropertyNotFoundException {
-
-        // PENDING(craigmcc) - No caching; relying on the underlying
-        // introspector to cache appropriately for performance
-        try {
-            PropertyDescriptor descriptors[] =
-                Introspector.getBeanInfo(base.getClass()).
-                getPropertyDescriptors();
-            for (int i = 0; i < descriptors.length; i++) {
-                if (name.equals(descriptors[i].getName())) {
-                    return (descriptors[i]);
-                }
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("Property not found while getting Descriptor for:" + name);
-            }
-            throw new PropertyNotFoundException(name);
-        } catch (Exception e) {
-            if (log.isDebugEnabled()) {
-                log.debug("Property not found exception while getting Descriptor:", e);
-            }
-            throw new PropertyNotFoundException(e);
-        }
-
-    }
-
-
-    /**
-     * <p>Convert the specified name into an int and return it.</p>
-     *
-     * @param name Name to be converted
-     *
-     * @exception PropertyNotFoundException if conversion cannot be
-     *  performed
-     */
-    private int toInt(String name) throws PropertyNotFoundException {
-
-        try {
-            return (Integer.parseInt(name));
-        } catch (NumberFormatException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("Property not found while converting name:"+name+" to an 'int':", e);
-            }
-            throw new PropertyNotFoundException(name);
-        }
-
-    }
-
 
 }

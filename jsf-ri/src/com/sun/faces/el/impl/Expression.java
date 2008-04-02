@@ -101,6 +101,10 @@ public abstract class Expression {
 
     public Class getType(ExpressionInfo exprInfo) 
         throws ElException {
+	Object value = evaluate(exprInfo);
+	if (value != null) {
+	    return value.getClass();
+	}
 	return null;
     }
 }

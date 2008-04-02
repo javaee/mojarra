@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.23 2004/01/06 04:28:48 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.24 2004/01/10 05:44:00 eburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import java.io.Serializable;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.23 2004/01/06 04:28:48 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.24 2004/01/10 05:44:00 eburns Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -408,8 +408,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
     page.setId("root");
     page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);
-    // PENDING (rlubke) is the TREE implicit variable still valid?
-	valueBinding.setRef("view.root");
+	valueBinding.setRef("view.childCount");
 	assertTrue(valueBinding.isReadOnly(getFacesContext()));
 	
 	TestBean testBean = (TestBean) getFacesContext().getExternalContext().getSessionMap().get("TestBean");
@@ -503,8 +502,9 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         page.setId("root");
         page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);
-	valueBinding.setRef("view.root");
-	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.faces.component.UIComponent"));
+	valueBinding.setRef("view");
+	Class c = valueBinding.getType(getFacesContext());
+	assertTrue(javax.faces.component.UIComponent.class.isAssignableFrom(c));
 	
 	TestBean testBean = (TestBean) getFacesContext().getExternalContext().getSessionMap().get("TestBean");
 	assertTrue(null != testBean);

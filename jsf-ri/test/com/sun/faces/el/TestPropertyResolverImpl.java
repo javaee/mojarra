@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.7 2003/12/17 15:15:19 rkitain Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.8 2004/01/10 05:44:00 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import com.sun.faces.TestBean;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.el.EvaluationException;
+import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
@@ -37,7 +38,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.7 2003/12/17 15:15:19 rkitain Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.8 2004/01/10 05:44:00 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,59 +103,27 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
         Object value = null;
 
 
-        // ---------- Should Throw NullPointerException ----------
+        // ---------- Should Return Null ----------
+	value = resolver.getValue(bean, null);
+	assertNull(value);            
 
-        try {
-            value = resolver.getValue(bean, null);
-            fail("Should have thrown NullPointerException");
-        } catch (NullPointerException e) {
-            ; // Expected result
-        }
+	value = resolver.getValue(null, "booleanProperty");
+	assertNull(value);            
             
-        try {
-            value = resolver.getValue(null, "booleanProperty");
-            fail("Should have thrown NullPointerException");
-        } catch (NullPointerException e) {
-            ; // Expected result
-        }
-            
-        try {
-            value = resolver.getValue(null, null);
-            fail("Should have thrown NullPointerException");
-        } catch (NullPointerException e) {
-            ; // Expected result
-        }
+	value = resolver.getValue(null, null);
+	assertNull(value);            
 
-
-        // ---------- Should Throw IndexOutOfBoundsException ----------
-
-        try {
-            value = resolver.getValue(bean.getIntArray(), -1);
-            fail("Should have thrown IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException e) {
-            ; // Expected result
-        }
+	value = resolver.getValue(bean.getIntArray(), -1);
+	assertNull(value);            
             
-        try {
-            value = resolver.getValue(bean.getIntArray(), 3);
-            fail("Should have thrown IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException e) {
-            ; // Expected result
-        }
+	value = resolver.getValue(bean.getIntArray(), 3);
+	assertNull(value);            
             
-        try {
-            value = resolver.getValue(bean.getIntList(), -1);
-            fail("Should have thrown IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException e) {
-            ; // Expected result
-        }
+	value = resolver.getValue(bean.getIntList(), -1);
+	assertNull(value);            
             
-        try {
-            value = resolver.getValue(bean.getIntList(), 5);
-            fail("Should have thrown IndexOutOfBoundsException");
-        } catch (IndexOutOfBoundsException e) {
-            ; // Expected result
-        }
+	value = resolver.getValue(bean.getIntList(), 5);
+	assertNull(value);            
             
         // ---------- Should throw EvaluationException
 	
@@ -167,8 +136,12 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 
         // ---------- Should Throw PropertyNotFoundException
 
-
-        // PENDING - all the tests that should throw this exception
+	try {
+	    value = resolver.getValue(bean, "dontExist"); 
+            fail("Should have thrown EvaluationException");
+	} catch (PropertyNotFoundException e) {
+	    ; // Expected result
+	}
 
     }
 
@@ -243,12 +216,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     }
 
 
-    // Positive getValue() tests for the indexed variant against a UIComponent
-    public void testIndexedGetUIComponent() throws Exception {
-
-    }
-
-
     // Positive setValue() tests for the indexed variant against an array
     public void testIndexedSetArray() throws Exception {
 
@@ -265,14 +232,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     }
 
 
-    // Positive setValue() tests for the indexed variant against a UIComponent
-    public void testIndexedSetUIComponent() throws Exception {
-
-        // PENDING - insert tests here
-
-    }
-
-
     // Positive getType() tests for the indexed variant against an array
     public void testIndexedTypeArray() throws Exception {
 
@@ -283,14 +242,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 
     // Positive getType() tests for the indexed variant against a List
     public void testIndexedTypeList() throws Exception {
-
-        // PENDING - insert tests here
-
-    }
-
-
-    // Positive getType() tests for the indexed variant against a UIComponent
-    public void testIndexedTypeUIComponent() throws Exception {
 
         // PENDING - insert tests here
 
@@ -359,18 +310,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 	getFacesContext().getExternalContext().getRequestMap().put("testValue", this);
 	assertTrue(this == resolver.getValue(getFacesContext().getExternalContext().getRequestMap(),
 						     "testValue"));
-
-    }
-
-    // Positive getValue() tests on a UIComponent base object
-    public void testStringGetUIComponent() throws Exception {
-
-	UIViewRoot root = new UIViewRoot();
-	root.setId("root");
-	UIOutput out = new UIOutput();
-	out.setId("out");
-	root.getChildren().add(out);
-	assertTrue(out == resolver.getValue(root, "out"));
 
     }
 
@@ -443,14 +382,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     }
 
 
-    // Positive setValue() tests on a UIComponent base object
-    public void testStringSetUIComponent() throws Exception {
-
-        // PENDING - insert tests here
-
-    }
-
-
     // Postitive getValue() tests on a JavaBean base object
     public void testStringTypeBean() throws Exception {
 
@@ -504,13 +435,6 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
     }
 
 
-    // Positive getValue() tests on a UIComponent base object
-    public void testStringTypeUIComponent() throws Exception {
-
-        // PENDING - insert tests here
-
-    }
-
     public void testReadOnlyObject() {
 	ExternalContext ec = getFacesContext().getExternalContext();
 
@@ -530,7 +454,7 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 	assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
 
 	UIViewRoot root = new UIViewRoot();
-	assertTrue(resolver.isReadOnly(root, "hello"));
+	assertTrue(resolver.isReadOnly(root, "childCount"));
 	
 	TestBean testBean = (TestBean) ec.getSessionMap().get("TestBean");
 	assertTrue(resolver.isReadOnly(testBean, "readOnly"));
