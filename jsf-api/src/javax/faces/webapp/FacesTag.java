@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.25 2002/12/17 23:30:57 eburns Exp $
+ * $Id: FacesTag.java,v 1.26 2002/12/23 22:46:01 jvisvanathan Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.webapp;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Stack;
+import java.util.HashMap;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
@@ -294,7 +295,10 @@ public abstract class FacesTag extends TagSupport {
         // Pop the component stack, and release it if we are outermost
         componentStack.pop();
         componentStack = null;
-
+        // Need to reset these ivars here because the release() is not
+        // called right away after end tag is processed.
+        this.numChildren = 0;
+        this.childIndex = 0;
         // Return the appropriate control value
         return (getDoEndValue());
 
@@ -311,7 +315,6 @@ public abstract class FacesTag extends TagSupport {
         this.id = null;
         this.modelReference = null;
         this.created = false;
-
     }
 
 
@@ -376,24 +379,32 @@ public abstract class FacesTag extends TagSupport {
     /**
      * <p>Find and return the component, from the response component
      * tree, that corresponds to the relative identifier defined by the
-     * <code>id</code> attribute of this tag.  If the value of the
-     * <code>id</code> attribute is null, assume that this component
-     * needs to be created.  If the value of the <code>id</code>
+     * <code>id</code> attribute of this tag. If the value of the <code>id</code>
      * attribute is non null, see if there is a component with this
      * <code>id</code> in the namespace of the nearest ancestor to the
      * top of the stack that is a naming container.  If so, return that
-     * component.</p>
+     * component. If the <code>id</code> is null, generate a tagKey and use
+     * it as a key into <code>tagHash</code> to locate the component. 
+     * If component is found, return it. Otherwise create the component and 
+     * store it in <code>tagHash</code> against the generated tagKey. 
+     * <code>tagHash</code>is stored as an attribute in root component
+     * so that it is available on postback. </p> 
      *
      * @exception JspException if the specified component cannot be located
 
      * @exception JspException if the id is non-null, and no
      * NamingContainer can be found.
-
+     *
      */
     protected UIComponent findComponent() throws JspException {
 
         // Validate the requested identifier
+        String tagKey = null;
+        
         String id = getId();
+        UIComponent root = context.getResponseTree().getRoot();
+        HashMap tagHash = (HashMap)root.getAttribute("tagHash");
+        
         UIComponent parent = (UIComponent) componentStack.peek();
 	UIComponent child = parent;
         if (id != null) { // FIXME - i18n
@@ -412,13 +423,33 @@ public abstract class FacesTag extends TagSupport {
                 created = false;
                 return (child);
             }
-        }
+        } else {
+            // generate the tagKey and use it locate the component in tagHash
+            tagKey = this.generateTagKey();
+             if ( tagHash != null ) {
+                 // if the component is found, then it is a postback case.
+                 UIComponent component = (UIComponent)tagHash.get(tagKey);
+                 if (component != null ) {
+                     created = false;
+                     return component;
+                 }    
+             } 
+        }    
 
         // Create and return a new child component of the appropriate type
         child = createComponent();
 	if (null != id) {
 	    child.setComponentId(id);
-	}
+	} else {
+            if ( tagHash == null ) {
+                // since the tagHash is null, request is processed 
+                // for the first time. 
+                tagHash = new HashMap();
+            }
+            // store this component in tagHash against the generated tagKey.
+            root.setAttribute("tagHash", tagHash);
+            tagHash.put(tagKey,child);
+        }    
         parent.addChild(child);
         created = true;
         return (child);
@@ -446,6 +477,98 @@ public abstract class FacesTag extends TagSupport {
 
     }
 
+    /** 
+     * Returns a string composed of one or more atoms, separated by ':', 
+     * where an atom is: 
+     * <This Tag ClassName>_<index Of This Tag In Parent's Child List>
+     */
+    private String generateTagKey() {
+        String tagKey = "";
+        Tag tagObj = this.getParent();
+	FacesTag facesTag = null;
+        while ( tagObj != null ) {
+            if ( tagObj instanceof FacesTag) {
+		facesTag = (FacesTag) tagObj;
+                tagKey = 
+		    facesTag.getClass().getName() + "_" + 
+		    facesTag.getChildIndex() + ":" + tagKey;
+            }
+            tagObj = tagObj.getParent();             
+        }
+        tagKey = tagKey + this.getClass().getName() +"_"+ this.getChildIndex();
+        return tagKey;
+    }
+
+    /**
+     * This ivar is the number of children we have.
+     */
+    protected int numChildren = 0;
+
+    /**
+     * This ivar is the index of this child Tag in its parent's child
+     * list.
+     */
+    protected int childIndex = 0; 
+
+    /**
+     * <p>Override this to do three things</p>
+     * <p><code>super.setParent(t)</code></p>
+     * <p>find the closest enclosing <ocde>FacesTag</code> and increment its
+     * <code>numChildren</code>.</p>
+     * <p>save our <code>childIndex</code> as 
+     * <code>enclosingFacesTag.numChildren - 1</code>.</p>
+     */ 
+
+    public void setParent(Tag t ) {
+        
+        super.setParent(t);
+        // iterate until we get the parent of this tag which is a facestag and
+        // increment its numchildren. Immediate parent need not be a facesTag.   
+        FacesTag parentFacesTag = (FacesTag)this.getNearestEnclosingFacesTag();
+        if (parentFacesTag != null ) {
+            parentFacesTag.incrementNumChildren();
+            this.childIndex = parentFacesTag.getNumChildren() - 1;
+        }    
+    } 
+    
+    /**
+     * Returns the nearest enclosing <code>FacesTag</code>.
+     */
+    protected Tag getNearestEnclosingFacesTag() {
+        Tag tagObj = this.getParent();
+        while ( tagObj != null ) {
+            if ( tagObj instanceof FacesTag) {
+                tagObj = (FacesTag) tagObj;
+                break;
+            } 
+            tagObj = tagObj.getParent(); 
+        }
+        if (tagObj == null ) {
+            return null;
+        }    
+        return tagObj;
+    }
+    
+    /** 
+     * Increments current value of <code>numChildren</code>.
+     */
+    protected void incrementNumChildren() {
+        numChildren++;
+    }
+    
+    /** 
+     * Returns current value of <code>numChildren</code>.
+     */
+    protected int getNumChildren() {
+        return this.numChildren;
+    }
+
+    /** 
+     * Returns current value of <code>childIndex</code>.
+     */
+    protected int getChildIndex() {
+        return this.childIndex;
+    }
 
     /**
      * <p>Return the flag value that should be returned from the
