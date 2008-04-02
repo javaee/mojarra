@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.19 2003/01/24 18:23:41 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.20 2003/02/04 01:17:42 edburns Exp $
  */
 
 /*
@@ -394,7 +394,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * apply to all renderers.
      */
     protected Converter getConverter(UIComponent component) {
-        Object converter = component.getAttribute("converter");
+        Object converter = component.getAttribute(UIComponent.CONVERTER_ATTR);
         if (converter == null) {
             return (null);
         } else if (converter instanceof Converter) {
@@ -412,7 +412,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public String getClientId(FacesContext context, UIComponent component){
 	String result = null;
 	
-	if (null != (result = (String) component.getAttribute("clientId"))) {
+	if (null != (result = (String) component.getAttribute(UIComponent.CLIENT_ID_ATTR))) {
 	    return result;
 	}
 
@@ -456,7 +456,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	if (null == result) {
 	    throw new NullPointerException();
 	}
-	component.setAttribute("clientId", result);
+	component.setAttribute(UIComponent.CLIENT_ID_ATTR, result);
 	return result;
     }
 

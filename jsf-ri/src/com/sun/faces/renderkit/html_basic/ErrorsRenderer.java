@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.6 2003/01/17 18:07:19 rkitain Exp $
+ * $Id: ErrorsRenderer.java,v 1.7 2003/02/04 01:17:42 edburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.6 2003/01/17 18:07:19 rkitain Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.7 2003/02/04 01:17:42 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -133,7 +133,7 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
         //    not associated with any component returned
         // 3. no clientId expression - all messages returned.
         // 
-        String clientId = (String)component.getAttribute("clientId");
+        String clientId = (String)component.getAttribute(UIComponent.CLIENT_ID_ATTR);
         if (null != clientId) {
             if (clientId.length() == 0) {
                 messageIter = context.getMessages(null);

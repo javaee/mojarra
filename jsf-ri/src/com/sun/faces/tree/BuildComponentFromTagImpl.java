@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.7 2002/09/08 21:30:58 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.8 2003/02/04 01:17:43 edburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.7 2002/09/08 21:30:58 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.8 2003/02/04 01:17:43 edburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -143,7 +143,7 @@ private String mapAttrNameToPropertyName(String attrName) {
         attrName = "componentId";
     }
 
-    if (attrName.equals("converter")) {
+    if (attrName.equals(UIComponent.CONVERTER_ATTR)) {
         attrName = "converterReference";
     }
 
