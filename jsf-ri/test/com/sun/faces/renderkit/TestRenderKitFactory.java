@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.6 2003/07/08 15:38:48 eburns Exp $
+ * $Id: TestRenderKitFactory.java,v 1.7 2003/10/06 19:29:51 rkitain Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.6 2003/07/08 15:38:48 eburns Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.7 2003/10/06 19:29:51 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,25 +88,18 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         renderKitFactory.addRenderKit("Foo", renderKit1);
         renderKitFactory.addRenderKit("Bar", renderKit2);
 
-        // 3. Verify null parameter exception for "getRenderKit"
-        FacesContext context = null;
-        boolean except = false;
-        try {
-            RenderKit renderKit3 = renderKitFactory.getRenderKit("DEFAULT", null);
-        } catch(NullPointerException npe) {
-            except = true;
-        }
-        assertTrue(except);
+	// Verify renderkit instance replaced with last identifier..
+	//
+	renderKitFactory.addRenderKit("BarBar", renderKit2);
+	RenderKit rkit = renderKitFactory.getRenderKit("BarBar");
+	assertTrue(rkit != null);
+	assertTrue(rkit == renderKit2);
 
-        // 4. Verify "getRenderKit" returns RenderKitImpl if
+        // 3. Verify "getRenderKit" returns null if
         //    RenderKit not found for renderkitid...
         //
         RenderKit renderKit4 = renderKitFactory.getRenderKit("Gamma");
-        Assert.assert_it(renderKit4 instanceof RenderKitImpl);
-
-        
-
-        
+	assertTrue(renderKit4 == null);
     }
 
     public void testDefaultExists() {
@@ -133,31 +126,51 @@ public class TestRenderKitFactory extends ServletFacesTestCase {
         renderKitFactory = new RenderKitFactoryImpl();
         RenderKit rKit = null;
 
-        // 1. Verify "IllegalArg" exception which occurs when attempting
-        //    to add the default (which already exists...
-        //
-        boolean thrown = false;
-        try {
-            rKit = renderKitFactory.getRenderKit(
-                RenderKitFactory.DEFAULT_RENDER_KIT);
-            renderKitFactory.addRenderKit(RenderKitFactory.DEFAULT_RENDER_KIT,
-                rKit);
-        } catch (IllegalArgumentException ia) {
-            thrown = true;
-        }
-        assertTrue(thrown);
+        rKit = renderKitFactory.getRenderKit("DEFAULT");
 
-        // 2. Verify "IllegalArg exception which occurs when attempting
-        //    to add the same renderkit id.
-        //
-        thrown = false;
+	// Verify NPE for "addRenderKit"
+	//
+        boolean exceptionThrown = false;
+	try {
+	    renderKitFactory.addRenderKit(null, rKit);
+	    exceptionThrown = false;
+	} catch (NullPointerException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	exceptionThrown = false;
+	try {
+	    renderKitFactory.addRenderKit("foo", null);
+	    exceptionThrown = false;
+	} catch (NullPointerException e1) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+	
+        // Verify null parameter exception for "getRenderKit"
+	//
+        exceptionThrown = false;
         try {
-            renderKitFactory.addRenderKit("foo", rKit); 
-            renderKitFactory.addRenderKit("foo", rKit); 
-        } catch (IllegalArgumentException ia) {
-            thrown = true;
+            rKit = renderKitFactory.getRenderKit(null);
+        } catch(NullPointerException e2) {
+            exceptionThrown = true;
         }
-        assertTrue(thrown);
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try {
+            rKit = renderKitFactory.getRenderKit(null, getFacesContext());
+        } catch(NullPointerException e3) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            rKit = renderKitFactory.getRenderKit("foo", null);
+        } catch(NullPointerException e4) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
             
             

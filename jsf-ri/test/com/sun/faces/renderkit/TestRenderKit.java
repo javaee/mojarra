@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.6 2003/10/02 06:50:20 jvisvanathan Exp $
+ * $Id: TestRenderKit.java,v 1.7 2003/10/06 19:29:51 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.ByteArrayOutputStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.6 2003/10/02 06:50:20 jvisvanathan Exp $
+ * @version $Id: TestRenderKit.java,v 1.7 2003/10/06 19:29:51 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,6 +102,21 @@ public static final String CORRECT_OUTPUT_FILENAME =
         //  
         Renderer renderer = renderKit.getRenderer("Form");
         assertTrue(renderer instanceof FormRenderer);
+
+	// 2. Verify "getRenderer()" returns null
+	// 
+	renderer = renderKit.getRenderer("Foo");
+	assertTrue(renderer == null);
+
+	// 3. Verify NPE
+	//
+	boolean exceptionThrown = false;
+	try {
+	    renderer = renderKit.getRenderer(null);
+	} catch (NullPointerException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
     }
 
     public void testAddRenderer() {
@@ -140,7 +155,7 @@ public static final String CORRECT_OUTPUT_FILENAME =
 	
     }
     
-    public void testGetResponseStream() throws Exception {
+    public void testCreateResponseStream() throws Exception {
         RenderKitFactory renderKitFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = renderKitFactory.getRenderKit("DEFAULT");
