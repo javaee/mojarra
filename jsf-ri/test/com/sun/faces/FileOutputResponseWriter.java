@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.7 2003/08/08 16:20:37 rkitain Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.8 2003/08/22 19:33:04 rkitain Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
 
+import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
 import java.io.PrintWriter;
@@ -33,7 +34,7 @@ import java.io.Writer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.7 2003/08/08 16:20:37 rkitain Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.8 2003/08/22 19:33:04 rkitain Exp $
  * 
  *
  */
@@ -72,7 +73,7 @@ public FileOutputResponseWriter()
         File file = new File ( RESPONSE_WRITER_FILENAME );
         FileOutputStream fs = new FileOutputStream(file);
         out = new PrintWriter(fs);
-        writer = new HtmlResponseWriter(out, "ISO-8859-1"); 
+        writer = new HtmlResponseWriter(out, "text/html", "ISO-8859-1"); 
     } catch ( Exception e ) {
         System.out.println(e.getMessage());
 	Assert.assert_it(false);
@@ -141,32 +142,27 @@ public void writeText(char[] text,int off, int len) throws IOException {
     writer.writeText(text, off, len);
 }
 
-public void writeText(char[] text ) throws IOException {
-    writer.writeText(text);
-}
-
-public void writeText(char text ) throws IOException {
-    writer.writeText(text);
-}
-
-public void writeText(Object text ) throws IOException {
-    writer.writeText(text);
+public void writeText(Object text, String componentPropertyName ) throws IOException {
+    writer.writeText(text, componentPropertyName);
 }
 
 public void writeComment(Object text ) throws IOException {
     writer.writeComment(text);
 }
 
-public void writeAttribute(String name, Object value) throws IOException {
-    writer.writeAttribute(name, value);
+public void writeAttribute(String name, Object value, String componentPropertyName ) 
+    throws IOException {
+    writer.writeAttribute(name, value, componentPropertyName);
 }    
 
-public void writeURIAttribute(String name, Object value) throws IOException {
-    writer.writeURIAttribute(name, value);
+public void writeURIAttribute(String name, Object value, String componentPropertyName) 
+    throws IOException {
+    writer.writeURIAttribute(name, value, componentPropertyName);
 }    
 
-public void startElement(String name) throws IOException {
-    writer.startElement(name);
+public void startElement(String name, UIComponent componentForElement) 
+    throws IOException {
+    writer.startElement(name, componentForElement);
 }
 
 public void endElement(String name) throws IOException {
@@ -181,12 +177,14 @@ public void endDocument() throws IOException {
     writer.endDocument();
 }
 
-//PENDING(rogerk) JSF_API_20030718 - implement
 public ResponseWriter cloneWithWriter(Writer writer) {
     return this.writer.cloneWithWriter(writer);
 }
 public String getCharacterEncoding() {
     return writer.getCharacterEncoding();
+}
+public String getContentType() {
+    return writer.getContentType();
 }
 
 } // end of class FileOutputResponseWriter
