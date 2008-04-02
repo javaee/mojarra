@@ -1,5 +1,5 @@
 /*
- * $Id: TestInstancePool_local.java,v 1.1 2004/05/11 21:35:27 eburns Exp $
+ * $Id: TestInstancePool_local.java,v 1.2 2004/06/01 16:58:51 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.BitSet;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestInstancePool_local.java,v 1.1 2004/05/11 21:35:27 eburns Exp $
+ * @version $Id: TestInstancePool_local.java,v 1.2 2004/06/01 16:58:51 eburns Exp $
  */
 
 public class TestInstancePool_local extends TestCase {
@@ -278,7 +278,7 @@ public class TestInstancePool_local extends TestCase {
 	    Object instance = null;
 	    for (int i = 0; i < numToCheckout; i++) {
 		try {
-		    pool.checkin(new Object());
+		    this.pool.checkin(new Object());
 		}
 		catch (Exception e) {
 		    System.out.println("index: " + index + " exception on checkin(): " + e.getMessage());

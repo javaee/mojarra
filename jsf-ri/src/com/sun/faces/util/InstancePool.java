@@ -4,14 +4,13 @@
  */
 
 /*
- * $Id: InstancePool.java,v 1.2 2004/05/12 18:30:41 ofung Exp $
+ * $Id: InstancePool.java,v 1.3 2004/06/01 16:58:49 eburns Exp $
  */
 
 package com.sun.faces.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.BitSet;
 
 /**
  * <p>A simple, thread-safe, instance pool offering checkout and checkin
@@ -67,11 +66,11 @@ public class InstancePool extends Object {
 
     private List instances = null;
 
-    private BitSet checkedOut = null;
+    private JSFBitSet checkedOut = null;
 
     public InstancePool() {
 	instances = new ArrayList(INITIAL_CAPACITY);
-	checkedOut = new BitSet(INITIAL_CAPACITY);
+	checkedOut = new JSFBitSet(INITIAL_CAPACITY);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: TestViewTag.java,v 1.10 2004/04/07 17:53:04 rkitain Exp $
+ * $Id: TestViewTag.java,v 1.11 2004/06/01 16:58:50 eburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewTag.java,v 1.10 2004/04/07 17:53:04 rkitain Exp $
+ * @version $Id: TestViewTag.java,v 1.11 2004/06/01 16:58:50 eburns Exp $
  */
 
 public class TestViewTag extends JspFacesTestCase {
@@ -155,7 +155,7 @@ public class TestViewTag extends JspFacesTestCase {
         assertTrue(locale.equals(new Locale("fr", "FR")));
 
         locale = viewTag.getLocaleFromString("fr");
-        assertTrue(locale.equals(new Locale("fr")));
+        assertTrue(locale.equals(new Locale("fr", "")));
 
         locale = viewTag.getLocaleFromString("testLocale");
         assertTrue(locale.equals(Locale.getDefault()));
