@@ -148,8 +148,8 @@ public class GlassfishUpdater {
             mat = pat.matcher(cur.getName());
             // If the current entry does not include javax.faces...
             if (!mat.matches()) {
-                // copy it to the newJar.
-                newEntry = new JarEntry(cur);
+                // copy it to the newJar.             
+                newEntry = new JarEntry(cur.getName());
                 copyJarStream.putNextEntry(newEntry);
                 while((n = origJarStream.read(buf, 0, buf.length)) != -1) {
                     copyJarStream.write(buf, 0, n);
