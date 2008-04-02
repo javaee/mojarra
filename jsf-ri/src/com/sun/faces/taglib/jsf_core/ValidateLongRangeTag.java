@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.9 2004/02/26 20:33:18 eburns Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.10 2004/04/06 15:02:04 eburns Exp $
  */
 
 /*
@@ -51,7 +51,6 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
 
     public ValidateLongRangeTag() {
         super();
-        super.setValidatorId("javax.faces.LongRange");
     }
 
 //
@@ -72,6 +71,12 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
         minimumSet = true;
         minimum_ = newMinimum;
     }
+
+    public int doStartTag() throws JspException {
+        super.setValidatorId("javax.faces.LongRange");
+	return super.doStartTag();
+    }
+
 
 // 
 // Methods from ValidatorTag
