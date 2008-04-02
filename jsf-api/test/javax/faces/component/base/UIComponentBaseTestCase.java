@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.2 2003/07/26 17:55:21 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.3 2003/07/27 00:48:30 craigmcc Exp $
  */
 
 /*
@@ -161,15 +161,15 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         checkChildCount(child2, 2);
 
         // Enqueue a single FacesEvent for each component
-        facesContext.addFacesEvent(new FacesEvent(component));
-        facesContext.addFacesEvent(new FacesEvent(facet1));
-        facesContext.addFacesEvent(new FacesEvent(facet2));
-        facesContext.addFacesEvent(new FacesEvent(facet3));
-        facesContext.addFacesEvent(new FacesEvent(child1));
-        facesContext.addFacesEvent(new FacesEvent(child2));
-        facesContext.addFacesEvent(new FacesEvent(child3));
-        facesContext.addFacesEvent(new FacesEvent(child2a));
-        facesContext.addFacesEvent(new FacesEvent(child2b));
+        facesContext.addFacesEvent(new TestEvent(component));
+        facesContext.addFacesEvent(new TestEvent(facet1));
+        facesContext.addFacesEvent(new TestEvent(facet2));
+        facesContext.addFacesEvent(new TestEvent(facet3));
+        facesContext.addFacesEvent(new TestEvent(child1));
+        facesContext.addFacesEvent(new TestEvent(child2));
+        facesContext.addFacesEvent(new TestEvent(child3));
+        facesContext.addFacesEvent(new TestEvent(child2a));
+        facesContext.addFacesEvent(new TestEvent(child2b));
 
         // Test processDecodes()
         TestComponent.trace(null);

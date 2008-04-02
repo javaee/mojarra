@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.5 2003/07/14 23:00:01 craigmcc Exp $
+ * $Id: FacesEvent.java,v 1.6 2003/07/27 00:48:27 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,8 @@ package javax.faces.event;
 
 
 import java.util.EventObject;
+import java.util.Iterator;
+import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
@@ -22,10 +24,10 @@ import javax.faces.context.FacesContext;
  * by the request processing lifecycle.</p>
  */
 
-public class FacesEvent extends EventObject {
+public abstract class FacesEvent extends EventObject {
 
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -43,7 +45,7 @@ public class FacesEvent extends EventObject {
     }
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
     /**
@@ -54,6 +56,34 @@ public class FacesEvent extends EventObject {
         return ((UIComponent) getSource());
 
     }
+
+
+    // ------------------------------------------------- Event Broadcast Methods
+
+
+    /**
+     * <p>Return <code>true</code> if this {@link FacesListener} is an instance
+     * of a listener class that this event supports.  Typically, this will be
+     * accomplished by an "instanceof" check on the listener class.</p>
+     *
+     * @param listener {@link FacesListener} to evaluate
+     */
+    public abstract boolean isAppropriateListener(FacesListener listener);
+
+
+    /**
+     * <p>Broadcast this {@link FacesEvent} to the specified
+     * {@link FacesListener}, by whatever mechanism is appropriate.  Typically,
+     * this will be accomplished by calling an event processing method, and
+     * passing this {@link FacesEvent} as a paramter.</p>
+     *
+     * @param listener {@link FacesListener} to send this {@link FacesEvent} to
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     */
+    public abstract void processListener(FacesListener listener);
 
 
 }

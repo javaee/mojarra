@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.38 2003/07/26 17:54:35 craigmcc Exp $
+ * $Id: UICommand.java,v 1.39 2003/07/27 00:48:20 craigmcc Exp $
  */
 
 /*
@@ -91,35 +91,6 @@ public interface UICommand extends UIOutput {
      *  is <code>null</code>
      */
     public void addActionListener(ActionListener listener);
-
-
-    /**
-     * <p>Broadcast the specified {@link FacesEvent} to all registered
-     * event listeners who have expressed an interest in events of this
-     * type, for the specified {@link PhaseId}.  The order in which
-     * registered listeners are notified is implementation dependent.</p>
-     *
-     * <p>After all interested listeners have been notified, return
-     * <code>false</code> if this event does not have any listeners
-     * interested in this event in future phases of the request processing
-     * lifecycle.  Otherwise, return <code>true</code>.</p>
-     *
-     * @param event The {@link FacesEvent} to be broadcast
-     * @param phaseId The {@link PhaseId} of the current phase of the
-     *  request processing lifecycle
-     *
-     * @exception AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @exception IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
-     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
-     *  for the phase identifier
-     * @exception NullPointerException if <code>event</code> or
-     *  <code>phaseId</code> is <code>null</code>
-     */
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
-        throws AbortProcessingException;
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.2 2003/07/26 17:54:48 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.3 2003/07/27 00:48:24 craigmcc Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
@@ -817,9 +818,66 @@ public abstract class UIComponentBase implements UIComponent {
         if ((event == null) || (phaseId == null)) {
             throw new NullPointerException();
         }
-        throw new IllegalArgumentException();
+        if (listeners == null) {
+            return (false);
+        }
+
+        // Broadcast the event to interested listeners
+        broadcast(event, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
+        broadcast(event, listeners[phaseId.getOrdinal()]);
+
+        // Determine whether there are any registered listeners for later phases
+        // that are interested in this event
+        for (int i = phaseId.getOrdinal() + 1; i < listeners.length; i++) {
+            if ((listeners[i] != null) && (listeners[i].size() > 0)) {
+                int n = listeners[i].size();
+                for (int j = 0; j < n; j++) {
+                    FacesListener listener = (FacesListener)
+                        listeners[i].get(j);
+                    if (event.isAppropriateListener(listener)) {
+                        return (true);
+                    }
+                }
+            }
+        }
+        return (false);
 
     }
+
+    /**
+     * <p>Broadcast this {@link FacesEvent} to all {@link FacesListener}s in
+     * the specified <code>List</code> (if any).  If the <code>list</code>
+     * is <code>null</code>, no action is taken.</p>
+     *
+     * <p>For each listener in the specified list, this method must first
+     * call <code>isAppropriateListener(FacesListener)</code> to determine
+     * whether this listener is interested in the current event, and (if it
+     * is) this method must call <code>processListener(FacesListener)</code> to
+     * actually broadcast the event.  Individual {@link FacesEvent} classes
+     * must implement these two abstract methods appropriately.</p>
+     *
+     * @param event {@link FacesEvent} to be broadcast
+     * @param list List of {@link FacesListener}s to notify (if any)
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
+     */
+    private void broadcast(FacesEvent event, List list) {
+
+        if (list == null) {
+            return;
+        }
+        Iterator listeners = list.iterator();
+        while (listeners.hasNext()) {
+            FacesListener listener = (FacesListener) listeners.next();
+            if (event.isAppropriateListener(listener)) {
+                event.processListener(listener);
+            }
+        }
+
+    }
+
 
     public void decode(FacesContext context) throws IOException {
 
@@ -876,6 +934,100 @@ public abstract class UIComponentBase implements UIComponent {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+
+    }
+
+
+    // ------------------------------------------------- Event Listener Methods
+
+
+    /**
+     * <p>Each element of this array is a <code>List</code> of registered
+     * {@link FacesListener}s for an ordinal {@link PhaseId} value.  This
+     * data structure is lazily instantiated as necessary.</p>
+     */
+    private List listeners[];
+
+
+    /**
+     * <p>Add the specified {@link FacesListener} to the set of listeners
+     * registered to receive event notifications from this {@link UIComponent}.
+     * It is expected that {@link UIComponent} classes acting as event sources
+     * will have corresponding typesafe APIs for registering listeners of the
+     * required type, and the implementation of those registration methods
+     * will delegate to this method.  For example:</p>
+     * <pre>
+     * public class FooEvent extends FacesEvent {
+     *   ...
+     *   protected boolean isAppropriateListener(FacesListener listener) {
+     *     return (listener instanceof FooListener);
+     *   }
+     *   protected void processListener(FacesListener listener) {
+     *     ((FooListener) listener).processFoo(this);
+     *   }
+     *   ...
+     * }
+     *
+     * public interface FooListener extends FacesListener {
+     *   public PhaseId getPhaseId();
+     *   public void processFoo(FooEvent event);
+     * }
+     *
+     * public class FooComponent extends UIComponentBase {
+     *   ...
+     *   public void addFooListener(FooListener listener) {
+     *     addFacesListener(listener);
+     *   }
+     *   public void removeFooListener(FooListener listener) {
+     *     removeFacesListener(listener);
+     *   }
+     *   ...
+     * }
+     * </pre>
+     *
+     * @param listener The {@link FacesListener} to be registered
+     *
+     * @exception NullPointerExcepton if <code>listener</code>
+     *  is <code>null</code>
+     */
+    protected void addFacesListener(FacesListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners == null) {
+            listeners = new List[PhaseId.VALUES.size()];
+        }
+        int ordinal = listener.getPhaseId().getOrdinal();
+        if (listeners[ordinal] == null) {
+            listeners[ordinal] = new ArrayList();
+        }
+        listeners[ordinal].add(listener);
+
+    }
+
+
+    /**
+     * <p>Remove the specified {@link FacesListener} from the set of listeners
+     * registered to receive event notifications from this {@link UIComponent}.
+     *
+     * @param listener The {@link FacesListener} to be deregistered
+     *
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     */
+    protected void removeFacesListener(FacesListener listener) {
+
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        if (listeners == null) {
+            return;
+        }
+        int ordinal = listener.getPhaseId().getOrdinal();
+        if (listeners[ordinal] != null) {
+            listeners[ordinal].remove(listener);
         }
 
     }

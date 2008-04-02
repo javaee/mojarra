@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBaseTestCase.java,v 1.2 2003/07/26 17:55:21 craigmcc Exp $
+ * $Id: UICommandBaseTestCase.java,v 1.3 2003/07/27 00:48:30 craigmcc Exp $
  */
 
 /*
@@ -199,6 +199,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
         command.addActionListener
             (new TestActionListener("PV2", PhaseId.PROCESS_VALIDATIONS));
 
+        /* PENDING(craigmcc) - listeners are no longer accessible
         lists = command.getListeners();
         assertEquals(PhaseId.VALUES.size(), lists.length);
         for (int i = 0; i < lists.length; i++) {
@@ -243,6 +244,7 @@ public class UICommandBaseTestCase extends UIOutputBaseTestCase {
                 assertNull(lists[i]);
             }
         }
+        */
 
     }
 

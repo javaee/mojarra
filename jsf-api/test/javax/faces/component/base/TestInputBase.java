@@ -1,5 +1,5 @@
 /*
- * $Id: TestInputBase.java,v 1.2 2003/07/26 17:55:20 craigmcc Exp $
+ * $Id: TestInputBase.java,v 1.3 2003/07/27 00:48:30 craigmcc Exp $
  */
 
 /*
@@ -28,10 +28,11 @@ public class TestInputBase extends UIInputBase {
         setId(id);
     }
 
+    /* PENDING(craigmcc) - listeners is private on UIComponentBase now
     public List[] getListeners() {
         return (this.listeners);
     }
-
+    */
 
     public boolean compareValues(Object previous, Object value) {
         return (super.compareValues(previous, value));

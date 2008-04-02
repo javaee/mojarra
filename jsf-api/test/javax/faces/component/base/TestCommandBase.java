@@ -1,5 +1,5 @@
 /*
- * $Id: TestCommandBase.java,v 1.2 2003/07/26 17:55:19 craigmcc Exp $
+ * $Id: TestCommandBase.java,v 1.3 2003/07/27 00:48:29 craigmcc Exp $
  */
 
 /*
@@ -28,9 +28,11 @@ public class TestCommandBase extends UICommandBase {
         setId(id);
     }
 
+    /* PENDING(craigmcc) - listeners is private on UIComponentBase now
     public List[] getListeners() {
         return (this.listeners);
     }
+    */
 
 
 }

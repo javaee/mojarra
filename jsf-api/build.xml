@@ -282,7 +282,7 @@
   </target>
 
   <target name="test.UIInputBase" depends="build.test">
-    <echo message="Running UIInput tests ..."/>
+    <echo message="Running UIInputBase tests ..."/>
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <jvmarg line="${debug.jvm.args}"/>

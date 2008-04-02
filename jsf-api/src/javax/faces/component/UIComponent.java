@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.86 2003/07/26 17:54:35 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.87 2003/07/27 00:48:20 craigmcc Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
+import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import javax.faces.render.Renderer;
 
@@ -334,10 +335,16 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Broadcast the specified {@link FacesEvent} to all registered
      * event listeners who have expressed an interest in events of this
-     * type, for the specified {@link PhaseId} (or for any phase, if the
-     * listener returns <code>PhaseId.ANY_PHASE</code> from its
-     * <code>getPhaseId()</code> method.  The order in which
-     * registered listeners are notified is implementation dependent.</p>
+     * type, for the specified {@link PhaseId}.  The order in which registered
+     * listeners are notified must be:</p>
+     * <ul>
+     * <li>Listeners whose <code>getPhaseId()</code> method returns
+     *     <code>PhaseId.ANY_PHASE</code>, in the order that they were
+     *     registered.</li>
+     * <li>Listeners whose <code>getPhaseId()</code> method returns
+     *     the <code>PhaseId</code> specified on this method call,
+     *     in the order that they were registered.</li>
+     * </ul>
      *
      * <p>After all interested listeners have been notified, return
      * <code>false</code> if this event does not have any listeners
@@ -358,7 +365,7 @@ public interface UIComponent extends Serializable {
      * @exception NullPointerException if <code>event</code> or
      *  <code>phaseId</code> is <code>null</code>
      */
-    public abstract boolean broadcast(FacesEvent event, PhaseId phaseId)
+    public boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException;
 
 
@@ -468,6 +475,60 @@ public interface UIComponent extends Serializable {
      *  is <code>null</code>
      */
     public void reconstitute(FacesContext context) throws IOException;
+
+
+    // ------------------------------------------------- Event Listener Methods
+
+
+    /**
+     * <p>Add the specified {@link FacesListener} to the set of listeners
+     * registered to receive event notifications from this {@link UIComponent}.
+     * It is expected that {@link UIComponent} classes acting as event sources
+     * will have corresponding typesafe APIs for registering listeners of the
+     * required type, and the implementation of those registration methods
+     * will delegate to this method.  For example:</p>
+     * <pre>
+     * public class FooEvent extends FacesEvent { ... }
+     *
+     * public interface FooListener extends FacesListener {
+     *   public PhaseId getPhaseId();
+     *   public void processFoo(FooEvent event);
+     * }
+     *
+     * public class FooComponent extends UIComponentBase {
+     *   ...
+     *   public void addFooListener(FooListener listener) {
+     *     addFacesListener(listener);
+     *   }
+     *   public void removeFooListener(FooListener listener) {
+     *     removeFacesListener(listener);
+     *   }
+     *   ...
+     * }
+     * </pre>
+     *
+     * @param listener The {@link FacesListener} to be registered
+     *
+     * @exception NullPointerExcepton if <code>listener</code>
+     *  is <code>null</code>
+     */
+    /* PENDING(craigmcc) - interfaces cannot declare protected methods
+    protected void addFacesListener(FacesListener listener);
+    */
+
+
+    /**
+     * <p>Remove the specified {@link FacesListener} from the set of listeners
+     * registered to receive event notifications from this {@link UIComponent}.
+     *
+     * @param listener The {@link FacesListener} to be deregistered
+     *
+     * @exception NullPointerException if <code>listener</code>
+     *  is <code>null</code>
+     */
+    /* PENDING(craigmcc) - interfaces cannot declare protected methods
+    protected void removeFacesListener(FacesListener listener);
+    */
 
 
     // ----------------------------------------------- Lifecycle Phase Handlers

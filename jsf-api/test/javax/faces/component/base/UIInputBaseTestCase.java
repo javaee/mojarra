@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBaseTestCase.java,v 1.2 2003/07/26 17:55:22 craigmcc Exp $
+ * $Id: UIInputBaseTestCase.java,v 1.3 2003/07/27 00:48:31 craigmcc Exp $
  */
 
 /*
@@ -233,6 +233,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
         input.addValueChangedListener
             (new TestValueChangedListener("PV2", PhaseId.PROCESS_VALIDATIONS));
 
+        /* PENDING(craigmcc) - listeners are no longer accessible
         lists = input.getListeners();
         assertEquals(PhaseId.VALUES.size(), lists.length);
         for (int i = 0; i < lists.length; i++) {
@@ -277,6 +278,7 @@ public class UIInputBaseTestCase extends UIOutputBaseTestCase {
                 assertNull(lists[i]);
             }
         }
+        */
 
     }
 

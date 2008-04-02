@@ -1,5 +1,5 @@
 /*
- * $Id: ActionEvent.java,v 1.5 2003/07/14 23:00:01 craigmcc Exp $
+ * $Id: ActionEvent.java,v 1.6 2003/07/27 00:48:26 craigmcc Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.component.UIComponent;
 public class ActionEvent extends FacesEvent {
 
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -36,6 +36,23 @@ public class ActionEvent extends FacesEvent {
     public ActionEvent(UIComponent component) {
 
         super(component);
+
+    }
+
+
+    // ------------------------------------------------- Event Broadcast Methods
+
+
+    public  boolean isAppropriateListener(FacesListener listener) {
+
+        return (listener instanceof ActionListener);
+
+    }
+
+
+    public void processListener(FacesListener listener) {
+
+        ((ActionListener) listener).processAction(this);
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedEvent.java,v 1.4 2003/02/20 22:46:29 ofung Exp $
+ * $Id: ValueChangedEvent.java,v 1.5 2003/07/27 00:48:27 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.component.UIComponent;
 public class ValueChangedEvent extends FacesEvent {
 
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -47,7 +47,7 @@ public class ValueChangedEvent extends FacesEvent {
     }
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
     /**
@@ -80,6 +80,23 @@ public class ValueChangedEvent extends FacesEvent {
     public Object getNewValue() {
 
         return (this.newValue);
+
+    }
+
+
+    // ------------------------------------------------- Event Broadcast Methods
+
+
+    public boolean isAppropriateListener(FacesListener listener) {
+
+        return (listener instanceof ValueChangedListener);
+
+    }
+
+
+    public void processListener(FacesListener listener) {
+
+        ((ValueChangedListener) listener).processValueChanged(this);
 
     }
 

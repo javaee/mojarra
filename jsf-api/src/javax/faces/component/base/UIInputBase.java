@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.2 2003/07/26 17:54:49 craigmcc Exp $
+ * $Id: UIInputBase.java,v 1.3 2003/07/27 00:48:25 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,6 @@ package javax.faces.component.base;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.Message;
@@ -20,8 +19,6 @@ import javax.faces.application.MessageResources;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ValueChangedEvent;
 import javax.faces.event.ValueChangedListener;
@@ -258,144 +255,19 @@ public class UIInputBase extends UIOutputBase implements UIInput {
     }
 
 
-    // ------------------------------------------------ Event Processing Methods
+    // -------------------------------------------------- Event Listener Methods
 
 
-    /**
-     * <p>Array of {@link List}s of {@link ValueChangedListener}s registered
-     * for particular phases.  The array, as well as the individual
-     * elements, are lazily instantiated as necessary.</p>
-     */
-    protected List listeners[] = null;
-
-
-    /**
-     * <p>Add a new {@link ValueChangedListener} to the set of listeners
-     * interested in being notified when {@link ValueChangedEvent}s occur.</p>
-     *
-     * @param listener The {@link ValueChangedListener} to be added
-     *
-     * @exception NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     */
     public void addValueChangedListener(ValueChangedListener listener) {
 
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            listeners = new List[PhaseId.VALUES.size()];
-        }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            listeners[ordinal] = new ArrayList();
-        }
-        listeners[ordinal].add(listener);
+        addFacesListener(listener);
 
     }
 
 
-    /**
-     * <p>Broadcast the specified {@link FacesEvent} to all registered
-     * event listeners who have expressed an interest in events of this
-     * type, for the specified {@link PhaseId}.  The order in which
-     * registered listeners are notified is implementation dependent.</p>
-     *
-     * <p>After all interested listeners have been notified, return
-     * <code>false</code> if this event does not have any listeners
-     * interested in this event in future phases of the request processing
-     * lifecycle.  Otherwise, return <code>true</code>.</p>
-     *
-     * @param event The {@link FacesEvent} to be broadcast
-     * @param phaseId The {@link PhaseId} of the current phase of the
-     *  request processing lifecycle
-     *
-     * @exception AbortProcessingException Signal the JavaServer Faces
-     *  implementation that no further processing on the current event
-     *  should be performed
-     * @exception IllegalArgumentException if the implementation class
-     *  of this {@link FacesEvent} is not supported by this component
-     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
-     *  for the phase identifier
-     * @exception NullPointerException if <code>event</code> or
-     *  <code>phaseId</code> is <code>null</code>
-     */
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
-        throws AbortProcessingException {
-
-        if ((event == null) || (phaseId == null)) {
-            throw new NullPointerException();
-        }
-        if (phaseId.equals(PhaseId.ANY_PHASE)) {
-            throw new IllegalStateException();
-        }
-        if (event instanceof ValueChangedEvent) {
-            if (listeners == null) {
-                return (false);
-            }
-            ValueChangedEvent vcevent = (ValueChangedEvent) event;
-            int ordinal = phaseId.getOrdinal();
-            broadcast(vcevent, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
-            broadcast(vcevent, listeners[ordinal]);
-            for (int i = ordinal + 1; i < listeners.length; i++) {
-                if ((listeners[i] != null) && (listeners[i].size() > 0)) {
-                    return (true);
-                }
-            }
-            return (false);
-        } else {
-            throw new IllegalArgumentException();
-        }
-
-    }
-
-
-    /**
-     * <p>Broadcast the specified {@link ValueChangedEvent} to the
-     * {@link ValueChangedListener}s on the specified list (if any)
-     *
-     * @param event The {@link ValueChangedEvent} to be broadcast
-     * @param list The list of {@link ValueChangedListener}s, or
-     *  <code>null</code> for no interested listeners
-     */
-    protected void broadcast(ValueChangedEvent event, List list) {
-
-        if (list == null) {
-            return;
-        }
-        Iterator listeners = list.iterator();
-        while (listeners.hasNext()) {
-            ValueChangedListener listener =
-                (ValueChangedListener) listeners.next();
-            listener.processValueChanged(event);
-        }
-
-    }
-
-
-    /**
-     * <p>Remove an existing {@link ValueChangedListener} (if any) from the
-     * set of listeners interested in being notified when
-     * {@link ValueChangedEvent}s occur.</p>
-     *
-     * @param listener The {@link ValueChangedListener} to be removed
-     *
-     * @exception NullPointerException if <code>listener</code>
-     *  is <code>null</code>
-     */
     public void removeValueChangedListener(ValueChangedListener listener) {
 
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            return;
-        }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            return;
-        }
-        listeners[ordinal].remove(listener);
+        removeFacesListener(listener);
 
     }
 
