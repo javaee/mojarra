@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.13 2004/02/26 20:34:38 eburns Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.14 2005/03/09 00:35:45 jayashri Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.13 2004/02/26 20:34:38 eburns Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.14 2005/03/09 00:35:45 jayashri Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase
@@ -316,7 +316,7 @@ public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestC
         } catch (NullPointerException npe) {
             exceptionThrown = true;
         }
-        assertTrue(exceptionThrown);
+        assertTrue(!exceptionThrown);
         exceptionThrown = false;
         try {
             writer.writeAttribute(null, "bar", null);

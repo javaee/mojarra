@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.17 2004/12/16 17:56:37 edburns Exp $
+ * $Id: HtmlResponseWriter.java,v 1.18 2005/03/09 00:35:44 jayashri Exp $
  */
 
 /*
@@ -239,14 +239,16 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @throws IllegalStateException if this method is called when there
      *                               is no currently open element
      * @throws IOException           if an input/output error occurs
-     * @throws NullPointerException  if <code>name</code> or
-     *                               <code>value</code> is <code>null</code>
+     * @throws NullPointerException  if <code>name</code> is <code>null</code>
      */
     public void writeAttribute(String name, Object value, String componentPropertyName)
         throws IOException {
-        if (name == null || value == null) {
+        if (name == null) {
             throw new NullPointerException(Util.getExceptionMessageString(
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        if ( value == null ) {
+            return;
         }
 
         Class valueClass = value.getClass();

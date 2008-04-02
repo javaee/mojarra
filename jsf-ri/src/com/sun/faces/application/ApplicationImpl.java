@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.57 2005/02/28 18:48:20 jayashri Exp $
+ * $Id: ApplicationImpl.java,v 1.58 2005/03/09 00:35:44 jayashri Exp $
  */
 
 /*
@@ -440,23 +440,37 @@ public class ApplicationImpl extends Application {
             message = message +" targetClass " + targetClass;
             throw new NullPointerException(message);
         }
+        Converter result = createConverterBasedOnClass(targetClass);
+        if (result == null) {
+            if (log.isErrorEnabled()) {
+                log.error("Couldn't instantiate converter of the type " +
+                          targetClass.getName());
+            }
+            Object[] params = {targetClass.getName()};
+            throw new FacesException(Util.getExceptionMessageString(
+                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+        } 
+        return result;
+    }
+    
+    protected Converter createConverterBasedOnClass(Class targetClass) {
+        
         Converter returnVal = (Converter) newThing(targetClass,
                                                    converterTypeMap);
-
         if (returnVal != null) {
             if (log.isTraceEnabled()) {
                 log.trace("Created converter of type " +
                           returnVal.getClass().getName());
             }
             return returnVal;
-        }
+        } 
 
         //Search for converters registered to interfaces implemented by
         //targetClass
         Class[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
-                returnVal = createConverter(interfaces[i]);
+                returnVal = createConverterBasedOnClass(interfaces[i]);
                 if (returnVal != null) {
                     if (log.isTraceEnabled()) {
                         log.trace("Created converter of type " +
@@ -470,7 +484,7 @@ public class ApplicationImpl extends Application {
         //Search for converters registered to superclasses of targetClass
         Class superclass = targetClass.getSuperclass();
         if (superclass != null) {
-            returnVal = createConverter(superclass);
+            returnVal = (Converter) createConverterBasedOnClass(superclass);
             if (returnVal != null) {
                 if (log.isTraceEnabled()) {
                     log.trace("Created converter of type " +
@@ -478,8 +492,7 @@ public class ApplicationImpl extends Application {
                 }
                 return returnVal;
             }
-        }
-
+        } 
         return returnVal;
     }
 

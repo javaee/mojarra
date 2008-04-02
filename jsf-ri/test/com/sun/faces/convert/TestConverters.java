@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.31 2005/01/03 18:16:52 rogerk Exp $
+ * $Id: TestConverters.java,v 1.32 2005/03/09 00:35:45 jayashri Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.31 2005/01/03 18:16:52 rogerk Exp $
+ * @version $Id: TestConverters.java,v 1.32 2005/03/09 00:35:45 jayashri Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -796,7 +796,11 @@ public class TestConverters extends JspFacesTestCase {
         application.addConverter(java.util.AbstractCollection.class,
                                  "javax.faces.convert.DateTimeConverter");
         converter = null;
-        converter = application.createConverter(java.util.HashSet.class);
+        try {
+            converter = application.createConverter(java.util.HashSet.class);
+        } catch (javax.faces.FacesException fe) {
+            
+        }
         assertTrue(converter != null);
 
 
