@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.10 2004/11/23 21:00:41 edburns Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.11 2004/12/02 21:30:58 edburns Exp $
  */
 
 /*
@@ -220,7 +220,6 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 	}
 
 	if (db != null || rendererType != null) {
-	    writer.write("* @deprecated \n");
 	    writer.write("*/\n");
 	}
 
