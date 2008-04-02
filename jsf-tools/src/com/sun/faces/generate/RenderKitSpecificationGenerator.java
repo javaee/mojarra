@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitSpecificationGenerator.java,v 1.4 2004/05/12 03:08:50 rkitain Exp $
+ * $Id: RenderKitSpecificationGenerator.java,v 1.5 2004/10/29 00:56:40 rlubke Exp $
  */
 
 /*
@@ -10,37 +10,32 @@
 package com.sun.faces.generate;
 
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FileOutputStream;
-import java.io.Writer;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.BufferedInputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.net.URL;
-import java.net.URLConnection;
-
-import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.sun.faces.config.beans.AttributeBean;
 import com.sun.faces.config.beans.ComponentBean;
 import com.sun.faces.config.beans.DescriptionBean;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.beans.PropertyBean;
 import com.sun.faces.config.beans.RenderKitBean;
 import com.sun.faces.config.beans.RendererBean;
-import com.sun.faces.config.beans.AttributeBean;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.Writer;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 
@@ -867,25 +862,9 @@ public class RenderKitSpecificationGenerator extends AbstractGenerator {
                 log.debug("Processing command line options");
             }
             Map options = options(args);
-            String dtd = (String) options.get("--dtd");
-            if (log.isDebugEnabled()) {
-                log.debug("Configuring digester instance with public identifiers and DTD '" +
-                          dtd + "'");
-            }
-    	    StringTokenizer st = new StringTokenizer(dtd, "|");
-	    int arrayLen = st.countTokens();
-	    if (arrayLen == 0) {
-		// PENDING I18n
-		throw new Exception("No DTDs specified");
-	    }
-            String[] dtds = new String[arrayLen];
-	    int i=0;
-	    while (st.hasMoreTokens()) {
-	        dtds[i] = st.nextToken();
-		i++;
-	    }
+          
             directories((String) options.get("--dir"));
-            Digester digester = digester(dtds, false, true, false);
+            Digester digester = digester(false, true, false);
             String config = (String) options.get("--config");
             if (log.isDebugEnabled()) {
                 log.debug("Parsing configuration file '" + config + "'");

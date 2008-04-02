@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.25 2004/08/17 17:05:21 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.26 2004/10/29 00:56:38 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -129,16 +129,6 @@ public class ConfigureListener implements ServletContextListener {
      */
     protected static final String ENABLE_HTML_TLV =
         RIConstants.FACES_PREFIX + "enableHtmlTagLibValidator";
-
-    /*
-     * The first element is the path, the second is the public ID.
-     */
-    private static String[][] DTD_INFO = {
-        { "/com/sun/faces/web-facesconfig_1_0.dtd",
-          "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN" },
-        { "/com/sun/faces/web-facesconfig_1_1.dtd",
-          "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN" }
-    };
 
     /**
      * <p>All known factory names.</p>
@@ -961,28 +951,13 @@ public class ConfigureListener implements ServletContextListener {
      * @param validateXml if true, validation is turned on during parsing.
      */
     protected Digester digester(boolean validateXml) {
-        Digester digester = new Digester();
 
-        // Configure basic properties
-        digester.setNamespaceAware(false);
-        digester.setUseContextClassLoader(true);
-        digester.setValidating(validateXml);
+        Digester digester =
+            DigesterFactory.newInstance(validateXml).createDigester();
 
         // Configure parsing rules
         // PENDING - Read from file?
         digester.addRuleSet(new FacesConfigRuleSet(false, false, true));
-
-        // Register known entities
-        for (int i = 0; i < DTD_INFO.length; i++) {
-            URL url = this.getClass().getResource(DTD_INFO[i][0]);
-            if (url != null) {
-                digester.register(DTD_INFO[i][1], url.toString());
-            } else {
-                throw new FacesException(
-                    Util.getExceptionMessageString(Util.NO_DTD_FOUND_ERROR_ID,
-                        new Object[]{ DTD_INFO[i][1], DTD_INFO[i][0] }));
-            }
-        }
 
         // Push an initial FacesConfigBean onto the stack
         digester.push(new FacesConfigBean());
@@ -1186,8 +1161,6 @@ public class ConfigureListener implements ServletContextListener {
             digester.clear();
             digester.push(fcb);
             digester.parse(source);
-            stream.close();
-            stream = null;
         } catch (Exception e) {
             String message = null;
             try {

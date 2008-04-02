@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlComponentGenerator.java,v 1.8 2004/08/24 17:07:13 edburns Exp $
+ * $Id: HtmlComponentGenerator.java,v 1.9 2004/10/29 00:56:39 rlubke Exp $
  */
 
 /*
@@ -10,6 +10,14 @@
 package com.sun.faces.generate;
 
 
+import com.sun.faces.config.beans.ComponentBean;
+import com.sun.faces.config.beans.DescriptionBean;
+import com.sun.faces.config.beans.FacesConfigBean;
+import com.sun.faces.config.beans.PropertyBean;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,14 +27,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
-import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import com.sun.faces.config.beans.ComponentBean;
-import com.sun.faces.config.beans.DescriptionBean;
-import com.sun.faces.config.beans.FacesConfigBean;
-import com.sun.faces.config.beans.PropertyBean;
 
 
 /**
@@ -521,35 +521,10 @@ public class HtmlComponentGenerator extends AbstractGenerator {
                 log.debug("Processing command line options");
             }
             Map options = options(args);
-            String dtd = (String) options.get("--dtd");
-            if (log.isDebugEnabled()) {
-                log.debug("Configuring digester instance with public identifiers and DTD '" +
-                          dtd + "'");
-            }
-	    StringTokenizer st = new StringTokenizer(dtd, "|");
-	    int arrayLen = st.countTokens();
-	    if (arrayLen == 0) {
-		// PENDING I18n
-		throw new Exception("No DTDs specified");
-	    }
-            String[] dtds = new String[arrayLen];
-	    int i=0;
-	    while (st.hasMoreTokens()) {
-		// even numbered elements are left alone
-		if (0 == (i % 2)) {
-		    dtds[i] = st.nextToken();
-		}
-		else {
-		    // odd numbered elements are treated as absolute
-		    // filenames
-		    dtds[i] =(new File(st.nextToken())).toURL().toString();
-		}
-		i++;
-	    }
 
             copyright((String) options.get("--copyright"));
             directories((String) options.get("--dir"));
-            Digester digester = digester(dtds, false, true, false);
+            Digester digester = digester(false, true, false);
             String config = (String) options.get("--config");
             if (log.isDebugEnabled()) {
                 log.debug("Parsing configuration file '" + config + "'");
@@ -562,7 +537,7 @@ public class HtmlComponentGenerator extends AbstractGenerator {
 
             // Generate concrete HTML component classes
             ComponentBean cbs[] = fcb.getComponents();
-            for (i = 0; i < cbs.length; i++) {
+            for (int i = 0; i < cbs.length; i++) {
                 String componentClass = cbs[i].getComponentClass();
                 if (componentClass.startsWith("javax.faces.component.html.")) {
                     cb = cbs[i];

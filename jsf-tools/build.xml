@@ -114,8 +114,9 @@
     <copy    todir="${build.temp}">
       <fileset dir="${jsf-api.dir}/doc" includes="*.xml"/>
     </copy>
-    <copy    todir="${build.classes}/META-INF">
+    <copy    todir="${build.classes}/com/sun/faces">
       <fileset dir="${jsf-api.dir}/doc" includes="*.dtd"/>
+      <fileset dir="${jsf-api.dir}/doc" includes="*.xsd"/>
     </copy>
     <copy    todir="${build.temp}"
               file="${standard-html-renderkit-impl}"/>
@@ -200,8 +201,6 @@ necessary to generate required classes.
       <arg         value="${build.temp}/standard-html-renderkit.xml"/>
       <arg         value="--dir"/>
       <arg         value="${build.generate}"/>
-      <arg         value="--dtd"/>
-      <arg         value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${jsf-api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
 
@@ -402,9 +401,7 @@ necessary to generate required classes.
       <arg         value="--config"/>
       <arg         value="${build.temp}/standard-html-renderkit.xml"/>
       <arg         value="--dir"/>
-      <arg         value="${build.generate.facesdoc}"/>
-      <arg         value="--dtd"/>
-      <arg         value="-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN|${jsf-api.dir}/doc/web-facesconfig_1_0.dtd|-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN|${jsf-api.dir}/doc/web-facesconfig_1_1.dtd"/>
+      <arg         value="${build.generate.facesdoc}"/>      
       <arg         value="--copyright"/>
       <arg         value="${basedir}/COPYRIGHT"/>
 

@@ -244,6 +244,7 @@ must exist.  This is necessary for the MessageFactory class.
 
       <!-- Copy the configuration processing classes -->
       <fileset dir="${jsf-tools.dir}/src">
+        <include name="com/sun/faces/config/DigesterFactory.java"/>
         <include name="com/sun/faces/config/beans/*.java"/>
         <include name="com/sun/faces/config/rules/*.java"/>
       </fileset>
@@ -389,6 +390,7 @@ must exist.  This is necessary for the MessageFactory class.
         <fileset dir="${jsf-api.home}/doc">
           <include name="*.dtd"/>
           <include name="*.xml"/>
+          <include name="*.xsd"/>
         </fileset>
     </copy>
 
@@ -670,7 +672,10 @@ must exist.  This is necessary for the MessageFactory class.
                   location="${build.home}/classes/com/sun/faces/web-facesconfig_1_0.dtd"/>
           </xmlcatalog>
       </xslt>
-      <delete file="${basedir}/merged.xml"/> 
+      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" token="xmlns=&quot;http://java.sun.com/JSF/Configuration&quot;" />
+      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" token="xmlns:jsf=&quot;http://java.sun.com/JSF/Configuration&quot;" />
+      <replace file="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" token="&lt;faces-config &gt;" value="&lt;faces-config&gt;"/>
+      <delete file="${basedir}/merged.xml"/>
   </target>
 
   <!--

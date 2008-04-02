@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractGenerator.java,v 1.6 2004/08/24 17:07:13 edburns Exp $
+ * $Id: AbstractGenerator.java,v 1.7 2004/10/29 00:56:39 rlubke Exp $
  */
 
 /*
@@ -10,22 +10,23 @@
 package com.sun.faces.generate;
 
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import com.sun.faces.config.DigesterFactory;
 import com.sun.faces.config.beans.FacesConfigBean;
 import com.sun.faces.config.rules.FacesConfigRuleSet;
 import org.apache.commons.digester.Digester;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -75,6 +76,7 @@ public abstract class AbstractGenerator {
         keywords.add("do");
         keywords.add("double");
         keywords.add("else");
+        keywords.add("enum");
         keywords.add("extends");
         keywords.add("final");
         keywords.add("finally");
@@ -104,6 +106,7 @@ public abstract class AbstractGenerator {
         keywords.add("return");
         keywords.add("short");
         keywords.add("static");
+        keywords.add("strictfp");
         keywords.add("super");
         keywords.add("switch");
         keywords.add("synchronized");
@@ -202,42 +205,22 @@ public abstract class AbstractGenerator {
      * <p>Configure and return a <code>Digester</code> instance suitable for
      * use in the environment specified by our parameter flags.</p>
      *
-     * @param dtd[] array of toString()'d URLs to DTDs to be registered
-     * (if any) and their corresponding public identifiers
      * @param design Include rules suitable for design time use in a tool
      * @param generate Include rules suitable for generating component,
      *  renderer, and tag classes
      * @param runtime Include rules suitable for runtime execution
-     *
-     * @exception MalformedURLException if a URL cannot be formed correctly
      */
-    protected static Digester digester(String dtd[], boolean design,
-                                       boolean generate, boolean runtime)
-        throws MalformedURLException {
+    protected static Digester digester(boolean design,
+                                       boolean generate, boolean runtime) {
 
-        Digester digester = new Digester();
-
-        // Configure basic properties
-        digester.setNamespaceAware(false);
-        digester.setUseContextClassLoader(true);
-        digester.setValidating(true);
+        Digester digester = DigesterFactory.newInstance(true).createDigester();
 
         // Configure parsing rules
         digester.addRuleSet(new FacesConfigRuleSet(design, generate, runtime));
 
         // Configure preregistered entities
-	int i = 0;
-	while (dtd.length > 0) {
-            if (dtd[i] != null && dtd[i+1] != null) {
-                digester.register(dtd[i], dtd[i+1]);
-	    }
-	    i += 2;
-	    if (i >= dtd.length) {
-	        break;
-	    }
-        }
-        return (digester);
 
+        return (digester);
     }
 
 
@@ -250,7 +233,7 @@ public abstract class AbstractGenerator {
     protected static String mangle(String name) {
 
         if (keywords.contains(name)) {
-            return ("_" + name);
+            return ('_' + name);
         } else {
             return (name);
         }
@@ -273,10 +256,10 @@ public abstract class AbstractGenerator {
         while (i < args.length) {
             if (!args[i].startsWith("-")) {
                 throw new IllegalArgumentException
-                    ("Invalid option name '" + args[i] + "'");
+                    ("Invalid option name '" + args[i] + '\'');
             } else if ((i + 1) >= args.length) {
                 throw new IllegalArgumentException
-                    ("Missing value for option '" + args[i] + "'");
+                    ("Missing value for option '" + args[i] + '\'');
             }
             options.put(args[i], args[i+1]);
             i += 2;
@@ -347,7 +330,7 @@ public abstract class AbstractGenerator {
      */
     protected static String shortName(String className) {
 
-        int index = className.lastIndexOf(".");
+        int index = className.lastIndexOf('.');
         if (index >= 0) {
             return (className.substring(index + 1));
         } else {
