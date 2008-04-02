@@ -1,12 +1,9 @@
 /*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
-http://developer.yahoo.com/yui/license.txt
-Version: 0.12.1
+http://developer.yahoo.net/yui/license.txt
+version: 2.2.0
 */
-
-
-
 /* Menu styles */
 
 div.yuimenu {
@@ -58,7 +55,6 @@ div.yuimenubar div.bd:after {
 
 }
 
-
 /* Matches the group title (H6) inside a Menu or MenuBar instance */
 
 div.yuimenu h6,
@@ -90,7 +86,6 @@ div.yuimenu h6 {
 
 }
 
-
 /* Matches the UL inside a Menu or MenuBar instance */
 
 div.yuimenubar ul {
@@ -111,12 +106,58 @@ div.yuimenu ul {
 
 }
 
-
 div.yuimenu ul.first-of-type, 
 div.yuimenu ul.hastitle,
 div.yuimenu h6.first-of-type {
 
     border-width:0;
+
+}
+
+/*
+    Styles for the menu's header and footer elements that are used as controls 
+    to scroll the menu's body element when the menu's height exceeds the 
+    value of the "maxheight" configuration property.
+*/
+
+div.yuimenu div.topscrollbar,
+div.yuimenu div.bottomscrollbar {
+
+    height:16px;
+    background-image:url(map.gif);
+    background-repeat:no-repeat;
+
+}
+
+
+div.yuimenu div.topscrollbar {
+
+    background-image:url(map.gif);
+    background-position:center -72px;
+
+}
+
+
+div.yuimenu div.topscrollbar_disabled {
+
+    background-image:url(map.gif);
+    background-position:center -88px;
+
+}
+
+
+div.yuimenu div.bottomscrollbar {
+
+    background-image:url(map.gif);
+    background-position:center -104px;
+
+}
+
+
+div.yuimenu div.bottomscrollbar_disabled {
+
+    background-image:url(map.gif);
+    background-position:center -120px;
 
 }
 
@@ -150,16 +191,10 @@ div.yuimenubar li li {
 
 /* Matches the help text for a menu item */
 
-div.yuimenu li em {
+div.yuimenu li.hashelptext em.helptext {
 
     font-style:normal;
     margin:0 0 0 40px;
-
-}
-
-div.yuimenu li a em {
-
-    margin:0;
 
 }
 
@@ -193,7 +228,7 @@ div.yuimenu li.hashelptext a.hashelptext {
 }
 
 
-/* Matches focused and selected menu items */
+/* Matches selected menu items */
 
 div.yuimenu li.selected,
 div.yuimenubar li.selected {
@@ -255,26 +290,64 @@ div.yuimenubar li.yuimenubaritem.first-of-type {
 }
 
 
-/* Matches the submenu indicator for menu items */
+/* Styles for the the submenu indicator for menu items */
 
-div.yuimenubar li.yuimenubaritem img {
+div.yuimenu li.hassubmenu em.submenuindicator, 
+div.yuimenubar li.hassubmenu em.submenuindicator {
 
-    height:8px;
-    width:8px;
-    margin:0 0 0 10px;
+    display:-moz-inline-box; /* Mozilla */
+    display:inline-block; /* IE, Opera and Safari */
     vertical-align:middle;
-
-}
-
-div.yuimenu li.yuimenuitem img {
-
     height:8px;
     width:8px;
-    margin:0 -16px 0 0;
-    padding-left:10px;
-    border:0;
+    text-indent:9px;
+    font:0/0 arial;
+    overflow:hidden;
+    background-image:url(map.gif);
+    background-repeat:no-repeat;
 
 }
+
+div.yuimenubar li.hassubmenu em.submenuindicator {
+
+    background-position:0 -24px;
+    margin:0 0 0 10px;
+
+}
+
+div.yuimenubar li.hassubmenu em.submenuindicator.selected {
+
+    background-position:0 -32px;
+
+}
+
+div.yuimenubar li.hassubmenu em.submenuindicator.disabled {
+
+    background-position:0 -40px;
+
+}
+
+div.yuimenu li.hassubmenu em.submenuindicator {
+
+    background-position:0 0;
+    margin:0 -16px 0 10px;
+
+}
+
+div.yuimenu li.hassubmenu em.submenuindicator.selected {
+
+    background-position:0 -8px;
+
+}
+
+div.yuimenu li.hassubmenu em.submenuindicator.disabled {
+
+    background-position:0 -16px;
+
+}
+
+
+/* Styles for a menu item's "checked" state */
 
 div.yuimenu li.checked {
 
@@ -282,16 +355,30 @@ div.yuimenu li.checked {
 
 }
 
-div.yuimenu li.checked img.checked {
+div.yuimenu li.checked em.checkedindicator {
 
     height:8px;
     width:8px;
-    margin:0;
-    padding:0;
-    border:0;
+    text-indent:9px;
+    overflow:hidden;
+    background-image:url(map.gif);
+    background-position:0 -48px;
+    background-repeat:no-repeat;
     position:absolute;
     left:6px;
     _left:-16px; /* Underscore hack b/c this is for IE 6 only */
     top:.5em;
-    
+
+}
+
+div.yuimenu li.checked em.checkedindicator.selected {
+
+    background-position:0 -56px;
+
+}
+
+div.yuimenu li.checked em.checkedindicator.disabled {
+
+    background-position:0 -64px;
+
 }

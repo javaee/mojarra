@@ -1,10 +1,9 @@
 /*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Copyright (c) 2007, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-Version 0.12
+version: 2.2.0
 */
-
 .yui-calcontainer {
 	position:relative;
 	padding:5px;
@@ -57,6 +56,13 @@ Version 0.12
 	z-index:1;
 }
 
+.yui-calcontainer .calclose {
+	background: url("calx.gif") no-repeat;
+	width:17px;
+	height:13px;
+	cursor:pointer;	
+}
+
 /* Calendar element styles */
 
 .yui-calendar {
@@ -73,7 +79,6 @@ Version 0.12
 
 .yui-calendar .calnavleft {
 	position:absolute;
-	background-repeat:no-repeat;
 	cursor:pointer;
 	top:2px;
 	bottom:0;
@@ -81,18 +86,19 @@ Version 0.12
 	height:12px;   
 	left:2px;
 	z-index:1;
+	background: url("callt.gif") no-repeat;
 }
 
 .yui-calendar .calnavright {
 	position:absolute;
-	background-repeat:no-repeat;
 	cursor:pointer;
 	top:2px;
 	bottom:0;
 	width:9px;
-	height:12px;  
+	height:12px;
 	right:2px;
 	z-index:1;
+	background: url("calrt.gif") no-repeat;
 }
 
 .yui-calendar td.calcell {
@@ -186,6 +192,6 @@ Version 0.12
 	border-right-width:2px;
 }
 
-/*Specific changes for calendar running under fonts/reset */
-.yui-calendar a:hover {background:inherit;}
+/* Specific changes for calendar running under fonts/reset */
+.yui-calendar .calbody a:hover {background:inherit;}
 p#clear {clear:left; padding-top:10px;}
