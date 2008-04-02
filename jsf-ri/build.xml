@@ -170,6 +170,7 @@
   <target name="prepare.generate"
           depends="prepare,set.tools.property,verify.tools.property">
     <mkdir dir="${build.generate.tld}"/>
+    <mkdir dir="${build.home}/generate.classes"/>
   </target>
 
   <target name="set.tools.property" unless="jsf-tools">
@@ -232,16 +233,22 @@ must exist.  This is necessary for the MessageFactory class.
   <target name="compile" depends="prepare,copy.template.sources"
    description="Just compile the classes">
     <!-- Run javac through everything -->
-    <javac
+    <javac srcdir="${build.generate}" excludes="com/sun/faces/taglib/**"
            destdir="${build.home}/classes"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">
-      <src path="${source.home}"/> 
-      <src path="${build.generate}"/>
-      <exclude name="com/sun/faces/taglib/**"/>
       <classpath refid="compile.classpath"/>
     </javac>
+
+    <javac srcdir="${source.home}"
+           destdir="${build.home}/classes"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath"/>
+    </javac>
+
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.properties"/>
     </copy>
@@ -257,7 +264,7 @@ must exist.  This is necessary for the MessageFactory class.
    description="Just compile the classes">
     <!-- Run javac through everything -->
     <javac
-           destdir="${build.home}/classes"
+           destdir="${build.home}/generate.classes"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
           optimize="${compile.optimize}">

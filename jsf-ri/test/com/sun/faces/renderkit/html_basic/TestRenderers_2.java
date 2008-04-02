@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.66 2003/10/30 20:30:40 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.67 2003/11/05 04:39:08 eburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.66 2003/10/30 20:30:40 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.67 2003/11/05 04:39:08 eburns Exp $
  * 
  *
  */
@@ -406,7 +406,7 @@ public class TestRenderers_2 extends JspFacesTestCase
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
         System.out.println("Testing GraphicImageRenderer");
         UIGraphic img = new UIGraphic();
-        img.setURL("/nonModelReferenceImage.gif");
+        img.setUrl("/nonModelReferenceImage.gif");
         img.setId("myGraphicImage");
         img.getAttributes().put("ismap", new Boolean(true));
         img.getAttributes().put("usemap", "usemap");

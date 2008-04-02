@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.18 2003/10/28 21:00:34 eburns Exp $
+ * $Id: Graphic_ImageTag.java,v 1.19 2003/11/05 04:39:07 eburns Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ public class Graphic_ImageTag extends BaseComponentTag
 	UIGraphic graphic = (UIGraphic) component;
 	
 	if (null != url) {
-	    graphic.setURL(url);
+	    graphic.setUrl(url);
 	}
         if (usemap != null) {
             component.getAttributes().put("usemap", usemap);
