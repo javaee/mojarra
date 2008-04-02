@@ -1,5 +1,5 @@
 /*
- * $Id: ToolsUtil.java,v 1.6 2005/12/15 00:02:37 rlubke Exp $
+ * $Id: ToolsUtil.java,v 1.7 2006/11/06 22:40:30 rlubke Exp $
  */
 
 /*
@@ -115,6 +115,23 @@ public class ToolsUtil {
     
     public static Logger getLogger( String loggerName ) {
         return Logger.getLogger(loggerName, FACES_LOG_STRINGS );
+    }
+
+    public static Class loadClass(String name,
+                                  Object fallbackClass)
+        throws ClassNotFoundException {
+        ClassLoader loader = ToolsUtil.getCurrentLoader(fallbackClass);
+        return Class.forName(name, false, loader);
+    }
+
+
+    public static ClassLoader getCurrentLoader(Object fallbackClass) {
+        ClassLoader loader =
+            Thread.currentThread().getContextClassLoader();
+        if (loader == null) {
+            loader = fallbackClass.getClass().getClassLoader();
+        }
+        return loader;
     }
     
 

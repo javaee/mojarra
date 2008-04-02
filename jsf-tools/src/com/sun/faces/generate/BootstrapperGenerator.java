@@ -1,5 +1,5 @@
 /*
- * $Id: BootstrapperGenerator.java,v 1.1 2006/09/19 21:13:33 jdlee Exp $
+ * $Id: BootstrapperGenerator.java,v 1.2 2006/11/06 22:40:30 rlubke Exp $
  */
 
 /*
@@ -225,7 +225,7 @@ public class BootstrapperGenerator {
                 } else if ("converter-class".equals(node.getNodeName())) {
                     writer.fwrite("converter.setConverterClass(\""+ node.getTextContent().trim() + "\");\n");
                 } else if ("converter-for-class".equals(node.getNodeName())) {
-                    writer.fwrite("converter.setConverterForClass(\""+ node.getTextContent().trim() + "\");\n");
+                    writer.fwrite("converter.setConverterForClass("+ node.getTextContent().trim() + ".class);\n");
                 }
             }
             writer.fwrite ("converters.add(converter);\n");

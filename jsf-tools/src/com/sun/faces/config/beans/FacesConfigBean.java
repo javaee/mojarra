@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigBean.java,v 1.7 2006/02/24 18:05:08 edburns Exp $
+ * $Id: FacesConfigBean.java,v 1.8 2006/11/06 22:40:29 rlubke Exp $
  */
 
 /*
@@ -119,7 +119,7 @@ public class FacesConfigBean {
                 logger.log(Level.FINE, "addConverterByClass(" +
                           descriptor.getConverterForClass() + ")");
             }
-            convertersByClass.put(descriptor.getConverterForClass(),
+            convertersByClass.put(descriptor.getConverterForClass().getName(),
                                   descriptor);
         }
     }

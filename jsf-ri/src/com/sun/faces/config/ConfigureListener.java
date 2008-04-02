@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.87 2006/11/06 19:59:15 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.88 2006/11/06 22:40:30 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -789,10 +789,8 @@ public class ConfigureListener implements ServletContextListener {
                     LOGGER.finer("addConverterByClass(" +
                               config[i].getConverterForClass() + ',' +
                               config[i].getConverterClass() + ')');
-                }
-                Class clazz = Util.loadClass(config[i].getConverterForClass(),
-                                             this);
-                application.addConverter(clazz,
+                }                
+                application.addConverter(config[i].getConverterForClass(),
                                          config[i].getConverterClass());
             }
         }
@@ -1353,20 +1351,11 @@ public class ConfigureListener implements ServletContextListener {
 
         // Check converters
         ConverterBean[] conv1 = fcb.getConvertersByClass();
-        Class clazz;
         for (int i = 0, len = conv1.length; i < len; i++) {
             try {
-                clazz = Util.loadClass(conv1[i].getConverterForClass(), this);
-                app.createConverter(clazz);
+                app.createConverter(conv1[i].getConverterForClass());
             } catch (Exception e) {
-                context.log(conv1[i].getConverterForClass(), e);
-                clazz = null;
-                success = false;
-            }
-            try {
-                app.createConverter(clazz);
-            } catch (Exception e) {
-                context.log(conv1[i].getConverterClass(), e);
+                context.log(conv1[i].getConverterForClass().getName(), e);               
                 success = false;
             }
         }

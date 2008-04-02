@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterBean.java,v 1.5 2005/08/25 17:11:00 rlubke Exp $
+ * $Id: ConverterBean.java,v 1.6 2006/11/06 22:40:29 rlubke Exp $
  */
 
 /*
@@ -30,6 +30,8 @@
 package com.sun.faces.config.beans;
 
 
+import com.sun.faces.util.ToolsUtil;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -51,10 +53,19 @@ public class ConverterBean extends FeatureBean
     { this.converterClass = converterClass; }
 
 
-    private String converterForClass;
-    public String getConverterForClass() { return converterForClass; }
-    public void setConverterForClass(String converterForClass)
-    { this.converterForClass = converterForClass; }
+    private Class converterForClass;
+    public Class getConverterForClass() { return converterForClass; }
+    public void setConverterForClass(String converterForClass) {
+        try {
+            this.converterForClass = ToolsUtil.loadClass(converterForClass,
+                                                         this);
+        } catch (ClassNotFoundException cnfe) {
+            throw new RuntimeException(cnfe);
+        }
+    }
+    public void setConverterForClass(Class converterForClass) {
+            this.converterForClass = converterForClass;        
+    }
 
 
     private String converterId;
