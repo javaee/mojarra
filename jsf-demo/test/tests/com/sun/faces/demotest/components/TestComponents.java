@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.5 2003/09/16 21:54:40 rkitain Exp $
+ * $Id: TestComponents.java,v 1.6 2003/09/17 20:03:48 rkitain Exp $
  */
 
 /*
@@ -91,6 +91,13 @@ public class TestComponents extends HtmlUnitTestCase {
 	HtmlPage page = accessAppAndGetPage("faces/result-set.jsp");
 	HtmlAnchor anchor = null;
 	assertNotNull(page);
+	page = executeResultSet(page, "2", "3");
+	//"-1" is action value for "Next"
+	page = executeResultSet(page, "5", "-1");
+	//"-2" is action value for "Previous"
+	page = executeResultSet(page, "10", "-2");
+	//stay on same page
+	page = executeResultSet(page, "10", "10");
     }
 
     protected HtmlPage executeTreeTest(HtmlPage page, 
@@ -179,6 +186,46 @@ public class TestComponents extends HtmlUnitTestCase {
 	assertNotNull(anchor);
 	page = (HtmlPage) anchor.click();
 	assertNotNull(page);
+
+	return page;
+    }
+
+    protected HtmlPage executeResultSet(HtmlPage page, String currentListNum, 
+        String newListNum) throws Exception {
+	HtmlAnchor anchor = null;
+	HtmlForm form = (HtmlForm) page.getAllForms().get(0);     
+	assertNotNull(form);
+	HtmlHiddenInput hidden1, hidden2 = null;
+
+	// verify that clicking on the <newListNum> link causes the
+	// the correct current page display.
+	// simulate the link being clicked
+
+	hidden1 = (HtmlHiddenInput) form.getInputByName("JSPid2:JSPid3_curPage");
+	assertNotNull(hidden1);
+	hidden1.setValueAttribute(currentListNum);
+
+	hidden2 = (HtmlHiddenInput) form.getInputByName("JSPid2:JSPid3_action");
+	assertNotNull(hidden2);
+	hidden2.setValueAttribute(newListNum);
+	page = (HtmlPage) form.submit();
+	
+	// If we've pressed the "next" link
+	if (newListNum.equals("-1")) {
+	    int newNum = Integer.valueOf(currentListNum).intValue() + 1;
+	    newListNum = Integer.toString(newNum);
+	// If we've pressed the "previous" link
+	} else if (newListNum.equals("-2")) {
+	    int newNum = Integer.valueOf(currentListNum).intValue() - 1;
+	    newListNum = Integer.toString(newNum);
+	}
+
+	try {
+            anchor = page.getFirstAnchorByText(newListNum);
+	    assertTrue(false);
+	} catch (ElementNotFoundException e) {
+	    assertTrue(true);
+	}
 
 	return page;
     }
