@@ -331,7 +331,7 @@ java -Xmx256m -jar ${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar
         <condition property="dl.os" value="Darwin">
             <os name="Mac OS X"/>
         </condition>
-        <condition property="isLinux" value="Linux">
+        <condition property="dl.os" value="Linux">
             <and>
                 <os family="unix"/>
                 <not>
