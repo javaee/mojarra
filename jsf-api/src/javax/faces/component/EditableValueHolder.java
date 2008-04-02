@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.4 2004/01/15 07:34:00 eburns Exp $
+ * $Id: EditableValueHolder.java,v 1.5 2004/01/15 23:13:23 eburns Exp $
  */
 
 /*
@@ -120,9 +120,10 @@ public interface EditableValueHolder extends ValueHolder {
      * or <em>Apply Request Values</em> phases (depending on the
      * value of the <code>immediate</code> property). </p>
      *
-     * <p>Any method referenced by such an expression must be public, with
-     * a return type of <code>void</code>, and accept parameters of type
-     * {@link FacesContext}, {@link UIComponent}, and <code>Object</code>.</p>
+     * <p>Any method referenced by such an expression must be public,
+     * with a return type of <code>void</code>, and accept parameters of
+     * type {@link javax.faces.context.FacesContext}, {@link
+     * UIComponent}, and <code>Object</code>.</p>
      *
      * @param validatorBinding The new <code>MethodBinding</code> instance
      */

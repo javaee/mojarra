@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.36 2004/01/15 06:03:39 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.37 2004/01/15 23:13:28 eburns Exp $
  */
 
 /*
@@ -183,15 +183,15 @@ public abstract class UIComponentTag implements Tag {
     /**
      * <p>Set the component identifier for our component.  If the
      * argument begins with {@link
-     * UIViewRoot.UNIQUE_ID_PREFIX} throw an
+     * UIViewRoot#UNIQUE_ID_PREFIX} throw an
      * <code>IllegalArgumentException</code></p>
      *
      * @param id The new component identifier.  This may not start with
-     * {@link UIViewRoot.UNIQUE_ID_PREFIX}.
+     * {@link UIViewRoot#UNIQUE_ID_PREFIX}.
      *
      * @exception IllegalArgumentException if the argument is
      * non-<code>null</code> and starts with {@link
-     * UIViewRoot.UNIQUE_ID_PREFIX}.
+     * UIViewRoot#UNIQUE_ID_PREFIX}.
      */
     public void setId(String id) {
 	if (null != id && id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {

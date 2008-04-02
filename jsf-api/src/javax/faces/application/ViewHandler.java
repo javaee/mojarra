@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.30 2004/01/15 21:33:56 eburns Exp $
+ * $Id: ViewHandler.java,v 1.31 2004/01/15 23:13:22 eburns Exp $
  */
 
 /*
@@ -189,7 +189,7 @@ public interface ViewHandler {
      * {@link FacesContext}, the implementation must copy its
      * <code>locale</code> and <code>renderKitId</code> to this new view
      * root.  If not, the implementation must call {@link
-     * #calculateLocale} and {@link calculateRenderKitId} and store the
+     * #calculateLocale} and {@link #calculateRenderKitId} and store the
      * results as the <code>locale</code> and <code>renderKitId</code>,
      * respectively, of the newly created <code>UIViewRoot</code></p>
      *

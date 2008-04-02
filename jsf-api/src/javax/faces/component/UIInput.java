@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.62 2004/01/15 07:34:00 eburns Exp $
+ * $Id: UIInput.java,v 1.63 2004/01/15 23:13:25 eburns Exp $
  */
 
 /*
@@ -338,13 +338,13 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     // ----------------------------------------------------- UIComponent Methods
 
     /**
-     * <p>In addition to the standard <code>processDecodes</code> behavior
-     * inherited from {@link UIComponentBase}, calls
-     * <code>validate()</code> if the the <code>immediate</code>
-     * property is true;  if the component is invalid afterwards or
-     * a <code>RuntimeException</code> is thrown, calls
-     * {@link FacesContext#renderResponse}
-     * </p>
+     * <p>Specialized decode behavior on top of that provided by the
+     * superclass.  In addition to the standard
+     * <code>processDecodes</code> behavior inherited from {@link
+     * UIComponentBase}, calls <code>validate()</code> if the the
+     * <code>immediate</code> property is true; if the component is
+     * invalid afterwards or a <code>RuntimeException</code> is thrown,
+     * calls {@link FacesContext#renderResponse}.  </p>
      * @exception NullPointerException {@inheritDoc}     
      */ 
     public void processDecodes(FacesContext context) {

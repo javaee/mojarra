@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.9 2004/01/15 06:03:37 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.10 2004/01/15 23:13:27 eburns Exp $
  */
 
 /*
@@ -38,10 +38,11 @@ public abstract class ResponseStateManager {
      * the output using the current {@link ResponseWriter}, which
      * must be correctly positioned already.</p>
      *
-     * <p>If the {@link SerializedView} is to be written out to hidden
-     * fields, the implementation must take care to make all necessary
-     * character replacements to make the Strings suitable for inclusion
-     * as an HTTP request paramater.</p>
+     * <p>If the {@link
+     * javax.faces.application.StateManager.SerializedView} is to be
+     * written out to hidden fields, the implementation must take care
+     * to make all necessary character replacements to make the Strings
+     * suitable for inclusion as an HTTP request paramater.</p>
      *
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved

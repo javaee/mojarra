@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainer.java,v 1.8 2004/01/15 06:03:19 eburns Exp $
+ * $Id: NamingContainer.java,v 1.9 2004/01/15 23:13:23 eburns Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ package javax.faces.component;
  * <p><strong>NamingContainer</strong> is an interface that must be
  * implemented by any {@link UIComponent} that wants to be a naming
  * container.  Naming containers affect the behavior of the
- * {@link UIComponent#findComponent} and {@link UIComponent#getClientId()}
+ * {@link UIComponent#findComponent} and {@link UIComponent#getClientId}
  * methods;  see those methods for further information.</p>
  */
 
