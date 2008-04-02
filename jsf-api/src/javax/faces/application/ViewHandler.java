@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.14 2003/10/03 15:31:05 eburns Exp $
+ * $Id: ViewHandler.java,v 1.15 2003/10/07 19:59:53 rlubke Exp $
  */
 
 /*
@@ -79,13 +79,15 @@ public interface ViewHandler {
      * request.</p>
      *
      * <p>The default implementation of <code>renderView</code> must
-     * examine the deployment descriptor for this web application to
-     * determine the manner in which the {@link
-     * javax.faces.webapp.FacesServlet} has been mapped to incoming
-     * urls.  If prefix mapping is used, this method simply calls {@link
-     * javax.faces.context.ExternalContext#dispatchMessage} passing the
+     * use <code>HttpServletRequest.getServletPath()</code> in 
+     * conjunction with the one or more<code>url-pattern<code> mappings obtained 
+     * from the deployment descriptor for this web application to determine 
+     * which mapping was used to invoke the 
+     * {@link javax.faces.webapp.FacesServlet} If a prefix mapping was used, 
+     * this method simply calls 
+     * {@link javax.faces.context.ExternalContext#dispatchMessage} passing the
      * <code>viewId</code> of the argument <code>viewToRender</code>.
-     * If suffix mapping is used, the default implementation must check
+     * If a suffix mapping was used, the default implementation must check
      * the servlet context init parameter named by the value of the
      * constant {@link #DEFAULT_SUFFIX_PARAM_NAME}.  If this parameter
      * is not defined, use {@link #DEFAULT_SUFFIX} as the suffix.  If
@@ -179,20 +181,20 @@ public interface ViewHandler {
      * <code>viewId</code>, including any <code>url-pattern</code>
      * prefix or extension mapping defined by the application.</p>
      *
-     * <p>The default implementation must examine the deployment
-     * descriptor for the current webapp and determine the
-     * <code>url-pattern</code> mapping given for the {@link
-     * javax.faces.webapp.FacesServlet}.  If the mapping is a prefix
-     * mapping, prepend the prefix mapping to the viewId, making sure to
-     * take any wildcards into account.  If the mapping is an extension
-     * mapping, replace the extension in the <code>viewId</code> with
-     * the extension discovered by examining the deployment descriptor.
-     * If the <code>viewId</code> has no extension, append the extension
-     * discovered by examining the deployment descriptor.  The default
-     * implementation expects the argument <code>viewId</code> to be a
-     * context relative path, starting with '<code>/</code>'.  If this
-     * is not the case, the default implementation thows
-     * <code>IllegalArgumentException</code>.</p>
+     * <p>The default implementation must examine the result of
+     * <code>HttpServletRequest.getServletPath()</code> in conjunction
+     * with the one or more </code>url-pattern</code> mappings obtained from 
+     * this application's deployment descriptor to determine which mapping 
+     * was used to invoke the {@link javax.faces.webapp.FacesServlet}.  
+     * If the mapping is a prefix mapping, prepend the prefix mapping 
+     * to the viewId, making sure to take any wildcards into account.  
+     * If the mapping is an extension mapping, replace the extension 
+     * in the <code>viewId</code> with the extension of the appropriate mapping.
+     * If the <code>viewId</code> has no extension, append the appropriate
+     * mapping.  The default implementation expects the argument 
+     * <code>viewId</code> to be a context relative path, starting 
+     * with '<code>/</code>'.  If this is not the case, the default 
+     * implementation throws <code>IllegalArgumentException</code>.</p>
      *
      * @param context the {@link FacesContext} for this request.
      *
