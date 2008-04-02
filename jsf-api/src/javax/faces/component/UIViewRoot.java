@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.44 2006/06/05 21:14:25 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.45 2006/07/25 20:36:32 edburns Exp $
  */
 
 /*
@@ -373,7 +373,7 @@ public class UIViewRoot extends UIComponentBase {
 
     /**
      * <p>Override the default {@link UIComponentBase#queueEvent} behavior to
-     * accumulate the queued events for later broadcaster.</p>
+     * accumulate the queued events for later broadcasting.</p>
      *
      * @param event {@link FacesEvent} to be queued
      *
