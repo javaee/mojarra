@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseWriter.java,v 1.7 2006/08/03 21:09:37 youngm Exp $
+ * $Id: CustomResponseWriter.java,v 1.8 2006/08/24 19:57:10 youngm Exp $
  */
 
 /*
@@ -333,7 +333,7 @@ public class CustomResponseWriter extends ResponseWriter {
         if (stringValue.startsWith("javascript:")) {
             HtmlUtils.writeAttribute(writer, buffer, stringValue);
         } else {
-            HtmlUtils.writeURL(writer, buffer, stringValue, encoding, getContentType());
+            HtmlUtils.writeURL(writer, stringValue, encoding, getContentType());
         }
         
         //PENDING (horwat) using String as a result of Tomcat char writer
