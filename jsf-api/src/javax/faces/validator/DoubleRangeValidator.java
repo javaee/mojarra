@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.45 2005/03/11 21:05:28 edburns Exp $
+ * $Id: DoubleRangeValidator.java,v 1.46 2005/05/20 14:49:56 rlubke Exp $
  */
 
 /*
@@ -10,12 +10,9 @@
 package javax.faces.validator;
 
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-
 import javax.faces.convert.Converter;
 
 /**
@@ -304,6 +301,17 @@ public class DoubleRangeValidator implements Validator, StateHolder {
                 (minimum == other.minimum) &&
 		(maximumSet == other.maximumSet) &&
                 (minimumSet == other.minimumSet));
+
+    }
+
+
+    public int hashCode() {
+
+        int hashCode = new Double(minimum).hashCode()
+            + new Double(maximum).hashCode()
+            + Boolean.valueOf(minimumSet).hashCode()
+            + Boolean.valueOf(maximumSet).hashCode();
+        return (hashCode);
 
     }
 

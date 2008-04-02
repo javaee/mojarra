@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidatorTestCase.java,v 1.1 2004/05/12 02:00:48 eburns Exp $
+ * $Id: DoubleRangeValidatorTestCase.java,v 1.2 2005/05/20 14:49:57 rlubke Exp $
  */
 
 /*
@@ -10,13 +10,12 @@
 package javax.faces.validator;
 
 
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.util.Locale;
 
 import javax.faces.component.UIInput;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * <p>Unit tests for {@link DoubleRangeValidator}.</p>
@@ -90,6 +89,41 @@ public class DoubleRangeValidatorTestCase extends ValidatorTestCase {
 	}
 	assertTrue(exceptionThrown);
 
+    }
+
+    public void testHashCode() {
+        DoubleRangeValidator validator1 = new DoubleRangeValidator();
+        DoubleRangeValidator validator2 = new DoubleRangeValidator();
+
+        validator1.setMinimum(10.0d);
+        validator1.setMaximum(15.1d);
+        validator2.setMinimum(10.0d);
+        validator2.setMaximum(15.1d);
+
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+
+        validator2.setMaximum(15.2d);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
+
+        validator1 = new DoubleRangeValidator();
+        validator2 = new DoubleRangeValidator();
+
+        validator1.setMinimum(10.0d);
+        validator2.setMinimum(10.0d);
+
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+
+        validator1.setMinimum(11.0d);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
+
+        validator1.setMinimum(10.0d);
+        validator1.setMaximum(10.1d);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
     }
 
 }

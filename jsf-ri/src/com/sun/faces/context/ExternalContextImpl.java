@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.30 2005/05/16 20:16:17 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.31 2005/05/20 14:49:59 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.30 2005/05/16 20:16:17 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.31 2005/05/20 14:49:59 rlubke Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -64,7 +64,7 @@ public class ExternalContextImpl extends ExternalContext {
     private Map cookieMap = null;
     private Map initParameterMap = null;
 
-    static Class theUnmodifiableMapClass =
+    static final Class theUnmodifiableMapClass =
         Collections.unmodifiableMap(new HashMap()).getClass();
     
     public ExternalContextImpl(ServletContext sc, ServletRequest request,
@@ -497,7 +497,7 @@ abstract class BaseContextMap extends AbstractMap {
 
 class ApplicationMap extends BaseContextMap {
 
-    private ServletContext servletContext = null;
+    private final ServletContext servletContext;
 
 
     ApplicationMap(ServletContext servletContext) {
@@ -552,11 +552,20 @@ class ApplicationMap extends BaseContextMap {
         return super.equals(obj);
     }
 
+
+    public int hashCode() {
+        int hashCode = 7 * servletContext.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END ApplicationMap
 
 class SessionMap extends BaseContextMap {
 
-    private HttpServletRequest request = null;
+    private final HttpServletRequest request;
 
 
     SessionMap(HttpServletRequest request) {
@@ -619,11 +628,19 @@ class SessionMap extends BaseContextMap {
         return request.getSession(true);
     }
 
+    public int hashCode() {
+        int hashCode = 7 * request.getSession().hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END SessionMap
 
 class RequestMap extends BaseContextMap {
 
-    private ServletRequest request = null;
+    private final ServletRequest request;
 
 
     RequestMap(ServletRequest request) {
@@ -677,11 +694,20 @@ class RequestMap extends BaseContextMap {
             return false;
         return super.equals(obj);
     }
+
+    public int hashCode() {
+        int hashCode = 7 * request.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END RequestMap
 
 class RequestParameterMap extends BaseContextMap {
 
-    private ServletRequest request = null;
+    private final ServletRequest request;
 
 
     RequestParameterMap(ServletRequest request) {
@@ -718,11 +744,20 @@ class RequestParameterMap extends BaseContextMap {
         }
         return super.equals(obj);
     }
+
+    public int hashCode() {
+        int hashCode = 7 * request.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END RequestParameterMap
 
 class RequestParameterValuesMap extends BaseContextMap {
 
-    private ServletRequest request = null;
+    private final ServletRequest request;
 
 
     RequestParameterValuesMap(ServletRequest request) {
@@ -760,11 +795,20 @@ class RequestParameterValuesMap extends BaseContextMap {
         }
         return super.equals(obj);
     }
+
+     public int hashCode() {
+        int hashCode = 7 * request.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END RequestParameterValuesMap
 
 class RequestHeaderMap extends BaseContextMap {
 
-    private HttpServletRequest request = null;
+    private final HttpServletRequest request;
 
 
     RequestHeaderMap(HttpServletRequest request) {
@@ -801,11 +845,20 @@ class RequestHeaderMap extends BaseContextMap {
         }
         return super.equals(obj);
     }
+
+     public int hashCode() {
+        int hashCode = 7 * request.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END RequestHeaderMap
 
 class RequestHeaderValuesMap extends BaseContextMap {
 
-    private HttpServletRequest request = null;
+    private final HttpServletRequest request;
 
 
     RequestHeaderValuesMap(HttpServletRequest request) {
@@ -902,7 +955,7 @@ class RequestHeaderValuesMap extends BaseContextMap {
 
 class RequestCookieMap extends BaseContextMap {
 
-    private HttpServletRequest request = null;
+    private final HttpServletRequest request;
 
 
     RequestCookieMap(HttpServletRequest newRequest) {
@@ -957,11 +1010,20 @@ class RequestCookieMap extends BaseContextMap {
         }
         return super.equals(obj);
     }
+
+     public int hashCode() {
+        int hashCode = 7 * request.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
+    }
+
 } // END RequestCookiesMap
 
 class InitParameterMap extends BaseContextMap {
 
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
 
 
     InitParameterMap(ServletContext newServletContext) {
@@ -1001,6 +1063,14 @@ class InitParameterMap extends BaseContextMap {
             return false;
         }
         return super.equals(obj);
+    }
+
+     public int hashCode() {
+        int hashCode = 7 * servletContext.hashCode();
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            hashCode += i.next().hashCode();
+        }
+        return hashCode;
     }
 } // END InitParameterMap
 

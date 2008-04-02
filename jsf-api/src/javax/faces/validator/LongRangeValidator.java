@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.40 2005/03/11 21:05:28 edburns Exp $
+ * $Id: LongRangeValidator.java,v 1.41 2005/05/20 14:49:56 rlubke Exp $
  */
 
 /*
@@ -10,7 +10,6 @@
 package javax.faces.validator;
 
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -307,6 +306,17 @@ public class LongRangeValidator implements Validator, StateHolder {
                 (minimum == other.minimum) &&
 		(maximumSet == other.maximumSet) &&
                 (minimumSet == other.minimumSet));
+
+    }
+
+
+    public int hashCode() {
+
+        int hashCode = new Long(minimum).hashCode()
+            + new Long(maximum).hashCode()
+            + Boolean.valueOf(minimumSet).hashCode()
+            + Boolean.valueOf(maximumSet).hashCode();
+        return (hashCode);
 
     }
 

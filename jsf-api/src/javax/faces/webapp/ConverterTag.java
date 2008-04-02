@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.16 2005/05/19 13:26:57 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.17 2005/05/20 14:49:57 rlubke Exp $
  */
 
 /*
@@ -127,7 +127,7 @@ public class ConverterTag extends TagSupport {
         
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-            UIComponentTag.getParentUIComponentClassicTagBase(pageContext);
+            UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) { // PENDING - i18n
             throw new JspException("Not nested in a UIComponentTag Error for tag with handler class:"+
                     this.getClass().getName());
@@ -163,8 +163,7 @@ public class ConverterTag extends TagSupport {
                     converterError = converterId;
                 }
             }
-            
-            Object params [] = {"javax.faces.convert.Converter",converterError};
+
             // PENDING i18n
             throw new JspException("Can't create class of type:"+
                     "javax.faces.convert.Converter for:"+converterError);

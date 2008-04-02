@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.34 2005/05/17 03:30:40 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.35 2005/05/20 14:49:58 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1596,7 +1596,7 @@ public class ConfigureListener implements ServletContextListener {
     
     static class ApplicationMap extends java.util.AbstractMap {
 
-        private ServletContext servletContext = null;
+        private final ServletContext servletContext;
 
         ApplicationMap(ServletContext servletContext) {
             this.servletContext = servletContext;
@@ -1642,6 +1642,15 @@ public class ConfigureListener implements ServletContextListener {
             if (obj == null || !(obj instanceof ApplicationMap))
                 return false;
             return super.equals(obj);
+        }
+
+
+        public int hashCode() {
+            int hashCode = 7 * servletContext.hashCode();
+            for (Iterator i = entrySet().iterator(); i.hasNext();) {
+                hashCode += i.next().hashCode();
+            }
+            return hashCode;
         }
         
         public void clear() {

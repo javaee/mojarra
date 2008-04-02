@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.29 2005/05/19 19:14:17 rlubke Exp $
+ * $Id: ResultSetDataModel.java,v 1.30 2005/05/20 14:49:55 rlubke Exp $
  */
 
 /*
@@ -439,7 +439,7 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Set that implements the entrySet() behavior
     // for ResultSetMap
-    private class ResultSetEntries extends AbstractSet {
+    private static class ResultSetEntries extends AbstractSet {
 
         public ResultSetEntries(ResultSetMap map) {
             this.map = map;
@@ -514,7 +514,7 @@ public class ResultSetDataModel extends DataModel {
 
     // Private implementation of Iterator that implements the iterator()
     // behavior for the Set returned by entrySet() from ResultSetMap
-    private class ResultSetEntriesIterator implements Iterator {
+    private static class ResultSetEntriesIterator implements Iterator {
 
         public ResultSetEntriesIterator(ResultSetMap map) {
             this.map = map;

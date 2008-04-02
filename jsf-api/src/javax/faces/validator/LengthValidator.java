@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.44 2005/03/11 21:05:28 edburns Exp $
+ * $Id: LengthValidator.java,v 1.45 2005/05/20 14:49:56 rlubke Exp $
  */
 
 /*
@@ -10,11 +10,9 @@
 package javax.faces.validator;
 
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-
 import javax.faces.convert.Converter;
 
 /**
@@ -241,6 +239,15 @@ public class LengthValidator implements Validator, StateHolder {
                 (minimum == other.minimum) &&
 		(maximumSet == other.maximumSet) &&
                 (minimumSet == other.minimumSet));
+
+    }
+
+    public int hashCode() {
+
+        int hashCode = minimum + maximum
+            + Boolean.valueOf(minimumSet).hashCode()
+            + Boolean.valueOf(maximumSet).hashCode();
+        return (hashCode);
 
     }
 

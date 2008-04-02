@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidatorTestCase.java,v 1.1 2004/05/12 02:00:49 eburns Exp $
+ * $Id: LongRangeValidatorTestCase.java,v 1.2 2005/05/20 14:49:58 rlubke Exp $
  */
 
 /*
@@ -10,13 +10,12 @@
 package javax.faces.validator;
 
 
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.util.Locale;
 
 import javax.faces.component.UIInput;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * <p>Unit tests for {@link LongRangeValidator}.</p>
@@ -90,6 +89,41 @@ public class LongRangeValidatorTestCase extends ValidatorTestCase {
 	}
 	assertTrue(exceptionThrown);
 
+    }
+
+    public void testHashCode() {
+        LongRangeValidator validator1 = new LongRangeValidator();
+        LongRangeValidator validator2 = new LongRangeValidator();
+
+        validator1.setMinimum(10l);
+        validator1.setMaximum(15l);
+        validator2.setMinimum(10l);
+        validator2.setMaximum(15l);
+
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+
+        validator2.setMaximum(16l);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
+
+        validator1 = new LongRangeValidator();
+        validator2 = new LongRangeValidator();
+
+        validator1.setMinimum(10l);
+        validator2.setMinimum(10l);
+
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+
+        validator1.setMinimum(11l);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
+
+        validator1.setMinimum(10l);
+        validator1.setMaximum(11l);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
     }
 
 }

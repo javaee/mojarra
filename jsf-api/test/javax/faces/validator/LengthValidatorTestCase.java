@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidatorTestCase.java,v 1.1 2004/05/12 02:00:48 eburns Exp $
+ * $Id: LengthValidatorTestCase.java,v 1.2 2005/05/20 14:49:58 rlubke Exp $
  */
 
 /*
@@ -10,13 +10,12 @@
 package javax.faces.validator;
 
 
-import junit.framework.TestCase;
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import java.util.Locale;
 
 import javax.faces.component.UIInput;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 /**
  * <p>Unit tests for {@link LengthValidator}.</p>
@@ -88,6 +87,41 @@ public class LengthValidatorTestCase extends ValidatorTestCase {
 	}
 	assertTrue(exceptionThrown);
 
+    }
+
+    public void testHashCode() {
+        LengthValidator validator1 = new LengthValidator();
+        LengthValidator validator2 = new LengthValidator();
+
+        validator1.setMinimum(10);
+        validator1.setMaximum(15);
+        validator2.setMinimum(10);
+        validator2.setMaximum(15);
+
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+
+        validator2.setMaximum(16);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
+
+        validator1 = new LengthValidator();
+        validator2 = new LengthValidator();
+
+        validator1.setMinimum(10);
+        validator2.setMinimum(10);
+
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+        assertTrue(validator1.hashCode() == validator2.hashCode());
+
+        validator1.setMinimum(11);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
+
+        validator1.setMinimum(10);
+        validator1.setMaximum(10);
+
+        assertTrue(validator1.hashCode() != validator2.hashCode());
     }
 
 }

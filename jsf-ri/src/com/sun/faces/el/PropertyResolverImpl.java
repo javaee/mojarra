@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverImpl.java,v 1.17 2005/05/18 17:33:44 jayashri Exp $
+ * $Id: PropertyResolverImpl.java,v 1.18 2005/05/20 14:49:59 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,6 @@ public class PropertyResolverImpl extends PropertyResolver {
             return null;
         }
 
-        Class type = base.getClass();
         if (base.getClass().isArray()) {
             try {
                 return Array.get(base, index);
@@ -129,8 +128,7 @@ public class PropertyResolverImpl extends PropertyResolver {
     public boolean isReadOnly(Object base, int index) {
         // validate input
         assertInput(base, index);
-
-        Class type = base.getClass();
+        
         if (base instanceof List || base.getClass().isArray()) {
             return false;
         } else {

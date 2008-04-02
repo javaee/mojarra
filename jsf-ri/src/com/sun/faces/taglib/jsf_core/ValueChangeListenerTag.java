@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.14 2005/05/19 13:27:00 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.15 2005/05/20 14:50:00 rlubke Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeListener;
 import javax.faces.webapp.UIComponentClassicTagBase;
-import javax.faces.webapp.UIComponentELTag;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -116,9 +115,9 @@ public class ValueChangeListenerTag extends TagSupport {
         
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-            UIComponentELTag.getParentUIComponentClassicTagBase(pageContext);
+            UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
-            Object params [] = {this.getClass().getName()};
+          //  Object[] params = {this.getClass().getName()};
 	    // PENDING(rogerk): do something with params
             throw new JspException(
                 Util.getExceptionMessageString(
@@ -136,7 +135,7 @@ public class ValueChangeListenerTag extends TagSupport {
                 Util.getExceptionMessageString(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof EditableValueHolder)) {
-            Object params [] = {this.getClass().getName()};
+            Object[] params = {this.getClass().getName()};
             throw new JspException(
                 Util.getExceptionMessageString(
                     Util.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
