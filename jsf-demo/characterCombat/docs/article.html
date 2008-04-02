@@ -94,14 +94,25 @@ fun way. The application is called Character Combat.
 		<p>You will note that this workflow lends itself to the &quot;wizard&quot; UI design pattern.&nbsp; We have extracted the wizard functionality of this example into a simple reusable bean for your own applications.&nbsp; For more on the wizard bean, see the section: <a id="" name="" href="#Example Wizard Component">Example Wizard Component</a>.</p>
 		<h2>Running the Application</h2>
 		<p>The latest JSF 1.0 Framework and all the runtime dependencies are already integrated in the <a href="http://java.sun.com/j2ee" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>. In SJSAS 8.0 PE you do not need to take any extra configuration steps to setup a JSF web application. SJSAS 8.0 PE is free and contains the latest implementation of J2EE technologies.</p>
+		<p>If you write your own JSF web application, the only thing you would need to do in SJSAS 8.0 PE in order to use the JSF 1.0 Framework is to simply specify the Faces Servlet and Mapping in your web application's deployment descriptor. All the dependencies are already part of the container and you don't need to bundle any extra jar files.</p>
 		<p>In order to run the sample application discussed in this article, simply deploy the supplied war file in the application server. The application will be available by the context name &quot;jsf-characterCombat&quot;. The demo source is available along with a pre-built war file. You will find instructions on how to deploy and built in the README provided with the source distribution.</p>
-		<p>The demo source is available <a href="article.tar.gz">here</a>. To unpack it, simply invoke the following command:</p>
+		<p>The demo source is available in both zip and tar form:</p>
+		<ul>
+			<li><a href="article.zip">article.zip</a>
+			<li><a href="article.tar.gz">article.tar.gz</a>
+		</ul>
+		<p>To unpack the zip version, you can use your favorite utility or unpack it from the command line:</p>
+		<table border="1" cellspacing="2" cellpadding="0">
+			<tr>
+				<td><code>% unzip <a href="article.zip">article.zip</a></code></td>
+			</tr>
+		</table>
+		<p>To unpack the tar version, you can invoke the following command:</p>
 		<table border="1" cellspacing="2" cellpadding="0">
 			<tr>
 				<td><code>% tar zxvf <a href="article.tar.gz">article.tar.gz</a></code></td>
 			</tr>
 		</table>
-		<p>If you write your own JSF web application the only thing you would need to do in SJSAS 8.0 PE in order to use the JSF 1.0 Framework is to simply specify the Faces Servlet and Mapping in your web application's deployment descriptor. All the dependencies are already part of the container and you don't need to bundle any extra jar files.</p>
 		<h2>Demo Application Building Blocks</h2>
 		<h3>Deployment Descriptor</h3>
 		<p>In order to use the JavaServer Faces framework in a web application you need to define your Faces Servlet and a Faces Servlet Mapping in your Deployment Descriptor. Here is an example:</p>

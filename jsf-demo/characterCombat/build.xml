@@ -13,6 +13,7 @@
   <property name="example" value="jsf-characterCombat" />
   <property name="build"   value="${basedir}/build" />
   <property name="dist"   value="${basedir}/docs" />
+  <property name="bundleName"   value="article" />
 
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
@@ -200,12 +201,13 @@
     <move file="build.xml" tofile="build.xml.BAK"/>
     <move file="build-sjsas.xml" tofile="build.xml"/>
 
-    <tar destfile="${dist}/article.tar">
+    <tar destfile="${dist}/${bundleName}.tar">
       <tarfileset dir="."
                   prefix="jsf-characterCombat"
                   excludes="CVS/**, 
                             build/**, 
-                            docs/article.tar*,
+                            docs/${bundleName}.tar*,
+                            docs/${bundleName}.zip,
                             docs/*.sxd, 
                             docs/WorkFlow.txt, 
                             *"/>
@@ -216,8 +218,26 @@
                             build.properties.sample,
                             build/jsf-characterCombat.war"/>
     </tar>
-    <gzip zipfile="${dist}/article.tar.gz" src="${dist}/article.tar" />
-    <delete file="${dist}/article.tar"/>
+    <gzip zipfile="${dist}/${bundleName}.tar.gz" src="${dist}/${bundleName}.tar" />
+    <delete file="${dist}/${bundleName}.tar"/>
+
+    <zip destfile="${dist}/${bundleName}.zip">
+      <zipfileset dir="."
+                  prefix="jsf-characterCombat"
+                  excludes="CVS/**, 
+                            build/**, 
+                            docs/${bundleName}.tar*,
+                            docs/${bundleName}.zip,
+                            docs/*.sxd, 
+                            docs/WorkFlow.txt, 
+                            *"/>
+      <zipfileset dir="."
+                  prefix="jsf-characterCombat"
+                  includes="README,
+                            build.xml,
+                            build.properties.sample,
+                            build/jsf-characterCombat.war"/>
+    </zip>
 
     <!-- restore default build files -->
     <move file="build.xml" tofile="build-sjsas.xml"/>
