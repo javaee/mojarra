@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.13 2002/12/19 03:09:28 rkitain Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.14 2003/01/13 20:13:48 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import java.util.Iterator;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: UpdateModelValuesPhase.java,v 1.13 2002/12/19 03:09:28 rkitain Exp $
+ * @version $Id: UpdateModelValuesPhase.java,v 1.14 2003/01/13 20:13:48 rkitain Exp $
  * 
  * @see	com.sun.faces.lifecycle.DefaultLifecycleImpl
  * @see	javax.faces.lifecycle.Lifecycle#UPDATE_MODEL_VALUES_PHASE
@@ -57,8 +57,6 @@ public class UpdateModelValuesPhase extends GenericPhaseImpl
 
 // Relationship Instance Variables
 
-protected LifecycleCallback pushValues = null;
-protected LifecycleCallback clearValues = null;
 
 //
 // Constructors and Genericializers    
@@ -67,19 +65,6 @@ protected LifecycleCallback clearValues = null;
 public UpdateModelValuesPhase(Lifecycle newDriver, int newId)
 {
     super(newDriver, newId);
-    clearValues = new LifecycleCallback() {
-	    public int takeActionOnComponent(FacesContext facesContext,
-					     UIComponent comp) throws FacesException {
-		int rc = Phase.GOTO_NEXT;
-		String model = null,
-		    message = null;
-
-		if (null != (model = comp.getModelReference())) {
-		    comp.setValue(null);
-		}
-		return rc;
-	    }
-	};
 }
 
 //
@@ -125,10 +110,6 @@ public int execute(FacesContext facesContext) throws FacesException
         rc = Phase.GOTO_RENDER;
     }
 
-    if (Phase.GOTO_NEXT == rc) {
-	callback = clearValues;
-	rc = traverseTreeInvokingCallback(facesContext);
-    }
     return rc;
 }
 
