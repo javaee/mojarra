@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.31 2006/09/01 17:30:55 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.32 2007/02/27 18:14:22 rogerk Exp $
  */
 
 /*
@@ -122,6 +122,10 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         messageIter = getMessageIter(context, clientId, component);
 
         assert(messageIter != null);
+        
+        if (!messageIter.hasNext()) {
+            return;
+        }
 
         String layout = (String) component.getAttributes().get("layout");
         boolean showSummary = ((UIMessages) component).isShowSummary();
