@@ -12,7 +12,7 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 <f:use_faces>
-<h:form id="thanksForm" formName="thanksForm" >
+<h:form  formName="thanksForm" >
 
 <body bgcolor="#FFFFFF">
 
@@ -25,7 +25,7 @@
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr>
 <td VALIGN=TOP WIDTH="100%">
-<h:graphic_image id="cardemo_img" url="/cardemo.jpg" /></td>
+<h:graphic_image  url="/cardemo.jpg" /></td>
 </tr>
 
 <tr>
@@ -36,7 +36,7 @@
 
 <tr>
 <td WIDTH="100%" BGCOLOR="#FFFFFF"><b><font face="Arial, Helvetica"><font color="#330066" align="center"><font size=+1>
-<h:output_text id="thxmsg" 
+<h:output_text  
 		   value="Thanks for using Cardemo! Your car will ship soon." />
 </font></font></font></b></td>
 </tr>

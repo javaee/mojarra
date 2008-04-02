@@ -11,8 +11,8 @@
     <H3> JSF Basic Components Test Page </H3>
     <hr>
     <f:use_faces>
-    <h:form id="errorForm" formName="errorForm" >
-	<faces:output_text id="hello_label" value="An Error Happened!"/>
+    <h:form  formName="errorForm" >
+	<faces:output_text  value="An Error Happened!"/>
              <P></P>
     </h:Form>
     </f:use_faces>

@@ -18,7 +18,7 @@
 <BODY BGCOLOR="white">
 
 <f:use_faces>
-<h:form id="carStoreForm" formName="carStoreForm" modelReference="CurrentOptionServer" >
+<h:form  formName="carStoreForm" modelReference="CurrentOptionServer" >
 
 <P>
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
@@ -30,46 +30,46 @@
         <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" BGCOLOR="white">
         <TR>
             <TD WIDTH="100%" VALIGN="TOP">
-            <h:graphic_image id="cardemo" url="/cardemo.jpg" />
+            <h:graphic_image  url="/cardemo.jpg" />
             </TD>
         </TR>
         <TR>
             <TD WIDTH="100%">
-            <h:graphic_image id="current_car" 
+            <h:graphic_image  
                 modelReference="CurrentOptionServer.carImage" />
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text id="carDetails" 
+            <h:output_text  
                 modelReference="CurrentOptionServer.carTitle" 
                 key="carDetailsLabel" />
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text id="currentCarDesc" 
+            <h:output_text  
                 modelReference="CurrentOptionServer.carDesc" 
                 key="curCarDescLabel" /> 
             <BR> <BR>
             </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text id="basePrice" value="Base Price" 
+            <h:output_text  value="Base Price" 
                 key="basePriceLabel"/>
             </FONT></B><FONT FACE="Arial, Helvetica"> 
-            <h:output_text id="currentCarBasePrice"  
+            <h:output_text   
                 modelReference="CurrentOptionServer.carBasePrice"
                 key="currentCarBasePriceLabel"/>
             <BR> </FONT><B>
             <FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text id="yourPrice"  key="yourPriceLabel"
+            <h:output_text   key="yourPriceLabel"
                 value="Your Price" />
             </FONT></B>
             <FONT FACE="Arial, Helvetica">
-            <h:output_text id="currentCarPrice"  
+            <h:output_text   
                 modelReference="CurrentOptionServer.carCurrentPrice"
                 key="currentCarPriceLabel"/>
             <BR> <BR>
-            <h:command_button id="buy1" commandName="buy" label="Buy" />
+            <h:command_button  commandName="buy" label="Buy" />
             </TD></FONT></TD>
         </TR>
         <TR>
             <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text id="opsNPax"  value="Options and Packages" />
+            <h:output_text   value="Options and Packages" />
             </FONT></B></TD>
         </TR>
         <TR>
@@ -77,24 +77,24 @@
             <TABLE>
             <TR>
                 <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text id="engine" key="Engine" value="Engine" />
+                <h:output_text  key="Engine" value="Engine" />
                 </FONT></B></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu id="engineOption" 
+                <h:selectone_menu  
                      modelReference="CurrentOptionServer.currentEngineOption">
-                    <h:selectitems id="engineOptionsList" 
+                    <h:selectitems  
                         modelReference="CurrentOptionServer.engineOption"/>
                 </h:selectone_menu>    
                 </FONT></P></BLOCKQUOTE>
                 </TD>
                 <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                 <h:output_text id="brakes"  value="Brakes"key="Brakes"  />
+                 <h:output_text   value="Brakes"key="Brakes"  />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio id="brakeOption" 
+                <h:selectone_radio  
                     modelReference="CurrentOptionServer.currentBrakeOption">
-                    <h:selectitems id="brakeOptionsList" 
+                    <h:selectitems  
                         modelReference="CurrentOptionServer.brakeOption"/>
                 </h:selectone_radio>
                 </FONT></P></BLOCKQUOTE>
@@ -103,27 +103,27 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text id="suspension" key="Suspension" 
+                <h:output_text  key="Suspension" 
                     value="Suspension" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu id="suspensionOption" 
+                <h:selectone_menu  
                     modelReference="CurrentOptionServer.currentSuspensionOption">
-                    <h:selectitems id="suspensionOptionsList" 
+                    <h:selectitems  
                         modelReference="CurrentOptionServer.suspensionOption"/>
                 </h:selectone_menu>
                 </FONT></P> </BLOCKQUOTE>
                 </TD>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text id="speakers" key="Speakers" value="Speakers" />
+                <h:output_text  key="Speakers" value="Speakers" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio id="speakerOption" 
+                <h:selectone_radio  
                     modelReference="CurrentOptionServer.currentSpeakerOption" >
-                    <h:selectitems id="speakerOptionsList" 
+                    <h:selectitems  
                         modelReference="CurrentOptionServer.speakerOption"/>
                 </h:selectone_radio>
                 </FONT></P> </BLOCKQUOTE>
@@ -132,13 +132,13 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text id="audio" key="Audio" value="Audio" />
+                <h:output_text  key="Audio" value="Audio" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio id="audioOption" 
+                <h:selectone_radio  
                     modelReference="CurrentOptionServer.currentAudioOption">
-                    <h:selectitems id="audioOptionsList" 
+                    <h:selectitems  
                         modelReference="CurrentOptionServer.audioOption"/>
                 </h:selectone_radio>
                 </FONT></P> 
@@ -146,14 +146,14 @@
                 </TD>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text id="transmission" key="Transmission" 
+                <h:output_text  key="Transmission" 
                     value="Transmission" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
                 <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu id="transmissionOption" 
+                <h:selectone_menu  
                     modelReference="CurrentOptionServer.currentTransmissionOption">
-                    <h:selectitems id="transmissionOptionsList" 
+                    <h:selectitems  
                         modelReference="CurrentOptionServer.transmissionOption"/>
                 </h:selectone_menu>
                 </FONT></P> </BLOCKQUOTE>
@@ -162,7 +162,7 @@
             <TR>
                 <TD>
                 <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text id="other" key="OtherOptions" 
+                <h:output_text  key="OtherOptions" 
                     value="Other Options" />
                 </FONT></B>
                 <FONT FACE="Arial, Helvetica"></FONT></P>
@@ -175,68 +175,68 @@
             <TABLE width="100%"> <P><FONT FACE="Arial, Helvetica">
             <TR>
                 <TD> 
-                <h:selectboolean_checkbox id="sunRoof" title="Sunroof" 
+                <h:selectboolean_checkbox  title="Sunroof" 
                     alt="Sunroof" modelReference="CurrentOptionServer.sunRoof"
                     key="sunroofLabel" />
                 </TD>																		
                 <TD>
-                <h:output_label id="srLabel" for="sunRoof" > Sun Roof</h:output_label> 
+                <h:output_label  for="sunRoof" > Sun Roof</h:output_label> 
                 </TD> 
                 <TD>
-                <h:selectboolean_checkbox id="cruiseControl" 
+                <h:selectboolean_checkbox  
                     title="Cruise Control"  
                     modelReference="CurrentOptionServer.cruiseControl"
                     key="cruiseLabel" />
                 </TD>
                 <TD>
-                <h:output_label id="ccLabel" for="cruiseControl" > Cruise Control</h:output_label> 
+                <h:output_label  for="cruiseControl" > Cruise Control</h:output_label> 
                 </TD>
                 <TD>
-                <h:selectboolean_checkbox id="keylessEntry" 
+                <h:selectboolean_checkbox  
                     title="Keyless Entry"  alt="Keyless Entry"
                     modelReference="CurrentOptionServer.keylessEntry"
                     key="keylessLabel" />
                 </TD>
                 <TD>
-                <h:output_label id="keLabel" for="keylessEntry" > Keyless Entry</h:output_label> 
+                <h:output_label  for="keylessEntry" > Keyless Entry</h:output_label> 
                 </TD>
             </TR>
             <TR>
                 <TD> 
-                <h:selectboolean_checkbox id="securitySystem"
+                <h:selectboolean_checkbox 
                     title="Security System"  alt="Security System"
                     modelReference="CurrentOptionServer.securitySystem"
                     key="securityLabel" />
                 </TD>
                 <TD>
-                <h:output_label id="ssLabel" for="securitySystem" > Security System</h:output_label> 
+                <h:output_label  for="securitySystem" > Security System</h:output_label> 
                 </TD>
                 <TD>
-                <h:selectboolean_checkbox id="skiRack" title="Ski Rack"  
+                <h:selectboolean_checkbox  title="Ski Rack"  
                     alt="Ski Rack" modelReference="CurrentOptionServer.skiRack"
                     key="skiRackLabel" />
                 </TD>
                 <TD>
-                <h:output_label id="srLabel" for="skiRack" >Ski Rack</h:output_label> 
+                <h:output_label  for="skiRack" >Ski Rack</h:output_label> 
                 </TD>
                 <TD>
-                <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
+                <h:selectboolean_checkbox  title="Tow Package"  
                     alt="Tow Package" 
                     modelReference="CurrentOptionServer.towPackage"
                     key="towPkgLabel" />
                 </TD>
                 <TD>
-                <h:output_label id="tpLabel" for="towPackage" >Tow Package</h:output_label> 
+                <h:output_label  for="towPackage" >Tow Package</h:output_label> 
                 </TD>
             </TR>
             <TR>
                 <TD>
-                <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
+                <h:selectboolean_checkbox  title="GPS" alt="GPS"
                     modelReference="CurrentOptionServer.gps" key="gpsLabel" />
                 </FONT> 
                 </TD>
                 <TD>
-                <h:output_label id="gpsLabel" for="gps" >GPS</h:output_label> 
+                <h:output_label  for="gps" >GPS</h:output_label> 
                 </TD>
             </TR>
             </TABLE>
@@ -247,7 +247,7 @@
                 </TD>
                 <TD>
                 <P>
-                <h:command_button id="buy2" label="Buy" key="buy"
+                <h:command_button  label="Buy" key="buy"
                     commandName="buy"/>
                 </TD>
             </TR>

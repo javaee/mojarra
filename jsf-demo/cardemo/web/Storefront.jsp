@@ -26,7 +26,7 @@
 
 <f:use_faces>  
 
-<h:form id="carStoreForm" formName="carStoreForm" modelReference="CurrentOptionServer" >
+<h:form  formName="carStoreForm" modelReference="CurrentOptionServer" >
   
 <P>
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
@@ -35,32 +35,32 @@
     <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
     <TR>
         <TD WIDTH="820">
-        <h:graphic_image id="cardemo_img" url="/cardemo.jpg" />
+        <h:graphic_image  url="/cardemo.jpg" />
         <BR>
         <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="6" WIDTH="660" BGCOLOR="white">
         <TR>
             <TD WIDTH="50%" VALIGN="TOP">
-            <h:graphic_image id="jalopy" url="/150x126_Jalopy.jpg" />
+            <h:graphic_image  url="/150x126_Jalopy.jpg" />
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text id="car1title" modelReference="CarServer.car1Title"
+            <h:output_text  modelReference="CarServer.car1Title"
                 key="car1title" /> 
             </FONT></B><FONT FACE="Arial, Helvetica"><BR><BR>
-            <h:output_text id="car1Desc" modelReference="CarServer.car1Desc"	                key="car1Desc" /> 
+            <h:output_text  modelReference="CarServer.car1Desc"	                key="car1Desc" /> 
             <BR></FONT>
-            <h:command_button id="more1" label="More" key="moreButton"
+            <h:command_button  label="More" key="moreButton"
                 commandName="more1"/>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-            <h:graphic_image id="roadster" url="/150x126_Roadster.jpg" />
+            <h:graphic_image  url="/150x126_Roadster.jpg" />
             <B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text id="car2Title" modelReference="CarServer.car2Title" 
+            <h:output_text  modelReference="CarServer.car2Title" 
                 key="car2Title"/>
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text id="car2Desc" modelReference="CarServer.car2Desc" 
+            <h:output_text  modelReference="CarServer.car2Desc" 
                 key="car2Desc"/>
             <BR>
-            <h:command_button id="more2" label="More" key="moreButton"
+            <h:command_button  label="More" key="moreButton"
                 commandName="more2"/>
             </TD>
         </TR>
@@ -70,29 +70,29 @@
         </TR>
         <TR>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-            <h:graphic_image id="luxury" url="/150x126_Luxury.jpg" />
+            <h:graphic_image  url="/150x126_Luxury.jpg" />
             <B> <FONT SIZE="4" COLOR="#330066"FACE="Arial, Helvetica">
-            <h:output_text id="car3Title" modelReference="CarServer.car3Title" 
+            <h:output_text  modelReference="CarServer.car3Title" 
                 key="car3Title" />
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text id="car3Desc" modelReference="CarServer.car3Desc" 
+            <h:output_text  modelReference="CarServer.car3Desc" 
                 key="car3Desc" />
             <BR>
-            <h:command_button id="more3" label="More" key="moreButton"
+            <h:command_button  label="More" key="moreButton"
                 commandName="more3"/>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
-            <h:graphic_image id="suv" url="/150x126_SUV.jpg" />
+            <h:graphic_image  url="/150x126_SUV.jpg" />
             <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text id="car4Title" modelReference="CarServer.car4Title"
+            <h:output_text  modelReference="CarServer.car4Title"
                 key="car4Title" />
             </FONT></B>
             <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text id="car4Desc" modelReference="CarServer.car4Desc" 
+            <h:output_text  modelReference="CarServer.car4Desc" 
                 key="car4Desc" /> 
             <BR>
-            <h:command_button id="more4" label="More" key="moreButton"
+            <h:command_button  label="More" key="moreButton"
                 commandName="more4"/>
             </TD>
         </TR>

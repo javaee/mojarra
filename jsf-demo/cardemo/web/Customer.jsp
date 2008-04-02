@@ -22,7 +22,7 @@
 
 <jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
 <f:use_faces>
-<h:form id="CustomerForm" formName="CustomerForm" modelReference="CustomerBean" >
+<h:form  formName="CustomerForm" modelReference="CustomerBean" >
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr>
 <td VALIGN=TOP WIDTH="100%"><img SRC="/cardemo/cardemo.jpg" BORDER=0 height=60 width=660
@@ -37,13 +37,13 @@ align=BOTTOM></td>
   <tbody>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="title_label"
+      <h:output_text 	
                                 value="Title"
 				key="titleLabel"
 				 /><br>
       </td>
       <td valign="top">
-      <h:selectone_menu id="title">
+      <h:selectone_menu >
 		<h:selectitem  itemValue="mr" itemLabel="Mr." selected="true"/>
 		<h:selectitem  itemValue="mrs" itemLabel="Mrs."/>
 		<h:selectitem  itemValue="ms" itemLabel="Ms."/>
@@ -52,19 +52,19 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="first_label"
+      <h:output_text 	
                                 value="First Name"
 				key="firstLabel"
 				 /><br>
       </td>
       <td valign="top">
-      <h:input_text id="firstName" modelReference="CustomerBean.firstName" > 
+      <h:input_text  modelReference="CustomerBean.firstName" > 
       </h:input_text><br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="middle_label" 	
+      <h:output_text 	 	
                                 value="Middle Initial"
     				key="middleLabel"
 				/><br>
@@ -74,50 +74,50 @@ align=BOTTOM></td>
             modelReference="CustomerBean.middleInitial" > 
             <f:validate_stringrange minimum="A" maximum="z"/> 
         </h:input_text>
-        <h:output_errors id="mIError" clientId="middleInitial"/> 
+        <h:output_errors  clientId="middleInitial"/> 
         <br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="last_label" 	
+      <h:output_text 	 	
                                 value="Last Name"
     				key="lastLabel"
 				 /><br>
       </td>
       <td valign="top">
-      <h:input_text id="lastName" modelReference="CustomerBean.lastName" >
+      <h:input_text  modelReference="CustomerBean.lastName" >
       </h:input_text><br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="mailing_label"  	
+      <h:output_text 	  	
                         value="Mailing Address"
        			key="mailingLabel" /><br>
       </td>
       <td valign="top">
-      <h:input_text id="mailingAddress" modelReference="CustomerBean.mailingAddress" /><br>
+      <h:input_text  modelReference="CustomerBean.mailingAddress" /><br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="city_label" 	
+      <h:output_text 	 	
                         value="City"
     			key="cityLabel" /><br>
       </td>
       <td valign="top">
-      <h:input_text id="city" modelReference="CustomerBean.city" /><br>
+      <h:input_text  modelReference="CustomerBean.city" /><br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="state_label"  	
+      <h:output_text 	  	
                                 value="State"
     				key="stateLabel" /><br>
       </td>
       <td valign="top">
-      <h:selectone_menu id="stateVal" modelReference="CustomerBean.state" >
+      <h:selectone_menu  modelReference="CustomerBean.state" >
 
 		<h:selectitem  itemValue="AL" itemLabel="AL" selected="true" />
 		<h:selectitem  itemValue="AK" itemLabel="AK"/>
@@ -178,24 +178,24 @@ align=BOTTOM></td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="zip_label" 	
+      <h:output_text 	 	
                                 value="Zip"
        				key="zipLabel" /><br>
       </td>
       <td valign="top">
-      <h:input_number id="zip" formatPattern="#####"
+      <h:input_number id="zip"  formatPattern="#####"
 			modelReference="CustomerBean.zip"
                         size="5">
         <f:validate_longrange minimum="10000" maximum="99999" /> 
       </h:input_number>
-      <h:output_errors id="zipError" clientId="zip" />    
+      <h:output_errors  clientId="zip" />    
             <br>
       </td>
     </tr>
     <tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="ccNumber"
+      <h:output_text 	
                                 value="Credit Card Number"
        				key="ccNumberLabel" /> <br>
       </td>
@@ -207,17 +207,17 @@ align=BOTTOM></td>
           <cd:creditcard_validator maximumChar="9" minimumChar="0" />
           
       </h:input_text>
-      <h:output_errors id="ccError" clientId="ccno"/> <br>
+      <h:output_errors  clientId="ccno"/> <br>
       </td>
     </tr>
     <tr>
       <td valign="top" align="right">
-      <h:output_text 	id="month_label" 	
+      <h:output_text 	 	
                                 value="Expiry Date"
        				key="monthLabel"
 				 /><br>
       </td>
-      <td valign="top"><h:selectone_menu id="month" modelReference="CustomerBean.month">
+      <td valign="top"><h:selectone_menu  modelReference="CustomerBean.month">
         <h:selectitem itemValue="01" itemLabel="01"/>
         <h:selectitem itemValue="02" itemLabel="02"/>
         <h:selectitem itemValue="03" itemLabel="03"/>
@@ -232,7 +232,7 @@ align=BOTTOM></td>
         <h:selectitem itemValue="12" itemLabel="12"/>
     </h:selectone_menu>
 
-<h:selectone_menu id="year" modelReference="CustomerBean.year" >
+<h:selectone_menu  modelReference="CustomerBean.year" >
         <h:selectitem itemValue="2002" itemLabel="2002"/>
         <h:selectitem itemValue="2003" itemLabel="2003"/>
         <h:selectitem itemValue="2004" itemLabel="2004"/>
@@ -247,13 +247,13 @@ align=BOTTOM></td>
 </table>
 </FONT>
     
-<h:command_button id="finish" label="Finish"
+<h:command_button  label="Finish"
  				     key="finishButton"
 				     commandName="finish"/>
 
 <hr WIDTH="100%">
 <p>
-<h:graphic_image id="duke" url="/duke.gif" /> Thanks
+<h:graphic_image  url="/duke.gif" /> Thanks
 for stopping by.
 <br>
 </h:form>
