@@ -31,7 +31,7 @@
 	<TD>
 
 	      <h:command_hyperlink id="link" href="hello.html"
-                           commandClass="hyperlinkClass"
+                           styleClass="hyperlinkClass"
 				       label="link text"/>
 
 	</TD>
@@ -43,7 +43,7 @@
 	<TD>
 
             <h:selectboolean_checkbox id="validUser" 
-                   selectbooleanClass="selectbooleanClass"/>
+                   styleClass="selectbooleanClass"/>
 	</TD>
 
       </TR>

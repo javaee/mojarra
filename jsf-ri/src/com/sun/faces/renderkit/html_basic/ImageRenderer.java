@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.16 2003/08/22 21:03:00 rkitain Exp $
+ * $Id: ImageRenderer.java,v 1.17 2003/09/04 18:04:33 rlubke Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.16 2003/08/22 21:03:00 rkitain Exp $
+ * @version $Id: ImageRenderer.java,v 1.17 2003/09/04 18:04:33 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +94,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
         ResponseWriter writer = null;
-	String graphicClass = null;
+	String styleClass = null;
         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -116,9 +116,9 @@ public class ImageRenderer extends HtmlBasicRenderer {
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
-	if (null != (graphicClass = (String) 
-		     component.getAttribute("graphicClass"))) {
-	    writer.writeAttribute("class", graphicClass, "graphicClass");
+	if (null != (styleClass = (String) 
+		     component.getAttribute("styleClass"))) {
+	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
 	writer.endElement("img");
     }

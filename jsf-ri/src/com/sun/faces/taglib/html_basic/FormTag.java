@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.44 2003/08/29 16:03:24 rlubke Exp $
+ * $Id: FormTag.java,v 1.45 2003/09/04 18:04:42 rlubke Exp $
  */
 
 /*
@@ -127,10 +127,7 @@ public class FormTag extends FacesTag
         }
         if (acceptcharset != null ) {
             component.setAttribute("acceptcharset", acceptcharset); 
-        }
-        if (formClass != null ) {
-            component.setAttribute("formClass", formClass); 
-        }
+        }        
     }
     
     //

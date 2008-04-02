@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.55 2003/08/29 17:46:42 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.56 2003/09/04 18:04:33 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.55 2003/08/29 17:46:42 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.56 2003/09/04 18:04:33 rlubke Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -190,10 +190,10 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	writer.writeAttribute("onmousedown", sb.toString(), null); 
 
         //handle css style class
-	String commandClass = (String)
-            command.getAttribute("commandClass");
-	if (commandClass != null) {
-            writer.writeAttribute("class", commandClass, "commandClass");
+	String styleClass = (String)
+            command.getAttribute("styleClass");
+	if (styleClass != null) {
+            writer.writeAttribute("class", styleClass, "styleClass");
         }
 
 	//Write Anchor inline elements

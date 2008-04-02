@@ -154,7 +154,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>formClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -331,7 +331,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>commandClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -403,7 +403,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>commandClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -577,7 +577,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectbooleanClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -645,7 +645,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectoneClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -767,7 +767,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectitemClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -895,7 +895,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectitemsClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1048,7 +1048,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectoneClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1126,7 +1126,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectoneClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1378,7 +1378,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>graphicClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1445,7 +1445,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>outputClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1477,7 +1477,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>outputClass</name>
+        <name>styleClass</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -1616,7 +1616,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>outputClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1776,7 +1776,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>inputClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -1956,7 +1956,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>inputClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2125,7 +2125,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>inputClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2172,7 +2172,7 @@
       <rtexprvalue>false</rtexprvalue>
    </attribute>
     <attribute>
-      <name>outputClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2268,7 +2268,7 @@
     </attribute>
 
     <attribute>
-      <name>panelClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2413,7 +2413,7 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>selectmanyClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2566,7 +2566,7 @@
      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
-      <name>selectmanyClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2714,7 +2714,7 @@
      <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
     <body-content>JSP</body-content>
     <attribute>
-      <name>selectmanyClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -2886,7 +2886,7 @@
     </attribute>
 
     <attribute>
-      <name>panelClass</name>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>

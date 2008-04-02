@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.23 2003/08/22 21:03:01 rkitain Exp $
+ * $Id: MessageRenderer.java,v 1.24 2003/09/04 18:04:34 rlubke Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.23 2003/08/22 21:03:01 rkitain Exp $
+ * @version $Id: MessageRenderer.java,v 1.24 2003/09/04 18:04:34 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +94,7 @@ public class MessageRenderer extends HtmlBasicRenderer {
     public void encodeEnd(FacesContext context, UIComponent component) 
         throws IOException {
         String currentValue = null;
-	String outputClass = null;
+	String styleClass = null;
         UIOutput output = null;
         
         if (context == null || component == null) {
@@ -162,14 +162,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
             message = currentValue;
         }
                 
-	if (null != (outputClass = (String) 
-		     component.getAttribute("outputClass"))) {
+	if (null != (styleClass = (String) 
+		     component.getAttribute("styleClass"))) {
 	    writer.startElement("span", component);
-	    writer.writeAttribute("class", outputClass, "outputClass");
+	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
 	//PENDING(rogerk)null 2nd arg?
         writer.writeText(message, null);
-	if (null != outputClass) {
+	if (null != styleClass) {
 	    writer.endElement("span");
 	}
     }

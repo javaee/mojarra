@@ -83,7 +83,7 @@
 <f:view>
 
 
-<h:output_errors outputClass="errors"/> 
+<h:output_errors styleClass="errors"/> 
 
 </f:view>
 

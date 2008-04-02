@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.47 2003/08/22 21:03:01 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.48 2003/09/04 18:04:34 rlubke Exp $
  */
 
 /*
@@ -90,7 +90,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
         UISelectOne uiSelectOne = (UISelectOne) component;
 	String alignStr = null;
 	String borderStr = null;
-	String selectoneClass = null;
+	String styleClass = null;
 	boolean alignVertical = false;
 	int border = 0;
 
@@ -115,10 +115,10 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 		border = 0;
 	    }
 	}
-	if (null != (selectoneClass = (String) 
-		     component.getAttribute("selectoneClass"))) {
+	if (null != (styleClass = (String) 
+		     component.getAttribute("styleClass"))) {
 	    writer.startElement("span", component);
-	    writer.writeAttribute("class", selectoneClass, "selectoneClass");
+	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
 	
         writer.startElement("table", component);
@@ -188,7 +188,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	}
         writer.endElement("table");
 
-	if (null != selectoneClass) {
+	if (null != styleClass) {
 	    writer.endElement("span");
 	}
     }

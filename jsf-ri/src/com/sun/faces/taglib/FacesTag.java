@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.45 2003/08/29 16:03:23 rlubke Exp $
+ * $Id: FacesTag.java,v 1.46 2003/09/04 18:04:41 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.45 2003/08/29 16:03:23 rlubke Exp $
+ * @version $Id: FacesTag.java,v 1.46 2003/09/04 18:04:41 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -74,16 +74,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     protected String alt = null;
     protected String charset = null;
     protected String checked = null;
-    protected String commandClass = null;
-    protected String graphicClass = null;
-    protected String inputClass = null;
-    protected String outputClass = null;
-    protected String formClass = null;
-    protected String selectbooleanClass = null;
-    protected String selectmanyClass = null;
-    protected String selectoneClass = null;
-    protected String selectitemClass = null;
-    protected String selectitemsClass = null;
     protected String cols = null;
     protected String coords = null;
     protected String dir = null;
@@ -126,11 +116,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     protected String shape = null;
     protected String size = null;
     protected String src = null;
-    protected String style = null; 
-    
-    // PENDING (rlubke) The styleClass attribute should be handled once
-    //         finallized
-    
+    protected String styleClass = null;    
     protected String tabindex = null;
     protected String target = null;
     protected String title = null;
@@ -356,106 +342,6 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
 
     // Space seperated list of classes -
     // For all HTML elements pertaining to Faces
-
-    public String getCommandClass()
-    {
-        return commandClass;
-    }
-
-    public void setCommandClass(String newCommandClass) 
-    {
-        commandClass = newCommandClass;
-    }
-
-    public String getGraphicClass()
-    {
-        return graphicClass;
-    }
-
-    public void setGraphicClass(String newGraphicClass) 
-    {
-        graphicClass = newGraphicClass;
-    }
-
-    public String getInputClass()
-    {
-        return inputClass;
-    }
-
-    public void setInputClass(String newInputClass) 
-    {
-        inputClass = newInputClass;
-    }
-
-    public String getOutputClass()
-    {
-        return outputClass;
-    }
-
-    public void setOutputClass(String newOutputClass) 
-    {
-        outputClass = newOutputClass;
-    }
-
-    public String getSelectbooleanClass()
-    {
-        return selectbooleanClass;
-    }
-
-    public void setSelectbooleanClass(String newSelectbooleanClass) 
-    {
-        selectbooleanClass = newSelectbooleanClass;
-    }
-
-    public String getSelectmanyClass()
-    {
-        return selectmanyClass;
-    }
-    
-    public void setSelectmanyClass(String newSelectmanyClass) 
-    {
-        selectmanyClass = newSelectmanyClass;
-    }
-    
-    public void setFormClass(String newFormClass) 
-    {
-        formClass = newFormClass;
-    }
-
-    public String getFormClass()
-    {
-        return formClass;
-    }
-
-    public String getSelectoneClass()
-    {
-        return selectoneClass;
-    }
-
-    public void setSelectoneClass(String newSelectoneClass) 
-    {
-        selectoneClass = newSelectoneClass;
-    }
-
-    public String getSelectitemClass()
-    {
-        return selectitemClass;
-    }
-
-    public void setSelectitemClass(String newSelectitemClass) 
-    {
-        selectitemClass = newSelectitemClass;
-    }
-
-    public String getSelectitemsClass()
-    {
-        return selectitemsClass;
-    }
-
-    public void setSelectitemsClass(String newSelectitemsClass) 
-    {
-        selectitemsClass = newSelectitemsClass;
-    }
 
     // For TEXTAREA HTML element
 
@@ -978,21 +864,9 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
         src = newSrc;
     }
 
-    // Associated style info - For all HTML elements pertaining
-    // to Faces.
-
-    public String getStyle() 
-    {
-        return style;
+    public void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
     }
-
-    public void setStyle(String newStyle)
-    {
-        style = newStyle;
-    }
-    
-    // PENDING (rlubke) The styleClass attribute should be handled once
-    //                  finalizied
 
     // Position in tabbing order - For "A" (Hyperlink)/
     // BUTTON/INPUT/SELECT/TEXTAREA HTML elements.
@@ -1290,35 +1164,8 @@ protected void overrideProperties(UIComponent component)
     if (null != getDir()) {
 	component.setAttribute("dir", getDir());
     }
-    if (null != getCommandClass()) {
-	component.setAttribute("commandClass", getCommandClass());
-    }
-    if (null != getGraphicClass()) {
-	component.setAttribute("graphicClass", getGraphicClass());
-    }
-    if (null != getInputClass()) {
-	component.setAttribute("inputClass", getInputClass());
-    }
-    if (null != getOutputClass()) {
-	component.setAttribute("outputClass", getOutputClass());
-    }
-    if (null != getSelectbooleanClass()) {
-	component.setAttribute("selectbooleanClass", getSelectbooleanClass());
-    }
-    if (null != getSelectmanyClass()) {
-	component.setAttribute("selectmanyClass", getSelectmanyClass());
-    }
-    if (null != getSelectoneClass()) {
-	component.setAttribute("selectoneClass", getSelectoneClass());
-    }
-    if (null != getSelectitemClass()) {
-	component.setAttribute("selectitemClass", getSelectitemClass());
-    }
-    if (null != getSelectitemsClass()) {
-	component.setAttribute("selectitemsClass", getSelectitemsClass());
-    }
-    if (null != getStyle()) {
-	component.setAttribute("style", getStyle());
+    if (null != styleClass) {
+        component.setAttribute("styleClass", styleClass);
     }
     
     // PENDING (rlubke) The styleClass attribute should be handled once

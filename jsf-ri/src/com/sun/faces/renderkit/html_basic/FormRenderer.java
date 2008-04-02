@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.55 2003/08/23 00:39:09 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.56 2003/09/04 18:04:32 rlubke Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.55 2003/08/23 00:39:09 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.56 2003/09/04 18:04:32 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,7 +76,7 @@ public class FormRenderer extends HtmlBasicRenderer {
 
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
-        String formClass = null;         
+        String styleClass = null;         
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -96,9 +96,9 @@ public class FormRenderer extends HtmlBasicRenderer {
 	//PENDING(rogerk)null 3rd arg?
 	writer.writeAttribute("method", "post", null);
 	writer.writeAttribute("action", getActionStr(context), null);
-        if (null != (formClass = (String) 
-		     component.getAttribute("formClass"))) {
-            writer.writeAttribute("class", formClass, "formClass");
+        if (null != (styleClass = (String) 
+		     component.getAttribute("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
 	}
 
         Util.renderPassThruAttributes(writer, component);

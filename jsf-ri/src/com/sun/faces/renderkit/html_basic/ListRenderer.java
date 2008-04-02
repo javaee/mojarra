@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.15 2003/08/22 21:03:00 rkitain Exp $
+ * $Id: ListRenderer.java,v 1.16 2003/09/04 18:04:34 rlubke Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.15 2003/08/22 21:03:00 rkitain Exp $
+ * @version $Id: ListRenderer.java,v 1.16 2003/09/04 18:04:34 rlubke Exp $
  *  
  */
 
@@ -93,12 +93,12 @@ public class ListRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );   
 
-        String panelClass = (String) component.getAttribute("panelClass");
+        String styleClass = (String) component.getAttribute("styleClass");
         
         // Render the beginning of this panel
 	writer.startElement("table", component);
-        if (panelClass != null) {
-	    writer.writeAttribute("class", panelClass, "panelClass");
+        if (styleClass != null) {
+	    writer.writeAttribute("class", styleClass, "styleClass");
         }
 	Util.renderPassThruAttributes(writer, component);
 	//PENDING(rogerk)null 2nd arg?

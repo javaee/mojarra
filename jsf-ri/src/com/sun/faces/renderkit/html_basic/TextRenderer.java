@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.49 2003/08/22 21:03:02 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.50 2003/09/04 18:04:35 rlubke Exp $
  */
 
 /*
@@ -88,13 +88,10 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(writer != null );
 
 	String styleClass = null;
-        if (null != (styleClass = (String)component.getAttribute("inputClass"))) { 
-	    writer.writeAttribute("class", styleClass, "inputClass");
-	    writer.startElement("span", component);
-	} else if (null != (styleClass = (String)component.getAttribute("outputClass"))) {
-	    writer.writeAttribute("class", styleClass, "outputClass");
-	    writer.startElement("span", component);
-	}
+        if (null != (styleClass = (String) component.getAttribute("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+            writer.startElement("span", component);
+        } 
         if (component instanceof UIInput) {
 	    writer.startElement("input", component);
 	    writer.writeAttribute("type", "text", "type");

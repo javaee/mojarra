@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.23 2003/08/29 17:46:42 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.24 2003/09/04 18:04:34 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -200,12 +200,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(writer != null );
         
 	String styleClass = null;
-        if (null != (styleClass = (String) component.getAttribute("selectmanyClass"))) {
-	    writer.writeAttribute("class", styleClass, "selectmanyClass");
+        if (null != (styleClass = (String) component.getAttribute("styleClass"))) {
+	    writer.writeAttribute("class", styleClass, "styleClass");
 	    writer.startElement("span", component);
 	} else if (null != (styleClass = 
-	    (String) component.getAttribute("selectoneClass"))) {
-	    writer.writeAttribute("class", styleClass, "selectoneClass");
+	    (String) component.getAttribute("styleClass"))) {
+	    writer.writeAttribute("class", styleClass, "styleClass");
 	    writer.startElement("span", component);
 	}
 	

@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.15 2003/08/22 21:02:59 rkitain Exp $
+ * $Id: GridRenderer.java,v 1.16 2003/09/04 18:04:33 rlubke Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.15 2003/08/22 21:02:59 rkitain Exp $
+ * @version $Id: GridRenderer.java,v 1.16 2003/09/04 18:04:33 rlubke Exp $
  *  
  */
 
@@ -84,13 +84,13 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
-        String panelClass = (String) component.getAttribute("panelClass");
+        String styleClass = (String) component.getAttribute("styleClass");
         
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.startElement("table", component);
-        if (panelClass != null) {
-            writer.writeAttribute("class", panelClass, "panelClass");
+        if (styleClass != null) {
+            writer.writeAttribute("class", styleClass, "styleClass");
         }
 
         Util.renderPassThruAttributes(writer, component);

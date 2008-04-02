@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.59 2003/08/29 17:46:41 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.60 2003/09/04 18:04:30 rlubke Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.59 2003/08/29 17:46:41 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.60 2003/09/04 18:04:30 rlubke Exp $
  *
  */
 
@@ -134,7 +134,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
         
         // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
         String type = (String) component.getAttribute("type");
-	String commandClass = null;
+	    String styleClass = null;
         if (type == null) {
             type = "submit";
 	    // This is needed in the decode method
@@ -161,9 +161,9 @@ public class ButtonRenderer extends BaseCommandRenderer {
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
-        if (null != (commandClass = (String) 
-            component.getAttribute("commandClass"))) {
-            writer.writeAttribute("class", commandClass, "commandClass");
+        if (null != (styleClass = (String) 
+            component.getAttribute("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
 	}
         writer.endElement("input");
     }

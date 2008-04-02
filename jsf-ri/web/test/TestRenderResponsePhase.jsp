@@ -34,7 +34,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 <f:view>
-<h:form formName="basicForm" id="basicForm" title="basicForm" formClass="formClass"
+<h:form formName="basicForm" id="basicForm" title="basicForm" styleClass="formClass"
       accept="html,wml" >
 
   <TABLE BORDER="1">
@@ -55,14 +55,14 @@
 
                     <h:output_text id="text1" value="Username:"/>
 
-                    <h:input_text id="username1" inputClass="inputClass" value="JavaServerFaces" />
+                    <h:input_text id="username1" styleClass="inputClass" value="JavaServerFaces" />
 
-                    <h:output_text id="text2" outputClass="outputClass" value="Password:"/>
+                    <h:output_text id="text2" styleClass="outputClass" value="Password:"/>
 
-                    <h:input_secret inputClass="secretClass" id="password1" />
+                    <h:input_secret styleClass="secretClass" id="password1" />
 
                     <h:command_button id="submit1" type="SUBMIT"
-                        commandClass="commandClass" 
+                        styleClass="commandClass" 
                         label="Login" >
                     </h:command_button>
 
@@ -127,7 +127,7 @@
 	<TD>
 
 	      <h:command_hyperlink id="link" 
-                           commandClass="hyperlinkClass"
+                           styleClass="hyperlinkClass"
 				       label="link text"/>
 
 	</TD>
@@ -152,7 +152,7 @@
       <TR>
         <TD>
             <h:command_hyperlink id="commandLink" 
-              commandClass="hyperlinkClass"
+              styleClass="hyperlinkClass"
               label="link text"/>
        </TD>
       </TR>
@@ -160,7 +160,7 @@
       <TR>
         <TD>
             <h:command_hyperlink id="commandParamLink" 
-              commandClass="hyperlinkClass"
+              styleClass="hyperlinkClass"
               label="link text">
               <f:parameter id="hlParam1" name="name" value="horwat"/>
               <f:parameter id="hlParam2" name="value" value="password"/>
@@ -203,7 +203,7 @@
 	<TD>
 
             <h:selectboolean_checkbox  rendered="true"
-                   selectbooleanClass="selectbooleanClass"/>
+                   styleClass="selectbooleanClass"/>
 	</TD>
 
       </TR>
@@ -212,7 +212,7 @@
 
 	<TD>
 
-	     <h:selectone_listbox selectoneClass="selectoneClass"
+	     <h:selectone_listbox styleClass="selectoneClass"
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -275,7 +275,7 @@
         </TD>
 
 	<TD><h:input_text value="Wed, Jul 10, 1996"
-                              inputClass="inputClass">
+                              styleClass="inputClass">
                 <f:convert_datetime dateStyle="long"/>
             </h:input_text>
 	</TD>
@@ -315,7 +315,7 @@
           <td>
             <h:input_text id="testPattern" 
                         value="9999.98765" size="3" maxlength="20" 
-                        inputClass="inputClass" 
+                        styleClass="inputClass" 
                         tabindex="2" accesskey="D">
                <f:convert_number pattern="####"/>
             </h:input_text>
@@ -324,7 +324,7 @@
       </tr>
 
       <tr>
-          <td> <h:output_text outputClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
+          <td> <h:output_text styleClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
                    <h:output_text id="testPercent" value="45%">
                        <f:convert_number type="number"/>
@@ -338,7 +338,7 @@
         </TD>
 
 	<TD><h:output_text id="date4" value="Wed, Jul 10, 1996"
-                              outputClass="outputClass" >
+                              styleClass="outputClass" >
                 <f:convert_datetime dateStyle="long"/>
             </h:output_text>
 	</TD>
@@ -454,7 +454,7 @@
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><h:selectmany_menu id="ManyApples" selectmanyClass="selectmanyClass">
+					<TD><h:selectmany_menu id="ManyApples" styleClass="selectmanyClass">
 						<h:selectitem itemValue="0" itemLabel="zero" />
 						<h:selectitem itemValue="1" itemLabel="one" />
 						<h:selectitem itemValue="2" itemLabel="two" />
@@ -487,7 +487,7 @@
 
 <tr>
 					<TD><h:selectmany_checkboxlist id="ManyApples3" 
-                                                selectmanyClass="selectmanyClass">
+                                                styleClass="selectmanyClass">
 						<h:selectitem itemValue="0" itemLabel="zero" />
 						<h:selectitem itemValue="1" itemLabel="one" />
 						<h:selectitem itemValue="2" itemLabel="two" />

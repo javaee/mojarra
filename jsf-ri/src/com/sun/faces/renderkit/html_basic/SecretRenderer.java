@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.45 2003/08/22 21:03:01 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.46 2003/09/04 18:04:35 rlubke Exp $
  */
 
 /*
@@ -83,7 +83,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
 	ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-        String inputClass = null;
+        String styleClass = null;
         
         String redisplay = (String)component.getAttribute("redisplay");
         if (redisplay == null || !redisplay.equals("true")) {
@@ -102,9 +102,9 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer,component);
 
-	if (null != (inputClass = (String) 
-		     component.getAttribute("inputClass"))) {
-	    writer.writeAttribute("class", inputClass, "inputClass");
+	if (null != (styleClass = (String) 
+		     component.getAttribute("styleClass"))) {
+	    writer.writeAttribute("class", styleClass, "styleClass");
 	}
 	
 	writer.endElement("input");
