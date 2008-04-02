@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.28 2005/11/22 16:32:31 rlubke Exp $
+ * $Id: FacesServlet.java,v 1.29 2005/11/22 17:45:54 rlubke Exp $
  */
 
 /*
@@ -196,13 +196,19 @@ public final class FacesServlet implements Servlet {
 
         // If prefix mapped, then ensure requests for /WEB-INF are
         // not processed.
-        String pathInfo = ((HttpServletRequest) request).getPathInfo();        
-        if (pathInfo != null &&
-            (pathInfo.startsWith("/WEB-INF/") || pathInfo.equals("/WEB-INF"))) {
-            ((HttpServletResponse) response).
-                  sendError(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
+        String pathInfo = ((HttpServletRequest) request).getPathInfo();
+        if (pathInfo != null) {
+            pathInfo = pathInfo.toUpperCase();
+            if (pathInfo.startsWith("/WEB-INF/")
+                || pathInfo.equals("/WEB-INF")
+                || pathInfo.startsWith("/META-INF/")
+                || pathInfo.equals("/META-INF")) {
+                ((HttpServletResponse) response).
+                      sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+        }    
+        
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response, lifecycle);

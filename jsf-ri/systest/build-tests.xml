@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.95 2005/11/22 16:32:32 rlubke Exp $
+ $Id: build-tests.xml,v 1.96 2005/11/22 17:45:54 rlubke Exp $
 -->
 
 <!--
@@ -339,6 +339,27 @@
            description="Ensure a prefix mapped FacesServlet doesn't allow access to WEB-INF">
         <tester host="${host}" port="${port}" protocol="${protocol}"
                 request="${context.path}/faces/WEB-INF/test.jsp"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/WEB-INF"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/WEB-INF/"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/META-INF/MANIFEST.MF"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/META-INF"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/META-INF/"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/web-Inf/test.jsp"
+                status="404"/>
+        <tester host="${host}" port="${port}" protocol="${protocol}"
+                request="${context.path}/faces/mEtA-InF/MANIFEST.MF"
                 status="404"/>
     </target>
 
