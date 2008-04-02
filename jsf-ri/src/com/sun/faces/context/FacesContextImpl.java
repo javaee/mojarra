@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.85 2006/11/08 16:48:51 rlubke Exp $
+ * $Id: FacesContextImpl.java,v 1.86 2007/02/13 05:38:22 rlubke Exp $
  */
 
 /*
@@ -246,9 +246,10 @@ import com.sun.faces.util.Util;
 
          //remove client id from pending display messages list.
          Map requestMap = getExternalContext().getRequestMap();
-         if (requestMap.containsKey(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED)) {
-        	 Set pendingClientIds = (Set)requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
-        	 pendingClientIds.remove(clientId);
+         Set pendingClientIds = (Set)
+              requestMap.get(RIConstants.CLIENT_ID_MESSAGES_NOT_DISPLAYED);
+         if (pendingClientIds != null && !pendingClientIds.isEmpty()) {
+            pendingClientIds.remove(clientId);
          }
 
          // If no messages have been enqueued at all,
