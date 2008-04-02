@@ -1,5 +1,5 @@
 /*
- * $Id: CompareFiles.java,v 1.12 2004/02/04 23:43:51 ofung Exp $
+ * $Id: CompareFiles.java,v 1.13 2004/02/05 20:52:43 horwat Exp $
  */
 
 /*
@@ -82,6 +82,8 @@ public class CompareFiles {
 		    boolean foundMatch = false;
 		    while (ignoreLines.hasNext()) {
 			String newTrim = ((String) ignoreLines.next()).trim();
+		        newTrim = stripJsessionidFromLine(newTrim);
+		        oldLine = stripJsessionidFromLine(oldLine);
 			if (oldLine.equals(newTrim)) {
 			    foundMatch = true;
 			    break;
