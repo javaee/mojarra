@@ -1,5 +1,5 @@
 /*
- * $Id: ViewExpiredException.java,v 1.1 2005/07/20 00:32:13 rogerk Exp $
+ * $Id: ViewExpiredException.java,v 1.2 2005/07/21 13:43:21 rogerk Exp $
  */
 
 /*
@@ -33,16 +33,28 @@ public class ViewExpiredException extends FacesException {
 
     }
 
-
+    /**
+     *<p>Construct a new exception with the specified view identifier.</p>
+     *
+     * @param viewId The view identifier for this exception
+     */
+    public ViewExpiredException(String viewId) {
+        
+        this.viewId = viewId;
+        
+    }
+    
     /**
      * <p>Construct a new exception with the specified detail message and
      * no root cause.</p>
      *
      * @param message The detail message for this exception
+     * @param viewId The view identifier for this exception
      */
-    public ViewExpiredException(String message) {
+    public ViewExpiredException(String message, String viewId) {
 
         super(message);
+        this.viewId = viewId;
 
     }
 
@@ -53,10 +65,12 @@ public class ViewExpiredException extends FacesException {
      * cause.toString()</code>
      *
      * @param cause The root cause for this exception
+     * @param viewId The view identifier for this exception
      */
-    public ViewExpiredException(Throwable cause) {
+    public ViewExpiredException(Throwable cause, String viewId) {
 
         super(cause);
+        this.viewId = viewId;
 
     }
 
@@ -67,10 +81,52 @@ public class ViewExpiredException extends FacesException {
      *
      * @param message The detail message for this exception
      * @param cause The root cause for this exception
+     * @param viewId The view identifier for this exception
      */
-    public ViewExpiredException(String message, Throwable cause) {
+    public ViewExpiredException(String message, Throwable cause, String viewId) {
 
         super(message, cause);
+        this.viewId = viewId;
 
     }
+
+    // ----------------------------------------------------- Instance Variables
+
+
+    /**
+     * <p>The view identifier of the view that could not be restored.</p>
+     */
+    private String viewId = null;
+    
+    
+    // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>Return the view identifier of this exception, or <code>null</code> if the
+     * view identifier is nonexistent or unknown.</p>
+     */
+    public String getViewId() {
+
+        return (this.viewId);
+
+    }
+
+    /**
+     * <p>Return the message for this exception prepended with the view identifier
+     * if the view identifier is not <code>null</code>, otherwise, return the 
+     * message.</p>
+     */
+    public String getMessage() {
+
+        if (viewId != null) {
+            return "viewId:" + viewId + " - " + super.getMessage();
+        }
+        return super.getMessage();
+
+    }
+    
 }
+
+    
+    
