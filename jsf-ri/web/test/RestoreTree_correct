@@ -8,57 +8,79 @@ value=null
   attr=rendererType : FormRenderer
   attr=parent : com.sun.faces.tree.SimpleTreeImpl
   attr=value : basicForm
-    ===>Type:javax.faces.component.UITextEntry
-    id:userName
-    value=Default_username
-    attr=componentId : userName
-    attr=rendererType : InputRenderer
-    attr=parent : javax.faces.component.UIForm
-    attr=value : Default_username
-    ===>Type:javax.faces.component.UITextEntry
-    id:password
-    value=Default_password
-    attr=componentId : password
-    attr=rendererType : SecretRenderer
-    attr=parent : javax.faces.component.UIForm
-    attr=value : Default_password
-    ===>Type:javax.faces.component.UICommand
-    id:login
-    value=login
-    attr=componentId : login
-    attr=label : Login
-    attr=rendererType : ButtonRenderer
-    attr=parent : javax.faces.component.UIForm
-    attr=value : login
     ===>Type:javax.faces.component.UICommand
     id:link
     value=null
+    attr=commandClass : hyperlinkClass
     attr=componentId : link
     attr=label : link text
     attr=rendererType : HyperlinkRenderer
     attr=parent : javax.faces.component.UIForm
     attr=target : hello.html
-    ===>Type:javax.faces.component.UIOutput
-    id:userLabel
-    value=Output Text
-    attr=componentId : userLabel
-    attr=rendererType : TextRenderer
-    attr=parent : javax.faces.component.UIForm
-    attr=value : Output Text
     ===>Type:javax.faces.component.UISelectBoolean
     id:validUser
-    value=true
+    value=false
+    attr=selectbooleanClass : selectbooleanClass
     attr=componentId : validUser
-    attr=label : Valid User
     attr=rendererType : CheckboxRenderer
     attr=parent : javax.faces.component.UIForm
-    attr=value : true
-    ===>Type:javax.faces.component.UITextEntry
-    id:address
-    value=Hi There
-    attr=componentId : address
-    attr=rendererType : TextAreaRenderer
+    attr=value : false
+    ===>Type:javax.faces.component.UISelectOne
+    id:appleQuantity
+     {
+    	 value=0 label=0 description=null
+    	 value=4 label=4 description=null
+    	 value=9 label=9 description=null
+     }
+      ===>Type:javax.faces.component.UISelectItem
+      id:0
+      value=null
+      attr=componentId : 0
+      attr=parent : javax.faces.component.UISelectOne
+      attr=disabled : true
+      attr=itemLabel : 0
+      attr=itemValue : 0
+      ===>Type:javax.faces.component.UISelectItem
+      id:4
+      value=null
+      attr=componentId : 4
+      attr=parent : javax.faces.component.UISelectOne
+      attr=itemLabel : 4
+      attr=title : Four
+      attr=itemValue : 4
+      ===>Type:javax.faces.component.UISelectItem
+      id:9
+      value=null
+      attr=componentId : 9
+      attr=parent : javax.faces.component.UISelectOne
+      attr=itemLabel : 9
+      attr=title : nine
+      attr=itemValue : 9
+    ===>Type:javax.faces.component.UISelectMany
+    id:ManyApples
+    value=[Ljava.lang.Object;@18cb3a
+    attr=componentId : ManyApples
+    attr=rendererType : SelectManyMenuRenderer
     attr=parent : javax.faces.component.UIForm
-    attr=value : Hi There
-    attr=rows : 10
-    attr=cols : 10
+    attr=value : [Ljava.lang.Object;
+      ===>Type:javax.faces.component.UISelectItem
+      id:4
+      value=null
+      attr=componentId : 4
+      attr=parent : javax.faces.component.UISelectMany
+      attr=itemLabel : four
+      attr=itemValue : 4
+      ===>Type:javax.faces.component.UISelectItem
+      id:6
+      value=null
+      attr=componentId : 6
+      attr=parent : javax.faces.component.UISelectMany
+      attr=itemLabel : six
+      attr=itemValue : 6
+      ===>Type:javax.faces.component.UISelectItem
+      id:7
+      value=null
+      attr=componentId : 7
+      attr=parent : javax.faces.component.UISelectMany
+      attr=itemLabel : seven
+      attr=itemValue : 7

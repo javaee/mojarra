@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.1 2002/08/06 18:27:23 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.2 2002/09/10 21:02:46 visvan Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.tree.TreeFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.1 2002/08/06 18:27:23 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.2 2002/09/10 21:02:46 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -52,7 +52,7 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-   "<FORM METHOD=\"post\" ACTION=\"/test/faces/form/basicForm;jsessionid=C491B5F84064E5B1D2225282F25842E3\">"
+   "<FORM METHOD=\"post\" ACTION=\"/test/faces/TestSaveState.jsp;jsessionid=316204F1A5676263822562E2D3F52581\">"
 };
     
 public String [] getLinesToIgnore() {

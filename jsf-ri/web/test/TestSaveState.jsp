@@ -12,57 +12,24 @@
 <faces:form formName="basicForm" id="basicForm">
   <TABLE BORDER="1">
 
-
-      <TR>
-
-	<TD>
-
-	      <faces:textentry_input id="userName" text="Default_username" />
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <faces:textentry_secret id="password" text="Default_password" />
-
-	</TD>
-
-      </TR>
-
-      <TR>
-
-	<TD>
-
-	      <faces:command_button id="login" label="Login" 
-				    commandName="login"/>
-
-	</TD>
-
-      </TR>
-
-
       <TR>
 
 	<TD>
 
 	      <faces:command_hyperlink id="link" target="hello.html"
+                           commandClass="hyperlinkClass"
 				       label="link text"/>
 
 	</TD>
 
       </TR>
 
-
       <TR>
 
 	<TD>
 
-	      <faces:output_text id="userLabel" text="Output Text" />
-
+            <faces:selectboolean_checkbox id="validUser" 
+                   selectbooleanClass="selectbooleanClass"/>
 	</TD>
 
       </TR>
@@ -71,25 +38,29 @@
 
 	<TD>
 
-	      <faces:selectboolean_checkbox id="validUser" label="Valid User"
-					    selected="true" />
+	     <faces:selectone_listbox id="appleQuantity" size="6"
+                     title="Select Quantity"
+                     accesskey="N" tabindex="20" >
+
+                <faces:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
+                <faces:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <faces:selectitem  itemValue="9" itemLabel="9" title="nine" />
+
+              </faces:selectone_listbox>
 
 	</TD>
 
       </TR>
 
-      <TR>
+					<TD><faces:selectmany_menu id="ManyApples">
+						<faces:selectitem itemValue="4" itemLabel="four" selected="true" />
+						<faces:selectitem itemValue="6" itemLabel="six" />
+						<faces:selectitem itemValue="7" itemLabel="seven" selected="true" />
+					</faces:selectmany_menu></TD>
 
-	<TD>
+</tr>
 
-	      <faces:textentry_textarea id="address" text="Hi There" 
-                                        rows="10" cols="10"/>
-
-	</TD>
-
-      </TR>
-
-  <TABLE>
+  </TABLE>
 
 </faces:form>
 </faces:usefaces>
