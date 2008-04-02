@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.29 2003/04/01 15:26:51 eburns Exp $
+ * $Id: RIConstants.java,v 1.30 2003/04/04 17:54:27 eburns Exp $
  */
 
 /*
@@ -92,6 +92,10 @@ public class RIConstants {
     
     public static final String IMMUTABLE_MARKER = 
 	"com.sun.faces.IMMUTABLE";
+
+    public static final String NAVIGATION_CONFIG_ATTR = 
+	"com.sun.faces.NavigationConfig";
+
 
 
 }

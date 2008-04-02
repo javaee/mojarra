@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationConfig.java,v 1.1 2003/04/01 17:39:06 rkitain Exp $
+ * $Id: NavigationConfig.java,v 1.2 2003/04/04 17:54:27 eburns Exp $
  */
 
 /*
@@ -25,6 +25,8 @@ import java.util.NoSuchElementException;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
+
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -69,11 +71,11 @@ public class NavigationConfig {
 // Constructors and Initializers    
 //
 
-    public NavigationConfig() {
+    public NavigationConfig(ServletContext servletContext) {
         super();
         parse_digester = initConfig();
         navigationList = new ArrayList();
-        loadProperties();
+        loadProperties(servletContext);
     }
 
 //
@@ -84,16 +86,15 @@ public class NavigationConfig {
 // General Methods
 //
 
-    private void loadProperties() {
+    private void loadProperties(ServletContext servletContext) {
 
         String fileName = "/WEB-INF/NavigationConfig.xml";
         InputStream input = null;
-        FacesContext context = FacesContext.getCurrentInstance();
-        try {
-            input = context.getExternalContext().getResourceAsStream("/WEB-INF/NavigationConfig.xml");
-        } catch (Throwable t) {
-            throw new RuntimeException("Error Opening File:"+fileName);
-        }
+	try {
+            input = servletContext.getResourceAsStream(fileName);
+	} catch (Throwable t) {
+	    throw new RuntimeException("Error Opening File:"+fileName);
+	}
         try {
             parse_digester.push(this);
             parse_digester.parse(input);

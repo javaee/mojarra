@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigation.java,v 1.1 2003/04/01 17:39:14 rkitain Exp $
+ * $Id: TestNavigation.java,v 1.2 2003/04/04 17:54:30 eburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigation.java,v 1.1 2003/04/01 17:39:14 rkitain Exp $
+ * @version $Id: TestNavigation.java,v 1.2 2003/04/04 17:54:30 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,14 +76,8 @@ public class TestNavigation extends ServletFacesTestCase
 //
 // General Methods
 //
-
     public void testNavigationHandler() {
-        NavigationConfig navConfig = new NavigationConfig();
-
         FacesContext context = getFacesContext();
-        context.getExternalContext().getApplicationMap().
-            put("navConfig", navConfig);
-
         NavigationHandlerImpl navHandler = new NavigationHandlerImpl();
         
         context.setTree(new SimpleTreeImpl(context, "/login.jsp"));
