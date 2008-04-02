@@ -271,6 +271,7 @@
             <test name="com.sun.faces.context.TestFacesContextImpl"/>
             <test name="com.sun.faces.application.TestMessageResourcesImpl"/>
             <test name="com.sun.faces.convert.TestConverters"/>
+            <test name="com.sun.faces.el.impl.TestELImpl"/>
             <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
             <test name="com.sun.faces.el.TestValueBindingImpl"/>
             <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
