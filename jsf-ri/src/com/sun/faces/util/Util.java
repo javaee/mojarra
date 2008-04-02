@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.98 2003/10/07 02:42:59 eburns Exp $
+ * $Id: Util.java,v 1.99 2003/10/07 19:53:14 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.io.StringReader;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -41,12 +40,10 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-import javax.faces.webapp.FacesServlet;
 
 import javax.faces.render.ResponseStateManager;
 import javax.faces.application.StateManager;
@@ -64,11 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.98 2003/10/07 02:42:59 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: Util.java,v 1.99 2003/10/07 19:53:14 rlubke Exp $ 
  */
 
 public class Util extends Object
@@ -279,7 +272,14 @@ public class Util extends Object
          "com.sun.faces.CANT_CLOSE_INPUT_STREAM";
     
    public static final String DUPLICATE_COMPONENT_ID_ERROR_ID = 
-         "com.sun.faces.DUPLICATE_COMPONENT_ID_ERROR";
+         "com.sun.faces.DUPLICATE_COMPONENT_ID_ERROR";       
+    
+   public static final String FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID =
+         "com.sun.faces.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED";
+    
+   public static final String ILLEGAL_VIEW_ID_ID =
+         "com.sun.faces.ILLEGAL_VIEW_ID";
+    
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -765,7 +765,7 @@ private Util()
                     value = value.toString();
                 }
 		//PENDING(rogerk) will revisit "null" param soon..
-		writer.writeAttribute(passthruAttributes[i], (String) value,
+		writer.writeAttribute(passthruAttributes[i], value,
                                       passthruAttributes[i]);
 	    }
 	}

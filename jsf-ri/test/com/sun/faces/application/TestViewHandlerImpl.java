@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.3 2003/10/02 06:50:08 jvisvanathan Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.4 2003/10/07 19:53:15 rlubke Exp $ 
  */ 
 
 
@@ -15,44 +15,30 @@
 package com.sun.faces.application; 
 
 
-import org.apache.cactus.WebRequest; 
-import org.apache.cactus.JspTestCase; 
+import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.context.ExternalContextImpl;
+import com.sun.faces.context.FacesContextImpl;
+import org.apache.cactus.WebRequest;
 
-
-import org.mozilla.util.Assert; 
-import org.mozilla.util.ParameterCheck; 
-
-
-import javax.faces.FacesException; 
-import javax.faces.FactoryFinder; 
-import javax.faces.context.FacesContext; 
-import javax.faces.context.FacesContextFactory; 
-import javax.faces.lifecycle.Lifecycle; 
-import javax.faces.component.UIComponentBase;
-import javax.faces.validator.Validator; 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpSession;
-
-import com.sun.faces.JspFacesTestCase; 
-import com.sun.faces.FileOutputResponseWrapper; 
-import com.sun.faces.util.Util; 
-import com.sun.faces.CompareFiles; 
-
-import com.sun.faces.TestBean;
-import com.sun.faces.application.ViewHandlerImpl;
-
-import javax.faces.component.UIComponent;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.ViewHandler;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpSession;
 
-import java.io.IOException; 
-import java.util.Iterator; 
-import java.util.ArrayList; 
-import java.util.Map;
-
-import javax.servlet.jsp.PageContext; 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map; 
 
 
 /** 
@@ -61,11 +47,7 @@ import javax.servlet.jsp.PageContext;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.3 2003/10/02 06:50:08 jvisvanathan Exp $ 
- * 
- * @see Blah 
- * @see Bloo 
- * 
+ * @version $Id: TestViewHandlerImpl.java,v 1.4 2003/10/07 19:53:15 rlubke Exp $  
  */ 
 
 
@@ -142,21 +124,111 @@ public boolean sendResponseToFile()
 
 public void beginRender(WebRequest theRequest) 
 { 
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null); 
-} 
+    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null); 
+}
+    
+    public void beginRender2(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/somepath/greeting.jsf", TEST_URI, null);
+    }
+    
+   public void testGetViewIdPath() {
+       
+       LifecycleFactory factory = (LifecycleFactory) 
+           FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+       Lifecycle lifecycle = 
+           factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+       
+       // wrap the request so we can control the return value of getServletPath
+       TestRequest testRequest = new TestRequest(request);       
+       
+       ExternalContext extContext = new ExternalContextImpl(config.getServletContext(),
+                                                         testRequest,
+                                                         response);
+       FacesContext facesContext = new FacesContextImpl(extContext, lifecycle);
+       
+       // Spoof the mappings so we can properly test the different possible
+       // values
+       List mappings = new ArrayList();
+       // create the same "massaged" mappings that WebXMLParser creates.
+       mappings.add("/faces");
+       mappings.add(".jsf");
+       mappings.add("/*");
+       ViewHandlerImpl handler = new ViewHandlerImpl();
+       handler.setFacesMapping(mappings);
+       
+       
+       // if getServletPath() returns "" then the viewId path returned should
+       // be the same as what was passed.
+       testRequest.setServletPath("");
+       String path = handler.getViewIdPath(facesContext, "/test.jsp");
+       System.out.println("VIEW ID PATH 1: " + path);
+       assertTrue(path.equals("/test.jsp"));
+       
+       // if getServletPath() returns a path prefix, then the viewId path
+       // returned must have that path prefixed.
+       testRequest.setServletPath("/faces");
+       path = handler.getViewIdPath(facesContext, "/path/test.jsp");
+       System.out.println("VIEW ID PATH 2: " + path);
+       assertTrue(path.equals("/faces/path/test.jsp"));
+       
+       
+       // if getServletPath() returns a path indicating extension mapping
+       // and the viewId passed has no extension, append the extension
+       // to the provided viewId
+       testRequest.setServletPath("/path/firstRequest.jsf");
+       path = handler.getViewIdPath(facesContext, "/path/test");
+       System.out.println("VIEW ID PATH 3: " + path);
+       assertTrue(path.equals("/path/test.jsf"));
+       
+       // if getServletPath() returns a path indicating extension mapping
+       // and the viewId passed has an extension, replace the extension with
+       // the extension defined in the deployment descriptor
+       testRequest.setServletPath("/path/firstRequest.jsf");
+       path = handler.getViewIdPath(facesContext, "/path/t.est.jsp");
+       System.out.println("VIEW ID PATH 4: " + path);
+       assertTrue(path.equals("/path/t.est.jsf"));
+                     
+    }
+    
+    public void testGetViewIdExceptionsTest() throws Exception {
+        boolean exceptionThrown = false;
+        ViewHandler handler = 
+            getFacesContext().getApplication().getViewHandler();
+        try {
+            handler.getViewIdPath(null, "/test.jsp");            
+        } catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
+        exceptionThrown = false;
+        try {
+            handler.getViewIdPath(getFacesContext(), null);
+        } catch (NullPointerException npe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+        
+        exceptionThrown = false;        
+        try {
+            handler.getViewIdPath(getFacesContext(), "test.jsp");            
+        } catch (IllegalArgumentException iae) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);                
+    }
 
 
+    
 public void testRender() 
-{ 
-    boolean result = false; 
-    UIComponentBase root = null; 
-    String value = null; 
+{     
     UIViewRoot newView = new UIViewRoot();
     newView.setViewId(TEST_URI);
     getFacesContext().setViewRoot(newView);
 
     try { 
-        ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
+        ViewHandler viewHandler = 
+            getFacesContext().getApplication().getViewHandler(); 
         viewHandler.renderView(getFacesContext(), 
 			       getFacesContext().getViewRoot()); 
     } catch (IOException e) { 
@@ -168,9 +240,36 @@ public void testRender()
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 
-    assertTrue(verifyExpectedOutput()); 
+    assertTrue(verifyExpectedOutput());        
 } 
+    
+    public void testRender2() {
+        // Change the viewID to end with .faces and make sure that
+        // the implementation changes .faces to .jsp and properly dispatches
+        // the message.
+        UIViewRoot newView = new UIViewRoot();
+        newView.setViewId(TEST_URI);
+        getFacesContext().setViewRoot(newView); 
+        
+        newView.setViewId("/faces/greeting.jsf");
+        getFacesContext().setViewRoot(newView);
+        try {
+            ViewHandler viewHandler =
+                getFacesContext().getApplication().getViewHandler();
+            viewHandler.renderView(getFacesContext(),
+                                   getFacesContext().getViewRoot());
+        } catch (IOException ioe) {
+            System.out.println("ViewHandler IOException: " + ioe);
+        } catch (FacesException fe) {
+            System.out.println("ViewHandler FacesException: " + fe);
+        }
+        
+        assertTrue(!(getFacesContext().getRenderResponse()) &&
+                   !(getFacesContext().getResponseComplete()));
 
+        assertTrue(verifyExpectedOutput()); 
+    }
+   
 public void testTransient()
 {
     
@@ -215,7 +314,8 @@ public void testTransient()
     
     getFacesContext().setViewRoot(root);
 
-    ViewHandlerImpl viewHandler = new ViewHandlerImpl(); 
+    ViewHandler viewHandler = 
+        getFacesContext().getApplication().getViewHandler(); 
     viewHandler.getStateManager().saveSerializedView(getFacesContext());
    
     // make sure that the transient property is not persisted.
@@ -238,7 +338,23 @@ public void testTransient()
     Map facetList = panel1.getFacets();
     assertTrue(!(facetList.containsKey("userName3")));
     assertTrue(facetList.containsKey("userName4"));
-}
+}        
 
+    private class TestRequest extends HttpServletRequestWrapper {
+        
+        String servletPath;
+        
+        public TestRequest(HttpServletRequest request) {
+            super(request);
+        }
 
+        public String getServletPath() {
+            return servletPath;
+        }
+        
+        public void setServletPath(String servletPath) {
+            this.servletPath = servletPath;            
+        }
+    }
+    
 } // end of class TestViewHandlerImpl 

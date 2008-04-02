@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.39 2003/10/03 17:43:42 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.40 2003/10/07 19:53:17 rlubke Exp $
  */
 
 /*
@@ -9,24 +9,12 @@
 
 package com.sun.faces.config;
 
+import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.MessageResourcesImpl;
-import com.sun.faces.el.ValueBindingImpl;
-import com.sun.faces.RIConstants;
+import org.apache.cactus.WebRequest;
+import org.mozilla.util.Assert;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.lang.reflect.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
@@ -40,11 +28,14 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
+import javax.servlet.ServletContext;
 
-import org.apache.cactus.ServletTestCase;
-import org.apache.cactus.WebRequest;
-import org.mozilla.util.Assert;
-import com.sun.faces.ServletFacesTestCase;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Unit tests for Configuration File processing.</p>
@@ -54,6 +45,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
+    List mappings;
 
 
     // ----------------------------------------------------------- Constructors
@@ -67,7 +59,13 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     public ConfigFileTestCase(String name) {
 
         super(name);
+        mappings = new ArrayList();
+        mappings.add("/faces/*");
 
+    }
+    
+    public void beginLifecyclePhaseListener(WebRequest theRequest) {
+        theRequest.setURL("localhost:8080", "/test", "/faces", null, null);     
     }
 
 
@@ -77,6 +75,16 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
 
     // ------------------------------------------------ Individual Test Methods
+    
+    // Verify the url-patterns for all javax.faces.webapp.FacesServlet
+    // entries are found and massaged.
+    public void testWebXmlParser() throws Exception {
+        WebXmlParser parser = new WebXmlParser(config.getServletContext());
+        List mappings = parser.getFacesServletMappings();
+
+        assertTrue(mappings.contains("/faces"));
+        assertTrue(mappings.contains(".jsf"));
+    }
 
     public void testMessageResources() {
 	// test the default messages
@@ -131,7 +139,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     // Test parsing a full configuration file
     public void testFull() throws Exception {
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
@@ -207,7 +215,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
     public void testEmpty() throws Exception {
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         parseConfig(cp, "/WEB-INF/faces-config-empty.xml",
                            config.getServletContext());
     }
@@ -217,7 +225,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
  
     public void testConfigManagedBeanFactory() throws Exception {
 
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         parseConfig(cp, "/WEB-INF/faces-config.xml",
                            config.getServletContext());
 
@@ -252,7 +260,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
     public void testNavigationCase() throws Exception {
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         parseConfig(cp, "/WEB-INF/faces-config.xml",
                             config.getServletContext());
         ApplicationFactory aFactory = 
@@ -318,7 +326,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
      */
 
     public void testDuplicateNames() throws Exception {
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
@@ -333,7 +341,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
      */ 
 
     public void testConversionErrorDuringParse() throws Exception {	
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
@@ -350,7 +358,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
     public void testInvalidMessageSeverityDuringParse() throws Exception {
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         ApplicationFactory factory = 
             (ApplicationFactory) FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         boolean exceptionThrown = false;
@@ -366,7 +374,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
     public void testLifecyclePhaseListener() throws Exception {
         final String HANDLED_BEFORE_AFTER = "Handled Before After";
-        ConfigParser cp = new ConfigParser(config.getServletContext());
+        ConfigParser cp = new ConfigParser(config.getServletContext(), mappings);
         LifecycleFactory lFactory = (LifecycleFactory)FactoryFinder.getFactory(
             FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle = lFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
@@ -374,7 +382,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
 
         UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
-	getFacesContext().setViewRoot(page);
+	    getFacesContext().setViewRoot(page);
         try {
             System.setProperty(HANDLED_BEFORE_AFTER, "");
             lifecycle.execute(getFacesContext());
@@ -385,5 +393,5 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         String handledBeforeAfter = System.getProperty(HANDLED_BEFORE_AFTER);
         assertTrue(handledBeforeAfter != null);
         assertTrue(handledBeforeAfter.equals(HANDLED_BEFORE_AFTER));
-    }
+    }       
 }

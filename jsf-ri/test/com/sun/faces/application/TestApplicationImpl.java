@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.11 2003/10/02 06:50:08 jvisvanathan Exp $
+ * $Id: TestApplicationImpl.java,v 1.12 2003/10/07 19:53:15 rlubke Exp $
  */
 
 /*
@@ -32,17 +32,16 @@ import javax.faces.FacesException;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.TestComponent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  *  <B>TestApplicationImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.11 2003/10/02 06:50:08 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: TestApplicationImpl.java,v 1.12 2003/10/07 19:53:15 rlubke Exp $ 
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -361,7 +360,9 @@ public class TestApplicationImpl extends JspFacesTestCase {
             exceptionThrown = true;
         }
         assertTrue(!exceptionThrown);
-        
+        List mappings = new ArrayList();
+        mappings.add("/faces");
+        ((ViewHandlerImpl) handler).setFacesMapping(mappings);
         try {
             handler.renderView(getFacesContext(), 
 			       getFacesContext().getViewRoot());

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.27 2003/08/28 15:52:26 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.28 2003/10/07 19:53:08 rlubke Exp $
  */
 
 /*
@@ -118,10 +118,7 @@ public class ApplicationImpl extends Application {
         return actionListener;
     }
 
-    public ViewHandler getViewHandler() {
-        if (null == viewHandler) {
-            viewHandler = new ViewHandlerImpl();
-        }
+    public ViewHandler getViewHandler() {        
         return viewHandler;
     }
 

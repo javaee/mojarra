@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.21 2003/10/02 06:50:16 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl.java,v 1.22 2003/10/07 19:53:18 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.21 2003/10/02 06:50:16 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.22 2003/10/07 19:53:18 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,7 +100,7 @@ protected PhaseListenerImpl getSharedPhaseListenerImpl() {
     
 protected void initWebRequest(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
 }
 
 public void setUp() {

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.39 2003/10/07 18:03:00 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.40 2003/10/07 19:53:09 rlubke Exp $
  */
 
 /*
@@ -14,14 +14,27 @@ import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.MessageCatalog;
 import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.application.MessageTemplate;
+import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.util.Util;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Locale;
-import java.util.Map;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.converters.BooleanConverter;
+import org.apache.commons.beanutils.converters.ByteConverter;
+import org.apache.commons.beanutils.converters.CharacterConverter;
+import org.apache.commons.beanutils.converters.DoubleConverter;
+import org.apache.commons.beanutils.converters.FloatConverter;
+import org.apache.commons.beanutils.converters.IntegerConverter;
+import org.apache.commons.beanutils.converters.LongConverter;
+import org.apache.commons.beanutils.converters.ShortConverter;
+import org.apache.commons.digester.Digester;
+import org.apache.commons.digester.Rule;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.mozilla.util.Assert;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -38,31 +51,17 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
-
-
+import javax.faces.render.Renderer;
 import javax.servlet.ServletContext;
 
-import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.Rule;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.converters.BooleanConverter;
-import org.apache.commons.beanutils.converters.ByteConverter;
-import org.apache.commons.beanutils.converters.CharacterConverter;
-import org.apache.commons.beanutils.converters.DoubleConverter;
-import org.apache.commons.beanutils.converters.FloatConverter;
-import org.apache.commons.beanutils.converters.IntegerConverter;
-import org.apache.commons.beanutils.converters.LongConverter;
-import org.apache.commons.beanutils.converters.ShortConverter;
-import org.mozilla.util.Assert;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * <p>Configuration File processing.</p>
@@ -153,6 +152,11 @@ public class ConfigParser {
      * The Digester instance we will use to parse configuration files.
      */
     protected Digester digester = null;
+    
+    /**
+     * <p>The <code>url-pattern</code> mappings of the FacesServlet.</p>
+     */ 
+    protected List mappings;
 
     //
     // Constructors and Initializers
@@ -162,9 +166,10 @@ public class ConfigParser {
      * Construct a new instance of this configuration parser.
      *
      */
-    public ConfigParser(ServletContext servletContext) {
+    public ConfigParser(ServletContext servletContext, List mappings) {
 
         super();
+        this.mappings = mappings;
         boolean validateXml = validateTheXml(servletContext);
         if (log.isTraceEnabled()) {
             log.trace("Validate Xml:"+validateXml);
@@ -325,7 +330,7 @@ public class ConfigParser {
 	//
         // This custom rule will add application info to the Application instance;
         //
-	ApplicationRule aRule = new ApplicationRule();
+	ApplicationRule aRule = new ApplicationRule(mappings);
         digester.addRule(prefix, aRule);
     }
 
@@ -886,9 +891,10 @@ final class ManagedBeansRule extends Rule {
 final class ApplicationRule extends Rule {
 
     protected static Log log = LogFactory.getLog(ConfigParser.class);
+    private List mappings;
 
-    public ApplicationRule() {
-        super();
+    public ApplicationRule(List mappings) {        
+        this.mappings = mappings;
     }
     public void end(String namespace, String name) throws Exception {
         ConfigApplication ca = (ConfigApplication)digester.peek();
@@ -918,9 +924,16 @@ final class ApplicationRule extends Rule {
 	}
 
 	returnObject = Util.createInstance(ca.getViewHandler());
+    ViewHandler viewHandler;
 	if (returnObject != null) {
-	    application.setViewHandler((ViewHandler)returnObject);
-	}
+        viewHandler = (ViewHandler) returnObject;
+    } else {
+        viewHandler = new ViewHandlerImpl();	    
+	} 
+    if (viewHandler instanceof ViewHandlerImpl) {
+        ((ViewHandlerImpl) viewHandler).setFacesMapping(mappings);
+    }    
+    application.setViewHandler(viewHandler);
     }
 }
 

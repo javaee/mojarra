@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.53 2003/09/26 17:17:57 rkitain Exp $
+ * $Id: FacesContextImpl.java,v 1.54 2003/10/07 19:53:13 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
 import javax.faces.application.RepeaterMessage;
-import javax.faces.application.ViewHandler;
 import javax.faces.component.Repeater;
 import javax.faces.component.RepeaterSupport;
 import javax.faces.component.UIComponent;
@@ -79,8 +78,7 @@ public class FacesContextImpl extends FacesContext
 
     */
     private List globalMessages;
-    private Map componentMessageLists;   
-    private ViewHandler viewHandler = null;
+    private Map componentMessageLists;       
 
     
     
@@ -104,8 +102,7 @@ public class FacesContextImpl extends FacesContext
 	}
         this.externalContext = ec;
         this.locale = externalContext.getRequestLocale();
-         
-        this.viewHandler = this.getApplication().getViewHandler();
+                 
         setCurrentInstance(this);
     }
 
@@ -404,8 +401,7 @@ public class FacesContextImpl extends FacesContext
         responseWriter = null;
         facesEvents = null;
         componentMessageLists = null;
-        globalMessages = null;
-        viewHandler = null;
+        globalMessages = null;        
         renderResponse = false;
         responseComplete = false;
 	    viewRoot = null;
@@ -436,12 +432,7 @@ public class FacesContextImpl extends FacesContext
     public boolean getResponseComplete() {
         assertNotReleased();
         return responseComplete;
-    }
-
-    public ViewHandler getViewHandler() {
-        assertNotReleased();
-        return this.viewHandler;
-    }
+    }  
     
     //
     // Private methods

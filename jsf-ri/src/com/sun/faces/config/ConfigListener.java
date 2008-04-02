@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.20 2003/09/29 19:27:13 eburns Exp $
+ * $Id: ConfigListener.java,v 1.21 2003/10/07 19:53:09 rlubke Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -52,6 +52,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.List;
 
 import javax.faces.FacesException;
 
@@ -121,13 +122,21 @@ public class ConfigListener implements ServletContextListener
 	    return;
 	}
 
-	ServletContext servletContext = e.getServletContext();
-        configParser = new ConfigParser(servletContext);
+	ServletContext servletContext = e.getServletContext();        
 	String initParamFileList = null;
 	InputStream jarInputStream = null;
         InputSource source = null;
+        
+        // Step 0, parse obtain the url-pattern information
+        // for the FacesServlet.  This information is passed
+        // onto the ConfigParser for later use.
+        WebXmlParser webXmlParser = new WebXmlParser(servletContext);
+        List mappings = webXmlParser.getFacesServletMappings();
+        
+        // construct a new ConfigParser instance passing the url pattern
+        configParser = new ConfigParser(servletContext, mappings);
 	
-	// Step 0, load our own JSF_RI_CONFIG
+	// Step 1, load our own JSF_RI_CONFIG
 	URL configURL = 
 	    Util.getCurrentLoader(this).getResource(RIConstants.JSF_RI_CONFIG);
 	Assert.assert_it(null != configURL);
@@ -166,11 +175,11 @@ public class ConfigListener implements ServletContextListener
             log.debug("Loading JSF_RI_CONFIG completed");
         }
 
-	// Step 1: scan the META-INF directory of all jar files in
+	// Step 2: scan the META-INF directory of all jar files in
 	// "/WEB-INF/lib" for "faces-config.xml" files.
 	scanJarsForConfigFile(servletContext, configParser);
 
-	// Step 2. If the init parameter exists, load the config from
+	// Step 3. If the init parameter exists, load the config from
 	// there
 	if (null != (initParamFileList = 
 		     servletContext.getInitParameter(RIConstants.CONFIG_FILES_INITPARAM))) {
@@ -204,7 +213,7 @@ public class ConfigListener implements ServletContextListener
 	    }
 	}
 	else {
-	    // Step 3, load the app's "/WEB-INF/faces-config.xml"
+	    // Step 4, load the app's "/WEB-INF/faces-config.xml"
 	    try {
                 if (log.isDebugEnabled()) {
                     log.debug("Trying to default configuration file");

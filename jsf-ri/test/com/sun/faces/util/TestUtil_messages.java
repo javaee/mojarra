@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.21 2003/10/03 17:43:43 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.22 2003/10/07 19:53:22 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.21 2003/10/03 17:43:43 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.22 2003/10/07 19:53:22 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -103,7 +103,9 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID, "0"},
         {Util.INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID, "1"},
         {Util.CANT_CLOSE_INPUT_STREAM_ID, "0"},
-        {Util.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"}
+        {Util.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"},        
+        {Util.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID, "1"},
+        {Util.ILLEGAL_VIEW_ID_ID, "1"}
         
     };
 
@@ -169,7 +171,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
                 assertTrue(message != null);
             } else if (numParams > 0) {
                 Object[] params = generateParams(numParams);
-                String message = Util.getExceptionMessage(messageInfo[i][0], params);
+                String message = Util.getExceptionMessage(messageInfo[i][0], params);                
                 assertTrue(message != null);
                 for (int j=0; j<params.length; j++) {
                     assertTrue(message.indexOf((String)params[j])!=-1);

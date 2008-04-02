@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.36 2003/10/02 06:50:11 jvisvanathan Exp $
+ * $Id: TestFacesContextImpl.java,v 1.37 2003/10/07 19:53:17 rlubke Exp $
  */
 
 /*
@@ -11,47 +11,25 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.lifecycle.LifecycleImpl;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
-
-import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 import javax.faces.application.MessageImpl;
-import javax.servlet.http.HttpSession;
-import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletContext;
-import com.sun.faces.context.FacesContextImpl;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Iterator;
-
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
-import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.context.ResponseWriter;
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
-import javax.faces.event.FacesEvent;
-import javax.faces.event.FacesListener;
-import javax.faces.FacesException;
-import javax.faces.render.RenderKit;
+import javax.faces.context.ResponseWriter;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.ParameterCheck;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Iterator;
+import java.util.Locale;
 
 /**
  *
@@ -59,11 +37,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.36 2003/10/02 06:50:11 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: TestFacesContextImpl.java,v 1.37 2003/10/07 19:53:17 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase
@@ -140,8 +114,7 @@ public void testAccessors()
     ServletRequest req = null;
     ServletResponse resp = null;
     ServletContext sc = null;
-    
-    assertTrue(((FacesContextImpl)getFacesContext()).getViewHandler() != null );
+        
     
     Locale locale = getFacesContext().getLocale();
     result = null != locale;
@@ -210,12 +183,6 @@ public void testAccessors()
     }
 }
 
-public void testFacesEventsNull()
-{
-    boolean exceptionThrown = false;
-    int count = 0;
-    Iterator iter = null;
-}
 
 public void testRenderingControls() {
     System.out.println("Testing renderResponse()");
@@ -229,7 +196,7 @@ public void testRenderingControls() {
 public void testCurrentInstance() {
     System.out.println("Testing getCurrentInstance()");
     FacesContext context = getFacesContext();
-    assertTrue(context == context.getCurrentInstance());
+    assertTrue(context == FacesContext.getCurrentInstance());
 }
 
 
@@ -341,15 +308,7 @@ public void testRelease() {
     } catch (IllegalStateException ise) {
         exceptionThrown = true;
     }
-    assertTrue(exceptionThrown);
-    
-    exceptionThrown = false;
-    try {
-        ((FacesContextImpl) context).getViewHandler();
-    } catch (IllegalStateException ise) {
-        exceptionThrown = true;
-    }
-    assertTrue(exceptionThrown);
+    assertTrue(exceptionThrown);        
     
     // remainder of FacesContext methods are tested in TCK       
 }

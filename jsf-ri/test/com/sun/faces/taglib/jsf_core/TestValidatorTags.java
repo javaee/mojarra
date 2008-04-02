@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidatorTags.java,v 1.19 2003/10/02 06:50:24 jvisvanathan Exp $
+ * $Id: TestValidatorTags.java,v 1.20 2003/10/07 19:53:21 rlubke Exp $
  */
 
 /*
@@ -11,26 +11,18 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import org.apache.cactus.WebRequest;
-
-import org.mozilla.util.Assert;
-
-import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.context.FacesContext;
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.UIComponent;
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UIViewRoot;
-
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
-import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.ProcessValidationsPhase;
 import com.sun.faces.lifecycle.RenderResponsePhase;
+import org.apache.cactus.WebRequest;
 
+import javax.faces.application.Application;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 
 import java.util.Iterator;
 
@@ -40,11 +32,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValidatorTags.java,v 1.19 2003/10/02 06:50:24 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: TestValidatorTags.java,v 1.20 2003/10/07 19:53:21 rlubke Exp $ 
  */
 
 public class TestValidatorTags extends JspFacesTestCase
@@ -115,7 +103,7 @@ public boolean sendResponseToFile()
 
 public void beginValidators(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
     theRequest.addParameter(OUTOFBOUNDS1_ID, OUTOFBOUNDS1_VALUE);
     theRequest.addParameter(INBOUNDS1_ID, INBOUNDS1_VALUE);
     theRequest.addParameter(OUTOFBOUNDS2_ID, OUTOFBOUNDS2_VALUE);

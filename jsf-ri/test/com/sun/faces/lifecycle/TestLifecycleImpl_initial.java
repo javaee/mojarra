@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.18 2003/10/06 22:48:09 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.19 2003/10/07 19:53:19 rlubke Exp $
  */
 
 /*
@@ -11,16 +11,10 @@
 
 package com.sun.faces.lifecycle;
 
+import com.sun.faces.JspFacesTestCase;
 import org.apache.cactus.WebRequest;
 
-
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
-
-import com.sun.faces.RIConstants;
-
-import com.sun.faces.JspFacesTestCase;
 
 /**
  *
@@ -28,11 +22,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.18 2003/10/06 22:48:09 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.19 2003/10/07 19:53:19 rlubke Exp $ 
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase
@@ -90,7 +80,7 @@ public boolean sendResponseToFile()
 
 protected void initWebRequest(WebRequest theRequest)
 {
-    theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+    theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
 }
 
 public void beginExecuteInitial(WebRequest theRequest)
