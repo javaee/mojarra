@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-
+import javax.el.ELException;                                                                                                  
 public class TestBean extends Object {
 
     public static final String PROP = "oneSet";
@@ -49,6 +49,15 @@ public class TestBean extends Object {
 
     public String getOne() {
         return one;
+    }
+
+    // test ELException with no message...
+    protected String four = null;
+    public void setFour(String four) throws ELException {
+        throw new ELException();
+    } 
+    public String getFour() {
+        return this.four;
     }
 
 

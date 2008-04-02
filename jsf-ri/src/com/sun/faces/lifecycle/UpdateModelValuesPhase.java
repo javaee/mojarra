@@ -1,5 +1,5 @@
 /*
- * $Id: UpdateModelValuesPhase.java,v 1.39 2005/06/23 20:29:34 jayashri Exp $
+ * $Id: UpdateModelValuesPhase.java,v 1.40 2005/07/22 19:41:44 rogerk Exp $
  */
 
 /*
@@ -86,12 +86,10 @@ public class UpdateModelValuesPhase extends Phase {
             exceptionMessage = fe.getMessage();
         }
 
-        if (null != exceptionMessage) {
-            Object[] params = new Object[3];
-            params[2] = exceptionMessage;
-            facesContext.addMessage(component.getClientId(facesContext),
-                    MessageFactory.getMessage(facesContext,
-                    Util.MODEL_UPDATE_ERROR_MESSAGE_ID, params));
+        // Just log the exception.  Any exception occurring from 
+        // processUpdates should have been stored as a message
+        // on FacesContext.
+        if (exceptionMessage != null) {
             if (logger.isLoggable(Level.WARNING)) {
                 logger.warning(exceptionMessage);
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.37 2005/05/06 22:02:10 edburns Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.38 2005/07/22 19:41:46 rogerk Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.37 2005/05/06 22:02:10 edburns Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.38 2005/07/22 19:41:46 rogerk Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -128,6 +128,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         TestUIInput userName = null;
         TestUIInput userName1 = null;
         TestUIInput userName2 = null;
+        TestUIInput userName3 = null;
         String value = null;
         Phase
             updateModelValues = new UpdateModelValuesPhase();
@@ -155,6 +156,13 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
                                   Util.getValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
+        userName3 = new TestUIInput();
+        userName3.setId("userName3");
+        userName3.setValue("four");
+        userName3.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.four}"));
+        userName3.testSetValid(true);
+        form.getChildren().add(userName3);
 
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.getChildren().add(form);
@@ -174,6 +182,17 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
 
         assertTrue(true == (getFacesContext().getMessages().hasNext()));
 
+        //assertions for our default update failed message
+        assertTrue(true == (getFacesContext().getMessages("form:userName3").hasNext()));
+        java.util.Iterator iter = getFacesContext().getMessages("form:userName3");
+        javax.faces.application.FacesMessage msg = null;
+        javax.faces.application.FacesMessage expectedMsg = 
+            com.sun.faces.util.MessageFactory.getMessage(getFacesContext(), "javax.faces.component.UIInput.UPDATE",
+            new Object[] {com.sun.faces.util.MessageFactory.getLabel(getFacesContext(), userName3)}); 
+        while (iter.hasNext()) {
+            msg = (javax.faces.application.FacesMessage)iter.next();
+        }    
+        assertTrue(msg.getSummary().equals(expectedMsg.getSummary()));
     }
 
 
