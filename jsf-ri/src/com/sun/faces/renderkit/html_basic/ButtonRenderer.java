@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.57 2003/08/25 22:36:14 eburns Exp $
+ * $Id: ButtonRenderer.java,v 1.58 2003/08/28 08:25:54 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.57 2003/08/25 22:36:14 eburns Exp $
+ * @version $Id: ButtonRenderer.java,v 1.58 2003/08/28 08:25:54 rkitain Exp $
  *
  */
 
@@ -70,9 +70,9 @@ public class ButtonRenderer extends BaseCommandRenderer {
      */
     protected String padLabel(String label) {
 	if (label.length() == 3) {
-	    label = "&nbsp;&nbsp;" + label + "&nbsp;&nbsp;";
+            label = "\u00a0\u00a0" + label + "\u00a0\u00a0";
 	} else if (label.length() == 2) {
-	    label = "&nbsp;&nbsp;&nbsp;" + label + "&nbsp;&nbsp;&nbsp;";
+	    label = "\u00a0\u00a0\u00a0" + label + "\u00a0\u00a0\u00a0";
 	}
 	return label;
     }
