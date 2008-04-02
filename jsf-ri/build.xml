@@ -50,9 +50,6 @@
   <!-- The home directory for Ant -->
   <property name="ant.home" value="${basedir}/lib"/>
 
-  <!-- Name of ultra-simple web-app -->
-  <property name="basic.name"  value="basic"/>
-
 
   <!-- ************ Dependencies **** *************************************** -->
 
@@ -107,27 +104,11 @@
   </path>
 
   <!-- Custom Tomcat Integration -->
-  <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
-        <classpath>
-          <pathelement location="${catalina-ant.jar}" />
-        </classpath>
-  </taskdef>
   <taskdef  name="list"     classname="org.apache.catalina.ant.ListTask">
         <classpath>
           <pathelement location="${catalina-ant.jar}" />
         </classpath>
   </taskdef>    
-  <taskdef  name="reload"   classname="org.apache.catalina.ant.ReloadTask">
-        <classpath>
-          <pathelement location="${catalina-ant.jar}" />
-        </classpath>
-  </taskdef>
-  <taskdef  name="remove"   classname="org.apache.catalina.ant.RemoveTask">
-        <classpath>
-          <pathelement location="${catalina-ant.jar}" />
-        </classpath>
-  </taskdef>
-  <property name="context.path" value="/basic"/>
   <property name="url"      value="http://localhost:8080/manager"/>
 
 
@@ -213,7 +194,7 @@
     <ant dir="${basedir}/systest" inheritall="false" target="clean"/>  
   </target>
 
-  <target name="all" depends="clean,prepare,compile,build.basic.war"
+  <target name="all" depends="clean,prepare,compile"
    description="Clean and compile all components"/>
 
   <!-- Create the source distribution -->
@@ -281,62 +262,6 @@
         <ant antfile="build-tests.xml" target="safe.remove"/>
     </target>
 
-
-    <!-- builds"basic" sample app -->
-    <target name="build.basic.war" depends="prepare,compile,jars,compile.basic.sample" >
-     <!-- name of the war file -->
-     <property name="dist.war"  value="${basic.name}.war"/>
-
-     <mkdir  dir="${dist.home}/${basic.name}"/>
-
-     <!-- copy basic directory under dist.home -->
-    <copy todir="${dist.home}/${basic.name}">
-      <fileset dir="${basedir}/web/${basic.name}" />
-    </copy>
-
-    <!-- copy all the classes under basic package -->
-    <copy todir="${dist.home}/${basic.name}">
-      <fileset dir="${build.home}/${basic.name}"/>
-    </copy>
-
-    <!-- copy dependent libs -->
-    <copy  file="${commons-beanutils.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${commons-collections.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${commons-digester.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${commons-logging.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${standard.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy  file="${jstl.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-
-    <copy file="${jsf-api.jar}" todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-    <copy file="${build.home}/lib/${name}.jar"  todir="${dist.home}/${basic.name}/WEB-INF/lib"/>
-
-    <!-- create dummy JAR containing only a configuration resource -->
-    <jar jarfile="${dist.home}/${basic.name}/WEB-INF/lib/basic-dummy.jar"
-         basedir="conf/basic"/>
-
-    <!-- create a war file for distribution -->
-    <jar jarfile="${dist.home}/${dist.war}"
-         basedir="${dist.home}/${basic.name}"/> 
-
-  </target>
-
-  <target name="compile.basic.sample"
-          description="Compile java files in the sample app named basic.name">
-    <property name="basic.name"  value="basic"/>
-    <mkdir dir="${build.home}/${basic.name}/WEB-INF/classes"/>
-    <javac  srcdir="${basedir}/web/${basic.name}/WEB-INF/src"
-           destdir="${build.home}/${basic.name}/WEB-INF/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <copy todir="${build.home}/${basic.name}/WEB-INF/classes">
-        <fileset dir="${basedir}/web/${basic.name}/WEB-INF/src"
-                 includes="**/*.properties"/>
-    </copy>
-  </target>
-
   <!-- 
        =================================================================== 
          Create the jars
@@ -364,37 +289,9 @@
        ===================================================================
   -->
 
-  <target name="install" depends="build.basic.war"
-   description="Install webapp on Tomcat">
-    <echo message="${dist.home}"/>
-    <echo message="${basic.name}"/>
-    <install url="${url}" username="${username}" password="${password}"
-            path="${context.path}"
-             war="file://${dist.home}/basic.war"/>
-  </target>
-
   <target name="list"
    description="List installed webapps on Tomcat">
     <list url="${url}" username="${username}" password="${password}"/>
-  </target>
-
-  <target name="reload" depends="build.basic.war"
-   description="Reload this webapp on Tomcat">
-    <reload url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-  </target>
-
-  <target name="remove"
-   description="Remove this webapp from Tomcat">
-    <remove url="${url}" username="${username}" password="${password}"
-            path="${context.path}"/>
-  </target>
-
-  <target name="deploy.tomcat" depends="build.basic.war"
-   description="Deploy the basic.war to tomcat">
-     <copy file="${dist.home}/${dist.war}"
-       toDir="${tomcat.home}/webapps"/>
-
   </target>
 
   <target name="main" depends="prepare,compile,jars"/>
