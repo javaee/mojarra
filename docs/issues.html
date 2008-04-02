@@ -1,0 +1,35 @@
+<html>
+<head caption="Known Issues">
+    <link rel="stylesheet" type="text/css" href="style/sun.css"/>
+</head>
+<body>
+
+<p>
+    Known issues with the 1.2_01 release.
+</p>
+<ul>
+    <li>
+    <p>
+        There is an inconsistency in the javadocs for <code>javax.faces.model.SelectItem</code>
+        where null values should be allowed, but the docs still state
+        NullPointerExceptions
+        should be thrown in this case. This issue will be addressed in the
+        upcoming
+        maintenance release (see issue <a
+          href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=345">345</a>).
+    </p>
+</li>
+<li>
+    <p>
+        The default renderer for <code>h:dataTable</code> doesn't produce
+        accessible
+        markup - specifically no <code>scope</code> attribute is rendered on
+        table
+        rows (see issue <a
+          href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=341">341</a>).
+    </p>
+</li>
+</ul>
+
+</body>
+</html>
