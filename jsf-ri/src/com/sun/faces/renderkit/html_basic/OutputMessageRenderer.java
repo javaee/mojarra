@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.29 2006/10/31 19:21:40 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.30 2006/11/16 23:18:19 rlubke Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
                 writer.writeAttribute("dir", dir, "dir");
             }
             if (lang != null) {
-                writer.writeAttribute(RenderKitUtils.prefixAttribute(lang, writer),
+                writer.writeAttribute(RenderKitUtils.prefixAttribute("lang", writer),
                                       lang,
                                       "lang");
             }
