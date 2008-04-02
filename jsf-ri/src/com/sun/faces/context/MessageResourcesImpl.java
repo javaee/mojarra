@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.11 2003/05/01 19:47:46 eburns Exp $
+ * $Id: MessageResourcesImpl.java,v 1.12 2003/05/03 06:55:42 rkitain Exp $
  */
 
 /*
@@ -209,8 +209,13 @@ public class MessageResourcesImpl extends MessageResources
 
     public Message getMessage(String messageId, Object params[]) {
         Locale locale = null;
-        locale = FacesContext.getCurrentInstance().getLocale();
-        if (locale == null) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null) {
+            locale = FacesContext.getCurrentInstance().getLocale();
+            if (locale == null) {
+                locale = Locale.getDefault();
+            }
+        } else {
             locale = Locale.getDefault();
         }
         
