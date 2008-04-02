@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.48 2003/08/19 15:19:27 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.49 2003/08/22 21:03:02 rkitain Exp $
  */
 
 /*
@@ -88,21 +88,21 @@ public class TextRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(writer != null );
 
 	String styleClass = null;
-        if ((null != (styleClass = (String) 
-		      component.getAttribute("inputClass"))) || 
-	    (null != (styleClass = (String) 
-		      component.getAttribute("outputClass")))) {
-	    writer.startElement("span", null);
-	    writer.writeAttribute("class", styleClass, null);
+        if (null != (styleClass = (String)component.getAttribute("inputClass"))) { 
+	    writer.writeAttribute("class", styleClass, "inputClass");
+	    writer.startElement("span", component);
+	} else if (null != (styleClass = (String)component.getAttribute("outputClass"))) {
+	    writer.writeAttribute("class", styleClass, "outputClass");
+	    writer.startElement("span", component);
 	}
         if (component instanceof UIInput) {
-	    writer.startElement("input", null);
-	    writer.writeAttribute("type", "text", null);
-	    writer.writeAttribute("name", (component.getClientId(context)), null);
+	    writer.startElement("input", component);
+	    writer.writeAttribute("type", "text", "type");
+	    writer.writeAttribute("name", (component.getClientId(context)), "clientId");
 
             // render default text specified
             if (currentValue != null) {
-	        writer.writeAttribute("value", currentValue, null);
+	        writer.writeAttribute("value", currentValue, "value");
             }
 
             Util.renderPassThruAttributes(writer, component);
@@ -122,7 +122,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                 }
             }
             if (currentValue != null) {
-		writer.writeText(currentValue, null);
+		writer.writeText(currentValue, "value");
             }
         }
 	if (null != styleClass) {

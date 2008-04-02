@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.52 2003/08/19 15:19:16 rkitain Exp $
+ * $Id: CheckboxRenderer.java,v 1.53 2003/08/22 21:02:57 rkitain Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.52 2003/08/19 15:19:16 rkitain Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.53 2003/08/22 21:02:57 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -183,16 +183,16 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(writer != null );
 	String selectbooleanClass = null;
 
-	writer.startElement("input", null);
-	writer.writeAttribute("type", "checkbox", null);
-	writer.writeAttribute("name", component.getClientId(context), null); 
+	writer.startElement("input", component);
+	writer.writeAttribute("type", "checkbox", "type");
+	writer.writeAttribute("name", component.getClientId(context), "clientId"); 
 
         if (currentValue != null && currentValue.equals("true")) {
-	    writer.writeAttribute("checked", new Boolean("true"), null);
+	    writer.writeAttribute("checked", new Boolean("true"), "value");
         }
         if (null != (selectbooleanClass = (String) 
 		     component.getAttribute("selectbooleanClass"))) {
-	    writer.writeAttribute("class", selectbooleanClass, null);
+	    writer.writeAttribute("class", selectbooleanClass, "selectbooleanClass");
 	}
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);

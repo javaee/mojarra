@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.11 2003/08/19 19:31:19 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.12 2003/08/22 21:03:02 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -104,25 +104,28 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
 
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
-	    writer.startElement("label", null);
-	    writer.writeAttribute("for", curComponent.getClientId(context), null);
-	    writer.writeText(curItem.getLabel(), null);
-	    writer.startElement("input", null);
-	    writer.writeAttribute("name", component.getClientId(context), null);
-	    writer.writeAttribute("id", curComponent.getClientId(context), null);
+	    writer.startElement("label", curComponent);
+	    writer.writeAttribute("for", curComponent.getClientId(context), "clientId");
+	    writer.writeText(curItem.getLabel(), "label");
+	    writer.startElement("input", component);
+	    writer.writeAttribute("name", component.getClientId(context), "clientId");
+	    //PENDING(rogerk)clientId 3rd arg?
+	    writer.writeAttribute("id", curComponent.getClientId(context), "clientId");
 	    writer.writeAttribute("value",
-	        getFormattedValue(context, component, curItem.getValue()), null);
-	    writer.writeAttribute("type", "checkbox", null);
+	        getFormattedValue(context, component, curItem.getValue()), "value");
+	    writer.writeAttribute("type", "checkbox", "type");
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {
+		//PENDING(rogerk)null 3rd arg?
 	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
             Util.renderPassThruAttributes(writer, curComponent);
             Util.renderBooleanPassThruAttributes(writer, curComponent);
 	    writer.endElement("label");
             if (layoutVertical) {
-                writer.startElement("br", null);
+                writer.startElement("br", curComponent);
                 writer.endElement("br");
 	    }
         }

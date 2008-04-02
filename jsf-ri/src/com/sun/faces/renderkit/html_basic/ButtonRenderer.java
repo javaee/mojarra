@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.55 2003/08/19 19:31:15 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.56 2003/08/22 21:02:57 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.55 2003/08/19 19:31:15 rlubke Exp $
+ * @version $Id: ButtonRenderer.java,v 1.56 2003/08/22 21:02:57 rkitain Exp $
  *
  */
 
@@ -139,15 +139,15 @@ public class ButtonRenderer extends BaseCommandRenderer {
         String imageSrc = getImageSrc(context, component);
         String label = getLabel(context, component);            
 
-        writer.startElement("input", null);
+        writer.startElement("input", component);
         if (imageSrc != null) {
-            writer.writeAttribute("type", "image", null);
-            writer.writeURIAttribute("src", imageSrc, null);
-            writer.writeAttribute("name", component.getClientId(context), null);
+            writer.writeAttribute("type", "image", "type");
+            writer.writeURIAttribute("src", imageSrc, "image");
+            writer.writeAttribute("name", component.getClientId(context), "clientId");
          } else {
-            writer.writeAttribute("type", type.toLowerCase(), null);
-            writer.writeAttribute("name", component.getClientId(context), null);
-            writer.writeAttribute("value", padLabel(label), null);
+            writer.writeAttribute("type", type.toLowerCase(), "type");
+            writer.writeAttribute("name", component.getClientId(context), "clientId");
+            writer.writeAttribute("value", padLabel(label), "value");
          }
 
         Util.renderPassThruAttributes(writer, component);
@@ -155,7 +155,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
 
         if (null != (commandClass = (String) 
             component.getAttribute("commandClass"))) {
-            writer.writeAttribute("class", commandClass, null);
+            writer.writeAttribute("class", commandClass, "commandClass");
 	}
         writer.endElement("input");
     }

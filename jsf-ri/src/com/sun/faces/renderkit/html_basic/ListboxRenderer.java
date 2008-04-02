@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.10 2003/08/19 19:31:18 rlubke Exp $
+ * $Id: ListboxRenderer.java,v 1.11 2003/08/22 21:03:00 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -88,20 +88,24 @@ public class ListboxRenderer extends MenuRenderer {
             curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\t", null);
-	    writer.startElement("option", null);
+	    writer.startElement("option", curComponent);
+	    //PENDING(rogerk)value 3rd arg?
 	    writer.writeAttribute("value", 
-	        getFormattedValue(context, component, curItem.getValue()), null);
+	        getFormattedValue(context, component, curItem.getValue()), "value");
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {
+		//PENDING(rogerk)null 3rd arg?
 	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
 
             Util.renderPassThruAttributes(writer, curComponent);
             Util.renderBooleanPassThruAttributes(writer, curComponent);
 
-	    writer.writeText(curItem.getLabel(), null);
+	    writer.writeText(curItem.getLabel(), "label");
 	    writer.endElement("option");
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
     }

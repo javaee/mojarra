@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.53 2003/08/22 16:50:23 eburns Exp $
+ * $Id: FormRenderer.java,v 1.54 2003/08/22 21:02:58 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.53 2003/08/22 16:50:23 eburns Exp $
+ * @version $Id: FormRenderer.java,v 1.54 2003/08/22 21:02:58 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -91,17 +91,19 @@ public class FormRenderer extends HtmlBasicRenderer {
         Assert.assert_it( writer != null );
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
-	writer.startElement("form", null);
-	writer.writeAttribute("id", component.getClientId(context), null);
+	writer.startElement("form", component);
+	writer.writeAttribute("id", component.getClientId(context), "clientId");
+	//PENDING(rogerk)null 3rd arg?
 	writer.writeAttribute("method", "post", null);
-	writer.writeAttribute("action", getActionStr(context, component), null);
+	writer.writeAttribute("action", getActionStr(context), null);
         if (null != (formClass = (String) 
 		     component.getAttribute("formClass"))) {
-            writer.writeAttribute("class", formClass, null);
+            writer.writeAttribute("class", formClass, "formClass");
 	}
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
+	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
 	updateFormNumber(context, component);
     }
@@ -136,9 +138,8 @@ public class FormRenderer extends HtmlBasicRenderer {
      * of the form generated for this component.</p>
      *
      * @param context FacesContext for the response we are creating
-     * @param form UIComponent representing form that's being processed.
      */
-    private String getActionStr(FacesContext context, UIComponent form) {
+    private String getActionStr(FacesContext context) {
         String contextPath = context.getExternalContext().getRequestContextPath();
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
@@ -172,6 +173,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         String saveStateParam = context.getExternalContext().
             getInitParameter(RIConstants.SAVESTATE_INITPARAM);
         if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText(RIConstants.SAVESTATE_MARKER, null);
         }    
 	writer.endElement("form");

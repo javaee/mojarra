@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.52 2003/08/19 19:31:18 rlubke Exp $
+ * $Id: HyperlinkRenderer.java,v 1.53 2003/08/22 21:02:59 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.52 2003/08/19 19:31:18 rlubke Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.53 2003/08/22 21:02:59 rkitain Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -162,8 +162,9 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 
         //make link act as if it's a button using javascript
 	StringBuffer sb = new StringBuffer();
-	writer.startElement("a", null);
-	writer.writeAttribute("href", "#", null);
+	writer.startElement("a", component);
+	//PENDING(rogerk)href 3rd arg?
+	writer.writeAttribute("href", "#", "href");
 	sb = new StringBuffer();
 	sb.append("document.forms[");
 	sb.append("");
@@ -179,13 +180,14 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	sb.append("");
 	sb.append("].submit()");
 
+	//PENDING(rogerk)null 3rd arg?
 	writer.writeAttribute("onmousedown", sb.toString(), null); 
 
         //handle css style class
 	String commandClass = (String)
             command.getAttribute("commandClass");
 	if (commandClass != null) {
-            writer.writeAttribute("class", commandClass, null);
+            writer.writeAttribute("class", commandClass, "commandClass");
         }
 
 	//Write Anchor inline elements
@@ -194,9 +196,10 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         String imageSrc = getImageSrc(context, command);
         if (imageSrc != null) {
 	    writer.startElement("img", null);
-	    writer.writeAttribute("src", getImageText(imageSrc), null);
+	    writer.writeAttribute("src", getImageText(imageSrc), "image");
         } else {
-            writer.writeText(getLabel(context, command), null);
+	    //PENDING(rogerk)value 2nd arg?
+            writer.writeText(getLabel(context, command), "value");
         }
 
         //Done writing Anchor element
@@ -205,16 +208,17 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         //Handle hidden fields
 
         //hidden clientId field
-	writer.startElement("input", null);
-	writer.writeAttribute("type", "hidden", null);
-	writer.writeAttribute("name", clientId, null);
+	writer.startElement("input", component);
+	writer.writeAttribute("type", "hidden", "type");
+	writer.writeAttribute("name", clientId, "clientId");
 	writer.endElement("input");
 
 	// get UIParameter children...
         Param paramList[] = getParamList(context, command);
         for (int i = 0; i < paramList.length; i++) {
-            writer.startElement("input", null);
-	    writer.writeAttribute("type", "hidden", null);
+            writer.startElement("input", component);
+	    writer.writeAttribute("type", "hidden", "type");
+	    //PENDING(rogerk)3rd args?
 	    writer.writeAttribute("name", (paramList[i]).getName(), null);
 	    writer.writeAttribute("value", (paramList[i]).getValue(), null);
 	    writer.endElement("input");

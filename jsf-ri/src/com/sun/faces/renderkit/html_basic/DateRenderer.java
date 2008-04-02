@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.26 2003/08/19 15:19:17 rkitain Exp $
+ * $Id: DateRenderer.java,v 1.27 2003/08/22 21:02:58 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.26 2003/08/19 15:19:17 rkitain Exp $
+ * @version $Id: DateRenderer.java,v 1.27 2003/08/22 21:02:58 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -186,30 +186,30 @@ public class DateRenderer extends HtmlBasicInputRenderer {
         }
         String styleClass = null;
  
-	if ((null != (styleClass = (String) 
-		      component.getAttribute("inputClass"))) || 
-	    (null != (styleClass = (String) 
-		      component.getAttribute("outputClass")))) {
-	    writer.startElement("span", null);
-	    writer.writeAttribute("class", styleClass, null);
+	if (null != (styleClass = (String)component.getAttribute("inputClass"))) {
+	    writer.writeAttribute("class", styleClass, "inputClass");
+	    writer.startElement("span", component);
+	} else if (null != (styleClass = (String)component.getAttribute("outputClass"))) {
+	    writer.writeAttribute("class", styleClass, "outputClass");
+	    writer.startElement("span", component);
 	}
-        
+
 	if (isInput) {
-	    writer.startElement("input", null);
-	    writer.writeAttribute("type", "text", null); 
-	    writer.writeAttribute("name", component.getClientId(context), null); 
+	    writer.startElement("input", component);
+	    writer.writeAttribute("type", "text", "type"); 
+	    writer.writeAttribute("name", component.getClientId(context), "clientId"); 
 	    // deal with HTML 4.0 LABEL element
-	    writer.writeAttribute("id", component.getClientId(context), null);
+	    writer.writeAttribute("id", component.getClientId(context), "clientId");
 	    // render default text specified
 	    if ( currentValue != null ) {
-	        writer.writeAttribute("value", currentValue, null);
+	        writer.writeAttribute("value", currentValue, "value");
             }    
 
             Util.renderPassThruAttributes(writer, component);
             Util.renderBooleanPassThruAttributes(writer, component);
 	    writer.endElement("input");
 	} else {
-	    writer.writeText(currentValue, null);
+	    writer.writeText(currentValue, "value");
         }  
         if (null != styleClass) {
 	    writer.endElement("span");

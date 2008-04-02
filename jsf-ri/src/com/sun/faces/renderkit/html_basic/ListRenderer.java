@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.14 2003/08/19 19:31:18 rlubke Exp $
+ * $Id: ListRenderer.java,v 1.15 2003/08/22 21:03:00 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.14 2003/08/19 19:31:18 rlubke Exp $
+ * @version $Id: ListRenderer.java,v 1.15 2003/08/22 21:03:00 rkitain Exp $
  *  
  */
 
@@ -96,11 +96,12 @@ public class ListRenderer extends HtmlBasicRenderer {
         String panelClass = (String) component.getAttribute("panelClass");
         
         // Render the beginning of this panel
-	writer.startElement("table", null);
+	writer.startElement("table", component);
         if (panelClass != null) {
-	    writer.writeAttribute("class", panelClass, null);
+	    writer.writeAttribute("class", panelClass, "panelClass");
         }
 	Util.renderPassThruAttributes(writer, component);
+	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
     }
 
@@ -136,8 +137,9 @@ public class ListRenderer extends HtmlBasicRenderer {
 
         // Process the table header (if any)
         if (null != (facet = (UIComponent) component.getFacets().get("header"))) {
-	    writer.startElement("tr", null);
-	    writer.startElement("thead", null);
+	    writer.startElement("tr", facet);
+	    writer.startElement("thead", facet);
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
 	    // If the header has kids, render them recursively
 	    if (null != (kids = facet.getChildren().iterator())) {
@@ -145,17 +147,19 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table header
 		    if (null != headerClass) {
-			writer.startElement("th", null);
-			writer.writeAttribute("class", headerClass, null);
+			writer.startElement("th", kid);
+			writer.writeAttribute("class", headerClass, "headerClass");
 		    }
 		    else {
-			writer.startElement("th", null);
+			writer.startElement("th", kid);
+	                //PENDING(rogerk)null 2nd arg?
 			writer.writeText("\n", null);
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
 		    writer.endElement("th");
+	            //PENDING(rogerk)null 2nd arg?
 		    writer.writeText("\n", null);
 		}
 	    }
@@ -169,10 +173,11 @@ public class ListRenderer extends HtmlBasicRenderer {
             }
 	    writer.endElement("thead");
 	    writer.endElement("tr");
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
 
-	writer.startElement("tbody", null);
+	writer.startElement("tbody", component);
 	if (null != (kids = component.getChildren().iterator())) {
 	    // Process each grouping of data items to be processed
             Map requestMap = context.getExternalContext().getRequestMap();
@@ -190,13 +195,14 @@ public class ListRenderer extends HtmlBasicRenderer {
 			// will use this to get their values.
 			requestMap.put(var, row);
 		    }
-		    writer.startElement("tr", null);
+		    writer.startElement("tr", group);
 		    if (rowStyles > 0) {
-			writer.writeAttribute("class", rowClasses, null);
+			writer.writeAttribute("class", rowClasses, "rowClasses");
 			if (rowStyle >= rowStyles) {
 			    rowStyle = 0;
 			}
 		    }
+		    //PENDING(rogerk)null 2nd arg?
 		    writer.writeText("\n", null);
 		    
 		    // Process each column to be rendered
@@ -207,21 +213,23 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    // rows in the list bean.
 		    while (columns.hasNext()) {
 			UIComponent column = (UIComponent) columns.next();
-			writer.startElement("td", null);
+			writer.startElement("td", column);
 			if (columnStyles > 0) {
 			    writer.writeAttribute("class", columnClasses[columnStyle++], 
-			        null);
+			        "columnClasses");
 			    if (columnStyle >= columnStyles) {
 				columnStyle = 0;
 			    }
 			}
 			encodeRecursive(context, column);
 			writer.endElement("td");
+			//PENDING(rogerk)null 2nd arg?
 			writer.writeText("\n", null);
 		    }
 		    
 		    // Finish the row that was just rendered
 		    writer.endElement("tr");
+		    //PENDING(rogerk)null 2nd arg?
 		    writer.writeText("\n", null);
 		    if (var != null) {
 			requestMap.remove(var);
@@ -233,8 +241,9 @@ public class ListRenderer extends HtmlBasicRenderer {
 
         // Process the table footer (if any)
         if (null != (facet = (UIComponent) component.getFacets().get("footer"))) {
-	    writer.startElement("tr", null);
-	    writer.startElement("tfoot", null);
+	    writer.startElement("tr", facet);
+	    writer.startElement("tfoot", facet);
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
 	    // If the footer has kids, render them recursively
 	    if (null != (kids = facet.getChildren().iterator())) {
@@ -242,17 +251,18 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table footer
 		    if (null != footerClass) {
-			writer.startElement("td", null);
-			writer.writeAttribute("class", footerClass, null);
+			writer.startElement("td", kid);
+			writer.writeAttribute("class", footerClass, "footerClass");
 		    }
 		    else {
-			writer.startElement("th", null);
+			writer.startElement("th", kid);
 	                writer.writeText("\n", null);
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
 		    writer.endElement("th");
+	            //PENDING(rogerk)null 2nd arg?
 	            writer.writeText("\n", null);
 		}
 	    }
@@ -266,6 +276,7 @@ public class ListRenderer extends HtmlBasicRenderer {
             }
 	    writer.endElement("tfoot");
 	    writer.endElement("tr");
+	    //PENDING(rogerk)null 2nd arg?
 	    writer.writeText("\n", null);
         }
     }
@@ -285,6 +296,7 @@ public class ListRenderer extends HtmlBasicRenderer {
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
 	writer.endElement("table");
+	//PENDING(rogerk)null 2nd arg?
 	writer.writeText("\n", null);
     }
 

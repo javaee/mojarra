@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.7 2003/08/19 19:31:14 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.8 2003/08/22 21:02:56 rkitain Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.7 2003/08/19 19:31:14 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.8 2003/08/22 21:02:56 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -68,7 +68,9 @@ public class RenderKitImpl extends RenderKit {
 //
 // Instance Variables
 //
-
+    // used for ResponseWriter creation;
+    private static String HTML_CONTENT_TYPE = "text/html"; 
+    private static String CHAR_ENCODING = "ISO-8859-1";
 //
 // Ivars used during actual client lifetime
 //
@@ -160,30 +162,52 @@ public class RenderKitImpl extends RenderKit {
         return null;  //To change body of implemented methods use Options | File Templates.
     }
 
-    // PENDING (rlubke) PROVIDE IMPLEMENTATION
-    public ResponseWriter createResponseWriter(Writer writer, String contentTypeList, String characterEncoding) {
-        return null;  //To change body of implemented methods use Options | File Templates.
+    /**
+     * Create a new {@link ResponseWriter} instance from the provided
+     * <code>Writer</code>, (optional) content type and character encoding.
+     *
+     * @param writer The contained <code>Writer</code>.
+     * @param contentTypeList an "Accept header style" list of content types
+     * for this response.  This argument may be null, in which case, the 
+     * <code>RenderKit</code> will choose the best fit.
+     * @param characterEncoding such as "ISO-8859-1" for this {@link ResponseWriter}.
+     * If this argument is null, then the character encoding "ISO-8859-1"
+     * will be used.
+     *
+     * @return a new {@link ResponseWriter}.
+     *
+     * @exception IllegalArgumentException if a recognizeable content type can not
+     * be found in the content type list.
+     */
+    public ResponseWriter createResponseWriter(Writer writer, String contentTypeList, 
+        String characterEncoding) {
+        if (writer == null) {
+	    return null;
+	}
+	// Set the default content type to html;  However, if a content type list
+	// argument was specified, make sure it contains an html content type;
+	// PENDING(rogerk) ideally, we want to analyze the content type string
+	// in more detail, to determine the preferred content type - as outlined in 
+	// http://www.ietf.org/rfc/rfc2616.txt?number=2616 - Section 14.1
+	// (since this is not an html renderkit);
+	//
+        String contentType = HTML_CONTENT_TYPE;
+	if (contentTypeList != null) {
+	    if (contentTypeList.indexOf(contentType) < 0) {
+	        throw new IllegalArgumentException(Util.getExceptionMessage(
+		    Util.CONTENT_TYPE_ERROR_MESSAGE_ID));
+	    }
+	}
+	if (characterEncoding == null) {
+	    characterEncoding = CHAR_ENCODING;
+	}
+		
+        return new HtmlResponseWriter(writer, contentType, characterEncoding);
     }
 
     // PENDING (rlubke) PROVIDE IMPLEMENTATION
     public ResponseStream getResponseStream(OutputStream out) {
         return null;  //To change body of implemented methods use Options | File Templates.
-    }
-
-    /**
-     * Create a new {@link ResponseWriter} instance from the provided
-     * <code>Writer</code> and character encoding.
-     *
-     * @param writer The contained <code>Writer</code>.
-     * @param characterEncoding such as "ISO-8859-1" for this {@link ResponseWriter}.
-     *
-     * @return a new {@link ResponseWriter}.
-     */
-    public ResponseWriter getResponseWriter(Writer writer, String characterEncoding) {
-	if (writer != null) {
-	    return new HtmlResponseWriter(writer, characterEncoding);
-	}
-        return null;
     }
 
     // The test for this class is in TestRenderKit.java

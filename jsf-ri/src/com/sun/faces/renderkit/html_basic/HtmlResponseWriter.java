@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.6 2003/08/19 15:19:20 rkitain Exp $
+ * $Id: HtmlResponseWriter.java,v 1.7 2003/08/22 21:02:59 rkitain Exp $
  */
 
 /*
@@ -61,13 +61,15 @@ public class HtmlResponseWriter extends ResponseWriter {
      * encoding.
      *
      * @param writer the <code>ResponseWriter</code>
+     * @param contentType the content type. 
      * @param encoding the character encoding.
      *
      * @exception if the encoding is not recognized.
      */
-    public HtmlResponseWriter(Writer writer, String encoding) 
+    public HtmlResponseWriter(Writer writer, String contentType, String encoding) 
         throws FacesException {
         this.writer = writer;
+	this.contentType = contentType;
 	this.encoding = encoding;
 
 	// Check the character encoding
@@ -80,7 +82,7 @@ public class HtmlResponseWriter extends ResponseWriter {
     }
 
     /**
-     * @return the content type such as "text/html" fr this ResponseWriter.
+     * @return the content type such as "text/html" for this ResponseWriter.
      */
     public String getContentType() {
         return contentType;
@@ -96,7 +98,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         return encoding;
     }
     /**
-     * <p>Write the text should begin a response.</p>
+     * <p>Write the text that should begin a response.</p>
      *
      * @exception IOException if an input/output error occurs
      */
@@ -447,7 +449,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      */
     public ResponseWriter cloneWithWriter(Writer writer) {
         try {
-            return new HtmlResponseWriter(writer, getCharacterEncoding());
+            return new HtmlResponseWriter(writer, getContentType(), getCharacterEncoding());
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();

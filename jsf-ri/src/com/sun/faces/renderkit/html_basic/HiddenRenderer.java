@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.11 2003/08/19 15:19:20 rkitain Exp $
+ * $Id: HiddenRenderer.java,v 1.12 2003/08/22 21:02:59 rkitain Exp $
  */
 
 /*
@@ -84,19 +84,19 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
 	ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-	writer.startElement("input", null);
-	writer.writeAttribute("type", "hidden", null);
-	writer.writeAttribute("name", component.getClientId(context), null);
+	writer.startElement("input", component);
+	writer.writeAttribute("type", "hidden", "type");
+	writer.writeAttribute("name", component.getClientId(context), "clientId");
 
         // render default text specified
         if (currentValue != null) {
-            writer.writeAttribute("value", currentValue, null);
+            writer.writeAttribute("value", currentValue, "value");
         }
         writer.endElement("input");
     }
     
     // The testcase for this class is TestRenderers_3.java 
 
-} // end of class TextRenderer
+} // end of class HiddenRenderer
 
 
