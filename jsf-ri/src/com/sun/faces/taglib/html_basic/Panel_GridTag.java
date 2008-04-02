@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.15 2003/10/06 19:06:48 horwat Exp $
+ * $Id: Panel_GridTag.java,v 1.16 2003/10/07 13:05:35 eburns Exp $
  */
 
 /*
@@ -116,8 +116,8 @@ public class Panel_GridTag extends BaseComponentTag {
         if (summary != null) {
             component.getAttributes().put("summary", summary);
         }
-        if (width != null) {
-            component.getAttributes().put("width", width);
+        if (width != Integer.MIN_VALUE) {
+            component.getAttributes().put("width", new Integer(width));
         }
         if (bgcolor != null) {
             component.getAttributes().put("bgcolor", bgcolor);
@@ -128,14 +128,14 @@ public class Panel_GridTag extends BaseComponentTag {
         if (rules != null) {
             component.getAttributes().put("rules", rules);
         }
-        if (border != null) {
-            component.getAttributes().put("border", border);
+        if (border != Integer.MIN_VALUE) {
+            component.getAttributes().put("border", new Integer(border));
         }
-        if (cellspacing != null) {
-            component.getAttributes().put("cellspacing", cellspacing);
+        if (cellspacing != Integer.MIN_VALUE) {
+            component.getAttributes().put("cellspacing", new Integer(cellspacing));
         }
-        if (cellpadding != null) {
-            component.getAttributes().put("cellpadding", cellpadding);
+        if (cellpadding != Integer.MIN_VALUE) {
+            component.getAttributes().put("cellpadding", new Integer(cellpadding));
         }
     }
 

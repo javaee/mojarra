@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.11 2003/10/06 19:06:49 horwat Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.12 2003/10/07 13:05:36 eburns Exp $
  */
 
 /*
@@ -86,8 +86,8 @@ public class SelectOne_ListboxTag extends BaseComponentTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	
-        if (null != size) {
-	    component.getAttributes().put("size", size);
+        if (size != Integer.MIN_VALUE) {
+	    component.getAttributes().put("size", new Integer(size));
 	}
         if (null != onselect) {
 	    component.getAttributes().put("onselect", onselect);

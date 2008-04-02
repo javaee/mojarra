@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.48 2003/10/06 19:06:48 horwat Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.49 2003/10/07 13:05:35 eburns Exp $
  */
 
 /*
@@ -70,15 +70,16 @@ public class SelectBoolean_CheckboxTag extends BaseComponentTag
 	super.overrideProperties(component);
 	UISelectBoolean checkbox = (UISelectBoolean) component;
 	
-        if (null != checked) {
+        if (checked) {
             checkbox.setSelected(true);
         } 
        
-        if (null != size) {
-	    checkbox.getAttributes().put("size", size);
+        if (size != Integer.MIN_VALUE) {
+	    checkbox.getAttributes().put("size", new Integer(size));
 	}
-        if (null != readonly) {
-	    checkbox.getAttributes().put("readonly", readonly);
+        if (readonly) {
+	    checkbox.getAttributes().put("readonly", 
+					 Boolean.valueOf(readonly));
 	}
         if (null != alt) {
 	    checkbox.getAttributes().put("alt", alt);

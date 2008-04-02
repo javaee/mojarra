@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.70 2003/10/02 00:40:13 jvisvanathan Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.71 2003/10/07 13:05:40 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.70 2003/10/02 00:40:13 jvisvanathan Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.71 2003/10/07 13:05:40 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -69,8 +69,6 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<form id=\"basicForm\" method=\"post\" action=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=E9ACB00A867AE39715C6D7A4D9068DF3\" class=\"formClass\" title=\"basicForm\" accept=\"html,wml\">",
-    "            <img id=\"basicForm:graphicImage\" src=\"/test/duke.gif;jsessionid=E9ACB00A867AE39715C6D7A4D9068DF3\" usemap=\"#map1\" ismap alt=\"\" /> "
 };
     
 public String [] getLinesToIgnore() {
@@ -133,8 +131,19 @@ public void testHtmlBasicRenderKit()
     page.setId("root");
     page.setViewId(TEST_URI);
     getFacesContext().setViewRoot(page);
-
-    renderResponse.execute(getFacesContext());
+    
+    try {
+	renderResponse.execute(getFacesContext());
+    }
+    catch (FacesException fe) {
+	System.out.println(fe.getMessage());
+	if (null != fe.getCause()) {
+	    fe.getCause().printStackTrace();
+	}
+	else {
+	    fe.printStackTrace();
+	}
+    }
     assertTrue(!(getFacesContext().getRenderResponse()) &&
         !(getFacesContext().getResponseComplete()));
 

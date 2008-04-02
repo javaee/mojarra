@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.13 2003/09/24 23:16:43 horwat Exp $
+ * $Id: ListboxRenderer.java,v 1.14 2003/10/07 13:05:29 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -108,7 +108,7 @@ public class ListboxRenderer extends MenuRenderer {
         
     protected int getDisplaySize(int itemCount, UIComponent component) {
         // display all items in the list.
-        component.getAttributes().put("size", String.valueOf(itemCount));
+        component.getAttributes().put("size", new Integer(itemCount));
         return itemCount;
     }
 

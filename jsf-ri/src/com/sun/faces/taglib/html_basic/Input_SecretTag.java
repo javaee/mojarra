@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.13 2003/10/06 19:06:47 horwat Exp $
+ * $Id: Input_SecretTag.java,v 1.14 2003/10/07 13:05:34 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ public class Input_SecretTag extends Input_TextTag
 
     // Attribute Instance Variables
 
-    protected String redisplay = null;
+    protected boolean redisplay = false;
 
     // Relationship Instance Variables
 
@@ -52,7 +52,7 @@ public class Input_SecretTag extends Input_TextTag
     // Class methods
     //
 
-    public void setRedisplay(String newRedisplay) {
+    public void setRedisplay(boolean newRedisplay) {
         redisplay = newRedisplay;
     }
     // 
@@ -74,8 +74,8 @@ public class Input_SecretTag extends Input_TextTag
         super.overrideProperties(component);
         UIInput input = (UIInput) component;
 
-        if (null != redisplay) {
-            input.getAttributes().put("redisplay", redisplay);
+        if (redisplay) {
+            input.getAttributes().put("redisplay", Boolean.valueOf(redisplay));
         }
     }
 

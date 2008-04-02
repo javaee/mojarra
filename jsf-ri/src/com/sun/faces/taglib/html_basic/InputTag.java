@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.13 2003/09/25 16:36:30 rlubke Exp $
+ * $Id: InputTag.java,v 1.14 2003/10/07 13:05:34 eburns Exp $
  */
 
 /*
@@ -68,14 +68,15 @@ public abstract class InputTag extends BaseComponentTag
 	super.overrideProperties(component);
 	UIInput input = (UIInput) component;
 
-        if (null != readonly) {
-	    input.getAttributes().put("readonly", readonly);
+        if (readonly) {
+	    input.getAttributes().put("readonly", Boolean.valueOf(readonly));
 	}
-	if (null != size) {
-	    input.getAttributes().put("size", size);
+	if (size != Integer.MIN_VALUE) {
+	    input.getAttributes().put("size", new Integer(size));
 	}
-	if (null != maxlength) {
-	    input.getAttributes().put("maxlength", maxlength);
+	if (maxlength != Integer.MIN_VALUE) {
+	    input.getAttributes().put("maxlength", 
+				      new Integer(maxlength));
 	}
 	if (null != alt) {
 	    input.getAttributes().put("alt", alt);

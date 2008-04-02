@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.47 2003/09/24 23:16:48 horwat Exp $
+ * $Id: SecretRenderer.java,v 1.48 2003/10/07 13:05:30 eburns Exp $
  */
 
 /*
@@ -85,7 +85,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
 
         String styleClass = null;
         
-        String redisplay = (String)component.getAttributes().get("redisplay");
+        String redisplay = "" + component.getAttributes().get("redisplay");
         if (redisplay == null || !redisplay.equals("true")) {
             currentValue = "";
         }

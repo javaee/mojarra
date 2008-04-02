@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectOne_MenuTag.java,v 1.13 2003/10/06 19:06:49 horwat Exp $
+ * $Id: SelectOne_MenuTag.java,v 1.14 2003/10/07 13:05:36 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -86,8 +86,8 @@ public class SelectOne_MenuTag extends BaseComponentTag
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
 
-        if (null != size) {
-            component.getAttributes().put("size", size);
+        if (size != Integer.MIN_VALUE) {
+            component.getAttributes().put("size", new Integer(size));
         }
         if (null != onselect) {
             component.getAttributes().put("onselect", onselect);

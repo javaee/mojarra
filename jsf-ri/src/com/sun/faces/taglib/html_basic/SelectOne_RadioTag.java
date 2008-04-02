@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.32 2003/10/06 19:06:49 horwat Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.33 2003/10/07 13:05:36 eburns Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
     // Attribute Instance Variables
 
     protected String layout = null;
-    protected String border = null;
 
 
     // Relationship Instance Variables
@@ -60,10 +59,6 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
 	layout = newLayout;
     }
 
-    public void setBorder(String newBorder) {
-	border = newBorder;
-    }
-
     //
     // General Methods
     //
@@ -82,8 +77,8 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
         if (null != layout) {
 	    uiSelectOne.getAttributes().put("layout", layout);
 	}
-        if (null != border) {
-	    uiSelectOne.getAttributes().put("border", layout);
+        if (border != Integer.MIN_VALUE) {
+	    uiSelectOne.getAttributes().put("border", new Integer(border));
 	}
     }
     //

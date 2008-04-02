@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.50 2003/09/24 23:16:47 horwat Exp $
+ * $Id: RadioRenderer.java,v 1.51 2003/10/07 13:05:30 eburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
         Assert.assert_it(writer != null );
         UISelectOne uiSelectOne = (UISelectOne) component;
 	String alignStr = null;
-	String borderStr = null;
+	Object borderObj = null;
 	String styleClass = null;
 	boolean alignVertical = false;
 	int border = 0;
@@ -107,12 +107,17 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	    alignVertical = alignStr.equalsIgnoreCase("PAGE_DIRECTION") ? 
 		true : false;
 	}
-	if (null != (borderStr = (String) uiSelectOne.getAttributes().get("border"))){
-	    try {
-		border = Integer.valueOf(borderStr).intValue();
+	if (null != (borderObj = uiSelectOne.getAttributes().get("border"))){
+	    if (borderObj instanceof Integer) {
+		border = ((Integer)borderObj).intValue();
 	    }
-	    catch (Throwable e) {
-		border = 0;
+	    else {
+		try {
+		    border = Integer.valueOf(borderObj.toString()).intValue();
+		}
+		catch (Throwable e) {
+		    border = 0;
+		}
 	    }
 	}
 	if (null != (styleClass = (String) 

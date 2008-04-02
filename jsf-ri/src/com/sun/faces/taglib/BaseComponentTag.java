@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.1 2003/09/25 16:36:26 rlubke Exp $
+ * $Id: BaseComponentTag.java,v 1.2 2003/10/07 13:05:32 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.1 2003/09/25 16:36:26 rlubke Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.2 2003/10/07 13:05:32 eburns Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -52,9 +52,51 @@ public abstract class BaseComponentTag extends UIComponentTag
     //
 
     // Attribute Instance Variables
+
+    // core attrs
+    protected String styleClass = null;    
+    protected String title = null;
+
+    // events attrs
+    protected String onclick = null;
+    protected String ondblclick = null;
+    protected String onmousedown = null;
+    protected String onmouseover = null;
+    protected String onmousemove = null;
+    protected String onmouseout = null;
+    protected String onkeypress = null;
+    protected String onkeydown = null;
+    protected String onkeyup = null;
+    
+    // i18n attrs
+    protected String lang = null;
+    protected String dir = null;
     protected String key = null;
-    protected String imageKey = null;
     protected String bundle = null;
+
+
+    // non-String attrs
+    protected boolean disabled = false;
+    protected int size = Integer.MIN_VALUE;
+    protected int tabindex = Integer.MIN_VALUE;
+    protected boolean checked = false;
+    protected int height = Integer.MIN_VALUE; // PENDING(edburns): never
+					      // pushed to component.
+					      // PENDING(edburns): this
+					      // should really be a
+					      // String, so it can
+					      // handle the percentage
+					      // case.
+    protected int width = Integer.MIN_VALUE;
+    protected int border = Integer.MIN_VALUE;
+    protected int cellspacing = Integer.MIN_VALUE;
+    protected int cellpadding = Integer.MIN_VALUE;
+    protected boolean readonly = false;
+    protected int maxlength = Integer.MIN_VALUE;
+    protected int rows = Integer.MIN_VALUE;
+    protected int cols = Integer.MIN_VALUE;
+
+    protected String imageKey = null;
     protected String formatStyle = null;
     protected String dateStyle = null;
     protected String timeStyle = null;
@@ -67,67 +109,41 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String action = null;
     protected String alt = null;
     protected String charset = null;
-    protected String checked = null;
-    protected String cols = null;
     protected String coords = null;
-    protected String dir = null;
-    protected String disabled = null;
     protected String enctype = null;
     protected String htmlFor = null;
-    protected String height = null;
     protected String href = null;
     protected String hreflang = null;
     protected String hspace = null;
     protected String ismap = null;
     protected String label = null;
-    protected String lang = null;
     protected String longdesc = null;
-    protected String maxlength = null;
     protected String method = null;
     protected String multiple = null;
     protected String name = null;
     protected String onblur = null;
     protected String onchange = null;
-    protected String onclick = null;
-    protected String ondblclick = null;
     protected String onfocus = null;
-    protected String onkeydown = null;
-    protected String onkeypress = null;
-    protected String onkeyup = null;
-    protected String onmousedown = null;
-    protected String onmousemove = null;
-    protected String onmouseout = null;
-    protected String onmouseover = null;
     protected String onmouseup = null;
     protected String onreset = null;
     protected String onselect = null;
     protected String onsubmit = null;
-    protected String readonly = null;
     protected String rel = null;
     protected String rev = null;
-    protected String rows = null;
     protected String selected = null;
     protected String shape = null;
-    protected String size = null;
     protected String src = null;
     protected String style = null;
-    protected String styleClass = null;    
-    protected String tabindex = null;
     protected String target = null;
-    protected String title = null;
     protected String type = null;
     protected String usemap = null;
     protected String value = null;
 
     // HTML 4.0 table attributes
     protected String summary = null;
-    protected String width = null;
     protected String bgcolor = null;
     protected String frame = null;
     protected String rules = null;
-    protected String border = null;
-    protected String cellspacing = null;
-    protected String cellpadding = null;
 
     protected String valueRef = null;
     protected Converter converter = null;
@@ -246,7 +262,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // For radio buttons and checkboxes - For INPUT element
 
-    public void setChecked(String newChecked) 
+    public void setChecked(boolean newChecked) 
     {
         checked = newChecked;
     }
@@ -256,7 +272,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // For TEXTAREA HTML element
 
-    public void setCols(String newCols)
+    public void setCols(int newCols)
     {
         cols = newCols;
     }
@@ -280,7 +296,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     // Means "unavailable" in this context -
     // For BUTTON/INPUT/OPTGROUP/OPTION/SELECT/TEXTAREA HTML elements 
 
-    public void setDisabled(String newDisabled)
+    public void setDisabled(boolean newDisabled)
     {
         disabled = newDisabled;
     }
@@ -301,7 +317,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // Override height - For IMG HTML element
 
-    public void setHeight(String newHeight)
+    public void setHeight(int newHeight)
     {
         height = newHeight;
     }
@@ -357,7 +373,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // Maximum chars for text fields - For INPUT HTML elements
 
-    public void setMaxlength(String newMaxlength) 
+    public void setMaxlength(int newMaxlength) 
     {
         maxlength = newMaxlength;
     }
@@ -511,7 +527,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // For TEXTAREA/INPUT HTML elements
 
-    public void setReadonly(String newReadonly)
+    public void setReadonly(boolean newReadonly)
     {
         readonly = newReadonly;
     }
@@ -532,7 +548,7 @@ public abstract class BaseComponentTag extends UIComponentTag
 
     // For TEXTAREA HTML element
 
-    public void setRows(String newRows)
+    public void setRows(int newRows)
     {
         rows = newRows;
     }
@@ -555,7 +571,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     // For INPUT/SELECT HTML elements - (means rows visible
     // for SELECT)
 
-    public void setSize(String newSize)
+    public void setSize(int newSize)
     {
         size = newSize;
     }
@@ -578,7 +594,7 @@ public abstract class BaseComponentTag extends UIComponentTag
     // Position in tabbing order - For "A" (Hyperlink)/
     // BUTTON/INPUT/SELECT/TEXTAREA HTML elements.
 
-    public void setTabindex(String newTabindex)
+    public void setTabindex(int newTabindex)
     {
         tabindex = newTabindex;
     }
@@ -627,7 +643,7 @@ public abstract class BaseComponentTag extends UIComponentTag
        this.summary = newSummary;
    } 
 
-   public  void setWidth(String newWidth) {
+   public  void setWidth(int newWidth) {
        this.width = newWidth;
    } 
    
@@ -643,15 +659,15 @@ public abstract class BaseComponentTag extends UIComponentTag
        this.rules = newRules;
    }
    
-   public  void setBorder(String newBorder) {
+   public  void setBorder(int newBorder) {
        this.border = newBorder;
    }
    
-   public  void setCellspacing(String newCellspacing) {
+   public  void setCellspacing(int newCellspacing) {
        this.cellspacing = newCellspacing;
    }
    
-   public  void setCellpadding(String newCellpadding) {
+   public  void setCellpadding(int newCellpadding) {
        this.cellpadding = newCellpadding;
    }
 
@@ -792,11 +808,12 @@ protected void overrideProperties(UIComponent component)
     if (null != title) {
         component.getAttributes().put("title", title);
     }
-    if (null != disabled) {
-	component.getAttributes().put("disabled", disabled);
+    if (disabled) {
+	component.getAttributes().put("disabled", 
+				     Boolean.valueOf(disabled));
     }
-    if (null != tabindex) {
-	component.getAttributes().put("tabindex", tabindex);
+    if (tabindex != Integer.MIN_VALUE) {
+	component.getAttributes().put("tabindex", new Integer(tabindex));
     }
     if (null != accesskey) {
 	component.getAttributes().put("accesskey", accesskey);
