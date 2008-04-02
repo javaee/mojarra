@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.1 2003/03/28 18:32:20 horwat Exp $
+ * $Id: TestApplicationImpl.java,v 1.2 2003/03/31 21:15:37 rkitain Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package com.sun.faces.application;
 
 import com.sun.faces.application.ApplicationFactoryImpl;
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.application.NavigationHandler;
+import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
 
@@ -36,7 +36,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.1 2003/03/28 18:32:20 horwat Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.2 2003/03/31 21:15:37 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
