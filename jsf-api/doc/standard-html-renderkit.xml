@@ -11265,6 +11265,18 @@
         <pass-through>false</pass-through>
       </property-extension>
     </property>
+    <property>
+      <description>
+          The type of layout markup to use when rendering this group.
+          If the value is "block" the renderer must produce an HTML
+          "div" element.  Otherwise HTML "span" element must
+          be produced.
+        </description>
+      <display-name>Layout</display-name>
+      <icon/>
+      <property-name>layout</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
 
     <component-extension>
       <base-component-type>javax.faces.Panel</base-component-type>
@@ -20598,10 +20610,15 @@
     <renderer>
       <description>Intended for use in situations when only one
       UIComponent child can be nested, such as in the case of facets.
-      If the "style" or "styleClass" attributes are present, render a
-      "span" element, outputting the value of the "style" attribute as
-      the value of the "style" attribute, and the value of the
-      "styleClass" attribute as the value of the "class"
+      If the "style" or "styleClass" attributes are present, and the "layout"
+      attribute is present with a value of "block", render a "div" element,
+      outputting the value of the "style" attribute as the value of the 
+      "style" attribute and the value of the "styleClass" attribute as the
+      value of the "class" attribute.  Otherwise, if the "layout" attribute
+      is not present, or the "layout" attribute contains a value other than
+      "block", render a "span" element, outputting the value of the 
+      "style" attribute as the value of the "style" attribute, and the value 
+      of the "styleClass" attribute as the value of the "class"
       attribute. </description>
       <component-family>javax.faces.Panel</component-family>
       <renderer-type>javax.faces.Group</renderer-type>
@@ -20634,6 +20651,18 @@
         <attribute-extension>
           <pass-through>false</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+          The type of layout markup to use when rendering this group.
+          If the value is "block" the renderer must produce an HTML
+          "div" element.  Otherwise HTML "span" element must
+          be produced.
+        </description>
+        <display-name>Layout</display-name>
+        <icon/>
+        <attribute-name>layout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <renderer-extension>
