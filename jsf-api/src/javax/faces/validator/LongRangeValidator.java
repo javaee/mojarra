@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.21 2003/10/19 21:13:07 craigmcc Exp $
+ * $Id: LongRangeValidator.java,v 1.22 2003/10/23 16:17:21 eburns Exp $
  */
 
 /*
@@ -205,23 +205,47 @@ public class LongRangeValidator implements Validator, StateHolder {
                 long converted = longValue(value);
                 if (maximumSet &&
                     (converted > maximum)) {
-                    context.addMessage(component.getClientId(context),
-                                       ValidatorMessages.getMessage
-                                       (context,
-                                        MAXIMUM_MESSAGE_ID,
-                                        new Object[] {
-                                            new Long(maximum) }));
-                    component.setValid(false);
+		    if (minimumSet) {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    new Object[] {
+						new Long(minimum),
+						new Long(maximum) }));
+			
+		    }
+		    else {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    MAXIMUM_MESSAGE_ID,
+					    new Object[] {
+						new Long(maximum) }));
+			component.setValid(false);
+		    }
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
-                    context.addMessage(component.getClientId(context),
-                                       ValidatorMessages.getMessage
-                                       (context,
-                                        MINIMUM_MESSAGE_ID,
-                                        new Object[] {
-                                            new Long(minimum) }));
-                    component.setValid(false);
+		    if (maximumSet) {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    ValidatorMessages.NOT_IN_RANGE_MESSAGE_ID,
+					    new Object[] {
+						new Double(minimum),
+						new Double(maximum) }));
+			
+		    }
+		    else {
+			context.addMessage(component.getClientId(context),
+					   ValidatorMessages.getMessage
+					   (context,
+					    MINIMUM_MESSAGE_ID,
+					    new Object[] {
+						new Long(minimum) }));
+			component.setValid(false);
+		    }
                 }
             } catch (NumberFormatException e) {
                 context.addMessage(component.getClientId(context),
