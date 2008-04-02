@@ -652,6 +652,14 @@ must exist.  This is necessary for the MessageFactory class.
             out="merged.xml" 
             style="conf/xslt/merge-config.xsl">
       </xslt>
+      <replace file="merged.xml">
+          <replacetoken><![CDATA[xmlns:jsf="http://java.sun.com/xml/ns/javaee"]]></replacetoken>
+          <replacevalue><![CDATA[]]></replacevalue>
+      </replace>
+      <replace file="merged.xml">
+          <replacetoken><![CDATA[ >]]></replacetoken>
+          <replacevalue><![CDATA[>]]></replacevalue>
+      </replace>
       <xslt in="merged.xml"
             out="${build.home}/classes/com/sun/faces/jsf-ri-runtime.xml" 
             style="conf/xslt/prune-tool-data.xsl">
