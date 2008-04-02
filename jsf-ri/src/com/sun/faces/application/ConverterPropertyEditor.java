@@ -88,6 +88,9 @@ public class ConverterPropertyEditor extends PropertyEditorSupport {
         String textValue = (String) requestMap.get(CURRENT_TEXT_VALUE_NAME);
         Object retValue = null;
         
+        assert(null != targetClass);
+        assert(null != component);
+        
         if (null == textValue) {
             return null;
         }
@@ -113,8 +116,6 @@ public class ConverterPropertyEditor extends PropertyEditorSupport {
             
         }
         
-        requestMap.remove(TARGET_CLASS_ATTRIBUTE_NAME);
-        requestMap.remove(TARGET_COMPONENT_ATTRIBUTE_NAME);
         requestMap.remove(CURRENT_TEXT_VALUE_NAME);
         
         return retValue;
