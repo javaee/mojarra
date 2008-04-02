@@ -38,7 +38,7 @@
  * 
  */
 
-package cardemo;
+package components.components;
 
 
 import java.io.IOException;

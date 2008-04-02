@@ -48,7 +48,7 @@
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib uri="/WEB-INF/imageMap.tld" prefix="imageMap" %>
+    <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
 
 <BODY BGCOLOR="white">
 
@@ -141,14 +141,14 @@
         </TD>
     </TR>
      <TR> <TD><font color="#FFFFFF"><h:output_text id="chooseLocale" key="chooseLocale" bundle="carDemoBundle" /></font><br>
-          <imageMap:image id="mapImage" url="/world.gif" usemap="#worldMap" />
-                <imageMap:map id="worldMap" currentArea="NAmericas" >
+          <d:image id="mapImage" url="/world.gif" usemap="#worldMap" />
+                <d:map id="worldMap" currentArea="NAmericas" >
                     <f:action_listener type="cardemo.ImageMapEventHandler"/> 
-                        <imageMap:area id="NAmericas" modelReference="NA" onmouseover="/cardemo/world_namer.gif" onmouseout="/cardemo/world.gif" />
-                        <imageMap:area id="SAmericas" modelReference="SA" onmouseover="/cardemo/world_samer.gif" onmouseout="/cardemo/world.gif" />
-                        <imageMap:area id="Germany" modelReference="gerA" onmouseover="/cardemo/world_germany.gif" onmouseout="/cardemo/world.gif" />
-                        <imageMap:area id="France" modelReference="fraA" onmouseover="/cardemo/world_france.gif" onmouseout="/cardemo/world.gif" />
-                </imageMap:map>
+                        <d:area id="NAmericas" modelReference="NA" onmouseover="/cardemo/world_namer.gif" onmouseout="/cardemo/world.gif" />
+                        <d:area id="SAmericas" modelReference="SA" onmouseover="/cardemo/world_samer.gif" onmouseout="/cardemo/world.gif" />
+                        <d:area id="Germany" modelReference="gerA" onmouseover="/cardemo/world_germany.gif" onmouseout="/cardemo/world.gif" />
+                        <d:area id="France" modelReference="fraA" onmouseover="/cardemo/world_france.gif" onmouseout="/cardemo/world.gif" />
+                </d:map>
      </TD> </TR>
     </TABLE>
     </TD>

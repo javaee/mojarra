@@ -37,71 +37,31 @@
  * maintenance of any nuclear facility.
  * 
  */
- 
-package cardemo;
 
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
+package components.components;
+
+
+import java.io.IOException;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponentBase;
+import javax.faces.context.FacesContext;
+import javax.faces.event.FacesEvent;
+import javax.faces.context.ResponseWriter;
 
 /**
- * This class is the tag handler that evaluates the <code>area</code>
- *  custom tag.
- *
- */
+ * This class represents the <code>UIArea</code> component, which corresponds
+ * to the <code>area</code> tag.  An <code>area</code> tag specifies the
+ * geometric regions of an image map. 
+*/
 
-public class AreaTag extends FacesTag
-{
+public class UIArea extends UIComponentBase {
 
-// Attribute Instance Variables
+    // Component type for this component
+    public static final String TYPE = "Area";
 
-    public String onmouseover = null;
-    public String onmouseout = null;
-
-// Constructors and Initializers    
-//
-
-public AreaTag()
-{
-    super();
-}
-// 
-// Accessor methods for the <code>area</code> tag attributes
-//
-    public String getOnmouseover() {
-        return onmouseover;
+    // Return our component type
+    public String getComponentType() {
+        return (TYPE);
     }
 
-    public void setOnmouseover(String newonmouseover) {
-        onmouseover = newonmouseover;
-    }
-
-    public String getOnmouseout() {
-        return onmouseout;
-    }
-
-    public void setOnmouseout(String newonmouseout) {
-        onmouseout = newonmouseout;
-    }
-
-
-//
-// Sets the values of the properties of the <code>UIArea</code> component to the values 
-// specified in the tag.
-//
-	public void overrideProperties(UIComponent component) {
-		super.overrideProperties(component);
-		UIArea areaComp = (UIArea)component;
-		if(areaComp.getAttribute("onmouseover") == null)
-			areaComp.setAttribute("onmouseover", getOnmouseover());
-		if(areaComp.getAttribute("onmouseout") == null)
-			areaComp.setAttribute("onmouseout", getOnmouseout());
-		}
-// Gets the renderer associated with this component    
-    	public String getRendererType() { return "Area"; } 
-
-// Creates the <code>UIArea</code> component instance associated with this tag.    
-    	public UIComponent createComponent() {
-        	return (new UIArea());
-    	}
-
-} // end of class
+ }

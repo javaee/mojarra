@@ -37,58 +37,73 @@
  * maintenance of any nuclear facility.
  * 
  */
+ 
+package components.taglib;
 
-package cardemo;
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.FacesTag;
 
-import javax.faces.component.UIGraphic;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
+import components.components.UIArea;
 
 /**
- * This class represents the <code>UIImage</code> component, which corresponds
- * to the <code>image</code> tag. 
-*/
+ * This class is the tag handler that evaluates the <code>area</code>
+ *  custom tag.
+ *
+ */
 
+public class AreaTag extends FacesTag
+{
 
-public class UIImage extends UIGraphic {
+// Attribute Instance Variables
 
-// Renders the image tag
+    public String onmouseover = null;
+    public String onmouseout = null;
 
-public void encodeEnd(FacesContext context) throws IOException {
+// Constructors and Initializers    
+//
 
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-                              
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-
-	
-        // Perform the default encoding
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<img id=\"");
-	writer.write((String) getComponentId());
-        writer.write("\"");
-	writer.write(" src=\"");
-	String url = (String) getAttribute("url");
-        if (url.startsWith("/")) {
-           writer.write(request.getContextPath());
-        }	
- 	writer.write(url);
-        writer.write("\"");
-	writer.write(" usemap=\"");
-	writer.write((String) getAttribute("usemap"));
-	writer.write("\"");
-        writer.write(">");
-
-    }
+public AreaTag()
+{
+    super();
 }
+// 
+// Accessor methods for the <code>area</code> tag attributes
+//
+    public String getOnmouseover() {
+        return onmouseover;
+    }
+
+    public void setOnmouseover(String newonmouseover) {
+        onmouseover = newonmouseover;
+    }
+
+    public String getOnmouseout() {
+        return onmouseout;
+    }
+
+    public void setOnmouseout(String newonmouseout) {
+        onmouseout = newonmouseout;
+    }
+
+
+//
+// Sets the values of the properties of the <code>UIArea</code> component to the values 
+// specified in the tag.
+//
+	public void overrideProperties(UIComponent component) {
+		super.overrideProperties(component);
+		UIArea areaComp = (UIArea)component;
+		if(areaComp.getAttribute("onmouseover") == null)
+			areaComp.setAttribute("onmouseover", getOnmouseover());
+		if(areaComp.getAttribute("onmouseout") == null)
+			areaComp.setAttribute("onmouseout", getOnmouseout());
+		}
+// Gets the renderer associated with this component    
+    	public String getRendererType() { return "Area"; } 
+
+// Creates the <code>UIArea</code> component instance associated with this tag.    
+    	public UIComponent createComponent() {
+        	return (new UIArea());
+    	}
+
+} // end of class

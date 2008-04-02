@@ -16,15 +16,15 @@
   <tlib-version>0.03</tlib-version>
   <jsp-version>1.2</jsp-version>
   <short-name>JavaServerFaces Framework Tag Library</short-name>
-  <uri>imageMaptaglibrary_1.1</uri>
+  <uri>http://java.sun.com/jsf/demo/components</uri>
   <description>
-    This tag library contains tags for representing an imagemap.
+    This tag library contains tags for several useful components.
   </description>
 
   <!-- ===================== ImageMap tags ====================== -->
   <tag>
     <name>image</name>
-    <tag-class>cardemo.ImageTag</tag-class>
+    <tag-class>components.taglib.ImageTag</tag-class>
       <attribute>
         <name>id</name>
 	<required>true</required>
@@ -43,7 +43,7 @@
   </tag>
  <tag>
     <name>map</name>
-    <tag-class>cardemo.MapTag</tag-class>
+    <tag-class>components.taglib.MapTag</tag-class>
       <attribute>
         <name>id</name>
         <required>true</required>
@@ -57,7 +57,7 @@
   </tag>
   <tag>
     <name>area</name>
-    <tag-class>cardemo.AreaTag</tag-class>
+    <tag-class>components.taglib.AreaTag</tag-class>
       <attribute>
         <name>id</name>
         <required>true</required>

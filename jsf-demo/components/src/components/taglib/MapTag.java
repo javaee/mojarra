@@ -1,4 +1,5 @@
- /*
+ 
+/*
  *
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
  * 
@@ -38,69 +39,66 @@
  * 
  */
 
-package cardemo;
+package components.taglib;
 
 import javax.faces.component.UIComponent;
 import javax.faces.webapp.FacesTag;
-import javax.faces.component.UIGraphic;
+
+import components.components.UIMap;
+
 
 /**
- * This class is the tag handler that evaluates the <code>image</code>
+ * This class is the tag handler that evaluates the <code>map</code>
  *  custom tag.
  *
  */
+ 
+public class MapTag extends FacesTag
+{
+// Attribute Instance Variables
 
-public class ImageTag extends FacesTag {
+       public String currentArea = null;
 
-    public String url = null;
-    public String usemap = null;
-    public Integer border = null;
+
+//
+// Constructors and Initializers    
+//
+
+public MapTag()
+{
+    super();
+}
 
 // 
-// Accessor methods for the <code>image</code> tag attributes
+// Accessor methods for the <code>map</code> tag attributes
 //
 
-    public ImageTag() {
-        super();
+
+    public String getCurrentArea() {
+    	return currentArea;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String newurl) {
-        url = newurl;
-    }
-
-
-    public String getUsemap() {
-        return usemap;
-    }
-
-    public void setUsemap(String newusemap) {
-        usemap = newusemap;
+    public void setCurrentArea(String area) {
+    	currentArea = area;
     }
 
 //
-// Sets the values of the properties of the <code>UIImage</code> component to the values 
+// Sets the values of the properties of the <code>UIMap</code> component to the values 
 // specified in the tag.
 //
-    public void overrideProperties(UIComponent component) {
-    
-    		super.overrideProperties(component);
-    		UIImage imageComp = (UIImage)component;
-		if(imageComp.getAttribute("url") == null)
-			imageComp.setAttribute("url", getUrl());
-		if(imageComp.getAttribute("usemap") == null)
-			imageComp.setAttribute("usemap", getUsemap());
-    }    
+	public void overrideProperties(UIComponent component) {
+		super.overrideProperties(component);
+		UIMap map = (UIMap) component;
+		if(map.getAttribute("currentArea") == null)
+			map.setAttribute("currentArea", getCurrentArea());
+	}    
 
 // Gets the renderer associated with this component    
-    public String getRendererType() { return null; } 
+    	public String getRendererType() { return null; } 
+    
+// Creates the <code>UIMap</code> component instance associated with this tag.        
+    	public UIComponent createComponent() {
+        	return (new UIMap());
+    	}
 
-// Creates the <code>UIImage</code> component instance associated with this tag.        
-    public UIComponent createComponent() {
-        	return (new UIImage());
-    }
-
-}
+} // end of class

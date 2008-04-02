@@ -38,7 +38,7 @@
  * 
  */
 
-package cardemo;
+package components.renderkit;
 
 public class ImageArea
 {

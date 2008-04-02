@@ -40,7 +40,7 @@
 
 // AreaRenderer.java
 
-package cardemo;
+package components.renderkit;
 
 import com.sun.faces.util.Util;
 
@@ -49,9 +49,9 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer;
-
 import java.io.IOException;
+
+import components.components.UIArea;
 
 
 /**
@@ -61,7 +61,7 @@ import java.io.IOException;
  *
  */
 
-public class AreaRenderer extends HtmlBasicRenderer {
+public class AreaRenderer extends BaseRenderer {
 
        public AreaRenderer() {
         super();

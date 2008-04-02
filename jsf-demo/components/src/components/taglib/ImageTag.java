@@ -1,4 +1,4 @@
-/*
+ /*
  *
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
  * 
@@ -38,30 +38,71 @@
  * 
  */
 
-package cardemo;
+package components.taglib;
 
+import javax.faces.component.UIComponent;
+import javax.faces.webapp.FacesTag;
+import javax.faces.component.UIGraphic;
 
-import java.io.IOException;
-import javax.faces.FacesException;
-import javax.faces.component.UIComponentBase;
-import javax.faces.context.FacesContext;
-import javax.faces.event.FacesEvent;
-import javax.faces.context.ResponseWriter;
+import components.components.UIImage;
 
 /**
- * This class represents the <code>UIArea</code> component, which corresponds
- * to the <code>area</code> tag.  An <code>area</code> tag specifies the
- * geometric regions of an image map. 
-*/
+ * This class is the tag handler that evaluates the <code>image</code>
+ *  custom tag.
+ *
+ */
 
-public class UIArea extends UIComponentBase {
+public class ImageTag extends FacesTag {
 
-    // Component type for this component
-    public static final String TYPE = "Area";
+    public String url = null;
+    public String usemap = null;
+    public Integer border = null;
 
-    // Return our component type
-    public String getComponentType() {
-        return (TYPE);
+// 
+// Accessor methods for the <code>image</code> tag attributes
+//
+
+    public ImageTag() {
+        super();
     }
 
- }
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String newurl) {
+        url = newurl;
+    }
+
+
+    public String getUsemap() {
+        return usemap;
+    }
+
+    public void setUsemap(String newusemap) {
+        usemap = newusemap;
+    }
+
+//
+// Sets the values of the properties of the <code>UIImage</code> component to the values 
+// specified in the tag.
+//
+    public void overrideProperties(UIComponent component) {
+    
+    		super.overrideProperties(component);
+    		UIImage imageComp = (UIImage)component;
+		if(imageComp.getAttribute("url") == null)
+			imageComp.setAttribute("url", getUrl());
+		if(imageComp.getAttribute("usemap") == null)
+			imageComp.setAttribute("usemap", getUsemap());
+    }    
+
+// Gets the renderer associated with this component    
+    public String getRendererType() { return null; } 
+
+// Creates the <code>UIImage</code> component instance associated with this tag.        
+    public UIComponent createComponent() {
+        	return (new UIImage());
+    }
+
+}

@@ -1,4 +1,3 @@
- 
 /*
  *
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -39,63 +38,57 @@
  * 
  */
 
-package cardemo;
+package components.components;
 
-import javax.faces.component.UIComponent;
-import javax.faces.webapp.FacesTag;
+import javax.faces.component.UIGraphic;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
- * This class is the tag handler that evaluates the <code>map</code>
- *  custom tag.
- *
- */
- 
-public class MapTag extends FacesTag
-{
-// Attribute Instance Variables
-
-       public String currentArea = null;
+ * This class represents the <code>UIImage</code> component, which corresponds
+ * to the <code>image</code> tag. 
+*/
 
 
-//
-// Constructors and Initializers    
-//
+public class UIImage extends UIGraphic {
 
-public MapTag()
-{
-    super();
+// Renders the image tag
+
+public void encodeEnd(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Delegate to our associated Renderer if needed
+        if (getRendererType() != null) {
+            super.encodeEnd(context);
+            return;
+        }
+
+                              
+        HttpServletRequest request =
+            (HttpServletRequest) context.getServletRequest();
+
+	
+        // Perform the default encoding
+        ResponseWriter writer = context.getResponseWriter();
+        writer.write("<img id=\"");
+	writer.write((String) getComponentId());
+        writer.write("\"");
+	writer.write(" src=\"");
+	String url = (String) getAttribute("url");
+        if (url.startsWith("/")) {
+           writer.write(request.getContextPath());
+        }	
+ 	writer.write(url);
+        writer.write("\"");
+	writer.write(" usemap=\"");
+	writer.write((String) getAttribute("usemap"));
+	writer.write("\"");
+        writer.write(">");
+
+    }
 }
-
-// 
-// Accessor methods for the <code>map</code> tag attributes
-//
-
-
-    public String getCurrentArea() {
-    	return currentArea;
-    }
-
-    public void setCurrentArea(String area) {
-    	currentArea = area;
-    }
-
-//
-// Sets the values of the properties of the <code>UIMap</code> component to the values 
-// specified in the tag.
-//
-	public void overrideProperties(UIComponent component) {
-		super.overrideProperties(component);
-		UIMap map = (UIMap) component;
-		if(map.getAttribute("currentArea") == null)
-			map.setAttribute("currentArea", getCurrentArea());
-	}    
-
-// Gets the renderer associated with this component    
-    	public String getRendererType() { return null; } 
-    
-// Creates the <code>UIMap</code> component instance associated with this tag.        
-    	public UIComponent createComponent() {
-        	return (new UIMap());
-    	}
-
-} // end of class

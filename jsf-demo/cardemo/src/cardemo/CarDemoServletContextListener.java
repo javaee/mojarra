@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.3 2003/02/05 00:45:20 jenball Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.4 2003/02/12 17:59:24 eburns Exp $
  */
 /*
  *
@@ -61,6 +61,8 @@ import javax.faces.context.MessageResources;
 
 import javax.faces.FactoryFinder;
 import javax.faces.render.*;
+
+import components.renderkit.AreaRenderer;
 
 /**
  *
