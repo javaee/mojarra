@@ -90,6 +90,19 @@
   <property name="wspack.home" value="${tomcat.home}"/>
 
   <property name="build.properties.demo" value="build.properties.demo" />
+
+  <!-- "commons" jar file locations -->
+  <property name="commons-logging.jar"
+          value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
+  <property name="commons-digester.jar"
+          value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
+  <property name="commons-beanutils.jar"
+          value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+  <property name="commons-collections.jar"
+          value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
+
+  <!-- "tools" location for retrieving generated documentation -->
+  <property name="jsf-tools.home" value="../jsf-tools" /> 
   
   <target name="clean">
   
@@ -346,12 +359,26 @@
   <target name="prepare.dist">
     <mkdir dir="${dist.home}"/>
     <mkdir dir="${dist.home}/samples"/>
+    <mkdir dir="${dist.home}/metadata"/>
+    <mkdir dir="${dist.home}/renderkitdocs"/>
 
     <echo> Handle the top level files </echo>
     <copy file="${jsf-ri.home}/LICENSE.txt" todir="${dist.home}"/>
     <copy file="${jsf-ri.home}/LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="${jsf-ri.home}/THIRDPARTYLICENSEREADME.txt" todir="${dist.home}"/>
     <copy file="${jsf-api.dtd}" todir="${dist.home}/lib"/>
+    <copy file="${commons-beanutils.jar}" todir="${dist.home}/lib"/>
+    <copy file="${commons-collections.jar}" todir="${dist.home}/lib"/>
+    <copy file="${commons-digester.jar}" todir="${dist.home}/lib"/>
+    <copy file="${commons-logging.jar}" todir="${dist.home}/lib"/>
+    <copy todir="${dist.home}/metadata">
+      <fileset dir="${jsf-api.home}/doc"/>
+      <fileset dir="${jsf-ri.home}/src/com/sun/faces" includes="standard-html-renderkit.xml"/>
+    </copy>
+    <ant dir="${jsf-tools.home}" inheritall="false" target="docs"/>
+    <copy todir="${dist.home}/renderkitdocs">
+      <fileset dir="${jsf-tools.home}/build/generate/facesdoc"/>
+    </copy>
     <antcall target="api.javadocs"/>
     <antcall target="ri.tlddocs"/>
     <antcall target="copydocs"/>
