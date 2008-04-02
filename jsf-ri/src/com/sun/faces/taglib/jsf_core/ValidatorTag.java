@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorTag.java,v 1.1 2005/05/05 20:51:27 edburns Exp $
+ * $Id: ValidatorTag.java,v 1.2 2005/08/10 21:23:16 rlubke Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ public class ValidatorTag extends ValidatorELTag {
     } // END setBinding
 
 
-    // -------------------------------------------- Methods from ConverterELTag
+    // -------------------------------------------- Methods from ValidatorELTag
 
 
     protected Validator createValidator()

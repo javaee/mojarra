@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.58 2005/04/21 18:55:37 edburns Exp $
+ * $Id: SecretRenderer.java,v 1.59 2005/08/10 21:23:16 rlubke Exp $
  */
 
 /*
@@ -90,6 +90,19 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
         writer.writeAttribute("type", "password", "type");
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
+
+        String autoComplete = (String)
+            component.getAttributes().get("autocomplete");
+        if (autoComplete != null) {
+            // only output the autocomplete attribute if the value
+            // is 'off' since its lack of presence will be interpreted
+            // as 'on' by the browser
+            if ("off".equals(autoComplete)) {
+                writer.writeAttribute("autocomplete",
+                                      "off",
+                                      "autocomplete");
+            }
+        }
 
         // render default text specified
         if (currentValue != null) {

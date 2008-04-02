@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.87 2005/08/02 20:24:54 rogerk Exp $
+ $Id: build-tests.xml,v 1.88 2005/08/10 21:23:16 rlubke Exp $
 -->
 
 <!--
@@ -674,6 +674,9 @@
          request="${context.path}/faces/standard/component01.jsp"
          recordGolden="${local.golden.path}/standard/component01.txt"
          golden="${golden.path}/standard/component01.txt" failonerror="${failonerror}"/>
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/standard/autocomplete.jsp"
+         golden="${golden.path}/standard/autocomplete.txt" failonerror="${failonerror}"/>
   </target>
 
   <target name="test.html.taglib"
