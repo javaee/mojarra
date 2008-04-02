@@ -52,6 +52,7 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	valueHolderComponents.add("UIInput");
 	valueHolderComponents.add("UISelectMany");
 	valueHolderComponents.add("UISelectOne");
+	valueHolderComponents.add("UISelectBoolean");
 	convertibleValueHolderComponents = new ArrayList();
 	convertibleValueHolderComponents.add("UIOutput");
 
@@ -100,8 +101,15 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
     /**
      * Return the "required" element value for the tag attribute.
      */
-    public String getRequired(String tagName, String attributeName) {
-        return REQUIRED;
+    public String getRequired(String tagName, String attributeName, 
+			      String tagAttributeStatus) {
+	String result = REQUIRED;
+	if (null != tagAttributeStatus &&
+	    tagAttributeStatus.equals("required")) {
+	    result = "true";
+	}
+	    
+        return result;
     }
 
     /**

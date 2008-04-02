@@ -31,7 +31,8 @@ public interface TaglibGenerator {
     /**
      * Implementations provide their own required attribute value; 
      */
-    public String getRequired(String tagName, String attributeName);
+    public String getRequired(String tagName, String attributeName, 
+			      String tagAttributeStatus);
 
     /**
      * Implementations provide their own rtexprvalue attribute value; 

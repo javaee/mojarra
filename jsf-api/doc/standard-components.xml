@@ -108,7 +108,7 @@
       <icon></icon>
       <property-name>rowIndex</property-name>
       <property-class>int</property-class>
-      <tag-attribute>yes</tag-attribute>
+      <tag-attribute>no</tag-attribute>
     </property>
     <property>
       <display-name></display-name>
