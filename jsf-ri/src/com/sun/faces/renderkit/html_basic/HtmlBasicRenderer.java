@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.22 2003/02/04 22:26:37 visvan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.23 2003/02/14 01:14:43 craigmcc Exp $
  */
 
 /*
@@ -399,16 +399,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * apply to all renderers.
      */
     protected Converter getConverter(UIComponent component) {
-        Object converter = component.getAttribute(UIComponent.CONVERTER_ATTR);
-        if (converter == null) {
+        String converterId = component.getConverter();
+        if (converterId == null) {
             return (null);
-        } else if (converter instanceof Converter) {
-            return ((Converter) converter);
         }
         ConverterFactory cfactory = (ConverterFactory)
             FactoryFinder.getFactory(FactoryFinder.CONVERTER_FACTORY);
         try {
-            return (cfactory.getConverter((String) converter));
+            return (cfactory.getConverter(converterId));
         } catch (Exception e) {
             return (null);
         }
