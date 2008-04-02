@@ -1559,6 +1559,8 @@
         visual representation (UIContainer?  UIManager?).</li>
     <li><strong>UISelectMany</strong> - Rename to UISelect (new XForms).</li>
     <li><strong>UISelectOne</strong> - Rename to UISelect1 (new XForms).</li>
+	  <li><strong>decode/encode</strong> - change to parse/render</li>
+
     </ul>
     <p>It's also worth reviewing the recent XForms 1.0 working draft
     (08/21/2002) because they've changed some of the component names we
