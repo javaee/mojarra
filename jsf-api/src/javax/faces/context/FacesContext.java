@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.38 2003/03/13 01:12:08 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.39 2003/03/18 21:29:10 eburns Exp $
  */
 
 /*
@@ -16,10 +16,6 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.event.FacesEvent;
 import javax.faces.tree.Tree;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -63,15 +59,6 @@ public abstract class FacesContext {
      * must be returned.
      */
     public abstract Iterator getFacesEvents();
-
-
-    /**
-     * <p>Return the <code>HttpSession</code> instance for the session
-     * associated with the current request (if any); otherwise, return
-     * <code>null</code>.</p>
-     */
-    public abstract HttpSession getHttpSession();
-
 
     /**
      * <p>Return the <code>Locale</code> to be used in localizing the
@@ -165,28 +152,6 @@ public abstract class FacesContext {
      */
     public abstract void setResponseWriter(ResponseWriter responseWriter);
 
-
-    /**
-     * <p>Return the <code>ServletContext</code> object for the web application
-     * associated with this request.</p>
-     */
-    public abstract ServletContext getServletContext();
-
-
-    /**
-     * <p>Return the <code>ServletRequest</code> object representing the
-     * current request that is being processed.</p>
-     */
-    public abstract ServletRequest getServletRequest();
-
-
-    /**
-     * <p>Return the <code>ServletResponse</code> object representing the
-     * current response that is being rendered.</p>
-     */
-    public abstract ServletResponse getServletResponse();
-
-
     /**
      * <p>Return the component {@link Tree} that is associated with the
      * this request.
@@ -269,6 +234,8 @@ public abstract class FacesContext {
      * as the current phase is completed.</p>
      */
     public abstract void responseComplete();
+
+    public abstract ExternalContext getExternalContext();
 
 
     // --------------------------------------------------------- Static Methods
