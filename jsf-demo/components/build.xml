@@ -207,6 +207,7 @@
         <include name="web.xml" />
       </fileset>
     </copy>
+    <copy todir="${build}/${webapp}/WEB-INF" file="src/demo/taglib/demo.tld"/>
 
      <copy todir="${build}/${webapp}">
       <fileset dir="web" />

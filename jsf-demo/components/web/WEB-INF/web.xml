@@ -22,7 +22,7 @@
     </context-param>
 
     <listener>
-        <listener-class>demo.ComponentsSetupListener</listener-class>
+        <listener-class>components.renderkit.ComponentsSetupListener</listener-class>
     </listener>
     
     <!-- Faces Servlet -->
