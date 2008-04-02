@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.42 2003/06/21 00:30:17 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.43 2003/06/23 16:03:07 craigmcc Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Set the {@ink Application} instance associated with this
+     * <p>Set the {@link Application} instance associated with this
      * web application.  This method should <strong>only</strong> be
      * called by the JavaServer Faces implementation, at the beginning
      * of the request processing lifecycle for the request represented
