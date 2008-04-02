@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.23 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.24 2006/10/10 16:20:41 rlubke Exp $
  */
 
 /*
@@ -29,29 +29,29 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import javax.el.ELContext;
-import javax.el.ValueExpression;
 import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.DateTimeConverter;
-import javax.faces.FacesException;
 import javax.servlet.jsp.JspException;
 
-import com.sun.faces.util.Util;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 
 /**
  * <p>ConvertDateTimeTag is a ConverterTag implementation for
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.23 2006/03/29 23:03:51 rlubke Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.24 2006/10/10 16:20:41 rlubke Exp $
  */
 
 public class ConvertDateTimeTag extends ConverterTag {
@@ -220,14 +220,13 @@ public class ConvertDateTimeTag extends ConverterTag {
         }
         if (localeExpression != null) {
             if (localeExpression.isLiteralText()) {
-                locale =
-                new Locale(localeExpression.getExpressionString(), "");
+                locale = getLocale(localeExpression.getExpressionString());
             } else {
                 Object loc = Util.evaluateValueExpression(localeExpression,
                                                           elContext);
                 if (loc != null) {
                     if (loc instanceof String) {
-                        locale = new Locale((String) loc, "");
+                        locale = getLocale((String) loc);
                     } else if (loc instanceof Locale) {
                         locale = (Locale) loc;
                     } else {

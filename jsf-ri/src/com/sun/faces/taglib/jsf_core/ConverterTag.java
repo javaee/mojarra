@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.4 2006/03/29 23:03:51 rlubke Exp $
+ * $Id: ConverterTag.java,v 1.5 2006/10/10 16:20:41 rlubke Exp $
  */
 
 /*
@@ -36,11 +36,22 @@ import javax.faces.convert.Converter;
 import javax.faces.webapp.ConverterELTag;
 import javax.servlet.jsp.JspException;
 
+import java.util.Locale;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.faces.util.Util;
+
 /**
  * Basic implementation of <code>ConverterELTag</code>.
  */
 public class ConverterTag extends ConverterELTag {
 
+    // Log instance for this class
+    private static final Logger LOGGER =
+            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    
 
     // -------------------------------------------------------------- Attributes
 
@@ -126,6 +137,34 @@ public class ConverterTag extends ConverterELTag {
         return converter;
 
     } // END createConverter
+    
+    
+    // ------------------------------------------------------- Protected Methods
 
 
+    protected static Locale getLocale(String string) {
+        if (string == null) {
+            return Locale.getDefault();
+        }
+        
+        if (string.length() > 2) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.log(Level.WARNING,
+                           "jsf.core.taglib.convertdatetime.invalid_local_value",
+                           string);
+            }
+        } else {
+            String[] langs = Locale.getISOLanguages();
+            Arrays.sort(langs);
+            if (Arrays.binarySearch(langs, string) < 0) {
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING,
+                               "jsf.core.taglib.convertdatetime.invalid_language",
+                               string);
+                }
+            }
+        }
+
+        return new Locale(string, "");        
+    }
 }
