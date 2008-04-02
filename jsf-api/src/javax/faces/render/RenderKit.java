@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.9 2002/07/16 17:28:46 craigmcc Exp $
+ * $Id: RenderKit.java,v 1.10 2002/09/19 23:35:06 craigmcc Exp $
  */
 
 /*
@@ -23,8 +23,6 @@ import javax.faces.component.UIComponent;
  * user <code>Locale</code>.  A <code>RenderKit</code> also acts as
  * a Factory for associated {@link Renderer} objects, which perform the
  * actual rendering process for each component.</p>
- *
- * <h3>Lifecycle</h3>
  *
  * <p>A typical JavaServer Faces implementation will configure one or more
  * <code>RenderKit</code> instances at web application startup.  They are

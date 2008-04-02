@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.15 2002/07/26 19:02:39 craigmcc Exp $
+ * $Id: Lifecycle.java,v 1.16 2002/09/19 23:35:05 craigmcc Exp $
  */
 
 /*
@@ -27,7 +27,8 @@ import javax.faces.context.FacesContext;
  * <code>getLifecycle()</code> will return the same instance (i.e.
  * it is a per-web-application Singleton).  Because this instance is
  * shared across multiple simultaneous requests, it must be implemented
- * in a thread-safe manner.</p>
+ * in a thread-safe manner.  At least one <code>Lifecycle</code> implementation
+ * must be provided as the default.</p>
  *
  * <p>The set of {@link Phase} instances associated with a particular
  * <code>Lifecycle</code> instance, as well as the order that they are
