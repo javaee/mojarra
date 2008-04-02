@@ -1,0 +1,224 @@
+<!--
+ Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ 
+ Redistribution and use in source and binary forms, with or
+ without modification, are permitted provided that the following
+ conditions are met:
+ 
+ - Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+ 
+ - Redistribution in binary form must reproduce the above
+   copyright notice, this list of conditions and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+    
+ Neither the name of Sun Microsystems, Inc. or the names of
+ contributors may be used to endorse or promote products derived
+ from this software without specific prior written permission.
+  
+ This software is provided "AS IS," without a warranty of any
+ kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+  
+ You acknowledge that this software is not designed, licensed or
+ intended for use in the design, construction, operation or
+ maintenance of any nuclear facility.
+-->
+
+<project name="portlet-guessNumber" default="build" basedir=".">
+ 
+  <property name="depth" value=".."/>
+
+  <property file="build.properties"/>                <!-- this demo local -->
+  <property file="../build.properties"/>             <!-- demos local     -->
+  <property file="../../build.properties"/>          <!-- jsf local       -->
+  <property file="${user.home}/build.properties"/>   <!-- user local      -->
+
+  <!-- Configure the context path for this application -->
+  <property name="context.path" value="/portlet-guessNumber"/>
+  <property name="example" value="portlet-guessNumber" />
+  <property name="build"   value="${basedir}/build" />
+  
+  <property name="jsf-api.jar" value="../../jsf-api/build/lib/jsf-api.jar"/>
+  <property name="jsf-impl.jar" value="../../jsf-ri/build/lib/jsf-impl.jar"/>
+  
+  <property name="pluto.home"   value="/usr/local/pluto" />
+  <property name="jsf-portlet.jar"   value="../../jsf-ri/build/lib/jsf-portlet.jar" />
+ 
+  <!-- Configure properties to access the Manager application -->
+  <property name="url"      value="http://localhost:8080/manager"/>
+
+
+  <path id="classpath">
+    <pathelement location="${commons-beanutils.jar}"/>
+    <pathelement location="${commons-collections.jar}"/>
+    <pathelement location="${commons-digester.jar}"/>
+    <pathelement location="${commons-logging.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsf-impl.jar}"/>
+    <pathelement location="${jstl.jar}"/>
+    <pathelement location="${build}/${example}/WEB-INF/classes"/>
+    <pathelement location="${servlet.jar}"/>
+  </path>
+
+    <target name="init" depends="check.changes,verifyPreconditions">
+        <tstamp/>        
+    </target>
+    
+    <target name="check.changes">
+        <uptodate property="skip.build"
+            targetfile="${build}/last-build">
+            <srcfiles dir="${basedir}">
+                <include name="src/**/*.*"/>
+                <include name="conf/**/*.*"/>
+                <include name="web/**/*.*"/>
+            </srcfiles>
+        </uptodate>
+    </target>
+
+  <target name="clean" >
+    <delete dir="${build}" />
+    <delete dir="${context.path}" />
+  </target>
+
+  <target name="verifyPreconditions" unless="skip.build">
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${servlet.jar}"/>
+       <param name="fail.message" value="A jar file containing the Servlet 2.3 and JSP1.2 classes is required to compile guessNumber.  Please define the property servlet.jar in your build.properties file and ensure that the file exists."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-beanutils.jar}"/>
+       <param name="fail.message" value="${commons-beanutils.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-digester.jar}"/>
+       <param name="fail.message" value="${commons-digester.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-logging.jar}"/>
+       <param name="fail.message" value="${commons-logging.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-collections.jar}"/>
+       <param name="fail.message" value="${commons-collections.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-api.jar}"/>
+       <param name="fail.message" value="${jsf-api.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${standard.jar}"/>
+       <param name="fail.message" value="${standard.jar} must exist."/>
+    </antcall>
+
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl.jar}"/>
+       <param name="fail.message" value="${jstl.jar} must exist."/>
+    </antcall>
+    
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf-portlet.jar}"/>
+       <param name="fail.message" value="${jsf-portlet.jar} must exist."/>
+    </antcall>
+ 
+  </target>
+
+  <target name="prepare" depends="init"
+        description="Create build directories.">
+    <mkdir dir="${build}/${example}" />
+    <mkdir dir="${build}/${example}/WEB-INF" />
+    <mkdir dir="${build}/${example}/WEB-INF/classes" />
+    <mkdir dir="${build}/${example}/WEB-INF/lib" />
+  </target>
+
+  <target name="copyJars" depends="prepare" if="build.standalone">
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-impl.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-portlet.jar}" />
+  </target>
+
+  <target name="build" unless="skip.build" depends="copyJars" 
+     description="Compile Java files and copy static files." >
+      <touch file="${build}/last-build"/>
+    <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
+    	<include name="**/*.java" />
+     <classpath refid="classpath"/>
+    </javac>
+    <copy todir="${build}/${example}/WEB-INF">
+        <fileset dir="web/WEB-INF">
+        <include name="*.xml" />
+      </fileset>
+    </copy>
+
+     <copy todir="${build}/${example}/">
+      <fileset dir="web">
+        <include name="*.html" />
+        <include name="*.gif" />
+        <include name="*.jpg" />
+        <include name="*.jsp" />
+        <include name="*.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${build}/${example}/WEB-INF/classes/${example}" >
+      <fileset dir="web" >
+         <include name="*properties"/>
+      </fileset>
+    </copy>
+
+    <jar jarfile="${example}.war" basedir="${build}/${example}"/>
+    <copy todir="${build}" file="${example}.war" />
+    <delete file="${example}.war" />
+  </target>	 
+
+  <target name="deploy_portlets" depends="build">
+    <property name="pluto.deploy.staging.dir" value="${pluto.home}/portlets"/>
+    <property name="pluto.deploy.command" value="${pluto.home}/build/build.bat"/>
+    <property name="pluto.deploy.command.args" value="deploy_portlets"/>
+    <property name="pluto.deploy.command.dir" value="${pluto.home}/build"/>
+
+    <copy file="${build}/${example}.war"  todir="${pluto.deploy.staging.dir}"/>
+    <exec dir="${pluto.deploy.command.dir}"  executable="${pluto.deploy.command}">
+      <arg line="${pluto.deploy.command.args}"/>
+    </exec>
+  </target>
+ 
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+
+</project>
+

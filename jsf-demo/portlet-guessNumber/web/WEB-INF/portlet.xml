@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
+    <portlet>
+        <description>JSF GuessNumber Portlet</description>
+        <portlet-name>guessNumber</portlet-name>
+        <display-name>JSF GuessNumber Portlet</display-name>
+        <portlet-class>com.sun.faces.portlet.FacesPortlet</portlet-class>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>VIEW</portlet-mode>
+            <portlet-mode>EDIT</portlet-mode>
+            <portlet-mode>HELP</portlet-mode>
+        </supports>
+
+        <portlet-info>
+            <title>GuessNumber Portlet</title>
+            <short-title>guessNumber</short-title>
+        </portlet-info>
+    </portlet>
+</portlet-app>

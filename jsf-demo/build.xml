@@ -321,6 +321,10 @@
     </copy>
     <copy file="${basedir}/components/wspack-build.xml"
           tofile="${dist.home}/samples/components/build.xml" />
+          
+    <copy todir="${dist.home}/samples/portlet-guessNumber" includeEmptyDirs="false">
+      <fileset dir="${basedir}/portlet-guessNumber" />
+    </copy>
 
   </target>
 
@@ -329,6 +333,7 @@
     <echo> copy the necessary libs </echo>
     <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf-impl.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf-portlet.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf-ri.home}/build/generate/conf/share/html_basic.tld" todir="${dist.home}/lib"/>
     <copy file="${jsf-ri.home}/conf/share/jsf_core.tld" todir="${dist.home}/lib"/>
   </target>
