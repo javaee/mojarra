@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBaseTestCase.java,v 1.7 2003/08/30 00:31:42 craigmcc Exp $
+ * $Id: UIOutputBaseTestCase.java,v 1.8 2003/09/05 19:35:31 eburns Exp $
  */
 
 /*
@@ -137,12 +137,13 @@ public class UIOutputBaseTestCase extends ValueHolderTestCaseBase {
         postSave.restoreState(facesContext, state);
 	assertTrue(propertiesAreEqual(facesContext, preSave, postSave));
 
-	// test component with valueRef
+	// test component with valueRef and value
 	testParent.getChildren().clear();
 	preSave = new UIOutputBase();
 	preSave.setId("output");
 	preSave.setRendererType(null); // necessary: we have no renderkit
 	preSave.setValueRef("valueRefString");
+	preSave.setValue(new Integer(1));
 	testParent.getChildren().add(preSave);
 	state = preSave.getState(facesContext);
 	assertTrue(null != state);

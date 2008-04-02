@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.7 2003/08/30 00:31:36 craigmcc Exp $
+ * $Id: UIOutputBase.java,v 1.8 2003/09/05 19:35:28 eburns Exp $
  */
 
 /*
@@ -172,7 +172,7 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
                 converter = (Converter) theConverter.get(0);
             }
 	}
-        value = (String) values[2];
+        value = values[2];
         valueRef = (String) values[3];
 
     }

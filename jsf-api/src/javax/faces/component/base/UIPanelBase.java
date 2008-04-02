@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanelBase.java,v 1.3 2003/08/30 00:31:37 craigmcc Exp $
+ * $Id: UIPanelBase.java,v 1.4 2003/09/05 19:35:28 eburns Exp $
  */
 
 /*
@@ -176,7 +176,7 @@ public class UIPanelBase extends UIOutputBase implements UIPanel {
                 converter = (Converter) theConverter.get(0);
             }
 	}
-        value = (String) values[2];
+        value = values[2];
         valueRef = (String) values[3];
 
     }

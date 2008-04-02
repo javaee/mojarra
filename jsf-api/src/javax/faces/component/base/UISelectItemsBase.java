@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemsBase.java,v 1.3 2003/08/30 00:31:38 craigmcc Exp $
+ * $Id: UISelectItemsBase.java,v 1.4 2003/09/05 19:35:28 eburns Exp $
  */
 
 /*
@@ -169,7 +169,7 @@ public class UISelectItemsBase extends UIComponentBase implements UISelectItems 
                 converter = (Converter) theConverter.get(0);
             }
 	}
-        value = (String) values[2];
+        value = values[2];
         valueRef = (String) values[3];
 
     }

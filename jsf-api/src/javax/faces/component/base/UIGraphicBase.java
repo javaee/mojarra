@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBase.java,v 1.3 2003/08/30 00:31:36 craigmcc Exp $
+ * $Id: UIGraphicBase.java,v 1.4 2003/09/05 19:35:27 eburns Exp $
  */
 
 /*
@@ -183,7 +183,7 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
                 converter = (Converter) theConverter.get(0);
             }
 	}
-        value = (String) values[2];
+        value = values[2];
         valueRef = (String) values[3];
 
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.10 2003/09/04 03:52:48 eburns Exp $
+ * $Id: UICommandBase.java,v 1.11 2003/09/05 19:35:23 eburns Exp $
  */
 
 /*
@@ -269,7 +269,7 @@ public class UICommandBase extends UIComponentBase implements UICommand {
             }
 	}
         immediate = ((Boolean) values[4]).booleanValue();
-        value = (String) values[5];
+        value = values[5];
         valueRef = (String) values[6];
 
         addDefaultActionListener(context);

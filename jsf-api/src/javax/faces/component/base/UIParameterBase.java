@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBase.java,v 1.4 2003/08/30 00:31:37 craigmcc Exp $
+ * $Id: UIParameterBase.java,v 1.5 2003/09/05 19:35:28 eburns Exp $
  */
 
 /*
@@ -191,7 +191,7 @@ public class UIParameterBase extends UIComponentBase implements UIParameter {
             }
 	}
         name = (String) values[2];
-        value = (String) values[3];
+        value = values[3];
         valueRef = (String) values[4];
 
     }

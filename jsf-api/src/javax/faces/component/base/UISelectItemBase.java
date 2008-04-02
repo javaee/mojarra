@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBase.java,v 1.5 2003/08/30 00:31:37 craigmcc Exp $
+ * $Id: UISelectItemBase.java,v 1.6 2003/09/05 19:35:28 eburns Exp $
  */
 
 /*
@@ -235,7 +235,7 @@ public class UISelectItemBase extends UIOutputBase implements UISelectItem {
         itemDescription = (String) values[2];
         itemLabel = (String) values[3];
         itemValue = (String) values[4];
-        value = (String) values[5];
+        value = values[5];
         valueRef = (String) values[6];
 
     }
