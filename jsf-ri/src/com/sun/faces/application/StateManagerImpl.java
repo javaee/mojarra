@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.32 2005/06/09 22:37:45 jayashri Exp $ 
+ * $Id: StateManagerImpl.java,v 1.33 2005/07/03 07:34:16 jhook Exp $ 
  */ 
 
 
@@ -21,6 +21,7 @@ import org.apache.commons.collections.LRUMap;
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ import javax.faces.component.NamingContainer;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.32 2005/06/09 22:37:45 jayashri Exp $
+ * @version $Id: StateManagerImpl.java,v 1.33 2005/07/03 07:34:16 jhook Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -265,28 +266,42 @@ public class StateManagerImpl extends StateManager {
                 idInLogicalMap = idString.substring(0, sep);
                 idInActualMap = idString.substring(sep + 1);
                 		
-		Map logicalMap = null,
-                    actualMap = null,
-                    sessionMap = Util.getSessionMap(context);
+                ExternalContext externalCtx = context.getExternalContext();
+                Object sessionObj = externalCtx.getSession(false);
                 
-                
-                if (null == sessionMap) {
+                // stop evaluating if the session is not available
+                if (sessionObj == null) {
                     if (logger.isLoggable(Level.FINE)) {
-                        logger.fine( "Can't get session map.  Perhaps the session expired? viewId: "
+                        logger.fine( "Can't Restore Server View State, session expired for viewId: "
                                 + viewId);
                     }
                     return null;
                 }
                 
+                Map logicalMap = null,
+                actualMap = null,
+                sessionMap = externalCtx.getSessionMap();
+                
 		TreeStructure structRoot = null;
 		Object [] stateArray = null;
-		synchronized (this) {
+		synchronized (sessionObj) {
 		    logicalMap = (Map) sessionMap.get(RIConstants.LOGICAL_VIEW_MAP);
+            if (logicalMap != null) {
                     actualMap = (Map) logicalMap.get(idInLogicalMap);
-                    context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
-                            idInLogicalMap);
-		    stateArray = (Object []) actualMap.get(idInActualMap);
+                    if (actualMap != null) {
+                        context.getExternalContext().getRequestMap().put(RIConstants.LOGICAL_VIEW_MAP, 
+                                idInLogicalMap);
+                        stateArray = (Object []) actualMap.get(idInActualMap);
+                    }
+            }
 		}
+        if (stateArray == null) {
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine( "Session Available, but View State does not exist for viewId: "
+                        + viewId);
+            }
+            return null;
+        }
 		structRoot = (TreeStructure)stateArray[0];
 		viewRoot = (UIViewRoot) structRoot.createComponent();
 		restoreComponentTreeStructure(structRoot, viewRoot);
