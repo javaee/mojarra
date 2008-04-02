@@ -84,37 +84,20 @@ public class PackageValueChanged implements ValueChangedListener {
             if ((componentId.equals("currentEngine")) ||
             (componentId.equals("currentBrake")) ||
             (componentId.equals("currentSuspension")) ||
-            (componentId.equals("currentSpeakers")) ||
+            (componentId.equals("currentSpeaker")) ||
             (componentId.equals("currentAudio")) ||
             (componentId.equals("currentTransmission"))) {
                 System.out.println("vEvent.getOldValue: "+vEvent.getOldValue());
                 System.out.println("vEvent.getNewValue: "+vEvent.getNewValue());
-                
+
                 cPrice = cPrice - (this.getPriceFor((String)vEvent.getOldValue()));
                 cPrice = cPrice + (this.getPriceFor((String)vEvent.getNewValue()));
+System.out.println("PRICE AFTER:"+componentId+":"+cPrice);
                 //cPrice = cPrice + 100;
-            }
+            } else {
             
-            else if( (componentId.equals("sunroof")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("sunrooftrue"));
-            }
-            else if( (componentId.equals("cruisecontrol")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("cruisecontroltrue"));
-            }
-            else if( (componentId.equals("keylessentry")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("keylessentrytrue"));
-            }
-            else if( (componentId.equals("securitySystem")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("securitySystemtrue"));
-            }
-            else if( (componentId.equals("skirack")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("skiracktrue"));
-            }
-            else if( (componentId.equals("towPackage")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("towPackagetrue"));
-            }
-            else if( (componentId.equals("gps")) && (((Boolean)vEvent.getNewValue()).equals(Boolean.TRUE))) {
-                cPrice = cPrice + (this.getPriceFor("gpstrue"));
+                Boolean optionSet = (Boolean)vEvent.getNewValue();
+                cPrice = calculatePrice(componentId, optionSet, cPrice); 
             }
             
             // update model value
@@ -122,6 +105,16 @@ public class PackageValueChanged implements ValueChangedListener {
             context.setModelValue("CurrentOptionServer.carCurrentPrice", currentPrice);
         } catch (NumberFormatException ignored) {}
         
+    }
+
+    public int calculatePrice(String optionKey, Boolean optionSet, int cPrice) {
+        if (optionSet.equals(Boolean.TRUE)) {
+            cPrice = cPrice + (this.getPriceFor(optionKey));
+        } else {
+            cPrice = cPrice - (this.getPriceFor(optionKey));
+        }
+System.out.println("PRICE AFTER:"+optionKey+":"+cPrice);
+        return cPrice;
     }
     
     //PENDING(rajprem): this information should eventually 
@@ -169,46 +162,25 @@ public class PackageValueChanged implements ValueChangedListener {
         else if (option.equals((String)rb.getObject("Manual"))) {
             return (200);
         }
-        else if (option.equals("sunrooffalse")) {
-            return (0);
-        }
-        else if (option.equals("sunrooftrue")) {
+        else if (option.equals("sunroof")) {
             return (100);
         }
-        else if (option.equals("cruisecontrolfalse")) {
-            return (0);
-        }
-        else if (option.equals("cruisecontroltrue")) {
+        else if (option.equals("cruisecontrol")) {
             return (150);
         }
-        else if (option.equals("keylessentryfalse")) {
-            return (0);
-        }
-        else if (option.equals("keylessentrytrue")) {
+        else if (option.equals("keylessentry")) {
             return (100);
         }
-        else if (option.equals("securitySystemfalse")) {
-            return (0);
-        }
-        else if (option.equals("securitySystemtrue")) {
+        else if (option.equals("securitySystem")) {
             return (100);
         }
-        else if (option.equals("skirackfalse")) {
-            return (0);
-        }
-        else if (option.equals("skiracktrue")) {
+        else if (option.equals("skirack")) {
             return (200);
         }
-        else if (option.equals("towPackagefalse")) {
-            return (0);
-        }
-        else if (option.equals("towPackagetrue")) {
+        else if (option.equals("towPackage")) {
             return (200);
         }
-        else if (option.equals("gpsfalse")) {
-            return (0);
-        }
-        else if (option.equals("gpstrue")) {
+        else if (option.equals("gps")) {
             return (200);
         }
         else return 0;

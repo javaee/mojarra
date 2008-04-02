@@ -1,5 +1,5 @@
 /*
- * $Id: PackageAction.java,v 1.6 2003/02/11 08:55:08 rkitain Exp $
+ * $Id: PackageAction.java,v 1.7 2003/02/11 19:08:38 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: PackageAction.java,v 1.6 2003/02/11 08:55:08 rkitain Exp $
+ * @version $Id: PackageAction.java,v 1.7 2003/02/11 19:08:38 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -145,37 +145,37 @@ public class PackageAction implements ActionListener {
 
         foundComponent = component.findComponent("sunroof");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.sunRoof", Boolean.FALSE);
 
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.cruiseControl", Boolean.FALSE);
 
         foundComponent = component.findComponent("skirack");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.skiRack", Boolean.FALSE);
 
         foundComponent = component.findComponent("keylessentry");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.keylessEntry", Boolean.FALSE);
 
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.towPackage", Boolean.FALSE);
 
         // Display locale specific button labels..
@@ -232,13 +232,13 @@ public class PackageAction implements ActionListener {
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
@@ -262,7 +262,7 @@ public class PackageAction implements ActionListener {
         foundComponent = component.findComponent("towPackage");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.towPackage", Boolean.FALSE);
 
         // Display locale specific button labels..
@@ -317,13 +317,13 @@ public class PackageAction implements ActionListener {
         foundComponent = component.findComponent("securitySystem");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.securitySystem", Boolean.FALSE);
 
         foundComponent = component.findComponent("gps");
         foundComponent.setAttribute("disabled", "true");
         foundComponent.setAttribute("value", Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "package-unselected");
+        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
         context.setModelValue("CurrentOptionServer.gps", Boolean.FALSE);
 
         foundComponent = component.findComponent("cruisecontrol");
