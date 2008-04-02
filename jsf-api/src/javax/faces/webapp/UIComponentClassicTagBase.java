@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.17 2006/03/23 22:17:28 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.18 2006/05/05 16:29:10 rlubke Exp $
  */
 
 /*
@@ -909,18 +909,39 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <i>component</i>.</p>
      */
 
-    protected void addVerbatimBeforeComponent(UIComponentClassicTagBase parentTag,
-					    UIComponent verbatim,
-					   UIComponent component) {
-	int indexOfComponentInParent = 0;
-	UIComponent parent = component.getParent();
-	List children = parent.getChildren();
-	if (null == parent) {
-	    return;
-	}
-	indexOfComponentInParent = children.indexOf(component);
-	children.add(indexOfComponentInParent, verbatim);
-	parentTag.addChild(verbatim);
+    protected void addVerbatimBeforeComponent(
+          UIComponentClassicTagBase parentTag,
+          UIComponent verbatim,
+          UIComponent component) {        
+       
+        UIComponent parent = component.getParent();
+        if (null == parent) {
+            return;
+        }
+        
+        List<UIComponent> children = parent.getChildren();   
+        // EDGE CASE:
+            // Consider CASE 1 or 2 where the component is provided via a
+            // component binding in session or application scope.
+            // The automatically created UIOuput instances for the template text
+            // will already be present.  Check the JSP_CREATED_COMPONENT_IDS attribute, 
+            // if present and the number of created components is the same
+            // as the number of children replace at a -1 offset from the current
+            // value of indexOfComponentInParent, otherwise, call add()
+        List createdIds = (List) 
+              parent.getAttributes().get(JSP_CREATED_COMPONENT_IDS);
+        boolean replace =
+              (createdIds != null && createdIds.size() == children.size());             
+        int indexOfComponentInParent = children.indexOf(component);
+        if (replace) {
+        indexOfComponentInParent = ((indexOfComponentInParent == 0)
+                                    ? 0
+                                    : (indexOfComponentInParent - 1));
+            children.set(indexOfComponentInParent, verbatim);
+        } else {
+            children.add(indexOfComponentInParent, verbatim);
+        }
+        parentTag.addChild(verbatim);
     }
 
     /**
@@ -1273,9 +1294,33 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 	    // stuff the template text or custom tag output into a
 	    // transient component
 	    if (null != (verbatim = this.createVerbatimComponentFromBodyContent())) {
-		component.getChildren().add(verbatim);
-		parentTag.addChild(verbatim);
-	    }
+            // EDGE CASE:
+            // Consider CASE 4 where the component is provided via a
+            // component binding in session or application scope.
+            // The verbatim instance will already be present.  If we
+            // add again, the user will get duplicate component ID
+            // errors.  Check the JSP_CREATED_COMPONENT_IDS attribute.  If it is not present, we
+            // need to add the new verbatim child.  If it is present, assume it is a
+            // List and check its size.  If the size of the list is equal to the
+            // number of children currently in the component, replace the replace
+            // the child of this component at the index derived as follows.  If
+            // indexOfChildInParent is 0, replace the child at the 0th index with
+            // the new verbatim child.  Otherwise, replace the child at the
+            // (indexOfChildInParent - 1)th index with the new verbatim child.
+            List createdIds = (List) 
+                  component.getAttributes().get(JSP_CREATED_COMPONENT_IDS);
+            if (createdIds != null) {
+                int listIdx = component.getChildCount();
+                if (createdIds.size() == listIdx) {
+                    component.getChildren().set((listIdx - 1), verbatim);                    
+                } else {
+                    component.getChildren().add(verbatim);                   
+                }
+            } else {
+                component.getChildren().add(verbatim);                
+            }
+            parentTag.addChild(verbatim);
+        }
 	}
 	
         return (getDoAfterBodyValue());

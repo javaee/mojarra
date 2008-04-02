@@ -1,0 +1,24 @@
+
+
+
+
+
+
+    <html>
+        <body>
+            <form id="form" name="form" method="post" action="/jsf-systest/faces/interweaving08.jsp;jsessionid=1d1ece01226445a33baa0da4d0ff3" enctype="application/x-www-form-urlencoded">
+<table>
+<tbody>
+<tr>
+<td>
+                        
+                        ciao
+                        Value</td>
+</tr>
+</tbody>
+</table>
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id37:j_id38" /><input type="hidden" name="form" value="form" /></form>
+        </body>
+    </html>
+
+

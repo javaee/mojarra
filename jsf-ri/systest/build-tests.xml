@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.112 2006/04/27 17:39:15 rlubke Exp $
+ $Id: build-tests.xml,v 1.113 2006/05/05 16:29:11 rlubke Exp $
 -->
 
 <!--
@@ -915,7 +915,53 @@
          <jsf.tester
               request="${context.path}/faces/interweaving07.jsp"  
               recordGolden="${local.golden.path}/interweaving07.txt"
-              golden="${golden.path}/interweaving07.txt"/>        
+              golden="${golden.path}/interweaving07.txt"/>  
+        
+        <!-- Make multiple requests to the same page and ensure
+             the response is 200 -->
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving08.jsp"
+            golden="${golden.path}/interweaving08.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving08.jsp"
+            golden="${golden.path}/interweaving08.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving08.jsp"
+            golden="${golden.path}/interweaving08.txt"/>
+        
+        <!-- Make multiple requests to the same page and ensure
+             the response is 200 -->
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving09.jsp"
+            golden="${golden.path}/interweaving09.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving09.jsp"
+            golden="${golden.path}/interweaving09.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving09.jsp"
+            golden="${golden.path}/interweaving09.txt"/>
+        
+        <!-- Make multiple requests to the same page and ensure
+             the response is 200 -->
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving10.jsp"
+            golden="${golden.path}/interweaving10.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving10.jsp"              
+            golden="${golden.path}/interweaving10.txt"/>
+        <jsf.tester
+            ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
+            request="${context.path}/faces/interweaving10.jsp"
+            golden="${golden.path}/interweaving10.txt"/>
+        
         
         <jsf.tester
               request="${context.path}/faces/include-import-interweaving.jsp"

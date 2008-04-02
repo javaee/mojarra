@@ -94,6 +94,30 @@
     </managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
   </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>interweaving08</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.InterweavingBean
+        </managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>interweaving09</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.InterweavingBean
+        </managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>interweaving10</managed-bean-name>
+        <managed-bean-class>
+            com.sun.faces.systest.model.InterweavingBean
+        </managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
   
   <managed-bean>
     <managed-bean-name>forEachBean1</managed-bean-name>
