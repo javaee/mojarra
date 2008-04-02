@@ -44,11 +44,11 @@
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
     
-    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=0F8DF120991FC2B6469169BA26263D54">
+    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=91C6BEFDEA5D8576382A0743D5A3190B">
 
-  	<input type="text" name="helloForm.userNo" value="NUMBER"> <BR>
+  	<input type="text" name="helloForm_userNo" value="NUMBER"> <BR>
 
-	 <input type="submit" name="helloForm.submit" value="Submit">
+	 <input type="submit" name="helloForm_submit" value="Submit">
     </form>
     
 </HTML>  
