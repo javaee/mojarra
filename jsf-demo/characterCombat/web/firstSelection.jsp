@@ -11,6 +11,9 @@
 </head>
 
 <body>
+
+  <h:graphicImage url="/images/header.jpg" />
+
   <h2>First Selection Page</h2>
 
   <p>This page illustrates how the same data from the model can be

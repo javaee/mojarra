@@ -140,9 +140,6 @@ public class ModelBean {
      * @return current character name String
      */
     public String getCurrentSelection() {
-	//        if (currentSelection == null) {
-	//            currentSelection = initCurrentSelection();
-	//        }
         return currentSelection;
     }
 
@@ -313,7 +310,8 @@ public class ModelBean {
             while (iter.hasNext()) {
                 CharacterBean item = (CharacterBean) iter.next();
                 if (item.getName().equals(customName)) {
-                    select();
+                    reset();
+                    return;
                 }
             }
 
@@ -324,46 +322,6 @@ public class ModelBean {
                 speciesPropertyMap.get(customSpecies));
             dataList.add(item);
         }
-    }
-
-    /**
-     * <p>Add first selection name</p>
-     *
-     * @return action result String to be used for navigation
-     */
-    public String addFirstSelection() {
-        firstSelection = currentSelection;
-
-        currentSelection = null;
-        secondSelection = null;
-
-        return "success";
-    }
-
-    /**
-     * <p>Add second selection name</p>
-     *
-     * @return action result String to be used for navigation
-     */
-    public String addSecondSelection() {
-        secondSelection = currentSelection;
-        currentSelection = null;
-
-        return "success";
-    }
-
-    /**
-     * <p>Clear out internal selection strings in preparation to go
-     * to the selection pages</p>
-     *
-     * @return action result String to be used for navigation
-     */
-    public String select() {
-        currentSelection = null;
-        firstSelection = null;
-        secondSelection = null;
- 
-        return "success";
     }
 
 
@@ -384,24 +342,6 @@ public class ModelBean {
             CharacterBean item = (CharacterBean) iter.next();
             if (item.getName().equals(name)) {
                 return item.getSpecies().getType();
-            }
-        }
-        return null;
-    }
-
-    /**
-     * <p>Create initial current selection by finding first not already
-     * selected character name</p>
-     *
-     * @return initial selection String 
-     */
-    private String initCurrentSelection() {
-        Iterator iter = dataList.iterator();
-        while (iter.hasNext()) {
-            CharacterBean item = (CharacterBean) iter.next();
-            if (!item.getName().equals(firstSelection) &&
-                !item.getName().equals(secondSelection)) {
-                 return item.getName();
             }
         }
         return null;
@@ -486,6 +426,16 @@ public class ModelBean {
          item.setName("Legolas");
          item.setSpecies((SpeciesBean) speciesPropertyMap.get("Elf"));
          dataList.add(item);
+    }
+
+    /**
+     * <p>Clear out internal selection strings in preparation to go
+     * to the selection pages</p>
+     */
+    private void reset() {
+        currentSelection = null;
+        firstSelection = null;
+        secondSelection = null;
     }
 
 }

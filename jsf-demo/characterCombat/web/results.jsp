@@ -12,6 +12,9 @@
 </head>
 
 <body>
+
+  <h:graphicImage url="/images/header.jpg" />
+
   <h2>Combat Results Page</h2>
 
   <p>The results page determines the winner of the two selections

@@ -13,12 +13,13 @@
 
 <body>
 
+  <h:graphicImage url="/images/header.jpg" />
+
   <h2>Welcome to the Character Combat</h2>
   <p>This sample application illustrates how you can easily display data
      from a backing bean, process user input, handle navigation, and
      display the results all using the JavaServer Faces Framework</p>
-
-  <p>This initial page displays a list of available characters in a table
+<p>This initial page displays a list of available characters in a table
      format. You can choose to add your own character to the list using
      the input text field or simply go on to the next page</p>
 
@@ -40,16 +41,16 @@
         <h:outputText value="Name"/>
       </f:facet>
 
-        <h:outputText value="#{character.name}"/>
+      <h:outputText value="#{character.name}"/>
 
     </h:column>
 
     <h:column>
       <f:facet name="header">
-          <h:outputText value="Species"/>
+        <h:outputText value="Species"/>
       </f:facet>
 
-        <h:outputText value="#{character.species.type}"/>
+      <h:outputText value="#{character.species.type}"/>
 
     </h:column>
 
@@ -58,7 +59,7 @@
         <h:outputText value="Language"/>
       </f:facet>
 
-        <h:outputText value="#{character.species.language}"/>
+      <h:outputText value="#{character.species.language}"/>
 
     </h:column>
 
@@ -67,7 +68,7 @@
         <h:outputText value="Immortal"/>
       </f:facet>
 
-        <h:outputText value="#{character.species.immortal}"/>
+      <h:outputText value="#{character.species.immortal}"/>
 
     </h:column>
 

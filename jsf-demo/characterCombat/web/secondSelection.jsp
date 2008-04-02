@@ -12,6 +12,9 @@
 </head>
 
 <body>
+
+  <h:graphicImage url="/images/header.jpg" />
+
   <h2>Second Selection Page</h2>
 
   <p>This page displays the same data as the previous page except it
