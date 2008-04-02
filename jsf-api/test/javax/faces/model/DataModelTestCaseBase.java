@@ -1,5 +1,5 @@
 /*
- * $Id: DataModelTestCaseBase.java,v 1.3 2003/10/15 02:02:18 craigmcc Exp $
+ * $Id: DataModelTestCaseBase.java,v 1.4 2003/10/15 20:16:02 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.model;
 
 
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.model.DataModel;
 import javax.faces.model.DataModelEvent;
@@ -17,6 +18,7 @@ import javax.faces.model.DataModelListener;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.apache.commons.beanutils.PropertyUtils;
 
 
 /**
@@ -183,6 +185,64 @@ public abstract class DataModelTestCaseBase extends TestCase {
         model.removeDataModelListener(listener);
         model.setRowIndex(0);
         assertEquals("/0/-1", TestListener.trace());
+
+    }
+
+
+    // Test the ability to update through the Map returned by getRowData()
+    public void testRowData() throws Exception {
+
+        // Retrieve the row data for row zero
+        model.setRowIndex(0);
+        Object data = model.getRowData();
+        assertNotNull(data);
+
+        // Modify several property values
+        TestBean bean = beans[0];
+        bean.setBooleanProperty(!bean.getBooleanProperty());
+        if (data instanceof Map) {
+            ((Map) data).put("booleanProperty",
+                             bean.getBooleanProperty() ?
+                             Boolean.TRUE : Boolean.FALSE);
+        } else {
+            PropertyUtils.setSimpleProperty(data, "booleanProperty",
+                                            bean.getBooleanProperty() ?
+                                            Boolean.TRUE : Boolean.FALSE);
+        }
+        bean.setIntProperty(bean.getIntProperty() + 5);
+        if (data instanceof Map) {
+            ((Map) data).put("intProperty",
+                             new Integer(bean.getIntProperty()));
+        } else {
+            PropertyUtils.setSimpleProperty(data, "intProperty",
+                                            new Integer(bean.getIntProperty()));
+        }
+        bean.setStringProperty(bean.getStringProperty() + "XYZ");
+        if (data instanceof Map) {
+            ((Map) data).put("stringProperty",
+                             bean.getStringProperty() + "XYZ");
+        } else {
+            PropertyUtils.setSimpleProperty(data, "stringProperty",
+                                            bean.getStringProperty());
+        }
+
+        // Ensure that all the modifications flowed through to beans[0]
+        assertEquals(bean.getBooleanProperty(),
+                     beans[0].getBooleanProperty());
+        assertEquals(bean.isBooleanSecond(),
+                     beans[0].isBooleanSecond());
+        assertEquals(bean.getByteProperty(),
+                     beans[0].getByteProperty());
+        assertEquals(bean.getDoubleProperty(),
+                     beans[0].getDoubleProperty(), 0.005);
+        assertEquals(bean.getFloatProperty(),
+                     beans[0].getFloatProperty(), (float) 0.005);
+        assertEquals(bean.getIntProperty(),
+                     beans[0].getIntProperty());
+        assertEquals(bean.getLongProperty(),
+                     beans[0].getLongProperty());
+        assertEquals(bean.getStringProperty(),
+                     beans[0].getStringProperty());
 
     }
 
