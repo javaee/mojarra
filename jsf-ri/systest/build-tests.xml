@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.101 2006/01/18 15:52:57 rlubke Exp $
+ $Id: build-tests.xml,v 1.102 2006/02/03 21:39:11 edburns Exp $
 -->
 
 <!--
@@ -454,6 +454,16 @@
 
     <target name="test.navigation"
             description="Test navigation handler rule processing">
+        
+        <jsf.junit context-path="${context.path}"
+                   classpath-refid="html.classpath"
+                   test-results-dir="${impl.test.results.dir}">
+            <tests>
+                <fileset dir="${basedir}/build/classes"
+                         includes="com/sun/faces/systest/NavigationTestCase.class"/>
+            </tests>
+        </jsf.junit>         
+        
 
     </target>
 

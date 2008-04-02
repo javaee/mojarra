@@ -43,26 +43,27 @@
 <root>
     <property>
         <description>
-          MethodBinding representing the application action to invoke when
-          this component is activated by the user.  The expression must
-          evaluate to a public method that takes no parameters, and returns
-          a String (the logical outcome) which is passed to the
-          NavigationHandler for this application.
+          MethodExpression representing the application action to invoke
+          when this component is activated by the user.  The expression
+          must evaluate to a public method that takes no parameters, and
+          returns an Object (the toString() of which is called to derive
+          the logical outcome) which is passed to the NavigationHandler
+          for this application.
         </description>
         <display-name>Application Action</display-name>
         <icon></icon>
         <property-name>action</property-name>
-        <property-class>javax.el.MethodBinding</property-class>
+        <property-class>javax.el.MethodExpression</property-class>
         <property-extension>
             <method-signature>
-                java.lang.String action()
+                java.lang.Object action()
             </method-signature>
         </property-extension>
     </property>
 
     <property>
         <description>
-          MethodBinding representing an action listener method that will be
+          MethodExpression representing an action listener method that will be
           notified when this component is activated by the user.  The
           expression must evaluate to a public method that takes an
           ActionEvent parameter, with a return type of void.

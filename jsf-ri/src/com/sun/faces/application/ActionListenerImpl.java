@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.14 2005/08/26 15:26:58 rlubke Exp $
+ * $Id: ActionListenerImpl.java,v 1.15 2006/02/03 21:39:10 edburns Exp $
  */
 
 /*
@@ -85,13 +85,17 @@ public class ActionListenerImpl implements ActionListener {
 
         Application application = context.getApplication();
 
+        Object invokeResult = null;
         String outcome = null;
         MethodBinding binding = null;
 
 	binding = actionSource.getAction();
 	if (binding != null) {
 	    try {
-		outcome = (String) binding.invoke(context, null);
+		if (null != (invokeResult = binding.invoke(context, null))) {
+                    outcome = invokeResult.toString();
+                }
+                // else, default to null, as assigned above.
 	    } catch (MethodNotFoundException e) {
                 if (logger.isLoggable(Level.SEVERE)) {
                     logger.log(Level.SEVERE, e.getMessage(), e);

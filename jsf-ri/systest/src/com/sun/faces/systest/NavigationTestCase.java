@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationTestCase.java,v 1.7 2005/08/22 22:10:38 ofung Exp $
+ * $Id: NavigationTestCase.java,v 1.8 2006/02/03 21:39:11 edburns Exp $
  */
 
 /*
@@ -192,6 +192,49 @@ public class NavigationTestCase extends AbstractTestCase {
             e.printStackTrace();
             assertTrue(false);
         }
+    }
+    
+    public void testNavigateWithEnum() throws Exception {
+        HtmlForm form;
+        HtmlSubmitInput submit;
+        HtmlPage page, page1;
+                                                                               
+                                                                               
+        page = getPage("/faces/enum01.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "go");
+                                                                               
+        // submit the form, go to next page, check that the text exists
+                                                                               
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 != page1.asText().indexOf("/hello.jsp PASSED"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        
+        page = getPage("/faces/enum01.jsp");
+        form = getFormById(page, "form");
+        assertNotNull("form exists", form);
+        submit = (HtmlSubmitInput)
+            form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "stay");
+                                                                               
+        // submit the form, stay on same page, check that the text does not exist
+                                                                               
+        try {
+            page1 = (HtmlPage) submit.click();
+            assertTrue(-1 == page1.asText().indexOf("/hello.jsp PASSED"));
+            assertTrue(-1 != page1.asText().indexOf("stay here"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+        
     }
 
 }

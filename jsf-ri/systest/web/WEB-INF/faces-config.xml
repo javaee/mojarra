@@ -154,7 +154,7 @@
     </managed-property>
     <managed-property>
       <property-name>suit</property-name>
-      <value>Heart</value>
+      <value>Hearts</value>
     </managed-property>
     <managed-property>
       <property-name>referencedSuit</property-name>
@@ -171,7 +171,7 @@
     <managed-bean-scope>session</managed-bean-scope>
     <managed-property>
       <property-name>suit</property-name>
-      <value>Spade</value>
+      <value>Spades</value>
     </managed-property>
   </managed-bean>
 
@@ -558,5 +558,17 @@
       <to-view-id>/renderkit04.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
+  
+  <navigation-rule>
+    <from-view-id>/enum01.jsp</from-view-id>
+    <navigation-case>
+      <description>If the action returns "Spades", goto
+      hello.jsp</description>
+      <display-name>The Generic Rule</display-name>
+      <from-outcome>Spades</from-outcome>
+      <to-view-id>/hello.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+  
 
 </faces-config>

@@ -75,11 +75,11 @@
     sb.append("stringProperty(" + bean.getStringProperty() + ")|");
   }
   TestBean.Suit suit = bean.getSuit();
-  if (suit != TestBean.Suit.Heart) {
+  if (suit != TestBean.Suit.Hearts) {
       sb.append("suit(" + suit.toString() + ")|");
   }
   suit = bean.getReferencedSuit();
-  if (suit != TestBean.Suit.Spade) {
+  if (suit != TestBean.Suit.Spades) {
       sb.append("referencedSuit(" + suit.toString() + ")|");
   }
 

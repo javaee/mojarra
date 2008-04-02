@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.24 2006/01/27 21:39:04 edburns Exp $
+ * $Id: TestBean.java,v 1.25 2006/02/03 21:39:12 edburns Exp $
  */
 
 /*
@@ -61,16 +61,21 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
  */
-
 public class TestBean {
+    
+public enum Suit { Hearts, Clubs, Diamonds, Spades }
 
     private Random random;
     private ArrayList newList1= new ArrayList();
     private ArrayList newList2= new ArrayList();
     ServletContext servletContext = null;
     
-    public enum Suit {
-        Spade, Heart, Diamond, Club
+    public Suit returnSpades() {
+        return Suit.Spades;
+    }
+    
+    public Suit returnDiamonds() {
+        return Suit.Diamonds;
     }
 
     public TestBean() {
