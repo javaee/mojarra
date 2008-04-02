@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.4 2004/01/29 16:38:11 eburns Exp $
+ * $Id: TestCarDemo.java,v 1.5 2004/01/29 17:37:50 eburns Exp $
  */
 
 /*
@@ -45,6 +45,13 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	"carstore.bundles.Roadster",
 	"carstore.bundles.SUV"
     };
+    protected String [] packageLabelKeys = {
+	"Custom",
+	"Standard",
+	"Performance",
+	"Deluxe"
+    };
+	
     protected ResourceBundle [] carBundles = null;
 
 
@@ -99,10 +106,12 @@ public class TestCarDemo extends HtmlUnitTestCase {
      * 
      * <p>Verify that all of the expected cars have their descriptions
      * on the page.</p>
-     * 
      *
      * <p>Verify that the text of the "more" button is properly
      * localized.</p>
+     *
+     * <p>Press the button for each model and execute doCarDetail() on
+     * the result.</p>
      *
      *
      */ 
@@ -129,10 +138,10 @@ public class TestCarDemo extends HtmlUnitTestCase {
 
 	for (i = 0; i < carBundles.length; i++) {
 	    iter = cells.iterator();
-	    description = carBundles[i].getString("description");
+	    description = carBundles[i].getString("description").trim();
 	    while (iter.hasNext()) {
 		cell = (HtmlTableDataCell) iter.next();
-		if (-1 != cell.asText().trim().indexOf(description)) {
+		if (-1 != cell.asText().indexOf(description)) {
 		    if (log.isTraceEnabled()) {
 			log.trace("Found description " + description + ".");
 		    }
@@ -144,11 +153,11 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	assertTrue("Did not find description: " + description, found);
 
 	iter = buttons.iterator();
-	moreButton = resources.getString("moreButton");
+	moreButton = resources.getString("moreButton").trim();
 	while (iter.hasNext()) {
 	    button = (HtmlSubmitInput) iter.next();
 	    assertTrue(-1 != 
-		       button.asText().trim().indexOf(moreButton.trim()));
+		       button.asText().indexOf(moreButton));
 	    if (log.isTraceEnabled()) {
 		log.trace("Button text of " + moreButton + " confirmed.");
 	    }
@@ -157,10 +166,102 @@ public class TestCarDemo extends HtmlUnitTestCase {
 	
     }
 
-    public void doCarDetail(HtmlPage carDetail) {
+    /**
+     * <p>Assumptions: Each of the package buttons causes an increase in
+     * base price over the previous button, in order.</p>
+     *
+     *
+     */
 
+    public void doCarDetail(HtmlPage carDetail) throws Exception {
 	assertNotNull(carDetail);
+	int 
+	    previousPrice = 0,
+	    basePrice = getNumberNearLabel("basePriceLabel", carDetail),
+	    currentPrice = getNumberNearLabel("yourPriceLabel", carDetail);
+	List buttons = getAllElementsOfGivenClass(carDetail, null, 
+						  HtmlSubmitInput.class);
+	HtmlSubmitInput button = null;
+	int i = 0;
+	String label = null;
+	Iterator iter = null;
+	
+	assertEquals(basePrice, currentPrice);
+	
+	// press each of the package buttons and see that the price
+	// increases for each one.
+	for (i = 0; i < packageLabelKeys.length; i++) {
+	    previousPrice = currentPrice;
+	    iter = buttons.iterator();
+	    label = resources.getString(packageLabelKeys[i]).trim();
+	    while (iter.hasNext()) {
+		button = (HtmlSubmitInput) iter.next();
+		// if this is the button we're looking for
+		if (-1 != (button.asText().indexOf(label))) {
+		    // press it
+		    carDetail = (HtmlPage) button.click();
+		    // resample yourPrice
+		    currentPrice = getNumberNearLabel("yourPriceLabel", 
+						      carDetail);
+		    assertTrue(previousPrice < currentPrice);
+		    break;
+		}
+	    }
+	}
     }
+
+    protected int getNumberNearLabel(String label, HtmlPage page) {
+	List cells;
+	Iterator iter = null;
+	HtmlTableDataCell cell = null;
+	String yourPrice = null;
+	int result = Integer.MIN_VALUE;
+	
+	cells = getAllElementsOfGivenClass(page, null, 
+					   HtmlTableDataCell.class);
+	iter = cells.iterator();
+	yourPrice = resources.getString(label).trim();
+	// look in the current or next cell for the price data.
+	while (iter.hasNext()) {
+	    cell = (HtmlTableDataCell) iter.next();
+	    if (-1 != cell.asText().indexOf(yourPrice)) {
+		if (Integer.MIN_VALUE != 
+		    (result = extractNumberFromText(cell.asText().trim()))) {
+		    return result;
+		}
+		// try the next cell
+		cell = (HtmlTableDataCell) iter.next();
+		if (Integer.MIN_VALUE != 
+		    (result=extractNumberFromText(cell.asText().trim()))) {
+		    return result;
+		}
+	    }
+	}
+	return Integer.MIN_VALUE;
+    }
+
+    protected int extractNumberFromText(String content) {
+	char [] chars = null;
+	chars = content.toCharArray();
+	String number = null;
+	int i,j;
+	for (i = 0; i < chars.length; i++) {
+	    if (Character.isDigit(chars[i])) {
+		for (j = i; j < chars.length; j++) {
+		    if (Character.isWhitespace(chars[j])) {
+			break;
+		    }
+		}
+		number = content.substring(i, j);
+		return Integer.valueOf(number).intValue();
+	    }
+	}
+	return Integer.MIN_VALUE;
+    }
+
+			
+		
+	    
     
 } // end of class DemoTest01
     
