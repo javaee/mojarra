@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.44 2006/08/03 02:35:56 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.45 2006/08/03 17:06:23 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.44 2006/08/03 02:35:56 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.45 2006/08/03 17:06:23 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -70,7 +70,6 @@ public class RenderKitImpl extends RenderKit {
 // Ivars used during actual client lifetime
 //
 
-// Relationship Instance Variables
 
     /**
      * Keys are String renderer family.  Values are HashMaps.  Nested
