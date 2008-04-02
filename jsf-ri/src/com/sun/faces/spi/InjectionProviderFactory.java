@@ -25,14 +25,15 @@
 
 package com.sun.faces.spi;
 
-import com.sun.faces.config.WebConfiguration;
-import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import javax.faces.context.ExternalContext;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.config.WebConfiguration;
+import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.util.Util;
-import javax.faces.context.ExternalContext;
 
 /**
  * <p>A factory for creating <code>InjectionProvider</code>
@@ -122,17 +123,8 @@ public class InjectionProviderFactory {
                     LOGGER.log(Level.SEVERE, "", iae);
                 }
             }
-        } else {
-            // added magic for GlassFish
-            try {
-                if (Class.forName("com.sun.enterprise.util.InjectionManagerImpl") != null) {
-                    provider = 
-                          getProviderInstance("com.sun.faces.vendor.GlassFishInjectionProvider");   
-                }
-            } catch (ClassNotFoundException cnfe) {
-                provider = NOOP_PROVIDER;
-            }
-        }
+        } 
+       
         return provider;
     }
 

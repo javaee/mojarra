@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.79 2006/05/25 21:02:26 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.80 2006/05/31 17:22:30 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -259,11 +259,7 @@ public class ConfigureListener implements ServletContextListener {
 
     private VariableResolver legacyVRChainHead = null;
     private PropertyResolver legacyPRChainHead = null;
-    private ArrayList<ELResolver> elResolversFromFacesConfig = null;
-    
-    // flag to disable web.xml scanning completely - to be used
-    // by subclasses of ConfigureListener.
-    private boolean shouldScanWebXml = true;
+    private ArrayList<ELResolver> elResolversFromFacesConfig = null;   
    
     
     // ------------------------------------------ ServletContextListener Methods
@@ -346,8 +342,7 @@ public class ConfigureListener implements ServletContextListener {
             // Check to see if the FacesServlet is present in the
             // web.xml.   If it is, perform faces configuration as normal,
             // otherwise, simply return.
-            if (shouldScanWebXml &&
-                !isFeatureEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles))
+            if (!isFeatureEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles))
             {
                 WebXmlProcessor processor = new WebXmlProcessor(context);
                 if (!processor.isFacesServletPresent()) {
@@ -582,12 +577,7 @@ public class ConfigureListener implements ServletContextListener {
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         return afactory.getApplication();
 
-    }
-    
-    
-    protected void scanWebXml(boolean shouldScan) {
-        this.shouldScanWebXml = shouldScan;
-    }
+    }            
 
 
     /**

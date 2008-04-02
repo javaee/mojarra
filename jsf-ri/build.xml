@@ -245,22 +245,7 @@
         <copy file="${build.generate.tld.dir}/html_basic.tld"
               toDir="${build.classes.dir}/META-INF"/>
         <copy file="${conf.share.dir}/jsf_core.tld"
-              toDir="${build.classes.dir}/META-INF"/>
-        <if>
-            <equals arg1="${container.name}" arg2="glassfish"/>
-            <then>
-                <property name="listener.class" value="com.sun.faces.config.GlassFishConfigureListener"/>
-            </then>
-            <else>
-                <property name="listener.class" value="com.sun.faces.config.ConfigureListener"/>
-            </else>
-        </if>
-        
-        <echo message="INFO: Updating jsf_core.tld to use ServletContextListener ${listener.class}"/>
-
-        <replace file="${build.classes.dir}/META-INF/jsf_core.tld"
-                 token="|CONFIG_LISTEN_CLASS|"
-                 value="${listener.class}"/>
+              toDir="${build.classes.dir}/META-INF"/>       
 
     </target>
 
