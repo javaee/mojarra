@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.2 2003/03/13 01:11:54 craigmcc Exp $
+ * $Id: NavigationHandler.java,v 1.3 2003/03/28 22:39:07 craigmcc Exp $
  */
 
 /*
@@ -33,12 +33,16 @@ public abstract class NavigationHandler {
      * returned by an executed {@link Action}.</p>
      *
      * @param context The {@link FacesContext} for the current request
+     * @param actionRef The action reference expression that was evaluated
+     *  to retrieve the specified outcome, or <code>null</code> if the
+     *  outcome was acquired by some other means
      * @param outcome The logical outcome returned by a previous {@link Action}
      *
      * @exception NullPointerException if <code>context</code> or
      *  <code>outcome</code> is <code>null</code>
      */
     public abstract void handleNavigation(FacesContext context,
+                                          String actionRef,
                                           String outcome);
 
 
