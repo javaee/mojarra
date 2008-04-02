@@ -1,5 +1,5 @@
 /*
- * $Id: DataTableTag.java,v 1.7 2003/10/28 21:00:33 eburns Exp $
+ * $Id: Data_TableTag.java,v 1.1 2003/11/05 05:46:00 eburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import javax.servlet.jsp.JspException;
  * custom tag.
  */
 
-public class DataTableTag extends BaseComponentTag {
+public class Data_TableTag extends BaseComponentTag {
 
 
     // -------------------------------------------------------------- Properties

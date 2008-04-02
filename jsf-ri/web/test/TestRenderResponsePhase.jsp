@@ -299,7 +299,7 @@
         </TD>
 
 	<TD><h:input_text id="date2" value="Thu, Jul 11, 1996"
-                         disabled="true"
+                         readonly="true"
                         size="3" maxlength="20" tabindex="1" accesskey="D">
                 <f:convert_datetime dateStyle="long"/>
             </h:input_text>

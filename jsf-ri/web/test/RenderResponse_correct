@@ -324,7 +324,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:date2" value="Thu, Jul 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1" disabled="disabled" />
+            <input type="text" name="basicForm:date2" value="Thu, Jul 11, 1996" accesskey="D" maxlength="20" size="3" tabindex="1" readonly="readonly" />
 	</TD>
 
       </TR>

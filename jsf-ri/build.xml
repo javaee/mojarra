@@ -30,7 +30,7 @@
   <property name="build.home" value="${basedir}/build"/>
 
   <property name="build.generate"   value="${build.home}/generate"/>
-  <property name="build.generate.tld"   value="${build.home}/generate/conf/share"/>
+  <property name="build.generate.tld"   value="${build.generate}/conf/share"/>
 
   <!-- The base directory for the JSF APIs -->
   <property name="jsf-api.home" value ="../jsf-api"/>
@@ -119,7 +119,7 @@
   <property name="url"      value="http://localhost:8080/manager"/>
 
 
-    <!-- Directory where core struts library configurations files are stored -->
+    <!-- Directory where tlds are stored -->
     <property name="conf.share.dir" value="conf/share"/>
 
 
@@ -159,10 +159,6 @@
     <mkdir dir="${build.home}/javadocs"/>
     <mkdir dir="${build.home}/tlddocs"/>
     <mkdir dir="${build.home}/lib"/>
-    <copy file="${conf.share.dir}/html_basic.tld"
-         toDir="${build.home}/classes/META-INF"/>
-    <copy file="${conf.share.dir}/jsf_core.tld"
-         toDir="${build.home}/classes/META-INF"/>
     <!-- unjar mozutil to classes, so we don't have to expose it -->
     <unjar src="${mozutil.jar}" dest="${build.home}/classes"/>
   </target>
@@ -257,6 +253,11 @@ must exist.  This is necessary for the MessageFactory class.
     </copy>
     <copy  file="${jsf-api.dtd}"
           todir="${build.home}/classes/com/sun/faces/config"/>
+
+    <copy file="${build.generate.tld}/html_basic.tld"
+         toDir="${build.home}/classes/META-INF"/>
+    <copy file="${conf.share.dir}/jsf_core.tld"
+         toDir="${build.home}/classes/META-INF"/>
 
     </target>
 
@@ -357,7 +358,7 @@ must exist.  This is necessary for the MessageFactory class.
     <java fork="true" jar="${tlddoc.jar}">
       <arg line="-d ${build.home}/tlddocs"/>
       <arg line="-windowtitle jsf-ri-${version}"/>
-      <arg value="${conf.share.dir}/html_basic.tld"/>
+      <arg value="${build.generate.tld}/html_basic.tld"/>
       <arg value="${conf.share.dir}/jsf_core.tld"/>
     </java>
   </target>
