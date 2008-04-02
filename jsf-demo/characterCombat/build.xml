@@ -12,6 +12,7 @@
   <property name="context.path" value="/jsf-characterCombat"/>
   <property name="example" value="jsf-characterCombat" />
   <property name="build"   value="${basedir}/build" />
+  <property name="dist"   value="${basedir}/docs" />
 
   <!-- Configure properties to access the Manager application -->
   <property name="url"      value="http://localhost:8080/manager"/>
@@ -191,6 +192,37 @@
     <copy todir="${build}" file="${example}.war" />
     <delete file="${example}.war" />
   </target>	 
+
+  <target name="build-article" depends="build"
+    description="Build source tar ball to be distributed with article.">
+
+    <!-- make JSAS build file default for article source distribution -->
+    <move file="build.xml" tofile="build.xml.BAK"/>
+    <move file="build-sjsas.xml" tofile="build.xml"/>
+
+    <tar destfile="${dist}/article.tar">
+      <tarfileset dir="."
+                  prefix="jsf-characterCombat"
+                  excludes="CVS/**, 
+                            build/**, 
+                            docs/article.tar*,
+                            docs/*.sxd, 
+                            docs/WorkFlow.txt, 
+                            *"/>
+      <tarfileset dir="."
+                  prefix="jsf-characterCombat"
+                  includes="README,
+                            build.xml,
+                            build.properties.sample,
+                            build/jsf-characterCombat.war"/>
+    </tar>
+    <gzip zipfile="${dist}/article.tar.gz" src="${dist}/article.tar" />
+    <delete file="${dist}/article.tar"/>
+
+    <!-- restore default build files -->
+    <move file="build.xml" tofile="build-sjsas.xml"/>
+    <move file="build.xml.BAK" tofile="build.xml"/>
+  </target>
 
   <target name="checkRequiredFile">
     <available file="${file}" property="requirement.satisfied"/>
