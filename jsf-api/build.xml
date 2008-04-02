@@ -276,8 +276,6 @@
     </java>
   </target>
 
-
-
   <target name="test.UICommandBase" depends="build.test">
     <echo message="Running UICommandBase tests ..."/>
     <java classname="${test.runner}" fork="yes"
@@ -600,6 +598,9 @@
       <zipfileset dir="${src.dir}"
              excludes="**/CVS/**"
                prefix="jsf-api-src-${version}/src"/>
+      <zipfileset dir="${doc.dir}"
+             includes="*.dtd"
+               prefix="jsf-api-src-${version}/doc"/>
     </zip>
 
   </target>
