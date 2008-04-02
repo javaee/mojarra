@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetBean.java,v 1.4 2006/03/07 17:21:00 rlubke Exp $
+ * $Id: ResultSetBean.java,v 1.5 2006/03/08 01:52:30 rlubke Exp $
  */
 
 /*
@@ -36,11 +36,9 @@ import javax.faces.event.ActionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /** <p>Backing file bean for <code>ResultSet</code> demo.</p> */
 

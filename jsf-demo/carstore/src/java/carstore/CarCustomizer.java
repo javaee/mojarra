@@ -26,9 +26,6 @@
 
 package carstore;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
@@ -36,8 +33,9 @@ import javax.faces.convert.Converter;
 
 import java.util.Enumeration;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  * <p>A helper class that customizes a CarBean for a set of options

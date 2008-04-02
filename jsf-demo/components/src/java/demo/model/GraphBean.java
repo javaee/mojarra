@@ -1,5 +1,5 @@
 /*
- * $Id: GraphBean.java,v 1.5 2006/03/07 17:21:00 rlubke Exp $
+ * $Id: GraphBean.java,v 1.6 2006/03/08 01:52:30 rlubke Exp $
  */
 
 /*
@@ -32,11 +32,8 @@ package demo.model;
 import javax.faces.event.ActionEvent;
 
 import java.util.Iterator;
-import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
 
 import com.sun.javaee.blueprints.components.ui.components.GraphComponent;
 import com.sun.javaee.blueprints.components.ui.model.Graph;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestCarDemo.java,v 1.12 2006/03/07 17:21:03 rlubke Exp $
+ * $Id: TestCarDemo.java,v 1.13 2006/03/08 01:52:31 rlubke Exp $
  */
 
 /*
@@ -33,8 +33,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;

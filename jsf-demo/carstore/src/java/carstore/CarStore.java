@@ -26,10 +26,6 @@
 
 package carstore;
 
-import com.sun.javaee.blueprints.components.ui.components.AreaSelectedEvent;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -37,8 +33,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.javaee.blueprints.components.ui.components.AreaSelectedEvent;
 
 /**
  * <p>This is the main bean for the application.  It maintains a

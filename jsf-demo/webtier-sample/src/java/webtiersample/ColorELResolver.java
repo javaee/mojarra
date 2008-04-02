@@ -15,16 +15,16 @@
 */
 package webtiersample;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
-import java.beans.FeatureDescriptor;
-
 import javax.el.ELContext;
 import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.PropertyNotWritableException;
+
+import java.beans.FeatureDescriptor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Introduces a new ${Color} implicit object and resolves properties
