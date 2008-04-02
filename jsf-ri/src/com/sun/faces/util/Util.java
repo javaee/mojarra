@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.76 2003/08/22 16:50:28 eburns Exp $
+ * $Id: Util.java,v 1.77 2003/08/22 21:04:28 rkitain Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.76 2003/08/22 16:50:28 eburns Exp $
+ * @version $Id: Util.java,v 1.77 2003/08/22 21:04:28 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -252,6 +252,9 @@ public class Util extends Object
 
     public static final String VALIDATION_COMMAND_ERROR_ID =
         "com.sun.faces.VALIDATION_COMMAND_ERROR";
+
+   public static final String CONTENT_TYPE_ERROR_MESSAGE_ID =
+         "com.sun.faces.CONTENT_TYPE_ERROR";
 
 // README - make sure to add the message identifier constant
 // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
@@ -715,6 +718,7 @@ private Util()
         for (i = 0; i < len; i++) {
             value = (String)component.getAttribute(booleanPassthruAttributes[i]);
 	    if (value != null && Boolean.valueOf(value).booleanValue()) {
+		//PENDING(rogerk) will revisit "null" param soon..
 		writer.writeAttribute(booleanPassthruAttributes[i], new Boolean("true"), null);
 	    }
 	}
@@ -737,6 +741,7 @@ private Util()
 	for (i = 0; i < len; i++) {
             value = (String)component.getAttribute(passthruAttributes[i]);
 	    if (value != null) {
+		//PENDING(rogerk) will revisit "null" param soon..
 		writer.writeAttribute(passthruAttributes[i], value, null);
 	    }
 	}
