@@ -21,6 +21,9 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
+* The URI for the html basic tld has changed to be spec compliant.  It
+  is now <http://java.sun.com/jsf/html>.
+
 * [ComponentNamespace-10] Flat namespace changes.  Component identifiers
   are no longer required in all cases.  When using JSF from JSP,
   component identifiers are only required when interacting with JSTL.
