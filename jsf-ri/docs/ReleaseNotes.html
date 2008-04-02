@@ -192,6 +192,14 @@ What's New in This Release</h1>
 
 <ul>
 <li>
+There is a known problem when running the ImageMap custom component demo
+specific to Windows and in a Web container's ROOT context.  This problem
+does not occur with other platforms or with other components.  If you
+are using the ImageMap custom component demo on Windows, you can avoid
+this problem by having your Web application defined under a named context
+and not ROOT.  
+</li>
+<li>
 A JavaServer Faces tag nested within a 
 JavaServer(TM) Pages Standard Tag Library (JSTL) iterator tag
  is required to have a unique 
