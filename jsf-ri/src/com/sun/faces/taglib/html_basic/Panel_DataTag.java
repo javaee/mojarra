@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_DataTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
+ * $Id: Panel_DataTag.java,v 1.8 2003/07/16 00:00:12 jvisvanathan Exp $
  */
 
 /*
@@ -13,15 +13,10 @@ package com.sun.faces.taglib.html_basic;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import com.sun.faces.taglib.FacesTag;
-import javax.servlet.jsp.JspException;
 
 /**
- *
- * @version $Id: Panel_DataTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>panel_data</code> custom tag.
  */
 
 public class Panel_DataTag extends FacesTag {
@@ -75,13 +70,17 @@ public class Panel_DataTag extends FacesTag {
     
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
-        if (getVar() != null) {
-            component.setAttribute("var", getVar());
+        if (var != null) {
+            component.setAttribute("var", var);
         }
     }
 
-    public String getLocalRendererType() { return ("Data"); }    
+    public String getLocalRendererType() { 
+        return ("Data"); 
+    }    
 
-    public String getComponentType() { return ("Panel"); }    
+    public String getComponentType() { 
+        return ("Panel"); 
+    }    
 
 }

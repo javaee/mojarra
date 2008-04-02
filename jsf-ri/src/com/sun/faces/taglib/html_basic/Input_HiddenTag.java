@@ -1,5 +1,5 @@
 /*
- * $Id: Input_HiddenTag.java,v 1.10 2003/07/09 19:04:23 rlubke Exp $
+ * $Id: Input_HiddenTag.java,v 1.11 2003/07/16 00:00:10 jvisvanathan Exp $
  */
 
 /*
@@ -7,35 +7,17 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_HiddenTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 
+
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: Input_HiddenTag.java,v 1.10 2003/07/09 19:04:23 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>input_hidden</code> custom tag.
  */
 
 public class Input_HiddenTag extends FacesTag
@@ -82,23 +64,27 @@ public class Input_HiddenTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "Hidden"; }
-    public String getComponentType() { return "Input"; }
+    public String getLocalRendererType() { 
+        return "Hidden"; 
+    }
+    public String getComponentType() { 
+        return "Input"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
         UIInput uiInput = (UIInput)component;
-        if (null != getValue()) {
-	    uiInput.setValue(getValue());
+        if (null != value) {
+	    uiInput.setValue(value);
 	}
         if (converter != null) {
             component.setConverter(converter);
         }
     }
     
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class Input_HiddenTag

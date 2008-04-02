@@ -1,5 +1,5 @@
 /*
- * $Id: Output_NumberTag.java,v 1.9 2003/07/09 19:04:25 rlubke Exp $
+ * $Id: Output_NumberTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
  */
 
 /*
@@ -7,38 +7,16 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Output_NumberTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.ServletContext;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
-import com.sun.faces.RIConstants;
 
 import com.sun.faces.taglib.FacesTag;
-import com.sun.faces.renderkit.FormatPool;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: Output_NumberTag.java,v 1.9 2003/07/09 19:04:25 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>output_number</code> custom tag.
  */
 
 public class Output_NumberTag extends FacesTag
@@ -88,18 +66,21 @@ public class Output_NumberTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "Number"; }
-    public String getComponentType() { return "Output"; }
+    public String getLocalRendererType() { 
+        return "Number"; 
+    }
+    public String getComponentType() { 
+        return "Output"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIOutput output = (UIOutput) component;
-	// if component has non null value, do not call setValue().
-	if (null != getValue()) {
-	    output.setValue(getValue());
+	if (null != value) {
+	    output.setValue(value);
 	}
-        if (null != getNumberStyle()) {
-	    component.setAttribute("numberStyle", getNumberStyle());
+        if (null != numberStyle) {
+	    component.setAttribute("numberStyle", numberStyle);
         }
      }   
     

@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GroupTag.java,v 1.6 2003/07/09 19:04:26 rlubke Exp $
+ * $Id: Panel_GroupTag.java,v 1.7 2003/07/16 00:00:12 jvisvanathan Exp $
  */
 
 /*
@@ -9,19 +9,13 @@
 
 package com.sun.faces.taglib.html_basic;
 
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import com.sun.faces.taglib.FacesTag;
-import javax.servlet.jsp.JspException;
 
 /**
- *
- * @version $Id: Panel_GroupTag.java,v 1.6 2003/07/09 19:04:26 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>panel_group</code> custom tag.
  */
 public class Panel_GroupTag extends FacesTag {
 
@@ -58,8 +52,12 @@ public class Panel_GroupTag extends FacesTag {
     // Accessors
     //
 
-    public String getLocalRendererType() { return ("Group"); }
+    public String getLocalRendererType() { 
+        return ("Group"); 
+    }
 
-    public String getComponentType() { return ("Panel"); }    
+    public String getComponentType() { 
+        return ("Panel"); 
+    }    
 
 }

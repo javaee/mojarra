@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextAreaTag.java,v 1.7 2003/07/09 19:04:24 rlubke Exp $
+ * $Id: Input_TextAreaTag.java,v 1.8 2003/07/16 00:00:10 jvisvanathan Exp $
  */
 
 /*
@@ -7,79 +7,74 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_TextAreaTag.java
-
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 
-
 /**
- *
- * @version $Id: Input_TextAreaTag.java,v 1.7 2003/07/09 19:04:24 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>input_textarea</code> custom tag.
  */
 
 public class Input_TextAreaTag extends Input_TextTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Input_TextAreaTag()
-{
-    super();
-}
+    public Input_TextAreaTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Textarea"; }
+    public String getLocalRendererType() { 
+        return "Textarea"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIInput inputTextArea = (UIInput) component;
 	
-	if (null != getRows()) {
-	    inputTextArea.setAttribute("rows", getRows());
+	if (null != rows) {
+	    inputTextArea.setAttribute("rows", rows);
 	}
 	if (null != getCols()) {
-	    inputTextArea.setAttribute("cols", getCols());
+	    inputTextArea.setAttribute("cols", cols);
 	}
     }
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class Input_TextAreaTag

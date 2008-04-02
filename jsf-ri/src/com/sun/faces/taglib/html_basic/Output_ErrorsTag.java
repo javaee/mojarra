@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.10 2003/07/09 19:04:25 rlubke Exp $
+ * $Id: Output_ErrorsTag.java,v 1.11 2003/07/16 00:00:11 jvisvanathan Exp $
  */
 
 /*
@@ -7,32 +7,17 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Output_ErrorsTag.java
-
 package com.sun.faces.taglib.html_basic;
 
 import com.sun.faces.taglib.FacesTag;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 
 /**
- *
-
  *  <B>Output_ErrorsTag</B> is a convenience tag allowing content
  *  authors flexible error reporting.  See the tld for
  *  attribute description.
-
- *
-
- * @version $Id: Output_ErrorsTag.java,v 1.10 2003/07/09 19:04:25 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
  */
 
 public class Output_ErrorsTag extends FacesTag {
@@ -95,8 +80,12 @@ public class Output_ErrorsTag extends FacesTag {
     // General Methods
     //
 
-    public String getLocalRendererType() {return "Errors"; }
-    public String getComponentType() {return "Output"; }
+    public String getLocalRendererType() {
+        return "Errors"; 
+    }
+    public String getComponentType() {
+        return "Output"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
@@ -104,8 +93,8 @@ public class Output_ErrorsTag extends FacesTag {
         if (null != forValue) {
             component.setAttribute("for", forValue);
         }
-        if (null != getColor()) {
-            component.setAttribute("color", getColor());
+        if (null != color) {
+            component.setAttribute("color", color);
         }
     }
     //

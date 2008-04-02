@@ -5,16 +5,13 @@
 
 
 /**
- * $Id: SelectMany_MenuTag.java,v 1.8 2003/07/09 19:04:27 rlubke Exp $
+ * $Id: SelectMany_MenuTag.java,v 1.9 2003/07/16 00:00:13 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
  * divested of its trade secrets, irrespective of what has been
  * deposited with the U. S. Copyright Office.   
  */
-
-
-// SelectMany_MenuTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -25,84 +22,77 @@ import javax.servlet.jsp.JspException;
 import com.sun.faces.taglib.FacesTag;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: SelectMany_MenuTag.java,v 1.8 2003/07/09 19:04:27 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- * 
- *
+ * This class is the tag handler that evaluates the 
+ * <code>selectmany_menu</code> custom tag.
  */
 
 public class SelectMany_MenuTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public SelectMany_MenuTag()
-{
-    super();
-}
+    public SelectMany_MenuTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Menu"; } 
-    public String getComponentType() { return "SelectMany"; }
+    public String getLocalRendererType() { 
+        return "Menu"; 
+    } 
+    public String getComponentType() { 
+        return "SelectMany"; 
+    }
 
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
     public int doEndTag() throws JspException {
 	UISelectMany component = (UISelectMany) getComponent();
-
 	int rc = super.doEndTag();
-
 	return rc;
     }
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
 
-        if (null != getSize()) {
-            component.setAttribute("size", getSize());
+        if (null != size) {
+            component.setAttribute("size", size);
         }
-        if (null != getOnselect()) {
-            component.setAttribute("onselect", getOnselect());
+        if (null != onselect) {
+            component.setAttribute("onselect", onselect);
         }
-        if (null != getOnchange()) {
-            component.setAttribute("onchange", getOnchange());
+        if (null != onchange) {
+            component.setAttribute("onchange", onchange);
         }
     }
 

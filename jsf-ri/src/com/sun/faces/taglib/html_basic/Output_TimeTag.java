@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TimeTag.java,v 1.9 2003/07/09 19:04:25 rlubke Exp $
+ * $Id: Output_TimeTag.java,v 1.10 2003/07/16 00:00:12 jvisvanathan Exp $
  */
 
 /*
@@ -7,87 +7,72 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Output_TimeTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 /**
- *
- * @version $Id: Output_TimeTag.java,v 1.9 2003/07/09 19:04:25 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>output_time</code> custom tag.
  */
 
 public class Output_TimeTag extends com.sun.faces.taglib.FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Output_TimeTag()
-{
-    super();
-}
+    public Output_TimeTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-
-//
-// General Methods
-//
-    public String getLocalRendererType() { return "Time"; }
-    public String getComponentType() { return "Output"; }
+    //
+    // General Methods
+    //
+    public String getLocalRendererType() { 
+        return "Time"; 
+    }
+    public String getComponentType() { 
+        return "Output"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIOutput uiOutput = (UIOutput)component;
-	// if component has non null value, do not call setValue().
-        if (null != getValue()) {
-	    uiOutput.setValue(getValue());
+	if (null != value) {
+	    uiOutput.setValue(value);
 	}
     }
 
 
-//
-// Methods from TagSupport
-//
+    //
+    // Methods from TagSupport
+    //
     
-
-
 } // end of class Output_TimeTag

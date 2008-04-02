@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
+ * $Id: Panel_ListTag.java,v 1.8 2003/07/16 00:00:12 jvisvanathan Exp $
  */
 
 /*
@@ -15,12 +15,8 @@ import com.sun.faces.taglib.FacesTag;
 import javax.servlet.jsp.JspException;
 
 /**
- *
- * @version $Id: Panel_ListTag.java,v 1.7 2003/07/09 19:04:26 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>panel_list</code> custom tag.
  */
 
 public class Panel_ListTag extends FacesTag {
@@ -160,15 +156,14 @@ public class Panel_ListTag extends FacesTag {
     }
 
     /**
-     *
      * This is implemented by faces subclasses to allow globally turing off
      * the render kit.
-     *
      */
-    public String getLocalRendererType() { return ("List"); }
+    public String getLocalRendererType() {
+        return ("List"); 
+    }
 
-    public String getComponentType() { return ("Panel"); }    
-
-    
-
+    public String getComponentType() { 
+        return ("Panel"); 
+    }    
 }

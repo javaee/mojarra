@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
+ * $Id: Input_TextTag.java,v 1.10 2003/07/16 00:00:10 jvisvanathan Exp $
  */
 
 /*
@@ -7,62 +7,57 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_TextTag.java
-
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 
+
 /**
- *
- * @version $Id: Input_TextTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>input_text</code> custom tag.
  */
 
 public class Input_TextTag extends InputTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
     private String converter = null;
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
     public Input_TextTag() {
         super();
     }
 
-//
-// Accessors
-//
+    //
+    // Accessors
+    //
     public void setConverter(String converter) {
         this.converter = converter;
     }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
     public String getLocalRendererType() { return "Text"; }
 
@@ -73,10 +68,8 @@ public class Input_TextTag extends InputTag
         }
     }
 
-//
-// Methods from TagSupport
-//
+    //
+    // Methods from TagSupport
+    //
     
-
-
 } // end of class Input_TextTag

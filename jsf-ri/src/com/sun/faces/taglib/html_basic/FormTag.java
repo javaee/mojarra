@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.38 2003/07/07 20:53:02 eburns Exp $
+ * $Id: FormTag.java,v 1.39 2003/07/16 00:00:09 jvisvanathan Exp $
  */
 
 /*
@@ -7,142 +7,131 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// FormTag.java
-
 package com.sun.faces.taglib.html_basic;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 import com.sun.faces.RIConstants;
 
+
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: FormTag.java,v 1.38 2003/07/07 20:53:02 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the <code>form</code> custom tag.
  */
 
 public class FormTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
     public String formName = null;
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public FormTag()
-{
-    super();
-}
+    public FormTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-    public String getFormName() { return formName; }
+    public String getFormName() { 
+        return formName; 
+    }
     public void setFormName(String newFormName) { 
 	formName = newFormName;
     }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Form"; }
-    public String getComponentType() { return "Form"; }
+    public String getLocalRendererType() { 
+        return "Form"; 
+    }
+    public String getComponentType() { 
+        return "Form"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIForm form = (UIForm) component;
 
-	if (null == form.getFormName()) {
-	    form.setFormName(getFormName());
+	if (null == formName) {
+	    form.setFormName(formName);
              // we set the bundle attribute on the root component here  
              // so that we don't set it again during postback. 
              // This cannot be done in FacesTag since this is specific
              // to FormTag. Since formName is a required attribute,
              // we can be sure that these statements will be executed
              // the first time the tags are processed.
-            if ( getBundle() != null) { 
+            if ( bundle != null) { 
                 // set it as an attribute on the root component so that
                 // it is available to children and doesn't have to be repeated
                 // in every tag.
                 FacesContext context = FacesContext.getCurrentInstance();
                 UIComponent root = context.getTree().getRoot();
-                root.setAttribute(RIConstants.BUNDLE_ATTR, getBundle());
+                root.setAttribute(RIConstants.BUNDLE_ATTR, bundle);
             }
 	}
-        // action, method, enctype, acceptcharset, accept, target, onsubmit, onreset
-        if (getOnsubmit() != null ) {
-            component.setAttribute("onsubmit", getOnsubmit()); 
+        // action, method, enctype, acceptcharset, accept, target, onsubmit, 
+        // onreset
+        if (onsubmit != null ) {
+            component.setAttribute("onsubmit", onsubmit); 
         }
-        if (getOnreset() != null ) {
-            component.setAttribute("onreset", getOnreset()); 
+        if (onreset != null ) {
+            component.setAttribute("onreset", onreset); 
         }
-        if (getAction() != null ) {
-            component.setAttribute("action", getAction()); 
+        if (action != null ) {
+            component.setAttribute("action", action); 
         }
-        if (getMethod() != null ) {
-            component.setAttribute("method", getMethod()); 
+        if (method != null ) {
+            component.setAttribute("method", method); 
         }
-        if (getEnctype() != null ) {
-            component.setAttribute("enctype", getEnctype()); 
+        if (enctype != null ) {
+            component.setAttribute("enctype", enctype); 
         }
-        if (getAccept() != null ) {
-            component.setAttribute("accept", getAccept()); 
+        if (accept != null ) {
+            component.setAttribute("accept", accept); 
         }
-        if (getTarget() != null ) {
-            component.setAttribute("target", getTarget()); 
+        if (target != null ) {
+            component.setAttribute("target", target); 
         }
-        if (getAcceptcharset() != null ) {
-            component.setAttribute("acceptcharset", getAcceptcharset()); 
+        if (acceptcharset != null ) {
+            component.setAttribute("acceptcharset", acceptcharset); 
         }
-        if (getFormClass() != null ) {
-            component.setAttribute("formClass", getFormClass()); 
+        if (formClass != null ) {
+            component.setAttribute("formClass", formClass); 
         }
-
     }
     
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class FormTag

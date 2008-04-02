@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_RadioTag.java,v 1.25 2003/07/09 19:04:27 rlubke Exp $
+ * $Id: SelectOne_RadioTag.java,v 1.26 2003/07/16 00:00:14 jvisvanathan Exp $
  */
 
 /*
@@ -7,35 +7,18 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// SelectOne_RadioTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: SelectOne_RadioTag.java,v 1.25 2003/07/09 19:04:27 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>selectone_radio</code> custom tag.
  */
 
 public class SelectOne_RadioTag extends SelectOne_ListboxTag
@@ -94,27 +77,31 @@ public class SelectOne_RadioTag extends SelectOne_ListboxTag
     }
 
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Radio"; }
-    public String getComponentType() { return "SelectOne"; }
+    public String getLocalRendererType() { 
+        return "Radio"; 
+    }
+    public String getComponentType() { 
+        return "SelectOne"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UISelectOne uiSelectOne = (UISelectOne) component;
 	
-        if (null != getLayout()) {
-	    uiSelectOne.setAttribute("layout", getLayout());
+        if (null != layout) {
+	    uiSelectOne.setAttribute("layout", layout);
 	}
-        if (null != getBorder()) {
-	    uiSelectOne.setAttribute("border", getBorder());
+        if (null != border) {
+	    uiSelectOne.setAttribute("border", layout);
 	}
     }
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class SelectOne_RadioTag

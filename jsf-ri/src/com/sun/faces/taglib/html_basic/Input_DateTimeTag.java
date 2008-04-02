@@ -1,5 +1,5 @@
 /*
- * $Id: Input_DateTimeTag.java,v 1.4 2003/07/09 19:04:23 rlubke Exp $
+ * $Id: Input_DateTimeTag.java,v 1.5 2003/07/16 00:00:10 jvisvanathan Exp $
  */
 
 /*
@@ -7,77 +7,59 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_DateTimeTag.java
-
 package com.sun.faces.taglib.html_basic;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
-
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
-
 /**
- *
- * @version $Id: Input_DateTimeTag.java,v 1.4 2003/07/09 19:04:23 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>input_datetime</code> custom tag.
  */
 
 public class Input_DateTimeTag extends InputTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Input_DateTimeTag()
-{
-    super();
-}
+    public Input_DateTimeTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "DateTime"; }
+    public String getLocalRendererType() { 
+        return "DateTime"; 
+    }
 
-//
-// Methods from TagSupport
-//
+    //
+    // Methods from TagSupport
+    //
     
-
-
 } // end of class Input_DateTimeTag

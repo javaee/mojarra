@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: SelectMany_ListboxTag.java,v 1.7 2003/07/09 19:04:27 rlubke Exp $
+ * $Id: SelectMany_ListboxTag.java,v 1.8 2003/07/16 00:00:13 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -12,83 +12,72 @@
  * deposited with the U. S. Copyright Office.   
  */
 
-
-// SelectMany_ListboxTag.java
-
 package com.sun.faces.taglib.html_basic;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectMany;
 import javax.servlet.jsp.JspException;
+import javax.faces.component.UISelectMany;
 
 import com.sun.faces.taglib.FacesTag;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: SelectMany_ListboxTag.java,v 1.7 2003/07/09 19:04:27 rlubke Exp $
- * 
- * @see Blah
- * @see Bloo
- * 
- *
+ * This class is the tag handler that evaluates the 
+ * <code>selectmany_listbox</code> custom tag.
  */
 
 public class SelectMany_ListboxTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public SelectMany_ListboxTag()
-{
-    super();
-}
+    public SelectMany_ListboxTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Listbox"; }
-    public String getComponentType() { return "SelectMany"; }
+    public String getLocalRendererType() { 
+        return "Listbox"; 
+    }
+    public String getComponentType() { 
+        return "SelectMany"; 
+    }
 
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
     public int doEndTag() throws JspException {
-    UISelectMany component = (UISelectMany) getComponent();
-
-    int rc = super.doEndTag();
-
-    return rc;
+        UISelectMany component = (UISelectMany) getComponent();
+        int rc = super.doEndTag();
+        return rc;
     }
 
 

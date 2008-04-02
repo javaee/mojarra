@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.8 2003/07/09 19:04:26 rlubke Exp $
+ * $Id: Panel_GridTag.java,v 1.9 2003/07/16 00:00:12 jvisvanathan Exp $
  */
 
 /*
@@ -12,15 +12,10 @@ package com.sun.faces.taglib.html_basic;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import com.sun.faces.taglib.FacesTag;
-import javax.servlet.jsp.JspException;
 
 /**
- *
- * @version $Id: Panel_GridTag.java,v 1.8 2003/07/09 19:04:26 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>panel_grid</code> custom tag.
  */
 
 public class Panel_GridTag extends FacesTag {
@@ -171,13 +166,15 @@ public class Panel_GridTag extends FacesTag {
     }
 
     /**
-     *
      * This is implemented by faces subclasses to allow globally turing off
      * the render kit.
-     *
      */
-    public String getLocalRendererType() { return ("Grid"); }
-    public String getComponentType() { return ("Panel"); }    
+    public String getLocalRendererType() { 
+        return ("Grid");
+    }
+    public String getComponentType() { 
+        return ("Panel"); 
+    }    
     
 
 }

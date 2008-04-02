@@ -1,5 +1,5 @@
 /*
- * $Id: Command_ButtonTag.java,v 1.38 2003/07/09 19:04:23 rlubke Exp $
+ * $Id: Command_ButtonTag.java,v 1.39 2003/07/16 00:00:08 jvisvanathan Exp $
  */
 
 /*
@@ -7,35 +7,16 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Command_ButtonTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: Command_ButtonTag.java,v 1.38 2003/07/09 19:04:23 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the <code>command_button</code>
+ * custom tag.
  */
 
 public class Command_ButtonTag extends FacesTag
@@ -122,23 +103,23 @@ public class Command_ButtonTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UICommand button = (UICommand) component;
-        if (null == button.getActionRef() && actionRef != null ) {
+        if (actionRef != null ) {
 	    button.setActionRef(actionRef);
 	}
-        if (null == button.getAction() && action != null ) {
+        if (action != null ) {
 	    button.setAction(action);
 	}
         
-        if (null != getType()) {
-            button.setAttribute("type", getType());
+        if (null != type) {
+            button.setAttribute("type", type);
         }
 
-        if (null != getLabel()) {
-            button.setAttribute("label", getLabel());
+        if (null != label) {
+            button.setAttribute("label", label);
         }
 
-        if (null != getImage()) {
-            button.setAttribute("image", getImage());
+        if (null != image) {
+            button.setAttribute("image", image);
         }
     }
 

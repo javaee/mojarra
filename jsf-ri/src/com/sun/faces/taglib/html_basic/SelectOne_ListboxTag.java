@@ -1,5 +1,5 @@
 /*
- * $Id: SelectOne_ListboxTag.java,v 1.6 2003/07/09 19:04:27 rlubke Exp $
+ * $Id: SelectOne_ListboxTag.java,v 1.7 2003/07/16 00:00:13 jvisvanathan Exp $
  */
 
 /*
@@ -7,83 +7,70 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// SelectOne_ListboxTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
 
-import com.sun.faces.util.Util;
-
-import com.sun.faces.taglib.FacesTag;
 import com.sun.faces.RIConstants;
+import com.sun.faces.taglib.FacesTag;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: SelectOne_ListboxTag.java,v 1.6 2003/07/09 19:04:27 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>selectmany_listbox</code> custom tag.
  */
 
 public class SelectOne_ListboxTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public SelectOne_ListboxTag()
-{
-    super();
-}
+    public SelectOne_ListboxTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Listbox"; }
-    public String getComponentType() { return "SelectOne"; }
+    public String getLocalRendererType() { 
+        return "Listbox"; 
+    }
+    public String getComponentType() { 
+        return "SelectOne"; 
+    }
 
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
     public int doEndTag() throws JspException {
 	UISelectOne component = (UISelectOne) getComponent();
@@ -93,21 +80,20 @@ public SelectOne_ListboxTag()
 	component.setAttribute(RIConstants.SELECTITEMS_CONFIGURED, 
 			       RIConstants.SELECTITEMS_CONFIGURED);
 	int rc = super.doEndTag();
-
 	return rc;
     }
     
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	
-        if (null != getSize()) {
-	    component.setAttribute("size", getSize());
+        if (null != size) {
+	    component.setAttribute("size", size);
 	}
-        if (null != getOnselect()) {
-	    component.setAttribute("onselect", getOnselect());
+        if (null != onselect) {
+	    component.setAttribute("onselect", onselect);
 	}
-        if (null != getOnchange()) {
-	    component.setAttribute("onchange", getOnchange());
+        if (null != onchange) {
+	    component.setAttribute("onchange", onchange);
 	}
     }
 

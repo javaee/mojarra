@@ -1,13 +1,11 @@
 /*
- * $Id: Output_DateTimeTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
+ * $Id: Output_DateTimeTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
  */
 
 /*
  * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-
-// Output_DateTimeTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -25,7 +23,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_DateTimeTag.java,v 1.9 2003/07/09 19:04:24 rlubke Exp $
+ * @version $Id: Output_DateTimeTag.java,v 1.10 2003/07/16 00:00:11 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -34,60 +32,59 @@ import com.sun.faces.util.Util;
 
 public class Output_DateTimeTag extends com.sun.faces.taglib.FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Output_DateTimeTag()
-{
-    super();
-}
+    public Output_DateTimeTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
 
-//
-// General Methods
-//
-    public String getLocalRendererType() { return "DateTime"; }
-    public String getComponentType() { return "Output"; }
+    //
+    // General Methods
+    //
+    public String getLocalRendererType() { 
+        return "DateTime"; 
+    }
+    public String getComponentType() { 
+        return "Output"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
         UIOutput uiOutput = (UIOutput)component;
-	// if component has non null value, do not call setValue().
-        if (null != getValue()) {
-	    uiOutput.setValue(getValue());
+	if (null != value) {
+	    uiOutput.setValue(value);
 	}
     }
 
-
-//
-// Methods from TagSupport
-//
-    
-
-
+    //
+    // Methods from TagSupport
+    //
 } // end of class Output_DateTimeTag

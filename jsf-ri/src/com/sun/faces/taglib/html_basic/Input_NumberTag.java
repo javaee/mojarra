@@ -1,5 +1,5 @@
 /*
- * $Id: Input_NumberTag.java,v 1.6 2003/07/09 19:04:23 rlubke Exp $
+ * $Id: Input_NumberTag.java,v 1.7 2003/07/16 00:00:10 jvisvanathan Exp $
  */
 
 /*
@@ -7,33 +7,14 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_NumberTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: Input_NumberTag.java,v 1.6 2003/07/09 19:04:23 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>input_number</code> custom tag.
  */
 
 public class Input_NumberTag extends InputTag
@@ -83,15 +64,16 @@ public class Input_NumberTag extends InputTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "Number"; }
+    public String getLocalRendererType() { 
+        return "Number"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
-    super.overrideProperties(component);
-    
-    if (null != getNumberStyle()) {
-	component.setAttribute("numberStyle", getNumberStyle());
+        super.overrideProperties(component);
+        if (null != numberStyle) {
+            component.setAttribute("numberStyle", numberStyle);
+        }
     }
-}
     
     //
     // Methods from TagSupport

@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.8 2003/07/09 19:04:24 rlubke Exp $
+ * $Id: Input_SecretTag.java,v 1.9 2003/07/16 00:00:10 jvisvanathan Exp $
  */
 
 /*
@@ -7,54 +7,50 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Input_SecretTag.java
 
 package com.sun.faces.taglib.html_basic;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 
+
 /**
- *
- * @version $Id: Input_SecretTag.java,v 1.8 2003/07/09 19:04:24 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>input_secret</code> custom tag.
  */
 
 public class Input_SecretTag extends Input_TextTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
     protected String redisplay = null;
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Input_SecretTag()
-{
-    super();
-}
+    public Input_SecretTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
     public String getRedisplay() {
         return redisplay;
     }
@@ -62,29 +58,30 @@ public Input_SecretTag()
     public void setRedisplay(String newRedisplay) {
         redisplay = newRedisplay;
     }
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Secret"; }
+    public String getLocalRendererType() { 
+        return "Secret"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
         super.overrideProperties(component);
         UIInput input = (UIInput) component;
 
-        if (null != getRedisplay()) {
-            input.setAttribute("redisplay", getRedisplay());
+        if (null != redisplay) {
+            input.setAttribute("redisplay", redisplay);
         }
     }
 
 
-//
-// Methods from TagSupport
-// 
-
+    //
+    // Methods from TagSupport
+    // 
 
 } // end of class Input_SecretTag

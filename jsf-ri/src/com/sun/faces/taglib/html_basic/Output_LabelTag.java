@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.6 2003/07/09 19:04:25 rlubke Exp $
+ * $Id: Output_LabelTag.java,v 1.7 2003/07/16 00:00:11 jvisvanathan Exp $
  */
 
 /*
@@ -7,88 +7,69 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Output_LabelTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: Output_LabelTag.java,v 1.6 2003/07/09 19:04:25 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>output_label</code> custom tag.
  */
 
 public class Output_LabelTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
     protected String forValue = null;
 
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Output_LabelTag()
-{
-    super();
-}
+    public Output_LabelTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-public String getFor()
-{
-    return forValue;
-}
+    public String getFor()
+    {
+        return forValue;
+    }
 
-public void setFor(String newForValue)
-{
-    forValue = newForValue;
-}
+    public void setFor(String newForValue)
+    {
+        forValue = newForValue;
+    }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
     public String getLocalRendererType() { return "Label"; }
     public String getComponentType() { return "Output"; }
@@ -96,17 +77,17 @@ public void setFor(String newForValue)
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 
-	if (null != getFor()) {
+	if (null != forValue) {
 	    // PENDING(edburns): We should do something more intelligent
 	    // here.  For now, however, we'll just store what we get
 	    // from JSP.
-	    component.setAttribute("for", getFor());
+	    component.setAttribute("for",forValue);
 	}
     }
     
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class Output_LabelTag

@@ -1,13 +1,11 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.7 2003/07/09 19:04:23 rlubke Exp $
+ * $Id: Graphic_ImageTag.java,v 1.8 2003/07/16 00:00:09 jvisvanathan Exp $
  */
 
 /*
  * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
-
-// Graphic_ImageTag.java
 
 package com.sun.faces.taglib.html_basic;
 
@@ -18,47 +16,43 @@ import javax.faces.component.UIGraphic;
 
 
 /**
- *
- * @version $Id: Graphic_ImageTag.java,v 1.7 2003/07/09 19:04:23 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>graphic_image</code> custom tag.
  */
 
 public class Graphic_ImageTag extends FacesTag 
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
     protected String url = null;
 
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public Graphic_ImageTag()
-{
-    super();
-}
+    public Graphic_ImageTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
     public String getUrl() {
         return url;
@@ -68,23 +62,27 @@ public Graphic_ImageTag()
         url = newUrl;
     }
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Image"; }
-    public String getComponentType() { return "Graphic"; }
+    public String getLocalRendererType() { 
+        return "Image"; 
+    }
+    public String getComponentType() { 
+        return "Graphic"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UIGraphic graphic = (UIGraphic) component;
 	
-	if (null == graphic.getURL()) {
-	    graphic.setURL(getUrl());
+	if (null != url) {
+	    graphic.setURL(url);
 	}
         if (usemap != null) {
             component.setAttribute("usemap", usemap);
@@ -93,9 +91,10 @@ public Graphic_ImageTag()
             component.setAttribute("ismap", ismap);
         }
     }
-//
-// Methods from TagSupport
-// 
+    
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class Graphic_ImageTag

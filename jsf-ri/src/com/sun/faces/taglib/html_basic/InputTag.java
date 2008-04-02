@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
+ * $Id: InputTag.java,v 1.8 2003/07/16 00:00:09 jvisvanathan Exp $
  */
 
 /*
@@ -7,31 +7,16 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// InputTag.java
-
 package com.sun.faces.taglib.html_basic;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 
+
 /**
- *
- * @version $Id: InputTag.java,v 1.7 2003/07/07 20:53:03 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class acts as the base class for input tags.
  */
 
 public abstract class InputTag extends FacesTag
@@ -109,10 +94,8 @@ public abstract class InputTag extends FacesTag
 
     public String getComponentType() { return "Input"; }
     
-//
-// Methods from TagSupport
-//
+    //
+    // Methods from TagSupport
+    //
     
-
-
 } // end of class Input_DateTag

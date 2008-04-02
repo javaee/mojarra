@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.6 2003/07/09 19:04:27 rlubke Exp $
+ * $Id: SelectItemsTag.java,v 1.7 2003/07/16 00:00:13 jvisvanathan Exp $
  */
 
 /*
@@ -7,82 +7,63 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// SelectItemsTag.java
-
 package com.sun.faces.taglib.html_basic;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
-import javax.faces.component.UISelectOne;
-import javax.faces.component.UIComponent;
-import javax.faces.component.SelectItem;
-import javax.faces.component.UISelectItems;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 import com.sun.faces.taglib.FacesTag;
-import com.sun.faces.RIConstants;
 
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: SelectItemsTag.java,v 1.6 2003/07/09 19:04:27 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>selectitems</code> custom tag.
  */
 
 public class SelectItemsTag extends FacesTag
 {
-//
-// Protected Constants
-//
+    //
+    // Protected Constants
+    //
 
-//
-// Class Variables
-//
+    //
+    // Class Variables
+    //
 
-//
-// Instance Variables
-//
+    //
+    // Instance Variables
+    //
 
-// Attribute Instance Variables
+    // Attribute Instance Variables
 
-// Relationship Instance Variables
+    // Relationship Instance Variables
 
-//
-// Constructors and Initializers    
-//
+    //
+    // Constructors and Initializers    
+    //
 
-public SelectItemsTag()
-{
-    super();
-}
+    public SelectItemsTag()
+    {
+        super();
+    }
 
-//
-// Class methods
-//
+    //
+    // Class methods
+    //
 
-// 
-// Accessors
-//
+    // 
+    // Accessors
+    //
 
-//
-// General Methods
-//
-    public String getLocalRendererType() { return null; }
-    public String getComponentType() { return "SelectItems"; }
+    //
+    // General Methods
+    //
+    public String getLocalRendererType() { 
+        return null; 
+    }
+    public String getComponentType() { 
+        return "SelectItems"; 
+    }
 
 
-//
-// Methods from FacesTag
-//
+    //
+    // Methods from FacesTag
+    //
 
 } // end of class SelectItemsTag

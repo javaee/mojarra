@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.31 2003/07/09 19:04:23 rlubke Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.32 2003/07/16 00:00:08 jvisvanathan Exp $
  */
 
 /*
@@ -7,35 +7,20 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// Command_HyperlinkTag.java
-
 package com.sun.faces.taglib.html_basic;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
-import javax.servlet.jsp.JspException;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
-import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
-
-import com.sun.faces.util.Util;
 
 import com.sun.faces.taglib.FacesTag;
 
+
 /**
- *
- *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
- *  library.  Its primary purpose is to centralize common tag functions
- *  to a single base class. <P>
- *
- * @version $Id: Command_HyperlinkTag.java,v 1.31 2003/07/09 19:04:23 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * This class is the tag handler that evaluates the 
+ * <code>command_hyperlink</code> custom tag.
  */
 
 public class Command_HyperlinkTag extends FacesTag
@@ -79,7 +64,9 @@ public class Command_HyperlinkTag extends FacesTag
     // 
     // Accessors
     //
-    public String getCommandName() { return commandname; }
+    public String getCommandName() { 
+        return commandname; 
+    }
     public void setCommandName(String newCommandname) {
         ParameterCheck.nonNull(newCommandname);
         commandname = newCommandname;
@@ -93,7 +80,9 @@ public class Command_HyperlinkTag extends FacesTag
 	return href;
     }
     
-    public String getLabel() { return label; }
+    public String getLabel() { 
+        return label; 
+    }
     public void setLabel(String newLabel) { 
         label = newLabel;
     }
@@ -122,37 +111,41 @@ public class Command_HyperlinkTag extends FacesTag
         return action;
     }
 
-//
-// General Methods
-//
+    //
+    // General Methods
+    //
 
-    public String getLocalRendererType() { return "Hyperlink"; }
-    public String getComponentType() { return "Command"; }
+    public String getLocalRendererType() { 
+        return "Hyperlink"; 
+    }
+    public String getComponentType() { 
+        return "Command"; 
+    }
 
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UICommand link = (UICommand) component;
-        if (null == link.getActionRef() && actionRef != null ) {
+        if (actionRef != null ) {
 	    link.setActionRef(actionRef);
 	}
-        if (null == link.getAction() && action != null ) {
+        if (action != null ) {
 	    link.setAction(action);
 	}
-        if (null != getLabel()) {
-            component.setAttribute("label", getLabel());
+        if (null != label) {
+            component.setAttribute("label", label);
         }
-        if (null != getImage()) {
-            component.setAttribute("image", getImage());
+        if (null != image) {
+            component.setAttribute("image", image);
         }
-        if (null != getHref()) {
-	    component.setAttribute("href", getHref());
+        if (null != href) {
+	    component.setAttribute("href", href);
 	}
     }
 
     
-//
-// Methods from TagSupport
-// 
+    //
+    // Methods from TagSupport
+    // 
 
 
 } // end of class Command_HyperlinkTag
