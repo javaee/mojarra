@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20020826
-jsf-api-spec for this implementation: JSF_20020826.pdf
+jsf-api cvs tag for this implementation: JSF_API_20020902A
+jsf-api-spec for this implementation: JSF_20020902.pdf
 
 Installation Notes
 ==================
@@ -22,7 +22,7 @@ Major changes/features in this release:
 =======================================
 
 * Saving the tree can be done either in session (server) or in page by
-  turning off/on context parameter "saveStateInClient". Default is server. 
+  turning off/on context parameter "saveStateInClient". Default is page. 
   All objects referenced must be serializable if save state in page option 
   is used.
 
@@ -46,10 +46,6 @@ Known Issues With This Release
 
 * When saving tree in session, we don't support multiple concurrent
   requests to faces app from one client.
-
-* SaveState in page option cannot be used if your web app has 
-  event handlers and validators because they are not serializable 
-  currently.
 
 *  Component type is hard coded in component subclasses (ex: UICommand)
    as fully qualfied class names (ex: javax.faces.component.UICommand).
