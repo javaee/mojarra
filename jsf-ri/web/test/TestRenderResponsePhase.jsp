@@ -237,16 +237,16 @@
                      title="Select Quantity"
                      tabindex="20" >
 
-                <f:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-                <f:selectitem  itemValue="1" itemLabel="1" />
-                <f:selectitem  itemValue="2" itemLabel="2" />
-                <f:selectitem  itemValue="3" itemLabel="3" />
-                <f:selectitem  itemValue="4" itemLabel="4" />
-                <f:selectitem  itemValue="5" itemLabel="5" />
-                <f:selectitem  itemValue="6" itemLabel="6" />
-                <f:selectitem  itemValue="7" itemLabel="7" />
-                <f:selectitem  itemValue="8" itemLabel="8" />
-                <f:selectitem  itemValue="9" itemLabel="9" />
+                <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectItem  itemValue="1" itemLabel="1" />
+                <f:selectItem  itemValue="2" itemLabel="2" />
+                <f:selectItem  itemValue="3" itemLabel="3" />
+                <f:selectItem  itemValue="4" itemLabel="4" />
+                <f:selectItem  itemValue="5" itemLabel="5" />
+                <f:selectItem  itemValue="6" itemLabel="6" />
+                <f:selectItem  itemValue="7" itemLabel="7" />
+                <f:selectItem  itemValue="8" itemLabel="8" />
+                <f:selectItem  itemValue="9" itemLabel="9" />
 
               </h:selectone_listbox>
 
@@ -263,9 +263,9 @@
                 enabledClass="enabledClass" accesskey="A" 
                 styleClass = "styleClass">
 
-                <f:selectitem itemValue="nextDay" itemLabel="Next Day" disabled="true"/>
-                <f:selectitem itemValue="nextWeek" itemLabel="Next Week" />
-                <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                <f:selectItem itemValue="nextDay" itemLabel="Next Day" disabled="true"/>
+                <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
+                <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
                  
               </h:selectone_radio>
 
@@ -279,11 +279,11 @@
             <h:selectone_radio id="verticalRadio" 
                                             layout="PAGE_DIRECTION" border="1" >
 
-                <f:selectitem itemValue="nextDay" itemLabel="Next Day"
+                <f:selectItem itemValue="nextDay" itemLabel="Next Day"
                                    disabled="true" />
-                <f:selectitem itemValue="nextWeek" itemLabel="Next Week"  
+                <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  
                         disabled="false"/>
-                <f:selectitem itemValue="nextMonth" itemLabel="Next Month" />
+                <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
 
            </h:selectone_radio>
 
@@ -312,7 +312,7 @@
 
 	<TD><h:input_text value="July 10, 1996"
                               styleClass="inputClass">
-                <f:convert_datetime dateStyle="long"/>
+                <f:convertDateTime dateStyle="long"/>
             </h:input_text>
 	</TD>
 
@@ -327,7 +327,7 @@
 	<TD><h:input_text id="date2" value="July 11, 1996"
                          readonly="true"
                         size="3" maxlength="20" tabindex="1" accesskey="D">
-                <f:convert_datetime dateStyle="long"/>
+                <f:convertDateTime dateStyle="long"/>
             </h:input_text>
 	</TD>
 
@@ -340,7 +340,7 @@
 
 	<TD><h:input_text id="date3" 
                           value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
-                <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
+                <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
             </h:input_text>
 	</TD>
 
@@ -353,7 +353,7 @@
                         value="9999.98765" size="3" maxlength="20" 
                         styleClass="inputClass" 
                         tabindex="2" accesskey="D">
-               <f:convert_number pattern="####"/>
+               <f:convertNumber pattern="####"/>
             </h:input_text>
               </td>
 
@@ -363,7 +363,7 @@
           <td> <h:output_text styleClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
                    <h:output_text id="testPercent" value="45%">
-                       <f:convert_number type="number" pattern="#%"/>
+                       <f:convertNumber type="number" pattern="#%"/>
                    </h:output_text>
               </td>
       </tr>
@@ -375,7 +375,7 @@
 
 	<TD><h:output_text id="date4" value="July 10, 1996"
                               styleClass="outputClass" >
-                <f:convert_datetime dateStyle="long"/>
+                <f:convertDateTime dateStyle="long"/>
             </h:output_text>
 	</TD>
 
@@ -388,7 +388,7 @@
 
 	<TD><h:output_text id="date5" 
                           value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
-                <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
+                <f:convertDateTime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
             </h:output_text>
 	</TD>
 
@@ -401,7 +401,7 @@
 
 	<TD><h:input_text id="date6" 
                           value="12:31:31 PM">
-                <f:convert_datetime timeStyle="medium"/>
+                <f:convertDateTime timeStyle="medium"/>
             </h:input_text>
 	</TD>
 
@@ -414,7 +414,7 @@
 
 	<TD><h:output_text id="date7" 
                           value="12:31:31 PM">
-                <f:convert_datetime timeStyle="medium"/>
+                <f:convertDateTime timeStyle="medium"/>
             </h:output_text>
 	</TD>
 
@@ -431,7 +431,7 @@
                                  alt="input_date medium readonly"
                                  accesskey="D" 
                                title="input_date medium readonly">
-                   <f:convert_datetime dateStyle="medium"/>
+                   <f:convertDateTime dateStyle="medium"/>
                 </h:input_text>
 
 
@@ -447,7 +447,7 @@
                                  value="Jan 12, 1952" 
                                  alt="input_date medium"
                                   title="input_date medium">
-                   <f:convert_datetime dateStyle="medium"/>
+                   <f:convertDateTime dateStyle="medium"/>
                 </h:input_text>
 
              </td>
@@ -463,7 +463,7 @@
                                  alt="input_date short"
                                   title="input_date short">
                    
-                   <f:convert_datetime dateStyle="short"/>
+                   <f:convertDateTime dateStyle="short"/>
                 </h:input_text>
 
              </td>
@@ -480,7 +480,7 @@
                                  alt="input_date long"
                                  accesskey="d"
                                title="input_date long">
-                   <f:convert_datetime dateStyle="long"/>
+                   <f:convertDateTime dateStyle="long"/>
                 </h:input_text>
 
 
@@ -491,16 +491,16 @@
 <tr>
 					<TD>Multi-select menu:</TD>
 					<TD><h:selectmany_menu id="ManyApples" styleClass="selectmanyClass">
-						<f:selectitem itemValue="0" itemLabel="zero" />
-						<f:selectitem itemValue="1" itemLabel="one" />
-						<f:selectitem itemValue="2" itemLabel="two" />
-						<f:selectitem itemValue="3" itemLabel="three" />
-						<f:selectitem itemValue="4" itemLabel="four" disabled="true"/>
-						<f:selectitem itemValue="5" itemLabel="five" />
-						<f:selectitem itemValue="6" itemLabel="six" />
-						<f:selectitem itemValue="7" itemLabel="seven" />
-						<f:selectitem itemValue="8" itemLabel="eight" />
-						<f:selectitem itemValue="9" itemLabel="nine" />
+						<f:selectItem itemValue="0" itemLabel="zero" />
+						<f:selectItem itemValue="1" itemLabel="one" />
+						<f:selectItem itemValue="2" itemLabel="two" />
+						<f:selectItem itemValue="3" itemLabel="three" />
+						<f:selectItem itemValue="4" itemLabel="four" disabled="true"/>
+						<f:selectItem itemValue="5" itemLabel="five" />
+						<f:selectItem itemValue="6" itemLabel="six" />
+						<f:selectItem itemValue="7" itemLabel="seven" />
+						<f:selectItem itemValue="8" itemLabel="eight" />
+						<f:selectItem itemValue="9" itemLabel="nine" />
 					</h:selectmany_menu></TD>
 
 </tr>
@@ -508,16 +508,16 @@
 <tr>
 					<TD>Multi-select listbox:</TD>
 					<TD><h:selectmany_listbox >
-						<f:selectitem itemValue="0" itemLabel="zero" />
-						<f:selectitem itemValue="1" itemLabel="one" />
-						<f:selectitem itemValue="2" itemLabel="two" />
-						<f:selectitem itemValue="3" itemLabel="three" />
-						<f:selectitem itemValue="4" itemLabel="four" />
-						<f:selectitem itemValue="5" itemLabel="five" />
-						<f:selectitem itemValue="6" itemLabel="six" />
-						<f:selectitem itemValue="7" itemLabel="seven" />
-						<f:selectitem itemValue="8" itemLabel="eight" />
-						<f:selectitem itemValue="9" itemLabel="nine" />
+						<f:selectItem itemValue="0" itemLabel="zero" />
+						<f:selectItem itemValue="1" itemLabel="one" />
+						<f:selectItem itemValue="2" itemLabel="two" />
+						<f:selectItem itemValue="3" itemLabel="three" />
+						<f:selectItem itemValue="4" itemLabel="four" />
+						<f:selectItem itemValue="5" itemLabel="five" />
+						<f:selectItem itemValue="6" itemLabel="six" />
+						<f:selectItem itemValue="7" itemLabel="seven" />
+						<f:selectItem itemValue="8" itemLabel="eight" />
+						<f:selectItem itemValue="9" itemLabel="nine" />
 					</h:selectmany_listbox></TD>
 </tr>
 
@@ -525,16 +525,16 @@
 					<TD><h:selectmany_checkboxlist id="ManyApples3" 
                                                 tabindex="3" disabledClass="disabledClass" 
                                                 styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
-						<f:selectitem itemValue="0" itemLabel="zero" disabled="true" />
-						<f:selectitem itemValue="1" itemLabel="one" />
-						<f:selectitem itemValue="2" itemLabel="two" />
-						<f:selectitem itemValue="3" itemLabel="three" disabled="false"/>
-						<f:selectitem itemValue="4" itemLabel="four" />
-						<f:selectitem itemValue="5" itemLabel="five" />
-						<f:selectitem itemValue="6" itemLabel="six" />
-						<f:selectitem itemValue="7" itemLabel="seven" />
-						<f:selectitem itemValue="8" itemLabel="eight" />
-						<f:selectitem itemValue="9" itemLabel="nine" />
+						<f:selectItem itemValue="0" itemLabel="zero" disabled="true" />
+						<f:selectItem itemValue="1" itemLabel="one" />
+						<f:selectItem itemValue="2" itemLabel="two" />
+						<f:selectItem itemValue="3" itemLabel="three" disabled="false"/>
+						<f:selectItem itemValue="4" itemLabel="four" />
+						<f:selectItem itemValue="5" itemLabel="five" />
+						<f:selectItem itemValue="6" itemLabel="six" />
+						<f:selectItem itemValue="7" itemLabel="seven" />
+						<f:selectItem itemValue="8" itemLabel="eight" />
+						<f:selectItem itemValue="9" itemLabel="nine" />
 					</h:selectmany_checkboxlist></TD>
 </tr>
 
@@ -547,7 +547,7 @@
 </tr>
 
 <h:input_hidden value="48%" >
-    <f:convert_number type="number" pattern="#%"/>
+    <f:convertNumber type="number" pattern="#%"/>
 </h:input_hidden>
 
 <tr><td>

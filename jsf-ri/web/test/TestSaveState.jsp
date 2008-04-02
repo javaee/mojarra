@@ -21,8 +21,8 @@
       <td>
                     <h:input_text id="userName" 
                                      value="JavaServerFaces" >
-		     <f:validate_length minimum="6" maximum="10"/>
-		     <f:validate_required/>
+		     <f:validateLength minimum="6" maximum="10"/>
+		     <f:validateRequired/>
                    </h:input_text>
 
               </td>

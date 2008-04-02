@@ -24,10 +24,10 @@
     <td>
 
                    <h:input_text id="doubleRange" value="1000.0">
-                        <f:convert_number type="number" integerOnly="false" 
+                        <f:convertNumber type="number" integerOnly="false" 
                            maxFractionDigits="2" maxIntegerDigits="5" locale="en"
                            groupingUsed="true" />
-                       <f:validate_doublerange minimum="#{doubleMin}" 
+                       <f:validateDoubleRange minimum="#{doubleMin}" 
                                              maximum="#{doubleMax}"/>
                    </h:input_text>
 
@@ -40,20 +40,20 @@
 
     <td>
          <h:input_text id="longRange" value="1000">
-                     <f:convert_number pattern="####" 
+                     <f:convertNumber pattern="####" 
                            minFractionDigits="0" minIntegerDigits="2" />
-                     <f:validate_longrange minimum="#{longMin}" 
-                                             maximum="#{longMax}"/>
+                     <f:validateLongRange minimum="#{longMin}" 
+                                           maximum="#{longMax}"/>
          </h:input_text>
 
     </td>
 
      <h:output_text id="outputNumber2" value="$123.45">
-                   <f:convert_number type="currency" currencySymbol="$" />
+                   <f:convertNumber type="currency" currencySymbol="$" />
                </h:output_text>
 
     <h:output_text id="outputDatetime3" value="7/10/96 12:31:31 PM PDT">
-       <f:convert_datetime type="both" timeStyle="full" dateStyle="short" 
+       <f:convertDateTime type="both" timeStyle="full" dateStyle="short" 
             locale="en"/>
     </h:output_text>
 
@@ -66,8 +66,8 @@
     <td>
             <h:input_text id="intRange" value="NorthAmerica">
                   
-                     <f:validate_length minimum="#{intMin}" 
-                                             maximum="#{intMax}"/>
+                     <f:validateLength minimum="#{intMin}" 
+                                       maximum="#{intMax}"/>
              </h:input_text>
 
     </td>

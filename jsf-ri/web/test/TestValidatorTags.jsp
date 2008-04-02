@@ -23,9 +23,9 @@
     <td>
 
                    <h:input_text id="outOfBounds1" value="3.1415">
-                       <f:convert_number pattern="####"/>
-                       <f:validate_doublerange minimum="10.0" 
-                                             maximum="10.5"/>
+                       <f:convertNumber pattern="####"/>
+                       <f:validateDoubleRange minimum="10.0" 
+                                              maximum="10.5"/>
                    </h:input_text>
 
     </td>
@@ -38,9 +38,9 @@
     <td>
 
                    <h:input_text id="inBounds1" value="10.25">
-                     <f:convert_number pattern="####"/>
-                     <f:validate_doublerange minimum="10.0" 
-                                             maximum="10.5"/>
+                     <f:convertNumber pattern="####"/>
+                     <f:validateDoubleRange minimum="10.0" 
+                                            maximum="10.5"/>
                    </h:input_text>
 
     </td>
@@ -53,7 +53,7 @@
     <td>
 
                    <h:input_text id="outOfBounds2" value="fox">
-                     <f:validate_length minimum="10" maximum="11"/>
+                     <f:validateLength minimum="10" maximum="11"/>
                    </h:input_text>
 
     </td>
@@ -66,7 +66,7 @@
     <td>
 
                    <h:input_text id="inBounds2" value="alligator22">
-                     <f:validate_length minimum="10"  maximum="12"/>
+                     <f:validateLength minimum="10"  maximum="12"/>
                    </h:input_text>
 
     </td>
@@ -79,8 +79,8 @@
     <td>
 
                    <h:input_text id="outOfBounds3" value="30000">
-                     <f:convert_number  />
-                     <f:validate_longrange minimum="100000" maximum="110000"/>
+                     <f:convertNumber  />
+                     <f:validateLongRange minimum="100000" maximum="110000"/>
                    </h:input_text>
 
     </td>
@@ -93,8 +93,8 @@
     <td>
 
                    <h:input_text id="inBounds3" value="1100">
-                     <f:convert_number  />
-                     <f:validate_longrange minimum="1000"  maximum="1200"/>
+                     <f:convertNumber  />
+                     <f:validateLongRange minimum="1000"  maximum="1200"/>
                    </h:input_text>
 
     </td>

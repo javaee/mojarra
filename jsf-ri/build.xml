@@ -327,7 +327,7 @@ must exist.  This is necessary for the MessageFactory class.
 
   <target name="tlddocs">
 
-    <echo message="${build.home}"/>
+    <echo message="tlddoc.jar = ${tlddoc.jar}"/>
 
     <java fork="true" jar="${tlddoc.jar}">
       <arg line="-d ${build.home}/tlddocs"/>
