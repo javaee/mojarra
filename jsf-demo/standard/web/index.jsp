@@ -37,7 +37,7 @@
 -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- $Id: index.jsp,v 1.5 2005/08/02 21:10:52 rogerk Exp $ -->
+<!-- $Id: index.jsp,v 1.6 2005/08/02 21:13:33 rogerk Exp $ -->
 <html>
   <head>
     <title>JavaServer Faces 1.0 Standard RenderKit Demo</title>
@@ -81,9 +81,6 @@
 	  </p></li>
 
 	  <li><p><a href="faces/DataModel.jsp">DataModel</a>
-	  </p></li>
-
-	  <li><p><a href="faces/UISelectMany1.jsp">UISelectMany1</a>
 	  </p></li>
 
 	</ul>
