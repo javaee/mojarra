@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.33 2004/02/26 20:31:31 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.34 2004/04/07 17:39:26 rkitain Exp $
  */
 
 /*
@@ -172,7 +172,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
         UIInput input = (UIInput) component;
 	input.setRendererType(null);
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.getChildren().add(input);
         ValueChangeEvent event  = null;
 	
@@ -316,7 +316,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         request.setAttribute("test", test);
 
         // Point at the "command" property
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.setValueBinding
@@ -373,7 +373,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         Class validateParams[] = {FacesContext.class, UIComponent.class,
                                   Object.class};
     
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.addValidator(new TestInputValidator("v1"));
@@ -396,7 +396,7 @@ public class UIInputTestCase extends UIOutputTestCase {
     // Test validation of a required field
     public void testValidateRequired() throws Exception {
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.setRequired(true);
@@ -483,7 +483,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 	Application app = facesContext.getApplication();
 	MethodBinding methodBinding = null;
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.addValueChangeListener(new TestInputValueChangeListener("l1"));
@@ -505,7 +505,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 	Application app = facesContext.getApplication();
 	MethodBinding methodBinding = null;
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UIInput input = (UIInput) component;
         input.setImmediate(true);
@@ -525,7 +525,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
     public void testGetValueChangeListeners() throws Exception {
 	UIInput command = (UIInput) component;
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.getChildren().add(command);
 	
 	TestValueChangeListener 

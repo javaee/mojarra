@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.38 2004/02/26 20:31:30 eburns Exp $
+ * $Id: UIDataTestCase.java,v 1.39 2004/04/07 17:39:26 rkitain Exp $
  */
 
 /*
@@ -1192,7 +1192,7 @@ public class UIDataTestCase extends UIComponentBaseTestCase {
         // Attach our UIData to the view root
         UIData data = (UIData) component;
         data.setId("data");
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
         root.setViewId("/view");
         facesContext.setViewRoot(root);

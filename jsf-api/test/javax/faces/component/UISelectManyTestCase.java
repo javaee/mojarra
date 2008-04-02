@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.25 2004/04/02 21:35:52 eburns Exp $
+ * $Id: UISelectManyTestCase.java,v 1.26 2004/04/07 17:39:26 rkitain Exp $
  */
 
 /*
@@ -170,7 +170,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
     public void testValidation() throws Exception {
 
         // Put our component under test in a tree under a UIViewRoot
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
 
         // Add valid options to the component under test
@@ -206,7 +206,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
     public void testValidateNested() throws Exception {
 
         // Set up UISelectMany with nested UISelectItems
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UISelectMany selectMany = (UISelectMany) component;
         UISelectItems selectItems = new UISelectItems();
@@ -244,7 +244,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
     // Test validation of a required field
     public void testValidateRequired() throws Exception {
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UISelectMany selectMany = (UISelectMany) component;
         selectMany.getChildren().add(new UISelectItemSub("foo", null, null));

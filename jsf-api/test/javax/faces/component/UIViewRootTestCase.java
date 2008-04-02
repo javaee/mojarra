@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.14 2004/04/05 18:26:01 rkitain Exp $
+ * $Id: UIViewRootTestCase.java,v 1.15 2004/04/07 17:39:27 rkitain Exp $
  */
 
 /*
@@ -84,7 +84,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     public void testAbortProcessingException() {
 
         // Register three listeners, with the second one set to abort
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.addFacesListener
             (new TestListener("a", false));
         root.addFacesListener
@@ -110,7 +110,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     public void testEventBroadcasting() {
 
         // Register a listener that will conditionally queue a new event
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.addFacesListener
             (new TestListener("t", "2", "4"));
         TestListener.trace(null);
@@ -149,7 +149,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
     public void testLocaleFromVB() throws Exception {
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	ValueBinding binding = application.createValueBinding("locale");
 	request.setAttribute("locale", Locale.CHINESE);
 	assertEquals(Locale.getDefault(), root.getLocale());
@@ -160,7 +160,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
     public void testUninitializedInstance() throws Exception {
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	assertEquals(javax.faces.render.RenderKitFactory.HTML_BASIC_RENDER_KIT,
 		     root.getRenderKitId());
 	assertEquals(Locale.getDefault(), root.getLocale());
@@ -182,7 +182,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         // for which events are fired
 
         // Register an event listener for the specified phase id
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	TestEvent event = null;
         TestListener listener = new TestListener("t");
         root.addFacesListener(listener);

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.21 2004/02/26 20:31:34 eburns Exp $
+ * $Id: UISelectOneTestCase.java,v 1.22 2004/04/07 17:39:27 rkitain Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
     public void testValidation() throws Exception {
 
         // Put our component under test in a tree under a UIViewRoot
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
 
         // Add valid options to the component under test
@@ -137,7 +137,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
     public void testValidateNested() throws Exception {
 
         // Set up UISelectOne with nested UISelectItems
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UISelectOne selectOne = (UISelectOne) component;
         UISelectItems selectItems = new UISelectItems();
@@ -173,7 +173,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
     // Test validation of a required field
     public void testValidateRequired() throws Exception {
 
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UISelectOne selectOne = (UISelectOne) component;
         selectOne.getChildren().add(new UISelectItemSub("foo", null, null));

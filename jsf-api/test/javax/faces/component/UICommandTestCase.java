@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.29 2004/02/26 20:31:29 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.30 2004/04/07 17:39:25 rkitain Exp $
  */
 
 /*
@@ -93,7 +93,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 					  RenderKitFactory.HTML_BASIC_RENDER_KIT);
         renderKit.addRenderer(UICommand.COMPONENT_FAMILY, 
 			      "javax.faces.Button", new ButtonRenderer());
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
         UICommand command = (UICommand) component;
 	MethodBinding binding = facesContext.getApplication().
@@ -198,7 +198,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.getChildren().add(command);
 	command.queueEvent(event);
 	root.processDecodes(facesContext);
@@ -226,7 +226,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.getChildren().add(command);
 	command.queueEvent(event);
 	root.processDecodes(facesContext);
@@ -256,7 +256,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
         // Fire events and evaluate results
         TestActionListener.trace(null);
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.getChildren().add(command);
 	command.queueEvent(event);
 	root.processDecodes(facesContext);
@@ -401,7 +401,7 @@ public class UICommandTestCase extends UIComponentBaseTestCase {
 
     public void testGetActionListeners() throws Exception {
 	UICommand command = (UICommand) component;
-	UIViewRoot root = new UIViewRoot();
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.getChildren().add(command);
 	
 	TestActionListener 

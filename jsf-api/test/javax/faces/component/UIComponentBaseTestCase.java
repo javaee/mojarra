@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.24 2004/02/26 20:31:30 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.25 2004/04/07 17:39:25 rkitain Exp $
  */
 
 /*
@@ -103,13 +103,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             new MockExternalContext(servletContext, request, response);
         lifecycle = new MockLifecycle();
         facesContext = new MockFacesContext(externalContext, lifecycle);
-	UIViewRoot root = new UIViewRoot();
-	root.setViewId("/viewId");
-        facesContext.setViewRoot(root);
         ApplicationFactory applicationFactory = (ApplicationFactory)
             FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         application = (MockApplication) applicationFactory.getApplication();
         facesContext.setApplication(application);
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	root.setViewId("/viewId");
+        facesContext.setViewRoot(root);
         RenderKitFactory renderKitFactory = (RenderKitFactory)
             FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         RenderKit renderKit = new MockRenderKit();
@@ -431,7 +431,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.getChildren().clear();
         component.getFacets().clear();
         component.setRendered(true);
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         UIPanel panel = new UIPanel();
         panel.setRendered(true);
         root.getChildren().add(panel);
@@ -501,7 +501,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.getChildren().clear();
         component.getFacets().clear();
         component.setRendered(true);
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         UIPanel panel = new UIPanel();
         panel.setRendered(false);
         root.getChildren().add(panel);
@@ -571,7 +571,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.getChildren().clear();
         component.getFacets().clear();
         component.setRendered(true);
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
 
         // Establish a view with multiple facets and children
@@ -638,7 +638,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         component.getChildren().clear();
         component.getFacets().clear();
         component.setRendered(false);
-        UIViewRoot root = new UIViewRoot();
+        UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
         root.getChildren().add(component);
 
         // Establish a view with multiple facets and children
