@@ -76,8 +76,7 @@ fun way. The application is called Character Combat.
 				<ul>
 					<li>go back to the first page and add more characters
 					<li>choose the first participant in the battle
-					<li>go to the third page.&nbsp; 
-				</ul>
+					<li>go to the third page</ul>
 			<li>On the third page, the user can do the following:
 				<ul>
 					<li>go back to the second page
@@ -145,13 +144,15 @@ fun way. The application is called Character Combat.
 		<p>This entry creates a mapping between a bean name and class. This mapping is used by the Managed Bean creation facility. The first time the &quot;modelBean&quot; is referenced, the model object is created and stored in the appropriate scope. Model Beans are discussed later on in the article.</p>
 		<p>There are many more configuration options. You can find the complete set by looking at the <a href="(EmptyReference!)" target="http://java.sun.com/j2ee/javaserverfaces/download.html">JSF 1.0 Specification</a>.</p>
 		<h3>Building the Application</h3>
-		<p>A pre-built war file is included in the demo source distribution. If you do wish to build the demo on your own you will need to take the following steps:</p>
-		<p>Make sure you have all of your compile time dependencies before you attempt to build the demo application. The demo comes with a &quot;build.properties.sample&quot; file. Copy that file and rename it to &quot;build.properties&quot; and make the changes appropriate to your environment.</p>
-		<p>If you are using the <a href="(EmptyReference!)" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>, the JSF 1.0 Framework and all the dependencies necessary to run a JSF application are already part of your environment. The only thing you would need to modify in order to build the demo application is the location of your SJSAS 8.0 PE installation.</p>
-		<p>The Character Combat demo application comes with a &quot;build.xml&quot; file. This file contains a set of rules and targets that will build the demo application web archive.</p>
-		<p>You will need Ant in order to build the application. Ant is already part of your SJSAS 8.0 PE distribution located in <code>&lt;SJSAS_HOME&gt;/bin/asant.</code></p>
-		<p>With the SJSAS 8.0 PE container, to build the demo simply invoke &quot;<code>asant</code>&quot; in your unpacked Character Combat demo directory where your &quot;build.xml&quot; file and customized &quot;build.properties&quot; files exist.</p>
-		<h2></h2>
+		<p>A pre-built war file is included in the demo source distribution. You can simply deploy that war file in your web container. </p>
+		<p>Note that the war file contains a JSTL 1.1 implementation. If your web container does not support JSTL 1.1 then you will need to rebuild your war with a JSTL 1.0 implementation.</p>
+		<p>If you wish to build the demo on your own you will need to take the following steps:</p>
+		<ol>
+			<li>Make sure you have all of your compile time dependencies before you attempt to build the demo application. The demo comes with a &quot;build.properties.sample&quot; file. Copy that file and rename it to &quot;build.properties&quot; and make the changes appropriate to your environment.
+			<li>If you are using the <a href="(EmptyReference!)" target="http://java.sun.com/j2ee">Sun Java Systems Application Server 8.0 PE</a>, the JSF 1.0 Framework and all the dependencies necessary to run a JSF application are already part of your environment. The only thing you would need to modify in your &quot;build.properties&quot; file is the location of your SJSAS 8.0 PE installation.
+			<li>The Character Combat demo application comes with a &quot;build.xml&quot; file. This file contains a set of rules and targets that will build the demo application web archive. You will need Ant in order to build the application. Ant is already part of your SJSAS 8.0 PE distribution located in <code>&lt;SJSAS_HOME&gt;/bin/asant.</code>
+			<li>With the SJSAS 8.0 PE container, to build the demo simply invoke &quot;<code>asant</code>&quot; in your unpacked Character Combat demo directory where your &quot;build.xml&quot; file and customized &quot;build.properties&quot; files exist.
+		</ol>
 		<h2>Character Combat Demo Architecture</h2>
 		<h2>Managed Beans
 </h2>
@@ -274,6 +275,8 @@ illustrate the above concepts:
 				</td>
 			</tr>
 		</table>
+		<p>Here is how the rendered HTML DataTable will look:</p>
+		<p><img src="dataTable.jpg" alt="" height="119" width="746" border="0"></p>
 		<h3>PanelGrid</h3>
 		<p>For simple table layout you can use the <code>&lt;h:panelGrid/&gt;</code> component. Unlike the DataTable component, PanelGrid does not take any underlying data model.</p>
 		<p>Here is an example of a two column table. A header is defined for the first row. The second row contains an InputText Field in the first column and a list of pull down items for the second column:</p>
@@ -314,6 +317,8 @@ field to our model by specifying the value attribute as follows:
 		<p> This InputText component is nested in a form. Once that form is
 submitted, the value in the field will be reflected in our model.
 </p>
+		<p>In the following image you can see the combination of an InputText in the PanelGrid layout component along with a set of CommandButtons and a ListBox:</p>
+		<p><img src="panelGrid.jpg" alt="" height="192" width="405" border="0"></p>
 		<h3>OutputText</h3>
 		<p>The OutputText component can display information in various ways. You can, for instance, configure it to either escape HTML markup, changing all occurrences of angle brackets to either the appropriate <code>&amp;lt;</code> syntax or pass through the markup unchanged. You can also apply various stylesheet styles to the component.</p>
 		<p> OutputText is used throughout the sample application to display the
@@ -367,7 +372,8 @@ sample:
 		<p> We will discuss actions in the next section since they are very
 important in navigation handling.
 </p>
-		<h2></h2>
+		<p>Here is how the set of RadioButtons along with the corresponding CommandButton wizards will be rendered:</p>
+		<h2><img src="firstSelection.jpg" alt="" height="139" width="565" border="0"></h2>
 		<h2><a id="Example Wizard Component" name="Example Wizard Component"></a>Navigation: the Example Wizard Component</h2>
 		
 		Let's take a look at the wizard component that handles navigation in
@@ -523,13 +529,7 @@ file. The "addCustomName" method adds the name to the table.<br>
 		<p>This Action Handler is invoked when the CommandButton with the ActionListener is invoked. The &quot;addCustomName&quot; method goes through a list of existing characters and if it doesn't find the new name in the list, it goes on to create a new Character entry.</p>
 		<p>If this Action Handler had a return value, that could be used by the Navigation Handler to determine the success of the action and where to navigate based on the outcome. In this particular example, no value is returned since the same page is redisplayed but with the addition of the new custom name entry. Action Handler and Navigation Handlers were designed to easily interoperate.</p>
 		<h2>Summary</h2>
-		<p>This article has introduced you to some of the features available in the JSF framework. The sample application demonstrated the use of components, navigation, action handlers, and stylesheets, .</p>
-		<p>JSF can help you create complex and robust web applications easily.
-It
-is a standard Java web application framework several years in the
-making. As a standard it is well positioned to be adopted by users and
-tool vendors. JSF is a tool that can help you build a great web
-application.
-</p>
+		<p>This article has introduced you to some of the features available in the JSF framework. The sample application demonstrated the use of components, navigation, action handlers, and stylesheets.</p>
+		<p>JSF can help you create complex and robust web applications easily. It is a standard Java web application framework several years in the making. As a standard it is well positioned to be adopted by users and tool vendors. JSF is a tool that can help you build a great web application using MVC principles.</p>
 </body>
 </html>
