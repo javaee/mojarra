@@ -7753,6 +7753,18 @@
     </property>
     <property>
       <description>
+        If false, the browser should disable its autocomplete feature
+        for this component.  This is useful for components that perform
+        autocompletion and do not want the browser interfering.  If not
+        set, defaults to true.
+        </description>
+      <display-name>Enable or disable browser autocompletion.</display-name>
+      <icon/>
+      <property-name>autocomplete</property-name>
+      <property-class>boolean</property-class>
+    </property>
+    <property>
+      <description>
           The maximum number of characters that may
           be entered in this field.
         </description>
@@ -8458,6 +8470,18 @@
       <property-extension>
         <pass-through>true</pass-through>
       </property-extension>
+    </property>
+    <property>
+      <description>
+        If false, the browser should disable its autocomplete feature
+        for this component.  This is useful for components that perform
+        autocompletion and do not want the browser interfering.  If not
+        set, defaults to true.
+        </description>
+      <display-name>Enable or disable browser autocompletion.</display-name>
+      <icon/>
+      <property-name>autocomplete</property-name>
+      <property-class>boolean</property-class>
     </property>
     <property>
       <description>
@@ -19541,6 +19565,18 @@
       </attribute>
       <attribute>
         <description>
+        If false, the browser should disable its autocomplete feature
+        for this component.  This is useful for components that perform
+        autocompletion and do not want the browser interfering.  If not
+        set, defaults to true.
+        </description>
+        <display-name>Enable or disable browser autocompletion.</display-name>
+        <icon/>
+        <attribute-name>autocomplete</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+      <attribute>
+        <description>
           The maximum number of characters that may
           be entered in this field.
         </description>
@@ -19951,6 +19987,18 @@
         <attribute-extension>
           <pass-through>true</pass-through>
         </attribute-extension>
+      </attribute>
+      <attribute>
+        <description>
+        If false, the browser should disable its autocomplete feature
+        for this component.  This is useful for components that perform
+        autocompletion and do not want the browser interfering.  If not
+        set, defaults to true.
+        </description>
+        <display-name>Enable or disable browser autocompletion.</display-name>
+        <icon/>
+        <attribute-name>autocomplete</attribute-name>
+        <attribute-class>boolean</attribute-class>
       </attribute>
       <attribute>
         <description>
