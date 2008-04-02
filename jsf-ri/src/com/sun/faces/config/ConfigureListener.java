@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.94 2007/02/05 00:00:12 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.95 2007/02/16 19:39:54 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -288,43 +288,42 @@ public class ConfigureListener implements ServletContextListener {
         if (initialized = initialized()) {
             return;
         }
-        
-        // store the servletContext instance in Thread local Storage.
-        // This enables our Application's ApplicationAssociate to locate
-        // it so it can store the ApplicationAssociate in the
-        // ServletContext.
-        tlsExternalContext.set(new ServletContextAdapter(context));
+
+        // Check to see if the FacesServlet is present in the
+        // web.xml.   If it is, perform faces configuration as normal,
+        // otherwise, simply return.
+        if (!isFeatureEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles)) {
+            WebXmlProcessor processor = new WebXmlProcessor(context);
+            if (!processor.isFacesServletPresent()) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(
+                         "No FacesServlet found in deployment descriptor -"
+                              +
+                              " bypassing configuration.");
+                }
+                return;
+            }
+
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("FacesServlet found in deployment descriptor -"
+                     +
+                     " processing configuration.");
+            }
+        }
 
         try {
-            
+
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version",
                            getServletContextIdentifier(context));
             }
 
-            // Check to see if the FacesServlet is present in the
-            // web.xml.   If it is, perform faces configuration as normal,
-            // otherwise, simply return.
-            if (!isFeatureEnabled(BooleanWebContextInitParameter.ForceLoadFacesConfigFiles))
-            {
-                WebXmlProcessor processor = new WebXmlProcessor(context);
-                if (!processor.isFacesServletPresent()) {
-                    if (LOGGER.isLoggable(Level.FINE)) {
-                        LOGGER.fine(
-                              "No FacesServlet found in deployment descriptor -"
-                              +
-                              " bypassing configuration.");
-                    }
-                    return;
-                }
-
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("FacesServlet found in deployment descriptor -"
-                                +
-                                " processing configuration.");
-                }
-            }                       
+            // store the servletContext instance in Thread local Storage.
+            // This enables our Application's ApplicationAssociate to locate
+            // it so it can store the ApplicationAssociate in the
+            // ServletContext.
+            tlsExternalContext.set(new ServletContextAdapter(context));
 
             // Prepare local variables we will need
             FacesConfigBean fcb = new FacesConfigBean();            
