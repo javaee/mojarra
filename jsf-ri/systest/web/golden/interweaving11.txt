@@ -1,0 +1,35 @@
+
+
+
+
+
+
+<html>
+  <head>
+      <title>interweaving11</title>   
+  </head>
+  <body>
+    <form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=1bb975b5f1254a3e5166d3de1438" enctype="application/x-www-form-urlencoded">
+<a href="#" onclick="clearFormHiddenParams_j_id_id17('j_id_id17');document.forms['j_id_id17']['j_id_id17:j_idcl'].value='j_id_id17:j_id_id21';document.forms['j_id_id17']['param'].value='value'; document.forms['j_id_id17'].submit(); return false;">one</a><input type="hidden" name="j_id_id17:j_idcl" /><input type="hidden" name="param" /><script type="text/javascript" language="Javascript"><!--
+
+function clearFormHiddenParams_j_id_id17(curFormName) {
+  var curForm = document.forms[curFormName];
+ curForm.elements['j_id_id17:j_idcl'].value = null;
+ curForm.elements['param'].value = null;
+}
+//-->
+</script>
+            
+                
+                </br>
+            
+                <a href="#" onclick="clearFormHiddenParams_j_id_id17('j_id_id17');document.forms['j_id_id17']['j_id_id17:j_idcl'].value='j_id_id17:j_id_id21j_id_1';document.forms['j_id_id17']['param'].value='value'; document.forms['j_id_id17'].submit(); return false;">two</a>
+                </br>
+            
+                <a href="#" onclick="clearFormHiddenParams_j_id_id17('j_id_id17');document.forms['j_id_id17']['j_id_id17:j_idcl'].value='j_id_id17:j_id_id21j_id_2';document.forms['j_id_id17']['param'].value='value'; document.forms['j_id_id17'].submit(); return false;">three</a>
+                </br>
+            
+        <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id37:j_id38" /><input type="hidden" name="j_id_id17" value="j_id_id17" /></form>
+  </body>
+</html>
+
