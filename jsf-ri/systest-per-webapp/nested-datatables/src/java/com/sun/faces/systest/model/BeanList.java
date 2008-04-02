@@ -1,5 +1,5 @@
 /*
- * $Id: BeanList.java,v 1.1 2004/06/09 21:28:17 eburns Exp $
+ * $Id: BeanList.java,v 1.2 2004/06/16 20:00:08 eburns Exp $
  */
 
 /*
@@ -10,7 +10,10 @@
 package com.sun.faces.systest.model;
 
 import javax.faces.model.ListDataModel;
+import javax.faces.component.UIData;
+import javax.faces.context.FacesContext;
 
+import java.util.List;
 import java.util.ArrayList;
 
 public class BeanList extends Object {
@@ -19,6 +22,25 @@ public class BeanList extends Object {
 
     public BeanList() {
     }
+
+    protected String outerDataName;
+    public String getOuterDataName() {
+	return outerDataName;
+    }
+
+    public void setOuterDataName(String newOuterDataName) {
+	outerDataName = newOuterDataName;
+    }
+
+    protected String innerDataName;
+    public String getInnerDataName() {
+	return innerDataName;
+    }
+
+    public void setInnerDataName(String newInnerDataName) {
+	innerDataName = newInnerDataName;
+    }
+
 
     protected String name = "name";
     public String getName() {
@@ -43,12 +65,11 @@ public class BeanList extends Object {
 
     public ListDataModel getListDataModel() {
 	if (null == listDataModel) {
-	    ArrayList beans = new ArrayList(10);
-	    TestBean curBean = null;
+	    ArrayList beans = new ArrayList(size);
+	    InputBean curBean = null;
 	    
 	    for (int i = 0; i < size; i++) {
-		curBean = new TestBean();
-		curBean.setStringProperty(getName() + " " + i);
+		curBean = new InputBean(this, size, getName() + " " + i);
 		
 		beans.add(curBean);
 	    }
@@ -62,5 +83,15 @@ public class BeanList extends Object {
     public void setListDataModel(ListDataModel newListDataModel) {
 	listDataModel = newListDataModel;
     }
+
+    protected List inputValues = null;
+    public List getInputValues() {
+	return inputValues;
+    }
+
+    public void setInputValues(List newInputValues) {
+	inputValues = newInputValues;
+    }
+
 
 }

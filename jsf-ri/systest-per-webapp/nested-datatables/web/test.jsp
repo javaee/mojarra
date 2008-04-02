@@ -18,18 +18,19 @@
 
   <h:form id="form">
 
-    <h:dataTable value="#{outer.listDataModel}" var="outerVar">
+    <h:dataTable id="outerData" value="#{outer}" var="outerVar">
 
-      <h:column>
+      <h:column id="outerColumn">
 
-        <h:dataTable value="#{inner.listDataModel}" var="innerVar">
+        <h:dataTable id="innerData" value="#{inner.listDataModel}" 
+                     var="innerVar">
 
           <f:facet name="header">
-            <h:outputText value="#{outerVar.stringProperty}" />
+            <h:outputText id="header" value="#{outerVar}" />
           </f:facet>
 
-          <h:column>
-            <h:inputText value="#{innerVar.stringProperty}" />
+          <h:column id="innerColumn">
+            <h:inputText id="inputText" value="#{innerVar.stringProperty}" />
           </h:column>
 
         </h:dataTable>
@@ -38,7 +39,11 @@
 
     </h:dataTable>
 
-    <h:commandButton value="reload" />
+    <h:commandButton style="color: red" value="reload" />
+
+    <p />
+
+    <h:messages />
 
 
   </h:form>

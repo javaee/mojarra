@@ -14,20 +14,15 @@
 
   <managed-bean>
     <managed-bean-name>outer</managed-bean-name>
-    <managed-bean-class>
-      com.sun.faces.systest.model.BeanList
-    </managed-bean-class>
-    <managed-bean-scope>session</managed-bean-scope>
-    <managed-property>
-      <property-name>name</property-name>
-      <value>outer</value>
-    </managed-property>
-    <managed-property>
-      <property-name>size</property-name>
-      <value>3</value>
-    </managed-property>
-
+    <managed-bean-class>java.util.ArrayList</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <list-entries>
+      <value-class>java.lang.String</value-class>
+      <value>outer 0</value>
+      <value>outer 1</value>
+    </list-entries>
   </managed-bean>
+
   <managed-bean>
     <managed-bean-name>inner</managed-bean-name>
     <managed-bean-class>
@@ -39,9 +34,21 @@
       <value>inner</value>
     </managed-property>
     <managed-property>
+      <property-name>outerDataName</property-name>
+      <value>form:outerData</value>
+    </managed-property>
+    <managed-property>
+      <property-name>innerDataName</property-name>
+      <value>form:outerData:innerData</value>
+    </managed-property>
+    <managed-property>
       <property-name>size</property-name>
-      <value>5</value>
+      <value>3</value>
     </managed-property>
   </managed-bean>
+
+  <lifecycle>
+    <phase-listener>com.sun.faces.systest.model.PrintTreePhaseListener</phase-listener>
+  </lifecycle>
 
 </faces-config>
