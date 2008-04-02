@@ -40,6 +40,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import com.sun.faces.util.Util;
 
 /**
@@ -171,6 +174,7 @@ public class ConverterPropertyEditorFactory {
                     + getVMClassName(templateClass) + ";");
                 targetClassConstant = findConstant(getVMClassName(templateTargetClass));
             } catch (Exception e) {
+                // ignore
             }
         }
 
@@ -529,7 +533,7 @@ public class ConverterPropertyEditorFactory {
      */
     @SuppressWarnings("unchecked")
     public Class<? extends ConverterPropertyEditorBase> definePropertyEditorClassFor(
-        Class<?> targetClass) {
+        final Class<?> targetClass) {
         try {
             String className = getTemplateInfo().generateClassNameFor(
                 targetClass, false);
@@ -542,7 +546,15 @@ public class ConverterPropertyEditorFactory {
             WeakReference<DisposableClassLoader> loaderRef = classLoaderCache
                 .get(targetClass.getClassLoader());
             if (loaderRef == null || (loader = loaderRef.get()) == null) {
-                loader = new DisposableClassLoader(targetClass.getClassLoader());
+                loader = (DisposableClassLoader) AccessController.doPrivileged(
+                      new PrivilegedAction() {
+                          public Object run() {
+                            return new DisposableClassLoader(targetClass.getClassLoader());    
+                          }
+                      });
+                if (loader == null) {
+                    return null;
+                }
                 classLoaderCache.put(targetClass.getClassLoader(),
                     new WeakReference(loader));
             }
