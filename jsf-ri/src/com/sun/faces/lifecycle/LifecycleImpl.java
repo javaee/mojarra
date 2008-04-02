@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.31 2003/08/22 19:25:10 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.32 2003/08/28 21:39:21 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.31 2003/08/22 19:25:10 rlubke Exp $
+ * @version $Id: LifecycleImpl.java,v 1.32 2003/08/28 21:39:21 eburns Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -113,7 +113,7 @@ public class LifecycleImpl extends Lifecycle
         phaseWrappers.add(new PhaseWrapper(new RenderResponsePhase(Application.getCurrentInstance())));
     }
 
-    protected void executeRender(FacesContext context) throws FacesException {
+    protected Phase getRenderPhase(FacesContext context) throws FacesException {
         Assert.assert_it(null != phaseWrappers);
         Phase renderPhase = null;
         PhaseWrapper wrapper = null;
@@ -130,7 +130,7 @@ public class LifecycleImpl extends Lifecycle
         }
     
         Assert.assert_it(null != renderPhase);
-        renderPhase.execute(context);
+	return renderPhase;
     }   
 
     public void execute(FacesContext context) throws FacesException {
@@ -176,12 +176,26 @@ public class LifecycleImpl extends Lifecycle
             }
 
             if (context.getResponseComplete()) {
+		maybeCallListeners(curPhase, AFTER);
                 return;
             } else if (context.getRenderResponse()) {
-                executeRender(context);
-                return;
-            }
+		// If we're skipping to RENDER_RESPONSE, be sure to call
+		// the after listener for the current phase.
+		maybeCallListeners(curPhase, AFTER);
 
+		// then call the before listener for RENDER_RESPONSE
+                curPhase = getRenderPhase(context);
+		maybeCallListeners(curPhase, BEFORE);
+
+		// then execute the RENDER_RESPONSE phase
+		curPhase.execute(context);
+
+		// then call the after listener for RENDER_RESPONSE
+		maybeCallListeners(curPhase, AFTER);
+
+		return;
+            }
+	    
 	    maybeCallListeners(curPhase, AFTER);
 
             curPhaseId++;
