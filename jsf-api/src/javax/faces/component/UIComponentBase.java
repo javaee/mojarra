@@ -1,9 +1,9 @@
 /*
- * $Id: UIComponentBase.java,v 1.33 2003/01/16 20:24:17 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.34 2003/01/16 20:47:56 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -215,7 +215,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getRequestTree().getRenderKitId());
+                (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
             result = renderer.getClientId(context, this);
         } else {
@@ -1223,7 +1223,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getRequestTree().getRenderKitId());
+                (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
             boolean result = renderer.decode(context, this);
             setValid(result);
@@ -1268,7 +1268,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getResponseTree().getRenderKitId());
+                (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
             renderer.encodeBegin(context, this);
         }
@@ -1302,7 +1302,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getResponseTree().getRenderKitId());
+                (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
             renderer.encodeChildren(context, this);
         }
@@ -1336,7 +1336,7 @@ public abstract class UIComponentBase implements UIComponent {
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
-                (context.getResponseTree().getRenderKitId());
+                (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
             renderer.encodeEnd(context, this);
         }
@@ -1457,7 +1457,7 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Perform the request component tree processing required by the
+     * <p>Perform the component tree processing required by the
      * <em>Apply Request Values</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
@@ -1506,7 +1506,7 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Perform the request component tree processing required by the
+     * <p>Perform the component tree processing required by the
      * <em>Process Validations</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
@@ -1567,7 +1567,7 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     /**
-     * <p>Perform the request component tree processing required by the
+     * <p>Perform the component tree processing required by the
      * <em>Update Model Values</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>

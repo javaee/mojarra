@@ -1,9 +1,9 @@
 /*
- * $Id: FacesTag.java,v 1.27 2003/01/10 02:40:56 craigmcc Exp $
+ * $Id: FacesTag.java,v 1.28 2003/01/16 20:48:00 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -210,7 +210,7 @@ public abstract class FacesTag extends TagSupport {
      *     with the current {@link FacesContext}.  This ensures that encoded
      *     output from the components is routed through the
      *     <code>JspWriter</code> for the current page.</li>
-     * <li>Locate the component (in the response component tree) corresponding
+     * <li>Locate the component (in the component tree) corresponding
      *     to this tag, creating a new one if necesary.</li>
      * <li>Override the attributes of the associated component with values
      *     set in our custom tag attributes, if values for the corresponding
@@ -408,7 +408,7 @@ public abstract class FacesTag extends TagSupport {
 
 
     /**
-     * <p>Find and return the component, from the response component
+     * <p>Find and return the component, from the component
      * tree, that corresponds to the relative identifier defined by the
      * <code>id</code> attribute of this tag. If the value of the <code>id</code>
      * attribute is non null, see if there is a component with this
@@ -433,7 +433,7 @@ public abstract class FacesTag extends TagSupport {
         String tagKey = null;
         
         String id = getId();
-        UIComponent root = context.getResponseTree().getRoot();
+        UIComponent root = context.getTree().getRoot();
         HashMap tagHash = (HashMap)root.getAttribute("tagHash");
         
         UIComponent parent = (UIComponent) componentStack.peek();
@@ -513,7 +513,7 @@ public abstract class FacesTag extends TagSupport {
                                      PageContext.REQUEST_SCOPE);
         if (componentStack == null) {
             componentStack = new Stack();
-            componentStack.push(context.getResponseTree().getRoot());
+            componentStack.push(context.getTree().getRoot());
             pageContext.setAttribute(COMPONENT_STACK_ATTR,
                                      componentStack,
                                      PageContext.REQUEST_SCOPE);

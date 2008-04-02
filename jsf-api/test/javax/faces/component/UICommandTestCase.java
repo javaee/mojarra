@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.3 2003/01/16 20:24:24 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.4 2003/01/16 20:48:01 craigmcc Exp $
  */
 
 /*

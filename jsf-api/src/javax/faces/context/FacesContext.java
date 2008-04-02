@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.33 2003/01/16 20:24:19 craigmcc Exp $
+ * $Id: FacesContext.java,v 1.34 2003/01/16 20:47:59 craigmcc Exp $
  */
 
 /*
@@ -19,8 +19,8 @@ import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
 import javax.faces.tree.Tree;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -41,13 +41,6 @@ import javax.servlet.http.HttpSession;
  * from any thread other than the one upon which the servlet container
  * executing this web application utilizes for the processing of this request.
  * </p>
- *
- * <p><strong>FIXME</strong> - Specify starting contents of all properties
- * when returned from <code>FacesContextFactory.getFacesContext()</code>,
- * versus what changes are expected in each phase of the request processing
- * lifecycle.</p>
- *
- * <p><strong>FIXME</strong> - ObjectManager et. al.</p>
  */
 
 public abstract class FacesContext {
@@ -98,6 +91,11 @@ public abstract class FacesContext {
      * <code>Iterator</code> returned by this method must support the
      * following functionality:</p>
      * <ul>
+     * <li>The <code>remove()</code> operation may be utilized by the
+     *     JSF implementation to remove the current event when it has
+     *     been completely handled.</li>
+     * <li>Event handlers may add new events to the list while it is
+     *     being iterated over, by calling <code>addFacesEvent()</code>.</li>
      * </ul>
      *
      * <p>If no events have been queued, an empty <code>Iterator</code>
@@ -166,29 +164,6 @@ public abstract class FacesContext {
 
 
     /**
-     * <p>Return the {@link Tree} that is associated with the inbound request.
-     * </p>
-     */
-    public abstract Tree getRequestTree();
-
-
-    /**
-     * <p>Set the {@link Tree} that is associated with the inbound request.
-     * The {@link Tree} associated with the current response is set to the
-     * same {@link Tree} instance.</p>
-     * </p>
-     *
-     * @param tree The new inbound request tree
-     *
-     * @exception IllegalStateException if this method is called more than
-     *  once without a call to <code>release()</code> in beween
-     * @exception NullPointerException if <code>tree</code>
-     *  is <code>null</code>
-     */
-    public abstract void setRequestTree(Tree tree);
-
-
-    /**
      * <p>Return the {@link ResponseStream} to which components should
      * direct their binary output.  Within a given response, components
      * can use either the ResponseStream or the ResponseWriter,
@@ -207,27 +182,6 @@ public abstract class FacesContext {
      *  is <code>null</code>
      */
     public abstract void setResponseStream(ResponseStream responseStream);
-
-
-    /**
-     * <p>Return the {@link Tree} that is associated with the outbound
-     * response.  Unless otherwise specified (by a call to
-     * <code>setResponseTree()</code>, this will return the same
-     * {@link Tree} returned by <code>getRequestTree()</code>.</p>
-     */
-    public abstract Tree getResponseTree();
-
-
-    /**
-     * <p>Set the {@link Tree} that is the associated with the
-     * outbound response.</p>
-     *
-     * @param tree The new outbound response tree
-     *
-     * @exception NullPointerException if <code>tree</code>
-     *  is <code>null</code>
-     */
-    public abstract void setResponseTree(Tree tree);
 
 
     /**
@@ -270,6 +224,30 @@ public abstract class FacesContext {
      * current response that is being rendered.</p>
      */
     public abstract ServletResponse getServletResponse();
+
+
+    /**
+     * <p>Return the component {@link Tree} that is associated with the
+     * this request.
+     * </p>
+     */
+    public abstract Tree getTree();
+
+
+    /**
+     * <p>Set the {@link Tree} that is associated with this request.
+     * This method can only be called by the application handler (or a
+     * class that the handler calls), and only during the <em>Invoke
+     * Application</em> phase of the request processing lifecycle.</p>
+     *
+     * @param tree The new component tree
+     *
+     * @exception IllegalStateException if this method is called more than
+     *  once without a call to <code>release()</code> in beween
+     * @exception NullPointerException if <code>tree</code>
+     *  is <code>null</code>
+     */
+    public abstract void setTree(Tree tree);
 
 
     /**

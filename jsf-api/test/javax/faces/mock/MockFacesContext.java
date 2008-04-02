@@ -1,9 +1,9 @@
 /*
- * $Id: MockFacesContext.java,v 1.2 2003/01/16 20:24:26 craigmcc Exp $
+ * $Id: MockFacesContext.java,v 1.3 2003/01/16 20:48:03 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -28,8 +28,8 @@ import javax.faces.event.FacesEvent;
 import javax.faces.lifecycle.ApplicationHandler;
 import javax.faces.lifecycle.ViewHandler;
 import javax.faces.tree.Tree;
-import javax.servlet.ServletRequest;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -88,17 +88,6 @@ public class MockFacesContext extends FacesContext {
         throw new UnsupportedOperationException();
     }
 
-    private Tree requestTree = null;
-
-    public Tree getRequestTree() {
-        return (this.requestTree);
-    }
-
-    public void setRequestTree(Tree requestTree) {
-        this.requestTree = requestTree;
-        this.responseTree = requestTree;
-    }
-
     private ResponseStream responseStream = null;
 
     public ResponseStream getResponseStream() {
@@ -107,16 +96,6 @@ public class MockFacesContext extends FacesContext {
 
     public void setResponseStream(ResponseStream responseStream) {
         this.responseStream = responseStream;
-    }
-
-    private Tree responseTree = null;
-
-    public Tree getResponseTree() {
-        return (this.responseTree);
-    }
-
-    public void setResponseTree(Tree responseTree) {
-        this.responseTree = responseTree;
     }
 
     private ResponseWriter responseWriter = null;
@@ -162,6 +141,16 @@ public class MockFacesContext extends FacesContext {
         this.servletResponse = servletResponse;
     }
 
+    private Tree tree = null;
+
+    public Tree getTree() {
+        return (this.tree);
+    }
+
+    public void setTree(Tree tree) {
+        this.tree = tree;
+    }
+
     public ViewHandler getViewHandler() {
         throw new UnsupportedOperationException();
     }
@@ -203,13 +192,12 @@ public class MockFacesContext extends FacesContext {
         applicationEvents.clear();
         facesEvents.clear();
         locale = null;
-        requestTree = null;
         responseStream = null;
-        responseTree = null;
         responseWriter = null;
         servletContext = null;
         servletRequest = null;
         servletResponse = null;
+        tree = null;
     }
 
 }

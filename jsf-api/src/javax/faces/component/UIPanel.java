@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.7 2002/08/04 23:27:26 craigmcc Exp $
+ * $Id: UIPanel.java,v 1.8 2003/01/16 20:47:57 craigmcc Exp $
  */
 
 /*
@@ -15,8 +15,17 @@ package javax.faces.component;
  * layout of its child components.</p>
  */
 
-public class UIPanel extends UIOutput {
+public class UIPanel extends UIOutput implements NamingContainer {
 
+
+    // ------------------------------------------------------- attributes
+
+    /**
+
+    * The NamingContainer implementation
+
+    */
+    private NamingContainer namespace = null;
 
     // ------------------------------------------------------- Static Variables
 
@@ -52,6 +61,33 @@ public class UIPanel extends UIOutput {
 
 
     // ------------------------------------------- Lifecycle Processing Methods
+
+    // ------------------------------------------- Constructors
+
+    public UIPanel() {
+	namespace = new NamingContainerImpl(this);
+    }
+
+    //
+    // Methods from NamingContainer
+    //
+
+    public void addComponentToNamespace(UIComponent namedComponent) {
+	namespace.addComponentToNamespace(namedComponent);
+    }
+
+    public void removeComponentFromNamespace(UIComponent namedComponent) {
+	namespace.removeComponentFromNamespace(namedComponent);
+    }
+
+    public UIComponent findComponentInNamespace(String name) {
+	return namespace.findComponentInNamespace(name);
+    }
+
+    public synchronized String generateClientId() {
+	return namespace.generateClientId();
+    }
+
 
 
 }

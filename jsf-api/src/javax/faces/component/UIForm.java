@@ -1,9 +1,9 @@
 /*
- * $Id: UIForm.java,v 1.19 2002/12/03 23:02:01 jvisvanathan Exp $
+ * $Id: UIForm.java,v 1.20 2003/01/16 20:47:57 craigmcc Exp $
  */
 
 /*
- * Copyright 2002 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2002-2003 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -182,7 +182,7 @@ public class UIForm extends UIComponentBase {
             context.getServletRequest();
         HttpServletResponse response = (HttpServletResponse)
             context.getServletResponse();
-        String treeId = context.getResponseTree().getTreeId();
+        String treeId = context.getTree().getTreeId();
         StringBuffer sb = new StringBuffer(request.getContextPath());
         sb.append("/faces");
         sb.append(treeId);

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.18 2003/01/16 20:24:24 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.19 2003/01/16 20:48:01 craigmcc Exp $
  */
 
 /*

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.27 2003/01/16 20:24:16 craigmcc Exp $
+ * $Id: UICommand.java,v 1.28 2003/01/16 20:47:56 craigmcc Exp $
  */
 
 /*
@@ -323,7 +323,7 @@ public class UICommand extends UIComponentBase {
      *
      * @param context The {@link FacesContext} for the current request
      */
-    protected void fireActionEvent(FacesContext context) {
+    public void fireActionEvent(FacesContext context) {
 
         context.addFacesEvent(new ActionEvent(this, getCommandName()));
 

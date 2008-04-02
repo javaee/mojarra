@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.62 2003/01/16 20:24:16 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.63 2003/01/16 20:47:56 craigmcc Exp $
  */
 
 /*
@@ -704,7 +704,7 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Perform the request component tree processing required by the
+     * <p>Perform the component tree processing required by the
      * <em>Apply Request Values</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
@@ -732,7 +732,7 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Perform the request component tree processing required by the
+     * <p>Perform the component tree processing required by the
      * <em>Process Validations</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
@@ -764,7 +764,7 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Perform the request component tree processing required by the
+     * <p>Perform the component tree processing required by the
      * <em>Update Model Values</em> phase of the request processing
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>

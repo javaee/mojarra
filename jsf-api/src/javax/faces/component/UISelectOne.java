@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.19 2003/01/16 20:24:17 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.20 2003/01/16 20:47:57 craigmcc Exp $
  */
 
 /*

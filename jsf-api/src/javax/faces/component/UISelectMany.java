@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.17 2003/01/16 20:24:17 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.18 2003/01/16 20:47:57 craigmcc Exp $
  */
 
 /*
