@@ -1710,10 +1710,15 @@
 
             <description>Intended for use in situations when only one
       UIComponent child can be nested, such as in the case of facets.
-      If the "style" or "styleClass" attributes are present, render a
-      "span" element, outputting the value of the "style" attribute as
-      the value of the "style" attribute, and the value of the
-      "styleClass" attribute as the value of the "class"
+      If the "style" or "styleClass" attributes are present, and the "layout"
+      attribute is present with a value of "block", render a "div" element,
+      outputting the value of the "style" attribute as the value of the 
+      "style" attribute and the value of the "styleClass" attribute as the
+      value of the "class" attribute.  Otherwise, if the "layout" attribute
+      is not present, or the "layout" attribute contains a value other than
+      "block", render a "span" element, outputting the value of the 
+      "style" attribute as the value of the "style" attribute, and the value 
+      of the "styleClass" attribute as the value of the "class"
       attribute. </description>
             <component-family>javax.faces.Panel</component-family>
             <renderer-type>javax.faces.Group</renderer-type>

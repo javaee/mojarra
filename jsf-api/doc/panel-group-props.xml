@@ -49,4 +49,16 @@
             <pass-through>false</pass-through>
         </property-extension>
     </property>
+    <property>
+        <description>
+          The type of layout markup to use when rendering this group.
+          If the value is "block" the renderer must produce an HTML
+          "div" element.  Otherwise HTML "span" element must
+          be produced.
+        </description>
+        <display-name>Layout</display-name>
+        <icon></icon>
+        <property-name>layout</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
 </root>
