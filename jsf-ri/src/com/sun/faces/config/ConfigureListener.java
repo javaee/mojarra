@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.64 2006/03/06 16:40:26 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.65 2006/03/14 22:36:58 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -75,6 +76,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ConfigNavigationCase;
 import com.sun.faces.spi.ManagedBeanFactory;
@@ -716,12 +718,35 @@ public class ConfigureListener implements ServletRequestListener,
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(servletContext);
         try {
-            associate.handlePreDestroy(beanName, scope);
-        } catch (InvocationTargetException ite) {
-            Throwable root = ite.getTargetException();
-            LOGGER.info(root.getMessage());
+            if (associate != null) {
+                associate.handlePreDestroy(beanName, scope);
+            }                  
         } catch (Exception e) {
-            LOGGER.info(e.getMessage());
+            String className = e.getClass().getName();            
+            String message = e.getMessage();
+            if (e instanceof InvocationTargetException) {
+                Throwable root =
+                      ((InvocationTargetException) e).getTargetException();
+                className = root.getClass().getName();
+                message = root.getMessage();                
+            }
+            if (message == null) {
+                message = "";
+            }
+            if (LOGGER.isLoggable(Level.INFO)) {
+                LOGGER.log(Level.INFO,
+                           "jsf.config.listener.predestroy.error",
+                           new Object[] {
+                                 className,
+                                 beanName,
+                                 scope,
+                                 message});
+            }
+            if (LOGGER.isLoggable(Level.FINE)) {
+                FastStringWriter writer = new FastStringWriter(128);
+                e.printStackTrace(new PrintWriter(writer));
+                LOGGER.fine(writer.toString());                
+            }
         }
 
     } // END handleAttributeEvent
