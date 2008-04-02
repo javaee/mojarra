@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.3 2005/06/10 21:59:55 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.4 2005/06/16 18:42:44 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -8,9 +8,10 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactory;
-import com.sun.faces.util.Util;
+import java.beans.FeatureDescriptor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -18,11 +19,10 @@ import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import java.beans.BeanInfo;
-import java.beans.FeatureDescriptor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.util.Util;
 
 public class ManagedBeanELResolver extends ELResolver {
 
@@ -34,7 +34,7 @@ public class ManagedBeanELResolver extends ELResolver {
         if (base != null) {
             return null;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
@@ -44,22 +44,13 @@ public class ManagedBeanELResolver extends ELResolver {
         Object result = null; 
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
-	ExternalContext externalContext = facesContext.getExternalContext();
-	boolean beanExists = false;
-	
-	if (externalContext.getRequestMap().containsKey(property)) {
-	    beanExists = true;
-	}
-	else if (externalContext.getSessionMap().containsKey(property)) {
-	    beanExists = true;
-	}
-	else if (externalContext.getApplicationMap().containsKey(property)) {
-	    beanExists = true;
-	}
+        ExternalContext externalContext = facesContext.getExternalContext();
 
-	if (beanExists) {
-	    return null;
-	}
+        if (externalContext.getRequestMap().containsKey(property)
+            || externalContext.getSessionMap().containsKey(property)
+            || externalContext.getApplicationMap().containsKey(property)) {
+            return null;
+        }
        
         // if it's a managed bean, try to create it
         ApplicationAssociate associate = ApplicationAssociate
@@ -77,50 +68,28 @@ public class ManagedBeanELResolver extends ELResolver {
 
     public Class getType(ELContext context, Object base, Object property) 
         throws ELException {
-        if (base != null) {
-            return null;
-        }
-        if ( base == null && property == null) {
+
+        if (base == null && property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        context.setPropertyResolved(true);
-        return Object.class;
+
+        return null;
+
     }
 
     public void  setValue(ELContext context, Object base, Object property,
         Object val) throws ELException {
-        
-        if (base != null) {
-            return;
-        }
-        if ( base == null && property == null) {
+
+        if (base == null && property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-            
-        Object result = null;
-        FacesContext facesContext = 
-            (FacesContext) context.getContext(FacesContext.class);
-        String attribute = (String) property;
-        ExternalContext ec = facesContext.getExternalContext();
-        if ((result = ec.getRequestMap().get(attribute)) != null) {
-            ec.getRequestMap().put(attribute, val);
-            context.setPropertyResolved(true);
-        } else if ((result = ec.getSessionMap().get(attribute)) != null) {
-            context.setPropertyResolved(true);
-            ec.getSessionMap().put(attribute, val);
-        } else if ((result = ec.getApplicationMap().get(attribute)) != null) {
-            context.setPropertyResolved(true);
-            ec.getApplicationMap().put(attribute, val);
-        } else {
-            ec.getRequestMap().put(attribute, val);
-        }
-       
+
     }
 
     public boolean isReadOnly(ELContext context, Object base, Object property) 
@@ -128,15 +97,13 @@ public class ManagedBeanELResolver extends ELResolver {
         if (base != null) {
             return false;
         }
-        if ( base == null && property == null) {
+        if (property == null) {
             String message = Util.getExceptionMessageString
                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID);
             message = message + " base " + base + " property " + property;
             throw new PropertyNotFoundException(message);
         }
-        // return value will be ignored unless context.propertyResolved is
-        // set to true.
-        context.setPropertyResolved(true);
+
         return false;
     }
 
@@ -147,7 +114,6 @@ public class ManagedBeanELResolver extends ELResolver {
         }
 
         ArrayList list = new ArrayList();
-        BeanInfo info = null;
        
         FacesContext facesContext = 
             (FacesContext) context.getContext(FacesContext.class);
