@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.29 2003/08/25 05:39:43 eburns Exp $
+ * $Id: ConfigParser.java,v 1.30 2003/08/25 14:06:25 rlubke Exp $
  */
 
 /*
@@ -679,6 +679,9 @@ final class ComponentsRule extends Rule {
  * mapping to the <code>Application</code> instance's internal map.
  */
 final class ConvertersRule extends Rule {
+
+    protected static Log log = LogFactory.getLog(ConvertersRule.class);
+
     public ConvertersRule() {
        super();
     }
@@ -714,8 +717,12 @@ final class ConvertersRule extends Rule {
 		Object[] obj = new Object[1];
 		obj[0] = "converter: " + cc.getConverterClass() + " " + 
 		    idOrClassName;
-		throw new RuntimeException(Util.getExceptionMessage(
-								    Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj), c);
+                String message = Util.getExceptionMessage(
+                    Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID, obj);
+                if (log.isErrorEnabled()) {
+                    log.error(message, c);
+                }
+		throw new RuntimeException(message);
 	    }
 	    // store by class
 	    application.addConverter(theClass, cc.getConverterClass());
