@@ -460,9 +460,7 @@ public class RenderKitUtils {
                         context = FacesContext.getCurrentInstance();
                     }
 
-                    boolean isXhtml = (context.getExternalContext()
-                          .getRequestMap()
-                          .get(RIConstants.CONTENT_TYPE_IS_XHTML) != null);
+                    boolean isXhtml = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE);
                     if (isXhtml) {
                         String prefixName = attrName;
                         if (Arrays.binarySearch(XHTML_PREFIX_ATTRIBUTES,

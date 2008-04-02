@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.44 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: ImageRenderer.java,v 1.45 2006/05/10 20:03:23 rogerk Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import java.io.IOException;
  * <B>ImageRenderer</B> is a class that handles the rendering of the graphic
  * ImageTag
  *
- * @version $Id: ImageRenderer.java,v 1.44 2006/03/29 23:03:48 rlubke Exp $
+ * @version $Id: ImageRenderer.java,v 1.45 2006/05/10 20:03:23 rogerk Exp $
  */
 
 public class ImageRenderer extends HtmlBasicRenderer {
@@ -130,7 +130,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeURIAttribute("src", src(context, component), "value");
 	// if we're writing XHTML and we have a null alt attribute
-	if (null != context.getExternalContext().getRequestMap().get(RIConstants.CONTENT_TYPE_IS_XHTML) && 
+	if (writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE) && 
 	    null == component.getAttributes().get("alt")) {
 	    // write out an empty alt
 	    writer.writeAttribute("alt", "", "alt");

@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.49 2006/05/05 17:26:29 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.50 2006/05/10 20:03:23 rogerk Exp $
  */
 
 /*
@@ -406,8 +406,7 @@ public class CommandLinkRenderer extends LinkRenderer {
 				   UIComponent component) throws IOException {
 	Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	UIForm myForm = getMyForm(component);
-	boolean isXHTML = 
-	    requestMap.containsKey(RIConstants.CONTENT_TYPE_IS_XHTML);
+	boolean isXHTML = writer.getContentType().equals(RIConstants.XHTML_CONTENT_TYPE); 
 
 	if (null == myForm) {
             return;

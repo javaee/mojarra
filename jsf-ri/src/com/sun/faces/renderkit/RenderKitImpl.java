@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.38 2006/05/10 01:27:00 rogerk Exp $
+ * $Id: RenderKitImpl.java,v 1.39 2006/05/10 20:03:23 rogerk Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.logging.Logger;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.38 2006/05/10 01:27:00 rogerk Exp $
+ * @version $Id: RenderKitImpl.java,v 1.39 2006/05/10 20:03:23 rogerk Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -77,13 +77,6 @@ public class RenderKitImpl extends RenderKit {
     private static final Logger logger =
             Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
 
-    // used for ResponseWriter creation;
-    private static String HTML_CONTENT_TYPE = "text/html";
-    private static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
-    private static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
-    private static String TEXT_XML_CONTENT_TYPE = "text/xml";
-    private static String ALL_MEDIA = "*/*";
-    private static String CHAR_ENCODING = "ISO-8859-1";
 //
 // Ivars used during actual client lifetime
 //
@@ -186,8 +179,8 @@ public class RenderKitImpl extends RenderKit {
     FacesContext context = FacesContext.getCurrentInstance();
 
         String [] supportedTypes =
-            { HTML_CONTENT_TYPE, XHTML_CONTENT_TYPE,
-              APPLICATION_XML_CONTENT_TYPE, TEXT_XML_CONTENT_TYPE };
+            { RIConstants.HTML_CONTENT_TYPE, RIConstants.XHTML_CONTENT_TYPE,
+              RIConstants.APPLICATION_XML_CONTENT_TYPE, RIConstants.TEXT_XML_CONTENT_TYPE };
 
         // Step 0: Determine if we have a preference for XHTML   
         if (preferXHTML == null) {
@@ -234,11 +227,11 @@ public class RenderKitImpl extends RenderKit {
 
             if (null != desiredContentTypeList) {
                 String supportedTypeString =
-                    HTML_CONTENT_TYPE + ',' + XHTML_CONTENT_TYPE + ',' +
-                    APPLICATION_XML_CONTENT_TYPE + ',' + TEXT_XML_CONTENT_TYPE;
+                    RIConstants.HTML_CONTENT_TYPE + ',' + RIConstants.XHTML_CONTENT_TYPE + ',' +
+                    RIConstants.APPLICATION_XML_CONTENT_TYPE + ',' + RIConstants.TEXT_XML_CONTENT_TYPE;
                 if (preferXHTML) {
                     desiredContentTypeList = RenderKitUtils.determineContentType(
-                        desiredContentTypeList, supportedTypeString, XHTML_CONTENT_TYPE);
+                        desiredContentTypeList, supportedTypeString, RIConstants.XHTML_CONTENT_TYPE);
                 } else {
                     desiredContentTypeList = RenderKitUtils.determineContentType(
                         desiredContentTypeList, supportedTypeString, null);
@@ -251,10 +244,8 @@ public class RenderKitImpl extends RenderKit {
 
         // Step 4: Default to text/html
         if (null == desiredContentTypeList ||
-            desiredContentTypeList.equals(ALL_MEDIA)) {
-            Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-            contentType = HTML_CONTENT_TYPE;
-            requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
+            RIConstants.ALL_MEDIA.equals(desiredContentTypeList)) {
+            contentType = RIConstants.HTML_CONTENT_TYPE;
         }
 
         if (null == contentType) {
@@ -263,7 +254,7 @@ public class RenderKitImpl extends RenderKit {
         }
 
         if (characterEncoding == null) {
-            characterEncoding = CHAR_ENCODING;
+            characterEncoding = RIConstants.CHAR_ENCODING;
         }
 
         return new HtmlResponseWriter(writer, contentType, characterEncoding);
@@ -297,20 +288,13 @@ public class RenderKitImpl extends RenderKit {
             curDesiredType = desiredTypes[i];
             for (int j = 0; j < supportedTypes.length; j++) {
                 curContentType = supportedTypes[j].trim();
-                if (-1 != curDesiredType.indexOf(curContentType)) {
-                    if (-1 != curContentType.indexOf(HTML_CONTENT_TYPE)) {
-                        if (preferXHTML) {
-                            contentType = XHTML_CONTENT_TYPE;
-                            requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
-                        } else {
-                            contentType = HTML_CONTENT_TYPE;
-                            requestMap.put(RIConstants.CONTENT_TYPE_IS_HTML, Boolean.TRUE);
-                        }
-                    } else if (-1 != curContentType.indexOf(XHTML_CONTENT_TYPE) ||
-                               -1 != curContentType.indexOf(APPLICATION_XML_CONTENT_TYPE) ||
-                               -1 != curContentType.indexOf(TEXT_XML_CONTENT_TYPE)) {
-                        contentType = XHTML_CONTENT_TYPE;
-                        requestMap.put(RIConstants.CONTENT_TYPE_IS_XHTML, Boolean.TRUE);
+                if (curDesiredType.contains(curContentType)) {
+                    if (curContentType.contains(RIConstants.HTML_CONTENT_TYPE)) {
+                        contentType = RIConstants.HTML_CONTENT_TYPE;
+                    } else if (curContentType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
+                               curContentType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE) ||
+                               curContentType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
+                        contentType = RIConstants.XHTML_CONTENT_TYPE;
                     }
                     break;
                 }

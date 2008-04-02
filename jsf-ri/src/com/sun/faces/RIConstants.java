@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.83 2006/05/03 14:49:21 edburns Exp $
+ * $Id: RIConstants.java,v 1.84 2006/05/10 20:03:22 rogerk Exp $
  */
 
 /*
@@ -107,12 +107,6 @@ public class RIConstants {
     public static final String ONE_TIME_INITIALIZATION_ATTR =
         FACES_PREFIX + "OneTimeInitialization";    
 
-    public static final String CONTENT_TYPE_IS_XHTML = 
-	FACES_PREFIX + "ContentTypeIsXHTML";
-
-    public static final String CONTENT_TYPE_IS_HTML = 
-	FACES_PREFIX + "ContentTypeIsHTML";
-
     public static final String APPLICATION = "application";
     public static final String APPLICATION_SCOPE = "applicationScope";
     public static final String SESSION = "session";
@@ -158,6 +152,17 @@ public class RIConstants {
     }
 
     public static final String EL_RESOLVER_CHAIN_TYPE_NAME = FACES_PREFIX + "ELResolverChainType";
+
+    /**
+     *<p>ResponseWriter Content Types and Encoding</p>
+     */
+    public final static String HTML_CONTENT_TYPE = "text/html";
+    public final static String XHTML_CONTENT_TYPE = "application/xhtml+xml";
+    public final static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
+    public final static String TEXT_XML_CONTENT_TYPE = "text/xml";
+    public final static String ALL_MEDIA = "*/*";
+    public final static String CHAR_ENCODING = "ISO-8859-1";
+
 
 
 }
