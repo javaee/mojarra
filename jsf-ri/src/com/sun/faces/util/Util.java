@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.46 2003/03/13 01:06:38 eburns Exp $
+ * $Id: Util.java,v 1.47 2003/03/15 05:40:52 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.46 2003/03/13 01:06:38 eburns Exp $
+ * @version $Id: Util.java,v 1.47 2003/03/15 05:40:52 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,6 +64,10 @@ public class Util extends Object
 // Protected Constants
 //
 
+    // README - make sure to add the message identifier constant
+    // (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
+    // parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
+ 
     /**
      * The message identifier of the {@link Message} to be created as
      * a result of type conversion error.
@@ -176,8 +180,11 @@ public class Util extends Object
          "com.sun.faces.RENDERER_NOT_FOUND";
 
    public static final String MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID =
-         "com.sun.faces.MAXIMUM_EVETS_REACHED";
+         "com.sun.faces.MAXIMUM_EVENTS_REACHED";
 
+// README - make sure to add the message identifier constant
+// (ex: Util.CONVERSION_ERROR_MESSAGE_ID) and the number of substitution
+// parameters to test/com/sun/faces/util/TestUtil_messages (see comment there).
 
 //
 // Class Variables
