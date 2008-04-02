@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.6 2003/08/07 18:03:19 eburns Exp $
+ * $Id: StateManager.java,v 1.7 2003/08/21 22:28:03 jvisvanathan Exp $
  */
 
 /*
@@ -363,6 +363,20 @@ public abstract class StateManager {
 	    structure = newStructure;
 	    state = newState;
 	}
+        
+        /**
+         * @return the structure object
+         */
+         public Object getTreeStructure() {
+             return structure;
+         }
+         
+         /**
+          * @ return state object
+          */
+         public Object getTreeState() {
+             return state;
+         }
     }
 
     // --------- methods used by UIComponents to save their attached Objects.
