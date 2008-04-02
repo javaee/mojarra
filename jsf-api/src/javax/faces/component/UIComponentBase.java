@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.48 2003/03/14 01:40:01 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.49 2003/04/08 14:48:09 eburns Exp $
  */
 
 /*
@@ -173,7 +173,7 @@ public abstract class UIComponentBase implements UIComponent {
                 (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
             clientId = renderer.getClientId(context, this);
-
+	    componentId = clientId;
         } else {
 
 	    // we have to define the client id ourselves
