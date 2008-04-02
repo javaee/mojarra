@@ -10,7 +10,7 @@
 
 <project name="JSF-RI" default="main" basedir=".">
 
-  <property name="Name" value="JSF RI"/>
+  <property name="Name" value="JavaServer Faces RI"/>
   <property name="name" value="jsf-ri"/>
   <property name="version" value="20030408"/>
 
@@ -454,6 +454,15 @@
   <target name="jars" depends="compile">
     <jar jarfile="${build.home}/lib/${name}.jar" 
          basedir="${build.home}/classes" > 
+         <manifest>
+          <attribute name="Specification-Title" value="JavaServer Faces"/>
+          <attribute name="Specification-Version" value="1.0"/>
+          <attribute name="Implementation-Title" value="'${name}': ${Name}"/>
+          <attribute name="Implementation-Version" value="${version}"/>
+          <attribute name="Implementation-Vendor" value="Sun Microsystems, Inc."/>
+          <attribute name="Implementation-Vendor-Id" value="com.sun"/>
+          <attribute name="Extension-Name" value="com.sun.faces"/>
+        </manifest>
     </jar>
 
   </target>
