@@ -31,10 +31,14 @@ package com.sun.faces.application;
 
 import com.sun.faces.RIConstants;
 import java.beans.PropertyEditorSupport;
+import java.util.Map;
 import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 
 /**
  *
@@ -44,15 +48,29 @@ public class ConverterPropertyEditor extends PropertyEditorSupport {
     
     public static final String TARGET_CLASS_ATTRIBUTE_NAME = RIConstants.FACES_PREFIX + "ConverterPropertyEditorTargetClass";
     public static final String TARGET_COMPONENT_ATTRIBUTE_NAME = RIConstants.FACES_PREFIX + "ComponentForValue";
+    private static final String CURRENT_TEXT_VALUE_NAME = RIConstants.FACES_PREFIX + "CurrentTextValue";
     
     /** Creates a new instance of ConverterPropertyEditor */
     public ConverterPropertyEditor() {
     }
     
-    private String textValue = null;
 
+    /**
+     * <p>Store a request scoped variable under a private key.  The value
+     * of this variable is the argument <code>text</code>.  This is necessary
+     * because <code>PropertyEditor</code> instances are not necessarily
+     * thread safe.</p>
+     */
+    
     public void setAsText(String text) throws IllegalArgumentException {
-        this.textValue = text;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (null == context) {
+            // PENDING(edburns): I18N
+            throw new FacesException("Cannot find FacesContext.");
+        }
+        
+        context.getExternalContext().getRequestMap().put(CURRENT_TEXT_VALUE_NAME,
+                text);
     }
 
     public Object getValue() {
@@ -63,8 +81,11 @@ public class ConverterPropertyEditor extends PropertyEditorSupport {
             throw new FacesException("Cannot find FacesContext.");
         }
         
-        Class targetClass = getTargetClass(context);
-        UIComponent component = getComponent(context);
+
+        Map<String, Object> requestMap = context.getExternalContext().getRequestMap();
+        Class targetClass = (Class) requestMap.get(TARGET_CLASS_ATTRIBUTE_NAME);
+        UIComponent component = (UIComponent) requestMap.get(TARGET_COMPONENT_ATTRIBUTE_NAME);
+        String textValue = (String) requestMap.get(CURRENT_TEXT_VALUE_NAME);
         Object retValue = null;
         
         if (null == textValue) {
@@ -84,19 +105,48 @@ public class ConverterPropertyEditor extends PropertyEditorSupport {
             throw new FacesException("Cannot create Converter to convert value " + textValue + 
                     " to instance of target class " + targetClass.getName() + ".");
         }
+        try {
+            
+            retValue = converter.getAsObject(context, component, textValue);
+        } catch (ConverterException ce) {
+            addConversionErrorMessage(context, component, ce, textValue);
+            
+        }
         
-        retValue = converter.getAsObject(context, component, textValue);
+        requestMap.remove(TARGET_CLASS_ATTRIBUTE_NAME);
+        requestMap.remove(TARGET_COMPONENT_ATTRIBUTE_NAME);
+        requestMap.remove(CURRENT_TEXT_VALUE_NAME);
         
         return retValue;
     }
     
-    private Class getTargetClass(FacesContext context) {
-        return (Class) 
-          context.getExternalContext().getRequestMap().get(TARGET_CLASS_ATTRIBUTE_NAME);
+    private void addConversionErrorMessage(FacesContext context, UIComponent component,
+            ConverterException ce, Object value) {
+        FacesMessage message = null;
+        String converterMessageString = null;
+        UIInput input = null;
+        if (component instanceof UIInput) {
+            input = (UIInput)component;
+            converterMessageString = input.getConverterMessage();
+            input.setValid(false);
+        }
+        if (null != converterMessageString) {
+            message = new FacesMessage(converterMessageString, converterMessageString);
+        }
+        else {
+            message = ce.getFacesMessage();
+            if (message == null) {
+                message = com.sun.faces.util.MessageFactory.getMessage(context,
+                        UIInput.CONVERSION_MESSAGE_ID);
+                if (message.getDetail() == null) {
+                    message.setDetail(ce.getMessage());
+                }
+            }
+        }
+        
+        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(component.getClientId(context), message);
     }
     
-    private UIComponent getComponent(FacesContext context) {
-        return (UIComponent) 
-          context.getExternalContext().getRequestMap().get(TARGET_COMPONENT_ATTRIBUTE_NAME);
-    }
+    
 }
