@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.14 2003/10/18 02:10:40 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.15 2003/10/21 05:37:49 craigmcc Exp $
  */
 
 /*
@@ -675,9 +675,13 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
     protected void lifecycleTrace(String lmethod, String cmethod,
                                   UIComponent component, StringBuffer sb) {
 
+
         // Append the call for this lifecycle method
         String id = component.getId();
         sb.append("/" + lmethod + "-" + id);
+        if (!component.isRendered()) {
+            return;
+        }
 
         // Append the calls for each facet
         Iterator names = component.getFacets().keySet().iterator();
@@ -685,7 +689,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
             String name = (String) names.next();
             sb.append("/" + lmethod + "-" + name);
 	    if ((cmethod != null) &&
-                UIComponentBase.isRendered((UIComponent) component.getFacets().get(name))) {
+                ((UIComponent) component.getFacets().get(name)).isRendered()) {
 		sb.append("/" + cmethod + "-" + name);
 	    }
         }
@@ -698,7 +702,7 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         }
 
         // Append the call for this component's component method
-	if ((cmethod != null) && UIComponentBase.isRendered(component)) {
+	if ((cmethod != null) && component.isRendered()) {
 	    sb.append("/" + cmethod + "-" + id);
 	}
 

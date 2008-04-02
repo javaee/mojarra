@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.36 2003/10/19 21:13:03 craigmcc Exp $
+ * $Id: UIInput.java,v 1.37 2003/10/21 05:37:45 craigmcc Exp $
  */
 
 /*
@@ -138,16 +138,7 @@ public class UIInput extends UIOutput {
      */
     public Object getPrevious() {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            if (repeater.getRowIndex() >= 0) {
-                return (repeater.getChildPrevious(this));
-            } else {
-                return (this.previous);
-            }
-        } else {
-            return (this.previous);
-        }
+        return (this.previous);
 
     }
 
@@ -162,16 +153,6 @@ public class UIInput extends UIOutput {
     public void setPrevious(Object previous) {
 
         this.previous = previous;
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null) {
-            if (repeater.getRowIndex() >= 0) {
-                repeater.setChildPrevious(this, previous);
-            } else {
-                this.previous = previous;
-            }
-        } else {
-            this.previous = previous;
-        }
 
     }
 
@@ -483,21 +464,7 @@ public class UIInput extends UIOutput {
         Object values[] = new Object[4];
         values[0] = super.saveState(context);
         values[1] = required ? Boolean.TRUE : Boolean.FALSE;
-       
-        int rowCount = 0;
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null && repeater.getRowIndex() >= 0) {
-            rowCount = repeater.getRowCount();
-            Object[] previousValues = new Object[rowCount];
-            for (int i = 0; i < rowCount; ++i ) {
-                repeater.setRowIndex(i);
-                previousValues[i] = repeater.getChildPrevious(this);
-            }
-            values[2] = previousValues;
-        } else {
-            values[2] = previous;
-        }
-        
+        values[2] = previous;
         values[3] = saveAttachedState(context, validators);
         return (values);
 
@@ -510,20 +477,7 @@ public class UIInput extends UIOutput {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         required = ((Boolean) values[1]).booleanValue();
-        
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
-        if (repeater != null && repeater.getRowIndex() >= 0) {
-            Object[] previousValues = (Object[])values[2];
-            if ( previousValues != null ) {
-                for (int i = 0; i < previousValues.length; ++i ) {
-                    repeater.setRowIndex(i);
-                    repeater.setChildPrevious(this, previousValues[i]);
-                }
-            }
-        } else {
-            previous = values[2];
-        }
-
+        previous = values[2];
 	List restoredValidators = null;
 	Iterator iter = null;
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.69 2003/10/18 02:10:39 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.70 2003/10/21 05:37:44 craigmcc Exp $
  */
 
 /*
@@ -260,22 +260,13 @@ public abstract class UIComponentBase extends UIComponent {
      */ 
     public String getClientId(FacesContext context) {
 
-        // Locate our parent Repeater (if any)
-        Repeater repeater = RepeaterSupport.findParentRepeater(this);
+        // NOTE - client ids cannot be cached because the generated
+        // value has to be dynamically calculated in some cases (UIData)
 
-	// Return any previously calculated client identifier
-        if (clientId != null) {
-            if (repeater == null) {
-                return (clientId);
-            } else {
-                return (repeater.getChildClientId(context, clientId));
-            }
-        }
+	// Search for an ancestor that is a naming container
 	UIComponent containerComponent = this;
 	Renderer renderer = null;
 	String parentIds = "";
-
-	// Search for an ancestor that is a naming container
 	while (null != (containerComponent = containerComponent.getParent())) {
 	    if (containerComponent instanceof NamingContainer) {
 		break;
@@ -294,11 +285,8 @@ public abstract class UIComponentBase extends UIComponent {
 	if (null != (renderer = getRenderer(context))) {
 	    clientId = renderer.convertClientId(context, clientId);
 	}
-	
-        if (null != repeater) {
-            return (repeater.getChildClientId(context, clientId));
-        }
-	return (clientId);
+        return (clientId);
+
     }
 
 
@@ -891,7 +879,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Unwrap a RepeaterEvent and set row index if necessary
         Repeater repeater = null;
-        int rowIndex = 0;
+        int rowIndex = -1;
         if (event instanceof RepeaterEvent) {
             repeater = (Repeater) event.getComponent();
             rowIndex = repeater.getRowIndex();
@@ -938,6 +926,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+
     /**
      * <p>Broadcast this {@link FacesEvent} to all {@link FacesListener}s in
      * the specified <code>List</code> (if any).  If the <code>list</code>
@@ -972,6 +961,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+
     /**
      * @exception NullPointerException {@inheritDoc}     
      */ 
@@ -990,6 +980,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     }
 
+
     /**
      * @exception NullPointerException {@inheritDoc}   
      */ 
@@ -997,6 +988,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+        if (!isRendered()) {
+            return;
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
@@ -1013,12 +1007,16 @@ public abstract class UIComponentBase extends UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
+        if (!isRendered()) {
+            return;
+        }
         String rendererType = getRendererType();
         if (rendererType != null) {
 	    getRenderer(context).encodeChildren(context, this);
         }
 
     }
+
 
     /**
      * @exception NullPointerException {@inheritDoc}   
@@ -1027,6 +1025,9 @@ public abstract class UIComponentBase extends UIComponent {
 
         if (context == null) {
             throw new NullPointerException();
+        }
+        if (!isRendered()) {
+            return;
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
@@ -1159,6 +1160,11 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
+        // Skip processing if our rendered flag is false
+        if (!isRendered()) {
+            return;
+        }
+
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
@@ -1168,9 +1174,7 @@ public abstract class UIComponentBase extends UIComponent {
 
         // Process this component itself
 	try {
-            if (isRendered(this)) {
-                decode(context);
-            }
+            decode(context);
 	} catch (RuntimeException e) {
 	    context.renderResponse();
 	    throw e;
@@ -1188,6 +1192,11 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
+        // Skip processing if our rendered flag is false
+        if (!isRendered()) {
+            return;
+        }
+
         // Process all the facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
@@ -1198,10 +1207,7 @@ public abstract class UIComponentBase extends UIComponent {
 	// Validate this component itself
 	if (this instanceof UIInput) {
 	    try {
-		// PENDING(craigmcc): shouldn't this be in UIInputBase
-                if (isRendered(this)) {
-                    ((UIInput) this).validate(context);
-                }
+                ((UIInput) this).validate(context);
 	    } catch (RuntimeException e) {
 		context.renderResponse();
 		throw e;
@@ -1227,6 +1233,11 @@ public abstract class UIComponentBase extends UIComponent {
             throw new NullPointerException();
         }
 
+        // Skip processing if our rendered flag is false
+        if (!isRendered()) {
+            return;
+        }
+
         // Process all facets and children of this component
         Iterator kids = getFacetsAndChildren();
         while (kids.hasNext()) {
@@ -1237,10 +1248,7 @@ public abstract class UIComponentBase extends UIComponent {
         // Process this component itself
         if (this instanceof UIInput) {
 	    try {
-		// PENDING(craigmcc): shouldn't this be in UIInput?
-                if (isRendered(this)) {
-                    ((UIInput) this).updateModel(context);
-                }
+                ((UIInput) this).updateModel(context);
 	    } catch (RuntimeException e) {
 		context.renderResponse();
 		throw e;
@@ -1356,38 +1364,6 @@ public abstract class UIComponentBase extends UIComponent {
     }
     
     // ------------------------------------------------------- Protected Methods
-
-
-    /**
-     * <p>Return <code>false</code> if the specified {@link UIComponent}'s
-     * <code>rendered</code> property is <code>false</code>, or this component
-     * is a child (or facet) of a parent {@link UIComponent} whose
-     * <code>rendersChildren</code> property is <code>true</code> and whose
-     * <code>rendered</code> property is false.</p>
-     *
-     * @param component {@link UIComponent} to be tested
-     *
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>false</code>
-     */
-    protected static boolean isRendered(UIComponent component) {
-
-        if (component == null) {
-            throw new NullPointerException();
-        }
-        if (!component.isRendered()) {
-            return (false);
-        }
-        UIComponent parent = component.getParent();
-        while (parent != null) {
-            if (parent.getRendersChildren() && !parent.isRendered()) {
-                return (false);
-            }
-            parent = parent.getParent();
-        }
-        return (true);
-
-    }
 
 
     /**

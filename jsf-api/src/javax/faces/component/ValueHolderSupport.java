@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderSupport.java,v 1.10 2003/10/16 01:05:33 craigmcc Exp $
+ * $Id: ValueHolderSupport.java,v 1.11 2003/10/21 05:37:46 craigmcc Exp $
  */
 
 /*
@@ -97,32 +97,14 @@ public class ValueHolderSupport
 
     public Object getValue() {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if (repeater != null) {
-            if (repeater.getRowIndex() >= 0) {
-                return (repeater.getChildValue(component));
-            } else {
-                return (this.value);
-            }
-        } else {
-            return (this.value);
-        }
+        return (this.value);
 
     }
 
 
     public void setValue(Object value) {
 
-        Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if (repeater != null) {
-            if (repeater.getRowIndex() >= 0) {
-                repeater.setChildValue(component, value);
-            } else {
-                this.value = value;
-            }
-        } else {
-            this.value = value;
-        }
+        this.value = value;
 
     }
 
@@ -190,69 +172,28 @@ public class ValueHolderSupport
 
     public Object saveState(FacesContext context) {
 
-        // NOTE:  The associated component is not stored as part of the state,
-        // because it will be a different object instance on restoration
-
         Object values[] = new Object[2];
-        int rowCount = 0;
-        Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if (repeater != null && repeater.getRowIndex() >= 0) {
-            rowCount = repeater.getRowCount();
-            Object[] currentValues = new Object[rowCount];
-            for (int i = 0; i < rowCount; ++i ) {
-                repeater.setRowIndex(i);
-                currentValues[i] = repeater.getChildValue(component);
-            }
-            values[0] = currentValues;
-        } else {
-            values[0] = value;
-        }
+        values[0] = value;
         values[1] = valueRef;
         return (values);
 
     }
 
-    /**
-     * <p>This ivar is used to allow the actual restoring of state to
-     * happen in {@link #setComponent}.  This is necessary because we
-     * need to know the component to which we are attached to fully have
-     * our state restored, and we don't know the component until {@link
-     * #setComponent} is called.</p>
-     *
-     */
-    private Object stateToRestore = null;
 
     public void restoreState(FacesContext context, Object state)
         throws IOException {
-	stateToRestore = state;
+
+        Object values[] = (Object[]) state;
+        value = values[0];
+        valueRef = (String) values[1];
+
     }
 
+    /** @deprecated */
     public void setComponent(UIComponent yourComponent) {
 
         component = yourComponent;
 	
-        // Restore component reference from parameter
-	if (null == stateToRestore || null == component) {
-	    return;
-	}
-
-        // Restore other state information from saved state
-        Object values[] = (Object[]) stateToRestore;
-
-        Repeater repeater = RepeaterSupport.findParentRepeater(component);
-        if (repeater != null && repeater.getRowIndex() >= 0) {
-            Object[] currentValues = (Object[])values[0];
-            if ( currentValues != null ) {
-                for (int i = 0; i < currentValues.length; ++i ) {
-                    repeater.setRowIndex(i);
-                    repeater.setChildValue(component, currentValues[i]);
-                }
-            }
-        } else {
-            value = values[0];
-        }
-        valueRef = (String) values[1];
-	stateToRestore = null;
 
     }
 

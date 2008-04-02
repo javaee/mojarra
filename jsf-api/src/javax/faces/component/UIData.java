@@ -40,12 +40,15 @@ package javax.faces.component;
 
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -75,7 +78,7 @@ import javax.faces.model.ScalarDataModel;
  */
 
 public class UIData extends UIComponentBase
-    implements Repeater, ValueHolder {
+    implements NamingContainer, Repeater, ValueHolder {
 
 
     // ------------------------------------------------------------ Constructors
@@ -111,9 +114,10 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>The helper instance to assist us in implementing {@link Repeater}.</p>
+     * <p>The zero-relative index of the current row number, or -1 for
+     * no current row association.</p>
      */
-    private RepeaterSupport repeater = new RepeaterSupport();
+    private int rowIndex = 0;
 
 
     /**
@@ -124,11 +128,26 @@ public class UIData extends UIComponentBase
 
 
     /**
-     * <p>The {@link ValueHolderSupport} instance to which we delegate
-     * our {@link ValueHolder} implementation processing.</p>
+     * <p>This map contains <code>SavedState</code> instances for each
+     * descendant component, keyed by the client identifier of the
+     * descendant.  Because descendant client identifiers will contain
+     * the <code>rowIndex</code> value of the parent, per-row state
+     * information is actually preserved.</p>
      */
-    private ValueHolderSupport support = new ValueHolderSupport(this);
+    private Map saved = null;
 
+
+    /**
+     * <p>The local value of this {@link UIComponent}.</p>
+     */
+    private Object value = null;
+
+
+    /**
+     * <p>The value reference expression pointing at the associated
+     * model data for this {@link UIComponent}.</p>
+     */
+    private String valueRef = null;
 
 
     /**
@@ -204,6 +223,99 @@ public class UIData extends UIComponentBase
     }
 
 
+    public int getRowIndex() {
+
+        return (this.getRowIndex());
+
+    }
+
+
+    /**
+     * <p>Set the zero relative index of the current row, or -1 to indicate that
+     * no row is currently selected, by implementing the following algorithm.
+     *</p>
+     * <ul>
+     * <li>Save current state information for all descendant components (as
+     *     described below).
+     * <li>Store the new row index, and pass it on to the {@link DataModel}
+     *     associated with this {@link UIData} instance.</li>
+     * <li>If the new <code>rowIndex</code> value is -1:
+     *     <ul>
+     *     <li>If the <code>var</code> property is not null,
+     *         remove the corresponding request scope attribute (if any).</li>
+     *     <li>Reset the state information for all descendant components
+     *         (as described below).</li>
+     *     </ul></li>
+     * <li>If the new <code>rowIndex</code> value is not -1:
+     *     <ul>
+     *     <li>If the <code>var</code> property is not null, call
+     *         <code>getRowData()</code> and expose the resulting data object
+     *         as a request scope attribute whose key is the <code>var</code>
+     *         property value.</li>
+     *     <li>Reset the state information for all descendant components
+     *         (as described below).
+     *     </ul></li>
+     * </ul>
+     *
+     * <p>To save current state information for all descendant components,
+     * {@link UIData} must maintain per-row information for each descendant
+     * as follows:<p>
+     * <ul>
+     * <li>If the descendant is an instance of <code>ValueHolder</code>, save
+     *     the state of the <code>value</code> property.</li>
+     * <li>If the descendant is also an instance of
+     *     <code>ConvertableValueHolder</code>, save the state of the
+     *     <code>valid</code> property.</li>
+     * <li>If the descendant is also an instance of <code>UIInput</code>,
+     *     save the state of the <code>previous</code> property.</li>
+     * </ul>
+     *
+     * <p>To restore current state information for all descendant components,
+     * {@link UIData} must reference its previously stored information for the
+     * current <code>rowIndex</code> and call setters for each descendant
+     * as follows:</p>
+     * <ul>
+     * <li>If the descendant is an instance of <code>ValueHolder</code>,
+     *     restore the <code>value</code> property.</li>
+     * <li>If the descendant is also an instance of
+     *     <code>ConvertableValueHolder</code>, restore the state of the
+     *     <code>valid</code> property.</li>
+     * <li>If the descendant is also an instance of <code>UIInput</code>,
+     *     restore the state of the <code>previous</code> property.</li>
+     * </ul>
+     *
+     * @param rowIndex The new row index value, or -1 for no associated row
+     *
+     * @exception IllegalArgumentException if <code>rowIndex</code>
+     *  is less than -1
+     */
+    public void setRowIndex(int rowIndex) {
+
+        // Save current state for the previous row index
+        saveDescendantState();
+
+        // Update to the new row index
+        this.rowIndex = rowIndex;
+        getDataModel(FacesContext.getCurrentInstance()).setRowIndex(rowIndex);
+
+        // Clear or expose the current row data as a request scope attribute
+        if (var != null) {
+            Map requestMap =
+                FacesContext.getCurrentInstance().getExternalContext().
+                getRequestMap();
+            if (rowIndex == -1) {
+                requestMap.remove(var);
+            } else {
+                requestMap.put(var, getRowData());
+            }
+        }
+
+        // Reset current state information for the new row index
+        restoreDescendantState();
+
+    }
+
+
     /**
      * <p>Return the number of rows to be displayed, or zero for all
      * remaining rows in the table.</p>
@@ -234,34 +346,6 @@ public class UIData extends UIComponentBase
     }
 
 
-    public Object getValue() {
-
-        return (support.getValue());
-
-    }
-
-
-    public void setValue(Object value) {
-
-        support.setValue(value);
-
-    }
-
-
-    public String getValueRef() {
-
-        return (support.getValueRef());
-
-    }
-
-
-    public void setValueRef(String valueRef) {
-
-        support.setValueRef(valueRef);
-
-    }
-
-
     /**
      * <p>Return the request-scope attribute under which the data object
      * for the current row will be exposed when iterating.</p>
@@ -286,117 +370,20 @@ public class UIData extends UIComponentBase
     }
 
 
-    // -------------------------------------------------------- Repeater Methods
-
-    /**
-     * @exception NullPointerException {@inheritDoc}  
-     */ 
-    public String getChildClientId(FacesContext context,
-				   String childClientId) {
-
-	return (repeater.getChildClientId(context, this, childClientId));
-
-    }
-
-    /**
-     * @exception NullPointerException {@inheritDoc}
-     */ 
-    public Object getChildPrevious(UIComponent component) {
-
-	return (repeater.getChildPrevious(component));
-
-    }
-
-    /**
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
-    public void setChildPrevious(UIComponent component, Object value) {
-
-	repeater.setChildPrevious(component, value);
-
-    }
-
-
-    public boolean isChildValid(UIComponent component) {
-
-	return (repeater.isChildValid(component));
-
-    }
-
-
-    public void setChildValid(UIComponent component, boolean valid) {
-
-	repeater.setChildValid(component, valid);
-
-    }
-
-    /**
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
-    public Object getChildValue(UIComponent component) {
-
-	return (repeater.getChildValue(component));
-
-    }
-
-    /**
-     * @exception NullPointerException {@inheritDoc}    
-     */ 
-    public void setChildValue(UIComponent component, Object value) {
-
-	repeater.setChildValue(component, value);
-
-    }
-
-
-    public int getRowIndex() {
-
-	return (repeater.getRowIndex());
-
-    }
-
-
-    /**
-     * <p>In addition to the responsibilities described for this method for a
-     * {@link Repeater}, expose the data object for the specified row
-     * (if it is nonzero), if there is a value for the <code>var</code>
-     * property.</p>
-     *
-     * @param index The new index value
-     *
-     * @exception IllegalArgumentException if <code>index</code>
-     *  is less than -1, or greater than or equal to the number of rows
-     */
-    public void setRowIndex(int index) {
-
-	repeater.setRowIndex(index);
-        getDataModel(FacesContext.getCurrentInstance()).setRowIndex(index);
-        if (var != null) {
-            Map requestMap =
-                FacesContext.getCurrentInstance().getExternalContext().
-                getRequestMap();
-            if (index == -1) {
-                requestMap.remove(var);
-            } else {
-                requestMap.put(var, getRowData());
-            }
-        }
-
-    }
-
-
     // ----------------------------------------------------- StateHolder Methods
 
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[6];
+        Object values[] = new Object[8];
         values[0] = super.saveState(context);
-        values[1] = saveAttachedState(context, support);
-        values[2] = new Integer(first);
-        values[3] = saveAttachedState(context, repeater);
-        values[4] = new Integer(rows);
-        values[5] = var;
+        values[1] = new Integer(first);
+        values[2] = new Integer(rowIndex);
+        values[3] = new Integer(rows);
+        values[4] = saved;
+        values[5] = value;
+        values[6] = valueRef;
+        values[7] = var;
         return (values);
 
     }
@@ -407,30 +394,99 @@ public class UIData extends UIComponentBase
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        support = (ValueHolderSupport) restoreAttachedState(context, values[1]);
-	support.setComponent(this);
-        first = ((Integer) values[2]).intValue();
-        repeater = (RepeaterSupport) restoreAttachedState(context, values[3]);
-        rows = ((Integer) values[4]).intValue();
-        var = (String) values[5];
+        first = ((Integer) values[1]).intValue();
+        rowIndex = ((Integer) values[2]).intValue();
+        rows = ((Integer) values[3]).intValue();
+        saved = (Map) values[4];
+        value = values[5];
+        valueRef = (String) values[6];
+        var = (String) values[7];
+
+    }
+
+
+    // -------------------------------------------------- ValueHolder Properties
+
+
+    public Object getValue() {
+
+        return (this.value);
+
+    }
+
+
+    public void setValue(Object value) {
+
+        this.value = value;
+
+    }
+
+
+    public String getValueRef() {
+
+        return (this.valueRef);
+
+    }
+
+
+    public void setValueRef(String valueRef) {
+
+        this.valueRef = valueRef;
 
     }
 
 
     // ----------------------------------------------------- ValueHolder Methods
 
+
     /**
      * @exception EvaluationException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}     
-     */ 
+     * @exception NullPointerException {@inheritDoc}  
+     */
     public Object currentValue(FacesContext context) {
 
-        return (support.currentValue(context));
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        Object value = getValue();
+        if (value != null) {
+            return (value);
+        }
+        String valueRef = getValueRef();
+        if (valueRef != null) {
+            Application application = context.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            return (binding.getValue(context));
+        }
+        return (null);
 
     }
 
 
     // ----------------------------------------------------- UIComponent Methods
+
+
+    /**
+     * <p>Return a client identifier for this component that includes the
+     * current value of the <code>rowIndex</code> property.  This implies
+     * that multiple calls to <code>getClientId()</code> may return different
+     * results, but ensures that child components can themselves will generate
+     * row-specific client identifiers (since {@link UIData} is a
+     * {@link NamingContainer}).</p>
+     *
+     * @exception NullPointerExcepton if <code>context</code>
+     *  is <code>null</code>
+     */
+    public String getCientId(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        return (super.getClientId(context) +
+                NamingContainer.SEPARATOR_CHAR +
+                rowIndex);
+
+    }
 
 
     /**
@@ -678,5 +734,158 @@ public class UIData extends UIComponentBase
 
     }
 
+
+    /**
+     * <p>Restore state information for all descendant components, as described
+     * for <code>setRowIndex()</code>.</p>
+     */
+    private void restoreDescendantState() {
+
+        System.err.println("restoreDescendantState(" + rowIndex + ")");
+        FacesContext context = FacesContext.getCurrentInstance();
+        Iterator kids = getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid instanceof UIColumn) {
+                restoreDescendantState(kid, context);
+            }
+        }
+        System.err.println("retoreDescendantState(COMPLETED)");
+
+    }
+
+
+    /**
+     * <p>Restore state information for the specified component and its
+     * descendants.</p>
+     *
+     * @param component Component for which to restore state information
+     * @param context {@link FacesContext} for the current request
+     */
+    private void restoreDescendantState(UIComponent component,
+                                        FacesContext context) {
+
+        // Restore state for this component
+        if (component instanceof ValueHolder) {
+            String clientId = component.getClientId(context);
+            System.err.println("  clientId=" + clientId);
+            SavedState state = (SavedState) saved.get(clientId);
+            if (state == null) {
+                return;
+            }
+            System.err.println("     value=" + state.getValue());
+            ((ValueHolder) component).setValue(state.getValue());
+            if (component instanceof ConvertableValueHolder) {
+                System.err.println("     valid=" + state.isValid());
+                ((ConvertableValueHolder) component).setValid(state.isValid());
+            }
+            if (component instanceof UIInput) {
+                System.err.println("      prev=" + state.getPrevious());
+                ((UIInput) component).setPrevious(state.getPrevious());
+            }
+        }
+
+        // Restore state for children of this component
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            restoreDescendantState((UIComponent) kids.next(), context);
+        }
+
+
+    }
+
+
+    /**
+     * <p>Save state information for all descendant components, as described
+     * for <code>setRowIndex()</code>.</p>
+     */
+    private void saveDescendantState() {
+
+        System.err.println("saveDescendantState(" + rowIndex + ")");
+        FacesContext context = FacesContext.getCurrentInstance();
+        Iterator kids = getChildren().iterator();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            if (kid instanceof UIColumn) {
+                saveDescendantState(kid, context);
+            }
+        }
+        System.err.println("saveDescendantState(COMPLETED)");
+
+    }
+
+
+    /**
+     * <p>Save state information for the specified component and its
+     * descendants.</p>
+     *
+     * @param component Component for which to save state information
+     * @param context {@link FacesContext} for the current request
+     */
+    private void saveDescendantState(UIComponent component,
+                                     FacesContext context) {
+
+        // Save state for this component
+        if (component instanceof ValueHolder) {
+            String clientId = component.getClientId(context);
+            SavedState state = (SavedState) saved.get(clientId);
+            if (state == null) {
+                state = new SavedState();
+                saved.put(clientId, state);
+            }
+            System.err.println("  clientId=" + clientId);
+            System.err.println("     value=" + (((ValueHolder) component).getValue()));
+            state.setValue(((ValueHolder) component).getValue());
+            if (component instanceof ConvertableValueHolder) {
+                System.err.println("     valid=" + (((ConvertableValueHolder) component).isValid()));
+                state.setValid(((ConvertableValueHolder) component).isValid());
+            }
+            if (component instanceof UIInput) {
+                System.err.println("      prev=" + (((UIInput) component).getPrevious()));
+                state.setPrevious(((UIInput) component).getPrevious());
+            }
+        }
+
+        // Save state for children of this component
+        Iterator kids = component.getChildren().iterator();
+        while (kids.hasNext()) {
+            saveDescendantState((UIComponent) kids.next(), context);
+        }
+
+    }
+
+
+}
+
+
+// ------------------------------------------------------------- Private Classes
+
+
+// Private Class To Represent Saved Information
+class SavedState implements Serializable {
+
+    private Object previous;
+    Object getPrevious() {
+	return (this.previous);
+    }
+    void setPrevious(Object previous) {
+	this.previous = previous;
+    }
+
+    private boolean valid = true;
+    boolean isValid() {
+	return (this.valid);
+    }
+    void setValid(boolean valid) {
+	this.valid = valid;
+    }
+
+    private Object value;
+    Object getValue() {
+	return (this.value);
+    }
+    public void setValue(Object value) {
+	this.value = value;
+    }
 
 }

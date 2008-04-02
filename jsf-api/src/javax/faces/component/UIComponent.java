@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.107 2003/10/20 03:03:58 eburns Exp $
+ * $Id: UIComponent.java,v 1.108 2003/10/21 05:37:44 craigmcc Exp $
  */
 
 /*
@@ -424,7 +424,8 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Render the beginning of the current state of this
+     * <p>If our <code>rendered</code> property is <code>true</code>,
+     * render the beginning of the current state of this
      * {@link UIComponent} to the response contained in the specified
      * {@link FacesContext}.  If the conversion attempted in a previous call
      * to <code>decode()</code> for this component failed, the state
@@ -445,7 +446,8 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Render the child {@link UIComponent}s of this {@link UIComponent},
+     * <p>If our <code>rendered</code> property is <code>true</code>,
+     * render the child {@link UIComponent}s of this {@link UIComponent},
      * following the rules described for <code>encodeBegin()</code> to acquire
      * the appropriate value to be rendered.  This method will only be called
      * if the <code>rendersChildren</code> property is <code>true</code>.</p>
@@ -460,7 +462,8 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Render the ending of the current state of this
+     * <p>If our <code>rendered</code> property is <code>true</code>,
+     * render the ending of the current state of this
      * {@link UIComponent}, following the rules described for
      * <code>encodeBegin()</code> to acquire the appropriate value
      * to be rendered.</p>
@@ -570,6 +573,8 @@ public abstract class UIComponent implements StateHolder {
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
      * <ul>
+     * <li>If the <code>rendered</code> property of this {@link UIComponent}
+     *     is <code>false</code>, skip further processing.</li>
      * <li>Call the <code>processDecodes()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
@@ -597,6 +602,8 @@ public abstract class UIComponent implements StateHolder {
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
      * <ul>
+     * <li>If the <code>rendered</code> property of this {@link UIComponent}
+     *     is <code>false</code>, skip further processing.</li>
      * <li>Call the <code>processValidators()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
@@ -629,6 +636,8 @@ public abstract class UIComponent implements StateHolder {
      * lifecycle for all facets of this component, all children of this
      * component, and this component itself, as follows.</p>
      * <ul>
+     * <li>If the <code>rendered</code> property of this {@link UIComponent}
+     *     is <code>false</code>, skip further processing.</li>
      * <li>Call the <code>processUpdates()</code> method of all facets
      *     and children of this {@link UIComponent}, in the order determined
      *     by a call to <code>getFacetsAndChildren()</code>.</li>
