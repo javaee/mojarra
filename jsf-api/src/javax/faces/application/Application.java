@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.42 2005/12/05 16:42:41 edburns Exp $
+ * $Id: Application.java,v 1.43 2006/02/01 03:05:59 edburns Exp $
  */
 
 /*
@@ -293,15 +293,24 @@ public abstract class Application {
      * instance that uses the locale of the current {@link
      * javax.faces.component.UIViewRoot}.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
      * @return <code>ResourceBundle</code> for the current UIViewRoot,
      * otherwise null
      *
      * @throws FacesException if a bundle was defined, but not resolvable
      *
      * @throws NullPointerException if ctx == null || name == null
+     *
+     * @since 1.2
      */
     
-    public abstract ResourceBundle getResourceBundle(FacesContext ctx, String name);
+    public ResourceBundle getResourceBundle(FacesContext ctx, String name) {
+        throw new UnsupportedOperationException();
+    }
     
 
 

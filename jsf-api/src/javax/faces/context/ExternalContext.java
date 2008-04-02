@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.25 2005/12/05 16:42:47 edburns Exp $
+ * $Id: ExternalContext.java,v 1.26 2006/02/01 03:06:01 edburns Exp $
  */
  
 /*
@@ -338,9 +338,17 @@ public abstract class ExternalContext {
      * subsequent calls to {@link #getRequest}.  This may be used to
      * install a wrapper for the request.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     *
      * @since 1.2
      */
-    public abstract void setRequest(Object request);
+    public void setRequest(Object request) {
+        throw new UnsupportedOperationException();
+    }
     
     /**
      *
@@ -360,13 +368,20 @@ public abstract class ExternalContext {
      * <code>javax.portlet.ActionRequest</code> method
      * <code>setCharacterEncoding()</code>.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
      * @throws java.io.UnsupportedEncodingException if this is not a valid
      * encoding 
      *
      * @since 1.2
      *
      */
-    public abstract void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException;
+    public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
+        throw new UnsupportedOperationException();
+    }
     
 
 
@@ -614,10 +629,17 @@ public abstract class ExternalContext {
      * <code>javax.portlet.ActionRequest</code> method
      * <code>getCharacterEncoding()</code>.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
      * @since 1.2
      *
      */
-    public abstract String getRequestCharacterEncoding();
+    public String getRequestCharacterEncoding() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      *
@@ -629,8 +651,17 @@ public abstract class ExternalContext {
      * <code>getContentType()</code>.</p>
      *
      * <p><em>Portlet:</em> This must return <code>null</code>.</p>
+     *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * @since 1.2
      */
-    public abstract String getRequestContentType();
+    public String getRequestContentType() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      *
@@ -643,9 +674,16 @@ public abstract class ExternalContext {
      *
      * <p><em>Portlet:</em> This must return <code>null</code>.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
      * @since 1.2
      */
-    public abstract String getResponseCharacterEncoding();
+    public String getResponseCharacterEncoding() {
+        throw new UnsupportedOperationException();
+    }
 
     
     /**
@@ -658,8 +696,17 @@ public abstract class ExternalContext {
      * <code>getContentType()</code>.</p>
      *
      * <p><em>Portlet:</em> This must return <code>null</code>.</p>
+     *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     * @since 1.2
      */
-    public abstract String getResponseContentType();
+    public String getResponseContentType() {
+        throw new UnsupportedOperationException();
+    }
 
     
 
@@ -749,9 +796,17 @@ public abstract class ExternalContext {
      * subsequent calls to {@link #getResponse}.  This may be used to
      * install a wrapper for the response.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     *
      * @since 1.2
      */
-    public abstract void setResponse(Object response);
+    public void setResponse(Object response) {
+        throw new UnsupportedOperationException();
+    }
     
     
     /**
@@ -765,10 +820,18 @@ public abstract class ExternalContext {
      *
      * <p><em>Portlet:</em> This method must take no action.</p>
      *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * this class.</p>
+     *
+     *
      * @since 1.2
      *
      */
-    public abstract void setResponseCharacterEncoding(String encoding);
+    public void setResponseCharacterEncoding(String encoding) {
+        throw new UnsupportedOperationException();
+    }
     
 
 

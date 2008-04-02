@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.137 2006/01/26 16:31:34 edburns Exp $
+ * $Id: UIComponent.java,v 1.138 2006/02/01 03:06:00 edburns Exp $
  */
 
 /*
@@ -162,16 +162,7 @@ public abstract class UIComponent implements StateHolder {
      *
      */
     public ValueExpression getValueExpression(String name) {
-
-        if (name == null) {
-            throw new NullPointerException();
-        }
-        if (bindings == null) {
-            return (null);
-        } else {
-            return ((ValueExpression) bindings.get(name));
-        }
-
+	throw new UnsupportedOperationException();
     }
 
 
@@ -208,35 +199,7 @@ public abstract class UIComponent implements StateHolder {
      *
      */
     public void setValueExpression(String name, ValueExpression binding) {
-
-        if (name == null) {
-            throw new NullPointerException();
-        }  else            if ("id".equals(name) || "parent".equals(name)) {
-                throw new IllegalArgumentException();
-            }
-        if (binding != null) {
-            if (!binding.isLiteralText()) {
-                if (bindings == null) {
-                    bindings = new HashMap<String, ValueExpression>();
-                }
-                bindings.put(name, binding);
-            }  else {
-                ELContext context = FacesContext.getCurrentInstance().getELContext();
-                try {
-                    getAttributes().put(name, binding.getValue(context));
-                } catch (ELException ele) {
-                    throw new FacesException(ele);
-                }
-            }
-        }  else {
-            if (bindings != null) {
-                bindings.remove(name);
-                if (bindings.size()  == 0) {
-                    bindings = null;
-                }
-            }
-        }
-
+	throw new UnsupportedOperationException();
     }
 
     // -------------------------------------------------------------- Properties
@@ -947,14 +910,6 @@ public abstract class UIComponent implements StateHolder {
      * @param context {@link FacesContext} for the current request
      */
     protected abstract Renderer getRenderer(FacesContext context);
-
-    // The set of ValueExpressions for this component, keyed by property
-    // name This collection is lazily instantiated
-    protected Map<String,ValueExpression> bindings = null;
-
-
-
-
 
 
 }

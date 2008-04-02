@@ -46,7 +46,7 @@
   </goal>
 
   <goal name="java:compile">
-    <attainGoal name="jsf-impl:build" />
+    <!-- <attainGoal name="jsf-impl:build" /> -->
     <mkdir dir="target/classes" />
     <unjar dest="target/classes" overwrite="true"
            src="build/lib/jsf-impl.jar" />

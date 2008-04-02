@@ -46,7 +46,7 @@
   </goal>
 
   <goal name="java:compile">
-    <attainGoal name="jsf-api:build" />
+    <!-- <attainGoal name="jsf-api:build" /> -->
     <mkdir dir="target/classes" />
     <unjar dest="target/classes" overwrite="true"
            src="build/lib/jsf-api.jar" />

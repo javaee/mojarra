@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.122 2006/01/23 21:01:42 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.123 2006/02/01 03:06:00 edburns Exp $
  */
 
 /*
@@ -188,6 +188,12 @@ public abstract class UIComponentBase extends UIComponent {
     // ---------------------------------------------------------------- Bindings
 
 
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    // The set of ValueExpressions for this component, keyed by property
+    // name This collection is lazily instantiated
+    private Map<String,ValueExpression> bindings = null;
+
     /**
      * {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
@@ -234,6 +240,63 @@ public abstract class UIComponentBase extends UIComponent {
 	} else {
 	    setValueExpression(name, null);
 	}
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 1.2
+     * @throws NullPointerException {@inheritDoc}
+     */ 
+    public ValueExpression getValueExpression(String name) {
+
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        if (bindings == null) {
+            return (null);
+        } else {
+            return ((ValueExpression) bindings.get(name));
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 1.2
+     * @throws IllegalArgumentException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
+     */ 
+    public void setValueExpression(String name, ValueExpression binding) {
+
+        if (name == null) {
+            throw new NullPointerException();
+        } else if ("id".equals(name) || "parent".equals(name)) {
+            throw new IllegalArgumentException();
+        }
+        if (binding != null) {
+            if (!binding.isLiteralText()) {
+                if (bindings == null) {
+                    bindings = new HashMap<String, ValueExpression>();
+                }
+                bindings.put(name, binding);
+            } else {
+                ELContext context =
+                    FacesContext.getCurrentInstance().getELContext();
+                try {
+                    getAttributes().put(name, binding.getValue(context));
+                } catch (ELException ele) {
+                    throw new FacesException(ele);
+                }
+            }
+        } else {
+            if (bindings != null) {
+                bindings.remove(name);
+                if (bindings.size() == 0) {
+                    bindings = null;
+                }
+            }
+        }
 
     }
     
