@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.28 2003/09/19 19:55:34 eburns Exp $
+ * $Id: UIForm.java,v 1.29 2003/09/22 16:08:42 eburns Exp $
  */
 
 /*
@@ -82,5 +82,11 @@ public interface UIForm extends UIComponent, NamingContainer {
 
     public void processUpdates(FacesContext context);
 
+    /*
+     * <p>Override {@link UIComponent.saveState} to call
+     * <code>setSubmitted(false)</code>.</p>
+     */
+
+    public Object saveState(FacesContext context);
 
 }

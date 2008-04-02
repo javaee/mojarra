@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormBase.java,v 1.4 2003/09/19 19:55:35 eburns Exp $
+ * $Id: UIFormBase.java,v 1.5 2003/09/22 16:08:43 eburns Exp $
  */
 
 /*
@@ -131,6 +131,13 @@ public class UIFormBase extends UINamingContainerBase implements UIForm {
                 context.renderResponse();
             }
         }
+    }
+
+    // ------------------------------------------------  StateHolder overrides
+
+    public Object saveState(FacesContext context) {
+	setSubmitted(false);
+	return super.saveState(context);
     }
 
 
