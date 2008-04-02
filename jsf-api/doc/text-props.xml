@@ -58,10 +58,12 @@
 
     <property>
         <description>
-        If the value of this attribute is "off", the browser should
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
         disable its autocomplete feature for this component.  This is
         useful for components that perform autocompletion and do not
-        want the browser interfering.  If not set, defaults to "on".
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
         </description>
         <display-name>Enable or disable browser autocompletion.</display-name>
         <icon></icon>

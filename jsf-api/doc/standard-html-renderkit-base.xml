@@ -1911,9 +1911,9 @@
       <p>
       Render the clientId of the component as the value of the "name"
       attribute.  If the current value of the component is "true",
-      output the "checked" attribute.  If the "styleClass" attribute is
-      specified, render its value as the value of the "class"
-      attribute.</p> </ul>]]></description>
+      output the "checked" attribute (must be rendered as checked="checked").  
+      If the "styleClass" attribute is specified, render its value as the value 
+      of the "class" attribute.</p> </ul>]]></description>
             <component-family>javax.faces.SelectBoolean</component-family>
             <renderer-type>javax.faces.Checkbox</renderer-type>
             <renderer-class>
@@ -2159,7 +2159,7 @@
       the component as the value of the "name" attribute.  If the "styleClass"
       attribute is specified, render its value as the value of the "class"
       attribute on the "select" element. If the component
-      to be rendered is a UISelectMany, render "true" as the value of
+      to be rendered is a UISelectMany, render "multiple" as the value of
       the "multiple" attribute.  Render "1" as the value of the "size"
       attribute.  See the <a
       href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering the option
@@ -2209,7 +2209,7 @@
       the component as the value of the "name" attribute.  If the "styleClass"
       attribute is specified, render its value as the value of the "class"
       attribute on the "select" element. If the component
-      to be rendered is a UISelectMany, render "true" as the value of
+      to be rendered is a UISelectMany, render "multiple" as the value of
       the "multiple" attribute.  If the "size" attribute is specified,
       render its value as the value of the "size" attribute.  Otherwise
       use the number of items as the value of the "size" attribute.  See

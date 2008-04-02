@@ -4376,11 +4376,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -4420,11 +4418,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -6725,11 +6721,9 @@
       <description>
         Flag indicating that this image is to be used as a server side
         image map.  Such an image must be enclosed within a hyperlink
-        ("a").  According to the HTML 4.01 spec, this attribute must be
-        rendered with attribute minimization.  If the value of the
-        attribute is true, then only the attribute name, "ismap", is
-        rendered.  If the attribute value is false, nothing is rendered
-        regarding this attribute.
+        ("a").  A value of false causes no attribute to be rendered, 
+        while a value of true causes the attribute to be rendered as
+        ismap="ismap".
         </description>
       <display-name>Image Map Flag</display-name>
       <icon/>
@@ -7706,11 +7700,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -7750,11 +7742,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -7793,10 +7783,12 @@
     </property>
     <property>
       <description>
-        If the value of this attribute is "off", the browser should
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
         disable its autocomplete feature for this component.  This is
         useful for components that perform autocompletion and do not
-        want the browser interfering.  If not set, defaults to "on".
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
         </description>
       <display-name>Enable or disable browser autocompletion.</display-name>
       <icon/>
@@ -8436,11 +8428,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -8480,11 +8470,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -8523,10 +8511,12 @@
     </property>
     <property>
       <description>
-        If the value of this attribute is "off", the browser should
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
         disable its autocomplete feature for this component.  This is
         useful for components that perform autocompletion and do not
-        want the browser interfering.  If not set, defaults to "on".
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
         </description>
       <display-name>Enable or disable browser autocompletion.</display-name>
       <icon/>
@@ -9150,11 +9140,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -9194,11 +9182,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -13035,11 +13021,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -13079,11 +13063,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -13711,11 +13693,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -13755,11 +13735,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -14435,11 +14413,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -14479,11 +14455,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -15143,11 +15117,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -15187,11 +15159,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -15828,11 +15798,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -15872,11 +15840,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -16523,11 +16489,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -16567,11 +16531,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -17208,11 +17170,9 @@
     <property>
       <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
       <display-name>Disabled Flag</display-name>
       <icon/>
@@ -17252,11 +17212,9 @@
       <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
       <display-name>Read Only Flag</display-name>
       <icon/>
@@ -17615,11 +17573,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -17659,11 +17615,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -19430,11 +19384,9 @@
         <description>
         Flag indicating that this image is to be used as a server side
         image map.  Such an image must be enclosed within a hyperlink
-        ("a").  According to the HTML 4.01 spec, this attribute must be
-        rendered with attribute minimization.  If the value of the
-        attribute is true, then only the attribute name, "ismap", is
-        rendered.  If the attribute value is false, nothing is rendered
-        regarding this attribute.
+        ("a").  A value of false causes no attribute to be rendered, 
+        while a value of true causes the attribute to be rendered as
+        ismap="ismap".
         </description>
         <display-name>Image Map Flag</display-name>
         <icon/>
@@ -19808,11 +19760,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -19852,11 +19802,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -19895,10 +19843,12 @@
       </attribute>
       <attribute>
         <description>
-        If the value of this attribute is "off", the browser should
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
         disable its autocomplete feature for this component.  This is
         useful for components that perform autocompletion and do not
-        want the browser interfering.  If not set, defaults to "on".
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
         </description>
         <display-name>Enable or disable browser autocompletion.</display-name>
         <icon/>
@@ -20243,11 +20193,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -20287,11 +20235,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -20330,10 +20276,12 @@
       </attribute>
       <attribute>
         <description>
-        If the value of this attribute is "off", the browser should
+        If the value of this attribute is "off", render "off" as the value
+        of the attribute. This indicates that the  browser should
         disable its autocomplete feature for this component.  This is
         useful for components that perform autocompletion and do not
-        want the browser interfering.  If not set, defaults to "on".
+        want the browser interfering.  If this attribute is not set or the value 
+        is "on", render nothing.
         </description>
         <display-name>Enable or disable browser autocompletion.</display-name>
         <icon/>
@@ -20655,11 +20603,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -20699,11 +20645,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -22775,9 +22719,9 @@
       <p>
       Render the clientId of the component as the value of the "name"
       attribute.  If the current value of the component is "true",
-      output the "checked" attribute.  If the "styleClass" attribute is
-      specified, render its value as the value of the "class"
-      attribute.</p> </ul>]]></description>
+      output the "checked" attribute (must be rendered as checked="checked").  
+      If the "styleClass" attribute is specified, render its value as the value 
+      of the "class" attribute.</p> </ul>]]></description>
       <component-family>javax.faces.SelectBoolean</component-family>
       <renderer-type>javax.faces.Checkbox</renderer-type>
       <renderer-class>
@@ -23041,11 +22985,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -23085,11 +23027,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -23427,11 +23367,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -23471,11 +23409,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -23929,11 +23865,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -23973,11 +23907,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -24057,7 +23989,7 @@
       the component as the value of the "name" attribute.  If the "styleClass"
       attribute is specified, render its value as the value of the "class"
       attribute on the "select" element. If the component
-      to be rendered is a UISelectMany, render "true" as the value of
+      to be rendered is a UISelectMany, render "multiple" as the value of
       the "multiple" attribute.  Render "1" as the value of the "size"
       attribute.  See the <a
       href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering the option
@@ -24329,11 +24261,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -24373,11 +24303,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -24446,7 +24374,7 @@
       the component as the value of the "name" attribute.  If the "styleClass"
       attribute is specified, render its value as the value of the "class"
       attribute on the "select" element. If the component
-      to be rendered is a UISelectMany, render "true" as the value of
+      to be rendered is a UISelectMany, render "multiple" as the value of
       the "multiple" attribute.  If the "size" attribute is specified,
       render its value as the value of the "size" attribute.  Otherwise
       use the number of items as the value of the "size" attribute.  See
@@ -24719,11 +24647,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -24763,11 +24689,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -25119,11 +25043,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -25163,11 +25085,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -25530,11 +25450,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -25574,11 +25492,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>
@@ -25605,11 +25521,9 @@
       <attribute>
         <description>
           Flag indicating that this element must never receive focus or
-          be included in a subsequent submit.  According to the HTML
-          4.01 specification, this attribute must be rendered using
-          attribute minimization such that a false value causes no
-          attribute to be rendered, and a true value causes only the
-          attribute name, "disabled", to be rendered.
+          be included in a subsequent submit.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as disabled="disabled".            
         </description>
         <display-name>Disabled Flag</display-name>
         <icon/>
@@ -25649,11 +25563,9 @@
         <description>
           Flag indicating that this component will prohibit changes by
           the user.  The element may receive focus unless it has also
-          been disabled.  According to the HTML 4.01 specification, This
-          attribute must be rendered using attribute minimization such
-          that a false value causes no attribute to be rendered, and a
-          true value causes only the attribute name, "readonly", to be
-          rendered.
+          been disabled.  A value of false causes
+          no attribute to be rendered, while a value of true causes the
+          attribute to be rendered as readonly="readonly".
         </description>
         <display-name>Read Only Flag</display-name>
         <icon/>

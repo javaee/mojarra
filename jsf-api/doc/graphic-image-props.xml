@@ -73,11 +73,9 @@
         <description>
         Flag indicating that this image is to be used as a server side
         image map.  Such an image must be enclosed within a hyperlink
-        ("a").  According to the HTML 4.01 spec, this attribute must be
-        rendered with attribute minimization.  If the value of the
-        attribute is true, then only the attribute name, "ismap", is
-        rendered.  If the attribute value is false, nothing is rendered
-        regarding this attribute.
+        ("a").  A value of false causes no attribute to be rendered, 
+        while a value of true causes the attribute to be rendered as
+        ismap=&quot;ismap&quot;.
         </description>
         <display-name>Image Map Flag</display-name>
         <icon></icon>
