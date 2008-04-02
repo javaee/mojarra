@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.5 2003/09/22 19:03:37 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.6 2003/09/23 04:12:20 craigmcc Exp $
  */
 
 /*
@@ -77,7 +77,6 @@ public class DateTimeConverter implements Converter, StateHolder {
 
 
     private String dateStyle = "default";
-    private boolean lenient = false;
     private Locale parseLocale = null;
     private String pattern = null;
     private String timeStyle = "default";
@@ -111,32 +110,6 @@ public class DateTimeConverter implements Converter, StateHolder {
     public void setDateStyle(String dateStyle) {
 
         this.dateStyle = dateStyle;
-
-    }
-
-
-    /**
-     * <p>Return the "is parsing lenient" flag for this {@link Converter}.
-     * If not set, the default value will be <code>false</code>.</p>
-     */
-    public boolean isLenient() {
-
-        return (this.lenient);
-
-    }
-
-
-    /**
-     * <p>Set the "is parsing lenient" flag for this {@link Converter}.
-     * This flag value affects conversion of Strings to dates in the same
-     * manner as that specified by the <code>lenient</code> property on
-     * <code>java.text.DateFormat</code>.</p>
-     *
-     * @param lenient The new lenient flag
-     */
-    public void setLenient(boolean lenient) {
-
-        this.lenient = lenient;
 
     }
 
@@ -378,7 +351,7 @@ public class DateTimeConverter implements Converter, StateHolder {
             throw new ConverterException
                 (new IllegalArgumentException(type));
         }
-        df.setLenient(lenient);
+        df.setLenient(false);
         return (df);
 
     }
@@ -438,14 +411,13 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[7];
+        Object values[] = new Object[6];
         values[0] = dateStyle;
-        values[1] = lenient ? Boolean.TRUE : Boolean.FALSE;
-        values[2] = parseLocale;
-        values[3] = pattern;
-        values[4] = timeStyle;
-        values[5] = timeZone;
-        values[6] = type;
+        values[1] = parseLocale;
+        values[2] = pattern;
+        values[3] = timeStyle;
+        values[4] = timeZone;
+        values[5] = type;
         return (values);
 
     }
@@ -455,12 +427,11 @@ public class DateTimeConverter implements Converter, StateHolder {
 
         Object values[] = (Object[]) state;
         dateStyle = (String) values[0];
-        lenient = ((Boolean) values[1]).booleanValue();
-        parseLocale = (Locale) values[2];
-        pattern = (String) values[3];
-        timeStyle = (String) values[4];
-        timeZone = (TimeZone) values[5];
-        type = (String) values[6];
+        parseLocale = (Locale) values[1];
+        pattern = (String) values[2];
+        timeStyle = (String) values[3];
+        timeZone = (TimeZone) values[4];
+        type = (String) values[5];
 
     }
 
