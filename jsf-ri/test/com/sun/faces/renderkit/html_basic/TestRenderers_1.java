@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.68 2005/10/19 19:51:38 edburns Exp $
+ * $Id: TestRenderers_1.java,v 1.69 2006/01/30 17:17:14 rogerk Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.68 2005/10/19 19:51:38 edburns Exp $
+ * @version $Id: TestRenderers_1.java,v 1.69 2006/01/30 17:17:14 rogerk Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -602,6 +602,12 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiSelectItems.setValue(items);
         uiSelectItems.setId("items");
         uiSelectOne.getChildren().add(uiSelectItems);
+
+        UIParameter param = new UIParameter();
+        param.setName("foo");
+        param.setValue("foovalue");
+        uiSelectOne.getChildren().add(param);
+        
 
         RadioRenderer radioRenderer = new RadioRenderer();
         // test decode method
