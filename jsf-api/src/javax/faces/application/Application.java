@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.23 2004/01/15 06:03:14 eburns Exp $
+ * $Id: Application.java,v 1.24 2004/01/20 19:17:15 craigmcc Exp $
  */
 
 /*
@@ -226,7 +226,8 @@ public abstract class Application {
      * during the <em>Restore View</em> and <em>Render Response</em>
      * phases of the request processing lifecycle.  If not explicitly set,
      * a default implementation must be provided that performs the functions
-     * described in the {@link ViewHandler} class description.</p>
+     * described in the {@link ViewHandler} description in the
+     * JavaServer Faces Specification.</p>
      */
     public abstract ViewHandler getViewHandler();
 
@@ -253,7 +254,8 @@ public abstract class Application {
      * during the <em>Restore View</em> and <em>Render Response</em>
      * phases of the request processing lifecycle.  If not explicitly set,
      * a default implementation must be provided that performs the functions
-     * described in the {@link StateManager} class description.</p>
+     * described in the {@link StateManager} description
+     * in the JavaServer Faces Specification.</p>
      */
     public abstract StateManager getStateManager();
 

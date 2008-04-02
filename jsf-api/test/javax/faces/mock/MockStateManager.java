@@ -1,5 +1,5 @@
 /*
- * $Id: MockStateManager.java,v 1.1 2003/12/22 23:25:45 eburns Exp $
+ * $Id: MockStateManager.java,v 1.2 2004/01/20 19:17:19 craigmcc Exp $
  */
 
 /*
@@ -41,10 +41,7 @@ public class MockStateManager extends StateManager {
         return null;
     }
 	
-    protected void restoreComponentState(FacesContext context, UIViewRoot root) throws IOException {}
-};
+    protected void restoreComponentState(FacesContext context, UIViewRoot root)
+    {}
 
-		    
-
-
-
+}

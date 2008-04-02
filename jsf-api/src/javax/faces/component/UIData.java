@@ -202,6 +202,61 @@ public class UIData extends UIComponentBase
 
     }
 
+
+    /**
+     * <p>Return the footer facet of this component (if any).  A convenience
+     * method for <code>getFacet("footer")</code>.</p>
+     */
+    public UIComponent getFooter() {
+
+        return getFacet("footer");
+
+    }
+
+
+    /**
+     * <p>Set the footer facet of this component.  A convenience
+     * method for <code>getFacets().put("footer", footer)</code>.</p>
+     * 
+     * @param footer the new footer facet
+     * 
+     * @exception NullPointerException if <code>footer</code> is
+     *   <code>null</code>
+     */
+    public void setFooter(UIComponent footer) {
+
+        getFacets().put("footer", footer);
+
+    }
+
+
+    /**
+     * <p>Return the header facet of this component (if any).  A convenience
+     * method for <code>getFacet("header")</code>.</p>
+     */
+    public UIComponent getHeader() {
+
+        return getFacet("header");
+
+    }
+
+
+    /**
+     * <p>Set the header facet of this component.  A convenience
+     * method for <code>getFacets().put("header", header)</code>.</p>
+     * 
+     * @param header the new header facet
+     * 
+     * @exception NullPointerException if <code>header</code> is
+     *   <code>null</code>
+     */
+    public void setHeader(UIComponent header) {
+
+        getFacets().put("header", header);
+
+    }
+
+
     /**
      * <p>Return a flag indicating whether there is <code>rowData</code>
      * available at the current <code>rowIndex</code>.  If no
