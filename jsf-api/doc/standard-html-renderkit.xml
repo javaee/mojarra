@@ -639,6 +639,9 @@
       <icon/>
       <property-name>var</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
     </property>
 
     <component-extension>
@@ -5529,6 +5532,9 @@
       <icon/>
       <property-name>var</property-name>
       <property-class>java.lang.String</property-class>
+      <property-extension>
+        <value-expression-enabled>true</value-expression-enabled>
+      </property-extension>
     </property>
 
 
