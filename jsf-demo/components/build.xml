@@ -153,8 +153,8 @@
     <mkdir dir="${build}/classes/${webapp}" />
     <mkdir dir="${build}/classes/components" />
     <mkdir dir="${build}/classes/components/META-INF" />
-    <mkdir dir="${build}/${webapp}/src/components" />
-    <mkdir dir="${build}/${webapp}/src/demo" />
+    <mkdir dir="${build}/${webapp}/src/java/components" />
+    <mkdir dir="${build}/${webapp}/src/java/demo" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
     <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
   </target>
@@ -248,10 +248,13 @@
 
     <!-- copy the java source to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/java/components">
-      <fileset dir="src/java/components"/>
+      <fileset dir="src/java/components"
+               excludes="components/CalendarComponent.java,
+               taglib/CalendarTag.java, renderkit/CalendarRenderer.java" />
     </copy>
     <copy todir="${build}/${webapp}/src/java/demo">
-      <fileset dir="src/java/demo"/>    
+      <fileset dir="src/java/demo" 
+               excludes="src/java/demo/model/CalendarBean.java"/>    
     </copy>
     <copy todir="${build}/${webapp}/WEB-INF" file="web/WEB-INF/tlds/demo.tld"/>
 
@@ -263,9 +266,17 @@
         <include name="**/*.jsp" />
         <include name="**/*.css" />
         <include name="**/*.xml" />
-      </fileset>
+      </fileset>   
     </copy>
-        
+    
+    <!-- delete Calender demo related files. -->
+    <delete file="${build}/${webapp}/calendar.jsp" />
+    <delete file="${build}/${webapp}/images/calendar.css" />
+    <delete file="${build}/${webapp}/images/calendar.gif" />
+    <delete file="${build}/${webapp}/images/simplecalendar.js" />
+    <delete file="${build}/${webapp}/images/up.gif" />
+    <delete file="${build}/${webapp}/images/down.gif" />
+           
     <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 
 	 basedir="${build}/classes/components"/>
 

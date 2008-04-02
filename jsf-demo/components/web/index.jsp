@@ -74,15 +74,15 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/src/components/components/AreaComponent.java">components/components/AreaComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/AreaSelectedEvent.java">components/components/AreaSelectedEvent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/AreaSelectedListener.java">components/components/AreaSelectedListener.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/MapComponent.java">components/components/MapComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/model/ImageArea.java">components/model/ImageArea.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/MapRenderer.java">components/renderkit/MapRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/AreaComponent.java">components/components/AreaComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/AreaSelectedEvent.java">components/components/AreaSelectedEvent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/AreaSelectedListener.java">components/components/AreaSelectedListener.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/MapComponent.java">components/components/MapComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/model/ImageArea.java">components/model/ImageArea.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/MapRenderer.java">components/renderkit/MapRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
 
 
 
@@ -103,16 +103,16 @@ Faces technology.</p>
 
 <td>
 
-<a href="ShowSource.jsp?filename=/src/components/taglib/GraphMenuBarTag.java">components/taglib/GraphMenuBarTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/GraphMenuNodeTag.java">components/taglib/GraphMenuNodeTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/GraphMenuTreeTag.java">components/taglib/GraphMenuTreeTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/GraphTreeNodeTag.java">components/taglib/GraphTreeNodeTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/GraphComponent.java">components/components/GraphComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/model/Graph.java">components/model/Graph.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/model/Node.java">components/model/Node.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/MenuBarRenderer.java">components/renderkit/MenuBarRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/MenuTreeRenderer.java">components/renderkit/MenuTreeRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/demo/model/GraphBean.java">demo/model/GraphBean.java</a>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/GraphMenuBarTag.java">components/taglib/GraphMenuBarTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/GraphMenuNodeTag.java">components/taglib/GraphMenuNodeTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/GraphMenuTreeTag.java">components/taglib/GraphMenuTreeTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/GraphTreeNodeTag.java">components/taglib/GraphTreeNodeTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/GraphComponent.java">components/components/GraphComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/model/Graph.java">components/model/Graph.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/model/Node.java">components/model/Node.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/MenuBarRenderer.java">components/renderkit/MenuBarRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/MenuTreeRenderer.java">components/renderkit/MenuTreeRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/demo/model/GraphBean.java">demo/model/GraphBean.java</a>
 </td>
 
 <td><a href="menu.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
@@ -129,9 +129,9 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/src/components/taglib/DataRepeaterTag.java">components/taglib/DataRepeaterTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/RepeaterRenderer.java">components/renderkit/RepeaterRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/demo/model/RepeaterBean.java">demo/model/RepeaterBean.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/DataRepeaterTag.java">components/taglib/DataRepeaterTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/RepeaterRenderer.java">components/renderkit/RepeaterRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/demo/model/RepeaterBean.java">demo/model/RepeaterBean.java</a><br>
 </td>
 
 <td><a href="repeater.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
@@ -148,9 +148,9 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/src/components/taglib/ScrollerTag.java">components/taglib/ScrollerTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/ScrollerComponent.java">components/components/ScrollerComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/demo/model/ResultSetBean.java">demo/model/ResultSetBean.java</a>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/ScrollerTag.java">components/taglib/ScrollerTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/ScrollerComponent.java">components/components/ScrollerComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/demo/model/ResultSetBean.java">demo/model/ResultSetBean.java</a>
 </td>
 
 <td><a href="result-set.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
@@ -167,14 +167,14 @@ Faces technology.</p>
 </td>
 
 <td>
-<a href="ShowSource.jsp?filename=/src/components/taglib/PaneTabTag.java">components/taglib/PaneTabTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/PaneTabLabelTag.java">components/taglib/PaneTabLabelTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/PaneTabbedTag.java">components/taglib/PaneTabbedTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/PaneComponent.java">components/components/PaneComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/PaneSelectedEvent.java">components/components/PaneSelectedEvent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/TabLabelRenderer.java">components/renderkit/TabLabelRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/TabRenderer.java">components/renderkit/TabRenderer.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/TabbedRenderer.java">components/renderkit/TabbedRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/PaneTabTag.java">components/taglib/PaneTabTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/PaneTabLabelTag.java">components/taglib/PaneTabLabelTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/PaneTabbedTag.java">components/taglib/PaneTabbedTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/PaneComponent.java">components/components/PaneComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/PaneSelectedEvent.java">components/components/PaneSelectedEvent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/TabLabelRenderer.java">components/renderkit/TabLabelRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/TabRenderer.java">components/renderkit/TabRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/TabbedRenderer.java">components/renderkit/TabbedRenderer.java</a><br>
 </td>
 
 <td><a href="tabbedpanes.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
@@ -191,13 +191,13 @@ Faces technology.</p>
 
 <td>
 
-<a href="ShowSource.jsp?filename=/src/components/taglib/ChartTag.java">components/taglib/ChartTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/ChartItemTag.java">components/taglib/ChartItemTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/ChartComponent.java">components/components/ChartComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/components/ChartItemComponent.java">components/components/ChartItemComponent.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/renderkit/ChartServlet.java">components/renderkit/ChartServlet.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/model/ChartItem.java">components/model/ChartItem.java</a><br>
-<a href="ShowSource.jsp?filename=/src/demo/model/ChartBean.java">demo/model/ChartBean.java</a>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/ChartTag.java">components/taglib/ChartTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/taglib/ChartItemTag.java">components/taglib/ChartItemTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/ChartComponent.java">components/components/ChartComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/components/ChartItemComponent.java">components/components/ChartItemComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/renderkit/ChartServlet.java">components/renderkit/ChartServlet.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/components/model/ChartItem.java">components/model/ChartItem.java</a><br>
+<a href="ShowSource.jsp?filename=/src/java/demo/model/ChartBean.java">demo/model/ChartBean.java</a>
 </td>
 
 <td><a href="chart.faces"><img src="images/execute.gif" width="24" height="24" border="0"></a>
