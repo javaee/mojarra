@@ -266,9 +266,9 @@
           depends="verifyPreconditions,copyDemoSource,main">
     <echo> Build the demos from the jsf-demo repository </echo>
     <echo> copy the sample war files to the zip area </echo>
-<!--
     <copy todir="${dist.home}/samples" 
           file="${basedir}/components/build/jsf-components.war"/>
+<!--
     <copy todir="${dist.home}/samples"
           file="${basedir}/cardemo/build/jsf-cardemo.war"/>
 -->
@@ -280,11 +280,9 @@
 -->
     <copy todir="${dist.home}/samples" 
           file="${basedir}/standard/build/jsf-standard.war"/>
-<!--
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/samples" 
      file="${basedir}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
--->
   </target>
 
   <target name="copyDemoSource" depends="copyJars,wspack.copyJars"> 
@@ -402,7 +400,6 @@
 
 
   <target name="main" depends="verifyPreconditions,prepare.build">
-<!--
 
     <ant dir="${basedir}/components">
       <property name="jsf-api.jar" 
@@ -410,6 +407,7 @@
       <property name="jsf-ri.jar" 
                 value="../../jsf-ri/build/lib/jsf-ri.jar"/>
     </ant>
+<!--
     <copy todir="${basedir}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
     <ant dir="${basedir}/cardemo">
