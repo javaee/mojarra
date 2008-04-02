@@ -544,6 +544,17 @@
        <managed-bean-class>com.sun.faces.systest.model.TestBeanConverter</managed-bean-class>
        <managed-bean-scope>none</managed-bean-scope>
      </managed-bean>
+
+  <navigation-rule>
+    <from-view-id>*</from-view-id>
+    <navigation-case>
+      <description>Default rule, go back to welcome page</description> 
+      <display-name>The Generic Rule</display-name> 
+      <from-outcome>welcome</from-outcome>
+      <to-view-id>/index.html</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
     
 
   <navigation-rule>
