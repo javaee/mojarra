@@ -43,6 +43,14 @@ public class YuiRendererHelper {
             cssClasses.put(".ygtvlph", YuiConstants.YUI_ROOT + "assets/lph.gif");
             cssClasses.put(".ygtvloading", YuiConstants.YUI_ROOT + "assets/loading.gif");
             cssClasses.put(".ygtvdepthcell", YuiConstants.YUI_ROOT + "assets/vline.gif");
+            
+            cssClasses.put("div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu div.topscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu div.topscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu div.bottomscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenubar li.hassubmenu em.submenuindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu li.checked em.checkedindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
         }
         
         return cssClasses;
@@ -79,9 +87,9 @@ public class YuiRendererHelper {
         writer.startElement("style", comp);
         writer.writeAttribute("type", "text/css", "type");
         for (Map.Entry<String, String> cssClass : getCssClasses().entrySet()) {
-            writer.write(cssClass.getKey() + " {background: url(" + 
+            writer.write(cssClass.getKey() + " {background-image:url(" + 
                     Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE, cssClass.getValue()) +
-                    ") 0 0 no-repeat;}");
+                    ");}\n");
         }
         writer.endElement("style");
     }

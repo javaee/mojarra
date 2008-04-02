@@ -74,6 +74,7 @@ public class YuiMenuRenderer extends Renderer {
         }
         
         YuiRendererHelper.renderSandboxJavaScript(context, context.getResponseWriter(), component);
+        YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
     }
 
     /**
