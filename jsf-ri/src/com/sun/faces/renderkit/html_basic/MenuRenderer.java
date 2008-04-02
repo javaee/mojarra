@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.51 2004/06/11 20:14:51 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.52 2004/09/01 21:45:50 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -475,7 +475,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         Util.renderPassThruAttributes(writer, component);
-        Util.renderBooleanPassThruAttributes(writer, component);
+	// don't render disabled here, because it is dealt with in a
+	// special fashin further down the callstack.
+        Util.renderBooleanPassThruAttributes(writer, component, 
+					     new String [] {"disabled"});
 
         // Now, render the "options" portion...
         renderOptions(context, component);
