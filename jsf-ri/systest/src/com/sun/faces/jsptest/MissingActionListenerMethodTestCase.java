@@ -1,5 +1,5 @@
 /*
- * $Id: MissingActionListenerMethodTestCase.java,v 1.1 2007/02/01 20:41:02 jdlee Exp $
+ * $Id: MissingActionListenerMethodTestCase.java,v 1.2 2007/02/01 21:57:47 jdlee Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ public class MissingActionListenerMethodTestCase extends AbstractTestCase {
 
     public void testMissingActionListenerMethod() throws Exception {
         HtmlPage page = getPage("/faces/jsp/testMissingActionListenerMethod.jsp");
-        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("j_id_id19:testButton");
+        HtmlSubmitInput button = (HtmlSubmitInput) page.getHtmlElementById("testForm:testButton");
         try {
             button.click();
         } catch (Exception e) {

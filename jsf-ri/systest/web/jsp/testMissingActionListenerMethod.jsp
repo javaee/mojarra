@@ -12,7 +12,7 @@ This page should Fail.
 <br>
 <f:view>
   <p>This command button has a missing ActionListener method</p>
-  <h:form>
+  <h:form id="testForm">
     <h:commandButton id="testButton" actionListener="#{methodRef.missingMethod}" value="Test Button"/>
   </h:form>
 </f:view>
