@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.5 2003/05/01 20:39:51 eburns Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.6 2003/05/02 03:11:33 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.5 2003/05/01 20:39:51 eburns Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.6 2003/05/02 03:11:33 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -203,11 +203,8 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "SelectMany",
 	    "SelectOne"
 	};
-
-	while (iter.hasNext()) {
-	    assertTrue(isMember((String) iter.next(), 
-					 standardComponentTypes));
-	}
+	
+	assertTrue(isSubset(standardComponentTypes, iter));
     }
 
     public void testConverterPositive() {
@@ -287,10 +284,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "Boolean"
 	};
 
-	while (iter.hasNext()) {
-	    assertTrue(isMember((String) iter.next(), 
-					 standardConverterIds));
-	}
+	assertTrue(isSubset(standardConverterIds, iter));
     }
 
     public void testMessageResorucesPositive() {
@@ -372,10 +366,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    MessageResources.FACES_IMPL_MESSAGES
 	};
 
-	while (iter.hasNext()) {
-	    assertTrue(isMember((String) iter.next(), 
-					 standardMessageResourcesIds));
-	}
+	assertTrue(isSubset(standardMessageResourcesIds, iter));
     }
 
     public void testValidatorPositive() {
@@ -441,10 +432,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	    "StringRange"	
 	};
 	
-	while (iter.hasNext()) {
-	    assertTrue(isMember((String) iter.next(), 
-					 standardValidatorIds));
-	}
+	assertTrue(isSubset(standardValidatorIds, iter));
     }
 
 

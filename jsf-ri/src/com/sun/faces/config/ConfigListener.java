@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.5 2003/05/01 06:20:39 eburns Exp $
+ * $Id: ConfigListener.java,v 1.6 2003/05/02 03:11:30 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -116,6 +116,11 @@ public class ConfigListener implements ServletContextListener
 
         configBase = configParser.parseConfig(jarInputStream);
 
+	// Step 2, load the app's "/WEB-INF/faces-config.xml"
+	configBase = configParser.parseConfig("/WEB-INF/faces-config.xml",
+					      servletContext,
+					      configBase);
+
 	// plug the configBase into the application
         ApplicationFactory aFactory = 
 	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
@@ -125,7 +130,7 @@ public class ConfigListener implements ServletContextListener
 
 	Assert.assert_it(null != configBase);
 	
-	// Step 2, load any additional config files from the
+	// Step 3, load any additional config files from the
 	// ServletContext init parameter.
 	if (null != (initParamFileList = 
 		     servletContext.getInitParameter(RIConstants.CONFIG_FILES_INITPARAM))) {

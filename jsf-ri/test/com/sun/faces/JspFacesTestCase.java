@@ -1,5 +1,5 @@
 /*
- * $Id: JspFacesTestCase.java,v 1.4 2003/05/01 18:04:05 eburns Exp $
+ * $Id: JspFacesTestCase.java,v 1.5 2003/05/02 03:11:31 eburns Exp $
  */
 
 /*
@@ -21,6 +21,8 @@ import javax.servlet.jsp.PageContext;
 
 import javax.faces.context.FacesContext;
 
+import java.util.Iterator;
+
 /**
  *
 
@@ -29,7 +31,7 @@ import javax.faces.context.FacesContext;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: JspFacesTestCase.java,v 1.4 2003/05/01 18:04:05 eburns Exp $
+ * @version $Id: JspFacesTestCase.java,v 1.5 2003/05/02 03:11:31 eburns Exp $
  * 
  * @see	#facesService
  *
@@ -161,5 +163,11 @@ public boolean isMember(String toTest, String [] set)
 {
     return facesService.isMember(toTest, set);
 }
+
+public boolean isSubset(String [] subset, Iterator superset) {
+    return facesService.isSubset(subset, superset);
+}
+    
+
 
 } // end of class JspFacesTestCase

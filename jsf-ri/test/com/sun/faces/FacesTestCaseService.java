@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.14 2003/05/01 18:04:04 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.15 2003/05/02 03:11:31 eburns Exp $
  */
 
 /*
@@ -49,7 +49,7 @@ import java.io.IOException;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.14 2003/05/01 18:04:04 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.15 2003/05/02 03:11:31 eburns Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -253,5 +253,44 @@ public boolean isMember(String toTest, String [] set) {
     }
     return false;
 }
+
+/**
+
+* @return true iff every element in subset is present in the iterator.
+
+*/
+
+public boolean isSubset(String [] subset, Iterator superset) {
+    int i, len = subset.length;
+    boolean [] hits = new boolean[len];
+    String cur = null;
+    for (i = 0; i < len; i++) {
+	hits[i] = false;
+    }
+
+
+    // for each element in the superset, go through the entire subset,
+    // marking our "hits" array if there is a match.
+    while (superset.hasNext()) {
+	cur = (String) superset.next();
+	for (i = 0; i < len; i++) {
+	    if (cur.equals(subset[i])) {
+		hits[i] = true;
+	    }
+	}
+    }
+
+    // if any of the hits array is false, return false;
+    for (i = 0; i < len; i++) {
+	if (!hits[i]) {
+	    return false;
+	}
+    }
+    return true;
+}
+	
+	
+	
+	
 
 } // end of class FacesTestCaseService
