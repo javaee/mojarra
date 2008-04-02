@@ -54,8 +54,7 @@
     <property name="resource.dir" value="${basedir}/src/resources"/>
 
     <property name="name" value="jsf-ri-sandbox"/>
-
-    <property name="impl.version" value="0.1"/>
+    <property name="sb.impl.version" value="0.1"/>
     <property name="impl.name" value="JSF RI Sandbox"/>
 
     <path id="impl.compile.classpath">
@@ -130,16 +129,16 @@
 
     <!-- Create the source distribution -->
     <target name="sandbox.source">
-        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${impl.version}.zip">
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip">
             <zipfileset dir="${basedir}"
                         includes="build.xml"
-                        prefix="jsf-ri-sandox-src-${impl.version}"/>
+                        prefix="jsf-ri-sandox-src-${sb.impl.version}"/>
             <zipfileset dir="${source.dir}"
                         excludes="**/CVS/**"
-                        prefix="jsf-ri-sandbox-src-${impl.version}/src"/>
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}/src"/>
             <zipfileset dir="${basedir}"
                         includes="conf/** web/**"
-                        prefix="jsf-ri-sandbox-src-${impl.version}"/>
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
         </zip>
     </target>
 
@@ -151,20 +150,20 @@
         <antcall target="tlddocs"/>
 
         <!-- Create the binary distribution -->
-        <zip destfile="${dist.dir}/jsf-ri-sandbox-${impl.version}.zip">
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip">
             <zipfileset dir="${build.dir}"
                         includes="lib/**,tlddocs/**"
-                        prefix="jsf-ri-sandbox-${impl.version}"/>
+                        prefix="jsf-ri-sandbox-${sb.impl.version}"/>
         </zip>
 
         <!-- Create a buildable source distribution -->
-        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${impl.version}.zip">
+        <zip destfile="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip">
             <zipfileset dir="${basedir}"
                         includes="build.xml build-tests.xml README COPYRIGHT LICENSE*.*"
-                        prefix="jsf-ri-sandbox-src-${impl.version}"/>
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}"/>
             <zipfileset dir="${source.dir}"
                         excludes="**/CVS/**"
-                        prefix="jsf-ri-sandbox-src-${impl.version}/src"/>
+                        prefix="jsf-ri-sandbox-src-${sb.impl.version}/src"/>
 
         </zip>
         <antcall target="sandbox.source"/>
@@ -174,7 +173,7 @@
     <target name="tlddocs">
         <java fork="true" jar="${tlddoc.jar}">
             <arg line="-d ${build.dir}/tlddocs"/>
-            <arg line="-windowtitle jsf-ri-sandbox-${impl.version}"/>
+            <arg line="-windowtitle jsf-ri-sandbox-${sb.impl.version}"/>
             <arg value="${resource.dir}/META-INF/sandbox.tld"/>
         </java>
     </target>
