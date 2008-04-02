@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.11 2004/01/30 00:31:20 jvisvanathan Exp $
+ * $Id: CommandLinkRenderer.java,v 1.12 2004/01/30 01:21:56 horwat Exp $
  */
 
 /*
@@ -195,12 +195,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 	sb.append("'");
 	sb.append("].submit()");
 
-        //If 'onclick' specified append 'return false' 
-        //to end javascript mouse event processing
-        if (component.getAttributes().get("onclick") != null) {
-            sb.append("; return false");
-        }
-
+        sb.append("; return false;");
 	writer.writeAttribute("onclick", sb.toString(), null); 
 
         //handle css style class
