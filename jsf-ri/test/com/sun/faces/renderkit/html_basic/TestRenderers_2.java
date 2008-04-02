@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.76 2004/01/14 17:13:16 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.77 2004/01/19 18:17:10 craigmcc Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.76 2004/01/14 17:13:16 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.77 2004/01/19 18:17:10 craigmcc Exp $
  * 
  *
  */
@@ -906,7 +906,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("Testing MessagesRenderer");
         UIMessages messages = new UIMessages();
         messages.setId("myMessage_0");
-        messages.setFor("myMessage_0");
+	String myFor = "myMessage_0";
+        // messages.setFor("myMessage_0");
         root.getChildren().add(messages);
 
         ResponseWriter originalWriter = getFacesContext().getResponseWriter();
@@ -924,10 +925,10 @@ public class TestRenderers_2 extends JspFacesTestCase
         MessagesRenderer messagesRenderer = new MessagesRenderer();
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_INFO,
             "global message summary_0.0", "global message detail_0.0"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_INFO,
             "global message summary_0.1", "global message detail_0.1"));
 
@@ -950,7 +951,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_1");
-        messages.setFor("myMessage_1");
+	myFor = "myMessage_1";
+        // messages.setFor("myMessage_1");
         messages.setShowDetail(true);
         messages.setShowSummary(true);
         messages.getAttributes().put("warnClass" , "warnClass");
@@ -969,13 +971,13 @@ public class TestRenderers_2 extends JspFacesTestCase
 	messages.getAttributes().put("styleClass", "styleClass");
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+	getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_WARN,
-            "global message summary_1.0", "global message detail_1.0"));
-        getFacesContext().addMessage(messages.getFor(),
+	    "global message summary_1.0", "global message detail_1.0"));
+	getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_WARN,
             "global message summary_1.1", "global message detail_1.1"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_WARN,
             "global message summary_1.1", "global message detail_1.1"));
 
@@ -1001,7 +1003,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_2");
-        messages.setFor("myMessage_2");
+        // messages.setFor("myMessage_2");
+	myFor = "myMessage_2";
         messages.getAttributes().put("warnClass" , "warnClass");
         messages.getAttributes().put("errorClass" , "errorClass");
         messages.getAttributes().put("infoClass" , "infoClass");
@@ -1020,13 +1023,13 @@ public class TestRenderers_2 extends JspFacesTestCase
 	messages.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_ERROR,
             "global message summary_2.0", "global message detail_2.0"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_ERROR,
             "global message summary_2.1", "global message detail_2.1"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_ERROR,
             "global message summary_2.2", "global message detail_2.2"));
 
@@ -1053,8 +1056,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_3");
-        messages.setFor("myMessage_3");
-         messages.getAttributes().put("warnClass" , "warnClass");
+        // messages.setFor("myMessage_3");
+	myFor = "myMessage_3";
+	messages.getAttributes().put("warnClass" , "warnClass");
         messages.getAttributes().put("errorClass" , "errorClass");
         messages.getAttributes().put("infoClass" , "infoClass");
         messages.getAttributes().put("fatalClass" , "fatalClass");
@@ -1074,10 +1078,10 @@ public class TestRenderers_2 extends JspFacesTestCase
 	messages.getAttributes().put("style", "style");
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_3.0", "global message detail_3.0"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_3.1", "global message detail_3.1"));
 
@@ -1103,8 +1107,9 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_4");
-        messages.setFor("myMessage_4");
-         messages.getAttributes().put("warnClass" , "warnClass");
+        // messages.setFor("myMessage_4");
+	myFor = "myMessage_4";
+	messages.getAttributes().put("warnClass" , "warnClass");
         messages.getAttributes().put("errorClass" , "errorClass");
         messages.getAttributes().put("infoClass" , "infoClass");
         messages.getAttributes().put("fatalClass" , "fatalClass");
@@ -1126,13 +1131,13 @@ public class TestRenderers_2 extends JspFacesTestCase
         messages.setShowSummary(true);
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_4.0", "global message detail_4.0"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_4.1", "global message detail_4.1"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_4.2", "global message detail_4.2"));
 
@@ -1161,7 +1166,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_5");
-        messages.setFor("myMessage_5");
+        // messages.setFor("myMessage_5");
+	myFor = "myMessage_5";
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -1183,13 +1189,13 @@ public class TestRenderers_2 extends JspFacesTestCase
 	messages.getAttributes().put("layout", "table");
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_5.0", "global message detail_5.0"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_5.1", "global message detail_5.1"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_5.2", "global message detail_5.2"));
 
@@ -1221,7 +1227,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         root.getChildren().remove(messages);
         messages = new UIMessages();
         messages.setId("myMessage_6");
-        messages.setFor("myMessage_6");
+        // messages.setFor("myMessage_6");
+	myFor = "myMessage_6";
         root.getChildren().add(messages);
 
         writer = new StringWriter();
@@ -1243,13 +1250,13 @@ public class TestRenderers_2 extends JspFacesTestCase
 	messages.getAttributes().put("layout", "table");
 
         // populate facescontext with some errors
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_6.0", "global message detail_6.0"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_6.1", "global message detail_6.1"));
-        getFacesContext().addMessage(messages.getFor(),
+        getFacesContext().addMessage(myFor,
             new FacesMessage(FacesMessage.SEVERITY_FATAL,
             "global message summary_6.2", "global message detail_6.2"));
 

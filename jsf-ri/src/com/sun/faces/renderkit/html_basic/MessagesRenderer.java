@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.8 2004/01/14 17:13:03 eburns Exp $
+ * $Id: MessagesRenderer.java,v 1.9 2004/01/19 18:17:08 craigmcc Exp $
  */
 
 /*
@@ -73,7 +73,8 @@ public class MessagesRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Util.doAssert(writer != null );
 
-	String clientId = ((UIMessages) component).getFor();
+	// String clientId = ((UIMessages) component).getFor();
+	String clientId = null; // PENDING - "for" is actually gone now
 	// if no clientId was included
 	if (clientId == null){
 	    // and the author explicitly only wants global messages

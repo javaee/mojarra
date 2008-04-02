@@ -29,7 +29,7 @@
         <h:input_text id="toValidate" 
                       validator="#{methodRef.validateInput}"/>
         <h:command_button id="validate" value="validate"/>
-        <h:messages for="toValidate"/>
+        <h:message for="toValidate"/>
 
         <hr>
 	<p>test value change</p>
@@ -45,7 +45,7 @@
     <address><a href="mailto:Ed Burns <ed.burns@sun.com>"></a></address>
 <!-- Created: Fri Oct 31 10:49:23 Eastern Standard Time 2003 -->
 <!-- hhmts start -->
-Last modified: Sat Dec 13 00:34:26 Eastern Standard Time 2003
+Last modified: Mon Jan 19 10:03:14 Pacific Standard Time 2004
 <!-- hhmts end -->
   </body>
 </html>
