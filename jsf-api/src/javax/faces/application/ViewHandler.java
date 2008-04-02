@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.42 2005/08/22 22:07:52 ofung Exp $
+ * $Id: ViewHandler.java,v 1.43 2005/08/23 21:58:24 edburns Exp $
  */
 
 /*
@@ -245,7 +245,7 @@ public abstract class ViewHandler {
      * and passes the result, if non-<code>null</code> into the
      * {@link ExternalContext#setRequestCharacterEncoding} method.
      *
-     * @exception {@link FacesException} if a problem occurs setting the encoding,
+     * @exception FacesException if a problem occurs setting the encoding,
      * such as the <code>UnsupportedEncodingException</code> thrown 
      * by the underlying Servlet or Portlet technology when the encoding is not
      * supported.
