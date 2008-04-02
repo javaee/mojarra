@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.2 2003/09/26 14:54:42 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.3 2003/09/26 23:07:43 eburns Exp $
  */
 
 /*
@@ -180,21 +180,35 @@ public class GenerateConcreteClasses extends GenerateBase {
 	
 	attrs = getParser().getAttributesForRenderer(rendererType);
 	iter = attrs.keySet().iterator();
+	String 
+	    ivar = null,
+	    getOrIs = null,
+	    is = "is",
+	    get = "get";
 	
 	while (iter.hasNext()) {
-	    attrName = (String) iter.next();
-	    attrClass = (String) attrs.get(attrName);
-	    result.append("  protected " + attrClass + " " + attrName + ";\n");
+	    attrName = ((String) iter.next()).trim();
+	    ivar = generateIvar(attrName);
+	    attrClass = ((String) attrs.get(attrName)).trim();
+	    result.append("  protected " + attrClass + " " + ivar + ";\n");
+
 	    result.append("  public void set" + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "(" + 
-			  attrClass + " " + attrName + ") {\n");
-	    result.append("      this." + attrName + " = " + attrName + ";\n");
+			  attrClass + " " + ivar + ") {\n");
+	    result.append("      this." + ivar + " = " + 
+			  ivar + ";\n");
 	    result.append("  }\n");
-	    result.append("  public " + attrClass + " get" + 
+	    if (attrClass.equals("boolean")) {
+		getOrIs = is;
+	    }
+	    else {
+		getOrIs = get;
+	    }
+	    result.append("  public " + attrClass + " " + getOrIs + 
 			  Character.toUpperCase(attrName.charAt(0)) +
 			  attrName.substring(1) + "() {\n");
-	    result.append("      return " + attrName + ";\n");
+	    result.append("      return " + ivar + ";\n");
 	    result.append("  }\n\n");
 	    
 	}

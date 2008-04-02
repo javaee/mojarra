@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.2 2003/09/26 21:12:09 eburns Exp $
+ * $Id: GenerateBase.java,v 1.3 2003/09/26 23:07:43 eburns Exp $
  */
 
 /*
@@ -236,6 +236,27 @@ public abstract class GenerateBase extends Object {
 	    }
 	}
 	return;
+    }
+
+    protected static String [] keywords = {
+	"for"
+    };
+
+    /**
+     * <p>generate a Java Language Identifier given the argument
+     * <code>ivar</code>. </p>
+     */
+
+    protected String generateIvar(String ivar) {
+	String result = ivar;
+
+	for (int i = 0, len = keywords.length; i < len; i++) {
+	    if (keywords[i].equals(ivar)) {
+		result = "_" + ivar;
+	    }
+	}
+
+	return result;
     }
 
     protected abstract Log getLog();

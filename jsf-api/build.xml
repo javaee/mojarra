@@ -35,7 +35,6 @@
             value="${tomcat.home}/../junit3.8.1/junit.jar"/>
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet-api.jar"/>
   <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
-  <property name="jsf-ri.dir" value="${basedir}/../jsf-ri"/>
   <property name="commons-logging.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
   <property name="commons-digester.jar" 
@@ -52,6 +51,7 @@
   <property name="build.classes"    value="${build.dir}/classes"/>
   <property name="build.lib"        value="${build.dir}/lib"/>
   <property name="build.test"       value="${build.dir}/test"/>
+  <property name="build.generate"   value="${build.dir}/generate"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
   <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
   <property name="javadoc.private"  value="false"/>
@@ -104,19 +104,24 @@
     <mkdir dir="${build.lib}"/>
   </target>
 
+  <target name="prepare.generate" depends="prepare">
+    <mkdir dir="${build.generate}"/>
+  </target>
+
 
   <!--
        ===================================================================
          Build the API code
        ===================================================================
   -->
-  <target name="build" depends="prepare">
+  <target name="build" depends="prepare,generate">
 
-    <javac srcdir="${src.dir}"
-           destdir="${build.classes}"
+    <javac destdir="${build.classes}"
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}" >
+      <src path="${src.dir}"/>
+      <src path="${build.generate}"/>
       <classpath refid="compile.classpath" />
     </javac>
 
@@ -134,7 +139,7 @@
 
   </target>
 
-  <target name="tools" depends="prepare">
+  <target name="tools" depends="prepare.generate" if="jsf-ri-config">
 
     <javac srcdir="${tools.dir}"
            destdir="${build.classes}"
@@ -153,7 +158,7 @@
 
   </target>
 
-  <target name="generate" depends="tools">
+  <target name="generate" depends="tools" if="jsf-ri-config">
 
     <copy todir="${build.classes}" 
           file="${basedir}/doc/web-facesconfig_1_0.dtd"/>
@@ -163,13 +168,20 @@
       <jvmarg line="${debug.jvm.args}"/>
       <classpath refid="compile.classpath" />
       <classpath refid="test.classpath" />
-      <arg line="-f ${jsf-ri.dir}/src/com/sun/faces/jsf-ri-config.xml"/>
-      <arg line="-d ${src.dir}"/>
+      <arg line="-f ${jsf-ri-config}"/>
+      <arg line="-d ${build.generate}"/>
       <arg line="-c ${basedir}/COPYRIGHT"/>
       <arg value="javax.faces.component.UICommand"/>
       <arg value="javax.faces.component.UIData"/>
       <arg value="javax.faces.component.UIForm"/>
-    </java>
+      <arg value="javax.faces.component.UIGraphic"/>
+      <arg value="javax.faces.component.UIInput"/>    
+      <arg value="javax.faces.component.UIOutput"/>
+      <arg value="javax.faces.component.UIPanel"/>
+      <arg value="javax.faces.component.UISelectBoolean"/>
+      <arg value="javax.faces.component.UISelectMany"/>
+      <arg value="javax.faces.component.UISelectOne"/>
+  </java>
 
   </target>
 
@@ -579,21 +591,27 @@
   <target name="javadoc_check">
     <uptodate property="javadoc.notrequired" targetfile="${build.javadocs}/packages.html" >
         <srcfiles dir= "${src.dir}" includes="**/*.java"/>
+        <srcfiles dir= "${build.generate}" includes="**/*.java"/>
     </uptodate>
   </target>
 
-  <target name="javadocs" depends="prepare, javadoc_check"
+  <target name="javadocs" depends="prepare, javadoc_check, generate"
           unless="javadoc.notrequired"
           description="Create the JavaDoc API documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="javax.*"
-             sourcepath="${src.dir}"
              destdir="${build.javadocs}"
              private="${javadoc.private}"
              protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
              doctitle="${Name} (${version})"
              bottom="Copyright &#169; 2002-2003 Sun Microsystems, Inc. All Rights Reserved.">
+       <fileset dir="${src.dir}">
+         <include name="**/*.java"/>
+       </fileset>
+       <fileset dir="${build.generate}">
+         <include name="**/*.java"/>
+       </fileset>
       <classpath refid="compile.classpath"/>
     </javadoc>
   </target>
@@ -670,38 +688,5 @@
     </zip>
 
   </target>
-
-
-  <!--
-       ===================================================================
-         Issues list
-       ===================================================================
-  -->
-  <target name="issues"
-   description="Generate outstanding issues list">
-    <style basedir="doc"
-           destdir="${build.dir}"
-         extension=".html"
-             style="doc/OutstandingIssuesDetail.xsl"
-          includes="OutstandingIssues.xml"/>
-    <move     file="${build.dir}/OutstandingIssues.html"
-            tofile="${build.dir}/OutstandingIssuesDetail.html"/>
-    <style basedir="doc"
-           destdir="${build.dir}"
-         extension=".html"
-             style="doc/OutstandingIssuesSummary.xsl"
-          includes="OutstandingIssues.xml"/>
-    <move     file="${build.dir}/OutstandingIssues.html"
-            tofile="${build.dir}/OutstandingIssuesSummary.html"/>
-    <style basedir="doc"
-           destdir="${build.dir}"
-         extension=".html"
-             style="doc/OutstandingIssuesEffort.xsl"
-          includes="OutstandingIssues.xml"/>
-    <move     file="${build.dir}/OutstandingIssues.html"
-            tofile="${build.dir}/OutstandingIssuesEffort.html"/>
-
-  </target>
-
 
 </project>
