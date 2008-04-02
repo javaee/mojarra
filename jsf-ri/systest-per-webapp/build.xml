@@ -87,7 +87,7 @@
 
     </target>    
 
-    <macrodef name="deploy.app">
+    <macrodef name="build.app">
         <attribute name="base-app-dir"/>
         <attribute name="appname"/>
         <sequential>
@@ -117,6 +117,13 @@
                                 prefix="WEB-INF/classes"/>
                 </archive-elements>
             </jsf.war>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="deploy.app">
+        <attribute name="base-app-dir"/>
+        <attribute name="appname"/>
+        <sequential>
             <deploy.artifact
                   artifact="@{base-app-dir}/build/jsf-@{appname}.war"
                   appName="jsf-@{appname}"/>
@@ -146,7 +153,20 @@
         <for list="${applications}" param="app" trim="true">
             <sequential>
                 <undeploy.app appname="@{app}"/>
+                <build.app appname="@{app}"
+                            base-app-dir="${basedir}/@{app}"/>
                 <deploy.app appname="@{app}"
+                            base-app-dir="${basedir}/@{app}"/>
+            </sequential>
+        </for>
+
+    </target>
+
+    <target name="build" depends="compile.base.sources">
+        
+        <for list="${applications}" param="app" trim="true">
+            <sequential>
+                <build.app appname="@{app}"
                             base-app-dir="${basedir}/@{app}"/>
             </sequential>
         </for>
