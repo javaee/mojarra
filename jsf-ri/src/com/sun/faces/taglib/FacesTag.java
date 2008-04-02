@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.46 2003/09/04 18:04:41 rlubke Exp $
+ * $Id: FacesTag.java,v 1.47 2003/09/04 20:27:51 rlubke Exp $
  */
 
 /*
@@ -31,11 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.46 2003/09/04 18:04:41 rlubke Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: FacesTag.java,v 1.47 2003/09/04 20:27:51 rlubke Exp $ 
  */
 
 public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
@@ -116,6 +112,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     protected String shape = null;
     protected String size = null;
     protected String src = null;
+    protected String style = null;
     protected String styleClass = null;    
     protected String tabindex = null;
     protected String target = null;
@@ -864,6 +861,10 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
         src = newSrc;
     }
 
+    public void setStyle(String style) {
+        this.style = style;
+    }
+    
     public void setStyleClass(String styleClass) {
         this.styleClass = styleClass;
     }
@@ -1164,13 +1165,12 @@ protected void overrideProperties(UIComponent component)
     if (null != getDir()) {
 	component.setAttribute("dir", getDir());
     }
+    if (null != style) {
+        component.setAttribute("style", style);
+    }
     if (null != styleClass) {
         component.setAttribute("styleClass", styleClass);
-    }
-    
-    // PENDING (rlubke) The styleClass attribute should be handled once
-    //         finalized
-    
+    }   
     if (null != getDateStyle()) {
 	component.setAttribute("dateStyle", getDateStyle());
     }
