@@ -1,5 +1,5 @@
 /*
- * $Id: TestValidator.java,v 1.6 2003/04/29 18:51:51 eburns Exp $
+ * $Id: TestValidator.java,v 1.7 2003/06/20 23:58:59 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.faces.validator.Validator;
 public class TestValidator implements Validator {
 
 
-    public void validate(FacesContext context, UIComponent component) {
+    public void validate(FacesContext context, UIInput component) {
         ;  // No action taken
     }
 

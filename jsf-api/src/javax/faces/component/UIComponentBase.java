@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.53 2003/06/20 23:28:47 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.54 2003/06/20 23:58:53 craigmcc Exp $
  */
 
 /*
@@ -330,19 +330,8 @@ public abstract class UIComponentBase implements UIComponent {
     }
 
 
-    /**
-     * <p>The valid flag for this component.</p>
-     */
-    private boolean valid = false;
-
-
     public boolean isValid() {
-        return (this.valid);
-    }
-
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
+        return (true);
     }
 
 
@@ -794,8 +783,8 @@ public abstract class UIComponentBase implements UIComponent {
         String rendererType = getRendererType();
         if (rendererType != null) {
             getRenderer(context).decode(context, this);
-        } else {
-            setValid(true);
+        } else if (this instanceof UIInput) {
+            ((UIInput) this).setValid(true);
         }
 
     }
@@ -919,7 +908,7 @@ public abstract class UIComponentBase implements UIComponent {
             Iterator validators = ((UIInput) this).getValidators();
             while (validators.hasNext()) {
                 Validator validator = (Validator) validators.next();
-                validator.validate(context, this);
+                validator.validate(context, (UIInput) this);
             }
             ((UIInput) this).validate(context);
         }

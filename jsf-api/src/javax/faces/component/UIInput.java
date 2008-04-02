@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.19 2003/06/20 23:28:47 craigmcc Exp $
+ * $Id: UIInput.java,v 1.20 2003/06/20 23:58:54 craigmcc Exp $
  */
 
 /*
@@ -179,6 +179,38 @@ public class UIInput extends UIOutput {
     }
 
 
+    // ------------------------------------------------------ Validation Methods
+
+
+    /**
+     * <p>The valid state of this {@link UIInput} component.</p>
+     */
+    protected boolean valid = true;
+
+
+    /**
+     * <p>Return the valid state of this {@link UIInput} component.</p>
+     */
+    public boolean isValid() {
+
+	return (this.valid);
+
+    }
+
+
+    /**
+     * <p>Set the valid state of this {@link UIInput} component.</p>
+     *
+     *
+     * @param boolean The new valid state
+     */
+    public void setValid(boolean valid) {
+
+	this.valid = valid;
+
+    }
+
+
     /**
      * <p>Perform validations and, if validation is successful, and the
      * local value is different from the previous value, queue
@@ -232,9 +264,6 @@ public class UIInput extends UIOutput {
 
     }
     
-
-    // ------------------------------------------------------ Validation Methods
-
 
     /**
      * <p>The set of {@link Validator}s associated with this

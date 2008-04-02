@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.81 2003/06/20 23:28:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.82 2003/06/20 23:58:53 craigmcc Exp $
  */
 
 /*
@@ -234,14 +234,6 @@ public interface UIComponent extends Serializable {
      * </ul>
      */
     public boolean isValid();
-
-
-    /**
-     * <p>Set the current validity state of this component.</p>
-     *
-     * @param valid The new validity state
-     */
-    public void setValid(boolean valid);
 
 
     // ------------------------------------------------ Tree Management Methods

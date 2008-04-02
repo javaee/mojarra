@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.11 2003/04/29 18:51:47 eburns Exp $
+ * $Id: ValidatorBase.java,v 1.12 2003/06/20 23:58:57 craigmcc Exp $
  */
 
 /*
@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 import javax.faces.context.MessageResources;
@@ -36,7 +36,7 @@ abstract class ValidatorBase implements Validator {
 
 
     public abstract void validate(FacesContext context,
-                                  UIComponent component);
+                                  UIInput component);
 
 
     // ------------------------------------------------------ Protected Methods

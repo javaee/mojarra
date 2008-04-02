@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.9 2003/04/29 18:51:47 eburns Exp $
+ * $Id: Validator.java,v 1.10 2003/06/20 23:58:57 craigmcc Exp $
  */
 
 /*
@@ -12,15 +12,15 @@ package javax.faces.validator;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
 
 
 /**
  * <p>A <strong>Validator</strong> implementation is a class that can perform
- * validation (correctness checks) on a {@link UIComponent}.  Zero or more
- * <code>Validator</code>s can be associated with each {@link UIComponent}
+ * validation (correctness checks) on a {@link UIInput}.  Zero or more
+ * <code>Validator</code>s can be associated with each {@link UIInput}
  * in the component tree, and are called during the <em>Process
  * Validations</em> phase of the request processing lifecycle.</p>
  *
@@ -28,9 +28,9 @@ import javax.faces.application.Message;
  * they are passed, and add {@link Message} instances to the
  * {@link FacesContext} for the current request, documenting
  * any failures to conform to the required rules.  In general, such
- * messages should be associated with the {@link UIComponent} on which
+ * messages should be associated with the {@link UIInput} on which
  * the validation failure occurred.  In addition, the <code>valid</code>
- * property of the corresponding {@link UIComponent} should be set to
+ * property of the corresponding {@link UIInput} should be set to
  * <code>false</code> on validation failures.</p>
  *
  * <p>For maximum generality, {@link Validator} instances may be
@@ -47,24 +47,24 @@ public interface Validator extends Serializable {
 
     /**
      * <p>Perform the correctness checks implemented by this
-     * {@link Validator} against the specified {@link UIComponent}.
+     * {@link Validator} against the specified {@link UIInput}.
      * If any violations are found:</p>
      * <ul>
      * <li>Add zero or more {@link Message}s to the specified
-     *     {@link FacesContext}, specifying this {@link UIComponent} as
+     *     {@link FacesContext}, specifying this {@link UIInput} as
      *     associated with the message, describing the nature of the
      *     violation(s) encountered.</li>
      * <li>Set the <code>valid</code> property on the specified
-     *     {@link UIComponent} to <code>false</code>.</li>
+     *     {@link UIInput} to <code>false</code>.</li>
      * </ul>
      *
      * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
+     * @param component UIInput we are checking for correctness
      *
      * @exception NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
-    public void validate(FacesContext context, UIComponent component);
+    public void validate(FacesContext context, UIInput component);
 
 
 }

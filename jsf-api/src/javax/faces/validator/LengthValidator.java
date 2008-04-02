@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.17 2003/04/29 18:51:45 eburns Exp $
+ * $Id: LengthValidator.java,v 1.18 2003/06/20 23:58:56 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
@@ -225,7 +225,7 @@ public class LengthValidator extends ValidatorBase {
 
     // --------------------------------------------------------- Public Methods
 
-    public void validate(FacesContext context, UIComponent component) {
+    public void validate(FacesContext context, UIInput component) {
 
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
