@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.10 2003/08/25 05:39:56 eburns Exp $
+ * $Id: TestConverters.java,v 1.11 2003/08/25 22:35:48 horwat Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.10 2003/08/25 05:39:56 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.11 2003/08/25 22:35:48 horwat Exp $
  * 
  *
  */
@@ -95,6 +95,7 @@ public class TestConverters extends JspFacesTestCase
             testDateConverter(root);
             testNumberConverter(root);
             testBooleanConverter(root);
+            testConverterInheritance(root);
             //assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
             t.printStackTrace();
@@ -187,6 +188,67 @@ public class TestConverters extends JspFacesTestCase
 
         assertTrue(str.equals(stringToConvert));
 
+    }
+
+    /**
+     * Test to verify that a class that registers itself is properly found
+     * using the search mechanism. The J2SE classes are used for their
+     * inheritance hierarchy to test that converters registered to
+     * interfaces and superclasses are properly found.
+     *
+     * This test is meant for inheritance lookup only.
+     *
+     */
+    public void testConverterInheritance(UIViewRoot root) throws ConverterException,
+        InstantiationException, IllegalAccessException, ClassNotFoundException {
+        System.out.println("Testing ConverterInheritance");
+
+        Converter converter;
+        UIInput text = new UIInputBase();
+        text.setId("my_date_converter");
+        root.getChildren().add(text);
+
+        //java.lang.Integer extends java.lang.Number. 
+        //Test to show that the standard converter registered to 
+        //java.lang.Integer should chosen over the inherited 
+        //java.lang.Number converter
+        application.addConverter(java.lang.Number.class, "javax.faces.convert.NumberConverter");
+        converter = application.createConverter(java.lang.Integer.class);
+        assertTrue(converter!=null);
+        assertTrue(converter instanceof javax.faces.convert.IntegerConverter);
+
+
+        //java.sql.Date extends java.util.Date
+        //Test to find converter registered to java.util.Date
+        application.addConverter(java.util.Date.class, "javax.faces.convert.DateTimeConverter");
+        converter = null;
+        converter = application.createConverter(java.sql.Date.class);
+        assertTrue(converter!=null);
+
+        //java.util.HashSet is a subclass of java.util.AbstractSet which is
+        //a subclass of java.util.AbstractCollection 
+        //Test to find the converter registered to java.util.AbstractCollection
+        application.addConverter(java.util.AbstractCollection.class, "javax.faces.convert.DateTimeConverter");
+        converter = null;
+        converter = application.createConverter(java.util.HashSet.class);
+        assertTrue(converter!=null);
+
+
+        //java.lang.String implements java.lang.CharSequence
+        //Test to find the converter registered to java.lang.CharSequence
+        application.addConverter(java.lang.CharSequence.class, "javax.faces.convert.CharacterConverter");
+        converter = null;
+        converter = application.createConverter(java.lang.String.class);
+        assertTrue(converter!=null);
+
+        //java.text.StringCharacterIterator implements 
+        //java.text.CharacterIterator which has a super-interface
+        //java.lang.Cloneable
+        //Test to find the converter registered to java.lang.Cloneable
+        application.addConverter(java.lang.Cloneable.class, "javax.faces.convert.CharacterConverter");
+        converter = null;
+        converter = application.createConverter(java.text.StringCharacterIterator.class);
+        assertTrue(converter!=null);
     }
 
 

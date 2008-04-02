@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.25 2003/08/23 00:39:03 jvisvanathan Exp $
+ * $Id: ApplicationImpl.java,v 1.26 2003/08/25 22:35:47 horwat Exp $
  */
 
 /*
@@ -456,15 +456,31 @@ public class ApplicationImpl extends Application {
         Converter returnVal = (Converter)newThing
             (targetClass, converterTypeMap);
 
-        //PENDING (horwat) need to implement converter search logic:
-        //  - converters registered for interfaces implemented by targetClass
-        //  - converters registered for superclasses of targetClass
-
-	if (returnVal == null) {
-            Object[] params = {targetClass};
-            throw new FacesException(Util.getExceptionMessage(
-                Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID,params));
+        if (returnVal != null) {
+            return returnVal;
         }
+
+        //Search for converters registered to interfaces implemented by
+        //targetClass
+        Class[] interfaces = targetClass.getInterfaces();
+        if (interfaces != null ) {
+            for (int i = 0; i < interfaces.length; i++) {
+                returnVal = createConverter(interfaces[i]);
+                if (returnVal != null) {
+                    return returnVal;
+                }
+            }
+        }
+
+        //Search for converters registered to superclasses of targetClass
+        Class superclass = targetClass.getSuperclass();
+        if (superclass != null) {
+            returnVal = createConverter(superclass);
+            if (returnVal != null) {
+                return returnVal;
+            }
+        }
+
         return returnVal;
     }
 
