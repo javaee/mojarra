@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.31 2003/10/30 21:57:51 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.32 2003/11/18 19:40:14 eburns Exp $
  */
 
 /*
@@ -108,8 +108,6 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      * @param maximum Maximum value to allow
      * @param minimum Minimum value to allow
      *
-     * @exception IllegalArgumentException if a specified maximum value is
-     *  less than a specified minimum value
      */
     public DoubleRangeValidator(double maximum, double minimum) {
 
@@ -144,17 +142,11 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      *
      * @param maximum The new maximum value
      *
-     * @exception IllegalArgumentException if a specified maximum value is
-     *  less than a specified minimum value
      */
     public void setMaximum(double maximum) {
 
         this.maximum = maximum;
         this.maximumSet = true;
-        if (this.minimumSet && (this.minimum > this.maximum)) {
-            throw new IllegalArgumentException();
-        }
-
     }
 
 
@@ -179,17 +171,11 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      *
      * @param minimum The new minimum value
      *
-     * @exception IllegalArgumentException if a specified maximum value is
-     *  less than a specified minimum value
      */
     public void setMinimum(double minimum) {
 
         this.minimum = minimum;
         this.minimumSet = true;
-        if (this.maximumSet && (this.minimum > this.maximum)) {
-            throw new IllegalArgumentException();
-        }
-
     }
 
 
