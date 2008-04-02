@@ -18,7 +18,7 @@ public class MultiFileUpload extends UIOutput {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.MultiFileUpload";
     public static final String RENDERER_TYPE = "com.sun.faces.sandbox.MultiFileUploadRenderer";
     public static final String[] DEP_JARS = {
-        "FaceLift-Upload-Applet.jar",
+        "jsf-ri-sandbox-Upload-Applet.jar",
         "commons-httpclient-3.1-beta1.jar",
         "commons-codec-1.3.jar",
         "commons-logging-1.1.jar"

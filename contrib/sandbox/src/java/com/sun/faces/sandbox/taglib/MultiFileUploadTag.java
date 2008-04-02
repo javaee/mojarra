@@ -117,4 +117,40 @@ public class MultiFileUploadTag extends UIComponentTag{
             }
         }
     }
+
+    public void setButtonText(String buttonText) {
+        this.buttonText = buttonText;
+    }
+
+    public void setDestinationUrl(String destinationUrl) {
+        this.destinationUrl = destinationUrl;
+    }
+
+    public void setFileFilter(String fileFilter) {
+        this.fileFilter = fileFilter;
+    }
+
+    public void setFileHolder(String fileHolder) {
+        this.fileHolder = fileHolder;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public void setMaxFileSize(String maxFileSize) {
+        this.maxFileSize = maxFileSize;
+    }
+
+    public void setStartDir(String startDir) {
+        this.startDir = startDir;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
 }

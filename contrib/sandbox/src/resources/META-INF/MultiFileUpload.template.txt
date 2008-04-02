@@ -1,4 +1,4 @@
-<applet code="com.iecokc.faces.components.upload.multifile.applet.%%%APPLET_CLASS%%%" name="FaceLiftMultiFileUpload" 
+<applet code="com.sun.faces.sandbox.web.applet.upload.%%%APPLET_CLASS%%%" name="JsfRiSandboxMultiFileUpload" 
 	archive="%%%DEPS%%%" width="%%%WIDTH%%%" height="%%%HEIGHT%%%">
 		<param name="type" value="application/x-java-applet;version=1.5"/>
 		<param name="url" value="%%%UPLOAD_URL%%%"/>
