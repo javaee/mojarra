@@ -35,6 +35,7 @@
     <property file="build.properties"/>
     <property environment="myenv"/>
     <import file="${jsf.build.home}/common/ant/common.xml"/>
+    <property name="tasks.home" value="${myenv.TASKS_HOME}"/>
 
 
     <property name="LICENSEFILE"
@@ -172,37 +173,76 @@
 
     <target name="nightly" depends="build.java.net"
             description="update nightly build">
-        
+        <if>
+            <available
+                  file="${tasks.home}/javanettasks-1.0.5.jar"/>
+            <then>
+                <sequential>
+                    <taskdef
+                          resource="org/kohsuke/javanettasks.properties">
+                        <classpath>
+                            <pathelement
+                                  location="${tasks.home}/javanettasks-1.0.5.jar"/>
+                            <fileset dir="${tasks.home}/lib"
+                                     includes="*.jar"/>
+                        </classpath>
+                    </taskdef>
 
-        <javaNetUpload projectName="javaserverfaces"
-                       toFile="/nightly/javaserverfaces_binary.class"
-                       fromFile="${basedir}/javaserverfaces_binary.class"
-                       fileDescription="Nightly snapshot.Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
-                       overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/nightly/javaserverfaces_binary.class"
+                                   fromFile="${basedir}/javaserverfaces_binary.class"
+                                   fileDescription="Nightly snapshot.Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
+                                   overwrite="yes"/>
 
 
-        <javaNetUpload projectName="javaserverfaces"
-                       toFile="/nightly/javaserverfaces_source.class"
-                       fromFile="${basedir}/javaserverfaces_source.class"
-                       fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
-                       overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/nightly/javaserverfaces_source.class"
+                                   fromFile="${basedir}/javaserverfaces_source.class"
+                                   fileDescription="Nightly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
+                                   overwrite="yes"/>
+                </sequential>
+            </then>
+            <else>
+                <fail message="Javanettasks version 1.0.5 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+            </else>
+        </if>
     </target>
 
     <target name="weekly" depends="build.java.net"
-            description="update weekly build">        
+            description="update weekly build">
+        <if>
+            <available
+                  file="${tasks.home}/javanettasks-1.0.5.jar"/>
+            <then>
+                <sequential>
+                    <taskdef
+                          resource="org/kohsuke/javanettasks.properties">
+                        <classpath>
+                            <pathelement
+                                  location="${tasks.home}/javanettasks-1.0.5.jar"/>
+                            <fileset dir="${tasks.home}/lib"
+                                     includes="*.jar"/>
+                        </classpath>
+                    </taskdef>
 
-        <javaNetUpload projectName="javaserverfaces"
-                       toFile="/weekly/javaserverfaces_binary.class"
-                       fromFile="${basedir}/javaserverfaces_binary.class"
-                       fileDescription="Weekly binary snapshot. Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
-                       overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/weekly/javaserverfaces_binary.class"
+                                   fromFile="${basedir}/javaserverfaces_binary.class"
+                                   fileDescription="Weekly binary snapshot. Requires Glassfish/JavaEE5. Run 'java -cp . javaserverfaces_binary' to install"
+                                   overwrite="yes"/>
 
 
-        <javaNetUpload projectName="javaserverfaces"
-                       toFile="/weekly/javaserverfaces_source.class"
-                       fromFile="${basedir}/javaserverfaces_source.class"
-                       fileDescription="Weekly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
-                       overwrite="yes"/>
+                    <javaNetUpload projectName="javaserverfaces"
+                                   toFile="/weekly/javaserverfaces_source.class"
+                                   fromFile="${basedir}/javaserverfaces_source.class"
+                                   fileDescription="Weekly source snapshot. Run 'java -cp . javaserverfaces_source' to install"
+                                   overwrite="yes"/>
+                </sequential>
+            </then>
+            <else>
+                <fail message="Javanettasks version 1.0.5 is not available at the location referred by TASKS_HOME (${tasks.home}).  Ensure that the TASKS_HOME environment variable is properly set."/>
+            </else>
+        </if>
     </target>
 
     <target name="main" description="Build API and RI">

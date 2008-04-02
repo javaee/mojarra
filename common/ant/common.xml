@@ -45,13 +45,7 @@
                   location="${jsf.build.home}/common/lib/sfx4j-1.0.jar"/>
         </classpath>
     </taskdef>
-
-    <taskdef resource="org/kohsuke/javanettasks.properties">
-        <classpath>
-            <pathelement
-                  location="${jsf.build.home}/common/lib/javanettasks-1.0.5.jar"/>
-        </classpath>
-    </taskdef>
+    
     <!-- Properties needed throughout the project -->
 
     <!-- Structural -->
