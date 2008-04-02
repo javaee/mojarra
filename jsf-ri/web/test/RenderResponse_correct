@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=7D66539BD38048705E27A3C0BCD3D120" class="formClass" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" class="formClass" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -110,12 +110,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=7D66539BD38048705E27A3C0BCD3D120" alt="" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=7D66539BD38048705E27A3C0BCD3D120" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -149,7 +149,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=7D66539BD38048705E27A3C0BCD3D120" alt="" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" alt="" /></a>
         </TD>
       </TR>
 
@@ -157,7 +157,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=7D66539BD38048705E27A3C0BCD3D120" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -169,12 +169,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=7D66539BD38048705E27A3C0BCD3D120" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=7D66539BD38048705E27A3C0BCD3D120" alt="" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=7D66539BD38048705E27A3C0BCD3D120" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -182,7 +182,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=7D66539BD38048705E27A3C0BCD3D120" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -192,13 +192,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=7D66539BD38048705E27A3C0BCD3D120?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=7D66539BD38048705E27A3C0BCD3D120"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -208,7 +208,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=7D66539BD38048705E27A3C0BCD3D120?name=horwat&value=password"><img src="duke.gif;jsessionid=7D66539BD38048705E27A3C0BCD3D120" alt="" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A?name=horwat&value=password"><img src="duke.gif;jsessionid=44593F4E0A6A6BD47FD80D4423AD6D5A" alt="" /></a>
         </TD>
       </TR>
 
@@ -287,19 +287,52 @@
                 
                 
 
-              <select name="basicForm:_id13" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
-	<option value="1">1</option>
-	<option value="2">2</option>
-	<option value="3">3</option>
-	<option value="4">4</option>
-	<option value="5">5</option>
-	<option value="6">6</option>
-	<option value="7">7</option>
-	<option value="8">8</option>
-	<option value="9">9</option>
+              <select name="basicForm:_id13" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled" class="dclass">0</option>
+	<option value="1" class="eclass">1</option>
+	<option value="2" class="eclass">2</option>
+	<option value="3" class="eclass">3</option>
+	<option value="4" class="eclass">4</option>
+	<option value="5" class="eclass">5</option>
+	<option value="6" class="eclass">6</option>
+	<option value="7" class="eclass">7</option>
+	<option value="8" class="eclass">8</option>
+	<option value="9" class="eclass">9</option>
 </select>
 
 	</TD>
+
+      </TR>
+
+      <TR>
+
+        <TD>
+
+             
+
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+
+              <select name="basicForm:_id24" class="selectoneClass" size="1" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled" class="dclass">0</option>
+	<option value="1" class="eclass">1</option>
+	<option value="2" class="eclass">2</option>
+	<option value="3" disabled="disabled" class="dclass">3</option>
+	<option value="4" class="eclass">4</option>
+	<option value="5" class="eclass">5</option>
+	<option value="6" class="eclass">6</option>
+	<option value="7" class="eclass">7</option>
+	<option value="8" class="eclass">8</option>
+	<option value="9" class="eclass">9</option>
+</select>
+
+        </TD>
 
       </TR>
 
@@ -363,7 +396,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:_id30" value="3.1415" style="someStyle" />
+            <input type="text" name="basicForm:_id41" value="3.1415" style="someStyle" />
 	</TD>
 
       </TR>
@@ -377,7 +410,7 @@
 
 	<TD>
                 
-            <input type="text" name="basicForm:_id31" value="July 10, 1996" class="inputClass" />
+            <input type="text" name="basicForm:_id42" value="July 10, 1996" class="inputClass" />
 	</TD>
 
       </TR>
@@ -538,16 +571,16 @@
 						
 						
 						
-					<select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple size="1" style="someStyle">	<option value="0">zero</option>
-	<option value="1">one</option>
-	<option value="2">two</option>
-	<option value="3">three</option>
-	<option value="4" disabled="disabled">four</option>
-	<option value="5">five</option>
-	<option value="6">six</option>
-	<option value="7">seven</option>
-	<option value="8">eight</option>
-	<option value="9">nine</option>
+					<select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple size="1" style="someStyle">	<option value="0" class="eclass">zero</option>
+	<option value="1" class="eclass">one</option>
+	<option value="2" class="eclass">two</option>
+	<option value="3" class="eclass">three</option>
+	<option value="4" disabled="disabled" class="dclass">four</option>
+	<option value="5" class="eclass">five</option>
+	<option value="6" class="eclass">six</option>
+	<option value="7" class="eclass">seven</option>
+	<option value="8" class="eclass">eight</option>
+	<option value="9" class="eclass">nine</option>
 </select></TD>
 
 </tr>
@@ -565,16 +598,16 @@
 						
 						
 						
-					<select name="basicForm:_id42" multiple size="10" style="someStyle">	<option value="0">zero</option>
-	<option value="1">one</option>
-	<option value="2">two</option>
-	<option value="3">three</option>
-	<option value="4">four</option>
-	<option value="5">five</option>
-	<option value="6">six</option>
-	<option value="7">seven</option>
-	<option value="8">eight</option>
-	<option value="9">nine</option>
+					<select name="basicForm:_id53" multiple size="10" style="someStyle">	<option value="0" class="eclass">zero</option>
+	<option value="1" class="eclass">one</option>
+	<option value="2" class="eclass">two</option>
+	<option value="3" disabled="disabled" class="dclass">three</option>
+	<option value="4" class="eclass">four</option>
+	<option value="5" class="eclass">five</option>
+	<option value="6" class="eclass">six</option>
+	<option value="7" class="eclass">seven</option>
+	<option value="8" class="eclass">eight</option>
+	<option value="9" class="eclass">nine</option>
 </select></TD>
 </tr>
 
@@ -643,7 +676,7 @@
 
 
     
-<input type="hidden" name="basicForm:_id68" value="48%" />
+<input type="hidden" name="basicForm:_id79" value="48%" />
 
 <tr><td>
 

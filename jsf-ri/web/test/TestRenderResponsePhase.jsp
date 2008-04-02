@@ -266,7 +266,7 @@
 
 	     <h:selectOneListbox styleClass="selectoneClass"
                      title="Select Quantity" style="someStyle"
-                     tabindex="20" >
+                     tabindex="20" enabledClass="eclass" disabledClass="dclass">
 
                 <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
                 <f:selectItem  itemValue="1" itemLabel="1" itemDescription="First Item" />
@@ -282,6 +282,31 @@
               </h:selectOneListbox>
 
 	</TD>
+
+      </TR>
+
+      <TR>
+
+        <TD>
+
+             <h:selectOneMenu styleClass="selectoneClass"
+                     title="Select Quantity" style="someStyle"
+                     tabindex="20" enabledClass="eclass" disabledClass="dclass">
+
+                <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectItem  itemValue="1" itemLabel="1" itemDescription="First Item" />
+                <f:selectItem  itemValue="2" itemLabel="2" />
+                <f:selectItem  itemValue="3" itemLabel="3" itemDisabled="true"/>
+                <f:selectItem  itemValue="4" itemLabel="4" />
+                <f:selectItem  itemValue="5" itemLabel="5" />
+                <f:selectItem  itemValue="6" itemLabel="6" />
+                <f:selectItem  itemValue="7" itemLabel="7" />
+                <f:selectItem  itemValue="8" itemLabel="8" />
+                <f:selectItem  itemValue="9" itemLabel="9" />
+
+              </h:selectOneMenu>
+
+        </TD>
 
       </TR>
 
@@ -521,7 +546,7 @@
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><h:selectManyMenu id="ManyApples" styleClass="selectmanyClass" style="someStyle">
+					<TD><h:selectManyMenu id="ManyApples" styleClass="selectmanyClass" style="someStyle" enabledClass="eclass" disabledClass="dclass">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -538,11 +563,12 @@
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><h:selectManyListbox style="someStyle">
+					<TD><h:selectManyListbox style="someStyle" enabledClass="eclass"
+                                              disabledClass="dclass">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
-						<f:selectItem itemValue="3" itemLabel="three" />
+						<f:selectItem itemValue="3" itemLabel="three" itemDisabled="true"/>
 						<f:selectItem itemValue="4" itemLabel="four" />
 						<f:selectItem itemValue="5" itemLabel="five" />
 						<f:selectItem itemValue="6" itemLabel="six" />
