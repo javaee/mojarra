@@ -1,5 +1,5 @@
 /*
- * $Id: ViewExpiredException.java,v 1.3 2005/08/22 22:07:51 ofung Exp $
+ * $Id: ViewExpiredException.java,v 1.4 2006/02/14 21:49:13 edburns Exp $
  */
 
 /*
@@ -36,6 +36,8 @@ import javax.faces.FacesException;
  * <p>Implementations must throw this {@link FacesException} when
  * attempting to restore the view {@link StateManager#restoreView(javax.faces.context.FacesContext, String, String)} 
  * results in failure on postback.</p>
+ *
+ * @since 1.2
  */
 
 public class ViewExpiredException extends FacesException {
