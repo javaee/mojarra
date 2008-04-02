@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!-- ========== Table Properties =========================================== -->
+
+
+<!-- template
+
+      <property>
+        <description>
+        </description>
+        <display-name></display-name>
+        <icon></icon>
+        <property-name></property-name>
+        <property-class>java.lang.String</property-class>
+      </property>
+
+-->
+<root>
+    <property>
+        <description>
+          Space-separated list of CSS style class(es) that will be
+          applied to any header generated for this column.
+        </description>
+        <display-name>Header CSS Classes</display-name>
+        <icon></icon>
+        <property-name>headerClass</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+    <property>
+        <description>
+          Space-separated list of CSS style class(es) that will be
+          applied to any footer generated for this column.
+        </description>
+        <display-name>Footer CSS Classes</display-name>
+        <icon></icon>
+        <property-name>footerClass</property-name>
+        <property-class>java.lang.String</property-class>
+    </property>
+
+</root>

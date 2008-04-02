@@ -3532,6 +3532,175 @@
   </component>
 <!-- Concrete HTML Components -->
   <component>
+    <description><![CDATA[<p>Represents a column that will be rendered 
+      in an HTML <code>table</code> element.</p>]]></description>
+    <display-name>Column</display-name>
+    <component-type>javax.faces.HtmlColumn</component-type>
+    <component-class>javax.faces.component.html.HtmlColumn</component-class>
+
+    <property>
+      <description>
+          A mutable Map of the attributes associated with
+          this component, keyed by attribute name.
+        </description>
+      <display-name>Attributes Map</display-name>
+      <icon/>
+      <property-name>attributes</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The number of child components associated with
+          this component.
+        </description>
+      <display-name>Child Component Count</display-name>
+      <icon/>
+      <property-name>childCount</property-name>
+      <property-class>int</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A mutable List of the child components associated with
+          this component.
+        </description>
+      <display-name>Child Component List</display-name>
+      <icon/>
+      <property-name>children</property-name>
+      <property-class>java.util.List</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          A mutable Map of the facets associated with
+          this component, keyed by facet name.
+        </description>
+      <display-name>Facets Map</display-name>
+      <icon/>
+      <property-name>facets</property-name>
+      <property-class>java.util.Map</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The component family to which this component belongs.  This property
+          is used to select an appropriate Renderer.
+        </description>
+      <display-name>Component Family</display-name>
+      <icon/>
+      <property-name>family</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          The component identifier for this component.  This value must be
+          unique within the closest parent component that is a naming
+          container.
+        </description>
+      <display-name>Component Identifier</display-name>
+      <icon/>
+      <property-name>id</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+          The parent component for this component.  On the root component
+          in the component tree (which must be of type UIViewRoot), this
+          property is null.
+        </description>
+      <display-name>Parent Component</display-name>
+      <icon/>
+      <property-name>parent</property-name>
+      <property-class>javax.faces.component.UIComponent</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether or not this component should be rendered
+          (during Render Response Phase), or processed on any subsequent
+          form submit.  The default value for this property is true.
+        </description>
+      <display-name>Rendered Flag</display-name>
+      <icon/>
+      <property-name>rendered</property-name>
+      <property-class>boolean</property-class>
+    </property>
+    <property>
+      <description>
+          Identifier used (in conjunction with the "family" property) to
+          select an appropriate Renderer to encode and decode this component.
+        </description>
+      <display-name>Renderer Type</display-name>
+      <icon/>
+      <property-name>rendererType</property-name>
+      <property-class>java.lang.String</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+      </property-extension>
+    </property>
+    <property>
+      <description>
+          Flag indicating whether or not this component takes responsibility
+          for rendering its own children.  This decision is normally delegated
+          to the associated Renderer, if there is one.
+        </description>
+      <display-name>Renders Children</display-name>
+      <icon/>
+      <property-name>rendersChildren</property-name>
+      <property-class>boolean</property-class>
+      <property-extension>
+        <tag-attribute>false</tag-attribute>
+        <read-only>true</read-only>
+      </property-extension>
+    </property>
+
+
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) that will be
+          applied to any header generated for this column.
+        </description>
+      <display-name>Header CSS Classes</display-name>
+      <icon/>
+      <property-name>headerClass</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+    <property>
+      <description>
+          Space-separated list of CSS style class(es) that will be
+          applied to any footer generated for this column.
+        </description>
+      <display-name>Footer CSS Classes</display-name>
+      <icon/>
+      <property-name>footerClass</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+
+    <component-extension>
+      <base-component-type>javax.faces.Column</base-component-type>
+    </component-extension>
+  </component>
+  <component>
     <description><![CDATA[<p>Represents an HTML <code>input</code> element
       for a button of type <code>submit</code> or <code>reset</code>.
       The label text is specified by the component value.</p>]]></description>
@@ -16597,11 +16766,14 @@
       "header" facet render a "tr" element.  For each
       <code>UIColumn</code> that actually has a "header" facet, render
       it inside of a "th" element.  Columns that don't have a "header"
-      facet cause an empty "th" element to be rendered.  Output the
-      value of the "headerClass" attribute of the <code>UIData</code>
+      facet cause an empty "th" element to be rendered.  Output the 
+      value of the "headerClass" attribute of the <code>UIColumn</code>
       component, if present, as the value of the "class" attribute on
-      the "th".  Output "col" as the value of the "colgroup" attribute
-      on the "th" element.
+      the "th".  If the "headerClass" attribute of the <code>UIColumn</code>
+      component is not present, output the value of the "headerClass" 
+      attribute of the <code>UIData</code> component, if present, as 
+      the value of the "class" attribute on the "th".  Output "col" as 
+      the value of the "colgroup" attribute on the "th" element.
       </p>
 
       <p>Close out the "thead" element.</p>
@@ -19705,15 +19877,15 @@
       <attribute>
         <description>
         Flag indicating that characters that are sensitive
-        in HTML and XML markup must be escaped.  This flag
-        is set to "true" by default.
+        in HTML and XML markup must be escaped.  If omitted, this
+        flag is assumed to be "false".
         </description>
         <display-name>Escape Characters</display-name>
         <icon/>
         <attribute-name>escape</attribute-name>
         <attribute-class>boolean</attribute-class>
         <attribute-extension>
-          <default-value>true</default-value>
+          <default-value>false</default-value>
         </attribute-extension>
       </attribute>
 

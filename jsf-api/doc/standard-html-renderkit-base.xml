@@ -270,6 +270,24 @@
 
     <!-- Concrete HTML Components -->
 
+    <component>
+                                                                                 
+        <description>
+            <![CDATA[<p>Represents a column that will be rendered 
+      in an HTML <code>table</code> element.</p>]]>
+        </description>
+        <display-name>Column</display-name>
+        <component-type>javax.faces.HtmlColumn</component-type>
+        <component-class>javax.faces.component.html.HtmlColumn</component-class>
+                                                                                 
+        <xi:include href="uicolumn-props.xml" xpointer="xpointer(/root/*)"/>
+        <xi:include href="column-props.xml" xpointer="xpointer(/root/*)"/>
+                                                                                 
+        <component-extension>
+            <base-component-type>javax.faces.Column</base-component-type>
+        </component-extension>
+                                                                                 
+    </component>
 
     <component>
 
@@ -1130,11 +1148,14 @@
       "header" facet render a "tr" element.  For each
       <code>UIColumn</code> that actually has a "header" facet, render
       it inside of a "th" element.  Columns that don't have a "header"
-      facet cause an empty "th" element to be rendered.  Output the
-      value of the "headerClass" attribute of the <code>UIData</code>
+      facet cause an empty "th" element to be rendered.  Output the 
+      value of the "headerClass" attribute of the <code>UIColumn</code>
       component, if present, as the value of the "class" attribute on
-      the "th".  Output "col" as the value of the "colgroup" attribute
-      on the "th" element.
+      the "th".  If the "headerClass" attribute of the <code>UIColumn</code>
+      component is not present, output the value of the "headerClass" 
+      attribute of the <code>UIData</code> component, if present, as 
+      the value of the "class" attribute on the "th".  Output "col" as 
+      the value of the "colgroup" attribute on the "th" element.
       </p>
 
       <p>Close out the "thead" element.</p>
