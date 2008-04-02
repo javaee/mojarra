@@ -840,6 +840,15 @@
       <summary xml:lang="es">Unable to find component with ID ''{0}'' in view.</summary>
       <summary xml:lang="fr">Unable to find component with ID ''{0}'' in view.</summary>
     </message>
+      
+    <message>
+        <message-id>com.sun.faces.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER</message-id>
+        <message-class>javax.faces.application.MessageImpl</message-class>
+        <summary xml:lang="en">Illegal attempt to set ViewHandler after a response has been generated.</summary>
+        <summary xml:lang="de">Illegal attempt to set ViewHandler after a response has been generated.</summary>
+        <summary xml:lang="es">Illegal attempt to set ViewHandler after a response has been generated.</summary>
+        <summary xml:lang="fr">Illegal attempt to set ViewHandler after a response has been generated.</summary>
+    </message>
   </message-resources>
 
   <!-- Standard Validators -->

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.7 2003/08/22 19:25:11 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.8 2003/08/28 15:53:47 rlubke Exp $
  */
 
 /*
@@ -11,16 +11,15 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.application.ApplicationFactoryImpl;
-import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.application.NavigationHandlerImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
 
 import javax.faces.component.UIComponent;
-import javax.faces.application.Application;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.base.UIViewRootBase;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.VariableResolver;
@@ -31,7 +30,6 @@ import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 
-import org.mozilla.util.Assert;
 import com.sun.faces.JspFacesTestCase;
 import com.sun.faces.TestComponent;
 
@@ -41,7 +39,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.7 2003/08/22 19:25:11 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.8 2003/08/28 15:53:47 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -348,6 +346,30 @@ public class TestApplicationImpl extends JspFacesTestCase {
 	    exceptionThrown = true;
 	}
 	assertTrue(exceptionThrown);
+    }
+    
+    public void testSetViewHandlerException() throws Exception {       
+        ViewHandler handler = new ViewHandlerImpl();
+        UIViewRoot root = new UIViewRootBase();
+        root.setViewId("/view");
+        root.setId("id");
+        getFacesContext().setViewRoot(root);
+                       
+        boolean exceptionThrown = false;
+        try {
+            application.setViewHandler(handler);
+        } catch (IllegalStateException ise) {
+            exceptionThrown = true;
+        }
+        assertTrue(!exceptionThrown);
+        
+        try {
+            handler.renderView(getFacesContext());
+            application.setViewHandler(handler);
+        } catch (IllegalStateException ise)  {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);      
     }
 	
 

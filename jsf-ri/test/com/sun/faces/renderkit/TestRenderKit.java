@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.3 2003/08/21 14:18:21 rlubke Exp $
+ * $Id: TestRenderKit.java,v 1.4 2003/08/28 15:53:48 rlubke Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.Renderer;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.context.ResponseStream;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -36,6 +37,7 @@ import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 
 /**
  *
@@ -43,7 +45,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.3 2003/08/21 14:18:21 rlubke Exp $
+ * @version $Id: TestRenderKit.java,v 1.4 2003/08/28 15:53:48 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -134,6 +136,26 @@ public static final String CORRECT_OUTPUT_FILENAME =
 	}
 	assertTrue(bool);
 	
+    }
+    
+    public void testGetResponseStream() throws Exception {
+        RenderKitFactory renderKitFactory = (RenderKitFactory)
+                FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+        renderKit = renderKitFactory.getRenderKit("DEFAULT");
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ResponseStream stream = renderKit.getResponseStream(out);
+        stream.write('a');
+        stream.write((byte) 'b');
+        stream.write(new byte[] { (byte) 'c', (byte) 'd', (byte) 'e' }, 1, 2);
+        stream.flush();
+        String result = out.toString();
+        assertTrue(result.equals("abde"));
+        try {
+            stream.close();
+        } catch (IOException ioe) {
+            ; // ignore
+        }        
     }
 
 } // end of class TestRenderKit
