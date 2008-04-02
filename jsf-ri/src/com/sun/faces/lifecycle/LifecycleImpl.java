@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.46 2004/10/29 19:48:38 edburns Exp $
+ * $Id: LifecycleImpl.java,v 1.47 2005/02/03 22:51:57 jayashri Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ public class LifecycleImpl extends Lifecycle {
 
 
     // The set of PhaseListeners registered with this Lifecycle instance
-    private List listeners = new ArrayList();
+    private ArrayList listeners = new ArrayList();
 
 
     // The set of Phase instances that are executed by the execute() method
@@ -184,23 +184,28 @@ public class LifecycleImpl extends Lifecycle {
 	int 
 	    i = 0,
 	    maxBefore = 0;
-
+        List tempListeners = (ArrayList)listeners.clone();
 	try {
-	    // Notify the "beforePhase" method of interested listeners
+            // Notify the "beforePhase" method of interested listeners
 	    // (ascending)
-	    synchronized (listeners) {
-		if (listeners.size() > 0) {
-		    PhaseEvent event = new PhaseEvent(context, phaseId, this);
-		    for (i = 0; i < listeners.size(); i++) {
-			PhaseListener listener = (PhaseListener) listeners.get(i);
-			if (phaseId.equals(listener.getPhaseId()) ||
-			    PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-			    listener.beforePhase(event);
-			}
-			maxBefore = i;
-		    }
-		}
-	    }
+            // Fix for bug 6223295. Get a pointer to 'listeners' so that 
+            // we still have reference to the original list for the current 
+            // thread. As a result, any listener added would not show up 
+            // until the NEXT phase but we want to avoid the lengthy
+            // synchronization block. Due to this, "listeners" should be 
+            // modified only via add/remove methods and must never be updated
+            // directly.
+	    if (tempListeners.size() > 0) {
+                PhaseEvent event = new PhaseEvent(context, phaseId, this);
+                for (i = 0; i < tempListeners.size(); i++) {
+                    PhaseListener listener = (PhaseListener)tempListeners.get(i);
+                    if (phaseId.equals(listener.getPhaseId()) ||
+                        PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                        listener.beforePhase(event);
+                    }
+                    maxBefore = i;
+                }
+            }
 	}
 	catch (Throwable e) {
 	    if (log.isTraceEnabled()) {
@@ -220,18 +225,17 @@ public class LifecycleImpl extends Lifecycle {
 	    try {
 		// Notify the "afterPhase" method of interested listeners
 		// (descending)
-		synchronized (listeners) {
-		    if (listeners.size() > 0) {
-			PhaseEvent event = new PhaseEvent(context, phaseId, this);
-			for (i = maxBefore; i >= 0; i--) {
-			    PhaseListener listener = (PhaseListener) listeners.get(i);
-			    if (phaseId.equals(listener.getPhaseId()) ||
-				PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
-				listener.afterPhase(event);
-			    }
-			}
-		    }
-		}
+		if (tempListeners.size() > 0) {
+                    PhaseEvent event = new PhaseEvent(context, phaseId, this);
+                    for (i = maxBefore; i >= 0; i--) {
+                        PhaseListener listener = (PhaseListener) 
+                            tempListeners.get(i);
+                        if (phaseId.equals(listener.getPhaseId()) ||
+                            PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
+                            listener.afterPhase(event);
+                        }
+                    }
+                }
 	    }
 	    catch (Throwable e) {
 		if (log.isTraceEnabled()) {

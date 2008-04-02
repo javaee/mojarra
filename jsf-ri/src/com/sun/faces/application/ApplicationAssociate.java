@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.7 2004/11/30 21:36:56 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.8 2005/02/03 22:51:57 jayashri Exp $
  */
 
 /*
@@ -231,9 +231,8 @@ public class ApplicationAssociate extends Object {
      * @throws FacesException if the managed bean
      *                                   could not be created.
      */
-    synchronized public Object createAndMaybeStoreManagedBeans(FacesContext context,
-                                                               String managedBeanName)
-        throws FacesException {
+    public Object createAndMaybeStoreManagedBeans(FacesContext context,
+        String managedBeanName) throws FacesException {
         ManagedBeanFactory managedBean = (ManagedBeanFactory)
             managedBeanFactoriesMap.get(managedBeanName);
         if (managedBean == null) {
@@ -243,34 +242,60 @@ public class ApplicationAssociate extends Object {
             return null;
         }
         
-        Object bean;
-        try {
-            bean = managedBean.newInstance(context);
-            if (log.isDebugEnabled()) {
-                log.debug("Created bean " + managedBeanName + " successfully ");
-            }
-        } catch (Exception ex) {
-            if (log.isErrorEnabled()) {
-                log.error("Managedbean " + managedBeanName + 
-                    " could not be created " + ex.getMessage(), ex);
-            } 
-            throw new FacesException(ex);
-        }
-        //add bean to appropriate scope
+        Object bean = null;
         String scope = managedBean.getScope();
         
-        if (log.isTraceEnabled()) {
-            log.trace("Storing " + managedBeanName + " in scope " + scope);
-        }
+        boolean
+            scopeIsApplication = false,
+            scopeIsSession = false,
+            scopeIsRequest = false;
 
-        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
-            context.getExternalContext().
-                getApplicationMap().put(managedBeanName, bean);
-        } else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
-            Util.getSessionMap(context).put(managedBeanName, bean);
-        } else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
-            context.getExternalContext().
-                getRequestMap().put(managedBeanName, bean);
+        if ((scopeIsApplication = 
+            scope.equalsIgnoreCase(RIConstants.APPLICATION)) ||
+            (scopeIsSession = scope.equalsIgnoreCase(RIConstants.SESSION))) {
+            synchronized (this) {
+                try {
+                    bean = managedBean.newInstance(context);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Created bean " + managedBeanName + " successfully ");
+                    }
+                } catch (Exception ex) {
+                    Object[] params = {ex.getMessage()};
+                    if (log.isErrorEnabled()) {
+                        log.error("Managedbean " + managedBeanName +
+                                  " could not be created " + ex.getMessage(), ex);
+                    }
+                    throw new FacesException(ex);
+                }
+                //add bean to appropriate scope
+                if (scopeIsApplication) {
+                    context.getExternalContext().
+                        getApplicationMap().put(managedBeanName, bean);
+                }
+                if (scopeIsSession) {
+                    Util.getSessionMap(context).put(managedBeanName, bean);
+                }
+            }
+        } else {
+            scopeIsRequest = scope.equalsIgnoreCase(RIConstants.REQUEST);
+            try {
+                bean = managedBean.newInstance(context);
+                if (log.isDebugEnabled()) {
+                    log.debug("Created bean " + managedBeanName + " successfully ");
+                }
+            } catch (Exception ex) {
+                Object[] params = {ex.getMessage()};
+                if (log.isErrorEnabled()) {
+                    log.error("Managedbean " + managedBeanName +
+                              " could not be created " + ex.getMessage(), ex);
+                }
+                throw new FacesException(ex);
+            }
+
+            if (scopeIsRequest) {
+                context.getExternalContext().
+                    getRequestMap().put(managedBeanName, bean);
+            }
         }
         return bean;
     }
