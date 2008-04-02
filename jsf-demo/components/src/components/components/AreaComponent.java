@@ -183,17 +183,4 @@ public class AreaComponent extends UIOutputBase {
     }
 
 
-    private boolean transientFlag = false;
-
-
-    public boolean isTransient() {
-        return (transientFlag);
-    }
-
-
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
-    }
-
-
 }

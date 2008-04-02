@@ -95,7 +95,7 @@ public class MapComponent extends UIComponentBase {
             return;
         } else {
             FacesContext.getCurrentInstance().addFacesEvent
-                (new AreaSelectedEvent(this, findArea(current)));
+                (new AreaSelectedEvent(this));
         }
 
     }
@@ -154,33 +154,6 @@ public class MapComponent extends UIComponentBase {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         current = (String) values[1];
-    }
-
-
-    private boolean transientFlag = false;
-
-
-    public boolean isTransient() {
-        return (transientFlag);
-    }
-
-
-    public void setTransient(boolean transientFlag) {
-        this.transientFlag = transientFlag;
-    }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return the child {@link AreaComponent} that matches the specified
-     * alternate text value, if any; otherwise, return <code>null</code>.</p>
-     *
-     * @param alt Alternate text to be matched
-     */
-    private AreaComponent findArea(String alt) {
-        return (null); // PENDING(craigmcc)
     }
 
 

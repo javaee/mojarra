@@ -1,5 +1,5 @@
 /*
- * $Id: AreaSelectedEvent.java,v 1.1 2003/08/26 18:40:43 craigmcc Exp $
+ * $Id: AreaSelectedEvent.java,v 1.2 2003/08/27 23:27:36 craigmcc Exp $
  */
 
 /*
@@ -61,29 +61,16 @@ public class AreaSelectedEvent extends FacesEvent {
 
     /**
      * <p>Construct a new {@link AreaSelectedEvent} from the specified
-     * source map, selecting the specified area.</p>
+     * source map.</p>
      *
      * @param map The {@link MapComponent} originating this event
-     * @param area The {@link AreaComponent} that was selected (may be null)
      */
-    public AreaSelectedEvent(MapComponent map, AreaComponent area) {
+    public AreaSelectedEvent(MapComponent map) {
         super(map);
-        this.areaComponent = area;
     }
 
 
     // -------------------------------------------------------------- Properties
-
-
-    private AreaComponent areaComponent = null;
-
-
-    /**
-     * <p>Return the {@link AreaComponent} of the selected area.</p>
-     */
-    public AreaComponent getAreaComponent() {
-        return (this.areaComponent);
-    }
 
 
     /**
