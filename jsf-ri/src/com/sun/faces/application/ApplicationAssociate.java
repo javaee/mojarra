@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.15 2005/07/20 17:03:52 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.16 2005/07/21 00:56:39 edburns Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.util.Util;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import javax.faces.component.UIViewRoot;
 
 /**
  * <p>Break out the things that are associated with the Application, but
@@ -316,7 +317,19 @@ public class ApplicationAssociate extends Object {
     
     public ResourceBundle getResourceBundle(FacesContext context,
             String var) {
-        Locale locale = context.getViewRoot().getLocale();
+        UIViewRoot root = null;
+        // Start out with the default locale
+        Locale locale = null, defaultLocale = Locale.getDefault();
+        locale = defaultLocale;
+        // See if this FacesContext has a ViewRoot
+        if (null != (root = context.getViewRoot())) {
+            // If so, ask it for its Locale
+            if (null == (locale = root.getLocale())) {
+                // If the ViewRoot has no Locale, fall back to the default.
+                locale = defaultLocale;
+            }
+        }
+        assert(null != locale);
         ResourceBundleBean bean = (ResourceBundleBean) resourceBundles.get(var);
         String baseName = null;
         ResourceBundle result = null;

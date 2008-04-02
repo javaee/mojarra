@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.53 2005/07/15 20:55:26 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.54 2005/07/21 00:56:39 edburns Exp $
  */
 
 /*
@@ -21,20 +21,17 @@ import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.servlet.http.HttpServletRequest;
 import javax.faces.render.ResponseStateManager;
-import javax.faces.el.PropertyResolver;
-import javax.faces.el.VariableResolver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import com.sun.faces.el.FacesCompositeELResolver;
 import com.sun.faces.el.ImplicitObjectELResolverForJsp;
 import com.sun.faces.el.ManagedBeanELResolver;
 import com.sun.faces.el.PropertyResolverChainWrapper;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.el.FacesResourceBundleELResolver;
 
 import javax.el.CompositeELResolver;
 import javax.el.ELResolver;
@@ -361,6 +358,7 @@ public class LifecycleImpl extends Lifecycle {
                 }
                 compositeELResolverForJsp.add(new ImplicitObjectELResolverForJsp());
                 compositeELResolverForJsp.add(new ManagedBeanELResolver());
+                compositeELResolverForJsp.add(new FacesResourceBundleELResolver());
 
                 // add ELResolvers from faces-config.xml
                 ArrayList elResolversFromFacesConfig = 

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.81 2005/06/06 18:04:46 edburns Exp $
+ $Id: build-tests.xml,v 1.82 2005/07/21 00:56:40 edburns Exp $
 -->
 
 <!--
@@ -95,6 +95,7 @@
                 test.component,
                 test.component01,
                 test.navigation,
+                test.resourceBundleELResolver,
                 test.tlvalidator,
                 test.standard,
                 test.html.taglib,
@@ -748,6 +749,27 @@
     </junit>
 
   </target>
+  
+  <target name="test.resourceBundleELResolver"
+   description="Test ResourceBundleELResolver ">
+
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/resourceBundle01.jsp"
+      outContent="Expression in raw JSP page is Value From ResourceBundle." failonerror="${failonerror}"/>
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/resourceBundle02.jsp"
+         recordGolden="${local.golden.path}/resourceBundle02.txt"
+         golden="${golden.path}/resourceBundle02.txt" failonerror="${failonerror}"/>
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/resourceBundle03.jsp"
+         recordGolden="${local.golden.path}/resourceBundle03.txt"
+         golden="${golden.path}/resourceBundle03.txt" failonerror="${failonerror}"/>
+    <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/resourceBundle04.jsp"
+         status="500" failonerror="${failonerror}"/>
+  </target>
+
+  
 
   <target name="test.phases"
    description="Test Phase processing with Phase Listener">

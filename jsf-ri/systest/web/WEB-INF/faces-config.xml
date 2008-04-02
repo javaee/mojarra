@@ -17,6 +17,14 @@
     <locale-config>
         <default-locale>en_US</default-locale>
     </locale-config>
+    <resource-bundle>
+      <var>resourceBundle01</var>
+      <base-name>com.sun.faces.systest.resources.ResourceBundle01</base-name>
+    </resource-bundle>
+    <resource-bundle>
+      <var>resourceBundle03</var>
+      <base-name>com.sun.faces.systest.resources.ResourceBundle03</base-name>
+    </resource-bundle>
   </application>
   <factory>
     <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>

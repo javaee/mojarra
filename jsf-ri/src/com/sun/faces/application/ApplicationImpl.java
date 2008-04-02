@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.64 2005/07/19 19:33:17 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.65 2005/07/21 00:56:39 edburns Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.application;
 
+import com.sun.faces.el.FacesResourceBundleELResolver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +27,7 @@ import javax.el.ELException;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.ListELResolver;
+import javax.el.ResourceBundleELResolver;
 import javax.el.MapELResolver;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -234,6 +236,8 @@ public class ApplicationImpl extends Application {
         }
         
         compositeELResolver.add(new ManagedBeanELResolver());
+        compositeELResolver.add(new ResourceBundleELResolver());
+        compositeELResolver.add(new FacesResourceBundleELResolver());
         compositeELResolver.add(new MapELResolver());
         compositeELResolver.add(new ListELResolver());
         compositeELResolver.add(new ArrayELResolver());
