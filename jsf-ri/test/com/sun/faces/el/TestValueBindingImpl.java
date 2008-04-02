@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.10 2003/06/13 16:59:51 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.11 2003/07/31 17:08:07 horwat Exp $
  */
 
 /*
@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.10 2003/06/13 16:59:51 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.11 2003/07/31 17:08:07 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -577,5 +577,70 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         assertNull(valueBinding.getScope(property));
 
     }   
+
+    public void testInvalidExpression() {
+        ValueBindingImpl valueBinding = new ValueBindingImpl(new ApplicationImpl());
+
+	boolean exceptionThrown = false ;
+	try {
+            valueBinding.setRef("");
+	    valueBinding.getValue(getFacesContext());
+	}
+	catch (IllegalArgumentException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+            valueBinding.setRef("!");
+	    valueBinding.getValue(getFacesContext());
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+            valueBinding.setRef("..");
+	    valueBinding.getValue(getFacesContext());
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+            valueBinding.setRef(".foo");
+	    valueBinding.getValue(getFacesContext());
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+            valueBinding.setRef("()");
+	    valueBinding.getValue(getFacesContext());
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+	exceptionThrown = false ;
+	try {
+            valueBinding.setRef("[]");
+	    valueBinding.getValue(getFacesContext());
+	}
+	catch (PropertyNotFoundException e) {
+	    exceptionThrown = true;
+	}
+	assertTrue(exceptionThrown);
+
+    }
 
 } // end of class TestValueBindingImpl
