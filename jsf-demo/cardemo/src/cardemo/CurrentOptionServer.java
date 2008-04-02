@@ -1,5 +1,5 @@
 /*
- * $Id: CurrentOptionServer.java,v 1.2 2003/02/05 00:45:23 jenball Exp $
+ * $Id: CurrentOptionServer.java,v 1.3 2003/02/10 18:20:06 rkitain Exp $
  */
 /*
  *
@@ -95,12 +95,19 @@ public class CurrentOptionServer extends Object {
     protected ArrayList transmissionOption;
     protected Object currentTransmissionOption = null;
     protected boolean sunRoof = false;
+    protected boolean sunRoofSelected = false;
     protected boolean cruiseControl = false;
+    protected boolean cruiseControlSelected = false;
     protected boolean keylessEntry = false;
+    protected boolean keylessEntrySelected = false;
     protected boolean securitySystem = false;
+    protected boolean securitySystemSelected = false;
     protected boolean skiRack = false;
+    protected boolean skiRackSelected = false;
     protected boolean towPackage = false;
+    protected boolean towPackageSelected = false;
     protected boolean gps = false;
+    protected boolean gpsSelected = false;
     
     
     
@@ -396,12 +403,28 @@ public class CurrentOptionServer extends Object {
         return sunRoof;
     }
     
+    public void setSunRoofSelected(boolean roof) {
+        sunRoofSelected = roof;
+    }
+
+    public boolean getSunRoofSelected() {
+        return sunRoofSelected;
+    }
+    
     public void setCruiseControl(boolean cruise) {
         cruiseControl = cruise;
     }
     
     public boolean getCruiseControl() {
         return cruiseControl;
+    }
+
+    public void setCruiseControlSelected(boolean cruise) {
+        cruiseControlSelected = cruise;
+    }
+
+    public boolean getCruiseControlSelected() {
+        return cruiseControlSelected;
     }
     
     public void setKeylessEntry(boolean entry) {
@@ -412,6 +435,14 @@ public class CurrentOptionServer extends Object {
         return keylessEntry;
     }
     
+    public void setKeylessEntrySelected(boolean entry) {
+        keylessEntrySelected = entry;
+    }
+
+    public boolean getKeylessEntrySelected() {
+        return keylessEntrySelected;
+    }
+
     public void setSecuritySystem(boolean security) {
         securitySystem = security;
     }
@@ -420,6 +451,14 @@ public class CurrentOptionServer extends Object {
         return securitySystem;
     }
     
+    public void setSecuritySystemSelected(boolean security) {
+        securitySystemSelected = security;
+    }
+
+    public boolean getSecuritySystemSelected() {
+        return securitySystemSelected;
+    }
+
     public void setSkiRack(boolean ski) {
         skiRack = ski;
     }
@@ -428,6 +467,14 @@ public class CurrentOptionServer extends Object {
         return skiRack;
     }
     
+    public void setSkiRackSelected(boolean ski) {
+        skiRackSelected = ski;
+    }
+
+    public boolean getSkiRackSelected() {
+        return skiRackSelected;
+    }
+
     public void setTowPackage(boolean tow) {
         towPackage = tow;
     }
@@ -436,11 +483,27 @@ public class CurrentOptionServer extends Object {
         return towPackage;
     }
     
+    public void setTowPackageSelected(boolean tow) {
+        towPackageSelected = tow;
+    }
+
+    public boolean getTowPackageSelected() {
+        return towPackageSelected;
+    }
+
     public void setGps(boolean g) {
         gps = g;
     }
     
     public boolean getGps() {
         return gps;
+    }
+
+    public boolean getGpsSelected() {
+        return gpsSelected;
+    }
+
+    public void setGpsSelected(boolean g) {
+        gpsSelected = g;
     }
 }

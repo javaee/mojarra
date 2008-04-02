@@ -243,8 +243,7 @@
             <TR>
                 <TD> 
                 <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
-                    alt="Sunroof" modelReference="CurrentOptionServer.sunRoof"/>
-
+                    alt="Sunroof" modelReference="CurrentOptionServer.sunRoofSelected"/>
                 </TD>																		
                 <TD>
                 <h:output_text key="sunroofLabel" bundle="carDemoBundle" /> 
@@ -252,7 +251,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="cruisecontrol" 
                     title="Cruise Control"  
-                    modelReference="CurrentOptionServer.cruiseControl" />
+                    modelReference="CurrentOptionServer.cruiseControlSelected" />
 
                 </TD>
                 <TD>
@@ -261,7 +260,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="keylessentry" 
                     title="Keyless Entry"  alt="Keyless Entry"
-                    modelReference="CurrentOptionServer.keylessEntry" />
+                    modelReference="CurrentOptionServer.keylessEntrySelected" />
 
                 </TD>
                 <TD>
@@ -272,7 +271,7 @@
                 <TD> 
                 <h:selectboolean_checkbox id="securitySystem"
                     title="Security System"  alt="Security System"
-                    modelReference="CurrentOptionServer.securitySystem" />
+                    modelReference="CurrentOptionServer.securitySystemSelected" />
 
                 </TD>
                 <TD>
@@ -280,7 +279,7 @@
                 </TD>
                 <TD>
                 <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
-                    alt="Ski Rack" modelReference="CurrentOptionServer.skiRack"
+                    alt="Ski Rack" modelReference="CurrentOptionServer.skiRackSelected"
                      />
                 </TD>
                 <TD>
@@ -289,7 +288,7 @@
                 <TD>
                 <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
                     alt="Tow Package" 
-                    modelReference="CurrentOptionServer.towPackage" />
+                    modelReference="CurrentOptionServer.towPackageSelected" />
 
                 </TD>
                 <TD>
@@ -299,7 +298,7 @@
             <TR>
                 <TD>
                 <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
-                    modelReference="CurrentOptionServer.gps"  />
+                    modelReference="CurrentOptionServer.gpsSelected"  />
                 </FONT> 
                 </TD>
                 <TD>
