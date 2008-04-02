@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.17 2003/10/16 22:11:30 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.18 2003/10/17 00:01:09 jvisvanathan Exp $ 
  */ 
 
 
@@ -30,6 +30,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import javax.servlet.jsp.jstl.core.Config;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +41,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.17 2003/10/16 22:11:30 jvisvanathan Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.18 2003/10/17 00:01:09 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -141,7 +143,12 @@ public class ViewHandlerImpl extends Object
                 requestURI = buffer.toString();
             }
         }
-        
+        // update the JSTL locale attribute in request scope so that JSTL
+        // picks up the locale from viewRoot. This attribute must be updated
+        // before the JSTL setBundle tag is called because that is when the
+        // new LocalizationContext object is created based on the locale.
+        Config.set((ServletRequest) context.getExternalContext().getRequest(), 
+                Config.FMT_LOCALE, context.getViewRoot().getLocale());
         context.getExternalContext().dispatchMessage(requestURI);
 
     }

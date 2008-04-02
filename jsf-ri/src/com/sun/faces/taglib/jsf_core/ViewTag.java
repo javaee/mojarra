@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.8 2003/10/16 00:30:18 eburns Exp $
+ * $Id: ViewTag.java,v 1.9 2003/10/17 00:01:10 jvisvanathan Exp $
  */
 
 /*
@@ -29,8 +29,6 @@ import java.util.Locale;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.servlet.jsp.jstl.core.Config;
-
 import com.sun.faces.util.Util;
 import org.mozilla.util.Assert;
 
@@ -41,7 +39,7 @@ import org.mozilla.util.Assert;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.8 2003/10/16 00:30:18 eburns Exp $
+ * @version $Id: ViewTag.java,v 1.9 2003/10/17 00:01:10 jvisvanathan Exp $
  * 
  *
  */
@@ -129,12 +127,6 @@ public class ViewTag extends UIComponentBodyTag
 	ResponseWriter writer = facesContext.getResponseWriter();
         Assert.assert_it(writer != null);
         
-        // update the JSTL locale attribute in request scope so that JSTL
-        // picks up the locale from viewRoot.
-        // PENDING (visvan) what if the JSTL setBundle gets executed before
-        // viewTag ? Then JSTL is going not see the modified locale.
-        Config.set((ServletRequest) facesContext.getExternalContext().getRequest(), 
-                Config.FMT_LOCALE, facesContext.getViewRoot().getLocale());
 	try {
             writer.startDocument();
         } catch (IOException e) {
