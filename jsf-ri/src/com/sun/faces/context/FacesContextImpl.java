@@ -1,5 +1,5 @@
  /*
- * $Id: FacesContextImpl.java,v 1.84 2006/09/01 01:22:39 tony_robertson Exp $
+ * $Id: FacesContextImpl.java,v 1.85 2006/11/08 16:48:51 rlubke Exp $
  */
 
 /*
@@ -195,25 +195,24 @@ import com.sun.faces.util.Util;
 
      public Severity getMaximumSeverity() {
          assertNotReleased();
-         int max = 0;
-         Severity result = null;
+         Severity max = FacesMessage.SEVERITY_INFO;
 
          if (null == componentMessageLists) {
              return null;
          }
          // Get an Iterator over the ArrayList instances
          List messages = getMergedMessageLists();
-         for (int i = 0, size = getMergedMessageLists().size(); i < size; i++) {
-             result = ((FacesMessage) messages.get(i)).getSeverity();
-             if (result.getOrdinal() > max) {
-                 max = result.getOrdinal();
+         for (int i = 0, size = messages.size(); i < size; i++) {
+             Severity s = ((FacesMessage) messages.get(i)).getSeverity();
+             if (s.getOrdinal() > max.getOrdinal()) {
+                 max = s;
              }
 
-             if (result == FacesMessage.SEVERITY_FATAL) {
+             if (FacesMessage.SEVERITY_FATAL.equals(max)) {
                  break;
              }
          }
-         return result;
+         return max;
      }
 
 

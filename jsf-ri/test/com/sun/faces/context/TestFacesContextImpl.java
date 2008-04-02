@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.53 2006/08/02 21:06:23 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.54 2006/11/08 16:48:51 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.ArrayList;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.53 2006/08/02 21:06:23 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.54 2006/11/08 16:48:51 rlubke Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {
@@ -380,6 +380,30 @@ public class TestFacesContextImpl extends ServletFacesTestCase {
         }
         
     }
+
+    public void testGetMaxServerity1() {
+        FacesContext f = getFacesContext();
+        FacesMessage msg1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "");
+        FacesMessage msg2 = new FacesMessage(FacesMessage.SEVERITY_WARN, "", "");
+
+        f.addMessage(null, msg2);
+        f.addMessage(null, msg1);
+
+        assertTrue(FacesMessage.SEVERITY_WARN.equals(f.getMaximumSeverity()));
+    }
+
+     public void testGetMaxServerity2() {
+        FacesContext f = getFacesContext();
+        FacesMessage msg1 = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "");
+        FacesMessage msg2 = new FacesMessage(FacesMessage.SEVERITY_WARN, "", "");
+        FacesMessage msg3 = new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "");
+
+        f.addMessage(null, msg2);
+        f.addMessage(null, msg1);
+        f.addMessage(null, msg3);
+
+        assertTrue(FacesMessage.SEVERITY_ERROR.equals(f.getMaximumSeverity()));
+    }       
 
 
     public void testGetApplication() {
