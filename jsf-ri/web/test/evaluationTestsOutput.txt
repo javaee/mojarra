@@ -371,37 +371,37 @@ With type: java.lang.Double
 
 Expression: ${bean1a.short1}
 ExpectedType: byte
-Evaluates to: -124
+Evaluates to: 98
 With type: java.lang.Byte
 
 Expression: ${bean1a.short1}
 ExpectedType: char
-Evaluates to: ﾄ
+Evaluates to: b
 With type: java.lang.Character
 
 Expression: ${bean1a.short1}
 ExpectedType: short
-Evaluates to: -124
+Evaluates to: 98
 With type: java.lang.Short
 
 Expression: ${bean1a.short1}
 ExpectedType: int
-Evaluates to: -124
+Evaluates to: 98
 With type: java.lang.Integer
 
 Expression: ${bean1a.short1}
 ExpectedType: long
-Evaluates to: -124
+Evaluates to: 98
 With type: java.lang.Long
 
 Expression: ${bean1a.short1}
 ExpectedType: float
-Evaluates to: -124.0
+Evaluates to: 98.0
 With type: java.lang.Float
 
 Expression: ${bean1a.short1}
 ExpectedType: double
-Evaluates to: -124.0
+Evaluates to: 98.0
 With type: java.lang.Double
 
 
@@ -443,37 +443,37 @@ With type: java.lang.Double
 
 Expression: ${bean1a.long1}
 ExpectedType: byte
-Evaluates to: -41
+Evaluates to: 98
 With type: java.lang.Byte
 
 Expression: ${bean1a.long1}
 ExpectedType: char
-Evaluates to: 擗
+Evaluates to: b
 With type: java.lang.Character
 
 Expression: ${bean1a.long1}
 ExpectedType: short
-Evaluates to: 25815
+Evaluates to: 98
 With type: java.lang.Short
 
 Expression: ${bean1a.long1}
 ExpectedType: int
-Evaluates to: 222423
+Evaluates to: 98
 With type: java.lang.Integer
 
 Expression: ${bean1a.long1}
 ExpectedType: long
-Evaluates to: 222423
+Evaluates to: 98
 With type: java.lang.Long
 
 Expression: ${bean1a.long1}
 ExpectedType: float
-Evaluates to: 222423.0
+Evaluates to: 98.0
 With type: java.lang.Float
 
 Expression: ${bean1a.long1}
 ExpectedType: double
-Evaluates to: 222423.0
+Evaluates to: 98.0
 With type: java.lang.Double
 
 
@@ -564,7 +564,7 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.byte1 < bean1a.short1}
 ExpectedType: boolean
-Evaluates to: false
+Evaluates to: true
 With type: java.lang.Boolean
 
 Expression: ${bean1a.byte1 < bean1a.int1}
@@ -610,7 +610,7 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.char1 < bean1a.long1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.char1 < bean1a.float1}
@@ -626,12 +626,12 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.byte1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.char1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.short1}
@@ -641,22 +641,22 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.int1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.long1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.float1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 Expression: ${bean1a.short1 < bean1a.double1}
 ExpectedType: boolean
-Evaluates to: true
+Evaluates to: false
 With type: java.lang.Boolean
 
 
@@ -672,7 +672,7 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.int1 < bean1a.short1}
 ExpectedType: boolean
-Evaluates to: false
+Evaluates to: true
 With type: java.lang.Boolean
 
 Expression: ${bean1a.int1 < bean1a.int1}
@@ -744,7 +744,7 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.float1 < bean1a.short1}
 ExpectedType: boolean
-Evaluates to: false
+Evaluates to: true
 With type: java.lang.Boolean
 
 Expression: ${bean1a.float1 < bean1a.int1}
@@ -780,7 +780,7 @@ With type: java.lang.Boolean
 
 Expression: ${bean1a.double1 < bean1a.short1}
 ExpectedType: boolean
-Evaluates to: false
+Evaluates to: true
 With type: java.lang.Boolean
 
 Expression: ${bean1a.double1 < bean1a.int1}
