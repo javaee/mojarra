@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.27 2006/12/17 07:44:04 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.28 2006/12/18 18:58:15 rlubke Exp $
  */
 
 /*
@@ -157,8 +157,22 @@ public class ValueChangeListenerTag extends TagSupport {
                       MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
 
-        ((EditableValueHolder) component).addValueChangeListener(
-             new BindingValueChangeListener(type, binding));        
+        // If binding is null, type is set and is a literal value,
+        // then don't bother wrapping.  Just instantiate and
+        // set.
+        ValueChangeListener listener;
+        if (binding == null && type != null && type.isLiteralText()) {
+            try {
+                listener = (ValueChangeListener)
+                     Util.getListenerInstance(type, null);
+            } catch (Exception e) {
+                throw new JspException(e.getMessage(), e.getCause());
+            }
+        } else {
+            listener = new BindingValueChangeListener(type, binding);
+        }
+        
+        ((EditableValueHolder) component).addValueChangeListener(listener);
 
         return (SKIP_BODY);
 
@@ -212,8 +226,8 @@ public class ValueChangeListenerTag extends TagSupport {
         public void processValueChange(ValueChangeEvent event) throws AbortProcessingException {
 
             if (instance == null) {
-               instance = (ValueChangeListener)
-                    Util.createListenerInstance(type, binding);
+                instance = (ValueChangeListener)
+                    Util.getListenerInstance(type, binding);
             }
             if (instance != null) {
                 instance.processValueChange(event);

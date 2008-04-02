@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerTag.java,v 1.34 2006/12/17 07:44:04 rlubke Exp $
+ * $Id: ActionListenerTag.java,v 1.35 2006/12/18 18:58:15 rlubke Exp $
  */
 
 /*
@@ -156,8 +156,22 @@ public class ActionListenerTag extends TagSupport {
                       "javax.faces.component.ActionSource"));
         }
 
-        ((ActionSource) component).addActionListener(
-             new BindingActionListener(type, binding));       
+        // If binding is null, type is set and is a literal value,
+        // then don't bother wrapping.  Just instantiate and
+        // set.
+        ActionListener listener;
+        if (binding == null && type != null && type.isLiteralText()) {
+            try {
+                listener = (ActionListener)
+                     Util.getListenerInstance(type, null);
+            } catch (Exception e) {
+                throw new JspException(e.getMessage(), e.getCause());
+            }
+        } else {
+            listener = new BindingActionListener(type, binding);
+        }
+        
+        ((ActionSource) component).addActionListener(listener);
 
         return (SKIP_BODY);
 
@@ -211,7 +225,7 @@ public class ActionListenerTag extends TagSupport {
 
             if (instance == null) {
                 instance = (ActionListener)
-                     Util.createListenerInstance(type, binding);
+                     Util.getListenerInstance(type, binding);
             }
             if (instance != null) {
                 instance.processAction(event);

@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseListenerTag.java,v 1.12 2006/12/17 07:44:04 rlubke Exp $
+ * $Id: PhaseListenerTag.java,v 1.13 2006/12/18 18:58:15 rlubke Exp $
  */
 
 /*
@@ -141,10 +141,21 @@ public class PhaseListenerTag extends TagSupport {
                  MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
 
-        // We need to cast here because addPhaseListener
-        // method does not apply to all components (it is not a method on
-        // UIComponent/UIComponentBase).
-        viewRoot.addPhaseListener(new BindingPhaseListener(type, binding));
+        // If binding is null, type is set and is a literal value,
+        // then don't bother wrapping.  Just instantiate and
+        // set.
+        PhaseListener listener;
+        if (binding == null && type != null && type.isLiteralText()) {
+            try {
+                listener = (PhaseListener)
+                    Util.getListenerInstance(type, null);
+            } catch (Exception e) {
+                throw new JspException(e.getMessage(), e.getCause());
+            }
+        } else {
+            listener = new BindingPhaseListener(type, binding);            
+        }
+        viewRoot.addPhaseListener(listener);
 
         return (SKIP_BODY);
 
@@ -242,7 +253,7 @@ public class PhaseListenerTag extends TagSupport {
         public PhaseListener getPhaseListener() throws AbortProcessingException {
             if (instance == null) {
                 instance = (PhaseListener)
-                     Util.createListenerInstance(type, binding);
+                     Util.getListenerInstance(type, binding);
             }
             if (instance != null) {
                 return instance;
