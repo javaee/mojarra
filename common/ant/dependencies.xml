@@ -282,7 +282,7 @@
     <property name="glassfish.home"
               value="${dependency.base.dir}/glassfish"/>
     <property name="tomcat6.home"
-              value="${dependency.base.dir}/apache-tomcat-6.0.2"/>
+              value="${dependency.base.dir}/apache-tomcat-6.0.10"/>
     <property name="glassfish.jar"
               value="${glassfish.home}/lib/appserv-rt.jar"/>
     <property name="tomcat6.jar"
@@ -340,15 +340,15 @@ java -Xmx256m -jar ${dependency.base.dir}/${glassfish.installer.jar} -console < 
 
         <if>
             <not>
-                <available file="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
+                <available file="${dependency.base.dir}/apache-tomcat-6.0.10.zip"
                            property="ignored"/>
             </not>
             <then>
-                <get src="http://www.ip97.com/apache.org/tomcat/tomcat-6/v6.0.2/bin/apache-tomcat-6.0.2.zip"
-                     dest="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
+                <get src="http://www.devlib.org/apache/tomcat/tomcat-6/v6.0.10/bin/apache-tomcat-6.0.10.zip"
+                     dest="${dependency.base.dir}/apache-tomcat-6.0.10.zip"
                      usetimestamp="true"/>
                 <unzip
-                      src="${dependency.base.dir}/apache-tomcat-6.0.2.zip"
+                      src="${dependency.base.dir}/apache-tomcat-6.0.10.zip"
                       dest="${dependency.base.dir}"/>
             </then>
         </if>
