@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.77 2003/10/31 04:04:57 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.78 2003/10/31 04:45:26 craigmcc Exp $
  */
 
 /*
@@ -546,8 +546,6 @@ public abstract class UIComponentBase extends UIComponent {
                             UIComponent child =
                                 (UIComponent) element;
                             eraseParent(child);
-                            String id = child.getId();
-                            validateId(id);
                             UIComponent previous =
                                 (UIComponent) get(index);
                             previous.setParent(null);
@@ -626,12 +624,6 @@ public abstract class UIComponentBase extends UIComponent {
         if (id == null) {
             return;
         }
-
-        if (0 == id.length() || 
-            NamingContainer.SEPARATOR_CHAR == id.charAt(0)) {
-            throw new IllegalArgumentException();
-        }
-            
         int n = id.length();
         if (n < 1) {
             throw new IllegalArgumentException();
@@ -640,7 +632,7 @@ public abstract class UIComponentBase extends UIComponent {
             char c = id.charAt(i);
             if (i == 0) {
                 if (!Character.isLetter(c) && (c != '_')) {
-                                    throw new IllegalArgumentException(id);
+                    throw new IllegalArgumentException(id);
                 }
             } else {
                 if (!Character.isLetter(c) &&
@@ -650,6 +642,7 @@ public abstract class UIComponentBase extends UIComponent {
                 }
             }
         }
+
     }
 
 

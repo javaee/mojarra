@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.111 2003/10/31 04:04:57 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.112 2003/10/31 04:45:26 craigmcc Exp $
  */
 
 /*
@@ -123,13 +123,32 @@ public abstract class UIComponent implements StateHolder {
 
 
     /**
-     * <p>Set the component identifier of this {@link UIComponent}.
+     * <p>Set the component identifier of this {@link UIComponent} (if any).
+     * Component identifiers must obey the following syntax restrictions:</p>
+     * <ul>
+     * <li>Must not be a zero-length String.</li>
+     * <li>First character must be a letter or an underscore ('_').</li>
+     * <li>Subsequent characters must be a letter, a digit,
+     *     an underscore ('_'), or a dash ('-').</li>
+     * <li>
+     * </ul>
      *
-     * @param id The new component identifier
+     * <p>Component identifiers must also obey the following semantic
+     * restrictions (note that this restriction is <strong>NOT</strong>
+     * enforced by the <code>setId()</code> implementation):</p>
+     * <ul>
+     * <li>The specified identifier must be unique among all the components
+     *     (including facets) that are descendents of the nearest ancestor
+     *     {@link UIComponent} that is a {@link NamingContainer}, or within
+     *     the scope of the entire component tree if there is no such
+     *     ancestor that is a {@link NamingContainer}.</li>
+     * </ul>
      *
-     * @exception IllegalArgumentException if <code>id</code> is zero
-     * length, begins with {@link NamingContainer#SEPARATOR_CHAR}, or
-     * contains invalid characters
+     * @param id The new component identifier, or <code>null</code> to indicate
+     *  that this {@link UIComponent} does not have a component identifier
+     *
+     * @exception IllegalArgumentException if <code>id</code> is not
+     *  syntactically valid
      */
     public abstract void setId(String id);
 
@@ -214,25 +233,11 @@ public abstract class UIComponent implements StateHolder {
      *     a NullPointerException</li>
      * <li>Any attempt to add an object that does not implement
      *     {@link UIComponent} must throw a ClassCastException.</li>
-     *
-     * <li>Any attempt to add a child {@link UIComponent} with a
-     *     non-null <code>componentId</code> that contains invalid
-     *     characters, or begins with {@link
-     *     NamingContainer#SEPARATOR_CHAR}, or {@link
-     *     UIViewRoot#UNIQUE_ID_PREFIX} (i.e. other than letters,
-     *     digits, '-', or '_') must throw
-     *     IllegalArgumentException.</li>
-     *
-     * <li>Whenever a new child component is added:
-     *     <ul>
-     *     <li>The <code>parent</code> property of the child must be set to
-     *         this component instance.</li>
-     *     </ul></li>
-     * <li>Whenever an existing child component is removed:
-     *     <ul>
-     *     <li>The <code>parent</code> property of the child must be
-     *         set to <code>null</code>.</li>
-     *     </ul></li>
+     * <li>Whenever a new child component is added, the <code>parent</code>
+     *     property of the child must be set to this component instance.</li>
+     * <li>Whenever an existing child component is removed, the
+     *     <code>parent</code> property of the child must be set to
+     *     <code>null</code>.</li>
      * </ul>
      */
     public abstract List getChildren();
