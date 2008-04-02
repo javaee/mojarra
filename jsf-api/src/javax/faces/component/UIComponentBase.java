@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.61 2003/09/25 23:21:33 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.62 2003/09/29 22:20:56 craigmcc Exp $
  */
 
 /*
@@ -942,6 +942,15 @@ public abstract class UIComponentBase extends UIComponent {
     // -------------------------------------------- Lifecycle Processing Methods
 
 
+    /**
+     * The list of events that have already been broadcast to ANY_PHASE
+     * listeners for this component.  This data structure is lazily
+     * instantiated only if necessary.  It is <strong>NOT</strong>
+     * part of the saved and restored state of this {@link UIComponent}.</p>
+     */
+    private transient List anyPhaseEvents = null;
+
+
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
         throws AbortProcessingException {
 
@@ -963,16 +972,22 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
         // Broadcast the event to interested listeners
-        broadcast(event, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
+        List anyPhaseListeners = listeners[PhaseId.ANY_PHASE.getOrdinal()];
+        if (anyPhaseListeners != null) {
+            if ((anyPhaseEvents == null) ||
+                !anyPhaseEvents.contains(event)) {
+                broadcast(event, anyPhaseListeners);
+            }
+            if (anyPhaseEvents == null) {
+                anyPhaseEvents = new ArrayList(5);
+            }
+            anyPhaseEvents.add(event);
+        }
         broadcast(event, listeners[phaseId.getOrdinal()]);
 
         // Determine whether there are any registered listeners for later phases
         // that are interested in this event
-        // PENDING(craigmcc) - Currently, we do not consider listeners
-        // registered for ANY_PHASE as being interested in this event
-        // in a future phase.  The implicit effect is that an event will
-        // be delivered to an ANY_PHASE listener exactly once, and it will
-        // have happened already by the time we get here
+        boolean result = false;
         for (int i = phaseId.getOrdinal() + 1; i < listeners.length; i++) {
             if ((listeners[i] != null) && (listeners[i].size() > 0)) {
                 int n = listeners[i].size();
@@ -980,7 +995,7 @@ public abstract class UIComponentBase extends UIComponent {
                     FacesListener listener = (FacesListener)
                         listeners[i].get(j);
                     if (event.isAppropriateListener(listener)) {
-                        return (true);
+                        result = true;
                     }
                 }
             }
@@ -991,7 +1006,7 @@ public abstract class UIComponentBase extends UIComponent {
             repeater.setRowIndex(rowIndex);
         }
 
-        return (false);
+        return (result);
 
     }
 

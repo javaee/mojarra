@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.2 2003/09/25 23:21:51 craigmcc Exp $
+ * $Id: UIViewRootTestCase.java,v 1.3 2003/09/29 22:20:58 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.component;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
@@ -73,6 +75,43 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 
     // ------------------------------------------------- Individual Test Methods
+
+
+    // Test event broadcasting
+    /* PENDING(craigmcc) - ConcurrentModificationException on ArrayList/LinkedList
+    public void testEventBroadcasting() {
+
+        // This test is intended to verify that we can actually
+        // modify the event queue (by removing and adding events)
+        // while an Iterator is running over it.  The test sort of
+        // cheats because it simulates the underlying algorithm
+        // using the same data structure.
+        List queue = new ArrayList();
+        StringBuffer results = new StringBuffer();
+
+        queue.add(new TestEvent(component, "1"));
+        queue.add(new TestEvent(component, "2"));
+        queue.add(new TestEvent(component, "3"));
+        queue.add(new TestEvent(component, "4"));
+
+        Iterator events = queue.iterator();
+        while (events.hasNext()) {
+            TestEvent event = (TestEvent) events.next();
+            results.append(event.getId());
+            if ("2".equals(event.getId())) {
+                results.append("R");
+                events.remove();
+            } else if ("3".equals(event.getId())) {
+                results.append("A");
+                queue.add(new TestEvent(component, "5"));
+            }
+        }
+
+        assertEquals("12R3A45", results.toString());
+        assertEquals(4, queue.size());
+
+    }
+    */
 
 
     // Test event queuing and broadcasting

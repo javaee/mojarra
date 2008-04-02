@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.10 2003/09/25 07:46:06 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.11 2003/09/29 22:20:58 craigmcc Exp $
  */
 
 /*
@@ -122,7 +122,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/AP0/AP1/AP2/AP0/AP1/AP2/AP0/AP1/AP2",
+        assertEquals("/AP0/AP1/AP2",
                      TestActionListener.trace());
 
     }
@@ -147,7 +147,7 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
         assertTrue(command.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(command.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!command.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/AP/ARV/AP/PV/AP",
+        assertEquals("/AP/ARV/PV",
                      TestActionListener.trace());
 
     }

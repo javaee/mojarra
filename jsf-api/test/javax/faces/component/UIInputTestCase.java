@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.13 2003/09/25 07:46:09 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.14 2003/09/29 22:20:58 craigmcc Exp $
  */
 
 /*
@@ -158,7 +158,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertTrue(!input.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(!input.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!input.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/AP0/AP1/AP2/AP0/AP1/AP2/AP0/AP1/AP2",
+        assertEquals("/AP0/AP1/AP2",
                      TestValueChangedListener.trace());
 
     }
@@ -183,7 +183,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         assertTrue(input.broadcast(event, PhaseId.APPLY_REQUEST_VALUES));
         assertTrue(!input.broadcast(event, PhaseId.PROCESS_VALIDATIONS));
         assertTrue(!input.broadcast(event, PhaseId.INVOKE_APPLICATION));
-        assertEquals("/AP/ARV/AP/PV/AP",
+        assertEquals("/AP/ARV/PV",
                      TestValueChangedListener.trace());
 
     }

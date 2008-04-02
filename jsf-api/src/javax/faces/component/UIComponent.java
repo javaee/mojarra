@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.101 2003/09/25 23:21:32 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.102 2003/09/29 22:20:56 craigmcc Exp $
  */
 
 /*
@@ -348,7 +348,9 @@ public abstract class UIComponent implements StateHolder {
      * <ul>
      * <li>Listeners whose <code>getPhaseId()</code> method returns
      *     <code>PhaseId.ANY_PHASE</code>, in the order that they were
-     *     registered.</li>
+     *     registered.  However, the implementation must ensure that the same
+     *     event is not delivered to the same <code>PhaseId.ANY_PHASE</code>
+     *     listener more than once.</li>
      * <li>Listeners whose <code>getPhaseId()</code> method returns
      *     the <code>PhaseId</code> specified on this method call,
      *     in the order that they were registered.</li>
