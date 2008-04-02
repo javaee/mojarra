@@ -65,6 +65,7 @@ public class AreaComponent extends UIOutputBase {
     private String alt = null;
     private String coords = null;
     private String shape = null;
+    private String targetImage = null;
 
 
 
@@ -125,7 +126,21 @@ public class AreaComponent extends UIOutputBase {
         this.shape = shape;
     }
 
-
+    /**
+     * <p>Set the image that is the target of this <code>AreaComponent</code>.</p>
+     * @return the target image of this area component.
+     */ 
+    public String getTargetImage() {
+        return targetImage;
+    }
+    
+    /**
+     * <p>Set the image that is the target of this <code>AreaComponent</code>.</p>
+     * @param targetImage the ID of the target of this <code>AreaComponent</code>
+     */ 
+    public void setTargetImage(String targetImage) {
+        this.targetImage = targetImage;
+    }
 
     // -------------------------------------------------------- UIOutput Methods
 

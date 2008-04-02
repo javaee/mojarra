@@ -74,27 +74,32 @@
         <d:area        id="NAmericas"
                  valueRef="NA"
               onmouseover="/images/world_namer.gif"
-               onmouseout="/images/world.gif"/>
+               onmouseout="/images/world.gif"
+               targetImage="mapImage"/>
 
         <d:area        id="SAmericas"
                  valueRef="SA"
               onmouseover="/images/world_samer.gif"
-               onmouseout="/images/world.gif"/>
+               onmouseout="/images/world.gif"
+               targetImage="mapImage"/>
 
         <d:area        id="Finland"
                  valueRef="finA"
               onmouseover="/images/world_finland.gif"
-               onmouseout="/images/world.gif"/>
+               onmouseout="/images/world.gif"
+               targetImage="mapImage"/>
 
         <d:area        id="Germany"
                  valueRef="gerA"
               onmouseover="/images/world_germany.gif"
-               onmouseout="/images/world.gif"/>
+               onmouseout="/images/world.gif"
+               targetImage="mapImage"/>
 
         <d:area        id="France"
                  valueRef="fraA"
               onmouseover="/images/world_france.gif"
-               onmouseout="/images/world.gif"/>
+               onmouseout="/images/world.gif"
+               targetImage="mapImage"/>
 
       </d:map>
 

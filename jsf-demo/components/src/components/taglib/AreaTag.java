@@ -56,7 +56,11 @@ public class AreaTag extends UIComponentTag {
         this.alt = alt;
     }
 
-
+    private String targetImage = null;
+    public void setTargetImage(String targetImage) {
+        this.targetImage = targetImage;
+    }
+    
     private String coords = null;
     public void setCoords(String coords) {
         this.coords = coords;
@@ -139,6 +143,8 @@ public class AreaTag extends UIComponentTag {
         if (valueRef != null) {
             area.setValueRef(valueRef);
         }
+        // target image is required
+        area.setTargetImage(targetImage);
 
     }
 

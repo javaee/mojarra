@@ -124,6 +124,8 @@ public class AreaRenderer extends BaseRenderer {
             throw new NullPointerException();
         }
         AreaComponent area = (AreaComponent) component;
+        String targetImageId = 
+                area.findComponent(area.getTargetImage()).getClientId(context);
         ImageArea iarea = (ImageArea) area.currentValue(context);
         ResponseWriter writer = context.getResponseWriter();
         StringBuffer sb = null;
@@ -133,12 +135,12 @@ public class AreaRenderer extends BaseRenderer {
         writer.writeAttribute("coords", iarea.getCoords(), "coords");
         writer.writeAttribute("shape", iarea.getShape(), "shape");
         // PENDING(craigmcc) - onmouseout only works on first form of a page
-        sb = new StringBuffer("document.forms[0].mapImage.src='");
+        sb = new StringBuffer("document.forms[0].").append(targetImageId).append(".src='");
         sb.append(getURI(context, (String) area.getAttribute("onmouseout")));
         sb.append("'");
         writer.writeAttribute("onmouseout", sb.toString(), "onmouseout");
         // PENDING(craigmcc) - onmouseover only works on first form of a page
-        sb = new StringBuffer("document.forms[0].mapImage.src='");
+        sb = new StringBuffer("document.forms[0].").append(targetImageId).append(".src='");
         sb.append(getURI(context, (String) area.getAttribute("onmouseover")));
         sb.append("'");
         writer.writeAttribute("onmouseover", sb.toString(), "onmouseover");

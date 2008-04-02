@@ -116,6 +116,15 @@
         hotspot when the mouse is hovering over it.
       </description>
     </attribute>
+      
+    <attribute>
+      <name>targetImage</name>
+      <required>true</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Specifies the ID if the image component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>shape</name>
