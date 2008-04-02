@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.10 2003/10/07 20:57:37 rlubke Exp $
+ * $Id: CarActionListener.java,v 1.11 2003/10/07 23:25:42 rlubke Exp $
  */
 
 /*
@@ -135,23 +135,23 @@ public class CarActionListener implements ActionListener {
             // propValue of 2 represents, the option will be disabled and 
             // unselected.
             if ( propValue.equals("0")) {
-                foundComponent.getAttributes().put("selectbooleanClass", 
+                foundComponent.getAttributes().put("styleClass", 
                     "option-unselected");
-                foundComponent.getAttributes().put("disabled", "false");
+                foundComponent.getAttributes().put("disabled", Boolean.FALSE);
                 // if we do not check for Custom here, current value will be lost
                 // and the value will be set to false.
                 if (!(packageName.equals("Custom"))) {
                     ((UISelectBoolean)foundComponent).setValue(Boolean.FALSE);
                 }    
             } else if (propValue.equals("1")){
-                foundComponent.getAttributes().put("selectbooleanClass", 
+                foundComponent.getAttributes().put("styleClass", 
                     "package-selected");
-                foundComponent.getAttributes().put("disabled", "true");
+                foundComponent.getAttributes().put("disabled", Boolean.TRUE);
                 ((UISelectBoolean)foundComponent).setValue(Boolean.TRUE);
             }  else if (propValue.equals("2")) {
-                 foundComponent.getAttributes().put("selectbooleanClass", 
+                 foundComponent.getAttributes().put("styleClass", 
                     "package-selected");
-                foundComponent.getAttributes().put("disabled", "true");
+                foundComponent.getAttributes().put("disabled", Boolean.TRUE);
                 ((UISelectBoolean)foundComponent).setValue(Boolean.FALSE);
             } // end of if  
         }  // end of while
@@ -168,9 +168,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Custom")) {
-            foundComponent.getAttributes().put("commandClass", "package-selected");
+            foundComponent.getAttributes().put("styleClass", "package-selected");
         } else {
-            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
         
         foundComponent = component.findComponent("standard");
@@ -178,9 +178,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Standard")) {
-            foundComponent.getAttributes().put("commandClass", "package-selected");
+            foundComponent.getAttributes().put("styleClass", "package-selected");
         } else {
-            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
         
         foundComponent = component.findComponent("performance");
@@ -188,9 +188,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Performance")) {
-            foundComponent.getAttributes().put("commandClass", "package-selected");
+            foundComponent.getAttributes().put("styleClass", "package-selected");
         } else {
-            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
         
         foundComponent = component.findComponent("deluxe");
@@ -198,9 +198,9 @@ public class CarActionListener implements ActionListener {
             return;
         }
         if ( packName.equals("Deluxe")) {
-            foundComponent.getAttributes().put("commandClass", "package-selected");
+            foundComponent.getAttributes().put("styleClass", "package-selected");
         } else {
-            foundComponent.getAttributes().put("commandClass", "package-unselected"); 
+            foundComponent.getAttributes().put("styleClass", "package-unselected"); 
         }
     }
    
