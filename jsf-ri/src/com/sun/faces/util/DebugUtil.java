@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.37 2006/05/18 20:55:15 rlubke Exp $
+ * $Id: DebugUtil.java,v 1.38 2006/06/06 00:30:18 rlubke Exp $
  */
 
 /*
@@ -241,6 +241,32 @@ public class DebugUtil {
         // print all the children of this component
         while (it.hasNext()) {
             printTree(it.next(), out);
+        }
+        curDepth--;
+    }
+    
+    public static void simplePrintTree(UIComponent root, 
+                                      String duplicateId,
+                                       Writer out) {
+        if (null == root) {
+            return;
+        }                     
+
+        if (duplicateId.equals(root.getId())) {
+            indentPrintln(out, "+id: " + root.getId() + "  <===============");
+        } else {
+            indentPrintln(out, "+id: " + root.getId());
+        }
+        indentPrintln(out, " type: " + root.toString());           
+
+        curDepth++;       
+        // print all the facets of this component
+        for (UIComponent uiComponent : root.getFacets().values()) {
+            simplePrintTree(uiComponent, duplicateId, out);
+        }
+        // print all the children of this component
+        for (UIComponent uiComponent : root.getChildren()) {
+            simplePrintTree(uiComponent, duplicateId, out);
         }
         curDepth--;
     }

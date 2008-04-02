@@ -51,12 +51,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.DebugUtil;
 
 public class StateManagerImpl extends StateManager {
 
@@ -331,9 +333,13 @@ public class StateManagerImpl extends StateManager {
                                "jsf.duplicate_component_id_error",
                                id);
                 }
-                throw new IllegalStateException(
-                      MessageUtils.getExceptionMessageString(
-                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id));
+                FastStringWriter writer = new FastStringWriter(128);
+                DebugUtil.simplePrintTree(context.getViewRoot(), id, writer);
+                String message = MessageUtils.getExceptionMessageString(
+                            MessageUtils.DUPLICATE_COMPONENT_ID_ERROR_ID, id) 
+                      + '\n'
+                      + writer.toString();
+                throw new IllegalStateException(message);
             }
         }
 

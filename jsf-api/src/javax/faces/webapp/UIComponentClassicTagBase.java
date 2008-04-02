@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.21 2006/06/05 21:14:26 rlubke Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.22 2006/06/06 00:30:14 rlubke Exp $
  */
 
 /*
@@ -44,6 +44,8 @@ import javax.servlet.jsp.tagext.JspIdConsumer;
 import javax.servlet.jsp.tagext.Tag;
 
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1085,11 +1087,15 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 if (clientId != null) {
                     if (componentIds.containsKey(clientId)) {
                         // PENDING i18n
-                        throw new JspException(new IllegalStateException("Duplicate component id: '" +
-                            clientId +
-                            "', first used in tag: '" +
-                            componentIds.get(clientId).getClass().getName() +
-                            "'"));
+                        StringWriter writer = new StringWriter(128);
+                        printTree(context.getViewRoot(), clientId, writer, 0);
+                        String msg = "Duplicate component id: '" 
+                                     + clientId 
+                                     + "', first used in tag: '" 
+                                     + componentIds.get(clientId).getClass().getName()
+                                     + "'\n"
+                                     + writer.toString();                                     
+                        throw new JspException(new IllegalStateException(msg));
                     } else {                        
                         componentIds.put(clientId, this);
                     }
@@ -1470,7 +1476,16 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
                 if (isNestedInIterator) {
                     this.id = generateIncrementedId(this.id);
                 } else {
-                    throw new JspException("Duplicate Id Found:"+this.id);
+                    StringWriter writer = new StringWriter(128);
+                    printTree(context.getViewRoot(), this.id, writer, 0);
+                    String msg = "Component ID '"
+                                 + this.id
+                                 + "' has already been used" 
+                                 + " in the view.\n"
+                                 + "See below for the view up to the point of" 
+                                 + " the detected error.\n"
+                                 + writer.toString();
+                    throw new JspException(msg);
                 }
             }
 	    return (this.id);
@@ -1685,5 +1700,45 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     }
 
+    private static void printTree(UIComponent root, 
+                                  String duplicateId,
+                                  Writer out, 
+                                  int curDepth) {
+        if (null == root) {
+            return;
+        }                      
+
+        if (duplicateId.equals(root.getId())) {
+            indentPrintln(out, "+id: " + root.getId() + "  <===============", 
+                          curDepth);
+        } else {
+            indentPrintln(out, "+id: " + root.getId(), curDepth);
+        }
+        indentPrintln(out, " type: " + root.toString(), curDepth);           
+
+        curDepth++;       
+        // print all the facets of this component
+        for (UIComponent uiComponent : root.getFacets().values()) {
+            printTree(uiComponent, duplicateId, out, curDepth);
+        }
+        // print all the children of this component
+        for (UIComponent uiComponent : root.getChildren()) {
+            printTree(uiComponent, duplicateId, out, curDepth);
+        }
+
+    }
+
+    private static void indentPrintln(Writer out, String str, int curDepth) {
+       
+        // handle indentation
+        try {
+            for (int i = 0; i < curDepth; i++) {
+                out.write("  ");
+            }
+            out.write(str + "\n");
+        } catch (IOException ex) {
+            // ignore
+        }
+    }
 
 }
