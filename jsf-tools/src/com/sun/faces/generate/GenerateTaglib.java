@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.6 2003/11/11 00:14:17 eburns Exp $
+ * $Id: GenerateTaglib.java,v 1.7 2003/11/13 15:51:40 eburns Exp $
  */
 
 /*
@@ -471,6 +471,7 @@ public class GenerateTaglib extends GenerateTagBase {
 	String propertyName = null;
 	String propertyClass = null;
 	String propertyDescription = null;
+	String tagAttributeStatus = null;
 
 	for (int i=0; i<propertyNames.size(); i++) {
 	    propertyName = (String)propertyNames.get(i);
@@ -494,12 +495,23 @@ public class GenerateTaglib extends GenerateTagBase {
 	    }
 	    propertyDescription = getParser().getComponentPropertyDescription (
 	        componentType, propertyName);
+	    tagAttributeStatus = 
+		getParser().getComponentPropertyTagAttribute(componentType, 
+							     propertyName);
+	    // if the tagAttributeStatus was "no"
+	    if (null != tagAttributeStatus && 
+		tagAttributeStatus.equals("no")) {
+		// don't generate an attribute.
+		continue;
+	    }
+
 	    result.append("    <attribute>\n");
 	    result.append("      <name>");
 	    result.append(propertyName);
 	    result.append("</name>\n");
 	    result.append("      <required>");
-	    result.append(tagLibGenerator.getRequired(tagName, propertyName));
+	    result.append(tagLibGenerator.getRequired(tagName, propertyName, 
+						      tagAttributeStatus));
 	    result.append("</required>\n");
 	    result.append("      <rtexprvalue>");
 	    result.append(tagLibGenerator.getRtexprvalue(tagName, propertyName));
@@ -530,6 +542,7 @@ public class GenerateTaglib extends GenerateTagBase {
 	String attributeName = null;
 	String attributeClass = null;
 	String attributeDescription = null;
+	String tagAttributeStatus = null;
 
 	for (int i=0; i<attributeNames.size(); i++) {
 	    attributeName = (String)attributeNames.get(i);
@@ -552,12 +565,23 @@ public class GenerateTaglib extends GenerateTagBase {
 
 	    attributeDescription = getParser().getRendererAttributeDescription (
 	        rendererType, attributeName);
+	    tagAttributeStatus = 
+		getParser().getRendererAttributeTagAttribute(rendererType, 
+							     attributeName);
+	    // if the tagAttributeStatus was "no"
+	    if (null != tagAttributeStatus && 
+		tagAttributeStatus.equals("no")) {
+		// don't generate an attribute.
+		continue;
+	    }
+
 	    result.append("    <attribute>\n");
 	    result.append("      <name>");
 	    result.append(attributeName);
 	    result.append("</name>\n");
 	    result.append("      <required>");
-	    result.append(tagLibGenerator.getRequired(tagName, attributeName));
+	    result.append(tagLibGenerator.getRequired(tagName, attributeName,
+						      tagAttributeStatus));
 	    result.append("</required>\n");
 	    result.append("      <rtexprvalue>");
 	    result.append(tagLibGenerator.getRtexprvalue(tagName, attributeName));
