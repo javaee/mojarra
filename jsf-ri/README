@@ -1,8 +1,8 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_20031009
-jsf-api-spec for this implementation: JSF_20030930.pdf
+jsf-api cvs tag for this implementation: JSF_API_20031017
+jsf-api-spec for this implementation: <>
 
 Installation Notes
 ==================
@@ -21,406 +21,471 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-SECTION: API Changes by scarab issue, since JSF_API_20030930 draft
+SECTION: API Changes by scarab issue, since JSF_API_20030930 draft (103
+         commit messages)
 
-JSFA3 Naming Container
+[JSFA101] 
 
-  M src/javax/faces/webapp/UIComponentTag.java
-    use request scope to store the componentIDs HashMap instead
-    of page scope since we get a new PageContext in the case of
-    imported and included pages.
-  A src/javax/faces/component/UINamingContainer.java
-    NamingContainer implementation.
+  build changes for code gen
 
-  M src/javax/faces/application/StateManager.java
+  For those HTML attributes that are "numberish" such as "height", make
+  the type "java.lang.String".
+
+"[NEW] ValueHolder and "valid""  
+
+  Add ConvertableValueHolder (extends ValueHolder) interface.  Migrate
+  "converter" property from ValueHolder to ConvertableValueHolder.  Add
+  "valid" property, to be removed from UIInput.
+
+  Add ConvertableValueHolderSupport (extends ValueHolderSupport) for
+  delegation support.
+
+  NOTE:  unit tests do not currently run; all our recent changes have left
+  them in need of some refactoring.  I'm going to do that next.
+
+  RI IMPACT:  Any code that casts to ValueHolder in order to access the
+  "converter" property must cast to "ConvertableValueHolder" instead.  Any
+  code that casts to UIInput to access the "valid" property must cast to
+  "ConvertableValueHolder" instead.
+
+  Correct implementation of delegated state restoration to
+  ValueHolderSupport, and correct saving/restoring of Converter as an
+  attached object.
+
+  add "supported-component-class" element to dtd.
+
+  M doc/standard-html-renderkit.xml
+    * added usemap and ismap attributes to Image.
+    * added shape, coords, rel, rev, hreflang attributes to hyperlink.
+
+[JSFA3]
+
+  Update Javadocs for UIComponent.setId() to remove the restriction that
+  component ids cannot start with UIViewRoot.UNIQUE_ID_PREFIX (otherwise,
+  component tags would not be able to generate such ids).  The corresponding
+  code change in UIComponentBase was checked in on 10/07/2003.
+
+test changes
+
+  * Avoid the need for laborious cut-n-paste code in testStateHolder
+    by factoring out the stuff that changes.
+
+  * More importantly, ensure that a component subclass saves and restores
+    all the state for its superclass as well as itself.
+
+[JSFA80][JSFA108]
+
   M src/javax/faces/application/ViewHandler.java
 
-    Move the responsibility for enforcing the id uniqueness property back
-    to StateManager.saveSerializedView(), as Adam suggested.
+    added calculateLocale() method.
 
-  M src/javax/faces/webapp/UIComponentTag    
-   - UIComponentTag will now store a list in the PageContext      
-     of all user defined component ID.  If any duplicates      
-     are found throw an IllegalStateException wrapped by a       
-     JSPException.      
-   - Updated pending remark in doStartTag().  The FacesContext      
-     will be checked for in the PageContext first, if not found,      
-     then call FacesContext.getCurrentInstance().   
-     Once obtained store in PageContext to refrain from repeated calls to       
-     getCurrentInstance().
+  M src/javax/faces/application/MessageResources.java
 
-     Spec bug.  UIForm must still implement NamingContainer.  This was
-     removed accidentally when applying Adam's proposal to the code.
+  Reflect location change of Locale
 
-     Removed unused instance variable.
+  r=visvan
 
-JSFA101
+  Make it so the overrideProperties for the tag that handles UIViewRoot is
+  called.
 
-  - Add mapping of component type "NamingContainer" to UINamingContainer.
+  Provide for the <f:view> tag to have a "locale" attribute.
 
-  M tools/javax/faces/generate/GenerateConcreteClasses.java
+  RI Impact: Handled atomically in this checkin.
 
-  - generate an implementation of the {save,restore}State() methods on
-    StateHolder.
+  r=edburns
 
-  RI Impact: 
-
-  These changes will need to be pulled into the jsf-ri-config.xml
-
-  When we generate the jsf-ri-config.xml, these changes will automatically
-  get pulled in.
-
-  Change the html taglib to use these new component types that map to
-  concrete HTML components.
+  SECTION: API Changes
 
   M doc/standard-html-renderkit.xml
 
-  - add missing component for TextRenderer HtmlOutputText
+  - add property for "locale".
 
-  - add component-type entries for the concrete HTML Components.
+  M src/javax/faces/webapp/UIComponentTag.java
 
-  - remove "base" where it occurrs.
+  - Make it so the tag handler for UIViewRoot tag gets its
+    overrideProperties() method called once per pageContext instance.
+    This replicates the behaviour for non-root tags.
 
-  - Add component-type elements for all <renderers>
+  SECTION: RI Changes
 
-  - Normalize all occurrences of "TextArea" to be "Textarea".
+  A test/com/sun/faces/taglib/jsf_core/TestViewTag.java
+  A web/test/TestViewTag.jsp
 
-  - Assign default values to primitive types.
+  - exercise standard behavior of this feature
 
-    Boolean == false
+  M build-tests.xml
 
-    Number types == <number>.MIN_VALUE.
+  - add TestViewTag.
 
+  M conf/share/jsf_core.tld
 
-JSFA126 attached objects.
+  - add the "locale" attribute
 
-   M src/javax/faces/component/UIComponentBase.java
+  M src/com/sun/faces/taglib/jsf_core/ViewTag.java
 
-   - find component fix, from Ryan Lubke.
+  - add the "locale" attribute, make it elexpression enabled.
 
-     Make sure to look if the match requested *is* a naming container.
+  - add override properties to set the locale into the ViewRoot if set.
 
-   - new public static methods 
+  M systest/web/message01.jsp
+  M systest/web/message02.jsp
+  M systest/web/message03.jsp
 
-       /**
-	*
-	* <p>This method is called by {@link UIComponent} subclasses that
-	* want to save one or more attached objects.  It is a convenience
-	* method that does the work of saving attached objects that may or
-	* may not implement the {@link StateHolder} interface.  Using this
-	* method implies the use of {@link #restoreAttachedState} to restore
-	* the attached objects.</p>
-	*
-	* <p>This method supports saving attached objects of the following
-	* type: <code>Object</code>, <code>List</code> of
-	* <code>Object</code> and array of <code>List</code> of
-	* <code>Object</code>.</p>
-	*
-	* <p>Algorithm:</p>
-	*
-	* <ul>
-	*
-	* <p>If argument <code>attachedObject</code> is <code>null</code>
-	* return.</p>
-	*
-	* <p>If the argument <code>attachedObject</code> is an array of
-	* <code>List</code> call a private helper method to handle this
-	* case.  Return the result.</p>
-	*
-	* <p>If the argument <code>attachedObject</code> is itself a
-	* <code>List</code>, create a new <code>List</code> and fill it
-	* with one <code>StateHolderSaver</code> for each element in the
-	* argument <code>attachedObject</code> list.  Return the new
-	* <code>List</code>.</p>
-	*
-	* <p>Otherwise, create a <code>StateHolderSaver</code> instance
-	* around the argument <code>attachedObject</code> and return
-	* it.</p>
-	*
-	* </ul>
-	*
-	* @param context the {@link FacesContext} for this request.
-	*
-	* @param attachedObject the object, which may be an array of
-	* <code>List</code> instances, a <code>List</code> instance, or an
-	* Object.  The <code>attachedObject</code> (or the elements that
-	* comprise <code>attachedObject</code> may implement {@link
-	* StateHolder}.
-	*
-	* @exception NullPointerException if the context argument is null.
-	*
-	*/
-
-       public static Object saveAttachedState(FacesContext context,
-					      Object attachedObject) {}
-
-       /**
-	*
-	* <p>This method is called by {@link UIComponent} subclasses that
-	* need to restore the objects they saved using {@link
-	* #saveAttachedState}.  This method is tightly coupled with {@link
-	* #saveAttachedState}.</p>
-	*
-	* <p>This method supports restoring all attached objects types
-	* supported by {@link #saveAttachedState}.</p>
-	*
-	* <p>Algorithm:</p>
-	*
-	* <p>If the argument <code>stateObj</code> is an array of
-	* <code>Object</code> instances, call a private helper method and
-	* return the result.</p>
-	*
-	* <p>If the argument <code>stateObj</code> is a <code>List</code>,
-	* create a new <code>List</code> to hold the result.  Treat each
-	* element of <code>stateObj</code> as a
-	* <code>StateHolderSaver</code> instance and call
-	* <code>restore</code> on it, saving the result to the result
-	* <code>List</code>, which is returned.</p>
-	*
-	* <p>If the argument <code>stateObj</code> is an instance of
-	* <code>StateHolderSaver</code> call <code>restore</code> on it and
-	* return the result.</p>
-	*
-	* @param context the {@link FacesContext} for this request
-	*
-	* @param stateObj the opaque object returned from {@link
-	* #saveAttachedState}
-	*
-	* @exception NullPointerException if context is null.
-	*
-	* @exception IllegalStateException if we don't have a
-	* <code>StateHolderSaver</code> instance where we expect one.
-	*
-	*/
-
-       public static Object restoreAttachedState(FacesContext context,
-						 Object stateObj) throws IllegalStateException {}
-
-   RI and DEMO Impact: any component that has attached objects to save will
-   have to call UIComponentBase.{save,restore}AttachedState().  
-
-   A src/javax/faces/component/StateHolderSaver.java
-
-   - new home for StateHolderSaver.
-
-   R src/javax/faces/application/StateHolderSaver.java
-
-   - this shouldn't be in the application package.
-
-   M src/javax/faces/application/StateManager.java
-
-   - remove attached object methods from here
-
-   M src/javax/faces/component/UICommand.java
-   M src/javax/faces/component/UIData.java
-   M src/javax/faces/component/UIGraphic.java
-   M src/javax/faces/component/UIInput.java
-   M src/javax/faces/component/UIOutput.java
-   M src/javax/faces/component/UIPanel.java
-   M src/javax/faces/component/UIParameter.java
-   M src/javax/faces/component/UISelectItem.java
-   M src/javax/faces/component/UISelectItems.java
-   M src/javax/faces/component/ValueHolderSupport.java
-
-   - leverage the new attached object APIs
-
-   - Added clarification to ViewHandler.renderView() and
-     ViewHandler.getViewIdPath() to consider the output of
-     HttpServletRequest.getServletPath() in congunction with the one or
-     more url-pattern mappings obtained from the deployment descriptor
-     to determine which mapping was used to invoke the FacesServlet.
-
-   Scarab issue: JSFA110 JSFA42
-
-     Clarified ViewHandler.renderView() and ViewHandler.getViewIdPath()
-     to reflect the possibility of multiple url-pattern mappings for the
-     FacesServlet.
-
-     Modified ConfigParser to qualify digester with 'this'
+  - make these run.
 
 
-     Fold in Hans's spec changes.
+  r=craigmcc
+  Author: visvan
 
-     RI Impact: see below
+  M src/javax/faces/component/UIViewRoot.java
+    added methods setLocale() and getLocale().
 
-     M src/javax/faces/application/ViewHandler.java
-
-     - change the contrat of getViewIdPath to take action in both prefix and
-       suffix cases.
-
-     - change the contract of renderView to replace the existing suffix with
-       the new one in the case of extension mapping.
-
-Bugfixes
+  M src/javax/faces/context/FacesContext.java
+    remove methods setLocale() and getLocale().
 
   M src/javax/faces/convert/DateTimeConverter.java
+  M src/javax/faces/convert/NumberConverter.java
+    set and get locale from UIViewRoot instead of FacesContext.
 
-  - Since GregorianCalendar requires a default TimeZone, we shouldn't be
-    wiping it out if possible.
 
-TCK related changes
+  Spec that any errors during startup or parsing of the config file must
+  cause the FacesServlet.init() method to throw ServletException,
+  causing the servlet to not be placed into service.
 
-  M src/javax/faces/convert/DateTimeConverter.java    
-   - Javadoc clarifications to the following for returns      
-     of getters.    
-   - renamed {get,set}ParseLocale to {get,set}Locale    
-   - If timezone has not been set, but getTimeZone() is      
-     called, return the default TimeZone of the VM    
-   - If locale has not been set, but getLocale() is      
-     called, return the locale (and possibly default      
-     locale of VM) from FacesContext    
-   - Removed empty string check when testing patterns      
-      this should be passed through.    
-   - Ensure locales are set on all of the DateFormat       
-     instances.    
-   - Updated private method getLocale() to only leverage      
-     FacesContext to obtain Locale info.  Javadocs state      
-     that if no locale is available to the FacesContext      
-     the default VM locale will be used.
+  RI IMPACT: 
+
+  Make sure that errors in the config file cause FacesServlet.init() to
+  throw ServletException.  Have some unit tests that prove this is the
+  case.
+
+  r=visvan
+
+  Implement 1 and 2 from
+  <http://archives.java.sun.com/cgi-bin/wa?A2=ind0310&L=jsr-127-eg&F=&S=&X=04C77A2F703823CF44&Y=ed.burns@sun.com&P=21467>
+
+  SECTION: API Changes
+
+  M doc/web-facesconfig_1_0.dtd
+
+  - add the "locale-config" element to "application".
+
+  - define the contents of the locale-config element.
+
+  M src/javax/faces/application/Application.java
+
+  - APIs for locale on Application
+
+  M test/javax/faces/mock/MockApplication.java
+
+  - make it compile
+
+  SECTION: RI Changes.
+
+  A web/test/locale-config.xml
+  A web/test/locale-config1.xml
+  A web/test/locale-config2.xml
+
+  - test config files
+
+  M src/com/sun/faces/application/ApplicationImpl.java
+
+  - impl of new methods for Locale.
+
+  M src/com/sun/faces/config/ConfigApplication.java
+
+  - things called by Digester code.
+
+  M src/com/sun/faces/config/ConfigParser.java
+
+  - rules to store the result into the Application instance.
+
+  - rules to set the bean from the config file.
+
+  - move private Locale getLocale() to public static Locale
+    Util.getLocaleFromString()
+
+  M src/com/sun/faces/util/Util.java
+
+  - new method: 
+
+  public static Locale Util.getLocaleFromString()
+
+  M test/com/sun/faces/application/TestApplicationImpl_Config.java
+
+  - exercise core and edge cases for Locale from config file.
+
+  M test/com/sun/faces/util/TestUtil_local.java
+
+  - exercise core and edge cases for Locale from string
+
+
+
+[JSFA128]
+
+  M doc/web-facesconfig_1_0.dtd
+
+  - replace "values" element within "managed-property" element to be
+    "list-entries" per EG request.
+
+  M test/javax/faces/webapp/config-file-1.xml
+
+  - make the test file conform to the DTD changes
+
+  SECTION: RI Changes
+
+  M src/com/sun/faces/config/ConfigParser.java
+
+  - change "values" to "list-entries"
+
+  M src/com/sun/faces/config/ManagedBeanFactory.java
+
+  - fix broken implementation of List and Map config from a faces-config
+    file.
+
+    New methods: 
+
+	      arrayOrList = getArrayOrListToSetIntoBean(bean, cmp);
+
+		      map = getMapToSetIntoBean(bean, cmp);
+
+  M test/com/sun/faces/TestBean.java
+
+  - This thing wasn't really a bean.  Fixed bean convention violations
+    that were exposed when the core impl was fixed.
+
+  M test/com/sun/faces/config/ConfigFileTestCase.java
+
+  - added testcase:
+
+  +    public void testMapPositive() throws Exception {
+
+  M test/com/sun/faces/config/NewCustomerFormHandler.java
+
+  - Added "array of Strings" property
+
+  M test/com/sun/faces/config/TestManagedBeanFactory.java
+
+  - adjust testcase to take non-broken impl into account
+
+  M web/test/WEB-INF/faces-config.xml
+
+  - make the test file conform to the DTD changes
+
+  r=visvan
+
+  The second and final part of the RI changes for this issue.
+
+  Make it allowable for List and Map instances to me created and populated
+  into the scoped namespace from the config file.
+
+  SECTION: API Changes
+
+  M doc/web-facesconfig_1_0.dtd
+
+  SECTION: RI Changes
+
+  A web/test/WEB-INF/config-lists-and-maps.xml
+  M src/com/sun/faces/config/ConfigManagedBean.java
+
+  - tweak this so it handles the case where you have a managed bean that
+    *is* a List or Map, rather than having a List or Map.
+
+  M src/com/sun/faces/config/ConfigParser.java
+
+  - ugliness.  Rule tweakings to allow the above change.
+
+  M src/com/sun/faces/config/ManagedBeanFactory.java
+
+  - refactoring.  Create new methods:
+
+  +		    copyListEntriesFromConfigToList(cmp, (List) bean);
+  +		copyMapEntriesFromConfigToMap(cmp, (Map) bean);
+
+  M test/com/sun/faces/config/ConfigFileTestCase.java
+
+  - Test with some wackiness.
+
+[TCK] 
+
+  Updated createConverter exceptions for the case where the converter
+  cannot be created.  Corrected typo on one NullPointerException
+
+[JSFA29]
+
+  Default the row index to 0 (i.e. the first row) instead of -1 (i.e. before
+  the first row) so that the 'rowData' property of a DataModel works
+  intuitively in a value reference expression without having to be specifically
+  tweaked.
+
+  Missed some one-relative --> zero-relative changes.
+
+  Correct javadoc description of when the exception is thrown.
+
+  More (hopefully last) bugfixes for 1-relative to 0-relative row indexes.
+
+  Add getters for the wrapped data; beanify ScalarDataModel as well as
+  the rest of them.
+
+  Call ResultSet.updateRow() if any column in the underlying row has
+  been updated.  Only call ResultSet.updateObject() if the value
+  actually changed.
+
+  Revise Map implementation returned by getRowData() to properly
+  delegate get and put operations to the correct row on the underlying
+  ResultSet.
+
+  Enhance tests on DataModel implications to ensure that updates through
+  the object returned by rowData flow through to the underlying data.
+
+  Make all the DataModel implementations into pure JavaBeans (zero args
+  constructor, setter method for the wrapped data) for improved ability
+  to assemble them.
+
+  Leverage the ResultSet.last() method to avoid having to explicitly
+  scroll through all the rows to count them.  (This is still likely to
+  get refined into supporting an "I don't know" answer, but this is
+  better than scrolling.)
+
+  Move ArrayDataModel and ListDataModel implementations from
+  j.f.component to j.f.model, and make them public.  Add new
+  implementations for wrapping result sets and individual JavaBeans.
+
+  UIData: synthesize a ResultSetDataModel around a ResultSet value, or a
+  ScalarDataModel around any individual JavaBean.
+
+  Add test cases for javax.faces.model implementations.
+
+  Migrate tests for javax.faces.model and javax.faces.webapp to use the
+  <junit> target to execute all of the *TestCase.java classes in the
+  corresponding package.
+
+  Add a default DataModel implementation that wraps
+  javax.servlet.jsp.jstl.Result (i.e. the results of an SQL query done
+  by JSTL tags), and associated unit tests.
+
+  RI Impact: None, because the getRowData() object will return a Map,
+  which is already supported by the default PropertyResolver
+  implementation.
+
+  First of several refinements to UIData and DataModel, based on EG feedback:
+  * Remove erase() method from UIData and RepeaterSupport.
+  * Remove open() and close() methods from DataModel and implementations,
+    along with the related event listener methods on DataModelListener.
+  * Make DataModel an abstract base class with concrete implementations of
+    the listener registration methods.
+
+  RI IMPACT:  TableRenderer may need to be revised to avoid calling open(),
+  or worrying about IllegalStateException.
+
+  DEMO IMPACT:  Ensure that the UIData example still works.
+
+  Make row index values zero-relative instead of one-relative.
+
+  RI IMPACT:  Make sure TableRenderer is adjusted for this.
+
+  DEMO IMPACT:  Make sure UIData sample is adjusted for this.
+
+  Make ResultSetDataModel.getRowData() return a Map of column name->value
+  entries, eliminating the need to customize the default PropertyResolver.
+
+  RI IMPACT:  Disregard the previous requirement to customze the default
+  PopertyResolverImplementation.
+
+  DEMO IMPACT:  None.
+
+
+  RI IMPACT:
+  =========
+
+  The default PropertyResolver will need to be extended to support the
+  following additional functionality when the "base" object is of type
+  javax.faces.model.ResultSetDataModel:
+
+  * getValue(Object,String) - call value(String) on the base object
+  * getValue(Object,int) - call value(int) on the base object
+  * setValue(Object,String,Object) - call value(String,Object) on the base object
+  * setValue(Object,int,Object) - call value(int,Object) on the base object
+  * isReadOnly(Object,String) - call readOnly(String)
+  * isReadOnly(Object,int) - call readOnly(int)
+  * getType(Object,String) - call type(String)
+  * getType(Object,int) - call type(int)
+
+  PENDING(craigmcc) - the readOnly() and type() methods need to be added
+  to ResultSetDataModel; see next checkin.
+
+  ResultSetDataModel:  Implement the readOnly() and type() methods needed
+  for robust support of PropertyResolver.
+
+  RI IMPACT:  See previous ResultSetDataModel commit message.
+
+  PENDING:  Unit tests for the (now public) DataMode wrapper implementations.
+
 
 SECTION: Spec document changes:
 
-  [JSFA92][JSFA116]
+[JSFA29]
 
-  [9.5.7]
+3.1:      Update "User Interface Component Model" to reflect recent changes to
+          fundamental UIComponent APIs (clean-up).
 
-    Assert that the <f:subview> tag must not contain an <f:view> tag.
+3.2.2:    Describe new ConvertableValueHolder interface.
 
-  [JSFA3]
+3.2.6:    Update description of ValueHolder to remove "converter" property.
 
-   7.6.1
+4.1.3:    Update description of default DataModel wrapper implementations
+          to include support for java.sql.ResultSet,
+          javax.servlet.jsp.jstl.sql.Result, and JavaBeans (wrapped in a
+          one-row "model").  Document the convenience wrapper implementations
+          provided in the "javax.faces.model" package.
 
-     Move the responsibility for enforcing the id uniqueness property back
-     to StateManager.saveSerializedView(), as Adam suggested.
+4.1.7:    Note that UIOutput now implements ConvertableValueHolder (and,
+          therefore, do all its subclasses), not ValueHolder.
+
+5.1.2:    Update semantics of property resolution so that "." and "[]"
+          will work when value-a is a javax.faces.model.ResultSetDataModel
+          instance (which is what ResultSetDataModel returns for the
+          getRowData() method).
+
+  Spec updates to reflect the UIData, DataModel, and Repeater changes just
+  checked in to jsf-api.  Refer to those commit messages for RI/DEMO IMPACT.
+
+RI IMPACT:  Already described in corresponding "jsf-api" commits.
+
+[JSFA128]
+
+  5.2.1.2
+
+    new rules for managed bean properties that are Maps, Lists, or arrays.
+
+    Allow Lists or Map to *be* managed beans.
+
+  RI IMPACT: Change implementation to allow Lists and Maps to *be* managed
+  beans.
+
+[JSFA101]
+
+8.5
+
+  Default values for renderer-dependent attributes.
+
+[JSFA180][JSFA106]
+
+7.1.8
+
+  Define methods in Application for Locale support.
+
+[JSFA180][JSFA106]
+
+9.3
+
+  <f:view/> tag
+
+    State what to do with the "locale" attribute on this tag.
+
+    Assert that the javax.servlet.jsp.jstl.core.Config.set() method must
+    be called with the appropriate parameters.
 
 
-  [JSFA120] Implement spec changes related to event bubbling changes.
-
-    * [2.2.2 ... 2.2.5] -- Refine the lifecycle phase descriptions to document
-      that event broadcasting is performed by the processXxx method of
-      the UIViewRoot instance at the root of the component tree.
-
-    * [2.3] -- Refine overall description of the Common Event Processing
-      to match the new behavior factoring.
-
-    * [3.1.10] -- Document the new UIComponent.queueEvent() method.
-
-    * [6.1.6] -- Remove FacesContext.addFacesEvent() and
-      getFacesEvents().
-
-    * Further [JSFA120] related commit (document updated behavior of
-      UIViewRoot) plus some cosmetic changes.  Impact analysis for all
-      of [JSFA120] was in the previous spec commit message.
-
-    * [JSFA120] Ensure that an ANY_PHASE listener sees any single event
-      once, instead of once per phase in the case where there are
-      listeners registered for later phases explicitly.
-
-    * [JSFA120] Correct implementation of event queueing so that we
-      won't see ConcurrentModificationException errors if new events are
-      queued while the existing ones are being processed.  Essentially,
-      this required simulating an Iterator.
-
-    RI IMPACTS:
-
-    * Any renderer whose decode method needs to queue events must call the
-      queueEvent() method on the source UIComponent, instead of calling
-      the removed FacesContext.addFacesEvent() method.
-
-    * FacesContextImpl - remove event queue functionality.
-
-    * LifecycleImpl - remove event broadcasting functionality, which is now
-      handled by UIViewRoot.  Add call to
-      UIViewRoot.processApplication() during Invoke Application phase.
-
-   JSFA3, JSFA101, JSFA110, JSFA76
-
-   3.1.1 
-
-     New rules for component id validitiy
-
-   3.2.2 
-
-     Emasculate this section, since NamingContainer has no more PME.
-
-   3.1.6
-
-     New description of find component
-
-   4.1.4.{2,3,4}, 4.1.15.{2,3,4}
-
-     No methods on NamingContainer
-
-   6.1.2
-
-     Remove ExternalContext.encodeURL().
-
-   10.3.3.
-
-     Import current DTD.
-
-   8.6
-
-     New section documenting the concrete HTML component classes.
-
-   JSFA76/JSFA104
-
-   4.1.4.
-
-     Fix assertion to say that the form Renderer must call writeState.
-
-   4.1.4.3
-
-     Document new methods:
-
-     public boolean isSubmitted();
-
-     public void setSubmitted(boolean submitted);
-
-     public void processDecodes(FacesContext context) throws IOException;
-
-     public void processValidators(FacesContext context);
-
-     public void processUpdates(FacesContext context);
-
-   8.5.3 
-
-     Document the new requirements on FormRenderer.
-
-   4.1.4.3 
-
-     Spec assertion to cause the UIForm to call setSubmitted(false) from
-     its saveState().
-
-   JSFA121
-
-     SECTION 11.1.  Note that you can add cause a PhaseListener to be added
-     by making an entry in the faces-config.xml file.
-
-     RI Impact:
-
-     Need to modify digester rules such that the <phase-listener> element 
-     causes Lifecycle.addPhaseListener() to be called.
-
-   JSFA119
-
-     RI IMPACT: Make sure that the RI never ever uses the presence of
-     messages in the FacesContext as a cue for skipping to render response.
-
-     2.2.3
-
-       Removed text that talks about using the presence of Messages as a cue
-       for skipping to Render Response Phase.
-
-     RI Impact: I think this will break some of our lifecycle tests.
-     Also, I think we're going to want to change the exception we catch
-     in UpdateModelValuesPhase to be RuntimeException.
-
-     sections 2.2.3, 2.2.4, 3.1.11
-
-     - Spec that if a RuntimeException is thrown during decode, validation,
-       or update model processing, it is caught, renderResponse() is
-       called, and the exception is re-thrown.
 
 
 
