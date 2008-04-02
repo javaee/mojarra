@@ -6,7 +6,7 @@
 -->
 
 
-<!-- ************ JSF build file ************************************** -->
+<!-- ************ JSF build file ************************************** --> 
 
 <project name="jsf-demo" default="build-all" basedir=".">
 
