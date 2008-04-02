@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.35 2003/04/29 18:51:29 eburns Exp $
+ * $Id: UICommand.java,v 1.36 2003/06/21 00:17:44 craigmcc Exp $
  */
 
 /*
@@ -125,34 +125,6 @@ public class UICommand extends UIComponentBase {
     }
 
 
-    /**
-     * <p>The command name for this {@link UICommand}.</p>
-     */
-    private String commandName = null;
-
-
-    /**
-     * <p>Return the command name for this {@link UICommand}.</p>
-     */
-    public String getCommandName() {
-
-        return (this.commandName);
-
-    }
-
-
-    /**
-     * <p>Set the command name for this {@link UICommand}.</p>
-     *
-     * @param commandName The new command name
-     */
-    public void setCommandName(String commandName) {
-
-        this.commandName = commandName;
-
-    }
-
-    
     // ---------------------------------------------------- UIComponent Methods
 
 
@@ -297,7 +269,7 @@ public class UICommand extends UIComponentBase {
      */
     public void fireActionEvent(FacesContext context) {
 
-        context.addFacesEvent(new ActionEvent(this, getCommandName()));
+        context.addFacesEvent(new ActionEvent(this));
 
     }
 

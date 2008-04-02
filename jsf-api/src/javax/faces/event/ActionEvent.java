@@ -1,5 +1,5 @@
 /*
- * $Id: ActionEvent.java,v 1.3 2003/02/20 22:46:27 ofung Exp $
+ * $Id: ActionEvent.java,v 1.4 2003/06/21 00:17:45 craigmcc Exp $
  */
 
 /*
@@ -29,34 +29,13 @@ public class ActionEvent extends FacesEvent {
      * and action command.</p>
      *
      * @param component Source {@link UIComponent} for this event
-     * @param actionCommand String identifying the command that was activated
      *
      * @exception IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
-    public ActionEvent(UIComponent source, String actionCommand) {
+    public ActionEvent(UIComponent source) {
 
         super(source);
-        this.actionCommand = actionCommand;
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>The string identifying the command that was activated.</p>
-     */
-    private String actionCommand = null;
-
-
-    /**
-     * <p>Return the String identifying the command that was activated.</p>
-     */
-    public String getActionCommand() {
-
-        return (this.actionCommand);
 
     }
 

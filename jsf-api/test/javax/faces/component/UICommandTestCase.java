@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.7 2003/04/29 18:51:51 eburns Exp $
+ * $Id: UICommandTestCase.java,v 1.8 2003/06/21 00:17:46 craigmcc Exp $
  */
 
 /*
@@ -110,7 +110,7 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
 
         // Add a single listener interested in a single phase
         UICommand command = (UICommand) component;
-        ActionEvent event = new ActionEvent(command, "");
+        ActionEvent event = new ActionEvent(command);
         TestActionListener listener =
             new TestActionListener(PhaseId.APPLY_REQUEST_VALUES);
         command.addActionListener(listener);
@@ -132,7 +132,7 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
 
         // Add a single listener interested in all phases
         UICommand command = (UICommand) component;
-        ActionEvent event = new ActionEvent(command, "");
+        ActionEvent event = new ActionEvent(command);
         TestActionListener listener =
             new TestActionListener(PhaseId.ANY_PHASE);
         command.addActionListener(listener);
@@ -153,7 +153,7 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
     public void testActionEvent3() {
 
         UICommand command = (UICommand) component;
-        ActionEvent event = new ActionEvent(command, "");
+        ActionEvent event = new ActionEvent(command);
 
         // No registered listeners at all
         if (command.broadcast(event, PhaseId.RECONSTITUTE_REQUEST)) {
