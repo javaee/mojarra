@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.21 2003/02/04 20:54:19 visvan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.22 2003/02/04 22:26:37 visvan Exp $
  */
 
 /*
@@ -368,11 +368,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         String currentValue = null;
         Object currentObj = component.currentValue(context);
         if ( currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String)currentObj;
-            } else {
-                currentValue = getFormattedValue(context, component, currentObj);
-            }
+            currentValue = getFormattedValue(context, component, currentObj);
         } 
         if (currentValue == null) {
             currentValue = "";

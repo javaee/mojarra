@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.14 2003/01/24 21:42:41 rkitain Exp $
+ * $Id: DateRenderer.java,v 1.15 2003/02/04 22:26:37 visvan Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.14 2003/01/24 21:42:41 rkitain Exp $
+ * @version $Id: DateRenderer.java,v 1.15 2003/02/04 22:26:37 visvan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -224,7 +224,12 @@ public class DateRenderer extends HtmlBasicInputRenderer {
    protected String getFormattedValue(FacesContext context, UIComponent component,
             Object currentObj ) {
        String currentValue = null;         
-       // if we hit this method, then value is not string type.
+       // if the currentValue is of type String, no formatting
+       // is necessary. This would be the case when the page is
+       // rendered for the first time.
+       if (currentObj instanceof String) {
+            return (String)currentObj;
+       }
        if (currentObj instanceof Date) {
            currentValue = formatDate(context, component, (Date) currentObj);
        }   
