@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.14 2003/10/15 18:11:37 eburns Exp $
+ * $Id: DateTimeConverter.java,v 1.15 2003/10/16 18:25:17 rlubke Exp $
  */
 
 /*
@@ -30,9 +30,9 @@ import javax.faces.context.FacesContext;
  * <li>If the specified String is null or zero length, return
  *     a <code>null</code>.  Otherwise, trim leading and trailing
  *     whitespace before proceeding.</li>
- * <li>If the <code>parseLocale</code> property is not null,
+ * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
- *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
  *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
  *     a pattern will be used to parse, and the <code>type</code>,
@@ -53,9 +53,9 @@ import javax.faces.context.FacesContext;
  * <ul>
  * <li>If the specified value is null or a zero-length String, return
  *     a zero-length String.</li>
- * <li>If the <code>parseLocale</code> property is not null,
+ * <li>If the <code>locale</code> property is not null,
  *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
- *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
  *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
  *     a pattern will be used to format, and the <code>type</code>,
