@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.16 2003/09/15 22:09:38 eburns Exp $
+ * $Id: StateManager.java,v 1.17 2003/09/15 23:18:49 jvisvanathan Exp $
  */
 
 /*
@@ -550,7 +550,7 @@ public abstract class StateManager {
      */
     
     public List [] restoreAttachedObjectState(FacesContext context,
-					      Object stateObj) throws IOException {
+            Object stateObj, List[] currentList) throws IOException {
 	if (null == stateObj) {
 	    return null;
 	}
@@ -576,24 +576,32 @@ public abstract class StateManager {
 	Object curAttachedObject = null;
 	
 	for (i = 0; i < outerLen; i++) {
-	    if (null != state[i]) {
-		if (null == result) {
-		    result = new List[outerLen];
-		}
-		innerArray = (StateHolderSaver []) state[i];
-		innerLen = innerArray.length;
-		result[i] = curList = new ArrayList();
-		// create the attachedObjects for this List
-		for (j = 0; j < innerLen; j++) {
-		    if (null != innerArray[j]) {
-			curAttachedObject = innerArray[j].restore(context);
-			if (null != curAttachedObject) {
-			    curList.add(curAttachedObject);
-			}
-		    }
-		}
-	    }
-	}
+            if (null != state[i]) {
+                if (null == result) {
+                    result = new List[outerLen];
+                }
+                innerArray = (StateHolderSaver []) state[i];
+                innerLen = innerArray.length;
+                // if there were some attached objects registered prior
+                // to this method being invoked, merge them with the list
+                // to be restored.
+                if ( currentList == null || currentList[i] == null) {
+                    result[i] = curList = new ArrayList();
+                } else {
+                    curList = (ArrayList) currentList[i];
+                    result[i] = curList;
+                }
+                // create the attachedObjects for this List
+                for (j = 0; j < innerLen; j++) {
+                    if (null != innerArray[j]) {
+                        curAttachedObject = innerArray[j].restore(context);
+                        if (null != curAttachedObject) {
+                            curList.add(curAttachedObject);
+                        }
+                    }
+                }
+            }
+        }
 	return result;
     }
 

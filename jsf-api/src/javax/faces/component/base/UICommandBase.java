@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.13 2003/09/15 20:17:22 eburns Exp $
+ * $Id: UICommandBase.java,v 1.14 2003/09/15 23:18:54 jvisvanathan Exp $
  */
 
 /*
@@ -280,7 +280,7 @@ public class UICommandBase extends UIComponentBase implements UICommand {
         actionRef = (String) values[2];
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[3]);
+            restoreAttachedObjectState(context, values[3], null);
         // PENDING(craigmcc) - it shouldn't be this hard to restore converters
 	if (converterList != null) {
             List theConverter = converterList[0];

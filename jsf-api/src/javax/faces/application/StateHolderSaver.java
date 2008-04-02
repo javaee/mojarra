@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.3 2003/09/15 20:17:18 eburns Exp $
+ * $Id: StateHolderSaver.java,v 1.4 2003/09/15 23:18:48 jvisvanathan Exp $
  */
 
 /*
@@ -29,8 +29,11 @@ class StateHolderSaver extends Object implements Serializable {
         className = toSave.getClass().getName();
 
         if (toSave instanceof StateHolder) {
+            // do not save an attached object that is marked transient.
             if (!((StateHolder)toSave).isTransient()) {
                 savedState = ((StateHolder)toSave).saveState(context);
+            } else {
+                className = null;
             }
         }
     }
@@ -43,6 +46,10 @@ class StateHolderSaver extends Object implements Serializable {
     Object restore(FacesContext context) throws IOException {
         Object result = null;
         Class toRestoreClass = null;
+        if ( className == null) {
+            return null;
+        }
+        
         try {
             toRestoreClass = loadClass(className, this);
         }

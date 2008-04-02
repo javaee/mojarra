@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBase.java,v 1.8 2003/09/15 20:17:26 eburns Exp $
+ * $Id: UISelectItemBase.java,v 1.9 2003/09/15 23:19:01 jvisvanathan Exp $
  */
 
 /*
@@ -244,7 +244,7 @@ public class UISelectItemBase extends UIOutputBase implements UISelectItem {
         super.restoreState(context, values[0]);
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1]);
+            restoreAttachedObjectState(context, values[1], null);
         // PENDING(craigmcc) - it shouldn't be this hard to restore converters
 	if (converterList != null) {
             List theConverter = converterList[0];

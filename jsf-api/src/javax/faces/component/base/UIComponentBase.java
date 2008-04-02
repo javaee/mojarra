@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.14 2003/09/15 20:17:23 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.15 2003/09/15 23:18:57 jvisvanathan Exp $
  */
 
 /*
@@ -1289,9 +1289,11 @@ public abstract class UIComponentBase implements UIComponent {
         id = (String) values[3];
         rendered = ((Boolean) values[4]).booleanValue();
         rendererType = (String) values[5];
+        // if there were some listeners registered prior to this method being 
+        // invoked, merge them with the list to be restored.
         listeners = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[6]);
+            restoreAttachedObjectState(context, values[6], listeners);
         transientFlag = ((Boolean) values[7]).booleanValue();
 
     }

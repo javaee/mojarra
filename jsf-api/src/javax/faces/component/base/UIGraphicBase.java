@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicBase.java,v 1.6 2003/09/15 20:17:24 eburns Exp $
+ * $Id: UIGraphicBase.java,v 1.7 2003/09/15 23:18:59 jvisvanathan Exp $
  */
 
 /*
@@ -195,7 +195,7 @@ public class UIGraphicBase extends UIComponentBase implements UIGraphic {
         super.restoreState(context, values[0]);
         List[] converterList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[1]);
+            restoreAttachedObjectState(context, values[1], null);
         // PENDING(craigmcc) - it shouldn't be this hard to restore converters
 	if (converterList != null) {
             List theConverter = converterList[0];

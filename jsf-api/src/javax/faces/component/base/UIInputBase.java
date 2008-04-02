@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.7 2003/09/15 20:17:25 eburns Exp $
+ * $Id: UIInputBase.java,v 1.8 2003/09/15 23:18:59 jvisvanathan Exp $
  */
 
 /*
@@ -344,9 +344,13 @@ public class UIInputBase extends UIOutputBase implements UIInput {
         previous = values[1];
         required = ((Boolean) values[2]).booleanValue();
         valid = ((Boolean) values[3]).booleanValue();
-        List validatorsList[] = (List[])
+        // if there were some validators registered prior to this method being 
+        // invoked, merge them with the list to be restored.
+        List validatorsList[] = new List[1];
+        validatorsList[0] = validators;
+        validatorsList = (List[])
             context.getApplication().getViewHandler().getStateManager().
-            restoreAttachedObjectState(context, values[4]);
+            restoreAttachedObjectState(context, values[4], validatorsList);
         if (validatorsList != null) {
             validators = (List) validatorsList[0];
         }
