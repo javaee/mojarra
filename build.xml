@@ -205,4 +205,19 @@
       <ant dir="${jsf-api.home}" target="test" inheritAll="false" />
       <ant dir="${jsf-ri.home}" target="test" inheritAll="false" />
   </target>
+
+  <target name="glassfish.deploy" description="Replace JSF jars in a glassfish instance">
+    <antcall target="clean.jsf.from.glassfish" />
+    <copy todir="${tomcat.home}/lib" 
+          file="${jsf-api.home}/build/lib/jsf-api.jar" />
+    <copy todir="${tomcat.home}/lib" 
+          file="${jsf-ri.home}/build/lib/jsf-impl.jar" />
+
+  </target>
+
+  <target name="clean.jsf.from.glassfish">
+    <delete>
+      <fileset dir="${j2ee.home}/lib" includes="jsf-*.jar"/>
+   </delete>
+  </target>
 </project>

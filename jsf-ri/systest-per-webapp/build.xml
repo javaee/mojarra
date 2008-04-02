@@ -102,6 +102,7 @@
   <!-- Catalina Ant Custom Taskdef Classpath -->
   <path id="catalina-ant.classpath">
     <pathelement location="${tomcat.home}/server/lib/catalina-ant.jar"/>
+    <pathelement location="${catalina-ant.jar}"/>
   </path>
 
 
