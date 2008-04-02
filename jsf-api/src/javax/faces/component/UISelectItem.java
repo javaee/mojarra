@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.14 2003/04/29 18:51:31 eburns Exp $
+ * $Id: UISelectItem.java,v 1.15 2003/07/26 17:54:38 craigmcc Exp $
  */
 
 /*
@@ -10,8 +10,7 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 
 /**
@@ -31,28 +30,16 @@ import javax.faces.context.FacesContext;
  * </ul>
  */
 
-public class UISelectItem extends UIOutput {
+public interface UISelectItem extends UIOutput {
 
 
-    // ------------------------------------------------------- Static Variables
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>The description for this selection item.</p>
-     */
-    private String itemDescription = null;
+    // -------------------------------------------------------------- Properties
 
 
     /**
      * <p>Return the description for this selection item.</p>
      */
-    public String getItemDescription() {
-
-        return (this.itemDescription);
-
-    }
+    public String getItemDescription();
 
 
     /**
@@ -60,27 +47,13 @@ public class UISelectItem extends UIOutput {
      *
      * @param itemDescription The new description
      */
-    public void setItemDescription(String itemDescription) {
-
-        this.itemDescription = itemDescription;
-
-    }
-
-
-    /**
-     * <p>The localized label for this selection item.</p>
-     */
-    private String itemLabel = null;
+    public void setItemDescription(String itemDescription);
 
 
     /**
      * <p>Return the localized label for this selection item.</p>
      */
-    public String getItemLabel() {
-
-        return (this.itemLabel);
-
-    }
+    public String getItemLabel();
 
 
     /**
@@ -88,27 +61,13 @@ public class UISelectItem extends UIOutput {
      *
      * @param itemLabel The new localized label
      */
-    public void setItemLabel(String itemLabel) {
-
-        this.itemLabel = itemLabel;
-
-    }
-
-
-    /**
-     * <p>The server value for this selection item.</p>
-     */
-    private String itemValue = null;
+    public void setItemLabel(String itemLabel);
 
 
     /**
      * <p>Return the server value for this selection item.</p>
      */
-    public String getItemValue() {
-
-        return (this.itemValue);
-
-    }
+    public String getItemValue();
 
 
     /**
@@ -116,23 +75,7 @@ public class UISelectItem extends UIOutput {
      *
      * @param itemValue The new server value
      */
-    public void setItemValue(String itemValue) {
-
-        this.itemValue = itemValue;
-
-    }
-
-
-    /**
-     * <p>Return <code>true</code> to indicate that no
-     * {@link javax.faces.render.Renderer} needs to be associated
-     * with this component.</p>
-     */
-    public boolean getRendersSelf() {
-
-        return (true);
-
-    }
+    public void setItemValue(String itemValue);
 
 
 }

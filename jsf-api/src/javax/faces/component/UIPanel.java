@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.13 2003/04/29 18:51:31 eburns Exp $
+ * $Id: UIPanel.java,v 1.14 2003/07/26 17:54:37 craigmcc Exp $
  */
 
 /*
@@ -15,38 +15,17 @@ package javax.faces.component;
  * layout of its child components.</p>
  */
 
-public class UIPanel extends UIOutput {
-
-
-    // ------------------------------------------------------- Static Variables
-
-
-    // ----------------------------------------------------------- Constructors
-
-
-    /**
-     * <p>Create a new {@link UIPanel} instance with default property
-     * values.</p>
-     */
-    public UIPanel() {
-
-        super();
-        setRendererType(null);
-
-    }
+public interface UIPanel extends UIOutput {
 
 
     // ------------------------------------------------------------- Properties
+
 
     /**
      * <p>Return <code>true</code> to indicate that this component takes
      * responsibility for rendering its children.</p>
      */
-    public boolean getRendersChildren() {
-
-        return (true);
-
-    }
+    public boolean getRendersChildren();
 
 
 }

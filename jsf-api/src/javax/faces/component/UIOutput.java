@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.26 2003/06/21 00:44:25 craigmcc Exp $
+ * $Id: UIOutput.java,v 1.27 2003/07/26 17:54:37 craigmcc Exp $
  */
 
 /*
@@ -10,122 +10,108 @@
 package javax.faces.component;
 
 
-import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
+import javax.faces.render.Renderer;
 
 
 /**
- * <p><strong>UIOutput</strong> is a {@link UIComponent} that displays
- * output to the user.  The user cannot manipulate this component; it is
- * for display purposes only.  There are no restrictions on the data type
- * of the local value, or the object referenced by the value reference
- * expression (if any); however, individual
- * {@link javax.faces.render.Renderer}s will
- * generally impose restrictions on the type of data they know how to
- * display.</p>
+ * <p><strong>UIOutput</strong> is a {@link UIComponent} that has a
+ * value, optionally retrieved from a model tier bean via a value reference
+ * expression, that is displayed to the user.  The user cannot directly modify
+ * the rendered value; it is for display purposes only.</p>
  *
- * <p>By default, the <code>rendererType</code> property is set to
+ * <p>During encoding, the value associated with this component may be
+ * converted to a String (if it is not already), according to the following
+ * rules:</p>
+ * <ul>
+ * <li>A <code>null</code> value will be converted to a String in a manner
+ *     that is dependent upon the {@link Renderer} in
+ *     use; typically, however, it will be rendered as a zero-length
+ *     String.</li>
+ * <li>If the <code>converter</code> property is set to a non-null value,
+ *     it will be passed to <code>Application.getConverter()</code> in order
+ *     to retrieve a {@link Converter} instance to be
+ *     utilized.  The <code>getAsString()</code> method will be called.</li>
+ * <li>If the <code>converter</code> property is null, but the type of the
+ *     value is one for which the JavaServer Faces implementation provides
+ *     default conversion, that default conversion will be performed.</li>
+ * <li>Otherwise, the <code>toString()</code> method will be called
+ *     on the value.</li>
+ * </ul>
+ *
+ * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIOutput extends UIComponentBase {
+public interface UIOutput extends UIComponent {
 
 
-    // ------------------------------------------------------- Static Variables
-
-
-    // ----------------------------------------------------------- Constructors
+    // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>Create a new {@link UIOutput} instance with default property
-     * values.</p>
+     * <p>Return the converter id of the {@link Converter} (if any)
+     * that is registered for this component.</p>
      */
-    public UIOutput() {
-
-        super();
-        setRendererType("Text");
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
+    public String getConverter();
 
 
     /**
-     * <p>The local value of this {@link UIInput} component.</p>
+     * <p>Set the converter id of the {@link Converter} (if any)
+     * that is registered for this component.</p>
+     *
+     * @param converter New converter identifier (or <code>null</code>)
      */
-    private Object value = null;
+    public void setConverter(String converter);
 
 
     /**
-     * <p>Return the local value of this {@link UIInput} component.</p>
+     * <p>Return the local value of this {@link UIOutput} component
+     * (if any).</p>
      */
-    public Object getValue() {
-
-        return (this.value);
-
-    }
+    public Object getValue();
 
 
     /**
-     * <p>Set the local value of this {@link UIInput} component.</p>
+     * <p>Set the local value of this {@link UIOutput} component (if any).</p>
      *
      * @param value The new local value
      */
-    public void setValue(Object value) {
-
-        this.value = value;
-
-    }
+    public void setValue(Object value);
 
 
     /**
-     * <p>The value reference expression for this {@link UIInput} component.
-     * </p>
+     * <p>Return the value reference expression for this {@link UIOutput}
+     * component (if any), pointing at the model tier property that will
+     * be rendered.</p>
      */
-    private String valueRef = null;
+    public String getValueRef();
 
 
     /**
-     * <p>Return the value reference expression for this {@link UIInput}
-     * component, pointing at the model tier property that will be updated
-     * or rendered.</p>
-     */
-    public String getValueRef() {
-
-        return (this.valueRef);
-
-    }
-
-
-    /**
-     * <p>Set the value reference expression for this {@link UIInput}
-     * component, pointing at the model tier property that will be updated
-     * or rendered.</p>
+     * <p>Set the value reference expression for this {@link UIOutput}
+     * component (if any), pointing at the model tier property that will
+     * be rendered.</p>
      *
      * @param valueRef The new value reference expression
      */
-    public void setValueRef(String valueRef) {
-
-        this.valueRef = valueRef;
-
-    }
+    public void setValueRef(String valueRef);
 
 
-    // --------------------------------------------------------- Public Methods
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
      * <p>Evaluate and return the current value of this component, according
      * to the following algorithm.</p>
      * <ul>
-     * <li>If the <code>value</code> property has been set (containing
-     *     the local value for this component), return that; else</li>
-     * <li>If the <code>valueRef</code> property has been set,
+     * <li>If the <code>value</code> property has a non-null value,
+     *     return that; else</li>
+     * <li>If the <code>valueRef</code> property has a non-null value,
      *     <ul>
      *     <li>Retrieve the {@link Application} instance for this web
      *         application.</li>
@@ -146,24 +132,7 @@ public class UIOutput extends UIComponentBase {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String valueRef = getValueRef();
-        if (valueRef != null) {
-            Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            return (binding.getValue(context));
-        }
-        return (null);
-
-    }
+    public Object currentValue(FacesContext context);
 
 
 }

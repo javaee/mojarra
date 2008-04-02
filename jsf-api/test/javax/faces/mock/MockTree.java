@@ -1,5 +1,5 @@
 /*
- * $Id: MockTree.java,v 1.1 2003/03/13 22:02:35 craigmcc Exp $
+ * $Id: MockTree.java,v 1.2 2003/07/26 17:55:36 craigmcc Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-package javax.faces.webapp;
+package javax.faces.mock;
 
 
 import javax.faces.component.UIComponent;

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.26 2003/04/29 18:51:32 eburns Exp $
+ * $Id: UISelectOne.java,v 1.27 2003/07/26 17:54:39 craigmcc Exp $
  */
 
 /*
@@ -12,7 +12,7 @@ package javax.faces.component;
 
 /**
  * <p><strong>UISelectOne</strong> is a {@link UIComponent} that represents
- * the user's choice of a single item from among a discrete set of
+ * the user's choice of zero or one items from among a discrete set of
  * available options.  The user can modify the selected value.  Optionally,
  * the component can be preconfigured with a currently selected item, by
  * storing it as the <code>value</code> property of the component.</p>
@@ -21,55 +21,32 @@ package javax.faces.component;
  * radio buttons.</p>
  *
  * <p>By default, the <code>rendererType</code> property is set to
- * "<code>Listbox</code>".  This value can be changed by calling the
+ * "<code>Menu</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UISelectOne extends UISelectBase {
+public interface UISelectOne extends UIInput {
 
 
-    // ------------------------------------------------------- Static Variables
-
-
-    // ----------------------------------------------------------- Constructors
+    // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>Create a new {@link UISelectOne} instance with default property
-     * values.</p>
+     * <p>Return the currently selected value, or <code>null</code> if there
+     * is no currently selected value.  This is a typesafe alias for
+     * <code>getValue()</code>.</p>
      */
-    public UISelectOne() {
-
-        super();
-        setRendererType("Menu");
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
-
-    /**
-     * <p>Return the currently selected item, or <code>null</code> if there
-     * is no currently selected item.</p>
-     */
-    public Object getSelectedValue() {
-
-        return (getValue());
-
-    }
+    public Object getSelectedValue();
 
 
     /**
-     * <p>Set the currently selected item, or <code>null</code> to indicate
-     * that there is no currently selected item.</p>
+     * <p>Set the currently selected value, or <code>null</code> to indicate
+     * that there is no currently selected value.  This is a typesafe
+     * alias for <code>setValue()</code>.</p>
      *
-     * @param selectedItem The new selected item (if any)
+     * @param selectedValue The new selected value (if any)
      */
-    public void setSelectedValue(Object selectedItem) {
-
-        setValue(selectedItem);
-
-    }
+    public void setSelectedValue(Object selectedValue);
 
 
 }

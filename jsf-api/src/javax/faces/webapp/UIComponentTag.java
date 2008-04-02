@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.8 2003/07/19 04:52:59 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.9 2003/07/26 17:55:01 craigmcc Exp $
  */
 
 /*
@@ -464,7 +464,7 @@ public abstract class UIComponentTag implements Tag {
 	    // If there is no parent tag, this tag must be the root.
 	    thisTagIsRoot = true;
             parentComponent = context.getTree().getRoot();
-            parentCreated = parentComponent.getChildCount() < 1;
+            parentCreated = parentComponent.getChildren().size() < 1;
         }
 
         // Case 1 -- Our parent was just created, so we must do so also
@@ -501,9 +501,9 @@ public abstract class UIComponentTag implements Tag {
 	    // protect from adding us to ourself
 	    if (parentComponent != component) {
 		if (facetName != null) {
-		    parentComponent.addFacet(facetName, component);
+		    parentComponent.getFacets().put(facetName, component);
 		} else {
-		    parentComponent.addChild(component);
+		    parentComponent.getChildren().add(component);
 		}
 	    }
 
@@ -517,15 +517,17 @@ public abstract class UIComponentTag implements Tag {
         if (facetName != null) {
 
             // Case 2A -- Look up facet by name
-            component = parentComponent.getFacet(facetName);
+            component = (UIComponent)
+                parentComponent.getFacets().get(facetName);
             // PENDING - what if it's not there?
 
         } else {
 
             // Case 2B -- Look up child by position
             if (parentTag != null) {
-		component =
-		    parentComponent.getChild(parentTag.getChildIndex());
+		component = (UIComponent)
+		    parentComponent.getChildren().
+                    get(parentTag.getChildIndex());
                 parentTag.incrementChildIndex();
             } else {
 		// The only case where parentTag == null is the root
@@ -700,7 +702,7 @@ public abstract class UIComponentTag implements Tag {
 	    component.setComponentRef(componentRef);
 	}
 	if (id != null) {
-	    component.setComponentId(id);
+	    component.setId(id);
 	}
         if (renderedSet) {
             component.setRendered(rendered);

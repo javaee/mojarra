@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.2 2003/04/29 18:52:03 eburns Exp $
+ * $Id: TestComponent.java,v 1.3 2003/07/26 17:55:37 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,7 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
-import javax.faces.component.UIComponentBase;
+import javax.faces.component.base.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
@@ -25,9 +25,9 @@ public class TestComponent extends UIComponentBase {
     }
 
 
-    public TestComponent(String componentId) {
+    public TestComponent(String id) {
         super();
-        setComponentId(componentId);
+        setId(id);
     }
 
 
@@ -58,9 +58,9 @@ public class TestComponent extends UIComponentBase {
         }
         ResponseWriter writer = context.getResponseWriter();
         writer.write("/b");
-        String componentId = getComponentId();
-        if (componentId != null) {
-            writer.write(componentId);
+        String id = getId();
+        if (id != null) {
+            writer.write(id);
         }
     }
 
@@ -78,9 +78,9 @@ public class TestComponent extends UIComponentBase {
         }
         ResponseWriter writer = context.getResponseWriter();
         writer.write("/e");
-        String componentId = getComponentId();
-        if (componentId != null) {
-            writer.write(componentId);
+        String id = getId();
+        if (id != null) {
+            writer.write(id);
         }
     }
 

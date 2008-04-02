@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.25 2003/04/29 18:51:30 eburns Exp $
+ * $Id: UIForm.java,v 1.26 2003/07/26 17:54:36 craigmcc Exp $
  */
 
 /*
@@ -16,61 +16,12 @@ package javax.faces.component;
  * (among other things) the input fields to be included when the form is
  * submitted.</p>
  *
- * <p>By default, the <code>rendererType</code> property is set to
+ * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Form</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIForm extends UIComponentBase {
+public interface UIForm extends UIComponent {
 
 
-    // ------------------------------------------------------- Static Variables
-
-
-    // ----------------------------------------------------------- Constructors
-
-
-    /**
-     * <p>Create a new {@link UIForm} instance with default property
-     * values.</p>
-     */
-    public UIForm() {
-
-        super();
-        setRendererType("Form");
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>The form name for this {@link UIForm}.</p>
-     */
-    private String formName = null;
-
-
-    /**
-     * <p>Return the form name for this {@link UIForm}.</p>
-     */
-    public String getFormName() {
-
-        return (this.formName);
-
-    }
-
-
-    /**
-     * <p>Set the form name for this {@link UIForm}.</p>
-     *
-     * @param formName The new form name
-     */
-    public void setFormName(String formName) {
-
-        this.formName = formName;
-
-    }
-
-    
 }

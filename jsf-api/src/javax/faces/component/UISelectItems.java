@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.10 2003/04/29 18:51:31 eburns Exp $
+ * $Id: UISelectItems.java,v 1.11 2003/07/26 17:54:38 craigmcc Exp $
  */
 
 /*
@@ -10,8 +10,7 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 
 /**
@@ -20,7 +19,7 @@ import javax.faces.context.FacesContext;
  * causes the addition of one or more {@link SelectItem} instances to the
  * list of available options in the parent component.  The
  * <code>value</code> of this component (set either directly, or acquired
- * indirectly via the <code>modelReference</code> property, can be of any
+ * indirectly via the <code>valueRef</code> property, can be of any
  * of the following types:</p>
  * <ul>
  * <li><em>Single instance of {@link SelectItem}</em> - This instance is
@@ -41,25 +40,7 @@ import javax.faces.context.FacesContext;
  * </ul>
  */
 
-public class UISelectItems extends UIOutput {
-
-
-    // ------------------------------------------------------- Static Variables
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return <code>true</code> to indicate that no
-     * {@link javax.faces.render.Renderer} needs to be associated
-     * with this component.</p>
-     */
-    public boolean getRendersSelf() {
-
-        return (true);
-
-    }
+public interface UISelectItems extends UIOutput {
 
 
 }

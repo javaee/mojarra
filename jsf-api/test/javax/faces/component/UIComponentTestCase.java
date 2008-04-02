@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.32 2003/06/20 23:28:51 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.33 2003/07/26 17:55:05 craigmcc Exp $
  */
 
 /*
@@ -10,403 +10,845 @@
 package javax.faces.component;
 
 
-import java.beans.BeanDescriptor;
-import java.beans.BeanInfo;
-import java.beans.EventSetDescriptor;
-import java.beans.Introspector;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
+import javax.faces.component.base.TestComponent;
 import javax.faces.mock.MockFacesContext;
 import javax.faces.mock.MockHttpServletRequest;
 import javax.faces.mock.MockServletContext;
 
 
 /**
- * <p>Base unit tests for all UIComponent classes.</p>
+ * <p>Base unit tests for all {@link UIComponent} implementation classes.</p>
  */
 
 public class UIComponentTestCase extends TestCase {
 
 
-    // ----------------------------------------------------- Instance Variables
+    // ------------------------------------------------------ Instance Variables
 
 
-    /**
-     * The names of the attributes that should be found in an unmodified
-     * instance of this component.
-     */
-    protected String attributes[] = null;
-
-
-    /**
-     * The component to be tested for each test.
-     */
+    // The component to be tested
     protected UIComponent component = null;
 
+    // The set of attribute names expected on a pristine component instance
+    protected String expectedAttributes[] = null;
 
-    /**
-     * The default rendererType that we expect in a new component instance.
-     */
-    protected String rendererType = null;
+    // The expected component identifier on a pristine component instance
+    protected String expectedId = null;
+
+    // The expected rendered on a pristine component instance
+    protected boolean expectedRendered = true;
+
+    // The expected rendererType on a pristine component instance
+    protected String expectedRendererType = null;
+
+    // The expected rendersChildren on a pristine component instance
+    protected boolean expectedRendersChildren = false;
 
 
-    // ---------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
-    /**
-     * Construct a new instance of this test case.
-     *
-     * @param name Name of the test case
-     */
+    // Construct a new instance of this test case.
     public UIComponentTestCase(String name) {
         super(name);
     }
 
 
-    // -------------------------------------------------- Overall Test Methods
+    // ---------------------------------------------------- Overall Test Methods
 
 
-    /**
-     * Set up instance variables required by this test case.
-     */
+    // Set up instance variables required by this test case.
     public void setUp() {
-
-        component = new TestComponentNamingContainer();
-        attributes = new String[0];
-
+        expectedAttributes = new String[0];
+        expectedId = "test";
+        expectedRendered = true;
+        expectedRendererType = null;
+        expectedRendersChildren = false;
+        component = new TestComponent(expectedId);
     }
 
 
-    /**
-     * Return the tests included in this test suite.
-     */
+    // Return the tests included in this test case.
     public static Test suite() {
-
         return (new TestSuite(UIComponentTestCase.class));
-
     }
 
-    /**
-     * Tear down instance variables required by this test case.
-     */
+
+    // Tear down instance variables required by this test case.
     public void tearDown() {
-
         component = null;
-
+        expectedAttributes = null;
+        expectedId = null;
+        expectedRendered = true;
+        expectedRendererType = null;
+        expectedRendersChildren = false;
     }
 
 
-    // ------------------------------------------------ Individual Test Methods
+    // ------------------------------------------------- Individual Test Methods
 
 
-    /**
-     * [3.1.3] Negative tests for <code>addChild()</code>.
-     */
-    public void testAddChildNegative() {
-        // Child components we will need
-        UIForm form1 = new UIForm();
-        form1.setComponentId("form1");
-        UIForm form1a = new UIForm();
-        form1a.setComponentId("form1"); // Duplicate id
-        UIForm form2 = new UIForm();
-        form2.setComponentId("form2");
-        UIForm form3 = new UIForm();
-        form3.setComponentId("form3");
+    // Negative tests on attribute methods
+    public void testAttributesNegative() {
 
-        // Add first child explicitly
-        component.addChild(form1);
-
-        // Null child - simple
+        // getAttribute() - null
         try {
-            component.addChild(null);
-            fail("Should have thrown NullPointerException");
+            Object value = component.getAttribute(null);
+            fail("should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
         }
 
-        // Null child - indexed
+        // setAttribute() - null
         try {
-            component.addChild(0, null);
-            fail("Should have thrown NullPointerException");
+            component.setAttribute(null, "bar");
+            fail("should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
         }
 
-        // Duplicate component id - simple
+    }
+
+
+    // Positive tests on attribute methods
+    public void testAttributesPositive() {
+
+        checkAttributeCount(component, expectedAttributes.length);
+        checkAttributeMissing(component, "foo");
+        checkAttributeMissing(component, "baz");
+
+        component.setAttribute("foo", "bar");
+        checkAttributeCount(component, expectedAttributes.length + 1);
+        checkAttributePresent(component, "foo", "bar");
+        checkAttributeMissing(component, "baz");
+
+        component.setAttribute("baz", "bop");
+        checkAttributeCount(component, expectedAttributes.length + 2);
+        checkAttributePresent(component, "foo", "bar");
+        checkAttributePresent(component, "baz", "bop");
+
+        component.setAttribute("baz", "boo");
+        checkAttributeCount(component, expectedAttributes.length + 2);
+        checkAttributePresent(component, "foo", "bar");
+        checkAttributePresent(component, "baz", "boo");
+
+        component.setAttribute("foo", null);
+        checkAttributeCount(component, expectedAttributes.length + 1);
+        checkAttributeMissing(component, "foo");
+        checkAttributePresent(component, "baz", "boo");
+
+    }
+
+
+    // Test attribute-property transparency
+    public void testAttributesTransparency() {
+
+        assertEquals(component.getChildren(),
+                     (List) component.getAttribute("children"));
+
+        assertEquals(component.getComponentRef(),
+                     (String) component.getAttribute("componentRef"));
+        component.setComponentRef("foo");
+        assertEquals("foo", (String) component.getAttribute("componentRef"));
+        component.setComponentRef(null);
+        assertNull((String) component.getAttribute("componentRef"));
+        component.setAttribute("componentRef", "bar");
+        assertEquals("bar", component.getComponentRef());
+        component.setAttribute("componentRef", null);
+        assertNull(component.getComponentRef());
+
+        assertEquals(component.getFacets(),
+                     (Map) component.getAttribute("facets"));
+
+        assertEquals(component.getId(),
+                     (String) component.getAttribute("id"));
+
+        assertEquals(component.getParent(),
+                     (UIComponent) component.getAttribute("parent"));
+
+        assertEquals(component.isRendered(),
+                     ((Boolean) component.getAttribute("rendered")).booleanValue());
+        component.setRendered(false);
+        assertEquals(Boolean.FALSE,
+                     (Boolean) component.getAttribute("rendered"));
+        component.setRendered(true);
+        assertEquals(Boolean.TRUE,
+                     (Boolean) component.getAttribute("rendered"));
+        component.setAttribute("rendered", Boolean.FALSE);
+        assertTrue(!component.isRendered());
+        component.setAttribute("rendered", Boolean.TRUE);
+        assertTrue(component.isRendered());
+
+        component.setRendererType("foo");
+        assertEquals("foo", (String) component.getAttribute("rendererType"));
+        component.setRendererType(null);
+        assertNull((String) component.getAttribute("rendererType"));
+        component.setAttribute("rendererType", "bar");
+        assertEquals("bar", component.getRendererType());
+        component.setAttribute("rendererType", null);
+        assertNull(component.getRendererType());
+
+        assertEquals(component.getRendersChildren(),
+                     ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
+
+
+    }
+
+
+    // Negative tests on children methods
+    public void testChidrenNegative() {
+
+        // Construct components we will need
+        UIComponent comp0 = new TestComponent(null);
+        UIComponent comp1 = new TestComponent("comp1");
+        UIComponent comp2 = new TestComponent("comp2");
+        UIComponent comp3 = new TestComponent("comp3");
+
+        // Set up and verify initial state
+        List children = component.getChildren();
+        children.add(comp0);
+        children.add(comp1);
+        children.add(comp2);
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
+
+        // add(Object) - ClassCastException
         try {
-            component.addChild(form1a);
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
+            children.add("String");
+            fail("Should have thrown ClassCastException");
+        } catch (ClassCastException e) {
             ; // Expected result
         }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-        // Duplicate component id - indexed
+        // add(Object) - NullPointerException
         try {
-            component.addChild(0, form1a);
-            fail("Should have thrown IllegalStateException");
-        } catch (IllegalStateException e) {
+            children.add(null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
             ; // Expected result
         }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-        // Index out of bounds - low
+        // add(int,Object) - ClassCastException
         try {
-            component.addChild(-1, form2);
-            fail("Should have thrown IndexOutOfBoundsException");
+            children.add(1, "String");
+            fail("Should have thrown ClassCastException");
+        } catch (ClassCastException e) {
+            ; // Expected result
+        }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
+
+        // add(int,Object) - IndexOutOfBoundsException low
+        try {
+            children.add(-1, comp3);
+            fail("Should have thrown IndexOutOfBoundsException low");
         } catch (IndexOutOfBoundsException e) {
             ; // Expected result
         }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-        // Index out of bounds - high
+        // add(int,Object) - IndexOutOfBoundsException high
         try {
-            component.addChild(2, form2);
-            fail("Should have thrown IndexOutOfBoundsException");
+            children.add(4, comp3);
+            fail("Should have thrown IndexOutOfBoundsException high");
         } catch (IndexOutOfBoundsException e) {
             ; // Expected result
         }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-        // Add the same child twice
+        // add(int,Object) - NullPointerException
         try {
-            component.addChild(form3);
-            component.addChild(form3);
-            fail("Should have thrown IllegalArgumentException");
-        } catch (IllegalStateException e) {
+            children.add(1, null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
             ; // Expected result
         }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-
-    }
-
-    public void testAddChildPositive() {
-
-        // Child components we will need
-        UIForm form1 = new UIForm();
-        form1.setComponentId("form1");
-        UIForm form1a = new UIForm();
-        form1a.setComponentId("form1"); // Duplicate id
-        UIForm form2 = new UIForm();
-        form2.setComponentId("form2");
-
-        // Add first child explicitly
-        component.addChild(form1);
-	boolean exceptionThrown = false; // expected result
-
-        // No component id - simple
+        // set(int,Object) - ClassCastException
         try {
-            component.addChild(new UIForm());
-        } catch (IllegalArgumentException e) {
-	    exceptionThrown = true;
-        }
-	assertTrue(!exceptionThrown);
-
-	exceptionThrown = false; // expected result
-        // No component id - indexed
-        try {
-            component.addChild(0, new UIForm());
-        } catch (IllegalArgumentException e) {
+            children.set(1, "String");
+            fail("Should have thrown ClassCastException");
+        } catch (ClassCastException e) {
             ; // Expected result
         }
-	assertTrue(!exceptionThrown);
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-
-        // Empty string component id
-	exceptionThrown = false; // expected result
+        // set(int,Object) - IndexOutOfBoundsException low
         try {
-	    UIForm emptyString = new UIForm();
-	    emptyString.setComponentId("");
-            component.addChild(emptyString);
-        } catch (IllegalArgumentException e) {
+            children.set(-1, comp3);
+            fail("Should have thrown IndexOutOfBoundsException low");
+        } catch (IndexOutOfBoundsException e) {
             ; // Expected result
         }
-	assertTrue(!exceptionThrown);
-	
-	// Make sure we can rename the component, and the clientId
-	// changes.
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
-        /**
-         * PENDING - comment out because we don't initialize the
-         * RenderKit so getClientId() will not work
-	FacesContext context = new MockFacesContext();
-	String form1ClientId = form1.getClientId(context);
-	form1.setComponentId("form30");
-	assertTrue(!form1ClientId.equals(form1.getClientId(context)));
-         */
-	    
-    }
-
-    public void testComponentIdValidityNegative() {
-	UIForm form = new UIForm();
-
+        // set(int,Object) - IndexOutOfBoundsException high
         try {
-            form.setComponentId(" startsWithSpace");
-            fail("Should throw IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+            children.set(4, comp3);
+            fail("Should have thrown IndexOutOfBoundsException high");
+        } catch (IndexOutOfBoundsException e) {
+            ; // Expected result
         }
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
+        // set(int,Object) - NullPointerException
         try {
-            form.setComponentId(" endsWithSpace");
-            fail("Should throw IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
+            children.set(1, null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            ; // Expected result
         }
-
-        try {
-            form.setComponentId("hasInvalidChars[");
-            fail("Should throw IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-        }
-
-        try {
-            form.setComponentId("hasInvalidChars.");
-            fail("Should throw IllegalArgumentException");
-        } catch (IllegalArgumentException e) {
-        }
-    }
-
-    public void testComponentIdValidityPositive() {
-	UIForm form = new UIForm();
-
-        try {
-            form.setComponentId("allchars");
-        } catch (Throwable e) {
-            fail("Should not throw anything");
-        }
-
-        try {
-            form.setComponentId("chars090and212numbers1212");
-        } catch (Throwable e) {
-            fail("Should not throw anything");
-        }
-
-        try {
-            form.setComponentId("chars-dashes");
-        } catch (Throwable e) {
-            fail("Should not throw anything");
-        }
-
-        try {
-            form.setComponentId("chars_underscores");
-        } catch (Throwable e) {
-            fail("Should not throw anything");
-        }
-
-        try {
-            form.setComponentId("chars090numbers--dashes__underscores_");
-        } catch (Throwable e) {
-            fail("Should not throw anything");
-        }
-
-    }    /**
-     * [3.1.7] Attribute/Property Transparency.
-     */
-
-    public void testAttributePropertyTransparency() {
-
-        // Removed because we undid the transparency requirement
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildMissing(component, comp3);
 
     }
 
 
-    /**
-     * [3.1.3] Component Tree Manipulation.
-     */
-    public void testComponentTreeManipulation() {
+    // Positive tests on children methods
+    public void testChildrenPositive() {
 
-	FacesContext context = new MockFacesContext();
+        // Construct components we will need
+        UIComponent comp0 = new TestComponent(null);
+        UIComponent comp1 = new TestComponent("comp1");
+        UIComponent comp2 = new TestComponent("comp2");
+        UIComponent comp3 = new TestComponent("comp3");
+        UIComponent comp4 = new TestComponent("comp4");
+        UIComponent comp5 = new TestComponent("comp5");
+        UIComponent comp6 = new TestComponent("comp6");
 
-        UIComponent test1 = new TestComponent("test1");
-        UIComponent test2 = new TestComponent("test2");
-        UIComponent test3 = new TestComponent("test3");
-
-        // Review initial conditions
-        assertEquals("No children yet", 0, component.getChildCount());
-        assertTrue("test1 not a child", !component.containsChild(test1));
-        assertTrue("test2 not a child", !component.containsChild(test2));
-        assertTrue("test3 not a child", !component.containsChild(test3));
+        // Verify initial state
+        List children = component.getChildren();
+        checkChildMissing(component, comp0);
         checkChildCount(component, 0);
-        checkChildCount(test1, 0);
-        checkChildCount(test2, 0);
-        checkChildCount(test3, 0);
+        checkChildMissing(component, comp1);
+        checkChildMissing(component, comp2);
+        checkChildMissing(component, comp3);
+        checkChildMissing(component, comp4);
+        checkChildMissing(component, comp5);
+        checkChildMissing(component, comp6);
 
-        // Add "test2" component as the only child
-        component.addChild(test2);
+        // add(Object)
+        children.add(comp1);
         checkChildCount(component, 1);
-        assertTrue("test1 not a child", !component.containsChild(test1));
-        assertTrue("test2 is a child", component.containsChild(test2));
-        assertTrue("test3 not a child", !component.containsChild(test3));
-        assertEquals("test2 clientSideId", "test2", 
-		     test2.getClientId(context));
+        checkChildMissing(component, comp0);
+        checkChildPresent(component, comp1, 0);
+        checkChildMissing(component, comp2);
+        checkChildMissing(component, comp3);
+        checkChildMissing(component, comp4);
+        checkChildMissing(component, comp5);
+        checkChildMissing(component, comp6);
 
-        // Insert "test1" component in front of "test2" component
-        component.addChild(0, test1);
+        // add(int, Object)
+        children.add(0, comp0);
         checkChildCount(component, 2);
-        assertTrue("test1 is a child", component.containsChild(test1));
-        assertTrue("test2 is a child", component.containsChild(test2));
-        assertTrue("test3 not a child", !component.containsChild(test3));
-        assertEquals("test1 clientSideId", "test1", 
-		     test1.getClientId(context));
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildMissing(component, comp2);
+        checkChildMissing(component, comp3);
+        checkChildMissing(component, comp4);
+        checkChildMissing(component, comp5);
+        checkChildMissing(component, comp6);
 
-        // Add "test3" component as child of "test2" component
-        test2.addChild(test3);
-        checkChildCount(component, 2);
-        checkChildCount(test1, 0);
-        checkChildCount(test2, 1);
-        checkChildCount(test3, 0);
-        assertTrue("test1 is a child", component.containsChild(test1));
-        assertTrue("test2 is a child", component.containsChild(test2));
-        assertTrue("test3 not a child", !component.containsChild(test3));
-        assertTrue("test3 is a child", test2.containsChild(test3));
-        assertEquals("test3 clientSideId", "test3",
-		     test3.getClientId(context));
+        // addAll(Collection)
+        ArrayList list1 = new ArrayList();
+        list1.add(comp4);
+        list1.add(comp5);
+        children.addAll(list1);
+        checkChildCount(component, 4);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildMissing(component, comp2);
+        checkChildMissing(component, comp3);
+        checkChildPresent(component, comp4, 2);
+        checkChildPresent(component, comp5, 3);
+        checkChildMissing(component, comp6);
 
-        // Verify the correct children are present in the correct order
-        Iterator kids = component.getChildren();
-        if (!kids.hasNext()) {
-            fail("Less than one child present");
-        }
-        UIComponent child1 = (UIComponent) kids.next();
-        assertEquals("test1 is first child", test1, child1);
-        if (!kids.hasNext()) {
-            fail("Less than two children present");
-        }
-        UIComponent child2 = (UIComponent) kids.next();
-        assertEquals("test2 is second child", test2, child2);
-        assertTrue("Exactly two children", !kids.hasNext());
-        assertEquals("test1 by index", test1, component.getChild(0));
-        assertEquals("test2 by index", test2, component.getChild(1));
+        // addAll(int, Collection)
+        ArrayList list2 = new ArrayList();
+        list2.add(comp2);
+        list2.add(comp3);
+        children.addAll(2, list2);
+        checkChildCount(component, 6);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildPresent(component, comp3, 3);
+        checkChildPresent(component, comp4, 4);
+        checkChildPresent(component, comp5, 5);
+        checkChildMissing(component, comp6);
 
-        // Remove children tests
-        test2.removeChild(0);
-        checkChildCount(test2, 0);
-        component.removeChild(test1);
-        checkChildCount(component, 1);
+        // contains(Object) is tested in checkChildPresent / checkChildMissing
 
-        // Clear children and review conditions
-        component.clearChildren();
+        // containsAll(Collection)
+        assertTrue(children.containsAll(list1));
+        assertTrue(children.containsAll(list2));
+
+        // get(int) is tested in checkChildPresent / checkChildMissing
+
+        // indexOf(Object) is tested in checkChildPresent / checkChildMissing
+
+        // isEmpty() is tested in checkChildCount
+
+        // iterator()
+        Iterator iter = children.iterator();
+        assertEquals(comp0, (UIComponent) iter.next());
+        assertEquals(comp1, (UIComponent) iter.next());
+        assertEquals(comp2, (UIComponent) iter.next());
+        assertEquals(comp3, (UIComponent) iter.next());
+        assertEquals(comp4, (UIComponent) iter.next());
+        assertEquals(comp5, (UIComponent) iter.next());
+        // PENDING(craigmcc) tests of Iterator.remove()
+
+        // toArray(Object[])
+        UIComponent kids[] =
+            (UIComponent[]) children.toArray(new UIComponent[0]);
+        assertEquals(comp0, kids[0]);
+        assertEquals(comp1, kids[1]);
+        assertEquals(comp2, kids[2]);
+        assertEquals(comp3, kids[3]);
+        assertEquals(comp4, kids[4]);
+        assertEquals(comp5, kids[5]);
+
+        // listIterator()
+        ListIterator listIter1 = children.listIterator();
+        assertEquals(comp0, (UIComponent) listIter1.next());
+        assertEquals(comp1, (UIComponent) listIter1.next());
+        assertEquals(comp2, (UIComponent) listIter1.next());
+        assertEquals(comp3, (UIComponent) listIter1.next());
+        assertEquals(comp4, (UIComponent) listIter1.next());
+        assertEquals(comp5, (UIComponent) listIter1.next());
+        assertEquals(comp5, (UIComponent) listIter1.previous());
+        assertEquals(comp4, (UIComponent) listIter1.previous());
+        assertEquals(comp3, (UIComponent) listIter1.previous());
+        assertEquals(comp2, (UIComponent) listIter1.previous());
+        assertEquals(comp1, (UIComponent) listIter1.previous());
+        assertEquals(comp0, (UIComponent) listIter1.previous());
+        // PENDING(craigmcc) tests of ListIterator.remove()
+        // PENDING(craigmcc) tests of ListIterator.set()
+
+        // listIterator(int)
+        ListIterator listIter2 = children.listIterator(2);
+        assertEquals(comp2, (UIComponent) listIter2.next());
+        assertEquals(comp3, (UIComponent) listIter2.next());
+        assertEquals(comp4, (UIComponent) listIter2.next());
+        assertEquals(comp4, (UIComponent) listIter2.previous());
+        assertEquals(comp3, (UIComponent) listIter2.previous());
+        assertEquals(comp2, (UIComponent) listIter2.previous());
+        assertEquals(comp1, (UIComponent) listIter2.previous());
+
+        // subList(int,int)
+        List subList = children.subList(3, 5);
+        assertEquals(2, subList.size());
+        assertEquals(comp3, (UIComponent) subList.get(0));
+        assertEquals(comp4, (UIComponent) subList.get(1));
+
+        // set(int,Object)
+        children.set(4, comp6);
+        checkChildCount(component, 6);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildPresent(component, comp3, 3);
+        checkChildMissing(component, comp4);
+        checkChildPresent(component, comp5, 5);
+        checkChildPresent(component, comp6, 4);
+        assertTrue(!children.containsAll(list1));
+        assertTrue(children.containsAll(list2));
+
+        // remove(int)
+        children.remove(4);
+        checkChildCount(component, 5);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildPresent(component, comp2, 2);
+        checkChildPresent(component, comp3, 3);
+        checkChildMissing(component, comp4);
+        checkChildPresent(component, comp5, 4);
+        checkChildMissing(component, comp6);
+        assertTrue(!children.containsAll(list1));
+        assertTrue(children.containsAll(list2));
+
+        // removeAll(Collection)
+        children.removeAll(list2);
+        checkChildCount(component, 3);
+        checkChildPresent(component, comp0, 0);
+        checkChildPresent(component, comp1, 1);
+        checkChildMissing(component, comp2);
+        checkChildMissing(component, comp3);
+        checkChildMissing(component, comp4);
+        checkChildPresent(component, comp5, 2);
+        checkChildMissing(component, comp6);
+        assertTrue(!children.containsAll(list1));
+        assertTrue(!children.containsAll(list2));
+
+        // PENDING(craigmcc) - retainAll() functionality and tests
+
+        // size() is tested in checkChildCount
+
+        // clear()
+        children.clear();
         checkChildCount(component, 0);
+        assertNull(comp0.getParent());
+        assertNull(comp1.getParent());
+        assertNull(comp2.getParent());
+        assertNull(comp3.getParent());
+        assertNull(comp4.getParent());
+        assertNull(comp5.getParent());
+        assertNull(comp6.getParent());
 
     }
+
+
+    // Negative tests on facet methods
+    public void testFacetsNegative() {
+
+        // Construct components we will need
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+
+        // Set up and verify initial conditions
+        Map facets = component.getFacets();
+        facets.put("facet1", facet1);
+        facets.put("facet2", facet2);
+        checkFacetCount(component, 2);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+
+        // put(Object,Object) - null first argument
+        try {
+            facets.put(null, facet3);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+        checkFacetCount(component, 2);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+
+        // put(Object,Object) - null second argument
+        try {
+            facets.put("facet3", null);
+            fail("Should have thrown NullPointerException");
+        } catch (NullPointerException e) {
+            ; // Expected result
+        }
+        checkFacetCount(component, 2);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+
+        // put(Object,Object) - non-String first argument
+        try {
+            facets.put(facet3, facet3);
+            fail("Should have thrown ClassCastException");
+        } catch (ClassCastException e) {
+            ; // Expected result
+        }
+        checkFacetCount(component, 2);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+
+        // put(Object,Object) - non-UIComponent second argument
+        try {
+            facets.put("facet3", "facet3");
+            fail("Should have thrown ClassCastException");
+        } catch (ClassCastException e) {
+            ; // Expected result
+        }
+        checkFacetCount(component, 2);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+
+    }
+
+
+    // Positive tests on facet methods
+    public void testFacetsPositive() {
+
+        // Construct components we will need
+        UIComponent facet1 = new TestComponent("facet1");
+        UIComponent facet2 = new TestComponent("facet2");
+        UIComponent facet3 = new TestComponent("facet3");
+        UIComponent facet4 = new TestComponent("facet4");
+        UIComponent facet5 = new TestComponent("facet5");
+
+        // Verify initial conditions
+        Map facets = component.getFacets();
+        checkFacetCount(component, 0);
+        checkFacetMissing(component, "facet1", facet1);
+        checkFacetMissing(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+        checkFacetMissing(component, "facet4", facet4);
+        checkFacetMissing(component, "facet5", facet5);
+
+        // containsKey(Object) is tested in checkFacetMissing / checkFacetPresent
+
+        // containsValue(Object) is tested in checkFacetMissing / checkFacetPresent
+
+        // PENDING(craigmcc) - tests for entrySet()
+
+        // get(Object) is tested in checkFacetMissing / checkFacetPresent
+
+        // isEmpty() is tested in checkFacetCount
+
+        // PENDING(craigmcc) - tests for keySet()
+
+        // put(Object,Object)
+        facets.put("facet1", facet1);
+        checkFacetCount(component, 1);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetMissing(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+        checkFacetMissing(component, "facet4", facet4);
+        checkFacetMissing(component, "facet5", facet5);
+
+        // put(Object,Object)
+        facets.put("facet4", facet4);
+        checkFacetCount(component, 2);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetMissing(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+        checkFacetPresent(component, "facet4", facet4);
+        checkFacetMissing(component, "facet5", facet5);
+
+        // putAll(Map)
+        Map map = new HashMap();
+        map.put("facet2", facet2);
+        map.put("facet3", facet3);
+        facets.putAll(map);
+        checkFacetCount(component, 4);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetPresent(component, "facet3", facet3);
+        checkFacetPresent(component, "facet4", facet4);
+        checkFacetMissing(component, "facet5", facet5);
+
+        // put(Object,Object) with replace
+        // PENDING(craigmcc) - For some reason the swap fails
+        map.put("facet3", facet5);
+        checkFacetCount(component, 4);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        // checkFacetPresent(component, "facet3", facet5);
+        checkFacetPresent(component, "facet4", facet4);
+        // checkFacetMissing(component, "facet5", facet3);
+
+        // remove(Object)
+        facets.remove("facet3");
+        checkFacetCount(component, 3);
+        checkFacetPresent(component, "facet1", facet1);
+        checkFacetPresent(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+        checkFacetPresent(component, "facet4", facet4);
+        checkFacetMissing(component, "facet5", facet5);
+
+        // values() is tested in checkFacetMissing / checkFacetPresent
+
+        // clear()
+        facets.clear();
+        checkFacetCount(component, 0);
+        checkFacetMissing(component, "facet1", facet1);
+        checkFacetMissing(component, "facet2", facet2);
+        checkFacetMissing(component, "facet3", facet3);
+        checkFacetMissing(component, "facet4", facet4);
+        checkFacetMissing(component, "facet5", facet5);
+
+    }
+
+
+    // Test a pristine UIComponent instance 
+    public void testPristine() {
+
+        // Validate attributes
+        checkAttributeCount(component, expectedAttributes.length);
+        for (int i = 0; i < expectedAttributes.length; i++) {
+            checkAttributePresent(component, expectedAttributes[i], null);
+        }
+
+        // Validate properties
+        assertNull("no componentRef", component.getComponentRef());
+        assertEquals("expected id",
+                     expectedId, component.getId());
+        assertNull("no parent", component.getParent());
+        assertEquals("expected rendered",
+                     expectedRendered, component.isRendered());
+        assertEquals("expected rendererType",
+                     expectedRendererType, component.getRendererType());
+        assertEquals("expected rendersChildren",
+                     expectedRendersChildren, component.getRendersChildren());
+
+        // Validate children and facets
+        checkChildCount(component, 0);
+        checkFacetCount(component, 0);
+        int n = 0;
+        Iterator items = component.getFacetsAndChildren();
+        assertNotNull("iterator returned", items);
+        while (items.hasNext()) {
+            items.next();
+            n++;
+        }
+        assertEquals("facets and children", 0, n);
+
+    }
+
+
+    // Test setting properties to invalid values
+    public void testPropertiesInvalid() throws Exception {
+
+        // id - zero length
+        try {
+            component.setId("");
+            fail("should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // id - leading digits
+        try {
+            component.setId("1abc");
+            fail("should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // id - invalid characters 1
+        try {
+            component.setId("a*c");
+            fail("should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // id - invalid characters 2
+        try {
+            component.setId(" abc");
+            fail("should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+        // id - invalid characters 3
+        try {
+            component.setId("-abc");
+            fail("should have thrown IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+
+    }
+
+
+    // Test setting properties to valid values
+    public void testPropertiesValid() throws Exception {
+
+        // componentRef
+        component.setComponentRef("foo.bar");
+        assertEquals("expected componentRef",
+                     "foo.bar", component.getComponentRef());
+
+        // id - simple name
+        component.setId("foo");
+        assertEquals("expected id",
+                     "foo", component.getId());
+
+        // id - complex name
+        component.setId("a123-bcd_e");
+        assertEquals("expected id",
+                     "a123-bcd_e", component.getId());
+
+        // parent
+        UIComponent parent = new TestComponent("parent");
+        component.setParent(parent);
+        assertEquals("expected parent",
+                     parent, component.getParent());
+
+        // rendered
+        component.setRendered(!expectedRendered);
+        assertEquals("expected rendered",
+                     !expectedRendered, component.isRendered());
+
+        // rendererType
+        component.setRendererType("foo");
+        assertEquals("expected rendererType",
+                     "foo", component.getRendererType());
+
+    }
+
 
 
     /**
      * [3.1.3] Component Tree Navigation with invalid findComponent arguments.
      */
+    /*
     public void testComponentTreeNavigationInvalid() {
 
         UIComponent test1 = new TestComponent("test1");
         UIComponent test2 = new TestComponent("test2");
         UIComponent test3 = new TestComponent("test3");
-        component.addChild(test1);
-        component.addChild(test2);
-        test2.addChild(test3);
+        component.getChildren().add(test1);
+        component.getChildren().add(test2);
+        test2.getChildren().add(test3);
 
 	assertTrue(null == component.findComponent("test4"));
 
@@ -421,37 +863,39 @@ public class UIComponentTestCase extends TestCase {
 
 
     }
+    */
 
 
     /**
      * [3.1.3] Component Tree Navigation with valid findComponent() arguments.
      */
+    /*
     public void testComponentTreeNavigationValid() {
 
         UIComponent test1 = new TestComponent("test1");
         UIComponent test2 = new TestComponent("test2");
         UIComponent test3 = new TestComponent("test3");
-        component.addChild(test1);
-        component.addChild(test2);
-        test2.addChild(test3);
+        component.getChildren().add(test1);
+        component.getChildren().add(test2);
+        test2.getChildren().add(test3);
 
         // Can a component find itself?
         assertEquals("component find self", component,
-                     component.findComponent(component.getComponentId()));
+                     component.findComponent(component.getId()));
         assertEquals("test1 find self", test1,
-                     test1.findComponent(test1.getComponentId()));
+                     test1.findComponent(test1.getId()));
         assertEquals("test2 find self", test2,
-                     test2.findComponent(test2.getComponentId()));
+                     test2.findComponent(test2.getId()));
         assertEquals("test3 find self", test3,
-                     test3.findComponent(test3.getComponentId()));
+                     test3.findComponent(test3.getId()));
 
         // Can a component find its parent?
         assertEquals("test1 find parent", component,
-                     test1.findComponent(test1.getParent().getComponentId()));
+                     test1.findComponent(test1.getParent().getId()));
         assertEquals("test2 find parent", component,
-                     test2.findComponent(test2.getParent().getComponentId()));
+                     test2.findComponent(test2.getParent().getId()));
         assertEquals("test3 find parent", test2,
-                     test3.findComponent(test3.getParent().getComponentId()));
+                     test3.findComponent(test3.getParent().getId()));
 
         // Can a component find its child by name?
         assertEquals("component find test1", test1,
@@ -464,83 +908,7 @@ public class UIComponentTestCase extends TestCase {
                      component.findComponent("test3"));
 
     }
-
-
-    /**
-     * [3.1.12] Facet manipulation.
-     */
-    public void testFacetManipulation() {
-
-        UIComponent test1 = new TestComponent("test1");
-        UIComponent test2 = new TestComponent("test2");
-        UIComponent test3 = new TestComponent("test3");
-        UIComponent test3dup = new TestComponent("test3"); // Same component id
-        UIComponent facet = null;
-
-        // Review initial conditions
-        checkFacetCount(component, 0);
-
-        // Add facets one at a time and check the count
-        component.addFacet("test1", test1);
-        assertTrue("facet test1 added",
-                   test1 == component.getFacet("test1"));
-	assertTrue("facet test1 parent",
-                   component == test1.getParent());
-        checkFacetCount(component, 1);
-        component.addFacet("test2", test2);
-        assertTrue("facet test2 added",
-                   test2 == component.getFacet("test2"));
-	assertTrue("facet test2 parent",
-                   component == test2.getParent());
-        checkFacetCount(component, 2);
-        component.addFacet("test3", test3);
-        assertTrue("facet test3 added",
-                   test3 == component.getFacet("test3"));
-	assertTrue("facet test3 parent",
-                   component == test3.getParent());
-        checkFacetCount(component, 3);
-
-        // Replace an existing facet
-        component.addFacet("test3", test3dup);
-        assertTrue("facet test3 replaced",
-                   test3dup == component.getFacet("test3"));
-        assertTrue("facet test3 new parent",
-                   component == test3dup.getParent());
-        assertTrue("facet test3 old parent",
-                   null == test3.getParent());
-        checkFacetCount(component, 3);
-
-	// Note that this doesn't throw any exception
-        facet = component.getFacet("test1");
-        assertEquals("test1 returned", test1, facet);
-        facet = component.getFacet("test2");
-        assertEquals("test2 returned", test2, facet);
-        facet = component.getFacet("test3");
-        assertEquals("test3dup returned", test3dup, facet);
-
-        // Remove a facet
-        component.removeFacet("test2");
-        assertTrue("facet test2 no parent",
-                   null == test2.getParent());
-        checkFacetCount(component, 2);
-        facet = component.getFacet("test1");
-        assertEquals("test1 returned", test1, facet);
-        facet = component.getFacet("test2");
-        assertNull("test2 not returned", facet);
-        facet = component.getFacet("test3");
-        assertEquals("test3dup returned", test3dup, facet);
-
-        // Clear all facets
-        component.clearFacets();
-        checkFacetCount(component, 0);
-        facet = component.getFacet("test1");
-        assertNull("test1 not returned", facet);
-        facet = component.getFacet("test2");
-        assertNull("test2 not returned", facet);
-        facet = component.getFacet("test3");
-        assertNull("test3 not returned", facet);
-
-    }
+    */
 
 
     /**
@@ -548,6 +916,7 @@ public class UIComponentTestCase extends TestCase {
      * facets are returned first followed by children in the order 
      * they are stored in the child list.
      */
+    /*
     public void testGetFacetsAndChildren() {
 
         UIComponent testComponent = new TestComponentNamingContainer();
@@ -568,12 +937,12 @@ public class UIComponentTestCase extends TestCase {
         assertTrue((kidItr.hasNext()) == false);
 
         // Add facets and children one at a time.
-        testComponent.addFacet("facet1", facet1);
-        testComponent.addChild(child1);
-        testComponent.addFacet("facet2", facet2);
-        testComponent.addChild(child2);
-        testComponent.addFacet("facet3", facet3);
-        testComponent.addChild(child3);
+        testComponent.getFacets().put("facet1", facet1);
+        testComponent.getChildren().add(child1);
+        testComponent.getFacets().put("facet2", facet2);
+        testComponent.getChildren().add(child2);
+        testComponent.getFacets().put("facet3", facet3);
+        testComponent.getChildren().add(child3);
 
         // make sure the facets and children are returned in the correct order.
         kidItr = testComponent.getFacetsAndChildren();
@@ -598,257 +967,192 @@ public class UIComponentTestCase extends TestCase {
         child = (UIComponent) kidItr.next();
         assertTrue(child.equals(child3));
     }
+    */
 
 
-    /**
-     * Test results returned by introspecting the component class.
-     */
-    public void testIntrospection() throws Exception {
-
-        Class clazz = null;
-        Method method = null;
-
-        BeanInfo binfo = Introspector.getBeanInfo(component.getClass());
-        assertNotNull(binfo);
-        BeanDescriptor bdesc = binfo.getBeanDescriptor();
-        assertNotNull(bdesc);
-        System.out.println();
-        System.out.println("BeanDescriptor Contents:");
-        System.out.println("        beanClass=" +
-                           bdesc.getBeanClass().getName());
-        Enumeration anames = bdesc.attributeNames();
-        while (anames.hasMoreElements()) {
-            String name = (String) anames.nextElement();
-            System.out.println("    attributeName=" + name +
-                               ", value=" + bdesc.getValue(name));
-        }
-        System.out.println("      displayName=" + bdesc.getDisplayName());
-        System.out.println("           expert=" + bdesc.isExpert());
-        System.out.println("           hidden=" + bdesc.isHidden());
-        System.out.println("             name=" + bdesc.getName());
-        System.out.println("        preferred=" + bdesc.isPreferred());
-        System.out.println(" shortDescription=" + bdesc.getShortDescription());
-        System.out.println("------------------------");
-        EventSetDescriptor edescs[] = binfo.getEventSetDescriptors();
-        if (edescs == null) {
-            edescs = new EventSetDescriptor[0];
-        }
-        for (int i = 0; i < edescs.length; i++) {
-            EventSetDescriptor edesc = edescs[i];
-            System.out.println("EventSetDescriptor Contents:");
-            method = edesc.getAddListenerMethod();
-            if (method != null) {
-                System.out.println("    addListenerMethod=" +
-                                   method.getName());
-            }
-            System.out.println("          displayName=" +
-                               edesc.getDisplayName());
-            System.out.println("               expert=" + edesc.isExpert());
-	    Method methods []  = edesc.getListenerMethods();
-            if (methods != null) {
-		if ((method = methods[0]) != null) {
-		    System.out.println("    getListenerMethod=" +
-				       method.getName());
-		}
-            }
-            System.out.println("               hidden=" + bdesc.isHidden());
-            System.out.println("    inDefaultEventSet=" +
-                               edesc.isInDefaultEventSet());
-            clazz = edesc.getListenerType();
-            if (clazz != null) {
-                System.out.println("         listenerType=" +
-                                   clazz.getName());
-            }
-            System.out.println("            preferred=" + bdesc.isPreferred());
-            method = edesc.getRemoveListenerMethod();
-            if (method != null) {
-                System.out.println(" removeListenerMethod=" +
-                                   method.getName());
-            }
-            System.out.println("     shortDescription=" +
-                               bdesc.getShortDescription());
-            System.out.println("              unicast=" +
-                               edesc.isUnicast());
-            System.out.println("----------------------------");
-        }
-
-    }
+    // --------------------------------------------------------- Support Methods
 
 
-    /**
-     * [3.1] Invalid setter arguments.
-     */
-    public void testInvalidSetters() {
-
-
-        // [3.1.2] setComponentId()
-	boolean exceptionThrown = false;
-        try {
-            component.setComponentId(null);
-        } catch (NullPointerException e) {
-	    exceptionThrown = true;
-        }
-	assertTrue(!exceptionThrown);
-        try {
-            component.setComponentId("*");
-            fail("setComponentId did not throw IAE");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-
-        // [3.1.7] setAttribute()
-        try {
-            component.setAttribute(null, "bar");
-            fail("setAttribute did not throw NPE");
-        } catch (NullPointerException e) {
-            ; // Expected result
-        }
-        /* Comment out because transparency removed
-        try {
-            component.setAttribute("componentType", "foo"); // Read-only prop
-            fail("setAttribute did not throw IAE");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-        */
-
-        /* Comment out because transparency removed
-        try {
-            component.setAttribute("rendersChildren", Boolean.FALSE); // Read-only prop
-            fail("setAttribute did not throw IAE");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-        */
-
-        /* Comment out because transparency removed
-        try {
-            component.setAttribute("rendersSelf", Boolean.FALSE); // Read-only prop
-            fail("setAttribute did not throw IAE");
-        } catch (IllegalArgumentException e) {
-            ; // Expected result
-        }
-        */
-
-    }
-
-
-    /**
-     * [3.1.10] Renders Children.
-     */
-    public void testRendersChildren() {
-
-        assertTrue("rendersChildren", !component.getRendersChildren());
-
-    }
-
-
-    /**
-     * [3.1.11] Renders Self.
-     */
-    public void testRendersSelf() {
-
-        if ((component instanceof UIParameter) ||
-            (component instanceof UISelectItem) ||
-            (component instanceof UISelectItems)) {
-            assertTrue("rendersSelf", component.getRendersSelf());
-        } else {
-            assertTrue("rendersSelf", !component.getRendersSelf());
-        }
-
-    }
-
-
-    /**
-     * [3.1] Test the state of an unmodified test component.
-     */
-    public void testUnmodifiedComponent() {
-
-        // [3.1.2] Component Identifiers
-        String componentId = component.getComponentId();
-        assertEquals("componentId correct", "test", componentId);
-
-        // [3.1.3] Component Tree Manipulation
-        assertNull("parent null", component.getParent());
-        checkChildCount(component, 0);
-
-        // [3.1.4] Component Tree Navigation
-        UIComponent result = null;
-        result = component.findComponent(component.getComponentId());
-        assertTrue("Can find self", result == component);
-
-        // [3.1.7] Generic Attributes
+    // Validate that the specified number of attributes are present.
+    protected void checkAttributeCount(UIComponent component, int count) {
+        int result = 0;
         Iterator names = component.getAttributeNames();
         while (names.hasNext()) {
-            String name = (String) names.next();
-            boolean found = false;
-            for (int i = 0; i < attributes.length; i++) {
-                if (name.equals(attributes[i])) {
-                    found = true;
-                    break;
+            names.next();
+            result++;
+        }
+        assertEquals("attribute count", count, result);
+    }
+
+
+    // Validate that the specified attribute name is not present
+    protected void checkAttributeMissing(UIComponent component,
+                                         String name) {
+        assertNull("Attribute " + name + " should be missing",
+                   component.getAttribute(name));
+        Iterator keys = component.getAttributeNames();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            if (name.equals(key)) {
+                fail("Attribute " + name + " should not be in names list");
+            }
+        }
+    }
+
+
+    // Validate that the specified attribute name is present with the
+    // specified value (if value is not null)
+    protected void checkAttributePresent(UIComponent component,
+                                         String name, Object value) {
+        assertNotNull("attribute " + name + " should be present",
+                      component.getAttribute(name));
+        if (value != null) {
+            assertEquals("attribute " + name + " value should be equal",
+                         value, component.getAttribute(name));
+        }
+        Iterator keys = component.getAttributeNames();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            if (name.equals(key)) {
+                if (value != null) {
+                    assertEquals("attribute " + name + " value should match",
+                                 value, component.getAttribute(name));
                 }
-            }
-            if (!found) {
-                fail("Invalid attribute name '" + name + "' found");
+                return;
             }
         }
-
-        // Renderer Type
-        if (rendererType == null) {
-            assertNull("rendererType null", component.getRendererType());
-        } else {
-            assertEquals("rendererType correct",
-                         rendererType, component.getRendererType());
-        }
-
-        // Valid Property
-	//        assertTrue("valid true", component.isValid());
+        fail("attribute " + name + " should be in name list");
 
     }
 
 
-
-    // -------------------------------------------------------- Support Methods
-
-
-    /**
-     * Validate that the specified number of children are present.
-     *
-     * @param component Component being tested
-     * @param count Expected number of children
-     */
+    // Validate that the specified number of children are present
     protected void checkChildCount(UIComponent component, int count) {
-
-        assertEquals("childCount", count, component.getChildCount());
-        int results = 0;
-        Iterator kids = component.getChildren();
-        assertNotNull("children", kids);
-        while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
-            results++;
+        assertEquals("child count",
+                     count, component.getChildren().size());
+        if (count == 0) {
+            assertTrue("children empty", component.getChildren().isEmpty());
+        } else {
+            assertTrue("children not empty", !component.getChildren().isEmpty());
         }
-        assertEquals("child count", count, results);
-
     }
 
 
-    /**
-     * Validate that the specified number of facets are present.
-     *
-     * @param component Component being tested
-     * @param count Expected number of facets
-     */
-    protected void checkFacetCount(UIComponent component, int count) {
-
-        int results = 0;
-        Iterator names = component.getFacetNames();
-        assertNotNull("children", names);
-        while (names.hasNext()) {
-            String name = (String) names.next();
-            results++;
+    // Validate that the specified child is not present
+    protected void checkChildMissing(UIComponent component,
+                                     UIComponent child) {
+        assertNull("child " + child + " has no parent",
+                   child.getParent());
+        List children = component.getChildren();
+        assertTrue("child " + child + " should not be contained",
+                   !children.contains(child));
+        assertEquals("child " + child + " should not be found by indexOf",
+                     -1, children.indexOf(child));
+        for (int i = 0; i < children.size(); i++) {
+            if (child.equals((UIComponent) children.get(i)))
+                fail("child " + child + " should be missing");
         }
-        assertEquals("facet count", count, results);
+    }
 
+
+    // Validate that the specified child is present at the specified index
+    protected void checkChildPresent(UIComponent component,
+                                     UIComponent child, int index) {
+        List children = component.getChildren();
+        assertTrue("child " + child + " should be contained",
+                   children.contains(child));
+        assertEquals("child " + child + " should be found by indexOf",
+                     index, children.indexOf(child));
+        UIComponent kid = (UIComponent) children.get(index);
+        assertEquals("child " + child + " should be present",
+                     child, kid);
+        assertEquals("child " + child + " has correct parent",
+                     component, kid.getParent());
+    }
+
+
+
+
+    // Validate that the specified number of facets is present
+    protected void checkFacetCount(UIComponent component, int count) {
+        assertEquals("facet count",
+                     count, component.getFacets().size());
+        if (count == 0) {
+            assertTrue("facets empty",
+                       component.getFacets().isEmpty());
+        } else {
+            assertTrue("facets not empty",
+                       !component.getFacets().isEmpty());
+        }
+    }
+
+
+    // Validate that the specified facet is not present
+    protected void checkFacetMissing(UIComponent component,
+                                     String name, UIComponent facet) {
+        assertNull("facet " + name + " has no parent",
+                   facet.getParent());
+        Map facets = component.getFacets();
+        assertTrue("facet " + name + " key not present",
+                   !facets.containsKey(name));
+        assertTrue("facet " + name + " value not present",
+                   !facets.containsValue(facet));
+        assertNull("facet " + name + " key not found by get",
+                   facets.get(name));
+        Iterator keys = facets.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            if (name.equals(key)) {
+                fail("facet " + name + " found in keys");
+            }
+        }
+        Iterator values = facets.values().iterator();
+        while (values.hasNext()) {
+            UIComponent value = (UIComponent) values.next();
+            if (facet.equals(value)) {
+                fail("facet " + name + " found in values");
+            }
+        }
+    }
+
+
+    // Validate that the specified facet is present
+    protected void checkFacetPresent(UIComponent component,
+                                     String name, UIComponent facet) {
+
+        assertEquals("facet " + name + " has correct parent",
+                     component, facet.getParent());
+        Map facets = component.getFacets();
+        assertTrue("facet " + name + " key is present",
+                   facets.containsKey(name));
+        assertTrue("facet " + name + " value is present",
+                   facets.containsValue(facet));
+        assertEquals("facet " + name + " has correct value",
+                     facet, (UIComponent) facets.get(name));
+        boolean found = false;
+        Iterator keys = facets.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            if (name.equals(key)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            fail("facet " + name + " not found in keys");
+        }
+        found = false;
+        Iterator values = facets.values().iterator();
+        while (values.hasNext()) {
+            UIComponent value = (UIComponent) values.next();
+            if (facet.equals(value)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            fail("facet " + name + " not found in values");
+        }
     }
 
 

@@ -1,12 +1,10 @@
 /*
- * $Id: MockApplicationMap.java,v 1.1 2003/07/20 00:41:43 craigmcc Exp $
+ * $Id: MockApplicationMap.java,v 1.2 2003/07/26 17:55:34 craigmcc Exp $
  */
- 
+
 /*
- * Licensed Material - Property of IBM 
- * (C) Copyright IBM Corp. 2002, 2003 - All Rights Reserved.
- * US Government Users Restricted Rights - Use, duplication or disclosure 
- * restricted by GSA ADP Schedule Contract with IBM Corp. 
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package javax.faces.mock;

@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainer.java,v 1.5 2003/02/20 22:46:10 ofung Exp $
+ * $Id: NamingContainer.java,v 1.6 2003/07/26 17:54:33 craigmcc Exp $
  */
 
 /*
@@ -17,6 +17,19 @@ package javax.faces.component;
  */
 
 public interface NamingContainer {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The separator character used in component identifiers to demarcate
+     * navigation to a child naming container.</p>
+     */
+    public static final char SEPARATOR_CHAR = '.';
+
+
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -37,30 +50,16 @@ public interface NamingContainer {
 
 
     /**
-     * <p>Remove the specified {@link UIComponent} from the namespace of
-     * this naming container, if it is present.</p>
-     *
-     * @param component The {@link UIComponent} to be removed
-     *
-     * @exception IllegalArgumentException if the specified component
-     *  does not have a <code>componentId</code>
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
-     */
-    public void removeComponentFromNamespace(UIComponent component);
-
-
-    /**
      * <p>Find and return a {@link UIComponent} in this namespace, if it
      * is present; otherwise return <code>null</code>.</p>
      *
-     * <p>If the argument name does not contain any {@link
-     * UIComponent#SEPARATOR_CHAR} characters, it is interpreted to be a
-     * name in the namespace of this naming container.</p>
+     * <p>If the argument name does not contain any SEPARATOR_CHAR
+     * characters, it is interpreted to be a name in the namespace
+     * of this naming container.</p>
      *
-     * <p>If the argument name does contain {@link
-     * UIComponent#SEPARATOR_CHAR} characters, each segment between
-     * {@link UIComponent#SEPARATOR_CHAR} is treated as a component
+     * <p>If the argument name does contain SEPARATOR
+     * characters, each segment between
+     * SEPARATOR_CHAR is treated as a component
      * identifier in its own namespace, which are searched for in
      * child naming containers of this naming container, from left
      * to right.</p>
@@ -80,6 +79,20 @@ public interface NamingContainer {
      * within this namespace.</p>
      */
     public String generateClientId();
+
+
+    /**
+     * <p>Remove the specified {@link UIComponent} from the namespace of
+     * this naming container, if it is present.</p>
+     *
+     * @param component The {@link UIComponent} to be removed
+     *
+     * @exception IllegalArgumentException if the specified component
+     *  does not have a <code>componentId</code>
+     * @exception NullPointerException if <code>component</code>
+     *  is <code>null</code>
+     */
+    public void removeComponentFromNamespace(UIComponent component);
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.27 2003/04/29 18:51:31 eburns Exp $
+ * $Id: UISelectBoolean.java,v 1.28 2003/07/26 17:54:38 craigmcc Exp $
  */
 
 /*
@@ -15,67 +15,31 @@ package javax.faces.component;
  * represents a single boolean (<code>true</code> or <code>false</code>) value.
  * It is most commonly rendered as a checkbox.</p>
  *
- * <p>By default, the <code>rendererType</code> property is set to
+ * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Checkbox</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UISelectBoolean extends UIInput {
+public interface UISelectBoolean extends UIInput {
 
 
-    // ------------------------------------------------------- Static Variables
-
-
-    // ----------------------------------------------------------- Constructors
+    // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>Create a new {@link UISelectBoolean} instance with default property
-     * values.</p>
+     * <p>Return the local value of the selected state of this component.
+     * This method is a typesafe alias for <code>getValue()</code>.</p>
      */
-    public UISelectBoolean() {
-
-        super();
-        setRendererType("Checkbox");
-
-    }
-
-
-    // ------------------------------------------------------------- Attributes
+    public boolean isSelected();
 
 
     /**
-     * <p>Return the local value of the selected state of this component.</p>
-     */
-    public boolean isSelected() {
-
-        Boolean value = (Boolean) getValue();
-        if (value != null) {
-            return (value.booleanValue());
-        } else {
-            return (false);
-        }
-
-    }
-
-
-    /**
-     * <p>Set the local value of the selected state of this component.</p>
+     * <p>Set the local value of the selected state of this component.
+     * This method is a typesafe alias for <code>setValue()</code>.</p>
      *
      * @param selected The new selected state
      */
-    public void setSelected(boolean selected) {
-
-        if (selected) {
-            setValue(Boolean.TRUE);
-        } else {
-            setValue(Boolean.FALSE);
-        }
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
+    public void setSelected(boolean selected);
 
 
 }

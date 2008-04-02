@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.17 2003/04/29 18:51:30 eburns Exp $
+ * $Id: UIGraphic.java,v 1.18 2003/07/26 17:54:36 craigmcc Exp $
  */
 
 /*
@@ -15,58 +15,31 @@ package javax.faces.component;
  * a graphical image to the user.  The user cannot manipulate this component;
  * it is for display purposes only.</p>
  *
- * <p>By default, the <code>rendererType</code> property is set to
+ * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Image</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIGraphic extends UIOutput {
+public interface UIGraphic extends UIOutput {
 
 
-    // ------------------------------------------------------- Static Variables
-
-
-    // ----------------------------------------------------------- Constructors
+    // -------------------------------------------------------------- Properties
 
 
     /**
-     * <p>Create a new {@link UIGraphic} instance with default property
-     * values.</p>
+     * <p>Return the image URL for this {@link UIGraphic}.  This method is a
+     * typesafe alias for <code>getValue()</code>.</p>
      */
-    public UIGraphic() {
-
-        super();
-        setRendererType("Image");
-
-    }
-
-
-    // ------------------------------------------------------------- Attributes
+    public String getURL();
 
 
     /**
-     * <p>Return the image URL for this {@link UIGraphic}.</p>
-     */
-    public String getURL() {
-
-        return ((String) getValue());
-
-    }
-
-
-    /**
-     * <p>Set the image URL for this {@link UIGraphic}.</p>
+     * <p>Set the image URL for this {@link UIGraphic}.  This method is a
+     * typesafe alias for <code>setValue()</code>.</p>
      *
      * @param url The new image URL
      */
-    public void setURL(String url) {
-
-        setValue(url);
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
+    public void setURL(String url);
 
 
 }

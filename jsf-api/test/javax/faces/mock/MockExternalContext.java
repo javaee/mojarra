@@ -1,12 +1,10 @@
 /*
- * $Id: MockExternalContext.java,v 1.1 2003/07/20 00:41:44 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.2 2003/07/26 17:55:34 craigmcc Exp $
  */
- 
+
 /*
- * Licensed Material - Property of IBM 
- * (C) Copyright IBM Corp. 2002, 2003 - All Rights Reserved.
- * US Government Users Restricted Rights - Use, duplication or disclosure 
- * restricted by GSA ADP Schedule Contract with IBM Corp. 
+ * Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
 package javax.faces.mock;
@@ -24,6 +22,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 public class MockExternalContext extends ExternalContext {
@@ -72,13 +72,22 @@ public class MockExternalContext extends ExternalContext {
     }
     
 
+    private Map sessionMap = null;
     public Map getSessionMap() {
-        throw new UnsupportedOperationException();
+        if (sessionMap == null) {
+            sessionMap = new MockSessionMap
+                (((HttpServletRequest) request).getSession(true));
+        }
+        return (sessionMap);
     }
     
 
+    private Map requestMap = null;
     public Map getRequestMap() {
-        throw new UnsupportedOperationException();
+        if (requestMap == null) {
+            requestMap = new MockRequestMap(request);
+        }
+        return (requestMap);
     }
     
 

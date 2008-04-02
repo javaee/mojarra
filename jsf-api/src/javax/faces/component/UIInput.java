@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.25 2003/07/16 23:11:01 craigmcc Exp $
+ * $Id: UIInput.java,v 1.26 2003/07/26 17:54:37 craigmcc Exp $
  */
 
 /*
@@ -10,17 +10,7 @@
 package javax.faces.component;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-import javax.faces.application.Application;
-import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -32,7 +22,7 @@ import javax.faces.validator.Validator;
 /**
  * <p><strong>UIInput</strong> is a {@link UIComponent} that represents
  * a component that both displays output to the user (like
- * {@link UIOutput} components do) and includes request parameters on the
+ * {@link UIOutput} components do) and processes request parameters on the
  * subsequent request that need to be decoded.  There are no restrictions
  * on the data type of the local value, or the object referenced by the
  * value reference expression (if any); however, individual
@@ -46,19 +36,20 @@ import javax.faces.validator.Validator;
  * method will ensure that this event is broadcast to all interested
  * listeners.</p>
  *
- * <p>By default, the <code>rendererType</code> property is set to
+ * <p>By default, the <code>rendererType</code> property must be set to
  * "<code>Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
-public class UIInput extends UIOutput {
+public interface UIInput extends UIOutput {
 
 
-    // ----------------------------------------------------- Manifest Constants
+    // ------------------------------------------------------ Manifest Constants
 
 
     /**
-     * <p>The message identifier of the {@link Message} to be created if
+     * <p>The message identifier of the
+     * {@link javax.faces.application.Message} to be created if
      * this validation fails.</p>
      */
     public static final String REQUIRED_MESSAGE_ID =
@@ -66,28 +57,7 @@ public class UIInput extends UIOutput {
 
 
 
-    // ----------------------------------------------------------- Constructors
-
-
-    /**
-     * <p>Create a new {@link UIInput} instance with default property
-     * values.</p>
-     */
-    public UIInput() {
-
-        super();
-        setRendererType("Text");
-
-    }
-
-
-    // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>The previous value of this {@link UIInput} component.</p>
-     */
-    private Object previous = null;
+    // -------------------------------------------------------------- Properties
 
 
     /**
@@ -96,11 +66,7 @@ public class UIInput extends UIOutput {
      * method of this component, or its corresponding
      * {@link javax.faces.render.Renderer}.</p>
      */
-    public Object getPrevious() {
-
-        return (this.previous);
-
-    }
+    public Object getPrevious();
 
 
     /**
@@ -111,27 +77,13 @@ public class UIInput extends UIOutput {
      *
      * @param previous The new previous value
      */
-    public void setPrevious(Object previous) {
-
-        this.previous = previous;
-
-    }
-
-
-    /**
-     * <p>The "required field" state for this component.</p>
-     */
-    private boolean required = false;
+    public void setPrevious(Object previous);
 
 
     /**
      * <p>Return the "required field" state for this component.</p>
      */
-    public boolean isRequired() {
-
-	return (this.required);
-
-    }
+    public boolean isRequired();
 
 
     /**
@@ -139,14 +91,10 @@ public class UIInput extends UIOutput {
      *
      * @param required The new "required field" state
      */
-    public void setRequired(boolean required) {
-
-	this.required = required;
-
-    }
+    public void setRequired(boolean required);
 
 
-    // ---------------------------------------------------- UIComponent Methods
+    // ----------------------------------------------------- UIComponent Methods
 
 
     /**
@@ -157,12 +105,12 @@ public class UIInput extends UIOutput {
      *     <code>false</code>, take no further action.</li>
      * <li>If the <code>valueRef</code> property of this component
      *     is <code>null</code>, take no further action.</li>
-     * <li>Retrieve the {@link Application} instance for this web application.
-     *     </ul>
-     * <li>Ask it for a {@link ValueBinding} for the <code>valueRef</code>
-     *     expression.</li>
+     * <li>Retrieve the {@link javax.faces.application.Application} instance
+     *     for this web application.</ul>
+     * <li>Ask it for a {@link javax.faces.el.ValueBinding} for the
+     *     <code>valueRef</code> expression.</li>
      * <li>Use the <code>setValue()</code> method of the
-     *     {@link ValueBinding} to update the value that the
+     *     {@link javax.faces.el.ValueBinding} to update the value that the
      *     value reference expression points at.</li>
      * <li>If the <code>setValue()</code> method returns successfully:
      *     <ul>
@@ -186,55 +134,16 @@ public class UIInput extends UIOutput {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void updateModel(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        if (!isValid()) {
-            return;
-        }
-        String valueRef = getValueRef();
-        if (valueRef == null) {
-            return;
-        }
-        try {
-	    Application application = context.getApplication();
-            ValueBinding binding = application.getValueBinding(valueRef);
-            binding.setValue(context, getValue());
-            setValue(null);
-            return;
-        } catch (FacesException e) {
-            setValid(false);
-            throw e;
-        } catch (IllegalArgumentException e) {
-            setValid(false);
-            throw e;
-        } catch (Exception e) {
-            setValid(false);
-            throw new FacesException(e);
-        }
-
-    }
+    public void updateModel(FacesContext context);
 
 
     // ------------------------------------------------------ Validation Methods
 
 
     /**
-     * <p>The valid state of this {@link UIInput} component.</p>
-     */
-    protected boolean valid = true;
-
-
-    /**
      * <p>Return the valid state of this {@link UIInput} component.</p>
      */
-    public boolean isValid() {
-
-	return (this.valid);
-
-    }
+    public boolean isValid();
 
 
     /**
@@ -242,11 +151,7 @@ public class UIInput extends UIOutput {
      *
      * @param valid The new valid state
      */
-    public void setValid(boolean valid) {
-
-	this.valid = valid;
-
-    }
+    public void setValid(boolean valid);
 
 
     /**
@@ -278,7 +183,7 @@ public class UIInput extends UIOutput {
      *     listeners.</li>
      * </ul>
      *
-     * <p>Application components subclassing {@link UIInput} that wish to
+     * <p>Application components implementing {@link UIInput} that wish to
      * perform validation with logic embedded in the component should perform
      * their own correctness checks, and then call the
      * <code>super.validate()</code> method to perform the standard
@@ -289,89 +194,7 @@ public class UIInput extends UIOutput {
      * @exception NullPointerException if <code>context</code>
      *  is null
      */
-    public void validate(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Save and reset the previous value for this component
-        Object previous = getPrevious();
-        setPrevious(null);
-
-	// If our value is valid, enforce the required property if present
-	if (isValid() && isRequired() && isEmpty()) {
-	    Message message =
-		context.getApplication().
-		getMessageResources(MessageResources.FACES_API_MESSAGES).
-		getMessage(context, REQUIRED_MESSAGE_ID);
-	    context.addMessage(this, message);
-	    setValid(false);
-	}
-
-	// If our value is valid and not empty, call all external validators
-	if (isValid() && !isEmpty() && (this.validators != null)) {
-	    Iterator validators = this.validators.iterator();
-	    while (validators.hasNext()) {
-		Validator validator = (Validator) validators.next();
-		validator.validate(context, this);
-	    }
-	}
-
-	// If our value is valid, emit a ValueChangedEvent if appropriate
-	if (isValid()) {
-	    Object value = getValue();
-	    boolean changed;
-	    if (previous != null && value != null &&
-		previous.equals(value)) {
-		// no change has occurred
-		changed = false;
-	    } else if (previous == null) {
-		// if the value is going from null to non-null, a change 
-		// has occurred
-		changed = (value != null);
-	    } else /* if (previous != null) */ {
-		// if the value is going from non-null
-		if (value == null) {
-		    // to null, no change has occurred.
-		    changed = false;
-		    // if previous and current values are not null, compare values.
-		} else if (compareValues(previous, value)) {
-		    // value change has occurred
-		    changed = true;
-		} else {
-		    // value change has not occurred
-		    changed = false;
-		}
-	    }
-	    if (changed) {
-		fireValueChangedEvent(context, previous, value);
-	    }
-        }
-
-    }
-
-
-    private boolean isEmpty() {
-
-	Object value = getValue();
-	if (value == null) {
-	    return (true);
-	} else if ((value instanceof String) &&
-		   (((String) value).length() < 1)) {
-	    return (true);
-	} else {
-	    return (false);
-	}
-
-    }
-    
-
-    /**
-     * <p>The set of {@link Validator}s associated with this
-     * <code>UIComponent</code>.</p>
-     */
-    private ArrayList validators = null;
+    public void validate(FacesContext context);
 
 
     /**
@@ -383,17 +206,7 @@ public class UIInput extends UIOutput {
      * @exception NullPointerException if <code>validator</code>
      *  is null
      */
-    public void addValidator(Validator validator) {
-
-        if (validator == null) {
-            throw new NullPointerException();
-        }
-        if (validators == null) {
-            validators = new ArrayList();
-        }
-        validators.add(validator);
-
-    }
+    public void addValidator(Validator validator);
 
 
     /**
@@ -403,41 +216,10 @@ public class UIInput extends UIOutput {
      *
      * @param validator The {@link Validator} to remove
      */
-    public void removeValidator(Validator validator) {
-
-        if (validators != null) {
-            validators.remove(validator);
-        }
-
-    }
+    public void removeValidator(Validator validator);
 
 
-    // ------------------------------------------------------ Protected Methods
-
-
-    /**
-     * <p>Return <code>true</code> if the new value is different from the
-     * previous value.</p>
-     *
-     * @param previous old value of this component
-     * @param value new value of this component
-     */
-    protected boolean compareValues(Object previous, Object value) {
-
-        return (!(previous.equals(value)));
-
-    }
-
-
-    // ----------------------------------------------- Event Processing Methods
-
-
-    /**
-     * <p>Array of {@link List}s of {@link ValueChangedListener}s registered
-     * for particular phases.  The array, as well as the individual
-     * elements, are lazily instantiated as necessary.</p>
-     */
-    protected List listeners[] = null;
+    // ------------------------------------------------ Event Processing Methods
 
 
     /**
@@ -449,21 +231,7 @@ public class UIInput extends UIOutput {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void addValueChangedListener(ValueChangedListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            listeners = new List[PhaseId.VALUES.size()];
-        }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            listeners[ordinal] = new ArrayList();
-        }
-        listeners[ordinal].add(listener);
-
-    }
+    public void addValueChangedListener(ValueChangedListener listener);
 
 
     /**
@@ -492,74 +260,7 @@ public class UIInput extends UIOutput {
      *  <code>phaseId</code> is <code>null</code>
      */
     public boolean broadcast(FacesEvent event, PhaseId phaseId)
-        throws AbortProcessingException {
-
-        if ((event == null) || (phaseId == null)) {
-            throw new NullPointerException();
-        }
-        if (phaseId.equals(PhaseId.ANY_PHASE)) {
-            throw new IllegalStateException();
-        }
-        if (event instanceof ValueChangedEvent) {
-            if (listeners == null) {
-                return (false);
-            }
-            ValueChangedEvent vcevent = (ValueChangedEvent) event;
-            int ordinal = phaseId.getOrdinal();
-            broadcast(vcevent, listeners[PhaseId.ANY_PHASE.getOrdinal()]);
-            broadcast(vcevent, listeners[ordinal]);
-            for (int i = ordinal + 1; i < listeners.length; i++) {
-                if ((listeners[i] != null) && (listeners[i].size() > 0)) {
-                    return (true);
-                }
-            }
-            return (false);
-        } else {
-            throw new IllegalArgumentException();
-        }
-
-    }
-
-
-    /**
-     * <p>Broadcast the specified {@link ValueChangedEvent} to the
-     * {@link ValueChangedListener}s on the specified list (if any)
-     *
-     * @param event The {@link ValueChangedEvent} to be broadcast
-     * @param list The list of {@link ValueChangedListener}s, or
-     *  <code>null</code> for no interested listeners
-     */
-    protected void broadcast(ValueChangedEvent event, List list) {
-
-        if (list == null) {
-            return;
-        }
-        Iterator listeners = list.iterator();
-        while (listeners.hasNext()) {
-            ValueChangedListener listener =
-                (ValueChangedListener) listeners.next();
-            listener.processValueChanged(event);
-        }
-
-    }
-
-
-    /**
-     * <p>Queue an {@link ValueChangedEvent} for processing during the next
-     * event processing cycle.</p>
-     *
-     * @param context The {@link FacesContext} for the current request
-     * @param oldValue The original value of this component
-     * @param newValue The new value of this component
-     */
-    protected void fireValueChangedEvent(FacesContext context,
-                                         Object oldValue,
-                                         Object newValue) {
-
-        context.addFacesEvent
-            (new ValueChangedEvent(this, oldValue, newValue));
-
-    }
+        throws AbortProcessingException;
 
 
     /**
@@ -572,21 +273,7 @@ public class UIInput extends UIOutput {
      * @exception NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
-    public void removeValueChangedListener(ValueChangedListener listener) {
-
-        if (listener == null) {
-            throw new NullPointerException();
-        }
-        if (listeners == null) {
-            return;
-        }
-        int ordinal = listener.getPhaseId().getOrdinal();
-        if (listeners[ordinal] == null) {
-            return;
-        }
-        listeners[ordinal].remove(listener);
-
-    }
+    public void removeValueChangedListener(ValueChangedListener listener);
 
 
 }

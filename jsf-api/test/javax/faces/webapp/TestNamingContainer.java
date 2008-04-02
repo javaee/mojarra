@@ -1,5 +1,5 @@
 /*
- * $Id: TestNamingContainer.java,v 1.1 2003/03/13 22:02:38 craigmcc Exp $
+ * $Id: TestNamingContainer.java,v 1.2 2003/07/26 17:55:38 craigmcc Exp $
  */
 
 /*
@@ -11,13 +11,13 @@ package javax.faces.webapp;
 
 
 import java.io.IOException;
-import javax.faces.component.UINamingContainer;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 
 // Test UINamingContainer Class
-public class TestNamingContainer extends UINamingContainer {
+public class TestNamingContainer
+    extends javax.faces.component.base.UINamingContainerBase {
 
 
     public TestNamingContainer() {
@@ -25,9 +25,9 @@ public class TestNamingContainer extends UINamingContainer {
     }
 
 
-    public TestNamingContainer(String componentId) {
+    public TestNamingContainer(String id) {
         super();
-        setComponentId(componentId);
+        setId(id);
     }
 
 
@@ -39,9 +39,9 @@ public class TestNamingContainer extends UINamingContainer {
     public void encodeBegin(FacesContext context) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         writer.write("/B");
-        String componentId = getComponentId();
-        if (componentId != null) {
-            writer.write(componentId);
+        String id = getId();
+        if (id != null) {
+            writer.write(id);
         }
     }
 
@@ -49,9 +49,9 @@ public class TestNamingContainer extends UINamingContainer {
     public void encodeEnd(FacesContext context) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
         writer.write("/E");
-        String componentId = getComponentId();
-        if (componentId != null) {
-            writer.write(componentId);
+        String id = getId();
+        if (id != null) {
+            writer.write(id);
         }
     }
 

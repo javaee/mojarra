@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.85 2003/07/18 22:22:53 eburns Exp $
+ * $Id: UIComponent.java,v 1.86 2003/07/26 17:54:35 craigmcc Exp $
  */
 
 /*
@@ -13,6 +13,8 @@ package javax.faces.component;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -22,42 +24,41 @@ import javax.faces.render.Renderer;
 
 /**
  * <p><strong>UIComponent</strong> is the base interface for all user interface
- * components in JavaServer Faces.  The set of {@link UIComponent}
- * instances associated with a particular request and response are
- * organized into a tree under a root {@link UIComponent} that represents
+ * components in JavaServer Faces.  The set of {@link UIComponent} instances
+ * associated with a particular request and response are organized into a
+ * component tree under a root {@link UIComponent} that represents
  * the entire content of the request or response.</p>
  *
- * <p>For the convenience of component developers, {@link UIComponentBase}
- * provides the default behavior that is specified for a
- * {@link UIComponent}, and is the base class for all of the standard
- * {@link UIComponent} implementations.  Component writers are encouraged
- * to subclass {@link UIComponentBase}, instead of directly implementing this
- * interface, to reduce the impact of any future changes to the method
- * signatures of this interface.</p>
+ * <p>For the convenience of component developers,
+ * {@link javax.faces.component.base.UIComponentBase} provides the default
+ * behavior that is specified for a {@link UIComponent}, and is the base class
+ * for all of the concrete {@link UIComponent} "base" implementations.
+ * Component writers are encouraged to subclass
+ * {@link javax.faces.component.base.UIComponentBase}, instead of directly
+ * implementing this interface, to reduce the impact of any future changes
+ * to the method signatures of this interface.</p>
  */
 
 public interface UIComponent extends Serializable {
-
-
-    // ----------------------------------------------------- Manifest Constants
-
-
-    /**
-     * <p>The separator character used in component identifiers to demarcate
-     * navigation to a child naming container.</p>
-     */
-    public static final char SEPARATOR_CHAR = '.';
 
 
     // ------------------------------------------------------------- Attributes
 
 
     /**
-     * <p>Return the value of the attribute with the specified name
-     * (if any); otherwise, return <code>null</code>.</p>
+     * <p>If the specified <code>name</code> identifies a readable property
+     * of this {@link UIComponent}'s implementation class, return the value
+     * of that property (wrapping Java primitives in their corresponding
+     * wrapper classes if necessary).  Otherwise, return the value of the
+     * attribute with the specified <code>name</code> (if any); otherwise,
+     * return <code>null</code>.</p>
      *
-     * @param name Name of the requested attribute
+     * @param name Name of the requested property or attribute
      *
+     * @exception FacesException if an introspection exception occurs when
+     *  introspecting the {@link UIComponent} implementation class
+     * @exception FacesException if the called property getter throws an
+     *  exception
      * @exception NullPointerException if <code>name</code> is
      *  <code>null</code>
      */
@@ -67,21 +68,32 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Return an <code>Iterator</code> over the names of all
      * currently defined attributes of this {@link UIComponent} that
-     * have a non-null value.</p>
+     * have a non-null value.  This <code>Iterator</code> will
+     * <strong>not</strong> include the names of properties on the
+     * {@link UIComponent} implementation class, even though their values
+     * are accessible via <code>getAttribute()</code>.</p>
      */
     public Iterator getAttributeNames();
 
 
     /**
-     * <p>Set the new value of the attribute with the specified name,
-     * replacing any existing value for that name.</p>
+     * <p>If the specified <code>name</code> identifies a writeable property
+     * of ths {@link UIComponent}'s implementation class, whose property type
+     * is assignment-compatible with the specified <code>value</code> (for
+     * properties whose type is a primitive, the <code>value</code> type must
+     * be the corresponding wrapper class), set the value of this property to
+     * the specified <code>value</code>.  Otherwise, set the new value of the
+     * attribute with the specified <code>name</code>, replacing any existing
+     * value for that name.</p>
      *
-     * @param name Name of the requested attribute
+     * @param name Name of the requested property or attribute
      * @param value New value (or <code>null</code> to remove
      *  any attribute value for the specified name
      *
-     * @exception IllegalArgumentException if <code>name</code> represents
-     *  a read-only property of this component
+     * @exception FacesException if an introspection exception occurs when
+     *  introspecting the {@link UIComponent} implementation class
+     * @exception FacesException if the called property setter throws an
+     *  exception
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
@@ -105,30 +117,6 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return the identifier of this {@link UIComponent}.</p>
-     */
-    public String getComponentId();
-
-
-    /**
-     * <p>Set the identifier of this {@link UIComponent}.
-     *
-     * @param componentId The new identifier
-     *
-     * @exception IllegalArgumentException if <code>componentId</code>
-     *  is zero length or contains invalid characters
-     * @exception NullPointerException if <code>componentId</code>
-     *  is <code>null</code>
-     * @exception IllegalArgumentException if this
-     * <code>UIComponent</code> instance is already in the tree and and
-     * is not unique within the namespace of the closest ancestor that
-     * is a naming container.
-
-     */
-    public void setComponentId(String componentId);
-
-
-    /**
      * <p>Return the component reference expression for this {@link UIComponent}
      * (if any).</p>
      */
@@ -146,20 +134,23 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return the converter id of the {@link javax.faces.convert.Converter}
-     * that is registered for this component.</p>
+     * <p>Return the component identifier of this {@link UIComponent}.</p>
      */
-    public String getConverter();
+    public String getId();
 
 
     /**
-     * <p>Set the converter id of the {@link javax.faces.convert.Converter}
-     * that is registered for this component, or <code>null</code> to indicate
-     * that there is no registered Converter.</p>
+     * <p>Set the component identifier of this {@link UIComponent}.
      *
-     * @param converter New converter identifier (or <code>null</code>)
+     * @param id The new component identifier
+     *
+     * @exception IllegalArgumentException if <code>id</code>
+     *  is zero length or contains invalid characters
+     * @exception IllegalStateException if <code>id</code> is non-null
+     *  and not unique within the scope of the nearest containing
+     *  {@link UIComponent} that is also a {@link NamingContainer}
      */
-    public void setConverter(String converter);
+    public void setId(String id);
 
 
     /**
@@ -222,112 +213,49 @@ public interface UIComponent extends Serializable {
     public boolean getRendersChildren();
 
 
-    /**
-     * <p>Return a flag indicating whether this component has concrete
-     * implementations of the <code>decode()</code> and
-     * <code>encodeXxx()</code> methods, and is therefore suitable for
-     * use in the <em>direct implementation</em> programming model
-     * for rendering.</p>
-     */
-    public boolean getRendersSelf();
-
-
-    /**
-     * <p>Return the current validity state of this component.  The validity
-     * state of a component is adjusted at the following points during the
-     * request processing lifecycle:</p>
-     * <ul>
-     * <li>During the <em>Apply Request Values</em> phase, set to
-     *     <code>true</code> or <code>false</code> by <code>decode()</code>,
-     *     based on the success or failure of decoding a new local value for
-     *     this component.</li>
-     * <li>During the <em>Process Validations</em> phase, set to
-     *     <code>false</code> by <code>processValidators()</code> if any
-     *     call to a <code>validate()</code> method returned
-     *     <code>false</code>.</li>
-     * <li>During the <em>Update Model Values</em> phase, set to
-     *     <code>false</code> by <code>updateModel()</code> if any conversion
-     *     or update error occurred.</li>
-     * </ul>
-     */
-    public boolean isValid();
-
-
     // ------------------------------------------------ Tree Management Methods
 
 
     /**
-     * <p>Append the specified {@link UIComponent} to the end of the
-     * child list for this component.</p>
-     *
-     * <p>If the child to be added has a non-null and valid component
-     * identifier, the identifier is added to the namespace of the
-     * closest ancestor that is a naming container.</p>
-     *
-     * <p>It <em>is</em> valid for a component to have a null component
-     * identifier or a component identifier that is the empty
-     * string.</p>
-     *
-     *
-     * @param component {@link UIComponent} to be added
-     *
-     * @exception IllegalStateException if the component identifier
-     *  of the new component is non-null, and is not unique in the
-     *  namespace of the closest ancestor that is a naming container.
-     * @exception IllegalArgumentException if the component is null.
-
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
+     * <p>Return a mutable <code>List</code> representing the child
+     * {@link UIComponent}s associated with this component.  The returned
+     * implementation must support all of the standard and optional
+     * <code>List</code> methods, plus support the following additional
+     * requirements:</p>
+     * <ul>
+     * <li>The <code>List</code> implementation must implement
+     *     the <code>java.io.Serializable</code> interface.</li>
+     * <li>Any attempt to add a <code>null</code> must throw
+     *     a NullPointerException</li>
+     * <li>Any attempt to add an object that does not implement
+     *     {@link UIComponent} must throw a ClassCastException.</li>
+     * <li>Any attempt to add a child {@link UIComponent} with a
+     *     non-null <code>componentId</code> that contains invalid characters
+     *     (i.e. other than letters, digits, '-', or '_') must throw
+     *     IllegalArgumentException.</li>
+     * <li>Any attempt to add two child {@link UIComponent}s with the same
+     *     non-null <code>componentId</code>, within the scope of the
+     *     closest parent {@link UIComponent} that is also a
+     *     {@link NamingContainer}, must throw IllegalStateException.</li>
+     * <li>Whenever a new child component is added:
+     *     <ul>
+     *     <li>The <code>parent</code> property of the child must be set to
+     *         this component instance.</li>
+     *     <li>If the new child has a non-null component identifier,
+     *         it  must be added to the nearest parent {@link UIComponent}
+     *         that is a {@link NamingContainer}.</li>
+     *     </ul></li>
+     * <li>Whenever an existing child component is removed:
+     *     <ul>
+     *     <li>The <code>parent</code> property of the child must be
+     *         set to <code>null</code>.</li>
+     *     <li>If the previous child has a non-null component identifier,
+     *         it must be removed from the nearest parent {@link UIComponent}
+     *         that is a {@link NamingContainer}.</li>
+     *     </ul></li>
+     * </ul>
      */
-    public void addChild(UIComponent component);
-
-
-    /**
-     * <p>Insert the specified {@link UIComponent} at the specified
-     * position in the child list for this component.</p>
-     *
-     * <p>If the child to be added has a non-null and valid component
-     * identifier, the identifier is added to the namespace of the
-     * closest ancestor that is a naming container.</p>
-     *
-     * <p>It <em>is</em> valid for a component to have a null component
-     * identifier or a component identifier that is the empty
-     * string.</p>
-     *
-     * @param index Zero-relative index at which to add this
-     *  {@link UIComponent}
-     * @param component The {@link UIComponent} to be added
-     *
-     * @exception IllegalStateException if the component identifier
-     *  of the new component is non-null, and is not unique in the
-     *  namespace of the closest ancestor that is a naming container.
-     * @exception IllegalArgumentException if the component is null.
-     * @exception IndexOutOfBoundsException if the index is out of range
-     *  ((index < 0) || (index &gt; size()))
-     * @exception NullPointerException if <code>component</code> is null
-     */
-    public void addChild(int index, UIComponent component);
-
-
-    /**
-     * <p>Remove all child {@link UIComponent}s from the child list.
-     * Remove the children from the namespace of the closest ancestor
-     * that is a naming container.</p>
-     */
-    public void clearChildren();
-
-
-    /**
-     * <p>Return <code>true</code> if the specified {@link UIComponent}
-     * is a direct child of this {@link UIComponent}; otherwise,
-     * return <code>false</code>.</p>
-     *
-     * @param component {@link UIComponent} to be checked
-     *
-     * @exception NullPointerException if <code>component</code>
-     *  is <code>null</code>
-     */
-    public boolean containsChild(UIComponent component);
+    public List getChildren();
 
 
     /**
@@ -352,123 +280,39 @@ public interface UIComponent extends Serializable {
     public UIComponent findComponent(String expr);
 
 
-    /**
-     * <p>Return the {@link UIComponent} at the specified position
-     * in the child list for this component.</p>
-     *
-     * @param index Position of the desired component
-     *
-     * @exception IndexOutOfBoundsException if index is out of range
-     *  ((index &lt; 0) || (index &gt;= size()))
-     */
-    public UIComponent getChild(int index);
-
-
-    /**
-     * <p>Return the number of {@link UIComponent}s on the child list
-     * for this component.</p>
-     */
-    public int getChildCount();
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the child
-     * {@link UIComponent}s of this {@link UIComponent},
-     * in the order of their position in the child list.  If this
-     * component has no children, an empty <code>Iterator</code>
-     * is returned.</p>
-     */
-    public Iterator getChildren();
-
-
-    /**
-     * <p>Remove the child <code>UIComponent</code> at the specified
-     * position in the child list for this component.  Remove the child
-     * from the namespace of the closest ancestor that is a naming
-     * container.</p>
-     *
-     * @param index Position of the component to be removed
-     *
-     * @exception IndexOutOfBoundsException if the index is out of range
-     *  ((index < 0) || (index &gt;= size()))
-     */
-    public void removeChild(int index);
-
-
-    /**
-     * <p>Remove the child {@link UIComponent} from the child list for
-     * this component.  Remove the child from the namespace of the
-     * closest ancestor that is a naming container.</p>
-     *
-     * @param component Child component to be removed
-     *
-     * @exception IllegalArgumentException if <code>component</code> is
-     *  not a child of this component
-     * @exception NullPointerException if <code>component</code> is null
-     */
-    public void removeChild(UIComponent component);
-
-
     // ----------------------------------------------- Facet Management Methods
 
 
     /**
-     * <p>Add the specified {@link UIComponent} as a facet
-     * associated with the name specified by the <code>facetName</code>
-     * argument, replacing any previous facet with that name.  The
-     * newly added <code>facet</code> will have its <code>parent</code>
-     * property set to this component.</p>
-     *
-     * @param facetName The name of this facet
-     * @param facet The new facet {@link UIComponent}
-     *
-     * @exception NullPointerException if the either of the
-     * <code>facetName</code> or <code>facet</code> arguments are
-     * <code>null</code>.
+     * <p>Return a mutable <code>Map</code> representing the facet
+     * {@link UIComponent}s associated with this {@link UIComponent},
+     * keyed by facet name (which must be a String).  The returned
+     * implementation must support all of the standard and optional
+     * <code>Map</code> methods, plus support the following additional
+     * requirements:</p>
+     * <ul>
+     * <li>The <code>Map</code> implementation must implement
+     *     the <code>java.io.Serializable</code> interface.</li>
+     * <li>Any attempt to add a <code>null</code> key or value must
+     *     throw a NullPointerException.</li>
+     * <li>Any attempt to add a key that is not a String must throw
+     *     a ClassCastException.</li>
+     * <li>Any attempt to add a value that is not a {@link UIComponent}
+     *     must throw a ClassCastException.</li>
+     * <li>Whenever a new facet {@link UIComponent} is added:
+     *     <ul>
+     *     <li>The <code>parent</code> property of the component must be set to
+     *         this component instance.</li>
+     *     </ul></li>
+     * <li>Whenever an existing facet {@link UIComponent} is removed:
+     *     <ul>
+     *     <li>The <code>parent</code> property of the facet must be
+     *         set to <code>null</code>.</li>
+     *     </ul></li>
+     * </ul>
      */
-    public void addFacet(String facetName, UIComponent facet);
+    public Map getFacets();
 
-
-    /**
-     * <p>Remove all facet {@link UIComponent}s from this component.
-     * </p>
-     */
-    public void clearFacets();
-
-
-    /**
-     * <p>Return the facet {@link UIComponent} associated with the
-     * specified name, if any.  Otherwise, return <code>null</code>.</p>
-     *
-     * @param name Name of the facet to be retrieved
-     *
-     * @exception NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     */
-    public UIComponent getFacet(String name);
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the names of the facet
-     * {@link UIComponent}s of this {@link UIComponent}.  If
-     * this component has no facets, an empty <code>Iterator</code> is
-     * returned.</p>
-     */
-    public Iterator getFacetNames();
-
-
-    /**
-     * <p>Remove the facet {@link UIComponent} associated with the
-     * specified name, if there is one.  The removed <code>facet</code>
-     * will have its <code>parent</code> property cleared.</p>
-     *
-     * @param name Name of the facet to be removed
-     *
-     * @exception NullPointerException if <code>name</code>
-     *  is <code>null</code>
-     */
-    public void removeFacet(String name);
-    
 
     /**
      * <p>Return an <code>Iterator</code> over the facet followed by child
@@ -477,6 +321,9 @@ public interface UIComponent extends Serializable {
      * all the children in the order they are stored in the child list. If this
      * component has no facets or children, an empty <code>Iterator</code>
      * is returned.</p>
+     *
+     * <p>The returned <code>Iterator</code> must not support the
+     * <code>remove()</code> operation.</p>
      */
     public Iterator getFacetsAndChildren();
     
@@ -621,21 +468,6 @@ public interface UIComponent extends Serializable {
      *  is <code>null</code>
      */
     public void reconstitute(FacesContext context) throws IOException;
-
-
-    /**
-     * <p>Update the model data associated with this {@link UIComponent},
-     * if any.  The default implementation in {@link UIComponentBase} does
-     * no processing; concrete implementations of components that represent
-     * controls that can be altered by users (such as {@link UIInput} must
-     * provide an apppropriate implementation of this method.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void updateModel(FacesContext context);
 
 
     // ----------------------------------------------- Lifecycle Phase Handlers

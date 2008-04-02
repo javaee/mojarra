@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.3 2003/07/20 00:41:49 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.4 2003/07/26 17:55:38 craigmcc Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import javax.faces.mock.MockRenderKitFactory;
 import javax.faces.mock.MockServlet;
 import javax.faces.mock.MockServletConfig;
 import javax.faces.mock.MockServletContext;
+import javax.faces.mock.MockTree;
 
 
 /**
@@ -456,8 +457,8 @@ public class UIComponentTagTestCase extends TestCase {
     protected void tree(UIComponent component, StringBuffer sb) {
 
         sb.append("/");
-        if (component.getComponentId() != null) {
-            sb.append(component.getComponentId());
+        if (component.getId() != null) {
+            sb.append(component.getId());
         }
         if (component instanceof TestComponent) {
             String label = ((TestComponent) component).getLabel();
@@ -466,7 +467,7 @@ public class UIComponentTagTestCase extends TestCase {
                 sb.append(label);
             }
         }
-        Iterator kids = component.getChildren();
+        Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             tree((UIComponent) kids.next(), sb);
         }
@@ -488,10 +489,13 @@ public class UIComponentTagTestCase extends TestCase {
 
         UIComponent b2c = facesContext.getTree().getRoot().findComponent("B2");
         assertNotNull("B2 component exists", b2c);
-        assertEquals("B2 component id", "B2", b2c.getComponentId());
-        assertEquals("B2 child count", 2, b2c.getChildCount());
-        assertNotNull("B2 header facet", b2c.getFacet("header"));
-        assertNotNull("B2 footer facet", b2c.getFacet("footer"));
+        assertEquals("B2 component id", "B2", b2c.getId());
+        assertEquals("B2 child count", 2,
+                     b2c.getChildren().size());
+        assertNotNull("B2 header facet",
+                      (UIComponent) b2c.getFacets().get("header"));
+        assertNotNull("B2 footer facet",
+                      (UIComponent) b2c.getFacets().get("footer"));
 
     }
 
