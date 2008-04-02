@@ -217,8 +217,8 @@
             <table>
             <tr>
                 <td>
-                <h:command_button id="convert" commandName="convert">
-                    <h:output_text id="buttonLabel" value="Convert" />
+                <h:command_button id="convert" commandName="convert"
+                    label="Convert">
                 </h:command_button>
                 </td> 
             </tr>

@@ -27,9 +27,8 @@
               </h:output_message>
 
 <P>
-              <h:command_button id="back" commandName="back" type="submit">
-                 <h:output_text id="backlabel" value="Back"/>
-
+              <h:command_button id="back" commandName="back" type="submit"
+                  label="Back">
              </h:command_button>
 </P>
       </h:form>

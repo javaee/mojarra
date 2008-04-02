@@ -25,12 +25,11 @@
                     <h:input_secret id="password1" />
 
                     <h:command_button id="submit1" type="SUBMIT"
-                             commandName="submit">
-                      <h:output_text id="submit1_label" value="Login" />
+                        commandName="submit" label="Login">
                     </h:command_button>
 
-                    <h:command_button id="reset1" type="RESET" commandName="reset">
-                      <h:output_text id="reset1_label" value="Reset" />
+                    <h:command_button id="reset1" type="RESET" 
+                        commandName="reset" label="Reset">
                     </h:command_button>
 
                 </h:panel_grid>
@@ -75,12 +74,11 @@
                 modelReference="LoginBean.password"/>
 
             <h:command_button id="submit2" type="SUBMIT"
-                     commandName="submit">
-              <h:output_text id="submit2_label" value="Login" />
+                commandName="submit" label="Login">
             </h:command_button>
 
-            <h:command_button id="reset2" type="RESET" commandName="reset">
-              <h:output_text id="reset2_label" value="Reset" />
+            <h:command_button id="reset2" type="RESET" commandName="reset"
+                label="Reset">
             </h:command_button>
 
             <!-- Panel footer element -->

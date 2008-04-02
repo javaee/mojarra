@@ -126,8 +126,8 @@
 
             <tr>
                 <td>
-                <h:command_button id="numberlogin" commandName="login">
-                    <h:output_text id="buttonLabel" value="Login" />
+                <h:command_button id="numberlogin" commandName="login"
+                    label="Login">
                 </h:command_button>
 
                 </td> 

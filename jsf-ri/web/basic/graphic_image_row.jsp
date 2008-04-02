@@ -9,7 +9,7 @@
 
              <td>
 
-               <h:graphic_image id="output_graphic1" url="/duke.gif" 
+               <h:graphic_image id="output_graphic1" url="duke.gif" 
 	                            alt="output_graphic with hard coded image"
                                   title="output_graphic with hard coded image"
                            />

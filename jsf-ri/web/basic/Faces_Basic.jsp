@@ -305,34 +305,32 @@
           value="B U T T O N------S T Y L E S "/> </TD></TR>
       <TR><TD><HR></HR></TD></TR>
       <TR>
-        <TD><h:output_text id="buttonlabel1" value="Button rendered with 'input type=..':" />
+        <TD><h:output_text id="buttonlabel1" value="Button rendered with 'label' attribute:" />
             <h:command_button id="mybutton" label="Login"
                 commandName="login">
             </h:command_button>
         </TD>
       </TR>
       <TR>
-        <TD><h:output_text id="buttonlabel2" value="Buttons rendered with 'button' element:" /> </TD></TR>
-
+        <TD><h:output_text id="buttonlabel2" value="Button rendered with 'image'attribute:" /> 
+            <h:command_button id="pushButton" type="button" 
+                commandName="push" disabled = "true" image="duke.gif">
+            </h:command_button>
+        </TD>
+      </TR>
       <TR>
-        <TD>   <h:command_button id="pushButton" type="button" 
-                     commandName="push" disabled = "true" >
-                 <h:output_text id="buttonLabel" value="This is a push button " />       
-                 <h:graphic_image id="buttonImage" url="/duke.gif" />
-             </h:command_button>
-             <h:command_button id="resetButton"  title="Click to reset form"
-                                   commandName="reset" type="reset" >
-                <h:output_text id="resetLabel" key="resetButton" 
-                                bundle="basicBundle" />
-             </h:command_button>
+        <TD><h:output_text id="buttonlabel3" value="Reset Button rendered with label from resource:" /> 
+            <h:command_button id="resetButton"  title="Click to reset form"
+                commandName="reset" type="reset" 
+                key="resetButton" bundle="basicBundle">
+            </h:command_button>
+        </TD>
+      </TR>
+      <TR>
+        <TD><h:output_text id="buttonlabel4" value="Submit Button rendered with label from resource:" /> 
             <h:command_button id="login" type="submit" 
-                     commandName="login" >
-                 <h:output_text id="submitLabel" key="loginButton" bundle="basicBundle" />       
-             </h:command_button>
-           <h:command_button id="imageOnlyButton" type="submit" 
-                     commandName="login"  >
-                 <h:graphic_image id="buttonImage1" url="/duke.gif" />
-             </h:command_button>
+                commandName="login" key="loginButton"  bundle="basicBundle">
+            </h:command_button>
         </TD>
       </TR>
       <TR><TD><HR></HR></TD></TR>

@@ -8,7 +8,7 @@
 
     <h1>UIOutput</h1>
 
-    <h3>$Id: UIOutput.jsp,v 1.3 2002/09/20 21:14:44 jvisvanathan Exp $</h3>
+    <h3>$Id: UIOutput.jsp,v 1.4 2002/10/03 18:13:28 rkitain Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -27,9 +27,9 @@
                    formName="standardRenderKitForm">
 
          <h:command_button id="standardRenderKitSubmit" 
-                      commandName="standardRenderKitSubmit">
-             <h:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
-                      bundle="${basicBundle}" />
+             commandName="standardRenderKitSubmit"
+             key="standardRenderKitSubmitLabel"
+             bundle="${basicBundle}"> 
          </h:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -63,9 +63,9 @@
          </table>
 
          <h:command_button id="standardRenderKitSubmit" 
-                      commandName="standardRenderKitSubmit">
-             <h:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
-                      bundle="${basicBundle}" />
+             commandName="standardRenderKitSubmit"
+             key="standardRenderKitSubmitLabel"
+             bundle="${basicBundle}"> 
          </h:command_button>
 
        </h:form>
