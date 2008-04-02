@@ -1996,8 +1996,10 @@
       render it as an attribute on the outer "table" element, the value of which 
       is the <code>clientId</code> of the component per the rules at the beginning
       of this specification.  The value of the current SelectItem is rendered as 
-      the value of the "value" attribute.  If the value of the enclosing UISelectMany
-      matches the current value, render "checked" as the value of the
+      the value of the "value" attribute.  Coerce the value of the currently rendered
+      child to the type of the parent UISelectMany value following the Expression Language 
+      coercion rules, before comparing the values.  If the value of the enclosing 
+      UISelectMany matches the current value, render "checked" as the value of the
       "checked" attribute.  See the 
       <a href="javax.faces.SelectManyjavax.faces.Listbox.html#options">"Rendering
       the option elements" </a> specification for
@@ -2119,7 +2121,10 @@
       <code>Object []</code>, otherwise the component must be a
       <code>UISelectOne</code> instance, call its
       <code>getSubmittedValue()</code> method and create an <code>Object
-      []</code> around the result.  If the resultant array is non-null,
+      []</code> around the result.  Determine the type of the resultant array
+      if the resultant array is non-null, otherwise the type is <code>String</code>.
+      Coerce the current item value to this type following the Expression
+      Language coercion rules.  If the resultant array is non-null,
       we look in the array for a value that, when we pass the renderable
       value to its <code>equals()</code> method, it returns
       <code>true</code>, meaning the current element is selected.  If
@@ -2356,7 +2361,9 @@
       render it as an attribute on the outer "table" element, the value of which
       is the <code>clientId</code> of the component per the rules at the
       beginning  of this specification.
-      If the value of the currently rendered child is equal to
+      Coerce the value of the currently rendered child to the type of the parent 
+      UISelectOne value using the Expression Language coercion rules before comparing 
+      the values.  If the value of the currently rendered child is equal to
       the value of the parent UISelectOne, render an appropriate HTML
       boolean value indicating "checked" for the enclosing "input".
       See the 
