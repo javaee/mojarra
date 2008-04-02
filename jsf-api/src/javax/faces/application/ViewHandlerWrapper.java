@@ -2,7 +2,7 @@
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  *
- * $Id: ViewHandlerWrapper.java,v 1.3 2004/10/18 22:46:02 edburns Exp $
+ * $Id: ViewHandlerWrapper.java,v 1.4 2005/08/19 18:16:05 edburns Exp $
  */
 
 package javax.faces.application;
@@ -40,6 +40,23 @@ public abstract class ViewHandlerWrapper extends ViewHandler {
 
 
     /**
+     * 
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#calculateCharacterEncoding(javax.faces.context.FacesContext)}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#calculateCharacterEncoding(javax.faces.context.FacesContext)
+     * @since 1.2
+     */
+
+    public String calculateCharacterEncoding(FacesContext context) {
+
+        return getWrapped().calculateCharacterEncoding(context);
+
+    }
+        
+    /**
+     * 
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#calculateLocale(javax.faces.context.FacesContext)}
      * on the wrapped {@link ViewHandler} object.</p>
@@ -111,8 +128,20 @@ public abstract class ViewHandlerWrapper extends ViewHandler {
 
         return getWrapped().getResourceURL(context, path);
     }
-
-
+    
+    /**
+     * <p>The default behavior of this method is to
+     * call {@link ViewHandler#initView}
+     * on the wrapped {@link ViewHandler} object.</p>
+     *
+     * @see ViewHandler#initView
+     * @since 1.2
+     */
+    public void initView(FacesContext context) throws FacesException {
+        
+        getWrapped().initView(context);
+    }
+    
     /**
      * <p>The default behavior of this method is to
      * call {@link ViewHandler#renderView(javax.faces.context.FacesContext, javax.faces.component.UIViewRoot)}

@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.26 2005/07/21 13:46:30 rogerk Exp $
+ * $Id: RestoreViewPhase.java,v 1.27 2005/08/19 18:16:08 edburns Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import java.util.logging.Level;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.26 2005/07/21 13:46:30 rogerk Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.27 2005/08/19 18:16:08 edburns Exp $
  */
 
 public class RestoreViewPhase extends Phase {
@@ -94,6 +94,8 @@ public class RestoreViewPhase extends Phase {
             throw new FacesException(Util.getExceptionMessageString(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
+        
+        Util.getViewHandler(facesContext).initView(facesContext);        
 
         // If an app had explicitely set the tree in the context, use that;
         //

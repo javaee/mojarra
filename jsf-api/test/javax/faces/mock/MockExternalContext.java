@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.16 2005/05/02 12:49:55 edburns Exp $
+ * $Id: MockExternalContext.java,v 1.17 2005/08/19 18:16:06 edburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.mock;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -24,9 +25,8 @@ import javax.faces.context.ExternalContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
 
 
 public class MockExternalContext extends ExternalContext {
@@ -72,6 +72,10 @@ public class MockExternalContext extends ExternalContext {
 	throw new UnsupportedOperationException();
     }
 
+    public void setResponseCharacterEncoding(String encoding) {
+	throw new UnsupportedOperationException();
+    }
+
     private Map applicationMap = null;
     public Map getApplicationMap() {
         if (applicationMap == null) {
@@ -112,9 +116,13 @@ public class MockExternalContext extends ExternalContext {
         this.requestParameterMap = requestParameterMap;
     }
 
+    public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
+        throw new UnsupportedOperationException();
+    }
+    
 
     public Map getRequestParameterValuesMap() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();        
     }
 
     
@@ -161,11 +169,19 @@ public class MockExternalContext extends ExternalContext {
         throw new UnsupportedOperationException();
     }
     
-   
+    public String getRequestCharacterEncoding() {
+        throw new UnsupportedOperationException();
+    }
+
+    
     public String getRequestContentType() {
         throw new UnsupportedOperationException();
     }
 
+    public String getResponseCharacterEncoding() {
+        throw new UnsupportedOperationException();
+    }
+    
     public String getResponseContentType() {
         throw new UnsupportedOperationException();
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.34 2005/07/22 19:38:10 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.35 2005/08/19 18:16:08 edburns Exp $
  */
 
 /*
@@ -42,14 +42,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.context.BaseContextMap.EntryIterator;
+import com.sun.faces.context.BaseContextMap.KeyIterator;
+import com.sun.faces.context.BaseContextMap.ValueIterator;
 import com.sun.faces.util.Util;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <p>This implementation of {@link ExternalContext} is specific to the
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.34 2005/07/22 19:38:10 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.35 2005/08/19 18:16:08 edburns Exp $
  */
 public class ExternalContextImpl extends ExternalContext {
 
@@ -131,6 +135,10 @@ public class ExternalContextImpl extends ExternalContext {
 	    this.request = (ServletRequest) request;
 	}
     }
+    
+    public void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException {
+        ((ServletRequest)request).setCharacterEncoding(encoding);
+    }
 
     public Object getResponse() {
         return this.response;
@@ -140,6 +148,10 @@ public class ExternalContextImpl extends ExternalContext {
 	if (response instanceof ServletResponse) {
 	    this.response = (ServletResponse) response;
 	}
+    }
+    
+    public void setResponseCharacterEncoding(String encoding) {
+        ((ServletResponse)response).setCharacterEncoding(encoding);
     }
 
     public Map getApplicationMap() {
@@ -269,12 +281,20 @@ public class ExternalContextImpl extends ExternalContext {
     public String getRequestServletPath() {
         return (((HttpServletRequest) request).getServletPath());
     }
+    
+    public String getRequestCharacterEncoding() {
+        return (((ServletRequest) request).getCharacterEncoding());
+    }
 
      
     public String getRequestContentType() {
         return (request.getContentType());
     }
-
+    
+    public String getResponseCharacterEncoding() {
+        return (((ServletResponse) response).getCharacterEncoding());
+    }
+    
     public String getResponseContentType() {
         return (response.getContentType());
     }

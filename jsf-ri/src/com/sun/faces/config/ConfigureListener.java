@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.47 2005/08/11 18:19:57 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.48 2005/08/19 18:16:07 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -11,6 +11,7 @@ package com.sun.faces.config;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -1679,6 +1680,21 @@ public class ConfigureListener implements ServletContextListener {
         }
         
         public void redirect(String url) throws IOException {
+        }
+
+        public String getRequestCharacterEncoding() {
+            return null;
+        }
+
+        public void setRequestCharacterEncoding(String requestCharacterEncoding) throws UnsupportedEncodingException {
+
+        }
+
+        public String getResponseCharacterEncoding() {
+            return null;
+        }
+
+        public void setResponseCharacterEncoding(String responseCharacterEncoding) {
         }
 
     }

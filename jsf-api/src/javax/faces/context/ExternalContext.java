@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ExternalContext.java,v 1.19 2005/08/15 15:59:17 edburns Exp $
+ * $Id: ExternalContext.java,v 1.20 2005/08/19 18:16:05 edburns Exp $
  */
  
 /*
@@ -18,6 +18,7 @@ package javax.faces.context;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
@@ -26,8 +27,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.Map;
 
-import javax.faces.FacesException;
-import javax.servlet.http.Cookie;
 
 
 /**
@@ -305,6 +304,33 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public abstract void setRequest(Object request);
+    
+    /**
+     *
+     * <p>Overrides the name of the character 
+     * encoding used in the body of this request.</p>
+     *
+     * <p>Calling this method after the request has been accessed will have no
+     * no effect, unless a <code>Reader</code> or <code>Stream</code> has been
+     * obtained from the request, in which case an <code>IllegalStateException</code>
+     * is thrown.</p>
+     *
+     * <p><em>Servlet:</em> This must call through to the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>setCharacterEncoding()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must call through to the
+     * <code>javax.portlet.ActionRequest</code> method
+     * <code>setCharacterEncoding()</code>.</p>
+     *
+     * @exception java.io.UnsupportedEncodingException if this is not a valid
+     * encoding 
+     *
+     * @since 1.2
+     *
+     */
+    public abstract void setRequestCharacterEncoding(String encoding) throws UnsupportedEncodingException;
+    
 
 
     /**
@@ -520,6 +546,24 @@ public abstract class ExternalContext {
      * <p><em>Portlet:</em> This must be <code>null</code>.</p>
      */
     public abstract String getRequestServletPath();
+    
+    /**
+     *
+     * <p> Return the character encoding currently being used
+     * to interpret this request.</p>
+     *
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * <code>javax.servlet.ServletRequest</code> method
+     * <code>getCharacterEncoding()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must return the value returned by the
+     * <code>javax.portlet.ActionRequest</code> method
+     * <code>getCharacterEncoding()</code>.</p>
+     *
+     * @since 1.2
+     *
+     */
+    public abstract String getRequestCharacterEncoding();
 
     /**
      *
@@ -534,6 +578,22 @@ public abstract class ExternalContext {
      */
     public abstract String getRequestContentType();
 
+    /**
+     *
+     * <p>Returns the name of the character encoding (MIME charset) used for 
+     * the body sent in this response. </p>
+     *
+     * <p><em>Servlet:</em> This must return the value returned by the
+     * <code>javax.servlet.ServletResponse</code> method
+     * <code>getCharacterEncoding()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This must return <code>null</code>.</p>
+     *
+     * @since 1.2
+     */
+    public abstract String getResponseCharacterEncoding();
+
+    
     /**
      *
      * <p>Return the MIME Content-Type for this response.  If not
@@ -638,6 +698,24 @@ public abstract class ExternalContext {
      * @since 1.2
      */
     public abstract void setResponse(Object response);
+    
+    
+    /**
+     *
+     * <p>Sets the character encoding (MIME charset) of the response being sent 
+     * to the client, for example, to UTF-8.</p>
+     *
+     * <p><em>Servlet:</em> This must call through to the
+     * <code>javax.servlet.ServletResponse</code> method
+     * <code>setCharacterEncoding()</code>.</p>
+     *
+     * <p><em>Portlet:</em> This method must take no action.</p>
+     *
+     * @since 1.2
+     *
+     */
+    public abstract void setResponseCharacterEncoding(String encoding);
+    
 
 
 

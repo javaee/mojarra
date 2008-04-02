@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.56 2005/08/10 13:35:38 rogerk Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.57 2005/08/19 18:16:06 edburns Exp $ 
  */ 
 
 
@@ -50,7 +50,7 @@ import java.io.StringWriter;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.56 2005/08/10 13:35:38 rogerk Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.57 2005/08/19 18:16:06 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -285,58 +285,6 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         ExternalContext extContext = context.getExternalContext();
-
-        // set the request character encoding. NOTE! This MUST be done
-        // before any request praameter is accessed.
-        
-        /*
-        HttpServletRequest request =
-            (HttpServletRequest) extContext.getRequest();
-         */
-        Map headerMap = extContext.getRequestHeaderMap();
-        String
-                contentType = null,
-                charEnc = null;
-        
-        // look for a charset in the Content-Type header first.
-        if (null != (contentType = (String) headerMap.get("Content-Type"))) {
-            // see if this header had a charset
-            String charsetStr = "charset=";
-            int
-                    len = charsetStr.length(),
-                    i = 0;
-            
-            // if we have a charset in this Content-Type header AND it
-            // has a non-zero length.
-            if (-1 != (i = contentType.indexOf(charsetStr)) &&
-                    (i + len < contentType.length())) {
-                charEnc = contentType.substring(i + len);
-            }
-        }
-        // failing that, look in the session for a previously saved one
-        if (null == charEnc) {
-            if (null != extContext.getSession(false)) {
-                charEnc = (String) extContext.getSessionMap().get
-                        (CHARACTER_ENCODING_KEY);
-            }
-        }
-        if (null != charEnc) {
-            try {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.fine("set character encoding on request to " 
-                            + charEnc);
-                }
-                Object request = extContext.getRequest();
-                if (request instanceof ServletRequest) {
-                    ((ServletRequest) request).setCharacterEncoding(charEnc);
-                }
-            } catch (java.io.UnsupportedEncodingException uee) {
-                if (logger.isLoggable(Level.SEVERE)) {
-                    logger.log(Level.SEVERE,uee.getMessage(), uee);
-                }
-                throw new FacesException(uee);
-            }
-        }
 
         String mapping = getFacesMapping(context);
         UIViewRoot viewRoot = null;

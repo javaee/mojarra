@@ -1,5 +1,5 @@
 /*
- * $Id: StoreServletContext.java,v 1.4 2005/05/02 12:49:59 edburns Exp $
+ * $Id: StoreServletContext.java,v 1.5 2005/08/19 18:16:09 edburns Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 
 package com.sun.faces.config;
 
+import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletContext;
 import javax.faces.context.ExternalContext;
 
@@ -92,6 +93,22 @@ public class StoreServletContext extends Object {
         }
 
 	public void setRequest(Object request) {}
+        
+        
+        public String getRequestCharacterEncoding() {
+            return null;
+        }
+
+        public void setRequestCharacterEncoding(String requestCharacterEncoding) throws UnsupportedEncodingException {
+
+        }
+
+        public String getResponseCharacterEncoding() {
+            return null;
+        }
+
+        public void setResponseCharacterEncoding(String responseCharacterEncoding) {
+        }        
 
         public String getRequestContextPath() {
             return null;

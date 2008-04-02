@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.40 2005/04/06 02:39:45 edburns Exp $
+ * $Id: ViewHandler.java,v 1.41 2005/08/19 18:16:05 edburns Exp $
  */
 
 /*
@@ -9,15 +9,17 @@
 
 package javax.faces.application;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
-import javax.faces.render.Renderer;
-import javax.faces.render.RenderKitFactory;
+
 
 
 /**
@@ -36,6 +38,8 @@ import javax.faces.render.RenderKitFactory;
 
 public abstract class ViewHandler {
 
+    private static Logger log = Logger.getLogger("javax.faces.application");
+    
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -80,6 +84,62 @@ public abstract class ViewHandler {
      *  <code>null</code>
      */
      public abstract Locale calculateLocale(FacesContext context);
+     
+     /**
+      * <p>Returns the correct character encoding to be used for this request.</p>
+      *
+      * <p>The following algorithm is employed.</p>
+      *
+      * <ul>
+      *
+      * <li><p>Examine the <code>Content-Type</code> request header.  If it has 
+      * a <code>charset</code> parameter, extract it and return that as the 
+      * encoding.</p></li>
+      *
+      * <li><p>If no <code>charset</code> parameter was found, check for the 
+      * existence of a session by calling {@link ExternalContext#getSession(boolean)} 
+      * passing <code>false</code> as the argument.  If that method returns 
+      * <code>true</code>, get the session Map by calling 
+      * {@link ExternalContext#getSessionMap} and look for a value under the 
+      * key given by the value of the symbolic constant 
+      * {@link ViewHandler#CHARACTER_ENCODING_KEY}.
+      * If present, return the value, converted to String.</p></li>
+      *
+      * <li><p>Otherwise, return <code>null</code></p></li>
+      *
+      * </ul>
+      */ 
+     
+     public String calculateCharacterEncoding(FacesContext context) {
+         ExternalContext extContext = context.getExternalContext();
+         Map<String,String> headerMap = extContext.getRequestHeaderMap();
+         String contentType = headerMap.get("Content-Type");
+         String charEnc = null;
+         
+         // look for a charset in the Content-Type header first.
+         if (null != contentType) {
+             // see if this header had a charset
+             String charsetStr = "charset=";
+             int len = charsetStr.length();
+             int idx = contentType.indexOf(charsetStr);
+             
+             // if we have a charset in this Content-Type header AND it
+             // has a non-zero length.
+             if (idx != -1 && idx + len < contentType.length()) {
+                 charEnc = contentType.substring(idx + len);
+             }
+         }
+         
+         // failing that, look in the session for a previously saved one
+         if (null == charEnc) {
+             if (null != extContext.getSession(false)) {
+                 charEnc = (String) extContext.getSessionMap().get
+                         (ViewHandler.CHARACTER_ENCODING_KEY);
+             }
+         }
+         
+         return charEnc;
+     }
 
 
     /** 
@@ -151,7 +211,45 @@ public abstract class ViewHandler {
      *  <code>path</code> is <code>null</code>.
      */
     public abstract String getResourceURL(FacesContext context, String path);
-
+    
+    /**
+     *
+     * <p>Initialize the view for the request processing lifecycle.</p>
+     *
+     * <p>This method must be called at the beginning of the <em>Restore
+     * View Phase</em> of the Request Processing Lifecycle.  It is responsible 
+     * for performing any per-request initialization necessary to the operation
+     * of the lifycecle.</p>
+     *
+     * <p>The default implementation calls {@link #calculateCharacterEncoding}
+     * and passes the result, if non-<code>null</code> into the
+     * {@link ExternalContext#setRequestCharacterEncoding} method.
+     *
+     * @exception {@link FacesException} if a problem occurs setting the encoding,
+     * such as the <code>UnsupportedEncodingException</code> thrown 
+     * by the underlying Servlet or Portlet technology when the encoding is not
+     * supported.
+     *
+     */
+    
+    public void initView(FacesContext context) throws FacesException {
+        String encoding = calculateCharacterEncoding(context);
+        if (null != encoding) {
+            try {
+                context.getExternalContext().setRequestCharacterEncoding(encoding);
+            } catch (UnsupportedEncodingException e) {
+                // PENDING(edburns): I18N
+                String message = "Can't set encoding to: " + encoding +
+                        " Exception:" + e.getMessage();
+                if (log.isLoggable(Level.WARNING)) {
+                    log.fine(message);
+                }
+                throw new FacesException(message, e);
+                
+            }
+        }
+    }
+    
 
     /**
      * <p>Perform whatever actions are required to render the response
