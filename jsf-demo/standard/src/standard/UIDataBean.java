@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataBean.java,v 1.6 2003/11/09 22:45:58 jvisvanathan Exp $
+ * $Id: UIDataBean.java,v 1.7 2004/01/12 06:52:58 craigmcc Exp $
  */
 
 /*
@@ -183,9 +183,10 @@ public class UIDataBean {
 
 
     /**
-     * <p>Delete any customers who have been checked from the list.</p>
+     * <p>Delete any customers who have been checked from the list
+     * (Immediate Mode).</p>
      */
-    public String delete() {
+    public String deleteImmediate() {
 
         append("delete()");
 
@@ -194,6 +195,41 @@ public class UIDataBean {
         int n = data.getRowCount();
         for (int i = 0; i < n; i++) {
             data.setRowIndex(i);
+            System.out.println("delete(accountId=" + accountId.getValue() + ",checked=" + checked.getSubmittedValue() + ")");
+            if ("true".equals(checked.getSubmittedValue())) {
+                removes.add(data.getRowData());
+                checked.setSelected(false);
+                created.setSelected(false);
+            }
+        }
+        if (removes.size() > 0) {
+            List list = list();
+            Iterator remove = removes.iterator();
+            while (remove.hasNext()) {
+                list.remove(remove.next());
+            }
+        }
+
+	clear();
+
+	return (null);
+    }
+
+
+    /**
+     * <p>Delete any customers who have been checked from the list
+     * (Deferred Mode).</p>
+     */
+    public String deleteDeferred() {
+
+        append("delete()");
+
+	// Delete customers for whom the checked field is selected
+        List removes = new ArrayList();
+        int n = data.getRowCount();
+        for (int i = 0; i < n; i++) {
+            data.setRowIndex(i);
+            System.out.println("delete(accountId=" + accountId.getValue() + ",checked=" + checked.isSelected() + ")");
             if (checked.isSelected()) {
                 removes.add(data.getRowData());
                 checked.setSelected(false);
