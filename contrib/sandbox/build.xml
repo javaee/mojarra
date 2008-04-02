@@ -100,17 +100,16 @@
         <jsf.javac srcdir="${source.dir}"
                    destdir="${build.classes.dir}"
                    excludes="${exclude.path}"
-                   source="1.4"
-                   target="1.4">
+                   source="1.5"
+                   target="1.5">
             <classpath>
                 <path refid="impl.compile.classpath"/>
             </classpath>
         </jsf.javac>
 
-        <copy file="${resource.dir}/META-INF/sandbox.tld"
-              toDir="${build.classes.dir}/META-INF"/>
-        <copy file="${resource.dir}/META-INF/faces-config.xml"
-              toDir="${build.classes.dir}/META-INF"/>
+        <copy toDir="${build.classes.dir}/META-INF">
+            <fileset dir="${resource.dir}/META-INF/" />
+        </copy>
 
     </target>
 
@@ -189,9 +188,9 @@
     -->
 
     <target name="jars" depends="compile">
-        <jsf.manifested.jar jarfile="${build.dir}/lib/${name}.jar"
+        <jsf.manifested.jar jarfile="${build.dir}/lib/${name}-${sb.impl.version}.jar"
                             basedir="${build.classes.dir}"
-                            extension-name="com.sun.faces"/>       
+                            extension-name=""/>       
     </target>
 
     <target name="main" depends="jars"/>

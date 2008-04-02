@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.1 2006/12/13 20:35:47 jdlee Exp $
+ * $Id: Util.java,v 1.2 2006/12/14 19:18:11 jdlee Exp $
  */
 
 /*
@@ -31,24 +31,33 @@
 
 package com.sun.faces.sandbox.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
+import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
-import java.io.IOException;
-import java.util.Map;
+import javax.faces.render.Renderer;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.1 2006/12/13 20:35:47 jdlee Exp $
+ * @version $Id: Util.java,v 1.2 2006/12/14 19:18:11 jdlee Exp $
  */
 
 public class Util {      
+
+    public static final String STATIC_RESOURCE_IDENTIFIER = "/ri_sandbox_static/resource";
 
     /**
      * This array contains attributes that have a boolean value in JSP,
@@ -60,7 +69,8 @@ public class Util {
          "readonly",
          "ismap"
     };
-
+    
+    private static final String INVOCATION_PATH = "com.sun.faces.sandbox.INVOCATION_PATH";
     /**
      * This array contains attributes whose value is just rendered
      * straight to the content.  This array should only contain
@@ -120,15 +130,80 @@ public class Util {
          "width"
     };
 
-    private Util() {
-        throw new IllegalStateException();
+    public static boolean componentIsDisabledOnReadonly(UIComponent component) {
+        Object disabledOrReadonly = null;
+        boolean result = false;
+        if (null !=
+             (disabledOrReadonly = component.getAttributes().get("disabled"))) {
+            if (disabledOrReadonly instanceof String) {
+                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+            } else {
+                result = disabledOrReadonly.equals(Boolean.TRUE);
+            }
+        }
+        if ((result == false) &&
+             null !=
+                  (disabledOrReadonly = component.getAttributes().get("readonly"))) {
+            if (disabledOrReadonly instanceof String) {
+                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
+            } else {
+                result = disabledOrReadonly.equals(Boolean.TRUE);
+            }
+        }
+
+        return result;
+    }
+    
+    public static Object evaluateVBExpression(String expression) {
+        if (expression == null || (!isVBExpression(expression))) {
+            return expression;
+        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        Object result =
+             context.getApplication().createValueBinding(expression).getValue(
+                  context);
+        return result;
+
+    }
+    
+    public static String generateStaticUri(String path) {
+        String uri = "";
+        FacesContext context = FacesContext.getCurrentInstance();
+        String mapping = getFacesMapping(context);
+        if (isPrefixMapped(mapping)) {
+            uri = "/" + mapping + STATIC_RESOURCE_IDENTIFIER;
+        } else {
+            uri = STATIC_RESOURCE_IDENTIFIER + mapping;
+        }
+
+        String fullPath = getAppBaseUrl(context) + uri + "?file=" + path ; 
+        return fullPath;
+    }
+    
+    public static Converter getConverterForClass(Class converterClass,
+                                                 FacesContext facesContext) {
+        if (converterClass == null) {
+            return null;
+        }
+        try {
+            Application application = facesContext.getApplication();
+            return (application.createConverter(converterClass));
+        } catch (Exception e) {
+            return (null);
+        }
     }
 
-    public static Class loadClass(String name,
-                                  Object fallbackClass)
-         throws ClassNotFoundException {
-        ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        return loader.loadClass(name);
+    public static Converter getConverterForIdentifer(String converterId,
+                                                     FacesContext facesContext) {
+        if (converterId == null) {
+            return null;
+        }
+        try {
+            Application application = facesContext.getApplication();
+            return (application.createConverter(converterId));
+        } catch (Exception e) {
+            return (null);
+        }
     }
 
 
@@ -139,6 +214,97 @@ public class Util {
             loader = fallbackClass.getClass().getClassLoader();
         }
         return loader;
+    }
+
+
+    /**
+     * <p>Returns the URL pattern of the
+     * {@link javax.faces.webapp.FacesServlet} that
+     * is executing the current request.  If there are multiple
+     * URL patterns, the value returned by
+     * <code>HttpServletRequest.getServletPath()</code> and
+     * <code>HttpServletRequest.getPathInfo()</code> is
+     * used to determine which mapping to return.</p>
+     * If no mapping can be determined, it most likely means
+     * that this particular request wasn't dispatched through
+     * the {@link javax.faces.webapp.FacesServlet}.
+     *
+     * @param context the {@link FacesContext} of the current request
+     *
+     * @return the URL pattern of the {@link javax.faces.webapp.FacesServlet}
+     *         or <code>null</code> if no mapping can be determined
+     *
+     * @throws NullPointerException if <code>context</code> is null
+     */
+    public static String getFacesMapping(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException("The FacesContext was null.");
+        }
+
+        // Check for a previously stored mapping   
+        ExternalContext extContext = context.getExternalContext();
+        String mapping =
+              (String) extContext.getRequestMap().get(INVOCATION_PATH);
+
+        if (mapping == null) {
+
+            Object request = extContext.getRequest();
+            String servletPath = null;
+            String pathInfo = null;
+
+            // first check for javax.servlet.forward.servlet_path
+            // and javax.servlet.forward.path_info for non-null
+            // values.  if either is non-null, use this
+            // information to generate determine the mapping.
+
+            if (request instanceof HttpServletRequest) {
+                servletPath = extContext.getRequestServletPath();
+                pathInfo = extContext.getRequestPathInfo();
+            }
+
+
+            mapping = getMappingForRequest(servletPath, pathInfo);
+        }
+        
+        // if the FacesServlet is mapped to /* throw an 
+        // Exception in order to prevent an endless 
+        // RequestDispatcher loop
+        if ("/*".equals(mapping)) {
+            throw new FacesException("The FacesServlet was configured incorrectly");
+        }
+
+        if (mapping != null) {
+            extContext.getRequestMap().put(INVOCATION_PATH, mapping);
+        }
+        return mapping;
+    }
+
+
+    /**
+     * This method will return a <code>SessionMap</code> for the current
+     * <code>FacesContext</code>.  If the <code>FacesContext</code> argument
+     * is null, then one is determined by <code>FacesContext.getCurrentInstance()</code>.
+     * The <code>SessionMap</code> will be created if it is null.
+     *
+     * @param context the FacesContext
+     * @return Map The <code>SessionMap</code>
+     */
+    public static Map getSessionMap(FacesContext context) {
+        if (context == null) {
+            context = FacesContext.getCurrentInstance();
+        }
+        return context.getExternalContext().getSessionMap();
+    }
+
+
+    public static ValueBinding getValueBinding(String valueRef) {
+        ValueBinding vb = null;
+        // Must parse the value to see if it contains more than
+        // one expression
+        FacesContext context = FacesContext.getCurrentInstance();
+        vb = context.getApplication().createValueBinding(valueRef);
+        return vb;
     }
 
 
@@ -184,6 +350,113 @@ public class Util {
         return result;
     }
 
+
+    /*
+     * Determine whether String is a mixed value binding expression or not.
+     */
+    public static boolean isMixedVBExpression(String expression) {
+        if (null == expression) {
+            return false;
+        }
+
+        // if it doesn't start and end with delimiters
+        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
+            // see if it has some inside.
+            return isVBExpression(expression);
+        }
+        return false;
+    }
+
+
+    /**
+     * <p>Returns true if the provided <code>url-mapping</code> is
+     * a prefix path mapping (starts with <code>/</code>).</p>
+     *
+     * @param mapping a <code>url-pattern</code>
+     * @return true if the mapping starts with <code>/</code>
+     */
+    public static boolean isPrefixMapped(String mapping) {
+        return (mapping.charAt(0) == '/');
+    }
+
+
+    /*
+    * Determine whether String is a value binding expression or not.
+    */
+    public static boolean isVBExpression(String expression) {
+        if (null == expression) {
+            return false;
+        }
+        int start = 0;
+        //check to see if attribute has an expression
+        if (((start = expression.indexOf("#{")) != -1) &&
+             (start < expression.indexOf('}'))) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public static void linkJavascript(ResponseWriter writer, String path) throws IOException {
+        // TODO:  Class.forName("some.shale.class"); useShaleStuff(); catch (ClassNotFound) {useOurStuff()}; 
+        writer.startElement("script", null);
+        writer.writeAttribute("src", generateStaticUri(path), "src");
+        writer.endElement("script");
+    }
+
+    public static void linkStyleSheet(ResponseWriter writer, String path) throws IOException {
+        writer.startElement("link", null);
+        writer.writeAttribute("rel", "stylesheet", "rel");
+        writer.writeAttribute("type", "text/css", "type");
+        writer.writeAttribute("href", generateStaticUri(path), "href");
+        writer.endElement("link");
+    }
+
+
+    public static Class loadClass(String name,
+                                  Object fallbackClass)
+         throws ClassNotFoundException {
+        ClassLoader loader = Util.getCurrentLoader(fallbackClass);
+        return loader.loadClass(name);
+    }
+
+
+    public static void outputTemplate(Renderer renderer, String path, Map<String, String> fields) throws IOException {
+        ResponseWriter writer = FacesContext.getCurrentInstance().getResponseWriter();
+        InputStream is = renderer.getClass().getResourceAsStream("/META-INF/" + path);
+        if (is != null) {
+            String template = readInString(is);
+            
+            for (Map.Entry<String, String> field : fields.entrySet()) {
+                template = template.replaceAll("%%%"+field.getKey()+"%%%", field.getValue());
+            }
+            
+            writer.writeText(template, null);
+        }
+    }
+
+    public static String readInString(InputStream is) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        String ret = null;
+
+        try {
+            int count = 0;
+            byte[] buffer = new byte[4096];
+            while ((count = is.read(buffer)) != -1) {
+                if (count > 0) {
+                    baos.write(buffer, 0, count);
+                }
+            }
+            ret = baos.toString();
+            
+            baos.close();
+            is.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        
+        return ret;
+    }
 
     public static void renderBooleanPassThruAttributes(ResponseWriter writer,
                                                        UIComponent component)
@@ -250,7 +523,6 @@ public class Util {
         renderPassThruAttributes(writer, component, null);
     }
 
-
     /**
      * Render any "passthru" attributes, where we simply just output the
      * raw name and value of the attribute.  This method is aware of the
@@ -293,7 +565,47 @@ public class Util {
         }
     }
 
+    /**
+     * <p>Return the appropriate {@link javax.faces.webapp.FacesServlet} mapping
+     * based on the servlet path of the current request.</p>
+     *
+     * @param servletPath the servlet path of the request
+     * @param pathInfo    the path info of the request
+     *
+     * @return the appropriate mapping based on the current request
+     *
+     * @see HttpServletRequest#getServletPath()
+     */
+    private static String getMappingForRequest(String servletPath, String pathInfo) {
 
+        if (servletPath == null) {
+            return null;
+        }
+
+        // If the path returned by HttpServletRequest.getServletPath()
+        // returns a zero-length String, then the FacesServlet has
+        // been mapped to '/*'.
+        if (servletPath.length() == 0) {
+            return "/*";
+        }
+
+        // presence of path info means we were invoked
+        // using a prefix path mapping
+        if (pathInfo != null) {
+            return servletPath;
+        } else if (servletPath.indexOf('.') < 0) {
+            // if pathInfo is null and no '.' is present, assume the
+            // FacesServlet was invoked using prefix path but without
+            // any pathInfo - i.e. GET /contextroot/faces or
+            // GET /contextroot/faces/
+            return servletPath;
+        } else {
+            // Servlet invoked using extension mapping
+            return servletPath.substring(servletPath.lastIndexOf('.'));
+        }
+    }
+    
+    
     /**
      * @return true if and only if the argument
      *         <code>attributeVal</code> is an instance of a wrapper for a
@@ -330,132 +642,20 @@ public class Util {
         }
         return true;
     }
-
-
-    public static Object evaluateVBExpression(String expression) {
-        if (expression == null || (!isVBExpression(expression))) {
-            return expression;
-        }
-        FacesContext context = FacesContext.getCurrentInstance();
-        Object result =
-             context.getApplication().createValueBinding(expression).getValue(
-                  context);
-        return result;
-
+    
+    private Util() {
+        throw new IllegalStateException();
     }
 
-
-    public static ValueBinding getValueBinding(String valueRef) {
-        ValueBinding vb = null;
-        // Must parse the value to see if it contains more than
-        // one expression
-        FacesContext context = FacesContext.getCurrentInstance();
-        vb = context.getApplication().createValueBinding(valueRef);
-        return vb;
+    public static String getAppBaseUrl(FacesContext context) {
+        String baseUrl = "";
+        Object obj = context.getExternalContext().getRequest();
+        if (obj instanceof HttpServletRequest ) {
+            HttpServletRequest req = (HttpServletRequest )obj;
+            baseUrl = req.getScheme() + "://" + req.getServerName() +
+                ":" + req.getServerPort() + "/" + req.getContextPath() + "/";
+        }
+        
+        return baseUrl;
     }
-
-    /**
-     * This method will return a <code>SessionMap</code> for the current
-     * <code>FacesContext</code>.  If the <code>FacesContext</code> argument
-     * is null, then one is determined by <code>FacesContext.getCurrentInstance()</code>.
-     * The <code>SessionMap</code> will be created if it is null.
-     *
-     * @param context the FacesContext
-     * @return Map The <code>SessionMap</code>
-     */
-    public static Map getSessionMap(FacesContext context) {
-        if (context == null) {
-            context = FacesContext.getCurrentInstance();
-        }
-        return context.getExternalContext().getSessionMap();
-    }
-
-
-    public static Converter getConverterForClass(Class converterClass,
-                                                 FacesContext facesContext) {
-        if (converterClass == null) {
-            return null;
-        }
-        try {
-            Application application = facesContext.getApplication();
-            return (application.createConverter(converterClass));
-        } catch (Exception e) {
-            return (null);
-        }
-    }
-
-
-    public static Converter getConverterForIdentifer(String converterId,
-                                                     FacesContext facesContext) {
-        if (converterId == null) {
-            return null;
-        }
-        try {
-            Application application = facesContext.getApplication();
-            return (application.createConverter(converterId));
-        } catch (Exception e) {
-            return (null);
-        }
-    }
-
-
-    /*
-    * Determine whether String is a value binding expression or not.
-    */
-    public static boolean isVBExpression(String expression) {
-        if (null == expression) {
-            return false;
-        }
-        int start = 0;
-        //check to see if attribute has an expression
-        if (((start = expression.indexOf("#{")) != -1) &&
-             (start < expression.indexOf('}'))) {
-            return true;
-        }
-        return false;
-    }
-
-
-    /*
-     * Determine whether String is a mixed value binding expression or not.
-     */
-    public static boolean isMixedVBExpression(String expression) {
-        if (null == expression) {
-            return false;
-        }
-
-        // if it doesn't start and end with delimiters
-        if (!(expression.startsWith("#{") && expression.endsWith("}"))) {
-            // see if it has some inside.
-            return isVBExpression(expression);
-        }
-        return false;
-    }
-
-
-    public static boolean componentIsDisabledOnReadonly(UIComponent component) {
-        Object disabledOrReadonly = null;
-        boolean result = false;
-        if (null !=
-             (disabledOrReadonly = component.getAttributes().get("disabled"))) {
-            if (disabledOrReadonly instanceof String) {
-                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
-            } else {
-                result = disabledOrReadonly.equals(Boolean.TRUE);
-            }
-        }
-        if ((result == false) &&
-             null !=
-                  (disabledOrReadonly = component.getAttributes().get("readonly"))) {
-            if (disabledOrReadonly instanceof String) {
-                result = ((String) disabledOrReadonly).equalsIgnoreCase("true");
-            } else {
-                result = disabledOrReadonly.equals(Boolean.TRUE);
-            }
-        }
-
-        return result;
-    }
-
 } // end of class Util
-

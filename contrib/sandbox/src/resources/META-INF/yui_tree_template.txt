@@ -1,0 +1,15 @@
+// This needs to be refactored, but it works, so that's good enough for now.
+var tree%%%ID%%%;
+(function() {
+
+    var nodeIndex, nodes=[], callback = null;
+
+    function treeInit() {
+        tree%%%ID%%% = new YAHOO.widget.TreeView("%%%ID%%%");
+        %%%NODES%%%;
+        tree%%%ID%%%.draw();
+    }
+
+    YAHOO.util.Event.addListener(window, "load", treeInit);
+
+})();

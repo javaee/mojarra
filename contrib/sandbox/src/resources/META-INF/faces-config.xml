@@ -30,6 +30,9 @@
   "http://java.sun.com/dtd/web-facesconfig_1_1.dtd" [
 ]>
 <faces-config>
+    <lifecycle>
+        <phase-listener>com.sun.faces.sandbox.util.StaticResourcePhaseListener</phase-listener>
+    </lifecycle>
     <component>
         <component-type>com.sun.faces.sandbox.AccessibleHtmlColumn</component-type>
         <component-class>com.sun.faces.sandbox.component.AccessibleHtmlColumn</component-class>
@@ -45,6 +48,22 @@
             <component-family>javax.faces.Data</component-family>
             <renderer-type>com.sun.faces.sandbox.AccessibleTableRenderer</renderer-type>
             <renderer-class>com.sun.faces.sandbox.render.AccessibleTableRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+    
+    
+    <component>
+        <component-type>com.sun.faces.sandbox.YuiTree</component-type>
+        <component-class>com.sun.faces.sandbox.component.YuiTree</component-class>
+        <component-extension>
+            <renderer-type>com.sun.faces.sandbox.YuiTreeRenderer</renderer-type>
+        </component-extension>
+    </component>
+    <render-kit>
+        <renderer>
+            <component-family>com.sun.faces.sandbox.YuiTree</component-family>
+            <renderer-type>com.sun.faces.sandbox.YuiTreeRenderer</renderer-type>
+            <renderer-class>com.sun.faces.sandbox.render.YuiTreeRenderer</renderer-class>
         </renderer>
     </render-kit>
 </faces-config>
