@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.1 2003/10/09 16:37:16 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.2 2003/10/14 16:42:34 rkitain Exp $
  */
 
 /*
@@ -84,7 +84,9 @@ public class GenerateConcreteClasses extends GenerateBase {
      * config file using the following algorithm.</p> 
      *
      * <p>According to the DTD, each <code>renderer</code> may have one
-     * or more <code>component-class</code> elements.  For each
+     * or more <code>supported-component-class</code> elements.  Each 
+     * <code>supported-component-class</code> element contains a 
+     * <code>component-class</code> element.  For each
      * <code>renderer</code> in the config file:</p>
      *
      * <ul>

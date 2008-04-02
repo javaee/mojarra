@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.1 2003/10/09 16:37:15 eburns Exp $
+ * $Id: ConfigParser.java,v 1.2 2003/10/14 16:42:34 rkitain Exp $
  */
 
 /*
@@ -119,7 +119,7 @@ class ConfigParser extends Object {
 			    "com.sun.faces.generate.ConfigRenderer");
         digester.addCallMethod(prefix + "/renderer-type",
                                "setRendererType", 0);
-        digester.addCallMethod(prefix + "/component-class",
+        digester.addCallMethod(prefix + "/supported-component-class/component-class",
                                "addComponentClass", 0);
 
 	prefix = prefix + "/attribute";
