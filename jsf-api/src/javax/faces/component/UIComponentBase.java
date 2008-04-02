@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.81 2003/11/07 01:23:48 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.82 2003/11/07 15:09:47 eburns Exp $
  */
 
 /*
@@ -1449,7 +1449,6 @@ public abstract class UIComponentBase extends UIComponent {
      */ 
     public void processRestoreState(FacesContext context,
                                     Object state) {
-        
         if (context == null) {
             throw new NullPointerException();
         }
@@ -1499,10 +1498,17 @@ public abstract class UIComponentBase extends UIComponent {
      */
     protected FacesContext getFacesContext() {
 
-	if (facesContext == null) {
-	    facesContext = FacesContext.getCurrentInstance();
-	}
-	return (facesContext);
+	// PENDING(edburns): we can't use the cache ivar because we
+	// don't always know when to clear it.  For example, in the
+	// "save state in server" case, the UIComponent instances stick
+	// around between requests, yielding stale facesContext
+	// references.  If there was some way to clear the facesContext
+	// cache ivar for each node in the tree *after* the
+	// render-response phase, then we could keep a cache ivar.  As
+	// it is now, we must always use the Thread Local Storage
+	// solution.
+
+	return FacesContext.getCurrentInstance();
 
     }
 
