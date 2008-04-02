@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.2 2003/07/08 15:38:33 eburns Exp $
+ * $Id: RenderKitImpl.java,v 1.3 2003/07/22 19:47:05 rkitain Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.2 2003/07/08 15:38:33 eburns Exp $
+ * @version $Id: RenderKitImpl.java,v 1.3 2003/07/22 19:47:05 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -62,19 +62,6 @@ public class RenderKitImpl extends RenderKit {
 //
 // Instance Variables
 //
-
-//
-// Ivars used during parsing
-//
-
-    /**
-
-    * Used during the Digester parsing.  Accrues HtmlBasicRenderer
-    * instances during createAndAccrueRenderer() calls.
-
-    */
-
-    private ArrayList parse_renderersForCurrentComponent = null;
 
 //
 // Ivars used during actual client lifetime
