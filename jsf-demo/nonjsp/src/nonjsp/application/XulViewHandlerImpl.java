@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.7 2003/10/07 23:05:49 rkitain Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.8 2003/10/08 17:52:56 eburns Exp $ 
  */ 
 
 
@@ -81,7 +81,7 @@ import java.util.Map;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.7 2003/10/07 23:05:49 rkitain Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.8 2003/10/08 17:52:56 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -264,6 +264,12 @@ public class XulViewHandlerImpl implements ViewHandler {
             throw new IllegalArgumentException(
 		"Illegal view ID "+viewId+". the ID must begin with '/'");
         }
+	// PENDING(edburns): do a more complete implementation that
+	// deals with the vagaries of prefix and suffix mapping.  For
+	// now , just slap "/faces" onto the front.
+	if (!viewId.startsWith("/faces")) {
+	    viewId = "/faces" + viewId;
+	}
         return viewId; 
     }
 
