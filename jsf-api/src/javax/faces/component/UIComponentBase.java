@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.67 2003/10/06 18:34:19 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.68 2003/10/08 02:24:54 eburns Exp $
  */
 
 /*
@@ -628,8 +628,7 @@ public abstract class UIComponentBase extends UIComponent {
         }
 
 	if (0 == id.length() || 
-	    NamingContainer.SEPARATOR_CHAR == id.charAt(0) ||
-	    id.startsWith(UIViewRoot.UNIQUE_ID_PREFIX)) {
+	    NamingContainer.SEPARATOR_CHAR == id.charAt(0)) {
 	    throw new IllegalArgumentException();
         }
 	    
@@ -640,7 +639,7 @@ public abstract class UIComponentBase extends UIComponent {
         for (int i = 0; i < n; i++) {
             char c = id.charAt(i);
             if (i == 0) {
-                if (!Character.isLetter(c)) {
+                if (!Character.isLetter(c) && (c != '_')) {
                                     throw new IllegalArgumentException(id);
                 }
             } else {

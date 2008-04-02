@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.18 2003/10/03 17:38:12 rlubke Exp $
+ * $Id: UIComponentTag.java,v 1.19 2003/10/08 02:24:55 eburns Exp $
  */
 
 /*
@@ -43,15 +43,6 @@ public abstract class UIComponentTag implements Tag {
 
 
     // ------------------------------------------------------ Manifest Constants
-
-
-    /**
-     * <p>The request scope attribute under which an <code>Integer</code> value
-     * describing the number of child identifiers that have been created
-     * so far on this page.</p>
-     */
-    private static final String AUTO_ID_INDEX_PAGE_ATTR =
-        "javax.faces.webapp.AUTO_INDEX";
 
 
     /**
@@ -373,14 +364,14 @@ public abstract class UIComponentTag implements Tag {
         setupResponseWriter();
         
         UIComponentTag parentTag = getParentUIComponentTag(pageContext);
-        
+        Map requestMap = context.getExternalContext().getRequestMap();
         Map componentIds = null;
         if (parentTag == null) {
             // create the map if we're the top level UIComponentTag
             componentIds = new HashMap();
-            pageContext.setAttribute(GLOBAL_ID_VIEW, componentIds);                        
+            requestMap.put(GLOBAL_ID_VIEW, componentIds); 
         } else {
-            componentIds = (Map) pageContext.getAttribute(GLOBAL_ID_VIEW);
+            componentIds = (Map) requestMap.get(GLOBAL_ID_VIEW);
         }
         
         // assert component ID uniqueness
@@ -926,19 +917,9 @@ public abstract class UIComponentTag implements Tag {
      * particular page.</p>
      */
     private String createId() {
-
-        Integer index =
-            (Integer) pageContext.getAttribute(AUTO_ID_INDEX_PAGE_ATTR,
-                                               PageContext.REQUEST_SCOPE);
-        if (index == null) {
-            index = new Integer(0);
-        }
-        index = new Integer(index.intValue() + 1);
-        pageContext.setAttribute(AUTO_ID_INDEX_PAGE_ATTR,
-                                 index,
-                                 PageContext.REQUEST_SCOPE);
-        return ("JSPid" + index);
-
+	FacesContext context = 
+	    (FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
+	return context.getViewRoot().createUniqueId();
     }
 
 

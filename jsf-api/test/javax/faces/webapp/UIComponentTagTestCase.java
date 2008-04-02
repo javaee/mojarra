@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.13 2003/09/25 07:46:53 craigmcc Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.14 2003/10/08 02:24:56 eburns Exp $
  */
 
 /*
@@ -201,14 +201,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, null, true, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bJSPid2/eJSPid2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/JSPid2-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/b" + UIViewRoot.UNIQUE_ID_PREFIX + "0/e" + UIViewRoot.UNIQUE_ID_PREFIX + "0/b" + UIViewRoot.UNIQUE_ID_PREFIX + "1/e" + UIViewRoot.UNIQUE_ID_PREFIX + "1/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/" + UIViewRoot.UNIQUE_ID_PREFIX + "0-c1/" + UIViewRoot.UNIQUE_ID_PREFIX + "1-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bJSPid2/eJSPid2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/JSPid2-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/b" + UIViewRoot.UNIQUE_ID_PREFIX + "2/e" + UIViewRoot.UNIQUE_ID_PREFIX + "2/b" + UIViewRoot.UNIQUE_ID_PREFIX + "3/e" + UIViewRoot.UNIQUE_ID_PREFIX + "3/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/" + UIViewRoot.UNIQUE_ID_PREFIX + "2-c1/" + UIViewRoot.UNIQUE_ID_PREFIX + "3-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -221,14 +221,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure(null, "C2", true, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/b" + UIViewRoot.UNIQUE_ID_PREFIX + "0/e" + UIViewRoot.UNIQUE_ID_PREFIX + "0/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/" + UIViewRoot.UNIQUE_ID_PREFIX + "0-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bJSPid1/eJSPid1/bC2/eC2/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/JSPid1-c1/C2-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/b" + UIViewRoot.UNIQUE_ID_PREFIX + "1/e" + UIViewRoot.UNIQUE_ID_PREFIX + "1/bC2/eC2/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/" + UIViewRoot.UNIQUE_ID_PREFIX + "1-c1/C2-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -241,14 +241,14 @@ public class UIComponentTagTestCase extends TestCase {
         configure("C1", null, true, false);
 
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bJSPid1/eJSPid1/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/JSPid1-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b" + UIViewRoot.UNIQUE_ID_PREFIX + "0/e" + UIViewRoot.UNIQUE_ID_PREFIX + "0/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/" + UIViewRoot.UNIQUE_ID_PREFIX + "0-c2/B3-b3", tree());
         verifyB2();
 
         reset();
         render();
-        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/bJSPid1/eJSPid1/eB2/bB3/eB3/eA", text());
-        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/JSPid1-c2/B3-b3", tree());
+        assertEquals("/bA/bB1/eB1/bB2/bC1/eC1/b" + UIViewRoot.UNIQUE_ID_PREFIX + "1/e" + UIViewRoot.UNIQUE_ID_PREFIX + "1/eB2/bB3/eB3/eA", text());
+        assertEquals("//A-a/B1-b1/B2-b2/C1-c1/" + UIViewRoot.UNIQUE_ID_PREFIX + "1-c2/B3-b3", tree());
         verifyB2();
 
     }
@@ -333,13 +333,13 @@ public class UIComponentTagTestCase extends TestCase {
         add(null, new TestTag(null, "a"));
 
         render();
-        assertEquals("/bJSPid1/eJSPid1", text());
-        assertEquals("//JSPid1-a", tree());
+        assertEquals("/b" + UIViewRoot.UNIQUE_ID_PREFIX + "0/e" + UIViewRoot.UNIQUE_ID_PREFIX + "0", text());
+        assertEquals("//" + UIViewRoot.UNIQUE_ID_PREFIX + "0-a", tree());
 
         reset();
         render();
-        assertEquals("/bJSPid1/eJSPid1", text());
-        assertEquals("//JSPid1-a", tree());
+        assertEquals("/b" + UIViewRoot.UNIQUE_ID_PREFIX + "1/e" + UIViewRoot.UNIQUE_ID_PREFIX + "1", text());
+        assertEquals("//" + UIViewRoot.UNIQUE_ID_PREFIX + "1-a", tree());
 
     }
 
