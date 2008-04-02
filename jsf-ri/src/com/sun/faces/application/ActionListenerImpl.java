@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListenerImpl.java,v 1.3 2003/04/08 23:31:23 rkitain Exp $
+ * $Id: ActionListenerImpl.java,v 1.4 2003/09/08 21:59:23 craigmcc Exp $
  */
 
 /*
@@ -105,5 +105,9 @@ public class ActionListenerImpl implements ActionListener {
         // Invoke nav handling..
 
         navHandler.handleNavigation(context, actionRef, outcome); 
+
+        // Trigger a switch to Render Response if needed
+        context.renderResponse();
+
     }
 }
