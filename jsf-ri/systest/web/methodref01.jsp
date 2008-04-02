@@ -16,7 +16,7 @@
 	<hr>
 	<p>Press a button, see some text.</p>
         <h:input_text readonly="true" id="buttonStatus" 
-                      valueRef="methodRef.buttonPressedOutcome"/>
+                      value="#{methodRef.buttonPressedOutcome}"/>
         <h:command_button id="button1" value="button1"
                            actionRef="methodRef.button1Pressed"/>
         <h:command_link id="button2" actionRef="methodRef.button2Pressed">
@@ -27,11 +27,11 @@
         <hr>
 	<p>the only valid value is batman</p>
         <h:input_text id="toValidate" 
-                      valueRef="methodRef.validateOutcome"
+                      value="#{methodRef.validateOutcome}"
                       validateRef="methodRef.validateInput"/>
         <h:command_button id="validate" value="validate"/>
         <h:input_text id="validateStatus" readonly="true" 
-                      valueRef="methodRef.validateOutcome"/>
+                      value="#{methodRef.validateOutcome}"/>
         <h:output_errors for="toValidate"/>
 
         <hr>
@@ -40,7 +40,7 @@
                       valueChangeListenerRef="methodRef.valueChange"/>
         <h:command_button id="changeValue" value="changeValue"/>
         <h:input_text id="changeStatus" readonly="true" 
-                      valueRef="methodRef.changeOutcome"/>
+                      value="#{methodRef.changeOutcome}"/>
       </h:form>
     </f:view>
 
@@ -50,7 +50,7 @@
     <address><a href="mailto:Ed Burns <ed.burns@sun.com>"></a></address>
 <!-- Created: Fri Oct 31 10:49:23 Eastern Standard Time 2003 -->
 <!-- hhmts start -->
-Last modified: Fri Oct 31 16:47:00 Eastern Standard Time 2003
+Last modified: Sun Nov 09 18:12:14 Eastern Standard Time 2003
 <!-- hhmts end -->
   </body>
 </html>

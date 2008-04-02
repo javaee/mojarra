@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: command_button_test.jsp,v 1.4 2003/11/09 03:25:18 eburns Exp $ --%>
+<%-- $Id: command_button_test.jsp,v 1.5 2003/11/10 00:08:34 eburns Exp $ --%>
 <html>
 <head>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
@@ -16,7 +16,7 @@
         var="messageBundle"/>
     <f:view locale="en_US">
         <h:command_button id="button01" type="submit" value="My Label"/>
-        <h:command_button id="button02" type="reset" valueRef="test1.stringProperty"/>
+        <h:command_button id="button02" type="reset" value="#{test1.stringProperty}"/>
         <h:command_button id="button03" type="submit" value="#{messageBundle.button_key}"/>
         <h:command_button id="button04" type="reset" image="duke.gif" value="FAIL"/>
         <h:command_button id="button05" type="submit" image="#{messageBundle.image_key}"/>

@@ -5,9 +5,9 @@
 <% pageContext.setAttribute("duplicate", "output1"); %>
 <% try { %>
 <f:view>
-    <h:output_text id="${duplicate}"/>
+    <h:output_text id="#{duplicate}"/>
     <h:output_text id="output2"/>
-    <h:output_text id="${duplicate}"/>
+    <h:output_text id="#{duplicate}"/>
 </f:view>
 <% 
   } catch (JspException je) {

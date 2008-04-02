@@ -3,7 +3,7 @@
    SUN PROPRIETARY/CONFIDENTIAL.  Use is subject license terms.
 --%>
 
-<%-- $Id: verbatim_test.jsp,v 1.2 2003/09/05 18:57:12 eburns Exp $ --%>
+<%-- $Id: verbatim_test.jsp,v 1.3 2003/11/10 00:08:27 eburns Exp $ --%>
 <html>
   <head>
     <title>Test of the Verbatim Tag</title>
@@ -48,7 +48,7 @@
     escaped.
     </f:verbatim>
 
-    <p><h:output_text valueRef="textToEscape"/></p>
+    <p><h:output_text value="#{textToEscape}"/></p>
 
 </p>
 
@@ -58,7 +58,7 @@
     <hr>
 <!-- Created: Thu Sep 04 14:10:57 Eastern Daylight Time 2003 -->
 <!-- hhmts start -->
-Last modified: Thu Sep 04 18:47:53 Eastern Daylight Time 2003
+Last modified: Sun Nov 09 18:09:51 Eastern Standard Time 2003
 <!-- hhmts end -->
   </body>
 

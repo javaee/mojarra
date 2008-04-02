@@ -6,6 +6,7 @@
 <html>
 <title>Validator Test Page</title>
 <head>
+    <%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 </head>
@@ -22,8 +23,8 @@ This page should Succeed.
 <br>
 
 <f:view>
-
-  <h:command_button id="${pageScope.first}${pageScope.last}" value="indiana" />
+  <c:set var="temp" scope="request" value="${pageScope.first}${pageScope.last}"/>
+  <h:command_button id="#{temp}" value="indiana" />
 
 </f:view>
 

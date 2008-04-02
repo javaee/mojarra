@@ -23,7 +23,7 @@ This page should Fail.
 <f:view>
 
   <p>This command button has an invalid id expression</p>
-  <h:command_button id="${${ford}}" value="hello" />
+  <h:command_button id="#{#{ford}}" value="hello" />
 
 </f:view>
 

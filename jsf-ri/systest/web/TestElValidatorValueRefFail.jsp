@@ -11,15 +11,15 @@
 </head>
 <body>
 
-<h1>TLV command_button, invalid 'valueRef' expression</h1>
+<h1>TLV command_button, invalid 'value' expression</h1>
 This page should Fail.
 <br>
 <br>
 
 <f:view>
 
-  <p>This command button has an invalid valueRef expression</p>
-  <h:command_button value="hello" valueRef="-3"/>
+  <p>This command button has an invalid value expression</p>
+  <h:command_button value="hello" value="#{-3"/>
 
 </f:view>
 

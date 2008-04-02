@@ -18,7 +18,7 @@ This page should Succeed.
 
 <f:view>
 
-  <h:command_button value="hello" valueRef="3" />
+  <h:command_button value="hello" />
 
 </f:view>
 

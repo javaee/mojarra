@@ -1,5 +1,5 @@
 /*
- * $Id: CommandTagParserImpl.java,v 1.3 2003/11/06 22:40:15 horwat Exp $
+ * $Id: CommandTagParserImpl.java,v 1.4 2003/11/10 00:08:23 eburns Exp $
  */
 
 /*
@@ -96,36 +96,25 @@ public class CommandTagParserImpl implements TagParser {
     // Private methods
 
     /**
-     * <p>set failed flag to true unless tag has a key, image, 
-     * imageKey, label, or valueRef attribute</p>.
+     * <p>set failed flag to true unless tag has a value attribute</p>.
      *
      * <p>PRECONDITION: qn is a command_button</p>
      */
     private void handleCommandButton() {
         Attributes attrs = validatorInfo.getAttributes();
         String qn = validatorInfo.getQName();
-        boolean hasKey = false, 
-                hasImage = false, 
-                hasValue = false, 
-                hasValueRef = false;
+        boolean hasValue = false;
+        boolean hasImage = false;
 
         for (int i = 0; i < attrs.getLength(); i++) {
-            if (attrs.getQName(i).equals("key")) {
-                hasKey = true;
-            }
-            if (attrs.getQName(i).equals("image") ||
-                attrs.getQName(i).equals("imageKey")) {
-                hasImage = true;
-            }
             if (attrs.getQName(i).equals("value")) {
                 hasValue = true;
             }
-            if (attrs.getQName(i).equals("valueRef")) {
-                hasValueRef = true;
+            if (attrs.getQName(i).equals("image")) {
+                hasImage = true;
             }
         }
-        if (failed = ((hasKey || hasImage || hasValue || hasValueRef ) 
-            != true)) {
+        if (failed = !(hasValue || hasImage)) {
   	    Object[] obj = new Object[1];
             obj[0] = qn;
             failureMessages.append(Util.getExceptionMessage(

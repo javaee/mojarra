@@ -18,7 +18,7 @@
       <tr>
         <td><h:output_text id="arrayLabel${i}" value="arrayLabel_${i}"/></td>
         <td><h:input_text id="arrayProp${i}"
-                    valueRef="forEachBean.arrayProperty[${i}]"/></td>
+                    value="#{forEachBean.arrayProperty[${i}]}"/></td>
       </tr>
     </c:forEach>
 

@@ -20,7 +20,7 @@ This page should Succeed.
 
   <h:command_button value="hello"/>
 
-  <h:command_button key="hello"/>
+  <h:command_button value="hello"/>
 
 </f:view>
 

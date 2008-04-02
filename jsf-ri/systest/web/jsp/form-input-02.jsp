@@ -14,35 +14,35 @@
   <h:panel_grid columns="3">
 
     <h:output_text value="booleanProperty"/>
-    <h:input_text id="booleanProperty" valueRef="formInput02.booleanProperty"/>
+    <h:input_text id="booleanProperty" value="#{formInput02.booleanProperty}"/>
     <h:output_errors for="booleanProperty"/>
 
     <h:output_text value="byteProperty"/>
-    <h:input_text id="byteProperty" valueRef="formInput02.byteProperty"/>
+    <h:input_text id="byteProperty" value="#{formInput02.byteProperty}"/>
     <h:output_errors for="byteProperty"/>
 
     <h:output_text value="doubleProperty"/>
-    <h:input_text id="doubleProperty" valueRef="formInput02.doubleProperty"/>
+    <h:input_text id="doubleProperty" value="#{formInput02.doubleProperty}"/>
     <h:output_errors for="doubleProperty"/>
 
     <h:output_text value="floatProperty"/>
-    <h:input_text id="floatProperty" valueRef="formInput02.floatProperty"/>
+    <h:input_text id="floatProperty" value="#{formInput02.floatProperty}"/>
     <h:output_errors for="floatProperty"/>
 
     <h:output_text value="intProperty"/>
-    <h:input_text id="intProperty" valueRef="formInput02.intProperty"/>
+    <h:input_text id="intProperty" value="#{formInput02.intProperty}"/>
     <h:output_errors for="intProperty"/>
 
     <h:output_text value="longProperty"/>
-    <h:input_text id="longProperty" valueRef="formInput02.longProperty"/>
+    <h:input_text id="longProperty" value="#{formInput02.longProperty}"/>
     <h:output_errors for="longProperty"/>
 
     <h:output_text value="shortProperty"/>
-    <h:input_text id="shortProperty" valueRef="formInput02.shortProperty"/>
+    <h:input_text id="shortProperty" value="#{formInput02.shortProperty}"/>
     <h:output_errors for="shortProperty"/>
 
     <h:output_text value="stringProperty"/>
-    <h:input_text id="stringProperty" valueRef="formInput02.stringProperty"/>
+    <h:input_text id="stringProperty" value="#{formInput02.stringProperty}"/>
     <h:output_errors for="stringProperty"/>
 
     <h:command_button id="submit" type="submit" value="Submit"/>
