@@ -170,5 +170,18 @@
  <message messageId="com.sun.faces.NULL_CONFIGURATION" severity="3" summary="No Configuration loaded for the application.">
      <detail>There is no Configuration loaded for the application.</detail>
  </message>
+
+  <message messageId="com.sun.faces.ERROR_OPENING_FILE" severity="3" summary="Can''t open configuration file">
+      <detail>Can''t open configuration file: ''{0}'' .</detail>
+  </message>
+
+  <message messageId="com.sun.faces.ERROR_PARSING_FILE" severity="3" summary="Can''t parse configuration file">
+      <detail>Can''t parse configuration file: ''{0}'' .</detail>
+  </message>
+
+  <message messageId="com.sun.faces.ERROR_REGISTERING_DTD" severity="3" summary="Can''t register DTD">
+      <detail>Can''t register DTD: ''{0}'' .</detail>
+  </message>
+
 </messages>
 
