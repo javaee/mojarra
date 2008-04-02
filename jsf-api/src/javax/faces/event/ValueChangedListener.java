@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangedListener.java,v 1.2 2003/01/16 20:24:21 craigmcc Exp $
+ * $Id: ValueChangedListener.java,v 1.3 2003/01/24 00:21:05 craigmcc Exp $
  */
 
 /*
@@ -28,8 +28,13 @@ public interface ValueChangedListener extends FacesListener {
      * {@link ValueChangedEvent} occurs.</p>
      *
      * @param event The {@link ValueChangedEvent} that has occurred
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
      */
-    public void processValueChanged(ValueChangedEvent event);
+    public void processValueChanged(ValueChangedEvent event)
+        throws AbortProcessingException;
 
 
 }

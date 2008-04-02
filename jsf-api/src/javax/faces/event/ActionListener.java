@@ -1,5 +1,5 @@
 /*
- * $Id: ActionListener.java,v 1.2 2003/01/16 20:24:20 craigmcc Exp $
+ * $Id: ActionListener.java,v 1.3 2003/01/24 00:21:05 craigmcc Exp $
  */
 
 /*
@@ -28,8 +28,13 @@ public interface ActionListener extends FacesListener  {
      * {@link ActionEvent} occurs.</p>
      *
      * @param event The {@link ActionEvent} that has occurred
+     *
+     * @exception AbortProcessingException Signal the JavaServer Faces
+     *  implementation that no further processing on the current event
+     *  should be performed
      */
-    public void processAction(ActionEvent event);
+    public void processAction(ActionEvent event)
+        throws AbortProcessingException;
 
 
 }
