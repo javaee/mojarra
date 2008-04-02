@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.40 2007/01/30 00:38:55 rlubke Exp $
+ * $Id: TestConverters.java,v 1.42 2007/01/30 01:25:45 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.40 2007/01/30 00:38:55 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.42 2007/01/30 01:25:45 rlubke Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -110,6 +110,7 @@ public class TestConverters extends JspFacesTestCase {
         application = aFactory.getApplication();
         UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         viewRoot.setViewId("viewId");
+        viewRoot.setLocale(Locale.US);
         getFacesContext().setViewRoot(viewRoot);
     }
 
@@ -124,7 +125,6 @@ public class TestConverters extends JspFacesTestCase {
         try {
             // create a dummy root for the tree.
             UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-            root.setLocale(Locale.US);
             root.setId("root");
 
             testDateConverter(root);
@@ -375,6 +375,7 @@ public class TestConverters extends JspFacesTestCase {
         // create a dummy root for the tree.
         UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
         root.setId("root");
+        root.setLocale(Locale.US);
         getFacesContext().setViewRoot(root);
 
         // test model type of boolean []
