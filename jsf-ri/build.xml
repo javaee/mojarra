@@ -324,21 +324,33 @@
     <echo> copy the necessary samples </echo>
 
     <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/guessNumber"/>
+      <fileset dir="${jsf.demo.home}/guessNumber" excludes="build.xml,wspack-build.xml"/>
     </copy>
+    <copy file="${jsf.demo.home}/guessNumber/wspack-build.xml"
+          tofile="${dist.home}/samples/guessNumber/build.xml" />
 
     <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
       <fileset dir="${jsf.demo.home}/cardemo"
-               excludes="**/build.properties.crashtest,**/crashtest.xml,**/testdriver.jar"/>
+               excludes="**/build.properties.crashtest,**/crashtest.xml,**/testdriver.jar,build.xml,wspack-build.xml"/>
     </copy>
+    <copy file="${jsf.demo.home}/cardemo/wspack-build.xml"
+          tofile="${dist.home}/samples/cardemo/build.xml" />
 
     <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/nonjsp"/>
+      <fileset dir="${jsf.demo.home}/nonjsp" excludes="build.xml,wspack-build.xml"/>
     </copy>
+    <copy file="${jsf.demo.home}/nonjsp/wspack-build.xml"
+          tofile="${dist.home}/samples/nonjsp/build.xml" />
 
     <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
-      <fileset dir="${jsf.demo.home}/components"/>
+      <fileset dir="${jsf.demo.home}/components" excludes="build.xml,wspack-build.xml"/>
     </copy>
+    <copy file="${jsf.demo.home}/components/wspack-build.xml"
+          tofile="${dist.home}/samples/components/build.xml" />
+
+    <copy file="${jsf.demo.home}/build.properties.sample"
+          todir="${dist.home}/samples" />
+
 
   </target>
 

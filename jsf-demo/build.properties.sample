@@ -36,45 +36,31 @@
 # maintenance of any nuclear facility.
 #
 
-# -----------------------------------------------------------------------------
-# build.properties.sample
-#
-# This is an example "build.properties" file, used to customize building the
-# jsf-demo for your local environment.  It defines the location of all external
-# modules that the jsf-demo depends on.  Copy this file to "build.properties"
-# in the top-level source directory, and customize it as needed.
-#
-# $Id: build.properties.sample,v 1.8 2003/04/11 17:09:04 jvisvanathan Exp $
-# -----------------------------------------------------------------------------
-
 # Make these values be correct on your system, then rename to
 # build.properties.  On win32, make sure to preserve the \\ syntax
 # for escaping backslashes.  
 
-tomcat.home=<path to tomcat or jwsdp installation>
+# Following settings assume JWSDP 1.2 environment.
+tomcat.home=<replace with your JWSDP 1.2 installation directory>
 commons-logging.jar=${tomcat.home}/jwsdp-shared/lib/commons-logging.jar
-commons-digester.jar=${tomcat.home}/server/lib/commons-digester.jar
-commons-beanutils.jar=${tomcat.home}/server/lib/commons-beanutils.jar
-commons-collections.jar=${tomcat.home}/common/lib/commons-collections.jar
+commons-digester.jar=${tomcat.home}/jwsdp-shared/lib/commons-digester.jar
+commons-beanutils.jar=${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar
+commons-collections.jar=${tomcat.home}/jwsdp-shared/lib/commons-collections.jar
 xerces.jar=${tomcat.home}/jaxp-1.2.2/lib/endorsed/xercesImpl.jar
-jstl.jar=${tomcat.home}/jstl-1.0.3/standard/lib/jstl.jar
-standard.jar=${tomcat.home}/jstl-1.0.3/standard/lib/standard.jar
+jstl.jar=${tomcat.home}/jstl/lib/jstl.jar
+standard.jar=${tomcat.home}/jstl/lib/standard.jar
 
-# Set the following only if you are building with JWSDP1.2.x
-# or TOMCAT 5.x 
-#jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
-#servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
+# Comment the following properties when building under JWSDP 1.1
+# or Tomcat 4.1.x
+jsp.jar=${tomcat.home}/common/lib/jsp-api.jar
+servlet.jar=${tomcat.home}/common/lib/servlet-api.jar  
 
-# By default, all the dependent libraries are bundled with every sample app.
-# To bundle only the libraries that are not in the JWSDP1.2,
-# comment build.standalone property and uncomment build.wspack property
-build.standalone=true
-#build.wspack=true
+jsf-api.jar=${tomcat.home}/jsf/lib/jsf-api.jar
+jsf-ri.jar=${tomcat.home}/jsf/lib/jsf-ri.jar
 
-# --------------------------------------------------
-#   PROPERTIES FOR JWSDP 1.2 NIGHTLY BUILDS
-# --------------------------------------------------
-# 
-#jsf.api.jar=<location of jsf-api.jar>
-#jsf.ri.jar=<location of jsf-ri.jar>
-
+# By default, the dependent libraries are not included with 
+# every sample app, since they come bundled with JWSDP 1.2.
+# To bundle the dependent libraries with every sample app,
+# uncomment build.standalone property and comment build.wspack property.
+#build.standalone=true
+build.wspack=true
