@@ -159,7 +159,10 @@ public class YuiMenuRenderer extends Renderer {
                 if (child instanceof YuiMenuItem) {
                     renderMenu(writer, menuItem);
                 } else {
-                    child.encodeAll(FacesContext.getCurrentInstance());
+                    // 1.1 doesn't support encodeAll()
+                    child.encodeBegin(FacesContext.getCurrentInstance());
+                    child.encodeChildren(FacesContext.getCurrentInstance());
+                    child.encodeEnd(FacesContext.getCurrentInstance());
                 }
             }
         }

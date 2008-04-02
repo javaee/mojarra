@@ -134,17 +134,22 @@ public class YuiRendererHelper {
     }
     
     public static String getRenderedOutput(FacesContext context, ResponseWriter writer, UIComponent component) throws IOException {
-        StringWriter stringWriter = new StringWriter();
-        ResponseWriter newWriter = writer.cloneWithWriter(stringWriter);
-        context.setResponseWriter(newWriter);
-        component.encodeAll(context);
-        String output = stringWriter.toString();
-        if (output != null) {
-            output = output.trim();
-            output = sanitizeStringForJavaScript(output);
+        String output = "";
+        if (component != null) {
+            StringWriter stringWriter = new StringWriter();
+            ResponseWriter newWriter = writer.cloneWithWriter(stringWriter);
+            context.setResponseWriter(newWriter);
+            component.encodeBegin(context);
+            component.encodeChildren(context);
+            component.encodeEnd(context);
+            output = stringWriter.toString();
+            if (output != null) {
+                output = output.trim();
+                output = sanitizeStringForJavaScript(output);
+            }
+            context.setResponseWriter(writer);
         }
-        context.setResponseWriter(writer);
-        
+
         return output;
     }
 

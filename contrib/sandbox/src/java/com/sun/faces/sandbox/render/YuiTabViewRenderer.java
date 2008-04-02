@@ -73,17 +73,6 @@ public class YuiTabViewRenderer extends Renderer {
             Util.getXhtmlHelper().linkStylesheet(context, component,
                     context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
                     YuiConstants.CSS_TABVIEW_MODULE_TABS);
-            /*
-.yui-navset .yui-nav {
-    background:#e1e1e1 url(../img/newcats_bkgd.gif) repeat-x; 
-    .yui-navset .yui-nav .selected a {
-    background:#293852 url(../img/tab_right.gif) no-repeat top right;
-    color:#fff;
-}
-
-.yui-navset .yui-nav .selected { background:url(../img/ptr.gif) no-repeat bottom center; }
-.yui-navset .yui-nav .selected em { background:url(../img/tab_left.gif) no-repeat; }
-             */
             writer.startElement("style", tabView);
             writer.writeAttribute("type", "text/css", "type");
             writer.write(".yui-navset .yui-nav {background-image:url(" + 
@@ -99,13 +88,6 @@ public class YuiTabViewRenderer extends Renderer {
             Util.getXhtmlHelper().linkStylesheet(context, component,
                     context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
                     YuiConstants.CSS_TABVIEW_ROUND_TABS);
-//            .yui-navset .yui-nav li a {
-//                background:#e5e5e5 url(../img/round_4px_trans_gray.gif) no-repeat;
-//            }
-//            .yui-navset .yui-nav li a em {
-//                background:transparent url(../img/round_4px_trans_gray.gif) no-repeat top right;
-//                padding:0.5em;
-//            }
             writer.startElement("style", tabView);
             writer.writeAttribute("type", "text/css", "type");
             writer.write(".yui-navset .yui-nav li a {background-image:url(" + 
@@ -118,7 +100,7 @@ public class YuiTabViewRenderer extends Renderer {
         }
         
         writer.startElement("div", tabView);
-        writer.writeAttribute("id", component.getClientId(context), "id");
+        writer.writeAttribute("id", "tabView_" + component.getClientId(context), "id");
         writer.writeAttribute("class", "yui-navset", "class");
         Util.renderPassThruAttributes(writer, component);
 
@@ -172,7 +154,7 @@ public class YuiTabViewRenderer extends Renderer {
         writer.startElement("script", component);
         writer.writeAttribute("type", "text/javascript", "type");
         String jsName = "tabView_" + YuiRendererHelper.getJavascriptVar(component);
-        writer.write ("var " + jsName + " = new YAHOO.widget.TabView('" + component.getClientId(context) + "');");
+        writer.write ("var " + jsName + " = new YAHOO.widget.TabView('tabView_" + component.getClientId(context) + "');");
         //writer.writeText(text, property)
         writer.endElement("script");
     }

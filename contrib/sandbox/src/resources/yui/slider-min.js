@@ -33,4 +33,4 @@ this._isHoriz=(iLeft||iRight);this._isVert=(iUp||iDown);this._isRegion=(this._is
 var val=(this._isHoriz)?this.getXValue():this.getYValue();return val;},getXValue:function(){if(!this.available){return 0;}
 var newOffset=this.getOffsetFromParent();return(newOffset[0]-this.startOffset[0]);},getYValue:function(){if(!this.available){return 0;}
 var newOffset=this.getOffsetFromParent();return(newOffset[1]-this.startOffset[1]);},toString:function(){return"SliderThumb "+this.id;},onChange:function(x,y){}});if("undefined"==typeof YAHOO.util.Anim){YAHOO.widget.Slider.ANIM_AVAIL=false;}
-YAHOO.register("slider",YAHOO.widget.Slider,{version:"2.2.0",build:"125"});
+YAHOO.register("slider",YAHOO.widget.Slider,{version:"2.2.0",build:"127"});
