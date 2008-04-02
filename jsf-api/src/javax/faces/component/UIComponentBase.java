@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.147 2007/01/30 22:00:50 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.148 2007/02/12 20:18:46 jdlee Exp $
  */
 
 /*
@@ -756,7 +756,13 @@ public abstract class UIComponentBase extends UIComponent {
         }
         String rendererType = getRendererType();
         if (rendererType != null) {
-            getRenderer(context).decode(context, this);
+            Renderer renderer = this.getRenderer(context);
+            if (renderer != null) {
+                renderer.decode(context, this);
+            }else {
+                // TODO: i18n
+                log.fine("Can't get Renderer for type " + rendererType);
+            }
         }
     }
 
