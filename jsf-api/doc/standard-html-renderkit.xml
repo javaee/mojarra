@@ -17337,7 +17337,6 @@
 
       <renderer-extension>
         <renders-children>true</renders-children>
-        <exclude-attributes>onclick</exclude-attributes>
         <body-tag>true</body-tag>
       </renderer-extension>
     </renderer>
