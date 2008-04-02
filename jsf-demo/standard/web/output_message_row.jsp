@@ -16,7 +16,7 @@
              <td>
 
               <h:output_message id="userMsg" value="Param 0: {0} Param 1: {1} Param 2: {2} " >
-                  <f:parameter valueRef="LoginBean.date"/>
+                  <f:parameter value="#{LoginBean.date}"/>
                   <f:parameter  value="param 2"/>
                   <f:parameter  value="param 3"/>
               </h:output_message>
@@ -39,8 +39,8 @@
              <td>
 
               <h:output_message id="userMsg1" 
-                       key="outputMessageKey" bundle="standardBundle">
-                  <f:parameter valueRef="LoginBean.date"/>
+	          value="#{standardBundle.outputMessageKey}">
+                  <f:parameter value="#{LoginBean.date}"/>
                   <f:parameter value="param 5"/>
                   <f:parameter value="param 6"/>
               </h:output_message>

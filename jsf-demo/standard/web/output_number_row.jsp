@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber1" valueRef="LoginBean.floater"/>
+               <h:output_text id="outputNumber1" value="#{LoginBean.floater}"/>
 
              </td>
              <td>
@@ -38,7 +38,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber2" valueRef="LoginBean.floater">
+               <h:output_text id="outputNumber2" value="#{LoginBean.floater}">
                    <f:convert_number type="currency"/>
                </h:output_text>
              </td>
@@ -64,7 +64,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber3" valueRef="LoginBean.floater">
+               <h:output_text id="outputNumber3" value="#{LoginBean.floater}">
                    <f:convert_number type="percent"/>
                </h:output_text>
 
@@ -91,7 +91,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber4" valueRef="LoginBean.floater">
+               <h:output_text id="outputNumber4" value="#{LoginBean.floater}">
                    <f:convert_number pattern="####"/>
                </h:output_text>
              </td>
@@ -117,7 +117,7 @@
 
              <td>
 
-               <h:output_text id="outputNumber5" valueRef="LoginBean.char"/>
+               <h:output_text id="outputNumber5" value="#{LoginBean.char}"/>
              </td>
 
               <td>

@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:output_text id="outputDatetime2" valueRef="LoginBean.date">
+               <h:output_text id="outputDatetime2" value="#{LoginBean.date}">
                    <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
               </h:output_text>
 
@@ -38,7 +38,7 @@
                      value="output_datetime dateStyle=short timeStyle=full"/>
              <td>
 
-               <h:output_text id="outputDatetime3" valueRef="LoginBean.date">
+               <h:output_text id="outputDatetime3" value="#{LoginBean.date}">
                    <f:convert_datetime type="both" timeStyle="full" dateStyle="short"/>
                </h:output_text>
 

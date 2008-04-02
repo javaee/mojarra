@@ -16,7 +16,7 @@
              <td>
 
                <h:output_text id="outputText1" 
-                       valueRef="LoginBean.userName"/>
+                       value="#{LoginBean.userName}"/>
 
 
              </td>
@@ -37,7 +37,7 @@
 
                <h:output_text id="outputText0" 
                        styleClass="output_text0"
-                       valueRef="LoginBean.userName"/>
+                       value="#{LoginBean.userName}"/>
 
 
              </td>
