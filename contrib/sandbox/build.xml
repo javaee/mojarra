@@ -198,7 +198,7 @@
         </if>
     </target>
 
-    <target name="compile" depends="prepare" description="Just compile the classes">
+    <target name="compile" depends="prepare,update" description="Just compile the classes">
         <if>
             <equals arg1="${container.name}" arg2="glassfish"/>
             <then>
@@ -330,6 +330,8 @@
         <antcall target="docs"/>
         
         <!-- Create the binary distribution -->
+        <delete file="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip"/>
+        <delete file="${dist.dir}/jsf-ri-sandbox-src-${sb.impl.version}.zip"/>
         <zip destfile="${dist.dir}/jsf-ri-sandbox-${sb.impl.version}.zip">
             <zipfileset dir="${build.dir}"
                         includes="lib/**,tlddocs/**"
@@ -417,7 +419,7 @@
                             extension-name=""/>       
     </target>
 
-    <target name="nightly" description="update nightly build">
+    <target name="nightly" depends="dist" description="Upload nightly build to java.net">
         <if>
             <available file="${tasks.home}"/>
             <then>
