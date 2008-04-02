@@ -1853,9 +1853,14 @@
       Render the children of the <code>UIPanel</code> component inside
       of a "tbody" element.  Render the children based on the value of
       the "columns" attribute, creating a new row each time a "columns"
-      worth of children have been rendered.  Each child is rendered
-      inside of a "td" element.  If a child has "rendered==false" it is
-      not rendered, and the column counter must not be incremented.]]>
+      worth of children have been rendered.  For the start of each row,
+      render a "tr" element.  Output the value of the "rowClasses" per
+      the attribute description below.  For each child, output a "td" 
+      element, attaching the value of the "columnClasses" attribute per
+      the attribute description below.  Recursively encode each child.
+      Close out the "td" element.  When done with the row, close out the 
+      "tr" element.  If a child has "rendered==false" it is not rendered, 
+      and the column counter must not be incremented.]]>
             </description>
             <component-family>javax.faces.Panel</component-family>
             <renderer-type>javax.faces.Grid</renderer-type>
