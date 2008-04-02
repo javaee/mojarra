@@ -1,0 +1,23 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>subview04</title>
+</head>
+<body>
+[A]Begin test &lt;c:include&gt; with subview tag in including pagebar01subview04bar02End test &lt;c:include&gt; with subview tag in including page
+
+
+
+
+</body>
+</html>
+

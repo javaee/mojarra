@@ -1,0 +1,38 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+
+
+
+
+<html>
+<head>
+<title>subview05</title>
+</head>
+<body>
+Begin test jsp:include with subview and iterator tag in included page
+<br>
+
+  <br>
+  
+    Array[0]: 
+    This component has no ID <br>
+  
+    Array[1]: 
+    This component has no ID <br>
+  
+    Array[2]: 
+    This component has no ID <br>
+  
+    Array[3]: 
+    This component has no ID <br>
+  
+
+Text from subview05.jspEnd test jsp:include with subview and iterator tag in included page
+
+</body>
+</html>
+

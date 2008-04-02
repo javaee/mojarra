@@ -1,0 +1,2 @@
+# Uncomment the following property to build for deployment in JWSDP
+#jwsdp.deploy=true
