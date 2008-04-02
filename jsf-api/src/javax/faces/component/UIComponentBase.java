@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.129 2006/02/24 18:05:04 edburns Exp $
+ * $Id: UIComponentBase.java,v 1.130 2006/03/07 18:28:09 edburns Exp $
  */
 
 /*
@@ -85,7 +85,8 @@ public abstract class UIComponentBase extends UIComponent {
 
     // -------------------------------------------------------------- Attributes
 
-    private static Logger log = Logger.getLogger("javax.faces.component");
+    private static Logger log = Logger.getLogger("javax.faces.component", 
+            "javax.faces.LogStrings");
 
 
     /**
@@ -98,13 +99,14 @@ public abstract class UIComponentBase extends UIComponent {
      * container's class loader that is a parent to webapp class loaders,
      * references to the classes will eventually expire.</p>
      */
-    private static WeakHashMap descriptors = new WeakHashMap();
- 
+    private static WeakHashMap<String,Map<String,PropertyDescriptor>> 
+            descriptors = new WeakHashMap<String,Map<String,PropertyDescriptor>>();
+
     /**
      * Reference to the map of <code>PropertyDescriptor</code>s for this class
      * in the <code>descriptors<code> <code>Map<code>.
      */
-    private Map pdMap = null; 
+    private Map<String,PropertyDescriptor> pdMap = null; 
 
     /**
      * <p>An empty argument list to be passed to reflection methods.</p>
@@ -112,20 +114,38 @@ public abstract class UIComponentBase extends UIComponent {
     private static Object empty[] = new Object[0];
 
     public UIComponentBase() {
-        synchronized(descriptors) {
-            pdMap = (Map) descriptors.get(this.getClass());
-            if (pdMap != null) {
-                return;
-            } 
+        populateDescriptorsMapIfNecessary();
+    }
+
+    private void populateDescriptorsMapIfNecessary() {
+        String className = this.getClass().getName();
+        pdMap = descriptors.get(className);
+        if (null != pdMap) {
+            return;
+        }
+        if (null == pdMap) {
             // load the property descriptors for this class.
             PropertyDescriptor pd[] = getPropertyDescriptors();
             if (pd != null) {
-                pdMap = new HashMap(pd.length);
+                pdMap = new HashMap<String, PropertyDescriptor>(pd.length);
                 for (int i = 0; i < pd.length; i++) {
                     pdMap.put(pd[i].getName(), pd[i]);    
                 }
-                descriptors.put(this.getClass(),pdMap);
+                if (log.isLoggable(Level.FINE)) {
+                    log.log(Level.FINE, "fine.component.populating_descriptor_map",
+                            new Object[] { className, 
+                            Thread.currentThread().getName() });
+                }
+
+                // Check again
+                Map<String,PropertyDescriptor> reCheckMap = 
+                        descriptors.get(className);
+                if (null != reCheckMap) {
+                    return;
+                }
+                descriptors.put(className,pdMap);
             }
+            
         }
     }
 

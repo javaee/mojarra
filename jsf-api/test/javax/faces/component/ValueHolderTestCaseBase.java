@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolderTestCaseBase.java,v 1.11 2005/08/22 22:08:21 ofung Exp $
+ * $Id: ValueHolderTestCaseBase.java,v 1.12 2006/03/07 18:28:10 edburns Exp $
  */
 
 /*
@@ -30,16 +30,15 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
+import java.beans.PropertyDescriptor;
+import java.util.WeakHashMap;
+import java.lang.reflect.Field;
+import java.util.Map;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.LongConverter;
 import javax.faces.convert.NumberConverter;
 import javax.faces.convert.ShortConverter;
-import javax.faces.TestUtil;
-import junit.framework.TestCase;
+import javax.faces.component.html.HtmlInputText;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -92,38 +91,125 @@ public abstract class ValueHolderTestCaseBase extends UIComponentBaseTestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
+    public void testAttributesTransparencyNonDeterministic() throws Exception {
+	final int numThreads = 30;
+	final Boolean outcomes[] = new Boolean[numThreads];
+	Runnable runnables[] = new Runnable[numThreads];
+        int i = 0;
+        
+        for (i = 0; i < outcomes.length; i++) {
+            outcomes[i] = null;
+        }
 
-    // Test attribute-property transparency
+	for (i = 0; i < runnables.length; i++) {
+	    runnables[i] = new Runnable() {
+                public void run() {
+                    int threadNum = 0;
+                    try {
+                        threadNum = Integer.valueOf(Thread.currentThread().
+                                getName()).intValue();
+                    } catch (NumberFormatException ex) {
+                        fail("Expected thread name to be an integer");
+                    }
+                    // Even threadNums use HtmlInputText, odd use this component
+                    boolean isEven = (threadNum % 2) == 0;
+                    ValueHolder vh = null;
+                    UIComponent newComp = null;
+                    if (isEven) {
+                        newComp = new HtmlInputText();
+                        vh = (ValueHolder) newComp;
+                    }
+                    else {
+                        try {
+                            newComp = ValueHolderTestCaseBase.this.component.getClass().newInstance();
+                            vh = (ValueHolder) newComp;
+                                    
+                        } catch (IllegalAccessException ex) {
+                            fail("Can't instantiate class of " + ValueHolderTestCaseBase.this.component.getClass().getName());
+                        } catch (InstantiationException ex) {
+                            fail("Can't instantiate class of " + ValueHolderTestCaseBase.this.component.getClass().getName());
+                        }
+                    }
+                    try {
+                        boolean result = doTestAttributesTransparency(vh, newComp);
+                        outcomes[threadNum] = new Boolean(result);
+                    }
+                    catch (Throwable e) {
+                        outcomes[threadNum] = new Boolean(false);
+                    }
+                }
+            };
+	}
+        clearDescriptors();
+        Thread thread = null;
+        for (i = 0; i < runnables.length; i++) {
+            thread = new Thread(runnables[i], "" + i);
+            thread.start();
+        }
+        
+        // Keep polling the outcomes array until there are no nulls.
+        boolean foundNull = false;
+        while (!foundNull) {
+            for (i = 0; i < outcomes.length; i++) {
+                if (null != outcomes[i]) {
+                    foundNull = true;
+                }
+            }
+            Thread.currentThread().sleep(500);
+        }
+		    
+        for (i = 0; i < outcomes.length; i++) {
+            if (!outcomes[i].booleanValue()) {
+                fail("Thread " + i + " failed");
+            }
+        }
+
+    }
+    
+    private void clearDescriptors() throws Exception {
+        Field descriptorsField = UIComponentBase.class.getDeclaredField("descriptors");
+        descriptorsField.setAccessible(true);
+        WeakHashMap<String,Map<String,PropertyDescriptor>> descriptors = 
+                (WeakHashMap) descriptorsField.get(null);
+        descriptors.clear();        
+    }
+
     public void testAttributesTransparency() {
-
         super.testAttributesTransparency();
         ValueHolder vh = (ValueHolder) component;
+        doTestAttributesTransparency(vh, component);
+    }
+
+    // Test attribute-property transparency
+    public boolean doTestAttributesTransparency(ValueHolder vh, UIComponent newComp) {
+
 
         assertEquals(vh.getValue(),
-                     (String) component.getAttributes().get("value"));
+                     (String) newComp.getAttributes().get("value"));
         vh.setValue("foo");
-        assertEquals("foo", (String) component.getAttributes().get("value"));
+        assertEquals("foo", (String) newComp.getAttributes().get("value"));
         vh.setValue(null);
-        assertNull((String) component.getAttributes().get("value"));
-        component.getAttributes().put("value", "bar");
+        assertNull((String) newComp.getAttributes().get("value"));
+        newComp.getAttributes().put("value", "bar");
         assertEquals("bar", vh.getValue());
-        component.getAttributes().put("value", null);
+        newComp.getAttributes().put("value", null);
         assertNull(vh.getValue());
 
         assertEquals(vh.getConverter(),
-                     (String) component.getAttributes().get("converter"));
+                     (String) newComp.getAttributes().get("converter"));
         vh.setConverter(new LongConverter());
-        assertNotNull((Converter) component.getAttributes().get("converter"));
-        assertTrue(component.getAttributes().get("converter")
+        assertNotNull((Converter) newComp.getAttributes().get("converter"));
+        assertTrue(newComp.getAttributes().get("converter")
                    instanceof LongConverter);
         vh.setConverter(null);
-        assertNull(component.getAttributes().get("converter"));
-        component.getAttributes().put("converter", new ShortConverter());
+        assertNull(newComp.getAttributes().get("converter"));
+        newComp.getAttributes().put("converter", new ShortConverter());
         assertNotNull(vh.getConverter());
         assertTrue(vh.getConverter() instanceof ShortConverter);
-        component.getAttributes().put("converter", null);
+        newComp.getAttributes().put("converter", null);
         assertNull(vh.getConverter());
 
+        return true;
     }
 
 
