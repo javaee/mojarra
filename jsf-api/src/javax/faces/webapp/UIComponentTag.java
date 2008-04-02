@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.1 2003/05/02 05:04:55 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.2 2003/05/02 05:27:13 craigmcc Exp $
  */
 
 /*
@@ -248,7 +248,9 @@ public abstract class UIComponentTag implements Tag {
      * <li>Push this component onto the stack of components corresponding to
      *     nested component tags for the current response, creating the stack
      *     if necessary.</li>
-     * <li>Call the <code>encodeBegin()</code> method of the component.</li>
+     * <li>Call the <code>encodeBegin()</code> method of the component,
+     *     unless rendering is suppressed or our component renders its
+     *     own children.</li>
      * </ul>
      *
      * <p>The flag value to be returned is acquired by calling the
@@ -277,7 +279,7 @@ public abstract class UIComponentTag implements Tag {
 
         // Render the beginning of the component associated with this tag
         try {
-            if (!isSuppressed()) {
+            if (!isSuppressed() && !component.getRendersChildren()) {
                 encodeBegin();
             }
         } catch (IOException e) {
@@ -297,6 +299,9 @@ public abstract class UIComponentTag implements Tag {
      * with this tag (via the <code>id</code> attribute), by following these
      * steps.</p>
      * <ul>
+     * <li>If the <code>rendersChildren</code> property of this component is
+     *     <code>true</code>, call the <code>encodeBegin()</code> method
+     *     of this component.
      * <li>If the <code>rendersChildren</code> property of this component is
      *     <code>true</code>, call the <code>encodeChildren()</code> method
      *     of the component.</li>
@@ -319,6 +324,7 @@ public abstract class UIComponentTag implements Tag {
         try {
             if (!isSuppressed()) {
                 if (component.getRendersChildren()) {
+                    encodeBegin();
                     encodeChildren();
                 }
                 encodeEnd();
