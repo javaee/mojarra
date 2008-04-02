@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
+ * $Id: NumberRenderer.java,v 1.11 2002/09/17 20:07:57 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.text.ParseException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
+ * @version $Id: NumberRenderer.java,v 1.11 2002/09/17 20:07:57 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -187,51 +187,19 @@ public class NumberRenderer extends HtmlBasicRenderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
+    protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
                 
-        String currentValue = null;
         boolean isInput = UIInput.TYPE == component.getComponentType();
-       
-        FormatPool formatPool = (FormatPool)
-	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
-	Assert.assert_it(null != formatPool);
+        String styleClass = null;
         
-        if (context == null || component == null) {
-            throw new NullPointerException(
-            Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-       
-	Object curValue = null;
-	String styleClass = null;
-
-	if (null != (curValue = component.currentValue(context))) {
-	    if (curValue instanceof Number) {
-		currentValue = formatPool.numberFormat_format(context, component,
-	                (Number) curValue);
-	    }
-	    else  {
-                // if it is "Character" type, just convert it to string.
-		currentValue = curValue.toString();
-	    }
-	}
-	else {
-	    currentValue = "";
-	}
-
-        ResponseWriter writer = null;
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-
-	if ((null != (styleClass = (String) 
+        if ((null != (styleClass = (String) 
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    writer.write("<span class=\"" + styleClass + "\">");
+            buffer.append("<span class=\"" + styleClass + "\">");
 	}
         if (isInput) {
-	    StringBuffer buffer = new StringBuffer();
-	    
 	    buffer.append("<input type=\"text\"");
 	    buffer.append(" name=\"");
 	    buffer.append(component.getCompoundId());
@@ -252,13 +220,32 @@ public class NumberRenderer extends HtmlBasicRenderer {
 	    buffer.append(">");
 	    // overwrite currentValue
 	    currentValue = buffer.toString();
-	}
-
-	writer.write(currentValue);                 
-	if (null != styleClass) {
-	    writer.write("</span>");
+	}else {
+            buffer.append(currentValue);
+        }  
+        if (null != styleClass) {
+	    buffer.append("</span>");
 	}
     }
+    
+    protected String getFormattedValue(FacesContext context, UIComponent component,
+            Object currentObj ) {
+        String currentValue = null;
+        // if we hit this method, then value is not string type.
+        FormatPool formatPool = (FormatPool)
+	    context.getServletContext().getAttribute(RIConstants.FORMAT_POOL);
+	Assert.assert_it(null != formatPool);      
+        
+        if ( currentObj instanceof Number) {
+            currentValue = formatPool.numberFormat_format(context, component,
+	                (Number) currentObj);
+        } else {
+            // if currentObj is of type Character
+            currentValue = currentObj.toString();
+        }    
+        return currentValue;
+    }            
+    
     
     // The testcase for this class is TestRenderers_2.java 
 

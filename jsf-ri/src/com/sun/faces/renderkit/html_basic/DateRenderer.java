@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
+ * $Id: DateRenderer.java,v 1.11 2002/09/17 20:07:57 jvisvanathan Exp $
  */
 
 /*
@@ -47,7 +47,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
+ * @version $Id: DateRenderer.java,v 1.11 2002/09/17 20:07:57 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -182,44 +182,20 @@ public class DateRenderer extends HtmlBasicRenderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
+     protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+                
 	boolean isInput = UIInput.TYPE == component.getComponentType();
-        String currentValue = null;
-	String styleClass = null;
-        
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-       
-	Object curValue = null;
-
-	if (null != (curValue = component.currentValue(context))) {
-	    if (curValue instanceof Date) {
-		currentValue = formatDate(context, component, (Date) curValue);
-	    }
-	    else if (curValue instanceof String) {
-		currentValue = (String) curValue;
-	    }
-	}
-	else {
-	    currentValue = "";
-	}
-        ResponseWriter writer = null;
-
-	writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-
+        String styleClass = null;
+ 
 	if ((null != (styleClass = (String) 
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    writer.write("<span class=\"" + styleClass + "\">");
+	    buffer.append("<span class=\"" + styleClass + "\">");
 	}
         
 	if (isInput) {
-	    StringBuffer buffer = new StringBuffer();
-	    
 	    buffer.append("<input type=\"text\"");
 	    buffer.append(" name=\"");
 	    buffer.append(component.getCompoundId());
@@ -228,25 +204,32 @@ public class DateRenderer extends HtmlBasicRenderer {
 	    buffer.append(" id=\"");
 	    buffer.append(component.getComponentId());
 	    buffer.append("\"");
-	    
 	    // render default text specified
 	    if ( currentValue != null ) {
 		buffer.append(" value=\"");
 		buffer.append(currentValue);
 		buffer.append("\"");
-	    }
-	    buffer.append(Util.renderPassthruAttributes(context, component));
-	    buffer.append(Util.renderBooleanPassthruAttributes(context, component));
-	    buffer.append(">");
-	    // overwrite currentValue
-	    currentValue = buffer.toString();
+            }    
+            buffer.append(Util.renderPassthruAttributes(context, component));
+            buffer.append(Util.renderBooleanPassthruAttributes(context, 
+                        component));
+            buffer.append(">");    
+	} else {
+            buffer.append(currentValue);
+        }  
+        if (null != styleClass) {
+	    buffer.append("</span>");
 	}
-	writer.write(currentValue);
-
-	if (null != styleClass) {
-	    writer.write("</span>");
-	}
-
+    }
+    
+   protected String getFormattedValue(FacesContext context, UIComponent component,
+            Object currentObj ) {
+       String currentValue = null;         
+       // if we hit this method, then value is not string type.
+       if (currentObj instanceof Date) {
+           currentValue = formatDate(context, component, (Date) currentObj);
+       }   
+       return currentValue;
     }
 		   
     

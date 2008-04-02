@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.10 2002/09/13 23:43:46 visvan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.11 2002/09/17 20:07:57 jvisvanathan Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ import javax.faces.render.Renderer;
 import javax.faces.context.Message;
 import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -270,11 +271,73 @@ public abstract class HtmlBasicRenderer extends Renderer {
     
     /**
      * Simply returns the value. This method needs to be overridden by
-     * renderers that needs to peform type conversion
+     * renderers that need to peform type conversion.
      */
     public Object getConvertedValue(FacesContext context, UIComponent component,
             String newValue) throws IOException {
        return newValue;            
+    }         
+    
+    public void encodeEnd(FacesContext context, UIComponent component) 
+            throws IOException {
+                
+        String currentValue = null;
+	StringBuffer buffer = null;
+        ResponseWriter writer = null;
+	String styleClass = null;
+        
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+          
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+        
+        currentValue = getCurrentValue(context, component);
+        // PENDING (visvan) here is where we'd hook in a buffer pooling scheme
+        buffer = new StringBuffer(1000);
+        getEndTextToRender(context, component, currentValue, buffer);
+        writer.write(buffer.toString());
+    }
+    
+    /**
+     * Gets value to be rendered and formats it if required. Sets to empty
+     * string if value is null.
+     */
+    protected String getCurrentValue(FacesContext context,UIComponent component) {
+        
+        String currentValue = null;
+        Object currentObj = component.currentValue(context);
+        if ( currentObj != null) {
+            if (currentObj instanceof String) {
+                currentValue = (String)currentObj;
+            } else {
+                currentValue = getFormattedValue(context, component, currentObj);
+            }
+        } 
+        if (currentValue == null) {
+            currentValue = "";
+        }
+        return currentValue;
+    }    
+    
+    /**
+     * Renderers override this method to write appropriate HTML content into
+     * the buffer.
+     */
+    protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+        return;
+    }
+    
+    /**
+     * Renderers override this method in case output value needs to be
+     * formatted
+     */
+    protected String getFormattedValue(FacesContext context, UIComponent component,
+            Object currentValue ) {
+        return currentValue.toString();
     }            
 
 } // end of class HtmlBasicRenderer

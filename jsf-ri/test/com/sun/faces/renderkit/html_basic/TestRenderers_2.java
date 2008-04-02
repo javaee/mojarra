@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.27 2002/09/13 19:23:13 visvan Exp $
+ * $Id: TestRenderers_2.java,v 1.28 2002/09/17 20:08:00 jvisvanathan Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.27 2002/09/13 19:23:13 visvan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.28 2002/09/17 20:08:00 jvisvanathan Exp $
  * 
  *
  */
@@ -196,7 +196,7 @@ public class TestRenderers_2 extends JspFacesTestCase
             testOutputErrorsRenderer(root);
 
             testOutputMessageRenderer(root);
-            
+            testInputNumberRendererWithCharacter(root);
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
             t.printStackTrace();
@@ -976,5 +976,18 @@ public class TestRenderers_2 extends JspFacesTestCase
 	assertTrue(!output.isValid());
 	
     }
+    
+    public void testInputNumberRendererWithCharacter(UIComponent root) 
+            throws IOException {
+        System.out.println("Testing NumberRenderer With Character input ");
+	UIInput input = new UIInput();
+        char testchar='9';
+        input.setValue(new Character(testchar));
+        input.setComponentId("my_character");
+	
+        NumberRenderer numberRenderer = new NumberRenderer();
+	String expectedStr = numberRenderer.getCurrentValue(getFacesContext(),input);
+        assertTrue(expectedStr.equals("9"));
+    } 
 
 } // end of class TestRenderers2_

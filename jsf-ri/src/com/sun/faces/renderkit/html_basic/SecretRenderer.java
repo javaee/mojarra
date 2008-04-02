@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.33 2002/09/13 23:43:47 visvan Exp $
+ * $Id: SecretRenderer.java,v 1.34 2002/09/17 20:07:58 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SecretRenderer.java,v 1.33 2002/09/13 23:43:47 visvan Exp $
+ * @version $Id: SecretRenderer.java,v 1.34 2002/09/17 20:07:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -99,35 +99,10 @@ public class SecretRenderer extends HtmlBasicRenderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
-        String currentValue = null;
-	String inputClass = null;
-        StringBuffer buffer = null;
-        ResponseWriter writer = null;
-
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        Object currentObj = component.currentValue(context);
-        if (currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String)currentObj;
-            } else {
-                currentValue = currentObj.toString();
-            }
-        }
-
-        if (currentValue == null) {
-            currentValue = "";
-        }
-
-        buffer = new StringBuffer();
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-
-
+   protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+        String inputClass = null;
+        
         String redisplay = (String)component.getAttribute("redisplay");
         if (redisplay == null || !redisplay.equals("true")) {
             currentValue = "";
@@ -152,7 +127,6 @@ public class SecretRenderer extends HtmlBasicRenderer {
 	}
 	
         buffer.append(">");         
-        writer.write(buffer.toString());
     }
 
 } // end of class SecretRenderer

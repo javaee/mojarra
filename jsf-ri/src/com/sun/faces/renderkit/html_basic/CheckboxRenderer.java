@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.37 2002/09/13 23:43:46 visvan Exp $
+ * $Id: CheckboxRenderer.java,v 1.38 2002/09/17 20:07:57 jvisvanathan Exp $
  *
  */
 
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.37 2002/09/13 23:43:46 visvan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.38 2002/09/17 20:07:57 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -122,43 +122,27 @@ public class CheckboxRenderer extends HtmlBasicRenderer {
         }
 
     }
-
-    public void encodeEnd(FacesContext context, UIComponent component) 
-        throws IOException {
-       
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        Boolean value = (Boolean) component.currentValue(context);
-        if (value == null) {
-            value = Boolean.FALSE;
-        }
-      
-        StringBuffer buffer = new StringBuffer();
+    
+    protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+ 
 	String selectbooleanClass = null;
         buffer.append("<input type=\"checkbox\" ");
         buffer.append(" name=\"");
         buffer.append(component.getCompoundId());
         buffer.append("\"");
 
-        UISelectBoolean boolComp = (UISelectBoolean)component;
-        if (value.booleanValue()) {
+        if (currentValue.equals("true")) {
             buffer.append(" checked ");
         }
-        buffer.append(Util.renderPassthruAttributes(context, component));
-	buffer.append(Util.renderBooleanPassthruAttributes(context, component));
-	if (null != (selectbooleanClass = (String) 
+        if (null != (selectbooleanClass = (String) 
 		     component.getAttribute("selectbooleanClass"))) {
 	    buffer.append(" class=\"" + selectbooleanClass + "\" ");
 	}
-
-        buffer.append(">");
-        
-        ResponseWriter writer = null;
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-	writer.write(buffer.toString());
+        buffer.append(Util.renderPassthruAttributes(context, component));
+        buffer.append(Util.renderBooleanPassthruAttributes(context, 
+                component));
+        buffer.append(">");    
     }
 
 } // end of class CheckboxRenderer

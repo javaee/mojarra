@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.34 2002/09/13 23:43:46 visvan Exp $
+ * $Id: RadioRenderer.java,v 1.35 2002/09/17 20:07:57 jvisvanathan Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RadioRenderer.java,v 1.34 2002/09/13 23:43:46 visvan Exp $
+ * @version $Id: RadioRenderer.java,v 1.35 2002/09/17 20:07:57 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -111,9 +111,9 @@ public class RadioRenderer extends HtmlBasicRenderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) throws IOException 
-    {
-        String currentValue = null;
+   protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+       
         UISelectOne uiSelectOne = null;
 	String alignStr = null;
 	String borderStr = null;
@@ -121,22 +121,6 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	boolean alignVertical = false;
 	int border = 0;
 
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        
-        Object currentObj = component.currentValue(context);
-        if ( currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String)currentObj;
-            } else {
-                currentValue = currentObj.toString();
-            }
-        }
-        if (currentValue == null) {
-            currentValue = "";
-        }
-      
         // cast component to UISelectOne.
         if ( supportsComponentType(component)) {
             uiSelectOne = (UISelectOne) component;
@@ -149,8 +133,7 @@ public class RadioRenderer extends HtmlBasicRenderer {
             return;
         }
         
-        StringBuffer buffer = new StringBuffer();
-	if (null != (alignStr = (String) uiSelectOne.getAttribute("layout"))) {
+        if (null != (alignStr = (String) uiSelectOne.getAttribute("layout"))) {
 	    alignVertical = alignStr.equalsIgnoreCase("PAGE_DIRECTION") ? 
 		true : false;
 	}
@@ -214,11 +197,6 @@ public class RadioRenderer extends HtmlBasicRenderer {
 	if (null != selectoneClass) {
 	    buffer.append("</span>");
 	}
-        
-        ResponseWriter writer = null;
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-	writer.write(buffer.toString());
     }
 
 } // end of class RadioRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.35 2002/09/13 23:43:47 visvan Exp $
+ * $Id: TextRenderer.java,v 1.36 2002/09/17 20:07:58 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TextRenderer.java,v 1.35 2002/09/13 23:43:47 visvan Exp $
+ * @version $Id: TextRenderer.java,v 1.36 2002/09/17 20:07:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,39 +107,15 @@ public class TextRenderer extends HtmlBasicRenderer {
         }
     }
 
-    public void encodeEnd(FacesContext context, UIComponent component) 
-            throws IOException {
-        String currentValue = null;
-	StringBuffer buffer = null;
-        ResponseWriter writer = null;
+   protected void getEndTextToRender(FacesContext context, UIComponent component,
+            String currentValue, StringBuffer buffer ) {
+        
 	String styleClass = null;
-        
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-       
-        Object currentObj = component.currentValue(context);
-        if ( currentObj != null) {
-            if (currentObj instanceof String) {
-                currentValue = (String)currentObj;
-            } else {
-                currentValue = currentObj.toString();
-            }
-        }
-
-        if (currentValue == null) {
-            currentValue = "";
-        }    
-
-	buffer = new StringBuffer();
-        writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
-        
-	if ((null != (styleClass = (String) 
+        if ((null != (styleClass = (String) 
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    writer.write("<span class=\"" + styleClass + "\">");
+	    buffer.append("<span class=\"" + styleClass + "\">");
 	}
         if (UIInput.TYPE == component.getComponentType()) {
             buffer.append("<input type=\"text\"");
@@ -157,7 +133,6 @@ public class TextRenderer extends HtmlBasicRenderer {
             buffer.append(Util.renderBooleanPassthruAttributes(context, 
                 component));
             buffer.append(">");            
-            writer.write(buffer.toString());
         } else if (UIOutput.TYPE == component.getComponentType()) {
             if (currentValue == null || currentValue == "") {
                 try {
@@ -169,11 +144,10 @@ public class TextRenderer extends HtmlBasicRenderer {
                     return;
                 }
             }
-
-	    writer.write(currentValue);
+            buffer.append(currentValue);
         }
 	if (null != styleClass) {
-	    writer.write("</span>");
+	    buffer.append("</span>");
 	}
 
     }
