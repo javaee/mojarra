@@ -25,13 +25,16 @@
 
 package guessNumber;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LongRangeValidator;
-import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import java.util.Random;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
 
 
 public class UserNumberBean {
@@ -202,6 +205,38 @@ public class UserNumberBean {
             return (Integer.parseInt(attributeValue.toString()));
         }
 
+    }
+
+    /**
+     * Holds value of property items.
+     */
+    private List items;
+
+    /**
+     * Getter for property items.
+     * @return Value of property items.
+     */
+    public List getItems() {
+        if (null == items) {
+            items = new ArrayList();
+            items.add(new Integer(1));
+            items.add(new Integer(2));
+        }
+
+        return this.items;
+    }
+
+    /**
+     * Setter for property items.
+     * @param items New value of property items.
+     */
+    public void setItems(List items) {
+
+        this.items = items;
+    }
+    
+    public void processValueChange(ValueChangeEvent e) throws AbortProcessingException {
+        System.out.println("value changed");
     }
 
 

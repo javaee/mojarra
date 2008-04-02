@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTagTestCase.java,v 1.7 2005/08/22 22:10:35 ofung Exp $
+ * $Id: ViewTagTestCase.java,v 1.8 2005/10/15 01:32:10 edburns Exp $
  */
 
 /*
@@ -124,5 +124,16 @@ public class ViewTagTestCase extends AbstractTestCase {
             "javax.faces.validator.RequiredValidator.FAILED");
         assertTrue(-1 != page.asText().indexOf("Erreur"));
 
+    }
+    
+    public void testReplaceViewRoot() throws Exception {
+        HtmlPage page;
+        HtmlAnchor link;
+        
+        page = getPage("/faces/replaceViewRoot.jsp");
+        link = page.getAnchorByName("examine");
+        page = (HtmlPage) link.click();
+        assertTrue(-1 != page.asText().indexOf("Replaced ViewRoot is com.sun.faces.systest.model.ViewRootExtension"));
+        
     }
 }

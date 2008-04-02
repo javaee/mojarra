@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.68 2005/08/26 15:26:58 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.69 2005/10/15 01:32:07 edburns Exp $
  */
 
 /*
@@ -116,10 +116,10 @@ public class ApplicationImpl extends Application {
     // These three maps store store "identifier" | "class name"
     // mappings.
     //
-    private Map<String,String> componentMap = null;
-    private Map<String,String> converterIdMap = null;
-    private Map<Class,String> converterTypeMap = null;
-    private Map<String,String> validatorMap = null;
+    private Map<String,Object> componentMap = null;
+    private Map<String,Object> converterIdMap = null;
+    private Map<Class,Object> converterTypeMap = null;
+    private Map<String,Object> validatorMap = null;
     private String messageBundle = null;
 
     private ArrayList<ELContextListener> elContextListeners = null;
@@ -132,10 +132,10 @@ public class ApplicationImpl extends Application {
     public ApplicationImpl() {
         super();
 	associate = new ApplicationAssociate(this);
-        componentMap = new HashMap<String,String>();
-        converterIdMap = new HashMap<String,String>();
-        converterTypeMap = new HashMap();
-        validatorMap = new HashMap();
+        componentMap = new HashMap<String,Object>();
+        converterIdMap = new HashMap<String,Object>();
+        converterTypeMap = new HashMap<Class,Object>();
+        validatorMap = new HashMap<String,Object>();
 
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created Application instance ");

@@ -47,6 +47,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
          <p />
 	 <h:message showSummary="true" showDetail="false" style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
 
+	 <p><h:selectOneMenu value="#{requstBean.userNumber}" 
+	                  valueChangeListener="#{requestBean.processValueChange}">
+	                  <f:selectItems value="#{requestBean.items" />
+	 </h:selectOneMenu>                 </p>
+	 
     </h:form>
     </f:view>
 

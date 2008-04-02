@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.60 2005/09/28 01:26:17 jayashri Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.61 2005/10/15 01:32:08 edburns Exp $ 
  */ 
 
 
@@ -65,7 +65,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.60 2005/09/28 01:26:17 jayashri Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.61 2005/10/15 01:32:08 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -314,7 +314,8 @@ public class ViewHandlerImpl extends ViewHandler {
             locale = context.getViewRoot().getLocale();
             renderKitId = context.getViewRoot().getRenderKitId();
         }
-        UIViewRoot result = new UIViewRoot();
+        UIViewRoot result = (UIViewRoot)
+                context.getApplication().createComponent(UIViewRoot.COMPONENT_TYPE);
         result.setViewId(viewId);
 
         if (logger.isLoggable(Level.FINE)) {

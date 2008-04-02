@@ -39,6 +39,18 @@
     </locale-config>
   </application>
 
+      <component>
+
+        <component-type>javax.faces.ViewRoot</component-type>
+        <component-class>guessNumber.ProcessingContextViewRoot</component-class>
+
+        <component-extension>
+            <component-family>javax.faces.ViewRoot</component-family>
+        </component-extension>
+
+    </component>
+
+  
   <navigation-rule>
     <description>
         The decision rule used by the NavigationHandler to
@@ -93,6 +105,26 @@
       <property-name>maximum</property-name>
       <property-class>int</property-class>
       <value>10</value>
+    </managed-property>
+
+  </managed-bean>
+  
+  <managed-bean>
+    <description>
+      The "backing file" bean that backs up the guessNumber webapp
+    </description>
+    <managed-bean-name>requestBean</managed-bean-name>
+    <managed-bean-class>guessNumber.UserNumberBean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>minimum</property-name>
+      <property-class>int</property-class>
+      <value>12</value>
+    </managed-property>
+    <managed-property>
+      <property-name>maximum</property-name>
+      <property-class>int</property-class>
+      <value>22</value>
     </managed-property>
 
   </managed-bean>

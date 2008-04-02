@@ -223,7 +223,7 @@
 
   </target>
 
-  <target name="libraries" depends="prepare" unless="jwsdp.deploy">
+  <target name="libraries" depends="prepare" if="build.standalone" unless="jwsdp.deploy">
     <!-- Copy required libraries -->
     <copy file="${commons-beanutils.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${commons-collections.jar}" todir="${build.home}/WEB-INF/lib"/>
@@ -356,7 +356,7 @@
   <target name="passthru" depends="compile"
    description="Convenience target to execute just one test.  Just change the nested traget attribute.">
 
-    <ant antfile="build-tests.xml" target="test.managed"/>
+    <ant antfile="build-tests.xml" target="test.jsp"/>
 
   </target>
 
