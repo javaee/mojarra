@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.18 2006/10/10 22:14:13 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.19 2006/11/04 00:17:52 rlubke Exp $
  */
 
 /*
@@ -103,18 +103,11 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
     protected void writeValue(UIComponent component, ResponseWriter writer)
           throws IOException {
 
+        Object v = getValue(component);
         String label = null;
-        if (component instanceof UICommand) {
-            Object value = ((UICommand) component).getValue();
-            if (value != null) {
-                label = value.toString();
-            }
-        } else if (component instanceof ValueHolder) {
-            Object value = ((ValueHolder) component).getValue();
-            if (value != null) {
-                label = value.toString();
-            }
-        }
+        if (v != null) {
+            label = v.toString();
+        }        
 
         if (label != null && label.length() != 0) {
             if (logger.isLoggable(Level.FINE)) {

@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.30 2006/09/01 17:30:54 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.31 2006/11/04 00:17:52 rlubke Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ import java.util.logging.Level;
 
 import com.sun.faces.renderkit.RenderKitUtils;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 
 /**
@@ -49,7 +50,7 @@ import com.sun.faces.util.MessageUtils;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.30 2006/09/01 17:30:54 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.31 2006/11/04 00:17:52 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -216,7 +217,11 @@ public class OutputLinkRenderer extends LinkRenderer {
 
     protected Object getValue(UIComponent component) {
 
-        return ((UIOutput) component).getValue();
+        if (Util.componentIsDisabled(component)) {
+            return null;
+        } else {
+            return ((UIOutput) component).getValue();
+        }
 
     }
 

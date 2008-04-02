@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.56 2006/09/01 17:30:53 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.57 2006/11/04 00:17:52 rlubke Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ package com.sun.faces.renderkit.html_basic;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
@@ -278,6 +279,13 @@ public class CommandLinkRenderer extends LinkRenderer {
     }
 
     // ------------------------------------------------------- Protected Methods
+
+
+    protected Object getValue(UIComponent component) {
+
+        return ((UICommand) component).getValue();       
+
+    }
 
 
     protected void renderAsActive(FacesContext context, UIComponent command)
