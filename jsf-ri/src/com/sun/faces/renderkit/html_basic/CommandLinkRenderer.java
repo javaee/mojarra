@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.29 2005/05/12 22:08:15 jayashri Exp $
+ * $Id: CommandLinkRenderer.java,v 1.30 2005/05/13 01:03:29 rogerk Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.NamingContainer;
+import javax.faces.component.html.HtmlCommandLink;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ResponseWriter;
@@ -140,7 +141,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             log.trace("Begin encoding component " + component.getId());
         }
 
-        UICommand command = (UICommand) component;
+        UICommand command = (UICommand)component;
 
         // suppress rendering if "rendered" property on the command is
         // false.
@@ -170,14 +171,31 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
 
         //make link act as if it's a button using javascript
         Param paramList[] = getParamList(context, command);
-        StringBuffer sb = new StringBuffer();
+
         writer.startElement("a", component);
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeAttribute("href", "#", "href");
         Util.renderPassThruAttributes(context, writer, component,
                                       new String[]{"onclick", "target"});
         Util.renderBooleanPassThruAttributes(writer, component);
-        sb = new StringBuffer();
+
+        // render onclick
+        String userOnclick = (String)command.getAttributes().get("onclick");
+        StringBuffer sb = new StringBuffer(128);
+        boolean userSpecifiedOnclick = (userOnclick != null && !"".equals(userOnclick));
+        
+        // if user specified their own onclick value, we are going to
+        // wrap their js and the injected js each in a function and
+        // execute them in a choose statement, if the user didn't specify
+        // an onclick, the original logic executes unaffected
+        if (userSpecifiedOnclick) {
+            sb.append("var a=function(){");
+            userOnclick = userOnclick.trim();
+            sb.append(userOnclick);
+            if (userOnclick.charAt(userOnclick.length()-1) != ';') sb.append(';');
+            sb.append("};var b=function(){");
+        }
+        
         // call the javascript function that clears the all the hidden field
         // parameters in the form.
         sb.append(CLEAR_HIDDEN_FIELD_FN_NAME + "_" + formClientId.replace(NamingContainer.SEPARATOR_CHAR, '_'));
@@ -225,6 +243,12 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         sb.append("].submit()");
 
         sb.append("; return false;");
+
+        // we need to finish wrapping the injected js then
+        if (userSpecifiedOnclick) {
+            sb.append("};return (a()==false) ? false : b();");
+        }
+
         writer.writeAttribute("onclick", sb.toString(), "onclick");
 
         //handle css style class
