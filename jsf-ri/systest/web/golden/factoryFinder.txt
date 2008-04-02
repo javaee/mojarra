@@ -9,8 +9,8 @@
   <body>
     <h1>Print out the names of the current Factories</h1>
 
-<form id="_id1" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=9F5D0333D14A581AA4BCC739ABE3902C" enctype="application/x-www-form-urlencoded">
-ApplicationFactoryWrapper FacesContextFactoryWrapper LifecycleFactoryWrapper RenderKitFactoryWrapper <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id2" /><input type="hidden" name="_id1" value="_id1" /></form>
+<form id="_id_id15" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=BB1958668B43924439AD5ABCFED3A3F6" enctype="application/x-www-form-urlencoded">
+ApplicationFactoryWrapper FacesContextFactoryWrapper LifecycleFactoryWrapper RenderKitFactoryWrapper <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id2" /><input type="hidden" name="_id_id15" value="_id_id15" /></form>
 
     <hr>
   </body>

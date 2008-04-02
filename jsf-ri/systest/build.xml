@@ -107,6 +107,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${junit.jar}"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
 
@@ -214,6 +215,7 @@
 
   <target name="compile" depends="libraries"
    description="Just compile the classes">
+
     <!-- Run javac through everything -->
     <javac  srcdir="${source.home}"
            destdir="${build.home}/WEB-INF/classes"
