@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.61 2003/09/24 23:16:28 horwat Exp $
+ * $Id: ButtonRenderer.java,v 1.62 2003/10/02 00:39:57 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.61 2003/09/24 23:16:28 horwat Exp $
+ * @version $Id: ButtonRenderer.java,v 1.62 2003/10/02 00:39:57 jvisvanathan Exp $
  *
  */
 
@@ -114,7 +114,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
             return;
         }
 
-	context.addFacesEvent(new ActionEvent(component));
+	component.queueEvent(new ActionEvent(component));
 
         return;
     }

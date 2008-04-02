@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.20 2003/09/26 21:56:07 rkitain Exp $
+ * $Id: ImageRenderer.java,v 1.21 2003/10/02 00:39:59 jvisvanathan Exp $
  */
 
 /*
@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.20 2003/09/26 21:56:07 rkitain Exp $
+ * @version $Id: ImageRenderer.java,v 1.21 2003/10/02 00:39:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -146,7 +146,7 @@ public class ImageRenderer extends HtmlBasicRenderer {
             sb.append(context.getExternalContext().getRequestContextPath());
         }
         sb.append(value);
-        return (context.getExternalContext().encodeURL(sb.toString()));
+        return (sb.toString());
     }
     
     // The testcase for this class is TestRenderers_2.java 

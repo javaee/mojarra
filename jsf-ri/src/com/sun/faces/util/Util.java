@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.93 2003/09/26 14:26:51 rkitain Exp $
+ * $Id: Util.java,v 1.94 2003/10/02 00:40:03 jvisvanathan Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.93 2003/09/26 14:26:51 rkitain Exp $
+ * @version $Id: Util.java,v 1.94 2003/10/02 00:40:03 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -599,7 +599,7 @@ private Util()
             } else if (kid instanceof UISelectItems && null != context) {
                 Object value = ((UISelectItems)kid).currentValue(context);
                 if (value instanceof SelectItem) {
-                    SelectItem item = (SelectItem) kid;
+                    SelectItem item = (SelectItem) value;
                     list.add(new SelectItemWrapper( kid, item));
                 } else if (value instanceof SelectItem[]) {
                     SelectItem items[] = (SelectItem[]) value;

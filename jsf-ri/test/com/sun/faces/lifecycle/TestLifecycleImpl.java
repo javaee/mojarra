@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.19 2003/09/25 21:03:00 jvisvanathan Exp $
+ * $Id: TestLifecycleImpl.java,v 1.20 2003/10/02 00:40:13 jvisvanathan Exp $
  */
 
 /*
@@ -23,9 +23,8 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIViewRootBase;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UIFormBase;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIForm;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -42,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.19 2003/09/25 21:03:00 jvisvanathan Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.20 2003/10/02 00:40:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -107,12 +106,12 @@ protected void initWebRequest(WebRequest theRequest)
 public void setUp() {
     RIConstants.IS_UNIT_TEST_MODE = true;
     super.setUp();
-    UIViewRoot root = new UIViewRootBase();
+    UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIFormBase();
+    UIFormBase basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInputBase();
+    UIInputBase userName = new UIInput();
     
     userName.setId("userName");
     root.getChildren().add(basicForm);

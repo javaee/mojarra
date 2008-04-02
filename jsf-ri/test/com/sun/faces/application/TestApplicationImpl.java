@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.9 2003/09/15 22:11:48 eburns Exp $
+ * $Id: TestApplicationImpl.java,v 1.10 2003/10/02 00:40:04 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,6 @@ import com.sun.faces.el.VariableResolverImpl;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
@@ -39,7 +38,7 @@ import com.sun.faces.TestComponent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.9 2003/09/15 22:11:48 eburns Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.10 2003/10/02 00:40:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo

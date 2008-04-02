@@ -1,5 +1,5 @@
 /*
- * $Id: TestPhase.java,v 1.8 2003/08/27 18:52:05 eburns Exp $
+ * $Id: TestPhase.java,v 1.9 2003/10/02 00:40:13 jvisvanathan Exp $
  */
 
 /*
@@ -24,9 +24,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UIViewRootBase;
 
 import java.util.Iterator;
 
@@ -46,7 +43,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPhase.java,v 1.8 2003/08/27 18:52:05 eburns Exp $
+ * @version $Id: TestPhase.java,v 1.9 2003/10/02 00:40:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,14 +110,14 @@ public void testExecute()
     // 2. Add components to tree
     //
     UIComponent root = getFacesContext().getViewRoot();
-    UIForm basicForm = new UIFormBase();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInput userName = new UIInputBase();
+    UIInput userName = new UIInput();
     userName.setId("userName");
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
     
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.getChildren().add(basicForm);
     page.setViewId("root");    
     getFacesContext().setViewRoot(page);

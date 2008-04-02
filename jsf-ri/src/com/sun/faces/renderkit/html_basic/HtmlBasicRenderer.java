@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.56 2003/09/24 23:16:36 horwat Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.57 2003/10/02 00:39:58 jvisvanathan Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.component.NamingContainer;
 import javax.faces.component.ValueHolder;
 import javax.faces.component.UIInput;
 import javax.faces.component.NamingContainer;
@@ -314,7 +315,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
     }
    
     public String getClientId(FacesContext context, UIComponent component){
-	String clientId = null;
+        // PENDING IMPLEMENTATION. This method needs to be replaced by
+        // the convertClientID() method below.
+        return null;
+/*	String clientId = null;
 	NamingContainer closestContainer = null;
 	UIComponent containerComponent = component;
 
@@ -349,14 +353,14 @@ public abstract class HtmlBasicRenderer extends Renderer {
             // If this is the root naming container, break
             if (null != containerComponent.getParent()) {
                 clientId = containerComponent.getClientId(context) +
-                    UIComponent.SEPARATOR_CHAR + clientId;
+                    NamingContainer.SEPARATOR_CHAR + clientId;
             }
         }
 
         if (null == clientId) {
 	    throw new NullPointerException();
 	}
-	return (clientId);
+	return (clientId); */
     }
 
     /**
@@ -428,5 +432,10 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     Util.CONVERSION_ERROR_MESSAGE_ID));
         }
     }
+    
+      public String convertClientId(FacesContext context, String clientId) {
+          // PENDING IMPLEMENTATION
+          return clientId;
+      }
 
 } // end of class HtmlBasicRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.17 2003/08/27 18:52:04 eburns Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.18 2003/10/02 00:40:12 jvisvanathan Exp $
  */
 
 /*
@@ -24,8 +24,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
 
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
@@ -36,7 +34,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.17 2003/08/27 18:52:04 eburns Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.18 2003/10/02 00:40:12 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -113,9 +111,9 @@ public void testCallback()
     // 2. Add components to tree
     //
     root = getFacesContext().getViewRoot();
-    UIForm basicForm = new UIFormBase();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInput userName = new UIInputBase();
+    UIInput userName = new UIInput();
     userName.setId("userName");
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);

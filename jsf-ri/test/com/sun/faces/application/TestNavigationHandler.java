@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.10 2003/09/08 20:13:14 rkitain Exp $
+ * $Id: TestNavigationHandler.java,v 1.11 2003/10/02 00:40:05 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,6 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIViewRootBase;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContext;
@@ -55,7 +54,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.10 2003/09/08 20:13:14 rkitain Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.11 2003/10/02 00:40:05 jvisvanathan Exp $
  * 
  */
 

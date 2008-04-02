@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.3 2003/09/09 20:45:57 rkitain Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.4 2003/10/02 00:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.component.base.UIInputBase;
+import javax.faces.component.UIInput;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -38,7 +38,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.3 2003/09/09 20:45:57 rkitain Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.4 2003/10/02 00:40:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,9 +119,9 @@ import org.mozilla.util.Assert;
     //
     public void testStartElement() {
 	try {
-            writer.startElement("input", new UIInputBase());
+            writer.startElement("input", new UIInput());
 	    assertTrue(sw.toString().equals("<input"));
-            writer.startElement("select", new UIInputBase());
+            writer.startElement("select", new UIInput());
 	    assertTrue(sw.toString().equals("<input><select"));
 	} catch (IOException e) {
             assertTrue(false);
@@ -134,7 +134,7 @@ import org.mozilla.util.Assert;
 	try {
 	    writer.endElement("input");
 	    assertTrue(sw.toString().equals("</input>"));
-	    writer.startElement("frame", new UIInputBase());
+	    writer.startElement("frame", new UIInput());
 	    writer.endElement("frame");
 	    assertTrue(sw.toString().equals("</input><frame />"));
 	    writer.endElement("frame");
@@ -154,7 +154,7 @@ import org.mozilla.util.Assert;
     //
     public void testWriteAttribute() {
 	try {
-	    writer.startElement("input", new UIInputBase());
+	    writer.startElement("input", new UIInput());
 	    writer.writeAttribute("type", "text", "type");
 	    assertTrue(sw.toString().equals("<input type="+"\"text\""));
 	    Boolean bool = new Boolean("true");
@@ -182,7 +182,7 @@ import org.mozilla.util.Assert;
     //
     public void testWriteURIAttribute() {
         try {
-            writer.startElement("input", new UIInputBase());
+            writer.startElement("input", new UIInput());
 	    writer.writeAttribute("type", "image", "type");
 	    writer.writeURIAttribute("src", "/mygif/foo.gif", "src");
 	    writer.endElement("input");
@@ -193,7 +193,7 @@ import org.mozilla.util.Assert;
 	    //
 	    sw = new StringWriter();
             writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-	    writer.startElement("foo", new UIInputBase());
+	    writer.startElement("foo", new UIInput());
 	    writer.writeURIAttribute("player","Bobby Orr", "player");
 	    assertTrue(sw.toString().equals("<foo player="+"\"Bobby+Orr\""));
 	    //
@@ -201,7 +201,7 @@ import org.mozilla.util.Assert;
 	    //
 	    sw = new StringWriter();
             writer = renderKit.createResponseWriter(sw, "text/html", "ISO-8859-1");
-	    writer.startElement("foo", new UIInputBase());
+	    writer.startElement("foo", new UIInput());
 	    writer.writeURIAttribute("player","javascript:Bobby Orr", null);
 	    assertTrue(sw.toString().equals("<foo player="+"\"javascript:Bobby Orr\""));
 	} catch (IOException e) {

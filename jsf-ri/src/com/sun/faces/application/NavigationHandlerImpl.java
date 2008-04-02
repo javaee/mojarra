@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.16 2003/09/08 03:26:44 craigmcc Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.17 2003/10/02 00:39:52 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,6 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
 
 import org.mozilla.util.Assert;

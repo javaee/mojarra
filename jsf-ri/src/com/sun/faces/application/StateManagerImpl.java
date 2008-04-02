@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.3 2003/09/16 00:29:37 jvisvanathan Exp $ 
+ * $Id: StateManagerImpl.java,v 1.4 2003/10/02 00:39:53 jvisvanathan Exp $ 
  */ 
 
 
@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Iterator;
 
 import javax.faces.FacesException;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.ViewHandler;
@@ -38,7 +37,7 @@ import javax.faces.render.ResponseStateManager;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.3 2003/09/16 00:29:37 jvisvanathan Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.4 2003/10/02 00:39:53 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 

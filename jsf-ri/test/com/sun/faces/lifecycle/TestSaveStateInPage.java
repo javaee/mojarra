@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.18 2003/09/16 00:29:38 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.19 2003/10/02 00:40:14 jvisvanathan Exp $
  */
 
 /*
@@ -18,17 +18,16 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.base.UIComponentBase;
+import javax.faces.component.UIComponentBase;
 import com.sun.faces.util.TreeStructure;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.application.StateManagerImpl;
 import java.util.Map;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UIPanelBase;
-import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 
 import com.sun.faces.lifecycle.Phase;
@@ -42,7 +41,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.18 2003/09/16 00:29:38 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.19 2003/10/02 00:40:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,7 +118,7 @@ public void testSaveStateInPage()
     UIComponentBase root = null;
     String value = null;    
     Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());   
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.setId("root");
     page.setViewId(TEST_URI);
     getFacesContext().setViewRoot(page);
@@ -138,19 +137,19 @@ public void testSaveStateInClient()
     // precreate tree and set it in session and make sure the tree is
     // restored from session.
     getFacesContext().setViewRoot(null);
-    UIViewRoot root = new UIViewRootBase();
+    UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIFormBase();
+    UIFormBase basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInputBase();
+    UIInputBase userName = new UIInput();
     
     userName.setId("userName");
     userName.setTransient(true);
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName);
     
-    UIPanelBase panel1 = new UIPanelBase();
+    UIPanelBase panel1 = new UIPanel();
     panel1.setId("panel1");
     basicForm.getChildren().add(panel1);
     
@@ -159,15 +158,15 @@ public void testSaveStateInClient()
     userName1.setTransient(true);
     panel1.getChildren().add(userName1);
     
-    UIInputBase userName2 = new UIInputBase();
+    UIInputBase userName2 = new UIInput();
     userName2.setId("userName2");
     panel1.getChildren().add(userName2);
     
-    UIInputBase userName3 = new UIInputBase();
+    UIInputBase userName3 = new UIInput();
     userName3.setTransient(true);
     panel1.getFacets().put("userName3", userName3);
     
-    UIInputBase userName4 = new UIInputBase();
+    UIInputBase userName4 = new UIInput();
     panel1.getFacets().put("userName4",userName4);
     
     getFacesContext().setViewRoot(root);

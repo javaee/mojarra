@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.25 2003/09/26 20:00:37 horwat Exp $
+ * $Id: ErrorsRenderer.java,v 1.26 2003/10/02 00:39:57 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * <p><B>ErrorsRenderer</B> handles rendering for the Output_ErrorsTag<p>. 
  *
- * @version $Id: ErrorsRenderer.java,v 1.25 2003/09/26 20:00:37 horwat Exp $*
+ * @version $Id: ErrorsRenderer.java,v 1.26 2003/10/02 00:39:57 jvisvanathan Exp $*
  */
 
 public class ErrorsRenderer extends HtmlBasicRenderer {
@@ -55,7 +55,8 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
             UIComponent comp = (UIComponent) children.get(i);
             
             if (comp instanceof NamingContainer) {
-                retComp = ((NamingContainer) comp).findComponentInNamespace(forComponent);    
+                // PENDING IMPLEMENTATION
+              //  retComp = ((NamingContainer) comp).findComponentInNamespace(forComponent);    
             }
             
             if (retComp == null) {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.7 2003/08/25 20:31:04 rkitain Exp $
+ * $Id: TestRendererConversions.java,v 1.8 2003/10/02 00:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -22,9 +22,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIViewRootBase;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.ServletFacesTestCase;
@@ -36,7 +33,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.7 2003/08/25 20:31:04 rkitain Exp $
+ * @version $Id: TestRendererConversions.java,v 1.8 2003/10/02 00:40:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,7 +91,7 @@ public void beginEmptyStrings(WebRequest theRequest)
 
 public void setUp() {
     super.setUp();
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.setViewId("viewId");    
     getFacesContext().setViewRoot(page);
  }
@@ -106,13 +103,11 @@ public void setUp() {
 
 public void testEmptyStrings()
 {
-    UIComponent root = new UINamingContainerBase() {
-	    public String getComponentType() { return "root"; }
-        };
+    UIViewRoot root = new UIViewRoot();
     UIInput 
-	text = new UIInputBase(),
-	hidden = new UIInputBase(),
-	secret = new UIInputBase();
+	text = new UIInput(),
+	hidden = new UIInput(),
+	secret = new UIInput();
     
     text.setId("text");
     hidden.setId("hidden");
@@ -160,9 +155,7 @@ public void beginBadConversion(WebRequest theRequest)
 
 public void testBadConversion()
 {
-    UIComponent root = new UINamingContainerBase() {
-	    public String getComponentType() { return "root"; }
-        };
+    UIComponent root = new UIViewRoot();
 }
 
 

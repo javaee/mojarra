@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessEvents.java,v 1.7 2003/09/05 17:25:25 eburns Exp $
+ * $Id: TestProcessEvents.java,v 1.8 2003/10/02 00:40:13 jvisvanathan Exp $
  */
 
 /*
@@ -29,8 +29,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIInput;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UICommandBase;
 
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
@@ -46,7 +44,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessEvents.java,v 1.7 2003/09/05 17:25:25 eburns Exp $
+ * @version $Id: TestProcessEvents.java,v 1.8 2003/10/02 00:40:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,7 +107,7 @@ public void testSingleValueChanged()
     //
     eventsProcessed = new HashMap();
 
-    UIInput userName = new UIInputBase();
+    UIInput userName = new UIInput();
 
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
@@ -138,7 +136,7 @@ public void testMultipleValueChanged()
     //
     eventsProcessed = new HashMap();
 
-    UIInput userName = new UIInputBase();
+    UIInput userName = new UIInput();
 
     // clear the property
     System.setProperty(HANDLED_VALUEEVENT1, EMPTY);
@@ -172,7 +170,7 @@ public void testValueChangedRecursion()
     //
     eventsProcessed = new HashMap();
 
-    UIInput userName = new UIInputBase();
+    UIInput userName = new UIInput();
 
     // add valueChangedListener to the component
 
@@ -205,7 +203,7 @@ public void testSingleAction()
     //
     eventsProcessed = new HashMap();
 
-    UICommand button = new UICommandBase();
+    UICommand button = new UICommand();
     // clear the property
     System.setProperty(HANDLED_ACTIONEVENT1, EMPTY);
 
@@ -352,7 +350,7 @@ public class ActionRecursion implements ActionListener {
     }
 }
 
-public static class UICommandSub extends UICommandBase {
+public static class UICommandSub extends UICommand {
     public List[] getListeners() { 
 	return listeners;
     }

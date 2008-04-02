@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.69 2003/09/26 21:56:09 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.70 2003/10/02 00:40:13 jvisvanathan Exp $
  */
 
 /*
@@ -23,8 +23,6 @@ import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
 import javax.faces.validator.Validator;
 
@@ -51,7 +49,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.69 2003/09/26 21:56:09 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.70 2003/10/02 00:40:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -131,7 +129,7 @@ public void testHtmlBasicRenderKit()
     String value = null;
     LifecycleImpl lifecycle = new LifecycleImpl();
     Phase renderResponse = new RenderResponsePhase(Application.getCurrentInstance());    
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.setId("root");
     page.setViewId(TEST_URI);
     getFacesContext().setViewRoot(page);

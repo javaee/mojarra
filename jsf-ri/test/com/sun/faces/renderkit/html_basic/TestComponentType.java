@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponentType.java,v 1.5 2003/08/21 14:18:22 rlubke Exp $
+ * $Id: TestComponentType.java,v 1.6 2003/10/02 00:40:18 jvisvanathan Exp $
  */
 
 /*
@@ -17,8 +17,6 @@ import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectMany;
-import javax.faces.component.base.UISelectManyBase;
-import javax.faces.component.base.UIOutputBase;
 
 import java.util.Iterator;
 
@@ -34,7 +32,7 @@ import junit.framework.TestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestComponentType.java,v 1.5 2003/08/21 14:18:22 rlubke Exp $
+ * @version $Id: TestComponentType.java,v 1.6 2003/10/02 00:40:18 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -79,7 +77,7 @@ import junit.framework.TestCase;
 
         // case 1: UISelectMany component
         
-        UISelectMany many = new UISelectManyBase();
+        UISelectMany many = new UISelectMany();
         String multipleText = mr.getMultipleText(many);
         assertTrue(multipleText.equals(" multiple "));
 
@@ -91,14 +89,14 @@ import junit.framework.TestCase;
 
         // case 3: UIOutput component
 
-        UIOutput output = new UIOutputBase();
+        UIOutput output = new UIOutput();
         multipleText = mr.getMultipleText(output);
         assertTrue(!multipleText.equals(" multiple "));
         assertTrue(multipleText.equals(""));
     }
 
 
-    public class MyComponent extends UISelectManyBase {
+    public class MyComponent extends UISelectMany {
     }
 
 

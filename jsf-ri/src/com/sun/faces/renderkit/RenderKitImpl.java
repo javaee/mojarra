@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.11 2003/09/11 21:20:11 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.12 2003/10/02 00:39:56 jvisvanathan Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ import javax.faces.render.ResponseStateManager;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.11 2003/09/11 21:20:11 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.12 2003/10/02 00:39:56 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -204,7 +204,7 @@ public class RenderKitImpl extends RenderKit {
     }
 
     
-    public ResponseStream getResponseStream(OutputStream out) {
+    public ResponseStream createResponseStream(OutputStream out) {
         final OutputStream output = out;
         return new ResponseStream() {
             public void write(int b) throws IOException {

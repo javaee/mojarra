@@ -1,5 +1,5 @@
 /*
- * $Id: ConvertDateTimeTag.java,v 1.1 2003/08/25 05:39:46 eburns Exp $
+ * $Id: ConvertDateTimeTag.java,v 1.2 2003/10/02 00:40:02 jvisvanathan Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import org.mozilla.util.Assert;
  * <p>ConvertDateTimeTag is a ConverterTag implementation for 
  * javax.faces.convert.DateTimeConverter</p>
  *
- * @version $Id: ConvertDateTimeTag.java,v 1.1 2003/08/25 05:39:46 eburns Exp $
+ * @version $Id: ConvertDateTimeTag.java,v 1.2 2003/10/02 00:40:02 jvisvanathan Exp $
  * 
  */
 
@@ -143,7 +143,7 @@ public class ConvertDateTimeTag extends ConverterTag {
         Assert.assert_it(null != result);
 
         result.setDateStyle(dateStyle);
-        result.setParseLocale(parseLocale);
+        result.setLocale(parseLocale);
         result.setPattern(pattern);
         result.setTimeStyle(timeStyle);
         result.setTimeZone(timeZone);

@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.8 2003/08/25 21:34:56 jvisvanathan Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.9 2003/10/02 00:40:10 jvisvanathan Exp $
  */
 
 /*
@@ -28,8 +28,6 @@ import org.apache.cactus.WebRequest;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.el.VariableResolver;
 import javax.faces.FactoryFinder;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
 
 
@@ -40,7 +38,7 @@ import javax.faces.component.UIViewRoot;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.8 2003/08/25 21:34:56 jvisvanathan Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.9 2003/10/02 00:40:10 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo

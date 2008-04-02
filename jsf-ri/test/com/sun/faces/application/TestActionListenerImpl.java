@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.12 2003/08/22 17:27:33 rlubke Exp $
+ * $Id: TestActionListenerImpl.java,v 1.13 2003/10/02 00:40:04 jvisvanathan Exp $
  */
 
 /*
@@ -24,8 +24,6 @@ import java.util.List;
 import javax.faces.application.Action;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UICommandBase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.FactoryFinder;
@@ -44,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.12 2003/08/22 17:27:33 rlubke Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.13 2003/10/02 00:40:04 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -98,9 +96,9 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         System.out.println("Testing With Action Literal Set...");
 
-        UICommand command = new UICommandBase();
+        UICommand command = new UICommand();
         command.setAction("loginRequired");
-        UIViewRoot page = new UIViewRootBase();
+        UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
 
@@ -140,7 +138,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
         boolean exceptionThrown = false;
 
         FacesContext context = FacesContext.getCurrentInstance();
-        UIViewRoot page = new UIViewRootBase();
+        UIViewRoot page = new UIViewRoot();
         page.setViewId("/login.jsp");
         context.setViewRoot(page);
         UserBean user = new UserBean();
@@ -148,7 +146,7 @@ public class TestActionListenerImpl extends ServletFacesTestCase
 
         assertTrue(user == context.getExternalContext().getApplicationMap().get("UserBean"));
 
-        UICommand command = new UICommandBase();
+        UICommand command = new UICommand();
         command.setActionRef("Foo");
         ActionEvent actionEvent = new ActionEvent(command);
 

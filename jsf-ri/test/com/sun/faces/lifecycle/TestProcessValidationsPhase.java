@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.23 2003/09/24 19:50:26 rkitain Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.24 2003/10/02 00:40:13 jvisvanathan Exp $
  */
 
 /*
@@ -23,8 +23,6 @@ import javax.faces.lifecycle.Lifecycle;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
 import javax.faces.validator.Validator;
 
 import com.sun.faces.ServletFacesTestCase;
@@ -39,7 +37,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.23 2003/09/24 19:50:26 rkitain Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.24 2003/10/02 00:40:13 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -118,9 +116,9 @@ public void testCallback()
     assertTrue(null != getFacesContext().getViewRoot());
 
     root = getFacesContext().getViewRoot();
-    UIForm basicForm = new UIFormBase();
+    UIForm basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInput userName1 = new UIInputBase();
+    UIInput userName1 = new UIInput();
     userName1.setId("userName");
     root.getChildren().add(basicForm);
     basicForm.getChildren().add(userName1);

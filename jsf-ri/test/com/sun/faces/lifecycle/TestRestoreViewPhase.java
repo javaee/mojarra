@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.5 2003/09/26 20:00:41 horwat Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.6 2003/10/02 00:40:14 jvisvanathan Exp $
  */
 
 /*
@@ -20,12 +20,11 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.component.base.UICommandBase;
+import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UIPanelBase;
-import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseId;
 
@@ -43,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.5 2003/09/26 20:00:41 horwat Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.6 2003/10/02 00:40:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -139,12 +138,12 @@ public void testReconstituteRequestSubmit()
     // precreate tree and set it in session and make sure the tree is
     // restored from session.
    
-    UIViewRoot root = new UIViewRootBase();
+    UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIFormBase();
+    UIFormBase basicForm = new UIForm();
     basicForm.setId("basicForm");
-    UIInputBase userName = new UIInputBase();
+    UIInputBase userName = new UIInput();
     
     userName.setId("userName");
     root.getChildren().add(basicForm);
@@ -196,15 +195,15 @@ public void testRegisterListeners() {
     // precreate tree and set it in session and make sure the tree is
     // restored from session.
    
-    UIViewRoot root = new UIViewRootBase();
+    UIViewRoot root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    UIFormBase basicForm = new UIFormBase();
+    UIFormBase basicForm = new UIForm();
     basicForm.setId("basicForm");
     root.getChildren().add(basicForm);
-    UIPanelBase panel = new UIPanelBase();
+    UIPanelBase panel = new UIPanel();
     basicForm.getChildren().add(panel);
-    UIPanelBase commandPanel = new UIPanelBase();
+    UIPanelBase commandPanel = new UIPanel();
     commandPanel.setId("commandPanel");
     TestCommand command1 = new TestCommand();
     TestCommand command2 = new TestCommand();
@@ -236,10 +235,10 @@ public void testRegisterListeners() {
     // 
     getFacesContext().setViewRoot(null);
     
-    root = new UIViewRootBase();
+    root = new UIViewRoot();
     root.setViewId(TEST_URI);
     
-    basicForm = new UIFormBase();
+    basicForm = new UIForm();
     basicForm.setId("basicForm");
     root.getChildren().add(basicForm);
     command1 = new TestCommand();
@@ -267,7 +266,7 @@ public void testRegisterListeners() {
     getFacesContext().setViewRoot(null);
 }
 
-public static class TestCommand extends UICommandBase {
+public static class TestCommand extends UICommand {
     public int getDefaultListenerCount() {
 	List list = null;
 	int ordinal = PhaseId.INVOKE_APPLICATION.getOrdinal();

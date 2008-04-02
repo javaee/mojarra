@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.34 2003/09/22 19:39:08 rlubke Exp $
+ * $Id: TestFacesContextImpl.java,v 1.35 2003/10/02 00:40:08 jvisvanathan Exp $
  */
 
 /*
@@ -42,10 +42,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UICommandBase;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIInputBase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseStream;
 import javax.faces.event.FacesEvent;
@@ -63,7 +59,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.34 2003/09/22 19:39:08 rlubke Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.35 2003/10/02 00:40:08 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -151,7 +147,7 @@ public void testAccessors()
     result = null != locale;
     System.out.println("Testing getLocale: " + result);
     assertTrue(result);
-    UIViewRoot page = new UIViewRootBase();
+    UIViewRoot page = new UIViewRoot();
     page.setViewId("viewId");
     getFacesContext().setViewRoot(page);
     UIViewRoot root = getFacesContext().getViewRoot();
@@ -235,8 +231,8 @@ public void testFacesEvents()
 {
     int count = 0;
     Iterator iter = null;
-    UIInput source1 = new UIInputBase();
-    UICommand source2 = new UICommandBase();
+    UIInput source1 = new UIInput();
+    UICommand source2 = new UICommand();
     FacesEvent event1 = new FacesEvent(source1) {        
         public boolean isAppropriateListener(FacesListener listener) {
             return false;  

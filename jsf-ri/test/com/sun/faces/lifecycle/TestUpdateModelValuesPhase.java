@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.28 2003/09/25 21:03:00 jvisvanathan Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.29 2003/10/02 00:40:14 jvisvanathan Exp $
  */
 
 /*
@@ -25,9 +25,6 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIViewRoot;
-import javax.faces.component.base.UIFormBase;
-import javax.faces.component.base.UIViewRootBase;
-import javax.faces.component.base.UIInputBase;
 
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.ServletFacesTestCase;
@@ -46,7 +43,7 @@ import com.sun.faces.util.DebugUtil;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.28 2003/09/25 21:03:00 jvisvanathan Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.29 2003/10/02 00:40:14 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,7 +99,7 @@ public void testUpdateNormal()
 	(getFacesContext().getExternalContext().getSessionMap()).get("TestBean");
     String value = null;
     Phase updateModelValues = new UpdateModelValuesPhase();
-    form = new UIFormBase();
+    form = new UIForm();
     form.setId("form");
     form.setSubmitted(true);
     userName = new TestUIInput();
@@ -124,7 +121,7 @@ public void testUpdateNormal()
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
     
-    UIViewRoot viewRoot = new UIViewRootBase();
+    UIViewRoot viewRoot = new UIViewRoot();
     viewRoot.getChildren().add(form);
     viewRoot.setViewId("updateModel.xul");
     getFacesContext().setViewRoot(viewRoot);
@@ -152,7 +149,7 @@ public void testUpdateFailed()
     String value = null;
     Phase 
 	updateModelValues = new UpdateModelValuesPhase();
-    form = new UIFormBase();
+    form = new UIForm();
     form.setId("form");
     form.setSubmitted(true);
     userName = new TestUIInput();
@@ -174,7 +171,7 @@ public void testUpdateFailed()
     userName2.testSetValid(true);
     form.getChildren().add(userName2);
 
-    UIViewRoot viewRoot = new UIViewRootBase();
+    UIViewRoot viewRoot = new UIViewRoot();
     viewRoot.getChildren().add(form);
     viewRoot.setViewId("updateModel.xul");
     getFacesContext().setViewRoot(viewRoot);
@@ -194,7 +191,7 @@ public void testUpdateFailed()
     
 }
 
-public static class TestUIInput extends UIInputBase {
+public static class TestUIInput extends UIInput {
 
     public void testSetValid(boolean validState) {
 	this.setValid(validState);

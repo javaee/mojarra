@@ -1,5 +1,5 @@
 /*
- * $Id: TestPropertyResolverImpl.java,v 1.4 2003/08/21 14:18:13 rlubke Exp $
+ * $Id: TestPropertyResolverImpl.java,v 1.5 2003/10/02 00:40:10 jvisvanathan Exp $
  */
 
 /*
@@ -22,9 +22,9 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.el.PropertyResolver;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UIViewRoot;
 import javax.faces.component.NamingContainer;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIOutputBase;
+import javax.faces.component.UIOutput;
 import javax.faces.context.ExternalContext;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestPropertyResolverImpl.java,v 1.4 2003/08/21 14:18:13 rlubke Exp $
+ * @version $Id: TestPropertyResolverImpl.java,v 1.5 2003/10/02 00:40:10 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -523,9 +523,7 @@ public class TestPropertyResolverImpl extends ServletFacesTestCase
 	assertTrue(resolver.isReadOnly(ec.getRequestCookieMap(), "hello"));
 	assertTrue(resolver.isReadOnly(ec.getInitParameterMap(), "hello"));
 
-	NamingContainer root = new UINamingContainerBase() {
-                public String getComponentType() { return "root"; }
-            };
+	UIViewRoot root = new UIViewRoot();
 	assertTrue(resolver.isReadOnly(root, "hello"));
 	
 	TestBean testBean = (TestBean) ec.getSessionMap().get("TestBean");

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.62 2003/09/26 21:56:07 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.63 2003/10/02 00:39:58 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.62 2003/09/26 21:56:07 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.63 2003/10/02 00:39:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -157,7 +157,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         StringBuffer sb = new StringBuffer(contextPath);
         sb.append(RIConstants.URL_PREFIX);
 	    sb.append(context.getViewRoot().getViewId());
-        return (context.getExternalContext().encodeURL(sb.toString()));
+        return (sb.toString());
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {

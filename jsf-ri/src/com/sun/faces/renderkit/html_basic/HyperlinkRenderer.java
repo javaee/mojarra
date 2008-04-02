@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.61 2003/09/24 23:16:37 horwat Exp $
+ * $Id: HyperlinkRenderer.java,v 1.62 2003/10/02 00:39:59 jvisvanathan Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.61 2003/09/24 23:16:37 horwat Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.62 2003/10/02 00:39:59 jvisvanathan Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -101,7 +101,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
             return;
         }
 
-	context.addFacesEvent(new ActionEvent(component));
+	command.queueEvent(new ActionEvent(component));
 	return;
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.33 2003/09/19 23:54:03 horwat Exp $
+ * $Id: LifecycleImpl.java,v 1.34 2003/10/02 00:39:54 jvisvanathan Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.33 2003/09/19 23:54:03 horwat Exp $
+ * @version $Id: LifecycleImpl.java,v 1.34 2003/10/02 00:39:54 jvisvanathan Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -257,7 +257,8 @@ public class LifecycleImpl extends Lifecycle
     //method returns "false" to indicate this.
 
     private void processEvents(FacesContext context, PhaseId phaseId) {
-        Iterator iter = context.getFacesEvents();
+        // PENDING IMPLEMENTATION. This is now handled by UIViewRoot.
+       /* Iterator iter = context.getFacesEvents();
         while (iter.hasNext()) {
             FacesEvent event = (FacesEvent)iter.next();
             UIComponent source = event.getComponent();
@@ -269,7 +270,7 @@ public class LifecycleImpl extends Lifecycle
                 }
 
             }
-        }
+        } */
     }
 
     //PENDING(rogerk) maybe we can optimize this method a bit..

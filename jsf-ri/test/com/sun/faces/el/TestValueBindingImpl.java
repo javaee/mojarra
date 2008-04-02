@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.18 2003/08/25 21:34:56 jvisvanathan Exp $
+ * $Id: TestValueBindingImpl.java,v 1.19 2003/10/02 00:40:10 jvisvanathan Exp $
  */
 
 /*
@@ -28,8 +28,6 @@ import javax.servlet.http.Cookie;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.context.ExternalContext;
-import javax.faces.component.base.UINamingContainerBase;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,7 +41,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.18 2003/08/25 21:34:56 jvisvanathan Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.19 2003/10/02 00:40:10 jvisvanathan Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase

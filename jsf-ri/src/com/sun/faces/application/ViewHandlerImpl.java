@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.12 2003/09/15 22:11:45 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.13 2003/10/02 00:39:53 jvisvanathan Exp $ 
  */ 
 
 
@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Iterator;
 
 import javax.faces.FacesException;
-import javax.faces.component.base.UIViewRootBase;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.UIComponent;
 import javax.faces.application.ViewHandler;
@@ -38,7 +37,7 @@ import javax.faces.render.ResponseStateManager;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.12 2003/09/15 22:11:45 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.13 2003/10/02 00:39:53 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -87,7 +86,7 @@ public class ViewHandlerImpl extends Object
 	viewRoot = getStateManager().restoreView(context, viewId);
 
         if ( viewRoot == null) {
-            viewRoot = new UIViewRootBase();
+            viewRoot = new UIViewRoot();
             context.renderResponse();
         }
         viewRoot.setViewId(viewId);
@@ -100,7 +99,7 @@ public class ViewHandlerImpl extends Object
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
 
-	UIViewRoot result = new UIViewRootBase();
+	UIViewRoot result = new UIViewRoot();
 	result.setViewId(viewId);
 	// PENDING(): not sure if we should set the RenderKitId here.
 	// The UIViewRootBase ctor sets the renderKitId to the default
@@ -116,6 +115,11 @@ public class ViewHandlerImpl extends Object
 	if (getStateManager().isSavingStateInClient(context)) {
 	    context.getResponseWriter().writeText(RIConstants.SAVESTATE_FIELD_MARKER,null);
 	}
+    }
+    
+    public String getViewIdPath(FacesContext context, String viewId) {
+        // PENDING IMPLEMENTATION
+        return null;
     }
 
 } 
