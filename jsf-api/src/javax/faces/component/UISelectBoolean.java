@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.29 2003/09/25 07:50:05 craigmcc Exp $
+ * $Id: UISelectBoolean.java,v 1.30 2004/01/21 07:39:56 craigmcc Exp $
  */
 
 /*
@@ -21,6 +21,21 @@ package javax.faces.component;
  */
 
 public class UISelectBoolean extends UIInput {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "SelectBoolean";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "SelectBoolean";
 
 
     // ------------------------------------------------------------ Constructors

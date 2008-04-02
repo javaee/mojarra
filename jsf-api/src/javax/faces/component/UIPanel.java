@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.24 2004/01/14 17:12:51 eburns Exp $
+ * $Id: UIPanel.java,v 1.25 2004/01/21 07:39:56 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,21 @@ import javax.faces.el.ValueBinding;
  */
 
 public class UIPanel extends UIComponentBase {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Panel";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Panel";
 
 
     // ------------------------------------------------------------ Constructors

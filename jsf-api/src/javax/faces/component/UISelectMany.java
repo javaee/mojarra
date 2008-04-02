@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.41 2004/01/15 06:03:23 eburns Exp $
+ * $Id: UISelectMany.java,v 1.42 2004/01/21 07:39:57 craigmcc Exp $
  */
 
 /*
@@ -79,6 +79,18 @@ public class UISelectMany extends UIInput {
 
 
     // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "SelectMany";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "SelectMany";
 
 
     /**

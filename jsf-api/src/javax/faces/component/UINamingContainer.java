@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainer.java,v 1.11 2003/10/09 15:41:51 eburns Exp $
+ * $Id: UINamingContainer.java,v 1.12 2004/01/21 07:39:55 craigmcc Exp $
  */
 
 /*
@@ -20,6 +20,21 @@ import javax.faces.context.FacesContext;
 
 public class UINamingContainer extends UIComponentBase
     implements NamingContainer {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "NamingContainer";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "NamingContainer";
 
 
     // ------------------------------------------------------------ Constructors

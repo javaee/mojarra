@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.20 2004/01/15 06:03:22 eburns Exp $
+ * $Id: UIParameter.java,v 1.21 2004/01/21 07:39:56 craigmcc Exp $
  */
 
 /*
@@ -34,6 +34,21 @@ import javax.faces.el.ValueBinding;
  */
 
 public class UIParameter extends UIComponentBase {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Parameter";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Parameter";
 
 
     // ------------------------------------------------------------ Constructors

@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.31 2004/01/15 06:03:21 eburns Exp $
+ * $Id: UIGraphic.java,v 1.32 2004/01/21 07:39:54 craigmcc Exp $
  */
 
 /*
@@ -27,6 +27,21 @@ import javax.faces.el.ValueBinding;
  */
 
 public class UIGraphic extends UIComponentBase {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Graphic";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Graphic";
 
 
     // ------------------------------------------------------------ Constructors

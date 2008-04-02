@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.22 2004/01/15 06:03:23 eburns Exp $
+ * $Id: UISelectItems.java,v 1.23 2004/01/21 07:39:57 craigmcc Exp $
  */
 
 /*
@@ -45,6 +45,21 @@ import javax.faces.model.SelectItem;
  */
 
 public class UISelectItems extends UIComponentBase {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "SelectItems";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "SelectItems";
 
 
     // ------------------------------------------------------------ Constructors

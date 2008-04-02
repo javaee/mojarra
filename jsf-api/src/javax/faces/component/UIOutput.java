@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.42 2004/01/15 06:03:22 eburns Exp $
+ * $Id: UIOutput.java,v 1.43 2004/01/21 07:39:56 craigmcc Exp $
  */
 
 /*
@@ -54,6 +54,21 @@ import javax.faces.el.ValueBinding;
 
 public class UIOutput extends UIComponentBase
     implements ValueHolder {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Output";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Output";
 
 
     // ------------------------------------------------------------ Constructors

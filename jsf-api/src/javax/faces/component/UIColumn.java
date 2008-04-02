@@ -47,6 +47,21 @@ package javax.faces.component;
 public class UIColumn extends UIComponentBase {
 
 
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Column";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Column";
+
+
     // ----------------------------------------------------------- Constructors
 
 

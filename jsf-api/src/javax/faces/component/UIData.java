@@ -85,6 +85,21 @@ public class UIData extends UIComponentBase
     implements NamingContainer {
 
 
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Data";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Data";
+
+
     // ------------------------------------------------------------ Constructors
 
 

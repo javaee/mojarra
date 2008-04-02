@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.63 2004/01/15 06:03:19 eburns Exp $
+ * $Id: UICommand.java,v 1.64 2004/01/21 07:39:53 craigmcc Exp $
  */
 
 /*
@@ -56,6 +56,21 @@ import java.util.List;
 
 public class UICommand extends UIComponentBase
     implements ActionSource {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Command";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Command";
 
 
     // ------------------------------------------------------------ Constructors

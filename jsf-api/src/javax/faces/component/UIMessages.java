@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessages.java,v 1.8 2004/01/19 06:26:53 craigmcc Exp $
+ * $Id: UIMessages.java,v 1.9 2004/01/21 07:39:55 craigmcc Exp $
  */
 
 /*
@@ -22,6 +22,21 @@ import javax.faces.el.ValueBinding;
  */
 
 public class UIMessages extends UIComponentBase {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Messages";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Messages";
 
 
     // ------------------------------------------------------------ Constructors

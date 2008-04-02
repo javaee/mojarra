@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.37 2004/01/15 21:51:21 eburns Exp $
+ * $Id: UIForm.java,v 1.38 2004/01/21 07:39:54 craigmcc Exp $
  */
 
 /*
@@ -26,6 +26,21 @@ import javax.faces.context.FacesContext;
  */
 
 public class UIForm extends UIComponentBase implements NamingContainer {
+
+
+    // ------------------------------------------------------ Manifest Constants
+
+
+    /**
+     * <p>The standard component type for this component.</p>
+     */
+    public static final String COMPONENT_TYPE = "Form";
+
+
+    /**
+     * <p>The standard component family for this component.</p>
+     */
+    public static final String COMPONENT_FAMILY = "Form";
 
 
     // ------------------------------------------------------------ Constructors
