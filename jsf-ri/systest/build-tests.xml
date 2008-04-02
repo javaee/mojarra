@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.105 2006/03/07 21:02:47 edburns Exp $
+ $Id: build-tests.xml,v 1.106 2006/03/14 22:20:50 rlubke Exp $
 -->
 
 <!--
@@ -146,11 +146,18 @@
                 test.methodRef,
                 test.jsp,  
                 test.path,
-                test.valueBindingGet
+                test.valueBindingGet,
+                test.misc
                "/>
 
     <target name="test.init">
         <mkdir dir="${impl.test.results.dir}"/>
+    </target>
+    
+    <target name="test.misc">
+        <!-- validates fix for issue IMPL-262 - should be 404 not 500 -->
+        <jsf.tester request="${context.path}/faces/thispagedoesnexist.jsp"
+            status="404"/>
     </target>
 
     <target name="test.duplicateIds"
