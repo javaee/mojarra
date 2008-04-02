@@ -102,7 +102,7 @@
     Attribute names must be unique within the scope of the parent (or related)
     component.
 -->
-<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class, icon?)>
+<!ELEMENT attribute       (description*, display-name*, icon*, attribute-name, attribute-class)>
 
 
 <!--
