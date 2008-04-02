@@ -116,5 +116,12 @@
             </description>
         </auth-constraint>
     </security-constraint>
+    
+    <!-- Enable encryption for client side state saving -->
+    <env-entry>
+        <env-entry-name>com.sun.faces.ClientStateSavingPassword</env-entry-name>
+        <env-entry-value>password</env-entry-value>
+        <env-entry-type>java.lang.String</env-entry-type>
+   </env-entry>
 
 </web-app>
