@@ -1,5 +1,5 @@
 /*
- * $Id: AccessibleColumnTag.java,v 1.1 2006/12/13 20:35:46 jdlee Exp $
+ * $Id: AccessibleColumnTag.java,v 1.2 2007/01/26 22:33:25 jdlee Exp $
  */
 
 /*
@@ -30,13 +30,13 @@
 
 package com.sun.faces.sandbox.taglib;
 
-import com.sun.faces.sandbox.util.Util;
-
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
+
+import com.sun.faces.sandbox.util.Util;
 
 public class AccessibleColumnTag extends UIComponentTag {
 

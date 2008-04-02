@@ -10,7 +10,6 @@ import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.sandbox.component.YuiContextMenu;
 import com.sun.faces.sandbox.component.YuiMenuBase;
-import com.sun.faces.sandbox.model.Menu;
 
 /**
  * This <code>Renderer</code> will render a context menu. For an 
@@ -31,7 +30,7 @@ public class YuiContextMenuRenderer extends YuiMenuRenderer {
         String javaScript = 
                 "var oMenu_%%%ID%%% = new YAHOO.widget.ContextMenu(\"%%%ID%%%\", {" + buildConstructorArgs(contextMenu) + "});" +
                 "oMenu_%%%ID%%%.render(document.getElementById(\"%%%TRIGGER%%%\"));";
-        javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()))
+        javaScript = javaScript.replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1")
                 .replaceAll("%%%TRIGGER%%%", component.getParent().getClientId(FacesContext.getCurrentInstance())); 
                         //getFullyQualifiedId(contextMenu.getTrigger()));
         

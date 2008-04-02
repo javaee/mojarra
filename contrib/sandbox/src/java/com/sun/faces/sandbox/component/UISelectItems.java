@@ -8,11 +8,14 @@ import java.util.List;
 
 import javax.el.ELContext;
 import javax.el.ELResolver;
-import javax.el.ValueExpression;
+import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 
-/*******************************************************************************
+import com.sun.faces.sandbox.util.Util;
+
+/**
  * <p>
  * UISelectItems is meant to be a drop-in replacement for &lt;f:selectItems&gt;
  * with the additional capability of passing in lists of POJOs to the componenet
@@ -59,172 +62,30 @@ import javax.faces.model.SelectItemGroup;
  */
 public class UISelectItems extends javax.faces.component.UISelectItems {
     public static final String COMPONENT_TYPE = "com.sun.faces.sandbox.SelectItems";
-    protected String itemLabel;
-    protected String itemValue;
-    protected String itemVar;
-
-    public UISelectItems() {
-        super();
-    }
-
-    /***************************************************************************
-     * Returns the itemLabel property of the UISelectItems.
-     */
-    public String getItemLabel() {
-        if (this.itemLabel != null) {
-            return this.itemLabel;
-        }
-        ValueExpression ve = this.getValueExpression("itemLabel");
-        if (ve != null) {
-            return (String) ve.getValue(this.getFacesContext().getELContext());
-        }
-        return null;
-    }
-
-    /***************************************************************************
-     * Sets the itemLabel property of the UISelectItems.
-     * 
-     * @param itemLabel
-     *            the label for each selectItem.
-     */
-    public void setItemLabel(String itemLabel) {
-        this.itemLabel = itemLabel;
-    }
-
-    protected boolean useItemLabel() {
-        return this.itemLabel != null
-                || this.getValueExpression("itemLabel") != null;
-    }
-
-    /***************************************************************************
-     * 
-     * Returns the itemValue property of the UISelectItems.
-     */
-    public String getItemValue() {
-        if (this.itemValue != null) {
-            return this.itemValue;
-        }
-        ValueExpression ve = this.getValueExpression("itemValue");
-        if (ve != null) {
-            return (String) ve.getValue(this.getFacesContext().getELContext());
-        }
-        return null;
-    }
-
-    /***************************************************************************
-     * Sets the itemValue property of the UISelectItems.
-     * 
-     * @param itemValue
-     *            the value for each selectItem.
-     */
-    public void setItemValue(String itemValue) {
-        this.itemValue = itemValue;
-    }
-
-    protected boolean useItemValue() {
-        return this.itemValue != null
-                || this.getValueExpression("itemValue") != null;
-    }
-
-    /***************************************************************************
-     * 
-     * Returns the itemVar property of the UISelectItems.
-     */
-    public String getItemVar() {
-        if (this.itemVar != null) {
-            return this.itemVar;
-        }
-        ValueExpression ve = this.getValueExpression("itemVar");
-        if (ve != null) {
-            return (String) ve.getValue(this.getFacesContext().getELContext());
-        }
-        return null;
-    }
-
-    /***************************************************************************
-     * Sets the itemVar property of the UISelectItems. Used to override the
-     * default variable mapping of "item" used in both the itemValue and
-     * itemLabel properties.
-     * 
-     * @param itemVar
-     *            the variable to map for each indiviual SelectItem.
-     */
-    public void setItemVar(String itemVar) {
-        this.itemVar = itemVar;
-    }
-
-    /*
-     * This code inspired by
-     * http://forum.java.sun.com/profile.jspa?userID=575815 I just changed it to
-     * use a dynamic proxy instead of hard-coding the whole interface. Also, a
-     * List instead of a Collection is expected by the JSF 1.2 RI.
-     */
-    /***************************************************************************
-     * Returns the value property for the UISelectItems.
-     */
-    public Object getValue() {
-        Object ret = super.getValue();
-
-        // return our wrapper if it is a collection
-        if (ret instanceof List) {
-            return (List) Proxy.newProxyInstance(ret.getClass()
-                    .getClassLoader(), new Class[] { List.class },
-                    new ListWrapper((List) ret, this));
-        }
-
-        // otherwise, just keep on truckin
-        return ret;
-    }
 
     protected class ListWrapper implements InvocationHandler {
-        protected List list;
-
-        protected UISelectItems si;
-
-        public ListWrapper(List list, UISelectItems si) {
-            this.list = list;
-            this.si = si;
-        }
-
-        public Object invoke(Object proxy, Method method, Object[] args)
-                throws Throwable {
-            if ("iterator".equals(method.getName())
-                    && method.getReturnType().equals(Iterator.class)) {
-                return new IteratorWrapper(list.iterator(), si);
-            }
-            return method.invoke(list, args);
-        }
-
         protected class IteratorWrapper implements Iterator {
             protected Iterator i;
-            protected UISelectItems si;
             protected String itemVar;
-            protected ELResolver er;
-            protected ELContext ec;
+            protected boolean saveOldBinding;
+            protected UISelectItems si;
             protected boolean useItemLabel;
             protected boolean useItemValue;
-            protected boolean saveOldBinding;
 
             public IteratorWrapper(Iterator i, UISelectItems si) {
                 this.i = i;
                 this.si = si;
-                this.ec = this.si.getFacesContext().getELContext();
-                this.er = ec.getELResolver();
                 this.itemVar = si.getItemVar();
                 if (this.itemVar == null) {
                     this.itemVar = "item";
                 }
                 this.useItemLabel = si.useItemLabel();
                 this.useItemValue = si.useItemValue();
-                this.saveOldBinding = this.er.getValue(ec, null, this.itemVar) != null;
+                this.saveOldBinding = getValueBinding("#{"+this.itemVar+"}") != null;
             }
 
             public boolean hasNext() {
                 return i.hasNext();
-            }
-
-            public void remove() {
-                i.remove();
             }
 
             public Object next() {
@@ -240,7 +101,7 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
                 // First, see if we already have that variable to override
                 Object oldBinding = null;
                 if (this.saveOldBinding) {
-                    oldBinding = this.er.getValue(ec, null, this.itemVar);
+                    oldBinding = getValueBinding("#{"+this.itemVar+"}").getValue(getFacesContext());
                 }
 
                 // Create the select item
@@ -250,7 +111,8 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
                 String itemValue = null;
                 String itemLabel = null;
                 if (this.useItemLabel || this.useItemValue) {
-                    er.setValue(ec, null, this.itemVar, o);
+                    ValueBinding vb = Util.getValueBinding("#{"+itemVar+"}");
+                    vb.setValue(getFacesContext(), o);
                 }
                 if (this.useItemValue) {
                     itemValue = si.getItemValue();
@@ -269,13 +131,113 @@ public class UISelectItems extends javax.faces.component.UISelectItems {
 
                 // Replace the old value
                 if (oldBinding != null) {
-                    er.setValue(ec, null, this.itemVar, oldBinding);
+                    ValueBinding vb = Util.getValueBinding("#{"+itemVar+"}");
+                    vb.setValue(getFacesContext(), oldBinding);
                 }
 
                 // Return the coerced selectItem
                 return item;
             }
+
+            public void remove() {
+                i.remove();
+            }
+        }
+
+        protected List list;
+
+        protected UISelectItems si;
+
+        public ListWrapper(List list, UISelectItems si) {
+            this.list = list;
+            this.si = si;
+        }
+
+        public Object invoke(Object proxy, Method method, Object[] args)
+                throws Throwable {
+            if ("iterator".equals(method.getName())
+                    && method.getReturnType().equals(Iterator.class)) {
+                return new IteratorWrapper(list.iterator(), si);
+            }
+            return method.invoke(list, args);
         }
     }
+    protected String itemLabel;
+    protected String itemValue;
+    protected String itemVar;
 
+    /**
+     * Returns the itemLabel property of the UISelectItems.
+     */
+    public String getItemLabel() { return ComponentHelper.getValue(this, "itemLabel",itemLabel); }
+
+    /**
+     * Returns the itemValue property of the UISelectItems.
+     */
+    public String getItemValue() { return ComponentHelper.getValue(this, "itemValue", itemValue); }
+
+    /**
+     * 
+     * Returns the itemVar property of the UISelectItems.
+     */
+    public String getItemVar() { return ComponentHelper.getValue(this, "itemVar", itemVar); }
+
+    /*
+     * This code inspired by
+     * http://forum.java.sun.com/profile.jspa?userID=575815 I just changed it to
+     * use a dynamic proxy instead of hard-coding the whole interface. Also, a
+     * List instead of a Collection is expected by the JSF 1.2 RI.
+     */
+    /**
+     * Returns the value property for the UISelectItems.
+     */
+    public Object getValue() {
+        Object ret = super.getValue();
+
+        // return our wrapper if it is a collection
+        if (ret instanceof List) {
+            return (List) Proxy.newProxyInstance(ret.getClass()
+                    .getClassLoader(), new Class[] { List.class },
+                    new ListWrapper((List) ret, this));
+        }
+
+        // otherwise, just keep on truckin
+        return ret;
+    }
+
+    /**
+     * Sets the itemLabel property of the UISelectItems.
+     * 
+     * @param itemLabel
+     *            the label for each selectItem.
+     */
+    public void setItemLabel(String itemLabel) { this.itemLabel = itemLabel; }
+
+    /**
+     * Sets the itemValue property of the UISelectItems.
+     * 
+     * @param itemValue
+     *            the value for each selectItem.
+     */
+    public void setItemValue(String itemValue) { this.itemValue = itemValue; }
+
+    /**
+     * Sets the itemVar property of the UISelectItems. Used to override the
+     * default variable mapping of "item" used in both the itemValue and
+     * itemLabel properties.
+     * 
+     * @param itemVar
+     *            the variable to map for each indiviual SelectItem.
+     */
+    public void setItemVar(String itemVar) { this.itemVar = itemVar; }
+
+    protected boolean useItemLabel() {
+        return this.itemLabel != null
+                || this.getValueBinding("itemLabel") != null;
+    }
+
+    protected boolean useItemValue() {
+        return this.itemValue != null
+                || this.getValueBinding("itemValue") != null;
+    }
 }

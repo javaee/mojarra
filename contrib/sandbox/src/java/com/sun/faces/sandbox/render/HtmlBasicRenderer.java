@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.1 2006/12/13 20:35:46 jdlee Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.2 2007/01/26 22:33:24 jdlee Exp $
  */
 
 /*
@@ -32,16 +32,27 @@
 package com.sun.faces.sandbox.render;
 
 
-import com.sun.faces.sandbox.util.Util;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
-import javax.faces.component.*;
+import javax.faces.component.NamingContainer;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.component.UIParameter;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
-import java.io.IOException;
-import java.util.*;
+
+import com.sun.faces.sandbox.util.Util;
 
 /**
  * <B>HtmlBasicRenderer</B> is a base class for implementing renderers

@@ -5,7 +5,6 @@ package com.sun.faces.sandbox.component;
 
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
 
 /**
  * @author Jason Lee

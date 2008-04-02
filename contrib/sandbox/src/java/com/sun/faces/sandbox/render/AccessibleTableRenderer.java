@@ -1,5 +1,5 @@
 /*
- * $Id: AccessibleTableRenderer.java,v 1.1 2006/12/13 20:35:46 jdlee Exp $
+ * $Id: AccessibleTableRenderer.java,v 1.2 2007/01/26 22:33:24 jdlee Exp $
  */
 
 /*
@@ -30,18 +30,19 @@
 package com.sun.faces.sandbox.render;
 
 
-import com.sun.faces.RIConstants;
-import com.sun.faces.sandbox.util.Util;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.faces.component.UIColumn;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIData;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
+import com.sun.faces.RIConstants;
+import com.sun.faces.sandbox.util.Util;
 
 /** <p>Render a {@link UIData} component as a two-dimensional table.</p> */
 

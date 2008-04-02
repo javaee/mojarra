@@ -1,11 +1,11 @@
 package com.sun.faces.sandbox.taglib;
 
-import com.sun.faces.sandbox.util.Util;
-
 import javax.faces.component.UIComponent;
 import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import javax.servlet.jsp.JspException;
+
+import com.sun.faces.sandbox.util.Util;
 
 public final class AccessibleDataTableTag extends UIComponentTag {
 

@@ -20,8 +20,6 @@ import com.sun.faces.sandbox.util.Util;
  *
  */
 public class FileDownloadRenderer extends Renderer {
-//    protected ELResolver elResolver;
-//    protected ELContext elContext;
     protected Object oldBinding = null;
 
     @Override
@@ -45,10 +43,6 @@ public class FileDownloadRenderer extends Renderer {
     }
     
     protected void setElValue(FacesContext context, FileDownload comp) {
-//        this.elContext = context.getELContext();
-//        this.elResolver = elContext.getELResolver();
-//        oldBinding = this.elResolver.getValue(elContext, null, comp.getUrlVar());
-//        elResolver.setValue(elContext, null, comp.getUrlVar(), generateUri(context, comp));
         ValueBinding vb = Util.getValueBinding("#{"+comp.getUrlVar()+"}");
         vb.setValue(context, generateUri(context, comp));
         
@@ -57,9 +51,6 @@ public class FileDownloadRenderer extends Renderer {
     protected void resetElValue(FacesContext context, FileDownload comp) {
         ValueBinding vb = Util.getValueBinding("#{"+comp.getUrlVar()+"}");
         vb.setValue(context, null);
-//        if (elResolver != null) {
-//            elResolver.setValue(elContext, null, comp.getUrlVar(), oldBinding);
-//        }
     }
 
     @Override

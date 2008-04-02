@@ -5,7 +5,6 @@ package com.sun.faces.sandbox.taglib;
 
 import javax.faces.component.UIComponent;
 
-import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.component.YuiMenuItem;
 
 /**

@@ -4,18 +4,14 @@
 package com.sun.faces.sandbox.render;
 
 import java.io.IOException;
-import java.util.List;
 
-import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.ValueHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
 import com.sun.faces.sandbox.component.YuiMenuBase;
 import com.sun.faces.sandbox.component.YuiMenuItem;
-import com.sun.faces.sandbox.model.Menu;
 import com.sun.faces.sandbox.util.Util;
 import com.sun.faces.sandbox.util.YuiConstants;
 
@@ -51,6 +47,8 @@ public class YuiMenuRenderer extends Renderer {
         ,YuiConstants.JS_MENU
         ,YuiConstants.JS_YUI_MENU_HELPER
     };
+    
+    int idCount = 0;
 
     /**
      * This String array lists all of the CSS files needed by this component.
@@ -104,8 +102,9 @@ public class YuiMenuRenderer extends Renderer {
      * @see com.sun.faces.sandbox.model.Menu
      */
     protected void renderMenu (ResponseWriter writer, UIComponent component) throws IOException {
+        idCount++;
         writer.startElement("div", component);
-        writer.writeAttribute("id", component.getClientId(FacesContext.getCurrentInstance()), "id");
+        writer.writeAttribute("id", component.getClientId(FacesContext.getCurrentInstance()) + "_" + idCount, "id");
         writer.writeAttribute("style", "padding: 0px;", "style");
         writer.writeAttribute("class", "yuimenu", "class");
 
@@ -137,14 +136,22 @@ public class YuiMenuRenderer extends Renderer {
      * @see com.sun.faces.sandbox.model.MenuItem
      */
     protected void renderMenuItem (ResponseWriter writer, YuiMenuItem menuItem) throws IOException {
+        idCount++;
         writer.startElement("li", menuItem);
+        writer.writeAttribute("id", menuItem.getClientId(FacesContext.getCurrentInstance()) + "_" + idCount, "id");
         writer.writeAttribute("class", "yuimenuitem", "class");
+        String label = (String)menuItem.getValue();
+        String url = menuItem.getUrl();
 
-        if (menuItem.getUrl() != null && menuItem.getValue() != null) {
-            writer.startElement("a", menuItem);
-            writer.writeAttribute("href", menuItem.getUrl(), "href");
-            writer.writeText(menuItem.getValue(), null);
-            writer.endElement("a");
+        if (label != null) {
+            if ((url != null) && (!"".equals(url.trim()))) { 
+                writer.startElement("a", menuItem);
+                writer.writeAttribute("href", menuItem.getUrl(), "href");
+                writer.writeText(menuItem.getValue(), null);
+                writer.endElement("a");
+            } else {
+                writer.writeText(menuItem.getValue(), null);
+            }
         }
         if (menuItem.getChildCount() > 0) {
             for (UIComponent child: menuItem.getChildren()) {
@@ -169,7 +176,7 @@ public class YuiMenuRenderer extends Renderer {
 
         String ctorArgs = buildConstructorArgs(component);
         writer.writeText(("var oMenu_%%%ID%%% = new YUISF.Menu(\"%%%ID%%%\", {" + ctorArgs + 
-        "});").replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance())) , null);
+        "});").replaceAll("%%%ID%%%", component.getClientId(FacesContext.getCurrentInstance()) + "_1") , null);
         writer.endElement("script");
     }
 
