@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.9 2004/02/03 02:43:59 rkitain Exp $
+ * $Id: OutputLinkRenderer.java,v 1.10 2004/02/03 04:17:07 jvisvanathan Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.9 2004/02/03 02:43:59 rkitain Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.10 2004/02/03 04:17:07 jvisvanathan Exp $
  */
 
 public class OutputLinkRenderer extends HtmlBasicRenderer {
@@ -85,6 +85,11 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
         }
 
 	// take no action, this is an Output component.
+        if (log.isTraceEnabled()) {
+            log.trace("No decoding necessary since the component " 
+                + component.getId() + 
+                " is not an instance or a sub class of UIInput");
+        }
 	return;
     }
 
@@ -108,6 +113,9 @@ public class OutputLinkRenderer extends HtmlBasicRenderer {
 
 	UIOutput output = (UIOutput) component;
 	String hrefVal = getCurrentValue(context, component);
+        if (log.isTraceEnabled()) {
+            log.trace("Value to be rendered " + hrefVal);
+        }
 
         // suppress rendering if "rendered" property on the output is
         // false

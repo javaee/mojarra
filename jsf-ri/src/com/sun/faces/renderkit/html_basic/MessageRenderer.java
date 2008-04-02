@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.42 2004/01/27 21:04:26 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.43 2004/02/03 04:17:05 jvisvanathan Exp $
  */
 
 /*
@@ -84,19 +84,26 @@ public class MessageRenderer extends HtmlBasicRenderer {
         FacesMessage curMessage = null;
         ResponseWriter writer = null;
 
-	if (component instanceof UIOutput) {
-	    omRenderer.encodeEnd(context, component);
-	    return;
-	}
-        
-        if (context == null || component == null) {
+	if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
        
+        if (component instanceof UIOutput) {
+	    omRenderer.encodeEnd(context, component);
+	    return;
+	}
+        if (log.isTraceEnabled()) {
+            log.trace("Begin encoding component " + component.getId());
+        }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
+            if (log.isTraceEnabled()) {
+                log.trace("End encoding component " + 
+                component.getId() + " since " + 
+                "rendered attribute is set to false ");
+            }
             return;
         }
         writer = context.getResponseWriter();
@@ -257,6 +264,9 @@ public class MessageRenderer extends HtmlBasicRenderer {
             writer.endElement("td");
             writer.endElement("tr");
             writer.endElement("table");
+        }
+        if (log.isTraceEnabled()) {
+            log.trace("End encoding component " + component.getId());
         }
     }
     
