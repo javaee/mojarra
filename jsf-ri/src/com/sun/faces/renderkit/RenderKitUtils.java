@@ -222,7 +222,18 @@ public class RenderKitUtils {
           + "\n            i += 1;"
           + "\n        }"
           + "\n    };"
-          + "\n}";         
+          + "\n}"   
+          + "\nfunction jsfcljs(f, pvp, t) {"
+          + "\n    if (f.apf) {"
+          + "\n        f.apf(pvp);"
+          + "\n    }"
+          + "\n    if (t) {"
+          + "\n       f.target = t;"
+          + "\n    }"
+          + "\n    f.submit();"
+          + "\n    return false;"
+          + "\n};";
+          
     
     /**
      * <p>A <code>compressed</code> version of <code>FORM_INIT_JS</code>.</p>
@@ -933,33 +944,34 @@ public class RenderKitUtils {
      * <p>Returns a string that can be inserted into the <code>onclick</code>
      * handler of a command.  This string will add all request parameters
      * as well as the client ID of the activated command to the form as
-     * hidden input parameters.</p>
+     * hidden input parameters, update the target of the link if necessary,
+     * and handle the form submission.  The content of {@link #FORM_INIT_JS}
+     * must be rendered prior to using this method.</p>
      * @param formClientId the client ID of the form
      * @param commandClientId the client ID of the command
-     * @param params the nested parameters, if any
-     * @return a String suitable for the <code>onclick</code> handler
+     * @param target
+     *@param params the nested parameters, if any @return a String suitable for the <code>onclick</code> handler
      *  of a command
      */
-    public static String getCommandLinkParamScript(String formClientId,
-                                                   String commandClientId,
-                                                   Param[] params) {
+    public static String getCommandLinkOnClickScript(String formClientId,
+                                                     String commandClientId,
+                                                     String target,
+                                                     Param[] params) {
 
-        StringBuilder sb = new StringBuilder(64);          
-        sb.append("var f = document.forms['");
+        StringBuilder sb = new StringBuilder(64);    
+        sb.append("jsfcljs(document.forms['");
         sb.append(formClientId);        
-        sb.append("']; if(f.apf){f.apf('");        
-        sb.append(commandClientId);
-        sb.append(',');
-        sb.append(commandClientId);               
-
+        sb.append("'],'");
+        sb.append(commandClientId).append(",").append(commandClientId);
         for (Param param : params) {         
             sb.append(",");
             sb.append(param.name);
             sb.append(",");
             sb.append(param.value);            
-        }
-        
-        sb.append("');};");
+        }          
+        sb.append("','");
+        sb.append(target);
+        sb.append("');");
 
         return sb.toString();
         

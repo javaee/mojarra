@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.54 2006/08/02 15:22:14 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.55 2006/08/07 23:13:26 rlubke Exp $
  */
 
 /*
@@ -316,31 +316,19 @@ public class CommandLinkRenderer extends LinkRenderer {
 
         Param[] params = getParamList(command);
         String commandClientId = command.getClientId(context);
+        String target = (String) command.getAttributes().get("target");
+        if (target != null) {
+            target = target.trim();          
+        } else {
+            target = "";
+        }
+        
         sb.append(
-              RenderKitUtils.getCommandLinkParamScript(formClientId,
+              RenderKitUtils.getCommandLinkOnClickScript(formClientId,
                                                        commandClientId,
+                                                       target, 
                                                        params));       
        
-        // Set the target attribute on the form element using javascript.
-        // Because we treat commandLink as a button,setting target on it,
-        // will not have the desired effect since we "return false" for 
-        // onclick which would essentially cancel the click.
-        String target = (String) command.getAttributes().get("target");
-        if (target != null && target.trim().length() > 0) {
-            sb.append(" document.forms[");
-            sb.append('\'');
-            sb.append(formClientId);
-            sb.append('\'');
-            sb.append("].target='");
-            sb.append(target);
-            sb.append("';");
-        }
-        sb.append(" document.forms[");
-        sb.append('\'');
-        sb.append(formClientId);
-        sb.append('\'');
-        sb.append("].submit(); return false;");                              
-
         // we need to finish wrapping the injected js then
         if (userSpecifiedOnclick) {
             sb.append("};return (a()==false) ? false : b();");

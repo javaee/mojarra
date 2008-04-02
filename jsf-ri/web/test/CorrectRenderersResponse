@@ -1,12 +1,12 @@
 
-<form id="formRenderer0" name="formRenderer0" method="post" action="/test/JspRedirector/root;jsessionid=a58c6b210b9e7d2c144f69d74c2c">
+<form id="formRenderer0" name="formRenderer0" method="post" action="/test/JspRedirector/root;jsessionid=acf2e13ad694f0776793d8d073f0">
 <input type="hidden" name="formRenderer0" value="formRenderer0" />
 ~com.sun.faces.saveStateFieldMarker~
 
 
 </form>
 
-<form id="formRenderer1" name="formRenderer1" method="post" action="/test/JspRedirector/root;jsessionid=a58c6b210b9e7d2c144f69d74c2c">
+<form id="formRenderer1" name="formRenderer1" method="post" action="/test/JspRedirector/root;jsessionid=acf2e13ad694f0776793d8d073f0">
 <input type="hidden" name="formRenderer1" value="formRenderer1" />
 ~com.sun.faces.saveStateFieldMarker~
 
@@ -30,29 +30,29 @@
 	</tr>
 </table></td>	</tr>
 </table>
-<input id="imageButton" type="image" src="duke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" name="imageButton" />
-<input id="imageButton2" type="image" src="resduke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" name="imageButton2" />
+<input id="imageButton" type="image" src="duke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" name="imageButton" />
+<input id="imageButton2" type="image" src="resduke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" name="imageButton2" />
 <input id="labelButton1" type="submit" name="labelButton1" value="PASSED" />
 <input id="labelButton2" type="reset" name="labelButton2" value="model label" />
 <input id="labelButton3" type="submit" name="labelButton3" value="RES-BUNDLE PASSED" />
 <input id="labelButton4" type="reset" name="labelButton4" value="" />
-<a id="labelLink1" name="labelLink1" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c">PASSED</a>
-<a id="labelLink2" name="labelLink2" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c">model label</a>
-<a id="labelLink3" name="labelLink3" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c">RES-BUNDLE PASSED</a>
-<a id="labelLink4" name="labelLink4" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
-<a id="linkImage" name="linkImage" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c"><img src="duke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" /></a>
-<a id="linkImage2" name="linkImage2" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c"><img src="resduke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" /></a>
-<a id="paramLink" name="paramLink" href="hrefValue;jsessionid=a58c6b210b9e7d2c144f69d74c2c?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" /></a>
+<a id="labelLink1" name="labelLink1" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0">PASSED</a>
+<a id="labelLink2" name="labelLink2" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0">model label</a>
+<a id="labelLink3" name="labelLink3" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0">RES-BUNDLE PASSED</a>
+<a id="labelLink4" name="labelLink4" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape"></a>
+<a id="linkImage" name="linkImage" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0"><img src="duke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" /></a>
+<a id="linkImage2" name="linkImage2" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0"><img src="resduke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" /></a>
+<a id="paramLink" name="paramLink" href="hrefValue;jsessionid=acf2e13ad694f0776793d8d073f0?parameter1=param_value1&parameter2=param_value2"><img src="resduke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" /></a>
 
 <script type="text/javascript" language="Javascript"
 <!--
-for (var f = 0; f < document.forms.length; f++) {var fm = document.forms[f];fm.dpf = function() {var adp = this.adp;if (adp != null) {for (var i = 0; i < adp.length; i++) {this.removeChild(adp[i]);}}this.adp = null;};var mos = fm.onsubmit;if (mos == null) {fm.onsubmit = fm.dpf;} else {fm.onsubmit = function() {fm.dpf();mos();}}fm.apf = function(pvp) {this.dpf();var adp = new Array();this.adp = adp;var ps = pvp.split(',');for (var i = 0, ii = 0; i < ps.length; i++, ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];this.appendChild(p);adp[ii] = p;i += 1;}};}
+for (var f = 0; f < document.forms.length; f++) {var fm = document.forms[f];fm.dpf = function() {var adp = this.adp;if (adp != null) {for (var i = 0; i < adp.length; i++) {this.removeChild(adp[i]);}}this.adp = null;};var mos = fm.onsubmit;if (mos == null) {fm.onsubmit = fm.dpf;} else {fm.onsubmit = function() {fm.dpf();mos();}}fm.apf = function(pvp) {this.dpf();var adp = new Array();this.adp = adp;var ps = pvp.split(',');for (var i = 0, ii = 0; i < ps.length; i++, ii++) {var p = document.createElement("input");p.type = "hidden";p.name = ps[i];p.value = ps[i + 1];this.appendChild(p);adp[ii] = p;i += 1;}};}function jsfcljs(f, pvp, t) {if (f.apf) {f.apf(pvp);}if (t) {f.target = t;}f.submit();return false;};
 //-->
 ></script>
-<a id="j_id0:labelLink1" href="#" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:labelLink1,j_id0:labelLink1');}; document.forms['j_id0'].submit(); return false;">PASSED</a>
-<a id="j_id0:labelLink2" href="#" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:labelLink2,j_id0:labelLink2');}; document.forms['j_id0'].submit(); return false;">model label</a>
-<a id="j_id0:labelLink3" href="#" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:labelLink3,j_id0:labelLink3');}; document.forms['j_id0'].submit(); return false;">RES-BUNDLE PASSED</a>
-<a id="j_id0:labelLink4" href="#" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:labelLink4,j_id0:labelLink4');}; document.forms['j_id0'].submit(); return false;"></a>
-<a id="j_id0:linkImage" href="#" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:linkImage,j_id0:linkImage');}; document.forms['j_id0'].submit(); return false;"><img src="duke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" /></a>
-<a id="j_id0:linkImage2" href="#" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:linkImage2,j_id0:linkImage2');}; document.forms['j_id0'].submit(); return false;"><img src="resduke.gif;jsessionid=a58c6b210b9e7d2c144f69d74c2c" /></a>
-<a id="j_id0:paramLink" href="#" onclick="var f = document.forms['j_id0']; if(f.apf){f.apf('j_id0:paramLink,j_id0:paramLink,parameter1,param_value1,parameter2,param_value2');}; document.forms['j_id0'].submit(); return false;"link with parameters></a>
+<a id="j_id0:labelLink1" href="#" onclick="jsfcljs(document.forms['j_id0'],'j_id0:labelLink1,j_id0:labelLink1','');">PASSED</a>
+<a id="j_id0:labelLink2" href="#" onclick="jsfcljs(document.forms['j_id0'],'j_id0:labelLink2,j_id0:labelLink2','');">model label</a>
+<a id="j_id0:labelLink3" href="#" onclick="jsfcljs(document.forms['j_id0'],'j_id0:labelLink3,j_id0:labelLink3','');">RES-BUNDLE PASSED</a>
+<a id="j_id0:labelLink4" href="#" coords="coords" hreflang="hreflang" rel="rel" rev="rev" shape="shape" onclick="jsfcljs(document.forms['j_id0'],'j_id0:labelLink4,j_id0:labelLink4','');"></a>
+<a id="j_id0:linkImage" href="#" onclick="jsfcljs(document.forms['j_id0'],'j_id0:linkImage,j_id0:linkImage','');"><img src="duke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" /></a>
+<a id="j_id0:linkImage2" href="#" onclick="jsfcljs(document.forms['j_id0'],'j_id0:linkImage2,j_id0:linkImage2','');"><img src="resduke.gif;jsessionid=acf2e13ad694f0776793d8d073f0" /></a>
+<a id="j_id0:paramLink" href="#" onclick="jsfcljs(document.forms['j_id0'],'j_id0:paramLink,j_id0:paramLink,parameter1,param_value1,parameter2,param_value2','');"link with parameters></a>

@@ -10,9 +10,9 @@
   </head>
   <body>
     
-<form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=a7df7261246f44710f6c0e57974e" enctype="application/x-www-form-urlencoded">
+<form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=ad5061b1858936d02ffb9e30cf8a" enctype="application/x-www-form-urlencoded">
 <input type="hidden" name="j_id_id17" value="j_id_id17" />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id41:j_id42" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id39:j_id40" />
 
 <script type="text/javascript" language="Javascript">
 <!--
@@ -52,17 +52,27 @@ for (var f = 0; f < document.forms.length; f++) {
         }
     };
 }
+function jsfcljs(f, pvp, t) {
+    if (f.apf) {
+        f.apf(pvp);
+    }
+    if (t) {
+       f.target = t;
+    }
+    f.submit();
+    return false;
+};
 //-->
 </script>
-<a href="#" onclick="var f = document.forms['j_id_id17']; if(f.apf){f.apf('j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value');}; document.forms['j_id_id17'].submit(); return false;">one</a>
+<a href="#" onclick="jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value','');">one</a>
             
                 
                 </br>
             
-                <a href="#" onclick="var f = document.forms['j_id_id17']; if(f.apf){f.apf('j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value');}; document.forms['j_id_id17'].submit(); return false;">two</a>
+                <a href="#" onclick="jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value','');">two</a>
                 </br>
             
-                <a href="#" onclick="var f = document.forms['j_id_id17']; if(f.apf){f.apf('j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value');}; document.forms['j_id_id17'].submit(); return false;">three</a>
+                <a href="#" onclick="jsfcljs(document.forms['j_id_id17'],'j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value','');">three</a>
                 </br>
             
         
