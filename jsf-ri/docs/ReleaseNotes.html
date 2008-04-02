@@ -637,6 +637,25 @@ This is a non-standard feature, so don't count on it.</p> </p></li>
           conforms to JSP 1.2, Servlet 2.3, you must use JSTL 1.0 
           instead of JSTL 1.1.  </p></li>
 
+          <li><p>There is a known issue in S1AS 7.x where security 
+          constraints are applied to welcome files. The bug number for
+          this issue is #5004853.</p>
+          <p>This bug is problematic for the <code>jsf-cardemo</code> 
+          application since the security constraint is applied to the 
+          <code>index.jsp</code> welcome file.  Since this container 
+          applies the security constraint to the welcome file, the 
+          container displays an error page when an attempt to access 
+          the application is made. On older versions of S1AS 7.x 
+          that error code is incorrectly reported as 500. This has since 
+          been fixed to be the correct number 403.</p>
+          <p>To get around this problem, modify the security constraint
+          in the <code>web.xml</code> welcome file to exclude the <code>
+          index.jsp</code> page.</p>
+          <p>The Java Systems Application Server 8.0, JWSDP 1.3, and 
+          Tomcat 5.x do not have this problem and properly exclude welcome 
+          files from the security constraints.</p>
+          </li>
+
 	  <li><p>The Non-JSP demo does not deploy under tomcat 4.1.29.
 	  </p></li>
 
