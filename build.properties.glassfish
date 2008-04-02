@@ -29,7 +29,7 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.10 2007/01/08 23:23:35 rlubke Exp $
+# $Id: build.properties.glassfish,v 1.11 2007/03/01 23:59:53 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
