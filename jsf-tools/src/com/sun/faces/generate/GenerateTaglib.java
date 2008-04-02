@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.2 2003/11/04 18:38:34 rkitain Exp $
+ * $Id: GenerateTaglib.java,v 1.3 2003/11/05 04:41:05 eburns Exp $
  */
 
 /*
@@ -213,7 +213,6 @@ public class GenerateTaglib extends GenerateTagBase {
 		        " from meta-data.");
 	        }
 		
-		tagName = tagName.toLowerCase();
 		tagClass = tagLibGenerator.getTagClassPath(tagName)+"."+tagName+"Tag";
 
 		result = generateTldTagInfo(result, tagName, tagClass, 
@@ -448,7 +447,7 @@ public class GenerateTaglib extends GenerateTagBase {
         String tagClass, String teiClass, String bodyContent) {
         result.append("  <tag>\n");
 	result.append("    <name>");
-	result.append(tagName);
+	result.append(tagName.toLowerCase());
 	result.append("</name>\n");
 	result.append("    <tag-class>");
 	result.append(tagClass);
