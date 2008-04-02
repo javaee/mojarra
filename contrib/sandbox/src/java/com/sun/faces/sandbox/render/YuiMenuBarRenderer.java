@@ -22,9 +22,9 @@ public class YuiMenuBarRenderer extends YuiMenuRenderer {
 
         writer.writeText(("var oMenu_%%%ID%%% = new YAHOO.widget.MenuBar(\"%%%ID%%%\", {" +
                 buildConstructorArgs(component) + "});")
-                .replaceAll("%%%ID%%%", component.getId()), null);
+                .replaceAll("%%%ID%%%", component.getId() + "_1"), null);
         writer.writeText("oMenu_%%%ID%%%.render();"
-                .replaceAll("%%%ID%%%", component.getId()), null);
+                .replaceAll("%%%ID%%%", component.getId() + "_1"), null);
         writer.endElement("script");
     }
 

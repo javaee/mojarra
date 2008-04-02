@@ -56,13 +56,13 @@ public class YuiMenuRenderer extends Renderer {
         Menu menu = (Menu)vh.getValue();
         
         ResponseWriter writer = context.getResponseWriter();
-        renderMenu(writer, (YuiMenuBase)component, menu);
+        renderMenu(writer, (YuiMenuBase)component, menu, 1);
         renderJavaScript(writer, (YuiMenuBase)component, menu);
     }
     
-    protected void renderMenu (ResponseWriter writer, YuiMenuBase component, Menu menu) throws IOException {
+    protected void renderMenu (ResponseWriter writer, YuiMenuBase component, Menu menu, int level) throws IOException {
         writer.startElement("div", component);
-        writer.writeAttribute("id", component.getId(), "id");
+        writer.writeAttribute("id", component.getId() + "_" + level, "id");
         writer.writeAttribute("class", "yuimenu", "class");
         
         writer.startElement("div", component);
@@ -72,7 +72,8 @@ public class YuiMenuRenderer extends Renderer {
         writer.writeAttribute("class", "first-of-type", "class");
         
         for (MenuItem item : menu.getMenuItems()) {
-            renderMenuItem(writer, component, item);
+            level++;
+            renderMenuItem(writer, component, item, level);
         }
         
         writer.endElement("ul");
@@ -80,7 +81,7 @@ public class YuiMenuRenderer extends Renderer {
         writer.endElement("div");
     }
     
-    protected void renderMenuItem (ResponseWriter writer, YuiMenuBase component, MenuItem item) throws IOException {
+    protected void renderMenuItem (ResponseWriter writer, YuiMenuBase component, MenuItem item, int level) throws IOException {
         writer.startElement("li", component);
         writer.writeAttribute("class", "yuimenuitem", "class");
         
@@ -90,7 +91,7 @@ public class YuiMenuRenderer extends Renderer {
         writer.endElement("a");
         
         if (item.getSubMenu() != null) {
-            renderMenu(writer, component, item.getSubMenu());
+            renderMenu(writer, component, item.getSubMenu(), level++);
         }
         writer.endElement("li");
     }
@@ -102,7 +103,7 @@ public class YuiMenuRenderer extends Renderer {
         
         String ctorArgs = buildConstructorArgs(component);
         writer.writeText(("var oMenu_%%%ID%%% = new YUISF.Menu(\"%%%ID%%%\", {" + ctorArgs + 
-                "});").replaceAll("%%%ID%%%", component.getId()) , null);
+                "});").replaceAll("%%%ID%%%", component.getId() + "_1") , null);
         writer.endElement("script");
     }
     
