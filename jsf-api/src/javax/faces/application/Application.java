@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.48 2007/03/12 01:37:40 rlubke Exp $
+ * $Id: Application.java,v 1.49 2007/03/13 02:39:06 rlubke Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.lang.reflect.Method;
 
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
@@ -976,36 +975,15 @@ public abstract class Application {
 
     // --------------------------------------------------------- Private Methods
 
-    
-    private static ExternalContext getCurrentExternalContext(FacesContext context) {
-        if (context != null) {
-            return context.getExternalContext();
-        }
-        context = FacesContext.getCurrentInstance();
-        if (context != null) {
-            return context.getExternalContext();
-        } else {
-            // hold your nose....
-            try {
-                Class cl =
-                     Class.forName("com.sun.faces.config.ConfigureListener",
-                                   true,
-                                   Thread.currentThread().getContextClassLoader());
-                if (cl != null) {
-                    Method method = cl.getMethod("getExternalContextDuringInitialize()");
-                    if (method != null) {
-                        return ((ExternalContext) method.invoke(null));
-                    }
-                }
-            } catch (Exception e) {
-               ;
-            }
-        }
-        return null;
-    }
 
     private static Application getRIApplicationImpl(FacesContext context) {
-        ExternalContext extContext = getCurrentExternalContext(context);
+        ExternalContext extContext;
+        if (context != null) {
+            extContext = context.getExternalContext();
+        } else {
+            extContext =
+                 FacesContext.getCurrentInstance().getExternalContext();
+        }
         if (extContext != null) {
             return ((Application) extContext.getApplicationMap().
                  get("com.sun.faces.ApplicationImpl"));

@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.11 2007/02/05 04:19:23 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.12 2007/03/13 02:39:05 rlubke Exp $
  */
 
 /*
@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.io.Serializable;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -260,7 +261,7 @@ public class JSFVersionTracker implements Serializable {
     }
     
     void publishInstanceToApplication() {
-        ExternalContext extContext = ConfigureListener.getExternalContextDuringInitialize();
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
         if (null != extContext) {
             ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
             if (null != associate) {

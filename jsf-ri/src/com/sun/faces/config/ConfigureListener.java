@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.96 2007/02/27 23:10:25 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.97 2007/03/13 02:39:04 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -33,12 +33,17 @@ import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.component.UIViewRoot;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
@@ -216,31 +221,6 @@ public class ConfigureListener implements ServletContextListener {
     
     // ------------------------------------------ ServletContextListener Methods
 
-    /**
-     * <p>This ivar is used to convey the ServletContext instance to the
-     * ApplicationAssociate ctor, which is executed when the Application
-     * is instantiated.  Note that this data bridge is only used by the
-     * Sun RI ApplicationImpl.  If the user replaces ApplicationFactory,
-     * and chooses to decorate the existing Application instance, this
-     * data bridge is used.  However, if the user replaces
-     * ApplicationFactory and entirely replaces the ApplicationInstance,
-     * this data-bridge is not used. </p>
-     *
-     */
-
-    private static ThreadLocal<ServletContextAdapter> tlsExternalContext =
-          new ThreadLocal<ServletContextAdapter>() {
-              protected ServletContextAdapter initialValue() {
-                  return (null);
-              }
-          };
-
-    static ThreadLocal getThreadLocalExternalContext() {
-        if (Util.isUnitTestModeEnabled()) {
-            return tlsExternalContext;
-        }
-        return null;
-    }
 
     /**
      * A subclass of ConfigureListener can override isFeatureEnabled and reset
@@ -263,16 +243,6 @@ public class ConfigureListener implements ServletContextListener {
         }
     }
 
-    /**
-     * <p>During the execution of {@link #contextInitialized}, this
-     * method will return the ServletContext instance.</p>
-     * @return <code>ExternalContext</code> used specifically during
-     *  initialization
-     */
-
-    public static ExternalContext getExternalContextDuringInitialize() {
-        return tlsExternalContext.get();
-    }   
 
     public void contextInitialized(ServletContextEvent sce) {        
         ServletContext context = sce.getServletContext();
@@ -310,6 +280,8 @@ public class ConfigureListener implements ServletContextListener {
             }
         }
 
+        FacesContext initContext = new InitFacesContext(context);
+
         try {
 
             if (LOGGER.isLoggable(Level.INFO)) {
@@ -317,12 +289,6 @@ public class ConfigureListener implements ServletContextListener {
                            "jsf.config.listener.version",
                            getServletContextIdentifier(context));
             }
-
-            // store the servletContext instance in Thread local Storage.
-            // This enables our Application's ApplicationAssociate to locate
-            // it so it can store the ApplicationAssociate in the
-            // ServletContext.
-            tlsExternalContext.set(new ServletContextAdapter(context));
 
             // Prepare local variables we will need
             FacesConfigBean fcb = new FacesConfigBean();            
@@ -452,19 +418,19 @@ public class ConfigureListener implements ServletContextListener {
             // Jsp.
             registerELResolverAndListenerWithJsp(context);
         } finally {
-            if (!initialized) {
+           if (!initialized) {
                 JSFVersionTracker tracker = getJSFVersionTracker();
                 if (null != tracker) {
                     tracker.publishInstanceToApplication();
                 }
                 releaseDigester(digester);
-            }
+           }
           
             if (associate != null) {
                 associate.setContextName(getServletContextIdentifier(context));
             }
-            RenderKitUtils.loadSunJsfJs(tlsExternalContext.get());      
-            tlsExternalContext.set(null);          
+            RenderKitUtils.loadSunJsfJs(initContext.getExternalContext());
+            initContext.release();
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE,
                            "jsf.config.listener.version.complete",
@@ -486,12 +452,12 @@ public class ConfigureListener implements ServletContextListener {
             FactoryFinder.releaseFactories();            
 
         } finally {
-            tlsExternalContext.set(new ServletContextAdapter(context));
+            FacesContext initContext = new InitFacesContext(context);
             ApplicationAssociate
-                  .clearInstance(tlsExternalContext.get());
+                  .clearInstance(initContext.getExternalContext());
             // Release the initialization mark on this web application
             release();
-            tlsExternalContext.set(null);    
+            initContext.release();
             WebConfiguration.clear(context);
         }
 
@@ -562,7 +528,8 @@ public class ConfigureListener implements ServletContextListener {
         }
         Application application = application();
         associate =
-                ApplicationAssociate.getInstance(getExternalContextDuringInitialize());                              
+                ApplicationAssociate.getInstance(
+                     FacesContext.getCurrentInstance().getExternalContext());                              
 
         // Configure scalar properties
 
@@ -1658,8 +1625,93 @@ public class ConfigureListener implements ServletContextListener {
 
     }
 
+    private static class InitFacesContext extends FacesContext {
 
-    public static class ServletContextAdapter extends ExternalContext {
+        private ExternalContext ec;
+
+        public InitFacesContext(ServletContext sc) {
+            ec = new ServletContextAdapter(sc);
+            setCurrentInstance(this);
+        }
+
+        public Application getApplication() {
+            throw new UnsupportedOperationException();
+        }
+
+        public Iterator<String> getClientIdsWithMessages() {
+            throw new UnsupportedOperationException();
+        }
+
+        public ExternalContext getExternalContext() {
+            return ec;
+        }
+
+        public FacesMessage.Severity getMaximumSeverity() {
+            throw new UnsupportedOperationException();
+        }
+
+        public Iterator<FacesMessage> getMessages() {
+            throw new UnsupportedOperationException();
+        }
+
+        public Iterator<FacesMessage> getMessages(String clientId) {
+            throw new UnsupportedOperationException();
+        }
+
+        public RenderKit getRenderKit() {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean getRenderResponse() {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean getResponseComplete() {
+            throw new UnsupportedOperationException();
+        }
+
+        public ResponseStream getResponseStream() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void setResponseStream(ResponseStream responseStream) {
+            throw new UnsupportedOperationException();
+        }
+
+        public ResponseWriter getResponseWriter() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void setResponseWriter(ResponseWriter responseWriter) {
+            throw new UnsupportedOperationException();
+        }
+
+        public UIViewRoot getViewRoot() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void setViewRoot(UIViewRoot root) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void addMessage(String clientId, FacesMessage message) {
+            throw new UnsupportedOperationException();
+        }
+
+        public void release() {
+            setCurrentInstance(null);
+        }
+
+        public void renderResponse() {
+            throw new UnsupportedOperationException();
+        }
+
+        public void responseComplete() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private static class ServletContextAdapter extends ExternalContext {
         
         private ServletContext servletContext = null;
         private ApplicationMap applicationMap = null;

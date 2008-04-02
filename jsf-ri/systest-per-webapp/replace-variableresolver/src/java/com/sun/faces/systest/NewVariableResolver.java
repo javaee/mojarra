@@ -27,7 +27,7 @@ public class NewVariableResolver extends VariableResolver {
     public NewVariableResolver(VariableResolver original) {
         this.original = original;
         
-        ConfigureListener.getExternalContextDuringInitialize().getApplicationMap().put("newVR", this);
+        FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().put("newVR", this);
     }
 
     public Object resolveVariable(FacesContext context, String name) throws EvaluationException {

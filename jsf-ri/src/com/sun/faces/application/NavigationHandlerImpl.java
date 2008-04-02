@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.53 2007/02/05 04:04:37 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.54 2007/03/13 02:39:01 rlubke Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
               FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         aFactory.getApplication();
         ApplicationAssociate associate = ApplicationAssociate.getInstance(
-              ConfigureListener.getExternalContextDuringInitialize());
+              FacesContext.getCurrentInstance().getExternalContext());
         if (associate != null) {
             caseListMap = associate.getNavigationCaseListMappings();
             wildCardSet = associate.getNavigationWildCardList();
