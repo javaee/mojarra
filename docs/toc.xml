@@ -5,8 +5,8 @@
     </banner>
     <!-- this portion is excuted as the footer -->
     <footer>
-        $Revision: 1.3 $<br/>
-        $Date: 2006/06/29 01:26:39 $<br/>        
+        $Revision: 1.4 $<br/>
+        $Date: 2006/06/29 22:03:25 $<br/>        
     </footer>
     <chapter name="JavaServer Faces(TM) 1.2">
         <document name="Overview"
@@ -17,7 +17,7 @@
                   url="changelog.html"/>
     </chapter>
     <chapter name="Community">
-        <document name="Think of Stuff"
-                  url="stuff.html"/>
+        <document name="Community"
+                  url="community.html"/>
     </chapter>
 </toc>
