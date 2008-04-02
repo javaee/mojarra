@@ -39,9 +39,35 @@
 
 package carstore;
 
+/**
+ * <p>This is the main backing file bean for the carstore
+ * application.</p>
+ *
+ */
+
 public class CarStore extends Object {
 
+    public CarStore() {}
+
+    // 
+    // ActionRef handlers
+    // 
     
+    public String storeFront1Pressed() {
+	return "carDetail";
+    }
+
+    public String storeFront2Pressed() {
+	return "carDetail";
+    }
+
+    public String storeFront3Pressed() {
+	return "carDetail";
+    }
+
+    public String storeFront4Pressed() {
+	return "carDetail";
+    }
 
 
 }

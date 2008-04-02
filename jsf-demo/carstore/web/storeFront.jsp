@@ -52,6 +52,15 @@
        <f:loadBundle
 	    basename="carstore.Resources" var="bundle"/>
 
+       <f:loadBundle
+	    basename="carstore.Car1" var="car1"/>
+       <f:loadBundle
+	    basename="carstore.Car2" var="car2"/>
+       <f:loadBundle
+	    basename="carstore.Car3" var="car3"/>
+       <f:loadBundle
+	    basename="carstore.Car4" var="car4"/>
+
 <f:view>  
 
     <h:form>
@@ -69,17 +78,17 @@
 
                 <!-- car 1 -->
                 <h:graphic_image url="/150x126_Jalopy.jpg" />
-                <h:output_text value="#{bundle.car1Desc}" /> 
-                <h:output_text value="#{bundle.car1Title}" />
-                <h:command_button action="more1" 
+                <h:output_text value="#{car1.CarDesc}" /> 
+                <h:output_text value="#{car1.CarTitle}" />
+                <h:command_button actionRef="carstore.storeFront1Pressed" 
                                   value="#{bundle.moreButton}" >
                 </h:command_button>
 
                 <!-- car 2 -->
                 <h:graphic_image url="/150x126_Roadster.jpg" />
-                <h:output_text value="#{bundle.car2Desc}" /> 
-                <h:output_text value="#{bundle.car2Title}" />
-                <h:command_button action="more2" 
+                <h:output_text value="#{car2.CarDesc}" /> 
+                <h:output_text value="#{car2.CarTitle}" />
+                <h:command_button actionRef="carstore.storeFront2Pressed" 
                                   value="#{bundle.moreButton}" >
                 </h:command_button>
 
@@ -90,17 +99,17 @@
 
                 <!-- car 3 -->
                 <h:graphic_image url="/150x126_Luxury.jpg" />
-                <h:output_text value="#{bundle.car3Desc}" /> 
-                <h:output_text value="#{bundle.car3Title}" />
-                <h:command_button action="more3" 
+                <h:output_text value="#{car3.CarDesc}" /> 
+                <h:output_text value="#{car3.CarTitle}" />
+                <h:command_button actionRef="carstore.storeFront3Pressed" 
                                   value="#{bundle.moreButton}" >
                 </h:command_button>
 
                 <!-- car 4 -->
                 <h:graphic_image url="/150x126_SUV.jpg" />
-                <h:output_text value="#{bundle.car4Desc}" /> 
-                <h:output_text value="#{bundle.car4Title}" />
-                <h:command_button action="more3" 
+                <h:output_text value="#{car4.CarDesc}" /> 
+                <h:output_text value="#{car4.CarTitle}" />
+                <h:command_button actionRef="carstore.storeFront4Pressed" 
                                   value="#{bundle.moreButton}" >
                 </h:command_button>
 
