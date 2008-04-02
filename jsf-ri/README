@@ -75,7 +75,7 @@ JavaServer(tm) Faces Technology.
 
   The "renderKitId" attribute has been removed from the <f:view> tag.
 
-* a validator signals that validation has failed by throwning an
+* a validator signals that validation has failed by throwing an
   ValidationException.  Also, the signature for Validator.validate() has
   changed.
 
@@ -253,6 +253,12 @@ well as logging for rest of the RI will be done in a future release.
 
 Known Issues With This Release
 ==============================
+
+* The Map returned by the UIComponent.getAttributes() method implements 
+  get() so that if you ask for a key that is implemented as a property, 
+  you get the property value. However, if you call iterator() on the Map, 
+  you will get an Iterator that iterates over the "real" attributes only, 
+  not the properties.
 
 * When authoring a page that uses a UISelectOne or UISelectOne component
   that is backed by a value reference expression that points to a

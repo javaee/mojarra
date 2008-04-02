@@ -584,6 +584,13 @@ in README.</li>
 
 	<ul>
 
+          <li><p>The Map returned by the UIComponent.getAttributes() 
+          method implements get() so that if you ask for a key that 
+          is implemented as a property, you get the property value. 
+          However, if you call iterator() on the Map, you will get 
+          an Iterator that iterates over the "real" attributes only, 
+          not the properties.</p></li>
+
 	  <li><p>When authoring a page that uses a
 	  <code>UISelectOne</code> or <code>UISelectOne</code> component
 	  that is backed by a value reference expression that points to
