@@ -709,7 +709,15 @@ public class HtmlTaglibGenerator extends AbstractGenerator {
         writer.write("        super.setProperties(component);\n");
         String uicomponent = "UI"+strip(componentType);
         writer.write("        "+uicomponent+" "+strip(componentType).toLowerCase()+
-		     " = (UI"+strip(componentType)+ ")component;\n\n");
+		     " = null;\n");
+
+	writer.write("        try {\n");
+        writer.write("            "+strip(componentType).toLowerCase()+
+		     " = (UI"+strip(componentType)+ ")component;\n");
+	writer.write("        }\n");
+	writer.write("        catch (ClassCastException cce) {\n");
+	writer.write("          throw new IllegalStateException(\"Component \" + component.toString() + \" not expected type.  Expected: " + uicomponent + ".  Perhaps you're missing a tag?\");\n");
+	writer.write("        }\n\n");
         if (convertibleValueHolderComponents.contains(uicomponent)) {
             writer.write("        if (converter != null) {\n");
             writer.write("            if (isValueReference(converter)) {\n");
