@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<converter-config>
+
+<!-- Converter Id - Converter Class Name Mappings -->
+
+    <converter>
+        <converter-id>date</converter-id>
+        <class>com.sun.faces.convert.DateConverter</class>
+    </converter>
+    <converter>
+        <converter-id>time</converter-id>
+        <class>com.sun.faces.convert.TimeConverter</class>
+    </converter>
+    <converter>
+        <converter-id>datetime</converter-id>
+        <class>com.sun.faces.convert.DateTimeConverter</class>
+    </converter>
+    <converter>
+        <converter-id>boolean</converter-id>
+        <class>com.sun.faces.convert.BooleanConverter</class>
+    </converter>
+    <converter>
+        <converter-id>number</converter-id>
+        <class>com.sun.faces.convert.NumberConverter</class>
+    </converter>
+
+</converter-config>
