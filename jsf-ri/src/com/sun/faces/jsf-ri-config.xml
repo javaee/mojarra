@@ -652,15 +652,6 @@
     </message>
 
     <message>
-      <message-id>com.sun.faces.RENDERER_ALREADY_EXISTS</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-      <summary xml:lang="en">Renderer for type ''{0}'' already exists.</summary>
-      <summary xml:lang="de">Renderer for type ''{0}'' already exists.</summary>
-      <summary xml:lang="es">Renderer for type ''{0}'' already exists.</summary>
-      <summary xml:lang="fr">Renderer for type ''{0}'' already exists.</summary>
-    </message>
-
-    <message>
       <message-id>com.sun.faces.RENDERER_NOT_FOUND</message-id>
       <message-class>javax.faces.application.MessageImpl</message-class>
       <summary xml:lang="en">Renderer not found for Renderer type: ''{0}''.</summary>
