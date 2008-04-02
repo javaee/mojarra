@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.11 2003/05/15 22:25:46 rkitain Exp $
+ * $Id: ValueBindingImpl.java,v 1.12 2003/08/13 18:15:40 rlubke Exp $
  */
 
 /*
@@ -10,18 +10,19 @@
 package com.sun.faces.el;
 
 import java.util.Map;
-import java.util.List;
+import java.util.Arrays;
 
 import javax.faces.el.ValueBinding;
 import javax.faces.el.PropertyNotFoundException;
+import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
-import javax.faces.component.UIComponent;
 
 import org.mozilla.util.ParameterCheck;
 import org.mozilla.util.Assert;
 
-import com.sun.faces.el.impl.jstl.ELEvaluator;
+import com.sun.faces.el.ext.FacesExpressionInfo;
+import com.sun.faces.el.impl.ElException;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import com.sun.faces.application.ApplicationImpl;
@@ -29,9 +30,28 @@ import com.sun.faces.application.ApplicationImpl;
 public class ValueBindingImpl extends ValueBinding
 {
 //
-// Protected Constants
-//
+// Private/Protected Constants
+//     
+    // Array of faces implicit objects
+    private static final String[] FACES_IMPLICIT_OBJECTS = {
+        "applicationScope",
+        "sessionScope",
+        "requestScope",
+        "facesContext",
+        "cookies",
+        "header",
+        "headerValues",
+        "initParam",
+        "param",
+        "paramValues",
+        "tree"
+    };
 
+    static {
+        // Sort for binary searching
+        Arrays.sort(FACES_IMPLICIT_OBJECTS);
+    }
+    
 //
 // Class Variables
 //
@@ -72,19 +92,7 @@ public class ValueBindingImpl extends ValueBinding
 //
 // General Methods
 //
-
-    public ELEvaluator getELEvaluator() {
-        ELEvaluator elEvaluator = (ELEvaluator)
-	    applicationMap.get(RIConstants.ELEVALUATOR);
-	if (null == elEvaluator) {
-            applicationMap.put(RIConstants.ELEVALUATOR, 
-			       elEvaluator= new ELEvaluator(application));
-	}
-	Assert.assert_it(null != elEvaluator);
-	return elEvaluator;
-    }
-    
-    
+ 
     public void setRef(String newRef) {
 	reset();
 	ParameterCheck.nonNull(newRef);
@@ -96,26 +104,15 @@ public class ValueBindingImpl extends ValueBinding
 	ref = null;
     }
 
-    String addBracketsIfNecessary(String modelReference) {
-        if (modelReference == null) {
-            throw new NullPointerException();
-        }
-        String result = modelReference;
-        if (!(result.startsWith("${") &&
-	      result.endsWith("}"))) {
-            result = "${" + modelReference + "}";
-        }
-        return (result);
-    }
-
     String stripQuotesIfNecessary(String modelReference) {
         if (modelReference == null) {
             throw new NullPointerException();
         }
         String result = modelReference;
-        if ((result.startsWith("\"") || result.startsWith("\'")) &&
-	    (result.endsWith("\"") || result.endsWith("\'"))) {
-            result = modelReference.substring(1, modelReference.length() - 1);
+        int len = modelReference.length() - 1;
+        if ((result.charAt(0) == '"' || result.charAt(0) == '\'') &&
+	    (result.charAt(len) == '"' || result.charAt(len) == '\'')) {
+            result = modelReference.substring(1, len);
         }
         return (result);
     }
@@ -198,7 +195,7 @@ public class ValueBindingImpl extends ValueBinding
 
     boolean hasMultipleSegments() {
 	boolean result = 
-	    (-1 != ref.indexOf(".")) || (-1 != ref.indexOf("["));
+	    (-1 != ref.indexOf('.')) || (-1 != ref.indexOf('['));
 	return result;
     }
 
@@ -219,11 +216,26 @@ public class ValueBindingImpl extends ValueBinding
 	Object result = null;
 
 	try {
-	    result = getELEvaluator().evaluate(addBracketsIfNecessary(toEvaluate), 
-					       context, Object.class);
-	}
-	catch (Throwable e) {
-	    Object [] params = { toEvaluate };
+        FacesExpressionInfo info = new FacesExpressionInfo();
+        info.setExpressionString(toEvaluate);
+        info.setExpectedType(Object.class);
+        info.setFacesContext(context); 
+        info.setFacesVariableResolver(context.getApplication().getVariableResolver());
+        info.setPropertyResolver(context.getApplication().getPropertyResolver());
+	    result = Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER).evaluate(info);
+    } catch (Throwable e) {        
+	    Object [] params = { toEvaluate };        
+        if (e instanceof ElException) {
+            Throwable t = ((ElException) e).getCause();
+            if (t != null) {
+                e = t;
+            }
+        } else if (e instanceof PropertyNotFoundException) {
+            Throwable t = ((PropertyNotFoundException) e).getCause();
+            if (t != null) {
+                e = t;
+            }
+        }
 	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
 	}
 	return result;
@@ -232,17 +244,36 @@ public class ValueBindingImpl extends ValueBinding
     public void setValue(FacesContext context, Object value)
         throws PropertyNotFoundException {
 
-	// PENDING(edburns): check for readOnly-ness
-	try {
-	    getELEvaluator().evaluate(addBracketsIfNecessary(ref), value, 
-				    context, Object.class);
-	    return;
-	}
-	catch (Throwable e) {
-	    Object [] params = { ref };
-
-	    throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
-	}
+        if (isReservedIdentifier(ref)) {
+            throw new ReferenceSyntaxException(
+                Util.getExceptionMessage(Util.ILLEGAL_IDENTIFIER_LVALUE_MODE, new Object[]{ref}));
+        }
+        // PENDING(edburns): check for readOnly-ness        
+        try {
+            FacesExpressionInfo info = new FacesExpressionInfo();
+            info.setExpressionString(ref);
+            info.setExpectedType(Object.class);
+            info.setFacesContext(context);
+            info.setFacesVariableResolver(context.getApplication().getVariableResolver());
+            info.setPropertyResolver(context.getApplication().getPropertyResolver());
+            info.setRValue(value);
+            Util.getExpressionEvaluator(RIConstants.FACES_RE_PARSER).evaluate(info);
+            return;
+        } catch (Throwable e) {
+            Object[] params = {ref};            
+            if (e instanceof ElException) {
+                Throwable t = ((ElException) e).getCause();
+                if (t != null) {
+                    e = t;
+                }
+            } else if (e instanceof PropertyNotFoundException) {
+                Throwable t = ((PropertyNotFoundException) e).getCause();
+                if (t != null) {
+                    e = t;
+                }
+            }
+            throw new PropertyNotFoundException(Util.getExceptionMessage(Util.ILLEGAL_MODEL_REFERENCE_ID, params), e);
+        }
     }
 
     /**
@@ -495,6 +526,17 @@ public class ValueBindingImpl extends ValueBinding
         }
         return segmentIndex;
     }
-
-
+    
+    /**
+     * <p>Returns true if the profivided identifier is a reserved identifier, otherwise
+     * false.</p>
+     * @param identifier the identifier to check
+     * @return returns true if the profivided identifier is a 
+     *         reserved identifier, otherwisefalse
+     */ 
+    private boolean isReservedIdentifier(String identifier) {
+        return (Arrays.binarySearch(FACES_IMPLICIT_OBJECTS, identifier) >= 0);
+    }   
+    
+    
 } // end of class ValueBindingImpl
