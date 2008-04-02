@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.49 2003/09/22 17:16:32 eburns Exp $
+ * $Id: FacesContext.java,v 1.50 2003/09/22 17:27:45 eburns Exp $
  */
 
 /*
@@ -297,6 +297,10 @@ public abstract class FacesContext {
      * <code>FacesContext</code> instance has been recycled by the
      * implementation for re-use), calling any other methods will cause
      * an <code>IllegalStateException</code> to be thrown.</p>
+     *
+     * <p>The implementation must call {@link #setCurrentInstance}
+     * passing <code>null</code> to remove the association between this
+     * thread and this dead <code>FacesContext</code> instance.</p>
      */
     public abstract void release();
 
@@ -359,15 +363,12 @@ public abstract class FacesContext {
      * <p>Set the {@link FacesContext} instance for the request that is
      * being processed by the current thread.</p>
      *
-     * @param context The {@link FacesContext} instance for the current thread
+     * @param context The {@link FacesContext} instance for the current
+     * thread, or null if this thread no longer has a
+     * <code>FacesContext</code> instance.
      *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
      */
     protected static void setCurrentInstance(FacesContext context) {
-	if (null == context) {
-	    throw new NullPointerException();
-	}
 
         instance.set(context);
 
