@@ -43,6 +43,8 @@
             value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
   <property name="commons-beanutils.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
+  <property name="jstl.jar"
+            value="${tomcat.home}/jstl/lib/jstl.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
   <property name="sax.jar" value="${tomcat.home}/jaxp/lib/endorsed/sax.jar"/>
   <property name="sax.jar" value="${tomcat.home}/jaxp/lib/jaxp-api.jar"/>
@@ -67,6 +69,7 @@
     <pathelement location="${build.classes}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/>
+    <pathelement location="${jstl.jar}"/>
   </path>
 
   <path id="test.classpath">
@@ -75,6 +78,7 @@
     <pathelement location="${junit.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/>
+    <pathelement location="${jstl.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
