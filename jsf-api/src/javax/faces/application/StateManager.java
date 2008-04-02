@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.19 2003/09/18 00:49:43 eburns Exp $
+ * $Id: StateManager.java,v 1.20 2003/09/18 22:01:10 eburns Exp $
  */
 
 /*
@@ -121,6 +121,11 @@ public abstract class StateManager {
      * <p>In JSP applications, this method must be called from the
      * <code>doAfterBody()</code> method of the tag handler for the
      * {@link UIViewRoot} tag.</p>
+     *
+     * <p>The implementation must obtain the current <code>Locale</code>
+     * from the {@link FacesContext} and save it in the returned
+     * <code>SerializedView</code> object or in an implementation
+     * depenent way if no state needs to be written to the response.</p>
      *
      * @return a SerializedView instance which encapsulates the state of this
      * view, or null if no state needs to be written to the response.
@@ -271,6 +276,10 @@ public abstract class StateManager {
      * <p>If the state was saved in the client, this method calls
      * through to {@link #restoreTreeStructure} and, if necessary {@link
      * #restoreComponentState}</p>
+     *
+     * <p>The implementation must obtain the <code>Locale</code> from
+     * the saved state and store it as the current <code>Locale</code>
+     * in this {@link FacesContext}.</p>
      *
      * @return the {@link UIViewRoot} that matches this
      * <code>viewId</code>, if there was a view to restore,
