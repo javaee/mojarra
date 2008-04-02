@@ -316,6 +316,8 @@
             <test name="com.sun.faces.lifecycle.TestReconstituteRequestTreePhase"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/> 
+            <test name="com.sun.faces.convert.TestConverterFactory"/>
+            <test name="com.sun.faces.convert.TestConverters"/>
 
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
