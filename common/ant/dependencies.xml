@@ -33,7 +33,7 @@
            Cactus 1.3-1.7.1
            JUnit 3.8.1
            Taglibrary Document Generator 1.3
-           Maven java.net repository importer 1.1
+           Maven java.net repository importer 1.2
     -->
 
     <property name="dependency.base.dir" 
@@ -42,7 +42,7 @@
     <property name="htmlunit.version" value="1.8"/>
     <property name="cactus.version" value="13-1.7.1"/>
     <property name="taglibdoc.version" value="1.3"/>
-    <property name="maven.repository.importer.version" value="1.1"/>
+    <property name="maven.repository.importer.version" value="1.2"/>
 
     <property name="junit.home"
               value="${dependency.base.dir}/junit${junit.version}"/>

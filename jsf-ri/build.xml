@@ -458,9 +458,21 @@
       <pathelement path="${maven.repository.importer.jar}" />
     </classpath>
   </taskdef>
+
+  <!-- Create the source distribution -->
+  <mkdir dir="${dist.dir}" />
+  <jar destfile="${dist.dir}/${name}-sources-${impl.version}.zip">
+      <zipfileset dir="${basedir}"
+               includes="LICENSE-APACHE.txt,LICENSE.TXT,THIRDPARTYLICENSEREADME.txt"/>
+      <zipfileset dir="${source.dir}"
+               excludes="**/CVS/**"/>
+      <zipfileset dir="${build.generate.dir}"
+               excludes="**/CVS/**,conf/**,last-generation"/>
+  </jar>
+
   <delete dir="${build.dir}/maven-repo" /><!-- clean it -->
   <maven-repository-importer destdir="${build.dir}/maven-repo" version="${snapshot.version}">
-    <artifact jar="${build.dir}/lib/jsf-impl.jar"  pom="jsf-impl-pom.xml" />
+    <artifact jar="${build.dir}/lib/jsf-impl.jar"  pom="jsf-impl-pom.xml" srczip="${dist.dir}/${name}-sources-${impl.version}.zip"/>
   </maven-repository-importer>
 </target>
 

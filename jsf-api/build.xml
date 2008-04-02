@@ -690,9 +690,21 @@ javax.faces.level=ALL
       <pathelement path="${maven.repository.importer.jar}" />
     </classpath>
   </taskdef>
+
+  <!-- Create the source distribution -->
+  <mkdir dir="${dist.dir}" />
+  <jar destfile="${dist.dir}/${name}-sources-${impl.version}.zip">
+      <zipfileset dir="${basedir}"
+               includes="LICENSE.txt"/>
+      <zipfileset dir="${src.dir}"
+               excludes="**/CVS/**"/>
+      <zipfileset dir="${build.generate.dir}"
+               excludes="**/CVS/**,facesdoc/**,last-generation"/>
+  </jar>
+
   <delete dir="${build.dir}/maven-repo" /><!-- clean it -->
   <maven-repository-importer destdir="${build.dir}/maven-repo" version="${snapshot.version}">
-    <artifact jar="${build.lib.dir}/jsf-api.jar"  pom="jsf-api-pom.xml" />
+    <artifact jar="${build.lib.dir}/jsf-api.jar"  pom="jsf-api-pom.xml" srczip="${dist.dir}/${name}-sources-${impl.version}.zip"/>
   </maven-repository-importer>
 </target>
 
