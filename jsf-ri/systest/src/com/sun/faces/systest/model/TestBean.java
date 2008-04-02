@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.8 2004/04/07 20:08:01 eburns Exp $
+ * $Id: TestBean.java,v 1.9 2004/04/08 19:04:47 eburns Exp $
  */
 
 /*
@@ -18,6 +18,10 @@ import javax.faces.model.SelectItem;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
+import javax.faces.application.Application;
+import javax.faces.el.PropertyResolver;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.PropertyNotFoundException;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -47,6 +51,16 @@ public class TestBean {
     public void setBooleanProperty(boolean booleanProperty) {
         this.booleanProperty = booleanProperty;
     }
+
+    private boolean booleanProperty2 = false;
+    public boolean getBooleanProperty2() {
+	return booleanProperty2;
+    }
+
+    public void setBooleanProperty2(boolean newBooleanProperty2) {
+	booleanProperty2 = newBooleanProperty2;
+    }
+
 
 
     private byte byteProperty = 12;
@@ -232,6 +246,88 @@ public class TestBean {
 	UIComponent group = FacesContext.getCurrentInstance().getViewRoot().findComponent("form" + NamingContainer.SEPARATOR_CHAR +  "addHere");
 	group.getChildren().add(output);
 	
+    }
+
+    /**
+     * replace the propertyResolver with one that does our bidding for
+     * this test.
+     */
+
+    public void replacePropertyResolver(ActionEvent action) {
+	FacesContext context = FacesContext.getCurrentInstance();
+	Application app = context.getApplication();
+
+	// see if we need to take action-
+	if (null == context.getExternalContext().getSessionMap().get("systest.replacePropertyResolver")) {
+	    final PropertyResolver oldProp = app.getPropertyResolver();
+	    PropertyResolver
+		newProp = new PropertyResolver() {
+		    public Object getValue(Object base, Object property)
+		    throws EvaluationException, PropertyNotFoundException {
+			return oldProp.getValue(base, property);
+		    }
+		    
+		    public Object getValue(Object base, int index)
+		    throws EvaluationException, PropertyNotFoundException {
+			return oldProp.getValue(base, index);
+		    }
+		    
+		    public void setValue(Object base, Object property, Object value)
+		    throws EvaluationException, PropertyNotFoundException {
+			TestBean.this.setValueChangeMessage("setValue() called");
+			oldProp.setValue(base, property, value);
+		    }
+		    
+		    public void setValue(Object base, int index, Object value)
+		    throws EvaluationException, PropertyNotFoundException {
+			TestBean.this.setValueChangeMessage("setValue() called");
+			oldProp.setValue(base, index, value);
+		    }
+		    
+		    public boolean isReadOnly(Object base, Object property)
+		    throws EvaluationException, PropertyNotFoundException {
+			return oldProp.isReadOnly(base, property);
+		    }
+		    
+		    public boolean isReadOnly(Object base, int index)
+		    throws EvaluationException, PropertyNotFoundException {
+			return oldProp.isReadOnly(base, index);
+		    }
+		    
+		    public Class getType(Object base, Object property)
+		    throws EvaluationException, PropertyNotFoundException {
+			return oldProp.getType(base, property);
+		    }
+		    
+		    public Class getType(Object base, int index)
+		    throws EvaluationException, PropertyNotFoundException {
+			return oldProp.getType(base, index);
+		    }
+		    
+		};    
+	    app.setPropertyResolver(newProp);
+	    context.getExternalContext().getSessionMap().put("systest.replacePropertyResolver", oldProp);
+	}
+    }
+
+
+    
+    /**
+     * restore the original PropertyResolver.
+     */
+
+    public void restorePropertyResolver(ActionEvent action) {
+	FacesContext context = FacesContext.getCurrentInstance();
+	Application app = context.getApplication();
+	PropertyResolver oldProp = null;
+
+	// see if we need to take action-
+	if (null != (oldProp = (PropertyResolver) context.getExternalContext().getSessionMap().get("systest.replacePropertyResolver"))) {
+	    app.setPropertyResolver(oldProp);
+	    context.getExternalContext().getSessionMap().remove("systest.replacePropertyResolver");
+	    setValueChangeMessage(null);
+
+	}
     }
 	
 }
