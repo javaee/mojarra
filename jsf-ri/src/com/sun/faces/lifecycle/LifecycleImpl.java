@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.64 2006/05/26 16:35:51 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.65 2006/05/26 17:05:04 rlubke Exp $
  */
 
 /*
@@ -223,12 +223,12 @@ public class LifecycleImpl extends Lifecycle {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.warning("phase("
                                + phaseId.toString()
-                               + ","
+                               + ','
                                + context
                                +
                                ") threw exception: "
                                + e
-                               + " "
+                               + ' '
                                + e.getMessage()
                                +
                                "\n"
@@ -239,7 +239,15 @@ public class LifecycleImpl extends Lifecycle {
         try {
             // Execute this phase itself (if still needed)
             if (!skipping(phaseId, context)) {
+                long start = System.currentTimeMillis();
                 phase.execute(context);
+                long stop = System.currentTimeMillis();
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("TIMING: Exectution time for phase '"
+                        + phaseId.toString() 
+                        + "': "
+                        + (stop - start));
+                }
             }
         } catch (Exception e) {
             // Log the problem, but continue
@@ -273,12 +281,12 @@ public class LifecycleImpl extends Lifecycle {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.warning("phase("
                                    + phaseId.toString()
-                                   + ","
+                                   + ','
                                    + context
                                    +
                                    ") threw exception: "
                                    + e
-                                   + " "
+                                   + ' '
                                    + e.getMessage()
                                    +
                                    "\n"
