@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: MessagesRenderer.java,v 1.29 2006/05/18 23:07:54 rlubke Exp $
  */
 
 /*
@@ -31,11 +31,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import java.util.logging.Level;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIMessages;
@@ -44,6 +39,10 @@ import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p><B>MessagesRenderer</B> handles rendering for the Messages<p>.
@@ -223,17 +222,17 @@ public class MessagesRenderer extends HtmlBasicRenderer {
                     writer.writeAttribute("title", summary, "title");
                 }               
                 writer.flush();
-                writer.writeText("\t", null);
+                writer.writeText("\t", component, null);
                 wroteTooltip = true;
             }
 
             if (!wroteTooltip && showSummary) {
-                writer.writeText("\t", null);
-                writer.writeText(summary, null);
-                writer.writeText(" ", null);
+                writer.writeText("\t", component, null);
+                writer.writeText(summary, component, null);
+                writer.writeText(" ", component, null);
             }
             if (showDetail) {
-                writer.writeText(detail, null);
+                writer.writeText(detail, component, null);
             }
 
             if (wroteTooltip) {

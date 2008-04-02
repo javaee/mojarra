@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.77 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: RadioRenderer.java,v 1.78 2006/05/18 23:07:54 rlubke Exp $
  */
 
 /*
@@ -31,9 +31,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
@@ -42,6 +39,9 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
 
 import java.io.IOException;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>ReadoRenderer</B> is a class that renders the current value of
@@ -101,9 +101,9 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
 
         if (alignVertical) {
-            writer.writeText("\t", null);
+            writer.writeText("\t", component, null);
             writer.startElement("tr", component);
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
         
         Class type = String.class;
@@ -126,7 +126,7 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
                 getAttributes().get("enabledClass");
         }
         writer.startElement("td", component);
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
 
         writer.startElement("input", component);
         writer.writeAttribute("type", "radio", "type");
@@ -171,16 +171,16 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         }
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
-            writer.writeText(" ", null);
-            writer.writeText(itemLabel, "label");
+            writer.writeText(" ", component, null);
+            writer.writeText(itemLabel, component, "label");
         }
         writer.endElement("label");
         writer.endElement("td");
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
         if (alignVertical) {
-            writer.writeText("\t", null);
+            writer.writeText("\t", component, null);
             writer.endElement("tr");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
     }
 

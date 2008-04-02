@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.26 2006/05/17 19:00:49 rlubke Exp $
+ * $Id: OutputMessageRenderer.java,v 1.27 2006/05/18 23:07:54 rlubke Exp $
  */
 
 /*
@@ -31,11 +31,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import java.util.logging.Level;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.component.ValueHolder;
@@ -46,6 +41,10 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -202,7 +201,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
             }
         }
         if (escape) {
-            writer.writeText(message, "value");
+            writer.writeText(message, component, "value");
         } else {
             writer.write(message);
         }

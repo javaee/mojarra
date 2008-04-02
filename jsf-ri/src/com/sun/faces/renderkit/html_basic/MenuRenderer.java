@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.75 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.76 2006/05/18 23:07:54 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -564,7 +564,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
-        writer.writeText("\t", null);
+        writer.writeText("\t", component, null);
         writer.startElement("option", component);
 
         String valueString = getFormattedValue(context, component,
@@ -625,13 +625,13 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }
 
         if (curItem.isEscape()) {
-            writer.writeText(curItem.getLabel(), "label");
+            writer.writeText(curItem.getLabel(), component, "label");
         }
         else {
             writer.write(curItem.getLabel());
         }
         writer.endElement("option");
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
 
     }
 

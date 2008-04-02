@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.96 2006/05/17 19:00:47 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.97 2006/05/18 23:07:54 rlubke Exp $
  */
 
 /*
@@ -31,18 +31,17 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-import java.util.Map;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
+import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
@@ -158,7 +157,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         }
         
         RenderKitUtils.renderPassThruAttributes(context, writer, component);     
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
     }
 
 

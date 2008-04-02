@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.43 2006/05/17 19:00:47 rlubke Exp $
+ * $Id: GridRenderer.java,v 1.44 2006/05/18 23:07:54 rlubke Exp $
  */
 
 /*
@@ -30,18 +30,17 @@
 package com.sun.faces.renderkit.html_basic;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>GridRenderer</B> is a class that renders <code>UIPanel</code> component
@@ -130,7 +129,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
         RenderKitUtils.renderPassThruAttributes(context, writer, component);
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
         
         // render the caption facet (if present)
         UIComponent caption = getFacet(component, "caption");
@@ -157,7 +156,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             (String) component.getAttributes().get("headerClass");
         if (header != null) {
             writer.startElement("thead", component);
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
             writer.startElement("tr", header);
             writer.startElement("th", header);
             if (headerClass != null) {
@@ -169,9 +168,9 @@ public class GridRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, header);
             writer.endElement("th");
             writer.endElement("tr");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
             writer.endElement("thead");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
 
         // Render the footer facet (if any)
@@ -180,7 +179,7 @@ public class GridRenderer extends HtmlBasicRenderer {
             (String) component.getAttributes().get("footerClass");
         if (footer != null) {
             writer.startElement("tfoot", component);
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
             writer.startElement("tr", footer);
             writer.startElement("td", footer);
             if (footerClass != null) {
@@ -191,9 +190,9 @@ public class GridRenderer extends HtmlBasicRenderer {
             encodeRecursive(context, footer);
             writer.endElement("td");
             writer.endElement("tr");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
             writer.endElement("tfoot");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
 
     }
@@ -240,7 +239,7 @@ public class GridRenderer extends HtmlBasicRenderer {
 
         // Render our children, starting a new row as needed
         writer.startElement("tbody", component);
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
 
         if (null != (kids = getChildren(component))) {
             while (kids.hasNext()) {
@@ -248,7 +247,7 @@ public class GridRenderer extends HtmlBasicRenderer {
                 if ((i % columns) == 0) {
                     if (open) {
                         writer.endElement("tr");
-                        writer.writeText("\n", null);
+                        writer.writeText("\n", component, null);
                         open = false;
                     }
                     writer.startElement("tr", component);
@@ -259,7 +258,7 @@ public class GridRenderer extends HtmlBasicRenderer {
                             rowStyle = 0;
                         }
                     }
-                    writer.writeText("\n", null);
+                    writer.writeText("\n", component, null);
                     open = true;
                     columnStyle = 0;
                 }
@@ -277,16 +276,16 @@ public class GridRenderer extends HtmlBasicRenderer {
                 }
                 encodeRecursive(context, child);
                 writer.endElement("td");
-                writer.writeText("\n", null);
+                writer.writeText("\n", component, null);
                 i++;
             }
         }
         if (open) {
             writer.endElement("tr");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
         writer.endElement("tbody");
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"End encoding children " + component.getId());
         }
@@ -317,7 +316,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
         writer.endElement("table");
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER,"End encoding component " + component.getId());
         }

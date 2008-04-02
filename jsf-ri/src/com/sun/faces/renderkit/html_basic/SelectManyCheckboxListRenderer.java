@@ -25,7 +25,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.48 2006/05/17 19:00:49 rlubke Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.49 2006/05/18 23:07:54 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -37,10 +37,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -50,6 +46,10 @@ import javax.faces.model.SelectItemGroup;
 
 import java.io.IOException;
 import java.util.Iterator;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>SelectManyCheckboxListRenderer</B> is a class that renders the
@@ -145,7 +145,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                         writer.startElement("tr", component);
                     }
                     writer.startElement("td", component);
-                    writer.writeText(curItem.getLabel(), "label");
+                    writer.writeText(curItem.getLabel(), component, "label");
                     writer.endElement("td");
                     if (alignVertical) {
                         writer.endElement("tr");
@@ -156,7 +156,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                     writer.startElement("tr", component);
                 }
                 writer.startElement("td", component);
-                writer.writeText("\n", null);
+                writer.writeText("\n", component, null);
                 renderBeginText(component, 0, alignVertical,
                                 context, false);
                 // render options of this group.
@@ -170,7 +170,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 writer.endElement("td");
                 if (alignVertical) {
                     writer.endElement("tr");
-                    writer.writeText("\n", null);
+                    writer.writeText("\n", component, null);
                 }
             } else {
                 renderOption(context, component, curItem, alignVertical, idx);
@@ -200,12 +200,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 getAttributes().get("enabledClass");
         }
         if (alignVertical) {
-            writer.writeText("\t", null);
+            writer.writeText("\t", component, null);
             writer.startElement("tr", component);
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
         writer.startElement("td", component);
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
 
         writer.startElement("input", component);
         writer.writeAttribute("name", component.getClientId(context),
@@ -272,16 +272,16 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         }
         String itemLabel = curItem.getLabel();
         if (itemLabel != null) {
-            writer.writeText(" ", null);
-            writer.writeText(itemLabel, "label");
+            writer.writeText(" ", component, null);
+            writer.writeText(itemLabel, component, "label");
         }
         writer.endElement("label");
         writer.endElement("td");
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
         if (alignVertical) {
-            writer.writeText("\t", null);
+            writer.writeText("\t", component, null);
             writer.endElement("tr");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
     }
 
@@ -320,12 +320,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
                 writer.writeAttribute("style", style, "style");
             }
         }
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
 
         if (!alignVertical) {
-            writer.writeText("\t", null);
+            writer.writeText("\t", component, null);
             writer.startElement("tr", component);
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
     }
 
@@ -338,9 +338,9 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         assert (writer != null);
 
         if (!alignVertical) {
-            writer.writeText("\t", null);
+            writer.writeText("\t", component, null);
             writer.endElement("tr");
-            writer.writeText("\n", null);
+            writer.writeText("\n", component, null);
         }
         writer.endElement("table");
     }

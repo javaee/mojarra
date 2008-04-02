@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.43 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: LabelRenderer.java,v 1.44 2006/05/18 23:07:54 rlubke Exp $
  */
 
 /*
@@ -31,17 +31,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
+import java.io.IOException;
 import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <p><B>LabelRenderer</B> renders Label element.<p>.
@@ -145,7 +144,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
         if (null != styleClass) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        writer.writeText("\n", null);
+        writer.writeText("\n", component, null);
         
         // render the curentValue as label text if specified.
         String value = getCurrentValue(context, component);
@@ -168,7 +167,7 @@ public class LabelRenderer extends HtmlBasicInputRenderer {
 	    }
 
 	    if (escape) {
-		writer.writeText(value, "value");
+		writer.writeText(value, component, "value");
 	    }
 	    else {
 		writer.write(value);

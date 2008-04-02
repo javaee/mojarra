@@ -1,5 +1,5 @@
 /*
- * $Id: TextareaRenderer.java,v 1.20 2006/05/17 19:00:49 rlubke Exp $
+ * $Id: TextareaRenderer.java,v 1.21 2006/05/18 23:07:55 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,14 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 /**
  * <B>TextareaRenderer</B> is a class that renders the current value of
@@ -119,7 +119,7 @@ public class TextareaRenderer extends HtmlBasicInputRenderer {
 
         // render default text specified
         if (currentValue != null) {
-            writer.writeText(currentValue, "value");
+            writer.writeText(currentValue, component, "value");
         }
 
         writer.endElement("textarea");
