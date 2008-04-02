@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.16 2002/08/13 22:57:45 rkitain Exp $
+ * $Id: TestRenderers_1.java,v 1.17 2002/09/17 00:07:20 rkitain Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.16 2002/08/13 22:57:45 rkitain Exp $
+ * @version $Id: TestRenderers_1.java,v 1.17 2002/09/17 00:07:20 rkitain Exp $
  * 
  *
  */
@@ -107,7 +107,8 @@ public class TestRenderers_1 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<FORM METHOD=\"post\" ACTION=\"/test/faces/form/FormRenderer;jsessionid=C5366598A51328E62948F964F9447243\">"
+//	    "<FORM METHOD=\"post\" ACTION=\"/test/faces/form/FormRenderer;jsessionid=C5366598A51328E62948F964F9447243\">"
+	"<FORM METHOD=\"post\" ACTION=\"/test/facestreeId;jsessionid=7B0D3B1D274C56B08A504EC211965B4C\">"
 };
         return lines;
     }    
@@ -119,6 +120,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         //theRequest.addParameter("action", "form");
         theRequest.addParameter("/radio_renderer", "Two");
         theRequest.addParameter("name", "ButtonRenderer");
+        theRequest.addParameter("name", "button");
     } 
     
     //
@@ -209,6 +211,22 @@ public class TestRenderers_1 extends JspFacesTestCase
         
         // test encode method
         System.out.println("Testing encode method");
+        buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
+        buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
+        getFacesContext().getResponseWriter().write("\n");
+        try {
+            getFacesContext().getResponseWriter().flush();
+        } catch (Exception e ) {
+            throw new FacesException("Exception while flushing buffer");
+        } 
+
+        // Test <Button> element rendering
+        uiCommand = new UICommand();
+        uiCommand.setComponentId("myButton");
+        uiCommand.setValue("button");
+        uiCommand.setAttribute("type", "submit");
+        root.addChild(uiCommand);
+        System.out.println("Testing encode (<button> rendering) method");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
         getFacesContext().getResponseWriter().write("\n");
