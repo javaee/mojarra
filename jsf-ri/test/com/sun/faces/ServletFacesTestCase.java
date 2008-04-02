@@ -1,5 +1,5 @@
 /*
- * $Id: ServletFacesTestCase.java,v 1.7 2003/05/20 16:35:29 eburns Exp $
+ * $Id: ServletFacesTestCase.java,v 1.8 2003/07/22 19:49:45 rkitain Exp $
  */
 
 /*
@@ -23,8 +23,6 @@ import javax.faces.context.FacesContext;
 
 import java.util.Iterator;
 
-import com.sun.faces.config.ConfigBase;
-
 /**
  *
 
@@ -33,7 +31,7 @@ import com.sun.faces.config.ConfigBase;
  *  by cactus.  This class just delegates all method calls to
  *  facesService.
  *
- * @version $Id: ServletFacesTestCase.java,v 1.7 2003/05/20 16:35:29 eburns Exp $
+ * @version $Id: ServletFacesTestCase.java,v 1.8 2003/07/22 19:49:45 rkitain Exp $
  * 
  * @see	#facesService
  *
@@ -175,8 +173,8 @@ public boolean requestsHaveSameAttributeSet(HttpServletRequest request1,
     return facesService.requestsHaveSameAttributeSet(request1, request2);
 }
 
-public ConfigBase loadFromInitParam(String paramValue) {
-    return facesService.loadFromInitParam(paramValue);
+public void loadFromInitParam(String paramValue) {
+    facesService.loadFromInitParam(paramValue);
 }
     
 

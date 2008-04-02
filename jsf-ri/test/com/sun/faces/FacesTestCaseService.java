@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTestCaseService.java,v 1.21 2003/07/08 15:38:41 eburns Exp $
+ * $Id: FacesTestCaseService.java,v 1.22 2003/07/22 19:49:44 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,7 @@
 
 package com.sun.faces;
 
+import java.io.*;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,6 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.component.UICommand;
-import com.sun.faces.config.ConfigBase;
 import javax.servlet.jsp.PageContext;
 
 import com.sun.faces.util.Util;
@@ -54,7 +54,7 @@ import org.apache.cactus.server.ServletContextWrapper;
  * <B>Lifetime And Scope</B> <P> Same as the JspTestCase or
  * ServletTestCase instance that uses it.
  *
- * @version $Id: FacesTestCaseService.java,v 1.21 2003/07/08 15:38:41 eburns Exp $
+ * @version $Id: FacesTestCaseService.java,v 1.22 2003/07/22 19:49:44 rkitain Exp $
  * 
  * @see	com.sun.faces.context.FacesContextFactoryImpl
  * @see	com.sun.faces.context.FacesContextImpl
@@ -371,9 +371,8 @@ public boolean requestsHaveSameAttributeSet(HttpServletRequest request1,
     return true;
 }
     
-public ConfigBase loadFromInitParam(String paramValue) {
+public void loadFromInitParam(String paramValue) {
     final String paramVal = paramValue;
-    ConfigBase result = null;
     
     // clear out the attr that was set in the servletcontext attr set.
     facesTestCase.getConfig().getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
@@ -399,10 +398,6 @@ public ConfigBase loadFromInitParam(String paramValue) {
     ServletContextEvent e = 
 	new ServletContextEvent(sc);
     configListener.contextInitialized(e);
-    result = (ConfigBase) sc.getAttribute(RIConstants.CONFIG_ATTR);
-    Assert.assert_it(null != result);
-
-    return result;
 }
 
 
