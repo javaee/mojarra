@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.8 2004/02/06 18:55:42 rlubke Exp $
+ * $Id: SelectItemTag.java,v 1.9 2004/02/07 02:33:03 craigmcc Exp $
  */
 
 /*
@@ -39,7 +39,8 @@ public class SelectItemTag extends BaseComponentTag {
 
     protected String itemValue = null;
     protected String itemLabel = null;
-    protected String description = null;
+    protected String itemDescription = null;
+    protected String itemDisabled = null;
    
     // Relationship Instance Variables
 
@@ -69,10 +70,13 @@ public class SelectItemTag extends BaseComponentTag {
     }
 
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
     }
 
+    public void setItemDisabled(String itemDisabled) {
+        this.itemDisabled = itemDisabled;
+    }
 
     //
     // General Methods
@@ -119,22 +123,22 @@ public class SelectItemTag extends BaseComponentTag {
                 selectItem.setItemLabel(itemLabel);
             }
         }
-        if (null != description) {
-            if (isValueReference(description)) {
-                selectItem.setValueBinding("description",
-                                           Util.getValueBinding(description));
+        if (null != itemDescription) {
+            if (isValueReference(itemDescription)) {
+                selectItem.setValueBinding("itemDescription",
+                                           Util.getValueBinding(itemDescription));
             } else {
-                selectItem.setItemDescription(description);
+                selectItem.setItemDescription(itemDescription);
             }
         }
 
 
-        if (null != super.disabled) {
-            if (isValueReference(super.disabled)) {
-                selectItem.setValueBinding("disabled",
-                                           Util.getValueBinding(super.disabled));
+        if (null != itemDisabled) {
+            if (isValueReference(itemDisabled)) {
+                selectItem.setValueBinding("itemDisabled",
+                                           Util.getValueBinding(itemDisabled));
             } else {
-                selectItem.setItemDisabled((Boolean.valueOf(super.disabled)).
+                selectItem.setItemDisabled((Boolean.valueOf(itemDisabled)).
                                            booleanValue());
             }
         }

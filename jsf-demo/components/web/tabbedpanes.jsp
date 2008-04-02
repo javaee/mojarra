@@ -106,7 +106,7 @@ Powered by Faces components:
       </h:selectOneRadio>
       <h:selectOneListbox id="appleQuantity" title="Select Quantity"
         tabindex="20" value="4" >
-        <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
+        <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
         <f:selectItem  itemValue="1" itemLabel="One" />
         <f:selectItem  itemValue="2" itemLabel="Two" />
         <f:selectItem  itemValue="3" itemLabel="Three" />

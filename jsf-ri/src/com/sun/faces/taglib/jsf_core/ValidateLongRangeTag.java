@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLongRangeTag.java,v 1.7 2004/02/06 18:55:42 rlubke Exp $
+ * $Id: ValidateLongRangeTag.java,v 1.8 2004/02/07 02:33:04 craigmcc Exp $
  */
 
 /*
@@ -100,18 +100,18 @@ public class ValidateLongRangeTag extends MaxMinValidatorTag {
 
         if (minimum_ != null) {
             if (Util.isVBExpression(minimum_)) {
-                Long longObj = (Long) Util.evaluateVBExpression(minimum_);
-                Util.doAssert(null != longObj);
-                minimum = longObj.longValue();
+                Number numberObj = (Number) Util.evaluateVBExpression(minimum_);
+                Util.doAssert(null != numberObj);
+                minimum = numberObj.longValue();
             } else {
                 minimum = new Long(minimum_).longValue();
             }
         }
         if (maximum_ != null) {
             if (Util.isVBExpression(maximum_)) {
-                Long longObj = (Long) Util.evaluateVBExpression(maximum_);
-                Util.doAssert(null != longObj);
-                maximum = longObj.longValue();
+                Number numberObj = (Number) Util.evaluateVBExpression(maximum_);
+                Util.doAssert(null != numberObj);
+                maximum = numberObj.longValue();
             } else {
                 maximum = new Long(maximum_).longValue();
             }

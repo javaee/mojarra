@@ -237,8 +237,8 @@
                      title="Select Quantity"
                      tabindex="20" >
 
-                <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
-                <f:selectItem  itemValue="1" itemLabel="1" />
+                <f:selectItem  itemDisabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectItem  itemValue="1" itemLabel="1" itemDescription="Item 1" />
                 <f:selectItem  itemValue="2" itemLabel="2" />
                 <f:selectItem  itemValue="3" itemLabel="3" />
                 <f:selectItem  itemValue="4" itemLabel="4" />
@@ -263,7 +263,7 @@
                 enabledClass="enabledClass" accesskey="A" 
                 styleClass = "styleClass">
 
-                <f:selectItem itemValue="nextDay" itemLabel="Next Day" disabled="true"/>
+                <f:selectItem itemValue="nextDay" itemLabel="Next Day" itemDisabled="true"/>
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
                  
@@ -280,9 +280,9 @@
                                             layout="pageDirection" border="1" >
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"
-                                   disabled="true" />
+                                   itemDisabled="true" />
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week"  
-                        disabled="false"/>
+                        itemDisabled="false"/>
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
 
            </h:selectOneRadio>
@@ -495,7 +495,7 @@
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
 						<f:selectItem itemValue="3" itemLabel="three" />
-						<f:selectItem itemValue="4" itemLabel="four" disabled="true"/>
+						<f:selectItem itemValue="4" itemLabel="four" itemDisabled="true"/>
 						<f:selectItem itemValue="5" itemLabel="five" />
 						<f:selectItem itemValue="6" itemLabel="six" />
 						<f:selectItem itemValue="7" itemLabel="seven" />
@@ -525,10 +525,10 @@
 					<TD><h:selectManyCheckbox id="ManyApples3" 
                                                 tabindex="3" disabledClass="disabledClass" 
                                                 styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
-						<f:selectItem itemValue="0" itemLabel="zero" disabled="true" />
+						<f:selectItem itemValue="0" itemLabel="zero" itemDisabled="true" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
-						<f:selectItem itemValue="3" itemLabel="three" disabled="false"/>
+						<f:selectItem itemValue="3" itemLabel="three" itemDisabled="false"/>
 						<f:selectItem itemValue="4" itemLabel="four" />
 						<f:selectItem itemValue="5" itemLabel="five" />
 						<f:selectItem itemValue="6" itemLabel="six" />

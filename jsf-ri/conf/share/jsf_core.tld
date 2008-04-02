@@ -496,18 +496,6 @@
     </attribute>
 
     <attribute>
-      <name>disabled</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <description>
-        Flag indicating whether the option created
-        by this component is disabled.  Expressions
-        must evaluate to a boolean.  Default value
-        is false.
-      </description>
-    </attribute>
-
-    <attribute>
       <name>id</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -524,6 +512,18 @@
       <description>
         Description of this option, for use in
         development tools.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>itemDisabled</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Flag indicating whether the option created
+        by this component is disabled.  Expressions
+        must evaluate to a boolean.  Default value
+        is false.
       </description>
     </attribute>
 

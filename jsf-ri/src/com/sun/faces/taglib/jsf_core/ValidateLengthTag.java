@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateLengthTag.java,v 1.7 2004/02/06 18:55:42 rlubke Exp $
+ * $Id: ValidateLengthTag.java,v 1.8 2004/02/07 02:33:04 craigmcc Exp $
  */
 
 /*
@@ -100,18 +100,18 @@ public class ValidateLengthTag extends MaxMinValidatorTag {
 
         if (minimum_ != null) {
             if (Util.isVBExpression(minimum_)) {
-                Integer intObj = (Integer) Util.evaluateVBExpression(minimum_);
-                Util.doAssert(null != intObj);
-                minimum = intObj.intValue();
+                Number numberObj = (Number) Util.evaluateVBExpression(minimum_);
+                Util.doAssert(null != numberObj);
+                minimum = numberObj.intValue();
             } else {
                 minimum = new Integer(minimum_).intValue();
             }
         }
         if (maximum_ != null) {
             if (Util.isVBExpression(maximum_)) {
-                Integer intObj = (Integer) Util.evaluateVBExpression(maximum_);
-                Util.doAssert(null != intObj);
-                maximum = intObj.intValue();
+                Number numberObj = (Number) Util.evaluateVBExpression(maximum_);
+                Util.doAssert(null != numberObj);
+                maximum = numberObj.intValue();
             } else {
                 maximum = new Integer(maximum_).intValue();
             }

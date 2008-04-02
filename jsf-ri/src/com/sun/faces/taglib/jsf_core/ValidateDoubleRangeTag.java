@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateDoubleRangeTag.java,v 1.7 2004/02/06 18:55:42 rlubke Exp $
+ * $Id: ValidateDoubleRangeTag.java,v 1.8 2004/02/07 02:33:03 craigmcc Exp $
  */
 
 /*
@@ -101,18 +101,18 @@ public class ValidateDoubleRangeTag extends MaxMinValidatorTag {
 
         if (minimum_ != null) {
             if (Util.isVBExpression(minimum_)) {
-                Double doubleObj = (Double) Util.evaluateVBExpression(minimum_);
-                Util.doAssert(null != doubleObj);
-                minimum = doubleObj.doubleValue();
+                Number numberObj = (Number) Util.evaluateVBExpression(minimum_);
+                Util.doAssert(null != numberObj);
+                minimum = numberObj.doubleValue();
             } else {
                 minimum = new Double(minimum_).doubleValue();
             }
         }
         if (maximum_ != null) {
             if (Util.isVBExpression(maximum_)) {
-                Double doubleObj = (Double) Util.evaluateVBExpression(maximum_);
-                Util.doAssert(null != doubleObj);
-                maximum = doubleObj.doubleValue();
+                Number numberObj = (Number) Util.evaluateVBExpression(maximum_);
+                Util.doAssert(null != numberObj);
+                maximum = numberObj.doubleValue();
             } else {
                 maximum = new Double(maximum_).doubleValue();
             }
