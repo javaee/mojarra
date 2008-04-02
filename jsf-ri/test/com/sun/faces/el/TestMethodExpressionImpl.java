@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.7 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestMethodExpressionImpl.java,v 1.1 2005/05/06 22:02:07 edburns Exp $
  */
 
 /*
@@ -12,18 +12,19 @@ package com.sun.faces.el;
 
 import com.sun.faces.ServletFacesTestCase;
 
-import javax.faces.el.MethodBinding;
-import javax.faces.el.MethodNotFoundException;
-import javax.faces.el.ReferenceSyntaxException;
+import javax.el.MethodExpression;
+import javax.el.ELException;
+import javax.el.ELContext;
+import javax.el.MethodNotFoundException;
 
 /**
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodRef.java,v 1.7 2005/05/06 22:02:07 edburns Exp $
+ * @version $Id: TestMethodExpressionImpl.java,v 1.1 2005/05/06 22:02:07 edburns Exp $
  */
 
-public class TestMethodRef extends ServletFacesTestCase
+public class TestMethodExpressionImpl extends ServletFacesTestCase
 {
 
     //
@@ -46,12 +47,12 @@ public class TestMethodRef extends ServletFacesTestCase
     // Constructors and Initializers
     //
 
-    public TestMethodRef()
+    public TestMethodExpressionImpl()
     {
-        super("TestMethodRef");
+        super("TestMethodExpression");
     }
 
-    public TestMethodRef(String name)
+    public TestMethodExpressionImpl(String name)
     {
         super(name);
     }
@@ -63,9 +64,10 @@ public class TestMethodRef extends ServletFacesTestCase
     //
     // General Methods
     //
-    protected MethodBinding create(String ref, Class[] params) throws Exception
+    protected MethodExpression create(String ref, Class[] params) throws Exception
     {
-        return (getFacesContext().getApplication().createMethodBinding(ref, params));
+        return (getFacesContext().getApplication().getExpressionFactory().
+            createMethodExpression(getFacesContext().getELContext(),ref, null, params));
     }
     
     public void testNullReference() throws Exception
@@ -83,48 +85,52 @@ public class TestMethodRef extends ServletFacesTestCase
     {
         try
         {
-            create("#{foo > 1}", null);
+            create("${foo > 1}", null);
             fail();
         }
-        catch (ReferenceSyntaxException rse) {}
-        catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
+        catch (ELException ee) {
+            fail("Should have thrown a NullPointerException"); 
+        }
+        catch (NullPointerException npe) { }
     }
     
     public void testLiteralReference() throws Exception
     {
+        boolean exceptionThrown = false;
         try
         {
             create("some.method", null);
-            fail();
         }
-        catch (ReferenceSyntaxException rse) {}
-        catch (Exception e) { fail("Should have thrown a ReferenceSyntaxException"); }
+        catch (NullPointerException ee) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
 
     public void testInvalidTrailing() throws Exception
     {
-        MethodBinding mb = this.create(
+        MethodExpression mb = this.create(
                 "#{NewCustomerFormHandler.redLectroidsMmmm}", new Class[0]);
 
         boolean exceptionThrown = false;
         try
         {
-            mb.invoke(getFacesContext(), new Object[0]);
+            mb.invoke(getFacesContext().getELContext(), new Object[0]);
         }
-        catch (MethodNotFoundException e)
+        catch (MethodNotFoundException me)
         {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
 
         mb = this.create("#{nonexistentBean.redLectroidsMmmm}", new Class[0]);
-        
+       
         exceptionThrown = false;
         try
         {
-            mb.invoke(getFacesContext(), new Object[0]);
+            mb.invoke(getFacesContext().getELContext(), new Object[0]);
         }
-        catch (MethodNotFoundException e)
+        catch (NullPointerException ne)
         {
             exceptionThrown = true;
         }

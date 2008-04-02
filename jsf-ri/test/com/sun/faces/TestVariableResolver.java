@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolver.java,v 1.4 2004/02/26 20:34:00 eburns Exp $
+ * $Id: TestVariableResolver.java,v 1.5 2005/05/06 22:02:03 edburns Exp $
  */
 
 /*
@@ -11,8 +11,24 @@
 
 package com.sun.faces;
 
-import com.sun.faces.el.VariableResolverImpl;
+import javax.faces.el.VariableResolver;
+import javax.faces.el.EvaluationException;
+import javax.faces.context.FacesContext;
 
-public class TestVariableResolver extends VariableResolverImpl {
+public class TestVariableResolver extends VariableResolver {
+   
+    public TestVariableResolver(VariableResolver variableResolver) {
+       
+    }
+    
+    //
+    // Relationship Instance Variables
+    // 
+
+    // Specified by javax.faces.el.VariableResolver.resolveVariable()
+    public Object resolveVariable(FacesContext context, String name)
+            throws EvaluationException {
+        return null;
+    }
 
 }

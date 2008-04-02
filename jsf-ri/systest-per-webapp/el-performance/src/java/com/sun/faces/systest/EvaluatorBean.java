@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluatorBean.java,v 1.4 2004/10/18 21:20:47 edburns Exp $
+ * $Id: EvaluatorBean.java,v 1.5 2005/05/06 22:02:01 edburns Exp $
  */
 
 /*
@@ -14,7 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UIComponent;
-import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
 
 import java.util.Date;
 import java.util.Random;
@@ -81,8 +81,9 @@ public class EvaluatorBean extends Object {
 	// get the expression to evaluate
 	UIOutput output = (UIOutput) context.getViewRoot().findComponent("form" + NamingContainer.SEPARATOR_CHAR +  id);
 	String expression = "#{" + output.getValue() + "}";
-	ValueBinding vb = 
-	    context.getApplication().createValueBinding(expression);
+	ValueExpression vb = 
+	    context.getApplication().getExpressionFactory().
+            createValueExpression(context.getELContext(),expression, Object.class);
 	// if the user wants to show results
 	if (showResults) {
 	    // clear the buffer for the new results
@@ -92,10 +93,10 @@ public class EvaluatorBean extends Object {
 	start = System.currentTimeMillis();
 	for (i = 0; i < reps; i++) {
 	    if (showResults) {
-		results.append(vb.getValue(context) + "\n");
+		results.append(vb.getValue(context.getELContext()) + "\n");
 	    }
 	    else {
-		vb.getValue(context);
+		vb.getValue(context.getELContext());
 	    }
 	}
 	end = System.currentTimeMillis();

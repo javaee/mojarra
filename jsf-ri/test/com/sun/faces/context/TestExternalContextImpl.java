@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.14 2005/04/26 19:36:18 edburns Exp $
+ * $Id: TestExternalContextImpl.java,v 1.15 2005/05/06 22:02:06 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Set;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.14 2005/04/26 19:36:18 edburns Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.15 2005/05/06 22:02:06 edburns Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {
@@ -649,6 +649,11 @@ public class TestExternalContextImpl extends ServletFacesTestCase {
             requestHeaderValuesMap.hashCode() ==
             getFacesContext().getExternalContext().getRequestHeaderValuesMap()
             .hashCode());
+        // PENDING (visvan) Fix this test
+        /*assertTrue(
+            requestHeaderValuesMap.equals(
+                getFacesContext().getExternalContext()
+                .getRequestHeaderValuesMap())); */
         assertTrue(!requestHeaderValuesMap.equals(null));
         assertTrue(!requestHeaderValuesMap.equals(new HashMap()));
     }

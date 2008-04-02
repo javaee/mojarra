@@ -25,17 +25,14 @@ import java.util.Set;
 import javax.faces.context.ExternalContext;
 import javax.faces.el.ValueBinding;
 
-import com.sun.faces.ServletFacesTestCase;
-import com.sun.faces.el.ValueBindingFactory;
 import com.sun.faces.el.impl.beans.Factory;
+import com.sun.faces.ServletFacesTestCase;
 
 /**
  * @author jhook
  */
 public class TestELImpl extends ServletFacesTestCase
 {
-    protected static ValueBindingFactory factory = new ValueBindingFactory();
-    
     /**
      *  
      */
@@ -54,7 +51,7 @@ public class TestELImpl extends ServletFacesTestCase
 
     protected Object evaluate(String ref) throws Exception
     {
-        ValueBinding vb = factory.createValueBinding(ref);
+        ValueBinding vb = this.getFacesContext().getApplication().createValueBinding(ref);
         return vb.getValue(this.getFacesContext());
     }
 
@@ -118,7 +115,10 @@ public class TestELImpl extends ServletFacesTestCase
 
         /* testing values that end with or contain "#" */
         evaluateTest("#", "#");
-        evaluateTest("\\#", "\\#");
+        
+        // JSF1.2 BI: This expression used to evaulate to "/#" but now
+        // returns "#".
+        evaluateTest("\\#", "#");
         evaluateTest("#  ", "#  ");
         evaluateTest("test#", "test#");
         evaluateTest("#test", "#test");
@@ -161,9 +161,8 @@ public class TestELImpl extends ServletFacesTestCase
         evaluateTest("#{3 != 3}", Boolean.FALSE);
 
         /* relationals between booleans */
-		// Pending JDK 5 Review
-        //evaluateTestFailure("#{false < true}");
-        //evaluateTestFailure("#{false > true}");
+        evaluateTestFailure("#{false < true}");
+        evaluateTestFailure("#{false > true}");
         evaluateTest("#{true >= true}", Boolean.TRUE);
         evaluateTest("#{true <= true}", Boolean.TRUE);
         evaluateTest("#{true == true}", Boolean.TRUE);
@@ -264,7 +263,10 @@ public class TestELImpl extends ServletFacesTestCase
         evaluateTest("#{bean1a == null}", Boolean.FALSE);
         evaluateTest("#{null == bean1a}", Boolean.FALSE);
         evaluateTest("#{bean1a == bean1a}", Boolean.TRUE);
-        evaluateTestFailure("#{bean1a > \"hello\"}");
+        // JSF1.2 BI: This test used to fail with JSF 1.1 EL. With unified EL
+        // the first portion of the expression is coerced to a string, so
+        // the expression evaluates to true.
+        evaluateTest("#{bean1a > \"hello\"}", Boolean.FALSE);
         evaluateTestFailure("#{bean1a.bean1 < 14}");
         evaluateTest("#{bean1a.bean1 == \"hello\"}", Boolean.FALSE);
 
@@ -328,8 +330,6 @@ public class TestELImpl extends ServletFacesTestCase
         evaluateTestFailure("#{bean1a.null}");
 
         /* test arithmetic */
-		evaluateTest("#{0+5}", new Long(5));
-		evaluateTest("#{0-5}", new Long(-5));
         evaluateTest("#{3+5}", new Long(8));
         evaluateTest("#{3-5}", new Long(-2));
         evaluateTest("#{3/5}", new Double(0.6));

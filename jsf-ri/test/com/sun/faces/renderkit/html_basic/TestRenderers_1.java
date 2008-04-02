@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.62 2005/04/26 21:56:27 jayashri Exp $
+ * $Id: TestRenderers_1.java,v 1.63 2005/05/06 22:02:10 edburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.component.UIParameter;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UIViewRoot;
-import javax.faces.el.ValueBinding;
+import javax.el.ValueExpression;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import javax.servlet.jsp.jstl.core.Config;
@@ -45,7 +45,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.62 2005/04/26 21:56:27 jayashri Exp $
+ * @version $Id: TestRenderers_1.java,v 1.63 2005/05/06 22:02:10 edburns Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {
@@ -162,10 +162,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         getFacesContext().setViewRoot(root);
         // Call this twice to test the multiple forms in a page logic.
         getFacesContext().getResponseWriter().startDocument();
-        // Form tests commented out because call to writeState() from FormRenderer
-        // needs a pre built tree after TCCI changes. 
-        //  verifyFormRenderer(root, 0);
-        //  verifyFormRenderer(root, 1);
+        verifyFormRenderer(root, 0);
+        verifyFormRenderer(root, 1);
         verifyRadioRenderer(root);
         verifyButtonRenderer(root);
         verifyLinkRenderer(root);
@@ -173,8 +171,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
 
         assertTrue(verifyExpectedOutput());
         sessionMap.remove("Messages");
-       // String stringToCheck = "id=" + "\"" + "formRenderer0" + "\"";
-       // assertTrue(verifyExpectedStringInOutput(stringToCheck));
+        String stringToCheck = "id=" + "\"" + "formRenderer0" + "\"";
+        assertTrue(verifyExpectedStringInOutput(stringToCheck));
 
     }
 
@@ -195,8 +193,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiOutput.setId("labelLink1");
         uiOutput.setValue("hrefValue");
         output.setValue("PASSED");
-        output.setValueBinding("value",
-                               Util.getValueBinding("#{TestBean.modelLabel}"));
+        output.setValueExpression("value",
+                               Util.getValueExpression("#{TestBean.modelLabel}"));
         uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing label lookup from local value...");
@@ -211,8 +209,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiOutput.setId("labelLink2");
         uiOutput.setValue("hrefValue");
         output = new UIOutput();
-        output.setValueBinding("value",
-                               Util.getValueBinding("#{TestBean.modelLabel}"));
+        output.setValueExpression("value",
+                               Util.getValueExpression("#{TestBean.modelLabel}"));
         uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing label lookup from model...");
@@ -227,8 +225,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         output = new UIOutput();
         uiOutput.setId("labelLink3");
         uiOutput.setValue("hrefValue");
-        ValueBinding vb = Util.getValueBinding("#{Messages.passedkey}");
-        output.setValueBinding("value", vb);
+        ValueExpression vb = Util.getValueExpression("#{Messages.passedkey}");
+        output.setValueExpression("value", vb);
         uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing label lookup from ResourceBundle...");
@@ -248,8 +246,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiOutput.getAttributes().put("shape", "shape");
         uiOutput.getAttributes().put("coords", "coords");
         uiOutput.getAttributes().put("hreflang", "hreflang");
-        output.setValueBinding("value",
-                               Util.getValueBinding("#{NonBean.label}"));
+        output.setValueExpression("value",
+                               Util.getValueExpression("#{NonBean.label}"));
         uiOutput.getChildren().add(output);
         root.getChildren().add(uiOutput);
         System.out.println("Testing empty label...");
@@ -277,8 +275,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         graphic = new UIGraphic();
         uiOutput.setId("linkImage2");
         uiOutput.setValue("hrefValue");
-        vb = Util.getValueBinding("#{Messages.imagekey}");
-        graphic.setValueBinding("value", vb);
+        vb = Util.getValueExpression("#{Messages.imagekey}");
+        graphic.setValueExpression("value", vb);
         uiOutput.getChildren().add(graphic);
         root.getChildren().add(uiOutput);
         System.out.println("Testing link image via resource lookup");
@@ -321,8 +319,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         UIForm form = new UIForm();
         uiCommand.setId("labelLink1");
         output.setValue("PASSED");
-        output.setValueBinding("value",
-                               Util.getValueBinding("#{TestBean.modelLabel}"));
+        output.setValueExpression("value",
+                               Util.getValueExpression("#{TestBean.modelLabel}"));
         uiCommand.getChildren().add(output);
         form.getChildren().add(uiCommand);
         root.getChildren().add(form);
@@ -337,8 +335,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand = new UICommand();
         uiCommand.setId("labelLink2");
         output = new UIOutput();
-        output.setValueBinding("value",
-                               Util.getValueBinding("#{TestBean.modelLabel}"));
+        output.setValueExpression("value",
+                               Util.getValueExpression("#{TestBean.modelLabel}"));
         uiCommand.getChildren().add(output);
         form.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
@@ -352,8 +350,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand = new UICommand();
         output = new UIOutput();
         uiCommand.setId("labelLink3");
-        ValueBinding vb = Util.getValueBinding("#{Messages.passedkey}");
-        output.setValueBinding("value", vb);
+        ValueExpression vb = Util.getValueExpression("#{Messages.passedkey}");
+        output.setValueExpression("value", vb);
         uiCommand.getChildren().add(output);
         form.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
@@ -372,8 +370,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand.getAttributes().put("shape", "shape");
         uiCommand.getAttributes().put("coords", "coords");
         uiCommand.getAttributes().put("hreflang", "hreflang");
-        output.setValueBinding("value",
-                               Util.getValueBinding("#{NonBean.label}"));
+        output.setValueExpression("value",
+                               Util.getValueExpression("#{NonBean.label}"));
         uiCommand.getChildren().add(output);
         form.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
@@ -399,8 +397,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand = new UICommand();
         graphic = new UIGraphic();
         uiCommand.setId("linkImage2");
-        vb = Util.getValueBinding("#{Messages.imagekey}");
-        graphic.setValueBinding("value", vb);
+        vb = Util.getValueExpression("#{Messages.imagekey}");
+        graphic.setValueExpression("value", vb);
         uiCommand.getChildren().add(graphic);
         form.getChildren().add(uiCommand);
         System.out.println("Testing link image via resource lookup");
@@ -488,8 +486,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         // Test button as image with image specified in resource bundle
         uiCommand = new UICommand();
         uiCommand.setId("imageButton2");
-        ValueBinding vb = Util.getValueBinding("#{Messages.imagekey}");
-        uiCommand.setValueBinding("image", vb);
+        ValueExpression vb = Util.getValueExpression("#{Messages.imagekey}");
+        uiCommand.setValueExpression("image", vb);
         root.getChildren().add(uiCommand);
         System.out.println("Testing link image via resource lookup");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -503,8 +501,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand.setId("labelButton1");
         uiCommand.getAttributes().put("type", "submit");
         uiCommand.setValue("PASSED");
-        uiCommand.setValueBinding("value",
-                                  Util.getValueBinding(
+        uiCommand.setValueExpression("value",
+                                  Util.getValueExpression(
                                       "#{TestBean.modelLabel}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from local value...");
@@ -517,8 +515,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand = new UICommand();
         uiCommand.setId("labelButton2");
         uiCommand.getAttributes().put("type", "reset");
-        uiCommand.setValueBinding("value",
-                                  Util.getValueBinding(
+        uiCommand.setValueExpression("value",
+                                  Util.getValueExpression(
                                       "#{TestBean.modelLabel}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from model...");
@@ -531,8 +529,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand = new UICommand();
         uiCommand.setId("labelButton3");
         uiCommand.getAttributes().put("type", "submit");
-        vb = Util.getValueBinding("#{Messages.passedkey}");
-        uiCommand.setValueBinding("value", vb);
+        vb = Util.getValueExpression("#{Messages.passedkey}");
+        uiCommand.setValueExpression("value", vb);
         root.getChildren().add(uiCommand);
         System.out.println("Testing label lookup from ResourceBundle...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
@@ -543,8 +541,8 @@ public class TestRenderers_1 extends JspFacesTestCase {
         uiCommand = new UICommand();
         uiCommand.setId("labelButton4");
         uiCommand.getAttributes().put("type", "reset");
-        uiCommand.setValueBinding("value",
-                                  Util.getValueBinding("#{NonBean.label}"));
+        uiCommand.setValueExpression("value",
+                                  Util.getValueExpression("#{NonBean.label}"));
         root.getChildren().add(uiCommand);
         System.out.println("Testing empty label...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);

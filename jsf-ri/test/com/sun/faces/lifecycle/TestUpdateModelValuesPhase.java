@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.36 2004/04/07 17:52:56 rkitain Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.37 2005/05/06 22:02:10 edburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.36 2004/04/07 17:52:56 rkitain Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.37 2005/05/06 22:02:10 edburns Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -84,22 +84,22 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName = new TestUIInput();
         userName.setId("userName");
         userName.setValue("one");
-        userName.setValueBinding("value",
-                                 Util.getValueBinding("#{TestBean.one}"));
+        userName.setValueExpression("value",
+                                 Util.getValueExpression("#{TestBean.one}"));
         userName.testSetValid(true);
         form.getChildren().add(userName);
         userName1 = new TestUIInput();
         userName1.setId("userName1");
         userName1.setValue("one");
-        userName1.setValueBinding("value",
-                                  Util.getValueBinding("#{TestBean.one}"));
+        userName1.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.one}"));
         userName1.testSetValid(true);
         form.getChildren().add(userName1);
         userName2 = new TestUIInput();
         userName2.setId("userName2");
         userName2.setValue("one");
-        userName2.setValueBinding("value",
-                                  Util.getValueBinding("#{TestBean.one}"));
+        userName2.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
 
@@ -138,21 +138,21 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         userName.setId("userName");
         userName.setValue("one");
         userName.testSetValid(true);
-        userName.setValueBinding("value",
-                                 Util.getValueBinding("#{TestBean.two}"));
+        userName.setValueExpression("value",
+                                 Util.getValueExpression("#{TestBean.two}"));
         form.getChildren().add(userName);
         userName1 = new TestUIInput();
         userName1.setId("userName1");
         userName1.setValue("one");
         userName1.testSetValid(true);
-        userName1.setValueBinding("value",
-                                  Util.getValueBinding("#{TestBean.one}"));
+        userName1.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.one}"));
         form.getChildren().add(userName1);
         userName2 = new TestUIInput();
         userName2.setId("userName2");
         userName2.setValue("one");
-        userName2.setValueBinding("value",
-                                  Util.getValueBinding("#{TestBean.one}"));
+        userName2.setValueExpression("value",
+                                  Util.getValueExpression("#{TestBean.one}"));
         userName2.testSetValid(true);
         form.getChildren().add(userName2);
 

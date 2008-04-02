@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.19 2004/11/09 04:19:29 jhook Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.20 2005/05/06 22:02:08 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.19 2004/11/09 04:19:29 jhook Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.20 2005/05/06 22:02:08 edburns Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {
@@ -80,7 +80,8 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
         TestBean testBean = new TestBean();
         InnerBean newInner, oldInner = new InnerBean();
         testBean.setInner(oldInner);
-        VariableResolver variableResolver = new VariableResolverImpl();
+        VariableResolver variableResolver = 
+            getFacesContext().getApplication().getVariableResolver();
         Object result = null;
         getFacesContext().getExternalContext().getSessionMap().remove(
             "TestBean");
@@ -121,7 +122,8 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
 
 
     public void testImplicitObjects() {
-        VariableResolver variableResolver = new VariableResolverImpl();
+        VariableResolver variableResolver = 
+            getFacesContext().getApplication().getVariableResolver();
         Object result = null;
 
         //
@@ -208,7 +210,8 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
 
     // Negative tests (should throw exceptions)
     public void testNegative() throws Exception {
-        VariableResolver variableResolver = new VariableResolverImpl();
+        VariableResolver variableResolver = 
+            getFacesContext().getApplication().getVariableResolver();
 
         Object value = null;
 
@@ -216,25 +219,24 @@ public class TestVariableResolverImpl extends ServletFacesTestCase {
 
         try {
             value = variableResolver.resolveVariable(getFacesContext(), null);
-            fail("Should have thrown NullPointerException");
+             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
-        }
-
+        } 
+        
         try {
             value = variableResolver.resolveVariable(null, "foo");
             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
-        }
+        } 
 
         try {
             value = variableResolver.resolveVariable(null, null);
             fail("Should have thrown NullPointerException");
         } catch (NullPointerException e) {
             ; // Expected result
-        }
-
+        } 
 
     }
 

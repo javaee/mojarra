@@ -392,6 +392,7 @@ public class TestBean extends Object {
 
         protected String three = null;
 
+        public Inner2Bean() {}
 
         public void setThree(String newThree) {
             three = newThree;

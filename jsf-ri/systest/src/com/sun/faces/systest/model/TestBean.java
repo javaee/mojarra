@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.13 2005/05/02 14:58:47 rogerk Exp $
+ * $Id: TestBean.java,v 1.14 2005/05/06 22:01:58 edburns Exp $
  */
 
 /*
@@ -116,6 +116,15 @@ public class TestBean {
         this.intProperty = intProperty;
     }
 
+    private int[] intsProperty = {5, 6, 7};
+
+    public int[] getIntsProperty() {
+        return (this.intsProperty);
+    }
+
+    public void setIntsProperty(int[] intsProperty) {
+        this.intsProperty = intsProperty;
+    }
 
     private long longProperty = 12345;
 

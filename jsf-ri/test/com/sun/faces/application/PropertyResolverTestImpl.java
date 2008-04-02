@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolverTestImpl.java,v 1.4 2004/02/26 20:34:08 eburns Exp $
+ * $Id: PropertyResolverTestImpl.java,v 1.5 2005/05/06 22:02:03 edburns Exp $
  */
 
 /*
@@ -9,8 +9,13 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.el.PropertyResolverImpl;
+import com.sun.faces.TestPropertyResolver;
+import javax.faces.el.PropertyResolver;
 
-public class PropertyResolverTestImpl extends PropertyResolverImpl {
+public class PropertyResolverTestImpl extends TestPropertyResolver{
+
+    public PropertyResolverTestImpl(PropertyResolver root) {
+        super(root);
+    }
 
 }

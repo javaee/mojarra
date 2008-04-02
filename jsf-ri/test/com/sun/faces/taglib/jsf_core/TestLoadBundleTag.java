@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.9 2004/04/07 17:53:03 rkitain Exp $
+ * $Id: TestLoadBundleTag.java,v 1.10 2005/05/06 22:02:11 edburns Exp $
  */
 
 /*
@@ -15,12 +15,15 @@ import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 
 import javax.faces.component.UIViewRoot;
+import javax.faces.application.Application;
+import javax.el.ExpressionFactory;
+import javax.el.ValueExpression;
 
 import java.util.Map;
 
 
 /**
- * @version $Id: TestLoadBundleTag.java,v 1.9 2004/04/07 17:53:03 rkitain Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.10 2005/05/06 22:02:11 edburns Exp $
  */
 
 public class TestLoadBundleTag extends ServletFacesTestCase {
@@ -64,7 +67,13 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
     public void testLoadBundle() throws Exception {
         getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
         LoadBundleTag tag = new LoadBundleTag();
-        tag.setBasename("com.sun.faces.TestMessages");
+        ExpressionFactory factory =
+            getFacesContext().getApplication().getExpressionFactory();
+        ValueExpression expr =
+            factory.createValueExpression(getFacesContext().getELContext(),
+                "com.sun.faces.TestMessages",String.class);
+                                         
+        tag.setBasename(expr);
         tag.setVar("messages");
         tag.doStartTag();
         assertEquals("Didn't get expected value",
@@ -90,10 +99,16 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
         boolean gotException = false;
         Object key = "buckaroo";
         Object value = "banzai";
+        ExpressionFactory factory =
+            getFacesContext().getApplication().getExpressionFactory();
+        ValueExpression expr =
+            factory.createValueExpression(getFacesContext().getELContext(),
+                "com.sun.faces.TestMessages",String.class);
+                                          
         getFacesContext().setViewRoot(Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null));
 
         LoadBundleTag tag = new LoadBundleTag();
-        tag.setBasename("com.sun.faces.TestMessages");
+        tag.setBasename(expr);
         tag.setVar("messages");
         tag.doStartTag();
         Map testMap = (Map) getFacesContext().getExternalContext()
@@ -101,7 +116,7 @@ public class TestLoadBundleTag extends ServletFacesTestCase {
             .get("messages");
 
         LoadBundleTag tag2 = new LoadBundleTag();
-        tag2.setBasename("com.sun.faces.TestMessages");
+        tag2.setBasename(expr);
         tag2.setVar("messages2");
         tag2.doStartTag();
         Map testMap2 = (Map) getFacesContext().getExternalContext()

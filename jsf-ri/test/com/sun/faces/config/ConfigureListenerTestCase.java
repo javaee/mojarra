@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListenerTestCase.java,v 1.8 2004/06/16 19:48:08 rlubke Exp $
+ * $Id: ConfigureListenerTestCase.java,v 1.9 2005/05/06 22:02:05 edburns Exp $
  */
 
 /*
@@ -185,8 +185,7 @@ public class ConfigureListenerTestCase extends TestCase {
 
     // Representative sample only
     private String rendersChildrenFalse[][] = {
-        {"javax.faces.Command", "javax.faces.Button"},
-        {"javax.faces.Form", "javax.faces.Form"},
+        
     };
 
     private String rendersChildrenTrue[][] = {
@@ -195,6 +194,8 @@ public class ConfigureListenerTestCase extends TestCase {
         {"javax.faces.Output", "javax.faces.Link"},
         {"javax.faces.Panel", "javax.faces.Grid"},
         {"javax.faces.Panel", "javax.faces.Group"},
+        {"javax.faces.Command", "javax.faces.Button"},
+        {"javax.faces.Form", "javax.faces.Form"}
     };
 
 

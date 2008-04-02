@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.65 2004/10/12 14:39:57 rlubke Exp $
+ * $Id: ConfigFileTestCase.java,v 1.66 2005/05/06 22:02:05 edburns Exp $
  */
 
 /*
@@ -116,12 +116,11 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             application.getActionListener() instanceof com.sun.faces.TestActionListener);
         assertTrue(
             application.getNavigationHandler() instanceof com.sun.faces.TestNavigationHandler);
+   
+         assertTrue(
+            application.getPropertyResolver() instanceof javax.faces.el.PropertyResolver);
         assertTrue(
-            application.getPropertyResolver() instanceof com.sun.faces.AdapterPropertyResolver);
-        assertTrue(
-            ((com.sun.faces.AdapterPropertyResolver) application.getPropertyResolver()).getRoot() instanceof com.sun.faces.TestPropertyResolver);
-        assertTrue(
-            application.getVariableResolver() instanceof com.sun.faces.TestVariableResolver);
+            application.getVariableResolver() instanceof javax.faces.el.VariableResolver);
         assertTrue(
             application.getViewHandler() instanceof com.sun.faces.TestViewHandler);
 
@@ -195,12 +194,15 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             application.getActionListener() instanceof com.sun.faces.TestActionListener);
         assertTrue(
             application.getNavigationHandler() instanceof com.sun.faces.TestNavigationHandler);
+        
+        // JSF1.2 BI: application.getPropertyResolver() no longer returns the 
+        // head of the PropertyResolver. Instead returns the head of the 
+        // ELResolver stack wrapped in a PropertyResolver.This also applies to
+        // VariableResolver
         assertTrue(
-            application.getPropertyResolver() instanceof com.sun.faces.AdapterPropertyResolver);
+            application.getPropertyResolver() instanceof javax.faces.el.PropertyResolver);
         assertTrue(
-            ((com.sun.faces.AdapterPropertyResolver) application.getPropertyResolver()).getRoot() instanceof com.sun.faces.TestPropertyResolver);
-        assertTrue(
-            application.getVariableResolver() instanceof com.sun.faces.TestVariableResolver);
+            application.getVariableResolver() instanceof javax.faces.el.VariableResolver);
         assertTrue(
             application.getViewHandler() instanceof com.sun.faces.TestViewHandler);
 

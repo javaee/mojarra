@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.86 2005/03/15 15:50:36 rogerk Exp $
+ * $Id: TestRenderers_2.java,v 1.87 2005/05/06 22:02:11 edburns Exp $
  */
 
 /*
@@ -37,6 +37,8 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.model.SelectItem;
 
+import javax.el.ValueExpression;
+
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -45,7 +47,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.86 2005/03/15 15:50:36 rogerk Exp $
+ * @version $Id: TestRenderers_2.java,v 1.87 2005/05/06 22:02:11 edburns Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -469,11 +471,11 @@ public class TestRenderers_2 extends JspFacesTestCase {
         img.getAttributes().put("usemap", "usemap");
         root.getChildren().add(img);
         TestBean testBean = (TestBean)
-            (Util.getValueBinding("#{TestBean}")).getValue(getFacesContext());
+            (Util.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
         assertTrue(null != testBean); // set in FacesTestCaseService
         testBean.setImagePath("/foo/modelReferenceImage.gif");
-        img.setValueBinding("value",
-                            Util.getValueBinding("#{TestBean.imagePath}"));
+        img.setValueExpression("value",
+                            Util.getValueExpression("#{TestBean.imagePath}"));
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);

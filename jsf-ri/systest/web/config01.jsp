@@ -3,7 +3,7 @@
 %><%@ page import="javax.faces.application.Application"
 %><%@ page import="javax.faces.application.ApplicationFactory"
 %><%@ page import="javax.faces.context.FacesContext"
-%><%@ page import="javax.faces.el.ValueBinding"
+%><%@ page import="javax.el.ValueExpression"
 %><%@ page import="com.sun.faces.systest.model.TestBean"
 %><%
 
@@ -24,18 +24,19 @@
     return;
   }
 
-  // Acquire a ValueBinding for the bean to be created
+  // Acquire a ValueExpression for the bean to be created
   // "mybean" exists in a Faces configuration file specified as
   // as a servlet context init parameter.
   //
-  ValueBinding valueBinding = appl.createValueBinding("#{mybean}");
-  if (valueBinding == null) {
-    out.println("/config01.jsp FAILED - No ValueBinding returned");
+  ValueExpression valueExpression = appl.getExpressionFactory().
+      createValueExpression(facesContext.getELContext(),"#{mybean}", Object.class);
+  if (valueExpression == null) {
+    out.println("/config01.jsp FAILED - No ValueExpression returned");
     return;
   }
 
   // Evaluate the value binding and check for bean creation
-  Object result = valueBinding.getValue(facesContext);
+  Object result = valueExpression.getValue(facesContext.getELContext());
   if (result == null) {
     out.println("/config01.jsp FAILED - getValue() returned null");
     return;
@@ -47,17 +48,18 @@
     return;
   }
 
-  // Acquire a ValueBinding for the bean to be created
+  // Acquire a ValueExpression for the bean to be created
   // "test1" exists in a Faces configuration file under WEB-INF. 
   //
-  valueBinding = appl.createValueBinding("#{test1}");
-  if (valueBinding == null) {
-    out.println("/config01.jsp FAILED - No ValueBinding returned");
+  valueExpression = appl.getExpressionFactory().createValueExpression(facesContext.getELContext(),"#{test1}", 
+     Object.class);
+  if (valueExpression == null) {
+    out.println("/config01.jsp FAILED - No ValueExpression returned");
     return;
   }
 
   // Evaluate the value binding and check for bean creation
-  result = valueBinding.getValue(facesContext);
+  result = valueExpression.getValue(facesContext.getELContext());
   if (result == null) {
     out.println("/config01.jsp FAILED - getValue() returned null");
     return;

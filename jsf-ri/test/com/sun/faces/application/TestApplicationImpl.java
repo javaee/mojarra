@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.22 2004/11/09 04:19:27 jhook Exp $
+ * $Id: TestApplicationImpl.java,v 1.23 2005/05/06 22:02:04 edburns Exp $
  */
 
 /*
@@ -32,12 +32,15 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 
+import javax.el.ELException;
+import javax.el.ValueExpression;
+
 /**
  * <B>TestApplicationImpl</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.22 2004/11/09 04:19:27 jhook Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.23 2005/05/06 22:02:04 edburns Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -92,6 +95,9 @@ public class TestApplicationImpl extends JspFacesTestCase {
 
     public void testAccessors() {
 
+        assertTrue(application.getELResolver() != null);
+        assertTrue(application.getExpressionFactory() != null);
+        
         // 1. Verify "getActionListener" returns the same ActionListener
         //    instance if called multiple times.
         //
@@ -115,7 +121,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         // 3. Verify "getPropertyResolver" returns the same PropertyResolver
         //    instance if called multiple times.
         //
-        PropertyResolver propertyResolver1 = new PropertyResolverImpl();
+        PropertyResolver propertyResolver1 = application.getPropertyResolver();
         application.setPropertyResolver(propertyResolver1);
         PropertyResolver propertyResolver2 = application.getPropertyResolver();
         PropertyResolver propertyResolver3 = application.getPropertyResolver();
@@ -125,7 +131,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         // 4. Verify "getVariableResolver" returns the same VariableResolver
         //    instance if called multiple times.
         //
-        VariableResolver variableResolver1 = new VariableResolverImpl();
+        VariableResolver variableResolver1 = application.getVariableResolver();
         application.setVariableResolver(variableResolver1);
         VariableResolver variableResolver2 = application.getVariableResolver();
         VariableResolver variableResolver3 = application.getVariableResolver();
@@ -186,7 +192,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
         thrown = false;
         try {
             application.createValueBinding(null);
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             thrown = true;
         }
         assertTrue(thrown);
@@ -290,7 +296,7 @@ public class TestApplicationImpl extends JspFacesTestCase {
             application.createValueBinding("improperexpression}#");
         } catch (ReferenceSyntaxException e) {
             thrown = true;
-        }
+        } 
         assertFalse(thrown);
 
 
@@ -394,6 +400,26 @@ public class TestApplicationImpl extends JspFacesTestCase {
         assertTrue(null != (valueBinding =
                             application.createValueBinding(
                                 "#{sessionScope.TAIBean}")));
+
+        try {
+            result = application.createComponent(valueBinding, getFacesContext(),
+                                                 "notreached");
+            assertTrue(false);
+        } catch (FacesException e) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+    }
+    
+    public void testGetComponentExpressionRefNegative() throws ELException{
+        ValueExpression valueBinding = null;
+        boolean exceptionThrown = false;
+        UIComponent result = null;
+        getFacesContext().getExternalContext().getSessionMap().put("TAIBean",
+                                                                   this);
+        assertTrue(null != (valueBinding =
+                            application.getExpressionFactory().createValueExpression(
+                            getFacesContext().getELContext(), "#{sessionScope.TAIBean}", Object.class)));
 
         try {
             result = application.createComponent(valueBinding, getFacesContext(),

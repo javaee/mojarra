@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.32 2005/03/09 00:35:45 jayashri Exp $
+ * $Id: TestConverters.java,v 1.33 2005/05/06 22:02:06 edburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.32 2005/03/09 00:35:45 jayashri Exp $
+ * @version $Id: TestConverters.java,v 1.33 2005/05/06 22:02:06 edburns Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -122,6 +122,9 @@ public class TestConverters extends JspFacesTestCase {
 
         boolean[] booleans = null;
 
+        public TestBean() {
+            super();
+        }
 
         public boolean[] getBooleans() {
             return booleans;
@@ -355,8 +358,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany booleanv = new UISelectMany();
         booleanv.setId("bool");
         booleanv.setRendererType("javax.faces.Checkbox");
-        booleanv.setValueBinding("value",
-                                 Util.getValueBinding("#{bean.booleans}"));
+        booleanv.setValueExpression("value",
+            (getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),  "#{bean.booleans}",
+            Boolean.class)));
         root.getChildren().add(booleanv);
         booleanv.getChildren().add(newUISelectItem(Boolean.TRUE));
         booleanv.getChildren().add(newUISelectItem(Boolean.FALSE));
@@ -372,8 +376,9 @@ public class TestConverters extends JspFacesTestCase {
         booleanv = new UISelectMany();
         booleanv.setId("bool2");
         booleanv.setRendererType("javax.faces.Checkbox");
-        booleanv.setValueBinding("value",
-                                 Util.getValueBinding("#{bean.booleans}"));
+        booleanv.setValueExpression("value",
+            (getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.booleans}",
+            Object.class)));
         root.getChildren().add(booleanv);
         booleanv.getChildren().add(newUISelectItem(Boolean.TRUE));
         booleanv.getChildren().add(newUISelectItem(Boolean.FALSE));
@@ -388,7 +393,10 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany bytev = new UISelectMany();
         bytev.setId("byte");
         bytev.setRendererType("javax.faces.Checkbox");
-        bytev.setValueBinding("value", Util.getValueBinding("#{bean.bytes}"));
+       
+        bytev.setValueExpression("value", 
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(), "#{bean.bytes}", 
+            Object.class));
         bytev.getChildren().add(newUISelectItem(new Byte(Byte.MIN_VALUE)));
         bytev.getChildren().add(newUISelectItem(new Byte(Byte.MAX_VALUE)));
         bytev.getChildren().add(newUISelectItem(new Byte((byte) 1)));
@@ -406,7 +414,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany charv = new UISelectMany();
         charv.setId("char");
         charv.setRendererType("javax.faces.Checkbox");
-        charv.setValueBinding("value", Util.getValueBinding("#{bean.chars}"));
+        charv.setValueExpression("value",  
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.chars}", 
+            Object.class));
         root.getChildren().add(charv);
         charv.getChildren().add(newUISelectItem(new Character('Q')));
         charv.getChildren().add(newUISelectItem(new Character('A')));
@@ -424,7 +434,8 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany shortv = new UISelectMany();
         shortv.setId("short");
         shortv.setRendererType("javax.faces.Checkbox");
-        shortv.setValueBinding("value", Util.getValueBinding("#{bean.shorts}"));
+        shortv.setValueExpression("value",  
+        getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.shorts}", Object.class));
         root.getChildren().add(shortv);
         shortv.getChildren().add(
             newUISelectItem(new Short((short) (Byte.MAX_VALUE + 1))));
@@ -443,7 +454,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany intv = new UISelectMany();
         intv.setId("int");
         intv.setRendererType("javax.faces.Checkbox");
-        intv.setValueBinding("value", Util.getValueBinding("#{bean.ints}"));
+        intv.setValueExpression("value", 
+             getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.ints}",
+             Object.class));
         root.getChildren().add(intv);
         intv.getChildren().add(
             newUISelectItem(new Integer(Short.MAX_VALUE + 1)));
@@ -462,7 +475,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany floatv = new UISelectMany();
         floatv.setId("float");
         floatv.setRendererType("javax.faces.Checkbox");
-        floatv.setValueBinding("value", Util.getValueBinding("#{bean.floats}"));
+        floatv.setValueExpression("value",  
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.floats}", 
+            Object.class));
         root.getChildren().add(floatv);
         floatv.getChildren().add(
             newUISelectItem(new Float(Integer.MAX_VALUE + 1)));
@@ -481,7 +496,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany longv = new UISelectMany();
         longv.setId("long");
         longv.setRendererType("javax.faces.Checkbox");
-        longv.setValueBinding("value", Util.getValueBinding("#{bean.longs}"));
+        longv.setValueExpression("value",  
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.longs}", 
+            Object.class));
         root.getChildren().add(longv);
         longv.getChildren().add(
             newUISelectItem(new Long(Integer.MAX_VALUE + 1)));
@@ -500,8 +517,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany doublev = new UISelectMany();
         doublev.setId("double");
         doublev.setRendererType("javax.faces.Checkbox");
-        doublev.setValueBinding("value",
-                                Util.getValueBinding("#{bean.doubles}"));
+        doublev.setValueExpression("value",
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.doubles}", 
+            Object.class));
         root.getChildren().add(doublev);
         doublev.getChildren().add(
             newUISelectItem(new Double(Long.MAX_VALUE + 1)));
@@ -522,7 +540,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany str = new UISelectMany();
         str.setId("str");
         str.setRendererType("javax.faces.Checkbox");
-        str.setValueBinding("value", Util.getValueBinding("#{bean.strings}"));
+        str.setValueExpression("value", 
+             getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.strings}", 
+             Object.class));
         root.getChildren().add(str);
         str.getChildren().add(newUISelectItem("value1"));
         str.getChildren().add(newUISelectItem("value2"));
@@ -542,7 +562,9 @@ public class TestConverters extends JspFacesTestCase {
         date.setConverter(dateConv);
         date.setId("date");
         date.setRendererType("javax.faces.Checkbox");
-        date.setValueBinding("value", Util.getValueBinding("#{bean.dates}"));
+        date.setValueExpression("value",  
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.dates}", 
+            Object.class));
         root.getChildren().add(date);
 
         try {
@@ -579,8 +601,9 @@ public class TestConverters extends JspFacesTestCase {
         number.setConverter(numberConv);
         number.setId("num");
         number.setRendererType("javax.faces.Checkbox");
-        number.setValueBinding("value",
-                               Util.getValueBinding("#{bean.numbers}"));
+        number.setValueExpression("value",
+            getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.numbers}", 
+            Object.class));
         root.getChildren().add(number);
         number.getChildren().add(newUISelectItem(new Double(3.14)));
         number.getChildren().add(newUISelectItem(new Double(49.99)));
@@ -602,8 +625,9 @@ public class TestConverters extends JspFacesTestCase {
         UISelectMany stringList = new UISelectMany();
         stringList.setId("stringList");
         stringList.setRendererType("javax.faces.Checkbox");
-        stringList.setValueBinding("value",
-                                   Util.getValueBinding("#{bean.stringList}"));
+        stringList.setValueExpression("value",
+             getFacesContext().getApplication().getExpressionFactory().createValueExpression(getFacesContext().getELContext(),"#{bean.stringList}", 
+             Object.class));
         root.getChildren().add(stringList);
         stringList.getChildren().add(newUISelectItem("value1"));
         stringList.getChildren().add(newUISelectItem("value2"));

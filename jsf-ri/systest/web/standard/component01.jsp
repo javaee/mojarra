@@ -8,7 +8,7 @@
 %><%@ page import="javax.faces.application.ApplicationFactory"
 %><%@ page import="javax.faces.context.FacesContext"
 %><%@ page import="javax.faces.component.UIInput"
-%><%@ page import="javax.faces.el.ValueBinding"
+%><%@ page import="javax.el.ValueExpression"
 %>
  <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
  <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
@@ -34,8 +34,9 @@
     FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
   Application appl = afactory.getApplication();
 
-  ValueBinding binding = appl.createValueBinding("usernamecomponent");
-  Object result = binding.getValue(facesContext);
+  ValueExpression binding = appl.getExpressionFactory().
+    createValueExpression(facesContext.getELContext(),"usernamecomponent", Object.class);
+  Object result = binding.getValue(facesContext.getELContext());
   if (result == null || !(result instanceof UIInput)) {
       System.out.println("/component01.jsp FAILED - Couldn't retrieve component.");
       return;

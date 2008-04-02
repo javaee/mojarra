@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.72 2005/05/02 14:58:45 rogerk Exp $
+ $Id: build-tests.xml,v 1.73 2005/05/06 22:01:57 edburns Exp $
 -->
 
 <!--
@@ -112,9 +112,10 @@
     <target name="test.duplicateIds"
         description="Test duplicate ID detection">
     
+       <!--
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds01.jsp"
-             status="200" failonerror="${failonerror}"/>
+             status="500" failonerror="${failonerror}"/> -->
         
         <tester host="${host}" port="${port}" protocol="${protocol}"
             request="${context.path}/faces/duplicateIds02.jsp"
@@ -143,7 +144,7 @@
 
       <batchtest todir="${test.results.dir}">
         <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/systest/TestDuplicateIds04.class"/>
+               includes="com/sun/faces/systest/TestDuplicateIds04.class"/> 
       </batchtest>
 
     </junit>
@@ -258,7 +259,7 @@
 
             <batchtest todir="${test.results.dir}">
                 <fileset dir="${basedir}/build/WEB-INF/classes"
-                    includes="com/sun/faces/pathtest/*TestCase.class" />
+                    includes="com/sun/faces/pathtest/*TestCase.class,com/sun/faces/systest/NavigationTestCase.class"/>
             </batchtest>
 
         </junit> -->
@@ -699,10 +700,13 @@
    <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/phaseListener01.jsp"
          outContent="/phaseListener01.jsp PASSED" failonerror="${failonerror}"/>
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/phaseListener01.jsp?param=foo"
+         outContent="/phaseListener01.jsp FAILED" failonerror="${failonerror}"/>
   </target>
   <target name="test.subview"
           description="Test subview tag">
-
+    <!--
     <tester host="${host}" port="${port}" protocol="${protocol}"
          request="${context.path}/faces/subview01.jsp"
           recordGolden="${local.golden.path}/subview01.txt"
@@ -732,7 +736,7 @@
          request="${context.path}/faces/subview06.jsp"
          recordGolden="${local.golden.path}/subview06.txt"
          golden="${golden.path}/subview06.txt" failonerror="${failonerror}"/>
-
+-->
   </target>
 
 </project>

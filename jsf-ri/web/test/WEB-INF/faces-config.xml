@@ -15,6 +15,7 @@
     <action-listener>com.sun.faces.TestActionListener</action-listener>
     <message-bundle>com.sun.faces.TestMessages</message-bundle>
     <variable-resolver>com.sun.faces.TestOldVariableResolver</variable-resolver>
+    <el-resolver>com.sun.faces.TestELResolver</el-resolver>
   </application>
 
 

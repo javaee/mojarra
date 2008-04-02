@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.35 2004/07/14 21:30:55 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.36 2005/05/06 22:02:04 edburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.35 2004/07/14 21:30:55 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.36 2005/05/06 22:02:04 edburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -492,15 +492,17 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
                             application.getNavigationHandler()));
         assertTrue(navHandler instanceof com.sun.faces.TestNavigationHandler);
 
+        // JSF1.2 BI: application.getPropertyResolver() no longer returns the 
+        // head of the PropertyResolver. Instead returns the head of the 
+        // ELResolver stack wrapped in a PropertyResolver.This also applies to
+        // VariableResolver
         assertTrue(null != (propResolver =
                             application.getPropertyResolver()));
         assertTrue(
-            application.getPropertyResolver() instanceof com.sun.faces.AdapterPropertyResolver);
-        assertTrue(
-            ((com.sun.faces.AdapterPropertyResolver) application.getPropertyResolver()).getRoot() instanceof com.sun.faces.TestPropertyResolver);
+            application.getPropertyResolver() instanceof javax.faces.el.PropertyResolver);
         assertTrue(null != (varResolver =
                             application.getVariableResolver()));
-        assertTrue(varResolver instanceof com.sun.faces.TestVariableResolver);
+        assertTrue(varResolver instanceof javax.faces.el.VariableResolver);
 
         assertTrue(null != (viewHandler =
                             application.getViewHandler()));

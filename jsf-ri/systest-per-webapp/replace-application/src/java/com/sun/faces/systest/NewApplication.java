@@ -1,5 +1,5 @@
 /*
- * $Id: NewApplication.java,v 1.1 2004/05/05 16:18:36 eburns Exp $
+ * $Id: NewApplication.java,v 1.2 2005/05/06 22:02:02 edburns Exp $
  */
 
 /*
@@ -32,6 +32,10 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.render.RenderKit;
 import javax.faces.validator.Validator;
+
+import javax.el.ELContextListener;
+import javax.el.ELException;
+import javax.el.ELResolver;
 
 
 public class NewApplication extends Application {
@@ -233,6 +237,39 @@ public class NewApplication extends Application {
         throws ReferenceSyntaxException {
 	return oldApp.createValueBinding(ref);
     }
-
+    
+    public ELContextListener [] getELContextListeners() {
+        return oldApp.getELContextListeners();
+    }
+    
+    public void addELContextListener(ELContextListener listener) {
+        oldApp.addELContextListener(listener);
+    } 
+    
+    public void removeELContextListener(ELContextListener listener) {
+        oldApp.removeELContextListener(listener);
+    }
+    
+     public Object evaluateExpressionGet(FacesContext context, 
+        String expression, Class expectedType) throws ELException {
+        return oldApp.evaluateExpressionGet(context, expression, expectedType);
+    }
+    
+     public javax.el.ExpressionFactory getExpressionFactory() {
+        return oldApp.getExpressionFactory();
+     }
+     
+    public UIComponent createComponent(javax.el.ValueExpression componentExpression,
+        FacesContext context, String componentType) throws FacesException {
+        return oldApp.createComponent(componentExpression, context, componentType);
+    } 
+    
+    public void addELResolver(ELResolver resolver) {
+       oldApp.addELResolver(resolver);
+    }
+    
+    public ELResolver getELResolver() {
+        return oldApp.getELResolver();
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl_Model.java,v 1.10 2005/05/06 22:02:07 edburns Exp $
+ * $Id: TestValueExpressionImpl_Model.java,v 1.1 2005/05/06 22:02:08 edburns Exp $
  */
 
 /*
@@ -7,7 +7,7 @@
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
-// TestValueBindingImpl_Model.java
+// TestValueExpressionImpl_Model.java
 
 package com.sun.faces.el;
 
@@ -17,18 +17,19 @@ import com.sun.faces.TestBean.Inner2Bean;
 import com.sun.faces.TestBean.InnerBean;
 
 import javax.faces.context.FacesContext;
-import javax.faces.el.PropertyNotFoundException;
-import javax.faces.el.ValueBinding;
+import javax.el.ELException;
+import javax.el.ValueExpression;
+import javax.el.ELContext;
 
 /**
- * <B>TestValueBindingImpl_Model</B> is a class ...
+ * <B>TestValueExpressionImpl_Model</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl_Model.java,v 1.10 2005/05/06 22:02:07 edburns Exp $
+ * @version $Id: TestValueExpressionImpl_Model.java,v 1.1 2005/05/06 22:02:08 edburns Exp $
  */
 
-public class TestValueBindingImpl_Model extends ServletFacesTestCase {
+public class TestValueExpressionImpl_Model extends ServletFacesTestCase {
 
 //
 // Protected Constants
@@ -45,18 +46,18 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
 // Attribute Instance Variables
 
 // Relationship Instance Variables
-    ValueBinding valueBinding = null;
+    ValueExpression valueExpression = null;
     
 //
 // Constructors and Initializers    
 //
 
-    public TestValueBindingImpl_Model() {
-        super("TestValueBindingImpl");
+    public TestValueExpressionImpl_Model() {
+        super("TestValueExpressionImpl");
     }
 
 
-    public TestValueBindingImpl_Model(String name) {
+    public TestValueExpressionImpl_Model(String name) {
         super(name);
     }
 //
@@ -70,18 +71,19 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
 //
 // General Methods
 //
-    public ValueBinding create(String ref) throws Exception {
-    	return (getFacesContext().getApplication().createValueBinding("#{" + ref + "}"));
+    public ValueExpression create(String ref) throws Exception {
+    	return (getFacesContext().getApplication().getExpressionFactory().
+            createValueExpression(getFacesContext().getELContext(),("#{" + ref + "}"), Object.class));
     }
     
     public void setUp() {
         super.setUp();
-        valueBinding = null;
+        valueExpression = null;
     }
 
 
     public void tearDown() {
-        valueBinding = null;
+        valueExpression = null;
         super.tearDown();
     }
 
@@ -98,38 +100,38 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
                                                                    testBean);
         boolean exceptionThrown = false;
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("TestBean.one");
-        valueBinding.setValue(getFacesContext(), "one");
+        valueExpression = this.create("TestBean.one");
+        valueExpression.setValue(getFacesContext().getELContext(), "one");
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         InnerBean newInner = new InnerBean();
-        valueBinding = this.create("TestBean.inner");
-        valueBinding.setValue(getFacesContext(), newInner);
-        result = valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("TestBean.inner");
+        valueExpression.setValue(getFacesContext().getELContext(), newInner);
+        result = valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(result == newInner);
         
         // Test two levels of nesting
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("sessionScope.TestBean.inner.two");
-        valueBinding.setValue(getFacesContext(), "two");
+        valueExpression = this.create("sessionScope.TestBean.inner.two");
+        valueExpression.setValue(getFacesContext().getELContext(), "two");
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         Inner2Bean newInner2 = new Inner2Bean();
-        valueBinding = this.create("TestBean.inner.inner2");
-        valueBinding.setValue(getFacesContext(), newInner2);
-        result = valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("TestBean.inner.inner2");
+        valueExpression.setValue(getFacesContext().getELContext(), newInner2);
+        result = valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(result == newInner2);
         
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("sessionScope.TestBean.inner.inner2");
-        valueBinding.setValue(getFacesContext(), innerInner);
+        valueExpression = this.create("sessionScope.TestBean.inner.inner2");
+        valueExpression.setValue(getFacesContext().getELContext(), innerInner);
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         
         // Test three levels of nesting
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("sessionScope.TestBean.inner.inner2.three");
-        valueBinding.setValue(getFacesContext(), "three");
+        valueExpression = this.create("sessionScope.TestBean.inner.inner2.three");
+        valueExpression.setValue(getFacesContext().getELContext(), "three");
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
     }
 
@@ -146,26 +148,26 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
                                                                    testBean);
 
         // Test one level of nesting
-        valueBinding = this.create("TestBean.one");
-        valueBinding.setValue(getFacesContext(), null);
+        valueExpression = this.create("TestBean.one");
+        valueExpression.setValue(getFacesContext().getELContext(), null);
         assertTrue(testBean.getOne() == null);
 
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("sessionScope.TestBean.inner");
-        valueBinding.setValue(getFacesContext(), inner);
+        valueExpression = this.create("sessionScope.TestBean.inner");
+        valueExpression.setValue(getFacesContext().getELContext(), inner);
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
-        valueBinding = this.create("sessionScope.TestBean.inner");
-        valueBinding.setValue(getFacesContext(), null);
+        valueExpression = this.create("sessionScope.TestBean.inner");
+        valueExpression.setValue(getFacesContext().getELContext(), null);
         assertTrue(testBean.getInner() == null);
 
         // Inner bean does not exist anymore. So this should result in an
         // exception.
         boolean exceptionThrown = false;
-        valueBinding = this.create("sessionScope.TestBean.inner.two");
+        valueExpression = this.create("sessionScope.TestBean.inner.two");
         try {
-            valueBinding.setValue(getFacesContext(), null);
-        } catch (javax.faces.el.EvaluationException ee) {
+            valueExpression.setValue(getFacesContext().getELContext(), null);
+        } catch (javax.el.PropertyNotWritableException ee) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);
@@ -187,39 +189,39 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
         // throw an illegalArgumentException
         boolean gotException = false;
         try {
-            valueBinding = this.create("header.header-one");
-            valueBinding.setValue(getFacesContext(), testBean);
-        } catch (javax.faces.el.EvaluationException pnf) {
+            valueExpression = this.create("header.header-one");
+            valueExpression.setValue(getFacesContext().getELContext(), testBean);
+        } catch (javax.el.ELException pnf) {
             gotException = true;
         }
         assertTrue(gotException);
 
         // Test one level of nesting
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("TestBean.one");
-        valueBinding.setValue(getFacesContext(), "one");
+        valueExpression = this.create("TestBean.one");
+        valueExpression.setValue(getFacesContext().getELContext(), "one");
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("requestScope.TestBean.inner");
-        valueBinding.setValue(getFacesContext(), inner);
+        valueExpression = this.create("requestScope.TestBean.inner");
+        valueExpression.setValue(getFacesContext().getELContext(), inner);
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         // Test two levels of nesting
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("requestScope.TestBean.inner.two");
-        valueBinding.setValue(getFacesContext(), "two");
+        valueExpression = this.create("requestScope.TestBean.inner.two");
+        valueExpression.setValue(getFacesContext().getELContext(), "two");
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("requestScope.TestBean.inner.inner2");
-        valueBinding.setValue(getFacesContext(), innerInner);
+        valueExpression = this.create("requestScope.TestBean.inner.inner2");
+        valueExpression.setValue(getFacesContext().getELContext(), innerInner);
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
 
         // Test three levels of nesting
         System.setProperty(TestBean.PROP, TestBean.FALSE);
-        valueBinding = this.create("requestScope.TestBean.inner.inner2.three");
-        valueBinding.setValue(getFacesContext(), "three");
+        valueExpression = this.create("requestScope.TestBean.inner.inner2.three");
+        valueExpression.setValue(getFacesContext().getELContext(), "three");
         assertTrue(System.getProperty(TestBean.PROP).equals(TestBean.TRUE));
     }
 
@@ -249,33 +251,33 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
                                                                   testBean);
 
         // Test zero levels of nesting
-        valueBinding = this.create("applicationScope.TestBean");
-        testBeanResult = (TestBean) valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("applicationScope.TestBean");
+        testBeanResult = (TestBean) valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(testBeanResult != null);
         assertTrue(testBeanResult == testBean);
 
         // Test one level of nesting
-        valueBinding = this.create("applicationScope.TestBean.one");
-        result = (String) valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("applicationScope.TestBean.one");
+        result = (String) valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(result.equals("one"));
 
-        valueBinding = this.create("applicationScope.TestBean.inner");
-        inner = (InnerBean) valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("applicationScope.TestBean.inner");
+        inner = (InnerBean) valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(null != inner);
 
         // Test two levels of nesting
-        valueBinding = this.create("applicationScope.TestBean.inner.two");
-        result = (String) valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("applicationScope.TestBean.inner.two");
+        result = (String) valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(result.equals("two"));
 
-        valueBinding = this.create("applicationScope.TestBean.inner.inner2");
+        valueExpression = this.create("applicationScope.TestBean.inner.inner2");
         inner2 = (Inner2Bean)
-            valueBinding.getValue(getFacesContext());
+            valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(null != inner2);
 
         // Test three levels of nesting
-        valueBinding = this.create("applicationScope.TestBean.inner.inner2.three");
-        result = (String) valueBinding.getValue(getFacesContext());
+        valueExpression = this.create("applicationScope.TestBean.inner.inner2.three");
+        result = (String) valueExpression.getValue(getFacesContext().getELContext());
         assertTrue(result.equals("three"));
 
     }
@@ -312,4 +314,4 @@ public class TestValueBindingImpl_Model extends ServletFacesTestCase {
          *********************/
     }
 
-} // end of class TestValueBindingImpl_Model
+} // end of class TestValueExpressionImpl_Model

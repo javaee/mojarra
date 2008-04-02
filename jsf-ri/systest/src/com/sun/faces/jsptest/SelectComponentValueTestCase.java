@@ -1,5 +1,5 @@
 /*
- * $Id: SelectComponentValueTestCase.java,v 1.3 2004/05/12 18:30:44 ofung Exp $
+ * $Id: SelectComponentValueTestCase.java,v 1.4 2005/05/06 22:01:57 edburns Exp $
  */
 
 /*
@@ -189,6 +189,41 @@ public class SelectComponentValueTestCase extends AbstractTestCase {
 	assertTrue(-1 == page.asText().indexOf(message));
     }
 	
+    public void testSelectOneTypeInt() throws Exception {
+        HtmlPage page = getPage("/faces/jsp/selectOneTypeInt.jsp");
+        List list = getAllElementsOfGivenClass(page, null,
+                                               HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        list = getAllElementsOfGivenClass(page, null, HtmlSelect.class);
+        HtmlSelect options = (HtmlSelect) list.get(0);
+                                                                                                    
+        String chosen = "2"; 
+        options.fakeSelectedAttribute(chosen);
+        page = (HtmlPage) button.click();
+        ResourceBundle messages = ResourceBundle.getBundle(
+            "javax.faces.Messages");
+        String message = messages.getString("javax.faces.component.UISelectMany.INVALID");
+        // it does not have a validation message
+        assertTrue(-1 == page.asText().indexOf("Validation Error"));
+    }
+
+    public void testSelectManyTypeInts() throws Exception {
+        HtmlPage page = getPage("/faces/jsp/selectManyTypeInts.jsp");
+        List list = getAllElementsOfGivenClass(page, null,
+                                               HtmlSubmitInput.class);
+        HtmlSubmitInput button = (HtmlSubmitInput) list.get(0);
+        list = getAllElementsOfGivenClass(page, null, HtmlSelect.class);
+        HtmlSelect options = (HtmlSelect) list.get(0);
+                                                                                                    
+        String chosen [] = {"2", "3"};
+        options.fakeSelectedAttribute(chosen);
+        page = (HtmlPage) button.click();
+        ResourceBundle messages = ResourceBundle.getBundle(
+            "javax.faces.Messages");
+        String message = messages.getString("javax.faces.component.UISelectMany.INVALID");
+        // it does not have a validation message
+        assertTrue(-1 == page.asText().indexOf("Validation Error"));
+    }
 
 
 

@@ -9,9 +9,9 @@
 <%-- Confirm duplicate ID's are found --%>
 <% try { %>
 <f:view>
-    <h:outputText id="duplicate1"/>
-    <h:outputText id="output2"/>
-    <h:outputText id="duplicate1"/>
+    <h:outputText id="duplicate1" value="one"/>
+    <h:outputText id="output2" value="two"/>
+    <h:outputText id="duplicate1" value="three"/>
 </f:view>
 <% 
   } catch (JspException je) {

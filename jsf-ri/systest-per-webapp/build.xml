@@ -65,6 +65,8 @@
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
   <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
+  <property name="el-api.jar" value="${tomcat.home}/common/lib/el-api.jar"/>
+
 
 
 
@@ -91,6 +93,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
+    <pathelement location="${el-api.jar}"/>
     <pathelement location="${basedir}/../build/test/WEB-INF/classes"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
