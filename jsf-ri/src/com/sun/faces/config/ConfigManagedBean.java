@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.7 2003/08/19 14:50:51 rlubke Exp $
+ * $Id: ConfigManagedBean.java,v 1.8 2003/09/15 16:29:20 rkitain Exp $
  */
 
 /*
@@ -26,11 +26,21 @@ import java.beans.IndexedPropertyDescriptor;
 import java.beans.Introspector;
 import java.beans.IntrospectionException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * <p>Config Bean for a Managed Bean .</p>
  */
 public class ConfigManagedBean extends ConfigFeature implements Cloneable {
 
+    //
+    // Protected Constants
+    //
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(ConfigManagedBean.class);
+    
     private String managedBeanId;
     private String managedBeanClass;
     private String managedBeanScope;
@@ -67,6 +77,10 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
     }
     
     public void addProperty(ConfigManagedBeanProperty property) throws FacesException {
+        if (null == property) {
+            throw new NullPointerException
+                (Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
         if (properties == null) {
             properties = new HashMap();
         }
@@ -141,8 +155,7 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         return sb.toString();
     }
 
-    private Class getPropertyType(ConfigManagedBeanProperty property) 
-        throws FacesException {
+    private Class getPropertyType(ConfigManagedBeanProperty property) {
         boolean isUIComponent = false;
         
         Class propertyType = null;
@@ -158,7 +171,12 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
             } catch (ClassNotFoundException ex) {
                 Object[] obj = new Object[1];
                 obj[0] = managedBeanClass;
-                throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), ex);
+		String msg = Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
+		    obj);
+                if (log.isWarnEnabled()) {
+                    log.warn(msg, ex);
+                }
+                throw new FacesException(msg, ex);
             } catch (IntrospectionException ex) {
                 // if the property happens to be attribute on UIComponent
                 // then bean introspection will fail and we need to return null.
@@ -167,8 +185,12 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
                 }
                 Object[] obj = new Object[1];
                 obj[0] = managedBeanClass;
-                throw new FacesException(Util.getExceptionMessage(
-                    Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj), ex);
+		String msg = Util.getExceptionMessage(Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID,
+		    obj);
+                if (log.isWarnEnabled()) {
+                    log.warn(msg, ex);
+                }
+                throw new FacesException(msg, ex);
             }
             PropertyDescriptor desc = null;
 
@@ -186,9 +208,12 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
                 }
                 Object[] obj = new Object[1];
                 obj[0] = managedBeanClass;
-                throw new FacesException(
-                    Util.getExceptionMessage(
-                    Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID, obj));
+		String msg = Util.getExceptionMessage(Util.CANT_INTROSPECT_CLASS_ERROR_MESSAGE_ID,
+		    obj);
+                if (log.isWarnEnabled()) {
+                    log.warn(msg);
+                }
+                throw new FacesException(msg);
             }
 
             boolean isIndexed;
@@ -218,8 +243,12 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
         } catch (ClassNotFoundException cfe) {
             Object[] obj = new Object[1];
             obj[0] = uiComponentClass;
-            throw new FacesException(Util.getExceptionMessage(
-                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, obj), cfe);
+	    String msg = Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
+	        obj);
+            if (log.isWarnEnabled()) {
+                log.warn(msg, cfe);
+            }
+            throw new FacesException(msg, cfe);
         }
         if (uiComponentClass.isAssignableFrom(clazz)) {
             return true;
