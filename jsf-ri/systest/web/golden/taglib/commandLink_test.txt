@@ -10,7 +10,7 @@
 </head>
 <body>
     
-    <form id="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=8083EF8368D8E4CEEABDA29E7F36BC4D" enctype="application/x-www-form-urlencoded">
+    <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=8083EF8368D8E4CEEABDA29E7F36BC4D" enctype="application/x-www-form-urlencoded">
 <a id="form01:hyperlink01" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:_idcl'].value='form01:hyperlink01'; document.forms['form01'].submit(); return false;">My Link</a><input type="hidden" name="form01:_idcl" /><script type="text/javascript" language="Javascript"><!--
 
 function clearFormHiddenParams_form01(curFormName) {

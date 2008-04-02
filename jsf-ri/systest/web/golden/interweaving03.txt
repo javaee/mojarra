@@ -7,7 +7,7 @@
 
 
 
-<form id="_id_id10" method="post" action="/jsf-systest/faces/interweaving03.jsp;jsessionid=D623839373C2B21D75B00AA4D67477BA" enctype="application/x-www-form-urlencoded">
+<form id="_id_id10" name="_id_id10" method="post" action="/jsf-systest/faces/interweaving03.jsp;jsessionid=D623839373C2B21D75B00AA4D67477BA" enctype="application/x-www-form-urlencoded">
 <table>
 <tbody>
 <tr>

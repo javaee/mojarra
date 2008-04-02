@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.88 2005/06/09 22:37:47 jayashri Exp $
+ * $Id: FormRenderer.java,v 1.89 2005/06/17 19:48:07 edburns Exp $
  */
 
 /*
@@ -114,10 +114,12 @@ public class FormRenderer extends HtmlBasicRenderer {
         }
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
+        String clientId = component.getClientId(context);
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
         writer.startElement("form", component);
-        writer.writeAttribute("id", component.getClientId(context), "clientId");
+        writer.writeAttribute("id", clientId, "clientId");
+        writer.writeAttribute("name", clientId, "name");
         writer.writeAttribute("method", "post", null);
         writer.writeAttribute("action", getActionStr(context), null);
         if (null != (styleClass = (String)

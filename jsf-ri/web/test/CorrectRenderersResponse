@@ -1,7 +1,7 @@
-<form id="formRenderer0" method="post" action="/test/root;jsessionid=44AFF596AD877039C6F1F0C808C4497B">
+<form id="formRenderer0" name="formRenderer0" method="post" action="/test/root;jsessionid=44AFF596AD877039C6F1F0C808C4497B">
 
 com.sun.faces.saveStateFieldMarker<input type="hidden" name="formRenderer0" value="formRenderer0" /></form>
-<form id="formRenderer1" method="post" action="/test/root;jsessionid=44AFF596AD877039C6F1F0C808C4497B">
+<form id="formRenderer1" name="formRenderer1" method="post" action="/test/root;jsessionid=44AFF596AD877039C6F1F0C808C4497B">
 
 com.sun.faces.saveStateFieldMarker<input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
 <table border="0" id="radioRenderer" class="styleClass">

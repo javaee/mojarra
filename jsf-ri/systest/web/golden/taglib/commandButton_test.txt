@@ -10,7 +10,7 @@
 <body>
     
     
-    <form id="form01" method="post" action="/jsf-systest/faces/taglib/commandButton_test.jsp;jsessionid=BE693B96F36669839082A2D1D6E354D7" enctype="application/x-www-form-urlencoded">
+    <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandButton_test.jsp;jsessionid=BE693B96F36669839082A2D1D6E354D7" enctype="application/x-www-form-urlencoded">
 <input id="form01:button01" type="submit" name="form01:button01" value="My Label" /><input id="form01:button02" type="reset" name="form01:button02" value="This is a String property" /><input id="form01:button03" type="submit" name="form01:button03" value="RES-BUNDLE KEY" /><input id="form01:button04" type="image" src="duke.gif;jsessionid=BE693B96F36669839082A2D1D6E354D7" name="form01:button04" /><input id="form01:button05" type="image" src="resbundle_image.gif;jsessionid=BE693B96F36669839082A2D1D6E354D7" name="form01:button05" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1:_id2" /><input type="hidden" name="form01" value="form01" /></form>
 </body>
 </html>

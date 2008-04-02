@@ -1268,7 +1268,11 @@
       "class" attribute.  Call <code>ViewHandler.writeState()</code>
       before the the close of the "form" element.  Render all the
       necessary hidden fields for all commandLink instances in the page
-      just before the close of the "form" element.</p>
+      just before the close of the "form" element.  Render a "name"
+      attribute with a value the same as the "id" attribute as described
+      in "<a href="renderkit-summary.html">General Notes on
+      Encoding</a>" regarding the "id" attribute for UIInput
+      components.</p>
 
       </ul>]]>
 

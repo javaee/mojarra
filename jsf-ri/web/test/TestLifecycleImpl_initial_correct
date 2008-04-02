@@ -10,7 +10,7 @@
     <body bgcolor="white">
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
-    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=0EA6D577F3E6F6F3433BC214E7C8B6FC" enctype="application/x-www-form-urlencoded">
+    <form id="helloForm" name="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=0EA6D577F3E6F6F3433BC214E7C8B6FC" enctype="application/x-www-form-urlencoded">
 <input id="helloForm:userNo" type="text" name="helloForm:userNo" value="NUMBER" />
   	 <BR>
 
