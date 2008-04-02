@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.7 2002/12/19 00:05:38 jvisvanathan Exp $
+ * $Id: LabelRenderer.java,v 1.8 2002/12/23 16:02:25 eburns Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.7 2002/12/19 00:05:38 jvisvanathan Exp $
+ * @version $Id: LabelRenderer.java,v 1.8 2002/12/23 16:02:25 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,19 +109,6 @@ public class LabelRenderer extends HtmlBasicRenderer {
 	forValue = (String) component.getAttribute("for");
 	Assert.assert_it(null != forValue);
 
-	// PENDING(edburns): There has to be a better way to do this
-	if (!forValue.startsWith("/")) {
-	    try {
-		java.net.URL base = new java.net.URL("http://ha" + 
-						    component.getClientId(context));
-		java.net.URL relative = new java.net.URL(base, forValue);
-		forValue = relative.getPath();
-	    }
-	    catch (Throwable e) {
-		// PENDING(edburns): log error
-	    }
-	}
-	
 	writer.write("<label for=\"" + forValue + "\" ");
 	writer.write(Util.renderPassthruAttributes(context, component));
 	if (null != (outputClass = (String) 
