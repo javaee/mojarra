@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.48 2004/02/04 23:37:48 ofung Exp $
+ * $Id: UISelectMany.java,v 1.49 2004/02/06 07:48:59 craigmcc Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
@@ -41,31 +42,31 @@ import javax.faces.model.SelectItemGroup;
  *
  * <ul>
  *
- * <p>Obtain the {@link
- * javax.faces.convert.Converter} using the following algorithm:</p>
+ * <p>Obtain the {@link Converter} using the following algorithm:</p>
  *
  * <ul> 
  *
- * <p>If the component has an attached <code>Converter</code>, use
- * it.</p>
+ * <p>If the component has an attached {@link Converter}, use it.</p>
  *
  * <p>If not, look for a {@link ValueBinding} for <code>value</code> (if any).
- * If there is a {@link ValueBinding}, call <code>getType()</code>.
- * <strong>The {@link ValueBinding} must point to something that is
- * an array or a <code>List</code> of <code>String</code>s.</strong>
- * If the type is an array type, use {@link
- * javax.faces.application.Application#createConverter(java.lang.Class)}
- * passing the <code>Class</code> instance for the element type of the
- * array.  If the type is <code>java.util.List</code>, assume the
- * element type is <code>String</code>.</p>
+ * The {@link ValueBinding} must point to something that is:</p>
+ * <ul>
+ * <li>An array of primitives (such as <code>int[]</code>).  Look up the
+ *     registered by-class {@link Converter} for this primitive type.</li>
+ * <li>An array of objects (such as <code>Integer[]</code> or
+ *     <code>String[]</code>).  Look up the registered by-class
+ *     {@link Converter} for the underlying element type.</li>
+ * <li>A <code>java.util.List</code>.  Assume that the element type is
+ *     <code>java.lang.String</code>, so no conversion is required.</li>
+ * </ul>
  *
  * <p>If for any reason a <code>Converter</code> cannot be found, assume
  * the type to be a String array.</p>
  *
  * </ul>
  *
- * <p>Use the <code>Converter</code> to convert each element in the
- * values array from the request to the proper type.  If the component
+ * <p>Use the selected {@link Converter} (if any) to convert each element in the
+ * values array or list from the request to the proper type.  If the component
  * has a {@link ValueBinding} for <code>value</code>, create an array
  * of the expected type to hold the converted values.  If the component
  * does not have a {@link ValueBinding} for <code>value</code>, create
