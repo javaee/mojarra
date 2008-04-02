@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.84 2003/06/21 04:49:17 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.85 2003/07/18 22:22:53 eburns Exp $
  */
 
 /*
@@ -310,7 +310,9 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Remove all child {@link UIComponent}s from the child list.</p>
+     * <p>Remove all child {@link UIComponent}s from the child list.
+     * Remove the children from the namespace of the closest ancestor
+     * that is a naming container.</p>
      */
     public void clearChildren();
 
@@ -380,8 +382,10 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Remove the child <code>UIComponent</code> at the specified position
-     * in the child list for this component.</p>
+     * <p>Remove the child <code>UIComponent</code> at the specified
+     * position in the child list for this component.  Remove the child
+     * from the namespace of the closest ancestor that is a naming
+     * container.</p>
      *
      * @param index Position of the component to be removed
      *
@@ -392,8 +396,9 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Remove the child {@link UIComponent} from the child list
-     * for this component.</p>
+     * <p>Remove the child {@link UIComponent} from the child list for
+     * this component.  Remove the child from the namespace of the
+     * closest ancestor that is a naming container.</p>
      *
      * @param component Child component to be removed
      *
