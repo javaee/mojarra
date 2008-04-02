@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.31 2005/05/05 20:50:58 edburns Exp $
+ * $Id: Application.java,v 1.32 2005/05/10 18:47:11 edburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.Locale;
 import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -24,12 +23,10 @@ import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
-import javax.faces.render.RenderKit;
 import javax.faces.validator.Validator;
 
 import javax.el.ELContextListener;
 import javax.el.ExpressionFactory;
-import javax.el.MethodExpression;
 import javax.el.ValueExpression;
 import javax.el.ELException;
 import javax.el.ELResolver;
@@ -311,12 +308,18 @@ public abstract class Application {
      * <code>ELResolver</code>s before or after initialization to a
      * <code>CompositeELResolver</code> that is already in the
      * chain.</p>
-
+     *
+     * <p>The default implementation throws 
+     * <code>UnsupportedOperationException</code> and is provided
+     * for the sole purpose of not breaking existing applications that extend
+     * {@link Application}.</p>
      *
      * @since 1.2
      */
 
-    public abstract void addELResolver(ELResolver resolver);
+    public void addELResolver(ELResolver resolver) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Return the singleton {@link ELResolver} instance to be used
@@ -345,11 +348,16 @@ public abstract class Application {
      *
      *	</ol>
      *
+     * <p>The default implementation throws <code>UnsupportedOperationException</code>
+     * and is provided for the sole purpose of not breaking existing applications 
+     * that extend {@link Application}.</p>
      *
      * @since 1.2
      */
 
-    public abstract ELResolver getELResolver();
+    public ELResolver getELResolver() {
+        throw new UnsupportedOperationException();
+    }
 
 
     /**
@@ -487,13 +495,45 @@ public abstract class Application {
      *
      * @exception FacesException if a {@link UIComponent} cannot be created
      * @exception NullPointerException if any parameter is <code>null</code>
+     *
+     * <p>A default implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users
+     * that decorate <code>Application</code> can continue to function</p>.
      * 
      * @since 1.2
      */
-    public abstract UIComponent createComponent(ValueExpression componentExpression,
-                                                FacesContext context,
-                                                String componentType)
-	throws FacesException;
+    public UIComponent createComponent(ValueExpression componentExpression,
+                                       FacesContext context,
+                                       String componentType)
+	throws FacesException {
+        if (null == componentExpression || null == context ||
+            null == componentType) {
+            String message = "null parameters";
+            message = message +" componentExpression " + componentExpression +
+                " context " + context + " componentType " + componentType;
+            throw new NullPointerException(message);
+        }
+
+        Object result = null;
+        boolean createOne = false;
+
+        try {
+            if (null != (result = 
+                componentExpression.getValue(context.getELContext()))) {
+                // if the result is not an instance of UIComponent
+                createOne = (!(result instanceof UIComponent));
+                // we have to create one.
+            }
+            if (null == result || createOne) {
+                result = this.createComponent(componentType);
+                componentExpression.setValue((context.getELContext()), result);
+            }
+        } catch (ELException elex) {
+            throw new FacesException(elex);
+        }
+
+        return (UIComponent) result;    
+    }
 
 
     /**
@@ -600,14 +640,20 @@ public abstract class Application {
      * application.  This instance is used by the convenience method
      * {@link #evaluateExpressionGet}.</p>
      *
-     * <p>The default implementation will simply return the
+     * <p>The implementation must return the
      * <code>ExpressionFactory</code> from the JSP container by calling
      * <code>JspFactory.getDefaultFactory().getJspApplicationContext(servletContext).getExpressionFactory()</code>. </p>
+     *
+     * <p>An implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users that decorate
+     * the <code>Application</code> continue to work.
      *
      * @since 1.2
      */
 
-    public abstract ExpressionFactory getExpressionFactory();
+    public ExpressionFactory getExpressionFactory() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Get a value by evaluating an expression.</p>
@@ -618,11 +664,17 @@ public abstract class Application {
      * {@link FacesContext#getELContext} and pass it to {@link
      * ValueExpression#getValue}, returning the result.</p>
      *
+     * <p>An implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
      */
     
-    public abstract Object evaluateExpressionGet(FacesContext context,
+    public Object evaluateExpressionGet(FacesContext context,
 						 String expression, 
-						 Class expectedType) throws ELException;
+						 Class expectedType) throws ELException {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Call {@link #getExpressionFactory} then call {@link
@@ -676,10 +728,16 @@ public abstract class Application {
      * of <code>ELContext</code> instances.  This listener will be
      * called once per request.</p>
      * 
+     * <p>An implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
      * @since 1.2
      */
 
-    public abstract void addELContextListener(ELContextListener listener);
+    public void addELContextListener(ELContextListener listener) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>Remove the argument <code>listener</code> from the list of
@@ -687,12 +745,17 @@ public abstract class Application {
      * exception is thrown and no action is performed.  If
      * <code>listener</code> is not in the list, no exception is thrown
      * and no action is performed.</p>
+     *
+     * <p>An implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users that decorate
+     * the <code>Application</code> continue to work.
      * 
      * @since 1.2
      */
 
-    public abstract void removeELContextListener(ELContextListener listener);
-
+    public void removeELContextListener(ELContextListener listener) {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * <p>If no calls have been made to {@link #addELContextListener},
@@ -701,9 +764,16 @@ public abstract class Application {
      * <p>Otherwise, return an array representing the list of listeners
      * added by calls to {@link #addELContextListener}.</p>
      *
+     * <p>An implementation is provided that throws 
+     * <code>UnsupportedOperationException</code> so that users that decorate
+     * the <code>Application</code> continue to work.
+     *
+     * @since 1.2
      */
 
-    public abstract ELContextListener [] getELContextListeners();
+    public ELContextListener [] getELContextListeners() {
+        throw new UnsupportedOperationException();
+    }
 
 
     /**
