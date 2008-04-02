@@ -523,6 +523,11 @@ must exist.  This is necessary for the MessageFactory class.
         <ant antfile="build-tests.xml" target="${passthru}"/>
     </target>
 
+   <target name="prepare.test.webapp">
+        <echo>Invoking target prepare.test.webapp</echo>
+        <ant antfile="build-tests.xml" target="prepare.test.webapp"/>
+    </target>
+
   <!-- 
        =================================================================== 
          Create the jars

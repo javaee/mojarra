@@ -331,6 +331,7 @@
             <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestELImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.impl.TestUnifiedELImpl"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestPropertyResolverImpl"/>
+            <test todir="${test.results.dir}" name="com.sun.faces.el.TestFacesResourceBundleELResolver"/>
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueExpressionImpl"/> 
             <test todir="${test.results.dir}" name="com.sun.faces.el.TestValueBindingImpl_Model"/> 

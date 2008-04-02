@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolver.java,v 1.3 2005/06/16 19:54:06 rlubke Exp $
+ * $Id: ImplicitObjectELResolver.java,v 1.4 2005/07/20 17:03:53 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -167,33 +167,33 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
             return null;
         }
         ArrayList list = new ArrayList(14);
-        list.add(getFeatureDescriptor("application", "application",
+        list.add(Util.getFeatureDescriptor("application", "application",
             "application",false, false, true, Object.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("applicationScope", "applicationScope",
+        list.add(Util.getFeatureDescriptor("applicationScope", "applicationScope",
             "applicationScope",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("cookie", "cookie",
+        list.add(Util.getFeatureDescriptor("cookie", "cookie",
             "cookie",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("facesContext", "facesContext",
+        list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
             "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("view", "view",
+        list.add(Util.getFeatureDescriptor("view", "view",
             "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("header", "header",
+        list.add(Util.getFeatureDescriptor("header", "header",
             "header",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("headerValues", "headerValues",
+        list.add(Util.getFeatureDescriptor("headerValues", "headerValues",
             "headerValues",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("initParam", "initParam",
+        list.add(Util.getFeatureDescriptor("initParam", "initParam",
             "initParam",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("param", "param",
+        list.add(Util.getFeatureDescriptor("param", "param",
             "param",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("paramValues", "paramValues",
+        list.add(Util.getFeatureDescriptor("paramValues", "paramValues",
             "paramValues",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("request", "request",
+        list.add(Util.getFeatureDescriptor("request", "request",
             "request",false, false, true, Object.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("requestScope", "requestScope",
+        list.add(Util.getFeatureDescriptor("requestScope", "requestScope",
             "requestScope",false, false, true, Map.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("session", "session",
+        list.add(Util.getFeatureDescriptor("session", "session",
             "session",false, false, true, Object.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("sessionScope", "sessionScope",
+        list.add(Util.getFeatureDescriptor("sessionScope", "sessionScope",
             "sessionScope",false, false, true, Map.class, Boolean.TRUE));
         
         return list.iterator();
@@ -207,20 +207,4 @@ public class ImplicitObjectELResolver extends ELResolver implements ELConstants{
         return String.class;
     }
     
-    private FeatureDescriptor getFeatureDescriptor(String name, String
-        displayName, String desc, boolean expert, boolean hidden, 
-        boolean preferred, Object type, Boolean designTime) {
-            
-        FeatureDescriptor fd = new FeatureDescriptor();
-        fd.setName(name);
-        fd.setDisplayName(displayName);
-        fd.setShortDescription(desc);
-        fd.setExpert(expert);
-        fd.setHidden(hidden);
-        fd.setPreferred(preferred);
-        fd.setValue(ELResolver.TYPE, type);
-        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
-        return fd;
-    }
-
 }

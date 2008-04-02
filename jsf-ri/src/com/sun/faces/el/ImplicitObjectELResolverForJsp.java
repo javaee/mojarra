@@ -1,5 +1,5 @@
 /*
- * $Id: ImplicitObjectELResolverForJsp.java,v 1.3 2005/06/13 19:28:22 rlubke Exp $
+ * $Id: ImplicitObjectELResolverForJsp.java,v 1.4 2005/07/20 17:03:53 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -150,9 +150,9 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         }
        
         ArrayList list = new ArrayList(2);
-        list.add(getFeatureDescriptor("facesContext", "facesContext",
+        list.add(Util.getFeatureDescriptor("facesContext", "facesContext",
         "facesContext",false, false, true, FacesContext.class, Boolean.TRUE));
-        list.add(getFeatureDescriptor("view", "view",
+        list.add(Util.getFeatureDescriptor("view", "view",
         "root",false, false, true, UIViewRoot.class, Boolean.TRUE));
         return list.iterator();
        
@@ -165,20 +165,4 @@ public class ImplicitObjectELResolverForJsp extends ImplicitObjectELResolver {
         return String.class;
     }
     
-    private FeatureDescriptor getFeatureDescriptor(String name, String
-        displayName, String desc, boolean expert, boolean hidden, 
-        boolean preferred, Object type, Boolean designTime) {
-            
-        FeatureDescriptor fd = new FeatureDescriptor();
-        fd.setName(name);
-        fd.setDisplayName(displayName);
-        fd.setShortDescription(desc);
-        fd.setExpert(expert);
-        fd.setHidden(hidden);
-        fd.setPreferred(preferred);
-        fd.setValue(ELResolver.TYPE, type);
-        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
-        return fd;
-    }
-
 }

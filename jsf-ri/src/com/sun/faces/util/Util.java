@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.165 2005/07/20 00:34:08 rogerk Exp $
+ * $Id: Util.java,v 1.166 2005/07/20 17:03:54 edburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitImpl;
+import java.beans.FeatureDescriptor;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -57,13 +58,15 @@ import java.util.StringTokenizer;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.text.MessageFormat;
+import javax.el.ELResolver;
+import javax.faces.component.UIViewRoot;
 
 /**
  * <B>Util</B> is a class ...
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.165 2005/07/20 00:34:08 rogerk Exp $
+ * @version $Id: Util.java,v 1.166 2005/07/20 17:03:54 edburns Exp $
  */
 
 public class Util extends Object {
@@ -794,6 +797,25 @@ public class Util extends Object {
             result = context.getViewRoot().getLocale();
         }
 
+        return result;
+    }
+    
+    /**
+     * <p>If the FacesContext has a UIViewRoot, and this UIViewRoot has a Locale,
+     * return it.  Otherwise return Locale.getDefault().
+     */
+    
+    public static Locale getLocaleFromContextOrSystem(FacesContext context) {
+        Locale result, temp = Locale.getDefault();
+        UIViewRoot root = null;
+        result = temp;
+        if (null != context) {
+            if (null != (root = context.getViewRoot())) {
+                if (null == (result = root.getLocale())) {
+                    result = temp;
+                }
+            }
+        }
         return result;
     }
 
@@ -1685,6 +1707,24 @@ public class Util extends Object {
 	public boolean takeActionOnNode(FacesContext context, 
 					UIComponent curNode) throws FacesException;
     }
+    
+    public static FeatureDescriptor getFeatureDescriptor(String name, String
+        displayName, String desc, boolean expert, boolean hidden, 
+        boolean preferred, Object type, Boolean designTime) {
+            
+        FeatureDescriptor fd = new FeatureDescriptor();
+        fd.setName(name);
+        fd.setDisplayName(displayName);
+        fd.setShortDescription(desc);
+        fd.setExpert(expert);
+        fd.setHidden(hidden);
+        fd.setPreferred(preferred);
+        fd.setValue(ELResolver.TYPE, type);
+        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
+        return fd;
+    }
+
+    
 
 
 } // end of class Util

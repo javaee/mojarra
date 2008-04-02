@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.42 2005/07/19 19:33:17 edburns Exp $
+ * $Id: ConfigureListener.java,v 1.43 2005/07/20 17:03:53 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1041,7 +1041,7 @@ public class ConfigureListener implements ServletContextListener {
                 }
                 throw new IllegalArgumentException(message);
             }
-            associate.addResourceBundle(baseName, var);
+            associate.addResourceBundleBean(var, config[i]);
         }
         
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.4 2005/06/16 18:42:44 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.5 2005/07/20 17:03:53 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -138,7 +138,7 @@ public class ManagedBeanELResolver extends ELResolver {
                     // are not specified on the description
                     desc = managedBean.getBeanDescription("");
                 }
-                list.add(getFeatureDescriptor(managedBeanName, 
+                list.add(Util.getFeatureDescriptor(managedBeanName, 
                     managedBeanName, desc,false, false, true,
                     managedBean.getManagedBeanClass(), Boolean.TRUE));
             }
@@ -146,22 +146,6 @@ public class ManagedBeanELResolver extends ELResolver {
         return list.iterator();
     }
     
-    private FeatureDescriptor getFeatureDescriptor(String name, String
-        displayName, String desc, boolean expert, boolean hidden, 
-        boolean preferred, Object type, Boolean designTime) {
-            
-        FeatureDescriptor fd = new FeatureDescriptor();
-        fd.setName(name);
-        fd.setDisplayName(displayName);
-        fd.setShortDescription(desc);
-        fd.setExpert(expert);
-        fd.setHidden(hidden);
-        fd.setPreferred(preferred);
-        fd.setValue(ELResolver.TYPE, type);
-        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
-        return fd;
-    }
-
     public Class getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;

@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.14 2005/07/19 19:33:17 edburns Exp $
+ * $Id: ApplicationAssociate.java,v 1.15 2005/07/20 17:03:52 edburns Exp $
  */
 
 /*
@@ -30,6 +30,7 @@ import javax.faces.el.VariableResolver;
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ConfigureListener;
 import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.config.beans.ResourceBundleBean;
 import com.sun.faces.util.Util;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -316,21 +317,36 @@ public class ApplicationAssociate extends Object {
     public ResourceBundle getResourceBundle(FacesContext context,
             String var) {
         Locale locale = context.getViewRoot().getLocale();
-        String baseName = (String) resourceBundles.get(var);
+        ResourceBundleBean bean = (ResourceBundleBean) resourceBundles.get(var);
+        String baseName = null;
         ResourceBundle result = null;
-        if (null != baseName) {
-            result = ResourceBundle.getBundle(baseName, locale);
+        
+        if (null != bean) {
+            baseName = (String) bean.getBasename();
+            if (null != baseName) {
+                result = ResourceBundle.getBundle(baseName, locale);
+            }
         }
         // PENDING(edburns): should cache these based on var/Locale pair for performance
         return result;
     }
     
+    /**
+     * keys: <var> element from faces-config<p>
+     *
+     * values: ResourceBundleBean instances.
+     */
+    
     Map resourceBundles = new HashMap();
     
-    public void addResourceBundle(String baseName, String var) {
-        resourceBundles.put(var, baseName);
+    public void addResourceBundleBean(String var, ResourceBundleBean bean) {
+        resourceBundles.put(var, bean);
     }
 
+    public Map getResourceBundleBeanMap() {
+        return resourceBundles;
+    }
+    
     /**
      * <p>Adds a new mapping of managed bean name to a managed bean
      * factory instance.</p>

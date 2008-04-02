@@ -1,7 +1,7 @@
 package com.sun.faces.el;
 
 /*
- * $Id: ScopedAttributeELResolver.java,v 1.1 2005/05/05 20:51:23 edburns Exp $
+ * $Id: ScopedAttributeELResolver.java,v 1.2 2005/07/20 17:03:53 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -145,7 +145,7 @@ public class ScopedAttributeELResolver extends ELResolver {
            Entry entry = (Entry) it.next();
            attrName = (String) entry.getKey();
            attrValue = entry.getValue();
-           list.add(getFeatureDescriptor(attrName, attrName, 
+           list.add(Util.getFeatureDescriptor(attrName, attrName, 
            "request scope attribute", false, false, true, attrValue.getClass(), 
            Boolean.TRUE));
        }
@@ -157,7 +157,7 @@ public class ScopedAttributeELResolver extends ELResolver {
            Entry entry = (Entry) it.next();
            attrName = (String) entry.getKey();
            attrValue = entry.getValue();
-           list.add(getFeatureDescriptor(attrName, attrName, 
+           list.add(Util.getFeatureDescriptor(attrName, attrName, 
            "session scope attribute", false, false, true, attrValue.getClass(), 
            Boolean.TRUE));
        }
@@ -169,7 +169,7 @@ public class ScopedAttributeELResolver extends ELResolver {
            Entry entry = (Entry) it.next();
            attrName = (String) entry.getKey();
            attrValue = entry.getValue();
-           list.add(getFeatureDescriptor(attrName, attrName, 
+           list.add(Util.getFeatureDescriptor(attrName, attrName, 
            "application scope attribute", false, false, true, attrValue.getClass(), 
            Boolean.TRUE));
        }
@@ -177,22 +177,6 @@ public class ScopedAttributeELResolver extends ELResolver {
        return list.iterator();
     }
 
-    private FeatureDescriptor getFeatureDescriptor(String name, String
-        displayName, String desc, boolean expert, boolean hidden, 
-        boolean preferred, Object type, Boolean designTime) {
-            
-        FeatureDescriptor fd = new FeatureDescriptor();
-        fd.setName(name);
-        fd.setDisplayName(displayName);
-        fd.setShortDescription(desc);
-        fd.setExpert(expert);
-        fd.setHidden(hidden);
-        fd.setPreferred(preferred);
-        fd.setValue(ELResolver.TYPE, type);
-        fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
-        return fd;
-    }
-    
     public Class getCommonPropertyType(ELContext context, Object base) {
         if (base != null) {
             return null;
