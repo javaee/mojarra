@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.87 2006/10/03 21:21:34 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.88 2006/10/05 20:56:36 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.87 2006/10/03 21:21:34 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.88 2006/10/05 20:56:36 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -196,15 +196,11 @@ public class ViewHandlerImpl extends ViewHandler {
         
         // write any AFTER_VIEW_CONTENT to the response
         // side effect: AFTER_VIEW_CONTENT removed
-        Object content = extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
-        assert(null != content);
-        if (content instanceof char[]) {            
-            response.getWriter().write((char[]) content);
-        } else if (content instanceof byte[]) {
-            response.getWriter().write(new String((byte[]) content));
-        } else {
-            assert(false);
-        }
+        ViewHandlerResponseWrapper wrapper = (ViewHandlerResponseWrapper)
+              extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
+        assert(null != wrapper);
+        wrapper.flushToWriter(response.getWriter(),
+                              response.getCharacterEncoding());
         
         response.flushBuffer();                
                
@@ -475,13 +471,7 @@ public class ViewHandlerImpl extends ViewHandler {
         
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
-        if (wrapped.isBytes()) {
-            extContext.getRequestMap().put(AFTER_VIEW_CONTENT,
-                                           wrapped.getBytes());
-        } else if (wrapped.isChars()) {
-            extContext.getRequestMap().put(AFTER_VIEW_CONTENT,
-                                           wrapped.getChars());
-        }
+        extContext.getRequestMap().put(AFTER_VIEW_CONTENT, wrapped);
 
         return false;
         

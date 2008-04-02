@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerResponseWrapper.java,v 1.9 2006/10/04 17:13:40 rlubke Exp $ 
+ * $Id: ViewHandlerResponseWrapper.java,v 1.10 2006/10/05 20:56:36 rlubke Exp $ 
  */
 
 /*
@@ -31,6 +31,7 @@
 
 package com.sun.faces.application;
 
+import javax.faces.FacesException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +41,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.CharArrayWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import com.sun.faces.util.Util;
+
 
 /**
  * <p>This class is used by {@link javax.faces.application.ViewHandler#createView} to obtain the
@@ -49,9 +60,13 @@ import java.io.UnsupportedEncodingException;
 
 public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
 
-    private ByteArrayServletOutputStream basos = null;
-    private PrintWriter pw = null;
-    private CharArrayWriter caw = null;
+    // Log instance for this class
+    private static final Logger LOGGER = Util.getLogger(Util.FACES_LOGGER
+                                                        + Util.APPLICATION_LOGGER);
+    
+    private ByteArrayServletOutputStream basos;
+    private PrintWriter pw ;
+    private CharArrayWriter caw;
     private int status = HttpServletResponse.SC_OK;
 
 
@@ -126,15 +141,26 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
     public void flushContentToWrappedResponse() throws IOException {
         ServletResponse wrapped = this.getResponse();
         if (null != caw) {
-            wrapped.getWriter().print(caw.toCharArray());
             pw.flush();
+            caw.writeTo(wrapped.getWriter());
             caw.reset();
         } else if (null != basos) {
-            wrapped.getOutputStream().write(basos.toByteArray());
-            basos.flush();
+            basos.writeTo(wrapped.getWriter(), wrapped.getCharacterEncoding());                       
             basos.resetByteArray();
         }
 
+    }
+    
+    public void flushToWriter(Writer writer, String encoding) throws IOException {
+        if (null != caw) {
+            pw.flush();
+            caw.writeTo(writer);
+            caw.reset();
+        } else if (null != basos) {
+            basos.writeTo(writer, encoding);
+            basos.resetByteArray();
+        }
+        writer.flush();
     }
 
     public void clearWrappedResponse() throws IOException {
@@ -145,7 +171,10 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-    public ServletOutputStream getOutputStream() throws IOException {
+    public ServletOutputStream getOutputStream() throws IOException {             
+        if (pw != null) {
+            throw new IllegalStateException();
+        }
         if (null == basos) {
             basos = new ByteArrayServletOutputStream();
         }
@@ -153,19 +182,26 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
     }
 
     public PrintWriter getWriter() throws IOException {
+        if (basos != null) {
+            throw new IllegalStateException();
+        }
         if (null == pw) {
-            caw = new CharArrayWriter();
+            caw = new CharArrayWriter(1024);
             pw = new PrintWriter(caw);
         }
 
         return pw;
     }
+    
+    
+    // ----------------------------------------------------------- Inner Classes
+    
 
     static class ByteArrayServletOutputStream extends ServletOutputStream {
-        private ByteArrayOutputStream baos = null;
+        private DirectByteArrayOutputStream baos;        
 
         public ByteArrayServletOutputStream() {
-            baos = new ByteArrayOutputStream();
+            baos = new DirectByteArrayOutputStream(1024);
         }
 
         public void write(int n) {
@@ -177,24 +213,63 @@ public class ViewHandlerResponseWrapper extends HttpServletResponseWrapper {
         public void resetByteArray() {
             baos.reset();
         }
-
+        
         public byte[] toByteArray() {
             return baos.toByteArray();
         }
 
-        public String toString() {
-            return baos.toString();
-        }
 
-        public String toString(String enc) {
-            String result = null;
+        /**
+         * Converters the buffered bytes into chars based on the
+         * specified encoding and writes them to the provided Writer.
+         * @param writer target Writer
+         * @param encoding character encoding
+         */
+        public void writeTo(Writer writer, String encoding) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Converting buffered ServletOutputStream bytes" 
+                            + " to chars using " + encoding);
+            }
+            
+            ByteBuffer bBuff = baos.getByteBuffer();
+            CharsetDecoder decoder = Charset.forName(encoding).newDecoder();
+
             try {
-                result = baos.toString(enc);
+                CharBuffer cBuff = decoder.decode(bBuff);
+                writer.write(cBuff.array());
+            } catch (CharacterCodingException cce) {
+                throw new FacesException(cce);
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
             }
-            catch (UnsupportedEncodingException usee) {
-            }
-            return result;
         }
+       
+    }
+    
+    
+    private static class DirectByteArrayOutputStream extends ByteArrayOutputStream {
+        
+        
+        // -------------------------------------------------------- Constructors
+        
+        
+        public DirectByteArrayOutputStream(int initialCapacity) {
+            super(initialCapacity);
+        }
+        
+        
+        // ------------------------------------------------------- PublicMethods
+        
+
+        /**
+         * Return the buffer backing this ByteArrayOutputStream as a 
+         * ByteBuffer.
+         * @return buf wrapped in a ByteBuffer
+         */
+        public ByteBuffer getByteBuffer() {
+            return (ByteBuffer.wrap(buf, 0, count)); 
+        }
+        
     }
 
 
