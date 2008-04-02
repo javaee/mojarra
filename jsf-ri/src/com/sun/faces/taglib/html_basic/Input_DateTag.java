@@ -1,5 +1,5 @@
 /*
- * $Id: Input_DateTag.java,v 1.6 2003/02/20 22:49:16 ofung Exp $
+ * $Id: Input_DateTag.java,v 1.7 2003/07/08 19:04:08 eburns Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Input_DateTag.java,v 1.6 2003/02/20 22:49:16 ofung Exp $
+ * @version $Id: Input_DateTag.java,v 1.7 2003/07/08 19:04:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -73,10 +73,6 @@ public Input_DateTag()
 //
 
     public String getLocalRendererType() { return "Date"; }
-
-    public UIComponent createComponent() {
-        return (new UIInput());
-    }
 
 //
 // Methods from TagSupport
