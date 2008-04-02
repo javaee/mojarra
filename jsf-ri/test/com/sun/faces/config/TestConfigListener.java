@@ -1,5 +1,5 @@
 /*
- * $Id: TestConfigListener.java,v 1.5 2004/02/26 20:34:16 eburns Exp $
+ * $Id: TestConfigListener.java,v 1.6 2005/05/11 15:55:56 rogerk Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ public class TestConfigListener extends ServletFacesTestCase {
     // (for the same webapp).
     //
     public void testContextInitialized() {
-        ConfigListener cl = new ConfigListener();
+        ConfigureListener cl = new ConfigureListener();
         ServletContextEvent e = new ServletContextEvent(
             getConfig().getServletContext());
         cl.contextInitialized(e);
