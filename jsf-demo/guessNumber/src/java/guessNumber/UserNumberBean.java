@@ -153,10 +153,11 @@ public class UserNumberBean {
                         throw new ValidatorException(
                             MessageFactory.getMessage
                             (context,
-                             Validator.NOT_IN_RANGE_MESSAGE_ID,
+                             LongRangeValidator.NOT_IN_RANGE_MESSAGE_ID,
                              new Object[]{
                                  new Integer(minimum),
-                                 new Integer(maximum)
+                                 new Integer(maximum),
+                                 MessageFactory.getLabel(context, component)
                              }));
 
                     } else {
@@ -165,7 +166,8 @@ public class UserNumberBean {
                             (context,
                              LongRangeValidator.MAXIMUM_MESSAGE_ID,
                              new Object[]{
-                                 new Integer(maximum)
+                                 new Integer(maximum),
+                                 MessageFactory.getLabel(context, component)
                              }));
                     }
                 }
@@ -174,10 +176,11 @@ public class UserNumberBean {
                     if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
                                                      (context,
-                                                      Validator.NOT_IN_RANGE_MESSAGE_ID,
+                                                      LongRangeValidator.NOT_IN_RANGE_MESSAGE_ID,
                                                       new Object[]{
                                                           new Double(minimum),
-                                                          new Double(maximum)
+                                                          new Double(maximum),
+                                                          MessageFactory.getLabel(context, component)
                                                       }));
 
                     } else {
@@ -186,14 +189,16 @@ public class UserNumberBean {
                             (context,
                              LongRangeValidator.MINIMUM_MESSAGE_ID,
                              new Object[]{
-                                 new Integer(minimum)
+                                 new Integer(minimum),
+                                 MessageFactory.getLabel(context, component)
                              }));
                     }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(
                     MessageFactory.getMessage
-                    (context, LongRangeValidator.TYPE_MESSAGE_ID));
+                    (context, LongRangeValidator.TYPE_MESSAGE_ID,
+                    new Object[]{MessageFactory.getLabel(context, component)}));
             }
         }
 
