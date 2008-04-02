@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.8 2003/07/17 23:03:06 rlubke Exp $
+ * $Id: TestExternalContextImpl.java,v 1.9 2003/07/23 16:30:32 rlubke Exp $
  */
 
 /*
@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -33,7 +35,7 @@ import java.util.Set;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.8 2003/07/17 23:03:06 rlubke Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.9 2003/07/23 16:30:32 rlubke Exp $
  *
  */
 
@@ -554,6 +556,16 @@ public class TestExternalContextImpl extends ServletFacesTestCase
         assertTrue(returnValues.equals(value));
         assertTrue(requestHeaderValuesMap.containsKey("foo"));
         assertTrue(requestHeaderValuesMap.containsValue(request.getHeaders("foo")));
+        assertTrue(!requestHeaderValuesMap.containsValue(null));
+        assertTrue(!requestHeaderValuesMap.containsValue(new Integer(1)));
+        assertTrue(!requestHeaderValuesMap.containsValue(
+            new TestEnumeration(new String[] {"one", "two", "three"})));
+        assertTrue(requestHeaderValuesMap.containsValue(
+            new TestEnumeration(new String[] {"one,two,three"})));
+        assertTrue(!requestHeaderValuesMap.containsValue(
+            new TestEnumeration(new String[] {"one,three,two"})));
+        assertTrue(!requestHeaderValuesMap.containsValue(
+            new TestEnumeration(new String[] {"one,two,three", "four"})));
         assertTrue(!requestHeaderValuesMap.entrySet().isEmpty());
         assertTrue(!requestHeaderValuesMap.values().isEmpty());
         assertTrue(!requestHeaderValuesMap.keySet().isEmpty());
@@ -777,5 +789,25 @@ public class TestExternalContextImpl extends ServletFacesTestCase
             assertTrue(exceptionThrown);
         }
     }
+
+    static class TestEnumeration implements Enumeration {
+        List myList = new ArrayList();
+        Iterator i = null;
+        TestEnumeration(String[] values) {
+            for (int i = 0; i < values.length; i++) {
+                myList.add(values[i]);
+            }
+            i = myList.iterator();
+        }
+
+        public boolean hasMoreElements() {
+            return i.hasNext();
+        }
+
+        public Object nextElement() {
+            return i.next();
+        }
+    }
+
 
 } // end of class TestExternalContextImpl

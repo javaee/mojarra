@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.10 2003/07/17 23:03:05 rlubke Exp $
+ * $Id: ExternalContextImpl.java,v 1.11 2003/07/23 16:30:31 rlubke Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.10 2003/07/17 23:03:05 rlubke Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.11 2003/07/23 16:30:31 rlubke Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -673,43 +673,36 @@ class RequestHeaderValuesMap extends BaseContextMap {
     // Override of containsValue was necessary as Enumeration.equals(Enumeration)
     // returned false.
     public boolean containsValue(Object value) {
-        Iterator i = entrySet().iterator();
-        if (value == null) {
-            while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                if (entry.getValue() == null) {
-                    return true;
-                }
-            }
-        } else {
-            int valHash = 0;
-            int valCount = 0;
+        if (value == null || !(value instanceof Enumeration))
+            return false;
 
-            // get sum of the hashcode for all elements for the
-            // input value.
-            Enumeration val = (Enumeration) value;
-            while (val.hasMoreElements()) {
-                valHash += val.nextElement().hashCode();
-                valCount++;
-            }
+        int valHash = 0;
+        int valCount = 0;
 
-            // For each Map.Entry within this instance, compute
-            // the hash for each value and compare against the
-            // sum computed above.  Ensure that the number of elements
-            // in each enumeration is the same as well.
-            while (i.hasNext()) {
-                int thisHash = 0;
-                int thisCount = 0;
-                Map.Entry entry = (Map.Entry) i.next();
-                Enumeration thisMap = (Enumeration) entry.getValue();
+        // get sum of the hashcode for all elements for the
+        // input value.
+        Enumeration val = (Enumeration) value;
+        while (val.hasMoreElements()) {
+            valHash += val.nextElement().hashCode();
+            valCount++;
+        }
 
-                while (thisMap.hasMoreElements()) {
-                    thisHash += thisMap.nextElement().hashCode();
-                    thisCount++;
-                }
-                if (thisCount == valCount && thisHash == valHash)
-                    return true;
+        // For each Map.Entry within this instance, compute
+        // the hash for each value and compare against the
+        // sum computed above.  Ensure that the number of elements
+        // in each enumeration is the same as well.
+        for (Iterator i = entrySet().iterator(); i.hasNext(); ) {
+            int thisHash = 0;
+            int thisCount = 0;
+            Map.Entry entry = (Map.Entry) i.next();
+            Enumeration thisMap = (Enumeration) entry.getValue();
+
+            while (thisMap.hasMoreElements()) {
+                thisHash += thisMap.nextElement().hashCode();
+                thisCount++;
             }
+            if (thisCount == valCount && thisHash == valHash)
+                return true;
         }
         return false;
     }
