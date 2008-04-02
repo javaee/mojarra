@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.184 2006/03/07 19:39:54 rlubke Exp $
+ * $Id: Util.java,v 1.185 2006/03/07 20:22:47 rlubke Exp $
  */
 
 /*
@@ -80,7 +80,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.184 2006/03/07 19:39:54 rlubke Exp $
+ * @version $Id: Util.java,v 1.185 2006/03/07 20:22:47 rlubke Exp $
  */
 
 public class Util {
@@ -615,17 +615,18 @@ public class Util {
                             Object[] parameters = new Object[]{root};
                             returnObject = construct.newInstance(parameters);
                         } catch (NoSuchMethodException nsme) {
-                            if (LOGGER.isLoggable(Level.FINE)) {
-                                
+                            if (LOGGER.isLoggable(Level.FINE)) {                                
                                 LOGGER.log(Level.FINE,
                                            "jsf.util.no.adapter.ctor.available",
                                            new Object[] {
                                                  clazz.getName(),
                                                  rootType.getName()
                                            });
-                            }
-                            returnObject = clazz.newInstance();
+                            }                           
                         }
+                    }
+                    if (returnObject == null) {
+                        returnObject = clazz.newInstance();
                     }
                 }
             } catch (Exception e) {
