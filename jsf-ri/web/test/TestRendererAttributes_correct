@@ -1,4 +1,5 @@
-ButtonRenderer
+Hyperlink
+Button
 	accesskey
 
 		Accessibility key character
@@ -199,8 +200,7 @@ ButtonRenderer
 
 		class java.lang.String
 
-HyperlinkRenderer
-FormRenderer
+Form
 	onsubmit
 
 		Execute this when the form is submitted selected.
@@ -211,7 +211,7 @@ FormRenderer
 
 		class java.lang.String
 
-ImageRenderer
+Image
 	onmousemove
 
 		Mouse was moved over this element.
@@ -402,7 +402,509 @@ ImageRenderer
 
 		class java.lang.String
 
-DateTimeRenderer
+Secret
+	accesskey
+
+		Accessibility key character
+
+		Access Key
+
+		accesskey
+
+		class java.lang.String
+
+	onmousemove
+
+		Mouse was moved over this element.
+
+		On Mouse Move
+
+		onmousemove
+
+		class java.lang.String
+
+	onmouseout
+
+		Mouse was moved away from this element.
+
+		On Mouse Out
+
+		onmouseout
+
+		class java.lang.String
+
+	onblur
+
+		The element lost the focus.
+
+		On Blur
+
+		onblur
+
+		class java.lang.String
+
+	onkeypress
+
+		Key was pressed and released over this element
+
+		On Key Press
+
+		onkeypress
+
+		class java.lang.String
+
+	onmouseover
+
+		Mouse was moved into this element.
+
+		On Mouse Over
+
+		onmouseover
+
+		class java.lang.String
+
+	ondblclick
+
+		The element was double clicked.
+
+		On Double Click
+
+		ondblclick
+
+		class java.lang.String
+
+	onkeydown
+
+		Key was pressed down over this element.
+
+		On Key Down
+
+		onkeydown
+
+		class java.lang.String
+
+	onselect
+
+		Execute this when the component is selected.
+
+		On Select
+
+		onselect
+
+		class java.lang.String
+
+	readonly
+
+		If true, this component should be rendered as read only.
+
+		Read Only
+
+		readonly
+
+		class java.lang.Boolean
+
+	onmouseup
+
+		Mouse was released over this element.
+
+		On Mouse Up
+
+		onmouseup
+
+		class java.lang.String
+
+	size
+
+		The number of columns in this DateRenderer.
+
+		Size
+
+		size
+
+		class java.lang.Integer
+
+	onkeyup
+
+		Key was released over this element.
+
+		On Key Up
+
+		onkeyup
+
+		class java.lang.String
+
+	inputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		inputClass
+
+		class java.lang.String
+
+	style
+
+		Style information for this element.
+
+		Style
+
+		style
+
+		class java.lang.String
+
+	maxlength
+
+		The maximum number of characters in this DateRenderer.
+
+		Max Length
+
+		maxlength
+
+		class java.lang.Integer
+
+	outputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		outputClass
+
+		class java.lang.String
+
+	onfocus
+
+		The element got the focus.
+
+		On Focus
+
+		onfocus
+
+		class java.lang.String
+
+	alt
+
+		The alt text for this component.
+
+		Alt Text
+
+		alt
+
+		class java.lang.String
+
+	tabindex
+
+		Position of this element in the tabbing order.
+
+		Tab Index
+
+		tabindex
+
+		class java.lang.Integer
+
+	title
+
+		Tool Tip for this element
+
+		Title
+
+		title
+
+		class java.lang.String
+
+	onclick
+
+		The element was clicked.
+
+		On Click
+
+		onclick
+
+		class java.lang.String
+
+	onmousedown
+
+		Mouse was pressed over this element.
+
+		On Mouse Down
+
+		onmousedown
+
+		class java.lang.String
+
+	lang
+
+		Base language of element's attribute values and content.
+
+		Language
+
+		lang
+
+		class java.lang.String
+
+Date
+	accesskey
+
+		Accessibility key character
+
+		Access Key
+
+		accesskey
+
+		class java.lang.String
+
+	onmousemove
+
+		Mouse was moved over this element.
+
+		On Mouse Move
+
+		onmousemove
+
+		class java.lang.String
+
+	onmouseout
+
+		Mouse was moved away from this element.
+
+		On Mouse Out
+
+		onmouseout
+
+		class java.lang.String
+
+	onblur
+
+		The element lost the focus.
+
+		On Blur
+
+		onblur
+
+		class java.lang.String
+
+	onkeypress
+
+		Key was pressed and released over this element
+
+		On Key Press
+
+		onkeypress
+
+		class java.lang.String
+
+	onmouseover
+
+		Mouse was moved into this element.
+
+		On Mouse Over
+
+		onmouseover
+
+		class java.lang.String
+
+	ondblclick
+
+		The element was double clicked.
+
+		On Double Click
+
+		ondblclick
+
+		class java.lang.String
+
+	onkeydown
+
+		Key was pressed down over this element.
+
+		On Key Down
+
+		onkeydown
+
+		class java.lang.String
+
+	onselect
+
+		Execute this when the component is selected.
+
+		On Select
+
+		onselect
+
+		class java.lang.String
+
+	readonly
+
+		If true, this component should be rendered as read only.
+
+		Read Only
+
+		readonly
+
+		class java.lang.Boolean
+
+	onmouseup
+
+		Mouse was released over this element.
+
+		On Mouse Up
+
+		onmouseup
+
+		class java.lang.String
+
+	size
+
+		The number of columns in this DateRenderer.
+
+		Size
+
+		size
+
+		class java.lang.Integer
+
+	timezone
+
+		The timezone used to format and parse this date.  See java.text.DateFormat.  Default is null.
+
+		Timezone
+
+		timezone
+
+		class java.lang.String
+
+	onkeyup
+
+		Key was released over this element.
+
+		On Key Up
+
+		onkeyup
+
+		class java.lang.String
+
+	inputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		inputClass
+
+		class java.lang.String
+
+	style
+
+		Style information for this element.
+
+		Style
+
+		style
+
+		class java.lang.String
+
+	maxlength
+
+		The maximum number of characters in this DateRenderer.
+
+		Max Length
+
+		maxlength
+
+		class java.lang.Integer
+
+	outputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		outputClass
+
+		class java.lang.String
+
+	onfocus
+
+		The element got the focus.
+
+		On Focus
+
+		onfocus
+
+		class java.lang.String
+
+	dateStyle
+
+		The style to be used to format and parse this date.  See java.text.DateFormat.  Default is MEDIUM
+
+		Date Style
+
+		dateStyle
+
+		class java.lang.String
+
+	alt
+
+		The alt text for this component.
+
+		Alt Text
+
+		alt
+
+		class java.lang.String
+
+	tabindex
+
+		Position of this element in the tabbing order.
+
+		Tab Index
+
+		tabindex
+
+		class java.lang.Integer
+
+	title
+
+		Tool Tip for this element
+
+		Title
+
+		title
+
+		class java.lang.String
+
+	onclick
+
+		The element was clicked.
+
+		On Click
+
+		onclick
+
+		class java.lang.String
+
+	onmousedown
+
+		Mouse was pressed over this element.
+
+		On Mouse Down
+
+		onmousedown
+
+		class java.lang.String
+
+	lang
+
+		Base language of element's attribute values and content.
+
+		Language
+
+		lang
+
+		class java.lang.String
+
+DateTime
 	accesskey
 
 		Accessibility key character
@@ -683,509 +1185,7 @@ DateTimeRenderer
 
 		class java.lang.String
 
-SecretRenderer
-	accesskey
-
-		Accessibility key character
-
-		Access Key
-
-		accesskey
-
-		class java.lang.String
-
-	onmousemove
-
-		Mouse was moved over this element.
-
-		On Mouse Move
-
-		onmousemove
-
-		class java.lang.String
-
-	onmouseout
-
-		Mouse was moved away from this element.
-
-		On Mouse Out
-
-		onmouseout
-
-		class java.lang.String
-
-	onblur
-
-		The element lost the focus.
-
-		On Blur
-
-		onblur
-
-		class java.lang.String
-
-	onkeypress
-
-		Key was pressed and released over this element
-
-		On Key Press
-
-		onkeypress
-
-		class java.lang.String
-
-	onmouseover
-
-		Mouse was moved into this element.
-
-		On Mouse Over
-
-		onmouseover
-
-		class java.lang.String
-
-	ondblclick
-
-		The element was double clicked.
-
-		On Double Click
-
-		ondblclick
-
-		class java.lang.String
-
-	onkeydown
-
-		Key was pressed down over this element.
-
-		On Key Down
-
-		onkeydown
-
-		class java.lang.String
-
-	onselect
-
-		Execute this when the component is selected.
-
-		On Select
-
-		onselect
-
-		class java.lang.String
-
-	readonly
-
-		If true, this component should be rendered as read only.
-
-		Read Only
-
-		readonly
-
-		class java.lang.Boolean
-
-	onmouseup
-
-		Mouse was released over this element.
-
-		On Mouse Up
-
-		onmouseup
-
-		class java.lang.String
-
-	size
-
-		The number of columns in this DateRenderer.
-
-		Size
-
-		size
-
-		class java.lang.Integer
-
-	onkeyup
-
-		Key was released over this element.
-
-		On Key Up
-
-		onkeyup
-
-		class java.lang.String
-
-	inputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		inputClass
-
-		class java.lang.String
-
-	style
-
-		Style information for this element.
-
-		Style
-
-		style
-
-		class java.lang.String
-
-	maxlength
-
-		The maximum number of characters in this DateRenderer.
-
-		Max Length
-
-		maxlength
-
-		class java.lang.Integer
-
-	outputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		outputClass
-
-		class java.lang.String
-
-	onfocus
-
-		The element got the focus.
-
-		On Focus
-
-		onfocus
-
-		class java.lang.String
-
-	alt
-
-		The alt text for this component.
-
-		Alt Text
-
-		alt
-
-		class java.lang.String
-
-	tabindex
-
-		Position of this element in the tabbing order.
-
-		Tab Index
-
-		tabindex
-
-		class java.lang.Integer
-
-	title
-
-		Tool Tip for this element
-
-		Title
-
-		title
-
-		class java.lang.String
-
-	onclick
-
-		The element was clicked.
-
-		On Click
-
-		onclick
-
-		class java.lang.String
-
-	onmousedown
-
-		Mouse was pressed over this element.
-
-		On Mouse Down
-
-		onmousedown
-
-		class java.lang.String
-
-	lang
-
-		Base language of element's attribute values and content.
-
-		Language
-
-		lang
-
-		class java.lang.String
-
-NumberRenderer
-	accesskey
-
-		Accessibility key character
-
-		Access Key
-
-		accesskey
-
-		class java.lang.String
-
-	onmousemove
-
-		Mouse was moved over this element.
-
-		On Mouse Move
-
-		onmousemove
-
-		class java.lang.String
-
-	onmouseout
-
-		Mouse was moved away from this element.
-
-		On Mouse Out
-
-		onmouseout
-
-		class java.lang.String
-
-	onblur
-
-		The element lost the focus.
-
-		On Blur
-
-		onblur
-
-		class java.lang.String
-
-	onkeypress
-
-		Key was pressed and released over this element
-
-		On Key Press
-
-		onkeypress
-
-		class java.lang.String
-
-	onmouseover
-
-		Mouse was moved into this element.
-
-		On Mouse Over
-
-		onmouseover
-
-		class java.lang.String
-
-	ondblclick
-
-		The element was double clicked.
-
-		On Double Click
-
-		ondblclick
-
-		class java.lang.String
-
-	onkeydown
-
-		Key was pressed down over this element.
-
-		On Key Down
-
-		onkeydown
-
-		class java.lang.String
-
-	onselect
-
-		Execute this when the component is selected.
-
-		On Select
-
-		onselect
-
-		class java.lang.String
-
-	formatPattern
-
-		The format pattern used to format and parse this number.  See java.text.DecimalFormat.
-
-		Format Pattern
-
-		formatPattern
-
-		class java.lang.String
-
-	readonly
-
-		If true, this component should be rendered as read only.
-
-		Read Only
-
-		readonly
-
-		class java.lang.Boolean
-
-	onmouseup
-
-		Mouse was released over this element.
-
-		On Mouse Up
-
-		onmouseup
-
-		class java.lang.String
-
-	size
-
-		The number of columns in this DateRenderer.
-
-		Size
-
-		size
-
-		class java.lang.Integer
-
-	onkeyup
-
-		Key was released over this element.
-
-		On Key Up
-
-		onkeyup
-
-		class java.lang.String
-
-	inputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		inputClass
-
-		class java.lang.String
-
-	style
-
-		Style information for this element.
-
-		Style
-
-		style
-
-		class java.lang.String
-
-	maxlength
-
-		The maximum number of characters in this DateRenderer.
-
-		Max Length
-
-		maxlength
-
-		class java.lang.Integer
-
-	numberStyle
-
-		The style to be used to format and parse this number.  See java.text.NumberFormat.  Default is NUMBER
-
-		Format Style
-
-		numberStyle
-
-		class java.lang.String
-
-	outputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		outputClass
-
-		class java.lang.String
-
-	onfocus
-
-		The element got the focus.
-
-		On Focus
-
-		onfocus
-
-		class java.lang.String
-
-	alt
-
-		The alt text for this component.
-
-		Alt Text
-
-		alt
-
-		class java.lang.String
-
-	tabindex
-
-		Position of this element in the tabbing order.
-
-		Tab Index
-
-		tabindex
-
-		class java.lang.Integer
-
-	title
-
-		Tool Tip for this element
-
-		Title
-
-		title
-
-		class java.lang.String
-
-	onclick
-
-		The element was clicked.
-
-		On Click
-
-		onclick
-
-		class java.lang.String
-
-	onmousedown
-
-		Mouse was pressed over this element.
-
-		On Mouse Down
-
-		onmousedown
-
-		class java.lang.String
-
-	lang
-
-		Base language of element's attribute values and content.
-
-		Language
-
-		lang
-
-		class java.lang.String
-
-TimeRenderer
+Time
 	accesskey
 
 		Accessibility key character
@@ -1456,248 +1456,7 @@ TimeRenderer
 
 		class java.lang.String
 
-TextRenderer
-	accesskey
-
-		Accessibility key character
-
-		Access Key
-
-		accesskey
-
-		class java.lang.String
-
-	onmousemove
-
-		Mouse was moved over this element.
-
-		On Mouse Move
-
-		onmousemove
-
-		class java.lang.String
-
-	onmouseout
-
-		Mouse was moved away from this element.
-
-		On Mouse Out
-
-		onmouseout
-
-		class java.lang.String
-
-	onblur
-
-		The element lost the focus.
-
-		On Blur
-
-		onblur
-
-		class java.lang.String
-
-	onkeypress
-
-		Key was pressed and released over this element
-
-		On Key Press
-
-		onkeypress
-
-		class java.lang.String
-
-	onmouseover
-
-		Mouse was moved into this element.
-
-		On Mouse Over
-
-		onmouseover
-
-		class java.lang.String
-
-	ondblclick
-
-		The element was double clicked.
-
-		On Double Click
-
-		ondblclick
-
-		class java.lang.String
-
-	onkeydown
-
-		Key was pressed down over this element.
-
-		On Key Down
-
-		onkeydown
-
-		class java.lang.String
-
-	onselect
-
-		Execute this when the component is selected.
-
-		On Select
-
-		onselect
-
-		class java.lang.String
-
-	readonly
-
-		If true, this component should be rendered as read only.
-
-		Read Only
-
-		readonly
-
-		class java.lang.Boolean
-
-	onmouseup
-
-		Mouse was released over this element.
-
-		On Mouse Up
-
-		onmouseup
-
-		class java.lang.String
-
-	size
-
-		The number of columns in this DateRenderer.
-
-		Size
-
-		size
-
-		class java.lang.Integer
-
-	onkeyup
-
-		Key was released over this element.
-
-		On Key Up
-
-		onkeyup
-
-		class java.lang.String
-
-	inputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		inputClass
-
-		class java.lang.String
-
-	style
-
-		Style information for this element.
-
-		Style
-
-		style
-
-		class java.lang.String
-
-	maxlength
-
-		The maximum number of characters in this DateRenderer.
-
-		Max Length
-
-		maxlength
-
-		class java.lang.Integer
-
-	outputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		outputClass
-
-		class java.lang.String
-
-	onfocus
-
-		The element got the focus.
-
-		On Focus
-
-		onfocus
-
-		class java.lang.String
-
-	alt
-
-		The alt text for this component.
-
-		Alt Text
-
-		alt
-
-		class java.lang.String
-
-	tabindex
-
-		Position of this element in the tabbing order.
-
-		Tab Index
-
-		tabindex
-
-		class java.lang.Integer
-
-	title
-
-		Tool Tip for this element
-
-		Title
-
-		title
-
-		class java.lang.String
-
-	onclick
-
-		The element was clicked.
-
-		On Click
-
-		onclick
-
-		class java.lang.String
-
-	onmousedown
-
-		Mouse was pressed over this element.
-
-		On Mouse Down
-
-		onmousedown
-
-		class java.lang.String
-
-	lang
-
-		Base language of element's attribute values and content.
-
-		Language
-
-		lang
-
-		class java.lang.String
-
-TextAreaRenderer
+Textarea
 	accesskey
 
 		Accessibility key character
@@ -1948,7 +1707,530 @@ TextAreaRenderer
 
 		class java.lang.String
 
-DateRenderer
+Text
+	accesskey
+
+		Accessibility key character
+
+		Access Key
+
+		accesskey
+
+		class java.lang.String
+
+	onmousemove
+
+		Mouse was moved over this element.
+
+		On Mouse Move
+
+		onmousemove
+
+		class java.lang.String
+
+	onmouseout
+
+		Mouse was moved away from this element.
+
+		On Mouse Out
+
+		onmouseout
+
+		class java.lang.String
+
+	onblur
+
+		The element lost the focus.
+
+		On Blur
+
+		onblur
+
+		class java.lang.String
+
+	onkeypress
+
+		Key was pressed and released over this element
+
+		On Key Press
+
+		onkeypress
+
+		class java.lang.String
+
+	onmouseover
+
+		Mouse was moved into this element.
+
+		On Mouse Over
+
+		onmouseover
+
+		class java.lang.String
+
+	ondblclick
+
+		The element was double clicked.
+
+		On Double Click
+
+		ondblclick
+
+		class java.lang.String
+
+	onkeydown
+
+		Key was pressed down over this element.
+
+		On Key Down
+
+		onkeydown
+
+		class java.lang.String
+
+	onselect
+
+		Execute this when the component is selected.
+
+		On Select
+
+		onselect
+
+		class java.lang.String
+
+	readonly
+
+		If true, this component should be rendered as read only.
+
+		Read Only
+
+		readonly
+
+		class java.lang.Boolean
+
+	onmouseup
+
+		Mouse was released over this element.
+
+		On Mouse Up
+
+		onmouseup
+
+		class java.lang.String
+
+	size
+
+		The number of columns in this DateRenderer.
+
+		Size
+
+		size
+
+		class java.lang.Integer
+
+	onkeyup
+
+		Key was released over this element.
+
+		On Key Up
+
+		onkeyup
+
+		class java.lang.String
+
+	inputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		inputClass
+
+		class java.lang.String
+
+	style
+
+		Style information for this element.
+
+		Style
+
+		style
+
+		class java.lang.String
+
+	maxlength
+
+		The maximum number of characters in this DateRenderer.
+
+		Max Length
+
+		maxlength
+
+		class java.lang.Integer
+
+	outputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		outputClass
+
+		class java.lang.String
+
+	onfocus
+
+		The element got the focus.
+
+		On Focus
+
+		onfocus
+
+		class java.lang.String
+
+	alt
+
+		The alt text for this component.
+
+		Alt Text
+
+		alt
+
+		class java.lang.String
+
+	tabindex
+
+		Position of this element in the tabbing order.
+
+		Tab Index
+
+		tabindex
+
+		class java.lang.Integer
+
+	title
+
+		Tool Tip for this element
+
+		Title
+
+		title
+
+		class java.lang.String
+
+	onclick
+
+		The element was clicked.
+
+		On Click
+
+		onclick
+
+		class java.lang.String
+
+	onmousedown
+
+		Mouse was pressed over this element.
+
+		On Mouse Down
+
+		onmousedown
+
+		class java.lang.String
+
+	lang
+
+		Base language of element's attribute values and content.
+
+		Language
+
+		lang
+
+		class java.lang.String
+
+Number
+	accesskey
+
+		Accessibility key character
+
+		Access Key
+
+		accesskey
+
+		class java.lang.String
+
+	onmousemove
+
+		Mouse was moved over this element.
+
+		On Mouse Move
+
+		onmousemove
+
+		class java.lang.String
+
+	onmouseout
+
+		Mouse was moved away from this element.
+
+		On Mouse Out
+
+		onmouseout
+
+		class java.lang.String
+
+	onblur
+
+		The element lost the focus.
+
+		On Blur
+
+		onblur
+
+		class java.lang.String
+
+	onkeypress
+
+		Key was pressed and released over this element
+
+		On Key Press
+
+		onkeypress
+
+		class java.lang.String
+
+	onmouseover
+
+		Mouse was moved into this element.
+
+		On Mouse Over
+
+		onmouseover
+
+		class java.lang.String
+
+	ondblclick
+
+		The element was double clicked.
+
+		On Double Click
+
+		ondblclick
+
+		class java.lang.String
+
+	onkeydown
+
+		Key was pressed down over this element.
+
+		On Key Down
+
+		onkeydown
+
+		class java.lang.String
+
+	onselect
+
+		Execute this when the component is selected.
+
+		On Select
+
+		onselect
+
+		class java.lang.String
+
+	formatPattern
+
+		The format pattern used to format and parse this number.  See java.text.DecimalFormat.
+
+		Format Pattern
+
+		formatPattern
+
+		class java.lang.String
+
+	readonly
+
+		If true, this component should be rendered as read only.
+
+		Read Only
+
+		readonly
+
+		class java.lang.Boolean
+
+	onmouseup
+
+		Mouse was released over this element.
+
+		On Mouse Up
+
+		onmouseup
+
+		class java.lang.String
+
+	size
+
+		The number of columns in this DateRenderer.
+
+		Size
+
+		size
+
+		class java.lang.Integer
+
+	onkeyup
+
+		Key was released over this element.
+
+		On Key Up
+
+		onkeyup
+
+		class java.lang.String
+
+	inputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		inputClass
+
+		class java.lang.String
+
+	style
+
+		Style information for this element.
+
+		Style
+
+		style
+
+		class java.lang.String
+
+	maxlength
+
+		The maximum number of characters in this DateRenderer.
+
+		Max Length
+
+		maxlength
+
+		class java.lang.Integer
+
+	numberStyle
+
+		The style to be used to format and parse this number.  See java.text.NumberFormat.  Default is NUMBER
+
+		Format Style
+
+		numberStyle
+
+		class java.lang.String
+
+	outputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		outputClass
+
+		class java.lang.String
+
+	onfocus
+
+		The element got the focus.
+
+		On Focus
+
+		onfocus
+
+		class java.lang.String
+
+	alt
+
+		The alt text for this component.
+
+		Alt Text
+
+		alt
+
+		class java.lang.String
+
+	tabindex
+
+		Position of this element in the tabbing order.
+
+		Tab Index
+
+		tabindex
+
+		class java.lang.Integer
+
+	title
+
+		Tool Tip for this element
+
+		Title
+
+		title
+
+		class java.lang.String
+
+	onclick
+
+		The element was clicked.
+
+		On Click
+
+		onclick
+
+		class java.lang.String
+
+	onmousedown
+
+		Mouse was pressed over this element.
+
+		On Mouse Down
+
+		onmousedown
+
+		class java.lang.String
+
+	lang
+
+		Base language of element's attribute values and content.
+
+		Language
+
+		lang
+
+		class java.lang.String
+
+Message
+	bundle
+
+		The name of the resource bundle in which to look up keys.
+
+		Resource Bundle Name
+
+		bundle
+
+		class java.lang.String
+
+	key
+
+		The value of this attribute is used as the key to lookup a reference in the ResourceBundle.
+
+		Localization Key
+
+		key
+
+		class java.lang.String
+
+Date
 	accesskey
 
 		Accessibility key character
@@ -2209,7 +2491,7 @@ DateRenderer
 
 		class java.lang.String
 
-DateTimeRenderer
+DateTime
 	accesskey
 
 		Accessibility key character
@@ -2490,344 +2772,7 @@ DateTimeRenderer
 
 		class java.lang.String
 
-ErrorsRenderer
-	compoundId
-
-		An expression that identifies a component
-
-		Compound Identifier
-
-		compoundId
-
-		class java.lang.String
-
-	outputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		outputClass
-
-		class java.lang.String
-
-	color
-
-		
-
-		Color
-
-		color
-
-		class java.lang.String
-
-NumberRenderer
-	accesskey
-
-		Accessibility key character
-
-		Access Key
-
-		accesskey
-
-		class java.lang.String
-
-	onmousemove
-
-		Mouse was moved over this element.
-
-		On Mouse Move
-
-		onmousemove
-
-		class java.lang.String
-
-	onmouseout
-
-		Mouse was moved away from this element.
-
-		On Mouse Out
-
-		onmouseout
-
-		class java.lang.String
-
-	onblur
-
-		The element lost the focus.
-
-		On Blur
-
-		onblur
-
-		class java.lang.String
-
-	onkeypress
-
-		Key was pressed and released over this element
-
-		On Key Press
-
-		onkeypress
-
-		class java.lang.String
-
-	onmouseover
-
-		Mouse was moved into this element.
-
-		On Mouse Over
-
-		onmouseover
-
-		class java.lang.String
-
-	ondblclick
-
-		The element was double clicked.
-
-		On Double Click
-
-		ondblclick
-
-		class java.lang.String
-
-	onkeydown
-
-		Key was pressed down over this element.
-
-		On Key Down
-
-		onkeydown
-
-		class java.lang.String
-
-	onselect
-
-		Execute this when the component is selected.
-
-		On Select
-
-		onselect
-
-		class java.lang.String
-
-	formatPattern
-
-		The format pattern used to format and parse this number.  See java.text.DecimalFormat.
-
-		Format Pattern
-
-		formatPattern
-
-		class java.lang.String
-
-	readonly
-
-		If true, this component should be rendered as read only.
-
-		Read Only
-
-		readonly
-
-		class java.lang.Boolean
-
-	onmouseup
-
-		Mouse was released over this element.
-
-		On Mouse Up
-
-		onmouseup
-
-		class java.lang.String
-
-	size
-
-		The number of columns in this DateRenderer.
-
-		Size
-
-		size
-
-		class java.lang.Integer
-
-	onkeyup
-
-		Key was released over this element.
-
-		On Key Up
-
-		onkeyup
-
-		class java.lang.String
-
-	inputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		inputClass
-
-		class java.lang.String
-
-	style
-
-		Style information for this element.
-
-		Style
-
-		style
-
-		class java.lang.String
-
-	maxlength
-
-		The maximum number of characters in this DateRenderer.
-
-		Max Length
-
-		maxlength
-
-		class java.lang.Integer
-
-	numberStyle
-
-		The style to be used to format and parse this number.  See java.text.NumberFormat.  Default is NUMBER
-
-		Format Style
-
-		numberStyle
-
-		class java.lang.String
-
-	outputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		outputClass
-
-		class java.lang.String
-
-	onfocus
-
-		The element got the focus.
-
-		On Focus
-
-		onfocus
-
-		class java.lang.String
-
-	alt
-
-		The alt text for this component.
-
-		Alt Text
-
-		alt
-
-		class java.lang.String
-
-	tabindex
-
-		Position of this element in the tabbing order.
-
-		Tab Index
-
-		tabindex
-
-		class java.lang.Integer
-
-	title
-
-		Tool Tip for this element
-
-		Title
-
-		title
-
-		class java.lang.String
-
-	onclick
-
-		The element was clicked.
-
-		On Click
-
-		onclick
-
-		class java.lang.String
-
-	onmousedown
-
-		Mouse was pressed over this element.
-
-		On Mouse Down
-
-		onmousedown
-
-		class java.lang.String
-
-	lang
-
-		Base language of element's attribute values and content.
-
-		Language
-
-		lang
-
-		class java.lang.String
-
-MessageRenderer
-	bundle
-
-		The name of the resource bundle in which to look up keys.
-
-		Resource Bundle Name
-
-		bundle
-
-		class java.lang.String
-
-	key
-
-		The value of this attribute is used as the key to lookup a reference in the ResourceBundle.
-
-		Localization Key
-
-		key
-
-		class java.lang.String
-
-LabelRenderer
-	outputClass
-
-		CSS Class Name for this element
-
-		CSS Class Name
-
-		outputClass
-
-		class java.lang.String
-
-	for
-
-		The componentId to which this label
-                applies.  Either an absolute path, beginning with "/",
-                or a relative path, possibly containing "../.."
-                chars.
-
-		for
-
-		for
-
-		class java.lang.String
-
-TimeRenderer
+Time
 	accesskey
 
 		Accessibility key character
@@ -3098,7 +3043,31 @@ TimeRenderer
 
 		class java.lang.String
 
-TextRenderer
+Label
+	outputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		outputClass
+
+		class java.lang.String
+
+	for
+
+		The componentId to which this label
+                applies.  Either an absolute path, beginning with "/",
+                or a relative path, possibly containing "../.."
+                chars.
+
+		for
+
+		for
+
+		class java.lang.String
+
+Text
 	accesskey
 
 		Accessibility key character
@@ -3339,7 +3308,38 @@ TextRenderer
 
 		class java.lang.String
 
-DateRenderer
+Errors
+	compoundId
+
+		An expression that identifies a component
+
+		Compound Identifier
+
+		compoundId
+
+		class java.lang.String
+
+	outputClass
+
+		CSS Class Name for this element
+
+		CSS Class Name
+
+		outputClass
+
+		class java.lang.String
+
+	color
+
+		
+
+		Color
+
+		color
+
+		class java.lang.String
+
+Number
 	accesskey
 
 		Accessibility key character
@@ -3430,6 +3430,16 @@ DateRenderer
 
 		class java.lang.String
 
+	formatPattern
+
+		The format pattern used to format and parse this number.  See java.text.DecimalFormat.
+
+		Format Pattern
+
+		formatPattern
+
+		class java.lang.String
+
 	readonly
 
 		If true, this component should be rendered as read only.
@@ -3459,16 +3469,6 @@ DateRenderer
 		size
 
 		class java.lang.Integer
-
-	timezone
-
-		The timezone used to format and parse this date.  See java.text.DateFormat.  Default is null.
-
-		Timezone
-
-		timezone
-
-		class java.lang.String
 
 	onkeyup
 
@@ -3510,6 +3510,16 @@ DateRenderer
 
 		class java.lang.Integer
 
+	numberStyle
+
+		The style to be used to format and parse this number.  See java.text.NumberFormat.  Default is NUMBER
+
+		Format Style
+
+		numberStyle
+
+		class java.lang.String
+
 	outputClass
 
 		CSS Class Name for this element
@@ -3527,16 +3537,6 @@ DateRenderer
 		On Focus
 
 		onfocus
-
-		class java.lang.String
-
-	dateStyle
-
-		The style to be used to format and parse this date.  See java.text.DateFormat.  Default is MEDIUM
-
-		Date Style
-
-		dateStyle
 
 		class java.lang.String
 
@@ -3600,7 +3600,7 @@ DateRenderer
 
 		class java.lang.String
 
-CheckboxRenderer
+Checkbox
 	accesskey
 
 		Accessibility key character
@@ -3824,22 +3824,7 @@ CheckboxRenderer
 
 		class java.lang.String
 
-DataRenderer
-	var
-
-		Name of a request scope attribute that should be used to expose
-                the current element of the data on each iteration through the
-                implicit loop being performed.  This name will typically be used
-                in model reference expressions on output components for the
-                individual properties.
-
-		Var
-
-		var
-
-		class java.lang.String
-
-ListRenderer
+List
 	bgcolor
 
 		Background color for the table.
@@ -4144,8 +4129,22 @@ ListRenderer
 
 		class java.lang.String
 
-GroupRenderer
-GridRenderer
+Data
+	var
+
+		Name of a request scope attribute that should be used to expose
+                the current element of the data on each iteration through the
+                implicit loop being performed.  This name will typically be used
+                in model reference expressions on output components for the
+                individual properties.
+
+		Var
+
+		var
+
+		class java.lang.String
+
+Grid
 	bgcolor
 
 		Background color for the table.
@@ -4461,7 +4460,249 @@ GridRenderer
 
 		class java.lang.String
 
-ListboxRenderer
+Group
+SelectManyCheckbox
+	modelreference
+
+		Reference to the model
+
+		Model Reference
+
+		modelreference
+
+		class java.lang.String
+
+	onmousemove
+
+		Mouse was moved over this element.
+
+		On Mouse Move
+
+		onmousemove
+
+		class java.lang.String
+
+	disabled
+
+		If true, this component should be rendered as disabled.
+
+		Disabled
+
+		disabled
+
+		class java.lang.String
+
+	onmouseout
+
+		Mouse was moved away from this element.
+
+		On Mouse Out
+
+		onmouseout
+
+		class java.lang.String
+
+	onblur
+
+		The element lost the focus.
+
+		On Blur
+
+		onblur
+
+		class java.lang.String
+
+	onkeypress
+
+		Key was pressed and released over this element
+
+		On Key Press
+
+		onkeypress
+
+		class java.lang.String
+
+	onmouseover
+
+		Mouse was moved into this element.
+
+		On Mouse Over
+
+		onmouseover
+
+		class java.lang.String
+
+	ondblclick
+
+		The element was double clicked.
+
+		On Double Click
+
+		ondblclick
+
+		class java.lang.String
+
+	onkeydown
+
+		Key was pressed down over this element.
+
+		On Key Down
+
+		onkeydown
+
+		class java.lang.String
+
+	onselect
+
+		Execute this when the component is selected.
+
+		On Select
+
+		onselect
+
+		class java.lang.String
+
+	onmouseup
+
+		Mouse was released over this element.
+
+		On Mouse Up
+
+		onmouseup
+
+		class java.lang.String
+
+	size
+
+		Number of rows displayed
+
+		Size
+
+		size
+
+		class java.lang.Integer
+
+	dir
+
+		Direction of the text - LTR or RTL
+
+		Directionality
+
+		dir
+
+		class java.lang.String
+
+	onkeyup
+
+		Key was released over this element.
+
+		On Key Up
+
+		onkeyup
+
+		class java.lang.String
+
+	style
+
+		Style-sheet information
+
+		Style
+
+		style
+
+		class java.lang.String
+
+	onfocus
+
+		The element got the focus.
+
+		On Focus
+
+		onfocus
+
+		class java.lang.String
+
+	selectmanyClass
+
+		Class name for this element
+
+		SelectMany Class
+
+		selectmanyClass
+
+		class java.lang.String
+
+	tabindex
+
+		The sequence of this component when tabbing through the page
+
+		Tab Index
+
+		tabindex
+
+		class java.lang.String
+
+	labelAlign
+
+		List layout - PAGE_START|LINE_END
+
+		Label Alignment
+
+		labelAlign
+
+		class java.lang.String
+
+	lang
+
+		Component language
+
+		Language
+
+		lang
+
+		class java.lang.String
+
+	name
+
+		Control name
+
+		Name
+
+		name
+
+		class java.lang.String
+
+	onclick
+
+		The element was clicked.
+
+		On Click
+
+		onclick
+
+		class java.lang.String
+
+	title
+
+		Displayed text hint for this component
+
+		Title
+
+		title
+
+		class java.lang.String
+
+	onmousedown
+
+		Mouse was pressed over this element.
+
+		On Mouse Down
+
+		onmousedown
+
+		class java.lang.String
+
+Listbox
 	accesskey
 
 		Accessibility key character
@@ -4682,7 +4923,7 @@ ListboxRenderer
 
 		class java.lang.String
 
-MenuRenderer
+Menu
 	accesskey
 
 		Accessibility key character
@@ -4933,7 +5174,7 @@ MenuRenderer
 
 		class java.lang.String
 
-SelectManyCheckboxListRenderer
+SelectManyCheckbox
 	modelreference
 
 		Reference to the model
@@ -5174,7 +5415,7 @@ SelectManyCheckboxListRenderer
 
 		class java.lang.String
 
-ListboxRenderer
+Listbox
 	accesskey
 
 		Accessibility key character
@@ -5395,7 +5636,7 @@ ListboxRenderer
 
 		class java.lang.String
 
-MenuRenderer
+Menu
 	accesskey
 
 		Accessibility key character
@@ -5646,248 +5887,7 @@ MenuRenderer
 
 		class java.lang.String
 
-SelectManyCheckboxListRenderer
-	modelreference
-
-		Reference to the model
-
-		Model Reference
-
-		modelreference
-
-		class java.lang.String
-
-	onmousemove
-
-		Mouse was moved over this element.
-
-		On Mouse Move
-
-		onmousemove
-
-		class java.lang.String
-
-	disabled
-
-		If true, this component should be rendered as disabled.
-
-		Disabled
-
-		disabled
-
-		class java.lang.String
-
-	onmouseout
-
-		Mouse was moved away from this element.
-
-		On Mouse Out
-
-		onmouseout
-
-		class java.lang.String
-
-	onblur
-
-		The element lost the focus.
-
-		On Blur
-
-		onblur
-
-		class java.lang.String
-
-	onkeypress
-
-		Key was pressed and released over this element
-
-		On Key Press
-
-		onkeypress
-
-		class java.lang.String
-
-	onmouseover
-
-		Mouse was moved into this element.
-
-		On Mouse Over
-
-		onmouseover
-
-		class java.lang.String
-
-	ondblclick
-
-		The element was double clicked.
-
-		On Double Click
-
-		ondblclick
-
-		class java.lang.String
-
-	onkeydown
-
-		Key was pressed down over this element.
-
-		On Key Down
-
-		onkeydown
-
-		class java.lang.String
-
-	onselect
-
-		Execute this when the component is selected.
-
-		On Select
-
-		onselect
-
-		class java.lang.String
-
-	onmouseup
-
-		Mouse was released over this element.
-
-		On Mouse Up
-
-		onmouseup
-
-		class java.lang.String
-
-	size
-
-		Number of rows displayed
-
-		Size
-
-		size
-
-		class java.lang.Integer
-
-	dir
-
-		Direction of the text - LTR or RTL
-
-		Directionality
-
-		dir
-
-		class java.lang.String
-
-	onkeyup
-
-		Key was released over this element.
-
-		On Key Up
-
-		onkeyup
-
-		class java.lang.String
-
-	style
-
-		Style-sheet information
-
-		Style
-
-		style
-
-		class java.lang.String
-
-	onfocus
-
-		The element got the focus.
-
-		On Focus
-
-		onfocus
-
-		class java.lang.String
-
-	selectmanyClass
-
-		Class name for this element
-
-		SelectMany Class
-
-		selectmanyClass
-
-		class java.lang.String
-
-	tabindex
-
-		The sequence of this component when tabbing through the page
-
-		Tab Index
-
-		tabindex
-
-		class java.lang.String
-
-	labelAlign
-
-		List layout - PAGE_START|LINE_END
-
-		Label Alignment
-
-		labelAlign
-
-		class java.lang.String
-
-	lang
-
-		Component language
-
-		Language
-
-		lang
-
-		class java.lang.String
-
-	name
-
-		Control name
-
-		Name
-
-		name
-
-		class java.lang.String
-
-	onclick
-
-		The element was clicked.
-
-		On Click
-
-		onclick
-
-		class java.lang.String
-
-	title
-
-		Displayed text hint for this component
-
-		Title
-
-		title
-
-		class java.lang.String
-
-	onmousedown
-
-		Mouse was pressed over this element.
-
-		On Mouse Down
-
-		onmousedown
-
-		class java.lang.String
-
-RadioRenderer
+Radio
 	accesskey
 
 		Accessibility key character

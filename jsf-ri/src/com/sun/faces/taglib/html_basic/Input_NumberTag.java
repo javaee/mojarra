@@ -1,5 +1,5 @@
 /*
- * $Id: Input_NumberTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
+ * $Id: Input_NumberTag.java,v 1.3 2002/10/22 21:26:59 jvisvanathan Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import com.sun.faces.util.Util;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Input_NumberTag.java,v 1.2 2002/08/17 00:57:05 jvisvanathan Exp $
+ * @version $Id: Input_NumberTag.java,v 1.3 2002/10/22 21:26:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -83,7 +83,7 @@ public class Input_NumberTag extends InputTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "NumberRenderer"; }
+    public String getLocalRendererType() { return "Number"; }
 
     public UIComponent createComponent() {
         return (new UIInput());

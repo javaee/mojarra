@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TextTag.java,v 1.2 2002/09/23 20:34:17 rkitain Exp $
+ * $Id: Input_TextTag.java,v 1.3 2002/10/22 21:26:59 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_TextTag.java,v 1.2 2002/09/23 20:34:17 rkitain Exp $
+ * @version $Id: Input_TextTag.java,v 1.3 2002/10/22 21:26:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -64,7 +64,7 @@ public class Input_TextTag extends InputTag
 // General Methods
 //
 
-    public String getLocalRendererType() { return "TextRenderer"; }
+    public String getLocalRendererType() { return "Text"; }
 
     public UIComponent createComponent() {
         return (new UIInput());

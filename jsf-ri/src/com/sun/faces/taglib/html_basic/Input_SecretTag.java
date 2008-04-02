@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.4 2002/09/23 21:33:53 rkitain Exp $
+ * $Id: Input_SecretTag.java,v 1.5 2002/10/22 21:26:59 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.faces.component.UIInput;
 
 /**
  *
- * @version $Id: Input_SecretTag.java,v 1.4 2002/09/23 21:33:53 rkitain Exp $
+ * @version $Id: Input_SecretTag.java,v 1.5 2002/10/22 21:26:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -70,7 +70,7 @@ public Input_SecretTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "SecretRenderer"; }
+    public String getLocalRendererType() { return "Secret"; }
 
     public UIComponent createComponent() {
         return (new UIInput());

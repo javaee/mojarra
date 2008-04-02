@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GridTag.java,v 1.2 2002/09/06 18:08:19 jvisvanathan Exp $
+ * $Id: Panel_GridTag.java,v 1.3 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_GridTag.java,v 1.2 2002/09/06 18:08:19 jvisvanathan Exp $
+ * @version $Id: Panel_GridTag.java,v 1.3 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -199,7 +199,7 @@ public class Panel_GridTag extends FacesTag {
      *
      */
     public String getLocalRendererType() {
-        return ("GridRenderer");
+        return ("Grid");
     }    
 
 }

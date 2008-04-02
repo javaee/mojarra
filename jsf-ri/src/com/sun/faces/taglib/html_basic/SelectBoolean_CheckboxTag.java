@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.37 2002/10/14 21:29:35 jvisvanathan Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.38 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectBoolean_CheckboxTag.java,v 1.37 2002/10/14 21:29:35 jvisvanathan Exp $
+ * @version $Id: SelectBoolean_CheckboxTag.java,v 1.38 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -77,7 +77,7 @@ public class SelectBoolean_CheckboxTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "CheckboxRenderer"; }
+    public String getLocalRendererType() { return "Checkbox"; }
 
     public UIComponent createComponent() {
         return (new UISelectBoolean());

@@ -12,7 +12,7 @@
     <component>
         <type>javax.faces.component.UICommand</type>
         <renderer>
-            <type>ButtonRenderer</type>
+            <type>Button</type>
             <class>com.sun.faces.renderkit.html_basic.ButtonRenderer</class>
             <attribute>
                 <name>type</name>
@@ -73,7 +73,7 @@
         </renderer>
         
         <renderer>
-            <type>HyperlinkRenderer</type>
+            <type>Hyperlink</type>
             <class>com.sun.faces.renderkit.html_basic.HyperlinkRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
@@ -82,7 +82,7 @@
     <component>
         <type>javax.faces.component.UIForm</type>
         <renderer>
-            <type>FormRenderer</type>
+            <type>Form</type>
             <class>com.sun.faces.renderkit.html_basic.FormRenderer</class>
             <attribute>
                 <name>onsubmit</name>
@@ -98,7 +98,7 @@
     <component>
         <type>javax.faces.component.UIGraphic</type>
         <renderer>
-            <type>ImageRenderer</type>
+            <type>Image</type>
             <class>com.sun.faces.renderkit.html_basic.ImageRenderer</class>
             <attribute>
                 <name>key</name>
@@ -155,7 +155,7 @@
     <component>
         <type>javax.faces.component.UIInput</type>
         <renderer>
-            <type>DateRenderer</type>
+            <type>Date</type>
             <class>com.sun.faces.renderkit.html_basic.DateRenderer</class>
             <attribute>
                 <name>dateStyle</name>
@@ -172,7 +172,7 @@
             &html-text-input-attrs;
         </renderer>
         <renderer>
-            <type>DateTimeRenderer</type>
+            <type>DateTime</type>
             <class>com.sun.faces.renderkit.html_basic.DateTimeRenderer</class>
             <attribute>
                 <name>dateStyle</name>
@@ -205,7 +205,7 @@
             &html-text-input-attrs;
         </renderer>
         <renderer>
-            <type>NumberRenderer</type>
+            <type>Number</type>
             <class>com.sun.faces.renderkit.html_basic.NumberRenderer</class>
             <attribute>
                 <name>numberStyle</name>
@@ -226,18 +226,18 @@
             &html-text-input-attrs;
         </renderer>
         <renderer>
-            <type>TextRenderer</type>
+            <type>Text</type>
             <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
             &html-text-input-attrs;
         </renderer>
         <renderer>
-            <type>SecretRenderer</type>
+            <type>Secret</type>
             <class>com.sun.faces.renderkit.html_basic.SecretRenderer</class>
             &html-text-input-attrs;
         </renderer>
 
         <renderer>
-            <type>TextAreaRenderer</type>
+            <type>Textarea</type>
             <class>com.sun.faces.renderkit.html_basic.TextAreaRenderer</class>
             <attribute>
                 <name>cols</name>
@@ -255,7 +255,7 @@
             &html-text-input-attrs;
         </renderer>
         <renderer>
-            <type>TimeRenderer</type>
+            <type>Time</type>
             <class>com.sun.faces.renderkit.html_basic.TimeRenderer</class>
             <attribute>
                 <name>timeStyle</name>
@@ -288,19 +288,19 @@
     <component>
         <type>javax.faces.component.UIOutput</type>
         <renderer>
-            <type>DateRenderer</type>
+            <type>Date</type>
             <class>com.sun.faces.renderkit.html_basic.DateRenderer</class>
             <!-- The attributes come from the DateRenderer declaration in
                  UIInput -->
         </renderer>
         <renderer>
-            <type>DateTimeRenderer</type>
+            <type>DateTime</type>
             <class>com.sun.faces.renderkit.html_basic.DateTimeRenderer</class>
             <!-- The attributes come from the DateRenderer declaration in
                  UIInput -->
         </renderer>
         <renderer>
-            <type>ErrorsRenderer</type>
+            <type>Errors</type>
             <class>com.sun.faces.renderkit.html_basic.ErrorsRenderer</class>
             <attribute>
                 <name>compoundId</name>
@@ -323,7 +323,7 @@
             </attribute>
         </renderer>
         <renderer>
-            <type>LabelRenderer</type>
+            <type>Label</type>
             <class>com.sun.faces.renderkit.html_basic.LabelRenderer</class>
             <attribute>
                 <name>for</name>
@@ -345,7 +345,7 @@
             </attribute>
         </renderer>
         <renderer>
-            <type>MessageRenderer</type>
+            <type>Message</type>
             <class>com.sun.faces.renderkit.html_basic.MessageRenderer</class>
             <attribute>
                 <name>key</name>
@@ -361,18 +361,18 @@
             </attribute>
         </renderer>
         <renderer>
-            <type>NumberRenderer</type>
+            <type>Number</type>
             <class>com.sun.faces.renderkit.html_basic.NumberRenderer</class>
             <!-- The attributes come from the NumberRenderer declaration in
                  UIInput -->
         </renderer>
         <renderer>
-            <type>TextRenderer</type>
+            <type>Text</type>
             <class>com.sun.faces.renderkit.html_basic.TextRenderer</class>
         <!-- Add Attribute Desc stuff here -->
         </renderer>
         <renderer>
-            <type>TimeRenderer</type>
+            <type>Time</type>
             <class>com.sun.faces.renderkit.html_basic.TimeRenderer</class>
             <!-- The attributes come from the DateRenderer declaration in
                  UIInput -->
@@ -382,7 +382,7 @@
     <component>
         <type>javax.faces.component.UISelectBoolean</type>
         <renderer>
-            <type>CheckboxRenderer</type>
+            <type>Checkbox</type>
             <class>com.sun.faces.renderkit.html_basic.CheckboxRenderer</class>
             <attribute>
                 <name>inputClass</name>
@@ -458,7 +458,7 @@
     <component>
         <type>javax.faces.component.UIPanel</type>
         <renderer>
-            <type>DataRenderer</type>
+            <type>Data</type>
             <class>com.sun.faces.renderkit.html_basic.DataRenderer</class>
             <attribute>
                 <name>var</name>
@@ -474,11 +474,11 @@
             </attribute>
         </renderer>
         <renderer>
-            <type>GroupRenderer</type>
+            <type>Group</type>
             <class>com.sun.faces.renderkit.html_basic.GroupRenderer</class>
         </renderer>
         <renderer>
-            <type>GridRenderer</type>
+            <type>Grid</type>
             <class>com.sun.faces.renderkit.html_basic.GridRenderer</class>
             &event-attrs;
             <attribute>
@@ -634,7 +634,7 @@
         </renderer>
         
         <renderer>
-            <type>ListRenderer</type>
+            <type>List</type>
             <class>com.sun.faces.renderkit.html_basic.ListRenderer</class>
             &event-attrs;
             <attribute>
@@ -783,7 +783,7 @@
     <component>
         <type>javax.faces.component.UISelectMany</type>
         <renderer>
-            <type>SelectManyCheckboxListRenderer</type>
+            <type>SelectManyCheckbox</type>
             <class>com.sun.faces.renderkit.html_basic.SelectManyCheckboxListRenderer</class>
             <attribute>
                 <name>selectmanyClass</name>
@@ -862,7 +862,7 @@
 
 	</renderer>
         <renderer>
-        <type>MenuRenderer</type>
+        <type>Menu</type>
 			<class>com.sun.faces.renderkit.html_basic.MenuRenderer</class>
 			<attribute>
 				<name>selectmanyClass</name>
@@ -875,7 +875,7 @@
 		</renderer>
 
 		<renderer>
-			<type>ListboxRenderer</type>
+			<type>Listbox</type>
 			<class>com.sun.faces.renderkit.html_basic.ListboxRenderer</class>
 			<attribute>
 				<name>selectmanyClass</name>
@@ -890,7 +890,7 @@
     <component>
         <type>javax.faces.component.UISelectOne</type>
         <renderer>
-            <type>ListboxRenderer</type>
+            <type>Listbox</type>
             <class>com.sun.faces.renderkit.html_basic.ListboxRenderer</class>
              <!-- HTML 4.0 attributes -->
             <attribute>
@@ -957,7 +957,7 @@
             &event-attrs;
         </renderer>
         <renderer>
-            <type>MenuRenderer</type>
+            <type>Menu</type>
             <class>com.sun.faces.renderkit.html_basic.MenuRenderer</class>
             <attribute>
                 <name>layout</name>
@@ -1044,7 +1044,7 @@
             </attribute>
         </renderer>
         <renderer>
-            <type>RadioRenderer</type>
+            <type>Radio</type>
             <class>com.sun.faces.renderkit.html_basic.RadioRenderer</class>
             <attribute>
                 <name>layout</name>

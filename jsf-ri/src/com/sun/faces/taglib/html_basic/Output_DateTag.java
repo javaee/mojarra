@@ -1,5 +1,5 @@
 /*
- * $Id: Output_DateTag.java,v 1.3 2002/09/09 23:52:25 visvan Exp $
+ * $Id: Output_DateTag.java,v 1.4 2002/10/22 21:26:59 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_DateTag.java,v 1.3 2002/09/09 23:52:25 visvan Exp $
+ * @version $Id: Output_DateTag.java,v 1.4 2002/10/22 21:26:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,7 +71,7 @@ public Output_DateTag()
 //
 // General Methods
 //
-    public String getLocalRendererType() { return "DateRenderer"; }
+    public String getLocalRendererType() { return "Date"; }
 
     public UIComponent createComponent() {
         return (new UIOutput());

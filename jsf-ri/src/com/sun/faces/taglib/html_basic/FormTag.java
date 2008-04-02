@@ -1,5 +1,5 @@
 /*
- * $Id: FormTag.java,v 1.31 2002/07/12 19:44:36 eburns Exp $
+ * $Id: FormTag.java,v 1.32 2002/10/22 21:26:58 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FormTag.java,v 1.31 2002/07/12 19:44:36 eburns Exp $
+ * @version $Id: FormTag.java,v 1.32 2002/10/22 21:26:58 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,7 +84,7 @@ public FormTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "FormRenderer"; }
+    public String getLocalRendererType() { return "Form"; }
 
     public UIComponent createComponent() {
         return (new UIForm());

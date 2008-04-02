@@ -1,6 +1,6 @@
 
 /**
- * $Id: SelectMany_CheckboxListTag.java,v 1.1 2002/09/04 22:32:38 eburns Exp $
+ * $Id: SelectMany_CheckboxListTag.java,v 1.2 2002/10/22 21:27:01 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -24,7 +24,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: SelectMany_CheckboxListTag.java,v 1.1 2002/09/04 22:32:38 eburns Exp $
+ * @version $Id: SelectMany_CheckboxListTag.java,v 1.2 2002/10/22 21:27:01 jvisvanathan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -71,7 +71,7 @@ public SelectMany_CheckboxListTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "SelectManyCheckboxListRenderer"; } 
+    public String getLocalRendererType() { return "SelectManyCheckbox"; } 
     
     public UIComponent createComponent() {
         return (new UISelectMany());

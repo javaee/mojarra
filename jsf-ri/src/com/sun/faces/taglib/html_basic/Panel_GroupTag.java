@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_GroupTag.java,v 1.1 2002/09/06 18:05:27 jvisvanathan Exp $
+ * $Id: Panel_GroupTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -17,7 +17,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_GroupTag.java,v 1.1 2002/09/06 18:05:27 jvisvanathan Exp $
+ * @version $Id: Panel_GroupTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -66,7 +66,7 @@ public class Panel_GroupTag extends FacesTag {
     }
     
     public String getLocalRendererType() {
-         return ("GroupRenderer");
+         return ("Group");
     }    
 
 }

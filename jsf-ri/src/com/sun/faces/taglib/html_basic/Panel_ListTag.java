@@ -1,5 +1,5 @@
 /*
- * $Id: Panel_ListTag.java,v 1.1 2002/09/09 23:52:26 visvan Exp $
+ * $Id: Panel_ListTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import javax.servlet.jsp.JspException;
 
 /**
  *
- * @version $Id: Panel_ListTag.java,v 1.1 2002/09/09 23:52:26 visvan Exp $
+ * @version $Id: Panel_ListTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -186,7 +186,7 @@ public class Panel_ListTag extends FacesTag {
      *
      */
     public String getLocalRendererType() {
-        return ("ListRenderer");
+        return ("List");
     }    
 
 }

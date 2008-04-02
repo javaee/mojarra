@@ -1,5 +1,5 @@
 /*
- * $Id: Output_LabelTag.java,v 1.1 2002/09/05 18:54:13 eburns Exp $
+ * $Id: Output_LabelTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import com.sun.faces.taglib.FacesTag;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_LabelTag.java,v 1.1 2002/09/05 18:54:13 eburns Exp $
+ * @version $Id: Output_LabelTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,7 +90,7 @@ public void setFor(String newForValue)
 // General Methods
 //
 
-    public String getLocalRendererType() { return "LabelRenderer"; }
+    public String getLocalRendererType() { return "Label"; }
 
     public UIComponent createComponent() {
         return (new UIOutput());

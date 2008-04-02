@@ -1,5 +1,5 @@
 /*
- * $Id: Graphic_ImageTag.java,v 1.1 2002/08/16 23:27:02 rkitain Exp $
+ * $Id: Graphic_ImageTag.java,v 1.2 2002/10/22 21:26:59 jvisvanathan Exp $
  */
 
 /*
@@ -19,7 +19,7 @@ import javax.faces.component.UIGraphic;
 
 /**
  *
- * @version $Id: Graphic_ImageTag.java,v 1.1 2002/08/16 23:27:02 rkitain Exp $
+ * @version $Id: Graphic_ImageTag.java,v 1.2 2002/10/22 21:26:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -76,7 +76,7 @@ public Graphic_ImageTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "ImageRenderer"; }
+    public String getLocalRendererType() { return "Image"; }
     public UIComponent createComponent() {
         return (new UIGraphic());
     }

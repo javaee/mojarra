@@ -1,5 +1,5 @@
 /*
- * $Id: Output_ErrorsTag.java,v 1.1 2002/08/19 21:37:01 rkitain Exp $
+ * $Id: Output_ErrorsTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import javax.faces.component.UIOutput;
 
  *
 
- * @version $Id: Output_ErrorsTag.java,v 1.1 2002/08/19 21:37:01 rkitain Exp $
+ * @version $Id: Output_ErrorsTag.java,v 1.2 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -93,7 +93,7 @@ public class Output_ErrorsTag extends FacesTag {
 // General Methods
 //
 
-    public String getLocalRendererType() {return "ErrorsRenderer"; }
+    public String getLocalRendererType() {return "Errors"; }
 
     public UIComponent createComponent() {
         return (new UIOutput());

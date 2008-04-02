@@ -1,5 +1,5 @@
 /*
- * $Id: Output_TimeTag.java,v 1.3 2002/09/09 23:52:26 visvan Exp $
+ * $Id: Output_TimeTag.java,v 1.4 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Output_TimeTag.java,v 1.3 2002/09/09 23:52:26 visvan Exp $
+ * @version $Id: Output_TimeTag.java,v 1.4 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,7 +71,7 @@ public Output_TimeTag()
 //
 // General Methods
 //
-    public String getLocalRendererType() { return "TimeRenderer"; }
+    public String getLocalRendererType() { return "Time"; }
 
     public UIComponent createComponent() {
         return (new UIOutput());

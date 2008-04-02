@@ -1,5 +1,5 @@
 /*
- * $Id: Input_TimeTag.java,v 1.1 2002/08/22 00:09:15 eburns Exp $
+ * $Id: Input_TimeTag.java,v 1.2 2002/10/22 21:26:59 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import com.sun.faces.util.Util;
 
 /**
  *
- * @version $Id: Input_TimeTag.java,v 1.1 2002/08/22 00:09:15 eburns Exp $
+ * @version $Id: Input_TimeTag.java,v 1.2 2002/10/22 21:26:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,7 +72,7 @@ public Input_TimeTag()
 // General Methods
 //
 
-    public String getLocalRendererType() { return "TimeRenderer"; }
+    public String getLocalRendererType() { return "Time"; }
 
     public UIComponent createComponent() {
         return (new UIInput());

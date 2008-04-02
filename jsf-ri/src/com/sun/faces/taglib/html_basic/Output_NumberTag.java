@@ -1,5 +1,5 @@
 /*
- * $Id: Output_NumberTag.java,v 1.4 2002/09/09 23:52:25 visvan Exp $
+ * $Id: Output_NumberTag.java,v 1.5 2002/10/22 21:27:00 jvisvanathan Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import com.sun.faces.renderkit.FormatPool;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: Output_NumberTag.java,v 1.4 2002/09/09 23:52:25 visvan Exp $
+ * @version $Id: Output_NumberTag.java,v 1.5 2002/10/22 21:27:00 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -88,7 +88,7 @@ public class Output_NumberTag extends FacesTag
     // General Methods
     //
 
-    public String getLocalRendererType() { return "NumberRenderer"; }
+    public String getLocalRendererType() { return "Number"; }
 
     public UIComponent createComponent() {
         return (new UIOutput());
