@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.17 2004/01/23 04:07:01 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.18 2004/01/23 04:24:20 craigmcc Exp $
  */
 
 /*
@@ -160,7 +160,7 @@ public class ResultSetDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}     
      */ 
     public Object getRowData() {
 

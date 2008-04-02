@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.10 2004/01/23 04:07:01 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.11 2004/01/23 04:24:20 craigmcc Exp $
  */
 
 /*
@@ -128,7 +128,7 @@ public class ScalarDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}     
      */ 
     public Object getRowData() {
 

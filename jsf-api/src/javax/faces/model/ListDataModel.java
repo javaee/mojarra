@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.11 2004/01/23 04:07:01 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.12 2004/01/23 04:24:19 craigmcc Exp $
  */
 
 /*
@@ -128,7 +128,7 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalArgumentException (@inheritDoc}
+     * @exception IllegalArgumentException {@inheritDoc}     
      */ 
     public Object getRowData() {
 
