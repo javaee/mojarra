@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.15 2003/03/13 01:12:28 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.16 2003/04/17 20:24:39 eburns Exp $
  */
 
 /*
@@ -124,8 +124,9 @@ public class LengthValidator extends ValidatorBase {
 
 
     /**
-     * <p>Return the maximum length to be enforced by this {@link Validator},
-     * if <code>isMaximumSet()</code> returns <code>true</code>.</p>
+     * <p>Return the maximum length to be enforced by this {@link
+     * Validator}, or <code>0</code> if the maximum has not been
+     * set.</p>
      */
     public int getMaximum() {
 
@@ -177,8 +178,9 @@ public class LengthValidator extends ValidatorBase {
 
 
     /**
-     * <p>Return the minimum length to be enforced by this {@link Validator},
-     * if <code>isMinimumSet()</code> returns <code>true</code>.</p>
+     * <p>Return the minimum length to be enforced by this {@link
+     * Validator}, or <code>0</code> if the minimum has not been
+     * set.</p>
      */
     public int getMinimum() {
 
