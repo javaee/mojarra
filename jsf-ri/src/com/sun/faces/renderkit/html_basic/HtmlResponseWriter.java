@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.40 2006/11/13 06:19:08 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.41 2006/11/13 19:01:51 rlubke Exp $
  */
 
 /*
@@ -29,19 +29,16 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.context.ResponseWriter;
-import javax.faces.context.FacesContext;
-
-import java.io.IOException;
-import java.io.Writer;
-
 import com.sun.faces.RIConstants;
-import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.util.HtmlUtils;
 import com.sun.faces.util.MessageUtils;
+
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ResponseWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 
 /**
@@ -98,7 +95,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     // Enables hiding of inlined script and style
     // elements from old browsers
-    private Boolean enableJSScriptHiding;
+    private Boolean isScriptHidingEnabled;
 
     // Internal buffer used when outputting properly escaped information
     // using HtmlUtils class.
@@ -111,7 +108,7 @@ public class HtmlResponseWriter extends ResponseWriter {
 
     /**
      * Constructor sets the <code>ResponseWriter</code> and
-     * encoding.
+     * encoding, and enables script hiding by default.
      *
      * @param writer      the <code>ResponseWriter</code>
      * @param contentType the content type.
@@ -119,9 +116,32 @@ public class HtmlResponseWriter extends ResponseWriter {
      *
      * @throws javax.faces.FacesException the encoding is not recognized.
      */
-    public HtmlResponseWriter(Writer writer, String contentType,
+    public HtmlResponseWriter(Writer writer,
+                              String contentType,
                               String encoding)
-          throws FacesException {
+    throws FacesException {
+
+        this(writer, contentType, encoding, true);
+
+    }
+
+    /**
+     * Constructor sets the <code>ResponseWriter</code> and
+     * encoding.
+     *
+     * @param writer      the <code>ResponseWriter</code>
+     * @param contentType the content type.
+     * @param encoding    the character encoding.
+     * @param isScriptHidingEnabled <code>true</code> if the writer
+     *  should attempt to hide JS from older browsers
+     *
+     * @throws javax.faces.FacesException the encoding is not recognized.
+     */
+    public HtmlResponseWriter(Writer writer,
+                              String contentType,
+                              String encoding,
+                              Boolean isScriptHidingEnabled)
+    throws FacesException {
 
         this.writer = writer;
 
@@ -130,6 +150,7 @@ public class HtmlResponseWriter extends ResponseWriter {
         }
 
         this.encoding = encoding;
+        this.isScriptHidingEnabled = isScriptHidingEnabled;
 
         // Check the character encoding
         if (!HtmlUtils.validateEncoding(encoding)) {
@@ -194,8 +215,10 @@ public class HtmlResponseWriter extends ResponseWriter {
     public ResponseWriter cloneWithWriter(Writer writer) {
 
         try {
-            return new HtmlResponseWriter(writer, getContentType(),
-                                          getCharacterEncoding());
+            return new HtmlResponseWriter(writer,
+                                          getContentType(),
+                                          getCharacterEncoding(),
+                                          isScriptHidingEnabled);
         } catch (FacesException e) {
             // This should never happen
             throw new IllegalStateException();
@@ -268,16 +291,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                     writer.write("\n]]>\n");
                 }
             } else {
-                if (enableJSScriptHiding == null) {
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    WebConfiguration webConfig =
-                         WebConfiguration.getInstance(
-                              context.getExternalContext());
-                    enableJSScriptHiding = webConfig
-                         .getBooleanContextInitParameter(
-                              WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding);
-                }
-                if (enableJSScriptHiding) {
+                if (isScriptHidingEnabled) {
                     writer.write("\n//-->\n");
                 }                
             }
@@ -724,16 +738,7 @@ public class HtmlResponseWriter extends ResponseWriter {
                         writer.write("\n<![CDATA[\n");
                     }
                 } else {
-                    if (enableJSScriptHiding == null) {
-                        FacesContext context = FacesContext.getCurrentInstance();
-                        WebConfiguration webConfig =
-                             WebConfiguration.getInstance(
-                                  context.getExternalContext());
-                        enableJSScriptHiding = webConfig
-                             .getBooleanContextInitParameter(
-                                  WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding);
-                    }
-                    if (enableJSScriptHiding) {
+                    if (isScriptHidingEnabled) {
                         writer.write("\n<!--\n");
                     }
                 }

@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.50 2006/11/11 00:05:29 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.51 2006/11/13 19:01:51 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.50 2006/11/11 00:05:29 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.51 2006/11/13 19:01:51 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
@@ -86,6 +86,7 @@ public class RenderKitImpl extends RenderKit {
 
     private ResponseStateManager responseStateManager;
     private Boolean preferXHTML;
+    private Boolean isScriptHidingEnabled;
 
 
     public RenderKitImpl() {
@@ -246,7 +247,19 @@ public class RenderKitImpl extends RenderKit {
             characterEncoding = RIConstants.CHAR_ENCODING;
         }
 
-        return new HtmlResponseWriter(writer, contentType, characterEncoding);
+        if (isScriptHidingEnabled == null) {
+            WebConfiguration webConfig =
+                 WebConfiguration.getInstance(
+                      context.getExternalContext());
+            isScriptHidingEnabled = webConfig
+                 .getBooleanContextInitParameter(
+                      WebConfiguration.BooleanWebContextInitParameter.EnableJSStyleHiding);
+        }
+
+        return new HtmlResponseWriter(writer,
+                                      contentType,
+                                      characterEncoding,
+             isScriptHidingEnabled);
     }
 
     private String[] contentTypeSplit(String contentTypeString) {
