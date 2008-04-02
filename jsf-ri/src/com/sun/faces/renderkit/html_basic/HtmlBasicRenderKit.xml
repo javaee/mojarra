@@ -283,6 +283,11 @@
             </attribute>
             &html-text-input-attrs;
         </renderer>
+        
+        <renderer>
+            <type>Hidden</type>
+            <class>com.sun.faces.renderkit.html_basic.HiddenRenderer</class>
+        </renderer>    
     </component>
 
     <component>

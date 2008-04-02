@@ -437,6 +437,10 @@
 					</h:selectmany_checkboxlist></TD>
 </tr>
 
+<h:input_hidden id = "basicHidden" converter="number"
+                  value="48%" >
+                     <f:attribute name="numberStyle" value="percent "/>
+              </h:input_hidden>
 
   <TABLE>
 

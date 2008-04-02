@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.36 2002/10/14 19:26:21 rkitain Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.37 2002/10/31 17:59:19 jvisvanathan Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import javax.servlet.jsp.PageContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.36 2002/10/14 19:26:21 rkitain Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.37 2002/10/31 17:59:19 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -71,11 +71,11 @@ public String getExpectedOutputFilename() {
 }
 
 public static final String ignore[] = {
-    "<FORM METHOD=\"post\" ACTION=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=D38D7E728762EE5434EA9A4846CB9B67\">",
+    "<FORM METHOD=\"post\" ACTION=\"/test/faces/TestRenderResponsePhase.jsp;jsessionid=01012512B94456B39985D5613414B001\">",
     "                 <img src=\"/test/duke.gif;jsessionid=884241010348B244D954B77358716144\">",
     "                 <img src=\"/test/duke.gif;jsessionid=884241010348B244D954B77358716144\" class=\"buttonImage1\">",
-    "                 <input type=\"image\" src=\"duke.gif;jsessionid=D38D7E728762EE5434EA9A4846CB9B67\" name=\"/basicForm/pushButton\" disabled >",
-    "                 <input type=\"image\" src=\"duke.gif;jsessionid=D38D7E728762EE5434EA9A4846CB9B67\" name=\"/basicForm/imageOnlyButton\">",
+    "                 <input type=\"image\" src=\"duke.gif;jsessionid=01012512B94456B39985D5613414B001\" name=\"/basicForm/pushButton\" disabled >",
+    "                 <input type=\"image\" src=\"duke.gif;jsessionid=01012512B94456B39985D5613414B001\" name=\"/basicForm/imageOnlyButton\">",
 
 };
     

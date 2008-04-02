@@ -8,7 +8,7 @@
 
     <h1>UIInput</h1>
 
-    <h3>$Id: UIInput.jsp,v 1.6 2002/10/03 18:13:28 rkitain Exp $</h3>
+    <h3>$Id: UIInput.jsp,v 1.7 2002/10/31 17:59:21 jvisvanathan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
@@ -51,6 +51,8 @@
            <%@ include file="input_time_row.jsp" %>
   
            <%@ include file="input_number_row.jsp" %>
+
+           <%@ include file="input_hidden_row.jsp" %>
 
 <tr>
 <td><b>Errors:</b>

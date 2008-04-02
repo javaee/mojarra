@@ -1,5 +1,5 @@
 /**
- * $Id: TestRenderers_3.java,v 1.5 2002/10/07 22:58:07 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.6 2002/10/31 17:59:20 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -19,8 +19,14 @@ import javax.faces.component.UIComponentBase;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContextFactory;
 
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.util.Date;
+
+import com.sun.faces.renderkit.html_basic.HiddenRenderer;
 import org.apache.cactus.WebRequest;
 
 import com.sun.faces.JspFacesTestCase;
@@ -32,7 +38,7 @@ import com.sun.faces.tree.XmlTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.5 2002/10/07 22:58:07 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.6 2002/10/31 17:59:20 jvisvanathan Exp $
  * 
  *
  */
@@ -41,6 +47,10 @@ public class TestRenderers_3 extends JspFacesTestCase {
     //
     // Protected Constants
     //
+    public static String DATE_STR = "Jan 12, 1952";
+    
+    public static String NUMBER_STR = "47%";
+   
     public boolean sendWriterToFile() {
         return true;
     }
@@ -96,6 +106,9 @@ public class TestRenderers_3 extends JspFacesTestCase {
         theRequest.addParameter("/my_listbox", "Blue");
         theRequest.addParameter("/my_checkboxlist", "Blue");
         theRequest.addParameter("/my_onemenu", "Blue");
+        // parameters to test hidden renderer
+        theRequest.addParameter("/my_number_hidden", NUMBER_STR);
+        theRequest.addParameter("/my_input_date_hidden", DATE_STR);
 
     }
 
@@ -114,7 +127,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
             testSelectManyListboxRenderer(root);
             testSelectManyCheckboxListRenderer(root);
             testSelectOneMenuRenderer(root);
-
+            testHiddenRenderer(root);
             assertTrue(verifyExpectedOutput());
         }
         catch (Throwable t) {
@@ -314,6 +327,69 @@ public class TestRenderers_3 extends JspFacesTestCase {
         result = selectOneMenuRenderer.supportsComponentType(selectOne);
         assertTrue(result);
         result = selectOneMenuRenderer.supportsComponentType("FooBar");
+        assertTrue(!result);
+    }
+    
+    public void testHiddenRenderer(UIComponent root) throws IOException {
+        System.out.println("Testing Input_DateRenderer");
+        UIInput input1 = new UIInput();
+        input1.setValue(null);
+        input1.setComponentId("my_input_date_hidden");
+        input1.setAttribute("converter", "date");
+	input1.setAttribute("dateStyle", "medium");
+        root.addChild(input1);
+        HiddenRenderer hiddenRenderer = new HiddenRenderer();
+        
+        DateFormat dateformatter = 
+	    DateFormat.getDateInstance(DateFormat.MEDIUM,
+				       getFacesContext().getLocale());
+        
+        // test hidden renderer with converter set to date
+        // test decode method
+	System.out.println("    Testing decode method...");
+        hiddenRenderer.decode(getFacesContext(), input1);
+	Date date = (Date) input1.getValue();
+	assertTrue(null != date);
+	assertTrue(DATE_STR.equals(dateformatter.format(date)));
+        
+        // test encode method
+        System.out.println("    Testing encode method...");
+        hiddenRenderer.encodeBegin(getFacesContext(), input1);
+        hiddenRenderer.encodeEnd(getFacesContext(), input1);
+        getFacesContext().getResponseWriter().flush();
+        
+        // test hidden renderer with converter set to number
+        UIInput input2 = new UIInput();
+        input2.setValue(null);
+        input2.setComponentId("my_number_hidden");
+        input2.setAttribute("converter", "number");
+	input2.setAttribute("numberStyle", "percent");
+        root.addChild(input2);
+
+	NumberFormat numberformatter = 
+	    NumberFormat.getPercentInstance(getFacesContext().getLocale());
+        // test decode method
+        System.out.println("    Testing decode method...");
+        hiddenRenderer.decode(getFacesContext(), input2);
+	Number number = (Number) input2.getValue();
+	assertTrue(null != number);
+	assertTrue(NUMBER_STR.equals(numberformatter.format(number)));
+   
+        // test encode method
+        System.out.println("    Testing encode method...");
+        hiddenRenderer.encodeBegin(getFacesContext(), input2);
+        hiddenRenderer.encodeEnd(getFacesContext(), input2);
+        getFacesContext().getResponseWriter().flush();
+       
+
+        System.out.println("    Testing supportsComponentType methods..");
+
+        boolean result = false;
+        result = hiddenRenderer.supportsComponentType("javax.faces.component.UIInput");
+        assertTrue(result);
+        result = hiddenRenderer.supportsComponentType(input1);
+        assertTrue(result);
+        result = hiddenRenderer.supportsComponentType("FooBar");
         assertTrue(!result);
     }
 } // end of class TestRenderers_3

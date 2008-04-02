@@ -18,3 +18,4 @@
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
+<input type="hidden" name="/my_input_date_hidden" value="Jan 12, 1952"><input type="hidden" name="/my_number_hidden" value="47%">

@@ -413,6 +413,10 @@
                 <h:selectitem itemValue="9" itemLabel="Gordie Howe" /> 
                 <h:selectitem itemValue="2" itemLabel="Brad Park" /> 
             </h:selectone_menu> </TD>
+        <TD> <h:input_hidden id = "basicHidden" converter="number"
+                  value="48%" >
+                     <f:attribute name="numberStyle" value="percent "/>
+              </h:input_hidden> </TD>
       </TR>
 
     </TABLE>
