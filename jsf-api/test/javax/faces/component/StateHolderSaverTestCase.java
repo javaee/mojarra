@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaverTestCase.java,v 1.1 2004/01/19 20:06:42 eburns Exp $
+ * $Id: StateHolderSaverTestCase.java,v 1.2 2004/01/19 21:31:38 eburns Exp $
  */
 
 /*
@@ -19,6 +19,8 @@ import java.util.Map;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
+import javax.faces.convert.IntegerConverter;
 
 
 public class StateHolderSaverTestCase extends UIComponentBaseTestCase {
@@ -90,13 +92,13 @@ public class StateHolderSaverTestCase extends UIComponentBaseTestCase {
 
     public void testImplementsNeither() throws Exception {
 	StateHolderSaver saver = null;
-	Object  
-	    preSave = new Object(),
+	IntegerConverter  
+	    preSave = new IntegerConverter(),
 	    postSave = null;
 
 	saver = new StateHolderSaver(facesContext, preSave);
-	postSave = (String) saver.restore(facesContext);
-	assertEquals(null, postSave);
+	postSave = (IntegerConverter) saver.restore(facesContext);
+	assertTrue(true); // lack of ClassCastException
     }
 
 

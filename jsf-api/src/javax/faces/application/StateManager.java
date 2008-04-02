@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.27 2004/01/15 06:03:15 eburns Exp $
+ * $Id: StateManager.java,v 1.28 2004/01/19 21:31:37 eburns Exp $
  */
 
 /*
@@ -376,8 +376,8 @@ public abstract class StateManager {
      */
 
     public class SerializedView extends Object {
-	protected Object structure = null;
-	protected Object state = null;
+	private Object structure = null;
+	private Object state = null;
 
 	public SerializedView(Object newStructure, Object newState) {
 	    structure = newStructure;
