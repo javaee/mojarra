@@ -76,9 +76,9 @@
             value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
   <property name="commons-digester.jar" 
             value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
-  <property name="jsf.api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
-  <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
-  <property name="jsf.ri.jar"  value="${jsf.ri.home}/build/lib/jsf-ri.jar"/>
+  <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
+  <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_0.dtd"/>
+  <property name="jsf-ri.jar"  value="${jsf-ri.home}/build/lib/jsf-ri.jar"/>
 
 
 
@@ -101,8 +101,8 @@
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
-    <pathelement location="${jsf.api.jar}"/>
-    <pathelement location="${jsf.ri.jar}"/>
+    <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsf-ri.jar}"/>
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
@@ -206,8 +206,8 @@
     <copy file="${commons-logging.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${jstl.jar}" todir="${build.home}/WEB-INF/lib"/>
     <copy file="${standard.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jsf.api.jar}" todir="${build.home}/WEB-INF/lib"/>
-    <copy file="${jsf.ri.jar}" todir="${build.home}/WEB-INF/lib"/>
+    <copy file="${jsf-api.jar}" todir="${build.home}/WEB-INF/lib"/>
+    <copy file="${jsf-ri.jar}" todir="${build.home}/WEB-INF/lib"/>
   </target>
 
 
