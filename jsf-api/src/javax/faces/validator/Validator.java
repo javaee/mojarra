@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.17 2003/12/22 19:29:26 eburns Exp $
+ * $Id: Validator.java,v 1.18 2003/12/24 17:23:40 eburns Exp $
  */
 
 /*
@@ -19,10 +19,11 @@ import javax.faces.application.FacesMessage;
 
 /**
  * <p>A <strong>Validator</strong> implementation is a class that can
- * perform validation (correctness checks) on a {@link UIInput}.  Zero
- * or more <code>Validator</code>s can be associated with each {@link
- * UIInput} in the view, and are called during the <em>Process
- * Validations</em> phase of the request processing lifecycle.</p>
+ * perform validation (correctness checks) on a {@link
+ * javax.faces.component.UIInput}.  Zero or more <code>Validator</code>s
+ * can be associated with each {@link javax.faces.component.UIInput} in
+ * the view, and are called during the <em>Process Validations</em>
+ * phase of the request processing lifecycle.</p>
  *
  * <p>Individual {@link Validator}s should examine the value and
  * component that they are passed, and throw a {@link ValidatorException}

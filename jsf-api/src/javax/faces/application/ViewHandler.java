@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.27 2003/12/22 23:25:42 eburns Exp $
+ * $Id: ViewHandler.java,v 1.28 2003/12/24 17:23:39 eburns Exp $
  */
 
 /*
@@ -151,7 +151,8 @@ public interface ViewHandler {
      * phases between <em>Restore View</em> and <em>Render Response</em>
      * to be skipped.<p>
      *
-     * <p>Before returning the {@link UIViewRoot}, the default
+     * <p>Before returning, <strong>and before any request parameters
+     * are read</strong> the {@link UIViewRoot}, the default
      * implementation must attempt to set the character encoding for
      * this request.  First, the <code>Content-Type</code> header is
      * consulted.  If a character encoding can be found there, set it as

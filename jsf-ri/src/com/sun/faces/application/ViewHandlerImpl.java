@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.26 2003/12/22 23:25:49 eburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.27 2003/12/24 17:23:40 eburns Exp $ 
  */ 
 
 
@@ -44,7 +44,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.26 2003/12/22 23:25:49 eburns Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.27 2003/12/24 17:23:40 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -153,40 +153,9 @@ public class ViewHandlerImpl extends Object
         }        
 
         ExternalContext extContext = context.getExternalContext();
-        String mapping = getFacesMapping(context);
-        UIViewRoot viewRoot = null;
-        
-        if (mapping != null && !isPrefixMapped(mapping)) {
-            viewId = convertViewId(context, viewId);
-        }
-        
-        // maping could be null if a non-faces request triggered
-        // this response.
-        if (extContext.getRequestPathInfo() == null && mapping != null &&
-            isPrefixMapped(mapping)) {                                   
-            // this was probably an initial request
-            // send them off to the root of the web application
-            try {
-                Object response = extContext.getResponse();
-                context.responseComplete();
-                if (log.isDebugEnabled()) {
-                    log.debug("Response Complete for" + viewId);
-                }
-                // PENDING -- Need to consider Portlets
-                if (response instanceof HttpServletResponse) {
-                    ((HttpServletResponse) response).sendRedirect(
-                        extContext.getRequestContextPath());
-                }
-            } catch (IOException ioe) {
-                throw new FacesException(ioe);
-            }           
-        } 
-	else {
-	    viewRoot = Util.getStateManager(context).restoreView(context, viewId);
-        }        
-	
 
-	// set the request character encoding 
+	// set the request character encoding. NOTE! This MUST be done
+	// before any request praameter is accessed.
 	HttpSession session = null;
 	HttpServletRequest request = 
 	    (HttpServletRequest) extContext.getRequest();
@@ -229,6 +198,38 @@ public class ViewHandlerImpl extends Object
 		throw new FacesException(uee);
 	    }
 	}
+
+        String mapping = getFacesMapping(context);
+        UIViewRoot viewRoot = null;
+        
+        if (mapping != null && !isPrefixMapped(mapping)) {
+            viewId = convertViewId(context, viewId);
+        }
+        
+        // maping could be null if a non-faces request triggered
+        // this response.
+        if (extContext.getRequestPathInfo() == null && mapping != null &&
+            isPrefixMapped(mapping)) {                                   
+            // this was probably an initial request
+            // send them off to the root of the web application
+            try {
+                Object response = extContext.getResponse();
+                context.responseComplete();
+                if (log.isDebugEnabled()) {
+                    log.debug("Response Complete for" + viewId);
+                }
+                // PENDING -- Need to consider Portlets
+                if (response instanceof HttpServletResponse) {
+                    ((HttpServletResponse) response).sendRedirect(
+                        extContext.getRequestContextPath());
+                }
+            } catch (IOException ioe) {
+                throw new FacesException(ioe);
+            }           
+        } 
+	else {
+	    viewRoot = Util.getStateManager(context).restoreView(context, viewId);
+        }        
 	
         return viewRoot;
     }
