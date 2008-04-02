@@ -50,11 +50,6 @@
       <f:use_faces>
         <h:form id="mapForm" formName="mapForm" bundle="mapBundle" >
 
-<p>You can mouse over and click on some parts of the world that speak
-U.S. English, French, German, Finnish, and Latin American Spanish.  This
-will cause the appropriate Locale to be set into the application,
-causing the proper ResourceBundle lookup.</p>
-
 	<table> 
              <tr> 
               <td> <h:output_text id="welcomeLabel" key="welcomeLabel" 
@@ -73,9 +68,25 @@ causing the proper ResourceBundle lookup.</p>
 		</d:map>
 	     </TD></TR>
 	</TABLE>
+<hr>
 	</h:form>
-       </f:use_faces>
 
 <a href='<%= request.getContextPath() + "/index.jsp" %>'>Back</a> to home page.
 
+<h1>How to Use this Component</h1>
+
+<p>This component renders a clickable image map of the world and regions can be selected to change the locale.</p>
+<p>You can mouse over and click on some parts of the world that speak
+U.S. English, French, German, Finnish, and Latin American Spanish.  This
+will cause the appropriate Locale to be set into the application,
+causing the proper ResourceBundle lookup.</p>
+
+<h1>Custom Tags / Components</h1>
+
+<p>The <code>UIMap</code> component is driven by the <code>map</code> tag, and it keeps track of the the selected area on the map.  It determines the selected area from the incoming request.</p>
+
+<p>The <code>UIArea</code> component is driven by the <code>area</code> tag. It uses Javascript events to visually show the selected area, and it sends the identifier of the selected area as part of the request.  This tag must be nested within the <code>map</code> tag.</p>
+
+<hr>
 </HTML>
+</f:use_faces>
