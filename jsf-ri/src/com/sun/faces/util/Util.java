@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.100 2003/10/07 20:16:08 horwat Exp $
+ * $Id: Util.java,v 1.101 2003/10/11 04:53:03 horwat Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.100 2003/10/07 20:16:08 horwat Exp $ 
+ * @version $Id: Util.java,v 1.101 2003/10/11 04:53:03 horwat Exp $ 
  */
 
 public class Util extends Object
@@ -932,8 +932,7 @@ private Util()
         if (expression != null) {
             //PENDING: horwat: put in quick and dirty expression check.
             //this method will be called often so it needs to be efficient!
-            if ((expression.indexOf("${") != -1) && 
-                (expression.indexOf('}') != -1)) {
+            if (isElExpression(expression)) {
 
                 ExpressionInfo exprInfo = new ExpressionInfo();
                 exprInfo.setExpressionString(expression);
@@ -949,6 +948,18 @@ private Util()
         }
 
         return expression;
+    }
+
+    /*
+     * Determine whether String is an expression or not.
+     */
+    public static boolean isElExpression(String expression) {
+        //check to see if attribute has an expression
+        if ((expression.indexOf("${") != -1) &&
+            (expression.indexOf("${") < expression.indexOf('}'))) {
+            return true;
+        }
+        return false;
     }
     
     public static StateManager getStateManager(FacesContext context) 

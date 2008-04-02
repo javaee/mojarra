@@ -1,5 +1,5 @@
 /*
- * $Id: ElTagParserImpl.java,v 1.3 2003/10/08 06:24:08 horwat Exp $
+ * $Id: ElTagParserImpl.java,v 1.4 2003/10/11 04:53:03 horwat Exp $
  */
 
 /*
@@ -102,8 +102,7 @@ public class ElTagParserImpl implements TagParser {
             String qname = attrs.getQName(i);
 
             //check to see if attribute has an expression
-            if ((value.indexOf("${") != -1) &&
-                (value.indexOf("${") < value.indexOf("}"))) {
+            if (Util.isElExpression(value)) {
                 ExpressionEvaluator evaluator = 
                     Util.getExpressionEvaluator(RIConstants.JSP_EL_PARSER);
                 ExpressionInfo exprInfo = new ExpressionInfo();
