@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.70 2003/11/11 01:22:44 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.71 2003/11/11 05:54:34 craigmcc Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.70 2003/11/11 01:22:44 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.71 2003/11/11 05:54:34 craigmcc Exp $
  * 
  *
  */
@@ -149,34 +149,29 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("myOutputMessage", "outputmessage");
     } 
 
-    public void testRenderers() {
+    public void testRenderers() throws Exception {
 
-        try {
-            // create a dummy root for the tree.
-            UIViewRoot root = new UIViewRoot();
-            root.setId("root");
+        // create a dummy root for the tree.
+        UIViewRoot root = new UIViewRoot();
+        root.setId("root");
 
-            testCheckboxRenderer(root);
-            // PENDING (visvan) revisit this test case once HyperLinkRenderer
-            // is fixed.
-            // testLinkRenderer(root);
-            getFacesContext().getResponseWriter().startDocument();
-            testListboxRenderer(root);
-            testSecretRenderer(root);
-            testInputTextRenderer(root);
-            testOutputTextRenderer(root);
-            testTextareaRenderer(root);
-            testGraphicImageRenderer(root);            
-            testOutputMessageRenderer(root);
-            testMessageRenderer(root);
-            testMessagesRenderer(root);
-            getFacesContext().getResponseWriter().endDocument();
-            assertTrue(verifyExpectedOutput());
-        } catch (Throwable t) {
-            t.printStackTrace();
-            assertTrue(false);
-            return;
-        }
+        testCheckboxRenderer(root);
+        // PENDING (visvan) revisit this test case once HyperLinkRenderer
+        // is fixed.
+        // testLinkRenderer(root);
+        getFacesContext().getResponseWriter().startDocument();
+        testListboxRenderer(root);
+        testSecretRenderer(root);
+        testInputTextRenderer(root);
+        testOutputTextRenderer(root);
+        testTextareaRenderer(root);
+        testGraphicImageRenderer(root);            
+        testOutputMessageRenderer(root);
+        testMessageRenderer(root);
+        testMessagesRenderer(root);
+        getFacesContext().getResponseWriter().endDocument();
+        assertTrue(verifyExpectedOutput());
+
     }
     
     //
