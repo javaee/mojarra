@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.87 2007/02/22 01:06:59 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.88 2007/02/24 05:24:00 rlubke Exp $
  */
 
 /*
@@ -426,10 +426,10 @@ public class ApplicationImpl extends Application {
     }
 
     @SuppressWarnings("deprecation")
-    public synchronized void setPropertyResolver(PropertyResolver resolver) {
+    public void setPropertyResolver(PropertyResolver resolver) {
         // Throw Illegal State Exception if  a PropertyResolver is set after 
-        // application initialization has completed. 
-        if (FacesContext.getCurrentInstance() != null) {
+        // a request has been processed.
+         if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
                     MessageUtils.getExceptionMessageString(
                     MessageUtils.APPLICATION_INIT_COMPLETE_ERROR_ID));
@@ -506,14 +506,15 @@ public class ApplicationImpl extends Application {
     }
 
     @SuppressWarnings("deprecation")
-    public synchronized void setVariableResolver(VariableResolver resolver) {
-        // Throw Illegal State Exception if VariableResolver is set after 
-        // application initialization has completed. 
-        if (FacesContext.getCurrentInstance() != null) {
+    public void setVariableResolver(VariableResolver resolver) {
+        // Throw Illegal State Exception if  a PropertyResolver is set after
+        // a request has been processed. 
+        if (associate.hasRequestBeenServiced()) {
             throw new IllegalStateException(
                     MessageUtils.getExceptionMessageString(
                     MessageUtils.APPLICATION_INIT_COMPLETE_ERROR_ID));
         }
+
         if (resolver == null) {
             String message = MessageUtils.getExceptionMessageString
                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "resolver");

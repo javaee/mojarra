@@ -51,6 +51,10 @@ import com.sun.faces.util.Util;
 /**
  * <p>This class is used to register the JSF <code>ELResolver</code>
  * stack with the JSP container.</p>
+ *
+ * <p>We overload it a bit to set a bit on the ApplicationAssociate
+ * stating we've processed a request to indicate the appliation is fully
+ * initialized.</p>
  * 
  * <p>After the first request, this <code>PhaseListener</code> will remove
  * itself from all registered lifecycle instances registered with the 
@@ -96,7 +100,11 @@ public class ELResolverInitPhaseListener implements PhaseListener {
      */
 
     public synchronized void beforePhase(PhaseEvent event) {
-        if (!preInitCompleted) {            
+        if (!preInitCompleted) {
+            ApplicationAssociate associate =
+                 ApplicationAssociate.getInstance(
+                      FacesContext.getCurrentInstance().getExternalContext());
+            associate.setRequestServiced();
             populateFacesELResolverForJsp(event.getFacesContext());
             preInitCompleted = true;
 

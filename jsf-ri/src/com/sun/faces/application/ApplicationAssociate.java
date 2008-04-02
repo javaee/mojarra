@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.37 2007/02/05 04:04:36 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.38 2007/02/24 05:24:00 rlubke Exp $
  */
 
 /*
@@ -135,6 +135,7 @@ public class ApplicationAssociate {
     private InjectionProvider injectionProvider;
 
     private String contextName;
+    private boolean requestServiced;
 
     public ApplicationAssociate(ApplicationImpl appImpl) {
     app = appImpl;
@@ -286,6 +287,15 @@ public class ApplicationAssociate {
     @SuppressWarnings("deprecation")
     public VariableResolver getLegacyVariableResolver(){
         return legacyVariableResolver;
+    }
+
+
+    public void setRequestServiced() {
+        this.requestServiced = true;
+    }
+
+    public boolean hasRequestBeenServiced() {
+        return requestServiced;
     }
 
 
