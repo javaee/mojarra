@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.71 2006/05/05 16:41:34 edburns Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.72 2006/05/10 00:24:50 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.71 2006/05/05 16:41:34 edburns Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.72 2006/05/10 00:24:50 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -469,9 +469,13 @@ public class ViewHandlerImpl extends ViewHandler {
         
         // Follow the JSTL 1.2 spec, section 7.4,  
         // on handling status codes on a forward
-        if (wrapped.getStatus() < 200 || wrapped.getStatus() > 299) {
+        if (wrapped.getStatus() < 200 || wrapped.getStatus() > 299) {  
+            // flush the contents of the wrapper to the response
+            // this is necessary as the user may be using a custom 
+            // error page - this content should be propagated
+            wrapped.flushContentToWrappedResponse();
             return true;            
-        }
+        }               
         
         // Put the AFTER_VIEW_CONTENT into request scope
         // temporarily
