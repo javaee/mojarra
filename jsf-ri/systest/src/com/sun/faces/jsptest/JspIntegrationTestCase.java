@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.2 2003/09/30 20:20:20 craigmcc Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.3 2003/10/21 03:56:31 eburns Exp $
  */
 
 /*
@@ -94,11 +94,7 @@ public class JspIntegrationTestCase extends AbstractTestCase {
                           "[A] { [1] [3] } [Z]");
 
         checkJspDynamic00();
-        /* PENDING(craigmcc) - this should have switched pages and deleted
-           the previous component tree.  However, the following check fails
-           because the old children are still present.  Need to investigate
-           why that happens, because it means we can't run the remainder
-           of the tests in this method.
+	client = new WebClient();
         checkJspDynamic01("",
                           "[A] { } [Z]");
 
@@ -113,10 +109,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         checkJspDynamic01("?mode=create&value=[3]",
                           "[A] { [1] [2] [3] } [Z]");
         checkJspDynamic00();
+	client = new WebClient();
         checkJspDynamic01("",
                           "[A] { } [Z]");
-        */
-
     }
 
 

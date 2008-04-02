@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.20 2003/10/02 06:50:17 jvisvanathan Exp $
+ * $Id: TestSaveStateInPage.java,v 1.21 2003/10/21 03:56:32 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.20 2003/10/02 06:50:17 jvisvanathan Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.21 2003/10/21 03:56:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -176,7 +176,8 @@ public void testSaveStateInClient()
 	(StateManagerImpl) viewHandler.getStateManager();
     TreeStructure structRoot = 
         new TreeStructure(((UIComponent)getFacesContext().getViewRoot()));
-    stateManager.buildTreeStructureToSave(((UIComponent)root),
+    stateManager.buildTreeStructureToSave(getFacesContext(), 
+					  ((UIComponent)root),
 					  structRoot);
    
    // make sure restored tree structure is correct

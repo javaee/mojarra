@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.8 2003/10/20 21:32:51 jvisvanathan Exp $ 
+ * $Id: StateManagerImpl.java,v 1.9 2003/10/21 03:56:28 eburns Exp $ 
  */ 
 
 
@@ -26,14 +26,13 @@ import com.sun.faces.RIConstants;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.8 2003/10/20 21:32:51 jvisvanathan Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.9 2003/10/21 03:56:28 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -52,7 +51,7 @@ public class StateManagerImpl extends StateManager  {
         if (!isSavingStateInClient(context)) {
             // honor the transient property and remove children from the tree
             // that are marked transient.
-            removeTransientChildrenAndFacets(viewRoot, new HashSet());   
+            removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
            
             Map sessionMap = Util.getSessionMap(context);
             sessionMap.put(viewRoot.getViewId(), viewRoot); 
@@ -63,7 +62,8 @@ public class StateManagerImpl extends StateManager  {
         return result;
     }
     
-    protected void removeTransientChildrenAndFacets(UIComponent component,
+    protected void removeTransientChildrenAndFacets(FacesContext context,
+						    UIComponent component,
                                                     Set componentIds) {
         UIComponent kid;
         // deal with children that are marked transient.
@@ -72,20 +72,22 @@ public class StateManagerImpl extends StateManager  {
         while (kids.hasNext()) {
             kid = (UIComponent) kids.next();
             
-            // check for id uniqueness
-            id = kid.getId();
-            if (id != null && !componentIds.add(id)) {
-                throw new IllegalStateException(
-                    Util.getExceptionMessage(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id})
-                );
-            }
+	    if (null != kid.getId()) {
+		// check for id uniqueness
+		id = kid.getClientId(context);
+		if (id != null && !componentIds.add(id)) {
+		    throw new IllegalStateException(
+		    Util.getExceptionMessage(
+					Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+					new Object[]{id})
+		    );
+		}
+	    }
             
             if (kid.isTransient()) {
                 kids.remove();
             } else {                
-                removeTransientChildrenAndFacets(kid, componentIds);
+                removeTransientChildrenAndFacets(context, kid, componentIds);
             }
         }
         // deal with facets that are marked transient.
@@ -93,20 +95,22 @@ public class StateManagerImpl extends StateManager  {
         while (kids.hasNext()) {
             kid = (UIComponent) kids.next();
             
-            // check for id uniqueness
-            id = kid.getId();
-            if (id != null && !componentIds.add(id)) {
-                throw new IllegalStateException(
-                    Util.getExceptionMessage(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id})
-                );
-            }
-            
+	    if (null != kid.getId()) {
+		// check for id uniqueness
+		id = kid.getClientId(context);
+		if (id != null && !componentIds.add(id)) {
+		    throw new IllegalStateException(
+                       Util.getExceptionMessage(
+				   Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+				   new Object[]{id})
+		       );
+		}
+	    }
+
             if (kid.isTransient()) {
                 kids.remove();
             } else {               
-                removeTransientChildrenAndFacets(kid, componentIds);
+                removeTransientChildrenAndFacets(context, kid, componentIds);
             }
             
         }
@@ -123,7 +127,7 @@ public class StateManagerImpl extends StateManager  {
         UIComponent viewRoot = context.getViewRoot();
         if (!(viewRoot.isTransient())) {
             structRoot = new TreeStructure(viewRoot);
-            buildTreeStructureToSave(viewRoot, structRoot);
+            buildTreeStructureToSave(context, viewRoot, structRoot);
         }
         return structRoot;
     }
@@ -173,7 +177,8 @@ public class StateManagerImpl extends StateManager  {
      * Builds a hierarchy of TreeStrucure objects simulating the component
      * tree hierarchy.
      */
-    public void  buildTreeStructureToSave(UIComponent component, 
+    public void  buildTreeStructureToSave(FacesContext context,
+					  UIComponent component, 
             TreeStructure treeStructure) {
         // traverse the component hierarchy and save the tree structure 
         // information for every component.
@@ -188,22 +193,24 @@ public class StateManagerImpl extends StateManager  {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();    
             
-            // check for id uniqueness
-            id = kid.getId();
-            if (id != null && !componentIds.add(id)) {
-                throw new IllegalStateException(
+	    if (null != kid.getId()) {
+		// check for id uniqueness
+		id = kid.getClientId(context);
+		if (id != null && !componentIds.add(id)) {
+		    throw new IllegalStateException(
                     Util.getExceptionMessage(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id})
-                );
-            }
+					  Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+					  new Object[]{id})
+		    );
+		}
+	    }
             
             // if a component is marked transient do not persist its state as
             // well as its children.
             if (!kid.isTransient()) {                                               
                 TreeStructure treeStructureChild = new TreeStructure(kid);
                 treeStructure.addChild(treeStructureChild);
-                buildTreeStructureToSave(kid, treeStructureChild);
+                buildTreeStructureToSave(context, kid, treeStructureChild);
             }
         }
 
@@ -215,14 +222,16 @@ public class StateManagerImpl extends StateManager  {
             UIComponent facetComponent = (UIComponent) component.getFacets().
                     get(facetName);
             
-            // check for id uniqueness
-            id = facetComponent.getId();
-            if (id != null && !componentIds.add(id)) {
-                throw new IllegalStateException(
+	    if (null != facetComponent.getId()) {
+		// check for id uniqueness
+		id = facetComponent.getClientId(context);
+		if (id != null && !componentIds.add(id)) {
+		    throw new IllegalStateException(
                     Util.getExceptionMessage(
-                        Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
-                        new Object[]{id})
-                );
+				       Util.DUPLICATE_COMPONENT_ID_ERROR_ID,
+				       new Object[]{id})
+		    );
+		}
             }
             
             // if a facet is marked transient do not persist its state as well as
@@ -232,7 +241,8 @@ public class StateManagerImpl extends StateManager  {
                         new TreeStructure(facetComponent);
                 treeStructure.addFacet(facetName, treeStructureFacet);
                 // process children of facet.
-                buildTreeStructureToSave(facetComponent, treeStructureFacet);
+                buildTreeStructureToSave(context, 
+					 facetComponent, treeStructureFacet);
             }
         }
     }

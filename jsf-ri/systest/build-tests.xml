@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.30 2003/10/13 18:08:47 rlubke Exp $
+ $Id: build-tests.xml,v 1.31 2003/10/21 03:56:29 eburns Exp $
 -->
 
 
@@ -33,6 +33,9 @@
   <property name="local.golden.path" value="${basedir}/web/golden"/>
   <property name="htmlunit.home" value="${tomcat.home}/../htmlunit-1.2.3"/>
 
+  <!-- Default value for debugging arguments is no.  Override in
+       build.properties -->
+  <property name="debug.jvm.args" value=""/>
 
   <!-- SystestClient taskdef classpath -->
   <path id="test.classpath">
@@ -158,8 +161,11 @@
   <target name="test.jsp"
    description="Test JSP Integration">
 
-    <junit printsummary="yes" fork="no"
+    <junit printsummary="yes" fork="yes"
           haltonfailure="yes" haltonerror="yes">
+
+      <!-- uncomment the below line to enable attaching a debugger -->
+      <jvmarg line="${debug.jvm.args}"/>
 
       <classpath refid="html.classpath"/>
       <formatter  type="plain"      usefile="false"/>
@@ -182,7 +188,7 @@
 
       <batchtest>
         <fileset    dir="${basedir}/build/WEB-INF/classes"
-               includes="com/sun/faces/jsptest/*TestCase.class"/>
+               includes="com/sun/faces/jsptest/JspIntegrationTestCase.class"/>
       </batchtest>
 
     </junit>

@@ -1,5 +1,5 @@
 /*
- * $Id: AbstractTestCase.java,v 1.2 2003/09/05 18:57:04 eburns Exp $
+ * $Id: AbstractTestCase.java,v 1.3 2003/10/21 03:56:30 eburns Exp $
  */
 
 /*
@@ -202,6 +202,36 @@ public abstract class AbstractTestCase extends TestCase {
         sessionId = value;
         //        System.err.println("Beginning session " + sessionId);
 
+    }
+
+    protected boolean clearAllCookies() {
+	if (null == state) {
+	    state = client.getWebConnection().getStateForUrl(domainURL);
+	    if (null == state) {
+		return false;
+	    }
+	}
+
+	Cookie[] cookies  = state.getCookies();
+	if (null == cookies) {
+	    return false;
+	}
+	java.util.Date exp = null;
+	long 
+	    curTime = System.currentTimeMillis(),
+	    latestTime = curTime; 
+	// find the freshest cookie
+	for (int i = 0, len = cookies.length; i < len; i++) {
+	    if (null != (exp = cookies[i].getExpiryDate())) {
+		curTime = exp.getTime();
+		if (latestTime < curTime) {
+		    curTime = latestTime;
+		}
+	    }
+	}
+	boolean result = 
+	    state.purgeExpiredCookies(new java.util.Date(latestTime));
+	return result;
     }
 
 

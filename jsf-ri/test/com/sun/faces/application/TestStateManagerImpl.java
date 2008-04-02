@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.1 2003/10/03 17:43:40 rlubke Exp $
+ * $Id: TestStateManagerImpl.java,v 1.2 2003/10/21 03:56:31 eburns Exp $
  */
 
 /*
@@ -48,26 +48,37 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
     // if duplicate component id's are detected on non-transient 
     // components.
     public void testDuplicateIdDetection() throws Exception {
+
+        UIViewRoot root = null;
         
+        UIComponent comp1 = null;
+        
+        UIComponent comp2 = null;
+        
+        UIComponent comp3 = null;
+        
+        UIComponent facet1 = null;
+        
+        UIComponent facet2 = null;
         
         // construct a view
-        UIViewRoot root = new UIViewRoot();
+        root = new UIViewRoot();
         root.setViewId("/test");
         root.setId("root");
         
-        UIComponent comp1 = new UIInput();
+        comp1 = new UIInput();
         comp1.setId("comp1");
         
-        UIComponent comp2 = new UIOutput();
+        comp2 = new UIOutput();
         comp2.setId("comp2");
         
-        UIComponent comp3 = new UIGraphic();
+        comp3 = new UIGraphic();
         comp3.setId("comp3");
         
-        UIComponent facet1 = new UIOutput();
+        facet1 = new UIOutput();
         facet1.setId("comp4");
         
-        UIComponent facet2 = new UIOutput();
+        facet2 = new UIOutput();
         facet2.setId("comp2");
         
         comp2.getFacets().put("facet1", facet1);
@@ -99,8 +110,36 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         // multiple componentns with a null ID should not
         // trigger an exception
+        // construct a view
+        root = new UIViewRoot();
+        root.setViewId("/test");
+        root.setId("root");
+        
+        comp1 = new UIInput();
+        comp1.setId("comp1");
+        
+        comp2 = new UIOutput();
         comp2.setId(null);
+        
+        comp3 = new UIGraphic();
         comp3.setId(null);
+        
+        facet1 = new UIOutput();
+        facet1.setId("comp4");
+        
+        facet2 = new UIOutput();
+        facet2.setId("comp2");
+        
+        comp2.getFacets().put("facet1", facet1);
+        comp2.getFacets().put("facet2", facet2);
+        
+        root.getChildren().add(comp1);
+        root.getChildren().add(comp2);
+        root.getChildren().add(comp3);
+                
+        session.setAttribute("/test", root);
+        
+        context.setViewRoot(root);
         
         exceptionThrown = false;
         try {
@@ -112,10 +151,38 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         // transient components with duplicate ids should 
         // trigger an error condition
-        comp2.setId("comp2");
+        // construct a view
+        root = new UIViewRoot();
+        root.setViewId("/test");
+        root.setId("root");
+        
+        comp1 = new UIInput();
+        comp1.setId("comp1");
+        comp1.setTransient(true);
+        
+        comp2 = new UIOutput();
+        comp2.setId("comp1");
         comp2.setTransient(true);
-        comp3.setId("comp1");
-        comp3.setTransient(true);
+        
+        comp3 = new UIGraphic();
+        comp3.setId("comp3");
+        
+        facet1 = new UIOutput();
+        facet1.setId("comp4");
+        
+        facet2 = new UIOutput();
+        facet2.setId("comp2");
+        
+        comp2.getFacets().put("facet1", facet1);
+        comp2.getFacets().put("facet2", facet2);
+        
+        root.getChildren().add(comp1);
+        root.getChildren().add(comp2);
+        root.getChildren().add(comp3);
+                
+        session.setAttribute("/test", root);
+        
+        context.setViewRoot(root);
         
         exceptionThrown = false;
         try {
@@ -125,4 +192,5 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         }
         assertTrue(exceptionThrown);
     }
+	
 }
