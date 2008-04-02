@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.8 2006/05/17 19:00:51 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.9 2006/05/30 20:49:24 rlubke Exp $
  */
 
 /*
@@ -31,13 +31,6 @@
 
 package com.sun.faces.systest.render;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
@@ -49,6 +42,12 @@ import javax.faces.render.Renderer;
 
 import java.io.IOException;
 import java.util.Map;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -286,8 +285,7 @@ public class ButtonRenderer extends Renderer {
                 writer.writeAttribute("id", component.getClientId(context),
                                       "id");
             } catch (IOException e) {
-                if (log.isDebugEnabled()) {
-                    // PENDING I18N
+                if (log.isDebugEnabled()) {                   
                     log.debug("Can't write ID attribute" + e.getMessage());
                 }
             }

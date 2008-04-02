@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.18 2006/05/17 19:00:51 rlubke Exp $
+ * $Id: TextRenderer.java,v 1.19 2006/05/30 20:49:24 rlubke Exp $
  */
 
 /*
@@ -31,14 +31,6 @@
 
 package com.sun.faces.systest.render;
 
-import com.sun.org.apache.commons.logging.Log;
-import com.sun.org.apache.commons.logging.LogFactory;
-
-import com.sun.faces.util.MessageFactory;
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
@@ -51,6 +43,13 @@ import javax.faces.convert.ConverterException;
 import javax.faces.render.Renderer;
 
 import java.io.IOException;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageFactory;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
+import com.sun.org.apache.commons.logging.Log;
+import com.sun.org.apache.commons.logging.LogFactory;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of
@@ -338,8 +337,7 @@ public class TextRenderer extends Renderer {
                 writer.writeAttribute("id", component.getClientId(context),
                                       "id");
             } catch (IOException e) {
-                if (log.isDebugEnabled()) {
-                    // PENDING I18N
+                if (log.isDebugEnabled()) {                   
                     log.debug("Can't write ID attribute" + e.getMessage());
                 }
             }
