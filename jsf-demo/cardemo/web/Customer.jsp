@@ -50,6 +50,7 @@
     <%@ taglib uri="/WEB-INF/cardemo.tld" prefix="cd" %>
 </head>
 <body>
+<jsp:useBean id="creditCardConverter" class="cardemo.CreditCardConverter" scope="session" />
 <fmt:setBundle
 	    basename="cardemo.Resources"
 	    scope="session" var="cardemoBundle"/>
@@ -200,7 +201,7 @@
       </font></td>
                                 <td valign="top"> <font face="Arial, Helvetica">
       <h:input_text id="ccno" size="16"
-           converter="creditcard" required="true">
+           converter="<%= creditCardConverter %>" required="true">
           <cd:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
       </h:input_text>
