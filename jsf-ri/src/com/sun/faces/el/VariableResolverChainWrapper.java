@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverChainWrapper.java,v 1.13 2006/09/01 01:22:51 tony_robertson Exp $
+ * $Id: VariableResolverChainWrapper.java,v 1.14 2006/11/30 19:58:53 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -37,8 +37,7 @@ import javax.faces.el.EvaluationException;
 import javax.faces.el.VariableResolver;
 
 import java.beans.FeatureDescriptor;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 import com.sun.faces.util.MessageUtils;
 
@@ -79,26 +78,37 @@ public class VariableResolverChainWrapper extends ELResolver {
         FacesContext facesContext = (FacesContext)
             context.getContext(FacesContext.class);
         Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+        String propString = property.toString();
         try {
 	    // If we are already in the midst of an expression evaluation
 	    // that touched this resolver...
-            if (null != requestMap.get(REENTRANT_GUARD)) {
+            List<String> varNames = (List<String>) requestMap.get(REENTRANT_GUARD);
+            if (varNames != null
+                 && !varNames.isEmpty()
+                 && varNames.contains(propString)) {
 		// take no action and return.
                 context.setPropertyResolved(false);
                 return null;
             }
-	    // Make sure subsequent calls don't take action.
-            requestMap.put(REENTRANT_GUARD, REENTRANT_GUARD);
+	        // Make sure subsequent calls don't take action.
+            if (varNames == null) {
+                varNames = new ArrayList<String>();
+                requestMap.put(REENTRANT_GUARD, varNames);
+            }
+            varNames.add(propString);
             
             result = legacyVR.resolveVariable(facesContext,
-                                              (String)property);                               
+                                              propString);
         } catch (EvaluationException ex) {
             context.setPropertyResolved(false);
             throw new ELException(ex);
         }
 	finally {
 	    // Make sure to remove the guard after the call returns
-            requestMap.remove(REENTRANT_GUARD);
+            List<String> varNames = (List<String>) requestMap.get(REENTRANT_GUARD);
+            if (varNames != null && !varNames.isEmpty()) {
+                varNames.remove(propString);
+            }
             // Make sure that the ELContext "resolved" indicator is set 
             // in accordance wth the result of the resolution.
             context.setPropertyResolved(result != null);
