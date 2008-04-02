@@ -220,7 +220,7 @@
 
 	<TD>
             
-            <h:selectmanyCheckbox  id="checkbox1" rendered="true"
+            <h:selectManyCheckbox  id="checkbox1" rendered="true"
                    styleClass="selectbooleanClass"/>
              <h:outputLabel id="labe11" for="checkbox1">
                         <h:outputText id="outputlabel" value="Checkbox"/>
@@ -233,7 +233,7 @@
 
 	<TD>
 
-	     <h:selectoneListbox styleClass="selectoneClass"
+	     <h:selectOneListbox styleClass="selectoneClass"
                      title="Select Quantity"
                      tabindex="20" >
 
@@ -248,7 +248,7 @@
                 <f:selectItem  itemValue="8" itemLabel="8" />
                 <f:selectItem  itemValue="9" itemLabel="9" />
 
-              </h:selectoneListbox>
+              </h:selectOneListbox>
 
 	</TD>
 
@@ -258,7 +258,7 @@
 
 	<TD>
 
-	    <h:selectoneRadio id="shipType" layout="LINE_DIRECTION" 
+	    <h:selectOneRadio id="shipType" layout="LINE_DIRECTION" 
                 tabindex="3" disabledClass="disabledClass" 
                 enabledClass="enabledClass" accesskey="A" 
                 styleClass = "styleClass">
@@ -267,7 +267,7 @@
                 <f:selectItem itemValue="nextWeek" itemLabel="Next Week" />
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
                  
-              </h:selectoneRadio>
+              </h:selectOneRadio>
 
 	</TD>
 
@@ -276,7 +276,7 @@
       <TR>
 
 	<TD>
-            <h:selectoneRadio id="verticalRadio" 
+            <h:selectOneRadio id="verticalRadio" 
                                             layout="pageDirection" border="1" >
 
                 <f:selectItem itemValue="nextDay" itemLabel="Next Day"
@@ -285,7 +285,7 @@
                         disabled="false"/>
                 <f:selectItem itemValue="nextMonth" itemLabel="Next Month" />
 
-           </h:selectoneRadio>
+           </h:selectOneRadio>
 
 	</TD>
 
@@ -490,7 +490,7 @@
 
 <tr>
 					<TD>Multi-select menu:</TD>
-					<TD><h:selectmanyMenu id="ManyApples" styleClass="selectmanyClass">
+					<TD><h:selectManyMenu id="ManyApples" styleClass="selectmanyClass">
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -501,13 +501,13 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmanyMenu></TD>
+					</h:selectManyMenu></TD>
 
 </tr>
 
 <tr>
 					<TD>Multi-select listbox:</TD>
-					<TD><h:selectmanyListbox >
+					<TD><h:selectManyListbox >
 						<f:selectItem itemValue="0" itemLabel="zero" />
 						<f:selectItem itemValue="1" itemLabel="one" />
 						<f:selectItem itemValue="2" itemLabel="two" />
@@ -518,11 +518,11 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmanyListbox></TD>
+					</h:selectManyListbox></TD>
 </tr>
 
 <tr>
-					<TD><h:selectmanyCheckbox id="ManyApples3" 
+					<TD><h:selectManyCheckbox id="ManyApples3" 
                                                 tabindex="3" disabledClass="disabledClass" 
                                                 styleClass="styleClass" enabledClass="enabledClass" accesskey="A">>
 						<f:selectItem itemValue="0" itemLabel="zero" disabled="true" />
@@ -535,7 +535,7 @@
 						<f:selectItem itemValue="7" itemLabel="seven" />
 						<f:selectItem itemValue="8" itemLabel="eight" />
 						<f:selectItem itemValue="9" itemLabel="nine" />
-					</h:selectmanyCheckbox></TD>
+					</h:selectManyCheckbox></TD>
 </tr>
 
 <tr>

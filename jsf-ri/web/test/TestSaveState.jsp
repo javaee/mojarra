@@ -42,7 +42,7 @@
 
 	<TD>
 
-            <h:selectmanyCheckbox id="validUser" 
+            <h:selectManyCheckbox id="validUser" 
                    styleClass="selectbooleanClass"/>
 	</TD>
 
@@ -52,25 +52,25 @@
 
 	<TD>
 
-	     <h:selectoneListbox id="appleQuantity" 
+	     <h:selectOneListbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
-                <h:selectitem  disabled="true" itemValue="0" itemLabel="0"/>
-                <h:selectitem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
-                <h:selectitem  itemValue="9" itemLabel="9" title="nine" />
+                <f:selectItem  disabled="true" itemValue="0" itemLabel="0"/>
+                <f:selectItem  itemValue="4" itemLabel="4" title="Four" selected="true"/>
+                <f:selectItem  itemValue="9" itemLabel="9" title="nine" />
 
-              </h:selectoneListbox>
+              </h:selectOneListbox>
 
 	</TD>
 
       </TR>
 
-					<TD><h:selectmanyMenu id="ManyApples">
-						<h:selectitem itemValue="4" itemLabel="four" selected="true" />
-						<h:selectitem itemValue="6" itemLabel="six" />
-						<h:selectitem itemValue="7" itemLabel="seven" selected="true" />
-					</h:selectmanyMenu></TD>
+					<TD><h:selectManyMenu id="ManyApples">
+						<f:selectItem itemValue="4" itemLabel="four" selected="true" />
+						<f:selectItem itemValue="6" itemLabel="six" />
+						<f:selectItem itemValue="7" itemLabel="seven" selected="true" />
+					</h:selectManyMenu></TD>
 
 </tr>
 

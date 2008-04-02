@@ -25,11 +25,11 @@
 
             <h:outputText id="userLabel" />
 
-            <h:selectmanyCheckbox id="validUser" />
+            <h:selectManyCheckbox id="validUser" />
 
-            <h:selectoneListbox id="appleQuantity" />
+            <h:selectOneListbox id="appleQuantity" />
 
-            <h:selectoneRadio id="shipType" />
+            <h:selectOneRadio id="shipType" />
 
             <h:textentry_secret id="password" />
 

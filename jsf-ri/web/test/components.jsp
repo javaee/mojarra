@@ -97,7 +97,7 @@
 
 	<TD>
 
-	      <h:selectmanyCheckbox id="validUser" label="Valid User"
+	      <h:selectManyCheckbox id="validUser" label="Valid User"
 					    selected="true" />
 
 	</TD>
@@ -108,20 +108,20 @@
 
 	<TD>
 
-	      <h:selectoneListbox id="appleQuantity">
+	      <h:selectOneListbox id="appleQuantity">
 
-		<h:selectitem  value="0" label="0"/>
-		<h:selectitem  value="1" label="1"/>
-		<h:selectitem  value="2" label="2"/>
-		<h:selectitem  value="3" label="3"/>
-		<h:selectitem  value="4" label="4" selected="true"/>
-		<h:selectitem  value="5" label="5"/>
-		<h:selectitem  value="6" label="6"/>
-		<h:selectitem  value="7" label="7"/>
-		<h:selectitem  value="8" label="8"/>
-		<h:selectitem  value="9" label="9"/>
+		<f:selectItem  value="0" label="0"/>
+		<f:selectItem  value="1" label="1"/>
+		<f:selectItem  value="2" label="2"/>
+		<f:selectItem  value="3" label="3"/>
+		<f:selectItem  value="4" label="4" selected="true"/>
+		<f:selectItem  value="5" label="5"/>
+		<f:selectItem  value="6" label="6"/>
+		<f:selectItem  value="7" label="7"/>
+		<f:selectItem  value="8" label="8"/>
+		<f:selectItem  value="9" label="9"/>
 
-	      </h:selectoneListbox>
+	      </h:selectOneListbox>
 
               Option List
 
@@ -133,14 +133,14 @@
 
 	<TD>
 
-	      <h:selectoneRadio id="shipType" align="horizontal">
+	      <h:selectOneRadio id="shipType" align="horizontal">
 
-		<h:selectitem value="nextDay" label="Next Day" />
-		<h:selectitem value="nextWeek" label="Next Week" 
+		<f:selectItem value="nextDay" label="Next Day" />
+		<f:selectItem value="nextWeek" label="Next Week" 
                                   selected="true" />
-		<h:selectitem value="nextMonth" label="Next Month" />
+		<f:selectItem value="nextMonth" label="Next Month" />
 
-              </h:selectoneRadio>
+              </h:selectOneRadio>
 
 	</TD>
 
@@ -149,15 +149,15 @@
       <TR>
 
 	<TD>
-		<h:selectoneRadio id="verticalRadio" 
+		<h:selectOneRadio id="verticalRadio" 
                                             align="vertical" border="1" >
 
-  		<h:selectitem value="nextDay" label="Next Day" 
+  		<f:selectItem value="nextDay" label="Next Day" 
                                   selected="true" />
-		<h:selectitem value="nextWeek" label="Next Week"  />
-		<h:selectitem value="nextMonth" label="Next Month" />
+		<f:selectItem value="nextWeek" label="Next Week"  />
+		<f:selectItem value="nextMonth" label="Next Month" />
 
-                </h:selectoneRadio>
+                </h:selectOneRadio>
 
 	</TD>
 
