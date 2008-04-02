@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.34 2005/06/17 15:26:14 edburns Exp $
+ * $Id: Application.java,v 1.35 2005/06/22 18:57:04 rlubke Exp $
  */
 
 /*
@@ -156,12 +156,12 @@ public abstract class Application {
 
     /**
      * <p>Set the <code>renderKitId</code> to be used to render this
-     * application.  Unless the client has provided a custom {@link
-     * ViewHandler} that supports the use of multiple {@link RenderKit}
-     * instances in the same application, this method must only be called
-     * at application startup, before any Faces requests have been
-     * processed.  This is a limitation of the current Specification,
-     * and may be lifted in a future release.</p>
+     * application.  Unless the client has provided a custom {@link ViewHandler}
+     * that supports the use of multiple {@link javax.faces.render.RenderKit}
+     * instances in the same application, this method must only be called at
+     * application startup, before any Faces requests have been processed.
+     * This is a limitation of the current Specification, and may be lifted in
+     * a future release.</p>
      */
     public abstract void setDefaultRenderKitId(String renderKitId);
 	

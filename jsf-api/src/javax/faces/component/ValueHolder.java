@@ -1,5 +1,5 @@
 /*
- * $Id: ValueHolder.java,v 1.16 2005/05/05 20:51:05 edburns Exp $
+ * $Id: ValueHolder.java,v 1.17 2005/06/22 18:57:05 rlubke Exp $
  */
 
 /*
@@ -38,13 +38,12 @@ public interface ValueHolder {
     /**
      * <p>Gets the value of this {@link UIComponent}.  First, consult
      * the local value property of this component.  If
-     * non-<code>null</code> return it.  If non-null, see if we have a
+     * non-<code>null</code> return it.  If <code>null</code>, see if we have a
      * {@link ValueExpression} for the <code>value</code> property.  If
      * so, return the result of evaluating the property, otherwise
-     * return null.  Note that because the specification for {@link
+     * return <code>null</code>.  Note that because the specification for {@link
      * UIComponent#setValueBinding} requires a
-     * call through to {@link
-     * UIComponent#setValueExpression}, legacy
+     * call through to {@link UIComponent#setValueExpression}, legacy
      * tags will continue to work.</p>
      */
     public Object getValue();
