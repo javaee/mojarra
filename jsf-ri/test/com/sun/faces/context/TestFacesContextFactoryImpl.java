@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.5 2003/02/20 22:49:50 ofung Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.6 2003/05/03 05:53:05 eburns Exp $
  */
 
 /*
@@ -14,7 +14,6 @@ package com.sun.faces.context;
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
-import org.apache.cactus.ServletTestCase;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.ServletException;
@@ -33,20 +32,22 @@ import javax.faces.event.FacesEvent;
 import javax.faces.tree.Tree;
 import javax.faces.FacesException;
 
+import com.sun.faces.ServletFacesTestCase;
+
 /**
  *
  *  <B>TestFacesContextFactoryImpl</B> is a class ...
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.5 2003/02/20 22:49:50 ofung Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.6 2003/05/03 05:53:05 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestFacesContextFactoryImpl extends ServletTestCase
+public class TestFacesContextFactoryImpl extends ServletFacesTestCase
 {
 //
 // Protected Constants

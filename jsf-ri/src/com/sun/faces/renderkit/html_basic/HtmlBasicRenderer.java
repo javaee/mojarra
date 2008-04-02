@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.38 2003/04/29 20:51:52 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.39 2003/05/03 05:53:01 eburns Exp $
  */
 
 /*
@@ -11,7 +11,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-//import com.sun.faces.util.AttributeDescriptorImpl;
 import com.sun.faces.util.Util;
 
 import java.util.Hashtable;
@@ -21,7 +20,6 @@ import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
-//import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.component.UISelectItem;
@@ -29,6 +27,9 @@ import javax.faces.component.UISelectItems;
 import javax.faces.component.UIInput;
 import javax.faces.component.NamingContainer;
 import javax.faces.el.ValueBinding;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Application;
+
 
 import javax.faces.render.Renderer;
 import javax.faces.component.UIInput;
@@ -37,7 +38,6 @@ import javax.faces.context.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
-//import javax.faces.convert.ConverterFactory;
 import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
@@ -430,21 +430,18 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * apply to all renderers.
      */
     protected Converter getConverter(UIComponent component) {
-//FIXME
-/*
         String converterId = component.getConverter();
         if (converterId == null) {
             return (null);
         }
-        ConverterFactory cfactory = (ConverterFactory)
-            FactoryFinder.getFactory(FactoryFinder.CONVERTER_FACTORY);
         try {
-            return (cfactory.getConverter(converterId));
+	    ApplicationFactory aFactory = 
+		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application application = aFactory.getApplication();
+            return (application.getConverter(converterId));
         } catch (Exception e) {
             return (null);
         }
-*/
-        return null;
     }
 
     public String getClientId(FacesContext context, UIComponent component){

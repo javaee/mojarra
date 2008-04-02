@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.6 2003/04/29 20:52:31 eburns Exp $
+ * $Id: TestConverters.java,v 1.7 2003/05/03 05:53:05 eburns Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
 import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.UICommand;
@@ -51,7 +52,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.6 2003/04/29 20:52:31 eburns Exp $
+ * @version $Id: TestConverters.java,v 1.7 2003/05/03 05:53:05 eburns Exp $
  * 
  *
  */
@@ -73,6 +74,8 @@ public class TestConverters extends JspFacesTestCase
 
     // Attribute Instance Variables
     // Relationship Instance Variables
+
+    protected Application application;
     //
     // Constructors and Initializers    
     //
@@ -89,7 +92,9 @@ public class TestConverters extends JspFacesTestCase
     //
     public void setUp() {
 	super.setUp();
-
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        application = aFactory.getApplication();
     }     
 
     public void beginConverters(WebRequest theRequest) {
@@ -128,8 +133,6 @@ public class TestConverters extends JspFacesTestCase
         root.addChild(text);
 
         Converter converter = null;
-        ApplicationFactoryImpl aFactory = new ApplicationFactoryImpl();
-        Application application = aFactory.getApplication();
         converter = application.getConverter("Date");
 
         // date
@@ -171,8 +174,6 @@ public class TestConverters extends JspFacesTestCase
         text.setComponentId("my_input_number");
         root.addChild(text);
 
-        ApplicationFactoryImpl aFactory = new ApplicationFactoryImpl();
-        Application application = aFactory.getApplication();
         Converter converter = application.getConverter("Number");
 
         String stringToConvert = "99.9";
@@ -191,8 +192,6 @@ public class TestConverters extends JspFacesTestCase
         text.setComponentId("my_input_boolean");
         root.addChild(text);
 
-        ApplicationFactoryImpl aFactory = new ApplicationFactoryImpl();
-        Application application = aFactory.getApplication();
         Converter converter = application.getConverter("Boolean");
 
         String stringToConvert = "true";

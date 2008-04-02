@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.33 2003/05/03 04:08:43 eburns Exp $
+ * $Id: FacesTag.java,v 1.34 2003/05/03 05:53:02 eburns Exp $
  */
 
 /*
@@ -30,13 +30,16 @@ import javax.faces.FacesException;
 import com.sun.faces.util.Util;
 import com.sun.faces.RIConstants;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  *
  *  <B>FacesTag</B> is a base class for most tags in the Faces Tag
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.33 2003/05/03 04:08:43 eburns Exp $
+ * @version $Id: FacesTag.java,v 1.34 2003/05/03 05:53:02 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -48,6 +51,9 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     //
     // Protected Constants
     //
+
+    // Log instance for this class
+    protected static Log log = LogFactory.getLog(FacesTag.class);
 
     //
     // Class Variables
@@ -1300,8 +1306,55 @@ protected void overrideProperties(UIComponent component)
   
 }
 
+protected String getDebugString() {
+    String result = 
+	"id: " + this.getId() + "\n " +
+	"class: " + this.getClass().getName() + "\n ";
+    return result;
+}
+
 // 
 // Methods From TagSupport
 //
+
+public int doStartTag() throws JspException {
+    int rc = 0;
+    try {
+	rc = super.doStartTag();
+    }
+    catch (JspException e) {
+	if (log.isDebugEnabled()) {
+	    log.debug(getDebugString());
+	}
+	throw e;
+    }
+    catch (Throwable t) {
+	if (log.isDebugEnabled()) {
+	    log.debug(getDebugString());
+	}
+    }
+    return rc;
+}
+
+public int doEndTag() throws JspException {
+    int rc = 0;
+    try {
+	rc = super.doEndTag();
+    }
+    catch (JspException e) {
+	if (log.isDebugEnabled()) {
+	    log.debug(getDebugString());
+	}
+	throw e;
+    }
+    catch (Throwable t) {
+	if (log.isDebugEnabled()) {
+	    log.debug(getDebugString());
+	}
+    }
+    return rc;
+}
+
+	
 
 } // end of class FacesTag

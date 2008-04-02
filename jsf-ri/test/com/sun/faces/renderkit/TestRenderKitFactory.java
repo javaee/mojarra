@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.4 2003/02/20 22:50:03 ofung Exp $
+ * $Id: TestRenderKitFactory.java,v 1.5 2003/05/03 05:53:08 eburns Exp $
  */
 
 /*
@@ -23,7 +23,8 @@ import javax.faces.FacesException;
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.ParameterCheck;
-import org.apache.cactus.ServletTestCase;
+
+import com.sun.faces.ServletFacesTestCase;
 
 /**
  *
@@ -31,14 +32,14 @@ import org.apache.cactus.ServletTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.4 2003/02/20 22:50:03 ofung Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.5 2003/05/03 05:53:08 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
  *
  */
 
-public class TestRenderKitFactory extends ServletTestCase {
+public class TestRenderKitFactory extends ServletFacesTestCase {
 //
 // Protected Constants
 //

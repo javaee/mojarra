@@ -440,11 +440,45 @@
 
             <formatter type="plain" usefile="false"/>
             <!-- Suite of tests -->
-            <test name="com.sun.faces.config.ConfigFileTestCase"/>
-
             <test name="com.sun.faces.application.TestApplicationImpl_Config"/>
             <test name="com.sun.faces.application.TestAppConfig"/>
+            <test name="com.sun.faces.config.ConfigFileTestCase"/>
             <test name="com.sun.faces.config.TestManagedBeanFactory"/>
+            <test name="com.sun.faces.application.TestActionListenerImpl"/>
+            <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
+            <test name="com.sun.faces.application.TestApplicationImpl"/>
+            <test name="com.sun.faces.application.TestNavigation"/>
+            <test name="com.sun.faces.context.TestExternalContextImpl"/>
+            <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
+            <test name="com.sun.faces.context.TestFacesContextImpl"/>
+            <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
+            <test name="com.sun.faces.convert.TestConverters"/>
+            <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
+            <test name="com.sun.faces.el.TestValueBindingImpl"/>
+            <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
+            <test name="com.sun.faces.el.TestVariableResolverImpl"/>
+            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
+            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
+            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
+            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
+            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
+            <test name="com.sun.faces.lifecycle.TestReconstituteComponentTreePhase"/>
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
+            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
+            <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
+            <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
+            <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
+            <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
+            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
+            <test name="com.sun.faces.util.TestUtil"/>
+            <test name="com.sun.faces.util.TestUtil_messages"/>
+            <test name="javax.faces.validator.RequiredValidatorTestCase"/>
 
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in 
@@ -455,53 +489,13 @@
 
 
 <!-- put non-running testcases here
-            <test name="com.sun.faces.application.TestActionListenerImpl"/>
-            <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
-            <test name="com.sun.faces.application.TestApplicationImpl"/>
-            <test name="com.sun.faces.application.TestNavigation"/>
-            <test name="com.sun.faces.context.TestExternalContextImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextImpl"/>
-            <test name="com.sun.faces.context.TestFacesContextFactoryImpl"/>
-            <test name="com.sun.faces.context.TestMessageResourcesImpl"/>
-            <test name="com.sun.faces.context.TestMessageResourcesFactoryImpl"/>
-            <test name="com.sun.faces.convert.TestConverterFactory"/>
-            <test name="com.sun.faces.convert.TestConverters"/>
-            <test name="com.sun.faces.el.TestValueBindingImpl_Model"/>
-            <test name="com.sun.faces.el.TestValueBindingImpl"/>
-            <test name="com.sun.faces.el.TestVariableResolverImpl"/>
-            <test name="com.sun.faces.el.TestPropertyResolverImpl"/>
-            <test name="com.sun.faces.lifecycle.TestPhase"/>
-            <test name="com.sun.faces.lifecycle.TestReconstituteComponentTreePhase"/>
-            <test name="com.sun.faces.lifecycle.TestApplyRequestValuesPhase"/>
-            <test name="com.sun.faces.lifecycle.TestProcessValidationsPhase"/>
-            <test name="com.sun.faces.lifecycle.TestUpdateModelValuesPhase"/>
-            <test name="com.sun.faces.lifecycle.TestInvokeApplicationPhase"/>
-            <test name="com.sun.faces.lifecycle.TestProcessEvents"/>
-            <test name="com.sun.faces.lifecycle.TestLifecycleFactoryImpl"/>
-            <test name="com.sun.faces.renderkit.TestRenderKitFactory"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRendererConversions"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestComponentType"/>
-            <test name="com.sun.faces.renderkit.TestFormatPoolImpl"/>
-            <test name="com.sun.faces.renderkit.html_basic.TestRendererAttributes"/>
-            <test name="com.sun.faces.util.TestUtil"/>
-            <test name="com.sun.faces.util.TestUtil_messages"/>
-            <test name="javax.faces.validator.RequiredValidatorTestCase"/>
-            <test name="com.sun.faces.taglib.html_basic.TestHtmlBasicValidator"/>
-            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
-            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
-
-            <test name="com.sun.faces.taglib.jsf_core.TestCoreValidator"/>
-            <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
+            <test name="com.sun.faces.lifecycle.TestPhase"/>
+            <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
             <test name="com.sun.faces.renderkit.html_basic.TestRenderKit"/>
-
             <test name="com.sun.faces.tree.TestXmlTreeFactoryImpl"/>
-
 -->
         </junit>
 
