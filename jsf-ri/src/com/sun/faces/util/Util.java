@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.112 2003/11/07 23:11:31 rlubke Exp $
+ * $Id: Util.java,v 1.113 2003/11/08 00:03:56 horwat Exp $
  */
 
 /*
@@ -37,8 +37,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
-import javax.faces.el.ValueBinding;
 import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.ValueBinding;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.model.SelectItem;
 import javax.faces.render.RenderKit;
@@ -66,7 +66,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.112 2003/11/07 23:11:31 rlubke Exp $ 
+ * @version $Id: Util.java,v 1.113 2003/11/08 00:03:56 horwat Exp $ 
  */
 
 public class Util extends Object
@@ -913,7 +913,7 @@ private Util()
         if (expression != null) {
             //PENDING: horwat: put in quick and dirty expression check.
             //this method will be called often so it needs to be efficient!
-            if (isElExpression(expression)) {
+            if (isVBExpression(expression)) {
 
                 ExpressionInfo exprInfo = new ExpressionInfo();
                 exprInfo.setExpressionString(expression);
@@ -941,7 +941,7 @@ private Util()
         if (expression != null) {
             //PENDING: horwat: put in quick and dirty expression check.
             //this method will be called often so it needs to be efficient!
-            if (isElExpression(expression)) {
+            if (isVBExpression(expression)) {
 
                 ExpressionInfo exprInfo = new ExpressionInfo();
                 exprInfo.setExpressionString(expression);
@@ -960,12 +960,12 @@ private Util()
     }
 
     /*
-     * Determine whether String is an expression or not.
+     * Determine whether String is a value binding expression or not.
      */
-    public static boolean isElExpression(String expression) {
+    public static boolean isVBExpression(String expression) {
         //check to see if attribute has an expression
-        if ((expression.indexOf("${") != -1) &&
-            (expression.indexOf("${") < expression.indexOf('}'))) {
+        if ((expression.indexOf("#{") != -1) &&
+            (expression.indexOf("#{") < expression.indexOf('}'))) {
             return true;
         }
         return false;
