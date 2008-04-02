@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.3 2003/09/12 16:30:21 craigmcc Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.4 2003/09/15 23:46:15 craigmcc Exp $
  */
 
 /*
@@ -259,6 +259,44 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     }
 
 
+    // Test selectively importing JSPs with simple components
+    public void testJstImport03() throws Exception {
+
+        // Check each individual case multiple times
+        checkJstlImport00();
+        checkJstlImport03a();
+        checkJstlImport03a();
+        checkJstlImport03a();
+        checkJstlImport00();
+        checkJstlImport03b();
+        checkJstlImport03b();
+        checkJstlImport03b();
+        checkJstlImport00();
+        checkJstlImport03c();
+        checkJstlImport03c();
+        checkJstlImport03c();
+
+        // Check cases in ascending order
+        checkJstlImport00();
+        checkJstlImport03a();
+        checkJstlImport03b();
+        checkJstlImport03c();
+
+        // Check cases in descending order
+        checkJstlImport00();
+        checkJstlImport03c();
+        checkJstlImport03b();
+        checkJstlImport03a();
+
+        // Check cases in random order
+        checkJstlImport00();
+        checkJstlImport03b();
+        checkJstlImport03a();
+        checkJstlImport03c();
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
 
 
@@ -444,6 +482,42 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
                      "jstl-import-02", page.getTitleText());
         assertEquals("Correct body element",
                      "[A] [B] [C] [D] [E]", getBodyText(page));
+
+    }
+
+
+    // Check selective imports with simple components
+    private void checkJstlImport03a() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=a");
+        assertEquals("Correct page title",
+                     "jstl-import-03", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2a] [3]", getBodyText(page));
+
+    }
+
+
+    // Check selective imports with simple components
+    private void checkJstlImport03b() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=b");
+        assertEquals("Correct page title",
+                     "jstl-import-03", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2b] [3]", getBodyText(page));
+
+    }
+
+
+    // Check selective imports with simple components
+    private void checkJstlImport03c() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=c");
+        assertEquals("Correct page title",
+                     "jstl-import-03", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2c] [3]", getBodyText(page));
 
     }
 
