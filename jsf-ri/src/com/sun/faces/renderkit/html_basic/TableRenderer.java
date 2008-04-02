@@ -1,5 +1,5 @@
 /*
- * $Id: TableRenderer.java,v 1.33 2006/03/29 23:03:49 rlubke Exp $
+ * $Id: TableRenderer.java,v 1.34 2006/04/27 17:39:15 rlubke Exp $
  */
 
 /*
@@ -89,8 +89,10 @@ public class TableRenderer extends HtmlBasicRenderer {
         if (styleClass != null) {
             writer.writeAttribute("class", styleClass, "styleClass");
         }
-        RenderKitUtils.renderPassThruAttributes(context, writer, component
-        );
+        RenderKitUtils.renderPassThruAttributes(context, 
+                                                writer, 
+                                                component,
+                                                new String[] {"rows"});
         writer.writeText("\n", null);
         
         UIComponent caption = getFacet(data, "caption");

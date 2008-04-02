@@ -24,7 +24,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.72 2006/03/29 23:03:48 rlubke Exp $
+ * $Id: MenuRenderer.java,v 1.73 2006/04/27 17:39:15 rlubke Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -492,7 +492,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 
         RenderKitUtils.renderPassThruAttributes(context, 
                                                 writer, 
-                                                component);                
+                                                component,
+                                                new String[] {"size"});                
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer,
                                                          component);
         // Now, render the "options" portion...

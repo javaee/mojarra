@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.111 2006/03/29 23:03:54 rlubke Exp $
+ $Id: build-tests.xml,v 1.112 2006/04/27 17:39:15 rlubke Exp $
 -->
 
 <!--
@@ -147,7 +147,8 @@
                 test.jsp,  
                 test.path,
                 test.valueBindingGet,
-                test.misc
+                test.misc,
+                test.regressions
                "/>
 
     <target name="test.init">
@@ -922,6 +923,15 @@
               golden="${golden.path}/include-import-interweaving.txt"
               recordGolden="${local.golden.path}/include-import-interweaving.txt"/>
 
+    </target>
+    
+    <target name="test.regressions">
+        <jsf.tester
+            request="${context.path}/faces/regression/AreaTextRowsAttrTest.jsp"
+            golden="${golden.path}/regression/AreaTextRowsAttrTest.txt"/>
+        <jsf.tester
+            request="${context.path}/faces/regression/SelectOneManySizeAttrTest.jsp"
+            golden="${golden.path}/regression/SelectOneManySizeAttrTest.txt"/>
     </target>
 
 </project>
