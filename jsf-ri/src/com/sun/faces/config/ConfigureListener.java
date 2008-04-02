@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.78 2006/05/22 23:35:51 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.79 2006/05/25 21:02:26 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -480,10 +480,12 @@ public class ConfigureListener implements ServletContextListener {
                 String[] tokens = Util.split(paths.trim(), ",");
                 for (int i = 0; i < tokens.length; i++) {
 
-                    url = getContextURLForPath(context, tokens[i].trim());
-                    if (url != null) {
-                        parse(digester, url, fcb);
-                    }
+		    if (!WEB_INF_RESOURCE.equals(tokens[i].trim())) {
+                        url = getContextURLForPath(context, tokens[i].trim());
+                        if (url != null) {
+                            parse(digester, url, fcb);
+                        }
+		    }
 
                 }
             }
