@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.114 2003/11/06 22:29:55 rlubke Exp $
+ * $Id: UIComponent.java,v 1.115 2003/11/07 01:23:47 craigmcc Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
@@ -40,6 +41,7 @@ import javax.faces.render.Renderer;
  */
 
 public abstract class UIComponent implements StateHolder {
+
 
     // -------------------------------------------------------------- Attributes
 
@@ -79,6 +81,34 @@ public abstract class UIComponent implements StateHolder {
      * </ul>
      */
     public abstract Map getAttributes();
+
+
+    // ---------------------------------------------------------------- Bindings
+
+
+    /**
+     * <p>Return the {@link ValueBinding} used to calculate the value for the
+     * specified property name, if any.</p>
+     *
+     * @param name Name of the property for which to retrieve a
+     *  {@link ValueBinding}
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public abstract ValueBinding getValueBinding(String name);
+
+
+    /**
+     * <p>Set the {@link ValueBinding} used to calculate the value for the
+     * specified property name, if any.</p>
+     *
+     * @param name Name of the property for which to set a
+     *  {@link ValueBinding}
+     * @param binding The {@link ValueBinding} to set, or <code>null</code>
+     *  to remove any currently set {@link ValueBinding}
+     */
+    public abstract void setValueBinding(String name, ValueBinding binding);
 
 
     // -------------------------------------------------------------- Properties

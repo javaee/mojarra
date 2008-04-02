@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.19 2003/10/30 23:04:58 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.20 2003/11/07 01:23:56 craigmcc Exp $
  */
 
 /*
@@ -322,6 +322,24 @@ public class UIInputTestCase extends UIOutputTestCase {
         setupNewValue(input);
         root.processValidators(facesContext);
         assertEquals("/v1/v2/v3", TestInputValidator.trace());
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UIInput test = (UIInput) component;
+
+	request.setAttribute("foo", Boolean.FALSE);
+	test.setRequired(true);
+	assertTrue(test.isRequired());
+	test.setValueBinding("required", application.getValueBinding("#{foo}"));
+	assertTrue(!test.isRequired());
+	assertNotNull(test.getValueBinding("required"));
+	test.setRequired(false);
+	assertTrue(!test.isRequired());
+	assertNull(test.getValueBinding("required"));
 
     }
 

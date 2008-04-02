@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.16 2003/10/21 23:58:19 craigmcc Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.17 2003/11/07 01:23:55 craigmcc Exp $
  */
 
 /*
@@ -332,6 +332,35 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
         assertNotNull(state);
         postSave.restoreState(facesContext, state);
         checkComponents(preSave, postSave);
+
+    }
+
+
+    public void testValueBindings() {
+
+	UIComponentBase test = (UIComponentBase) component;
+
+	request.setAttribute("foo", "bar");
+	test.setId(null);
+	assertNull(test.getId());
+	test.setId("baz");
+	assertEquals("baz", test.getId());
+	test.setValueBinding("id", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getId());
+	assertNotNull(test.getValueBinding("id"));
+	test.setId("bop");
+	assertEquals("bop", test.getId());
+	assertNull(test.getValueBinding("id"));
+
+	request.setAttribute("foo", Boolean.FALSE);
+	test.setRendered(true);
+	assertTrue(test.isRendered());
+	test.setValueBinding("rendered", application.getValueBinding("#{foo}"));
+	assertTrue(!test.isRendered());
+	assertNotNull(test.getValueBinding("rendered"));
+	test.setRendered(false);
+	assertTrue(!test.isRendered());
+	assertNull(test.getValueBinding("rendered"));
 
     }
 

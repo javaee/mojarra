@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.27 2003/11/05 02:22:52 craigmcc Exp $
+ * $Id: UIComponentTag.java,v 1.28 2003/11/07 01:23:53 craigmcc Exp $
  */
 
 /*
@@ -214,25 +214,17 @@ public abstract class UIComponentTag implements Tag {
      * <p>An override for the rendered attribute associated with our
      * {@link UIComponent}.</p>
      */
-    protected boolean rendered = true;
+    protected String rendered = null;
 
-
-    /**
-     * <p>Flag indicating whether the <code>rendered</code> attribute was
-     * set on this tag instance.</p>
-     */
-    protected boolean renderedSet = false;
-    
 
     /**
      * <p>Set an override for the rendered attribute.</p>
      *
      * @param rendered The new value for rendered attribute
      */
-    public void setRendered(boolean rendered) {
+    public void setRendered(String rendered) {
 
         this.rendered = rendered;
-        this.renderedSet = true;
 
     }
 
@@ -542,8 +534,7 @@ public abstract class UIComponentTag implements Tag {
         this.created = false;
         this.override = true;
         this.overrideSet = false;
-        this.rendered = true;
-        this.renderedSet = false;
+        this.rendered = null;
     }
 
 
@@ -694,10 +685,7 @@ public abstract class UIComponentTag implements Tag {
         }
 
         // Step 3 -- Calculate the component identifier for this component
-        String newId = this.id;
-        if (newId == null) {
-            newId = createId();
-        }
+        String newId = createId();
         
         // Step 4 -- Create or return a facet with the specified name (if any)
         String facetName = getFacetName();
@@ -795,6 +783,32 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
+     * <p>Return <code>true</code> if the specified value conforms to the
+     * syntax requirements of a value reference expression.  Such expressions
+     * may be used on most component tag attributes to signal a desire for
+     * deferred evaluation of the attribute or property value to be set on
+     * the underlying {@link UIComponent}.</p>
+     *
+     * @param value The value to evaluate
+     *
+     * @exception NullPointerException if <code>value</code> is
+     *  <code>null</code>
+     */
+    protected boolean isValueReference(String value) {
+
+	if (value == null) {
+	    throw new NullPointerException();
+	}
+	if (value.startsWith("#{") && value.endsWith("}")) {
+	    return (true);
+	} else {
+	    return (false);
+	}
+
+    }
+
+
+    /**
      * <p>Override properties and attributes of the specified component,
      * if the corresponding properties of this tag handler instance were
      * explicitly set.  This method must be called <strong>ONLY</strong>
@@ -844,10 +858,22 @@ public abstract class UIComponentTag implements Tag {
 	    component.setComponentRef(componentRef);
 	}
 	if (id != null) {
-	    component.setId(id);
+	    if (isValueReference(id)) {
+		ValueBinding vb =
+		    context.getApplication().getValueBinding(id);
+		component.setValueBinding("id", vb);
+	    } else {
+		component.setId(id);
+	    }
 	}
-        if (renderedSet) {
-            component.setRendered(rendered);
+        if (rendered != null) {
+	    if (isValueReference(rendered)) {
+		ValueBinding vb =
+		    context.getApplication().getValueBinding(rendered);
+		component.setValueBinding("rendered", vb);
+	    } else {
+		component.setRendered(Boolean.valueOf(rendered).booleanValue());
+	    }
         }
 	if (getRendererType() != null) {
 	    component.setRendererType(getRendererType());
@@ -1012,14 +1038,23 @@ public abstract class UIComponentTag implements Tag {
 
 
     /**
-     * <p>Generate and return a component identifier that includes a sequence
-     * number reflecting the number of identifiers generated for this
-     * particular page.</p>
+     * <p>Create the component identifier to be used for this component.</p>
      */
     private String createId() {
-	FacesContext context = 
-	    (FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
-	return context.getViewRoot().createUniqueId();
+
+	if (this.id == null) {
+	    FacesContext context = 
+		(FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
+	    return context.getViewRoot().createUniqueId();
+	} else if (isValueReference(this.id)) {
+	    FacesContext context = 
+		(FacesContext) pageContext.getAttribute(CURRENT_FACES_CONTEXT);
+	    ValueBinding vb = context.getApplication().getValueBinding(this.id);
+	    return ((String) vb.getValue(context));
+	} else {
+	    return (this.id);
+	}
+
     }
 
 

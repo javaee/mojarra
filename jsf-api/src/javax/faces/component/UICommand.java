@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.51 2003/11/06 15:39:42 eburns Exp $
+ * $Id: UICommand.java,v 1.52 2003/11/07 01:23:47 craigmcc Exp $
  */
 
 /*
@@ -85,7 +85,12 @@ public class UICommand extends UIComponentBase
 
     public String getAction() {
 
-        return (this.action);
+	ValueBinding vb = getValueBinding("action");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.action);
+	}
 
     }
 
@@ -93,6 +98,7 @@ public class UICommand extends UIComponentBase
     public void setAction(String action) {
 
         this.action = action;
+	setValueBinding("action", null);
 
     }
 
@@ -145,12 +151,19 @@ public class UICommand extends UIComponentBase
 
     public boolean isImmediate() {
 
-        return (this.immediate);
+	ValueBinding vb = getValueBinding("immediate");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.immediate);
+	}
 
     }
 
 
     public void setImmediate(boolean immediate) {
+
 	// if the immediate value is changing.
 	if (immediate != this.immediate) {
 	    FacesContext context = FacesContext.getCurrentInstance();
@@ -159,6 +172,8 @@ public class UICommand extends UIComponentBase
 	    this.immediate = immediate;
 	    addDefaultActionListener(context);
 	}
+	setValueBinding("immediate", null);
+
     }
 
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.18 2003/11/05 01:01:12 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.19 2003/11/07 01:23:56 craigmcc Exp $
  */
 
 /*
@@ -566,6 +566,46 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         checkResponse("/javax/faces/component/UIDataTestCase_4.xml");
 
     }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UIData test = (UIData) component;
+
+	request.setAttribute("foo", new Integer(5));
+	test.setFirst(10);
+	assertEquals(10, test.getFirst());
+	test.setValueBinding("first", application.getValueBinding("#{foo}"));
+	assertEquals(5, test.getFirst());
+	assertNotNull(test.getValueBinding("first"));
+	test.setFirst(15);
+	assertEquals(15, test.getFirst());
+	assertNull(test.getValueBinding("first"));
+ 
+	request.setAttribute("foo", new Integer(5));
+	test.setRows(10);
+	assertEquals(10, test.getRows());
+	test.setValueBinding("rows", application.getValueBinding("#{foo}"));
+	assertEquals(5, test.getRows());
+	assertNotNull(test.getValueBinding("rows"));
+	test.setRows(15);
+	assertEquals(15, test.getRows());
+	assertNull(test.getValueBinding("rows"));
+ 
+	request.setAttribute("foo", "bar");
+	test.setVar(null);
+	assertNull(test.getVar());
+	test.setVar("baz");
+	assertEquals("baz", test.getVar());
+	test.setValueBinding("var", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getVar());
+	assertNotNull(test.getValueBinding("var"));
+	test.setVar("bop");
+	assertEquals("bop", test.getVar());
+	assertNull(test.getValueBinding("var"));
+
+   }
 
 
     // --------------------------------------------------------- Support Methods

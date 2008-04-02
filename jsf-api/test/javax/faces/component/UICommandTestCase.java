@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.16 2003/10/30 23:04:57 craigmcc Exp $
+ * $Id: UICommandTestCase.java,v 1.17 2003/11/07 01:23:55 craigmcc Exp $
  */
 
 /*
@@ -332,6 +332,36 @@ public class UICommandTestCase extends ValueHolderTestCaseBase {
 	// we should have no listeners for APPLY_REQUEST_VALUES
 	assertTrue(0 == 
 		   ((List)listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()]).size());
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UICommand test = (UICommand) component;
+
+	request.setAttribute("foo", "bar");
+	test.setAction(null);
+	assertNull(test.getAction());
+	test.setAction("baz");
+	assertEquals("baz", test.getAction());
+	test.setValueBinding("action", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getAction());
+	assertNotNull(test.getValueBinding("action"));
+	test.setAction("bop");
+	assertEquals("bop", test.getAction());
+	assertNull(test.getValueBinding("action"));
+
+	request.setAttribute("foo", Boolean.FALSE);
+	test.setImmediate(true);
+	assertTrue(test.isImmediate());
+	test.setValueBinding("immediate", application.getValueBinding("#{foo}"));
+	assertTrue(!test.isImmediate());
+	assertNotNull(test.getValueBinding("immediate"));
+	test.setImmediate(false);
+	assertTrue(!test.isImmediate());
+	assertNull(test.getValueBinding("immediate"));
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.12 2003/10/25 00:50:44 craigmcc Exp $
+ * $Id: UIOutputTestCase.java,v 1.13 2003/11/07 01:23:57 craigmcc Exp $
  */
 
 /*
@@ -111,6 +111,29 @@ public class UIOutputTestCase extends ConvertibleValueHolderTestCaseBase {
 
         super.testPropertiesValid();
         UIOutput output = (UIOutput) component;
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UIOutput test = (UIOutput) component;
+
+	request.setAttribute("foo", new LongConverter());
+	test.setConverter(new ShortConverter());
+	assertNotNull(test.getConverter());
+	assertTrue(test.getConverter() instanceof ShortConverter);
+	test.setValueBinding("converter", application.getValueBinding("#{foo}"));
+	assertNotNull(test.getConverter());
+	assertTrue(test.getConverter() instanceof LongConverter);
+	test.setConverter(new ShortConverter());
+	assertNotNull(test.getConverter());
+	assertTrue(test.getConverter() instanceof ShortConverter);
+	assertNull(test.getValueBinding("converter"));
+	test.setConverter(null);
+	assertNull(test.getConverter());
+	assertNull(test.getValueBinding("converter"));
 
     }
 

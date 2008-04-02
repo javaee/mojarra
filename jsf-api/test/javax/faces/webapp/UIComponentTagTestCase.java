@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.16 2003/11/04 04:08:02 eburns Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.17 2003/11/07 01:24:00 craigmcc Exp $
  */
 
 /*
@@ -270,6 +270,29 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
     }
 
 
+    // Test configuring value bindings instead of literal values
+    public void testValueBindings() throws Exception {
+
+	TestTag tag = new TestTag();
+	tag.setId("#{foo}");
+	tag.setRendered("#{bar}");
+	add(root, tag);
+	request.setAttribute("foo", "bap");
+	request.setAttribute("bar", Boolean.FALSE);
+	reset();
+	render();
+
+	UIViewRoot vr = facesContext.getViewRoot();
+	assertEquals(1, vr.getChildren().size());
+	UIComponent component = (UIComponent) vr.getChildren().get(0);
+	assertEquals("bap", component.getId());
+	assertTrue(!component.isRendered());
+	assertNull(component.getValueBinding("id")); // Evaluated by the tag
+	assertNotNull(component.getValueBinding("rendered"));
+
+    }
+
+
     // ------------------------------------------------------ Protected Methods
 
 
@@ -306,7 +329,7 @@ public class UIComponentTagTestCase extends TagTestCaseBase {
 
         UIComponentTag a = new TestTag("A", "a");
         UIComponentTag b2 = new TestTag("B2", "b2");
-        b2.setRendered(rendered);
+        b2.setRendered(rendered ? "true" : "false");
         ((TestTag) b2).setRendersChildren(children);
         FacetTag f1 = new FacetTag();
         f1.setName("header");

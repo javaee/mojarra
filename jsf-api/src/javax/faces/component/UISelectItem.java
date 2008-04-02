@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.23 2003/11/06 15:39:44 eburns Exp $
+ * $Id: UISelectItem.java,v 1.24 2003/11/07 01:23:49 craigmcc Exp $
  */
 
 /*
@@ -70,7 +70,12 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      */
     public String getItemDescription() {
 
-        return (this.itemDescription);
+	ValueBinding vb = getValueBinding("itemDescription");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.itemDescription);
+	}
 
     }
 
@@ -83,6 +88,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     public void setItemDescription(String itemDescription) {
 
         this.itemDescription = itemDescription;
+	setValueBinding("itemDescription", null);
 
     }
 
@@ -92,7 +98,12 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      */
     public String getItemLabel() {
 
-        return (this.itemLabel);
+	ValueBinding vb = getValueBinding("itemLabel");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.itemLabel);
+	}
 
     }
 
@@ -105,6 +116,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     public void setItemLabel(String itemLabel) {
 
         this.itemLabel = itemLabel;
+	setValueBinding("itemLabel", null);
 
     }
 
@@ -114,7 +126,12 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      */
     public String getItemValue() {
 
-        return (this.itemValue);
+	ValueBinding vb = getValueBinding("itemValue");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.itemValue);
+	}
 
     }
 
@@ -127,6 +144,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     public void setItemValue(String itemValue) {
 
         this.itemValue = itemValue;
+	setValueBinding("itemValue", null);
 
     }
 

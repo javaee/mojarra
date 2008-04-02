@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.44 2003/11/06 15:39:43 eburns Exp $
+ * $Id: UIInput.java,v 1.45 2003/11/07 01:23:49 craigmcc Exp $
  */
 
 /*
@@ -172,7 +172,13 @@ public class UIInput extends UIOutput {
      */
     public boolean isRequired() {
 
-        return (this.required);
+	ValueBinding vb = getValueBinding("required");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.required);
+	}
 
     }
 
@@ -185,6 +191,7 @@ public class UIInput extends UIOutput {
     public void setRequired(boolean required) {
 
         this.required = required;
+	setValueBinding("required", null);
 
     }
 

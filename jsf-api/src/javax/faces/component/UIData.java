@@ -168,7 +168,13 @@ public class UIData extends UIComponentBase
      */
     public int getFirst() {
 
-        return (this.first);
+	ValueBinding vb = getValueBinding("first");
+	if (vb != null) {
+	    Integer value = (Integer) vb.getValue(getFacesContext());
+	    return (value.intValue());
+	} else {
+	    return (this.first);
+	}
 
     }
 
@@ -188,6 +194,7 @@ public class UIData extends UIComponentBase
 	    throw new IllegalArgumentException("" + first);
 	}
         this.first = first;
+	setValueBinding("first", null);
 
     }
 
@@ -253,7 +260,13 @@ public class UIData extends UIComponentBase
      */
     public int getRowIndex() {
 
-	return (rowIndex);
+	ValueBinding vb = getValueBinding("rowIndex");
+	if (vb != null) {
+	    Integer value = (Integer) vb.getValue(getFacesContext());
+	    return (value.intValue());
+	} else {
+	    return (this.rowIndex);
+	}
 
     }
 
@@ -350,6 +363,8 @@ public class UIData extends UIComponentBase
         // Reset current state information for the new row index
         restoreDescendantState();
 
+	setValueBinding("rowIndex", null);
+
     }
 
 
@@ -359,7 +374,13 @@ public class UIData extends UIComponentBase
      */
     public int getRows() {
 
-        return (this.rows);
+	ValueBinding vb = getValueBinding("rows");
+	if (vb != null) {
+	    Integer value = (Integer) vb.getValue(getFacesContext());
+	    return (value.intValue());
+	} else {
+	    return (this.rows);
+	}
 
     }
 
@@ -379,6 +400,7 @@ public class UIData extends UIComponentBase
 	    throw new IllegalArgumentException("" + rows);
 	}
         this.rows = rows;
+	setValueBinding("rows", null);
 
     }
 
@@ -389,7 +411,12 @@ public class UIData extends UIComponentBase
      */
     public String getVar() {
 
-        return (this.var);
+	ValueBinding vb = getValueBinding("var");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.var);
+	}
 
     }
 
@@ -403,6 +430,7 @@ public class UIData extends UIComponentBase
     public void setVar(String var) {
 
         this.var = var;
+	setValueBinding("var", null);
 
     }
 

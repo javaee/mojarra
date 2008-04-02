@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterTestCase.java,v 1.10 2003/10/09 22:58:13 craigmcc Exp $
+ * $Id: UIParameterTestCase.java,v 1.11 2003/11/07 01:23:57 craigmcc Exp $
  */
 
 /*
@@ -116,6 +116,26 @@ public class UIParameterTestCase extends ValueHolderTestCaseBase {
         assertEquals("foo", parameter.getName());
         parameter.setName(null);
         assertNull(parameter.getName());
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UIParameter test = (UIParameter) component;
+
+	request.setAttribute("foo", "bar");
+	test.setName(null);
+	assertNull(test.getName());
+	test.setName("baz");
+	assertEquals("baz", test.getName());
+	test.setValueBinding("name", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getName());
+	assertNotNull(test.getValueBinding("name"));
+	test.setName("bop");
+	assertEquals("bop", test.getName());
+	assertNull(test.getValueBinding("name"));
 
     }
 

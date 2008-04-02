@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemTestCase.java,v 1.4 2003/10/09 22:58:14 craigmcc Exp $
+ * $Id: UISelectItemTestCase.java,v 1.5 2003/11/07 01:23:57 craigmcc Exp $
  */
 
 /*
@@ -153,6 +153,50 @@ public class UISelectItemTestCase extends ValueHolderTestCaseBase {
         assertEquals("foo", selectItem.getItemValue());
         selectItem.setItemValue(null);
         assertNull(selectItem.getItemValue());
+
+    }
+
+
+    public void testValueBindings() {
+
+	super.testValueBindings();
+	UISelectItem test = (UISelectItem) component;
+
+	request.setAttribute("foo", "bar");
+	test.setItemDescription(null);
+	assertNull(test.getItemDescription());
+	test.setItemDescription("baz");
+	assertEquals("baz", test.getItemDescription());
+	test.setValueBinding("itemDescription", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getItemDescription());
+	assertNotNull(test.getValueBinding("itemDescription"));
+	test.setItemDescription("bop");
+	assertEquals("bop", test.getItemDescription());
+	assertNull(test.getValueBinding("itemDescription"));
+
+	request.setAttribute("foo", "bar");
+	test.setItemLabel(null);
+	assertNull(test.getItemLabel());
+	test.setItemLabel("baz");
+	assertEquals("baz", test.getItemLabel());
+	test.setValueBinding("itemLabel", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getItemLabel());
+	assertNotNull(test.getValueBinding("itemLabel"));
+	test.setItemLabel("bop");
+	assertEquals("bop", test.getItemLabel());
+	assertNull(test.getValueBinding("itemLabel"));
+
+	request.setAttribute("foo", "bar");
+	test.setItemValue(null);
+	assertNull(test.getItemValue());
+	test.setItemValue("baz");
+	assertEquals("baz", test.getItemValue());
+	test.setValueBinding("itemValue", application.getValueBinding("#{foo}"));
+	assertEquals("bar", test.getItemValue());
+	assertNotNull(test.getValueBinding("itemValue"));
+	test.setItemValue("bop");
+	assertEquals("bop", test.getItemValue());
+	assertNull(test.getValueBinding("itemValue"));
 
     }
 

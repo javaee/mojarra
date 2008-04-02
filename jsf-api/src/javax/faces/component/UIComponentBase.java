@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.80 2003/11/06 15:39:42 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.81 2003/11/07 01:23:48 craigmcc Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import java.util.WeakHashMap;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
@@ -153,6 +154,10 @@ public abstract class UIComponentBase extends UIComponent {
                             throw new NullPointerException();
                         }
                         String name = (String) key;
+			ValueBinding vb = getValueBinding(name);
+			if (vb != null) {
+			    return (vb.getValue(getFacesContext()));
+			}
                         PropertyDescriptor pd =
                             getPropertyDescriptor(name);
                         if (pd != null) {
@@ -198,6 +203,7 @@ public abstract class UIComponentBase extends UIComponent {
                                 } else {
                                     throw new IllegalArgumentException(null);
                                 }
+				setValueBinding(name, null);
                                 return (result);
                             } catch (IllegalAccessException e) {
                                 throw new FacesException(e);
@@ -209,6 +215,7 @@ public abstract class UIComponentBase extends UIComponent {
                             if (value == null) {
                                 throw new NullPointerException();
                             }
+			    setValueBinding(name, null);
                             return (super.put(key, value));
                         }
                     }
@@ -245,6 +252,57 @@ public abstract class UIComponentBase extends UIComponent {
         return (attributes);
 
     }
+
+
+    // ---------------------------------------------------------------- Bindings
+
+
+    // The set of ValueBindings for this component, keyed by property name
+    // This collection is lazily instantiated
+    private Map bindings = null;
+
+
+    /**
+     * @exception NullPointerException {@inheritDoc}
+     */ 
+    public ValueBinding getValueBinding(String name) {
+
+	if (name == null) {
+	    throw new NullPointerException();
+	}
+	if (bindings == null) {
+	    return (null);
+	} else {
+	    return ((ValueBinding) bindings.get(name));
+	}
+
+    }
+
+
+    /**
+     * @exception NullPointerException {@inheritDoc}
+     */ 
+    public void setValueBinding(String name, ValueBinding binding) {
+
+	if (name == null) {
+	    throw new NullPointerException();
+	}
+	if (binding != null) {
+	    if (bindings == null) {
+		bindings = new HashMap();
+	    }
+	    bindings.put(name, binding);
+	} else {
+	    if (bindings != null) {
+		bindings.remove(name);
+		if (bindings.size() == 0) {
+		    bindings = null;
+		}
+	    }
+	}
+
+    }
+
 
 
     // -------------------------------------------------------------- Properties
@@ -314,7 +372,14 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public String getId() {
-        return (this.id);
+
+	ValueBinding vb = getValueBinding("id");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (id);
+	}
+
     }
 
     /**
@@ -324,9 +389,11 @@ public abstract class UIComponentBase extends UIComponent {
     public void setId(String id) {
         
         validateId(id);
-        
-        // Save the newly assigned component identifier
+
+	// Save the newly assigned component identifier
         this.id = id;
+	setValueBinding("id", null);
+
     }
 
 
@@ -353,12 +420,23 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public boolean isRendered() {
-        return (this.rendered);
+
+	ValueBinding vb = getValueBinding("rendered");
+	if (vb != null) {
+	    Boolean value = (Boolean) vb.getValue(getFacesContext());
+	    return (value.booleanValue());
+	} else {
+	    return (this.rendered);
+	}
+
     }
     
 
     public void setRendered(boolean rendered) {
+
         this.rendered = rendered;
+	setValueBinding("rendered", null);
+
     }
 
 
@@ -369,12 +447,22 @@ public abstract class UIComponentBase extends UIComponent {
 
 
     public String getRendererType() {
-        return (this.rendererType);
+
+	ValueBinding vb = getValueBinding("rendererType");
+	if (vb != null) {
+	    return ((String) vb.getValue(getFacesContext()));
+	} else {
+	    return (this.rendererType);
+	}
+
     }
 
 
     public void setRendererType(String rendererType) {
+
         this.rendererType = rendererType;
+	setValueBinding("rendererType", null);
+
     }
 
 
@@ -382,15 +470,14 @@ public abstract class UIComponentBase extends UIComponent {
         boolean result = false;
 
         Renderer renderer = null;
-        String rendererType = getRendererType();
-        
-        if (rendererType != null) {
+        if (getRendererType() != null) {
             if (null != 
-                (renderer = getRenderer(FacesContext.getCurrentInstance()))) {
+                (renderer = getRenderer(getFacesContext()))) {
                 result = renderer.getRendersChildren();
             }
         }
         return result;
+
     }
 
 
@@ -1402,6 +1489,24 @@ public abstract class UIComponentBase extends UIComponent {
     // ------------------------------------------------------- Protected Methods
 
 
+    // Cache a reference to the FacesContext the first time it is requested
+    // This is *not* part of the saved state of the component
+    private transient FacesContext facesContext = null;
+
+
+    /**
+     * <p>Return the {@link FacesContext} instance for the current request.</p>
+     */
+    protected FacesContext getFacesContext() {
+
+	if (facesContext == null) {
+	    facesContext = FacesContext.getCurrentInstance();
+	}
+	return (facesContext);
+
+    }
+
+
     /**
      * <p>Return the {@link Renderer} instance associated with this
      * {@link UIComponent}, if any; otherwise, return <code>null</code>.</p>
@@ -1429,7 +1534,7 @@ public abstract class UIComponentBase extends UIComponent {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[7];
+        Object values[] = new Object[8];
         // copy over "attributes" to a temporary map, so that
         // any references maintained due to "attributes" being an inner class
         // is not saved.
@@ -1437,12 +1542,13 @@ public abstract class UIComponentBase extends UIComponent {
             HashMap attributesCopy = new HashMap(attributes);
             values[0] = attributesCopy;
         }
-        values[1] = clientId;
-        values[2] = componentRef;
-        values[3] = id;
-        values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
-        values[5] = rendererType;
-        values[6] = saveAttachedState(context, listeners);
+	values[1] = saveBindingsState(context);
+        values[2] = clientId;
+        values[3] = componentRef;
+        values[4] = id;
+        values[5] = rendered ? Boolean.TRUE : Boolean.FALSE;
+        values[6] = rendererType;
+        values[7] = saveAttachedState(context, listeners);
         // Don't save the transient flag.  Asssert that it is false
         // here.
                     
@@ -1465,14 +1571,15 @@ public abstract class UIComponentBase extends UIComponent {
                 attributes.put(key, value);
             }
         }
-        clientId = (String) values[1];
-        componentRef = (String) values[2];
-        id = (String) values[3];
-        rendered = ((Boolean) values[4]).booleanValue();
-        rendererType = (String) values[5];
+	bindings = restoreBindingsState(context, values[1]);
+        clientId = (String) values[2];
+        componentRef = (String) values[3];
+        id = (String) values[4];
+        rendered = ((Boolean) values[5]).booleanValue();
+        rendererType = (String) values[6];
         List [] restoredListeners = null;
         if (null != (restoredListeners = (List [])
-                     restoreAttachedState(context, values[6]))) {
+                     restoreAttachedState(context, values[7]))) {
             // if there were some listeners registered prior to this
             // method being invoked, merge them with the list to be
             // restored.
@@ -1851,6 +1958,46 @@ public abstract class UIComponentBase extends UIComponent {
             }
         }
         return result;
+    }
+
+
+    private Map restoreBindingsState(FacesContext context, Object state) {
+
+	if (state == null) {
+	    return (null);
+	}
+	Object values[] = (Object[]) state;
+	String names[] = (String[]) values[0];
+	Object states[] = (Object[]) values[1];
+	Map bindings = new HashMap();
+	for (int i = 0; i < names.length; i++) {
+	    bindings.put(names[i],
+			 restoreAttachedState(context, states[i]));
+	}
+	return (bindings);
+
+    }
+
+
+    private Object saveBindingsState(FacesContext context) {
+
+	if (bindings == null) {
+	    return (null);
+	}
+	List names = new ArrayList();
+	List states = new ArrayList();
+	Iterator keys = bindings.keySet().iterator();
+	while (keys.hasNext()) {
+	    String key = (String) keys.next();
+	    ValueBinding binding = (ValueBinding) bindings.get(key);
+	    names.add(key);
+	    states.add(saveAttachedState(context, binding));
+	}
+	Object values[] = new Object[2];
+	values[0] = (String[]) names.toArray(new String[names.size()]);
+	values[1] = (Object[]) states.toArray(new Object[states.size()]);
+	return (values);
+
     }
 
 

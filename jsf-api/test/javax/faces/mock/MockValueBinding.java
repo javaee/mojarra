@@ -1,5 +1,5 @@
 /*
- * $Id: MockValueBinding.java,v 1.1 2003/10/21 23:58:22 craigmcc Exp $
+ * $Id: MockValueBinding.java,v 1.2 2003/11/07 01:24:00 craigmcc Exp $
  */
 
 /*
@@ -47,6 +47,9 @@ public class MockValueBinding extends ValueBinding {
             throw new NullPointerException();
         }
         this.application = application;
+	if (ref.startsWith("#{") && ref.endsWith("}")) {
+	    ref = ref.substring(2, ref.length() - 1);
+	}
         this.ref = ref;
 
     }
