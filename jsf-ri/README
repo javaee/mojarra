@@ -1,7 +1,7 @@
 This README documents the Sun Reference implementation (RI) for JSR 127,
 JavaServer (tm) Faces.
 
-jsf-api cvs tag for this implementation: JSF_API_2003030G
+jsf-api cvs tag for this implementation: JSF_API_20031009
 jsf-api-spec for this implementation: JSF_20030930.pdf
 
 Installation Notes
@@ -21,435 +21,278 @@ distribution in your WEB-INF/lib directory in your webapp.
 Major changes/features in this release:
 =======================================
 
-SECTION: API Changes by scarab issue
+SECTION: API Changes by scarab issue, since JSF_API_20030930 draft
 
-    JSFA92 
+JSFA3 Naming Container
 
-      * Add requirements for <f:subview/> tag.
+  M src/javax/faces/webapp/UIComponentTag.java
+    use request scope to store the componentIDs HashMap instead
+    of page scope since we get a new PageContext in the case of
+    imported and included pages.
+  A src/javax/faces/component/UINamingContainer.java
+    NamingContainer implementation.
 
-      * Remove "lenient" attribute from <f:convert_datetime/>.
+  M src/javax/faces/application/StateManager.java
+  M src/javax/faces/application/ViewHandler.java
 
-      * Miscellaneous cleanups (see change bars).
+    Move the responsibility for enforcing the id uniqueness property back
+    to StateManager.saveSerializedView(), as Adam suggested.
 
-      SPEC IMPACT: Needs to have "lenient" property removed from Section
-      3.3.3 if it was added (Ed, can you double check this?).
+  M src/javax/faces/webapp/UIComponentTag    
+   - UIComponentTag will now store a list in the PageContext      
+     of all user defined component ID.  If any duplicates      
+     are found throw an IllegalStateException wrapped by a       
+     JSPException.      
+   - Updated pending remark in doStartTag().  The FacesContext      
+     will be checked for in the PageContext first, if not found,      
+     then call FacesContext.getCurrentInstance().   
+     Once obtained store in PageContext to refrain from repeated calls to       
+     getCurrentInstance().
 
-      RI IMPACT: Remove "lenient" attribute from the TLD and
-      implementation class for the <f:convert_datetime> tag.
+     Spec bug.  UIForm must still implement NamingContainer.  This was
+     removed accidentally when applying Adam's proposal to the code.
 
-      DEMO IMPACT: All date/time parsing must strictly match the
-      specified pattern.
+     Removed unused instance variable.
 
-      RI IMPACT:
+JSFA101
 
-      * Implement new tag for <f:subview/>
+  - Add mapping of component type "NamingContainer" to UINamingContainer.
 
-      * Relax the current TLV so that, if you are nested inside a naming
-	container tag that is inside a conditional or iterator, you need
-	not have an id.
+  M tools/javax/faces/generate/GenerateConcreteClasses.java
 
-      * Review change bars in Chapter 9 carefully for current compliance and/or
-	problems where the spec is not complete enough.
+  - generate an implementation of the {save,restore}State() methods on
+    StateHolder.
 
-      * Remove the long-ago deprecated FacesTag and FacesBodyTag classes
-	that were replaced by UIComponentTag and UIComponentBodyTag.
+  RI Impact: 
 
-   JSFA98
+  These changes will need to be pulled into the jsf-ri-config.xml
 
-    Clarify responsibilities of methods on RenderKit and
-    RenderKitFactory to be more consistent with other factories like
-    Applicaton.
+  When we generate the jsf-ri-config.xml, these changes will automatically
+  get pulled in.
 
-    M src/javax/faces/render/RenderKit.java
+  Change the html taglib to use these new component types that map to
+  concrete HTML components.
 
-    - addRenderer() can repace existing Renderers for the same identifier.
+  M doc/standard-html-renderkit.xml
 
-    - getRenderer() returns null instead of IAE if no Renderer is registered
-      for the specified type.
+  - add missing component for TextRenderer HtmlOutputText
 
-    - getResponseStream() renamed to createResponseStream() for consistency
-      with createResponseWriter().
+  - add component-type entries for the concrete HTML Components.
 
+  - remove "base" where it occurrs.
 
-    M src/javax/faces/render/RenderKtFactory.java
+  - Add component-type elements for all <renderers>
 
-    - addRenderKit() can replace existing RenderKits for the same identifier.
+  - Normalize all occurrences of "TextArea" to be "Textarea".
 
-    - getRenderKit() returns null instead of IAE of no RenderKit is registered
-      for the specified identifier.  The first form (taking only a
-      renderKitId) must return an application-wide singeton; the second
-      form (customized by a FacesContext) need not.
+  - Assign default values to primitive types.
 
-    RI IMPACTS:
+    Boolean == false
 
-    - Modify implementation of RenderKitImpl and RenderKitFactoryImpl
-      to reflect the revised responsibilities.
+    Number types == <number>.MIN_VALUE.
 
-    - Update unit tests to reflect ability to replace existing RenderKits and
-      Renderers, and null-returns on unknown identifiers.
 
-   JSFA80/106
+JSFA126 attached objects.
 
-      * Require that StateManager saves and restores the current Locale
-	from/to the FacesContext.
+   M src/javax/faces/component/UIComponentBase.java
 
-   JSFA101
+   - find component fix, from Ryan Lubke.
 
-      we now have a tool that generates the concrete html components in
-      the package javax.faces.component.html from meta-data in the
-      standard-html-renderkit.xml file.  This tool will be expanded to
-      generate the TLD and tag handler classes as well.
+     Make sure to look if the match requested *is* a naming container.
 
-      The spec now includes a standard-html-renderkit.xml file, which is
-      a faces-config file that defines the standard html renderkit.
-
-
-    JSFA116
-
-      * <jsp:include> and <c:import> now work.
-
-    JSFA120
-
-      Implement the API-related changes for queueing events and have
-      them bubble up to the UIViewRoot (unless intercepted or modified
-      by some component in between the source component and the tree
-      root).
-
-    JSFA121
-
-      Make the code that parses the faces-config.xml install any
-      phase-listener instances it finds.
-
-      Add phase-listener syntax to DTD.
-
-      RI Impact:
-
-      The digester rules need to change to cause a PhaseListener to be
-      added when a <phase-listener> element is encountered in the
-      faces-config.xml file.
-
-    JSFA122
-
-      M src/javax/faces/component/UISelectMany.java
-
-      - document that valueRefs for UISelectMany may also support "List of
-	String".
-    
-    JSFA123
-
-      RI and Demo Impact: any place that implements 
-
-      UIComponent.decode() or UIComponent.processDecodes() will have to
-      remove the "throws IOException" statement.
-				    
-    JSFA22 
-
-      Remove the setComponent() method from StateHolder.  Move the
-      responsibility of letting your attached object know about yourself to be
-      the responsibility of the attachee.  For example, for things that have a
-      ValueHolderSupport, such as UIOutputBase, they must manually call
-      setComponent() on the ValueHolderSupport instance.
-
-      DataGrid now works with save state in client or on server.
-      Previously it only worked on server.
-
-      Bugfix to correctly handle UIComponentBase.getAttributes() special
-      attribute/property transparency map.
-
-    JSFA76
-
-      FormRenderer.encode() must render a hidden field with the name being
-      the clientId of the UIForm component.  The value is inconsequential,
-      but may need to be non-null.  Not sure.  Whatever you need to do to
-      make the below logic in decode() work.
-
-      FormRenderer.decode() must check
-      RequestParameterMap.containsKey(clientId).  If so, it must call
-      UIForm.setSubmitted(true).  Because we rendered a hidden field in
-      encode, this will only happen to be the case if this is the form that
-      was submitted.
-
-    JSFA115
-
-      Per EG discussion, we decided to add back two convenience methods
-      that can be used for efficiency, because they avoid allocating the
-      underlying List or Map if it's not already there:
-
-      * public int getChildCount();
-
-      * public UIComponent getFacet(String name);
-
-      RI IMPACT: No *required* changes, but code that currently calls
-      component.getChildren().size() or component.getFacets().get("...")
-      should be revised to use the new method signatures (for
-      readability as well as potential performance improvement).
-
-      [JSFA115] For symmetry with the way that children and facets are
-      handled, replace all the attribute-related methods with a
-      getAttributes() that returns a mutable Map.
-
-      RI IMPACT: Replace all the getAttribute(), getAttributeNames(),
-      and setAttribute() calls with corresponding sequences.
-
-      DEMO IMPACT: Same as RI IMPACT.
-
-      NOTE: I tagged the jsf-api repository just before this commit with
-      tag "JSF_API_20030919_BEFORE_ATTRIBUTES" if you want to be latest
-      and greatest before this change that breaks compiling -- I did
-      some bugfixes.
-
-      [JSFA115] Switching to behavioral interfaces like ValueHolder has
-      introduced some duplicate logic in the component classes that used
-      to extend UIOutput.  It makes sense to create a support class to
-      which these component classes can delegate the required behavior,
-      in the same way that components implementing NamingContainer can
-      delegate to NamingContainerSupport.
-
-      [JSFA115] Flesh out ValueHolderSupport, including its support for
-      saving and restoring its own state as an attached object.
-
-      [JSFA115] Make all components that implement ValueHolder delegate
-      this functionality to an instance of ValueHolderSupport, and make
-      sure this instance variable is saved and restored as an attached
-      object.
-
-      [JSFA115] Add a new test case in ValueHolderTestCaseBase that
-      ensures all of the properties reflected in the ValueHolder
-      interface (including a precisely configured Converter instance)
-      are correctly saved and restored.  This test is inherited by all
-      of the component test cases for components that implement
-      ValueHolder, so saving/restoring the attached object will be
-      tested in all of those cases.
-
-      [JSFA115] Bugfix.  getChildren().set() would fail if an old child
-      was being replaced with a new one that has the same "id".  The
-      check for validateMissing() here is superfluous, because the old
-      component will be removed if it is present.
-
-      [JSFA115] Unit test updates for transition back to concrete
-      component classes.  See next commit message for detailed impacts.
-
-      [JSFA115] Switch generic components back to concrete classes;
-      eliminate the javax.faces.component.base package.
-
-      RI IMPACT:
-
-      * Change jsf-ri-config.xml to register the revised concrete
-        component classes.
-
-      * Change unit tests that instantiate concrete components.
-
-      DEMO IMPACT:
-
-      * Change inheritance of any demo-level component class that
-        inherits from
-	a concrete Faces base class.
-
-   TCK related changes
-
-     RI Impact: FacesContext Impl needs to throw IllegalStateException from
-     every FacesContext method (except release()) if any method is called
-     after release() is called.  That's all for now, since our RI doesn't
-     recycle FacesContext instances.
-
-     State that the implementation of FacesContext.release() must call
-     setCurrentInstance(null).
-
-   JSFA119
-
-     RI Impact: I think this will break some of our lifecycle tests.  Also, I
-     think we're going to want to change the exception we catch in
-     UpdateModelValuesPhase to be RuntimeException.
-
-     M src/javax/faces/component/UIComponent.java
-
-     - Spec that if a RuntimeException is thrown during decode, validation,
-       or update model processing, it is caught, renderResponse() is called,
-       and the exception is re-thrown.
-
-     M src/javax/faces/component/base/UIComponentBase.java
-
-     - implement the above behavior
-
-   JSFA110/JSFA42
-
-     M src/javax/faces/application/ViewHandler.java
-
-     +     * <p>The default implementation of <code>restoreView</code>
-     +     * must examine the deployment descriptor for this web
-     +     * application to determine the manner in which the {@link
-     +     * javax.faces.webapp.FacesServlet} has been mapped to
-     +     * incoming urls.  If prefix mapping is used, this method
-     +     * simply calls {@link
-     +     * javax.faces.context.ExternalContext#dispatchMessage}
-     +     * passing the <code>viewId</code> of the argument
-     +     * <code>viewToRender</code>.  If suffix mapping is used, the
-     +     * default implementation must check the the servlet context
-     +     * init parameter named by the value of the constant {@link
-     +     * #DEFAULT_SUFFIX_PARAM_NAME}.  If this parameter is not
-     +     * defined, use {@link #DEFAULT_SUFFIX} as the suffix.  Append
-     +     * the suffix to the <code>viewId</code> of the argument
-     +     * <code>viewToRender</code>, and call {@link
-     +     * javax.faces.context.ExternalContext#dispatchMessage} on the
-     +     * result.</p>
-
-     and new method:
-
-     +    /**
-     +     * <p>Returns the context relative path of the argument
-     +     * <code>viewId</code>, including any <code>url-pattern</code>
-     +     * prefix mapping defined by the application.</p>
-     +     *
-     +     * <p>The default implementation must examine the deployment
-     +     * descriptor for the current webapp and determine the
-     +     * <code>url-pattern</code> mapping given for the {@link
-     +     * javax.faces.webapp.FacesServlet}.  If the mapping is a
-     +     * prefix mapping, prepend the prefix mapping to the viewId,
-     +     * making sure to take any wildcards into account.  If the
-     +     * mapping is an extension mapping, take no action and just
-     +     * return the argument <code>viewId</code>.  The default
-     +     * implementation expects the argument <code>viewId</code> to
-     +     * be a context relative path, starting with '<code>/</code>'.
-     +     * If this is not the case, the default implementation thows
-     +     * <code>IllegalArgumentException</code>.</p>
-     +     *
-     +     * @param context the {@link FacesContext} for this request.
-     +     *
-     +     * @param viewId the context relative path of this viewId.
-     +     *
-     +     * @exception NullPointerException if <code>context</code> or
-     +     * <code>viewId</code> is <code>null</code>.
-     +     *
-     +     * @exception IllegalArgumentException if <code>viewId</code> is not
-     +     * valid for this <code>ViewHandler</code>.
-     +     *
-     +     */
-
-     +    public String getViewIdPath(FacesContext context, String viewId);
-
-     M src/javax/faces/context/ExternalContext.java
-
-     - remove 
-
-	public abstract String encodeURL(String url);
-
-   JSFA3
-
-     M src/javax/faces/application/ViewHandler.java
-
-     - add component id uniqueness checking to the ViewHandler.renderView's list of
-       things to do.
-
-     M src/javax/faces/component/NamingContainer.java
-
-      - remove all methods
-
-      - update SEPARATOR_CHAR
-
-     R src/javax/faces/component/NamingContainerSupport.java
-
-     - remove this class.
-
-     M src/javax/faces/component/UIComponent.java
-
-     - remove SEPARATOR_CHAR, defined on NamingContainer
-
-     - change getClientId() 
-
-	In particular, change
-	 UIComponentBase.getClientId(FacesContext)
-       to always generate the client ID as it does in the no-Renderer-
-       exists case, and only after that finishes, to call Renderer
-       convertClientId() to transform the ID into a proper form for output:
-
-	Renderer renderer = getRenderer();
-	if (renderer != null) {
-	  clientId = renderer.convertClientId(context, clientId);
-	}
-
-	   * <p>Return a client-side identifier for this component, generating
-     +     * one if necessary.  The associated {@link
-     +     * javax.faces.render.Renderer}, if present, will be asked to
-     +     * convert the clientId to a form suitable for transmission to the
-     +     * client.</p>
-
-     - change setId()
-
-     6. Spec setId() to throw IllegalArgumentException if either:
-     - the ID contains NamingContainer.SEPARATOR_CHAR
-     - the ID begins with UIViewRoot.UNIQUE_ID_PREFIX
-
-	   *
-	   * @param id The new component identifier
-	   *
-     +     * @exception IllegalArgumentException if <code>id</code> is zero
-     +     * length, begins with {@link NamingContainer#SEPARATOR_CHAR}, or
-     +     * {@link UIViewRoot#UNIQUE_ID_PREFIX}, or contains invalid
-     +     * characters
-
-     4. Rewrite UIComponentBase.findComponent() as a brute force search.
-       Change UIComponent.findComponent()'s spec to read as follows:
+   - new public static methods 
 
        /**
-	* Searches for a component with a matching ID.  The search will
-	* begin either from the root of the component tree or the
-	* nearest ancestor NamingContainer, whichever is closer, and
-	* continue recursively through all children and facets, but will not
-	* continue inside any NamingContainers.
-	* <p>
-	* If this component is itself a NamingContainer, the search will
-	* first recursively search children and facets inside of the component,
-	* then search from the root of the component tree or the
-	* nearest ancestor NamingContainer, whichever is closer.
-	* <p>
-	* If the ID contains instances of NamingContainer.SEPARATOR_CHAR,
-	* then the call is treated as a request for a recursive search.
-	* The ID will be divided into a series of IDs separated by
-	* NamingContainer.SEPARATOR_CHAR, reading from left to right.
-	* The search begins as above, but will instead search for a component
-	* matching the first ID.  If that search suceeds, findComponent()
-	* will search recursively all children and facets inside of that
-	* component for a descendant matching the second ID; etc.
-	* If any step of the search fails, findComponent() returns null
-	* (and does not throw an exception).
+	*
+	* <p>This method is called by {@link UIComponent} subclasses that
+	* want to save one or more attached objects.  It is a convenience
+	* method that does the work of saving attached objects that may or
+	* may not implement the {@link StateHolder} interface.  Using this
+	* method implies the use of {@link #restoreAttachedState} to restore
+	* the attached objects.</p>
+	*
+	* <p>This method supports saving attached objects of the following
+	* type: <code>Object</code>, <code>List</code> of
+	* <code>Object</code> and array of <code>List</code> of
+	* <code>Object</code>.</p>
+	*
+	* <p>Algorithm:</p>
+	*
+	* <ul>
+	*
+	* <p>If argument <code>attachedObject</code> is <code>null</code>
+	* return.</p>
+	*
+	* <p>If the argument <code>attachedObject</code> is an array of
+	* <code>List</code> call a private helper method to handle this
+	* case.  Return the result.</p>
+	*
+	* <p>If the argument <code>attachedObject</code> is itself a
+	* <code>List</code>, create a new <code>List</code> and fill it
+	* with one <code>StateHolderSaver</code> for each element in the
+	* argument <code>attachedObject</code> list.  Return the new
+	* <code>List</code>.</p>
+	*
+	* <p>Otherwise, create a <code>StateHolderSaver</code> instance
+	* around the argument <code>attachedObject</code> and return
+	* it.</p>
+	*
+	* </ul>
+	*
+	* @param context the {@link FacesContext} for this request.
+	*
+	* @param attachedObject the object, which may be an array of
+	* <code>List</code> instances, a <code>List</code> instance, or an
+	* Object.  The <code>attachedObject</code> (or the elements that
+	* comprise <code>attachedObject</code> may implement {@link
+	* StateHolder}.
+	*
+	* @exception NullPointerException if the context argument is null.
+	*
 	*/
 
-     M src/javax/faces/component/UIComponentBase.java
+       public static Object saveAttachedState(FacesContext context,
+					      Object attachedObject) {}
 
-     - new findComponent implementation.
+       /**
+	*
+	* <p>This method is called by {@link UIComponent} subclasses that
+	* need to restore the objects they saved using {@link
+	* #saveAttachedState}.  This method is tightly coupled with {@link
+	* #saveAttachedState}.</p>
+	*
+	* <p>This method supports restoring all attached objects types
+	* supported by {@link #saveAttachedState}.</p>
+	*
+	* <p>Algorithm:</p>
+	*
+	* <p>If the argument <code>stateObj</code> is an array of
+	* <code>Object</code> instances, call a private helper method and
+	* return the result.</p>
+	*
+	* <p>If the argument <code>stateObj</code> is a <code>List</code>,
+	* create a new <code>List</code> to hold the result.  Treat each
+	* element of <code>stateObj</code> as a
+	* <code>StateHolderSaver</code> instance and call
+	* <code>restore</code> on it, saving the result to the result
+	* <code>List</code>, which is returned.</p>
+	*
+	* <p>If the argument <code>stateObj</code> is an instance of
+	* <code>StateHolderSaver</code> call <code>restore</code> on it and
+	* return the result.</p>
+	*
+	* @param context the {@link FacesContext} for this request
+	*
+	* @param stateObj the opaque object returned from {@link
+	* #saveAttachedState}
+	*
+	* @exception NullPointerException if context is null.
+	*
+	* @exception IllegalStateException if we don't have a
+	* <code>StateHolderSaver</code> instance where we expect one.
+	*
+	*/
 
-     - new setId implementation
+       public static Object restoreAttachedState(FacesContext context,
+						 Object stateObj) throws IllegalStateException {}
 
-     - remove all traces of naming container interaction from the children
-       inner List impl.
+   RI and DEMO Impact: any component that has attached objects to save will
+   have to call UIComponentBase.{save,restore}AttachedState().  
 
-     M src/javax/faces/component/UIForm.java
+   A src/javax/faces/component/StateHolderSaver.java
 
-     - no longer implements NamingContainer.
+   - new home for StateHolderSaver.
 
-     R src/javax/faces/component/UINamingContainer.java
+   R src/javax/faces/application/StateHolderSaver.java
 
-     - no longer needed
+   - this shouldn't be in the application package.
 
-     M src/javax/faces/component/UIViewRoot.java
+   M src/javax/faces/application/StateManager.java
 
-     - no longer implements NamingContainer.
+   - remove attached object methods from here
 
-     M src/javax/faces/render/Renderer.java
+   M src/javax/faces/component/UICommand.java
+   M src/javax/faces/component/UIData.java
+   M src/javax/faces/component/UIGraphic.java
+   M src/javax/faces/component/UIInput.java
+   M src/javax/faces/component/UIOutput.java
+   M src/javax/faces/component/UIPanel.java
+   M src/javax/faces/component/UIParameter.java
+   M src/javax/faces/component/UISelectItem.java
+   M src/javax/faces/component/UISelectItems.java
+   M src/javax/faces/component/ValueHolderSupport.java
 
-     11. Change Renderer.getClientId(FacesContext context) to
-     Renderer.convertClientId(FacesContext context, String clientId)
-     with the following default implementation
+   - leverage the new attached object APIs
 
-     public String convertClientId(FacesContext context, String clientId)
-     {
-	return clientId;
-     }
+   - Added clarification to ViewHandler.renderView() and
+     ViewHandler.getViewIdPath() to consider the output of
+     HttpServletRequest.getServletPath() in congunction with the one or
+     more url-pattern mappings obtained from the deployment descriptor
+     to determine which mapping was used to invoke the FacesServlet.
 
-   
+   Scarab issue: JSFA110 JSFA42
 
+     Clarified ViewHandler.renderView() and ViewHandler.getViewIdPath()
+     to reflect the possibility of multiple url-pattern mappings for the
+     FacesServlet.
+
+     Modified ConfigParser to qualify digester with 'this'
+
+
+     Fold in Hans's spec changes.
+
+     RI Impact: see below
+
+     M src/javax/faces/application/ViewHandler.java
+
+     - change the contrat of getViewIdPath to take action in both prefix and
+       suffix cases.
+
+     - change the contract of renderView to replace the existing suffix with
+       the new one in the case of extension mapping.
+
+Bugfixes
+
+  M src/javax/faces/convert/DateTimeConverter.java
+
+  - Since GregorianCalendar requires a default TimeZone, we shouldn't be
+    wiping it out if possible.
+
+TCK related changes
+
+  M src/javax/faces/convert/DateTimeConverter.java    
+   - Javadoc clarifications to the following for returns      
+     of getters.    
+   - renamed {get,set}ParseLocale to {get,set}Locale    
+   - If timezone has not been set, but getTimeZone() is      
+     called, return the default TimeZone of the VM    
+   - If locale has not been set, but getLocale() is      
+     called, return the locale (and possibly default      
+     locale of VM) from FacesContext    
+   - Removed empty string check when testing patterns      
+      this should be passed through.    
+   - Ensure locales are set on all of the DateFormat       
+     instances.    
+   - Updated private method getLocale() to only leverage      
+     FacesContext to obtain Locale info.  Javadocs state      
+     that if no locale is available to the FacesContext      
+     the default VM locale will be used.
 
 SECTION: Spec document changes:
+
+  [JSFA92][JSFA116]
+
+  [9.5.7]
+
+    Assert that the <f:subview> tag must not contain an <f:view> tag.
+
+  [JSFA3]
+
+   7.6.1
+
+     Move the responsibility for enforcing the id uniqueness property back
+     to StateManager.saveSerializedView(), as Adam suggested.
+
 
   [JSFA120] Implement spec changes related to event bubbling changes.
 
