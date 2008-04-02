@@ -10,15 +10,39 @@
 </head>
 <body>
     
-    <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=8083EF8368D8E4CEEABDA29E7F36BC4D" enctype="application/x-www-form-urlencoded">
-<a id="form01:hyperlink01" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:hyperlink01'; document.forms['form01'].submit(); return false;">My Link</a><input type="hidden" name="form01:j_idcl" /><script type="text/javascript" language="Javascript"><!--
+    <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_test.jsp;jsessionid=70d6fd67fbf5a07b12b65aa300d4" enctype="application/x-www-form-urlencoded">
 
-function clearFormHiddenParams_form01(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['form01:j_idcl'].value = null;
-}
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('form01').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
-</script><a id="form01:hyperlink02" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:hyperlink02'; document.forms['form01'].submit(); return false;">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:hyperlink03'; document.forms['form01'].submit(); return false;">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:hyperlink04'; document.forms['form01'].submit(); return false;"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:hyperlink05'; document.forms['form01'].submit(); return false;"><img src="resbundle_image.gif;jsessionid=8083EF8368D8E4CEEABDA29E7F36BC4D" /></a><a id="form01:hyperlink06" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:hyperlink06';document.forms['form01']['param1'].value='value1'; document.forms['form01'].submit(); return false;">Paramter Link</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id46:j_id47" /><input type="hidden" name="form01" value="form01" /></form>
+</script>
+<a id="form01:hyperlink01" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink01,form01:hyperlink01'); document.forms['form01'].submit(); return false;">My Link</a><a id="form01:hyperlink02" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink02,form01:hyperlink02'); document.forms['form01'].submit(); return false;">This is a String property</a><a id="form01:hyperlink03" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink03,form01:hyperlink03'); document.forms['form01'].submit(); return false;">RES-BUNDLE LINK</a><a id="form01:hyperlink04" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink04,form01:hyperlink04'); document.forms['form01'].submit(); return false;"><img src="duke.gif" /></a><a id="form01:hyperlink05" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink05,form01:hyperlink05'); document.forms['form01'].submit(); return false;"><img src="resbundle_image.gif;jsessionid=70d6fd67fbf5a07b12b65aa300d4" /></a><a id="form01:hyperlink06" href="#" onclick="document.forms['form01'].addParams('form01:hyperlink06,form01:hyperlink06,param1,value1'); document.forms['form01'].submit(); return false;">Paramter Link</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id231:j_id232" /><input type="hidden" name="form01" value="form01" /></form>
 </body>
 </html>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.98 2006/05/17 19:00:47 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.99 2006/07/25 21:06:04 rlubke Exp $
  */
 
 /*
@@ -31,9 +31,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-import java.util.Map;
-
 import javax.faces.FacesException;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
@@ -43,11 +40,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import com.sun.faces.util.Util;
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
+import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.Util;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -206,32 +205,18 @@ public class ButtonRenderer extends HtmlBasicRenderer {
             writer.writeAttribute("name", clientId, "clientId");
             writer.writeAttribute("value", label, "value");
         }
-
-	StringBuffer sb = new StringBuffer();
-	// get the clearHiddenField script, if necessary
-	String clearScript = getClearHiddenFieldScript(context, component);
-        if (clearScript != null && clearScript.length() != 0) {
-	    sb.append(clearScript);
-	}
         
         // append user specified script for onclick if any.
         String onclickAttr = (String)component.getAttributes().get("onclick");
         if (onclickAttr != null && onclickAttr.length() != 0) {
-            sb.append(onclickAttr);
-            
-        }
-	// only output the attribute if necessary
-	clearScript = sb.toString();
-        if (clearScript != null && clearScript.length() != 0) {
-	    writer.writeAttribute("onclick", clearScript, null);
-	}
+            writer.writeAttribute("onclick", onclickAttr, null);
+        }        
 
         RenderKitUtils.renderPassThruAttributes(context, 
                                                 writer, 
                                                 component, 
                                                 new String[] {"onclick"});
         RenderKitUtils.renderXHTMLStyleBooleanAttributes(writer, component);
-
 
         if (null != (styleClass = (String)
             component.getAttributes().get("styleClass"))) {

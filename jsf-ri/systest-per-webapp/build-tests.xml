@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.27 2006/05/10 00:18:57 rogerk Exp $
+ $Id: build-tests.xml,v 1.28 2006/07/25 21:06:08 rlubke Exp $
 -->
 
 <!--
@@ -48,7 +48,6 @@
     <property name="applications"
               value="replace-application,
                    replace-statemanager,                                    
-                   command-link-back-button,
                    nested-datatables,
                    jar-ordering,                  
                    replace-lifecycle,
@@ -68,8 +67,6 @@
               value="com/sun/faces/systest/ReplaceApplicationTestCase.class"/>
     <property name="replace-statemanager"
               value="com/sun/faces/systest/ReplaceStateManagerTestCase.class"/>
-    <property name="command-link-back-button"
-              value="com/sun/faces/systest/CommandLinkBackButtonTestCase.class"/>
     <property name="nested-datatables"
               value="com/sun/faces/systest/NestedDatatablesTestCase.class"/>
     <property name="jar-ordering"

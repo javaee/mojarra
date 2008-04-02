@@ -46,20 +46,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.html_basic.HtmlBasicRenderer.Param;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
 
 /**
  * <p>A set of utilities for use in {@link RenderKit}s.</p>
  */
-public class RenderKitUtils {
-
-    /**
-     * <p>The key under which passthrough attributes of a component
-     * may be stored under (within the component attribute map).</p>
-     */
-    private static final String PASSTHROUGH_LIST_ATTR =
-          "javax.faces.component.PassThroughAttributes";
+public class RenderKitUtils {    
 
     /**
      * <p>A <code>request</code> scope attribute defining the
@@ -843,4 +837,103 @@ public class RenderKitUtils {
     public static String createValidECMAIdentifier(String origIdentifier) {
         return origIdentifier.replace("-", "$_");
     }
+
+
+    /**
+     * <p>Renders the Javascript necessary to add and remove request
+     * parameters to the current form.</p>
+     * @param formClientId the client ID of the form
+     * @param writer the <code>ResponseWriter</code>
+     * @throws java.io.IOException if an error occurs writing to the response
+     */
+    public static void renderAddParamToFormJavaScript(String formClientId,
+                                                      ResponseWriter writer) 
+    throws IOException {
+        
+        boolean isXhtml = 
+              RIConstants.XHTML_CONTENT_TYPE.equals(writer.getContentType());
+        
+        writer.write('\n');
+        writer.startElement("script", null);
+        writer.writeAttribute("type", "text/javascript", null);
+        writer.writeAttribute("language", "Javascript", null);
+        if (isXhtml) {
+            writer.write("\n//<![CDATA[");
+        } else {
+            writer.write("\n<!--");
+        }
+        writer.write("\n    document.getElementById('");
+        writer.write(formClientId);
+        writer.write("').addParams = function(paramValuePairs) {");
+        writer.write("\n        var addedParams = this.addedParams;");
+        writer.write("\n        if (addedParams != null) {");        
+        writer.write("\n            for (var i = 0; i < addedParams.length; i++) {");
+        writer.write("\n                for (var p = 0; p < this.elements.length; p++) {");
+        writer.write("\n                    var element = this.elements[p];");
+        writer.write("\n                    if (addedParams[i] == elements[p].name) {");
+        writer.write("\n                        this.removeChild(element);");
+        writer.write("\n                        break;");
+        writer.write("\n                    }");
+        writer.write("\n                }");
+        writer.write("\n            }");
+        writer.write("\n        }");
+        writer.write("\n        addedParams = new Array();");
+        writer.write("\n        this.addedParams = addedParams;");
+        writer.write("\n        var params = paramValuePairs.split(',');");
+        writer.write("\n        for (var i = 0, ii = 0; i < params.length; i++, ii++) {");        
+        writer.write("\n            var param = document.createElement(\"input\");");
+        writer.write("\n            param.type = \"hidden\";");
+        writer.write("\n            param.name = params[i];");
+        writer.write("\n            param.value = params[i + 1];");
+        writer.write("\n            this.appendChild(param);");
+        writer.write("\n            addedParams[ii] = params[i]");
+        writer.write("\n            i = i + 1;");
+        writer.write("\n        }");
+        writer.write("\n    }");       
+        if (isXhtml) {
+            writer.write("\n//]]>\n");            
+        } else {
+            writer.write("\n//-->\n");
+        }
+        writer.endElement("script");
+        writer.write("\n");
+        
+    }
+
+    /**
+     * <p>Returns a string that can be inserted into the <code>onclick</code>
+     * handler of a command.  This string will add all request parameters
+     * as well as the client ID of the activated command to the form as
+     * hidden input parameters.</p>
+     * @param formClientId the client ID of the form
+     * @param commandClientId the client ID of the command
+     * @param params the nested parameters, if any
+     * @return a String suitable for the <code>onclick</code> handler
+     *  of a command
+     */
+    public static String getCommandLinkParamScript(String formClientId,
+                                                   String commandClientId,
+                                                   Param[] params) {
+
+        StringBuilder sb = new StringBuilder(64);       
+        sb.append("document.forms['");
+        sb.append(formClientId);
+        sb.append("'].addParams('");
+        sb.append(commandClientId);
+        sb.append(',');
+        sb.append(commandClientId);               
+
+        for (Param param : params) {         
+            sb.append(",");
+            sb.append(param.name);
+            sb.append(",");
+            sb.append(param.value);            
+        }
+        
+        sb.append("');");
+
+        return sb.toString();
+        
+    }    
+                           
 } // END RenderKitUtils

@@ -6,26 +6,70 @@
                                                                                 
 <html>
   <body>
-     <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=51f9a8a1563a3db07cf720bb8bc5e" enctype="application/x-www-form-urlencoded">
-<a id="form01:Link1" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:Link1';document.forms['form01']['param1'].value='value1';document.forms['form01']['param2'].value='value2'; document.forms['form01'].submit(); return false;">Link1</a><input type="hidden" name="form01:j_idcl" /><input type="hidden" name="param1" /><input type="hidden" name="param2" /><script type="text/javascript" language="Javascript"><!--
+     <form id="form01" name="form01" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=70fa669f5b2c90981d3f07d57106" enctype="application/x-www-form-urlencoded">
 
-function clearFormHiddenParams_form01(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['form01:j_idcl'].value = null;
- curForm.elements['param1'].value = null;
- curForm.elements['param2'].value = null;
-}
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('form01').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
-</script><a id="form01:Link2" href="#" onclick="clearFormHiddenParams_form01('form01');document.forms['form01']['form01:j_idcl'].value='form01:Link2';document.forms['form01']['param1'].value='value1';document.forms['form01']['param2'].value='value2'; document.forms['form01'].submit(); return false;">Link2</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id125:j_id126" /><input type="hidden" name="form01" value="form01" /></form><form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=51f9a8a1563a3db07cf720bb8bc5e" enctype="application/x-www-form-urlencoded">
-<a id="form02:Link3" href="#" onclick="clearFormHiddenParams_form02('form02');document.forms['form02']['form02:j_idcl'].value='form02:Link3';document.forms['form02']['param3'].value='value3';document.forms['form02']['param4'].value='value4'; document.forms['form02'].submit(); return false;">Link3</a><input type="hidden" name="form02:j_idcl" /><input type="hidden" name="param3" /><input type="hidden" name="param4" /><script type="text/javascript" language="Javascript"><!--
+</script>
+<a id="form01:Link1" href="#" onclick="document.forms['form01'].addParams('form01:Link1,form01:Link1,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link1</a><a id="form01:Link2" href="#" onclick="document.forms['form01'].addParams('form01:Link2,form01:Link2,param1,value1,param2,value2'); document.forms['form01'].submit(); return false;">Link2</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id233:j_id234" /><input type="hidden" name="form01" value="form01" /></form><form id="form02" name="form02" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=70fa669f5b2c90981d3f07d57106" enctype="application/x-www-form-urlencoded">
 
-function clearFormHiddenParams_form02(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['form02:j_idcl'].value = null;
- curForm.elements['param3'].value = null;
- curForm.elements['param4'].value = null;
-}
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('form02').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
-</script><a id="form02:Link4" href="#" onclick="clearFormHiddenParams_form02('form02');document.forms['form02']['form02:j_idcl'].value='form02:Link4'; document.forms['form02'].submit(); return false;">Link4</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id125:j_id126" /><input type="hidden" name="form02" value="form02" /></form>
+</script>
+<a id="form02:Link3" href="#" onclick="document.forms['form02'].addParams('form02:Link3,form02:Link3,param3,value3,param4,value4'); document.forms['form02'].submit(); return false;">Link3</a><a id="form02:Link4" href="#" onclick="document.forms['form02'].addParams('form02:Link4,form02:Link4'); document.forms['form02'].submit(); return false;">Link4</a><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id233:j_id234" /><input type="hidden" name="form02" value="form02" /></form>
   </body>
 </html>

@@ -11,14 +11,38 @@
         <title>User Defined JS Injection Test</title>        
     </head>
     <body>
-        <form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=57b1f1c144ee219395f91461791a5" enctype="application/x-www-form-urlencoded">
-<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){clearFormHiddenParams_j_id_id16('j_id_id16');document.forms['j_id_id16']['j_id_id16:j_idcl'].value='j_id_id16:j_id_id18'; document.forms['j_id_id16'].submit(); return false;};return (a()==false) ? false : b();">Link</a><input type="hidden" name="j_id_id16:j_idcl" /><script type="text/javascript" language="Javascript"><!--
+        <form id="j_id_id16" name="j_id_id16" method="post" action="/jsf-systest/faces/regression/InjectUserDefJS.jsp;jsessionid=711ef4fe1267f0932e7b9f84540b" enctype="application/x-www-form-urlencoded">
 
-function clearFormHiddenParams_j_id_id16(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['j_id_id16:j_idcl'].value = null;
-}
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('j_id_id16').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
-</script><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="clearFormHiddenParams_j_id_id16(this.form.id);alert('Are you sure?')" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3:j_id4" /><input type="hidden" name="j_id_id16" value="j_id_id16" /></form>
+</script>
+<a href="#" onclick="var a=function(){alert('Are you sure?');};var b=function(){document.forms['j_id_id16'].addParams('j_id_id16:j_id_id18,j_id_id16:j_id_id18'); document.forms['j_id_id16'].submit(); return false;};return (a()==false) ? false : b();">Link</a><input type="submit" name="j_id_id16:j_id_id20" value="Button" onclick="alert('Are you sure?')" /><input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id319:j_id320" /><input type="hidden" name="j_id_id16" value="j_id_id16" /></form>
     </body>
 </html>

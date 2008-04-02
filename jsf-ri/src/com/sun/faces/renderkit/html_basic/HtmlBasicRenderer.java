@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.110 2006/06/21 21:42:32 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.111 2006/07/25 21:06:04 rlubke Exp $
  */
 
 /*
@@ -53,7 +53,6 @@ import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.faces.RIConstants;
 import com.sun.faces.util.MessageFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
@@ -94,19 +93,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
     public static final String SCRIPT_LANGUAGE_JAVASCRIPT = "JavaScript";
 
     public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
-         "clearFormHiddenParams";
-    static final String DID_RENDER_SCRIPT = RIConstants.FACES_PREFIX +
-	"didRenderScript";
-    static final String RENDERED_HIDDEN_FIELDS = RIConstants.FACES_PREFIX +
-	"renderedHiddenFields";
-   
+         "clearFormHiddenParams";       
+      
     public HtmlBasicRenderer() {
         super();
-    }
-
-    //
-    // Class methods
-    //
+    }   
 
     //
     // Methods From Renderer
@@ -546,14 +537,15 @@ public abstract class HtmlBasicRenderer extends Renderer {
         return id;
     }
 
-
-    protected Param[] getParamList(FacesContext context, UIComponent command) {
+    /**
+     * @param command the command which may have parameters
+     * @return an array of parameters
+     */
+    protected Param[] getParamList(UIComponent command) {
+        
         ArrayList<Param> parameterList = new ArrayList<Param>();
 
-        Iterator<UIComponent> kids = command.getChildren().iterator();
-        while (kids.hasNext()) {
-            UIComponent kid = kids.next();
-
+        for (UIComponent kid : command.getChildren()) {
             if (kid instanceof UIParameter) {
                 UIParameter uiParam = (UIParameter) kid;
                 Object value = uiParam.getValue();
@@ -564,37 +556,28 @@ public abstract class HtmlBasicRenderer extends Renderer {
             }
         }
 
-        return (Param[]) parameterList.toArray(new Param[parameterList.size()]);
+        return parameterList.toArray(new Param[parameterList.size()]);
+        
     }
 
-
-    //inner class to store parameter name and value pairs
-    protected static class Param {
-
+    /**
+     * <p>Simple class to encapsulate the name and value of a 
+     * <code>UIParameeter</code>.
+     */
+    public static class Param {
+        
+        public String name;
+        public String value;
+        
         public Param(String name, String value) {
-            set(name, value);
-        }
-
-
-        private String name;
-        private String value;
-
-
-        public void set(String name, String value) {
             this.name = name;
             this.value = value;
         }
-
-
-        public String getName() {
-            return name;
-        }
-
-
-        public String getValue() {
-            return value;
-        }
     }
+
+
+
+   
     
     /**
      * <p>This <code>Iterator</code> is used to Iterator over

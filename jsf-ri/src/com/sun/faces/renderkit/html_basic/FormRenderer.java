@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.97 2006/05/18 23:07:54 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.98 2006/07/25 21:06:05 rlubke Exp $
  */
 
 /*
@@ -154,10 +154,11 @@ public class FormRenderer extends HtmlBasicRenderer {
             component.getAttributes().get("acceptcharset"))) {
             writer.writeAttribute("accept-charset", acceptcharset, 
                     "acceptcharset");
-        }
+        }               
         
-        RenderKitUtils.renderPassThruAttributes(context, writer, component);     
+        RenderKitUtils.renderPassThruAttributes(context, writer, component);
         writer.writeText("\n", component, null);
+                 
     }
 
 
@@ -201,31 +202,20 @@ public class FormRenderer extends HtmlBasicRenderer {
 
         // Render the end tag for form
         ResponseWriter writer = context.getResponseWriter();
-        assert (writer != null);
+        assert (writer != null);        
 
         // this hidden field will be checked in the decode method to
-        // determine if this form has been submitted.
-        //
+        // determine if this form has been submitted. 
+        String clientId = component.getClientId(context);
         writer.startElement("input", component);
         writer.writeAttribute("type", "hidden", "type");
-        writer.writeAttribute("name", component.getClientId(context),
+        writer.writeAttribute("name", clientId,
                               "clientId");
-        writer.writeAttribute("value", component.getClientId(context), "value");
-        writer.endElement("input");
-
-        writer.endElement("form");
+        writer.writeAttribute("value", clientId, "value");
+        writer.endElement("input");        
         
-        // reset necessary attributes, otherwise they will be persisted 
-        // by the state saving logic, which will cause the script, hidden fields 
-        // to be not rendered during postback.
-        component.getAttributes().remove(DID_RENDER_SCRIPT);
-        
-        // reset necessary attributes set in request scope, so that it doesn't
-        // hang around when the next form in the page is processed. Otherwise
-        // any parameters with the same form will be ignored.
-        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
-        requestMap.remove(RENDERED_HIDDEN_FIELDS);
-        
+        writer.endElement("form");               
+               
         if (logger.isLoggable(Level.FINER)) {
             logger.log(Level.FINER, "End encoding component " + component.getId());
         }

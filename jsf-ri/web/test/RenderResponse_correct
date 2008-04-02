@@ -12,7 +12,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<form id="basicForm" name="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=99ec0282023f3f31a393ffff9aa4" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
+<form id="basicForm" name="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=6eb2f7716564b81e4cc714767417" class="formClass" accept-charset="some-charset" accept="html,wml" enctype="application/x-www-form-urlencoded" target="_self" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -34,8 +34,8 @@
 <td><input id="basicForm:password1" type="password" name="basicForm:password1" value="" class="secretClass" /></td>
 </tr>
 <tr>
-<td><input id="basicForm:submit1" type="submit" name="basicForm:submit1" value="Login" onclick="clearFormHiddenParams_basicForm(this.form.id);" class="commandClass" /></td>
-<td><input id="basicForm:reset1" type="reset" name="basicForm:reset1" value="Reset" onclick="clearFormHiddenParams_basicForm(this.form.id);" /></td>
+<td><input id="basicForm:submit1" type="submit" name="basicForm:submit1" value="Login" class="commandClass" /></td>
+<td><input id="basicForm:reset1" type="reset" name="basicForm:reset1" value="Reset" /></td>
 </tr>
 </tbody>
 </table>
@@ -47,7 +47,7 @@
 
 	<TD>
 
-            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" name="basicForm:pushButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" style="someStyle" disabled="disabled" />
+            <input id="basicForm:pushButton" type="image" src="duke.gif;jsessionid=6eb2f7716564b81e4cc714767417" name="basicForm:pushButton" style="someStyle" disabled="disabled" />
 	</TD>
 
       </TR>
@@ -57,7 +57,7 @@
 
 	<TD>
 
-            <input id="basicForm:imageOnlyButton" type="image" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4?title=LOGIN&color=red" name="basicForm:imageOnlyButton" onclick="clearFormHiddenParams_basicForm(this.form.id);" />
+            <input id="basicForm:imageOnlyButton" type="image" src="/test/duke.gif;jsessionid=6eb2f7716564b81e4cc714767417?title=LOGIN&color=red" name="basicForm:imageOnlyButton" />
 	</TD>
 
       </TR>
@@ -66,15 +66,38 @@
 
 	<TD>
 
-	      <a id="basicForm:link" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:link'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text with localized outputMessage with &euro;</a><input type="hidden" name="basicForm:j_idcl" /><script type="text/javascript" language="Javascript"><!--
-
-function clearFormHiddenParams_basicForm(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['basicForm:j_idcl'].value = null;
-  curForm.target='_self';
-}
+	      
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('basicForm').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
 </script>
+<a id="basicForm:link" href="#" onclick="document.forms['basicForm'].addParams('basicForm:link,basicForm:link'); document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text with localized outputMessage with &euro;</a>
 
 	</TD>
 
@@ -84,7 +107,7 @@ function clearFormHiddenParams_basicForm(curFormName) {
 
 	<TD>
 
-	      <a id="basicForm:linkWithValue1" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:linkWithValue1'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
+	      <a id="basicForm:linkWithValue1" href="#" onclick="document.forms['basicForm'].addParams('basicForm:linkWithValue1,basicForm:linkWithValue1'); document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
 	</TD>
 
       </TR>
@@ -93,7 +116,7 @@ function clearFormHiddenParams_basicForm(curFormName) {
 
 	<TD>
 
-	      <a id="basicForm:linkWithValue2" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:linkWithValue2'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link textwith some text</a>   
+	      <a id="basicForm:linkWithValue2" href="#" onclick="document.forms['basicForm'].addParams('basicForm:linkWithValue2,basicForm:linkWithValue2'); document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link textwith some text</a>   
 	</TD>
 
       </TR>
@@ -102,37 +125,37 @@ function clearFormHiddenParams_basicForm(curFormName) {
 
 	<TD>
 
-	      <a id="basicForm:imageLink" href="#" style="someStyle" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4?title=LOGIN&color=red" /></a>
+	      <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm'].addParams('basicForm:imageLink,basicForm:imageLink'); document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=6eb2f7716564b81e4cc714767417?title=LOGIN&color=red" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" style="someStyle" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=6eb2f7716564b81e4cc714767417" style="someStyle" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:commandLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:commandLink'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
+            <a id="basicForm:commandLink" href="#" onclick="document.forms['basicForm'].addParams('basicForm:commandLink,basicForm:commandLink'); document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:commandParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:commandParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a><input type="hidden" name="name" /><input type="hidden" name="value" />
+            <a id="basicForm:commandParamLink" href="#" onclick="document.forms['basicForm'].addParams('basicForm:commandParamLink,basicForm:commandParamLink,name,horwat,value,password'); document.forms['basicForm'].submit(); return false;" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:hrefLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif"></a>
+            <a id="basicForm:hrefLink" href="#" onclick="document.forms['basicForm'].addParams('basicForm:hrefLink,basicForm:hrefLink'); document.forms['basicForm'].submit(); return false;"><img src="duke.gif"></a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:hrefParamLink" href="#" onclick="clearFormHiddenParams_basicForm('basicForm');document.forms['basicForm']['basicForm:j_idcl'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm'].addParams('basicForm:hrefParamLink,basicForm:hrefParamLink,name,horwat,value,password'); document.forms['basicForm'].target='_top'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=6eb2f7716564b81e4cc714767417" /></a>
         </TD>
       </TR>
 
@@ -140,7 +163,7 @@ function clearFormHiddenParams_basicForm(curFormName) {
 
 	<TD>
 
-	      <a id="basicForm:outputLink" name="basicForm:outputLink" href="test.html;jsessionid=99ec0282023f3f31a393ffff9aa4" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" name="basicForm:outputLink" href="test.html;jsessionid=6eb2f7716564b81e4cc714767417" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -150,37 +173,37 @@ function clearFormHiddenParams_basicForm(curFormName) {
 
 	<TD>
 
-	      <a id="basicForm:output_imageLink" name="basicForm:output_imageLink" href="test.html;jsessionid=99ec0282023f3f31a393ffff9aa4" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" /></a>
+	      <a id="basicForm:output_imageLink" name="basicForm:output_imageLink" href="test.html;jsessionid=6eb2f7716564b81e4cc714767417" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=6eb2f7716564b81e4cc714767417" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" usemap="#map1" ismap="ismap" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=6eb2f7716564b81e4cc714767417" usemap="#map1" ismap="ismap" /> 
         </TD>
 
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_commandLink" name="basicForm:output_commandLink" href="test.html;jsessionid=99ec0282023f3f31a393ffff9aa4" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" name="basicForm:output_commandLink" href="test.html;jsessionid=6eb2f7716564b81e4cc714767417" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_commandParamLink" name="basicForm:output_commandParamLink" href="test.html;jsessionid=99ec0282023f3f31a393ffff9aa4?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" name="basicForm:output_commandParamLink" href="test.html;jsessionid=6eb2f7716564b81e4cc714767417?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" name="basicForm:output_hrefLink" href="test.html;jsessionid=99ec0282023f3f31a393ffff9aa4"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" name="basicForm:output_hrefLink" href="test.html;jsessionid=6eb2f7716564b81e4cc714767417"><img src="duke.gif"></a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefParamLink" name="basicForm:output_hrefParamLink" href="test.html;jsessionid=99ec0282023f3f31a393ffff9aa4?name=horwat&value=password"><img src="duke.gif;jsessionid=99ec0282023f3f31a393ffff9aa4" /></a>
+            <a id="basicForm:output_hrefParamLink" name="basicForm:output_hrefParamLink" href="test.html;jsessionid=6eb2f7716564b81e4cc714767417?name=horwat&value=password"><img src="duke.gif;jsessionid=6eb2f7716564b81e4cc714767417" /></a>
         </TD>
       </TR>
 
@@ -714,23 +737,47 @@ see the <i>angle brackets</i> on this text
 
 </table>
 
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="basicForm" value="basicForm" /></form><form id="form2" name="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=99ec0282023f3f31a393ffff9aa4" enctype="application/x-www-form-urlencoded">
-<input type="submit" name="form2:j_id_id818" value="form2 button1" onclick="clearFormHiddenParams_form2(this.form.id);" />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="basicForm" value="basicForm" /></form><form id="form2" name="form2" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=6eb2f7716564b81e4cc714767417" enctype="application/x-www-form-urlencoded">
+<input type="submit" name="form2:j_id_id818" value="form2 button1" />
    <p />
-  <input type="submit" name="form2:j_id_id821" value="form2 button2" onclick="clearFormHiddenParams_form2(this.form.id);" /> <p />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="form2" value="form2" /></form><form id="form3" name="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=99ec0282023f3f31a393ffff9aa4" enctype="application/x-www-form-urlencoded">
-<input type="submit" name="form3:j_id_id827" value="form3 button1" onclick="clearFormHiddenParams_form3(this.form.id);" />
+  <input type="submit" name="form2:j_id_id821" value="form2 button2" /> <p />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="form2" value="form2" /></form><form id="form3" name="form3" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=6eb2f7716564b81e4cc714767417" enctype="application/x-www-form-urlencoded">
+<input type="submit" name="form3:j_id_id827" value="form3 button1" />
    <p />
-  <a href="#" onclick="clearFormHiddenParams_form3('form3');document.forms['form3']['form3:j_idcl'].value='form3:j_id_id830'; document.forms['form3'].submit(); return false;">form3 link1</a><input type="hidden" name="form3:j_idcl" /><script type="text/javascript" language="Javascript"><!--
-
-function clearFormHiddenParams_form3(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['form3:j_idcl'].value = null;
-}
+  
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('form3').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
-</script> <p />
-<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="form3" value="form3" /></form><form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=99ec0282023f3f31a393ffff9aa4" enctype="application/x-www-form-urlencoded">
-<a href="http://localhost:8080/test/;jsessionid=99ec0282023f3f31a393ffff9aa4">
+</script>
+<a href="#" onclick="document.forms['form3'].addParams('form3:j_id_id830,form3:j_id_id830'); document.forms['form3'].submit(); return false;">form3 link1</a> <p />
+<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id1:j_id2" /><input type="hidden" name="form3" value="form3" /></form><form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=6eb2f7716564b81e4cc714767417" enctype="application/x-www-form-urlencoded">
+<a href="http://localhost:8080/test/;jsessionid=6eb2f7716564b81e4cc714767417">
       Link Enabled
   </a><span>
       Link Disabled

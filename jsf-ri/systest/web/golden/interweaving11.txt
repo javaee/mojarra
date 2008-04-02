@@ -9,27 +9,50 @@
       <title>interweaving11</title>   
   </head>
   <body>
-    <form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=1bb975b5f1254a3e5166d3de1438" enctype="application/x-www-form-urlencoded">
-<a href="#" onclick="clearFormHiddenParams_j_id_id17('j_id_id17');document.forms['j_id_id17']['j_id_id17:j_idcl'].value='j_id_id17:j_id_id21';document.forms['j_id_id17']['param'].value='value'; document.forms['j_id_id17'].submit(); return false;">one</a><input type="hidden" name="j_id_id17:j_idcl" /><input type="hidden" name="param" /><script type="text/javascript" language="Javascript"><!--
+    <form id="j_id_id17" name="j_id_id17" method="post" action="/jsf-systest/faces/interweaving11.jsp;jsessionid=70ba0938b3e2b0663a3309083dbf" enctype="application/x-www-form-urlencoded">
 
-function clearFormHiddenParams_j_id_id17(curFormName) {
-  var curForm = document.forms[curFormName];
- curForm.elements['j_id_id17:j_idcl'].value = null;
- curForm.elements['param'].value = null;
-}
+<script type="text/javascript" language="Javascript">
+<!--
+    document.getElementById('j_id_id17').addParams = function(paramValuePairs) {
+        var addedParams = this.addedParams;
+        if (addedParams != null) {
+            for (var i = 0; i < addedParams.length; i++) {
+                for (var p = 0; p < this.elements.length; p++) {
+                    var element = this.elements[p];
+                    if (addedParams[i] == elements[p].name) {
+                        this.removeChild(element);
+                        break;
+                    }
+                }
+            }
+        }
+        addedParams = new Array();
+        this.addedParams = addedParams;
+        var params = paramValuePairs.split(',');
+        for (var i = 0, ii = 0; i < params.length; i++, ii++) {
+            var param = document.createElement("input");
+            param.type = "hidden";
+            param.name = params[i];
+            param.value = params[i + 1];
+            this.appendChild(param);
+            addedParams[ii] = params[i]
+            i = i + 1;
+        }
+    }
 //-->
 </script>
+<a href="#" onclick="document.forms['j_id_id17'].addParams('j_id_id17:j_id_id21,j_id_id17:j_id_id21,param,value'); document.forms['j_id_id17'].submit(); return false;">one</a>
             
                 
                 </br>
             
-                <a href="#" onclick="clearFormHiddenParams_j_id_id17('j_id_id17');document.forms['j_id_id17']['j_id_id17:j_idcl'].value='j_id_id17:j_id_id21j_id_1';document.forms['j_id_id17']['param'].value='value'; document.forms['j_id_id17'].submit(); return false;">two</a>
+                <a href="#" onclick="document.forms['j_id_id17'].addParams('j_id_id17:j_id_id21j_id_1,j_id_id17:j_id_id21j_id_1,param,value'); document.forms['j_id_id17'].submit(); return false;">two</a>
                 </br>
             
-                <a href="#" onclick="clearFormHiddenParams_j_id_id17('j_id_id17');document.forms['j_id_id17']['j_id_id17:j_idcl'].value='j_id_id17:j_id_id21j_id_2';document.forms['j_id_id17']['param'].value='value'; document.forms['j_id_id17'].submit(); return false;">three</a>
+                <a href="#" onclick="document.forms['j_id_id17'].addParams('j_id_id17:j_id_id21j_id_2,j_id_id17:j_id_id21j_id_2,param,value'); document.forms['j_id_id17'].submit(); return false;">three</a>
                 </br>
             
-        <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id37:j_id38" /><input type="hidden" name="j_id_id17" value="j_id_id17" /></form>
+        <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id39:j_id40" /><input type="hidden" name="j_id_id17" value="j_id_id17" /></form>
   </body>
 </html>
 

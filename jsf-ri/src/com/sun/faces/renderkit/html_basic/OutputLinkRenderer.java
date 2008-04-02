@@ -1,5 +1,5 @@
 /*
- * $Id: OutputLinkRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
+ * $Id: OutputLinkRenderer.java,v 1.29 2006/07/25 21:06:05 rlubke Exp $
  */
 
 /*
@@ -31,18 +31,17 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import java.io.IOException;
-import java.util.Iterator;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.MessageUtils;
-import com.sun.faces.renderkit.RenderKitUtils;
-
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
+
+import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -50,7 +49,7 @@ import java.util.logging.Level;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: OutputLinkRenderer.java,v 1.28 2006/05/17 19:00:48 rlubke Exp $
+ * @version $Id: OutputLinkRenderer.java,v 1.29 2006/07/25 21:06:05 rlubke Exp $
  */
 
 public class OutputLinkRenderer extends LinkRenderer {
@@ -260,7 +259,7 @@ public class OutputLinkRenderer extends LinkRenderer {
 
         //Write Anchor attributes
 
-        Param paramList[] = getParamList(context, component);
+        Param paramList[] = getParamList(component);
         int
             i = 0,
             len = paramList.length;
@@ -273,9 +272,9 @@ public class OutputLinkRenderer extends LinkRenderer {
             if (0 != i) {
                 sb.append("&");
             }
-            sb.append(paramList[i].getName());
+            sb.append(paramList[i].name);
             sb.append("=");
-            sb.append(paramList[i].getValue());
+            sb.append(paramList[i].value);
         }
         writer.writeURIAttribute("href",
                                  context.getExternalContext()
