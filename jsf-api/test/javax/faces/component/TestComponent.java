@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponent.java,v 1.2 2002/06/07 23:31:13 craigmcc Exp $
+ * $Id: TestComponent.java,v 1.3 2002/12/03 01:04:59 craigmcc Exp $
  */
 
 /*
@@ -8,6 +8,11 @@
  */
 
 package javax.faces.component;
+
+
+import java.io.IOException;
+import javax.faces.context.FacesContext;
+import javax.faces.event.RequestEvent;
 
 
 /**
@@ -28,6 +33,97 @@ public class TestComponent extends UIComponentBase {
 
     public String getComponentType() {
         return ("TestComponent");
+    }
+
+
+    // -------------------------------------------------- Trace-Enabled Methods
+
+
+    public boolean decode(FacesContext context) throws IOException {
+        trace("d-" + getComponentId());
+        return (super.decode(context));
+    }
+
+
+    public void encodeBegin(FacesContext context) throws IOException {
+        trace("eB-" + getComponentId());
+        super.encodeBegin(context);
+    }
+
+
+    public void encodeChildren(FacesContext context) throws IOException {
+        trace("eC-" + getComponentId());
+        super.encodeChildren(context);
+    }
+
+
+    public void encodeEnd(FacesContext context) throws IOException {
+        trace("eE-" + getComponentId());
+        super.encodeEnd(context);
+    }
+
+
+    public boolean processEvent(FacesContext context, RequestEvent event) {
+        trace("e-" + getComponentId());
+        return (super.processEvent(context, event));
+    }
+
+
+    public boolean updateModel(FacesContext context) {
+        trace("u-" + getComponentId());
+        return (super.updateModel(context));
+    }
+
+
+    public boolean validate(FacesContext context) {
+        trace("v-" + getComponentId());
+        return (super.validate(context));
+    }
+
+
+    public boolean processDecodes(FacesContext context) throws IOException {
+        trace("pD-" + getComponentId());
+        return (super.processDecodes(context));
+    }
+
+
+    public boolean processEvents(FacesContext context) {
+        trace("pE-" + getComponentId());
+        return (super.processEvents(context));
+    }
+
+
+    public boolean processValidators(FacesContext context) {
+        trace("pV-" + getComponentId());
+        return (super.processValidators(context));
+    }
+
+
+    public boolean processUpdates(FacesContext context) {
+        trace("pU-" + getComponentId());
+        return (super.processUpdates(context));
+    }
+
+
+    // --------------------------------------------------- Static Trace Methods
+
+
+    // Accumulated trace log
+    private static StringBuffer trace = new StringBuffer();
+
+    // Append to the current trace log (or clear if null)
+    public static void trace(String text) {
+        if (text == null) {
+            trace.setLength(0);
+        } else {
+            trace.append('/');
+            trace.append(text);
+        }
+    }
+
+    // Retrieve the current trace log
+    public static String trace() {
+        return (trace.toString());
     }
 
 

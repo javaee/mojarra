@@ -131,6 +131,7 @@
    description="Run all JUnit test cases"
        depends="build.test,
                 test.UIComponent,
+                test.UIComponentBase,
                 test.UICommand,
                 test.UIForm,
                 test.UIGraphic,
@@ -148,6 +149,15 @@
     <java classname="${test.runner}" fork="yes"
         failonerror="${test.failonerror}">
       <arg value="javax.faces.component.UIComponentTestCase"/>
+      <classpath refid="test.classpath"/>
+    </java>
+  </target>
+
+  <target name="test.UIComponentBase" depends="build.test">
+    <echo message="Running UIComponentBase tests ..."/>
+    <java classname="${test.runner}" fork="yes"
+        failonerror="${test.failonerror}">
+      <arg value="javax.faces.component.UIComponentBaseTestCase"/>
       <classpath refid="test.classpath"/>
     </java>
   </target>

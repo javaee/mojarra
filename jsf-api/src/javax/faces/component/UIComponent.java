@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.55 2002/09/21 22:24:32 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.56 2002/12/03 01:04:57 craigmcc Exp $
  */
 
 /*
@@ -266,7 +266,7 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Remove all child <code>UIComponent</code>s from the child list.
+     * <p>Remove all child <code>UIComponent</code>s from the child list.</p>
      */
     public void clearChildren();
 
@@ -335,7 +335,7 @@ public interface UIComponent extends Serializable {
 
     /**
      * <p>Return an <code>Iterator</code> over the child
-     * <code>UIComponent</code>s of this <code>UIComonent</code>,
+     * <code>UIComponent</code>s of this <code>UIComponent</code>,
      * in the order of their position in the child list.  If this
      * component has no children, an empty <code>Iterator</code>
      * is returned.</p>
@@ -366,6 +366,64 @@ public interface UIComponent extends Serializable {
      * @exception NullPointerException if <code>component</code> is null
      */
     public void removeChild(UIComponent component);
+
+
+    // ----------------------------------------------- Facet Management Methods
+
+
+    /**
+     * <p>Add the specified <code>UIComponent</code> as a facet associated
+     * with the name specified by its <code>componentId</code>, replacing
+     * any previous facet with that name.</p>
+     *
+     * @param facet The new facet {@link UIComponent}
+     *
+     * @exception IllegalArgumentException if the specified <code>facet</code>
+     *  has a <code>componentId</code> that is <code>null</code>
+     * @exception NullPointerException if <code>facet</code>
+     *  is <code>null</code>
+     */
+    public void addFacet(UIComponent facet);
+
+
+    /**
+     * <p>Remove all facet <code>UIComponent</code>s from this component.
+     * </p>
+     */
+    public void clearFacets();
+
+
+    /**
+     * <p>Return the facet <code>UIComponent</code> associated with the
+     * specified name, if any.  Otherwise, return <code>null</code>.</p>
+     *
+     * @param name Name of the facet to be retrieved
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public UIComponent getFacet(String name);
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the names of the facet
+     * <code>UIComponent</code>s of this <code>UIComponent</code>.  If
+     * this component has no facets, an empty <code>Iterator</code> is
+     * returned.</p>
+     */
+    public Iterator getFacetNames();
+
+
+    /**
+     * <p>Remove the facet <code>UIComponent</code> associated with the
+     * specified name, if there is one.</p>
+     *
+     * @param name Name of the facet to be removed
+     *
+     * @exception NullPointerException if <code>name</code>
+     *  is <code>null</code>
+     */
+    public void removeFacet(String name);
 
 
     // ------------------------------------------ Request Event Handler Methods
@@ -569,56 +627,6 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Process all events queued to this <code>UIComponent</code>, by
-     * calling the <code>processEvent()</code> method of the component itself,
-     * followed by the <code>processEvent()</code> method of each registered
-     * {@link RequestEventHandler}, for each of them.
-     * Normally, component writers will not override this method -- it is
-     * primarily available for use by tools.  Component writers should
-     * override the <code>processEvent()</code> method instead.</p>
-     *
-     * <p>Return <code>false</code> if the <code>processEvent()</code> method
-     * call for any queued event returned <code>false</code>; otherwise,
-     * return <code>true</code>.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public boolean processEvents(FacesContext context);
-
-
-    /**
-     * <p>Perform all validations for this component, as follows.</p>
-     * <ul>
-     * <li>Skip validation processing if the current <code>valid</code>
-     *     property of this component is <code>false</code>.</li>
-     * <li>Call the <code>validate()</code> method on this component,
-     *     to perform any self-validation that has been defined.</li>
-     * <li>Call the <code>validate()</code> method on each registered
-     *     {@link Validator} instance for this component.</li>
-     * <li>If any of the calls to a <code>validate()</code> method performed
-     *     in the preceding steps returns <code>false</code>, set the
-     *     <code>valid</code> property of this component to <code>false</code>
-     *     and return <code>false</code>.</li>
-     * <li>Otherwise, set the <code>valid</code> property of this component
-     *     to <code>true</code>, and return <code>true</code>.</li>
-     * </ul>
-     *
-     * <p>Normally, component writers will not overwrite this method -- it is
-     * primarily available for use by tools.  Component writers should
-     * override the <code>validate()</code> method instead.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public boolean processValidators(FacesContext context);
-
-
-    /**
      * <p>Perform the following algorithm to update the model data
      * associated with this component, if any, as appropriate.</p>
      * <ul>
@@ -675,6 +683,134 @@ public interface UIComponent extends Serializable {
      *  is <code>null</code>
      */
     public boolean validate(FacesContext context);
+
+
+    // ----------------------------------------------- Lifecycle Phase Handlers
+
+
+    /**
+     * <p>Perform the request component tree processing required by the
+     * <em>Apply Request Values</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+     * <li>Call the <code>processDecodes()</code> method of all facets
+     *     of this component, in the order their names would be
+     *     returned by a call to <code>getFacetNames()</code>.</li>
+     * <li>Call the <code>processDecodes() method of all children
+     *     of this component, in the order they would be returned
+     *     by a call to <code>getChildren()</code>.</li>
+     * <li>Call the <code>decode()</code> method of this component.</li>
+     * </ul>
+     *
+     * <p>Return <code>false</code> if any <code>processDecodes()</code> or
+     * <code>decode()</code> method call returned <code>false</code>.
+     * Otherwise, return <code>true</code>.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs during decoding
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public boolean processDecodes(FacesContext context) throws IOException;
+
+
+    /**
+     * <p>Perform the request component tree processing required by the
+     * <em>Handle Request Events</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+     * <li>Call the <code>processEvents()</code> method of all facets
+     *     of this component, in the order their names would be
+     *     returned by a call to <code>getFacetNames()</code>.</li>
+     * <li>Call the <code>processEvents()</code> method of all children
+     *     of this component, in the order they would be returned
+     *     by a call to <code>getChildren()</code>.</li>
+     * <li>For each event queued to this component:
+     *     <ul>
+     *     <li>Call the <code>processEvent()</code> method of each registered
+     *         {@link RequestEventHandler} for this component.</li>
+     *     <li>Call the <code>processEvent()</code> method of this
+     *         component.</li>
+     *     </ul></li>
+     * </ul>
+     *
+     * <p>Return <code>false</code> if any <code>processEvents()</code> or
+     * <code>processEvent()</code> method call returned <code>false</code>.
+     * Otherwise, return <code>true</code>.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public boolean processEvents(FacesContext context);
+
+
+    /**
+     * <p>Perform the request component tree processing required by the
+     * <em>Process Validations</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+     * <li>Call the <code>processValidators()</code> method of all facets
+     *     of this component, in the order their names would be
+     *     returned by a call to <code>getFacetNames()</code>.</li>
+     * <li>Call the <code>processValidators()</code> method of all
+     *     children of this component, in the order they would be
+     *     returned by a call to <code>getChildren()</code>.</li>
+     * <li>If the <code>valid</code> property of this component is
+     *     currently <code>true</code>:
+     *     <ul>
+     *     <li>Call the <code>validate()</code> method of each
+     *         {@link Validator} instance associated with this component.</li>
+     *     <li>Call the <code>validate()</code> method of this component.</li>
+     *     <li>If any of the calls to a <code>validate()</code> method
+     *         returned <code>false</code>, set the <code>valid</code>
+     *         property of this component to <code>false</code>.</li>
+     *     </ul></li>
+     * </ul>
+     *
+     * <p>Return <code>false</code> if any <code>processValidators()</code>
+     * method call returned <code>false</code>, or if the <code>valid</code>
+     * property of this component is <code>false</code>.  Otherwise,
+     * return <code>true</code>.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public boolean processValidators(FacesContext context);
+
+
+    /**
+     * <p>Perform the request component tree processing required by the
+     * <em>Update Model Values</em> phase of the request processing
+     * lifecycle for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+     * <li>Call the <code>processUpdates()</code> method of all facets
+     *     of this component, in the order their names would be
+     *     returned by a call to <code>getFacetNames()</code>.</li>
+     * <li>Call the <code>processUpdates()</code> method of all
+     *     children of this component, in the order they would be
+     *     returned by a call to <code>getChildren()</code>.</li>
+     * <li>Call the <code>updateModel()</code> method of this component.</li>
+     * </ul>
+     *
+     * <p>Return <code>false</code> if any <code>processUpdates()</code>
+     * or <code>updateModel()</code> method call returned <code>false</code>.
+     * Otherwise, return <code>true</code>.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public boolean processUpdates(FacesContext context);
 
 
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.13 2002/10/07 18:39:32 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.14 2002/12/03 01:04:59 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
 import java.util.Iterator;
+import javax.faces.context.FacesContext;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.RequestEventHandler;
 import javax.faces.validator.Validator;
@@ -18,10 +20,13 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import javax.faces.mock.MockFacesContext;
+import javax.faces.mock.MockHttpServletRequest;
+import javax.faces.mock.MockServletContext;
+
 
 /**
- * <p>Test case for the <strong>javax.faces.component.UIComponentBase</strong>
- * concrete class.</p>
+ * <p>Base unit tests for all UIComponent classes.</p>
  */
 
 public class UIComponentTestCase extends TestCase {
@@ -474,6 +479,69 @@ public class UIComponentTestCase extends TestCase {
 
 
     /**
+     * [3.1.12] Facet manipulation.
+     */
+    public void testFacetManipulation() {
+
+        UIComponent test1 = new TestComponent("test1");
+        UIComponent test2 = new TestComponent("test2");
+        UIComponent test3 = new TestComponent("test3");
+        UIComponent test4 = new TestComponent("test3"); // Same component id
+        UIComponent facet = null;
+
+        // Review initial conditions
+        checkFacetCount(component, 0);
+
+        // Add facets one at a time and check the count
+        component.addFacet(test1);
+        checkFacetCount(component, 1);
+        component.addFacet(test2);
+        checkFacetCount(component, 2);
+        component.addFacet(test3);
+        checkFacetCount(component, 3);
+
+        // All added facets must be individually retrievable
+        facet = component.getFacet("test1");
+        assertEquals("test1 returned", test1, facet);
+        facet = component.getFacet("test2");
+        assertEquals("test2 returned", test2, facet);
+        facet = component.getFacet("test3");
+        assertEquals("test3 returned", test3, facet);
+
+        // Replace an existing facet
+        component.addFacet(test4);
+        checkFacetCount(component, 3);
+        facet = component.getFacet("test1");
+        assertEquals("test1 returned", test1, facet);
+        facet = component.getFacet("test2");
+        assertEquals("test2 returned", test2, facet);
+        facet = component.getFacet("test3");
+        assertEquals("test4 returned", test4, facet);
+
+        // Remove a facet
+        component.removeFacet("test2");
+        checkFacetCount(component, 2);
+        facet = component.getFacet("test1");
+        assertEquals("test1 returned", test1, facet);
+        facet = component.getFacet("test2");
+        assertNull("test2 not returned", facet);
+        facet = component.getFacet("test3");
+        assertEquals("test4 returned", test4, facet);
+
+        // Clear all facets
+        component.clearFacets();
+        checkFacetCount(component, 0);
+        facet = component.getFacet("test1");
+        assertNull("test1 not returned", facet);
+        facet = component.getFacet("test2");
+        assertNull("test2 not returned", facet);
+        facet = component.getFacet("test3");
+        assertNull("test3 not returned", facet);
+
+    }
+
+
+    /**
      * [3.1] Invalid setter arguments.
      */
     public void testInvalidSetters() {
@@ -688,6 +756,26 @@ public class UIComponentTestCase extends TestCase {
             results++;
         }
         assertEquals("child count", count, results);
+
+    }
+
+
+    /**
+     * Validate that the specified number of facets are present.
+     *
+     * @param component Component being tested
+     * @param count Expected number of facets
+     */
+    protected void checkFacetCount(UIComponent component, int count) {
+
+        int results = 0;
+        Iterator names = component.getFacetNames();
+        assertNotNull("children", names);
+        while (names.hasNext()) {
+            String name = (String) names.next();
+            results++;
+        }
+        assertEquals("facet count", count, results);
 
     }
 
