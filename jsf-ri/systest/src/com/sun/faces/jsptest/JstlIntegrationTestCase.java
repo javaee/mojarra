@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.5 2003/09/17 21:20:44 craigmcc Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.6 2003/10/08 22:30:07 craigmcc Exp $
  */
 
 /*
@@ -12,12 +12,16 @@ package com.sun.faces.jsptest;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.sun.faces.htmlunit.AbstractTestCase;
 import java.net.URL;
 import java.util.Iterator;
+import javax.faces.component.NamingContainer;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -45,6 +49,22 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
 
     // ------------------------------------------------------ Instance Variables
+
+
+    // ---------- jstl-foreach-01.jsp values ----------
+
+    private String jstlForEach01_name = "jstlForeach01_form";
+
+    private String jstlForEach01_names[] =
+    { "arrayProp0", "arrayProp1", "arrayProp2", "arrayProp3", "arrayProp4" };
+
+    private String jstlForEach01_pristine[] =
+    { "First String", "Second String", "Third String", "Fourth String",
+      "Fifth String" };
+
+    private String jstlForEach01_updated[] =
+    { "New First String", "Second String", "Third String", "New Fourth String",
+      "Fifth String" };
 
 
     // ---------------------------------------------------- Overall Test Methods
@@ -149,6 +169,63 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
         checkJstlChoose02b();
         checkJstlChoose02a();
         checkJstlChoose02c();
+
+    }
+
+
+    // Form with fields rendered inside a <c:forEach> - pristine
+    public void testJstForEach01_pristine() throws Exception {
+
+        checkJstlForEach00();
+        checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
+        checkJstlForEach00();
+        checkJstlForEach01(getJstlForEach01(), jstlForEach01_pristine);
+        checkJstlForEach00();
+
+    }
+
+
+    // Form with fields rendered inside a <c:forEach> - submit unchanged
+    public void testJstForEach01_submit01() throws Exception {
+
+        checkJstlForEach00();
+        HtmlPage page = getJstlForEach01();
+        checkJstlForEach01(page, jstlForEach01_pristine);
+        HtmlForm form = getFormById(page, jstlForEach01_name);
+        assertNotNull("form exists", form);
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+            form.getInputByName(jstlForEach01_name +
+                                NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+        page = (HtmlPage) submit.click();
+        checkJstlForEach01(page, jstlForEach01_pristine);
+        checkJstlForEach00();
+
+    }
+
+
+    // Form with fields rendered inside a <c:forEach> - submit modified
+    public void testJstForEach01_submit02() throws Exception {
+
+        checkJstlForEach00();
+        HtmlPage page = getJstlForEach01();
+        checkJstlForEach01(page, jstlForEach01_pristine);
+        HtmlForm form = getFormById(page, jstlForEach01_name);
+        assertNotNull("form exists", form);
+        for (int i = 0; i < jstlForEach01_names.length; i++) {
+            HtmlTextInput input = (HtmlTextInput)
+                form.getInputByName(jstlForEach01_name +
+                                    NamingContainer.SEPARATOR_CHAR +
+                                    jstlForEach01_names[i]);
+            assertNotNull("field '" + jstlForEach01_names[i] + "' exists", input);
+            input.setValueAttribute(jstlForEach01_updated[i]);
+        }
+        HtmlSubmitInput submit = (HtmlSubmitInput)
+            form.getInputByName(jstlForEach01_name + NamingContainer.SEPARATOR_CHAR +
+                                "submit");
+        page = (HtmlPage) submit.click();
+        checkJstlForEach01(page, jstlForEach01_updated);
+        checkJstlForEach00();
 
     }
 
@@ -497,6 +574,38 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
 
     // Check the reset page to force a new component tree
+    private void checkJstlForEach00() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-foreach-00.jsp");
+        assertEquals("Correct page title",
+                     "jstl-foreach-00", page.getTitleText());
+
+    }
+
+
+    // Check the values of the input fields against the specified list
+    private void checkJstlForEach01(HtmlPage page, String expected[]) {
+
+
+        assertEquals("Correct page title",
+                     "jstl-foreach-01", page.getTitleText());
+        HtmlForm form = getFormById(page, jstlForEach01_name);
+        assertNotNull("form exists", form);
+        for (int i = 0; i < expected.length; i++) {
+            HtmlTextInput input = (HtmlTextInput)
+                form.getInputByName(jstlForEach01_name +
+                                    NamingContainer.SEPARATOR_CHAR +
+                                    jstlForEach01_names[i]);
+            assertNotNull("field '" + jstlForEach01_names[i] + "' exists",
+                          input);
+            assertEquals("field '" + jstlForEach01_names[i] + "' value",
+                         expected[i], input.getValueAttribute());
+        }
+
+    }
+
+
+    // Check the reset page to force a new component tree
     private void checkJstlIf00() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jstl-if-00.jsp");
@@ -750,6 +859,30 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
                      "jstl-import-04", page.getTitleText());
         assertEquals("Correct body element",
                      "[1] [2c][2x] [3]", getBodyText(page));
+
+    }
+
+
+    // Return the form with the specified "id" from the specified page
+    // (HtmlPage.getFormByName() looks at "name" instead)
+    private HtmlForm getFormById(HtmlPage page, String id) {
+
+        Iterator forms = page.getAllForms().iterator();
+        while (forms.hasNext()) {
+            HtmlForm form = (HtmlForm) forms.next();
+            if (id.equals(form.getAttributeValue("id"))) {
+                return (form);
+            }
+        }
+        return (null);
+
+    }
+
+
+    // Retrieve the jstl-foreach-01 page
+    private HtmlPage getJstlForEach01() throws Exception {
+
+        return (getPage("/faces/jsp/jstl-foreach-01.jsp"));
 
     }
 

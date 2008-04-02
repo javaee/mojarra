@@ -10,11 +10,6 @@
 </head>
 <body>
 
-<%-- Appears we do not need this (good!!!)
-<jsp:useBean id="forEachBean" scope="request"
-          class="com.sun.faces.systest.model.ForEachBean"/>
---%>
-
 <h:form id="jstlForeach01_form" formName="formName">
 
   <table border="0" cellspacing="5" cellpadding="5">
@@ -22,22 +17,15 @@
     <c:forEach var="i" begin="0" end="4">
       <tr>
         <td><h:output_text id="arrayLabel${i}" value="arrayLabel_${i}"/></td>
-<%--
-     PENDING(craigmcc) - The valueRef expression below works
-     but is not intuitive
---%>
         <td><h:input_text id="arrayProp${i}"
                     valueRef="forEachBean.arrayProperty[${i}]"/></td>
-<%--
-     PENDING(craigmcc) - The valueRef expression below returns
-     an error:  "String is empty" but would be really nice if
-     this actually worked:
---%>
-<%--
-                    valueRef="${forEachBean.arrayProperty[i]}"/></td>
---%>
       </tr>
     </c:forEach>
+
+    <tr>
+      <td><h:command_button id="submit" type="submit" value="Submit"/></td>
+      <td><h:command_button id="reset"  type="reset"  value="Reset"/></td>
+    </tr>
 
   </table>
 
