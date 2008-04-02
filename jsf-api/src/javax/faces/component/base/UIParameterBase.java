@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameterBase.java,v 1.2 2003/07/26 17:54:51 craigmcc Exp $
+ * $Id: UIParameterBase.java,v 1.3 2003/08/27 00:56:51 craigmcc Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.component.base;
 
 
+import java.io.IOException;
 import javax.faces.component.UIParameter;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -56,6 +58,29 @@ public class UIParameterBase extends UIOutputBase implements UIParameter {
     public void setName(String name) {
 
         this.name = name;
+
+    }
+
+
+    // ----------------------------------------------------- StateHolder Methods
+
+
+    public Object getState(FacesContext context) {
+
+        Object values[] = new Object[2];
+        values[0] = super.getState(context);
+        values[1] = name;
+        return (values);
+
+    }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        name = (String) values[1];
 
     }
 

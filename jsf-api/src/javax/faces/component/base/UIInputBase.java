@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputBase.java,v 1.4 2003/07/28 22:18:46 eburns Exp $
+ * $Id: UIInputBase.java,v 1.5 2003/08/27 00:56:51 craigmcc Exp $
  */
 
 /*
@@ -235,7 +235,7 @@ public class UIInputBase extends UIOutputBase implements UIInput {
      * <p>The set of {@link Validator}s associated with this
      * <code>UIComponent</code>.</p>
      */
-    protected ArrayList validators = null;
+    protected List validators = null;
 
 
     public void addValidator(Validator validator) {
@@ -277,64 +277,42 @@ public class UIInputBase extends UIOutputBase implements UIInput {
     }
 
 
-    // ---------------------------------------------- methods from StateHolder
-
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-	Object [] thisState = (Object []) state[THIS_INDEX];
-
-	// restore the attributes
-	String stateStr = (String) thisState[ATTRS_INDEX];
-	int i = stateStr.indexOf(STATE_SEP);
-	required = Boolean.valueOf(stateStr.substring(0, i)).booleanValue();
-	valid = Boolean.valueOf(stateStr.substring(i + STATE_SEP_LEN)).booleanValue();
-	// restore the listeners
-	listeners = context.getApplication().getViewHandler().
-	    getStateManager().restoreAttachedObjectState(context, 
-							 thisState[LISTENERS_INDEX]);
-	// restore the validators
-	List [] validatorsList = context.getApplication().getViewHandler().
-	    getStateManager().restoreAttachedObjectState(context, 
-							 thisState[VALIDATORS_INDEX]);
-	if (null != validatorsList) {
-	    validators = (ArrayList) validatorsList[0];
-	}
-	// restore the value
-	previous = thisState[PREVIOUS_INDEX];
-	
-	super.restoreState(context, state[SUPER_INDEX]);
-    }
-
-    private static final int ATTRS_INDEX = 0;
-    private static final int LISTENERS_INDEX = 1;
-    private static final int PREVIOUS_INDEX = 2;
-    private static final int VALIDATORS_INDEX = 3;
+    // ----------------------------------------------------- StateHolder Methods
 
 
     public Object getState(FacesContext context) {
-	// get the state of our superclasses.
-	Object superState = super.getState(context);
-	Object [] result = new Object[2];
-	Object [] thisState = new Object[4];
-	// save the attributes
-	thisState[ATTRS_INDEX] = required + STATE_SEP + valid;
-	// save the listeners
-	thisState[LISTENERS_INDEX] = context.getApplication().getViewHandler().getStateManager().getAttachedObjectState(context, this, "listeners", listeners);
-	if (null != validators) {
-	    List [] validatorsList = new List[1];
-	    validatorsList[0] = validators;
-	    thisState[VALIDATORS_INDEX] = context.getApplication().getViewHandler().getStateManager().getAttachedObjectState(context, this, "validators", validatorsList);
-	}
-	// save the value
-	if (previous instanceof Serializable) {
-	    thisState[PREVIOUS_INDEX] = previous;
-	}
-	result[THIS_INDEX] = thisState;
-	// save the state of our superclass
-	result[SUPER_INDEX] = superState;
-	return result;
-    }    
+
+        Object values[] = new Object[5];
+        values[0] = super.getState(context);
+        values[1] = previous;
+        values[2] = required ? Boolean.TRUE : Boolean.FALSE;
+        values[3] = valid ? Boolean.TRUE : Boolean.FALSE;
+        List validatorsList[] = new List[1];
+        validatorsList[0] = validators;
+        values[4] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, null, validatorsList);
+        return (values);
+
+    }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        previous = values[1];
+        required = ((Boolean) values[2]).booleanValue();
+        valid = ((Boolean) values[3]).booleanValue();
+        List validatorsList[] = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[4]);
+        if (validatorsList != null) {
+            validators = (List) validatorsList[0];
+        }
+
+    }
 
 
 }

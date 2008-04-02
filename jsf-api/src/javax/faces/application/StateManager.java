@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.10 2003/08/26 17:54:12 eburns Exp $
+ * $Id: StateManager.java,v 1.11 2003/08/27 00:56:48 craigmcc Exp $
  */
 
 /*
@@ -588,14 +588,29 @@ public abstract class StateManager {
 	protected Object savedState = null;
 
 	StateHolderSaver(FacesContext context, Object toSave) {
-	    className = toSave.getClass().getName();
 
+            // PENDING(craigmcc) - causes NPE if toSave is null
+            /*
+	    className = toSave.getClass().getName();
 	    if (toSave instanceof StateHolder) {
 		if (!((StateHolder)toSave).isTransient()) {
 		    savedState = ((StateHolder)toSave).getState(context);
 		}
 	    }
+            */
+
+            // Replacement that deals with null objects to be saved
+            if (toSave != null) {
+                className = toSave.getClass().getName();
+                if (toSave instanceof StateHolder) {
+                    if (!((StateHolder)toSave).isTransient()) {
+                        savedState = ((StateHolder)toSave).getState(context);
+                    }
+                }
+            }
+
 	}
+
 
 	/**
 	 *
@@ -603,6 +618,11 @@ public abstract class StateManager {
 	 */
 
 	Object restore(FacesContext context) throws IOException {
+
+            if (className == null) {
+                return (null);
+            }
+
 	    Object result = null;
 	    Class toRestoreClass = null;
 	    try {

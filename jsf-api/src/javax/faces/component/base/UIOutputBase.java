@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputBase.java,v 1.5 2003/08/21 15:26:06 eburns Exp $
+ * $Id: UIOutputBase.java,v 1.6 2003/08/27 00:56:51 craigmcc Exp $
  */
 
 /*
@@ -134,52 +134,47 @@ public class UIOutputBase extends UIComponentBase implements UIOutput {
 
     }
 
-    // ---------------------------------------------- methods from StateHolder
 
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-	Object [] myState = (Object []) state[THIS_INDEX];
-        valueRef = (String) myState[ATTRS_INDEX];
-	value = myState[VALUE_INDEX];
-	// restore the converter
-	List [] converterList = context.getApplication().getViewHandler().
-	    getStateManager().restoreAttachedObjectState(context, 
-							 myState[CONVERTER_INDEX]);
-	if (null != converterList) {
-	    converter = (Converter) ((List)converterList[0]).get(0);
-	}
-
-	super.restoreState(context, state[SUPER_INDEX]);
-    }
-
-
-    private static final int ATTRS_INDEX = 0;
-    private static final int VALUE_INDEX = 1;
-    private static final int CONVERTER_INDEX = 2;
+    // ----------------------------------------------------- StateHolder Methods
 
 
     public Object getState(FacesContext context) {
-	Object superState = super.getState(context);
-	Object [] result = new Object[2];
-	Object [] myState = new Object[3];
-	myState[ATTRS_INDEX] = valueRef;
-	// PENDING(edburns): is it correct to "just skip it" if value is
-	// not Serializable?
-	if (value instanceof Serializable) {
-	    myState[VALUE_INDEX] = value;
-	}
-	if (null != converter) {
-	    List [] converterList = new List[1];
-	    List theConverter = new ArrayList(1);
-	    theConverter.add(converter);
-	    converterList[0] = theConverter;
 
-	    myState[CONVERTER_INDEX] = context.getApplication().getViewHandler().getStateManager().getAttachedObjectState(context, this, "converter", converterList);
-	}
-	result[THIS_INDEX] = myState;
-	result[SUPER_INDEX] = superState;
-	return result;
+        Object values[] = new Object[4];
+        values[0] = super.getState(context);
+        List[] converterList = new List[1];
+        List theConverter = new ArrayList(1);
+        theConverter.add(converter);
+        converterList[0] = theConverter;
+        values[1] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, "converter", converterList);
+        values[2] = value;
+        values[3] = valueRef;
+        return (values);
+
     }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        List[] converterList = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[1]);
+        // PENDING(craigmcc) - it shouldn't be this hard to restore converters
+	if (converterList != null) {
+            List theConverter = converterList[0];
+            if ((theConverter != null) && (theConverter.size() > 0)) {
+                converter = (Converter) theConverter.get(0);
+            }
+	}
+        value = (String) values[2];
+        valueRef = (String) values[3];
+
+    }
+
 
 }

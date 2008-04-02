@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootBase.java,v 1.1 2003/08/22 14:03:15 eburns Exp $
+ * $Id: UIViewRootBase.java,v 1.2 2003/08/27 00:56:52 craigmcc Exp $
  */
 
 /*
@@ -22,7 +22,9 @@ public class UIViewRootBase extends UINamingContainerBase implements UIViewRoot 
 	setRendererType(null);
     }
 
-    // ------------------------------------------------------------- Properties
+
+    // -------------------------------------------------------------- Properties
+
 
     private String renderKitId = RenderKitFactory.DEFAULT_RENDER_KIT;
 
@@ -34,6 +36,7 @@ public class UIViewRootBase extends UINamingContainerBase implements UIViewRoot 
 	renderKitId = newRenderKitId;
     }
 
+
     private String viewId = null;
 
     public String getViewId() {
@@ -44,40 +47,30 @@ public class UIViewRootBase extends UINamingContainerBase implements UIViewRoot 
 	viewId = newViewId;
     }
 
-    // --------------------------------------------- methods from StateHolder
 
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-	String stateStr = (String) state[THIS_INDEX];
-	int i = stateStr.indexOf(STATE_SEP);
-	renderKitId = stateStr.substring(0, i);
-	if (renderKitId.equals("null")) {
-	    renderKitId = null;
-	}
-	viewId = stateStr.substring(i + STATE_SEP_LEN);
-	if (viewId.equals("null")) {
-	    viewId = null;
-	}
+    // ----------------------------------------------------- StateHolder Methods
 
-	super.restoreState(context, state[SUPER_INDEX]);
-    }
 
     public Object getState(FacesContext context) {
-	Object superState = super.getState(context);
-	Object [] result = new Object[2];
-	result[THIS_INDEX] = renderKitId + STATE_SEP + viewId;
-	result[SUPER_INDEX] = superState;
-	return result;
+
+        Object values[] = new Object[3];
+        values[0] = super.getState(context);
+        values[1] = renderKitId;
+        values[2] = viewId;
+        return (values);
+
     }
-    
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        renderKitId = (String) values[1];
+        viewId = (String) values[2];
+
+    }
 
 
 }
-
-
-
-	
-
-    
-

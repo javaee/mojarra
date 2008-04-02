@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.6 2003/08/22 14:03:14 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.7 2003/08/27 00:56:50 craigmcc Exp $
  */
 
 /*
@@ -1197,94 +1197,64 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-    //---------------------------------------------- Methods from StateHolder
 
-    /**
-     *
-     * <p>As stipulated in {@link javax.faces.component.StateHolder} we
-     * implement both state methods.  The state we save at this level of
-     * the inheritance hierachy is:</p>
-     * 
-     * <p><code>
-     *
-     * 	<ul>
-     *
-     * <li>  clientId</li>
-     * <li>  componentId</li>
-     * <li>  componentRef</li>
-     * <li>  rendered</li>
-     * <li>  rendererType</li>
-     * <li>  rendersChildren</li>
-     * <li>  valid</li>
-     * <li>  transient</li>
-     * <li>  attributes</li>
-     *
-     *	</ul>
-     *
-     * </code></p>
-     *
-     * <p>Since this set is well known, let's use a simple data
-     * structure to represent it: Object array.  </p>
-     */
-
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-
-	clientId = (String) state[CLIENT_ID_INDEX]; // no setter for this.
-	id = (String) state[COMPONENT_ID_INDEX]; // avoid namingContainer lookup.
-	componentRef = (String) state[COMPONENT_REF_INDEX];
-	rendered = (null != state[RENDERED_INDEX]) ? true : false;
-	rendererType = (String) state[RENDERER_TYPE_INDEX];
-	isTransient = (null != state[TRANSIENT_INDEX]) ? true : false;
-	attributes = (HashMap) state[ATTRIBUTES_INDEX];
-    }
-
-    private static final int CLIENT_ID_INDEX = 0;
-    private static final int COMPONENT_ID_INDEX = 1;
-    private static final int COMPONENT_REF_INDEX = 2;
-    private static final int RENDERED_INDEX = 3;
-    private static final int RENDERER_TYPE_INDEX = 4;
-    private static final int TRANSIENT_INDEX = 5;
-    private static final int ATTRIBUTES_INDEX = 6;
-    private static final int NUMBER_OF_PROPERTIES_TO_SAVE = 7;
-
-    /**
-     * <p>These constants are used so subclasses may save their
-     * state.</p>
-     */
-    
-    protected static final int THIS_INDEX = 0;
-    protected static final int SUPER_INDEX = 1;
-    protected static final String STATE_SEP = "[sep]";
-    protected static final int STATE_SEP_LEN = 5;
+    // ----------------------------------------------------- StateHolder Methods
 
 
     public Object getState(FacesContext context) {
-	Object [] result = new Object[NUMBER_OF_PROPERTIES_TO_SAVE];
-	// need to call getClientId because logic must execute.
-	result[CLIENT_ID_INDEX] = getClientId(context);
-	result[COMPONENT_ID_INDEX] = id;
-	result[COMPONENT_REF_INDEX] = componentRef;
-	result[RENDERED_INDEX] =  rendered ? result : null;
-	result[RENDERER_TYPE_INDEX] = rendererType;
-	result[TRANSIENT_INDEX] = isTransient ? result : null;
-	if (isAttributesAllocated()) {
-	    // PENDING(edburns): make sure all the attributes are
-	    // Serializable
-	    result[ATTRIBUTES_INDEX] = attributes;
-	}
-	return result;
+
+        Object values[] = new Object[8];
+        values[0] = attributes;
+        values[1] = getClientId(context);
+        values[2] = componentRef;
+        values[3] = id;
+        values[4] = rendered ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = rendererType;
+        values[6] =
+            context.getApplication().getViewHandler().getStateManager().
+            getAttachedObjectState(context, this, null, listeners);
+        values[7] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
+        return (values);
+
     }
 
-    protected boolean isTransient = false;
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        attributes = (HashMap) values[0];
+        clientId = (String) values[1];
+        componentRef = (String) values[2];
+        id = (String) values[3];
+        rendered = ((Boolean) values[4]).booleanValue();
+        rendererType = (String) values[5];
+        listeners = (List[])
+            context.getApplication().getViewHandler().getStateManager().
+            restoreAttachedObjectState(context, values[6]);
+        transientFlag = ((Boolean) values[7]).booleanValue();
+
+    }
+
+
+    /**
+     * <p>Flag indicating a desire to now participate in state saving.</p>
+     */
+    private boolean transientFlag = false;
+
 
     public boolean isTransient() {
-	return isTransient;
+
+        return (this.transientFlag);
+
     }
 
-    public void setTransient(boolean newTransient) {
-	isTransient = newTransient;
+
+    public void setTransient(boolean transientFlag) {
+
+        this.transientFlag = transientFlag;
+
     }
+
 
 }

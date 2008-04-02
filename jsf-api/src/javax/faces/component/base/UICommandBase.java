@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandBase.java,v 1.6 2003/08/26 21:50:04 craigmcc Exp $
+ * $Id: UICommandBase.java,v 1.7 2003/08/27 00:56:49 craigmcc Exp $
  */
 
 /*
@@ -122,63 +122,56 @@ public class UICommandBase extends UIOutputBase implements UICommand {
 
     }
 
-    // ---------------------------------------------- methods from StateHolder
 
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-	Object [] thisState = (Object []) state[THIS_INDEX];
+    // ----------------------------------------------------- StateHolder Methods
 
-	// restore the attributes
-	String stateStr = (String) thisState[ATTRS_INDEX];
-	int i = stateStr.indexOf(STATE_SEP);
-	action = stateStr.substring(0, i);
-	if (action.equals("null")) {
-	    action = null;
-	}
-	actionRef = stateStr.substring(i + STATE_SEP_LEN);
-	if (actionRef.equals("null")) {
-	    actionRef = null;
-	}
-	// restore the listeners
-	listeners = context.getApplication().getViewHandler().getStateManager()
-	    .restoreAttachedObjectState(context, thisState[LISTENERS_INDEX]);
-	// add the default action listener
-	addActionListener(context.getApplication().getActionListener());
-	
-	super.restoreState(context, state[SUPER_INDEX]);
-    }
-
-    private static final int ATTRS_INDEX = 0;
-    private static final int LISTENERS_INDEX = 1;
 
     public Object getState(FacesContext context) {
-	// get the state of our superclasses.
-	Object superState = super.getState(context);
-	Object [] result = new Object[2];
-	Object [] thisState = new Object[2];
-	// save the attributes
-	thisState[ATTRS_INDEX] = action + STATE_SEP + actionRef;
-	// save the listeners
 
-	// remove the default action listener
-	removeActionListener(context.getApplication().getActionListener());
-	
-	thisState[LISTENERS_INDEX] = context.getApplication().
-	    getViewHandler().getStateManager().getAttachedObjectState(context,
-								      this,
-								      null,
-								      listeners);
-	// re-add the default action listener
-	addActionListener(context.getApplication().getActionListener());
+        removeDefaultActionListener(context);
 
-	result[THIS_INDEX] = thisState;
-	// save the state of our superclass
-	result[SUPER_INDEX] = superState;
-	return result;
+        Object values[] = new Object[4];
+        values[0] = super.getState(context);
+        values[1] = action;
+        values[2] = actionRef;
+        values[3] = immediate ? Boolean.TRUE : Boolean.FALSE;
+
+        addDefaultActionListener(context);
+        return (values);
+
     }
 
 
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        action = (String) values[1];
+        actionRef = (String) values[2];
+        immediate = ((Boolean) values[3]).booleanValue();
+
+        addDefaultActionListener(context);
+
+    }
+
+
+    // Add the default action listener
+    private void addDefaultActionListener(FacesContext context) {
+        ActionListener listener = immediate ?
+            context.getApplication().getActionListener() :
+            context.getApplication().getApplicationListener();
+        addActionListener(listener);
+    }
+
+
+    // Remove the default action listener
+    private void removeDefaultActionListener(FacesContext context) {
+        ActionListener listener = immediate ?
+            context.getApplication().getActionListener() :
+            context.getApplication().getApplicationListener();
+        removeActionListener(listener);
+    }
 
 
 }

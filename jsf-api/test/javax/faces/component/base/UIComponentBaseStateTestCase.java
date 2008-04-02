@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.3 2003/08/22 14:03:25 eburns Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.4 2003/08/27 00:56:56 craigmcc Exp $
  */
 
 /*
@@ -74,22 +74,16 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 
     // ------------------------------------------------- Individual Test Methods
 
-    public void testProcessState() {
+    public void testProcessState() throws Exception {
+
 	UIViewRootBase root1 = createTestView();
 	UIViewRootBase root2 = createTestView();
-
 	assertTrue(verifyTestViewsAreEqual(root1, root2));
-
 	applyAttributesToTestView(root1);
-	try {
-	    Object componentState = root1.processGetState(facesContext);
-	    root2.processRestoreState(facesContext, componentState);
-	 
-	}
-	catch (Throwable t) {
-	    assertTrue(false);
-	}
+        Object componentState = root1.processGetState(facesContext);
+        root2.processRestoreState(facesContext, componentState);
 	assertTrue(verifyTestViewsAreEqual(root1, root2));
+
     }
 
     // --------------------------------------------------------- Support Methods

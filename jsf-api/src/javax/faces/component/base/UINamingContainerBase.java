@@ -1,5 +1,5 @@
 /*
- * $Id: UINamingContainerBase.java,v 1.3 2003/07/28 22:18:46 eburns Exp $
+ * $Id: UINamingContainerBase.java,v 1.4 2003/08/27 00:56:51 craigmcc Exp $
  */
 
 /*
@@ -56,24 +56,28 @@ public class UINamingContainerBase extends UIComponentBase
 	namespace.removeComponentFromNamespace(namedComponent);
     }
 
-    // ---------------------------------------------- methods from StateHolder
 
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-	namespace.restoreState(context, state[THIS_INDEX]);
-	super.restoreState(context, state[SUPER_INDEX]);
-    }
+    // ----------------------------------------------------- StateHolder Methods
+
 
     public Object getState(FacesContext context) {
-	// get the state of our superclasses.
-	Object superState = super.getState(context);
-	Object [] result = new Object[2];
-	result[THIS_INDEX] = namespace.getState(context);
-	// save the state of our superclass
-	result[SUPER_INDEX] = superState;
-	return result;
-    }    
+
+        Object values[] = new Object[2];
+        values[0] = super.getState(context);
+        values[1] = namespace.getState(context);
+        return (values);
+
+    }
+
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        namespace.restoreState(context, values[1]);
+
+    }
 
 
 }

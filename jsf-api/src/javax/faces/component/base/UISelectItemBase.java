@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItemBase.java,v 1.3 2003/07/28 22:18:47 eburns Exp $
+ * $Id: UISelectItemBase.java,v 1.4 2003/08/27 00:56:51 craigmcc Exp $
  */
 
 /*
@@ -102,41 +102,32 @@ public class UISelectItemBase extends UIOutputBase implements UISelectItem {
 
     }
 
-    // --------------------------------------------- methods from StateHolder
 
-    public void restoreState(FacesContext context, 
-			     Object stateObj) throws IOException {
-	Object [] state = (Object []) stateObj;
-	String stateStr = (String) state[THIS_INDEX];
-	int i = stateStr.indexOf(STATE_SEP), j;
-	itemDescription = stateStr.substring(0, i);
-	if (itemDescription.equals("null")) {
-	    itemDescription = null;
-	}
+    // ----------------------------------------------------- StateHolder Methods
 
-	j = stateStr.indexOf(STATE_SEP, i + STATE_SEP_LEN);
-	itemLabel = stateStr.substring(i + STATE_SEP_LEN, j);
-	if (itemLabel.equals("null")) {
-	    itemLabel = null;
-	}
-
-	itemValue = stateStr.substring(j + STATE_SEP_LEN);
-	if (itemValue.equals("null")) {
-	    itemValue = null;
-	}
-
-	super.restoreState(context, state[SUPER_INDEX]);
-    }
 
     public Object getState(FacesContext context) {
-	Object superState = super.getState(context);
-	Object [] result = new Object[2];
-	result[THIS_INDEX] = itemDescription + STATE_SEP + itemLabel + 
-	    STATE_SEP + itemValue;
-	result[SUPER_INDEX] = superState;
-	return result;
+
+        Object values[] = new Object[4];
+        values[0] = super.getState(context);
+        values[1] = itemDescription;
+        values[2] = itemLabel;
+        values[3] = itemValue;
+        return (values);
+
     }
 
+
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        itemDescription = (String) values[1];
+        itemLabel = (String) values[2];
+        itemValue = (String) values[3];
+
+    }
 
 
 }

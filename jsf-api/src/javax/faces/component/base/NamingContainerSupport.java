@@ -1,5 +1,5 @@
 /*
- * $Id: NamingContainerSupport.java,v 1.5 2003/08/18 16:38:23 eburns Exp $
+ * $Id: NamingContainerSupport.java,v 1.6 2003/08/27 00:56:49 craigmcc Exp $
  */
 
 /*
@@ -213,37 +213,47 @@ public class NamingContainerSupport implements NamingContainer, StateHolder {
 
     }
 
-    // ---------------------------------------------- methods from StateHolder
+
+    // ----------------------------------------------------- StateHolder Methods
+
 
     public Object getState(FacesContext context) {
-	Object [] state = new Object[2];
-	state[SERIAL_INDEX] = "" + serialNumber;
-	if (null != namespace) {
-	    state[NAMESPACE_INDEX] = namespace.clone();
-	}
-	return state;
+
+        Object values[] = new Object[3];
+        // PENDING(craigmcc) - Seems likely to fail on save in client?
+        values[0] = (namespace != null) ? namespace.clone() : null;
+        values[1] = new Integer(serialNumber);
+        values[2] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
+        return (values);
+
     }
 
-    private static final int SERIAL_INDEX = 0;
-    private static final int NAMESPACE_INDEX = 1;
 
-    public void restoreState(FacesContext context, Object stateObj) {
-	Object [] state = (Object []) stateObj;
-	serialNumber = Integer.valueOf((String)state[SERIAL_INDEX]).intValue();
-	if (null != namespace) {
-	    namespace.clear();
-	}
-	if (null != state[NAMESPACE_INDEX]) {
-	    if (null == namespace) {
-		namespace = new HashMap();
-	    }
-	    namespace.putAll((Map) state[NAMESPACE_INDEX]);
-	}
+    public void restoreState(FacesContext context, Object state)
+        throws IOException {
+
+        Object values[] = (Object[]) state;
+        namespace = (HashMap) values[0];
+        serialNumber = ((Integer) values[1]).intValue();
+        transientFlag = ((Boolean) values[2]).booleanValue();
+
     }
 
-    public boolean isTransient() { return false;
+
+    private boolean transientFlag = false;
+
+
+    public boolean isTransient() {
+
+        return (transientFlag);
+
     }
 
-    public void setTransient(boolean newT) {}
+    public void setTransient(boolean transientFlag) {
+
+        this.transientFlag = transientFlag;
+
+    }
+
 
 }
