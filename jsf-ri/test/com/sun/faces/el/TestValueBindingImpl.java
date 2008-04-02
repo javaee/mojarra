@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueBindingImpl.java
- * $Id: TestValueBindingImpl.java,v 1.38 2005/08/24 16:13:37 edburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.39 2005/10/19 19:51:32 edburns Exp $
 =======
- * $Id: TestValueBindingImpl.java,v 1.38 2005/08/24 16:13:37 edburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.39 2005/10/19 19:51:32 edburns Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -34,10 +34,10 @@
 // TestValueBindingImpl.java
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.TestBean.Inner2Bean;
-import com.sun.faces.TestBean.InnerBean;
+import com.sun.faces.cactus.TestBean.Inner2Bean;
+import com.sun.faces.cactus.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
@@ -479,7 +479,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         valueBinding = this.create("view.childCount");
         assertTrue(valueBinding.isReadOnly(getFacesContext()));
 
-        TestBean testBean = (TestBean) getFacesContext().getExternalContext()
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
                 .getSessionMap().get("TestBean");
         assertTrue(null != testBean);
         valueBinding = this.create("TestBean.readOnly");
@@ -586,7 +586,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         Class c = valueBinding.getType(getFacesContext());
         assertTrue(c == null);
 
-        TestBean testBean = (TestBean) getFacesContext().getExternalContext()
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
                 .getSessionMap().get("TestBean");
         assertTrue(null != testBean);
         valueBinding = this.create("TestBean.readOnly");
@@ -604,7 +604,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
         valueBinding = this.create("TestBean[\"inner\"]");
         assertTrue(valueBinding.getType(getFacesContext()).getName().equals(
-                "com.sun.faces.TestBean$InnerBean"));
+                "com.sun.faces.cactus.TestBean$InnerBean"));
 
         int[] intArray =
         { 1, 2, 3 };

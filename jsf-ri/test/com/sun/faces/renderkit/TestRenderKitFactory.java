@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKitFactory.java,v 1.15 2005/08/22 22:11:22 ofung Exp $
+ * $Id: TestRenderKitFactory.java,v 1.16 2005/10/19 19:51:36 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.render.RenderKit;
@@ -44,7 +44,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKitFactory.java,v 1.15 2005/08/22 22:11:22 ofung Exp $
+ * @version $Id: TestRenderKitFactory.java,v 1.16 2005/10/19 19:51:36 edburns Exp $
  */
 
 public class TestRenderKitFactory extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewFromPage.java,v 1.12 2005/08/22 22:11:21 ofung Exp $
+ * $Id: TestRestoreViewFromPage.java,v 1.13 2005/10/19 19:51:35 edburns Exp $
  */
 
 /*
@@ -31,9 +31,9 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.CompareFiles;
-import com.sun.faces.FileOutputResponseWriter;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.CompareFiles;
+import com.sun.faces.cactus.FileOutputResponseWriter;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.render.RenderKitFactory;
@@ -50,7 +50,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewFromPage.java,v 1.12 2005/08/22 22:11:21 ofung Exp $
+ * @version $Id: TestRestoreViewFromPage.java,v 1.13 2005/10/19 19:51:35 edburns Exp $
  */
 
 public class TestRestoreViewFromPage extends ServletFacesTestCase {

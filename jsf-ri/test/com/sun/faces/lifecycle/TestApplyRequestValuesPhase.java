@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplyRequestValuesPhase.java,v 1.29 2005/08/22 22:11:19 ofung Exp $
+ * $Id: TestApplyRequestValuesPhase.java,v 1.30 2005/10/19 19:51:34 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.NamingContainer;
@@ -46,7 +46,7 @@ import javax.faces.component.UICommand;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplyRequestValuesPhase.java,v 1.29 2005/08/22 22:11:19 ofung Exp $
+ * @version $Id: TestApplyRequestValuesPhase.java,v 1.30 2005/10/19 19:51:34 edburns Exp $
  */
 
 public class TestApplyRequestValuesPhase extends ServletFacesTestCase {

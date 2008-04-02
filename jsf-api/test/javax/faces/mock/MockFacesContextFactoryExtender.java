@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContextFactoryExtender.java,v 1.4 2005/08/22 22:08:23 ofung Exp $
+ * $Id: MockFacesContextFactoryExtender.java,v 1.5 2005/10/19 19:51:14 edburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@
 
 package javax.faces.mock;
 
+import com.sun.faces.mock.MockFacesContextFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContextFactory;
 

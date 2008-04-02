@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModelTestCase.java,v 1.4 2005/08/22 22:08:28 ofung Exp $
+ * $Id: ResultDataModelTestCase.java,v 1.5 2005/10/19 19:51:22 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ package javax.faces.model;
 
 import java.util.Map;
 import javax.faces.context.FacesContext;
-import javax.faces.mock.MockResult;
+import com.sun.faces.mock.MockResult;
 import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;

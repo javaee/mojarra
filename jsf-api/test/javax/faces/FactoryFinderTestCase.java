@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinderTestCase.java,v 1.4 2005/08/22 22:08:14 ofung Exp $
+ * $Id: FactoryFinderTestCase.java,v 1.5 2005/10/19 19:51:11 edburns Exp $
  */
 
 /*
@@ -59,16 +59,16 @@ public class FactoryFinderTestCase extends TestCase {
 
     public static String FACTORIES[][] = {
 	{ FactoryFinder.APPLICATION_FACTORY, 
-	  "javax.faces.mock.MockApplicationFactory"
+	  "com.sun.faces.mock.MockApplicationFactory"
 	},
 	{ FactoryFinder.FACES_CONTEXT_FACTORY, 
-	  "javax.faces.mock.MockFacesContextFactory"
+	  "com.sun.faces.mock.MockFacesContextFactory"
 	},
 	{ FactoryFinder.LIFECYCLE_FACTORY, 
-	  "javax.faces.mock.MockLifecycleFactory"
+	  "com.sun.faces.mock.MockLifecycleFactory"
 	},
 	{ FactoryFinder.RENDER_KIT_FACTORY, 
-	  "javax.faces.mock.MockRenderKitFactory"
+	  "com.sun.faces.mock.MockRenderKitFactory"
 	}
     };
 
@@ -181,7 +181,7 @@ public class FactoryFinderTestCase extends TestCase {
 	}
 	// verify that the delegation works
 	assertTrue(System.getProperty(FACTORIES[1][0]).equals("javax.faces.mock.MockFacesContextFactoryExtender"));
-	assertTrue(System.getProperty("oldImpl").equals("javax.faces.mock.MockFacesContextFactory"));
+	assertTrue(System.getProperty("oldImpl").equals("com.sun.faces.mock.MockFacesContextFactory"));
 
 
     }

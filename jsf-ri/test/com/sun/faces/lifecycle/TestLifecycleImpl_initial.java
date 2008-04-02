@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.29 2005/08/22 22:11:20 ofung Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.30 2005/10/19 19:51:34 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
@@ -44,7 +44,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.29 2005/08/22 22:11:20 ofung Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.30 2005/10/19 19:51:34 edburns Exp $
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase {

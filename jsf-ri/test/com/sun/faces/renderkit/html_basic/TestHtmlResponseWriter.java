@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlResponseWriter.java,v 1.15 2005/08/22 22:11:23 ofung Exp $
+ * $Id: TestHtmlResponseWriter.java,v 1.16 2005/10/19 19:51:38 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import junit.framework.TestCase;
 import org.apache.cactus.ServletTestCase;
 
@@ -49,7 +49,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestHtmlResponseWriter.java,v 1.15 2005/08/22 22:11:23 ofung Exp $
+ * @version $Id: TestHtmlResponseWriter.java,v 1.16 2005/10/19 19:51:38 edburns Exp $
  */
 
 public class TestHtmlResponseWriter extends ServletFacesTestCase // ServletTestCase

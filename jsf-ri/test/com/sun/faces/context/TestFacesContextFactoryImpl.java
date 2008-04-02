@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextFactoryImpl.java,v 1.12 2005/08/22 22:11:13 ofung Exp $
+ * $Id: TestFacesContextFactoryImpl.java,v 1.13 2005/10/19 19:51:31 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -44,7 +44,7 @@ import javax.faces.lifecycle.LifecycleFactory;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextFactoryImpl.java,v 1.12 2005/08/22 22:11:13 ofung Exp $
+ * @version $Id: TestFacesContextFactoryImpl.java,v 1.13 2005/10/19 19:51:31 edburns Exp $
  */
 
 public class TestFacesContextFactoryImpl extends ServletFacesTestCase {

@@ -71,6 +71,7 @@
             value="${tomcat.home}/jstl/lib/jstl.jar"/>
   <property name="xerces.jar" value="${tomcat.home}/jaxp/lib/endorsed/xercesImpl.jar"/>
   <property name="dom.jar" value="${tomcat.home}/jaxp/lib/endorsed/dom.jar"/>
+  <property name="jsf-extensions-test-time.jar" value="${basedir}/../lib/jsf-extensions-test-time.jar"/>
 
   <property name="build.dir"        value="build"/>
   <property name="build.classes"    value="${build.dir}/classes"/>
@@ -118,6 +119,7 @@
     <pathelement location="${dom.jar}"/>
     <pathelement location="${jaxp-api.jar}"/>
     <pathelement location="${jsf-tools.dir}/build/classes"/>
+    <pathelement location="${jsf-extensions-test-time.jar}"/>
   </path>
 
   <property name="test.factory"
@@ -356,37 +358,9 @@ jsf-api.jar.
   -->
 
 
-  <target name="prepare.test" 
-          depends="discover.jsp.level,prepare.test.jsp21,prepare.test.jsp2,prepare.test.jsp12">
+  <target name="prepare.test">
       <mkdir dir="${test.results.dir}"/>
   </target> 
-
-  <target name="discover.jsp.level">
-    <echo message="jsp.jar is ${jsp.jar}"/>
-    <available classpath="${jsp.jar}" 
-               classname="javax.servlet.jsp.el.VariableResolver"
-               property="is.jsp2"/>
-    <echo message="is jsp 2.0: ${is.jsp2}"/>
-    <available classpath="${el-api.jar}" 
-               classname="javax.el.ELContext"
-               property="is.jsp21"/>
-    <echo message="is jsp 2.1: ${is.jsp21}"/>
-  </target>
-
-  <target name="prepare.test.jsp2" if="is.jsp2" unless="is.jsp21">
-    <copy file="${basedir}/test/javax/faces/mock/MockPageContext.jsp2"
-          tofile="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
-  </target>
-
-  <target name="prepare.test.jsp21" if="is.jsp21">
-    <copy file="${basedir}/test/javax/faces/mock/MockPageContext.jsp21"
-          tofile="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
-  </target>
-
-  <target name="prepare.test.jsp12" unless="is.jsp2">
-    <copy file="${basedir}/test/javax/faces/mock/MockPageContext.jsp12"
-          tofile="${basedir}/test/javax/faces/mock/MockPageContext.java"/>
-  </target>
 
   <!--
        ===================================================================

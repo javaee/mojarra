@@ -1,5 +1,5 @@
 /*
- * $Id: TestLoadBundleTag.java,v 1.11 2005/08/22 22:11:25 ofung Exp $
+ * $Id: TestLoadBundleTag.java,v 1.12 2005/10/19 19:51:39 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 
 import javax.faces.component.UIViewRoot;
@@ -43,7 +43,7 @@ import java.util.Map;
 
 
 /**
- * @version $Id: TestLoadBundleTag.java,v 1.11 2005/08/22 22:11:25 ofung Exp $
+ * @version $Id: TestLoadBundleTag.java,v 1.12 2005/10/19 19:51:39 edburns Exp $
  */
 
 public class TestLoadBundleTag extends ServletFacesTestCase {

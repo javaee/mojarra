@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.91 2005/10/14 20:33:35 rlubke Exp $
+ * $Id: TestRenderers_2.java,v 1.92 2005/10/19 19:51:38 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import com.sun.faces.TestBean;
 import com.sun.faces.util.Util;
@@ -66,7 +66,7 @@ import java.io.StringWriter;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.91 2005/10/14 20:33:35 rlubke Exp $
+ * @version $Id: TestRenderers_2.java,v 1.92 2005/10/19 19:51:38 edburns Exp $
  */
 
 public class TestRenderers_2 extends JspFacesTestCase {
@@ -492,7 +492,7 @@ public class TestRenderers_2 extends JspFacesTestCase {
         img.getAttributes().put("ismap", new Boolean(true));
         img.getAttributes().put("usemap", "usemap");
         root.getChildren().add(img);
-        TestBean testBean = (TestBean)
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
             (Util.getValueExpression("#{TestBean}")).getValue(getFacesContext().getELContext());
         assertTrue(null != testBean); // set in FacesTestCaseService
         testBean.setImagePath("/foo/modelReferenceImage.gif");

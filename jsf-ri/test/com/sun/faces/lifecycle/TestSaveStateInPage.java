@@ -1,5 +1,5 @@
 /*
- * $Id: TestSaveStateInPage.java,v 1.30 2005/09/15 00:46:02 rlubke Exp $
+ * $Id: TestSaveStateInPage.java,v 1.31 2005/10/19 19:51:35 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.application.StateManagerImpl;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.util.TreeStructure;
@@ -53,7 +53,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestSaveStateInPage.java,v 1.30 2005/09/15 00:46:02 rlubke Exp $
+ * @version $Id: TestSaveStateInPage.java,v 1.31 2005/10/19 19:51:35 edburns Exp $
  */
 
 public class TestSaveStateInPage extends JspFacesTestCase {

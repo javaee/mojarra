@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueExpressionImpl.java
- * $Id: TestValueExpressionImpl.java,v 1.4 2005/08/24 16:13:37 edburns Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
 =======
- * $Id: TestValueExpressionImpl.java,v 1.4 2005/08/24 16:13:37 edburns Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -34,10 +34,10 @@
 // TestValueExpressionImpl.java
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.TestBean.Inner2Bean;
-import com.sun.faces.TestBean.InnerBean;
+import com.sun.faces.cactus.TestBean.Inner2Bean;
+import com.sun.faces.cactus.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.spi.ManagedBeanFactory.Scope;
 import com.sun.faces.util.Util;
@@ -481,7 +481,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         valueExpression = this.create("view.childCount");
         assertTrue(valueExpression.isReadOnly(getFacesContext().getELContext()));
 
-        TestBean testBean = (TestBean) getFacesContext().getExternalContext()
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
                 .getSessionMap().get("TestBean");
         assertTrue(null != testBean);
         valueExpression = this.create("TestBean.readOnly");
@@ -588,7 +588,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         Class c = valueExpression.getType(getFacesContext().getELContext());
         assertTrue(c == null);
 
-        TestBean testBean = (TestBean) getFacesContext().getExternalContext()
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean) getFacesContext().getExternalContext()
                 .getSessionMap().get("TestBean");
         assertTrue(null != testBean);
         valueExpression = this.create("TestBean.readOnly");
@@ -606,7 +606,7 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
 
         valueExpression = this.create("TestBean[\"inner\"]");
         assertTrue(valueExpression.getType(getFacesContext().getELContext()).getName().equals(
-                "com.sun.faces.TestBean$InnerBean"));
+                "com.sun.faces.cactus.TestBean$InnerBean"));
 
         int[] intArray =
         { 1, 2, 3 };

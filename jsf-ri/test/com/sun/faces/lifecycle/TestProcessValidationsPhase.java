@@ -1,5 +1,5 @@
 /*
- * $Id: TestProcessValidationsPhase.java,v 1.34 2005/08/22 22:11:20 ofung Exp $
+ * $Id: TestProcessValidationsPhase.java,v 1.35 2005/10/19 19:51:35 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.faces.component.NamingContainer;
@@ -49,7 +49,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestProcessValidationsPhase.java,v 1.34 2005/08/22 22:11:20 ofung Exp $
+ * @version $Id: TestProcessValidationsPhase.java,v 1.35 2005/10/19 19:51:35 edburns Exp $
  */
 
 public class TestProcessValidationsPhase extends ServletFacesTestCase {

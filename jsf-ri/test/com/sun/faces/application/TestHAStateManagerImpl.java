@@ -1,5 +1,5 @@
 /*
- * $Id: TestHAStateManagerImpl.java,v 1.2 2005/08/22 22:11:09 ofung Exp $
+ * $Id: TestHAStateManagerImpl.java,v 1.3 2005/10/19 19:51:29 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ package com.sun.faces.application;
 
 import org.apache.cactus.server.ServletConfigWrapper;
 import com.sun.faces.RIConstants;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 
 import javax.faces.application.StateManager;

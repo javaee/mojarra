@@ -1,5 +1,5 @@
 /*
- * $Id: TestConfigListener.java,v 1.7 2005/08/22 22:11:12 ofung Exp $
+ * $Id: TestConfigListener.java,v 1.8 2005/10/19 19:51:30 edburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.ServletTestCase;
 
 import javax.servlet.ServletContextEvent;

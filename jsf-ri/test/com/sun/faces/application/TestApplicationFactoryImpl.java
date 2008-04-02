@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationFactoryImpl.java,v 1.8 2005/08/22 22:11:09 ofung Exp $
+ * $Id: TestApplicationFactoryImpl.java,v 1.9 2005/10/19 19:51:28 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 
 import com.sun.faces.config.ConfigureListener;
 import javax.faces.application.Application;
@@ -41,7 +41,7 @@ import javax.faces.application.Application;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationFactoryImpl.java,v 1.8 2005/08/22 22:11:09 ofung Exp $
+ * @version $Id: TestApplicationFactoryImpl.java,v 1.9 2005/10/19 19:51:28 edburns Exp $
  */
 
 public class TestApplicationFactoryImpl extends JspFacesTestCase {

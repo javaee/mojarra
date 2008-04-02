@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.31 2005/08/22 22:08:17 ofung Exp $
+ * $Id: UICommandTestCase.java,v 1.32 2005/10/19 19:51:11 edburns Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.el.MethodBinding;
 import javax.faces.event.ActionListener;
 import javax.faces.event.PhaseId;
 import javax.faces.TestUtil;
-import javax.faces.mock.MockExternalContext;
+import com.sun.faces.mock.MockExternalContext;
 import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;

@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.28 2005/09/15 00:46:01 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.29 2005/10/19 19:51:29 edburns Exp $ 
  */ 
 
 
@@ -35,7 +35,7 @@
 package com.sun.faces.application;
 
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.context.ExternalContextImpl;
 import com.sun.faces.context.FacesContextImpl;
 import com.sun.faces.util.Util;
@@ -74,7 +74,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.28 2005/09/15 00:46:01 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.29 2005/10/19 19:51:29 edburns Exp $
  */
 
 
@@ -198,7 +198,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
     }
 
     public void beginRestoreViewNegative(WebRequest theRequest) {
-        theRequest.setURL("localhost:8080", "/test", "/faces", "", null);
+        theRequest.setURL("localhost:8080", "/test", "/faces", null, null);
     }
 
     public void testGetActionURL() {

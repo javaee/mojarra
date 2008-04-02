@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderResponsePhase.java,v 1.79 2005/08/22 22:11:20 ofung Exp $
+ * $Id: TestRenderResponsePhase.java,v 1.80 2005/10/19 19:51:35 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.util.Util;
 import org.apache.cactus.JspTestCase;
 import org.apache.cactus.WebRequest;
@@ -44,7 +44,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderResponsePhase.java,v 1.79 2005/08/22 22:11:20 ofung Exp $
+ * @version $Id: TestRenderResponsePhase.java,v 1.80 2005/10/19 19:51:35 edburns Exp $
  */
 
 public class TestRenderResponsePhase extends JspFacesTestCase {

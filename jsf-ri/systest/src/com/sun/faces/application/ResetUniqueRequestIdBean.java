@@ -1,5 +1,5 @@
 /*
- * $Id: ResetUniqueRequestIdBean.java,v 1.4 2005/09/15 00:46:00 rlubke Exp $
+ * $Id: ResetUniqueRequestIdBean.java,v 1.5 2005/10/19 19:51:25 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ package com.sun.faces.application;
 import javax.faces.context.FacesContext;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.TestingUtil;
+import com.sun.faces.cactus.TestingUtil;
 
 import org.apache.commons.collections.LRUMap;
 

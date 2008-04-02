@@ -51,7 +51,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.el.ValueBinding;
 
 import com.sun.faces.el.impl.beans.Factory;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 /**
  * @author jhook

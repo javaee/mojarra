@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.21 2005/08/22 22:08:21 ofung Exp $
+ * $Id: UIViewRootTestCase.java,v 1.22 2005/10/19 19:51:12 edburns Exp $
  */
 
 /*
@@ -52,12 +52,12 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import javax.faces.mock.MockExternalContext;
-import javax.faces.mock.MockFacesContext;
-import javax.faces.mock.MockHttpServletRequest;
-import javax.faces.mock.MockHttpServletResponse;
-import javax.faces.mock.MockLifecycle;
-import javax.faces.mock.MockServletContext;
+import com.sun.faces.mock.MockExternalContext;
+import com.sun.faces.mock.MockFacesContext;
+import com.sun.faces.mock.MockHttpServletRequest;
+import com.sun.faces.mock.MockHttpServletResponse;
+import com.sun.faces.mock.MockLifecycle;
+import com.sun.faces.mock.MockServletContext;
 import javax.faces.TestUtil;
 
 import javax.el.ValueExpression;
@@ -99,16 +99,16 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public static String FACTORIES[][] = {
 	{ FactoryFinder.APPLICATION_FACTORY, 
-	  "javax.faces.mock.MockApplicationFactory"
+	  "com.sun.faces.mock.MockApplicationFactory"
 	},
 	{ FactoryFinder.FACES_CONTEXT_FACTORY, 
-	  "javax.faces.mock.MockFacesContextFactory"
+	  "com.sun.faces.mock.MockFacesContextFactory"
 	},
 	{ FactoryFinder.LIFECYCLE_FACTORY, 
-	  "javax.faces.mock.MockLifecycleFactory"
+	  "com.sun.faces.mock.MockLifecycleFactory"
 	},
 	{ FactoryFinder.RENDER_KIT_FACTORY, 
-	  "javax.faces.mock.MockRenderKitFactory"
+	  "com.sun.faces.mock.MockRenderKitFactory"
 	}
     };
 

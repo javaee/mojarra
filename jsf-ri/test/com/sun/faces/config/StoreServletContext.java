@@ -1,5 +1,5 @@
 /*
- * $Id: StoreServletContext.java,v 1.7 2005/09/15 00:46:01 rlubke Exp $
+ * $Id: StoreServletContext.java,v 1.8 2005/10/19 19:51:30 edburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.util.TestingUtil;
+import com.sun.faces.cactus.TestingUtil;
 
 /**
  * <p>The purpose of this class is to call the package private

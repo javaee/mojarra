@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageFactoryImpl.java,v 1.9 2005/08/22 22:11:26 ofung Exp $
+ * $Id: TestMessageFactoryImpl.java,v 1.10 2005/10/19 19:51:40 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.util;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.faces.FacesException;
 import javax.faces.application.FacesMessage;
@@ -45,7 +45,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageFactoryImpl.java,v 1.9 2005/08/22 22:11:26 ofung Exp $
+ * @version $Id: TestMessageFactoryImpl.java,v 1.10 2005/10/19 19:51:40 edburns Exp $
  */
 
 public class TestMessageFactoryImpl extends ServletFacesTestCase {

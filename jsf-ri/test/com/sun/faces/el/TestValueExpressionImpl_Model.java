@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueExpressionImpl_Model.java,v 1.3 2005/08/22 22:11:16 ofung Exp $
+ * $Id: TestValueExpressionImpl_Model.java,v 1.4 2005/10/19 19:51:32 edburns Exp $
  */
 
 /*
@@ -31,10 +31,10 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.TestBean.Inner2Bean;
-import com.sun.faces.TestBean.InnerBean;
+import com.sun.faces.cactus.TestBean.Inner2Bean;
+import com.sun.faces.cactus.TestBean.InnerBean;
 
 import javax.faces.context.FacesContext;
 import javax.el.ELException;
@@ -46,7 +46,7 @@ import javax.el.ELContext;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueExpressionImpl_Model.java,v 1.3 2005/08/22 22:11:16 ofung Exp $
+ * @version $Id: TestValueExpressionImpl_Model.java,v 1.4 2005/10/19 19:51:32 edburns Exp $
  */
 
 public class TestValueExpressionImpl_Model extends ServletFacesTestCase {

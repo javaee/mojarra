@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleFactoryImpl.java,v 1.12 2005/08/22 22:11:19 ofung Exp $
+ * $Id: TestLifecycleFactoryImpl.java,v 1.13 2005/10/19 19:51:34 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.ServletTestCase;
 
 import javax.faces.lifecycle.Lifecycle;
@@ -44,7 +44,7 @@ import java.util.Iterator;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleFactoryImpl.java,v 1.12 2005/08/22 22:11:19 ofung Exp $
+ * @version $Id: TestLifecycleFactoryImpl.java,v 1.13 2005/10/19 19:51:34 edburns Exp $
  */
 
 public class TestLifecycleFactoryImpl extends ServletFacesTestCase {

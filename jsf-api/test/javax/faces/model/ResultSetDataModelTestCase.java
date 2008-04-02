@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModelTestCase.java,v 1.7 2005/08/22 22:08:28 ofung Exp $
+ * $Id: ResultSetDataModelTestCase.java,v 1.8 2005/10/19 19:51:22 edburns Exp $
  */
 
 /*
@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.faces.context.FacesContext;
-import javax.faces.mock.MockResultSet;
-import javax.faces.mock.MockResultSetMetaData;
+import com.sun.faces.mock.MockResultSet;
+import com.sun.faces.mock.MockResultSetMetaData;
 import javax.faces.model.DataModel;
 import javax.faces.model.DataModelEvent;
 import javax.faces.model.DataModelListener;

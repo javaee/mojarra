@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.27 2005/08/24 16:13:36 edburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.28 2005/10/19 19:51:30 edburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.config.beans.ListEntriesBean;
 import com.sun.faces.config.beans.ManagedBeanBean;

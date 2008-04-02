@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.69 2005/08/22 22:11:11 ofung Exp $
+ * $Id: ConfigFileTestCase.java,v 1.70 2005/10/19 19:51:29 edburns Exp $
  */
 
 /*
@@ -29,7 +29,7 @@
 
 package com.sun.faces.config;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.config.beans.FacesConfigBean;

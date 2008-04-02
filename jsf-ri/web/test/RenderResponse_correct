@@ -730,7 +730,7 @@ function clearFormHiddenParams_form3(curFormName) {
 //-->
 </script> <p />
 <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id1:_id2" /><input type="hidden" name="form3" value="form3" /></form><form id="form4" name="form4" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=99ec0282023f3f31a393ffff9aa4" enctype="application/x-www-form-urlencoded">
-<a href="http://localhost/test/;jsessionid=99ec0282023f3f31a393ffff9aa4">
+<a href="http://localhost:8080/test/;jsessionid=99ec0282023f3f31a393ffff9aa4">
       Link Enabled
   </a><span>
       Link Disabled

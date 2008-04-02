@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.44 2005/08/22 22:11:27 ofung Exp $
+ * $Id: TestUtil_messages.java,v 1.45 2005/10/19 19:51:40 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.util.Locale;
 
 import javax.faces.component.UIViewRoot;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 
 /**
@@ -43,7 +43,7 @@ import com.sun.faces.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.44 2005/08/22 22:11:27 ofung Exp $
+ * @version $Id: TestUtil_messages.java,v 1.45 2005/10/19 19:51:40 edburns Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.41 2005/08/22 22:08:18 ofung Exp $
+ * $Id: UIDataTestCase.java,v 1.42 2005/10/19 19:51:11 edburns Exp $
  */
 
 /*
@@ -50,8 +50,8 @@ import javax.faces.convert.LongConverter;
 import javax.faces.convert.ShortConverter;
 import javax.faces.el.ValueBinding;
 import javax.faces.event.ActionEvent;
-import javax.faces.mock.MockExternalContext;
-import javax.faces.mock.MockResponseWriter;
+import com.sun.faces.mock.MockExternalContext;
+import com.sun.faces.mock.MockResponseWriter;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
 import javax.faces.render.Renderer;

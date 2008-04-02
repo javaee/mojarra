@@ -24,7 +24,7 @@
  */
 
 /**
- * $Id: TestRenderers_4.java,v 1.18 2005/08/22 22:11:24 ofung Exp $
+ * $Id: TestRenderers_4.java,v 1.19 2005/10/19 19:51:38 edburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -36,7 +36,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
@@ -54,7 +54,7 @@ import java.io.IOException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_4.java,v 1.18 2005/08/22 22:11:24 ofung Exp $
+ * @version $Id: TestRenderers_4.java,v 1.19 2005/10/19 19:51:38 edburns Exp $
  */
 
 public class TestRenderers_4 extends JspFacesTestCase {

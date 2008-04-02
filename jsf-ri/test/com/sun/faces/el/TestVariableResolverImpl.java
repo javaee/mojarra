@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.22 2005/08/24 16:13:37 edburns Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.23 2005/10/19 19:51:33 edburns Exp $
  */
 
 /*
@@ -31,9 +31,9 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
-import com.sun.faces.TestBean.InnerBean;
+import com.sun.faces.cactus.TestBean.InnerBean;
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.application.ApplicationAssociate;
 import com.sun.faces.config.ManagedBeanFactoryImpl;
@@ -51,7 +51,7 @@ import javax.faces.el.VariableResolver;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.22 2005/08/24 16:13:37 edburns Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.23 2005/10/19 19:51:33 edburns Exp $
  */
 
 public class TestVariableResolverImpl extends ServletFacesTestCase {

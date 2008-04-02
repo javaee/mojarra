@@ -1,5 +1,5 @@
 /*
- * $Id: TestActionListenerImpl.java,v 1.23 2005/08/22 22:11:09 ofung Exp $
+ * $Id: TestActionListenerImpl.java,v 1.24 2005/10/19 19:51:28 edburns Exp $
  */
 
 /*
@@ -30,10 +30,8 @@
 // TestActionListenerImpl.java
 
 package com.sun.faces.application;
-
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
-import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
 import javax.faces.component.UICommand;
@@ -50,7 +48,7 @@ import javax.faces.event.ActionEvent;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestActionListenerImpl.java,v 1.23 2005/08/22 22:11:09 ofung Exp $
+ * @version $Id: TestActionListenerImpl.java,v 1.24 2005/10/19 19:51:28 edburns Exp $
  */
 
 /**

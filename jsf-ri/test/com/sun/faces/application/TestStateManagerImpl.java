@@ -1,6 +1,6 @@
 
 /*
- * $Id: TestStateManagerImpl.java,v 1.13 2005/08/22 22:11:10 ofung Exp $
+ * $Id: TestStateManagerImpl.java,v 1.14 2005/10/19 19:51:29 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
 
 package com.sun.faces.application;
 import com.sun.faces.RIConstants;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import java.util.Map;
 import javax.faces.application.StateManager.SerializedView;

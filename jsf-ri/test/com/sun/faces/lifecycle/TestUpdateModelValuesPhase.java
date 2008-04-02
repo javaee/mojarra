@@ -1,5 +1,5 @@
 /*
- * $Id: TestUpdateModelValuesPhase.java,v 1.39 2005/08/22 22:11:21 ofung Exp $
+ * $Id: TestUpdateModelValuesPhase.java,v 1.40 2005/10/19 19:51:35 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.lifecycle;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestBean;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
@@ -45,7 +45,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUpdateModelValuesPhase.java,v 1.39 2005/08/22 22:11:21 ofung Exp $
+ * @version $Id: TestUpdateModelValuesPhase.java,v 1.40 2005/10/19 19:51:35 edburns Exp $
  */
 
 public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
@@ -93,7 +93,7 @@ public class TestUpdateModelValuesPhase extends ServletFacesTestCase {
         TestUIInput userName = null;
         TestUIInput userName1 = null;
         TestUIInput userName2 = null;
-        TestBean testBean = (TestBean)
+        com.sun.faces.cactus.TestBean testBean = (com.sun.faces.cactus.TestBean)
             (getFacesContext().getExternalContext().getSessionMap()).get(
                 "TestBean");
         String value = null;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRendererConversions.java,v 1.14 2005/08/22 22:11:23 ofung Exp $
+ * $Id: TestRendererConversions.java,v 1.15 2005/10/19 19:51:38 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
@@ -45,7 +45,7 @@ import javax.faces.component.UIViewRoot;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRendererConversions.java,v 1.14 2005/08/22 22:11:23 ofung Exp $
+ * @version $Id: TestRendererConversions.java,v 1.15 2005/10/19 19:51:38 edburns Exp $
  */
 
 public class TestRendererConversions extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.25 2005/10/18 00:27:07 rlubke Exp $
+ * $Id: TestUtil.java,v 1.26 2005/10/19 19:51:40 edburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@
 package com.sun.faces.util;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
@@ -51,7 +51,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.25 2005/10/18 00:27:07 rlubke Exp $
+ * @version $Id: TestUtil.java,v 1.26 2005/10/19 19:51:40 edburns Exp $
  */
 
 public class TestUtil extends ServletFacesTestCase {

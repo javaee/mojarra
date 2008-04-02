@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.34 2005/08/22 22:11:14 ofung Exp $
+ * $Id: TestConverters.java,v 1.35 2005/10/19 19:51:31 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.convert;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.util.Util;
 import org.apache.cactus.WebRequest;
 
@@ -59,7 +59,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.34 2005/08/22 22:11:14 ofung Exp $
+ * @version $Id: TestConverters.java,v 1.35 2005/10/19 19:51:31 edburns Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {

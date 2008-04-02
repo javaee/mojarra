@@ -1,5 +1,5 @@
 /*
- * $Id: TestExternalContextImpl.java,v 1.17 2005/08/22 22:11:13 ofung Exp $
+ * $Id: TestExternalContextImpl.java,v 1.18 2005/10/19 19:51:30 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import org.apache.cactus.WebRequest;
 
 import javax.servlet.ServletContext;
@@ -57,7 +57,7 @@ import java.util.Collection;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestExternalContextImpl.java,v 1.17 2005/08/22 22:11:13 ofung Exp $
+ * @version $Id: TestExternalContextImpl.java,v 1.18 2005/10/19 19:51:30 edburns Exp $
  */
 
 public class TestExternalContextImpl extends ServletFacesTestCase {

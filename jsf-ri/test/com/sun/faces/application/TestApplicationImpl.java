@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.28 2005/09/15 00:46:00 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.29 2005/10/19 19:51:28 edburns Exp $
  */
 
 /*
@@ -31,11 +31,11 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.TestComponent;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.TestingUtil;
+import com.sun.faces.cactus.TestingUtil;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -64,7 +64,7 @@ import javax.el.ValueExpression;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.28 2005/09/15 00:46:00 rlubke Exp $
+ * @version $Id: TestApplicationImpl.java,v 1.29 2005/10/19 19:51:28 edburns Exp $
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {

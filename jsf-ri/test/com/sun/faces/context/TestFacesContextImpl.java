@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.49 2005/08/22 22:11:13 ofung Exp $
+ * $Id: TestFacesContextImpl.java,v 1.50 2005/10/19 19:51:31 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.context;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.lifecycle.LifecycleImpl;
 import com.sun.faces.util.Util;
 
@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.49 2005/08/22 22:11:13 ofung Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.50 2005/10/19 19:51:31 edburns Exp $
  */
 
 public class TestFacesContextImpl extends ServletFacesTestCase {

@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodExpressionImpl.java,v 1.4 2005/08/22 22:11:14 ofung Exp $
+ * $Id: TestMethodExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
 // TestMethodRef.java
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.el.MethodExpression;
 import javax.el.ELException;
@@ -41,7 +41,7 @@ import javax.faces.el.PropertyNotFoundException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodExpressionImpl.java,v 1.4 2005/08/22 22:11:14 ofung Exp $
+ * @version $Id: TestMethodExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
  */
 
 public class TestMethodExpressionImpl extends ServletFacesTestCase

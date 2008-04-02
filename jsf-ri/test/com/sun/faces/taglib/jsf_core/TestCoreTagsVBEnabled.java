@@ -1,5 +1,5 @@
 /*
- * $Id: TestCoreTagsVBEnabled.java,v 1.8 2005/08/22 22:11:25 ofung Exp $
+ * $Id: TestCoreTagsVBEnabled.java,v 1.9 2005/10/19 19:51:39 edburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.lifecycle.ApplyRequestValuesPhase;
 import com.sun.faces.lifecycle.Phase;
 import com.sun.faces.lifecycle.ProcessValidationsPhase;
@@ -49,7 +49,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestCoreTagsVBEnabled.java,v 1.8 2005/08/22 22:11:25 ofung Exp $
+ * @version $Id: TestCoreTagsVBEnabled.java,v 1.9 2005/10/19 19:51:39 edburns Exp $
  */
 
 public class TestCoreTagsVBEnabled extends JspFacesTestCase {

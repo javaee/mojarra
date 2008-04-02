@@ -63,6 +63,8 @@
   <property name="jsf-api.home" value ="../jsf-api"/>
 
   <property name="jsf-tools.dir"    value="${basedir}/../jsf-tools"/>
+  <property name="jsf-extensions-test-time.jar" value="${basedir}/../lib/jsf-extensions-test-time.jar"/>
+
   
   <!-- The base directory for distribution targets -->
   <property name="dist.home" value="${basedir}/dist"/>
@@ -155,6 +157,7 @@
     <pathelement location="${servlet.jar}"/>
     <pathelement location="${standard.jar}"/>
     <pathelement location="${el-api.jar}"/>
+    <pathelement location="${jsf-extensions-test-time.jar}"/>
   </path>
 
   <!-- Custom Tomcat Integration -->
@@ -819,7 +822,7 @@ must exist.  This is necessary for the MessageFactory class.
         <concat append="true"
                 destfile="${tomcat.home}/domains/domain1/config/server.policy">
 grant {
-    permission java.lang.reflect.ReflectPermission &quot;suppressAccessChecks&quot;;
+    permission java.lang.reflect.ReflectPermission &quot;*&quot;;
 };
         </concat>
         <chmod file="${tomcat.home}/domains/domain1/config/server.policy"

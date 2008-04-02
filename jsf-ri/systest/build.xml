@@ -41,7 +41,6 @@
   <property file="../../build.properties"/>          <!-- Project local     -->
 
 
-
 <!-- ************ Where are we building into? ***************************** -->
 
   <!-- the root of our tomcat -->
@@ -101,6 +100,7 @@
   <property name="jsf-api.jar" value="${jsf-api.home}/build/lib/jsf-api.jar"/>
   <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
   <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
+  <property name="jsf-extensions-test-time.jar" value="${basedir}/../../lib/jsf-extensions-test-time.jar"/>
 
 
 
@@ -129,6 +129,7 @@
     <pathelement location="${jsp.jar}"/> 
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${junit.jar}"/>
+    <pathelement location="${jsf-extensions-test-time.jar}"/>
     <pathelement location="${build.home/WEB-INF/classes}"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
@@ -296,17 +297,19 @@
           <include name="*.jar" />
         </fileset>
       </delete>
-      <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
   </target>
 
   <target name="build.war.bundled" unless="build.standalone">
       <!-- edburns: remove this deletion when the glassfish regression is fixed 
       <delete file="${build.home}/WEB-INF/sun-web.xml" /> -->
 
-      <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
   </target>
    
-  <target name="build.war" depends="build.war.standalone,build.war.bundled"/> 
+  <target name="build.war" depends="build.war.standalone,build.war.bundled"> 
+      <copy todir="${build.home}/WEB-INF/lib" 
+            file="${jsf-extensions-test-time.jar}" />
+      <jar jarfile="${dist.home}/jsf-systest.war" basedir="${build.home}"/>
+  </target>
    
   <target description="Deploy web applications"  name="deploy.autodeploy" depends="build.war"> 
 

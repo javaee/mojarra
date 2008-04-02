@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesResourceBundleELResolver.java,v 1.2 2005/08/22 22:11:14 ofung Exp $
+ * $Id: TestFacesResourceBundleELResolver.java,v 1.3 2005/10/19 19:51:31 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import java.beans.FeatureDescriptor;
 import java.util.Iterator;
 import java.util.Locale;

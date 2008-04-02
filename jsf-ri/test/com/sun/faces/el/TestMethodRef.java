@@ -1,5 +1,5 @@
 /*
- * $Id: TestMethodRef.java,v 1.10 2005/08/22 22:11:15 ofung Exp $
+ * $Id: TestMethodRef.java,v 1.11 2005/10/19 19:51:32 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@
 // TestMethodRef.java
 package com.sun.faces.el;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
@@ -41,7 +41,7 @@ import javax.faces.el.ReferenceSyntaxException;
  * <B>TestMethodRef </B> is a class ... <p/><B>Lifetime And Scope </B>
  * <P>
  * 
- * @version $Id: TestMethodRef.java,v 1.10 2005/08/22 22:11:15 ofung Exp $
+ * @version $Id: TestMethodRef.java,v 1.11 2005/10/19 19:51:32 edburns Exp $
  */
 
 public class TestMethodRef extends ServletFacesTestCase

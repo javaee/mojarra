@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderKit.java,v 1.19 2005/10/07 17:04:27 rogerk Exp $
+ * $Id: TestRenderKit.java,v 1.20 2005/10/19 19:51:36 edburns Exp $
  */
 
 /*
@@ -31,8 +31,8 @@
 
 package com.sun.faces.renderkit;
 
-import com.sun.faces.FileOutputResponseWriter;
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.FileOutputResponseWriter;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.TextRenderer;
 import org.apache.cactus.ServletTestCase;
@@ -55,7 +55,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderKit.java,v 1.19 2005/10/07 17:04:27 rogerk Exp $
+ * @version $Id: TestRenderKit.java,v 1.20 2005/10/19 19:51:36 edburns Exp $
  */
 
 public class TestRenderKit extends ServletFacesTestCase {

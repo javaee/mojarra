@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagTestCase.java,v 1.27 2005/08/22 22:08:32 ofung Exp $
+ * $Id: UIComponentTagTestCase.java,v 1.28 2005/10/19 19:51:23 edburns Exp $
  */
 
 /*
@@ -56,20 +56,20 @@ import junit.framework.TestCase;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import javax.faces.mock.MockApplication;
-import javax.faces.mock.MockExternalContext;
-import javax.faces.mock.MockFacesContext;
-import javax.faces.mock.MockHttpServletRequest;
-import javax.faces.mock.MockHttpServletResponse;
-import javax.faces.mock.MockHttpSession;
-import javax.faces.mock.MockJspWriter;
-import javax.faces.mock.MockLifecycle;
-import javax.faces.mock.MockPageContext;
-import javax.faces.mock.MockRenderKit;
-import javax.faces.mock.MockRenderKitFactory;
-import javax.faces.mock.MockServlet;
-import javax.faces.mock.MockServletConfig;
-import javax.faces.mock.MockServletContext;
+import com.sun.faces.mock.MockApplication;
+import com.sun.faces.mock.MockExternalContext;
+import com.sun.faces.mock.MockFacesContext;
+import com.sun.faces.mock.MockHttpServletRequest;
+import com.sun.faces.mock.MockHttpServletResponse;
+import com.sun.faces.mock.MockHttpSession;
+import com.sun.faces.mock.MockJspWriter;
+import com.sun.faces.mock.MockLifecycle;
+import com.sun.faces.mock.MockPageContext;
+import com.sun.faces.mock.MockRenderKit;
+import com.sun.faces.mock.MockRenderKitFactory;
+import com.sun.faces.mock.MockServlet;
+import com.sun.faces.mock.MockServletConfig;
+import com.sun.faces.mock.MockServletContext;
 
 
 /**

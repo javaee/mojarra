@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.32 2005/08/22 22:08:18 ofung Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.33 2005/10/19 19:51:11 edburns Exp $
  */
 
 /*
@@ -36,17 +36,17 @@ import javax.faces.application.ApplicationFactory;
 import javax.faces.application.FacesMessage;
 import javax.faces.el.ValueBinding;
 import javax.el.ValueExpression;
-import javax.faces.mock.MockApplication;
-import javax.faces.mock.MockExternalContext;
-import javax.faces.mock.MockFacesContext;
-import javax.faces.mock.MockHttpServletRequest;
-import javax.faces.mock.MockHttpServletResponse;
-import javax.faces.mock.MockHttpSession;
-import javax.faces.mock.MockLifecycle;
-import javax.faces.mock.MockRenderKit;
-import javax.faces.mock.MockServletConfig;
-import javax.faces.mock.MockServletContext;
-import javax.faces.mock.MockValueBinding;
+import com.sun.faces.mock.MockApplication;
+import com.sun.faces.mock.MockExternalContext;
+import com.sun.faces.mock.MockFacesContext;
+import com.sun.faces.mock.MockHttpServletRequest;
+import com.sun.faces.mock.MockHttpServletResponse;
+import com.sun.faces.mock.MockHttpSession;
+import com.sun.faces.mock.MockLifecycle;
+import com.sun.faces.mock.MockRenderKit;
+import com.sun.faces.mock.MockServletConfig;
+import com.sun.faces.mock.MockServletContext;
+import com.sun.faces.mock.MockValueBinding;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.ValidatorException;
@@ -110,9 +110,9 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 
         // Set up Faces API Objects
 	FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-				 "javax.faces.mock.MockApplicationFactory");
+				 "com.sun.faces.mock.MockApplicationFactory");
 	FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-				 "javax.faces.mock.MockRenderKitFactory");
+				 "com.sun.faces.mock.MockRenderKitFactory");
 
         externalContext =
             new MockExternalContext(servletContext, request, response);

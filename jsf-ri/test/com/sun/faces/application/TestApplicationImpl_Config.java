@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.37 2005/08/22 22:11:09 ofung Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.38 2005/10/19 19:51:28 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.ServletFacesTestCase;
+import com.sun.faces.cactus.ServletFacesTestCase;
 import com.sun.faces.TestComponent;
 import com.sun.faces.TestConverter;
 
@@ -57,7 +57,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.37 2005/08/22 22:11:09 ofung Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.38 2005/10/19 19:51:28 edburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {

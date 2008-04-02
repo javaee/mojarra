@@ -101,15 +101,15 @@
     <!-- all of these properties must have valid values -->
     <property name="catalina-ant.jar" value="${tomcat.home}/server/lib/catalina-ant.jar"/>
     <property name="cactus.home" 
-              value="${tomcat.home}/../jakarta-cactus-13-1.4.1"/>
+              value="${tomcat.home}/../jakarta-cactus-13-1.7.1"/>
     <property name="cactus.ant.jar" 
-              value="${cactus.home}/lib/cactus-ant-1.4.1.jar"/>
+              value="${cactus.home}/lib/cactus-ant-1.7.1.jar"/>
     <property name="cactus.jar" 
-              value="${cactus.home}/lib/cactus-1.4.1.jar"/>
+              value="${cactus.home}/lib/cactus-1.7.1.jar"/>
     <property name="aspectjrt.jar" 
-              value="${cactus.home}/lib/aspectjrt-1.0.5.jar"/>
+              value="${cactus.home}/lib/aspectjrt-1.2.1.jar"/>
     <property name="httpclient.jar" 
-              value="${cactus.home}/lib/commons-httpclient-2.0alpha1-20020606.jar"/>
+              value="${cactus.home}/lib/commons-httpclient-2.0.2.jar"/>
 
     <property name="junit.jar" 
               value="${tomcat.home}/../junit3.8.1/junit.jar"/>
@@ -144,6 +144,7 @@
       <pathelement location="${conf.test.dir}"/>
       <pathelement location="${jstl.jar}"/>
       <pathelement location="${el-api.jar}"/>
+      <pathelement location="${jsf-extensions-test-time.jar}"/>
     </path>
 
     <path id="catalina-ant.classpath">
@@ -156,10 +157,10 @@
         Initialization of custom Ant tasks
 -->
     <target name="init">
-
         <taskdef name="runservertests"
-            classname="org.apache.cactus.ant.RunServerTestsTask">
+            classname="org.apache.cactus.integration.ant.RunServerTestsTask">
             <classpath>
+                <pathelement location="${commons-logging.jar}"/>
                 <pathelement location="${cactus.ant.jar}"/>
                 <pathelement path="${java.class.path}"/>
             </classpath>
@@ -246,11 +247,23 @@
       <antcall target="remove.jsp.incompat.workaround"/>
     </target>
 
+    <target name="prepare.test.standalone" if="build.standalone">
+        <!-- Copy needed libs in /lib -->
+        <copy file="${jsf-api.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${jstl.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${standard.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${basedir}/build/lib/jsf-impl.jar" todir="${out.test.dir}/WEB-INF/lib"/>
+
+    </target>
+
+    <target name="prepare.test.bundled" unless="build.standalone">
+
+    </target>
+
     <target name="prepare.test.webapp" unless="skip.build" 
             description="put the test webapp in the WAR file format in out.test.dir"
-            depends="compile.test">
+            depends="compile.test,prepare.test.standalone,prepare.test.bundled">
 
-        <!-- Copy needed libs in /lib -->
         <copy file="${junit.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
         <copy file="${cactus.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
         <copy file="${aspectjrt.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
@@ -258,10 +271,7 @@
         <copy file="${commons-collections.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
         <copy file="${commons-digester.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
         <copy file="${commons-logging.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${jsf-api.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${jstl.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${standard.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
-        <copy file="${basedir}/build/lib/jsf-impl.jar" todir="${out.test.dir}/WEB-INF/lib"/>
+        <copy file="${jsf-extensions-test-time.jar}" todir="${out.test.dir}/WEB-INF/lib"/>
 
         <!-- copy the all important web.xml -->
         <echo message="out.test.dir ${out.test.dir}" />

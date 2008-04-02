@@ -86,6 +86,7 @@
   <property name="jsf-api.dtd" value="${jsf-api.home}/build/lib/web-facesconfig_1_1.dtd"/>
   <property name="jsf-impl.jar"  value="${jsf-ri.home}/build/lib/jsf-impl.jar"/>
   <property name="el-api.jar" value="${tomcat.home}/common/lib/el-api.jar"/>
+  <property name="jsf-extensions-test-time.jar" value="${basedir}/../../lib/jsf-extensions-test-time.jar"/>
 
 
 
@@ -115,6 +116,7 @@
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${el-api.jar}"/>
     <pathelement location="${basedir}/../build/test/WEB-INF/classes"/>
+    <pathelement location="${jsf-extensions-test-time.jar}"/>
     <fileset dir="${htmlunit.home}/lib" includes="*.jar"/>
   </path>
 
@@ -207,7 +209,7 @@
 
   </target>
 
-  <target name="libraries" depends="prepare" unless="jwsdp.deploy">
+  <target name="libraries.standalone" if="build.standalone">
     <!-- Copy required libraries -->
     <copy file="${commons-beanutils.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
     <copy file="${commons-collections.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
@@ -217,6 +219,17 @@
     <copy file="${standard.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
     <copy file="${jsf-api.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
     <copy file="${jsf-impl.jar}" todir="${webapp.build.home}/WEB-INF/lib"/>
+
+  </target>
+
+  <target name="libraries.bundled" unless="build.standalone">
+
+  </target>
+
+  <target name="libraries" unless="jwsdp.deploy" depends="prepare,libraries.standalone,libraries.bundled">
+    <copy todir="${webapp.build.home}/WEB-INF/classes"
+          file="${jsf-extensions-test-time.jar}" />
+
     <copy todir="${webapp.build.home}/WEB-INF/classes">
       <fileset dir="${basedir}/build/classes" />
     </copy>

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.67 2005/10/14 20:33:34 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.68 2005/10/19 19:51:38 edburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.ViewHandlerImpl;
 import com.sun.faces.util.Util;
@@ -63,7 +63,7 @@ import java.util.ResourceBundle;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.67 2005/10/14 20:33:34 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.68 2005/10/19 19:51:38 edburns Exp $
  */
 
 public class TestRenderers_1 extends JspFacesTestCase {

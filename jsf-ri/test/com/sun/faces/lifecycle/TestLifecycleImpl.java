@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.37 2005/08/22 22:11:20 ofung Exp $
+ * $Id: TestLifecycleImpl.java,v 1.38 2005/10/19 19:51:34 edburns Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
-import com.sun.faces.JspFacesTestCase;
+import com.sun.faces.cactus.JspFacesTestCase;
 import com.sun.faces.util.Util;
 
 import org.apache.cactus.WebRequest;
@@ -49,7 +49,7 @@ import org.apache.cactus.WebRequest;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.37 2005/08/22 22:11:20 ofung Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.38 2005/10/19 19:51:34 edburns Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
