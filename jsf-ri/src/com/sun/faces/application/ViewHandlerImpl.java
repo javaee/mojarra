@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.41 2004/05/10 19:56:00 jvisvanathan Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.42 2004/07/14 21:30:53 rlubke Exp $ 
  */ 
 
 
@@ -41,7 +41,7 @@ import java.util.Map;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.41 2004/05/10 19:56:00 jvisvanathan Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.42 2004/07/14 21:30:53 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -397,6 +397,7 @@ public class ViewHandlerImpl extends ViewHandler {
 	// if it's not in the supported locales,
 	if (null == result) {
 	    Locale defaultLocale = context.getApplication().getDefaultLocale();
+        if (defaultLocale != null) {
             if ( perf.equals(defaultLocale)) {
                 // exact match
                 result = defaultLocale;
@@ -411,6 +412,7 @@ public class ViewHandlerImpl extends ViewHandler {
                     result = defaultLocale;
                 }
             }
+        }
 	}
 
         return result;

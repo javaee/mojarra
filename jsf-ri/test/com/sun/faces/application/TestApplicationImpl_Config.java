@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.34 2004/06/15 21:03:39 rlubke Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.35 2004/07/14 21:30:55 rlubke Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.34 2004/06/15 21:03:39 rlubke Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.35 2004/07/14 21:30:55 rlubke Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -412,7 +412,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
         application.addValidator("Billybob",
                                  "javax.faces.validator.LengthValidator");
-        assertTrue(null != (newTestValidator = (Validator)
+        assertTrue(null != (newTestValidator =
             application.createValidator("Billybob")));
         assertTrue(newTestValidator != testValidator);
 
@@ -526,8 +526,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 
         assertNotNull("Can't get default locale from Application",
                       locale = application.getDefaultLocale());
-        Locale defaultLocale = Locale.getDefault();
-        assertEquals(locale, defaultLocale);        
+        assertEquals(Locale.US, locale);
 
         Iterator iter;
         int j = 0, len = 0;

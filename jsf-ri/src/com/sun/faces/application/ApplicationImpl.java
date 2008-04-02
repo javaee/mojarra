@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.50 2004/05/10 19:55:59 jvisvanathan Exp $
+ * $Id: ApplicationImpl.java,v 1.51 2004/07/14 21:30:53 rlubke Exp $
  */
 
 /*
@@ -574,16 +574,7 @@ public class ApplicationImpl extends Application {
 
 
     public Locale getDefaultLocale() {
-        Locale result = defaultLocale;
-        synchronized (this) {
-            if (null == defaultLocale) {
-                result = Locale.getDefault();
-            }
-        }
-        if (log.isTraceEnabled()) {
-            log.trace("get defaultLocale " + result);
-        }
-        return result;
+        return defaultLocale;
     }
 
 

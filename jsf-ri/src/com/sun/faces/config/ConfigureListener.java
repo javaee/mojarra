@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.20 2004/06/04 20:48:01 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.21 2004/07/14 21:30:54 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -760,12 +760,10 @@ public class ConfigureListener implements ServletContextListener {
         value = config.getDefaultLocale();
         if (value != null) {
             if (log.isTraceEnabled()) {
-                if (log.isTraceEnabled()) {
-                    log.trace("setDefaultLocale(" + value + ")");
-                }
-                application.setDefaultLocale
-                    (Util.getLocaleFromString(value));
+                log.trace("setDefaultLocale(" + value + ")");
             }
+            application.setDefaultLocale
+                (Util.getLocaleFromString(value));
         }
 
         values = config.getSupportedLocales();
