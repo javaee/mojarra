@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.53 2003/08/22 21:02:59 rkitain Exp $
+ * $Id: HyperlinkRenderer.java,v 1.54 2003/08/25 22:36:15 eburns Exp $
  */
 
 /*
@@ -25,6 +25,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.event.ActionEvent;
 
 import org.mozilla.util.Assert;
 
@@ -35,7 +36,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.53 2003/08/22 21:02:59 rkitain Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.54 2003/08/25 22:36:15 eburns Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -95,8 +96,7 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
             return;
         }
 
-        //PENDING(rogerk) fire action event
-        //command.fireActionEvent(context);
+	context.addFacesEvent(new ActionEvent(component));
 	return;
     }
 
