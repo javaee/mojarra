@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.7 2003/10/07 01:45:17 eburns Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.8 2003/10/07 20:10:51 eburns Exp $
  */
 
 /*
@@ -39,6 +39,8 @@ public class GenerateConcreteClasses extends GenerateBase {
     // Relationship Instance Variables
 
     protected Map defaultPrimitiveValues = null;
+
+    protected Map wrappersForNumbers = null;
     
     //
     // Constructors and Initializers    
@@ -56,6 +58,16 @@ public class GenerateConcreteClasses extends GenerateBase {
 	defaultPrimitiveValues.put("long", "Long.MIN_VALUE");
 	defaultPrimitiveValues.put("int", "Integer.MIN_VALUE");
 	defaultPrimitiveValues.put("boolean", "false");
+
+	wrappersForNumbers = new HashMap(7);
+	wrappersForNumbers.put("char", "Character");
+	wrappersForNumbers.put("double", "Double");
+	wrappersForNumbers.put("float", "Float");
+	wrappersForNumbers.put("short", "Short");
+	wrappersForNumbers.put("byte", "Byte");
+	wrappersForNumbers.put("long", "Long");
+	wrappersForNumbers.put("int", "Integer");
+
     }
 
     //
@@ -216,6 +228,10 @@ public class GenerateConcreteClasses extends GenerateBase {
 	// package declaration
 	result.append("package " + 
 		      fullyQualifiedDestClass.substring(0, lastDot) + ";\n\n");
+
+	// imports
+	result.append("import javax.faces.context.FacesContext;\n");
+	result.append("import java.io.IOException;\n");
 	
 	// class declaration
 	result.append("public class " + destClass + 
@@ -244,7 +260,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    // ivar declaration
 	    result.append("  protected " + attrClass + " " + ivar);
 	    // if it's a primitive
-	    if (defaultPrimitiveValues.containsKey(attrClass)) {
+	    if (isPrimitive(attrClass)) {
 		// assign the default value
 		result.append(" = " + 
 			      (String) defaultPrimitiveValues.get(attrClass));
@@ -273,8 +289,120 @@ public class GenerateConcreteClasses extends GenerateBase {
 	    result.append("  }\n\n");
 	    
 	}
+
+	//
+	// StateHolder
+	//
+	if (0 < attrs.keySet().size()) {
+	    generateStateHolder(result, attrs);
+	}
+
 	result.append("}\n");
 	return result.toString();
+    }
+
+    protected void generateStateHolder(StringBuffer result,
+				       Map attrs) {
+	int 
+	    curAttr = 1,
+	    numAttrs = 0;
+	Iterator iter = null;
+	String
+	    attrName = null,
+	    ivar = null,
+	    attrClass = null;
+
+	// 
+	// saveState
+	// 
+	curAttr = 1;
+	numAttrs= attrs.keySet().size() + 1; // + 1 for super.state,
+					     // saved in values[0]
+	result.append("  public Object saveState(FacesContext context) {\n");
+	result.append("    Object [] values = new Object[" + numAttrs + 
+		      "];\n");
+	result.append("    values[0] = super.saveState(context);\n");
+	// generate the state saving for each attribute
+	iter = attrs.keySet().iterator();
+	while (iter.hasNext()) {
+	    attrName = ((String) iter.next()).trim();
+	    ivar = generateIvar(attrName);
+	    attrClass = ((String) attrs.get(attrName)).trim();
+	    // if it's a primitive
+	    if (isPrimitive(attrClass)) {
+		// wrap it
+		if (attrClass.equals("boolean")) {
+		    result.append("    values[" + curAttr + "] = " + ivar+ 
+				  " ? Boolean.TRUE : Boolean.FALSE;\n");
+		}
+		else {
+		    result.append("    values[" + curAttr + "] = new " +
+				  (String) wrappersForNumbers.get(attrClass) +
+				  "(" + ivar + ");\n");
+		}
+	    }
+	    else if (attrClass.equals("String") || 
+		     attrClass.equals("java.lang.String")) {
+		// if it's a string
+		result.append("    values[" + curAttr + "] = " + 
+			      ivar + ";\n");
+	    }
+	    else {
+		throw new IllegalStateException("Can't generate state saving for attribute named " + ivar + " of type " + attrClass + ".");
+	    }
+	    curAttr++;
+	}
+	result.append("    return (values);\n");
+	result.append("  }\n");
+
+	result.append("\n\n");
+	
+	// 
+	// restoreState
+	//
+	curAttr = 1;
+	numAttrs= attrs.keySet().size() + 1; // + 1 for super.state,
+					     // saved in values[0]
+	result.append("  public void restoreState(FacesContext context, Object state) throws IOException {\n");
+	result.append("    Object [] values = (Object []) state;\n");
+	result.append("    super.restoreState(context, values[0]);\n");
+	// generate the state restoring for each attribute
+	iter = attrs.keySet().iterator();
+	while (iter.hasNext()) {
+	    attrName = ((String) iter.next()).trim();
+	    ivar = generateIvar(attrName);
+	    attrClass = ((String) attrs.get(attrName)).trim();
+	    // if it's a primitive
+	    if (isPrimitive(attrClass)) {
+		// un-wrap it
+		if (attrClass.equals("boolean")) {
+		    result.append("    " + ivar + " = ((Boolean) values[" + 
+				  curAttr + "]).booleanValue();\n");
+		}
+		else {
+		    result.append("    " + ivar + " = ((" + 
+				  (String) wrappersForNumbers.get(attrClass) +
+				  ") values[" + curAttr + 
+				  "])." + attrClass + "Value();\n");
+		}
+	    }
+	    else if (attrClass.equals("String") || 
+		     attrClass.equals("java.lang.String")) {
+		// if it's a string
+		result.append("    " + ivar + " = (String) values[" + 
+			      curAttr + "];\n");
+	    }
+	    else {
+		throw new IllegalStateException("Can't generate state saving for attribute named " + ivar + " of type " + attrClass + ".");
+	    }
+	    curAttr++;
+	}
+	result.append("  }\n");
+
+    }
+
+    protected boolean isPrimitive(String attrClass) {
+	return defaultPrimitiveValues.containsKey(attrClass);
     }
 
     protected Log getLog() {
