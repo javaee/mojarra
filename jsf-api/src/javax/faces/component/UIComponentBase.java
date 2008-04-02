@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.92 2004/01/16 17:51:09 horwat Exp $
+ * $Id: UIComponentBase.java,v 1.93 2004/01/20 00:50:47 craigmcc Exp $
  */
 
 /*
@@ -1364,9 +1364,6 @@ public abstract class UIComponentBase extends UIComponent {
     private transient FacesContext facesContext = null;
 
 
-    /**
-     * <p>Return the {@link FacesContext} instance for the current request.</p>
-     */
     protected FacesContext getFacesContext() {
 
 	// PENDING(edburns): we can't use the cache ivar because we
@@ -1384,12 +1381,6 @@ public abstract class UIComponentBase extends UIComponent {
     }
 
 
-    /**
-     * <p>Return the {@link Renderer} instance associated with this
-     * {@link UIComponent}, if any; otherwise, return <code>null</code>.</p>
-     *
-     * @param context {@link FacesContext} for the current request
-     */
     protected Renderer getRenderer(FacesContext context) {
 
         String rendererType = getRendererType();

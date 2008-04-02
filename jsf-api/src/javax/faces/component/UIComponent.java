@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.121 2004/01/15 06:03:20 eburns Exp $
+ * $Id: UIComponent.java,v 1.122 2004/01/20 00:50:46 craigmcc Exp $
  */
 
 /*
@@ -120,10 +120,9 @@ public abstract class UIComponent implements StateHolder {
 
     /**
      * <p>Return a client-side identifier for this component, generating
-     * one if necessary.  The associated {@link
-     * javax.faces.render.Renderer}, if present, will be asked to
-     * convert the clientId to a form suitable for transmission to the
-     * client.</p>
+     * one if necessary.  The associated {@link Renderer}, if any,
+     * will be asked to convert the clientId to a form suitable for
+     * transmission to the client.</p>
      *
      * <p>The return from this method must be the same value throughout
      * the lifetime of the instance, unless the <code>id</code> property
@@ -187,10 +186,10 @@ public abstract class UIComponent implements StateHolder {
     /**
      * <p>Set the parent <code>UIComponent</code> of this
      * <code>UIComponent</code>.  <strong>This method must
-     * never be called by developers;  a UIComponent's internal
+     * never be called by developers;  a {@link UIComponent}'s internal
      * implementation will call it as components are added to or
      * removed from a parent's child <code>List</code> or 
-     * facet <code>Map</code>.</p>
+     * facet <code>Map</code></strong>.</p>
      * 
      * @param parent The new parent, or <code>null</code> for the root node
      *  of a component tree
@@ -719,5 +718,24 @@ public abstract class UIComponent implements StateHolder {
      */
     public abstract Object processSaveState(FacesContext context);
 
+
+    // ----------------------------------------------------- Convenience Methods
+
+
+    /**
+     * <p>Convenience method to return the {@link FacesContext} instance
+     * for the current request.</p>
+     */
+    protected abstract FacesContext getFacesContext();
+
+
+    /**
+     * <p>Convenience method to return the {@link Renderer} instance
+     * associated with this component, if any; otherwise, return
+     * <code>null</code>.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     */
+    protected abstract Renderer getRenderer(FacesContext context);
 
 }
