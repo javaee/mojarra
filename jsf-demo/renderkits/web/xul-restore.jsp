@@ -17,7 +17,7 @@
       <x:panelGroup styleClass="groupboxClass" captionLabel="#{phaseBundle.restoreCaption}" 
           captionClass="captionClass" >
          <x:panelGroup styleClass="groupboxDetailClass" >
-            <x:outputText styleClass="info" value="#{phaseBundle.restoreDescription1}" />
+            <x:outputText styleClass="info" value="#{phaseBundle.restoreDescription1}" escape="false" />
             <x:outputText styleClass="info" value="#{phaseBundle.restoreDescription2}" escape="false" />
             <x:outputText styleClass="info" value="#{phaseBundle.restoreDescription3}" escape="false" />
             <x:outputText styleClass="info" value="#{phaseBundle.restoreDescription4}" escape="false" />

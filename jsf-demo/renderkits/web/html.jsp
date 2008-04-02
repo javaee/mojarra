@@ -39,14 +39,35 @@
 <%@ page contentType="text/html"%>
 
 <HTML>
+<HEAD>
+<link rel="stylesheet" type="text/css"
+            href='<%= request.getContextPath() + "/html.css" %>'>
+</HEAD>
+<body bgcolor="#c1cdc1">
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
        <f:view renderKitId="HTML_BASIC" >  
+          <f:loadBundle basename="demo.model.Resources" var="phaseBundle"/>
           <h:form id="form">
-              <h:commandButton id="submit" action="success" value="submit"/>
+              <h:outputText styleClass="headerClass" value="Multiple RenderKits Demo" />
+              <h:panelGrid columns="1">
+                 <h:outputText styleClass="sectionClass" value="Background" />
+              </h:panelGrid>
+              <h:panelGrid columns="1">
+                 <h:outputText value="#{phaseBundle.background1}" escape="false" />
+                 <h:graphicImage url="lifecycle-pages.gif" />
+                 <h:outputText value="#{phaseBundle.background2}" escape="false" />
+              </h:panelGrid>
+              <h:panelGrid columns="1">
+                 <h:outputText styleClass="sectionClass" value="Design Detail" />
+                 <h:outputText value="#{phaseBundle.detail1}" escape="false" />
+                 <h:graphicImage url="life-demo.gif" />
+                 <h:commandButton type="submit" value="Next" action="success" />
+              </h:panelGrid>
           </h:form>
        </f:view>
 
+</body>
 </HTML>
