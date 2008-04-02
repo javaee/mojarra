@@ -27,17 +27,12 @@
 
 package renderkits.renderkit.svg;
 
-import javax.faces.component.NamingContainer;
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.event.ActionEvent;
 
 import java.io.IOException;
-import java.util.Map;
 import javax.faces.FacesException;
-import javax.faces.component.UIForm;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

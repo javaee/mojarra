@@ -247,6 +247,9 @@
     <copy todir="${build}/${webapp}/src/script">
       <fileset dir="src/script"/>
     </copy>
+    <copy todir="${build}/${webapp}">
+      <fileset dir="src/script"/>
+    </copy>
 
     <copy todir="${build}/${webapp}">
       <fileset dir="web">
@@ -256,7 +259,7 @@
         <include name="**/*.jsp" />
         <include name="**/*.css" />
         <include name="**/*.xml" />
-        <include name="**/*.svg" />
+        <include name="**/*.es" />
       </fileset>   
     </copy>
            

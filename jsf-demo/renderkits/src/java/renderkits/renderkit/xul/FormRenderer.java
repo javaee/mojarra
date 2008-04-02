@@ -26,15 +26,11 @@
 // FormRenderer.java
 
 package renderkits.renderkit.xul;
-import javax.faces.event.PhaseListener;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.faces.FactoryFinder;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
@@ -59,6 +55,9 @@ import org.apache.commons.logging.LogFactory;
 public class FormRenderer extends Renderer {
 
     private Lifecycle lifecycle = null;
+
+    private static final String RENDERED_SCRIPT = "demo.RENDERED_SCRIPT";
+
     //
     // Protected Constants
     //
@@ -112,7 +111,7 @@ public class FormRenderer extends Renderer {
         if (log.isTraceEnabled()) {
             log.trace("Begin decoding component " + component.getId());
         }
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
         if (requestParameterMap.containsKey(clientId)) {
             ((UIForm) component).setSubmitted(true);
@@ -168,9 +167,15 @@ public class FormRenderer extends Renderer {
         }
         
         writer.writeText("\n", null);
-        writer.startElement("script", component);
-        writer.writeAttribute("src", "../src/script/http-xul.es", null);
-        writer.endElement("script");
+
+        // Only render the main script element once per request.
+        if (!context.getExternalContext().getRequestMap().containsKey(RENDERED_SCRIPT)) {
+            context.getExternalContext().getRequestMap().put(RENDERED_SCRIPT,
+                    Boolean.TRUE);
+            writer.startElement("script", component);
+            writer.writeAttribute("src", "http-xul.es", null);
+            writer.endElement("script");
+        }
     }
 
 

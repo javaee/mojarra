@@ -27,7 +27,6 @@
 
 package renderkits.renderkit.svg;
 
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -99,7 +98,7 @@ public class ButtonRenderer extends BaseRenderer {
         
         // Was our command the one that caused this submission?
         String clientId = component.getClientId(context);
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
         if (requestParameterMap.get(clientId) == null) {
                 return;

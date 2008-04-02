@@ -170,14 +170,14 @@ public class GridRenderer extends BaseRenderer {
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
         boolean open = false;
-        Iterator kids = null;
+        Iterator<UIComponent> kids = null;
         int i = 0;
 
         // Render our children, starting a new row as needed
 
         if (null != (kids = getChildren(component))) {
             while (kids.hasNext()) {
-                UIComponent child = (UIComponent) kids.next();
+                UIComponent child = kids.next();
                 if ((i % columns) == 0) {
                     if (open) {
                         writer.endElement("row");
@@ -266,7 +266,7 @@ public class GridRenderer extends BaseRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -278,7 +278,7 @@ public class GridRenderer extends BaseRenderer {
             }
         }
         String results[] = new String[list.size()];
-        return ((String[]) list.toArray(results));
+        return (list.toArray(results));
     }
 
 
@@ -290,7 +290,7 @@ public class GridRenderer extends BaseRenderer {
         int count;
         Object value = component.getAttributes().get("columns");
         if ((value != null) && (value instanceof Integer)) {
-            count = ((Integer) value).intValue();
+            count = (Integer) value;
         } else {
             count = 2;
         }
@@ -312,7 +312,7 @@ public class GridRenderer extends BaseRenderer {
             return (new String[0]);
         }
         values = values.trim();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         while (values.length() > 0) {
             int comma = values.indexOf(",");
             if (comma >= 0) {
@@ -324,6 +324,6 @@ public class GridRenderer extends BaseRenderer {
             }
         }
         String results[] = new String[list.size()];
-        return ((String[]) list.toArray(results));
+        return (list.toArray(results));
     }
 }

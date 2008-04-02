@@ -25,17 +25,6 @@
 
 package renderkits.components.svg;
 
-import javax.faces.context.FacesContext;
-import javax.faces.component.UIOutput;
-import javax.faces.el.ValueBinding;
-import javax.faces.component.UIComponent;
-import javax.faces.context.ResponseWriter;
-import javax.faces.component.UIViewRoot;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-
 
 /**
  * <p>{@link Line} is a JavaServer Faces component that renders

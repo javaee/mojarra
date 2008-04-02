@@ -177,8 +177,6 @@ public class SVGResponseWriter extends ResponseWriter {
         }
         
         
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
         writer.write("<");
         writer.write(name);
         closeStart = true;

@@ -51,7 +51,7 @@ public class ResponsePhaseListener implements PhaseListener {
     
     public void afterPhase(PhaseEvent event) {
         // Disregard requests that are not XMLHttpRequest(s) 
-        Map requestHeaderMap = event.getFacesContext().getExternalContext().
+        Map<String,String> requestHeaderMap = event.getFacesContext().getExternalContext().
             getRequestHeaderMap();
         if (requestHeaderMap.get(XML_HTTP) == null) {
             return;

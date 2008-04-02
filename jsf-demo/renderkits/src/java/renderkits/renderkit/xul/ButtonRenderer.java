@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import javax.faces.FacesException;
-import javax.faces.component.NamingContainer;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
@@ -110,9 +109,9 @@ public class ButtonRenderer extends BaseRenderer {
 
         // Was our command the one that caused this submission?
         String clientId = component.getClientId(context);
-        Map requestParameterMap = context.getExternalContext()
+        Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
-        String value = (String) requestParameterMap.get(clientId);
+        String value = requestParameterMap.get(clientId);
         if (value == null) {
             if (requestParameterMap.get(clientId + ".x") == null &&
                 requestParameterMap.get(clientId + ".y") == null) {

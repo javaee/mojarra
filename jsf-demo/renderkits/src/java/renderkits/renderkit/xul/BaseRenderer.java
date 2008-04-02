@@ -237,9 +237,9 @@ public abstract class BaseRenderer extends Renderer {
      */
     protected UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {
         UIComponent retComp = null;
-        List children = startPoint.getChildren();
+        List<UIComponent> children = startPoint.getChildren();
         for (int i = 0, size = children.size(); i < size; i++) {
-            UIComponent comp = (UIComponent) children.get(i);
+            UIComponent comp = children.get(i);
                                                                                                                     
             if (comp instanceof NamingContainer) {
                 retComp = comp.findComponent(forComponent);
@@ -264,12 +264,12 @@ public abstract class BaseRenderer extends Renderer {
      *
      * @param component <code>UIComponent</code> for which to extract children
      */
-    protected Iterator getChildren(UIComponent component) {
+    protected Iterator<UIComponent> getChildren(UIComponent component) {
                                                                                                                        
-        List results = new ArrayList();
-        Iterator kids = component.getChildren().iterator();
+        List<UIComponent> results = new ArrayList<UIComponent>();
+        Iterator<UIComponent> kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            UIComponent kid = (UIComponent) kids.next();
+            UIComponent kid = kids.next();
             if (kid.isRendered()) {
                 results.add(kid);
             }
@@ -297,9 +297,9 @@ public abstract class BaseRenderer extends Renderer {
         if (component.getRendersChildren()) {
             component.encodeChildren(context);
         } else {
-            Iterator kids = getChildren(component);
+            Iterator<UIComponent> kids = getChildren(component);
             while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
+                UIComponent kid = kids.next();
                 encodeRecursive(context, kid);
             }
         }

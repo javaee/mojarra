@@ -1,5 +1,5 @@
 /*
- * $Id: XULResponseStateManager.java,v 1.3 2005/08/22 22:09:34 ofung Exp $
+ * $Id: XULResponseStateManager.java,v 1.4 2005/08/26 21:19:31 rogerk Exp $
  */
 
 /*
@@ -203,7 +203,7 @@ public class XULResponseStateManager extends ResponseStateManager {
     
     private Object getComponentState(FacesContext context) {
         // requestMap is a local variable so we don't need to synchronize
-        Map requestMap = context.getExternalContext().getRequestMap();
+        Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
         Object state = requestMap.get(FACES_VIEW_STATE);
         // null out the temporary attribute, since we don't need it anymore.
         requestMap.remove(FACES_VIEW_STATE);
@@ -215,12 +215,12 @@ public class XULResponseStateManager extends ResponseStateManager {
         StateManager stateManager = context.getApplication().getStateManager();
                                                                                                         
                                                                                                         
-        Map requestParamMap = context.getExternalContext()
+        Map<String,String> requestParamMap = context.getExternalContext()
             .getRequestParameterMap();
                                                                                                         
                                                                                                         
-        String viewString = (String) requestParamMap.get(
-                                                         javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
+        String viewString = requestParamMap.get(
+            javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
         Object structure = null;
         if (viewString == null) {
             return null;
@@ -248,7 +248,7 @@ public class XULResponseStateManager extends ResponseStateManager {
                 }
                 structure = ois.readObject();
                 state = ois.readObject();
-                Map requestMap = context.getExternalContext().getRequestMap();
+                Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
                 // store the state object temporarily in request scope
                 // until it is processed by getComponentState
                 // which resets it.

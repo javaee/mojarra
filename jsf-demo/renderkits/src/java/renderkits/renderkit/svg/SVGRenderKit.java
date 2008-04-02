@@ -75,7 +75,7 @@ public class SVGRenderKit extends RenderKit {
      * Renderer instances themselves.
      */
 
-    private HashMap rendererFamilies;
+    private HashMap<String,HashMap<Object,Renderer>> rendererFamilies; 
 
     private ResponseStateManager responseStateManager = null;
 //
@@ -84,7 +84,7 @@ public class SVGRenderKit extends RenderKit {
 
     public SVGRenderKit() {
         super();
-	rendererFamilies = new HashMap();
+        rendererFamilies = new HashMap<String, HashMap<Object,Renderer>>();
     }
 
 
@@ -110,12 +110,12 @@ public class SVGRenderKit extends RenderKit {
             throw new NullPointerException(message);
                 
         }
-	HashMap renderers = null;
+        HashMap<Object,Renderer> renderers = null;
 
         synchronized (rendererFamilies) {
-	    if (null == (renderers = (HashMap) rendererFamilies.get(family))) {
-		rendererFamilies.put(family, renderers = new HashMap());
-	    }
+            if (null == (renderers = rendererFamilies.get(family))) {
+                rendererFamilies.put(family, renderers = new HashMap<Object, Renderer>());
+            }
             renderers.put(rendererType, renderer);
         }
     }
@@ -131,12 +131,12 @@ public class SVGRenderKit extends RenderKit {
             throw new NullPointerException(message);
         }
 
-	HashMap renderers = null;
+        HashMap<Object,Renderer> renderers = null;
         Renderer renderer = null;
 
-	if (null != (renderers = (HashMap) rendererFamilies.get(family))) {
-	    renderer = (Renderer) renderers.get(rendererType);
-	}
+        if (null != (renderers = rendererFamilies.get(family))) {
+            renderer = renderers.get(rendererType); 
+        }
 	
         return renderer;
     }
@@ -182,7 +182,7 @@ public class SVGRenderKit extends RenderKit {
         }
 
 	if (null != desiredContentTypeList) {
-	    Map requestMap = context.getExternalContext().getRequestMap();
+            Map<String,Object> requestMap = context.getExternalContext().getRequestMap();
 	    
 	    desiredTypes = contentTypeSplit(desiredContentTypeList);
 	    String curContentType = null, curDesiredType = null;                       
