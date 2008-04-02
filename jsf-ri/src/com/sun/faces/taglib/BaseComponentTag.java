@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.11 2003/10/30 22:15:37 jvisvanathan Exp $
+ * $Id: BaseComponentTag.java,v 1.12 2003/10/31 21:40:19 eburns Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.11 2003/10/30 22:15:37 jvisvanathan Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.12 2003/10/31 21:40:19 eburns Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -216,6 +216,15 @@ public abstract class BaseComponentTag extends UIComponentTag
     protected String valueRef_ = null;
     protected Converter converter = null;
 
+    protected String actionListenerRef = null; 
+    protected String actionListenerRef_ = null; 
+
+    protected String validateRef = null;
+    protected String validateRef_ = null;
+   
+    protected String valueChangeListenerRef = null;
+    protected String valueChangeListenerRef_ = null;
+
     protected String id_ = null;
 
     // Relationship Instance Variables
@@ -240,7 +249,19 @@ public abstract class BaseComponentTag extends UIComponentTag
     {
 	valueRef_ = newValueRef;
     }
+
+    public void setActionListenerRef(String newActionListenerRef) {
+	actionListenerRef_ = newActionListenerRef;
+    }
+
+    public void setValidateRef(String newValidateRef) {
+	validateRef_ = newValidateRef;
+    }
     
+    public void setValueChangeListenerRef(String newValueChangeListenerRef) {
+	valueChangeListenerRef_ = newValueChangeListenerRef;
+    }
+
     public void setConverter(Converter converter) {
         this.converter = converter;
     }
@@ -974,6 +995,19 @@ public abstract class BaseComponentTag extends UIComponentTag
         if (disabledClass_ != null) {
             disabledClass = Util.evaluateElExpression(disabledClass_, pageContext);
         }
+	if (actionListenerRef_ != null) {
+	    actionListenerRef = Util.evaluateElExpression(actionListenerRef_,
+							  pageContext);
+	}
+	if (validateRef_ != null) {
+	    validateRef = Util.evaluateElExpression(validateRef_,
+						    pageContext);
+	}
+	if (valueChangeListenerRef_ != null) {
+	    valueChangeListenerRef = 
+		Util.evaluateElExpression(valueChangeListenerRef_,
+					  pageContext);
+	}
     }
 
 
@@ -1086,6 +1120,19 @@ public abstract class BaseComponentTag extends UIComponentTag
         if (null != styleClass) {
             component.getAttributes().put("styleClass", styleClass);
         }
+	if (null != actionListenerRef) {
+            component.getAttributes().put("actionListenerRef", 
+					  actionListenerRef);
+        }
+	if (null != validateRef) {
+            component.getAttributes().put("validateRef", 
+					  validateRef);
+        }
+	if (null != valueChangeListenerRef) {
+            component.getAttributes().put("valueChangeListenerRef", 
+					  valueChangeListenerRef);
+        }
+	    
     }
 
     protected String getDebugString() {

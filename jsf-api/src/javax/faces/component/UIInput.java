@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.42 2003/10/30 23:04:53 craigmcc Exp $
+ * $Id: UIInput.java,v 1.43 2003/10/31 21:40:18 eburns Exp $
  */
 
 /*
@@ -448,11 +448,13 @@ public class UIInput extends UIOutput {
 	}
 
 	// If our value is valid and not empty, call all validators
-	if (isValid() && !isEmpty() && (this.validators != null)) {
-	    Iterator validators = this.validators.iterator();
-	    while (validators.hasNext()) {
-		Validator validator = (Validator) validators.next();
-		validator.validate(context, this);
+	if (isValid() && !isEmpty()) {
+	    if (this.validators != null) {
+		Iterator validators = this.validators.iterator();
+		while (validators.hasNext()) {
+		    Validator validator = (Validator) validators.next();
+		    validator.validate(context, this);
+		}
 	    }
             String validateRef = getValidateRef();
             if (!(validateRef == null)) {

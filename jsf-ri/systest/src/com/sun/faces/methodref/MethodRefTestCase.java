@@ -1,5 +1,5 @@
 /*
- * $Id: MethodRefTestCase.java,v 1.1 2003/10/31 18:42:23 eburns Exp $
+ * $Id: MethodRefTestCase.java,v 1.2 2003/10/31 21:40:20 eburns Exp $
  */
 
 /*
@@ -14,6 +14,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlBody;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -81,10 +82,10 @@ public class MethodRefTestCase extends AbstractTestCase {
     // ------------------------------------------------- Individual Test Methods
 
 
-    // Test dynamically adding and removing components
-    public void testSimpleActionRef() throws Exception {
+    public void testActionRefAndActionListener() throws Exception {
 	HtmlForm form;
 	HtmlSubmitInput submit;
+	HtmlAnchor link;
 	HtmlTextInput input;
         HtmlPage page;
 
@@ -97,26 +98,93 @@ public class MethodRefTestCase extends AbstractTestCase {
 	// press button1
 	page = (HtmlPage) submit.click();
 	form = getFormById(page, "form");
-        submit = (HtmlSubmitInput)
-	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-                                "button2");
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-				"input");
+				"buttonStatus");
 	assertTrue("Input does not have expected value",
 		   -1 != input.asText().indexOf("button1 was pressed"));
+        link = (HtmlAnchor) page.getAnchors().get(0);
 	
 	// press button2
+	// page = (HtmlPage) link.click(); // htmlunit 1.2.3 bug
+	page = getPage("/faces/methodref01.jsp?form:button2=form:button2");
+	assertNotNull(page);
+	form = getFormById(page, "form");
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"buttonStatus");
+	assertTrue("Input does not have expected value",
+		   -1 != input.asText().indexOf("button2 was pressed"));
+        submit = (HtmlSubmitInput)
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "button3");
+
+	// press button3
 	page = (HtmlPage) submit.click();
 	form = getFormById(page, "form");
 	input = (HtmlTextInput) 
 	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
-				"input");
+				"buttonStatus");
 	assertTrue("Input does not have expected value",
-		   -1 != input.asText().indexOf("button2 was pressed"));
+		   -1 != input.asText().indexOf("button3 was pressed"));
 
 	
     }
 
+    public void testValidateRef() throws Exception {
+	HtmlForm form;
+	HtmlSubmitInput submit;
+	HtmlAnchor link;
+	HtmlTextInput input;
+        HtmlPage page;
 
+	page = getPage("/faces/methodref01.jsp");
+	form = getFormById(page, "form");
+        submit = (HtmlSubmitInput)
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "validate");
+
+	// press the button with no value, see that no value appears in
+	// the "validateStatus" textField.
+	page = (HtmlPage) submit.click();
+	form = getFormById(page, "form");
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"validateStatus");
+	assertEquals("Input does not have expected value",
+		     0, input.asText().length());
+	
+	// fill in an incorrect value, see that still no value appears
+	// in the text field.
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"toValidate");
+	input.setValueAttribute("aoeuaoeu");
+        submit = (HtmlSubmitInput)
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "validate");
+	page = (HtmlPage) submit.click();
+	form = getFormById(page, "form");
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"validateStatus");
+	assertEquals("Input does not have expected value",
+		     0, input.asText().length());
+
+	// fill in the correct value, see that finally we have a value
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"toValidate");
+	input.setValueAttribute("batman");
+        submit = (HtmlSubmitInput)
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+                                "validate");
+	page = (HtmlPage) submit.click();
+	form = getFormById(page, "form");
+	input = (HtmlTextInput) 
+	    form.getInputByName("form" + NamingContainer.SEPARATOR_CHAR +
+				"validateStatus");
+	assertEquals("Input does not have expected value",
+		     "batman", input.asText());
+    }
 }
