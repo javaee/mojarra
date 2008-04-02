@@ -304,6 +304,11 @@
             <formatter type="plain" usefile="false"/>
 
             <!-- Suite of tests -->
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/> 
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_1"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_2"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_3"/>
+            <test name="com.sun.faces.renderkit.html_basic.TestRenderers_4"/>
             <test name="com.sun.faces.application.TestActionListenerImpl"/>
             <test name="com.sun.faces.application.TestApplicationFactoryImpl"/>
             <test name="com.sun.faces.application.TestApplicationImpl"/>

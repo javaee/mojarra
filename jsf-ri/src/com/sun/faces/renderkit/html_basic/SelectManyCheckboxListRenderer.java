@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.18 2003/11/01 02:52:51 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.19 2003/11/19 23:08:46 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -175,13 +175,17 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // later.
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
-
+        String itemLabel = curItem.getLabel();
+        if (itemLabel != null) {
+            writer.writeText(" ", null);
+            writer.writeText(itemLabel, "label");
+        }
+	writer.endElement("input");
         // apply any styleClass specified on the label.
         if ( labelClass != null) {
             writer.startElement("span", component);
             writer.writeAttribute("class", labelClass, "labelClass");
         }
-        writer.writeText(curItem.getLabel(), "label");
         if (null != labelClass) {
             writer.endElement("span");
         }

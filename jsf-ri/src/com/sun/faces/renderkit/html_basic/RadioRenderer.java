@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.55 2003/11/09 05:11:06 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.56 2003/11/19 23:08:45 rkitain Exp $
  */
 
 /*
@@ -111,17 +111,17 @@ public class RadioRenderer extends SelectManyCheckboxListRenderer {
         // later.
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
+        String itemLabel = curItem.getLabel();
+        if (itemLabel != null) {
+            writer.writeText(" ", null);
+            writer.writeText(itemLabel, null);
+        }
         writer.endElement("input");
 
         // apply any styleClass specified on the label.
         if ( labelClass != null) {
             writer.startElement("span", component);
             writer.writeAttribute("class", labelClass, "labelClass");
-        }
-        String itemLabel = curItem.getLabel();
-        if (itemLabel != null) {
-            writer.writeText(" ", null);
-            writer.writeText(itemLabel, null);
         }
         if (null != labelClass) {
             writer.endElement("span");

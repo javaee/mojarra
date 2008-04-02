@@ -11,15 +11,15 @@
 <span class="styleClass"><table border="0">
 	<tr>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"><span class="disabledClass">Red</span></label></td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"> Red</input><span class="disabledClass"></span></label></td>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"><span class="enabledClass">Blue</span></label></td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"> Blue</input><span class="enabledClass"></span></label></td>
 <table border="0">
 	<tr>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"><span class="enabledClass">Green</span></label></td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"> Green</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"><span class="enabledClass">Yellow</span></label></td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"> Yellow</input><span class="enabledClass"></span></label></td>
 	</tr>
 </table>	</tr>
 </table></span>

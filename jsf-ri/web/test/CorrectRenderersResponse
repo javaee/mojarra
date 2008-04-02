@@ -6,13 +6,13 @@
 <input type="hidden" name="formRenderer1" value="formRenderer1" /></form>
 <span class="styleClass"><table border="0">
 	<tr>
-<td><input type="radio" name="radioRenderer" value="One" disabled="disabled" tabindex="5" title="title" /><span class="disabledClass"> One</span></td>
-<td><input type="radio" checked name="radioRenderer" value="Two" tabindex="5" title="title" /><span class="enabledClass"> Two</span></td>
-<td><input type="radio" name="radioRenderer" value="Three" tabindex="5" title="title" /><span class="enabledClass"> Three</span></td>
+<td><input type="radio" name="radioRenderer" value="One" disabled="disabled" tabindex="5" title="title"> One</input><span class="disabledClass"></span></td>
+<td><input type="radio" checked name="radioRenderer" value="Two" tabindex="5" title="title"> Two</input><span class="enabledClass"></span></td>
+<td><input type="radio" name="radioRenderer" value="Three" tabindex="5" title="title"> Three</input><span class="enabledClass"></span></td>
 <table border="0">
 	<tr>
-<td><input type="radio" name="radioRenderer" value="Four" tabindex="5" title="title" /><span class="enabledClass"> Four</span></td>
-<td><input type="radio" name="radioRenderer" value="Five" tabindex="5" title="title" /><span class="enabledClass"> Five</span></td>
+<td><input type="radio" name="radioRenderer" value="Four" tabindex="5" title="title"> Four</input><span class="enabledClass"></span></td>
+<td><input type="radio" name="radioRenderer" value="Five" tabindex="5" title="title"> Five</input><span class="enabledClass"></span></td>
 	</tr>
 </table>	</tr>
 </table></span>

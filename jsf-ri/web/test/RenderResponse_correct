@@ -280,9 +280,9 @@
                  
               <span class="styleClass"><table>
 	<tr>
-<td><input type="radio" name="basicForm:shipType" value="nextDay" accesskey="A" tabindex="3" /><span class="enabledClass"> Next Day</span></td>
-<td><input type="radio" name="basicForm:shipType" value="nextWeek" accesskey="A" tabindex="3" /><span class="enabledClass"> Next Week</span></td>
-<td><input type="radio" name="basicForm:shipType" value="nextMonth" accesskey="A" tabindex="3" /><span class="enabledClass"> Next Month</span></td>
+<td><input type="radio" name="basicForm:shipType" value="nextDay" accesskey="A" tabindex="3"> Next Day</input><span class="enabledClass"></span></td>
+<td><input type="radio" name="basicForm:shipType" value="nextWeek" accesskey="A" tabindex="3"> Next Week</input><span class="enabledClass"></span></td>
+<td><input type="radio" name="basicForm:shipType" value="nextMonth" accesskey="A" tabindex="3"> Next Month</input><span class="enabledClass"></span></td>
 	</tr>
 </table></span>
 
@@ -301,13 +301,13 @@
 
            <table border="1">
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextDay" border="1" /> Next Day</td>
+<td><input type="radio" name="basicForm:verticalRadio" value="nextDay" border="1"> Next Day</input></td>
 	</tr>
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextWeek" border="1" /> Next Week</td>
+<td><input type="radio" name="basicForm:verticalRadio" value="nextWeek" border="1"> Next Week</input></td>
 	</tr>
 	<tr>
-<td><input type="radio" name="basicForm:verticalRadio" value="nextMonth" border="1" /> Next Month</td>
+<td><input type="radio" name="basicForm:verticalRadio" value="nextMonth" border="1"> Next Month</input></td>
 	</tr>
 </table>
 
@@ -538,25 +538,25 @@
 					<span class="styleClass"><table border="0">
 	<tr>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="0" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">zero</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="0" type="checkbox" accesskey="A" tabindex="3"> zero</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="1" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">one</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="1" type="checkbox" accesskey="A" tabindex="3"> one</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="2" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">two</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="2" type="checkbox" accesskey="A" tabindex="3"> two</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="3" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">three</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="3" type="checkbox" accesskey="A" tabindex="3"> three</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="4" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">four</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="4" type="checkbox" accesskey="A" tabindex="3"> four</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="5" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">five</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="5" type="checkbox" accesskey="A" tabindex="3"> five</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="6" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">six</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="6" type="checkbox" accesskey="A" tabindex="3"> six</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="7" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">seven</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="7" type="checkbox" accesskey="A" tabindex="3"> seven</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="8" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">eight</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="8" type="checkbox" accesskey="A" tabindex="3"> eight</input><span class="enabledClass"></span></label></td>
 <td>
-<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="9" type="checkbox" accesskey="A" tabindex="3"><span class="enabledClass">nine</span></label></td>
+<label for="basicForm:ManyApples3"><input name="basicForm:ManyApples3" id="basicForm:ManyApples3" value="9" type="checkbox" accesskey="A" tabindex="3"> nine</input><span class="enabledClass"></span></label></td>
 	</tr>
 </table></span></TD>
 </tr>
