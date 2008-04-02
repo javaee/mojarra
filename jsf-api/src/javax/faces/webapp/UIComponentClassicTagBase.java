@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.13 2005/12/05 16:43:04 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.14 2005/12/06 01:58:08 rlubke Exp $
  */
 
 /*
@@ -647,8 +647,11 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     public static UIComponentClassicTagBase getParentUIComponentClassicTagBase(PageContext context) {
 
-        List list = (List) context.getAttribute(COMPONENT_TAG_STACK_ATTR,
-                                                PageContext.REQUEST_SCOPE);
+        FacesContext facesContext = (FacesContext)
+              context.getAttribute(CURRENT_FACES_CONTEXT);
+        List list = (List) facesContext.getExternalContext().getRequestMap()
+              .get(COMPONENT_TAG_STACK_ATTR);
+       
         if (list != null) {
             return ((UIComponentClassicTagBase) list.get(list.size() - 1));
         } else {
@@ -693,14 +696,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * stack, deleting the stack if this was the last entry.</p>
      */
     private void popUIComponentClassicTagBase() {
-
-        List list = (List) pageContext.getAttribute(COMPONENT_TAG_STACK_ATTR,
-                                                    PageContext.REQUEST_SCOPE);
+        Map<String,Object> requestMap = 
+              context.getExternalContext().getRequestMap();
+        List list = (List) requestMap.get(COMPONENT_TAG_STACK_ATTR);
         if (list != null) {
             list.remove(list.size() - 1);
             if (list.size() < 1) {
-                pageContext.removeAttribute(COMPONENT_TAG_STACK_ATTR,
-                                            PageContext.REQUEST_SCOPE);
+                requestMap.remove(COMPONENT_TAG_STACK_ATTR);
             }
         }
 
@@ -713,12 +715,13 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      */
     private void pushUIComponentClassicTagBase() {
 
-        List list = (List) pageContext.getAttribute(COMPONENT_TAG_STACK_ATTR,
-                                                    PageContext.REQUEST_SCOPE);
+        Map<String,Object> requestMap = 
+              context.getExternalContext().getRequestMap();
+        List<UIComponentClassicTagBase> list = (List<UIComponentClassicTagBase>) 
+              requestMap.get(COMPONENT_TAG_STACK_ATTR);
         if (list == null) {
-            list = new ArrayList();
-            pageContext.setAttribute(COMPONENT_TAG_STACK_ATTR, list,
-                                     PageContext.REQUEST_SCOPE);
+            list = new ArrayList<UIComponentClassicTagBase>();
+            requestMap.put(COMPONENT_TAG_STACK_ATTR, list);
         }
         list.add(this);
 
@@ -1432,7 +1435,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
 
     /**
      * <p>Called from {@link #setJspId} to update the value saved for
-     * the previous call to {@link setJspId} for this component <b>on
+     * the previous call to {@link #setJspId} for this component <b>on
      * this request</b>.  If this method is presented with the same
      * argument <code>id</code> for the same tag instance more than once
      * on the same request, then we know that the tag instance lies

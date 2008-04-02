@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.41 2005/11/03 19:18:21 rlubke Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.42 2005/12/06 01:58:08 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ package com.sun.faces.application;
 
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +51,7 @@ import com.sun.faces.util.Util;
  * <p><strong>NavigationHandlerImpl</strong> is the class that implements
  * default navigation handling. Refer to section 7.4.2 of the specification for
  * more details.
+ * PENDING: Make independent of ApplicationAssociate. 
  */
 
 public class NavigationHandlerImpl extends NavigationHandler {
@@ -70,12 +71,20 @@ public class NavigationHandlerImpl extends NavigationHandler {
     // Instance Variables
 
     /**
-     * Application associate that contains navigation mappings loaded
-     * from configuration file(s).
+     * <code>Map</code> containing configured navigation cases.
      */
-    private ApplicationAssociate associate = null;
+    private Map<String, List<ConfigNavigationCase>> caseListMap;
 
+    /**
+     * <code>Set</code> containing wildcard navigation cases.
+     */
+    private Set<String> wildCardSet;
 
+    /**
+     * Flag indicating navigation cases properly consumed and available.
+     */
+    private boolean navigationConfigured;
+    
     /**
      * This constructor uses the current <code>Application</code>
      * instance to obtain the navigation mappings used to make
@@ -86,15 +95,20 @@ public class NavigationHandlerImpl extends NavigationHandler {
         if (logger.isLoggable(Level.FINE)) {
             logger.log(Level.FINE, "Created NavigationHandler instance ");
         }
-	// if the user is using the decorator pattern, this would cause
-	// our ApplicationAssociate to be created, if it isn't already
-	// created.
-        ApplicationFactory aFactory = (ApplicationFactory) 
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        // if the user is using the decorator pattern, this would cause
+        // our ApplicationAssociate to be created, if it isn't already
+        // created.
+        ApplicationFactory aFactory = (ApplicationFactory)
+              FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
         aFactory.getApplication();
-	associate = ApplicationAssociate.getInstance(
-                ConfigureListener.getExternalContextDuringInitialize());
-
+        ApplicationAssociate associate = ApplicationAssociate.getInstance(
+              ConfigureListener.getExternalContextDuringInitialize());
+        if (associate != null) {
+            caseListMap = associate.getNavigationCaseListMappings();
+            wildCardSet = associate.getNavigationWildCardList();
+            navigationConfigured = (wildCardSet != null &&
+                                    caseListMap != null);
+        }
     }
 
 
@@ -179,18 +193,16 @@ public class NavigationHandlerImpl extends NavigationHandler {
         String viewId = context.getViewRoot().getViewId();
         CaseStruct caseStruct;
 
-        synchronized (this) {
-            caseStruct = findExactMatch(viewId, fromAction, outcome);
+        caseStruct = findExactMatch(viewId, fromAction, outcome);
 
-            if (caseStruct == null) {
-                caseStruct = findWildCardMatch(viewId, fromAction, outcome);
-            }
-
-            if (caseStruct == null) {
-                caseStruct = findDefaultMatch(fromAction, outcome);
-            }
+        if (caseStruct == null) {
+            caseStruct = findWildCardMatch(viewId, fromAction, outcome);
         }
-        
+
+        if (caseStruct == null) {
+            caseStruct = findDefaultMatch(fromAction, outcome);
+        }
+               
          if (caseStruct == null && logger.isLoggable(Level.WARNING)) {
             if (fromAction == null) {            
                 logger.log(Level.WARNING, 
@@ -218,20 +230,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
      * @return The <code>view</code> identifier.
      */
 
-    synchronized private CaseStruct findExactMatch(String viewId,
-                                                   String fromAction,
-                                                   String outcome) {        
+    private CaseStruct findExactMatch(String viewId,
+                                      String fromAction,
+                                      String outcome) {        
 
-	// if the user has elected to replace the Application instance
-	// entirely
-	if (null == associate) {
-	    return null;
-	}
-	    
-
-        Map<String,List<ConfigNavigationCase>> caseListMap = 
-              associate.getNavigationCaseListMappings();
-        assert (null != caseListMap);
+        // if the user has elected to replace the Application instance
+        // entirely
+        if (!navigationConfigured) {
+            return null;
+        }          
 
         List<ConfigNavigationCase> caseList = caseListMap.get(viewId);
 
@@ -267,20 +274,13 @@ public class NavigationHandlerImpl extends NavigationHandler {
                                                       String outcome) {
         CaseStruct result = null;
 
-	// if the user has elected to replace the Application instance
-	// entirely
-	if (null == associate) {
-	    return null;
-	}
+        // if the user has elected to replace the Application instance
+        // entirely
+        if (!navigationConfigured) {
+            return null;
+        }       
 
-        Map<String,List<ConfigNavigationCase>> caseListMap = 
-              associate.getNavigationCaseListMappings();
-        assert (null != caseListMap);
-        TreeSet<String> wildcardMatchList = 
-              associate.getNavigationWildCardList();
-        assert (null != wildcardMatchList);
-
-        for (String fromViewId : wildcardMatchList) {
+        for (String fromViewId : wildCardSet) {
             // See if the entire wildcard string (without the trailing "*" is
             // contained in the incoming viewId.  
             // Ex: /foobar is contained with /foobarbaz
@@ -293,7 +293,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
 
             // Append the trailing "*" so we can do our map lookup;
 
-            String wcFromViewId = fromViewId + "*";
+            String wcFromViewId = fromViewId + '*';
             List<ConfigNavigationCase> caseList = caseListMap.get(wcFromViewId);
 
             if (caseList == null) {
@@ -328,17 +328,12 @@ public class NavigationHandlerImpl extends NavigationHandler {
      */
 
     synchronized private CaseStruct findDefaultMatch(String fromAction,
-                                                     String outcome) {        
-
-	// if the user has elected to replace the Application instance
-	// entirely
-	if (null == associate) {
-	    return null;
-	}
-
-        Map<String,List<ConfigNavigationCase>> caseListMap = 
-              associate.getNavigationCaseListMappings();
-        assert (null != caseListMap);
+                                                     String outcome) {
+        // if the user has elected to replace the Application instance
+        // entirely
+        if (!navigationConfigured) {
+            return null;
+        }        
 
         List<ConfigNavigationCase> caseList = caseListMap.get("*");
 
@@ -412,8 +407,7 @@ public class NavigationHandlerImpl extends NavigationHandler {
     }
 
 
-    static class CaseStruct {
-
+    private static class CaseStruct {
         String viewId;
         ConfigNavigationCase navCase;
     }
