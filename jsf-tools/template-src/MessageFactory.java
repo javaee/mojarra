@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.5 2004/02/04 23:46:37 ofung Exp $
+ * $Id: MessageFactory.java,v 1.6 2004/05/10 19:57:26 jvisvanathan Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
+import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -155,7 +156,8 @@ import java.io.IOException;
 
 	// At this point, we have a summary and a bundle.
 	if (null == summary || null == bundle) {
-	    throw new NullPointerException();
+            throw new NullPointerException(" summary " + summary + " bundle " + 
+                bundle);
 	}
 	summary = substituteParams(locale, summary, params);
 
@@ -181,7 +183,8 @@ import java.io.IOException;
     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
 					   Object params[]) {
         if (context == null || messageId == null ) {
-            throw new NullPointerException("One or more parameters could be null");
+            throw new NullPointerException(" context " + context + " messageId " + 
+                messageId);
         }
         Locale locale = null;
         // viewRoot may not have been initialized at this point.
@@ -191,7 +194,7 @@ import java.io.IOException;
             locale = Locale.getDefault();
         }
 	if (null == locale) {
-	    throw new NullPointerException();
+	    throw new NullPointerException(" locale " + locale);
 	}
         FacesMessage message = getMessage(locale, messageId, params);
         if (message != null) {
@@ -200,6 +203,34 @@ import java.io.IOException;
         locale = Locale.getDefault();
         return (getMessage(locale, messageId, params));
     }  
+    
+    @protection@ static FacesMessage getMessage(FacesContext context, 
+        UIComponent component, String messageId) {
+        return getMessage(context, component, messageId, null);
+         
+    }
+    
+    @protection@ static FacesMessage getMessage(FacesContext context, 
+        UIComponent component, String messageId, Object params[]) {
+        // if component id is specified, insert the "id" at
+        // the end of the parameter list
+        String id = "";
+        if (component != null && component.getId() != null) {
+            id = (" \"" + component.getId() + "\"" + ": ");
+        }
+        int length = 1;
+        if (params != null) {
+            length = (params.length) + 1;
+        }
+        Object[] newParams = new Object[length];
+        if ( params != null) {
+            for (int i = 0; i < params.length; ++i ) {
+                newParams[i] = params[i];
+            }
+        }
+        newParams[length-1] = id;
+        return getMessage(context, messageId, newParams);
+    }
     
     @protection@ static FacesMessage getMessage(FacesContext context, String messageId,
                                        Object param0) {
