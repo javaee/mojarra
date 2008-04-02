@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.1 2003/03/28 18:32:19 horwat Exp $
+ * $Id: ApplicationImpl.java,v 1.2 2003/03/28 20:08:59 horwat Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package com.sun.faces.application;
 
 import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionListener;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -199,7 +200,10 @@ public class ApplicationImpl extends Application {
         // Get ValueBinding from cache otherwise create new binding
         ValueBinding valueBinding;
         if (null == (valueBinding = (ValueBinding) valueBindingMap.get(ref))) {
-            valueBinding = new ValueBindingImpl(variableResolver, propertyResolver);
+
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            valueBinding = new ValueBindingImpl
+                (facesContext, variableResolver, propertyResolver);
             valueBindingMap.put(ref, valueBinding);
         }
 
