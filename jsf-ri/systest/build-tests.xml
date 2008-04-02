@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.129 2007/02/01 16:04:50 jdlee Exp $
+ $Id: build-tests.xml,v 1.130 2007/02/01 20:41:02 jdlee Exp $
 -->
 
 <!--
@@ -272,6 +272,7 @@
                                    com/sun/faces/jsptest/CommandLinkNoFormTestCase.class,
                                    com/sun/faces/jsptest/PrependIdTestCase.class,
                                    com/sun/faces/jsptest/FormElTestCase.class,
+                                   com/sun/faces/jsptest/MissingActionListenerMethodTestCase.class,
                                    com/sun/faces/jsptest/ConverterTestCase.class,
                                    com/sun/faces/jsptest/IdRefTestCase.class,
                                    com/sun/faces/jsptest/ForEachTestCase.class"/>

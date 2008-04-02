@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionActionListener.java,v 1.4 2006/02/22 21:56:51 rlubke Exp $
+ * $Id: MethodExpressionActionListener.java,v 1.5 2007/02/01 20:41:02 jdlee Exp $
  */
 
 /*
@@ -87,19 +87,24 @@ public class MethodExpressionActionListener implements ActionListener,
             ELContext elContext = context.getELContext();
             methodExpression.invoke(elContext, new Object[] {actionEvent});
         } catch (ELException ee) {
+            Throwable eeCause = ee.getCause();
             if (LOGGER.isLoggable(Level.SEVERE)) {
                 LOGGER.log(Level.SEVERE,
                            "severe.event.exception_invoking_processaction",
                            new Object[]{
-                                 ee.getCause().getClass().getName(),
+                                 eeCause == null ? ee.getClass().getName() : eeCause.getClass().getName(),
                                  methodExpression.getExpressionString(),
                                  actionEvent.getComponent().getId()
                            });
                 StringWriter writer = new StringWriter(1024);
-                ee.getCause().printStackTrace(new PrintWriter(writer));
+                if (eeCause == null) {
+                    ee.printStackTrace(new PrintWriter(writer));
+                } else {
+                    eeCause.printStackTrace(new PrintWriter(writer));
+                }
                 LOGGER.severe(writer.toString());
             }
-            throw new AbortProcessingException(ee.getMessage(), ee.getCause());
+            throw eeCause == null ? new AbortProcessingException(ee.getMessage(), ee) : new AbortProcessingException(ee.getMessage(), eeCause);
         }
     }
 
