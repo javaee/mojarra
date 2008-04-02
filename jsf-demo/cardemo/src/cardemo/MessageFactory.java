@@ -1,5 +1,5 @@
 /*
- * $Id: MessageFactory.java,v 1.1 2003/10/31 01:12:18 eburns Exp $
+ * $Id: MessageFactory.java,v 1.2 2003/12/17 15:17:35 rkitain Exp $
  */
 
 /*
@@ -51,8 +51,6 @@ public class MessageFactory extends Object
 
     // Relationship Instance Variables
 
-    private static Application application = null;
-     
 
     //
     // Constructors and Initializers    
@@ -112,11 +110,9 @@ public class MessageFactory extends Object
 					   Object params[]) {
 	FacesMessage result = null;
 	String 
-	    severityStr = null,
 	    summary = null,
 	    detail = null,
 	    bundleName = null;
-	FacesMessage.Severity severity = null;
 	ResourceBundle bundle = null;
 
 	// see if we have a user-provided bundle
@@ -170,19 +166,7 @@ public class MessageFactory extends Object
 	catch (MissingResourceException e) {
 	}
 
-	try {
-	    if (null != (severityStr = bundle.getString(messageId + "_severity"))){
-		severity = (FacesMessage.Severity)
-		    FacesMessage.VALUES_MAP.get(severityStr);
-	    }
-	}
-	catch (MissingResourceException e) {
-	}
-	if (null == severity) {
-	    severity = FacesMessage.SEVERITY_INFO;
-	}
-	
-        return (new FacesMessage(severity, summary, detail));
+        return (new FacesMessage(summary, detail));
     }
 
 
@@ -241,10 +225,7 @@ public class MessageFactory extends Object
     }                                       
 
     protected static Application getApplication() {
-	if (null == application) {
-	    application = Application.getCurrentInstance();
-	}
-	return application;
+        return (FacesContext.getCurrentInstance().getApplication());
     }
 
     protected static ClassLoader getCurrentLoader(Object fallbackClass) {

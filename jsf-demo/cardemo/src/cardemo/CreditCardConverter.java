@@ -1,5 +1,5 @@
 /*
- * $Id: CreditCardConverter.java,v 1.3 2003/08/26 18:35:00 horwat Exp $
+ * $Id: CreditCardConverter.java,v 1.4 2003/12/17 15:17:35 rkitain Exp $
  */
 
 /*
@@ -51,8 +51,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
-
-import org.mozilla.util.Assert;
 
 /**
  * CreditCardConverter Class accepts a Credit Card Number of type String 

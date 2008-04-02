@@ -78,7 +78,7 @@
   
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="20031110_BETA_SCF"/>
+  <property name="version" value="20031214_BETA"/>
   
   <property name="build.home" value="${basedir}/build"/>
 
@@ -89,8 +89,8 @@
 
   <property name="wspack.home" value="${tomcat.home}"/>
 
-  <property name="webapp" value="demo" />
-
+  <property name="build.properties.demo" value="build.properties.demo" />
+  
   <target name="clean">
   
     <delete dir="${basedir}/lib"/> 
@@ -102,9 +102,10 @@
     <ant target="clean" dir="guessNumber"/>
     <ant target="clean" dir="helloDuke"/>
     <ant target="clean" dir="components"/>
-    <ant target="clean" dir="cardemo"/>
+    <ant target="clean" dir="carstore"/>
     <ant target="clean" dir="nonjsp"/>
     <ant target="clean" dir="standard"/>
+    <ant target="clean" dir="test/mappingDemo"/>
 
   </target>
 
@@ -119,8 +120,8 @@
        <param name="fail.message" value="jsf-api.jar must be set"/>
     </antcall>
     <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-ri.jar}"/>
-       <param name="fail.message" value="jsf-ri.jar must be set"/>
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="jsf-impl.jar must be set"/>
     </antcall>
     <antcall target="checkRequiredFile">
        <param name="file" value="${commons-logging.jar}"/>
@@ -232,7 +233,7 @@
       <fileset dir="${tomcat.home}/webapps">
 
         <include name="*components*"/>
-        <include name="*cardemo*"/>
+        <include name="*carstore*"/>
         <include name="*helloDuke*"/>
         <include name="*guessNumber*"/>
         <include name="*nonJsp*"/>
@@ -252,17 +253,6 @@
       <mkdir dir="${basedir}/lib"/>
   </target>
 
-  <target name="copyJars" depends="prepare.build" if="build.standalone">
-    <copy todir="${basedir}/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${basedir}/lib" file="${commons-logging.jar}" />
-    <copy todir="${basedir}/lib" file="${commons-digester.jar}" />
-    <copy todir="${basedir}/lib" file="${commons-collections.jar}" />
-    <copy todir="${basedir}/lib" file="${jsf-api.jar}" />
-    <copy todir="${basedir}/lib" file="${jsf-ri.jar}" />
-    <copy todir="${basedir}/lib" file="${standard.jar}" />
-    <copy todir="${basedir}/lib" file="${jstl.jar}" />
-  </target>
-
   <target name="dist.binary" 
           depends="verifyPreconditions,copyDemoSource,main">
     <echo> Build the demos from the jsf-demo repository </echo>
@@ -270,37 +260,30 @@
     <copy todir="${dist.home}/samples" 
           file="${basedir}/components/build/jsf-components.war"/>
     <copy todir="${dist.home}/samples"
-          file="${basedir}/cardemo/build/jsf-cardemo.war"/>
+          file="${basedir}/carstore/build/jsf-cardemo.war"/>
     <copy todir="${dist.home}/samples"
-          file="${basedir}/standard/build/jsf-standard.war"/>
-    <copy todir="${dist.home}/samples" 
           file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
     <copy todir="${dist.home}/samples" 
           file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/> 
-    <copy todir="${dist.home}/samples" 
-          file="${basedir}/standard/build/jsf-standard.war"/>
     <echo> copy the demo-components.jar </echo>
     <copy todir="${dist.home}/samples" 
-     file="${basedir}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
+     file="${basedir}/components/build/jsf-components/WEB-INF/lib/demo-components.jar"/>
   </target>
 
-  <target name="copyDemoSource" depends="copyJars,wspack.copyJars"> 
+  <target name="copyDemoSource" depends="copyJars"> 
     <echo> copy the necessary samples </echo>
 
     <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
       <fileset dir="${basedir}/guessNumber" excludes="build.xml,wspack-build.xml"/>
     </copy>
-    <copy todir="${dist.home}/samples/standard" includeEmptyDirs="false">
-      <fileset dir="${basedir}/standard" excludes="build.xml,wspack-build.xml"/>
-    </copy>
     <copy file="${basedir}/guessNumber/wspack-build.xml"
           tofile="${dist.home}/samples/guessNumber/build.xml" />
 
     <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
-      <fileset dir="${basedir}/cardemo"
-               excludes="**/build.properties.crashtest,**/crashtest.xml,**/testdriver.jar,build.xml,wspack-build.xml"/>
+      <fileset dir="${basedir}/carstore"
+               excludes="build.xml,wspack-build.xml"/>
     </copy>
-    <copy file="${basedir}/cardemo/wspack-build.xml"
+    <copy file="${basedir}/carstore/wspack-build.xml"
           tofile="${dist.home}/samples/cardemo/build.xml" />
 
     <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
@@ -309,14 +292,19 @@
     <copy file="${basedir}/nonjsp/wspack-build.xml"
           tofile="${dist.home}/samples/nonjsp/build.xml" />
 
-    <copy todir="${dist.home}/samples/standard" includeEmptyDirs="false">
-      <fileset dir="${basedir}/standard" excludes="build.xml,wspack-build.xml"/>
-    </copy>
-    <copy file="${basedir}/standard/wspack-build.xml"
-          tofile="${dist.home}/samples/standard/build.xml" />
-
     <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
-      <fileset dir="${basedir}/components" excludes="build.xml,wspack-build.xml"/>
+      <fileset dir="${basedir}/components" 
+                     excludes="build.xml,wspack-build.xml,
+                     src/components/components/CalendarComponent.java,
+                     src/components/taglib/CalendarTag.java,
+                     src/components/renderkit/CalendarRenderer.java,
+                     src/demo/model/CalendarBean.java,
+                     web/calendar.jsp,
+                     web/images/calendar.css,
+                     web/images/calendar.gif,
+                     web/images/simplecalendar.js,
+                     web/images/up.gif,
+                     web/images/down.gif"/>
     </copy>
     <copy file="${basedir}/components/wspack-build.xml"
           tofile="${dist.home}/samples/components/build.xml" />
@@ -324,10 +312,10 @@
   </target>
 
 
-  <target name="wspack.copyJars" depends="prepare.dist" if="build.wspack">
+  <target name="copyJars" depends="prepare.dist" >
     <echo> copy the necessary libs </echo>
     <copy file="${jsf-api.jar}" todir="${dist.home}/lib"/>
-    <copy file="${jsf-ri.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf-impl.jar}" todir="${dist.home}/lib"/>
     <copy file="${jsf-ri.home}/build/generate/conf/share/html_basic.tld" todir="${dist.home}/lib"/>
     <copy file="${jsf-ri.home}/conf/share/jsf_core.tld" todir="${dist.home}/lib"/>
   </target>
@@ -360,14 +348,10 @@
     <mkdir dir="${dist.home}/samples"/>
 
     <echo> Handle the top level files </echo>
-    <copy file="README" todir="${dist.home}"/>
-<!-- PENDING(edburrns): don't copy these for wspack
-    <copy file="LICENSE.html" todir="${dist.home}"/>
-    <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
--->
-    <copy file="${jsf-ri.home}/LICENSE-MOZILLA.txt" todir="${dist.home}"/>
+    <copy file="${jsf-ri.home}/LICENSE.txt" todir="${dist.home}"/>
+    <copy file="${jsf-ri.home}/LICENSE-APACHE.txt" todir="${dist.home}"/>
+    <copy file="${jsf-ri.home}/THIRDPARTYLICENSEREADME.txt" todir="${dist.home}"/>
     <copy file="${jsf-api.dtd}" todir="${dist.home}/lib"/>
-
     <antcall target="api.javadocs"/>
     <antcall target="ri.tlddocs"/>
     <antcall target="copydocs"/>
@@ -404,58 +388,41 @@
     <mkdir dir="${dist.home}/docs"/>
     <mkdir dir="${dist.home}/docs/style"/>
     <copy todir="${dist.home}/docs">
-      <fileset dir="${jsf-ri.home}/docs"
-               includes="index.html,samples.html,ReleaseNotes.html"/>
       <fileset dir="${jsf-ri.home}" includes="README"/>
+    </copy>
+    <copy todir="${dist.home}/docs">
+      <fileset dir="${jsf-ri.home}/docs"
+               includes="index.html,samples.html,ReleaseNotes.html, Installation.html,Copyright.html"/>
     </copy>
     <copy todir="${dist.home}/docs/style">
       <fileset dir="${jsf-ri.home}/docs/style" includes="default.css"/>
     </copy>
-    
+    <copy file="${build.properties.demo}"
+      tofile="${dist.home}/samples/build.properties.sample" />
   </target>
 
 
   <target name="main" depends="verifyPreconditions,prepare.build">
 
-    <ant dir="${basedir}/components">
-      <property name="jsf-api.jar" 
-                value="../../jsf-api/build/lib/jsf-api.jar"/>
-      <property name="jsf-ri.jar" 
-                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    <echo message="jsf-api.jar  = ${jsf-api.jar}"/>
+    <echo message="jsf-impl.jar   = ${jsf-impl.jar}"/>
+
+    <ant dir="${basedir}/components" inheritAll="false">
     </ant>
     <copy todir="${basedir}/lib"
-          file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
-    <ant dir="${basedir}/cardemo">
-      <property name="jsf-api.jar" 
-                value="../../jsf-api/build/lib/jsf-api.jar"/>
-      <property name="jsf-ri.jar" 
-                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+          file="components/build/jsf-components/WEB-INF/lib/demo-components.jar"/>
+    <ant dir="${basedir}/carstore" inheritAll="false">
     </ant>
-    <ant dir="${basedir}/helloDuke">
-      <property name="jsf-api.jar" 
-                value="../../jsf-api/build/lib/jsf-api.jar"/>
-      <property name="jsf-ri.jar" 
-                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    <ant dir="${basedir}/helloDuke" inheritAll="false">
     </ant>
-    <ant dir="${basedir}/guessNumber">
-      <property name="jsf-api.jar" 
-                value="../../jsf-api/build/lib/jsf-api.jar"/>
-      <property name="jsf-ri.jar" 
-                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    <ant dir="${basedir}/guessNumber" inheritAll="false">
     </ant>
-    <ant dir="${basedir}/nonjsp">
-      <property name="jsf-api.jar" 
-                value="../../jsf-api/build/lib/jsf-api.jar"/>
-      <property name="jsf-ri.jar" 
-                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    <ant dir="${basedir}/nonjsp" inheritAll="false">
     </ant>  
-    <ant dir="${basedir}/standard">
-      <property name="jsf-api.jar" 
-                value="../../jsf-api/build/lib/jsf-api.jar"/>
-      <property name="jsf-ri.jar" 
-                value="../../jsf-ri/build/lib/jsf-ri.jar"/>
+    <ant dir="${basedir}/standard" inheritAll="false">
     </ant>  
-
+    <ant dir="${basedir}/test/mappingDemo" inheritAll="false">
+    </ant>  
   </target>
 
   <target name="checkRequiredFile">

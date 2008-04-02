@@ -49,7 +49,7 @@
   <!-- Configure the context path for this application -->
   <property name="context.path" value="/jsf-components"/>
   <property name="example" value="jsf-components" />
-  <property name="webapp" value="demo" />
+  <property name="webapp" value="jsf-components" />
   <property name="build"   value="${basedir}/build" />
 
   <!-- The base directory for demo apps -->
@@ -129,8 +129,8 @@
     </antcall>
 
     <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-ri.jar}"/>
-       <param name="fail.message" value="${jsf-ri.jar} must exist."/>
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
     </antcall>
 
     <antcall target="checkRequiredFile">
@@ -154,6 +154,7 @@
     <mkdir dir="${build}/classes/components" />
     <mkdir dir="${build}/classes/components/META-INF" />
     <mkdir dir="${build}/${webapp}/src/components" />
+    <mkdir dir="${build}/${webapp}/src/demo" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
     <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
   </target>
@@ -166,7 +167,7 @@
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-api.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl.jar}" />
     <copy todir="${build}/${webapp}/WEB-INF/lib" file="${standard.jar}" />
-    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-impl.jar}" />
   </target>
 
   <taskdef  name="install"  classname="org.apache.catalina.ant.InstallTask">
@@ -208,16 +209,18 @@
   <target name="build" unless="skip.build" depends="copyJars" 
      description="Compile Java files for components, not webapp." >
       <touch file="${build}/last-build"/>
+      
     <javac debug="on" srcdir="src" destdir="${build}/classes/components">
         <include name="components/**" />
-     <classpath refid="classpath"/>
+        <classpath refid="classpath"/>
     </javac>
+    
     <copy todir="${build}/classes/components/META-INF" 
             file="src/components/taglib/components.tld"/>
 
     <javac debug="on" srcdir="src" destdir="${build}/${webapp}/WEB-INF/classes">
-        <include name="demo/**" />
-     <classpath refid="classpath"/>
+         <include name="demo/**" />
+         <classpath refid="classpath"/>
     </javac>
 
     <!-- strip out the components -->
@@ -244,14 +247,26 @@
 
     <!-- copy the java source to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/components">
-      <fileset dir="src/components" />
+      <fileset dir="src/components" excludes="components/CalendarComponent.java,
+              taglib/CalendarTag.java,renderkit/CalendarRenderer.java" />
     </copy>
+    <copy todir="${build}/${webapp}/src/demo">
+      <fileset dir="src/demo" excludes="model/CalendarBean.java"/>    
+   </copy>
     <copy todir="${build}/${webapp}/WEB-INF" file="src/demo/taglib/demo.tld"/>
 
      <copy todir="${build}/${webapp}">
-      <fileset dir="web" />
-    </copy>
+         <fileset dir="web" excludes="calendar.jsp,images/calendar.css,
+              images/calendar.gif,images/simplecalendar.js,images/up.gif,
+              images/down.gif"/> 
+     </copy>
 
+     <!-- Remove All calendar demo class files -->
+     <delete file="${build}/classes/components/components/components/CalendarComponent.class" />
+     <delete file="${build}/classes/components/components/renderkit/CalendarRenderer.class" />
+     <delete file="${build}/classes/components/components/taglib/CalendarTag.class" />
+     <delete file="${build}/${webapp}/WEB-INF/classes/demo/model/CalendarBean.class" />
+        
     <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 
 	 basedir="${build}/classes/components"/>
 

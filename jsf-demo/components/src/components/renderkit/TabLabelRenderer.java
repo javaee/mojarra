@@ -1,5 +1,5 @@
 /*
- * $Id: TabLabelRenderer.java,v 1.13 2003/10/07 14:31:06 eburns Exp $
+ * $Id: TabLabelRenderer.java,v 1.14 2003/12/17 15:19:09 rkitain Exp $
  */
 
 /*
@@ -52,17 +52,10 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.event.FacesEvent;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
-
 
 /**
  *
@@ -72,7 +65,7 @@ import org.apache.commons.beanutils.ConversionException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TabLabelRenderer.java,v 1.13 2003/10/07 14:31:06 eburns Exp $
+ * @version $Id: TabLabelRenderer.java,v 1.14 2003/12/17 15:19:09 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

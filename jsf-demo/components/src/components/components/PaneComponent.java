@@ -1,5 +1,5 @@
 /*
- * $Id: PaneComponent.java,v 1.10 2003/11/06 15:57:53 eburns Exp $
+ * $Id: PaneComponent.java,v 1.11 2003/12/17 15:19:01 rkitain Exp $
  */
 
 /*
@@ -44,21 +44,17 @@ package components.components;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIComponentBase;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.FacesListener;
 import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 
 /**
  * <p>Component designed to contain child components (and possibly other
@@ -69,30 +65,33 @@ public class PaneComponent extends UIComponentBase {
 
     private static Log log = LogFactory.getLog(PaneComponent.class);
     
-    private boolean selected = false;
-
-
     // creates and adds a listener;
     public PaneComponent() {
         PaneSelectedListener listener = new PaneSelectedListener();
         addFacesListener(listener);    
     }
 
-
     // Does this component render its own children?
     public boolean getRendersChildren() {
         return (true);
     }
 
+    public void processDecodes(FacesContext context) {
+        // Process all facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.processDecodes(context);
+        }
 
-    // The currently selected state of this component
-    public boolean isSelected() {
-        return selected;
+        // Process this component itself
+        try {
+            decode(context);
+        } catch (RuntimeException e) {
+            context.renderResponse();
+            throw e;
+        }
     }
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
 
     // Ignore update model requests
     public void updateModel(FacesContext context) {
@@ -105,12 +104,6 @@ public class PaneComponent extends UIComponentBase {
     public class PaneSelectedListener implements FacesListener, StateHolder {
 
         public PaneSelectedListener() {
-        }
-
-        // This listener will process events after the phase specified.
-
-        public PhaseId getPhaseId() {
-            return PhaseId.ANY_PHASE;
         }
 
         // process the event..
@@ -130,17 +123,17 @@ public class PaneComponent extends UIComponentBase {
             for (int i = 0; i < n; i++) {
                 PaneComponent pane = (PaneComponent)tabControl.getChildren().get(i);
                 if (pane.getId().equals(id)) {
-                    pane.setSelected(true);
+                    pane.setRendered(true);
                     paneSelected = true;
                 } else {
-                    pane.setSelected(false);
+                    pane.setRendered(false);
                 }
             }
             
             if (!paneSelected) {
                 log.warn("Cannot select pane for id=" + id + "," +
                      ", selecting first pane");
-                ((PaneComponent) tabControl.getChildren().get(0)).setSelected(true);
+                ((PaneComponent) tabControl.getChildren().get(0)).setRendered(true);
             }
         }
         // methods from StateHolder

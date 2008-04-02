@@ -1,5 +1,5 @@
 /*
- * $Id: CarBuyListener.java,v 1.1 2003/08/28 08:22:16 rkitain Exp $
+ * $Id: CarBuyListener.java,v 1.2 2003/12/17 15:17:34 rkitain Exp $
  */
 
 /*
@@ -61,12 +61,6 @@ public class CarBuyListener extends CarActionListener implements ActionListener 
     private static Log log = LogFactory.getLog(CarBuyListener.class);
     
     public CarBuyListener() {
-    }
-
-
-    // This listener will process events after the phase specified.
-    public PhaseId getPhaseId() {
-        return PhaseId.APPLY_REQUEST_VALUES;
     }
 
     public void processAction(ActionEvent event) {

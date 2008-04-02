@@ -123,8 +123,8 @@ public class AreaTag extends UIComponentTag {
     }
 
 
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
         AreaComponent area = (AreaComponent) component;
         if (alt != null) {
 	    if (isValueReference(alt)) {

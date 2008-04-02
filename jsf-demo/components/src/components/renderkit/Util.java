@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.11 2003/10/30 23:16:03 eburns Exp $
+ * $Id: Util.java,v 1.12 2003/12/17 15:19:09 rkitain Exp $
  */
 
 /*
@@ -48,6 +48,8 @@ import javax.servlet.ServletContext;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.render.RenderKit;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -64,6 +66,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -76,7 +79,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.11 2003/10/30 23:16:03 eburns Exp $
+ * @version $Id: Util.java,v 1.12 2003/12/17 15:19:09 rkitain Exp $
  * 
  */
 
@@ -345,11 +348,14 @@ private Util()
     
      
     public static ValueBinding getValueBinding(String valueRef) {
-        ApplicationFactory factory = (ApplicationFactory)
-                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = factory.getApplication();
-        ValueBinding binding = application.getValueBinding(valueRef);
-        return binding;
+        ApplicationFactory af = (ApplicationFactory)
+            FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        Application a = af.getApplication();
+        return (a.createValueBinding(valueRef));
+    }
+
+    public static MethodBinding createConstantMethodBinding(String outcome){
+	return new ConstantMethodBinding(outcome);
     }
 
 //

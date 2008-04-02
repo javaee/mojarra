@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UICommand.jsp,v 1.7 2003/11/09 03:25:12 eburns Exp $ --%>
+<%-- $Id: UICommand.jsp,v 1.8 2003/12/17 15:20:00 rkitain Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -28,7 +28,7 @@
                   >
 
          <h:command_button id="standardRenderKitSubmit" 
-             actionRef="model.defaultAction"
+             action="#{model.defaultAction}"
              value="#{standardBundle.standardRenderKitSubmitLabel}">
          </h:command_button>
 
@@ -43,7 +43,7 @@
          </table>
 
          <h:command_button id="standardRenderKitSubmit1"
-             actionRef="model.defaultAction"
+             action="#{model.defaultAction}"
              value="#{standardBundle.standardRenderKitSubmitLabel}">
          </h:command_button>
 

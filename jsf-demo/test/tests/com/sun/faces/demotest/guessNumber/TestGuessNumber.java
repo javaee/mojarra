@@ -1,5 +1,5 @@
 /*
- * $Id: TestGuessNumber.java,v 1.6 2003/10/23 20:28:29 eburns Exp $
+ * $Id: TestGuessNumber.java,v 1.7 2003/12/17 15:20:15 rkitain Exp $
  */
 
 /*
@@ -177,17 +177,7 @@ public class TestGuessNumber extends HtmlUnitTestCase {
     private HtmlPage accessAppAndGetGreetingJSP() throws Exception {
         
         HtmlPage page = (HtmlPage) getInitialPage();
-        
-        assertTrue(page != null);
-        assertTrue(page.getTitleText().equals("index"));
-
-        List anchorList = page.getAnchors();
-        assertTrue(anchorList.size() == 1);
-
-        HtmlAnchor link = (HtmlAnchor) anchorList.get(0);
-        HtmlPage greetingPage = (HtmlPage) link.click();
-        assertTrue(greetingPage != null);
-        return greetingPage;
+        return page;
     }
 
 } // end of class DemoTest01

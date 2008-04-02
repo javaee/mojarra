@@ -76,9 +76,8 @@ public class MapComponent extends UIComponentBase
 
     private String current = null;
 
-    private String action = null;
-    private String actionListenerRef = null;
-    private String actionRef = null;
+    private MethodBinding action = null;
+    private MethodBinding actionListener = null;
     private boolean immediate = false;
     private boolean immediateSet = false;
 
@@ -130,37 +129,21 @@ public class MapComponent extends UIComponentBase
 
     // -------------------------------------------------- Action Source Methods
 
-    public String getAction() {
-	if (this.action != null) {
+    public MethodBinding getAction() {
 	    return (this.action);
 	}
-	ValueBinding vb = getValueBinding("action");
-	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
-	} else {
-	    return (null);
-	}
-    }
 
-    public void setAction(String action) {
+    public void setAction(MethodBinding action) {
         this.action = action;
     }
 
-    public String getActionListenerRef() {
-        return (this.actionListenerRef);
+    public MethodBinding getActionListener() {
+        return (this.actionListener);
     }
 
 
-    public void setActionListenerRef(String actionListenerRef) {
-        this.actionListenerRef = actionListenerRef;
-    }
-
-    public String getActionRef() {
-        return (this.actionRef);
-    }
-
-    public void setActionRef(String actionRef) {
-        this.actionRef = actionRef;
+    public void setActionListener(MethodBinding actionListener) {
+        this.actionListener = actionListener;
     }
 
     public boolean isImmediate() {
@@ -210,8 +193,9 @@ public class MapComponent extends UIComponentBase
     private static Class signature[] = { AreaSelectedEvent.class };
 
     /**
-     * Pass the {@link ActionEvent} being broadcast to the method referenced
-     * by <code>actionListenerRef</code> (if any).
+     * <p>In addition to to the default {@link UIComponent#broadcast}
+     * processing, pass the {@link ActionEvent} being broadcast to the
+     * method referenced by <code>actionListener</code> (if any).</p>
      *
      * @param event {@link FacesEvent} to be broadcast
      * @param phaseId {@link PhaseId} of the current phase of the
@@ -220,36 +204,50 @@ public class MapComponent extends UIComponentBase
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
+     * @exception IllegalStateException if PhaseId.ANY_PHASE is passed
+     *  for the phase identifier
+     * @exception NullPointerException if <code>event</code> is
+     * <code>null</code>
      */
-    public boolean broadcast(FacesEvent event, PhaseId phaseId)
-        throws AbortProcessingException {
+    public void broadcast(FacesEvent event) throws AbortProcessingException {
 
         // Perform standard superclass processing
-        boolean returnValue = super.broadcast(event, phaseId);
+        super.broadcast(event);
 
         // Notify the specified action listener method (if any)
-        String actionListenerRef = getActionListenerRef();
-        if (actionListenerRef != null) {
+        MethodBinding mb = getActionListener();
+        if (mb != null) {
             if ((isImmediate() &&
-                 phaseId.equals(PhaseId.APPLY_REQUEST_VALUES)) ||
+                 event.getPhaseId().equals(PhaseId.APPLY_REQUEST_VALUES)) ||
                 (!isImmediate() &&
-                 phaseId.equals(PhaseId.INVOKE_APPLICATION))) {
+                 event.getPhaseId().equals(PhaseId.INVOKE_APPLICATION))) {
                 FacesContext context = getFacesContext();
-                MethodBinding mb =
-                    context.getApplication().getMethodBinding
-                    (actionListenerRef, signature);
-                try {
                     mb.invoke(context, new Object[] { event });
-                } catch (InvocationTargetException e) {
-                    throw new FacesException(e.getTargetException());
-                }
             }
         }
 
-        // Return the flag indicating future interest
-        return (returnValue);
     }
 
+    /**
+     * <p>Intercept <code>queueEvent</code> and mark the phaseId for the
+     * event to be <code>PhaseId.APPLY_REQUEST_VALUES</code> if the
+     * <code>immediate</code> flag is true,
+     * <code>PhaseId.INVOKE_APPLICATION</code> otherwise.</p>
+     */
+
+    public void queueEvent(FacesEvent e) {
+	if (e instanceof ActionEvent) {
+	    if (isImmediate()) {
+		e.setPhaseId(PhaseId.APPLY_REQUEST_VALUES);
+	    }
+	    else {
+		e.setPhaseId(PhaseId.INVOKE_APPLICATION);
+	    }
+	}
+	super.queueEvent(e);
+    }
 
     // ----------------------------------------------------- StateHolder Methods
 
@@ -261,14 +259,13 @@ public class MapComponent extends UIComponentBase
      */
     public Object saveState(FacesContext context) {
 	removeDefaultActionListener(context);
-        Object values[] = new Object[7];
+        Object values[] = new Object[6];
         values[0] = super.saveState(context);
         values[1] = current;
-        values[2] = action;
-        values[3] = actionListenerRef;
-        values[4] = actionRef;
-        values[5] = immediate ? Boolean.TRUE : Boolean.FALSE;
-        values[6] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
+        values[2] = saveAttachedState(context, action);
+        values[3] = saveAttachedState(context, actionListener);
+        values[4] = immediate ? Boolean.TRUE : Boolean.FALSE;
+        values[5] = immediateSet ? Boolean.TRUE : Boolean.FALSE;
         addDefaultActionListener(context);
         return (values);
     }
@@ -287,11 +284,11 @@ public class MapComponent extends UIComponentBase
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         current = (String) values[1];
-        action = (String) values[2];
-        actionListenerRef = (String) values[3];
-        actionRef = (String) values[4];
-        immediate = ((Boolean) values[5]).booleanValue();
-        immediateSet = ((Boolean) values[6]).booleanValue();
+        action = (MethodBinding) restoreAttachedState(context, values[2]);
+        actionListener = (MethodBinding) restoreAttachedState(context, 
+							      values[3]);
+        immediate = ((Boolean) values[4]).booleanValue();
+        immediateSet = ((Boolean) values[5]).booleanValue();
         addDefaultActionListener(context);
     }
     
@@ -301,51 +298,12 @@ public class MapComponent extends UIComponentBase
     private void addDefaultActionListener(FacesContext context) {
         ActionListener listener =
             context.getApplication().getActionListener();
-        if (immediate) {
-            addActionListener(new WrapperActionListener(listener));
-        } else {
             addActionListener(listener);
         }
-    }
 
     // Remove the default action listener
     private void removeDefaultActionListener(FacesContext context) {
-        if (immediate) {
-            if (listeners == null) {
-                return;
-            }
-            List list = listeners[PhaseId.APPLY_REQUEST_VALUES.getOrdinal()];
-            if (list == null) {
-                return;
-            }
-            Iterator items = list.iterator();
-            while (items.hasNext()) {
-                Object item = items.next();
-                if (item instanceof WrapperActionListener) {
-                    removeActionListener((ActionListener) item);
-                    return;
-                }
-            }
-        } else {
             removeActionListener(context.getApplication().getActionListener());
         }
-    }
 
-    // Wrapper for the default ActionListener that overrides getPhaseId()
-    // to return PhaseId.APPLY_REQUEST_VALUES, for "immediate" commands
-    private class WrapperActionListener implements ActionListener {
-        public WrapperActionListener(ActionListener wrapped) {
-            this.wrapped = wrapped;
-        }
-
-        private ActionListener wrapped;
-
-        public PhaseId getPhaseId() {
-            return (PhaseId.APPLY_REQUEST_VALUES);
-        }
-
-        public void processAction(ActionEvent event) {
-            wrapped.processAction(event);
-        }
-    }
 }

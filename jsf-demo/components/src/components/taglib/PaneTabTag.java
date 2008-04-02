@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabTag.java,v 1.6 2003/11/03 22:03:37 eburns Exp $
+ * $Id: PaneTabTag.java,v 1.7 2003/12/17 15:19:15 rkitain Exp $
  */
 
 /*
@@ -59,14 +59,6 @@ public class PaneTabTag extends UIComponentTag {
     private static Log log = LogFactory.getLog(PaneTabTag.class);
 
 
-    private boolean selected = false;
-    private boolean selectedSet = false;
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-        selectedSet = true;
-    }
-
-
     public String getComponentType() {
         return ("Pane");
     }
@@ -76,29 +68,12 @@ public class PaneTabTag extends UIComponentTag {
         return ("Tab");
     }
 
-
     public void release() {
         super.release();
-        this.selected = false;
-        this.selectedSet = false;
     }
 
 
-    protected void overrideProperties(UIComponent component) {
-	setOverride(false); // PENDING(edburns): fix this when we
-			    // resolve the override issue.
-        super.overrideProperties(component);
-
-        if (selectedSet) {
-            log.debug("OVERRIDING " + component.getId());
-            if (selected) {
-                component.getAttributes().put("selected", Boolean.TRUE);
-            } else {
-                component.getAttributes().put("selected", Boolean.FALSE);
-            }
-        }
-
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
     }
-
-
 }

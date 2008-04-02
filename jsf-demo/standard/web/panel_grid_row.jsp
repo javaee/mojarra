@@ -48,7 +48,7 @@
                     <h:messages for="form1:password1"/>
 
                     <h:command_button id="submit1"
-                               actionRef="LoginForm.login"
+                               action="#{LoginForm.login}"
                                     type="SUBMIT"
                                    value="Login"/>
 
@@ -103,7 +103,7 @@
                     <h:output_text value="Username:"/>
 
                     <h:input_text     id="username2"
-                            componentRef="LoginForm.username"
+                                 binding="#{LoginForm.username}"
                                 required="true"/>
 
                     <h:messages for="form2:username2"/>
@@ -111,13 +111,13 @@
                     <h:output_text value="Password:"/>
 
                     <h:input_secret   id="password2"
-                            componentRef="LoginForm.password"
+                                 binding="#{LoginForm.password}"
                                 required="true"/>
 
                     <h:messages for="form2:password2"/>
 
                     <h:command_button id="submit2"
-                               actionRef="LoginForm.login"
+                               action="#{LoginForm.login}"
                                     type="SUBMIT"
                                    value="Login"/>
 

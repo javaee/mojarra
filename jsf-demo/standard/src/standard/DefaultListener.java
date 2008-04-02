@@ -1,5 +1,5 @@
 /*
- * $Id: DefaultListener.java,v 1.2 2003/08/25 21:25:17 eburns Exp $
+ * $Id: DefaultListener.java,v 1.3 2003/12/17 15:19:57 rkitain Exp $
  */
 
 /*
@@ -20,15 +20,11 @@ import javax.faces.el.ValueBinding;
 /**
  * Set a request parameter telling me which UIComponent was actuated
  *
- * @version $Id: DefaultListener.java,v 1.2 2003/08/25 21:25:17 eburns Exp $
+ * @version $Id: DefaultListener.java,v 1.3 2003/12/17 15:19:57 rkitain Exp $
  */
 
 public class DefaultListener extends Object implements ActionListener {
 
-    public PhaseId getPhaseId() {
-	return PhaseId.PROCESS_VALIDATIONS;
-    }
-    
     public void processAction(ActionEvent event)
         throws AbortProcessingException {
 	System.out.println("DefaultListener.processAction");
@@ -36,9 +32,9 @@ public class DefaultListener extends Object implements ActionListener {
 	// so we don't leak UIComponent instances.
 	String id = event.getComponent().getId();
 	FacesContext context = FacesContext.getCurrentInstance();
-	ValueBinding vb = context.getApplication().getValueBinding("model.hasComponent");
+	ValueBinding vb = context.getApplication().createValueBinding("#{model.hasComponent}");
 	vb.setValue(context, "true");
-	vb = context.getApplication().getValueBinding("model.whichComponent");
+	vb = context.getApplication().createValueBinding("#{model.whichComponent}");
 	vb.setValue(context, id);
     }
     

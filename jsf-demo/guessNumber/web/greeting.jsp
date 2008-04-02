@@ -41,18 +41,19 @@
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
     <body bgcolor="white">
-    <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
-    Can you guess it?</h2>
-    <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
     <f:view>
     <h:form id="helloForm" >
+      <h2>Hi. My name is Duke.  I'm thinking of a number from
+      <h:output_text value="#{UserNumberBean.minimum}"/> to
+      <h:output_text value="#{UserNumberBean.maximum}"/>.  Can you guess
+      it?</h2>
+
         <h:graphic_image id="waveImg" url="/wave.med.gif" />
-  	<h:input_text id="userNo" value="#{UserNumberBean.userNumber}">                
-	        <f:validate_longrange minimum="0" maximum="10" />
-         </h:input_text> 
+  	<h:input_text id="userNo" value="#{UserNumberBean.userNumber}"
+                      validator="#{UserNumberBean.validate}"/>          
 	 <h:command_button id="submit" action="success" value="Submit" />
          <p>
-	 <h:messages id="errors1" for="userNo"/>
+	 <h:messages style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
 
     </h:form>
     </f:view>

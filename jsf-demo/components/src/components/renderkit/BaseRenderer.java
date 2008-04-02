@@ -1,5 +1,5 @@
 /*
- * $Id: BaseRenderer.java,v 1.8 2003/10/07 14:31:05 eburns Exp $
+ * $Id: BaseRenderer.java,v 1.9 2003/12/17 15:19:07 rkitain Exp $
  */
 
 /*
@@ -48,6 +48,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.render.Renderer;
 
+import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Iterator;
@@ -106,4 +107,24 @@ public abstract class BaseRenderer extends Renderer {
 	
 	return bundle.getString(key);
     }
+
+
+    protected void encodeRecursive(FacesContext context, UIComponent component)
+        throws IOException {
+
+        component.encodeBegin(context);
+        if (component.getRendersChildren()) {
+            component.encodeChildren(context);
+        } else {
+            Iterator kids = component.getChildren().iterator();
+            while (kids.hasNext()) {
+                UIComponent kid = (UIComponent) kids.next();
+                encodeRecursive(context, kid);
+            }
+        }
+        component.encodeEnd(context);
+
+    }
+
+
 }

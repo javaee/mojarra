@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuNodeTag.java,v 1.6 2003/11/11 02:40:58 jvisvanathan Exp $
+ * $Id: GraphMenuNodeTag.java,v 1.7 2003/12/17 15:19:15 rkitain Exp $
  */
 
 /*
@@ -105,52 +105,49 @@ public class GraphMenuNodeTag extends UIComponentBodyTag {
     //
     // General Methods
     //
-    public String getName() {
-        return (this.name);
-    }
-
+   
+    /**
+     *  Name of the node
+     */
     public void setName(String name) {
         this.name = name;
     }
-
-
-   public boolean getExpanded() {
-        return (this.expanded);
+    
+    public String getName() {
+        return this.name;
     }
 
+    /**
+     *  Should the node appear expanded by default
+     */
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
     }
 
-
-    public String getIcon() {
-        return (this.icon);
-    }
-
+    /**
+     *  Icon representing the node.
+     */
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    public String getLabel() {
-        return (this.label);
-    }
-
+   /**
+     *  Label for the node.
+     */    
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     *  Should the node be enabled by default
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public boolean getEnabled() {
-        return (this.enabled);
-    }
-
-    public String getAction() {
-        return (this.action);
-    }
-
+    /**
+     *  Link the node points to.
+     */
     public void setAction(String action) {
         this.action = action;
     }
@@ -173,11 +170,10 @@ public class GraphMenuNodeTag extends UIComponentBodyTag {
             ((Util.getValueBinding("#{sessionScope.graph_menu}").getValue(context)));
         // In the postback case, graph and the node exist already.So make sure
         // it doesn't created again.
-        if ( graph.findNodeByName(getName()) != null) {
+        if ( graph.findNodeByName(name) != null) {
             return BodyTag.EVAL_BODY_BUFFERED;
         }    
-        Node node = new Node( getName(),getLabel(), getAction(), getIcon(), 
-                 getEnabled(), getExpanded());
+        Node node = new Node(name,label, action, icon, enabled, expanded);
 
         // get the immediate ancestor/parent of this node.
         GraphMenuNodeTag parentNode = null;

@@ -50,312 +50,65 @@
 <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
 
-     <f:loadBundle
-	    basename="carstore.Resources" var="bundle"/>
+     <f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 
 <BODY BGCOLOR="white">
 
 <f:view>
-<h:form  >
 
-<P>
-<TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
-<TR>
-    <TD WIDTH="828">
-    <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%">
-    <TR>
-        <TD WIDTH="820">
-        <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%" BGCOLOR="white">
-        <TR>
-            <TD WIDTH="100%" VALIGN="TOP">
-            <h:graphic_image  url="/cardemo.jpg" />
-            </TD>
-        </TR>
-        <TR>
-            <TD WIDTH="100%">
-            <h:graphic_image  
-                value="#{CarServer.carImage}" />
-                <BR>
-            <B> <FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text  
-                value="#{CarServer.carTitle}" 
-                 />
-            </FONT></B>
-            <FONT FACE="Arial, Helvetica"><BR> <BR>
-            <h:output_text  
-                value="#{CarServer.carDesc}" />
-            <BR> <BR>
-            </FONT><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text value="#{carDemoBundle.basePriceLabel}" />
+    <h:form>
 
-            </FONT></B><FONT FACE="Arial, Helvetica"> 
-            <h:output_text   
-                value="#{CarServer.carBasePrice}" />
 
-            <BR> </FONT><B>
-            <FONT COLOR="#93B629" FACE="Arial, Helvetica">
-            <h:output_text value="#{carDemoBundle.yourPriceLabel}" />
+        <!-- non-option details -->
 
-            </FONT></B>
-            <FONT FACE="Arial, Helvetica">
-            <h:output_text   
-                value="#{CarServer.carCurrentPrice}" />
+        <h:panel_grid columns="1"
+                      summary="#{bundle.carDetails}"
+                      title="#{bundle.carDetails}">
 
-            <BR> <BR>
-            <h:command_button value="#{carDemoBundle.buy}" 
-                 actionRef="CarServer.carBuyAction" >
-                <f:action_listener type="cardemo.CarBuyListener"/>
-            </h:command_button>
-            <BR> <BR>
-            </TD></FONT></TD>
-        </TR>
-        <TR>
-            <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="4" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text value="#{carDemoBundle.OptionsPackages}" />
-            </FONT></B></TD>
-        </TR>
-        <TR>
-            <TD WIDTH="100%" BGCOLOR="white"><B><FONT SIZE="3" COLOR="#330066" FACE="Arial, Helvetica">
-            <h:output_text value="#{carDemoBundle.Package}" />
-            </FONT></B>
-            <BR>
-            <h:command_button id="Custom" action="Custom"
-                styleClass="package-selected" override="false"
-                value="#{carDemoBundle.Custom}">
-                <f:action_listener type="cardemo.CarPackageListener" />
-            </h:command_button>
-            <h:command_button id="Standard" action="Standard" 
-                value="#{carDemoBundle.Standard}">
-                <f:action_listener type="cardemo.CarPackageListener" />
-            </h:command_button>
-            <h:command_button id="Performance" action="Performance"
-                value="#{carDemoBundle.Performance}">
-                <f:action_listener type="cardemo.CarPackageListener" />
-            </h:command_button>
-            <h:command_button id="Deluxe" action="Deluxe"
-                value="#{carDemoBundle.Deluxe}">
-                <f:action_listener type="cardemo.CarPackageListener" />
-            </h:command_button>
-            <BR> <BR>
-            </TD>
-        </TR>
-        <TR>
-            <TD WIDTH="100%"><BLOCKQUOTE>
-            <TABLE>
-            <TR>
-                <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text value="#{carDemoBundle.Engine}" />
-                </FONT></B></P>
-                <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu  id="currentEngine"
-                     value="#{CarServer.currentEngineOption}">
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                    <f:selectitems  
-                        value="#{CarServer.engineOption}"/>
-                </h:selectone_menu>    
-                </FONT></P></BLOCKQUOTE>
-                </TD>
-                <TD><P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                 <h:output_text value="#{carDemoBundle.Brakes}"  />
-                </FONT></B>
-                <FONT FACE="Arial, Helvetica"></FONT></P>
-                <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio  id="currentBrake"
-                    value="#{CarServer.currentBrakeOption}">
-                    <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                    <f:selectitems  
-                        value="#{CarServer.brakeOption}"/>
-                </h:selectone_radio>
-                </FONT></P></BLOCKQUOTE>
-                </TD>
-            </TR>
-            <TR>
-                <TD>
-                <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text value="#{carDemoBundle.Suspension}" />
+            <h:graphic_image  url="/images/cardemo.jpg" /> 
 
-                </FONT></B>
-                <FONT FACE="Arial, Helvetica"></FONT></P>
-                <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu  id="currentSuspension"
-                    value="#{CarServer.currentSuspensionOption}">
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                    <f:selectitems  
-                        value="#{CarServer.suspensionOption}"/>
-                </h:selectone_menu>
-                </FONT></P> </BLOCKQUOTE>
-                </TD>
-                <TD>
-                <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text value="#{carDemoBundle.Speakers}" />
+            <h:graphic_image 
+               binding="#{carstore.currentModel.components.image}" />
 
-                </FONT></B>
-                <FONT FACE="Arial, Helvetica"></FONT></P>
-                <BLOCKQUOTE><P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio  id="currentSpeaker"
-                    value="#{CarServer.currentSpeakerOption}" >
-                    <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                   <f:selectitems  
-                        value="#{CarServer.speakerOption}"/>
-                </h:selectone_radio>
-                </FONT></P> </BLOCKQUOTE>
-                </TD>
-            </TR>
-            <TR>
-                <TD>
-                <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text value="#{carDemoBundle.Audio}" />
-                </FONT></B>
-                <FONT FACE="Arial, Helvetica"></FONT></P>
-                <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
-                <h:selectone_radio  id="currentAudio"
-                    value="#{CarServer.currentAudioOption}">
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                    <f:selectitems  
-                        value="#{CarServer.audioOption}"/>
-                </h:selectone_radio>
-                </FONT></P> 
-                </BLOCKQUOTE>
-                </TD>
-                <TD>
-                <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text value="#{carDemoBundle.Transmission}" />
+            <h:output_text styleClass="subtitlebig"
+               binding="#{carstore.currentModel.components.title}" />
+            
+            <h:output_text 
+               binding="#{carstore.currentModel.components.description}" />
 
-                </FONT></B>
-                <FONT FACE="Arial, Helvetica"></FONT></P>
-                <BLOCKQUOTE> <P><FONT FACE="Arial, Helvetica">
-                <h:selectone_menu  id="currentTransmission"
-                    value="#{CarServer.currentTransmissionOption}">
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                    <f:selectitems  
-                        value="#{CarServer.transmissionOption}"/>
-                </h:selectone_menu>
-                </FONT></P> </BLOCKQUOTE>
-                </TD>
-            </TR>
-            <TR>
-                <TD>
-                <P><B><FONT COLOR="#93B629" FACE="Arial, Helvetica">
-                <h:output_text value="#{carDemoBundle.OtherOptions}" />
+            <h:panel_grid columns="2">
 
-                </FONT></B>
-                <FONT FACE="Arial, Helvetica"></FONT></P>
-                <BLOCKQUOTE> </FONT></P> 
-                </BLOCKQUOTE>
-                </TD>
-            </TR>
-            </TABLE>
+	      <h:output_text styleClass="subtitle"
+                             value="#{bundle.basePriceLabel}" />
 
-            <TABLE width="100%"> <P><FONT FACE="Arial, Helvetica">
-            <TR>
-                <TD> 
-                <h:selectboolean_checkbox id="sunroof" title="Sunroof" 
-                    alt="Sunroof" value="#{CarServer.currentPackage.sunRoofSelected}">
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>    
-                </TD>																		
-                <TD>
-                <h:output_text value="#{carDemoBundle.sunroofLabel}" /> 
-                </TD> 
-                <TD>
-                <h:selectboolean_checkbox id="cruisecontrol" 
-                    title="Cruise Control"  
-                    value="#{CarServer.currentPackage.cruiseControlSelected}" >
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>
+	      <h:output_text 
+		 binding="#{carstore.currentModel.components.basePrice}" />
 
-                </TD>
-                <TD>
-                <h:output_text value="#{carDemoBundle.cruiseLabel}" /> 
-                </TD>
-                <TD>
-                <h:selectboolean_checkbox id="keylessentry" 
-                    title="Keyless Entry"  alt="Keyless Entry"
-                    value="#{CarServer.currentPackage.keylessEntrySelected}" >
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>
+	      <h:output_text styleClass="subtitle"
+                             value="#{bundle.yourPriceLabel}" />
 
-                </TD>
-                <TD>
-                <h:output_text value="#{carDemoBundle.keylessLabel}" /> 
-                </TD>
-            </TR>
-            <TR>
-                <TD> 
-                <h:selectboolean_checkbox id="securitySystem"
-                    title="Security System"  alt="Security System"
-                    value="#{CarServer.currentPackage.securitySystemSelected}" >
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>
+	      <h:output_text value="#{carstore.currentModel.currentPrice}" />
 
-                </TD>
-                <TD>
-                <h:output_text value="#{carDemoBundle.securityLabel}" />  
-                </TD>
-                <TD>
-                <h:selectboolean_checkbox id="skirack" title="Ski Rack"  
-                    alt="Ski Rack" value="#{CarServer.currentPackage.skiRackSelected}"
-                     >
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>
-                </TD>
-                <TD>
-                <h:output_text value="#{carDemoBundle.skiRackLabel}" /> 
-                </TD>
-                <TD>
-                <h:selectboolean_checkbox id="towPackage" title="Tow Package"  
-                    alt="Tow Package" 
-                    value="#{CarServer.currentPackage.towPackageSelected}" >
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>
+            </h:panel_grid>
 
-                </TD>
-                <TD>
-                <h:output_text value="#{carDemoBundle.towPkgLabel}" /> 
-                </TD>
-            </TR>
-            <TR>
-                <TD>
-                <h:selectboolean_checkbox id="gps" title="GPS" alt="GPS"
-                    value="#{CarServer.currentPackage.gpsSelected}"  >
-                     <f:valuechange_listener type="cardemo.PackageValueChanged" />
-                 </h:selectboolean_checkbox>
-                </FONT> 
-                </TD>
-                <TD>
-                <h:output_text value="#{carDemoBundle.gpsLabel}" /> 
-                </TD>
-            </TR>
-            </TABLE>
-            </BLOCKQUOTE>
-            <TABLE ALIGN=RIGHT>
-            <TR> 
-                <TD>
-                </TD>
-                <TD>
-                <P>
-                <h:command_button id="recalculate" 
-                    value="#{carDemoBundle.recalculate}">
-                    <f:action_listener type="cardemo.CarBuyListener" />
-                </h:command_button>
-                <h:command_button value="#{carDemoBundle.buy}" 
-                actionRef="CarServer.carBuyAction">
-                    <f:action_listener type="cardemo.CarBuyListener"/>
-                </h:command_button>
+            <h:command_button action="#{carstore.buyCurrentCar}"
+                 value="#{bundle.buy}" />
 
-                </TD>
-            </TR>
-            </TABLE>
-            </TD>
-        </TR>
-        </TABLE>
-        </TD>
-    </TR>
-    </TABLE>
-    </TD>
-</TR>
-</TABLE>
+        </h:panel_grid>
+
+        <jsp:include page="optionsPanel.jsp"/>
+
+        <h:command_button value="#{bundle.recalculate}" 
+                      action="#{carstore.currentModel.updatePricing}" 
+                      immediate="true" />
+
+        <h:command_button action="#{carstore.buyCurrentCar}"
+                 value="#{bundle.buy}" />
+
 </h:form>
+
+ <jsp:include page="bottomMatter.jsp"/>
+
 </f:view>
 </BODY>
 

@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.12 2003/11/11 01:34:03 jvisvanathan Exp $
+ * $Id: CarActionListener.java,v 1.13 2003/12/17 15:17:33 rkitain Exp $
  */
 
 /*
@@ -68,12 +68,6 @@ public class CarActionListener implements ActionListener {
     private static Log log = LogFactory.getLog(CarActionListener.class);
     
     public CarActionListener() {
-    }
-
-
-    // This listener will process events after the phase specified.
-    public PhaseId getPhaseId() {
-        return PhaseId.APPLY_REQUEST_VALUES;
     }
 
     public void processAction(ActionEvent event) {

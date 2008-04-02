@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <!--
  Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -68,6 +68,15 @@
       characteristics, you must specify EITHER a value OR the
       alt, coords, and shape attributes.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>alt</name>
@@ -170,6 +179,15 @@
     </description>
 
     <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
+
+    <attribute>
       <name>type</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
@@ -195,7 +213,7 @@
     </description>
 
     <attribute>
-      <name>componentRef</name>
+      <name>binding</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
@@ -292,16 +310,37 @@
     </description>
 
     <attribute>
-      <name>action_listener</name>
+      <name>binding</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-         Optional listener to handle tree expansion and contraction events.
+        Component reference expression for this component.
       </description>
     </attribute>
 
     <attribute>
-      <name>graphClass</name>
+      <name>actionListener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Optional method binding reference to handle tree expansion and contraction events.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>immediate</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+      A flag indicating that the default ActionListener should execute
+      immediately (that is, during the Apply Request Values phase of the 
+      request processing lifecycle, instead of waiting for Invoke 
+      Application phase). The default value of this property must be false.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
@@ -319,11 +358,11 @@
     </attribute>
 
     <attribute>
-      <name>valueRef</name>
+      <name>value</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Model reference expression pointing at a components.model.Graph
+        value binding expression pointing at a components.model.Graph
         instance.
       </description>
     </attribute>
@@ -361,16 +400,37 @@
     </description>
 
     <attribute>
-      <name>action_listener</name>
+      <name>binding</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-         Optional listener to handle tree expansion and contraction events.
+        Component reference expression for this component.
       </description>
     </attribute>
 
     <attribute>
-      <name>graphClass</name>
+      <name>actionListener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Optional method binding reference to handle tree expansion and contraction events.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>immediate</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+      A flag indicating that the default ActionListener should execute
+      immediately (that is, during the Apply Request Values phase of the 
+      request processing lifecycle, instead of waiting for Invoke 
+      Application phase). The default value of this property must be false.
+      </description>
+    </attribute>
+    
+    <attribute>
+      <name>styleClass</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
@@ -388,7 +448,7 @@
     </attribute>
 
     <attribute>
-      <name>valueRef</name>
+      <name>value</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
@@ -424,6 +484,15 @@
     <description>
       Render a components.model.Node that represents a node of the tree.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>action</name>
@@ -491,6 +560,15 @@
     <description>
       Render a components.model.Node that represents a node of the tree.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>action</name>
@@ -563,6 +641,15 @@
     </description>
 
     <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
+
+    <attribute>
       <name>current</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -590,7 +677,7 @@
     </attribute>
 
     <attribute>
-      <name>actionListenerRef</name>
+      <name>actionListener</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <type>java.lang.String</type>
@@ -601,13 +688,6 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <type>boolean</type>
-    </attribute>
-
-    <attribute>
-      <name>actionRef</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-      <type>java.lang.String</type>
     </attribute>
 
     <attribute>
@@ -631,6 +711,15 @@
     * facet tags that can optionally nest panel_group tag that provide widgets
     * for easy navigation.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>id</name>
@@ -661,6 +750,15 @@
         Case insensitive.
       </description>
     </attribute>
+    
+    <attribute>
+      <name>actionListener</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+         Optional method binding reference to handle scroll event.
+      </description>
+    </attribute>
 </tag>
 
 
@@ -673,6 +771,15 @@
       Render an individual pane of a tabbed control.  This tag is only
       valid when immediately nested in a pane_tabbed tag.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>id</name>
@@ -693,13 +800,12 @@
     </attribute>
 
     <attribute>
-      <name>selected</name>
+      <name>rendered</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Boolean attribute describing whether this pane should be the
-        initially selected one.  If no pane is marked as selected, the
-        first one will arbitrarily be chosen.
+        Flag indicating whether or not this component should be rendered.
+        If not specified, the default value is "true".
       </description>
     </attribute>
 
@@ -715,6 +821,15 @@
       Render a tabbed control with immediately nested pane_tab tags
       to represent each pane.
     </description>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
 
     <attribute>
       <name>contentClass</name>
@@ -780,6 +895,15 @@
     </description>
 
     <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
+
+    <attribute>
       <name>commandName</name>
       <required>true</required>
       <rtexprvalue>false</rtexprvalue>
@@ -838,6 +962,15 @@
     </description>
 
     <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Component reference expression for this component.
+      </description>
+    </attribute>
+
+    <attribute>
       <name>id</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -857,6 +990,4 @@
     </attribute>
 
   </tag>
-
-
 </taglib>

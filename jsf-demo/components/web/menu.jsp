@@ -36,67 +36,9 @@
  maintenance of any nuclear facility.
 -->
 
-<%@ page import="components.model.Graph,components.model.Node" %>
 <%@ taglib uri="http://java.sun.com/jsf/core"   prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"   prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
-
-<%
-
-    // Construct a preconfigured Graph in session scope
-    Graph graph = (Graph)
-      pageContext.getAttribute("graph2", PageContext.SESSION_SCOPE);
-    if (graph == null) {
-
-      Node root = new Node("Menu 2", "Menu", null, null, false, true);
-      graph = new Graph(root);
-
-      Node file = new Node("File", "File 2", "demo-test.jsf", null, true, true);
-      root.addChild(file);
-      file.addChild(new Node("File-New", "New 2", "demo-test.jsf", null, true, false));
-      file.addChild(new Node("File-Open", "Open 2", "demo-test.jsf", null, true, false));
-      Node close = new Node("File-Close", "Close 2", "demo-test.jsf", null, false, false);
-      file.addChild(close);
-      file.addChild(new Node("File-Exit", "Exit 2", "demo-test.jsf", null, true, false));
-
-      Node edit = new Node("Edit", "Edit 2", "demo-test.jsf", null, true, false);
-      root.addChild(edit);
-      edit.addChild(new Node("Edit-Cut", "Cut 2", "demo-test.jsf", null, true, false));
-      edit.addChild(new Node("Edit-Copy", "Copy 2","demo-test.jsf", null, true, false));
-      edit.addChild(new Node("Edit-Paste", "Paste 2", "demo-test.jsf", null, false, false));
-
-      graph.setSelected(close);
-      pageContext.setAttribute("graph2", graph, PageContext.SESSION_SCOPE);
-    }
-
-    // Construct a preconfigured Graph in session scope
-    graph = (Graph)
-      pageContext.getAttribute("graph4", PageContext.SESSION_SCOPE);
-    if (graph == null) {
-
-      Node root = new Node("Menu 4", "Menu", null, null, false, true);
-      graph = new Graph(root);
-
-      Node file = new Node("File", "File 4", "demo-test.jsf", null, true, true);
-      root.addChild(file);
-      file.addChild(new Node("File-New", "New 4", "demo-test.jsf", null, true, false));
-      file.addChild(new Node("File-Open", "Open 4", "demo-test.jsf", null, true, false));
-      Node close = new Node("File-Close", "Close 4", "demo-test.jsf", null, false, false);
-      file.addChild(close);
-      file.addChild(new Node("File-Exit", "Exit 4", "demo-test.jsf", null, true, false));
-
-      Node edit = new Node("Edit", "Edit 4", "demo-test.jsf", null, true, false);
-      root.addChild(edit);
-      edit.addChild(new Node("Edit-Cut", "Cut 4", "demo-test.jsf", null, true, false));
-      edit.addChild(new Node("Edit-Copy", "Copy 4","demo-test.jsf", null, true, false));
-      edit.addChild(new Node("Edit-Paste", "Paste 4", "demo-test.jsf", null, false, false));
-
-      graph.setSelected(close);
-      pageContext.setAttribute("graph4", graph, PageContext.SESSION_SCOPE);
-
-  }
-
-%>
 
 <f:view>
 <html>
@@ -110,14 +52,14 @@
 <d:stylesheet path="/tree-control-test.css"/>
 
 Render graph as a menu bar (graph retrieved from model):<br>
-<d:graph_menubar id="menu2" valueRef="#{sessionScope.graph2}" 
+<d:graph_menubar id="menu2" value="#{GraphBean.menuGraph}" 
     selectedClass="tree-control-selected"
-    unselectedClass="tree-control-unselected" />
+    unselectedClass="tree-control-unselected" immediate="true"/>
 
 <hr>
 Render graph as a menu bar (graph specified via JSP):<br>
 <d:graph_menubar id="menu3" selectedClass="tree-control-selected"
-      unselectedClass="tree-control-unselected">
+      unselectedClass="tree-control-unselected" immediate="true">
     <d:graph_menunode  name="Menu" label="Menu 3" >
         <d:graph_menunode  name="File" label="File 3" expanded="true">
             <d:graph_menunode  name="File-New" label="New 3" action="demo-test.jsf" />
@@ -136,14 +78,16 @@ Render graph as a menu bar (graph specified via JSP):<br>
 
 <hr>
 Render graph as a tree control (graph retrieved from model):<br>
-<d:graph_menutree id="menu4" valueRef="#{sessionScope.graph4}" graphClass="tree-control"
+<d:graph_menutree id="menu4" value="#{GraphBean.treeGraph}" styleClass="tree-control"
      selectedClass="tree-control-selected" 
-     unselectedClass="tree-control-unselected" />
+     unselectedClass="tree-control-unselected" immediate="true"/>
 <hr>
 Render graph as a tree control (graph specified via JSP):<br>
 <d:graph_menutree id="menu5" selectedClass="tree-control-selected"
-    unselectedClass="tree-control-unselected" graphClass="tree-control" >
-    <d:graph_treenode  name="Menu" label="Menu 5" enabled="false" expanded="true">
+    unselectedClass="tree-control-unselected" styleClass="tree-control" 
+    immediate="true">
+    <d:graph_treenode  name="Menu" label="Menu 5" enabled="false" 
+         expanded="true">
 
         <d:graph_treenode  name="File" label="File 5"
              icon="folder_16_pad.gif" enabled="false">
@@ -177,11 +121,21 @@ Render graph as a tree control (graph specified via JSP):<br>
 
 <h1>How to Use this Component</h1>
 
-<p>This component renders a <code>Graph</code> as either a menu bar or a tree control.  The <code>Graph</code> can be specified as model data, or it can be specified in <code>JSP</code>.</p>
+<p>This component renders a <code>Graph</code> as either a menu bar or a tree control.  
+The <code>Graph</code> can be specified as model data, or it can be specified in 
+<code>JSP</code>.</p>
 
 <h2>JSP Attributes</h2>
 
-<p>This component allows the user to define CSS classes via JSP attributes that are output in the rendered markup.  This makes it possible to produce highly customizable output.  You can compare the rendered source of this page, using the "View Source" feature of your browser, with <a href="ShowSource.jsp?filename=/menu.jsp">the JSP source</A> for this page.</p>
+<p>Attributes described below apply to graph_menubar tag as well as graph_tree tag 
+since they are just two different visual representations of the Graph Component.
+Attributes can represent values directly or point to them via value binding
+expressions except for actionListener attribute that points to a 
+method reference. This component allows the user to define CSS classes via JSP 
+attributes that are output in the rendered markup.  This makes it possible to 
+produce highly customizable output. You can compare the rendered source of this 
+page, using the "View Source" feature of your browser, with 
+<a href="ShowSource.jsp?filename=/menu.jsp">the JSP source</A> for this page.</p>
 
 <table border="1">
 
@@ -191,20 +145,44 @@ Render graph as a tree control (graph specified via JSP):<br>
 </tr>
 
 <tr>
-
 <td><code>selectedClass</code></td>
-
-<td>A style sheet class which controls the display attributes of the selected menu bar or tree element.  This is used to distinguish the selected portion from the other unselected portions.</td>
-
+<td>A style sheet class which controls the display attributes of the selected 
+menu bar or tree element.  This is used to distinguish the selected portion from 
+the other unselected portions.</td>
 </tr>
-
 <tr>
 
 <td><code>unselectedClass</code></td>
-
 <td>A style sheet class which controls the display attributes of an unselected menu bar or tree element.  This is used to distinguish an unselected portion from a selected portion.</
-td>
+<td>
+</tr>
 
+<tr>
+<td><code>immediate</code>
+</td>
+<td>A flag indicating that the default ActionListener should execute
+      immediately (that is, during the Apply Request Values phase of the 
+      request processing lifecycle, instead of waiting for Invoke 
+      Application phase). The default value of this property must be false.
+</td>
+</tr>
+
+<tr>
+<td><code>styleClass</code></td>
+<td>The CSS style <code>class</code> to be applied to the entire menu/tree.
+</td>
+</tr>
+
+<tr>
+<td><code>value</code></td>
+<td>Value Binding reference expression that points to a Graph in scoped namespace.
+</td>
+</tr>
+
+<tr>
+<td><code>actionListener</code></td>
+<td>Method binding reference to handle tree expansion and contraction events.
+</td>
 </tr>
 
 </table>

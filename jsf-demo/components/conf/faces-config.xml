@@ -68,7 +68,7 @@
     <component-class>components.components.ScrollerComponent</component-class>
   </component>
 
-  <!-- Custom Renderers -->
+    <!-- Custom Renderers -->
 
   <render-kit>
 
@@ -135,6 +135,16 @@
     </renderer>
 
     <renderer>
+      <description>
+        Renderer for a UIData component that can serve as the basis for
+        different markup creation for the components that are children
+        of the child UIColumn components.
+      </description>
+      <renderer-type>Repeater</renderer-type>
+      <renderer-class>components.renderkit.RepeaterRenderer</renderer-class>
+    </renderer>
+
+    <renderer>
       <renderer-type>Stylesheet</renderer-type>
       <renderer-class>components.renderkit.StylesheetRenderer</renderer-class>
     </renderer>
@@ -153,7 +163,6 @@
       <renderer-type>Tabbed</renderer-type>
       <renderer-class>components.renderkit.TabbedRenderer</renderer-class>
     </renderer>
-
   </render-kit>
 
 

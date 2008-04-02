@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlUnitTestCase.java,v 1.1 2003/08/18 18:24:58 rlubke Exp $
+ * $Id: HtmlUnitTestCase.java,v 1.2 2003/12/17 15:20:15 rkitain Exp $
  */
 
 /*
@@ -50,6 +50,7 @@ public class HtmlUnitTestCase extends TestCase {
     // Get the initial page of the target application
     protected Page getInitialPage() throws Exception {
         WebClient client = new WebClient();
+	client.setRedirectEnabled(true);
         return client.getPage(new URL("http://" + host + ":" + port + context));
     }
 }

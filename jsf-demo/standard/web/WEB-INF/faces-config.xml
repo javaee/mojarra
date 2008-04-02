@@ -47,7 +47,7 @@
   <navigation-rule>
     <from-view-id> * </from-view-id>
     <navigation-case>
-      <description>If the action or ActionRef returns "success", goto
+      <description>If the action "success", goto
       Standard_Thanks.jsp</description> 
       <display-name>The Generic Rule</display-name> 
       <from-outcome>success</from-outcome>
@@ -58,7 +58,7 @@
   <navigation-rule>
     <from-view-id>/UIInput.jsp</from-view-id>
     <navigation-case>
-      <description>If the action or ActionRef returns "success", goto
+      <description>If the action returns "success", goto
       UIInput.jsp</description> 
       <display-name>The Generic Rule</display-name>
       <from-outcome>success</from-outcome>

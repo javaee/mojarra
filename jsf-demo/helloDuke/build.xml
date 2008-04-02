@@ -64,7 +64,7 @@
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsf-ri.jar}"/>
+    <pathelement location="${jsf-impl.jar}"/>
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>
     <pathelement location="${servlet.jar}"/>
@@ -128,8 +128,8 @@
     </antcall>
 
     <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-ri.jar}"/>
-       <param name="fail.message" value="${jsf-ri.jar} must exist."/>
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
     </antcall>
 
     <antcall target="checkRequiredFile">
@@ -158,7 +158,7 @@
     <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/WEB-INF/lib" file="${jsf-impl.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${jstl.jar}" />
     <copy todir="${build}/WEB-INF/lib" file="${standard.jar}" />
   </target> 

@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIData.jsp,v 1.7 2003/11/11 01:22:47 eburns Exp $ --%>
+<%-- $Id: UIData.jsp,v 1.8 2003/12/17 15:20:00 rkitain Exp $ --%>
 
 <%@ page import="standard.CustomerBean" %>
 <%@ page import="java.util.ArrayList" %>
@@ -58,7 +58,7 @@
                                list-column-center, list-column-left,
                                list-column-center, list-column-right,
                                list-column-center"
-                 componentRef="UIDataBean.data"
+                      binding="#{UIDataBean.data}"
                   footerClass="list-footer"
                   headerClass="list-header"
                            id="table"
@@ -72,11 +72,11 @@
       <%-- Visible checkbox for selection --%>
       <h:selectboolean_checkbox
                            id="checked"
-                 componentRef="UIDataBean.checked"/>
+                      binding="#{UIDataBean.checked}"/>
       <%-- Invisible checkbox for "created" flag --%>
       <h:selectboolean_checkbox
                            id="created"
-                 componentRef="UIDataBean.created"
+                      binding="#{UIDataBean.created}"
                      rendered="false"/>
     </h:column>
 
@@ -85,7 +85,7 @@
         <h:output_text  value="Account Id"/>
       </f:facet>
       <h:input_text        id="accountId"
-                 componentRef="UIDataBean.accountId"
+                      binding="#{UIDataBean.accountId}"
                      required="true"
                          size="6"
                         value="#{customer.accountId}">
@@ -139,12 +139,12 @@
         <h:output_text  value="Commands"/>
       </f:facet>
       <h:command_button    id="press"
-                    actionRef="UIDataBean.press"
+                    action="#{UIDataBean.press}"
                     immediate="true"
                         value="#{UIDataBean.pressLabel}"
                          type="SUBMIT"/>
       <h:command_link id="click"
-                    actionRef="UIDataBean.click"
+                    action="#{UIDataBean.click}"
                     immediate="true">
         <h:output_text
                         value="#{UIDataBean.clickLabel}"/>
@@ -154,49 +154,49 @@
   </h:data_table>
 
   <h:command_button        id="create"
-                    actionRef="UIDataBean.create"
+                    action="#{UIDataBean.create}"
                     immediate="true"
                         value="Create New Row"
                          type="SUBMIT"/>
 
   <h:command_button        id="delete"
-                    actionRef="UIDataBean.delete"
+                    action="#{UIDataBean.delete}"
                     immediate="true"
                         value="Delete Checked"
                          type="SUBMIT"/>
 
   <h:command_button        id="first"
-                    actionRef="UIDataBean.first"
+                    action="#{UIDataBean.first}"
                     immediate="true"
                         value="First Page"
                          type="SUBMIT"/>
 
   <h:command_button        id="last"
-                    actionRef="UIDataBean.last"
+                    action="#{UIDataBean.last}"
                     immediate="true"
                         value="Last Page"
                          type="SUBMIT"/>
 
   <h:command_button        id="next"
-                    actionRef="UIDataBean.next"
+                    action="#{UIDataBean.next}"
                     immediate="true"
                         value="Next Page"
                          type="SUBMIT"/>
 
   <h:command_button        id="previous"
-                    actionRef="UIDataBean.previous"
+                    action="#{UIDataBean.previous}"
                     immediate="true"
                         value="Prev Page"
                          type="SUBMIT"/>
 
   <h:command_button        id="reset"
-                    actionRef="UIDataBean.reset"
+                    action="#{UIDataBean.reset}"
                     immediate="true"
                         value="Reset Changes"
                          type="SUBMIT"/>
 
   <h:command_button        id="update"
-                    actionRef="UIDataBean.update"
+                    action="#{UIDataBean.update}"
                     immediate="false"
                         value="Save Changes"
                          type="SUBMIT"/>

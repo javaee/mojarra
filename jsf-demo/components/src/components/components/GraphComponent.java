@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.10 2003/11/09 22:45:53 jvisvanathan Exp $
+ * $Id: GraphComponent.java,v 1.11 2003/12/17 15:19:00 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import javax.faces.FacesException;
-import javax.faces.component.UIOutput;
+import javax.faces.component.UICommand;
 import javax.faces.component.StateHolder;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
@@ -61,87 +61,31 @@ import javax.faces.event.PhaseId;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.faces.component.ValueHolder;
+import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
+import javax.faces.event.ActionListener;
+import javax.faces.event.ActionEvent;
 
 /**
  * Component wrapping a {@link Graph} object that is pointed at by the
- * local value or value reference expression.  This component supports
+ * a value binding reference expression.  This component supports
  * the processing of a {@link ActionEvent} that will toggle the expanded
  * state of the specified {@link Node} in the {@link Graph}.
  */
 
-public class GraphComponent extends UIOutput {
-
-
-    private static Log log = LogFactory.getLog(GraphComponent.class);
-
-
-    public GraphComponent() {
-        GraphListener listener = new GraphListener();
-        addFacesListener(listener);    
-    }   
+public class GraphComponent extends UICommand{
     
-   /**
-     * <p>Faces Listener implementation which toggles the selected Node
-     * in the GraphComponent;</p>
-     */
-    public class GraphListener implements FacesListener, StateHolder{
+    private static Log log = LogFactory.getLog(GraphComponent.class);
+    
+    public GraphComponent() {
+	
+        // set a default actionListener to expand or collapse a node
+        // when a node is clicked.
+	Class signature[] = { ActionEvent.class };
+	setActionListener(FacesContext.getCurrentInstance().getApplication().createMethodBinding("#{GraphBean.processGraphEvent}", 
+												 signature));
 
-        public GraphListener() {
-        }
-        
-        // Processes the event queued on the graph component.
-        public void processGraphEvent(GraphEvent event) {
-            Graph graph = null;
-            GraphComponent component = (GraphComponent)event.getSource();
-            String path= (String) event.getPath();
+    }   
 
-            // Acquire the root node of the graph representing the menu
-            FacesContext context = FacesContext.getCurrentInstance();
-            graph = (Graph) component.getValue();
-            if (graph == null) {
-                throw new FacesException("Graph could not be located");
-            }
-            // Toggle the expanded state of this node
-            Node node =  graph.findNode(path);
-            if ( node == null ) {
-                // PENDING (visvan) log error.
-                return;
-            }    
-            boolean current = node.isExpanded();
-            node.setExpanded(!current);
-            if (!current) {
-                Node parent = node.getParent();
-                if (parent != null) {
-                    Iterator kids = parent.getChildren();
-                    while (kids.hasNext()) {
-                        Node kid = (Node) kids.next();
-                        if (kid != node) {
-                            kid.setExpanded(false);
-                        }
-                    }
-                }
-            }
-        }
-
-        // This listener will handle events after the phase specified
-        // as the return value;
-        public PhaseId getPhaseId() {
-            return PhaseId.ANY_PHASE;
-        }  
-        // methods from StateHolder
-        public Object saveState(FacesContext context) {
-            return null;
-        }
-        
-        public void restoreState(FacesContext context, Object state) {
-        }
-        
-        public void setTransient(boolean newTransientValue) {
-        }
-        
-        public boolean isTransient() {
-            return true;
-        }
-        
-    }    
 }

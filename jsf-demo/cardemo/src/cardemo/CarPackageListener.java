@@ -1,5 +1,5 @@
 /*
- * $Id: CarPackageListener.java,v 1.3 2003/11/11 01:34:03 jvisvanathan Exp $
+ * $Id: CarPackageListener.java,v 1.4 2003/12/17 15:17:34 rkitain Exp $
  */
 
 /*
@@ -67,11 +67,6 @@ public class CarPackageListener extends CarActionListener implements ActionListe
     public CarPackageListener() {
     }
 
-
-    // This listener will process events after the phase specified.
-    public PhaseId getPhaseId() {
-        return PhaseId.APPLY_REQUEST_VALUES;
-    }
 
     public void processAction(ActionEvent event) {
         log.debug("CarPackageListener.processAction");

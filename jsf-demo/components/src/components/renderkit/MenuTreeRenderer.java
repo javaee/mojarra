@@ -1,5 +1,5 @@
 /*
- * $Id: MenuTreeRenderer.java,v 1.7 2003/11/09 22:45:55 jvisvanathan Exp $
+ * $Id: MenuTreeRenderer.java,v 1.8 2003/12/17 15:19:08 rkitain Exp $
  */
 
 /*
@@ -44,7 +44,6 @@ package components.renderkit;
 
 
 import components.components.GraphComponent;
-import components.components.GraphEvent;
 import components.model.Graph;
 import components.model.Node;
 import java.io.IOException;
@@ -121,16 +120,6 @@ public class MenuTreeRenderer extends MenuBarRenderer {
         writer.write("</table>");
         writer.write("\n");
     }
-
-    /**
-     * Creates and returns an <code>ActionEvent</code>
-     */
-    protected GraphEvent createEvent(GraphComponent component, String path) {
-
-        return (new GraphEvent(component, path,false));
-
-    }
-
 
     protected void encodeNode(ResponseWriter writer, Node node,
                               int level, int width, boolean last)

@@ -1,5 +1,5 @@
 /*
- * $Id: XmlXulRuleSet.java,v 1.2 2003/10/07 23:05:49 rkitain Exp $
+ * $Id: XmlXulRuleSet.java,v 1.3 2003/12/17 15:19:52 rkitain Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.digester.RuleSetBase;
 
-import org.mozilla.util.Assert;
+
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.AttributesImpl;
@@ -146,9 +146,7 @@ final class UIComponentFactory extends AbstractObjectCreationFactory {
 
         // Identify the name of the class to instantiate
         String className = attributes.getValue("class");
-        Assert.assert_it(className != null);
         String id = attributes.getValue("id");
-        Assert.assert_it(id != null);
         String value = attributes.getValue("value");
         
         // Instantiate the new object and return it

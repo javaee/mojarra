@@ -1,5 +1,5 @@
 /*
- * $Id: BuildComponentFromTagImpl.java,v 1.6 2003/10/23 05:20:07 eburns Exp $
+ * $Id: BuildComponentFromTagImpl.java,v 1.7 2003/12/17 15:19:50 rkitain Exp $
  */
 
 /*
@@ -48,15 +48,17 @@ import nonjsp.util.Util;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+
+
 import org.xml.sax.Attributes;
 
+import javax.faces.context.FacesContext;
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.UIForm;
 import javax.faces.model.SelectItem;
+import javax.faces.el.MethodBinding;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -69,7 +71,7 @@ import java.util.Hashtable;
  * Copy of com.sun.faces.tree.BuildComponentFromTagImpl in order to remove
  * demo dependancy on RI.
  *
- * @version $Id: BuildComponentFromTagImpl.java,v 1.6 2003/10/23 05:20:07 eburns Exp $
+ * @version $Id: BuildComponentFromTagImpl.java,v 1.7 2003/12/17 15:19:50 rkitain Exp $
  * 
  */
 
@@ -190,7 +192,6 @@ public class BuildComponentFromTagImpl extends Object
         if (attrName.equals("valueChangeListener") ||
 	    attrName.equals("actionListener") ||
 	    attrName.equals("action") ||
-	    attrName.equals("actionRef") ||
             attrName.equals("required") || 
             attrName.equals("format") ||
             attrName.equals("rangeMaximum") ||
@@ -207,14 +208,10 @@ public class BuildComponentFromTagImpl extends Object
 					  IllegalArgumentException, 
 				  	  InvocationTargetException, 
 					  NoSuchMethodException {
-        ParameterCheck.nonNull(child);
-        ParameterCheck.nonNull(attrName);
-        ParameterCheck.nonNull(attrValue);
-
-        Assert.assert_it(attrRequiresSpecialTreatment(attrName));
     
         Class [] stringArg = { String.class };
         Method attrMethod = null;
+	Object objValue = attrValue;
 
         if (attrName.equals("valueChangeListener")) {
 	    try {
@@ -232,13 +229,10 @@ public class BuildComponentFromTagImpl extends Object
             }
         } else if (attrName.equals("action")) {
             try {
-                attrMethod = child.getClass().getMethod("setAction", stringArg);
-            } catch (SecurityException e) {
-                log.trace("handleSpecialAttr: " + e);
-            }
-        } else if (attrName.equals("actionRef")) {
-            try {
-                attrMethod = child.getClass().getMethod("setActionRef", stringArg);
+		Class [] mbArgs = { MethodBinding.class };
+                attrMethod = child.getClass().getMethod("setAction", 
+							mbArgs);
+		objValue = new ConstantMethodBinding(attrValue);
             } catch (SecurityException e) {
                 log.trace("handleSpecialAttr: " + e);
             }
@@ -247,7 +241,7 @@ public class BuildComponentFromTagImpl extends Object
             return;
         }
 
-        Object [] args = { attrValue };
+        Object [] args = { objValue };
         if (null != attrMethod) {
 	    attrMethod.invoke(child, args);
         }
@@ -261,8 +255,6 @@ public class BuildComponentFromTagImpl extends Object
 
     public UIComponent createComponentForTag(String shortTagName)
     {
-        ParameterCheck.nonNull(shortTagName);
-
         UIComponent result = null;
         if (!tagHasComponent(shortTagName)) {
 	    return result;
@@ -270,7 +262,6 @@ public class BuildComponentFromTagImpl extends Object
 
         String className = (String) classMap.get(shortTagName);
         Class componentClass;
-        Assert.assert_it(null != className);
 
         // PENDING(edburns): this can be way optimized
         try {
@@ -295,7 +286,6 @@ public class BuildComponentFromTagImpl extends Object
 
     public boolean tagHasComponent(String shortTagName)
     {
-        ParameterCheck.nonNull(shortTagName);
         boolean result = false;
         String value;
 
@@ -310,7 +300,6 @@ public class BuildComponentFromTagImpl extends Object
 
     public boolean isNestedComponentTag(String shortTagName)
     {
-        ParameterCheck.nonNull(shortTagName);
         boolean result = false;
         String value;
 
@@ -326,9 +315,6 @@ public class BuildComponentFromTagImpl extends Object
     public void handleNestedComponentTag(UIComponent parent, 
 				         String shortTagName, Attributes attrs)
     {
-        ParameterCheck.nonNull(parent);
-        ParameterCheck.nonNull(shortTagName);
-        ParameterCheck.nonNull(attrs);
 
         if (null == parent || null == shortTagName || null == attrs) {
 	    return;
@@ -400,8 +386,6 @@ public class BuildComponentFromTagImpl extends Object
     public void applyAttributesToComponentInstance(UIComponent child, 
 					       Attributes attrs)
     {
-        ParameterCheck.nonNull(child);
-        ParameterCheck.nonNull(attrs);
         int attrLen, i = 0;
         String attrName, attrValue;
 
@@ -428,33 +412,54 @@ public class BuildComponentFromTagImpl extends Object
 	        catch (IllegalAccessException innerE) {
 		    innerE.printStackTrace();
 		    log.trace(innerE.getMessage());
-		    Assert.assert_it(false);
 	        }
 	        catch (IllegalArgumentException innerE) {
 		    innerE.printStackTrace();
 		    log.trace(innerE.getMessage());
-		    Assert.assert_it(false);
 	        }
 	        catch (InvocationTargetException innerE) {
 		    innerE.printStackTrace();
 		    log.trace(innerE.getMessage());
-		    Assert.assert_it(false);
 	        }
 	        catch (NoSuchMethodException innerE) {
 		    innerE.printStackTrace();
 		    log.trace(innerE.getMessage());
-		    Assert.assert_it(false);
 	        }
+	    }
+	    catch (IllegalArgumentException e) {
+	        try {
+		    if (attrRequiresSpecialTreatment(attrName)) {
+		        handleSpecialAttr(child, attrName, attrValue);
+		    }
+		    else {
+		        // If that doesn't work, this will.
+		        child.getAttributes().put(attrName, attrValue);
+		    }
+	        }
+	        catch (IllegalAccessException innerE) {
+		    innerE.printStackTrace();
+		    log.trace(innerE.getMessage());
+	        }
+	        catch (IllegalArgumentException innerE) {
+		    innerE.printStackTrace();
+		    log.trace(innerE.getMessage());
+	        }
+	        catch (InvocationTargetException innerE) {
+		    innerE.printStackTrace();
+		    log.trace(innerE.getMessage());
+	        }
+	        catch (NoSuchMethodException innerE) {
+		    innerE.printStackTrace();
+		    log.trace(innerE.getMessage());
+	        }	    
 	    }
 	    catch (InvocationTargetException e) {
 	        e.printStackTrace();
 	        log.trace(e.getMessage());
-	        Assert.assert_it(false);
 	    }
 	    catch (IllegalAccessException e) {
 	        e.printStackTrace();
 	        log.trace(e.getMessage());
-	        Assert.assert_it(false);
 	    }
         }
     

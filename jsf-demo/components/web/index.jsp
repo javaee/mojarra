@@ -47,6 +47,7 @@ TD { text-align: center }
 
 <%
   pageContext.removeAttribute("graph", PageContext.SESSION_SCOPE);
+  pageContext.removeAttribute("list", PageContext.SESSION_SCOPE);
 %>
 
 <p>Here is a small gallery of custom components built from JavaServer
@@ -66,7 +67,6 @@ Faces technology.</p>
 <th>Execute JSP</th></tr>
 
 <tr>
-
 <td>Image Map
 </td>
 
@@ -82,7 +82,6 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/AreaRenderer.java">components/renderkit/AreaRenderer.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/MapRenderer.java">components/renderkit/MapRenderer.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/taglib/AreaTag.java">components/taglib/AreaTag.java</a><br>
-<a href="ShowSource.jsp?filename=/src/components/taglib/AreaSelectedTag.java">components/taglib/AreaSelectedTag.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/taglib/MapTag.java">components/taglib/MapTag.java</a><br>
 
 
@@ -113,7 +112,7 @@ Faces technology.</p>
 <a href="ShowSource.jsp?filename=/src/components/model/Node.java">components/model/Node.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/MenuBarRenderer.java">components/renderkit/MenuBarRenderer.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/renderkit/MenuTreeRenderer.java">components/renderkit/MenuTreeRenderer.java</a><br>
-
+<a href="ShowSource.jsp?filename=/src/demo/model/GraphBean.java">demo/model/GraphBean.java</a>
 </td>
 
 <td><a href="menu.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
@@ -123,7 +122,26 @@ Faces technology.</p>
 
 <tr>
 
-<td>Result Set
+<td>Repeater
+</td>
+
+<td><a href="ShowSource.jsp?filename=/repeater.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
+</td>
+
+<td>
+<a href="ShowSource.jsp?filename=/src/components/taglib/DataRepeaterTag.java">components/taglib/DataRepeaterTag.java</a><br>
+<a href="ShowSource.jsp?filename=/src/components/renderkit/RepeaterRenderer.java">components/renderkit/RepeaterRenderer.java</a><br>
+<a href="ShowSource.jsp?filename=/src/demo/model/RepeaterBean.java">demo/model/RepeaterBean.java</a><br>
+</td>
+
+<td><a href="repeater.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>
+</td>
+
+</tr>
+
+<tr>
+
+<td>Scroller
 </td>
 
 <td><a href="ShowSource.jsp?filename=/result-set.jsp"><img src="images/code.gif" width="24" height="24" border="0"></a>
@@ -132,6 +150,7 @@ Faces technology.</p>
 <td>
 <a href="ShowSource.jsp?filename=/src/components/taglib/ScrollerTag.java">components/taglib/ScrollerTag.java</a><br>
 <a href="ShowSource.jsp?filename=/src/components/components/ScrollerComponent.java">components/components/ScrollerComponent.java</a><br>
+<a href="ShowSource.jsp?filename=/src/demo/model/ResultSetBean.java">demo/model/ResultSetBean.java</a>
 </td>
 
 <td><a href="result-set.jsf"><img src="images/execute.gif" width="24" height="24" border="0"></a>

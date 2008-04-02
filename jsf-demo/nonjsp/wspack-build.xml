@@ -51,31 +51,13 @@
   <property name="build"   value="${basedir}/build" />
   <property name="dist"   value="${basedir}/dist" />
 
-  <property name="servlet.jar" 
-            value="${tomcat.home}/common/lib/servlet-api.jar"/>
-  <property name="jsp.jar" value="${tomcat.home}/common/lib/jsp-api.jar"/>
-  <property name="commons-beanutils.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-beanutils.jar"/>
-  <property name="commons-digester.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-digester.jar"/>
-  <property name="commons-logging.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-logging.jar"/>
-  <property name="commons-collections.jar" 
-            value="${tomcat.home}/jwsdp-shared/lib/commons-collections.jar"/>
-  <property name="jsf-api.jar"
-            value="${tomcat.home}/jsf/lib/jsf-api.jar" />
-  <property name="jsf-ri.jar"
-            value="${tomcat.home}/jsf/lib/jsf-ri.jar" />
-  <property name="jstl.jar" value="${tomcat.home}/jstl/lib/jstl.jar"/>
-  <property name="standard.jar" value="${tomcat.home}/jstl/lib/standard.jar"/>
-
   <path id="classpath">
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${commons-collections.jar}"/>
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
-    <pathelement location="${jsf-ri.jar}"/>
+    <pathelement location="${jsf-impl.jar}"/>
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${standard.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>
@@ -122,8 +104,8 @@
     </antcall>
 
     <antcall target="checkRequiredFile">
-       <param name="file" value="${jsf-ri.jar}"/>
-       <param name="fail.message" value="${jsf-ri.jar} must exist."/>
+       <param name="file" value="${jsf-impl.jar}"/>
+       <param name="fail.message" value="${jsf-impl.jar} must exist."/>
     </antcall>
 
     <antcall target="checkRequiredFile">
@@ -149,7 +131,7 @@
 
   <!-- Executable Targets -->
 
-  <target name="build" depends="deploy.copyJars"
+  <target name="build" depends="prepare,deploy.copyJars"
      description="Compile Java files and copy static files." >
     <javac srcdir="src" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
@@ -198,7 +180,7 @@
     <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-logging.jar}" />
     <copy todir="${build}/${example}/WEB-INF/lib" file="${commons-digester.jar}" />
     <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-ri.jar}" />
+    <copy todir="${build}/${example}/WEB-INF/lib" file="${jsf-impl.jar}" />
     <copy todir="${build}/${example}/WEB-INF/lib" file="${jstl.jar}" />
     <copy todir="${build}/${example}/WEB-INF/lib" file="${standard.jar}" />
   </target>

@@ -1,5 +1,5 @@
 /*
- * $Id: XulDialectProvider.java,v 1.1 2003/09/08 19:31:21 horwat Exp $
+ * $Id: XulDialectProvider.java,v 1.2 2003/12/17 15:19:52 rkitain Exp $
  */
 
 /*
@@ -44,8 +44,8 @@
 
 package nonjsp.application;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
+
+
 
 import org.apache.commons.digester.RuleSetBase;
 
@@ -55,7 +55,7 @@ import org.apache.commons.digester.RuleSetBase;
  *  specific logic required for creating a tree of UIComponent instances 
  *  from an Xml file. <P>
  *
- * @version $Id: XulDialectProvider.java,v 1.1 2003/09/08 19:31:21 horwat Exp $
+ * @version $Id: XulDialectProvider.java,v 1.2 2003/12/17 15:19:52 rkitain Exp $
  * 
  */
 public class XulDialectProvider extends Object implements XmlDialectProvider {

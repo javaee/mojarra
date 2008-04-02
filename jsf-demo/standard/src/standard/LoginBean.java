@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.5 2003/11/01 02:53:32 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.6 2003/12/17 15:19:58 rkitain Exp $
  */
 
 /*
@@ -49,7 +49,8 @@ public class LoginBean {
     ArrayList stringList = new ArrayList(3);
     Long[] currentLongOptions = null;
     Boolean currentBooleanOption = null;
-    Long currentLongOption = null;
+  //  Long currentLongOption = null;
+    long currentLongOption;
     
     private double doubleVal;
     private ArrayList options = null;
@@ -112,7 +113,7 @@ public class LoginBean {
 	currentLongOptions = new Long[2];
 	currentLongOptions[0] = longOptions[0];
 	currentLongOptions[1] = longOptions[1];
-        currentLongOption = longOptions[1];
+     //   currentLongOption = longOptions[1];
         currentBooleanOption = booleanOptions[0];
         
         System.out.println("Populated options");
@@ -269,14 +270,14 @@ public class LoginBean {
         System.out.println("set currentBooleanOption " + currentBooleanOption.toString());
     }
     
-    public Long getCurrentLongOption() {
-        System.out.println("get currentLongOption " + currentLongOption.toString());
+    public long getCurrentLongOption() {
+     //   System.out.println("get currentLongOption " + currentLongOption.toString());
         return currentLongOption;
     }
 
-    public void setCurrentLongOption(Long newLongOption) {
+    public void setCurrentLongOption(long newLongOption) {
         currentLongOption = newLongOption;
-        System.out.println("set currentLongOption " + currentLongOption.toString());
+       // System.out.println("set currentLongOption " + currentLongOption.toString());
     }
 
     public Object[] getCurrentOptions() {

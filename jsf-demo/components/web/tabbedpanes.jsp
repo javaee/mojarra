@@ -87,7 +87,7 @@ Powered by Faces components:
 
   </d:pane_tab>
 
-  <d:pane_tab id="second" selected="true">
+  <d:pane_tab id="second">
 
     <f:facet name="label">
       <d:pane_tablabel image="images/duke.gif" commandName="second"/>

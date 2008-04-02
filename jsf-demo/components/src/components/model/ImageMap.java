@@ -84,7 +84,8 @@ public class ImageMap {
      *
      * @param event The {@link AreaSelectedEvent} that has occurred
      */
-    public void processAreaSelected(AreaSelectedEvent event) {
+    public void processAreaSelected(ActionEvent actionEvent) {
+	AreaSelectedEvent event = (AreaSelectedEvent) actionEvent;
         String current = event.getMapComponent().getCurrent();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getViewRoot().setLocale((Locale) locales.get(current));
@@ -92,7 +93,7 @@ public class ImageMap {
 
     /**
      * <p>Return an indication for navigation.  Application using this component,
-     * can refer to this method via an <code>actionRef</code> expression in their
+     * can refer to this method via an <code>action</code> expression in their
      * page, and set up the "outcome" (success) in their navigation rule.
      */
     public String status() {

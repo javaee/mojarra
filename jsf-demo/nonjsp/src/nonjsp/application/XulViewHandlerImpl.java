@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.10 2003/10/16 22:12:21 jvisvanathan Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.11 2003/12/17 15:19:52 rkitain Exp $ 
  */ 
 
 
@@ -52,7 +52,7 @@ import org.apache.commons.digester.RuleSetBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.SimpleLog;
-import org.mozilla.util.Assert;
+
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
@@ -84,7 +84,7 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.10 2003/10/16 22:12:21 jvisvanathan Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.11 2003/12/17 15:19:52 rkitain Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -220,8 +220,6 @@ public class XulViewHandlerImpl implements ViewHandler {
         digester.setValidating(validate);
 
         ruleSet = dialectProvider.getRuleSet();
-
-        Assert.assert_it(null != ruleSet);
 
         digester.addRuleSet(ruleSet);
 

@@ -72,8 +72,8 @@
                                 <TD>
           <h:graphic_image id="mapImage" url="/world.jpg" usemap="#worldMap" />
                 <d:map id="worldMap" 
-                  actionListenerRef="imageMap.processAreaSelected"
-                  actionRef="imageMap.status"
+                  actionListener="#{imageMap.processAreaSelected}"
+                  action="#{imageMap.status}"
                   immediate="true"
                   current="NAmericas">
                         <d:area id="NAmerica" value="#{NA}" onmouseover="/world_namer.jpg" onmouseout="/world.jpg" 

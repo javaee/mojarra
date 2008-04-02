@@ -64,7 +64,7 @@
                    usemap="#worldMap"/>
 
       <d:map           id="worldMap"
-        actionListenerRef="imageMap.processAreaSelected"
+        actionListener="#{imageMap.processAreaSelected}"
                 immediate="true"
                   current="NAmericas">
 
@@ -124,14 +124,55 @@ causing the proper ResourceBundle lookup.</p>
 <p>The <code>MapComponent</code> component is driven by the <code>map</code>
 tag, and it keeps track of the the selected area on the map.  It determines
 the selected area from the incoming request, and fires an
-<code>AreaSelectedEvent</code> whenver the selected area is changed.  You
-can use the <code>&lt;d:area_selected&gt;</code> tag to specify an event
-listener to respond to these events.</p>
+<code>AreaSelectedEvent</code> whenever the selected area is changed.  <code>AreaSelectedEvent</code>
+is an <code>ActionEvent</code>.  A method binding reference expression tag attribute is 
+used to reference a method in the backing file bean (imagemap), and that 
+method listens for action events.  The listener method <code>processAreaSelected</code>,
+receives the <code>ActionEvent</code> and sets the locale accordingly.
 
 <p>The <code>AreaComponent</code> component is driven by the <code>area</code>
 tag. It uses Javascript events to visually show the selected area, and it sends
 the identifier of the selected area as part of the request.  This tag must be
 nested within an <code>&lt;d:map&gt;</code> tag.</p>
+
+<h2>JSP Attributes</h2>
+
+<p>Attributes described below apply to map tag.
+Attributes can represent values directly or point to them via value binding
+expressions except for actionListener attribute that points to a
+method reference. 
+
+<table border="1">
+
+<tr>
+<th>JSP Attribute Name</th>
+<th>What it Does</th>
+</tr>
+
+<tr>
+<td><code>actionListener</code></td>
+<td>Method binding reference that refers to a method that sets the locale
+    from information contained in the <code>AreaSelectedEvent</code>.
+</td>
+</tr>
+
+<tr>
+<td><code>immediate</code>
+</td>
+<td>A flag indicating that the default ActionListener should execute
+      immediately (that is, during the Apply Request Values phase of the
+      request processing lifecycle, instead of waiting for Invoke
+      Application phase). The default value of this property must be false.
+</td>
+</tr>
+
+<tr>
+<td><code>current</code></td>
+<td>This refers to the current selected area on the map.
+</td>
+</tr>
+
+</table>
 
 <hr>
 

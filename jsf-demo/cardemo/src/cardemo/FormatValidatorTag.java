@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidatorTag.java,v 1.2 2003/05/20 23:08:49 jvisvanathan Exp $
+ * $Id: FormatValidatorTag.java,v 1.3 2003/12/17 15:17:35 rkitain Exp $
  */
 
 /*
@@ -41,9 +41,6 @@
  */
 
 package cardemo;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
 
 import javax.faces.webapp.ValidatorTag;
 import javax.faces.validator.Validator;
@@ -107,7 +104,6 @@ public class FormatValidatorTag extends ValidatorTag {
     {
         FormatValidator result = null;
         result = (FormatValidator) super.createValidator();
-        Assert.assert_it(null != result);
         
         result.setFormatPatterns(formatPatterns);
         return result;

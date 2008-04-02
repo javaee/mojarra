@@ -1,5 +1,5 @@
 /*
- * $Id: LogValueChangedListener.java,v 1.3 2003/10/27 04:15:55 craigmcc Exp $
+ * $Id: LogValueChangedListener.java,v 1.4 2003/12/17 15:19:57 rkitain Exp $
  */
 
 /*
@@ -57,17 +57,6 @@ public class LogValueChangedListener implements ValueChangeListener {
 
 
     // --------------------------------------------- ValueChangeListener Methods
-
-
-    /**
-     * <p>Specify the phase(s) we are interested in being notified for.</p>
-     */
-    public PhaseId getPhaseId() {
-
-	return (PhaseId.PROCESS_VALIDATIONS);
-
-    }
-
 
     /**
      * <p>Log the event.</p>

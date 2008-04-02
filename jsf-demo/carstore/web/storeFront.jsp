@@ -39,7 +39,6 @@
 <HTML>
 
 <HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<TITLE>Welcome to CarStore</TITLE>
         <link rel="stylesheet" type="text/css"
             href='<%= request.getContextPath() + "/stylesheet.css" %>'>
@@ -49,28 +48,18 @@
 
 <BODY BGCOLOR="white">
 
-       <f:loadBundle
-	    basename="carstore.Resources" var="bundle"/>
-
-       <f:loadBundle
-	    basename="carstore.Car1" var="car1"/>
-       <f:loadBundle
-	    basename="carstore.Car2" var="car2"/>
-       <f:loadBundle
-	    basename="carstore.Car3" var="car3"/>
-       <f:loadBundle
-	    basename="carstore.Car4" var="car4"/>
+       <f:loadBundle basename="carstore.bundles.Resources" var="bundle"/>
 
 <f:view>  
 
     <h:form>
 
-        <h:graphic_image  url="/cardemo.jpg" /> 
+        <h:graphic_image  url="/images/cardemo.jpg" /> 
 
         <h:panel_grid columns="2" 
                       footerClass="form-footer"
                       headerClass="form-header"
-                      styleClass="main-background"
+                      styleClass="top-table"
                       columnClasses="single-column"
                       summary="#{bundle.chooseCar}" 
                       title="#{bundle.chooseCar}" >
@@ -78,20 +67,26 @@
             <h:panel_grid columns="2"
                           styleClass="storeFrontCar">
 
-                <!-- car 1 -->
-                <h:graphic_image url="/150x126_Jalopy.jpg" />
-                <h:output_text value="#{car1.CarDesc}" /> 
-                <h:output_text value="#{car1.CarTitle}" />
-                <h:command_button actionRef="carstore.storeFront1Pressed" 
-                                  value="#{bundle.moreButton}" >
+                <!-- Jalopy -->
+                <h:graphic_image binding="#{carstore.models.Jalopy.components.imageSmall}" />
+                <h:output_text styleClass="subtitlebig"
+                  value="#{carstore.models.Jalopy.attributes.title}" />
+                <h:output_text 
+            value="#{carstore.models.Jalopy.attributes.description}"/> 
+                <h:command_button 
+                           action="#{carstore.storeFrontJalopyPressed}" 
+                           value="#{bundle.moreButton}" >
                 </h:command_button>
 
-                <!-- car 2 -->
-                <h:graphic_image url="/150x126_Roadster.jpg" />
-                <h:output_text value="#{car2.CarDesc}" /> 
-                <h:output_text value="#{car2.CarTitle}" />
-                <h:command_button actionRef="carstore.storeFront2Pressed" 
-                                  value="#{bundle.moreButton}" >
+                <!-- Roadster -->
+                <h:graphic_image binding="#{carstore.models.Roadster.components.imageSmall}" />
+                <h:output_text styleClass="subtitlebig"
+               value="#{carstore.models.Roadster.attributes.title}" />
+                <h:output_text 
+         value="#{carstore.models.Roadster.attributes.description}" /> 
+                <h:command_button 
+                           action="#{carstore.storeFrontRoadsterPressed}" 
+                           value="#{bundle.moreButton}" >
                 </h:command_button>
 
             </h:panel_grid>
@@ -99,19 +94,24 @@
             <h:panel_grid columns="2"
                           styleClass="storeFrontCar">
 
-                <!-- car 3 -->
-                <h:graphic_image url="/150x126_Luxury.jpg" />
-                <h:output_text value="#{car3.CarDesc}" /> 
-                <h:output_text value="#{car3.CarTitle}" />
-                <h:command_button actionRef="carstore.storeFront3Pressed" 
-                                  value="#{bundle.moreButton}" >
+                <!-- Luxury -->
+                <h:graphic_image binding="#{carstore.models.Luxury.components.imageSmall}" />
+                <h:output_text styleClass="subtitlebig"
+                  value="#{carstore.models.Luxury.attributes.title}" />
+                <h:output_text 
+           value="#{carstore.models.Luxury.attributes.description}" /> 
+                <h:command_button 
+                           action="#{carstore.storeFrontLuxuryPressed}" 
+                           value="#{bundle.moreButton}" >
                 </h:command_button>
 
-                <!-- car 4 -->
-                <h:graphic_image url="/150x126_SUV.jpg" />
-                <h:output_text value="#{car4.CarDesc}" /> 
-                <h:output_text value="#{car4.CarTitle}" />
-                <h:command_button actionRef="carstore.storeFront4Pressed" 
+                <!-- SUV -->
+                <h:graphic_image binding="#{carstore.models.SUV.components.imageSmall}" />
+                <h:output_text styleClass="subtitlebig"
+                  value="#{carstore.models.SUV.attributes.title}" />
+                <h:output_text 
+              value="#{carstore.models.SUV.attributes.description}" /> 
+                <h:command_button action="#{carstore.storeFrontSUVPressed}" 
                                   value="#{bundle.moreButton}" >
                 </h:command_button>
 
@@ -120,6 +120,8 @@
         </h:panel_grid>
 
     </h:form>
+
+ <jsp:include page="bottomMatter.jsp"/>
 
 </f:view>
 

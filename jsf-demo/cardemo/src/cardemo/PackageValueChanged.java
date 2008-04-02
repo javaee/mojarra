@@ -66,11 +66,6 @@ public class PackageValueChanged implements ValueChangeListener {
     }
     
     
-    public PhaseId getPhaseId() {
-        return PhaseId.PROCESS_VALIDATIONS;
-    }
-    
-    
     public void processValueChange(ValueChangeEvent vEvent) {
         try {
             log.debug("ValueChangeEvent processEvent");

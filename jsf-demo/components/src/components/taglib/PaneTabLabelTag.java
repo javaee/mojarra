@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabLabelTag.java,v 1.5 2003/09/25 17:48:12 horwat Exp $
+ * $Id: PaneTabLabelTag.java,v 1.6 2003/12/17 15:19:15 rkitain Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ package components.taglib;
 
 
 import javax.faces.component.UIComponent;
+import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -94,20 +95,39 @@ public class PaneTabLabelTag extends UIComponentTag {
     }
 
 
-    protected void overrideProperties(UIComponent component) {
+    protected void setProperties(UIComponent component) {
 
-        super.overrideProperties(component);
+        super.setProperties(component);
 
         if (commandName != null) {
-            component.getAttributes().put("commandName", commandName);
-        }
-        if (image != null) {
-            component.getAttributes().put("image", image);
-        }
-        if (label != null) {
-            component.getAttributes().put("label", label);
+            if (isValueReference(commandName)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(commandName);
+                component.setValueBinding("commandName", vb);
+            } else {
+                component.getAttributes().put("commandName", commandName);
+            }
         }
 
+        if (image != null) {
+            if (isValueReference(image)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(image);
+                component.setValueBinding("image", vb);
+            } else {
+                component.getAttributes().put("image", image);
+            }
+        }
+
+        if (label != null) {
+            if (isValueReference(label)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(label);
+                component.setValueBinding("label", vb);
+            } else {
+                component.getAttributes().put("label", label);
+            }
+        }
     }
 
 

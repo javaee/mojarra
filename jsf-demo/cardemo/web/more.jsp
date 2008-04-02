@@ -103,7 +103,7 @@
 
             <BR> <BR>
             <h:command_button value="#{carDemoBundle.buy}" 
-                 actionRef="CarServer.carBuyAction" >
+                 action="#{CarServer.carBuyAction}">
                 <f:action_listener type="cardemo.CarBuyListener"/>
             </h:command_button>
             <BR> <BR>
@@ -120,7 +120,7 @@
             </FONT></B>
             <BR>
             <h:command_button id="Custom" action="Custom"
-                styleClass="package-selected" override="false"
+                styleClass="package-selected" 
                 value="#{carDemoBundle.Custom}">
                 <f:action_listener type="cardemo.CarPackageListener" />
             </h:command_button>
@@ -339,7 +339,7 @@
                     <f:action_listener type="cardemo.CarBuyListener" />
                 </h:command_button>
                 <h:command_button value="#{carDemoBundle.buy}" 
-                actionRef="CarServer.carBuyAction">
+                action="#{CarServer.carBuyAction}">
                     <f:action_listener type="cardemo.CarBuyListener"/>
                 </h:command_button>
 

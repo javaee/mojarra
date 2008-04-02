@@ -1,5 +1,5 @@
 /*
- * $Id: PaneTabbedTag.java,v 1.5 2003/09/25 17:48:12 horwat Exp $
+ * $Id: PaneTabbedTag.java,v 1.6 2003/12/17 15:19:15 rkitain Exp $
  */
 
 /*
@@ -44,6 +44,7 @@ package components.taglib;
 
 
 import javax.faces.component.UIComponent;
+import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -102,23 +103,49 @@ public class PaneTabbedTag extends UIComponentTag {
     }
 
 
-    protected void overrideProperties(UIComponent component) {
+    protected void setProperties(UIComponent component) {
 
-        super.overrideProperties(component);
+        super.setProperties(component);
 
         if (contentClass != null) {
-            component.getAttributes().put("contentClass", contentClass);
-        }
-        if (paneClass != null) {
-            component.getAttributes().put("paneClass", paneClass);
-        }
-        if (selectedClass != null) {
-            component.getAttributes().put("selectedClass", selectedClass);
-        }
-        if (unselectedClass != null) {
-            component.getAttributes().put("unselectedClass", unselectedClass);
+            if (isValueReference(contentClass)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(contentClass);
+                component.setValueBinding("contentClass", vb);
+            } else {
+                component.getAttributes().put("contentClass", contentClass);
+            }
         }
 
+        if (paneClass != null) {
+            if (isValueReference(paneClass)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(paneClass);
+                component.setValueBinding("paneClass", vb);
+            } else {
+                component.getAttributes().put("paneClass", paneClass);
+            }
+        }
+
+        if (selectedClass != null) {
+            if (isValueReference(selectedClass)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(selectedClass);
+                component.setValueBinding("selectedClass", vb);
+            } else {
+                component.getAttributes().put("selectedClass", selectedClass);
+            }
+        }
+
+        if (unselectedClass != null) {
+            if (isValueReference(unselectedClass)) {
+                ValueBinding vb =
+                    context.getApplication().createValueBinding(unselectedClass);
+                component.setValueBinding("unselectedClass", vb);
+            } else {
+                component.getAttributes().put("unselectedClass", unselectedClass);
+            }
+        }
     }
 
 

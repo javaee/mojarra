@@ -1,5 +1,5 @@
 /*
- * $Id: TabbedRenderer.java,v 1.6 2003/09/26 20:02:01 horwat Exp $
+ * $Id: TabbedRenderer.java,v 1.7 2003/12/17 15:19:09 rkitain Exp $
  */
 
 /*
@@ -44,19 +44,14 @@ package components.renderkit;
 
 
 import components.components.PaneComponent;
-import components.components.PaneSelectedEvent;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.FacesException;
-import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 
 /**
  * <p>Render our associated {@link PaneComponent} as a tabbed control, with
@@ -129,16 +124,16 @@ public class TabbedRenderer extends BaseRenderer {
             if (firstPane == null) {
                 firstPane = pane;
             }
-            if (pane.isSelected()) {
+            if (pane.isRendered()) {
                 if (selectedPane == null) {
                     selectedPane = pane;
                 } else {
-                    pane.setSelected(false);
+                    pane.setRendered(false);
                 }
             }
         }
         if ((selectedPane == null) && (firstPane != null)) {
-            firstPane.setSelected(true);
+            firstPane.setRendered(true);
             selectedPane = firstPane;
         }
 
@@ -166,11 +161,11 @@ public class TabbedRenderer extends BaseRenderer {
             writer.write("<td width=\"");
             writer.write("" + percent);
             writer.write("%\"");
-            if (pane.isSelected() && (selectedClass != null)) {
+            if (pane.isRendered() && (selectedClass != null)) {
                 writer.write(" class=\"");
                 writer.write(selectedClass);
                 writer.write("\"");
-            } else if (!pane.isSelected() && (unselectedClass != null)) {
+            } else if (!pane.isRendered() && (unselectedClass != null)) {
                 writer.write(" class=\"");
                 writer.write(unselectedClass);
                 writer.write("\"");
@@ -179,9 +174,9 @@ public class TabbedRenderer extends BaseRenderer {
 
             UIComponent facet = (UIComponent) pane.getFacet("label");
             if (facet != null) {
-                if (pane.isSelected() && (selectedClass != null)) {
+                if (pane.isRendered() && (selectedClass != null)) {
                     facet.getAttributes().put("paneTabLabelClass", selectedClass);
-                } else if (!pane.isSelected() && (unselectedClass != null)) {
+                } else if (!pane.isRendered() && (unselectedClass != null)) {
                     facet.getAttributes().put("paneTabLabelClass", unselectedClass);
                 }
                 facet.encodeBegin(context);

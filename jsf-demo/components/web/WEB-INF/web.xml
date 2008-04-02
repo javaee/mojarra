@@ -64,7 +64,6 @@
         <param-value>true</param-value>
     </context-param>
 
-    
     <!-- Faces Servlet -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>

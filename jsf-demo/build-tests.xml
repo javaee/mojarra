@@ -45,6 +45,8 @@
     <property name="url" value="http://${host}:${port}/manager"/>
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>
     <property name="components.context.path" value="/jsf-components"/>
+    <property name="mapping-extension.context.path" value="/jsf-mappingDemo-extension"/>
+    <property name="mapping-prefix.context.path" value="/jsf-mappingDemo-prefix"/>
     <!-- Default value for debugging arguments is no.  Override in
          build.properties -->
     <property name="debug.jvm.args" value=""/>
@@ -52,6 +54,8 @@
     <!-- Demo WAR files -->
     <property name="components.war" value="${basedir}/components/build/jsf-components.war"/>
     <property name="guessNumber.war" value="${basedir}/guessNumber/build/jsf-guessNumber.war"/>        
+    <property name="mapping-extension.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>        
+    <property name="mapping-prefix.war" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>        
 
     <path id="classpath">
         <pathelement location="${htmlunit.jar}"/>
@@ -147,7 +151,7 @@
 
     <target name="install" unless="skip.deploy" description="Install web application" depends="build">
         <install url="${url}" username="${username}" password="${password}"
-            path="${context.path}" war="file://${demo.path}/"/>
+            path="${context.path}" war="file://${demo.path}"/>
     </target>
 
     <target name="reload" description="Reload web application" depends="build">
@@ -236,8 +240,37 @@
     <!-- Global test target to run all unit tests -->
     <target name="test" depends="build" 
             description="Runs all of available demo unit tests">
+        <antcall target="run.mapping-extension.tests"/>    
+        <antcall target="run.mapping-prefix.tests"/>    
         <antcall target="run.guessNumber.tests"/>    
         <antcall target="run.components.tests"/>    
+    </target>
+
+    <!-- Unit test configuration for mapping tests -->            
+    <target name="run.mapping-extension.tests" depends="build">
+        <uptodate property="skip.deploy"
+            targetfile="${build}/mapping-extension.last-testrun"
+            srcfile="${mapping-extension.war}"/>    
+        
+        <antcall target="test.invoker">
+            <param name="context.path" value="${mapping-extension.context.path}"/>
+            <param name="demo.path" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-extension.war"/>
+            <param name="demo.name" value="mappingTest"/>                        
+        </antcall> 
+        <touch file="${build}/mapping-extension.last-testrun"/>
+    </target>
+
+    <target name="run.mapping-prefix.tests" depends="build">
+        <uptodate property="skip.deploy"
+            targetfile="${build}/mapping-prefix.last-testrun"
+            srcfile="${mapping-prefix.war}"/>    
+        
+        <antcall target="test.invoker">
+            <param name="context.path" value="${mapping-prefix.context.path}"/>
+            <param name="demo.path" value="${basedir}/test/mappingDemo/build/jsf-mappingDemo-prefix.war"/>
+            <param name="demo.name" value="mappingTest"/>                        
+        </antcall> 
+        <touch file="${build}/mapping-prefix.last-testrun"/>
     </target>
 
     <!-- Unit test configuration for guessNumber -->            
@@ -261,7 +294,7 @@
         
         <antcall target="test.invoker">
             <param name="context.path" value="${components.context.path}"/>
-            <param name="demo.path" value="${basedir}/components/build/demo"/>
+            <param name="demo.path" value="${basedir}/components/build/jsf-components"/>
             <param name="demo.name" value="components"/>                        
         </antcall>                                    
         <touch file="${build}/component.last-testrun"/>

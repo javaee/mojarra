@@ -1,5 +1,5 @@
 /*
- * $Id: CustomerBean.java,v 1.2 2003/02/21 23:45:06 ofung Exp $
+ * $Id: CustomerBean.java,v 1.3 2003/12/17 15:19:22 rkitain Exp $
  */
 
 /*
@@ -43,11 +43,14 @@
 package demo.model;
 
 
+import java.io.Serializable;
+
+
 /**
  * <p>JavaBean represented the data for an individual customer.</p>
  */
 
-public class CustomerBean {
+public class CustomerBean implements Serializable {
 
 
     public CustomerBean() {

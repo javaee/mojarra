@@ -1,5 +1,5 @@
 /*
- * $Id: TabRenderer.java,v 1.5 2003/09/25 17:48:05 horwat Exp $
+ * $Id: TabRenderer.java,v 1.6 2003/12/17 15:19:09 rkitain Exp $
  */
 
 /*
@@ -50,8 +50,6 @@ import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -115,24 +113,6 @@ public class TabRenderer extends BaseRenderer {
             UIComponent kid = (UIComponent) kids.next();
             encodeRecursive(context, kid);
         }
-
-    }
-
-
-    private void encodeRecursive(FacesContext context, UIComponent component)
-        throws IOException {
-
-        component.encodeBegin(context);
-        if (component.getRendersChildren()) {
-            component.encodeChildren(context);
-        } else {
-            Iterator kids = component.getChildren().iterator();
-            while (kids.hasNext()) {
-                UIComponent kid = (UIComponent) kids.next();
-                encodeRecursive(context, kid);
-            }
-        }
-        component.encodeEnd(context);
 
     }
 

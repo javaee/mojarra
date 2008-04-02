@@ -1,5 +1,5 @@
 /*
- * $Id: AreaSelectedEvent.java,v 1.3 2003/11/18 21:16:39 rkitain Exp $
+ * $Id: AreaSelectedEvent.java,v 1.4 2003/12/17 15:18:59 rkitain Exp $
  */
 
 /*

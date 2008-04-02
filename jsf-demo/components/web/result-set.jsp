@@ -36,35 +36,13 @@
  maintenance of any nuclear facility.
 -->
 
-<%-- $Id: result-set.jsp,v 1.12 2003/11/11 02:53:01 jvisvanathan Exp $ --%>
+<%-- $Id: result-set.jsp,v 1.13 2003/12/17 15:19:31 rkitain Exp $ --%>
 
-<%@ page import="demo.model.CustomerBean" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+
+
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt"  prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
 <%@ taglib uri="http://java.sun.com/jsf/demo/components" prefix="d" %>
-<%
-
-  // Construct a preconfigured customer list in session scope
-  List list = (List)
-    pageContext.getAttribute("list", PageContext.SESSION_SCOPE);
-  if (list == null) {
-    list = new ArrayList();
-    for (int i = 0; i < 1000; i++) {
-      list.add(new CustomerBean(Integer.toString(i), 
-                                "name_" + Integer.toString(i),
-                                "symbol_" + Integer.toString(i),
-                                i));
-    }
-      
-    pageContext.setAttribute("list", list,
-                             PageContext.SESSION_SCOPE);
-  }
-
-%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <f:view>
@@ -81,15 +59,15 @@
 Rendered via Faces components:
 
   <h:data_table columnClasses="list-column-center,list-column-center,
-                 list-column-center, list-column-center"
-                 headerClass="list-header"
-                 rowClasses="list-row-even,list-row-odd"
-                 styleClass="list-background"
-                 id="table"
-                 rows="20"
-                 componentRef="ResultSetBean.data"
-                 value="#{list}"
-                 var="customer">
+                               list-column-center, list-column-center"
+                  headerClass="list-header"
+                   rowClasses="list-row-even,list-row-odd"
+                   styleClass="list-background"
+                           id="table"
+                         rows="20"
+                      binding="#{ResultSetBean.data}"
+                        value="#{ResultSetBean.list}"
+                          var="customer">
 
     <h:column>
       <f:facet           name="header">
@@ -124,8 +102,8 @@ Rendered via Faces components:
 
   </h:data_table>
 
-  <d:scroller navFacetOrientation="NORTH" for="table">
-      <f:action_listener type="components.components.ScrollerListener"/>
+  <d:scroller navFacetOrientation="NORTH" for="table" 
+          actionListener="#{ResultSetBean.processScrollEvent}">
       <f:facet name="header">
         <h:panel_group>
           <h:output_text value="Account Id"/>
@@ -202,6 +180,13 @@ the facet.
 <td><code>forValue</code>
 </td>
 <td>The data grid component for which this acts as a scroller.
+</td>
+</tr>
+
+<tr>
+<td><code>actionListener</code></td>
+<td>Method binding reference to handle an action event generated as a result of 
+    clicking on a link that points a particular page in the result-set.
 </td>
 </tr>
 </table>

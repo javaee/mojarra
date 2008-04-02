@@ -1,5 +1,5 @@
 /*
- * $Id: ScrollerComponent.java,v 1.1 2003/10/28 20:11:00 jvisvanathan Exp $
+ * $Id: ScrollerComponent.java,v 1.2 2003/12/17 15:19:01 rkitain Exp $
  */
 
 /*
@@ -51,15 +51,20 @@ import javax.faces.component.UIData;
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.event.ActionEvent;
+import javax.faces.el.MethodBinding;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 
 import java.util.MissingResourceException;
 
+import components.renderkit.Util;
+
 /**
  * This component produces a search engine style scroller that facilitates
- * easy navigation over results that span across several pages.
+ * easy navigation over results that span across several pages. It
+ * demonstrates how a component can do decoding and encoding
+ * without delegating it to a renderer.
  */
 public class ScrollerComponent extends UICommand {
    
@@ -102,8 +107,9 @@ public class ScrollerComponent extends UICommand {
             // nothing to decode
             return;
         }
+	MethodBinding mb = Util.createConstantMethodBinding(action);
 	
-        this.getAttributes().put("action", action);
+        this.getAttributes().put("action", mb);
         curPage = (String) requestParameterMap.get(clientId + "_curPage");
         currentPage = Integer.valueOf(curPage).intValue();
 
@@ -345,7 +351,7 @@ public class ScrollerComponent extends UICommand {
 	return result;
     }
 
-    // PENDING(edburns): avoid doing this each time called.  Perhaps
+    // PENDING: avoid doing this each time called.  Perhaps
     // store in our own attr?
     protected UIForm getForm(FacesContext context) {
         UIComponent parent = this.getParent();

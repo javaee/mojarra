@@ -1,5 +1,5 @@
 /*
- * $Id: MenuBarRenderer.java,v 1.12 2003/11/09 22:45:55 jvisvanathan Exp $
+ * $Id: MenuBarRenderer.java,v 1.13 2003/12/17 15:19:08 rkitain Exp $
  */
 
 /*
@@ -44,7 +44,6 @@ package components.renderkit;
 
 
 import components.components.GraphComponent;
-import components.components.GraphEvent;
 import components.model.Graph;
 import components.model.Node;
 
@@ -54,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
+import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
@@ -90,32 +90,20 @@ public class MenuBarRenderer extends BaseRenderer {
             
         Graph graph = null;
   
-        // if a node was clicked queue an GraphEvent.
+        // if a node was clicked queue an ActionEvent.
         Map requestParameterMap = (Map) context.getExternalContext().
                 getRequestParameterMap();
         String path = (String) requestParameterMap.
                 get(component.getClientId(context));
         if (path != null && path.length() != 0) {
-            GraphEvent event = createEvent(((GraphComponent)component), path);
+            component.getAttributes().put("path", path);
+            component.queueEvent(new ActionEvent(component));
             if (log.isTraceEnabled()) {
-                log.trace("Adding event " + event);
+                log.trace("ActionEvent queued on Graph component for " + path);
             }
-            component.queueEvent(event);
+            
         }    
     }
-
-
-    public void encodeBegin(FacesContext context, UIComponent component)
-        throws IOException {
-        ;
-    }
-
-
-    public void encodeChildren(FacesContext context, UIComponent component)
-        throws IOException {
-        ;
-    }
-
 
     public void encodeEnd(FacesContext context, UIComponent component)
         throws IOException {
@@ -238,13 +226,6 @@ public class MenuBarRenderer extends BaseRenderer {
     }
 
     /**
-     * Creates and returns an <code>ActionEvent</code>
-     */
-    protected GraphEvent createEvent(GraphComponent component, String path) {
-        return (new GraphEvent(component, path, false));
-    }
-    
-    /**
      * Returns a string that is rendered as the value of
      * onmousedown attribute. onmousedown event handler is used
      * the track the node that was clicked using a hidden field, then submits
@@ -290,23 +271,21 @@ public class MenuBarRenderer extends BaseRenderer {
     
     /**
      * Returns a string that is rendered as the value of
-     * href attribute.
+     * href attribute after prepending the contextPath if necessary.
      */
     protected String href(String action) {
-        // if action doesn't start with "faces", just return
-	if (action != null) {
-            if (!(action.startsWith(URL_PREFIX))) {
-               return action;
-            }
+        // if action does not start with a "/", it is considered an absolute
+        // URL and hence don't prepend contextPath.
+        if (action != null && !(action.startsWith("/"))) {
+            return action;
         }
-        String contextPath = context.getExternalContext().getRequestContextPath();
-        StringBuffer sb = new StringBuffer(contextPath);
-        sb.append(URL_PREFIX);
-        // need to make sure the rendered string contains where we
-        // want to go next (target).
-        action = action.substring(URL_PREFIX.length());
+       
+        StringBuffer sb = new StringBuffer();
+        if (action.startsWith("/")) {
+            sb.append(context.getExternalContext().getRequestContextPath());
+        }
         sb.append(action);
-        return (context.getExternalContext().encodeActionURL(sb.toString()));
+        return (sb.toString());
     }
 
 

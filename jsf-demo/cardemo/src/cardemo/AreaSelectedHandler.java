@@ -93,14 +93,6 @@ public class AreaSelectedHandler implements AreaSelectedListener {
 
 
     /**
-     * <p>Return the phase identifier for when we wish to process events.</p>
-     */
-    public PhaseId getPhaseId() {
-        return (PhaseId.APPLY_REQUEST_VALUES);
-    }
-
-
-    /**
      * <p>Select a new Locale based on this event.</p>
      *
      * @param event The {@link AreaSelectedEvent} that has occurred

@@ -1,5 +1,5 @@
 /*
- * $Id: GraphMenuBarTag.java,v 1.9 2003/11/11 02:40:58 jvisvanathan Exp $
+ * $Id: GraphMenuBarTag.java,v 1.10 2003/12/17 15:19:15 rkitain Exp $
  */
 
 /*
@@ -49,32 +49,82 @@ import components.renderkit.Util;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
+import javax.faces.el.MethodBinding;
 import javax.faces.webapp.UIComponentTag;
 
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
+import javax.faces.event.ActionEvent;
 
 
 /**
+ * Tag Handler class for menu control.
  * This class creates a <code>Graph</code> instance if there is no
- * valueRef attribute specified on the component, represented by this tag and
+ * value attribute specified on the component, represented by this tag and
  * stores it against the attribute name "graph_menu" in session scope.
  */
 
 public class GraphMenuBarTag extends UIComponentTag {
 
-
-    protected String action_listener = null;
-    public void setAction_listener(String action_listener) {
-        this.action_listener = action_listener;
-    }
-
-
-
-    protected String graphClass = null;
+    protected String actionListener = null;
+    protected String styleClass = null;
     protected String selectedClass = null;
     protected String unselectedClass = null;
-    protected String valueRef = null;
+    protected String value = null;
+    protected String immediate = null;
+    
+    /**
+     * Optional method reference to handle menu expansion and contraction 
+     * events.
+     */
+    public void setActionListener(String actionListener) {
+        this.actionListener = actionListener;
+    }
+    
+    /**
+     * Value Binding reference expression that points to a Graph in scoped
+     * namespace.
+     */
+    public void setValue(String newValue) {
+	value = newValue;
+    }
+    
+    /**
+     * The CSS style <code>class</code> to be applied to the text
+     * of selected nodes. This can be value or a value binding reference
+     * expression.
+     */
+    public void setSelectedClass(String styleSelected) {
+        this.selectedClass = styleSelected;
+    }
+
+    /**
+     * The CSS style <code>class</code> to be applied to the text
+     * of unselected nodes. This can be value or a value binding reference
+     * expression.
+     */
+    public void setUnselectedClass(String styleUnselected) {
+        this.unselectedClass = styleUnselected;
+    }
+
+    /**
+     * The CSS style <code>class</code> to be applied to the entire menu.
+     * This can be value or a value binding reference expression.
+     */
+    public void setStyleClass(String style) {
+        this.styleClass = style;
+    }
+
+    /**
+     * A flag indicating that the default ActionListener should execute
+     * immediately (that is, during the Apply Request Values phase of the 
+     * request processing lifecycle, instead of waiting for Invoke 
+     * Application phase). The default value of this property must be false.
+     * This can be value or a value binding reference expression.
+     */
+    public void setImmediate(java.lang.String immediate) {
+        this.immediate = immediate;
+    }
     
     public String getComponentType() {
         return ("Graph");
@@ -84,92 +134,72 @@ public class GraphMenuBarTag extends UIComponentTag {
         return ("MenuBar");
     }
   
-    public String getValueRef()
-    {
-	return valueRef;
-    }
-    
-    public void setValueRef(String newValueRef)
-    {
-	valueRef = newValueRef;
-    }
-    
-    /**
-     * Optional listener to handle tree expansion and contraction events
-     */
-    public String getAction_listener() {
-        return (this.action_listener);
-    }
-
-
-    /**
-     * The CSS style <code>class</code> to be applied to the text
-     * of selected nodes.
-     */
-    public String getSelectedClass() {
-        return (this.selectedClass);
-    }
-
-    public void setSelectedClass(String styleSelected) {
-        this.selectedClass = styleSelected;
-    }
-
-
-    /**
-     * The CSS style <code>class</code> to be applied to the text
-     * of unselected nodes.
-     */
-    public String getUnselectedClass() {
-        return (this.unselectedClass);
-    }
-
-    public void setUnselectedClass(String styleUnselected) {
-        this.unselectedClass = styleUnselected;
-    }
-
-    /**
-     * The CSS style <code>class</code> to be applied to the entire tree.
-     */
-    public String getGraphClass() {
-        return (this.graphClass);
-    }
-
-    public void setGraphClass(String style) {
-        this.graphClass = style;
-    }
-    
-    protected void overrideProperties(UIComponent component) {
-        super.overrideProperties(component);
+    protected void setProperties(UIComponent component) {
+        super.setProperties(component);
         FacesContext context = FacesContext.getCurrentInstance();
         ValueBinding vb = null;
         
         GraphComponent graphComponent = (GraphComponent)component;
-        if ((action_listener != null) &&
-            (component.getAttributes().get("action_listener") == null)) {
-            component.getAttributes().put("action_listener", action_listener);
+        
+        if (actionListener != null) {
+            if (isValueReference(actionListener)) {
+                Class args[] = { ActionEvent.class };
+                MethodBinding mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(actionListener, args);
+                graphComponent.setActionListener(mb);
+            } else {
+              Object params [] = {actionListener};
+              throw new javax.faces.FacesException();
+            }
         }
-
-        if ((graphClass != null) &&
-            (component.getAttributes().get("graphClass") == null)) {
-            component.getAttributes().put("graphClass", graphClass);
+        // if the attributes are values set them directly on the component, if
+        // not set the ValueBinding reference so that the expressions can be
+        // evaluated lazily.
+        if (styleClass != null) {
+            if (isValueReference(styleClass)) {
+                vb = context.getApplication().createValueBinding(styleClass);
+                graphComponent.setValueBinding("styleClass", vb);
+            } else {
+                graphComponent.getAttributes().put("styleClass", styleClass);
+            }
         }
-        if ((selectedClass != null) &&
-            (component.getAttributes().get("selectedClass") == null)) {
-            component.getAttributes().put("selectedClass", selectedClass);
+        if (selectedClass != null) {
+            if (isValueReference(selectedClass)) {
+                vb = context.getApplication().createValueBinding(selectedClass);
+                graphComponent.setValueBinding("selectedClass", vb);
+            } else {
+                graphComponent.getAttributes().put("selectedClass", selectedClass);
+            }
         }
-        if ((unselectedClass != null) &&
-            (component.getAttributes().get("unselectedClass") == null)) {
-            component.getAttributes().put("unselectedClass", unselectedClass);
-        }
-        if ( valueRef != null) {
-            vb = context.getApplication().getValueBinding(valueRef);
-            component.setValueBinding("value", vb); 
+        if (unselectedClass != null) {
+            if (isValueReference(unselectedClass)) {
+                vb = context.getApplication().createValueBinding(unselectedClass);
+                graphComponent.setValueBinding("unselectedClass", vb);
+            } else {
+                graphComponent.getAttributes().put("unselectedClass", unselectedClass);
+            }
         }
         
-        // if there is no valueRef attribute set on this tag, then
-        // we need to build the graph.
-        if ( valueRef == null ) {
-            vb = context.getApplication().getValueBinding("#{sessionScope.graph_menu}");
+        if (immediate != null) {
+            if (isValueReference(immediate)) {
+                vb = context.getApplication().createValueBinding(immediate);
+                graphComponent.setValueBinding("immediate", vb);
+            } else {
+                boolean _immediate = new Boolean(immediate).booleanValue();
+                graphComponent.setImmediate(_immediate);
+            }
+        }
+        
+        if (value != null) {
+            // if the value is not value reference expression, we need
+            // to build the graph using the nested node tags.
+            if (isValueReference(value)) {
+               vb = context.getApplication().createValueBinding(value);
+               component.setValueBinding("value", vb);
+            }
+        }
+        
+        if ( value == null ) {
+            vb = context.getApplication().createValueBinding("#{sessionScope.graph_menu}");
             component.setValueBinding("value", vb); 
            
             // In the postback case, graph exists already. So make sure

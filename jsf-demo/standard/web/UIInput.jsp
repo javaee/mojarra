@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIInput.jsp,v 1.7 2003/11/11 05:26:17 rkitain Exp $ --%>
+<%-- $Id: UIInput.jsp,v 1.8 2003/12/17 15:20:01 rkitain Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -28,7 +28,7 @@
        <h:form id="standardRenderKitForm" >
 
          <h:command_button id="standardRenderKitSubmit" 
-             actionRef="model.postbackAction"
+             action="#{model.postbackAction}"
              value="#{standardBundle.standardRenderKitPostbackLabel}">
          </h:command_button>
 
@@ -67,7 +67,7 @@
          </table>
 
          <h:command_button id="standardRenderKitSubmit1" 
-             actionRef="model.postbackAction"
+             action="#{model.postbackAction}"
              value="#{standardBundle.standardRenderKitPostbackLabel}">
          </h:command_button>
 
