@@ -18,7 +18,7 @@
  * your own identifying information:
  * "Portions Copyrighted [year] [name of copyright owner]"
  * 
- * [WebConfiguration] [$Id: WebConfiguration.java,v 1.17 2007/01/26 17:15:38 rlubke Exp $] [Apr 2, 2006]
+ * [WebConfiguration] [$Id: WebConfiguration.java,v 1.18 2007/02/05 04:19:23 rlubke Exp $] [Apr 2, 2006]
  * 
  * Copyright 2006 Sun Microsystems Inc. All Rights Reserved
  */
@@ -31,8 +31,8 @@ import javax.servlet.ServletContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.EnumMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -61,16 +61,13 @@ public class WebConfiguration {
     private Level loggingLevel = Level.FINE;
 
     private Map<BooleanWebContextInitParameter, Boolean> booleanContextParameters =
-          new HashMap<BooleanWebContextInitParameter, Boolean>(
-                BooleanWebContextInitParameter.values().length);
+          new EnumMap<BooleanWebContextInitParameter, Boolean>(BooleanWebContextInitParameter.class);
 
     private Map<WebContextInitParameter, String> contextParameters =
-          new HashMap<WebContextInitParameter, String>(WebContextInitParameter
-                .values().length);
+          new EnumMap<WebContextInitParameter, String>(WebContextInitParameter.class);
 
     private Map<WebEnvironmentEntry, String> envEntries =
-          new HashMap<WebEnvironmentEntry, String>(WebEnvironmentEntry
-                .values().length);
+          new EnumMap<WebEnvironmentEntry, String>(WebEnvironmentEntry.class);
 
     private ServletContext servletContext;
 

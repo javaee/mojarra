@@ -2,7 +2,7 @@
  * JSFVersionTracker
  *
  * Created on February 15, 2006, 11:41 AM
- * $Id: JSFVersionTracker.java,v 1.10 2007/01/26 20:33:50 rlubke Exp $
+ * $Id: JSFVersionTracker.java,v 1.11 2007/02/05 04:19:23 rlubke Exp $
  */
 
 /*
@@ -114,7 +114,8 @@ public class JSFVersionTracker implements Serializable {
         if (null == versionStack) {
             versionStack = new ArrayList<Version>() {
                 public String toString() {
-                    StringBuffer result = new StringBuffer();
+                    //noinspection StringBufferWithoutInitialCapacity
+                    StringBuilder result = new StringBuilder();
                     for (Version cur : this) {
                         if (null == cur) {
                             result.append("null\n");
@@ -134,7 +135,8 @@ public class JSFVersionTracker implements Serializable {
     Version popJSFVersionNumber() {
         List<Version> stack = getVersionStack();
         assert(null != stack);
-        int nonNull = -1, j = 0, end = 0;
+        int nonNull;
+        int end;
         Version result = null;
         
         // Starting at the end of the stack, look for 
@@ -148,7 +150,7 @@ public class JSFVersionTracker implements Serializable {
 
         // Pop all the values including the first non-null one.
         if (null != result) {
-            for (j = end; j >= nonNull; j--) {
+            for (int j = end; j >= nonNull; j--) {
                 stack.remove(stack.size() - 1);
             }
         }
@@ -159,12 +161,11 @@ public class JSFVersionTracker implements Serializable {
     Version peekJSFVersionNumber() {
         List<Version> stack = getVersionStack();
         assert(null != stack);
-        int i = -1, j = 0, end = stack.size() - 1;
         Version result = null;
         
         // Starting at the end of the stack, look for 
         // a value that is not null.
-        for (i = end; i >= 0; i--) {
+        for (int i = (stack.size() - 1); i >= 0; i--) {
             if (null != (result = stack.get(i))) {
                 break;
             }
@@ -178,10 +179,10 @@ public class JSFVersionTracker implements Serializable {
         if (null == trackedClasses) {
             trackedClasses = new HashMap<String, Version>() {
                 public String toString() {
-                    StringBuffer result = new StringBuffer();
-                    Version curVersion = null;
+                    //noinspection StringBufferWithoutInitialCapacity
+                    StringBuilder result = new StringBuilder();
                     for (Map.Entry cur : this.entrySet()) {
-                        curVersion = (Version)cur.getValue();
+                        Version curVersion = (Version)cur.getValue();
                         result.append(cur).append(": ");
                         result.append(curVersion.toString()).append('\n');
                     }
@@ -260,9 +261,8 @@ public class JSFVersionTracker implements Serializable {
     
     void publishInstanceToApplication() {
         ExternalContext extContext = ConfigureListener.getExternalContextDuringInitialize();
-        ApplicationAssociate associate = null;
         if (null != extContext) {
-            associate = ApplicationAssociate.getInstance(extContext);
+            ApplicationAssociate associate = ApplicationAssociate.getInstance(extContext);
             if (null != associate) {
                 associate.setJSFVersionTracker(this);
             }
@@ -334,7 +334,7 @@ public class JSFVersionTracker implements Serializable {
         
         public int compareTo(Object obj) {
             Version other = (Version) obj;
-            int result = 0;
+            int result;
             int thisMajor, thisMinor, otherMajor, otherMinor;
             // Is thisMajor < thisMinor?
             if ((thisMajor = this.getMajorVersion()) < 
