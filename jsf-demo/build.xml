@@ -307,17 +307,7 @@
 
     <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
       <fileset dir="${basedir}/components" 
-                     excludes="build.xml,wspack-build.xml,
-                     src/java/components/components/CalendarComponent.java,
-                     src/java/components/taglib/CalendarTag.java,
-                     src/java/components/renderkit/CalendarRenderer.java,
-                     src/java/demo/model/CalendarBean.java,
-                     web/calendar.jsp,
-                     web/images/calendar.css,
-                     web/images/calendar.gif,
-                     web/images/simplecalendar.js,
-                     web/images/up.gif,
-                     web/images/down.gif"/>
+                     excludes="build.xml,wspack-build.xml"/>
     </copy>
     <copy file="${basedir}/components/wspack-build.xml"
           tofile="${dist.home}/samples/components/build.xml" />
