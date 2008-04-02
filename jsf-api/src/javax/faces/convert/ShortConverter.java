@@ -1,5 +1,5 @@
 /*
- * $Id: ShortConverter.java,v 1.18 2007/01/29 06:59:55 rlubke Exp $
+ * $Id: ShortConverter.java,v 1.19 2007/01/29 17:56:34 rlubke Exp $
  */
 
 /*
@@ -138,8 +138,8 @@ public class ShortConverter implements Converter {
             return (Short.toString(((Short) value).shortValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                 context, STRING_ID, new Object[]{value,
-                 MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, value,
+                 MessageFactory.getLabel(context, component)), e);
         }
     }
 }

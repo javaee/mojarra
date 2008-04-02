@@ -411,8 +411,7 @@ public class UIData extends UIComponentBase
         // Save current state for the previous row index
         saveDescendantState();
 
-        // Update to the new row index
-        int previous = this.rowIndex;
+        // Update to the new row index        
         this.rowIndex = rowIndex;
         DataModel localModel = getDataModel();
         localModel.setRowIndex(rowIndex);

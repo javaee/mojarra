@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.143 2007/01/29 07:56:04 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.144 2007/01/29 17:56:34 rlubke Exp $
  */
 
 /*
@@ -2032,8 +2032,7 @@ public abstract class UIComponentBase extends UIComponent {
         
         public void clear() {
             Iterator<String> keys = keySet().iterator();
-            while (keys.hasNext()) {
-                String key = keys.next();
+            while (keys.hasNext()) {              
                 keys.remove();
             }
             super.clear();
