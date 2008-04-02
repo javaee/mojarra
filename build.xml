@@ -108,7 +108,7 @@
   
   <installerBuilder
           classFile="javaserverfaces_binary.class"
-          licenseFile="${jsf-ri.home}/PRE-RELEASE-LICENSE.txt"
+          licenseFile="${jsf-ri.home}/LICENSE.TXT"
           zipFile="${basedir}/javaserverfaces_binary.zip" />
           
   <installerBuilder
@@ -155,7 +155,7 @@
           zipFile="${basedir}/jsf-portlet_source.zip" />
              
     <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
-    <copy file="${jsf-portlet.home}/LICENSE.txt"
+    <copy file="${jsf-portlet.home}/LICENSE.TXT"
          todir="${jsf-portlet.home}/dist/jsf-portlet" />
     <copy file="${jsf-portlet.home}/portlet-lib/build/lib/jsf-portlet.jar"
          todir="${jsf-portlet.home}/dist/jsf-portlet/lib" />
@@ -177,7 +177,7 @@
     
     <installerBuilder
           classFile="javaserverfaces_portlet.class"
-          licenseFile="${jsf-portlet.home}/LICENSE.txt"
+          licenseFile="${jsf-portlet.home}/LICENSE.TXT"
           zipFile="${basedir}/jsf-portlet.zip" />
       
   </target>
