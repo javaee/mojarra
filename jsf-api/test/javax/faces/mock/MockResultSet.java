@@ -1,5 +1,5 @@
 /*
- * $Id: MockResultSet.java,v 1.1 2003/10/12 05:08:35 craigmcc Exp $
+ * $Id: MockResultSet.java,v 1.2 2003/10/15 04:17:36 craigmcc Exp $
  */
 
 /*
@@ -61,6 +61,7 @@ import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import javax.faces.model.TestBean;
 import org.apache.commons.beanutils.PropertyUtils;
 
 
@@ -185,8 +186,13 @@ public class MockResultSet implements ResultSet {
             throw new SQLException("Invalid row number " + row);
         }
         try {
-            return (PropertyUtils.getSimpleProperty(beans[row - 1],
-                                                    columnName));
+            if (columnName.equals("writeOnlyProperty") &&
+                (beans[row - 1] instanceof TestBean)) {
+                return (((TestBean) beans[row - 1]).getWriteOnlyPropertyValue());
+            } else {
+                return (PropertyUtils.getSimpleProperty(beans[row - 1],
+                                                        columnName));
+            }
         } catch (Exception e) {
             throw new SQLException(e.getMessage());
         }

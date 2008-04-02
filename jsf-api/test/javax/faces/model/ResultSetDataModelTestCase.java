@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModelTestCase.java,v 1.1 2003/10/12 05:07:25 craigmcc Exp $
+ * $Id: ResultSetDataModelTestCase.java,v 1.2 2003/10/15 04:17:37 craigmcc Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package javax.faces.model;
 
 
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.mock.MockResultSet;
 import javax.faces.mock.MockResultSetMetaData;
@@ -85,31 +86,30 @@ public class ResultSetDataModelTestCase extends DataModelTestCaseBase {
     protected TestBean data() throws Exception {
 
         Object data = model.getRowData();
-        assertTrue(data instanceof ResultSetDataModel);
-        assertTrue(data == model);
+        assertTrue(data instanceof Map);
         TestBean bean = new TestBean();
-        ResultSetDataModel rsdm = (ResultSetDataModel) model;
+        Map map = (Map) data;
 
         bean.setBooleanProperty
-            (((Boolean) rsdm.value("booleanProperty")).booleanValue());
+            (((Boolean) map.get("booleanProperty")).booleanValue());
         bean.setBooleanSecond
-            (((Boolean) rsdm.value("booleanSecond")).booleanValue());
+            (((Boolean) map.get("booleanSecond")).booleanValue());
         bean.setByteProperty
-            (((Byte) rsdm.value("byteProperty")).byteValue());
+            (((Byte) map.get("byteProperty")).byteValue());
         bean.setDoubleProperty
-            (((Double) rsdm.value("doubleProperty")).doubleValue());
+            (((Double) map.get("doubleProperty")).doubleValue());
         bean.setFloatProperty
-            (((Float) rsdm.value("floatProperty")).floatValue());
+            (((Float) map.get("floatProperty")).floatValue());
         bean.setIntProperty
-            (((Integer) rsdm.value("intProperty")).intValue());
+            (((Integer) map.get("intProperty")).intValue());
         bean.setLongProperty
-            (((Long) rsdm.value("longProperty")).longValue());
-        bean.setNullProperty((String) rsdm.value("nullProperty"));
+            (((Long) map.get("longProperty")).longValue());
+        bean.setNullProperty((String) map.get("nullProperty"));
         bean.setShortProperty
-            (((Short) rsdm.value("shortProperty")).shortValue());
-        bean.setStringProperty((String) rsdm.value("stringProperty"));
+            (((Short) map.get("shortProperty")).shortValue());
+        bean.setStringProperty((String) map.get("stringProperty"));
         bean.setWriteOnlyProperty
-            ((String) rsdm.value("writeOnlyPropertyValue"));
+            ((String) map.get("writeOnlyPropertyValue"));
 
         return (bean);
 

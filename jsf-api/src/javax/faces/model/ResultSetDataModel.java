@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.5 2003/10/15 02:02:15 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.6 2003/10/15 04:17:35 craigmcc Exp $
  */
 
 /*
@@ -47,6 +47,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.TreeMap;
 import javax.faces.FacesException;
 import javax.faces.el.PropertyNotFoundException;
 
@@ -72,6 +73,8 @@ public class ResultSetDataModel extends DataModel {
      *
      * @param resultSet <code>ResultSet</code> to be wrapped
      *
+     * @exception FacesException if the specified result set cannot be
+     *  initialized
      * @exception IllegalArgumentException if <code>resultSet</code> is of
      *  type <code>ResultSet.TYPE_FORWARD_ONLY</code>
      * @exception NullPointerException if <code>resultSet</code>
@@ -90,6 +93,11 @@ public class ResultSetDataModel extends DataModel {
             throw new IllegalArgumentException();
         }
         this.resultSet = resultSet;
+        try {
+            this.metadata = resultSet.getMetaData();
+        } catch (SQLException e) {
+            throw new FacesException(e);
+        }
 
     }
 
@@ -148,8 +156,18 @@ public class ResultSetDataModel extends DataModel {
         if (index == -1) {
             return (null);
         } else {
-            current = index;
-            return (this);
+            try {
+                resultSet.absolute(index + 1);
+                TreeMap map = new TreeMap(String.CASE_INSENSITIVE_ORDER);
+                int n = metadata.getColumnCount();
+                for (int i = 1; i <= n; i++) {
+                    String name = metadata.getColumnName(i);
+                    map.put(name, resultSet.getObject(name));
+                }
+                return (map);
+            } catch (SQLException e) {
+                throw new FacesException(e);
+            }
         }
 
     }
@@ -191,287 +209,6 @@ public class ResultSetDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
-
-    }
-
-
-    // ---------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Return <code>true</code> if the <code>ResultSet</code> we are wrapping
-     * is of concurrency <code>ResultSet.CONCUR_READ_ONLY</code>, or if the
-     * column metadata indicates that the individual column is read only;
-     * otherwise, return <code>false</code>.</p>
-     *
-     * @param column One-relative index of the column whose state is to be
-     *  retrieved
-     *
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied index
-     */
-    public boolean readOnly(int column) throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            ResultSetMetaData metadata = metadata();
-            if (metadata.isReadOnly(column)) {
-                return (true);
-            } else if (ResultSet.CONCUR_READ_ONLY == resultSet.getConcurrency()) {
-                return (true);
-            } else {
-                return (false);
-            }
-        } catch (SQLException e) {
-            throw new PropertyNotFoundException("" + column);
-        }
-
-    }
-
-
-    /**
-     * <p>Return <code>true</code> if the <code>ResultSet</code> we are wrapping
-     * is of concurrency <code>ResultSet.CONCUR_READ_ONLY</code>, or if the
-     * column metadata indicates that the individual column is read only;
-     * otherwise, return <code>false</code>.</p>
-     *
-     * @param name Name of the column whose state is to be retrieved
-     *
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied name
-     */
-    public boolean readOnly(String name) throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            ResultSetMetaData metadata = metadata();
-            int n = metadata.getColumnCount();
-            int j = -1;
-            for (int i = 1; i <= n; i++) {
-                if (metadata.getColumnName(i).equals(name)) {
-                    j = i;
-                    break;
-                }
-            }
-            if (metadata.isReadOnly(j)) {
-                return (true);
-            } else if (ResultSet.CONCUR_READ_ONLY == resultSet.getConcurrency()) {
-                return (true);
-            } else {
-                return (false);
-            }
-        } catch (SQLException e) {
-            throw new PropertyNotFoundException(name);
-        }
-    }
-
-
-    /**
-     * <p>Return the Java <code>Class</code> representing the data type of
-     * the specified column.</p>
-     *
-     * @param column One-relative index of the column whose type is to be
-     *  returned
-     *
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied index
-     */
-    public Class type(int column) throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            ResultSetMetaData metadata = metadata();
-            String cname = metadata.getColumnClassName(column);
-            ClassLoader loader =
-                Thread.currentThread().getContextClassLoader();
-            if (loader == null) {
-                loader = this.getClass().getClassLoader();
-            }
-            return (loader.loadClass(cname));
-        } catch (Exception e) {
-            throw new PropertyNotFoundException("" + column);
-        }
-
-    }
-
-
-    /**
-     * <p>Return the Java <code>Class</code> representing the data type of
-     * the specified column.</p>
-     *
-     * @param name Name of the column whose type is to be returned
-     *  returned
-     *
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied index
-     */
-    public Class type(String name) throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            ResultSetMetaData metadata = metadata();
-            int n = metadata.getColumnCount();
-            int j = -1;
-            for (int i = 1; i <= n; i++) {
-                if (metadata.getColumnName(i).equals(name)) {
-                    j = i;
-                    break;
-                }
-            }
-            String cname = metadata.getColumnClassName(j);
-            ClassLoader loader =
-                Thread.currentThread().getContextClassLoader();
-            if (loader == null) {
-                loader = this.getClass().getClassLoader();
-            }
-            return (loader.loadClass(cname));
-        } catch (Exception e) {
-            throw new PropertyNotFoundException(name);
-        }
-
-    }
-
-
-    /**
-     * <p>Return the value of the specified column index, for the current row.
-     * </p>
-     *
-     * @param column One-relative index of the column whose value is to be
-     *  retrieved
-     *
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied index
-     */
-    public Object value(int column) throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            return (resultSet.getObject(column));
-        } catch (SQLException e) {
-            throw new PropertyNotFoundException("" + column);
-        }
-
-    }
-
-
-
-    /**
-     * <p>Return the value of the specified column name, for the currrent row.
-     * </p>
-     *
-     * @param name Name of the column whose value is to be retrieved
-     *
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied name
-     */
-    public Object value(String name) throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            return (resultSet.getObject(name));
-        } catch (SQLException e) {
-            throw new PropertyNotFoundException(name);
-        }
-
-    }
-
-
-    /**
-     * <p>Set the value of the specified column index, for the current row.
-     * </p>
-     *
-     * @param column One-relative index of the column whose value is to be set
-     * @param value New value for this column
-     *
-     * @exception IllegalArgumentException if the underlying result set
-     *  is read only
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied index
-     */
-    public void value(int column, Object value)
-        throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            if (ResultSet.CONCUR_READ_ONLY == resultSet.getConcurrency()) {
-                throw new IllegalArgumentException();
-            }
-            resultSet.updateObject(column, value);
-        } catch (SQLException e) {
-            throw new PropertyNotFoundException("" + column);
-        }
-
-    }
-
-
-
-    /**
-     * <p>Set the value of the specified column name, for the currrent row.
-     * </p>
-     *
-     * @param name Name of the column whose value is to be set
-     * @param value New value for this column
-     *
-     * @exception IllegalArgumentException if the underlying result set
-     *  is read only
-     * @exception IllegalStateException if the row index has been moved
-     * @exception PropertyNotFoundException if there is no column with
-     *  the specfied name
-     */
-    public void value(String name, Object value)
-        throws PropertyNotFoundException {
-
-        if (current != index) {
-            throw new IllegalStateException();
-        }
-        try {
-            if (ResultSet.CONCUR_READ_ONLY == resultSet.getConcurrency()) {
-                throw new IllegalArgumentException();
-            }
-            resultSet.updateObject(name, value);
-        } catch (SQLException e) {
-            throw new PropertyNotFoundException(name);
-        }
-
-    }
-
-
-    // --------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return the <code>ResultSetMetaData</code> for the
-     * <code>ResultSet</code> we are wrapping.</p>
-     *
-     * @exception SQLException if we cannot return the metadata
-     */
-    private ResultSetMetaData metadata() throws SQLException {
-
-        if (metadata == null) {
-            metadata = resultSet.getMetaData();
-        }
-        return (metadata);
 
     }
 
