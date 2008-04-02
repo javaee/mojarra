@@ -173,7 +173,7 @@
         <property-name>disabled</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <pass-through>false</pass-through>
         </property-extension>
     </property>
 

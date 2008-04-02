@@ -71,16 +71,20 @@
 
     <property>
         <description>
-        Flag indicating that this image is to be
-        used as a server side image map.  Such an image
-        must be enclosed within a hyperlink ("a").
+        Flag indicating that this image is to be used as a server side
+        image map.  Such an image must be enclosed within a hyperlink
+        ("a").  According to the HTML 4.01 spec, this attribute must be
+        rendered with attribute minimization.  If the value of the
+        attribute is true, then only the attribute name, "ismap", is
+        rendered.  If the attribute value is false, nothing is rendered
+        regarding this attribute.
         </description>
         <display-name>Image Map Flag</display-name>
         <icon></icon>
         <property-name>ismap</property-name>
         <property-class>boolean</property-class>
         <property-extension>
-            <pass-through>true</pass-through>
+            <pass-through>false</pass-through>
         </property-extension>
     </property>
 
