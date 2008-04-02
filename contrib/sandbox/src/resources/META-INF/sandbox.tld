@@ -878,7 +878,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[Determines whether to hide extra weeks that are completely outside the current month.]]>
             </description>
         </attribute>
         <attribute>
@@ -886,7 +886,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[Determines whether to display the weekday headers.]]>
             </description>
         </attribute>
         <attribute>
@@ -894,7 +894,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[Determines whether to display row footers.]]>
             </description>
         </attribute>
         <attribute>
@@ -902,7 +902,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[Determines whether to display row headers.]]>
             </description>
         </attribute>
         <attribute>
@@ -910,7 +910,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>false</rtexprvalue>
             <description>
-                <![CDATA[The current value of this component.]]>
+                <![CDATA[0-6, representing the day that a week begins on.]]>
             </description>
         </attribute>
 
