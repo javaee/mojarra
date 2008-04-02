@@ -6,7 +6,7 @@
 -->
 
 
-<!-- ========== Listbox Attributes ========================================= -->
+<!-- ========== Menu Attributes ========================================= -->
 
 
 <!-- template
@@ -43,15 +43,3 @@
        <attribute-name>enabledClass</attribute-name>
        <attribute-class>java.lang.String</attribute-class>
     </attribute>
-
-    <attribute>
-      <description>
-        Number of available options to be shown at all times.
-        If not specified, all available options are shown.
-      </description>
-      <display-name>Size</display-name>
-      <icon></icon>
-      <attribute-name>size</attribute-name>
-      <attribute-class>int</attribute-class>
-    </attribute>
-

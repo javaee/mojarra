@@ -6,7 +6,7 @@
 -->
 
 
-<!-- ========== Listbox Properties ========================================= -->
+<!-- ========== Menu Properties ========================================= -->
 
 
 <!-- template
@@ -43,15 +43,3 @@
        <property-name>enabledClass</property-name>
        <property-class>java.lang.String</property-class>
     </property>
-
-    <property>
-      <description>
-        Number of available options to be shown at all times.
-        If not specified, all available options are shown.
-      </description>
-      <display-name>Size</display-name>
-      <icon></icon>
-      <property-name>size</property-name>
-      <property-class>int</property-class>
-    </property>
-

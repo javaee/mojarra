@@ -42,6 +42,7 @@
   <!ENTITY link-props               SYSTEM "link-props.xml">
   <!ENTITY list-props               SYSTEM "list-props.xml">
   <!ENTITY listbox-props            SYSTEM "listbox-props.xml">
+  <!ENTITY menu-props               SYSTEM "menu-props.xml">
   <!ENTITY table-props              SYSTEM "table-props.xml">
   <!ENTITY text-props               SYSTEM "text-props.xml">
 
@@ -68,6 +69,7 @@
   <!ENTITY link-attrs               SYSTEM "link-attrs.xml">
   <!ENTITY list-attrs               SYSTEM "list-attrs.xml">
   <!ENTITY listbox-attrs            SYSTEM "listbox-attrs.xml">
+  <!ENTITY menu-attrs               SYSTEM "menu-attrs.xml">
   <!ENTITY table-attrs              SYSTEM "table-attrs.xml">
   <!ENTITY text-attrs               SYSTEM "text-attrs.xml">
 
@@ -862,6 +864,7 @@
     &focus-props;
     &i18n-props;
     &input-props;
+    &menu-props;
 
     <component-extension>
       <base-component-type>javax.faces.SelectMany</base-component-type>
@@ -913,6 +916,7 @@
     &focus-props;
     &i18n-props;
     &input-props;
+    &menu-props;
 
     <component-extension>
       <base-component-type>javax.faces.SelectOne</base-component-type>
@@ -2001,6 +2005,7 @@
       &focus-attrs;
       &i18n-attrs;
       &input-attrs;
+      &menu-attrs;
 
     </renderer>
 
@@ -2092,6 +2097,7 @@
       &focus-attrs;
       &i18n-attrs;
       &input-attrs;
+      &menu-attrs;
 
     </renderer>
 
