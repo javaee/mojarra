@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.2 2003/10/14 16:42:34 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.3 2003/11/04 18:38:33 rkitain Exp $
  */
 
 /*
@@ -74,6 +74,24 @@ class ConfigParser extends Object {
      */
     Map renderersByRendererType = null;
 
+    /**
+     * <p>Keys are component types; Values are <code>List</code> of 
+     * <code>String</code>, where each element is a renderer type for 
+     * that component.</p>
+     */
+    Map renderersByComponentType = null;
+
+    /**
+     * <p>Keys are componentTypes, values are <code>ConfigComponent</code>
+     * beans</p>
+     */
+    Map componentsByComponentType = null;
+
+    /**
+     * <p>These components have no associated <code>Renderer</code>.
+     */
+    List componentsWithNoRenderer = null;
+
     //
     // Constructors and Initializers    
     //
@@ -95,7 +113,10 @@ class ConfigParser extends Object {
 	digester.setValidating(true);
         configureRules();
 	renderersByComponentClass = new HashMap();
+	renderersByComponentType = new HashMap();
 	renderersByRendererType = new HashMap();
+	componentsByComponentType = new HashMap();
+	componentsWithNoRenderer = new ArrayList();
     }
 
     //
@@ -122,6 +143,15 @@ class ConfigParser extends Object {
         digester.addCallMethod(prefix + "/supported-component-class/component-class",
                                "addComponentClass", 0);
 
+	digester.addObjectCreate(prefix + "/supported-component-type",
+            "com.sun.faces.generate.ConfigComponentType");
+        digester.addSetNext(prefix + "/supported-component-type", "addComponentType", 
+            "com.sun.faces.generate.ConfigComponentType");
+        digester.addCallMethod(prefix + "/supported-component-type/component-type",
+            "setComponentType", 0);
+        digester.addCallMethod(prefix + "/supported-component-type/attribute-name",
+            "addAttributeName", 0);
+
 	prefix = prefix + "/attribute";
 	digester.addObjectCreate(prefix,
 				 "com.sun.faces.generate.ConfigAttribute");
@@ -131,11 +161,66 @@ class ConfigParser extends Object {
                                "setAttributeName", 0);
         digester.addCallMethod(prefix + "/attribute-class",
                                "setAttributeClass", 0);
-
+        digester.addCallMethod(prefix + "/description",
+                               "setDescription", 0);
+        digester.addCallMethod(prefix + "/tag-attribute",
+                               "setTagAttribute", 0);
 	
 	prefix = "faces-config/render-kit";
 	RenderKitRule rRule = new RenderKitRule(this);
 	digester.addRule(prefix, rRule);
+
+	// Component Patterns
+
+        prefix = "faces-config";
+	
+        digester.addObjectCreate(prefix, 
+            "com.sun.faces.generate.ConfigComponents");
+	prefix = prefix + "/component";
+        digester.addObjectCreate(prefix, 
+	    "com.sun.faces.generate.ConfigComponent");
+        digester.addSetNext(prefix, "addComponent", 
+	    "com.sun.faces.generate.ConfigComponent");
+        digester.addCallMethod(prefix + "/component-type",
+            "setComponentType", 0);
+        digester.addCallMethod(prefix + "/component-class",
+            "setComponentClass", 0);
+
+	// for nested "property" elements within "component" elements
+	//
+	prefix = prefix + "/property";
+	digester.addObjectCreate(prefix,
+            "com.sun.faces.generate.ConfigAttribute");
+	digester.addSetNext(prefix, "addProperty",
+            "com.sun.faces.generate.ConfigAttribute");
+        digester.addCallMethod(prefix + "/property-name",
+            "setAttributeName", 0);
+        digester.addCallMethod(prefix + "/property-class",
+            "setAttributeClass", 0);
+        digester.addCallMethod(prefix + "/description",
+                               "setDescription", 0);
+        digester.addCallMethod(prefix + "/tag-attribute",
+                               "setTagAttribute", 0);
+
+	// for nested "attribute" elements within "component" elements
+	//
+	prefix = "faces-config/component/attribute";
+	digester.addObjectCreate(prefix,
+            "com.sun.faces.generate.ConfigAttribute");
+	digester.addSetNext(prefix, "addProperty",
+            "com.sun.faces.generate.ConfigAttribute");
+        digester.addCallMethod(prefix + "/attribute-name",
+            "setAttributeName", 0);
+        digester.addCallMethod(prefix + "/attribute-class",
+            "setAttributeClass", 0);
+        digester.addCallMethod(prefix + "/description",
+                               "setDescription", 0);
+        digester.addCallMethod(prefix + "/tag-attribute",
+                               "setTagAttribute", 0);
+
+	prefix = "faces-config";
+	ComponentsRule cRule = new ComponentsRule(this);
+	digester.addRule(prefix, cRule);
     }
     
     //
@@ -204,6 +289,146 @@ class ConfigParser extends Object {
 	return result;
     }
 
+    String getRendererAttributeClass(String rendererType, String attributeName) {
+	String result = null;
+        ConfigRenderer cr = (ConfigRenderer)renderersByRendererType.get(
+	    rendererType);
+	if (cr == null) {
+	    return null;
+	}
+	return cr.getAttributeClass(attributeName);
+    }
+
+    String getRendererAttributeDescription(String rendererType, String attributeName) {
+	String result = null;
+        ConfigRenderer cr = (ConfigRenderer)renderersByRendererType.get(
+	    rendererType);
+	if (cr == null) {
+	    return null;
+	}
+	return cr.getAttributeDescription(attributeName);
+    }
+	    
+    String getRendererAttributeTagAttribute(String rendererType, String attributeName) {
+	String result = null;
+        ConfigRenderer cr = (ConfigRenderer)renderersByRendererType.get(
+	    rendererType);
+	if (cr == null) {
+	    return null;
+	}
+	return cr.getAttributeTagAttribute(attributeName);
+    }
+
+    Map getAttributesForComponent(String componentType) {
+	if (null == componentsByComponentType || null == componentType) {
+	    return Collections.EMPTY_MAP;
+	} 
+        ConfigComponent cc = (ConfigComponent)componentsByComponentType.
+	    get(componentType);
+	if (cc == null) {
+	    return Collections.EMPTY_MAP;
+	}
+	return cc.getProperties();
+    }
+
+    Iterator getComponentTypes(String rendererType) {
+	List results = new ArrayList();
+	if (null == renderersByRendererType) {
+	    return Collections.EMPTY_LIST.iterator();
+	}
+        Iterator iter = ((ConfigRenderer)renderersByRendererType.
+            get(rendererType)).getComponentTypes().iterator();
+	while (iter.hasNext()) {
+	    ConfigComponentType cc = (ConfigComponentType)iter.next();
+	    String typeName = cc.getComponentType();
+	    results.add(typeName);
+	}
+	if (results.size() > 0) {
+	    return results.iterator();
+	} else {
+            return Collections.EMPTY_LIST.iterator();
+        }
+    }
+
+    Iterator getComponentTypes() {
+	Iterator result = null;
+	if (null == componentsByComponentType) {
+	    result = Collections.EMPTY_LIST.iterator();
+	}
+	else {
+	    result = componentsByComponentType.keySet().iterator();
+	}
+	return result;
+    }
+
+    /**
+     * <p> Returns a List of the supported attribute names for a component type
+     * and renderer type.  This would correspond to the nested 
+     * <code><attribute-name></code> element within <code><supported-component-type>
+     * </code>.
+     */
+    List getSupportedAttributeNames(String componentType, String rendererType) {
+        if (null == renderersByRendererType) {
+	    return Collections.EMPTY_LIST;
+	}
+        ConfigRenderer renderer = (ConfigRenderer)renderersByRendererType.get(rendererType);
+        if (renderer == null) {
+	    return Collections.EMPTY_LIST;
+	}
+	List componentTypes = renderer.getComponentTypes();
+	if (componentTypes == Collections.EMPTY_LIST) {
+	    return Collections.EMPTY_LIST;
+	}
+	List result = Collections.EMPTY_LIST;
+	Iterator iter = componentTypes.iterator();
+        while (iter.hasNext()) {
+	    ConfigComponentType cType = (ConfigComponentType)iter.next();
+	    if (cType.getComponentType().equals(componentType)) {
+	        result = cType.getAttributeNames();
+		break;
+	    }
+	}
+	return result;
+    }
+
+    String getComponentPropertyClass(String componentType, String propertyName) {
+	String result = null;
+        ConfigComponent cc = (ConfigComponent)componentsByComponentType.get(
+	    componentType);
+	if (cc == null) {
+	    return null;
+	}
+	return cc.getPropertyClass(propertyName);
+    }
+
+    String getComponentPropertyDescription(String componentType, String propertyName) {
+	String result = null;
+        ConfigComponent cc = (ConfigComponent)componentsByComponentType.get(
+	    componentType);
+	if (cc == null) {
+	    return null;
+	}
+	return cc.getPropertyDescription(propertyName);
+    }
+	    
+    String getComponentPropertyTagAttribute(String componentType, String propertyName) {
+	String result = null;
+        ConfigComponent cc = (ConfigComponent)componentsByComponentType.get(
+	    componentType);
+	if (cc == null) {
+	    return null;
+	}
+	return cc.getPropertyTagAttribute(propertyName);
+    }
+
+    boolean componentHasRenderer(String componentType) {
+        boolean result = true;
+	if (componentsWithNoRenderer.contains(componentType)) {
+	    result = false;
+	}
+	return result;
+    }
+
     // 
     // Class methods
     //
@@ -251,10 +476,13 @@ class ConfigParser extends Object {
 	    Map renderers = cr.getRenderers();
 	    List
 		rList = null,
-		cClasses = null; // component classes
+		cClasses = null,
+		rendererList = null,
+		cTypes = null; // component classes
 	    Iterator iter = renderers.keySet().iterator();
 	    String 
 		className = null,
+	        cType = null,
 		rType = null;
 	    while (iter.hasNext()) {
 		rType = (String) iter.next();
@@ -277,10 +505,54 @@ class ConfigParser extends Object {
 		    }
 		}
 
+		// Build renderer by component type view..
+		//
+		if (null != (cTypes = renderer.getComponentTypes())) {
+		    for (int i = 0, len = cTypes.size(); i < len; i++) {
+			cType = ((ConfigComponentType)cTypes.get(i)).getComponentType();
+			if (null == (rendererList = (List)
+				     parser.renderersByComponentType.get(cType))){
+			    rendererList = new ArrayList();
+			    parser.renderersByComponentType.put(cType, rendererList);
+			}
+			rendererList.add(rType);
+		    }
+		}
+
 		parser.renderersByRendererType.put(rType, renderer);
 	    }
-		
 	    return;
+	}
+    }
+
+    final class ComponentsRule extends Rule {
+	ConfigParser parser = null;
+	
+	public ComponentsRule(ConfigParser newParser) {
+	    super();
+	    parser = newParser;
+	}
+	public void end(String namespace, String name) throws Exception {
+	    ConfigComponents cc = (ConfigComponents) this.digester.peek();
+	    ConfigComponent component = null;
+	    Map components = cc.getComponents();
+
+	    String componentType = null;
+	    Iterator iter = components.keySet().iterator();
+	    while (iter.hasNext()) {
+	        componentType = (String)iter.next();
+		component = (ConfigComponent)components.get(componentType);
+		parser.componentsByComponentType.put(componentType, component);
+	    }
+	    // Keep track of the components that are not associated with a renderer..
+	    //
+            Iterator componentTypes = componentsByComponentType.keySet().iterator();
+	    while (componentTypes.hasNext()) {
+		componentType = (String)componentTypes.next();
+	        if (parser.renderersByComponentType.get(componentType) == null) {
+		    componentsWithNoRenderer.add(componentType);
+		}
+	    }
 	}
     }
 

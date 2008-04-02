@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.2 2003/10/14 16:42:34 rkitain Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.3 2003/11/04 18:38:34 rkitain Exp $
  */
 
 /*
@@ -38,36 +38,12 @@ public class GenerateConcreteClasses extends GenerateBase {
     
     // Relationship Instance Variables
 
-    protected Map defaultPrimitiveValues = null;
-
-    protected Map wrappersForNumbers = null;
-    
     //
     // Constructors and Initializers    
     //
     
     public GenerateConcreteClasses() {
 	super();
-
-	defaultPrimitiveValues = new HashMap(7);
-	defaultPrimitiveValues.put("char", "Character.MIN_VALUE");
-	defaultPrimitiveValues.put("double", "Double.MIN_VALUE");
-	defaultPrimitiveValues.put("float", "Float.MIN_VALUE");
-	defaultPrimitiveValues.put("short", "Short.MIN_VALUE");
-	defaultPrimitiveValues.put("byte", "Byte.MIN_VALUE");
-	defaultPrimitiveValues.put("long", "Long.MIN_VALUE");
-	defaultPrimitiveValues.put("int", "Integer.MIN_VALUE");
-	defaultPrimitiveValues.put("boolean", "false");
-
-	wrappersForNumbers = new HashMap(7);
-	wrappersForNumbers.put("char", "Character");
-	wrappersForNumbers.put("double", "Double");
-	wrappersForNumbers.put("float", "Float");
-	wrappersForNumbers.put("short", "Short");
-	wrappersForNumbers.put("byte", "Byte");
-	wrappersForNumbers.put("long", "Long");
-	wrappersForNumbers.put("int", "Integer");
-
     }
 
     //
@@ -258,7 +234,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	while (iter.hasNext()) {
 	    attrName = ((String) iter.next()).trim();
 	    ivar = generateIvar(attrName);
-	    attrClass = ((String) attrs.get(attrName)).trim();
+	    attrClass = getParser().getRendererAttributeClass(rendererType,attrName).trim();
 	    // ivar declaration
 	    result.append("  protected " + attrClass + " " + ivar);
 	    // if it's a primitive
@@ -296,14 +272,14 @@ public class GenerateConcreteClasses extends GenerateBase {
 	// StateHolder
 	//
 	if (0 < attrs.keySet().size()) {
-	    generateStateHolder(result, attrs);
+	    generateStateHolder(result, rendererType, attrs);
 	}
 
 	result.append("}\n");
 	return result.toString();
     }
 
-    protected void generateStateHolder(StringBuffer result,
+    protected void generateStateHolder(StringBuffer result, String rendererType,
 				       Map attrs) {
 	int 
 	    curAttr = 1,
@@ -329,7 +305,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	while (iter.hasNext()) {
 	    attrName = ((String) iter.next()).trim();
 	    ivar = generateIvar(attrName);
-	    attrClass = ((String) attrs.get(attrName)).trim();
+	    attrClass = getParser().getRendererAttributeClass(rendererType,attrName).trim();
 	    // if it's a primitive
 	    if (isPrimitive(attrClass)) {
 		// wrap it
@@ -373,7 +349,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	while (iter.hasNext()) {
 	    attrName = ((String) iter.next()).trim();
 	    ivar = generateIvar(attrName);
-	    attrClass = ((String) attrs.get(attrName)).trim();
+	    attrClass = getParser().getRendererAttributeClass(rendererType,attrName).trim();
 	    // if it's a primitive
 	    if (isPrimitive(attrClass)) {
 		// un-wrap it
@@ -401,10 +377,6 @@ public class GenerateConcreteClasses extends GenerateBase {
 	}
 	result.append("  }\n");
 
-    }
-
-    protected boolean isPrimitive(String attrClass) {
-	return defaultPrimitiveValues.containsKey(attrClass);
     }
 
     protected Log getLog() {

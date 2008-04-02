@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.1 2003/10/09 16:37:16 eburns Exp $
+ * $Id: GenerateBase.java,v 1.2 2003/11/04 18:38:33 rkitain Exp $
  */
 
 /*
@@ -19,6 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
 import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
 import org.xml.sax.EntityResolver;
@@ -48,16 +50,37 @@ public abstract class GenerateBase extends Object {
 
     File outputDir = null;
 
+    protected Map defaultPrimitiveValues = null;
+    protected Map wrappersForNumbers = null;
+
     //
     // Constructors and Initializers    
     //
     
     public GenerateBase() {
 	super();
-    }
+	defaultPrimitiveValues = new HashMap(7);
+	defaultPrimitiveValues.put("char", "Character.MIN_VALUE");
+	defaultPrimitiveValues.put("double", "Double.MIN_VALUE");
+	defaultPrimitiveValues.put("float", "Float.MIN_VALUE");
+	defaultPrimitiveValues.put("short", "Short.MIN_VALUE");
+	defaultPrimitiveValues.put("byte", "Byte.MIN_VALUE");
+	defaultPrimitiveValues.put("long", "Long.MIN_VALUE");
+	defaultPrimitiveValues.put("int", "Integer.MIN_VALUE");
+	defaultPrimitiveValues.put("boolean", "false");
 
+	wrappersForNumbers = new HashMap(7);
+	wrappersForNumbers.put("char", "Character");
+	wrappersForNumbers.put("double", "Double");
+	wrappersForNumbers.put("float", "Float");
+	wrappersForNumbers.put("short", "Short");
+	wrappersForNumbers.put("byte", "Byte");
+	wrappersForNumbers.put("long", "Long");
+	wrappersForNumbers.put("int", "Integer");
+    }
+   
     //
-    // Methods to be used by subclass
+    // Methods to be used by subclass(s)
     // 
 
     protected ConfigParser getParser() {
@@ -67,6 +90,10 @@ public abstract class GenerateBase extends Object {
     protected String getTopMatter() {
 	return topMatter;
     }
+
+    protected boolean isPrimitive(String attrClass) {
+	return defaultPrimitiveValues.containsKey(attrClass);
+    } 
 
     /**
      * <p>Validate and convert the arguments into our internal

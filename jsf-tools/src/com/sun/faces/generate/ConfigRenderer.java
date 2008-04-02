@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigRenderer.java,v 1.1 2003/10/09 16:37:15 eburns Exp $
+ * $Id: ConfigRenderer.java,v 1.2 2003/11/04 18:38:33 rkitain Exp $
  */
 
 /*
@@ -27,8 +27,7 @@ public class ConfigRenderer extends Object {
         if (attributes == null) {
             attributes = new HashMap();
         }
-        attributes.put(attribute.getAttributeName(), 
-		       attribute.getAttributeClass());
+        attributes.put(attribute.getAttributeName(), attribute); 
     }
     public Map getAttributes() {
         if (attributes == null) {
@@ -36,6 +35,30 @@ public class ConfigRenderer extends Object {
         } else {
             return (attributes);
         }
+    }
+    public ConfigAttribute getAttribute(String attributeName) {
+        return (ConfigAttribute)attributes.get(attributeName);
+    }
+    public String getAttributeClass(String attributeName) {
+        ConfigAttribute attribute = (ConfigAttribute)attributes.get(attributeName);
+	if (attribute == null) {
+	    return null;
+	}
+	return attribute.getAttributeClass();
+    }
+    public String getAttributeDescription(String attributeName) {
+        ConfigAttribute attribute = (ConfigAttribute)attributes.get(attributeName);
+	if (attribute == null) {
+	    return null;
+	}
+	return attribute.getDescription();
+    }
+    public String getAttributeTagAttribute(String attributeName) {
+        ConfigAttribute attribute = (ConfigAttribute)attributes.get(attributeName);
+	if (attribute == null) {
+	    return null;
+	}
+	return attribute.getTagAttribute();
     }
 
     private String rendererType;
@@ -64,4 +87,21 @@ public class ConfigRenderer extends Object {
 	componentClasses.add(componentClass);
     }
 
+    private List componentTypes = null;
+    public List getComponentTypes() {
+	List result = null;
+	if (null == componentTypes) {
+	    result = Collections.EMPTY_LIST;
+	}
+	else {
+	    result = componentTypes;
+	}
+	return result;
+    }
+    public void addComponentType(ConfigComponentType componentType) {
+	if (null == componentTypes) {
+	    componentTypes = new ArrayList();
+	}
+	componentTypes.add(componentType);
+    }
 }

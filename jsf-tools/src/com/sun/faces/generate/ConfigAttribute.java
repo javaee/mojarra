@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigAttribute.java,v 1.1 2003/10/09 16:37:14 eburns Exp $
+ * $Id: ConfigAttribute.java,v 1.2 2003/11/04 18:38:32 rkitain Exp $
  */
 
 /*
@@ -31,4 +31,19 @@ public class ConfigAttribute extends Object {
         this.attributeName = attributeName;
     }
 
+    private String description;
+    public String getDescription() {
+        return (this.description);
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    private String tagAttribute;
+    public String getTagAttribute() {
+        return (this.tagAttribute);
+    }
+    public void setTagAttribute(String tagAttribute) {
+        this.tagAttribute = tagAttribute;
+    }
 }
