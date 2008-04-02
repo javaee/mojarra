@@ -1,5 +1,5 @@
 /*
- * $Id: LoginBean.java,v 1.4 2003/10/01 17:14:10 jvisvanathan Exp $
+ * $Id: LoginBean.java,v 1.5 2003/11/01 02:53:32 jvisvanathan Exp $
  */
 
 /*
@@ -10,6 +10,7 @@
 package standard;
 
 import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -26,6 +27,19 @@ public class LoginBean {
         "baked"
     };
     
+    private static final SelectItem options1[] = {
+        new SelectItem("pinto","pinto", "pinto"),
+        new SelectItem("black","black", "black"),
+        new SelectItem("garbanzo","garbanzo", "garbanzo")
+    };
+    
+    private static final SelectItem options2[] = {
+        new SelectItem("green","green", "green"),
+        new SelectItem("string","string", "string"),
+        new SelectItem("coffee","coffee", "coffee"),
+        new SelectItem("baked","baked", "baked")
+    };
+    
     Long[] longOptions = {new Long(1001), new Long(1002),new Long(1003)};
     Boolean booleanOptions[] = {new Boolean(true), new Boolean(false), 
             new Boolean(false)};
@@ -39,6 +53,8 @@ public class LoginBean {
     
     private double doubleVal;
     private ArrayList options = null;
+    private ArrayList optionsGroup = null;
+    
     private Object currentOption = defaultOptions[4];
     private ArrayList currentOptions = null;
     private Date date = new Date(System.currentTimeMillis());
@@ -62,6 +78,9 @@ public class LoginBean {
     private SelectItem nextMonth = null;
     private SelectItem nextDay = null;
 
+    SelectItemGroup group1 = null;
+    SelectItemGroup group2 = null;
+        
     public LoginBean() {
         System.out.println("Model Object Created");
         options = new ArrayList(defaultOptions.length);
@@ -69,7 +88,14 @@ public class LoginBean {
         for (i = 0; i < defaultOptions.length; i++) {
             options.add(new SelectItem(defaultOptions[i], defaultOptions[i],
                 defaultOptions[i]));
-        }
+        } 
+        
+        optionsGroup = new ArrayList(2);
+        group1 = new SelectItemGroup("coffee1", null, true, options1);
+        group2 = new SelectItemGroup("coffee2", null, true, options2);
+        optionsGroup.add(group1);
+        optionsGroup.add(group2);
+        
         currentOptions = new ArrayList(2);
         currentOptions.add(defaultOptions[3]);
         currentOptions.add(defaultOptions[4]);
@@ -213,6 +239,14 @@ public class LoginBean {
 
     public void setOptions(Collection newOptions) {
         options = new ArrayList(newOptions);
+    }
+    
+    public Collection getOptionsGroup() {
+        return optionsGroup;
+    }
+
+    public void setOptionsGroup(Collection newGroupOptions) {
+        optionsGroup = new ArrayList(newGroupOptions);
     }
 
     public Object getCurrentOption() {

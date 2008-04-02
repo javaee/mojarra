@@ -98,5 +98,26 @@
 		    </h:selectone_radio></td>
 	   </tr>
 
+           <tr>
+
+             <td>
+                 <h:output_text value="Radio with optionGroups from model " />
+
+             </td>
+
+
+             <td>
+                 <h:selectone_radio id="radioFromModelGroup"
+                       valueRef="LoginBean.currentOption"
+                       title="options come from model"
+                       layout="LINE_DIRECTION" >
+
+                 <f:selectitems id="radioOptionsGroup" valueRef="LoginBean.optionsGroup"/>
+                </h:selectone_radio>
+
+             </td>
+
+            </tr>
+
 
 

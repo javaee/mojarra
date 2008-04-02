@@ -52,3 +52,12 @@
 							valueRef="LoginBean.longList" />
 					</h:selectmany_checkboxlist></td>
 				</tr>
+
+                                <tr>
+					<td>Multi-select checklistmodelGroup:</td>
+					<td><h:selectmany_checkboxlist id="checklistmodelGroup"
+						valueRef="LoginBean.currentOptions">
+						<f:selectitems id="checklistmodelitemsGroup"
+							valueRef="LoginBean.optionsGroup" />
+					</h:selectmany_checkboxlist></td>
+				</tr

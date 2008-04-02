@@ -35,3 +35,12 @@
 							valueRef="LoginBean.longList" />
 					</h:selectmany_listbox></td>
 				</tr>
+
+                                <tr>
+					<td>Multi-select listmodel Group:</td>
+					<td><h:selectmany_listbox id="listmodelGroup"
+						valueRef="LoginBean.currentOptions">
+						<f:selectitems id="listmodelitemsGroup"
+							valueRef="LoginBean.optionsGroup" />
+					</h:selectmany_listbox></td>
+				</tr>
