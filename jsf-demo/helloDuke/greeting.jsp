@@ -39,18 +39,17 @@
 
 <HTML>
     <HEAD> <title>Hello</title> </HEAD>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
     <img src="/helloDuke/wave.med.gif">
     <h2>My name is Duke.  What is yours?</h2>
     <jsp:useBean id="UserNameBean" class="helloDuke.UserNameBean" scope="session" />
-    <faces:usefaces>
-    <faces:form id="helloForm" formName="helloForm" >
-  	<faces:input_text id="username"
+    <f:usefaces>
+    <h:form id="helloForm" formName="helloForm" >
+  	<h:input_text id="username"
 			modelReference="UserNameBean.userName"/>
-  	<faces:command_button id="submit" commandName="submit">
-           Submit
-        </faces:command_button>
-    </faces:form>
-    </faces:usefaces>
-    </HTML>  
+  	<h:command_button id="submit" label="Submit" commandName="submit" />
+    </h:form>
+    </f:usefaces>
+</HTML>  

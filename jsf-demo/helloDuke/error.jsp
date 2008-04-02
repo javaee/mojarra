@@ -39,15 +39,14 @@
 
 <HTML>
     <HEAD> <TITLE> JSF Basic Components Test Page </TITLE> </HEAD>
-    <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <H3> JSF Basic Components Test Page </H3>
     <hr>
-      <faces:usefaces>
-        <faces:form id="errorForm' formName="errorForm">
-
-            <faces:output_text id="hello_label" text="Login Failed" />
+      <f:usefaces>
+        <h:form id="errorForm" formName="errorForm">
+            <h:output_text id="hello_label" text="Login Failed" />
              <P></P>
-        </faces:form>
-       </faces:usefaces>
+        </h:form>
+       </f:usefaces>
 </HTML>

@@ -38,15 +38,16 @@
 -->
 <HTML>
     <HEAD> <title>Hello</title> </HEAD>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
     <img src="/helloDuke/wave.med.gif">
-    <faces:usefaces>
-    <faces:form id="responseform" formName="responseform">
-    <h2>Hi, <faces:output_text id="userLabel"
-			   modelReference="${UserNameBean.userName}" /> </h2>
-	 <faces:command_button id="back" commandName="back">back
-         </faces:command_button><p>
-    </faces:form>
-    </faces:usefaces>
+    <f:usefaces>
+    <h:form id="responseform" formName="responseform">
+    <h2>Hi, <h:output_text id="userLabel"
+			   modelReference="UserNameBean.userName" /> </h2>
+	 <h:command_button id="back" label="Back" commandName="back" />
+         <p>
+    </h:form>
+    </f:usefaces>
 </HTML>  

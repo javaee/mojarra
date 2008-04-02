@@ -38,15 +38,16 @@
 
 <HTML>
     <HEAD> <title>Guess The Number</title> </HEAD>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
     <img src="/guessNumber/wave.med.gif">
-    <faces:usefaces>
-    <faces:form id="responseForm" formName="responseForm" >
-    <h2><faces:output_text id="result" 
+    <f:usefaces>
+    <h:form id="responseForm" formName="responseForm" >
+    <h2><h:output_text id="result" 
     			modelReference="UserNumberBean.response"/></h2>   
-	 <faces:command_button id="back" commandName="back">Back</faces:command_button><p>
+    <h:command_button id="back" label="Back" commandName="back" /><p>
 
-    </faces:form>
-    </faces:usefaces>
+    </h:form>
+    </f:usefaces>
  </HTML>

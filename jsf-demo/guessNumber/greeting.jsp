@@ -38,33 +38,23 @@
 
 <HTML>
     <HEAD> <title>Hello</title> </HEAD>
-    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
+    <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="h" %>
+    <%@ taglib uri="http://java.sun.com/jsf/core/" prefix="f" %>
     <body bgcolor="white">
     <img src="/guessNumber/wave.med.gif">
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
     <jsp:useBean id="UserNumberBean" class="guessNumber.UserNumberBean" scope="session" />
-    <faces:usefaces>
-    <faces:form id="helloForm" formName="helloForm" >
-  	<faces:input_number id="userNo" numberStyle="NUMBER"
+    <f:usefaces>
+    <h:form id="helloForm" formName="helloForm" >
+  	<h:input_number id="userNo" numberStyle="NUMBER"
    				modelReference="UserNumberBean.userNumber">
-	        <faces:validator 
-                       className="javax.faces.validator.LongRangeValidator"/>
+	        <f:validate_longrange minimum="0" maximum="10" />
 
-		     <faces:attribute 
-                         name="javax.faces.validator.LongRangeValidator.MINIMUM"
-                         value="0"/>
-
-		     <faces:attribute 
-                         name="javax.faces.validator.LongRangeValidator.MAXIMUM"
-                         value="10"/>
-
-         </faces:input_number> 
-	 <faces:command_button id="submit" commandName="submit">
-         Submit
-         </faces:command_button>
+         </h:input_number> 
+	 <h:command_button id="submit" label="Submit" commandName="submit" />
          <p>
-	 <faces:output_errors id="errors1" compoundId="/helloForm/userNo"/>
-    </faces:form>
-    </faces:usefaces>
+	 <h:output_errors id="errors1" compoundId="/helloForm/userNo"/>
+    </h:form>
+    </f:usefaces>
 </HTML>  
