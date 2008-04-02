@@ -152,6 +152,7 @@
     <navigation-case>
       <from-outcome>loginRequired</from-outcome>
       <to-view-id>/must-login-first.jsp</to-view-id>
+      <redirect/>
     </navigation-case>
   </navigation-rule>
 

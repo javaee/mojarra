@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.20 2003/10/15 02:03:24 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.21 2003/10/18 00:27:54 craigmcc Exp $
 
 -->
 
@@ -278,7 +278,7 @@
     conditions that must match for this case to be executed, and the
     view id of the component tree that should be selected next.
 -->
-<!ELEMENT navigation-case (description*, display-name*, icon*, from-action-ref?, from-outcome?, to-view-id)>
+<!ELEMENT navigation-case (description*, display-name*, icon*, from-action-ref?, from-outcome?, to-view-id, redirect?)>
 
 
 <!--
@@ -654,6 +654,14 @@ name of the concrete PhaseListener implementation class that will be
 registered on the Lifecycle. It must be of type "ClassName".
 -->
 <!ELEMENT phase-listener (#PCDATA)>
+
+<!--
+    The "redirect" element indicates that navigation to the specified
+    "to-view-id" should be accomplished by performing an HTTP redirect
+    rather than the usual ViewHandler mechanisms.
+-->
+<!ELEMENT redirect EMPTY>
+
 
 <!--
 
