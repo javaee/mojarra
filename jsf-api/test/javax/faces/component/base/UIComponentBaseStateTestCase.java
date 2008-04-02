@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseStateTestCase.java,v 1.5 2003/09/15 20:17:38 eburns Exp $
+ * $Id: UIComponentBaseStateTestCase.java,v 1.6 2003/09/16 23:12:26 eburns Exp $
  */
 
 /*
@@ -103,6 +103,10 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	input1.setRendererType(null);
 	UIInputBase input2 = new UIInputBaseTestCase.UIInputSub();
 	input2.setRendererType(null);
+	UIPanelBase header = new UIPanelBase();
+	header.setRendererType(null);
+	UIPanelBase footer = new UIPanelBase();
+	footer.setRendererType(null);
 	UIOutputBase output1 = new UIOutputBase();
 	output1.setRendererType(null);
 	UICommandBase command = new UICommandBaseTestCase.UICommandSub();
@@ -112,6 +116,8 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 
 	root.getChildren().add(form);
 	form.getChildren().add(input1);
+	input2.getFacets().put("header", header);
+	input2.getFacets().put("footer", footer);
 	form.getChildren().add(input2);
 	form.getChildren().add(output1);
 	form.getChildren().add(command);
@@ -146,6 +152,10 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	input.setRequired(false);
 	input.addValueChangedListener(new TestValueChangedListener("ANY2",
 								   PhaseId.ANY_PHASE));
+
+	((UIPanelBase)input.getFacets().get("header")).setId("header");
+	((UIPanelBase)input.getFacets().get("footer")).setId("footer");
+
 	doubleVal = new DoubleRangeValidator();
 	doubleVal.setMinimum(1);
 	doubleVal.setMaximum(3);
@@ -185,6 +195,7 @@ public class UIComponentBaseStateTestCase extends UIComponentBaseTestCase {
 	UIInputBase input2 = (UIInputBase) form2.getChildren().get(0);
 	assertTrue(inputBaseTester.propertiesAreEqual(facesContext, 
 						      input1, input2));
+	assertTrue(this.propertiesAreEqual(facesContext, input1, input1));
 
 	input1 = (UIInputBase) form1.getChildren().get(1);
 	input2 = (UIInputBase) form2.getChildren().get(1);

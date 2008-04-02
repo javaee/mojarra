@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBaseTestCase.java,v 1.13 2003/09/15 20:17:38 eburns Exp $
+ * $Id: UIComponentBaseTestCase.java,v 1.14 2003/09/16 23:12:26 eburns Exp $
  */
 
 /*
@@ -436,12 +436,35 @@ public class UIComponentBaseTestCase extends UIComponentTestCase {
 				      comp2.getRendererType())) {
 	    return false;
 	}
-	if (comp1.isTransient() != comp2.isTransient()) {
-	    return false;
-	}
 	if (!attributesAreEqual(comp1, comp2)) {
 	    return false;
 	}
+
+	// test facets are equal
+	Iterator iter = comp1.getFacets().keySet().iterator();
+	UIComponent 
+	    facet1 = null,
+	    facet2 = null;
+	String curFacetName = null;
+	UIComponentBaseTestCase testFacets = new UIComponentBaseTestCase("t");
+	while (iter.hasNext()) {
+	    facet1 = (UIComponent) 
+		comp1.getFacets().get(curFacetName = (String) iter.next());
+	    facet2 = (UIComponent) comp2.getFacets().get(curFacetName);
+	    assertNotNull(facet2);
+	    assertTrue(testFacets.propertiesAreEqual(context, facet1, facet2));
+	}
+
+	iter = comp2.getFacets().keySet().iterator();
+	while (iter.hasNext()) {
+	    facet1 = (UIComponent) 
+		comp2.getFacets().get(curFacetName = (String) iter.next());
+	    facet2 = (UIComponent) comp1.getFacets().get(curFacetName);
+	    assertNotNull(facet2);
+	    assertTrue(testFacets.propertiesAreEqual(context, facet1, facet2));
+	}
+
+
 	return true;
     }
 

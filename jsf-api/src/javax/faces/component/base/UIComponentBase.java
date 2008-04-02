@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.15 2003/09/15 23:18:57 jvisvanathan Exp $
+ * $Id: UIComponentBase.java,v 1.16 2003/09/16 23:12:24 eburns Exp $
  */
 
 /*
@@ -43,6 +43,7 @@ import javax.faces.render.Renderer;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import javax.faces.validator.Validator;
+import javax.faces.application.StateHolderSaver;
 
 
 /**
@@ -1180,46 +1181,87 @@ public abstract class UIComponentBase implements UIComponent {
     private static final int CHILD_STATE = 1;
 
     public Object processSaveState(FacesContext context) {
-
+	
         if (context == null) {
             throw new NullPointerException();
         }
+	if (this.isTransient()) {
+	    return null;
+	}
 	Object [] stateStruct = new Object[2];
 	Object [] childState = null;
+	
+        // Process all the children of this component
+	int i = 0, len = getChildren().size() + getFacets().keySet().size();
 
-        // Process all facets and children of this component
-	int i = 0, len = getFacets().values().size() + getChildren().size();
 	childState = new Object[len];
 	stateStruct[CHILD_STATE] = childState;
-        Iterator kids = getFacetsAndChildren();
+        Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
 	    childState[i++] = kid.processSaveState(context);
         }
-
+        
+        Iterator myFacets = getFacets().keySet().iterator();
+	String facetName = null;
+	UIComponent facet = null;
+	Object facetState = null;
+	Object[][] facetSaveState = null;
+        while (myFacets.hasNext()) {
+            facetName = (String) myFacets.next();
+            facet = (UIComponent) getFacets().get(facetName);
+	    if (!facet.isTransient()) {
+		facetState = facet.processSaveState(context);
+		facetSaveState = new Object[1][2];
+		facetSaveState[0][0] = facetName;
+		facetSaveState[0][1] = facetState;
+		childState[i] = facetSaveState;
+	    }
+	    else {
+		childState[i] = null;
+	    }
+	    i++;
+        }
+	
         // Process this component itself
         stateStruct[MY_STATE] = saveState(context);
 	return stateStruct;
     }
-
-    public void processRestoreState(FacesContext context, 
+    
+    public void processRestoreState(FacesContext context,
 				    Object state) {
-
+	
         if (context == null) {
             throw new NullPointerException();
         }
-
+	
 	Object [] stateStruct = (Object []) state;
 	Object [] childState = (Object []) stateStruct[CHILD_STATE];
 	int i = 0;
-
-        // Process all facets and children of this component
-        Iterator kids = getFacetsAndChildren();
+	
+        // Process all the children of this component
+        Iterator kids = getChildren().iterator();
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             kid.processRestoreState(context, childState[i++]);
         }
-
+        
+        int facetsSize = getFacets().size();
+        int j = 0;
+	Object[][] facetSaveState = null;
+	String facetName = null;
+	UIComponent facet = null;
+	Object facetState = null;
+        while (j < facetsSize) {
+	    if (null != (facetSaveState = (Object[][])childState[i++])) {
+		facetName = (String) facetSaveState[0][0];
+		facetState = facetSaveState[0][1];
+		facet = (UIComponent) getFacets().get(facetName);
+		facet.processRestoreState(context, facetState);
+	    }
+            ++j;
+        }
+	
         // Process this component itself
 	try {
 	    restoreState(context, stateStruct[MY_STATE]);
@@ -1228,9 +1270,7 @@ public abstract class UIComponentBase implements UIComponent {
 	    throw new FacesException(ioe);
 	}
     }
-
-
-
+    
     // ------------------------------------------------------- Protected Methods
 
 
@@ -1261,7 +1301,7 @@ public abstract class UIComponentBase implements UIComponent {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[8];
+        Object values[] = new Object[7];
         values[0] = attributes;
         values[1] = getClientId(context);
         values[2] = componentRef;
@@ -1271,11 +1311,10 @@ public abstract class UIComponentBase implements UIComponent {
         values[6] =
             context.getApplication().getViewHandler().getStateManager().
             getAttachedObjectState(context, this, null, listeners);
-	// PENDING(edburns): don't save the transient flag.  Asssert
-	// that it is false here.
-        values[7] = transientFlag ? Boolean.TRUE : Boolean.FALSE;
+	// Don't save the transient flag.  Asssert that it is false
+	// here.
+		    
         return (values);
-
     }
 
 
@@ -1294,8 +1333,6 @@ public abstract class UIComponentBase implements UIComponent {
         listeners = (List[])
             context.getApplication().getViewHandler().getStateManager().
             restoreAttachedObjectState(context, values[6], listeners);
-        transientFlag = ((Boolean) values[7]).booleanValue();
-
     }
 
 

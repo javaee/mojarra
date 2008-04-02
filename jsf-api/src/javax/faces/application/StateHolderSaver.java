@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.4 2003/09/15 23:18:48 jvisvanathan Exp $
+ * $Id: StateHolderSaver.java,v 1.5 2003/09/16 23:12:23 eburns Exp $
  */
 
 /*
@@ -20,12 +20,16 @@ import java.io.Serializable;
 /**
  * <p>Helper class for saving and restoring attached objects.</p>
  *
+ * <p>PENDING(edburns): move this to the component.base package, along
+ * with the {get,restore}AttachedObjectState() machinery.  Make it
+ * package private again.</p>
+ *
  */
-class StateHolderSaver extends Object implements Serializable {
+public class StateHolderSaver extends Object implements Serializable {
     protected String className = null;
     protected Object savedState = null;
 
-    StateHolderSaver(FacesContext context, Object toSave) {
+    public StateHolderSaver(FacesContext context, Object toSave) {
         className = toSave.getClass().getName();
 
         if (toSave instanceof StateHolder) {
@@ -43,7 +47,7 @@ class StateHolderSaver extends Object implements Serializable {
      * @return the restored {@link StateHolder} instance.
      */
 
-    Object restore(FacesContext context) throws IOException {
+    public Object restore(FacesContext context) throws IOException {
         Object result = null;
         Class toRestoreClass = null;
         if ( className == null) {
