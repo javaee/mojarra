@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutputTestCase.java,v 1.4 2003/02/20 22:46:51 ofung Exp $
+ * $Id: UIOutputTestCase.java,v 1.5 2003/03/13 01:12:41 craigmcc Exp $
  */
 
 /*
@@ -76,8 +76,8 @@ private class UIOutputNamingContainer extends UIOutput implements NamingContaine
 
         component = new UIOutputNamingContainer();
         component.setComponentId("test");
-        attributes = new String[]
-            { "componentId", "rendersChildren" };
+        attributes = new String[0];
+        rendererType = "Text";
 
     }
 

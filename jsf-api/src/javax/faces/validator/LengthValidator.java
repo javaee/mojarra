@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.14 2003/02/20 22:46:40 ofung Exp $
+ * $Id: LengthValidator.java,v 1.15 2003/03/13 01:12:28 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.validator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 
@@ -228,7 +229,7 @@ public class LengthValidator extends ValidatorBase {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
+        Object value = ((UIInput) component).getValue();
         if (value != null) {
             String converted = stringValue(value);
             if (isMaximumSet() &&

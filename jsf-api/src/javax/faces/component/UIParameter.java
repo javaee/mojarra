@@ -1,5 +1,5 @@
 /*
- * $Id: UIParameter.java,v 1.4 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UIParameter.java,v 1.5 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -8,10 +8,6 @@
  */
 
 package javax.faces.component;
-
-
-import java.io.IOException;
-import javax.faces.context.FacesContext;
 
 
 /**
@@ -41,6 +37,21 @@ public class UIParameter extends UIOutput {
      * The component type of this {@link UIComponent} subclass.
      */
     public static final String TYPE = "javax.faces.component.UIParameter";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UIParameter} instance with default property
+     * values.</p>
+     */
+    public UIParameter() {
+
+        super();
+        setRendererType(null);
+
+    }
 
 
     // ------------------------------------------------------------- Attributes
@@ -86,63 +97,6 @@ public class UIParameter extends UIOutput {
     public boolean getRendersSelf() {
 
         return (true);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeBegin(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeChildren(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the response we are creating
-     *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
     }
 

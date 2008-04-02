@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.75 2003/02/20 22:46:11 ofung Exp $
+ * $Id: UIComponent.java,v 1.76 2003/03/13 01:11:57 craigmcc Exp $
  */
 
 /*
@@ -41,24 +41,6 @@ public interface UIComponent extends Serializable {
 
 
     // ----------------------------------------------------- Manifest Constants
-
-
-    /**
-     * <p>The attribute name under which the client identifier for this
-     * component is stored, if one has been generated.</p>
-     */
-    public static final String CLIENT_ID_ATTR =
-        "clientId";
-
-
-    /**
-     * <p>For {@link UIComponent}s that are facets, the attribute name under
-     * which the owning {@link UIComponent} is stored.</p>
-     *
-     * @deprecated Use FACET_PARENT_ATTR instead
-     */ 
-    public static final String FACET_PARENT =
-        "javax.faces.component.FacetParent";
 
 
     /**
@@ -119,19 +101,13 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return a client-side identifier for this component.</p>
+     * <p>Return a client-side identifier for this component, generating
+     * one if necessary.  Generation will be delegated to the associated
+     * {@link javax.faces.render.Renderer} (if there is one).</p>
      *
-     * <p>If a client-side identifier has previously been generated for
-     * this component, and saved in the attribute named by
-     * <code>UIComponent.CLIENT_ID</code>,
-     * return that identifier value.  Otherwise, generate a new client-side
-     * identifier, save it in the attribute named by
-     * <code>UIComponent.CLIENT_ID</code>, and return it.</p>
+     * @param context The {@link FacesContext} for the current request
      *
-     * @param component {@link UIComponent} whose identifier is to be
-     *  returned
-     *
-     * @exception NullPointerException if <code>component</code>
+     * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public String getClientId(FacesContext context);
@@ -185,23 +161,6 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return the model reference expression of this
-     * {@link UIComponent}, if any.</p>
-     */
-    public String getModelReference();
-
-
-    /**
-     * <p>Set the model reference expression of this
-     * {@link UIComponent}.</p>
-     *
-     * @param modelReference The new model reference expression, or
-     *  <code>null</code> to disconnect this component from any model data
-     */
-    public void setModelReference(String modelReference);
-
-
-    /**
      * <p>Return the parent {@link UIComponent} of this
      * <code>UIComponent</code>, if any.</p>
      */
@@ -209,15 +168,25 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Return <code>true</code> if the value of the <code>rendered</code>
-     * attribute is a Boolean representing <code>true</code>, or is
-     * not present; otherwise return <code>false</code>.</p>
+     * <p>Set the parent <code>UIComponent</code> of this
+     * <code>UIComponent</code>.</p>
+     *
+     * @param parent The new parent, or <code>null</code> for the root node
+     *  of a component tree
+     */
+    public void setParent(UIComponent parent);
+
+
+    /**
+     * <p>Return <code>true</code> if this component (and its children)
+     * should be rendered during the <em>Render Response</em> phase
+     * of the request processing lifecycle.</p>
      */
     public boolean isRendered();
 
 
     /**
-     * <p>Set the <code>rendered</code> attribute of this
+     * <p>Set the <code>rendered</code> property of this
      * {@link UIComponent}.</p>
      * 
      * @param rendered If <code>true</code> render this component;
@@ -288,41 +257,6 @@ public interface UIComponent extends Serializable {
      * @param valid The new validity state
      */
     public void setValid(boolean valid);
-
-
-    /**
-     * <p>Return the local value of this {@link UIComponent}, if any.</p>
-     */
-    public Object getValue();
-
-
-    /**
-     * <p>Set the local value of this {@link UIComponent}.</p>
-     *
-     * @param value The new local value, or <code>null</code> for no value
-     */
-    public void setValue(Object value);
-
-
-    /**
-     * <p>Evaluate and return the current value of this component, according
-     * to the following algorithm.</p>
-     * <ul>
-     * <li>If the <code>value</code> property has been set (containing
-     *     the local value for this component), return that; else</li>
-     * <li>If the <code>modelReference</code> property has been set,
-     *     retrieve and return the corresponding model value, if possible;
-     *     else</li>
-     * <li>Return <code>null</code>.</li>
-     * </ul>
-     *
-     * @param context {@link FacesContext} within which to evaluate the model
-     *  reference expression, if necessary
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public Object currentValue(FacesContext context);
 
 
     // ------------------------------------------------ Tree Management Methods
@@ -705,35 +639,30 @@ public interface UIComponent extends Serializable {
 
 
     /**
-     * <p>Perform the following algorithm to update the model data
-     * associated with this {@link UIComponent}, if any, as appropriate.</p>
-     * <ul>
-     * <li>If the <code>valid</code> property of this component is
-     *     <code>false</code>, take no further action.</li>
-     * <li>If the <code>modelReference</code> property of this component
-     *     is <code>null</code>, take no further action.</li>
-     * <li>Call the <code>setModelValue()</code> method on the specified
-     *     {@link FacesContext} instance, passing this component's
-     *     <code>modelReference</code> property and its local value.</li>
-     * <li>If the <code>setModelValue()</code> method returns successfully:
-     *     <ul>
-     *     <li>Clear the local value of this {@link UIComponent}.</li>
-     *     <li>Set the <code>valid</code> property of this {@link UIComponent}
-     *         to <code>true</code>.</li>
-     *     </ul></li>
-     * <li>If the <code>setModelValue()</code> method call fails:
-     *     <ul>
-     *     <li>Enqueue error messages by calling <code>addMessage()</code>
-     *         on the specified {@link FacesContext} instance.</li>
-     *     <li>Set the <code>valid</code> property of this {@link UIComponent}
-     *         to <code>false</code>.</li>
-     *     </ul></li>
-     * </ul>
+     * <p>Perform any processing required to correct the state of this
+     * component as a result of the owning component tree having been
+     * reconstructed during <em>Reconstitute Component Tree</em> phase
+     * of the request processing lifecycle.  The default implementation
+     * of this method does nothing.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IllegalArgumentException if the <code>modelReference</code>
-     *  property has invalid syntax for an expression
+     * @exception IOException if an input/output error occurs during processing
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void reconstitute(FacesContext context) throws IOException;
+
+
+    /**
+     * <p>Update the model data associated with this {@link UIComponent},
+     * if any.  The default implementation in {@link UIComponentBase} does
+     * no processing; concrete implementations of components that represent
+     * controls that can be altered by users (such as {@link UIInput} must
+     * provide an apppropriate implementation of this method.</p>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -749,7 +678,7 @@ public interface UIComponent extends Serializable {
      * request, and the <code>valid</code> property of this {@link UIComponent}
      * should be set to <code>false</code>.</p>
      *
-     * @param context FacesContext for the request we are processing
+     * @param context {@link FacesContext} for the request we are processing
      *
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
@@ -758,6 +687,27 @@ public interface UIComponent extends Serializable {
 
 
     // ----------------------------------------------- Lifecycle Phase Handlers
+
+
+    /**
+     * <p>Perform the component tree processing required by the
+     * <em>Reconstitute Component Tree</em> phase of the request processing
+     * lifecyc,e for all facets of this component, all children of this
+     * component, and this component itself, as follows.</p>
+     * <ul>
+     * <li>Call the <code>processReconstitutes()</code> method of all facets
+     *     and children of this {@link UIComponent} in the order determined
+     *     by a call to <code>getFacetsAndChildren()</code>.</li>
+     * <li>Call the <code>reconstitute()</code> method of this component.</li>
+     * </ul>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception IOException if an input/output error occurs during processing
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void processReconstitutes(FacesContext context) throws IOException;
 
 
     /**

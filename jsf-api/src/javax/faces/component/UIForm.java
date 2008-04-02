@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.23 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UIForm.java,v 1.24 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -10,24 +10,18 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-
 /**
  * <p><strong>UIForm</strong> is a {@link UIComponent} that represents an
  * input form to be presented to the user, and whose child components represent
  * (among other things) the input fields to be included when the form is
  * submitted.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Form</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
-public class UIForm extends UIOutput {
+public class UIForm extends UIComponentBase {
 
 
     // ------------------------------------------------------- Static Variables
@@ -39,7 +33,35 @@ public class UIForm extends UIOutput {
     public static final String TYPE = "javax.faces.component.UIForm";
 
 
-    // ------------------------------------------------------------- Attributes
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UIForm} instance with default property
+     * values.</p>
+     */
+    public UIForm() {
+
+        super();
+        setRendererType("Form");
+
+    }
+
+
+    // ------------------------------------------------------------- Properties
+
+
+    public String getComponentType() {
+
+        return (TYPE);
+
+    }
+
+
+    /**
+     * <p>The form name for this {@link UIForm}.</p>
+     */
+    private String formName = null;
 
 
     /**
@@ -47,7 +69,7 @@ public class UIForm extends UIOutput {
      */
     public String getFormName() {
 
-        return ((String) getAttribute("value"));
+        return (this.formName);
 
     }
 
@@ -59,97 +81,9 @@ public class UIForm extends UIOutput {
      */
     public void setFormName(String formName) {
 
-        setAttribute("value", formName);
+        this.formName = formName;
 
     }
 
     
-    // ------------------------------------------------------------- Properties
-
-
-    public String getComponentType() {
-
-        return (TYPE);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    public void encodeBegin(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeBegin(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Render the beginning of this form
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<form action=\"");
-        writer.write(action(context));
-        writer.write("\" method=\"post\">");
-
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Render the ending of this form
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("</form>");
-
-    }
-
-
-    // -------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return the value to be rendered as the <code>action</code> attribute
-     * of the form generated for this component.</p>
-     *
-     * @param context FacesContext for the response we are creating
-     */
-    private String action(FacesContext context) {
-
-        HttpServletRequest request = (HttpServletRequest)
-            context.getServletRequest();
-        HttpServletResponse response = (HttpServletResponse)
-            context.getServletResponse();
-        String treeId = context.getTree().getTreeId();
-        StringBuffer sb = new StringBuffer(request.getContextPath());
-        sb.append("/faces");
-        sb.append(treeId);
-        return (response.encodeURL(sb.toString()));
-
-
-    }
-
-
 }

@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.33 2003/02/20 22:46:11 ofung Exp $
+ * $Id: UICommand.java,v 1.34 2003/03/13 01:11:56 craigmcc Exp $
  */
 
 /*
@@ -10,20 +10,15 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.FacesEvent;
-import javax.faces.event.FormEvent;
 import javax.faces.event.PhaseId;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -37,6 +32,10 @@ import javax.servlet.http.HttpServletResponse;
  * this control has been activated, it will queue an {@link ActionEvent}.
  * Later on, the <code>broadcast()</code> method will ensure that this
  * event is broadcast to all interested listeners.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Button</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
 public class UICommand extends UIComponentBase {
@@ -51,7 +50,92 @@ public class UICommand extends UIComponentBase {
     public static final String TYPE = "javax.faces.component.UICommand";
 
 
-    // ------------------------------------------------------------- Attributes
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UICommand} instance with default property
+     * values.</p>
+     */
+    public UICommand() {
+
+        super();
+        setRendererType("Button");
+
+    }
+
+
+    // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>The literal outcome value.</p>
+     */
+    private String action = null;
+
+
+    /**
+     * <p>Return the literal action outcome value to be returned to the
+     * {@link javax.faces.event.ActionListener} processing application level
+     * events for this application.</p>
+     */
+    public String getAction() {
+
+        return (this.action);
+
+    }
+
+
+    /**
+     * <p>Set the literal action outcome value for this component.</p>
+     *
+     * @param action The new outcome value
+     */
+    public void setAction(String action) {
+
+        this.action = action;
+
+    }
+
+
+    /**
+     * <p>The action reference.</p>
+     */
+    private String actionRef = null;
+
+
+    /**
+     * <p>Return the <em>action reference expression</em> pointing at the
+     * {@link javax.faces.application.Action} to be invoked, if this component
+     * is activated by the user, during <em>Invoke Application</em> phase
+     * of the request processing lifecycle.</p>
+     */
+    public String getActionRef() {
+
+        return (this.actionRef);
+
+    }
+
+
+    /**
+     * <p>Set the <em>action reference expression</em> pointing at the
+     * {@link javax.faces.application.Action} to be invoked, if this component
+     * is activated by the user, during <em>Invoke Application</em> phase
+     * of the request processing lifecycle.</p>
+     *
+     * @param actionRef The new action reference
+     */
+    public void setActionRef(String actionRef) {
+
+        this.actionRef = actionRef;
+
+    }
+
+
+    /**
+     * <p>The command name for this {@link UICommand}.</p>
+     */
+    private String commandName = null;
 
 
     /**
@@ -59,7 +143,7 @@ public class UICommand extends UIComponentBase {
      */
     public String getCommandName() {
 
-        return ((String) getAttribute("value"));
+        return (this.commandName);
 
     }
 
@@ -71,14 +155,11 @@ public class UICommand extends UIComponentBase {
      */
     public void setCommandName(String commandName) {
 
-        setAttribute("value", commandName);
+        this.commandName = commandName;
 
     }
 
     
-    // ------------------------------------------------------------- Properties
-
-
     public String getComponentType() {
 
         return (TYPE);
@@ -87,97 +168,6 @@ public class UICommand extends UIComponentBase {
 
 
     // ---------------------------------------------------- UIComponent Methods
-
-
-    /**
-     * <p>Enqueue a {@link FormEvent} event to the application identifying
-     * the form submission that has occurred, along with the command name
-     * of the {@link UICommand} that caused the form to be submitted, if any.
-     * </p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void decode(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.decode(context);
-            return;
-        }
-
-        // Was our command the one that caused this submission?
-        setValid(true);
-        String value = context.getServletRequest().
-            getParameter(getClientId(context));
-        if (value == null) {
-            return;
-        }
-
-        // Fire an ActionEvent for broadcast to interested listeners
-        fireActionEvent(context);
-
-        // Construct and enqueue a FormEvent for the application
-        // NOTE - this behavior will be removed when the deprecated
-        // (placeholder) ApplicationHandler functionality is revised
-        String commandName = (String) currentValue(context);
-        String formName = null;
-        UIComponent parent = getParent();
-        while (parent != null) {
-            if (parent instanceof UIForm) {
-                formName = (String) parent.currentValue(context);
-                break;
-            }
-            parent = parent.getParent();
-        }
-        if (formName == null) {
-            return; // Not nested in a form
-        }
-        context.addApplicationEvent
-            (new FormEvent(this, formName, commandName));
-
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform default encoding
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<input type=\"submit\"");
-        Object currentValue = currentValue(context);
-        if (currentValue != null) {
-            writer.write(" name=\"");
-            writer.write(getClientId(context));
-            writer.write("\"");
-            writer.write(" value=\"");
-            writer.write(currentValue.toString());
-            writer.write("\"");
-        }
-        writer.write(">");
-
-    }
 
 
     /**

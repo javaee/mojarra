@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBooleanTestCase.java,v 1.6 2003/02/20 22:46:51 ofung Exp $
+ * $Id: UISelectBooleanTestCase.java,v 1.7 2003/03/13 01:12:41 craigmcc Exp $
  */
 
 /*
@@ -78,8 +78,8 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
 
         component = new UISelectBooleanNamingContainer();
         component.setComponentId("test");
-        attributes = new String[]
-            { "componentId", "rendersChildren", "value" };
+        attributes = new String[0];
+        rendererType = "Checkbox";
 
     }
 
@@ -127,19 +127,19 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
         // Test "selected" property
         assertTrue("selected1", !selectBoolean.isSelected());
         assertTrue("selected2",
-                   selectBoolean.getAttribute("value") == null);
+                   selectBoolean.getValue() == null);
 
         selectBoolean.setSelected(true);
         assertTrue("selected3", selectBoolean.isSelected());
         assertTrue("selected4",
-                   ((Boolean) selectBoolean.getAttribute("value")).booleanValue());
-        selectBoolean.setAttribute("value", Boolean.FALSE);
+                   ((Boolean) selectBoolean.getValue()).booleanValue());
+        selectBoolean.setValue(Boolean.FALSE);
         assertTrue("selected5", !selectBoolean.isSelected());
         assertTrue("selected6",
-                   !((Boolean) selectBoolean.getAttribute("value")).booleanValue());
+                   !((Boolean) selectBoolean.getValue()).booleanValue());
 
         // Perform standard tests
-        component.setValue(null);
+        selectBoolean.setValue(null);
         super.testAttributePropertyTransparency();
 
     }
@@ -152,8 +152,7 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
         // make sure ValueChangedEvent is not fired if new value is same
         // as the old value.
         UISelectBoolean selectBoolean = (UISelectBoolean) component;
-        selectBoolean.setAttribute(UIInput.PREVIOUS_VALUE,
-            selectBoolean.currentValue(facesContext));
+        selectBoolean.setPrevious(selectBoolean.currentValue(facesContext));
         selectBoolean.setValue(null);
         selectBoolean.validate(facesContext);
         // ValueChangedEvent should not be fired in this case since the value
@@ -164,8 +163,7 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
         // case 2: previous value null, new value is false;
         // make sure ValueChangedEvent is fired if new value is different
         // from the old value.
-        selectBoolean.setAttribute(UIInput.PREVIOUS_VALUE,
-            selectBoolean.currentValue(facesContext));
+        selectBoolean.setPrevious(selectBoolean.currentValue(facesContext));
         selectBoolean.setValue(Boolean.FALSE);
         selectBoolean.validate(facesContext);
 
@@ -182,8 +180,7 @@ private class UISelectBooleanNamingContainer extends UISelectBoolean implements 
         // create a new FacesContext make sure we don't have any events
         // queued from previous test case.
         facesContext = new MockFacesContext();
-        selectBoolean.setAttribute(UIInput.PREVIOUS_VALUE,
-            selectBoolean.currentValue(facesContext));
+        selectBoolean.setPrevious(selectBoolean.currentValue(facesContext));
         selectBoolean.setValue(Boolean.TRUE);
         selectBoolean.validate(facesContext);
 

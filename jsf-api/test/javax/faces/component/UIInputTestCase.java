@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.7 2003/02/20 22:46:50 ofung Exp $
+ * $Id: UIInputTestCase.java,v 1.8 2003/03/13 01:12:40 craigmcc Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import junit.framework.TestSuite;
  * concrete class.</p>
  */
 
-public class UIInputTestCase extends UIComponentTestCase {
+public class UIInputTestCase extends UIOutputTestCase {
 
 
     // ----------------------------------------------------- Instance Variables
@@ -81,8 +81,8 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
 
         component = new UIInputNamingContainer();
         component.setComponentId("test");
-        attributes = new String[]
-            { "componentId", "rendersChildren" };
+        attributes = new String[0];
+        rendererType = "Text";
 
     }
 
@@ -217,8 +217,7 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         // as the old value.
         UIInput input = (UIInput) component;
         input.setValue(null);
-        input.setAttribute(UIInput.PREVIOUS_VALUE,
-            input.currentValue(facesContext));
+        input.setPrevious(input.currentValue(facesContext));
         input.validate(facesContext);
         
         // ValueChangedEvent should not be fired in this case since the value
@@ -228,8 +227,7 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         
         // case 2: previous value null
         // new value is "New Value"
-        input.setAttribute(UIInput.PREVIOUS_VALUE,
-            input.currentValue(facesContext));
+        input.setPrevious(input.currentValue(facesContext));
         input.setValue("New Value");
         input.validate(facesContext);
         // make sure ValueChangedEvent was fired since the value changed
@@ -243,8 +241,7 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         // new value is "New Value"
         // create a new FacesContext make sure we don't have any events 
         // queued from previous test case.
-        input.setAttribute(UIInput.PREVIOUS_VALUE,
-            input.currentValue(facesContext));
+        input.setPrevious(input.currentValue(facesContext));
         facesContext = new MockFacesContext();
         input.setValue("New Value");
         input.validate(facesContext);
@@ -256,8 +253,7 @@ private class UIInputNamingContainer extends UIInput implements NamingContainer 
         
         // case 3: previous value "New Value"
         // new value is "Another Value"
-        input.setAttribute(UIInput.PREVIOUS_VALUE,
-            input.currentValue(facesContext));
+        input.setPrevious(input.currentValue(facesContext));
         input.setValue("Another Value");
         input.validate(facesContext);
         // make sure ValueChangedEvent was fired since the value changed

@@ -1,5 +1,5 @@
 /*
- * $Id: UIPanel.java,v 1.11 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UIPanel.java,v 1.12 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -25,6 +25,21 @@ public class UIPanel extends UIOutput {
      * The component type of this {@link UIComponent} subclass.
      */
     public static final String TYPE = "javax.faces.component.UIPanel";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UIPanel} instance with default property
+     * values.</p>
+     */
+    public UIPanel() {
+
+        super();
+        setRendererType(null);
+
+    }
 
 
     // ------------------------------------------------------------- Properties

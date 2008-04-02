@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.12 2003/02/20 22:46:13 ofung Exp $
+ * $Id: UISelectItem.java,v 1.13 2003/03/13 01:11:59 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import javax.faces.context.FacesContext;
  * <ul>
  * <li>The <code>value</code> attribute's value is an instance of
  *     {@link SelectItem}.</li>
- * <li>The <code>modelReference</code> attribute points at a model data
+ * <li>The <code>valueRef</code> attribute points at a model data
  *     item of type {@link SelectItem}.</li>
  * <li>A new {@link SelectItem} instance is synthesized from the values
  *     of the <code>itemDescription</code>, <code>itemLabel</code>, and
@@ -43,81 +43,96 @@ public class UISelectItem extends UIOutput {
     public static final String TYPE = "javax.faces.component.UISelectItem";
 
 
-    // ------------------------------------------------------------- Attributes
-
-
-    /**
-     * <p>Return the item description for this component (if <code>value</code>
-     * and <code>modelReference</code> are <code>null</code>).</p>
-     */
-    public String getItemDescription() {
-
-        return ((String) getAttribute("itemDescription"));
-
-    }
-
-
-    /**
-     * <p>Set the item description for this component (if <code>value</code>
-     * and <code>modelReference</code> are <code>null</code>).</p>
-     */
-    public void setItemDescription(String itemDescription) {
-
-        setAttribute("itemDescription", itemDescription);
-
-    }
-
-
-    /**
-     * <p>Return the item label for this component (if <code>value</code>
-     * and <code>modelReference</code> are <code>null</code>).</p>
-     */
-    public String getItemLabel() {
-
-        return ((String) getAttribute("itemLabel"));
-
-    }
-
-
-    /**
-     * <p>Set the item label for this component (if <code>value</code>
-     * and <code>modelReference</code> are <code>null</code>).</p>
-     */
-    public void setItemLabel(String itemLabel) {
-
-        setAttribute("itemLabel", itemLabel);
-
-    }
-
-
-    /**
-     * <p>Return the item value for this component (if <code>value</code>
-     * and <code>modelReference</code> are <code>null</code>).</p>
-     */
-    public String getItemValue() {
-
-        return ((String) getAttribute("itemValue"));
-
-    }
-
-
-    /**
-     * <p>Set the item value for this component (if <code>value</code>
-     * and <code>modelReference</code> are <code>null</code>).</p>
-     */
-    public void setItemValue(String itemValue) {
-
-        setAttribute("itemValue", itemValue);
-
-    }
-
-
     // ------------------------------------------------------------- Properties
 
 
     public String getComponentType() {
 
         return (TYPE);
+
+    }
+
+
+    /**
+     * <p>The description for this selection item.</p>
+     */
+    private String itemDescription = null;
+
+
+    /**
+     * <p>Return the description for this selection item.</p>
+     */
+    public String getItemDescription() {
+
+        return (this.itemDescription);
+
+    }
+
+
+    /**
+     * <p>Set the description for this selection item.</p>
+     *
+     * @param itemDescription The new description
+     */
+    public void setItemDescription(String itemDescription) {
+
+        this.itemDescription = itemDescription;
+
+    }
+
+
+    /**
+     * <p>The localized label for this selection item.</p>
+     */
+    private String itemLabel = null;
+
+
+    /**
+     * <p>Return the localized label for this selection item.</p>
+     */
+    public String getItemLabel() {
+
+        return (this.itemLabel);
+
+    }
+
+
+    /**
+     * <p>Set the localized label for this selection item.</p>
+     *
+     * @param itemLabel The new localized label
+     */
+    public void setItemLabel(String itemLabel) {
+
+        this.itemLabel = itemLabel;
+
+    }
+
+
+    /**
+     * <p>The server value for this selection item.</p>
+     */
+    private String itemValue = null;
+
+
+    /**
+     * <p>Return the server value for this selection item.</p>
+     */
+    public String getItemValue() {
+
+        return (this.itemValue);
+
+    }
+
+
+    /**
+     * <p>Set the server value for this selection item.</p>
+     *
+     * @param itemValue The new server value
+     */
+    public void setItemValue(String itemValue) {
+
+        this.itemValue = itemValue;
 
     }
 
@@ -130,63 +145,6 @@ public class UISelectItem extends UIOutput {
     public boolean getRendersSelf() {
 
         return (true);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeBegin(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeChildren(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
     }
 

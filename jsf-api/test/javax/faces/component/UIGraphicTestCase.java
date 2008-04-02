@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphicTestCase.java,v 1.4 2003/02/20 22:46:50 ofung Exp $
+ * $Id: UIGraphicTestCase.java,v 1.5 2003/03/13 01:12:40 craigmcc Exp $
  */
 
 /*
@@ -76,8 +76,8 @@ private class UIGraphicNamingContainer extends UIGraphic implements NamingContai
 
         component = new UIGraphicNamingContainer();
         component.setComponentId("test");
-        attributes = new String[]
-            { "componentId", "rendersChildren" };
+        attributes = new String[0];
+        rendererType = "Image";
 
     }
 
@@ -125,18 +125,18 @@ private class UIGraphicNamingContainer extends UIGraphic implements NamingContai
 
         // graphicName
         assertNull("url1", graphic.getURL());
-        assertNull("url2", graphic.getAttribute("value"));
+        assertNull("url2", graphic.getValue());
         graphic.setURL("foo");
         assertEquals("url3", "foo", graphic.getURL());
         assertEquals("url4", "foo",
-                     (String) graphic.getAttribute("value"));
-        graphic.setAttribute("value", "bar");
+                     (String) graphic.getValue());
+        graphic.setValue("bar");
         assertEquals("url5", "bar", graphic.getURL());
         assertEquals("url6", "bar",
-                     (String) graphic.getAttribute("value"));
-        graphic.setAttribute("value", null);
+                     (String) graphic.getValue());
+        graphic.setValue(null);
         assertNull("url7", graphic.getURL());
-        assertNull("url8", graphic.getAttribute("value"));
+        assertNull("url8", graphic.getValue());
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIOutput.java,v 1.23 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UIOutput.java,v 1.24 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -10,20 +10,26 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
 
 
 /**
  * <p><strong>UIOutput</strong> is a {@link UIComponent} that displays
  * output to the user.  The user cannot manipulate this component; it is
  * for display purposes only.  There are no restrictions on the data type
- * of the local value, or the object referenced by the model reference
+ * of the local value, or the object referenced by the value reference
  * expression (if any); however, individual
  * {@link javax.faces.render.Renderer}s will
  * generally impose restrictions on the type of data they know how to
  * display.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Text</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
 public class UIOutput extends UIComponentBase {
@@ -38,6 +44,21 @@ public class UIOutput extends UIComponentBase {
     public static final String TYPE = "javax.faces.component.UIOutput";
 
 
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UIOutput} instance with default property
+     * values.</p>
+     */
+    public UIOutput() {
+
+        super();
+        setRendererType("Text");
+
+    }
+
+
     // ------------------------------------------------------------- Properties
 
 
@@ -48,71 +69,115 @@ public class UIOutput extends UIComponentBase {
     }
 
 
-    // ---------------------------------------------------- UIComponent Methods
+    /**
+     * <p>The local value of this {@link UIInput} component.</p>
+     */
+    private Object value = null;
 
 
     /**
-     * <p>Set the <code>valid</code> property to <code>true</code>,
-     * and perform no decoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
+     * <p>Return the local value of this {@link UIInput} component.</p>
      */
-    public void decode(FacesContext context) throws IOException {
+    public Object getValue() {
 
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        setValid(true);
+        return (this.value);
 
     }
 
 
-    public void encodeEnd(FacesContext context) throws IOException {
+    /**
+     * <p>Set the local value of this {@link UIInput} component.</p>
+     *
+     * @param value The new local value
+     */
+    public void setValue(Object value) {
+
+        this.value = value;
+
+    }
+
+
+    /**
+     * <p>The value reference expression for this {@link UIInput} component.
+     * </p>
+     */
+    private String valueRef = null;
+
+
+    /**
+     * <p>Return the value reference expression for this {@link UIInput}
+     * component, pointing at the model tier property that will be updated
+     * or rendered.</p>
+     */
+    public String getValueRef() {
+
+        return (this.valueRef);
+
+    }
+
+
+    /**
+     * <p>Set the value reference expression for this {@link UIInput}
+     * component, pointing at the model tier property that will be updated
+     * or rendered.</p>
+     *
+     * @param valueRef The new value reference expression
+     */
+    public void setValueRef(String valueRef) {
+
+        this.valueRef = valueRef;
+
+    }
+
+
+    // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>Evaluate and return the current value of this component, according
+     * to the following algorithm.</p>
+     * <ul>
+     * <li>If the <code>value</code> property has been set (containing
+     *     the local value for this component), return that; else</li>
+     * <li>If the <code>valueRef</code> property has been set,
+     *     <ul>
+     *     <li>Retrieve the {@link Application} instance for this web
+     *         application from {@link ApplicationFactory}.</li>
+     *     <li>Ask it for a {@link ValueBinding} for the <code>valueRef</code>
+     *         expression.</li>
+     *     <li>Use the <code>getValue()</code> method of the
+     *         {@link ValueBinding} to retrieve the value that the
+     *         value reference expression points at.</li>
+     *     </ul>
+     * <li>Otherwise, return <code>null</code>.</li>
+     * </ul>
+     *
+     * @param context {@link FacesContext} within which to evaluate the value
+     *  reference expression, if necessary
+     *
+     * @exception EvaluationException if a problem occurs evaluating
+     *  the value reference expression
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public Object currentValue(FacesContext context) {
 
         if (context == null) {
             throw new NullPointerException();
         }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform the default encoding
-        Object value = currentValue(context);
+        Object value = getValue();
         if (value != null) {
-            ResponseWriter writer = context.getResponseWriter();
-            writer.write(value.toString());
+            return (value);
         }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no model update.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     *
-     * @exception IllegalArgumentException if the <code>modelReference</code>
-     *  property has invalid syntax for an expression
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void updateModel(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
+        String valueRef = getValueRef();
+        if (valueRef != null) {
+            ApplicationFactory factory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+            Application application = factory.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            return (binding.getValue(context));
         }
+        return (null);
 
     }
 

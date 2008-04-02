@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.37 2003/02/20 22:46:20 ofung Exp $
+ * $Id: FacesContext.java,v 1.38 2003/03/13 01:12:08 craigmcc Exp $
  */
 
 /*
@@ -14,10 +14,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
-import javax.faces.event.ApplicationEvent;
 import javax.faces.event.FacesEvent;
-import javax.faces.lifecycle.ApplicationHandler;
-import javax.faces.lifecycle.ViewHandler;
 import javax.faces.tree.Tree;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -46,55 +43,7 @@ import javax.servlet.http.HttpSession;
 public abstract class FacesContext {
 
 
-    // ----------------------------------------------------- Manifest Constants
-
-
-    /**
-     * <p>The name of the request attribute under which the
-     * {@link FacesContext} instance for the current request will
-     * be stored.</p>
-     */
-    public static final String FACES_CONTEXT_ATTR =
-        "javax.faces.context.FacesContext";
-
-
     // ------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return an <code>Iterator</code> over the {@link ApplicationEvent}s
-     * for events that should be handled by the application during the
-     * <em>Invoke Application</em> phase of the request processing
-     * lifecycle.</p>
-     *
-     * @deprecated The current mechanism for handling application events is a
-     *  placeholder, and will be replaced in the next public release of
-     *  JavaServer Faces.
-     */
-    public abstract Iterator getApplicationEvents();
-
-
-    /**
-     * <p>Return the number of {@link ApplicationEvent}s that have been queued
-     * tot he application, or zero if no such events have been queued.</p>
-     *
-     * @deprecated The current mechanism for handling application events is a
-     *  placeholder, and will be replaced in the next public release of
-     *  JavaServer Faces.
-     */
-    public abstract int getApplicationEventsCount();
-
-
-    /**
-     * <p>Return the {@link ApplicationHandler} instance to be utilized during
-     * the <em>Invoke Application</em> phase of the request processing
-     * lifecycle.</p>
-     *
-     * @deprecated The current mechanism for handling application events is a
-     *  placeholder, and will be replaced in the next public release of
-     *  JavaServer Faces.
-     */
-    public abstract ApplicationHandler getApplicationHandler();
 
 
     /**
@@ -262,32 +211,7 @@ public abstract class FacesContext {
     public abstract void setTree(Tree tree);
 
 
-    /**
-     * <p>Return the {@link ViewHandler} instance to be utilized during
-     * the <em>Render Response</em> phase of the request processing
-     * lifecycle.</p>
-     */
-    public abstract ViewHandler getViewHandler();
-
-
     // --------------------------------------------------------- Public Methods
-
-
-    /**
-     * <p>Append a {@link ApplicationEvent} to the set of events that should be
-     * processed by the application during the <em>Invoke Application</em>
-     * phase of the request processing lifecycle.</p>
-     *
-     * @param event The event to be appended
-     *
-     * @exception NullPointerException if <code>event</code>
-     *  is <code>null</code>
-     *
-     * @deprecated The current mechanism for handling application events is a
-     *  placeholder, and will be replaced in the next public release of
-     *  JavaServer Faces.
-     */
-    public abstract void addApplicationEvent(ApplicationEvent event);
 
 
     /**
@@ -318,61 +242,6 @@ public abstract class FacesContext {
      *  is <code>null</code>
      */
     public abstract void addMessage(UIComponent component, Message message);
-
-
-    /**
-     * <p>Evaluate the specified model reference expression, and return the
-     * expected type of the corresponding value, if it can be determined;
-     * otherwise, return <code>null</code>.</p>
-     *
-     * @param modelReference Model reference expression to be evaluated
-     *
-     * @exception FacesException if an error occurs during expression
-     *  evaluation
-     * @exception IllegalArgumentException if the model reference
-     *  expression is invalid
-     * @exception NullPointerException if <code>modelReference</code>
-     *  is <code>null</code>
-     */
-    public abstract Class getModelType(String modelReference)
-        throws FacesException;
-
-
-    /**
-     * <p>Evaluate the specified model reference expression, and return the
-     * corresponding data value (which may be null).  No data type conversion
-     * is performed.</p>
-     *
-     * @param modelReference Model reference to be evaluated
-     *
-     * @exception FacesException if an error occurs during expression
-     *  evaluation
-     * @exception IllegalArgumentException if the model reference
-     *  expression is invalid
-     * @exception NullPointerException if <code>modelReference</code>
-     *  is <code>null</code>
-     */
-    public abstract Object getModelValue(String modelReference)
-        throws FacesException;
-
-
-    /**
-     * <p>Evaluate the specified model reference expression, and set the
-     * corresponding data value (which may be null).  No data type conversion
-     * is performed.</p>
-     *
-     * @param modelReference Model reference to be evaluated
-     * @param value New model data to be stored in the model
-     *
-     * @exception FacesException if an error occurs during expression
-     *  evaluation
-     * @exception IllegalArgumentException if the model reference
-     *  expression is invalid
-     * @exception NullPointerException if <code>modelReference</code>
-     *  is <code>null</code>
-     */
-    public abstract void setModelValue(String modelReference, Object value)
-        throws FacesException;
 
 
     /**

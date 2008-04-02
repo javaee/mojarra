@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.16 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UIInput.java,v 1.17 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -10,12 +10,15 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
@@ -28,7 +31,7 @@ import javax.faces.event.ValueChangedListener;
  * {@link UIOutput} components do) and includes request parameters on the
  * subsequent request that need to be decoded.  There are no restrictions
  * on the data type of the local value, or the object referenced by the
- * model reference expression (if any); however, individual
+ * value reference expression (if any); however, individual
  * {@link javax.faces.render.Renderer}s will generally impose restrictions
  * on the type of data they know how to display.</p>
  *
@@ -38,9 +41,13 @@ import javax.faces.event.ValueChangedListener;
  * {@link ValueChangedEvent}.  Later on, the <code>broadcast()</code>
  * method will ensure that this event is broadcast to all interested
  * listeners.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Text</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
-public class UIInput extends UIComponentBase {
+public class UIInput extends UIOutput {
 
 
     // ------------------------------------------------------- Static Variables
@@ -51,15 +58,20 @@ public class UIInput extends UIComponentBase {
      */
     public static final String TYPE = "javax.faces.component.UIInput";
 
+
+    // ----------------------------------------------------------- Constructors
+
+
     /**
-     * The symbolic name for the attribute name used to store the previous
-     * local value of this {@link UIInput}, saved during
-     * <code>decode()</code> processing and used during
-     * <code>validate()</code> processing to determine whether a {@link
-     * ValueChangedEvent} should be queued.
+     * <p>Create a new {@link UIInput} instance with default property
+     * values.</p>
      */
-    public static final String PREVIOUS_VALUE =
-        "javax.faces.component.PreviousValue";
+    public UIInput() {
+
+        super();
+        setRendererType("Text");
+
+    }
 
 
     // ------------------------------------------------------------- Properties
@@ -72,64 +84,117 @@ public class UIInput extends UIComponentBase {
     }
 
 
-    // ---------------------------------------------------- UIComponent Methods
+    /**
+     * <p>The previous value of this {@link UIInput} component.</p>
+     */
+    private Object previous = null;
 
 
-    public void decode(FacesContext context) throws IOException {
+    /**
+     * <p>Return the previous value of this {@link UIInput} component.
+     * This method should only be utilized by the <code>decode()</code>
+     * method of this component, or its corresponding
+     * {@link javax.faces.render.Renderer}.</p>
+     */
+    public Object getPrevious() {
 
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        setAttribute(UIInput.PREVIOUS_VALUE, currentValue(context));
-        if (getRendererType() != null) {
-            super.decode(context);
-            return;
-        }
-
-        // Perform the default decoding
-        String newValue =
-            context.getServletRequest().getParameter(getClientId(context));
-        setValue(newValue);
-        setValid(true);
-
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform the default encoding
-        Object value = currentValue(context);
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<input type=\"text\" name=\"");
-        writer.write(getClientId(context));
-        writer.write("\" value=\"");
-        if (value != null) {
-            writer.write(value.toString());
-        }
-        writer.write("\">");
+        return (this.previous);
 
     }
 
 
     /**
-     * <p>Perform validations and, if validation is successful, queue
+     * <p>Set the previous value of this {@link UIInput} component.
+     * This method should only be utilized by the <code>decode()</code>
+     * method of this component, or its corresponding
+     * {@link javax.faces.render.Renderer}.</p>
+     *
+     * @param previous The new previous value
+     */
+    public void setPrevious(Object previous) {
+
+        this.previous = previous;
+
+    }
+
+
+    // ---------------------------------------------------- UIComponent Methods
+
+
+    /**
+     * <p>Perform the following algorithm to update the model data
+     * associated with this {@link UIInput}, if any, as appropriate.</p>
+     * <ul>
+     * <li>If the <code>valid</code> property of this component is
+     *     <code>false</code>, take no further action.</li>
+     * <li>If the <code>valueRef</code> property of this component
+     *     is <code>null</code>, take no further action.</li>
+     * <li>Retrieve the {@link Application} instance for this web application
+     *     from {@link ApplicationFactory}.</li>
+     * <li>Ask it for a {@link ValueBinding} for the <code>valueRef</code>
+     *     expression.</li>
+     * <li>Use the <code>setValue()</code> method of the
+     *     {@link ValueBinding} to update the value that the
+     *     value reference expression points at.</li>
+     * <li>If the <code>setValue()</code> method returns successfully:
+     *     <ul>
+     *     <li>Clear the local value of this {@link UIInput}.</li>
+     *     <li>Set the <code>valid</code> property of this {@link UIInput}
+     *         to <code>true</code>.</li>
+     *     </ul></li>
+     * <li>If the <code>setValue()</code> method call fails:
+     *     <ul>
+     *     <li>Enqueue error messages by calling <code>addMessage()</code>
+     *         on the specified {@link FacesContext} instance.</li>
+     *     <li>Set the <code>valid</code> property of this {@link UIInput}
+     *         to <code>false</code>.</li>
+     *     </ul></li>
+     * </ul>
+     *
+     * @param context {@link FacesContext} for the request we are processing
+     *
+     * @exception IllegalArgumentException if the <code>valueRef</code>
+     *  property has invalid syntax for an expression
+     * @exception NullPointerException if <code>context</code>
+     *  is <code>null</code>
+     */
+    public void updateModel(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        if (!isValid()) {
+            return;
+        }
+        String valueRef = getValueRef();
+        if (valueRef == null) {
+            return;
+        }
+        try {
+            ApplicationFactory factory = (ApplicationFactory)
+                FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+            Application application = factory.getApplication();
+            ValueBinding binding = application.getValueBinding(valueRef);
+            binding.setValue(context, getValue());
+            setValue(null);
+            return;
+        } catch (FacesException e) {
+            setValid(false);
+            throw e;
+        } catch (IllegalArgumentException e) {
+            setValid(false);
+            throw e;
+        } catch (Exception e) {
+            setValid(false);
+            throw new FacesException(e);
+        }
+
+    }
+
+
+    /**
+     * <p>Perform validations and, if validation is successful, and the
+     * local value is different from the previous value, queue
      * a {@link ValueChangedEvent} to be processed later.</p>
      *
      * @param context The {@link FacesContext} for the current request
@@ -144,8 +209,8 @@ public class UIInput extends UIComponentBase {
         }
 
         // Save and reset the previous value for this component
-        Object previous = getAttribute(UIInput.PREVIOUS_VALUE);
-        setAttribute(UIInput.PREVIOUS_VALUE, null);
+        Object previous = getPrevious();
+        setPrevious(null);
 
         // Determine whether a value change has actually occurred
         Object value = getValue();
@@ -180,6 +245,9 @@ public class UIInput extends UIComponentBase {
 
     }
     
+
+    // ------------------------------------------------------ Protected Methods
+
 
     /**
      * <p>Return <code>true</code> if the new value is different from the

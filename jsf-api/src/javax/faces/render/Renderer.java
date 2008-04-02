@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.17 2003/02/20 22:46:36 ofung Exp $
+ * $Id: Renderer.java,v 1.18 2003/03/13 01:12:26 craigmcc Exp $
  */
 
 /*
@@ -249,15 +249,8 @@ public abstract class Renderer {
         throws IOException;
 
     /**
-     * <p>Return a client-side identifier for the argument component.</p>
-     *
-     * <p>If a client-side identifier has previously been generated for
-     * this component, and saved in the attribute named by
-     * <code>UIComponent.CLIENT_ID</code>,
-     * return that identifier value.  Otherwise, generate a new client-side
-     * identifier, save it in the attribute named by
-     * <code>UIComponent.CLIENT_ID</code> on the specified {@link UIComponent},
-     * and return it.</p>
+     * <p>Generate and return a new client-side identifier for the
+     * specified component.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param component {@link UIComponent} whose identifier is to be

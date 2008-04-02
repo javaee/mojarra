@@ -1,5 +1,5 @@
 /*
- * $Id: StringRangeValidator.java,v 1.11 2003/02/20 22:46:41 ofung Exp $
+ * $Id: StringRangeValidator.java,v 1.12 2003/03/13 01:12:29 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.validator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 
@@ -246,7 +247,7 @@ public class StringRangeValidator extends ValidatorBase {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
+        Object value = ((UIInput) component).getValue();
         if (value != null) {
             String converted = stringValue(value);
             if (isMaximumSet() &&

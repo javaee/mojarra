@@ -1,5 +1,5 @@
 /*
- * $Id: UICommandTestCase.java,v 1.5 2003/02/20 22:46:50 ofung Exp $
+ * $Id: UICommandTestCase.java,v 1.6 2003/03/13 01:12:39 craigmcc Exp $
  */
 
 /*
@@ -77,9 +77,8 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
     public void setUp() {
         component = new UICommandNamingContainer();
         component.setComponentId("test");
-        attributes = new String[]
-            { "componentId", "rendersChildren" };
-
+        attributes = new String[0];
+        rendererType = "Button";
     }
 
 
@@ -112,32 +111,6 @@ private class UICommandNamingContainer extends UICommand implements NamingContai
 
         assertEquals("componentType", UICommand.TYPE,
                      component.getComponentType());
-
-    }
-
-
-    /**
-     * [3.1.7] Attribute/Property Transparency
-     */
-    public void testAttributePropertyTransparency() {
-
-        super.testAttributePropertyTransparency();
-        UICommand command = (UICommand) component;
-
-        // commandName
-        assertNull("commandName1", command.getCommandName());
-        assertNull("commandName2", command.getAttribute("value"));
-        command.setCommandName("foo");
-        assertEquals("commandName3", "foo", command.getCommandName());
-        assertEquals("commandName4", "foo",
-                     (String) command.getAttribute("value"));
-        command.setAttribute("value", "bar");
-        assertEquals("commandName5", "bar", command.getCommandName());
-        assertEquals("commandName6", "bar",
-                     (String) command.getAttribute("value"));
-        command.setAttribute("value", null);
-        assertNull("commandName7", command.getCommandName());
-        assertNull("commandName8", command.getAttribute("value"));
 
     }
 

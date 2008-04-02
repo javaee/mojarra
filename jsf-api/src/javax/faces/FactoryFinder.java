@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.14 2003/02/20 22:46:08 ofung Exp $
+ * $Id: FactoryFinder.java,v 1.15 2003/03/13 01:11:51 craigmcc Exp $
  */
 
 /*
@@ -66,6 +66,14 @@ public final class FactoryFinder {
 
 
     // ----------------------------------------------------- Manifest Constants
+
+
+    /**
+     * <p>The property name for the
+     * {@link javax.faces.application.ApplicationFactory} class name.</p>
+     */
+    public final static String APPLICATION_FACTORY =
+        "javax.faces.application.ApplicationFactory";
 
 
     /**
@@ -139,6 +147,7 @@ public final class FactoryFinder {
      * discovery mechanism is supported.</p>
      */
     private static String factoryNames[] = {
+        APPLICATION_FACTORY,
         CONVERTER_FACTORY,
         FACES_CONTEXT_FACTORY,
         LIFECYCLE_FACTORY,

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBase.java,v 1.9 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UISelectBase.java,v 1.10 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package javax.faces.component;
 
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -63,7 +62,7 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
         while (kids.hasNext()) {
             UIComponent kid = (UIComponent) kids.next();
             if (kid instanceof UISelectItem) {
-                Object value = kid.currentValue(context);
+                Object value = ((UISelectItem) kid).currentValue(context);
                 if (value == null) {
                     UISelectItem item = (UISelectItem) kid;
                     list.add(new SelectItem(item.getItemValue(),
@@ -76,7 +75,7 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
                         ("Value is not a SelectItem");
                 }
             } else if (kid instanceof UISelectItems) {
-                Object value = kid.currentValue(context);
+                Object value = ((UISelectItems) kid).currentValue(context);
                 if (value instanceof SelectItem) {
                     list.add(value);
                 } else if (value instanceof SelectItem[]) {
@@ -110,99 +109,6 @@ abstract class UISelectBase extends UIInput implements NamingContainer {
             }
         }
         return (list.iterator());
-
-    }
-
-
-    /**
-     * <p>Return the value of the requested attribute (or the value from the
-     * corresponding model reference expression if the attribute is not
-     * defined), as a single String.  If no data can be acquired, return
-     * a zero-length String.</p>
-     *
-     * @param context The {@link FacesContext} for the current request
-     * @param attributeName Attribute name of the attribute defining the local
-     *  value of the requested data (if any)
-     * @param modelReference Model reference expression defining the external
-     *  source of the requested data (if any)
-     */
-    protected String getAsString(FacesContext context, String attributeName,
-                                 String modelReference) {
-
-        // Acquire the raw value of the requested data
-        Object value = null;
-        if (attributeName != null) {
-            value = getAttribute(attributeName);
-        }
-        if ((value == null) && (modelReference != null)) {
-            value = context.getModelValue(modelReference);
-        }
-
-        // Convert to a String as required
-        String result = "";
-        if (value != null) {
-            result = value.toString();
-        }
-        return (result);
-
-    }
-
-
-    /**
-     * <p>Return the values of the requested attribute (or the values from
-     * the corresponding model reference expression if the attribute is not
-     * defined), as an array of Strings.  If no data can be acquired, return
-     * a zero-length array of Strings.</p>
-     *
-     * @param context The {@link FacesContext} for the current request
-     * @param attributeName Attribute name for the attribute defining the local
-     *  values of the requested data (if any)
-     * @param modelReference Model reference expression defining the external
-     *  source of the requested data (if any)
-     */
-    protected String[] getAsStrings(FacesContext context, String attributeName,
-                                    String modelReference) {
-
-        // Acquire the raw values of the requested data
-        Object values = null;
-        if (attributeName != null) {
-            values = getAttribute(attributeName);
-        }
-        if ((values == null) && (modelReference != null)) {
-            values = context.getModelValue(modelReference);
-        }
-
-        // Convert to a String array as required
-        String results[] = new String[0];
-        if (values == null) {
-            ; // No change needed
-        } else if (values instanceof List) {
-            results = new String[((List) values).size()];
-            Iterator items = ((List) values).iterator();
-            int n = 0;
-            while (items.hasNext()) {
-                Object item = items.next();
-                if (item == null) {
-                    results[n++] = "";
-                } else {
-                    results[n++] = item.toString();
-                }
-            }
-        } else if (values.getClass().isArray()) { // FIXME - primitives???
-            results = new String[Array.getLength(values)];
-            for (int i = 0; i < results.length; i++) {
-                Object item = Array.get(values, i);
-                if (item == null) {
-                    results[i] = "";
-                } else {
-                    results[i] = item.toString();
-                }
-            }
-        } else {
-            results = new String[1];
-            results[0] = values.toString();
-        }
-        return (results);
 
     }
 

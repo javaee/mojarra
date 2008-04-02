@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.46 2003/02/20 22:46:11 ofung Exp $
+ * $Id: UIComponentBase.java,v 1.47 2003/03/13 01:11:57 craigmcc Exp $
  */
 
 /*
@@ -98,25 +98,11 @@ public abstract class UIComponentBase implements UIComponent {
 
         // Validate method parameters
         if (name == null) {
-            throw new NullPointerException("getAttribute");
+            throw new NullPointerException();
         }
 
-        // Special cases for read-only and special case attributes
-        if ("componentType".equals(name)) {
-            return (getComponentType());
-        } else if ("rendersChildren".equals(name)) {
-            if (getRendersChildren()) {
-                return (Boolean.TRUE);
-            } else {
-                return (Boolean.FALSE);
-            }
-        } else if ("rendersSelf".equals(name)) {
-            if (getRendersSelf()) {
-                return (Boolean.TRUE);
-            } else {
-                return (Boolean.FALSE);
-            }
-        }
+        // PENDING(craigmcc) - Should we reflectively retrieve component
+        // property values that correspond to the specified name?
 
         // Return the selected attribute value
         if (!isAttributesAllocated()) {
@@ -140,26 +126,22 @@ public abstract class UIComponentBase implements UIComponent {
 
         // Validate method parameters
         if (name == null) {
-            throw new NullPointerException("setAttribute");
-        }
-        if ("componentId".equals(name)) {
-	    validateComponentId(name);
-	}
-
-        // Special cases for read-only pseudo-attributes
-        if ("componentType".equals(name) ||
-            "rendersChildren".equals(name) ||
-            "rendersSelf".equals(name)) {
-            throw new IllegalArgumentException(name);
+            throw new NullPointerException();
         }
 
-        // FIXME - special cases for setComponentId and setModel values
+        // PENDING(craigmcc) - should we disallow setting attributes that match
+        // UIComponent property names?
+
+        // PENDING(craigmcc) - should we reflectively call property setters
+        // for corresponding UIComponent properties?
 
         // Set or remove the specified value
         if (value != null) {
             getAttributes().put(name, value);
         } else {
-            getAttributes().remove(name);
+            if (isAttributesAllocated()) {
+                getAttributes().remove(name);
+            }
         }
 
     }
@@ -168,25 +150,32 @@ public abstract class UIComponentBase implements UIComponent {
     // ------------------------------------------------------------- Properties
 
 
+    /**
+     * <p>The assigned client identifier for this component.</p>
+     */
+    private String clientId = null;
+
+
     public String getClientId(FacesContext context) {
-	String result = null;
 
-	if (null != (result = (String) getAttribute(CLIENT_ID_ATTR))) {
-	    return result;
-	}
-
-        String rendererType = getRendererType();
+        if (clientId != null) {
+            return (clientId);
+        }
 
 	// if there is a Renderer for this component
+        String rendererType = getRendererType();
         if (rendererType != null) {
+
 	    // let the Renderer define the client id
             RenderKitFactory rkFactory = (RenderKitFactory)
                 FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
             RenderKit renderKit = rkFactory.getRenderKit
                 (context.getTree().getRenderKitId());
             Renderer renderer = renderKit.getRenderer(rendererType);
-            result = renderer.getClientId(context, this);
+            clientId = renderer.getClientId(context, this);
+
         } else {
+
 	    // we have to define the client id ourselves
 	    NamingContainer closestContainer = null;
 	    UIComponent containerComponent = this;
@@ -206,37 +195,44 @@ public abstract class UIComponentBase implements UIComponent {
 	    }
 	    
 	    if (null != closestContainer) {
+
 		// If there is no componentId, generate one and store it
-		if (null == (result = getComponentId())) {
+		if (componentId == null) {
 		    // Don't call setComponentId() because it checks for
 		    // uniqueness.  No need.
-		    setAttribute("componentId",
-				 result = closestContainer.generateClientId());
-		}
-		//
-		// build the client side id
-		//
+                    clientId = closestContainer.generateClientId();
+                    componentId = clientId;
+		} else {
+                    clientId = componentId;
+                }
 
+		// build the client side id
 		containerComponent = (UIComponent) closestContainer;
+
 		// If this is the root naming container, break
 		if (null != containerComponent.getParent()) {
-		    result = containerComponent.getClientId(context) +
-			SEPARATOR_CHAR + result;
+		    clientId = containerComponent.getClientId(context) +
+			SEPARATOR_CHAR + clientId;
 		}
+
 	    }
+
         }
-	if (null == result) {
+	if (null == clientId) {
 	    throw new NullPointerException();
 	}
-	setAttribute(CLIENT_ID_ATTR, result);
-	return result;
+	return (clientId);
     }
 
 
+    /**
+     * <p>The component identifier for this component.</p>
+     */
+    private String componentId = null;
+
+
     public String getComponentId() {
-
-        return ((String) getAttribute("componentId"));
-
+        return (this.componentId);
     }
 
 
@@ -248,10 +244,10 @@ public abstract class UIComponentBase implements UIComponent {
 	// Handle the case where we're re-naming a component
 	if (null != (currentId = getComponentId())) {
 	    maybeRemoveFromNearestNamingContainer(this);
-	    setAttribute(CLIENT_ID_ATTR, null);
+            this.clientId = null;
 	}
 
-        setAttribute("componentId", componentId);
+        this.componentId = componentId;
 
 	try {
 	    // If we are already in the tree, make sure to add ourselves to
@@ -261,7 +257,7 @@ public abstract class UIComponentBase implements UIComponent {
 	catch (IllegalStateException e) {
 	    // If we can't be added to the namespace, roll-back our
 	    // component-id
-	    setAttribute("componentId", null);
+            this.componentId = null;
 	    throw e;
 	}
 
@@ -271,158 +267,93 @@ public abstract class UIComponentBase implements UIComponent {
     public abstract String getComponentType();
 
 
+    /**
+     * <p>The converter identifier for this component.</p>
+     */
+    private String converter = null;
+
+
     public String getConverter() {
-
-        return ((String) getAttribute("converter"));
-
+        return (this.converter);
     }
 
 
     public void setConverter(String converter) {
-
-        setAttribute("converter", converter);
-
-    }
-
-
-    public String getModelReference() {
-
-        return ((String) getAttribute("modelReference"));
-
-    }
-
-
-    public void setModelReference(String modelReference) {
-
-        setAttribute("modelReference", modelReference);
-
-    }
-
-
-    public UIComponent getParent() {
-
-        return ((UIComponent) getAttribute("parent"));
-
+        this.converter = converter;
     }
 
 
     /**
-     * <p>Set the parent <code>UIComponent</code> of this
-     * <code>UIComponent</code>.</p>
-     *
-     * @param parent The new parent, or <code>null</code> for the root node
-     *  of a component tree
+     * <p>The parent component for this component.</p>
      */
-    void setParent(UIComponent parent) {
+    private UIComponent parent = null;
 
-        setAttribute("parent", parent);
 
+    public UIComponent getParent() {
+        return (this.parent);
     }
 
 
-    public boolean isRendered() {
+    public void setParent(UIComponent parent) {
+        this.parent = parent;
+    }
 
-        Boolean rendered = (Boolean) getAttribute("rendered");
-        if (rendered != null) {
-            return (rendered.booleanValue());
-        } else {
-            return (true);
-        }
+
+    /**
+     * <p>The "should this component be rendered" flag.</p>
+     */
+    private boolean rendered = true;
+
+
+    public boolean isRendered() {
+        return (this.rendered);
     }
     
 
     public void setRendered(boolean rendered) {
-        if ( rendered ) {
-            setAttribute("rendered", Boolean.TRUE);
-        } else {
-            setAttribute("rendered", Boolean.FALSE);  
-        }
+        this.rendered = rendered;
     }
 
 
+    /**
+     * <p>The renderer type for this component.</p>
+     */
+    private String rendererType = null;
+
+
     public String getRendererType() {
-
-        return ((String) getAttribute("rendererType"));
-
+        return (this.rendererType);
     }
 
 
     public void setRendererType(String rendererType) {
-
-        setAttribute("rendererType", rendererType);
-
+        this.rendererType = rendererType;
     }
 
 
     public boolean getRendersChildren() {
-
         return (false);
-
     }
 
 
     public boolean getRendersSelf() {
-
         return (false);
-
     }
 
 
+    /**
+     * <p>The valid flag for this component.</p>
+     */
+    private boolean valid = false;
+
+
     public boolean isValid() {
-
-        Boolean valid = (Boolean) getAttribute("valid");
-        if (valid != null) {
-            return (valid.booleanValue());
-        } else {
-            return (false);
-
-        }
-
+        return (this.valid);
     }
 
 
     public void setValid(boolean valid) {
-
-        if (valid) {
-            setAttribute("valid", Boolean.TRUE);
-        } else {
-            setAttribute("valid", Boolean.FALSE);
-        }
-
-    }
-
-
-    public Object getValue() {
-
-        return (getAttribute("value"));
-
-    }
-
-
-    public void setValue(Object value) {
-
-        setAttribute("value", value);
-
-    }
-
-
-    public Object currentValue(FacesContext context) {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-        Object value = getValue();
-        if (value != null) {
-            return (value);
-        }
-        String modelReference = getModelReference();
-        if (modelReference != null) {
-            if (context != null) {
-                return (context.getModelValue(modelReference));
-            }
-        }
-        return (null);
-
+        this.valid = valid;
     }
 
 
@@ -592,20 +523,20 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     public void addChild(UIComponent component) {
+
 	if (this == component) {
 	    throw new IllegalArgumentException();
 	}
 	validateComponentId(component.getComponentId());
         maybeAddToNearestNamingContainer(component);
         getChildList().add(component);
-        if (component instanceof UIComponentBase) { // FIXME - Hmmmm
-            ((UIComponentBase) component).setParent(this);
-        }
+        component.setParent(this);
 
     }
 
 
     public void addChild(int index, UIComponent component) {
+
 	if (this == component) {
 	    throw new IllegalArgumentException();
 	}
@@ -618,9 +549,7 @@ public abstract class UIComponentBase implements UIComponent {
 	}
         maybeAddToNearestNamingContainer(component);
         getChildList().add(index, component);
-        if (component instanceof UIComponentBase) { // FIXME - Hmmmm
-            ((UIComponentBase) component).setParent(this);
-        }
+        component.setParent(this);
 
     }
 
@@ -645,7 +574,7 @@ public abstract class UIComponentBase implements UIComponent {
     public UIComponent findComponent(String expr) {
 
         if (expr == null) {
-            throw new NullPointerException("findChildren");
+            throw new NullPointerException();
         }
 	UIComponent node = this;
 	NamingContainer namingContainer = null;
@@ -692,9 +621,7 @@ public abstract class UIComponentBase implements UIComponent {
 
         UIComponent kid = getChild(index);
         getChildList().remove(index);
-        if (kid instanceof UIComponentBase) { // FIXME -- Hmmmmm
-            ((UIComponentBase) kid).setParent(null);
-        }
+        kid.setParent(null);
 
     }
 
@@ -705,9 +632,7 @@ public abstract class UIComponentBase implements UIComponent {
         }
         if (containsChild(component)) {
             getChildList().remove(component);
-            if (component instanceof UIComponentBase) { // FIXME -- Hmmmmm
-                ((UIComponentBase) component).setParent(null);
-            }
+            component.setParent(null);
         } else {
             throw new IllegalArgumentException("removeChild");
         }
@@ -821,6 +746,7 @@ public abstract class UIComponentBase implements UIComponent {
         } else {
             return childrenAndFacets.iterator();
         }
+
     }
 
 
@@ -956,31 +882,20 @@ public abstract class UIComponentBase implements UIComponent {
 
     }
 
-    public void updateModel(FacesContext context) {
+
+    public void reconstitute(FacesContext context) throws IOException {
 
         if (context == null) {
             throw new NullPointerException();
         }
-        if (!isValid()) {
-            return;
-        }
-        String modelReference = getModelReference();
-        if (modelReference == null) {
-            return;
-        }
-        try {
-            context.setModelValue(modelReference, getValue());
-            setValue(null);
-            return;
-        } catch (FacesException e) {
-            setValid(false);
-            throw e;
-        } catch (IllegalArgumentException e) {
-            setValid(false);
-            throw e;
-        } catch (Exception e) {
-            setValid(false);
-            throw new FacesException(e);
+
+    }
+
+
+    public void updateModel(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
         }
 
     }
@@ -996,6 +911,26 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     // ----------------------------------------------- Lifecycle Phase Handlers
+
+
+    public void processReconstitutes(FacesContext context) throws IOException {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Process all facets and children of this component
+        Iterator kids = getFacetsAndChildren();
+        while (kids.hasNext()) {
+            UIComponent kid = (UIComponent) kids.next();
+            kid.processReconstitutes(context);
+        }
+
+        // Process this component itself
+        reconstitute(context);
+
+    }
+
 
     public void processDecodes(FacesContext context) throws IOException {
 

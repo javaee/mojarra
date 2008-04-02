@@ -1,5 +1,5 @@
 /*
- * $Id: FacesBodyTag.java,v 1.5 2003/02/20 22:46:44 ofung Exp $
+ * $Id: FacesBodyTag.java,v 1.6 2003/03/13 01:12:32 craigmcc Exp $
  */
 
 /*
@@ -35,6 +35,20 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
 
 
     // -------------------------------------------------------- BodyTag Methods
+
+
+    /**
+     * <p>Handle the ending of the nested body content for this tag.  The
+     * default implementation simply calls <code>getDoAfterBodyValue()</code>
+     * to retrieve the flag value to be returned.</p>
+     *
+     * @exception JspException if an error is encountered
+     */
+    public int doAfterBody() throws JspException {
+
+        return (getDoAfterBodyValue());
+
+    }
 
 
     /**
@@ -103,6 +117,18 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
 
 
     // ------------------------------------------------------ Protected Methods
+
+
+    /**
+     * <p>Return the flag value that should be returned from the
+     * <code>doAfterBody()</code> method when it is called.  Subclasses
+     * may override this method to return the appropriate value.</p>
+     */
+    protected int getDoAfterBodyValue() throws JspException {
+
+        return (SKIP_BODY);
+
+    }
 
 
     protected int getDoStartValue() throws JspException {

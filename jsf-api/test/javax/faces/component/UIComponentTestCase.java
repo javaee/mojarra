@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.25 2003/02/20 22:46:50 ofung Exp $
+ * $Id: UIComponentTestCase.java,v 1.26 2003/03/13 01:12:39 craigmcc Exp $
  */
 
 /*
@@ -36,16 +36,22 @@ public class UIComponentTestCase extends TestCase {
 
 
     /**
+     * The names of the attributes that should be found in an unmodified
+     * instance of this component.
+     */
+    protected String attributes[] = null;
+
+
+    /**
      * The component to be tested for each test.
      */
     protected UIComponent component = null;
 
 
     /**
-     * The names of the attributes that should be found in an unmodified
-     * instance of this component.
+     * The default rendererType that we expect in a new component instance.
      */
-    protected String attributes[] = null;
+    protected String rendererType = null;
 
 
     // ---------------------------------------------------------- Constructors
@@ -70,8 +76,7 @@ public class UIComponentTestCase extends TestCase {
     public void setUp() {
 
         component = new TestComponentNamingContainer();
-        attributes = new String[]
-            { "componentId" };
+        attributes = new String[0];
 
     }
 
@@ -196,10 +201,15 @@ public class UIComponentTestCase extends TestCase {
 
 	// Make sure we can rename the component, and the clientId
 	// changes.
+
+        /**
+         * PENDING - comment out because we don't initialize the
+         * RenderKit so getClientId() will not work
 	FacesContext context = new MockFacesContext();
 	String form1ClientId = form1.getClientId(context);
 	form1.setComponentId("form30");
 	assertTrue(!form1ClientId.equals(form1.getClientId(context)));
+         */
 	    
     }
 
@@ -207,101 +217,10 @@ public class UIComponentTestCase extends TestCase {
     /**
      * [3.1.7] Attribute/Property Transparency.
      */
+
     public void testAttributePropertyTransparency() {
 
-        // componentId
-        assertNotNull("componentId1",component.getComponentId());
-        assertNotNull("componentId2",
-                     (String) component.getAttribute("componentId"));
-        assertEquals("componentId12", component.getComponentId(),
-                     (String) component.getAttribute("componentId"));
-        component.setComponentId("foo");
-        assertEquals("componentId3", "foo", component.getComponentId());
-        assertEquals("componentId4", "foo",
-                     (String) component.getAttribute("componentId"));
-        component.setAttribute("componentId", "bar");
-        assertEquals("componentId5", "bar", component.getComponentId());
-        assertEquals("componentId6", "bar",
-                     (String) component.getAttribute("componentId"));
-        component.setAttribute("componentId", null);
-        assertNull("componentId7", component.getComponentId());
-        assertNull("componentId8", component.getAttribute("componentId"));
-
-        // converter
-        assertNull("conv1", component.getConverter());
-        assertNull("conv2", component.getAttribute("converter"));
-        component.setConverter("foo");
-        assertEquals("conv3", "foo", component.getConverter());
-        assertEquals("conv4", "foo",
-                     (String) component.getAttribute("converter"));
-        component.setAttribute("converter", "bar");
-        assertEquals("conv5", "bar", component.getConverter());
-        assertEquals("conv6", "bar",
-                     (String) component.getAttribute("converter"));
-        component.setAttribute("converter", null);
-        assertNull("conv7", component.getConverter());
-        assertNull("conv8", component.getAttribute("converter"));
-
-        // modelReference
-        assertNull("model1", component.getModelReference());
-        assertNull("model2", component.getAttribute("modelReference"));
-        component.setModelReference("${foo}");
-        assertEquals("model3", "${foo}", component.getModelReference());
-        assertEquals("model4", "${foo}",
-                     (String) component.getAttribute("modelReference"));
-        component.setAttribute("modelReference", "${bar}");
-        assertEquals("model5", "${bar}", component.getModelReference());
-        assertEquals("model6", "${bar}",
-                     (String) component.getAttribute("modelReference"));
-        component.setAttribute("modelReference", null);
-        assertNull("model7", component.getModelReference());
-        assertNull("model8", component.getAttribute("modelReference"));
-
-        // parent
-        assertNull("parent1", component.getParent());
-        assertNull("parent2", component.getAttribute("parent"));
-        UIComponent test1 = new TestComponent("test1");
-        component.addChild(test1);
-        assertNotNull("parent3", test1.getParent());
-        assertNotNull("parent4", test1.getAttribute("parent"));
-        assertEquals("parent5", test1.getParent(),
-                     (UIComponent) test1.getAttribute("parent"));
-
-        // rendererType
-        assertNull("rendererType1", component.getRendererType());
-        assertNull("rendererType2", component.getAttribute("rendererType"));
-        component.setRendererType("foo");
-        assertEquals("rendererType3", "foo", component.getRendererType());
-        assertEquals("rendererType4", "foo",
-                     (String) component.getAttribute("rendererType"));
-        component.setAttribute("rendererType", "bar");
-        assertEquals("rendererType5", "bar", component.getRendererType());
-        assertEquals("rendererType6", "bar",
-                     (String) component.getAttribute("rendererType"));
-        component.setAttribute("rendererType", null);
-        assertNull("rendererType7", component.getRendererType());
-        assertNull("rendererType8", component.getAttribute("rendererType"));
-
-        // rendersChildren and rendersSelf
-        assertEquals("rendersChildren1", component.getRendersChildren(),
-                     ((Boolean) component.getAttribute("rendersChildren")).booleanValue());
-        assertEquals("rendersSelf1", component.getRendersSelf(),
-                     ((Boolean) component.getAttribute("rendersSelf")).booleanValue());
-
-        // value
-        assertNull("value1", component.getValue());
-        assertNull("value2", component.getAttribute("value"));
-        component.setValue("foo");
-        assertEquals("value3", "foo", component.getValue());
-        assertEquals("value4", "foo",
-                     (String) component.getAttribute("value"));
-        component.setAttribute("value", "bar");
-        assertEquals("value5", "bar", component.getValue());
-        assertEquals("value6", "bar",
-                     (String) component.getAttribute("value"));
-        component.setAttribute("value", null);
-        assertNull("value7", component.getValue());
-        assertNull("value8", component.getAttribute("value"));
+        // Removed because we undid the transparency requirement
 
     }
 
@@ -578,26 +497,32 @@ public class UIComponentTestCase extends TestCase {
         } catch (NullPointerException e) {
             ; // Expected result
         }
+        /* Comment out because transparency removed
         try {
             component.setAttribute("componentType", "foo"); // Read-only prop
             fail("setAttribute did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
+        */
 
+        /* Comment out because transparency removed
         try {
             component.setAttribute("rendersChildren", Boolean.FALSE); // Read-only prop
             fail("setAttribute did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
+        */
 
+        /* Comment out because transparency removed
         try {
             component.setAttribute("rendersSelf", Boolean.FALSE); // Read-only prop
             fail("setAttribute did not throw IAE");
         } catch (IllegalArgumentException e) {
             ; // Expected result
         }
+        */
 
         // [3.1.9] addValidator()
         try {
@@ -643,23 +568,16 @@ public class UIComponentTestCase extends TestCase {
 
         // [3.1.2] Component Identifiers
         String componentId = component.getComponentId();
-        assertEquals("componentId", "test", componentId);
+        assertEquals("componentId correct", "test", componentId);
 
         // [3.1.3] Component Tree Manipulation
-        assertNull("parent", component.getParent());
+        assertNull("parent null", component.getParent());
         checkChildCount(component, 0);
 
         // [3.1.4] Component Tree Navigation
         UIComponent result = null;
         result = component.findComponent(component.getComponentId());
         assertTrue("Can find self", result == component);
-
-        // [3.1.5] Model Object References
-        assertNull("modelReference", component.getModelReference());
-
-        // [3.1.6] Local Values
-        assertNull("value", component.getValue());
-        // FIXME - assertNull("currentValue", component.currentValue(context));
 
         // [3.1.7] Generic Attributes
         Iterator names = component.getAttributeNames();
@@ -678,13 +596,20 @@ public class UIComponentTestCase extends TestCase {
         }
 
         // [3.1.9] Validation Processing
-        assertTrue("valid", !component.isValid());
+        assertTrue("valid true", !component.isValid());
         checkValidatorCount(component, 0);
 
-        // [3.1.10] Decoding and Encoding
-        assertNull("rendererType", component.getRendererType());
+        // Renderer Type
+        if (rendererType == null) {
+            assertNull("rendererType null", component.getRendererType());
+        } else {
+            assertEquals("rendererType correct",
+                         rendererType, component.getRendererType());
+        }
 
     }
+
+
 
 
 

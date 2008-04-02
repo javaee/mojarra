@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.25 2003/02/20 22:46:13 ofung Exp $
+ * $Id: UISelectBoolean.java,v 1.26 2003/03/13 01:11:59 craigmcc Exp $
  */
 
 /*
@@ -10,15 +10,14 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-
-
 /**
  * <p><strong>UISelectBoolean</strong> is a {@link UIComponent} that
  * represents a single boolean (<code>true</code> or <code>false</code>) value.
  * It is most commonly rendered as a checkbox.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Checkbox</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
 public class UISelectBoolean extends UIInput {
@@ -33,6 +32,21 @@ public class UISelectBoolean extends UIInput {
     public static final String TYPE = "javax.faces.component.UISelectBoolean";
 
 
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectBoolean} instance with default property
+     * values.</p>
+     */
+    public UISelectBoolean() {
+
+        super();
+        setRendererType("Checkbox");
+
+    }
+
+
     // ------------------------------------------------------------- Attributes
 
 
@@ -41,7 +55,7 @@ public class UISelectBoolean extends UIInput {
      */
     public boolean isSelected() {
 
-        Boolean value = (Boolean) getAttribute("value");
+        Boolean value = (Boolean) getValue();
         if (value != null) {
             return (value.booleanValue());
         } else {
@@ -59,9 +73,9 @@ public class UISelectBoolean extends UIInput {
     public void setSelected(boolean selected) {
 
         if (selected) {
-            setAttribute("value", Boolean.TRUE);
+            setValue(Boolean.TRUE);
         } else {
-            setAttribute("value", Boolean.FALSE);
+            setValue(Boolean.FALSE);
         }
 
     }
@@ -73,68 +87,6 @@ public class UISelectBoolean extends UIInput {
     public String getComponentType() {
 
         return (TYPE);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    public void decode(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        setAttribute(UIInput.PREVIOUS_VALUE, currentValue(context));
-        if (getRendererType() != null) {
-            super.decode(context);
-            return;
-        }
-
-        // Perform the default decoding
-        Boolean newValue = Boolean.FALSE;
-        String clientId = getClientId(context);
-        if (context.getServletRequest().getParameter(clientId) != null) {
-            newValue = Boolean.TRUE;
-        }
-        setValue(newValue);
-        setValid(true);
-
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform the default encoding
-        Boolean value = (Boolean) currentValue(context);
-        if (value == null) {
-            value = Boolean.FALSE;
-        }
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<input type=\"checkbox\" name=\"");
-        writer.write(getClientId(context));
-        writer.write("\"");
-        if (value.booleanValue()) {
-            writer.write(" checked=\"checked\"");
-        }
-        writer.write(">");
 
     }
 

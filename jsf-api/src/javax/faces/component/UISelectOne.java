@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.24 2003/02/20 22:46:13 ofung Exp $
+ * $Id: UISelectOne.java,v 1.25 2003/03/13 01:11:59 craigmcc Exp $
  */
 
 /*
@@ -8,12 +8,6 @@
  */
 
 package javax.faces.component;
-
-
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 
 
 /**
@@ -25,6 +19,10 @@ import javax.faces.context.ResponseWriter;
  *
  * <p>This component is generally rendered as a select box or a group of
  * radio buttons.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Listbox</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
 public class UISelectOne extends UISelectBase {
@@ -37,6 +35,21 @@ public class UISelectOne extends UISelectBase {
      * The component type of this {@link UIComponent} subclass.
      */
     public static final String TYPE = "javax.faces.component.UISelectOne";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectOne} instance with default property
+     * values.</p>
+     */
+    public UISelectOne() {
+
+        super();
+        setRendererType("Menu");
+
+    }
 
 
     // ------------------------------------------------------------- Properties
@@ -55,7 +68,7 @@ public class UISelectOne extends UISelectBase {
      */
     public Object getSelectedValue() {
 
-        return (getAttribute("value"));
+        return (getValue());
 
     }
 
@@ -68,78 +81,7 @@ public class UISelectOne extends UISelectBase {
      */
     public void setSelectedValue(Object selectedItem) {
 
-        setAttribute("value", selectedItem);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    public void decode(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        setAttribute(UIInput.PREVIOUS_VALUE, currentValue(context));
-        if (getRendererType() != null) {
-            super.decode(context);
-            return;
-        }
-
-        // Perform the default decoding
-        String value =
-            context.getServletRequest().getParameter(getClientId(context));
-        setValue(value);
-        setValid(true);
-
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform the default encoding
-        Object oldValue = currentValue(context);
-        if (oldValue == null) {
-            oldValue = "";
-        }
-        String value = getAsString(context, "value", getModelReference());
-        Iterator items = getSelectItems(context);
-
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<select name=\"");
-        writer.write(getClientId(context));
-        writer.write("\">");
-        while (items.hasNext()) {
-            SelectItem item = (SelectItem) items.next();
-            writer.write("<option value=\"");
-            writer.write(item.getValue().toString());
-            writer.write("\"");
-            if (value.equals(item.getValue())) {
-                writer.write(" selected=\"selected\"");
-            }
-            writer.write(">");
-            writer.write(item.getLabel());
-            writer.write("</option>");
-        }
-        writer.write("</select>");
+        setValue(selectedItem);
 
     }
 

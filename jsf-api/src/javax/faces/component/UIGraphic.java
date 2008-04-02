@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.15 2003/02/20 22:46:12 ofung Exp $
+ * $Id: UIGraphic.java,v 1.16 2003/03/13 01:11:58 craigmcc Exp $
  */
 
 /*
@@ -10,17 +10,14 @@
 package javax.faces.component;
 
 
-import java.io.IOException;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-
 /**
  * <p><strong>UIGraphic</strong> is a {@link UIComponent} that displays
  * a graphical image to the user.  The user cannot manipulate this component;
  * it is for display purposes only.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Image</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
 public class UIGraphic extends UIOutput {
@@ -35,6 +32,21 @@ public class UIGraphic extends UIOutput {
     public static final String TYPE = "javax.faces.component.UIGraphic";
 
 
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UIGraphic} instance with default property
+     * values.</p>
+     */
+    public UIGraphic() {
+
+        super();
+        setRendererType("Image");
+
+    }
+
+
     // ------------------------------------------------------------- Attributes
 
 
@@ -43,7 +55,7 @@ public class UIGraphic extends UIOutput {
      */
     public String getURL() {
 
-        return ((String) getAttribute("value"));
+        return ((String) getValue());
 
     }
 
@@ -55,7 +67,7 @@ public class UIGraphic extends UIOutput {
      */
     public void setURL(String url) {
 
-        setAttribute("value", url);
+        setValue(url);
 
     }
 
@@ -66,64 +78,6 @@ public class UIGraphic extends UIOutput {
     public String getComponentType() {
 
         return (TYPE);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform the default encoding
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<img src=\"");
-        writer.write(src(context));
-        writer.write("\">");
-
-    }
-
-
-    // -------------------------------------------------------- Private Methods
-
-
-    /**
-     * <p>Return the value to be rendered as the <code>src</code> attribute
-     * of the image element generated for this component.</p>
-     *
-     * @param context FacesContext for the response we are creating
-     */
-    private String src(FacesContext context) {
-
-        String value = (String) currentValue(context);
-        if (value == null) {
-            value = "";
-        }
-        HttpServletRequest request =
-            (HttpServletRequest) context.getServletRequest();
-        HttpServletResponse response =
-            (HttpServletResponse) context.getServletResponse();
-        StringBuffer sb = new StringBuffer();
-        if (value.startsWith("/")) {
-            sb.append(request.getContextPath());
-        }
-        sb.append(currentValue(context));
-        return (response.encodeURL(sb.toString()));
 
     }
 

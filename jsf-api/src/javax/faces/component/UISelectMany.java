@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.24 2003/02/20 22:46:13 ofung Exp $
+ * $Id: UISelectMany.java,v 1.25 2003/03/13 01:11:59 craigmcc Exp $
  */
 
 /*
@@ -8,12 +8,6 @@
  */
 
 package javax.faces.component;
-
-
-import java.io.IOException;
-import java.util.Iterator;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 
 
 /**
@@ -26,6 +20,10 @@ import javax.faces.context.ResponseWriter;
  *
  * <p>This component is generally rendered as a select box or a group of
  * checkboxes.</p>
+ *
+ * <p>By default, the <code>rendererType</code> property is set to
+ * "<code>Listbox</code>".  This value can be changed by calling the
+ * <code>setRendererType()</code> method.</p>
  */
 
 public class UISelectMany extends UISelectBase {
@@ -38,6 +36,21 @@ public class UISelectMany extends UISelectBase {
      * The component type of this {@link UIComponent} subclass.
      */
     public static final String TYPE = "javax.faces.component.UISelectMany";
+
+
+    // ----------------------------------------------------------- Constructors
+
+
+    /**
+     * <p>Create a new {@link UISelectMany} instance with default property
+     * values.</p>
+     */
+    public UISelectMany() {
+
+        super();
+        setRendererType("Listbox");
+
+    }
 
 
     // ------------------------------------------------------------- Properties
@@ -56,7 +69,7 @@ public class UISelectMany extends UISelectBase {
      */
     public Object[] getSelectedValues() {
 
-        return ((Object[]) getAttribute("value"));
+        return ((Object[]) getValue());
 
     }
 
@@ -69,84 +82,10 @@ public class UISelectMany extends UISelectBase {
      */
     public void setSelectedValues(Object selectedItems[]) {
 
-        setAttribute("value", selectedItems);
+        setValue(selectedItems);
 
     }
 
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    public void decode(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        setAttribute(UIInput.PREVIOUS_VALUE, currentValue(context));
-        if (getRendererType() != null) {
-            super.decode(context);
-            return;
-        }
-
-        // Perform the default decoding
-        String values[] =
-            context.getServletRequest().getParameterValues(getClientId(context));
-        setValue(values);
-        setValid(true);
-
-    }
-
-
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        // Delegate to our associated Renderer if needed
-        if (getRendererType() != null) {
-            super.encodeEnd(context);
-            return;
-        }
-  
-        // if rendered is false, do not perform default encoding.
-        if (!isRendered()) {
-            return;
-        }
-
-        // Perform the default encoding
-        String values[] = getAsStrings(context, "value", getModelReference());
-        Iterator items = getSelectItems(context);
-
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<select name=\"");
-        writer.write(getClientId(context));
-        writer.write("\" multiple=\"multiple\">");
-        while (items.hasNext()) {
-            SelectItem item = (SelectItem) items.next();
-            writer.write("<option value=\"");
-            writer.write(item.getValue().toString());
-            writer.write("\"");
-            boolean match = false;
-            for (int j = 0; j < values.length; j++) {
-                if (values[j].equals(item.getValue())) {
-                    match = true;
-                    break;
-                }
-            }
-            if (match) {
-                writer.write(" selected=\"selected\"");
-            }
-            writer.write(">");
-            writer.write(item.getLabel());
-            writer.write("</option>");
-        }
-        writer.write("</select>");
-
-    }
-    
 
     // ------------------------------------------------------ Protected Methods
 

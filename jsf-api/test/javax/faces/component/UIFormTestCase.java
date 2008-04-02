@@ -1,5 +1,5 @@
 /*
- * $Id: UIFormTestCase.java,v 1.3 2003/02/20 22:46:50 ofung Exp $
+ * $Id: UIFormTestCase.java,v 1.4 2003/03/13 01:12:40 craigmcc Exp $
  */
 
 /*
@@ -76,8 +76,8 @@ private class UIFormNamingContainer extends UIForm implements NamingContainer {
 
         component = new UIFormNamingContainer();
         component.setComponentId("test");
-        attributes = new String[]
-            { "componentId", "rendersChildren" };
+        attributes = new String[0];
+        rendererType = "Form";
 
     }
 
@@ -111,32 +111,6 @@ private class UIFormNamingContainer extends UIForm implements NamingContainer {
 
         assertEquals("componentType", UIForm.TYPE,
                      component.getComponentType());
-
-    }
-
-
-    /**
-     * [3.1.7] Attribute/Property Transparency
-     */
-    public void testAttributePropertyTransparency() {
-
-        super.testAttributePropertyTransparency();
-        UIForm form = (UIForm) component;
-
-        // formName
-        assertNull("formName1", form.getFormName());
-        assertNull("formName2", form.getAttribute("value"));
-        form.setFormName("foo");
-        assertEquals("formName3", "foo", form.getFormName());
-        assertEquals("formName4", "foo",
-                     (String) form.getAttribute("value"));
-        form.setAttribute("value", "bar");
-        assertEquals("formName5", "bar", form.getFormName());
-        assertEquals("formName6", "bar",
-                     (String) form.getAttribute("value"));
-        form.setAttribute("value", null);
-        assertNull("formName7", form.getFormName());
-        assertNull("formName8", form.getAttribute("value"));
 
     }
 

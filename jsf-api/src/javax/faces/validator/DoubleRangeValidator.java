@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.13 2003/02/20 22:46:39 ofung Exp $
+ * $Id: DoubleRangeValidator.java,v 1.14 2003/03/13 01:12:28 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.validator;
 
 import javax.faces.component.AttributeDescriptor;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 
@@ -239,7 +240,7 @@ public class DoubleRangeValidator extends ValidatorBase {
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
-        Object value = component.getValue();
+        Object value = ((UIInput) component).getValue();
         if (value != null) {
             try {
                 double converted = doubleValue(value);

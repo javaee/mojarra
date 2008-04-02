@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItems.java,v 1.8 2003/02/20 22:46:13 ofung Exp $
+ * $Id: UISelectItems.java,v 1.9 2003/03/13 01:11:59 craigmcc Exp $
  */
 
 /*
@@ -71,63 +71,6 @@ public class UISelectItems extends UIOutput {
     public boolean getRendersSelf() {
 
         return (true);
-
-    }
-
-
-    // ---------------------------------------------------- UIComponent Methods
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeBegin(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeChildren(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-    }
-
-
-    /**
-     * <p>Override the default behavior and perform no encoding.</p>
-     *
-     * @param context {@link FacesContext} for the request we are processing
-     *
-     * @exception IOException if an input/output error occurs while reading
-     * @exception NullPointerException if <code>context</code>
-     *  is <code>null</code>
-     */
-    public void encodeEnd(FacesContext context) throws IOException {
-
-        if (context == null) {
-            throw new NullPointerException();
-        }
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseId.java,v 1.6 2003/02/20 22:46:29 ofung Exp $
+ * $Id: PhaseId.java,v 1.7 2003/03/13 01:12:20 craigmcc Exp $
  */
 
 /*
@@ -104,7 +104,7 @@ public class PhaseId implements Comparable {
 
 
     /**
-     * <p>Identifier that indicates an interest in events queued during
+     * <p>Identifier that indicates an interest in events queued for
      * the <em>Reconstitute Request</em> phase of the request
      * processing lifecycle.</p>
      */
@@ -112,7 +112,7 @@ public class PhaseId implements Comparable {
 
 
     /**
-     * <p>Identifier that indicates an interest in events queued during
+     * <p>Identifier that indicates an interest in events queued for
      * the <em>Apply Request Values</em> phase of the request
      * processing lifecycle.</p>
      */
@@ -120,7 +120,7 @@ public class PhaseId implements Comparable {
 
 
     /**
-     * <p>Identifier that indicates an interest in events queued during
+     * <p>Identifier that indicates an interest in events queued for
      * the <em>Process Validations</em> phase of the request
      * processing lifecycle.</p>
      */
@@ -128,11 +128,19 @@ public class PhaseId implements Comparable {
 
 
     /**
-     * <p>Identifier that indicates an interest in events queued during
+     * <p>Identifier that indicates an interest in events queued for
      * the <em>Update Model Values</em> phase of the request
      * processing lifecycle.</p>
      */
     public static final PhaseId UPDATE_MODEL_VALUES = new PhaseId();
+
+
+    /**
+     * <p>Identifier that indicates an interest in events queued for
+     * the <em>Invoke Application</em> phase of the request
+     * processing lifecycle.</p>
+     */
+    public static final PhaseId INVOKE_APPLICATION = new PhaseId();
 
 
     /**
@@ -142,7 +150,7 @@ public class PhaseId implements Comparable {
      */
     private static final PhaseId[] values =
     { ANY_PHASE, RECONSTITUTE_REQUEST, APPLY_REQUEST_VALUES,
-      PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES };
+      PROCESS_VALIDATIONS, UPDATE_MODEL_VALUES, INVOKE_APPLICATION };
 
 
     /**

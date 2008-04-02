@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.33 2003/02/20 22:46:44 ofung Exp $
+ * $Id: FacesTag.java,v 1.34 2003/03/13 01:12:32 craigmcc Exp $
  */
 
 /*
@@ -23,7 +23,6 @@ import javax.faces.tree.Tree;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.tagext.TagSupport;
 
 
 /**
@@ -38,7 +37,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * </p>
  */
 
-public abstract class FacesTag extends TagSupport {
+public abstract class FacesTag implements Tag {
 
 
     // ----------------------------------------------------- Instance Variables
@@ -79,6 +78,66 @@ public abstract class FacesTag extends TagSupport {
     protected boolean created = false;
 
 
+    /**
+     * <p>The component identifier for the associated component.</p>
+     */
+    protected String id = null;
+
+
+    /**
+     * <p>The JSP <code>PageContext</code> for the page we are embedded in.</p>
+     */
+    protected PageContext pageContext = null;
+
+
+    /**
+     * <p>The JSP <code>Tag</code> that is the parent of this tag.</p>
+     */
+    protected Tag parent = null;
+
+
+    /**
+     * <p>An override for the rendered attribute associated with our
+     * {@link UIComponent}, if not <code>true</code>.</p>
+     */
+    protected boolean rendered = true;
+
+
+    /**
+     * <p>Flag indicating whether the <code>rendered</code> attribute was
+     * set on this tag instance.</p>
+     */
+    protected boolean renderedSet = false;
+    
+
+    // ------------------------------------------------------------- Attributes
+
+
+    /**
+     * <p>Set the component identifier for our component.</p>
+     *
+     * @param id The new component identifier
+     */
+    public void setId(String id) {
+
+        this.id = id;
+
+    }
+
+
+    /**
+     * <p>Set an override for the rendered attribute.</p>
+     *
+     * @param rendered The new value for rendered attribute
+     */
+    public void setRendered(boolean rendered) {
+
+        this.rendered = rendered;
+        this.renderedSet = true;
+
+    }
+
+
     // ------------------------------------------------------------- Properties
 
 
@@ -107,58 +166,6 @@ public abstract class FacesTag extends TagSupport {
     }
 
 
-
-    /**
-     * <p>An override for the model reference expression associated with our
-     * {@link UIComponent}, if not <code>null</code>.</p>
-     */
-    protected String modelReference = null;
-
-
-    /**
-     * <p>Return the override for the model reference expression.</p>
-     */
-    public String getModelReference() {
-
-        return (this.modelReference);
-
-    }
-
-
-    /**
-     * <p>Set an override for the model reference expression.</p>
-     *
-     * @param modelReference The new model reference expression
-     */
-    public void setModelReference(String modelReference) {
-
-        this.modelReference = modelReference;
-
-    }
-
-    /**
-     * <p>An override for the rendered attribute associated with our
-     * {@link UIComponent}, if not <code>true</code>.</p>
-     */
-    protected boolean rendered = true;
-    
-    /**
-     * <p>Return the override for the rendered attribute.</p>
-     */
-    public boolean getRendered() {
-        return this.rendered;
-    }    
-    
-    /**
-     * <p>Set an override for the rendered attribute.</p>
-     *
-     * @param rendered The new value for rendered attribute
-     */
-    public void setRendered(boolean rendered) {
-        this.rendered = rendered;
-    }
-
-
     /**
      * <p>Return the <code>rendererType</code> property that selects the
      * <code>Renderer</code> to be used for encoding this component, or
@@ -167,6 +174,54 @@ public abstract class FacesTag extends TagSupport {
      * </p>
      */
     public abstract String getRendererType();
+
+
+    // --------------------------------------------------------- Tag Properties
+
+
+    /**
+     * <p>Set the <code>PageContext</code> of the page containing this
+     * tag instance.</p>
+     *
+     * @param pageContext The enclosing <code>PageContext</code>
+     */
+    public void setPageContext(PageContext pageContext) {
+
+        this.pageContext = pageContext;
+
+    }
+
+
+    /**
+     * <p>Return the <code>Tag</code> that is the parent of this instance.</p>
+     */
+    public Tag getParent() {
+
+        return (this.parent);
+
+    }
+
+
+    /**
+     * <p>Set the <code>Tag</code> that is the parent of this instance.
+     * In addition, locate the closest enclosing <code>FacesTag</code> and
+     * increment its <code>numChildren</code> counter.  Finally, save our
+     * <code>childIndex</code> as
+     * <code>(enclosingFacesTag.numChildren - 1)</code>.</p>
+     *
+     * @param parent The new parent <code>Tag</code>
+     */
+    public void setParent(Tag parent) {
+
+        this.parent = parent;
+
+        FacesTag parentFacesTag = (FacesTag)this.getNearestEnclosingFacesTag();
+        if (parentFacesTag != null ) {
+            parentFacesTag.incrementNumChildren();
+            this.childIndex = parentFacesTag.getNumChildren() - 1;
+        }    
+
+    }
 
 
     // ------------------------------------------------------------ Tag Methods
@@ -202,9 +257,9 @@ public abstract class FacesTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         // Look up the FacesContext instance for this request
-        context = (FacesContext)
-            pageContext.getAttribute(FacesContext.FACES_CONTEXT_ATTR,
-                                     PageContext.REQUEST_SCOPE);
+        // PENDING(craigmcc) - Make this more efficient by doing so
+        // only in the outermost tag
+        context = FacesContext.getCurrentInstance();
         if (context == null) { // FIXME - i18n
             throw new JspException("Cannot find FacesContext");
         }
@@ -234,22 +289,6 @@ public abstract class FacesTag extends TagSupport {
 
         // Return the appropriate control value
         return (getDoStartValue());
-
-    }
-
-
-    /**
-     * <p>Handle the ending of the nested body content for a tag that
-     * implements <code>javax.servlet.jsp.tagext.IterationTag</code>,
-     * as all subclasses of this class do.  The default implementation
-     * simply calls <code>getDoAfterBodyValue()</code> to retrieve the
-     * flag value to be returned.</p>
-     *
-     * @exception JspException if an error occurs
-     */
-    public int doAfterBody() throws JspException {
-
-        return (getDoAfterBodyValue());
 
     }
 
@@ -312,10 +351,12 @@ public abstract class FacesTag extends TagSupport {
      */
     public void release() {
 
-        super.release();
+        this.parent = null;
+
         this.id = null;
-        this.modelReference = null;
         this.created = false;
+        this.rendered = true;
+        this.renderedSet = false;
     }
 
 
@@ -402,7 +443,7 @@ public abstract class FacesTag extends TagSupport {
         // Validate the requested identifier
         String tagKey = null;
         
-        String id = getId();
+        String id = this.id;
         UIComponent root = context.getTree().getRoot();
         HashMap tagHash = (HashMap)root.getAttribute("tagHash");
         
@@ -497,12 +538,14 @@ public abstract class FacesTag extends TagSupport {
 
     }
 
+
     /** 
      * Returns a string composed of one or more atoms, separated by ':', 
      * where an atom is: 
      * <This Tag ClassName>_<index Of This Tag In Parent's Child List>
      */
     private String generateTagKey() {
+
         String tagKey = "";
         Tag tagObj = this.getParent();
 	FacesTag facesTag = null;
@@ -517,12 +560,15 @@ public abstract class FacesTag extends TagSupport {
         }
         tagKey = tagKey + this.getClass().getName() +"_"+ this.getChildIndex();
         return tagKey;
+
     }
+
 
     /**
      * This ivar is the number of children we have.
      */
     protected int numChildren = 0;
+
 
     /**
      * This ivar is the index of this child Tag in its parent's child
@@ -530,32 +576,12 @@ public abstract class FacesTag extends TagSupport {
      */
     protected int childIndex = 0; 
 
-    /**
-     * <p>Override this method to do three things.</p>
-     * <ul>
-     * <li>Call <code>super.setParent(t)</code>.</li>
-     * <li>Find the closest enclosing <code>FacesTag</code> and increment its
-     *     <code>numChildren</code> counter.</li>
-     * <li>save our <code>childIndex</code> as
-     *     <code>enclosingFacesTag.numChildren - 1</code>.</li>
-     * </ul>
-     */ 
-    public void setParent(Tag t ) {
-        
-        super.setParent(t);
-        // iterate until we get the parent of this tag which is a facestag and
-        // increment its numchildren. Immediate parent need not be a facesTag.   
-        FacesTag parentFacesTag = (FacesTag)this.getNearestEnclosingFacesTag();
-        if (parentFacesTag != null ) {
-            parentFacesTag.incrementNumChildren();
-            this.childIndex = parentFacesTag.getNumChildren() - 1;
-        }    
-    } 
-    
+
     /**
      * Returns the nearest enclosing <code>FacesTag</code>.
      */
     protected Tag getNearestEnclosingFacesTag() {
+
         Tag tagObj = this.getParent();
         while ( tagObj != null ) {
             if ( tagObj instanceof FacesTag) {
@@ -568,40 +594,35 @@ public abstract class FacesTag extends TagSupport {
             return null;
         }    
         return tagObj;
+
     }
     
     /** 
      * Increments current value of <code>numChildren</code>.
      */
     protected void incrementNumChildren() {
+
         numChildren++;
+
     }
     
+
     /** 
      * Returns current value of <code>numChildren</code>.
      */
     protected int getNumChildren() {
+
         return this.numChildren;
+
     }
+
 
     /** 
      * Returns current value of <code>childIndex</code>.
      */
     protected int getChildIndex() {
+
         return this.childIndex;
-    }
-
-    /**
-     * <p>Return the flag value that should be returned from the
-     * <code>doAfterBody()</code> method when it is called.  Subclasses
-     * may override this method to return the appropriate value.</p>
-     *
-     * @exception JspException to cause <code>doAfterBody()</code>
-     *  to throw an exception
-     */
-    protected int getDoAfterBodyValue() throws JspException {
-
-        return (SKIP_BODY);
 
     }
 
@@ -683,13 +704,8 @@ public abstract class FacesTag extends TagSupport {
         component.setRendererType(getRendererType());
 
         // Override other properties as required
-        if ((modelReference != null) &&
-            (component.getModelReference() == null)) {
-            component.setModelReference(modelReference);
-        }
-
-        if (component.getAttribute("rendered") == null) {
-             component.setRendered(rendered);
+        if (renderedSet) {
+            component.setRendered(rendered);
         }
 
     }

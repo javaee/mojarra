@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.6 2003/02/20 22:46:58 ofung Exp $
+ * $Id: MockFacesContext.java,v 1.7 2003/03/13 01:12:46 craigmcc Exp $
  */
 
 /*
@@ -23,10 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Message;
 import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import javax.faces.event.ApplicationEvent;
 import javax.faces.event.FacesEvent;
-import javax.faces.lifecycle.ApplicationHandler;
-import javax.faces.lifecycle.ViewHandler;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.FacesException;
 import javax.faces.tree.Tree;
@@ -42,14 +39,6 @@ public class MockFacesContext extends FacesContextImpl {
 
     public MockFacesContext() {
         setCurrentInstance(this);
-    }
-
-   public void setViewHandler(ViewHandler viewHandler) {
-        viewHandler =  viewHandler;
-    }    
-    
-    public void setApplicationHandler(ApplicationHandler applicationHandler) {
-        applicationHandler =  applicationHandler;
     }
 
     // Mock object setter

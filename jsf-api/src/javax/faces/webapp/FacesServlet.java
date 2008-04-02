@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.12 2003/02/20 22:46:44 ofung Exp $
+ * $Id: FacesServlet.java,v 1.13 2003/03/13 01:12:32 craigmcc Exp $
  */
 
 /*
@@ -15,8 +15,6 @@ import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
-import javax.faces.event.CommandEvent;
-import javax.faces.event.FormEvent;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.servlet.Servlet;
@@ -162,10 +160,9 @@ public final class FacesServlet implements Servlet {
                         ServletResponse response)
         throws IOException, ServletException {
 
-        // Acquire and cache the FacesContext instance for this request
+        // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response, lifecycle);
-        request.setAttribute(FacesContext.FACES_CONTEXT_ATTR, context);
 
         // Execute the request processing lifecycle for this request
         try {
@@ -185,8 +182,7 @@ public final class FacesServlet implements Servlet {
             }
         }
 
-        // Remove and release the FacesContext instance for this request
-        request.removeAttribute(FacesContext.FACES_CONTEXT_ATTR);
+        // Release the FacesContext instance for this request
         context.release();
         
     }
