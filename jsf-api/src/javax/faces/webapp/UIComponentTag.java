@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.20 2003/10/16 00:29:46 eburns Exp $
+ * $Id: UIComponentTag.java,v 1.21 2003/10/21 04:04:01 eburns Exp $
  */
 
 /*
@@ -382,22 +382,30 @@ public abstract class UIComponentTag implements Tag {
             componentIds = (Map) requestMap.get(GLOBAL_ID_VIEW);
         }
         
-        // assert component ID uniqueness
-        if (this.id != null) {
-            if (componentIds.containsKey(this.id)) {
-                // PENDING i18n                        
-                throw new JspException(
-                    new IllegalStateException("Duplicate component id: '" +
-                        this.id + "', first used in tag: '" +
-                        componentIds.get(this.id) + "'"));
-            } else {
-                componentIds.put(this.id, this.getClass().getName());
-            }
-        }
-
         // Locate the UIComponent associated with this UIComponentTag,
         // creating one if necessary
         component = findComponent(context);
+
+	// only check for id uniqueness if the author has manually given
+	// us an id.
+	if (null != this.id) {
+	    String clientId = component.getClientId(context);
+	    
+	    // assert component ID uniqueness
+	    if (clientId != null) {
+		if (componentIds.containsKey(clientId)) {
+		    // PENDING i18n                        
+		    throw new JspException(
+		      new IllegalStateException("Duplicate component id: '" +
+						clientId + 
+						"', first used in tag: '" +
+						componentIds.get(clientId) + 
+						"'"));
+		} else {
+		    componentIds.put(clientId, this.getClass().getName());
+		}
+	    }
+	}
 
         // Add to parent's list of created components or facets if needed
         
@@ -611,6 +619,11 @@ public abstract class UIComponentTag implements Tag {
         if (parentTag != null) {
             parentComponent = parentTag.getComponent();
         } else {
+	    //
+	    // Special case.  The component to be found is the
+	    // UIViewRoot.
+	    //
+
 	    // see if this is the first time this tag instance is trying
 	    // to be bound to the UIViewRoot
 	    if (null == (parentComponent = (UIComponent)
@@ -619,8 +632,25 @@ public abstract class UIComponentTag implements Tag {
 		parentComponent = context.getViewRoot();
 		pageContext.setAttribute(CURRENT_VIEW_ROOT, parentComponent,
 					 PageContext.REQUEST_SCOPE);
-		overrideProperties(parentComponent);
+		// Has this UIViewRoot instance had a tag bound to it
+		// before?
+		if (null == 
+		    parentComponent.getAttributes().get(CURRENT_VIEW_ROOT)) {
+		    // No it hasn't.
+		    
+		    // make sure overrideProperties() and setId() are called
+		    // once per UIViewRoot instance.
+		    overrideProperties(parentComponent);
+		    if (null != this.id) {
+			parentComponent.setId(this.id);
+		    }
+		    parentComponent.getAttributes().put(CURRENT_VIEW_ROOT, 
+							CURRENT_VIEW_ROOT);
+		}
 	    }
+	    // this is not the first time this tag instance is trying to
+	    // be bound to this UIViewRoot, take no extra action.
+		
             component = parentComponent;
             return (component);
         }

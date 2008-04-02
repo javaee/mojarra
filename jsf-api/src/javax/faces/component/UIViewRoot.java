@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.10 2003/10/20 21:42:23 jvisvanathan Exp $
+ * $Id: UIViewRoot.java,v 1.11 2003/10/21 04:04:00 eburns Exp $
  */
 
 /*
@@ -200,7 +200,7 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processDecodes(FacesContext context) {
-
+	lastId = 0; // PENDING(edburns): shouldn't have to do this.
         super.processDecodes(context);
         broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
 
