@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.138 2006/09/15 17:19:17 rlubke Exp $
+ * $Id: UIComponentBase.java,v 1.139 2006/09/26 18:59:44 rlubke Exp $
  */
 
 /*
@@ -128,7 +128,7 @@ public abstract class UIComponentBase extends UIComponent {
         // load the property descriptors for this class.
         PropertyDescriptor pd[] = getPropertyDescriptors();
         if (pd != null) {
-            pdMap = new WeakHashMap<String, PropertyDescriptor>(pd.length);
+            pdMap = new HashMap<String, PropertyDescriptor>(pd.length, 1.0f);
             for (PropertyDescriptor aPd : pd) {
                 pdMap.put(aPd.getName(), aPd);
             }
