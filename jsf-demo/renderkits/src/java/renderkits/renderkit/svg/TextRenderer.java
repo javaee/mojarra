@@ -39,15 +39,6 @@ public class TextRenderer extends BaseRenderer {
             UIOutput output = (UIOutput) component;
 
             writer.write("<text");
-            String outputClass = (String) output.getAttributes().get("outputClass");
-            if (outputClass == null) {
-                outputClass = "sunText";
-            }
-            if (outputClass != null) {
-                writer.write(" class=\"");
-                writer.write(outputClass);
-                writer.write("\"");
-            }
             String x = (String)component.getAttributes().get("x");
             if (x != null) {
                 writer.writeAttribute("x", x, "x");
@@ -75,6 +66,10 @@ public class TextRenderer extends BaseRenderer {
             String textAdjust = (String)component.getAttributes().get("textAdjust");
             if (textAdjust != null) {
                 writer.writeAttribute("textAdjust",textAdjust, "textAdjust");
+            }
+            String style = (String)component.getAttributes().get("style");
+            if (style != null) {
+                writer.writeAttribute("style", style, "style");
             }
             writer.write(">");
             writer.write(getCurrentValue(context, output));

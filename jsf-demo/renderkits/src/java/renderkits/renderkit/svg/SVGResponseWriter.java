@@ -5,15 +5,15 @@
 
 package renderkits.renderkit.svg;
 
-import javax.faces.FacesException;
-import javax.faces.component.UIComponent;
-import javax.faces.context.ResponseWriter;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import renderkits.util.HtmlUtils;
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ResponseWriter;
+
+import renderkits.util.Util;
 
 
 /**
@@ -45,7 +45,7 @@ public class SVGResponseWriter extends ResponseWriter {
     private boolean dontEscape;
 
     // Internal buffer used when outputting properly escaped information
-    // using HtmlUtils class.
+    // using Util class.
     //
     private char[] buffer = new char[1028];
     private char[] charHolder = new char[1];
@@ -71,7 +71,7 @@ public class SVGResponseWriter extends ResponseWriter {
 
         // Check the character encoding
         try {
-            HtmlUtils.validateEncoding(encoding);
+            Util.validateEncoding(encoding);
         } catch (UnsupportedEncodingException e) {
             // PENDING i18n
             throw new IllegalArgumentException("Unrecognized Character Encoding.");
@@ -122,12 +122,6 @@ public class SVGResponseWriter extends ResponseWriter {
      * @throws IOException if an input/output error occurs.
      */
     public void flush() throws IOException {
-        // NOTE: Internal buffer's contents (the ivar "buffer") is
-        // written to the contained writer in the HtmlUtils class - see
-        // HtmlUtils.flushBuffer method; Buffering is done during
-        // writeAttribute/writeText - otherwise, output is written
-        // directly to the writer (ex: writer.write(....)..
-        //
         // close any previously started element, if necessary
         closeStartIfNecessary();
     }
@@ -191,22 +185,12 @@ public class SVGResponseWriter extends ResponseWriter {
         dontEscape = false;
         // See if we need to close the start of the last element
         if (closeStart) {
-            boolean isEmptyElement = HtmlUtils.isEmptyElement(name);
-
-            if (isEmptyElement) {
-                writer.write(" />");
-                closeStart = false;
-                return;
-            }
-
             writer.write(">");
             closeStart = false;
         }
 
         writer.write("</");
         writer.write(name);
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
         writer.write(">");
     }
 
@@ -256,9 +240,7 @@ public class SVGResponseWriter extends ResponseWriter {
             writer.write("=\"");
             
             // write the attribute value
-            HtmlUtils.writeAttribute(writer, buffer, value.toString());
-            //PENDING (horwat) using String as a result of Tomcat char 
-            //        writer ArrayIndexOutOfBoundsException (3584)
+            Util.writeAttribute(writer, buffer, value.toString());
             writer.write("\"");
         }
     }
@@ -290,24 +272,14 @@ public class SVGResponseWriter extends ResponseWriter {
             throw new NullPointerException("Argument Error: One or more parameters are null.");
         }
 
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
         writer.write(" ");
         writer.write(name);
         writer.write("=\"");
 
-        String stringValue = value.toString();
-        
-        // Javascript URLs should not be URL-encoded
-        if (stringValue.startsWith("javascript:")) {
-            HtmlUtils.writeAttribute(writer, buffer, stringValue);
-        } else {
-            HtmlUtils.writeURL(writer, stringValue, encoding);
-        }
-        
-        //PENDING (horwat) using String as a result of Tomcat char writer
-        //         ArrayIndexOutOfBoundsException (3584)
-        writer.write("\"");
+        String strValue = value.toString(); //TODO: Use converter for value?
+        writer.write(' ');
+        writer.write(name);
+        writer.write("=\"" + strValue + "\"");
     }
 
 
@@ -358,7 +330,7 @@ public class SVGResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text.toString());
         } else {
-            HtmlUtils.writeText(writer, buffer, text.toString());
+            Util.writeText(writer, buffer, text.toString());
         }
     }
 
@@ -380,7 +352,7 @@ public class SVGResponseWriter extends ResponseWriter {
             writer.write(text);
         } else {
             charHolder[0] = text;
-            HtmlUtils.writeText(writer, buffer, charHolder);
+            Util.writeText(writer, buffer, charHolder);
         }
     }
 
@@ -410,7 +382,7 @@ public class SVGResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text);
         } else {
-            HtmlUtils.writeText(writer, buffer, text);
+            Util.writeText(writer, buffer, text);
         }
     }
 
@@ -446,7 +418,7 @@ public class SVGResponseWriter extends ResponseWriter {
         if (dontEscape) {
             writer.write(text, off, len);
         } else {
-            HtmlUtils.writeText(writer, buffer, text, off, len);
+            Util.writeText(writer, buffer, text, off, len);
         }
     }
 

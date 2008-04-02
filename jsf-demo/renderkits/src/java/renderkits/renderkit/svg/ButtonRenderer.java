@@ -1,9 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.1 2005/06/14 20:12:49 rogerk Exp $
- */
-
-/*
- * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ * Copyright 2005 Sun Microsystems, Inc. All rights reserved.
  * SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
  */
 
@@ -97,10 +93,6 @@ public class ButtonRenderer extends BaseRenderer {
             }
         }
 
-        String type = (String) component.getAttributes().get("type");
-        if ((type != null) && (type.toLowerCase().equals("reset"))) {
-            return;
-        }
         ActionEvent actionEvent = new ActionEvent(component);
         component.queueEvent(actionEvent);
 
@@ -134,15 +126,10 @@ public class ButtonRenderer extends BaseRenderer {
             return;
         }
         
-        // Which button type (SUBMIT, RESET, or BUTTON) should we generate?
-        String type = (String) component.getAttributes().get("type");
-        if (type == null) {
-            type = "submit";
-            // This is needed in the decode method
-            component.getAttributes().put("type", type);
-        }
-
         ResponseWriter writer = context.getResponseWriter();
+
+        // for text with rect positioning..
+        int dxi = 0, dyi = 0, xi = 0, yi = 0, heighti = 0;
 
         String label = "";
         Object value = ((UICommand) component).getValue();
@@ -152,17 +139,21 @@ public class ButtonRenderer extends BaseRenderer {
         writer.startElement("g", component);
         writeIdAttributeIfNecessary(context, writer, component);
         
-	UIComponent root = context.getViewRoot();
-        UIComponent myForm = component;
-        while (!(myForm instanceof UIForm) && root != myForm) {
-            myForm = myForm.getParent();
+        String type = (String)component.getAttributes().get("type");
+        if (type != null && type.equals("submit")) {
+	    UIComponent root = context.getViewRoot();
+            UIComponent myForm = component;
+            while (!(myForm instanceof UIForm) && root != myForm) {
+                myForm = myForm.getParent();
+            }
+            String formMethodName = myForm.getClientId(context)+"_post(evt)";
+            writer.writeAttribute("onclick", formMethodName, "onclick"); 
+        } else {
+            String onclick = (String)component.getAttributes().get("onclick");
+            if (onclick != null) {
+                writer.writeAttribute("onclick", onclick, "onclick");
+            }
         }
-        String formMethodName = myForm.getClientId(context)+"_post(evt)";
-
-        // for text with rect positioning..
-        int dxi = 0, dyi = 0, xi = 0, yi = 0, heighti = 0;
-
-        writer.writeAttribute("onclick", formMethodName, "onclick"); 
         writer.writeText("\n    ", null);
         writer.startElement("rect", component);
         String width = (String)component.getAttributes().get("width");
