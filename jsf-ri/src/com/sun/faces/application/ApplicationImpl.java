@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.30 2003/10/17 20:49:37 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.31 2003/10/26 04:44:56 craigmcc Exp $
  */
 
 /*
@@ -23,6 +23,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.event.ActionListener;
+import javax.faces.el.MethodBinding;
+import javax.faces.el.MethodNotFoundException;
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -36,6 +38,7 @@ import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.el.MethodBindingImpl;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
 import com.sun.faces.el.VariableResolverImpl;
@@ -233,6 +236,46 @@ public class ApplicationImpl extends Application {
 
         this.propertyResolver = resolver;
     }
+
+
+    /**
+     * <p>Return a {@link MethodBinding} for the specified method
+     * reference expression, which may be used to call the corresponding
+     * method later.  The returned {@link MethodBinding} instance must
+     * utilize the {@link PropertyResolver} and {@link VariableResolver}
+     * instances registered with this {@link Application} instance at the
+     * time that the {@link MethodBinding} instance was initially created.</p>
+     *
+     * <p>For maximum performance, implementations of {@link Application}
+     * may, but are not required to, cache {@link MethodBinding} instances
+     * in order to avoid repeated parsing of the reference expression.
+     * However, under no circumstances may a particular {@link MethodBinding}
+     * instance be shared across multiple web applications.</p>
+     *
+     * @param ref Reference expression for which to return a
+     *  {@link MethodBinding} instance
+     * @param params Parameter signatures that must match exactly on the
+     *  method to be invoked, or <code>null</code> for a method that takes
+     *  no parameters
+     *
+     * @exception NullPointerException if <code>ref</code>
+     *  is <code>null</code>
+     * @exception ReferenceSyntaxException if the specified <code>ref</code>
+     *  has invalid syntax
+     */
+    public MethodBinding getMethodBinding(String ref, Class params[]) {
+
+        if (ref == null) {
+            throw new NullPointerException
+                (Util.getExceptionMessage
+                 (Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+                                                                   
+        } else {
+            return (new MethodBindingImpl(this, ref, params));
+        }
+
+    }
+
 
     /**
      * <p>Return a {@link ValueBinding} for the specified action or value
