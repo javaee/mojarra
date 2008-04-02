@@ -107,7 +107,7 @@
                            property="ignored"/>
             </not>
             <then>
-                <get src="http://apache.cs.utah.edu/jakarta/cactus/binaries/jakarta-cactus-${cactus.version}.zip"
+                <get src="http://archive.apache.org/dist/jakarta/cactus/binaries/jakarta-cactus-${cactus.version}.zip"
                      dest="${dependency.base.dir}/downloads/jakarta-cactus-${cactus.version}.zip"
                      usetimestamp="true"/>
                 <unzip
