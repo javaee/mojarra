@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.22 2005/05/02 19:27:07 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.23 2005/08/08 22:44:03 rogerk Exp $
  */
 
 /*
@@ -103,9 +103,10 @@ public abstract class ResponseStateManager {
 	    view = (SerializedView) state;
 	}
 	else {
+            Object[] stateArray = (Object[])state;
 	    StateManager stateManager = 
 		context.getApplication().getStateManager();
-	    view = stateManager.new SerializedView(state, null);
+	    view = stateManager.new SerializedView(stateArray[0], null);
 	}
 	writeState(context, view);
     }
