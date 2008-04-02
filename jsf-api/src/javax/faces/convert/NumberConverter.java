@@ -1,5 +1,5 @@
 /*
- * $Id: NumberConverter.java,v 1.24 2005/12/05 16:42:52 edburns Exp $
+ * $Id: NumberConverter.java,v 1.25 2006/12/15 18:12:14 rlubke Exp $
  */
 
 /*
@@ -30,51 +30,51 @@
 package javax.faces.convert;
 
 
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 
 /**
  * <p>{@link Converter} implementation for <code>java.lang.Number</code>
  * values.</p>
- *
+ * <p/>
  * <p>The <code>getAsObject()</code> method parses a String into an
  * <code>java.lang.Double</code> or <code>java.lang.Long</code>, according
  * to the following algorithm:</p>
  * <ul>
  * <li>If the specified String is null, return
- *     a <code>null</code>.  Otherwise, trim leading and trailing
- *     whitespace before proceeding.</li>
+ * a <code>null</code>.  Otherwise, trim leading and trailing
+ * whitespace before proceeding.</li>
  * <li>If the specified String - after trimming - has a zero length,
- *     return <code>null</code>.</li>
+ * return <code>null</code>.</li>
  * <li>If the <code>locale</code> property is not null,
- *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
- *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
+ * use that <code>Locale</code> for managing parsing.  Otherwise, use the
+ * <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
- *     the rules specified by <code>java.text.DecimalFormat</code>.  Such
- *     a pattern will be used to parse, and the <code>type</code> property
- *     will be ignored.</li>
+ * the rules specified by <code>java.text.DecimalFormat</code>.  Such
+ * a pattern will be used to parse, and the <code>type</code> property
+ * will be ignored.</li>
  * <li>If a <code>pattern</code> has not been specified, parsing will be based
- *     on the <code>type</code> property, which expects a currency, a number,
- *     or a percent.  The parse pattern for currencies, numbers, and
- *     percentages is determined by calling the
- *     <code>getCurrencyInstance()</code>, <code>getNumberInstance()</code>,
- *     or <code>getPercentInstance()</code> method of the
- *     <code>java.text.NumberFormat</code> class, passing in the selected
- *     <code>Locale</code>.</li>
+ * on the <code>type</code> property, which expects a currency, a number,
+ * or a percent.  The parse pattern for currencies, numbers, and
+ * percentages is determined by calling the
+ * <code>getCurrencyInstance()</code>, <code>getNumberInstance()</code>,
+ * or <code>getPercentInstance()</code> method of the
+ * <code>java.text.NumberFormat</code> class, passing in the selected
+ * <code>Locale</code>.</li>
  * <li>If the <code>integerOnly</code> property has been set to true, only
- *     the integer portion of the String will be parsed.  See the JavaDocs
- *     for the <code>setParseIntegerOnly()</code> method of the
- *     <code>java.text.NumberFormat</code> class for more information.</li>
+ * the integer portion of the String will be parsed.  See the JavaDocs
+ * for the <code>setParseIntegerOnly()</code> method of the
+ * <code>java.text.NumberFormat</code> class for more information.</li>
  * </ul>
- *
+ * <p/>
  * <p>The <code>getAsString()</code> method expects a value of type
  * <code>java.lang.Number</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
@@ -82,44 +82,43 @@ import javax.faces.context.FacesContext;
  * <li>If the specified value is null, return a zero-length String.</li>
  * <li>If the specified value is a String, return it unmodified.</li>
  * <li>If the <code>locale</code> property is not null,
- *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
- *     <code>Locale</code> from the <code>FacesContext</code>.</li>
+ * use that <code>Locale</code> for managing formatting.  Otherwise, use the
+ * <code>Locale</code> from the <code>FacesContext</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
- *     the rules specified by <code>java.text.DecimalFormat</code>.  Such
- *     a pattern will be used to format, and the <code>type</code> property
- *     (along with related formatting options described in the next paragraph)
- *     will be ignored.</li>
+ * the rules specified by <code>java.text.DecimalFormat</code>.  Such
+ * a pattern will be used to format, and the <code>type</code> property
+ * (along with related formatting options described in the next paragraph)
+ * will be ignored.</li>
  * <li>If a <code>pattern</code> has not been specified, formatting will be
- *     based on the <code>type</code> property, which formats the value as a
- *     currency, a number, or a percent.  The format pattern for currencies,
- *     numbers, and percentages is determined by calling the
- *     percentages is determined by calling the
- *     <code>getCurrencyInstance()</code>, <code>getNumberInstance()</code>,
- *     or <code>getPercentInstance()</code> method of the
- *     <code>java.text.NumberFormat</code> class, passing in the selected
- *     <code>Locale</code>.  In addition, the following properties will be
- *     applied to the format pattern, if specified:
- *     <ul>
- *     <li>If the <code>groupingUsed</code> property is <code>true</code>, the
- *         <code>setGroupingUsed(true)</code> method on the corresponding
- *         <code>NumberFormat</code> instance will be called.</li>
- *     <li>The minimum and maximum number of digits in the integer and
- *         fractional portions of the result will be configured based on
- *         any values set for the <code>maxFractionDigits</code>,
- *         <code>maxIntegerDigits</code>, <code>minFractionDigits</code>,
- *         and <code>minIntegerDigits</code> properties.</li>
- *     <li>If the type is set to <code>currency</code>, it is also possible
- *         to configure the currency symbol to be used, using either the
- *         <code>currencyCode</code> or <code>currencySymbol</code> properties.
- *         If both are set, the value for <code>currencyCode</code> takes
- *         precedence on a JDK 1.4 (or later) JVM; otherwise, the value
- *         for <code>currencySymbol</code> takes precedence.</li>
- *     </ul></li>
+ * based on the <code>type</code> property, which formats the value as a
+ * currency, a number, or a percent.  The format pattern for currencies,
+ * numbers, and percentages is determined by calling the
+ * percentages is determined by calling the
+ * <code>getCurrencyInstance()</code>, <code>getNumberInstance()</code>,
+ * or <code>getPercentInstance()</code> method of the
+ * <code>java.text.NumberFormat</code> class, passing in the selected
+ * <code>Locale</code>.  In addition, the following properties will be
+ * applied to the format pattern, if specified:
+ * <ul>
+ * <li>If the <code>groupingUsed</code> property is <code>true</code>, the
+ * <code>setGroupingUsed(true)</code> method on the corresponding
+ * <code>NumberFormat</code> instance will be called.</li>
+ * <li>The minimum and maximum number of digits in the integer and
+ * fractional portions of the result will be configured based on
+ * any values set for the <code>maxFractionDigits</code>,
+ * <code>maxIntegerDigits</code>, <code>minFractionDigits</code>,
+ * and <code>minIntegerDigits</code> properties.</li>
+ * <li>If the type is set to <code>currency</code>, it is also possible
+ * to configure the currency symbol to be used, using either the
+ * <code>currencyCode</code> or <code>currencySymbol</code> properties.
+ * If both are set, the value for <code>currencyCode</code> takes
+ * precedence on a JDK 1.4 (or later) JVM; otherwise, the value
+ * for <code>currencySymbol</code> takes precedence.</li>
+ * </ul></li>
  * </ul>
  */
 
 public class NumberConverter implements Converter, StateHolder {
-
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -138,11 +137,11 @@ public class NumberConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String CURRENCY_ID =
-        "javax.faces.converter.NumberConverter.CURRENCY";
+         "javax.faces.converter.NumberConverter.CURRENCY";
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
@@ -153,12 +152,12 @@ public class NumberConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String NUMBER_ID =
-        "javax.faces.converter.NumberConverter.NUMBER";
-                                                                                
+         "javax.faces.converter.NumberConverter.NUMBER";
+
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Number</code> fails.  The message format
@@ -168,11 +167,11 @@ public class NumberConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String PATTERN_ID =
-        "javax.faces.converter.NumberConverter.PATTERN";
+         "javax.faces.converter.NumberConverter.PATTERN";
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
@@ -183,26 +182,25 @@ public class NumberConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String PERCENT_ID =
-        "javax.faces.converter.NumberConverter.PERCENT";
+         "javax.faces.converter.NumberConverter.PERCENT";
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
-     *  the conversion of the <code>Number</code> value to
-     *  <code>String</code> fails.   The message format string for this message
-     *  may optionally include the following placeholders:
+     * the conversion of the <code>Number</code> value to
+     * <code>String</code> fails.   The message format string for this message
+     * may optionally include the following placeholders:
      * <ul>
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String STRING_ID =
-        "javax.faces.converter.STRING";
-
+         "javax.faces.converter.STRING";
 
     // ------------------------------------------------------ Instance Variables
 
@@ -222,7 +220,6 @@ public class NumberConverter implements Converter, StateHolder {
     private Locale locale = null;
     private String pattern = null;
     private String type = "number";
-
 
     // -------------------------------------------------------------- Properties
 
@@ -434,14 +431,14 @@ public class NumberConverter implements Converter, StateHolder {
     /**
      * <p>Return the <code>Locale</code> to be used when parsing numbers.
      * If this value is <code>null</code>, the <code>Locale</code> stored
-     * in the {@link javax.faces.component.UIViewRoot} for the current request 
+     * in the {@link javax.faces.component.UIViewRoot} for the current request
      * will be utilized.</p>
      */
     public Locale getLocale() {
 
         if (this.locale == null) {
             this.locale =
-            getLocale(FacesContext.getCurrentInstance());
+                 getLocale(FacesContext.getCurrentInstance());
         }
         return (this.locale);
 
@@ -451,7 +448,7 @@ public class NumberConverter implements Converter, StateHolder {
     /**
      * <p>Set the <code>Locale</code> to be used when parsing numbers.
      * If set to <code>null</code>, the <code>Locale</code> stored in the
-     * {@link javax.faces.component.UIViewRoot} for the current request 
+     * {@link javax.faces.component.UIViewRoot} for the current request
      * will be utilized.</p>
      *
      * @param locale The new <code>Locale</code> (or <code>null</code>)
@@ -516,16 +513,15 @@ public class NumberConverter implements Converter, StateHolder {
 
     }
 
-
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @throws ConverterException {@inheritDoc}
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
-        
+
         if (context == null || component == null) {
             throw new NullPointerException();
         }
@@ -550,7 +546,7 @@ public class NumberConverter implements Converter, StateHolder {
             // Create and configure the parser to be used
             parser = getNumberFormat(locale);
             if (((pattern != null) && !pattern.equals(""))
-                || "currency".equals(type)) {
+                 || "currency".equals(type)) {
                 configureCurrency(parser);
             }
             parser.setParseIntegerOnly(isIntegerOnly());
@@ -560,23 +556,23 @@ public class NumberConverter implements Converter, StateHolder {
         } catch (ParseException e) {
             if (pattern != null) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, PATTERN_ID, new Object[] {value, "#,##0.0#",  
-                        MessageFactory.getLabel(context, component)}));
+                     context, PATTERN_ID, new Object[]{value, "#,##0.0#",
+                     MessageFactory.getLabel(context, component)}));
             } else if (type.equals("currency")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, CURRENCY_ID, new Object[] {value,
-                        parser.format(99.99),  
-                            MessageFactory.getLabel(context, component)}));
+                     context, CURRENCY_ID, new Object[]{value,
+                     parser.format(99.99),
+                     MessageFactory.getLabel(context, component)}));
             } else if (type.equals("number")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, NUMBER_ID, new Object[] {value,
-                        parser.format(99), 
-                            MessageFactory.getLabel(context, component)}));
+                     context, NUMBER_ID, new Object[]{value,
+                     parser.format(99),
+                     MessageFactory.getLabel(context, component)}));
             } else if (type.equals("percent")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, PERCENT_ID, new Object[] {value,
-                        parser.format(.75),  
-                            MessageFactory.getLabel(context, component)}));
+                     context, PERCENT_ID, new Object[]{value,
+                     parser.format(.75),
+                     MessageFactory.getLabel(context, component)}));
             }
         } catch (ConverterException ce) {
             throw ce;
@@ -587,18 +583,18 @@ public class NumberConverter implements Converter, StateHolder {
     }
 
     /**
-     * @throws ConverterException {@inheritDoc}
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-        
+
         try {
-            
+
             // If the specified value is null, return a zero-length String
             if (value == null) {
                 return "";
@@ -615,9 +611,9 @@ public class NumberConverter implements Converter, StateHolder {
 
             // Create and configure the formatter to be used
             NumberFormat formatter =
-                getNumberFormat(locale);
+                 getNumberFormat(locale);
             if (((pattern != null) && !pattern.equals(""))
-                || "currency".equals(type)) {
+                 || "currency".equals(type)) {
                 configureCurrency(formatter);
             }
             configureFormatter(formatter);
@@ -627,21 +623,20 @@ public class NumberConverter implements Converter, StateHolder {
 
         } catch (ConverterException e) {
             throw new ConverterException(MessageFactory.getMessage(
-                context, STRING_ID, new Object[] {value, 
-                     MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, new Object[]{value,
+                 MessageFactory.getLabel(context, component)}), e);
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                context, STRING_ID, new Object[] {value, 
-                     MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, new Object[]{value,
+                 MessageFactory.getLabel(context, component)}), e);
         }
     }
-
 
     // --------------------------------------------------------- Private Methods
 
 
     private static Class currencyClass;
-    
+
     static {
         try {
             currencyClass = Class.forName("java.util.Currency");
@@ -649,37 +644,37 @@ public class NumberConverter implements Converter, StateHolder {
         } catch (Exception cnfe) {
         }
     }
-    
+
     private static final Class[] GET_INSTANCE_PARAM_TYPES =
-	new Class[] { String.class };
+         new Class[]{String.class};
 
 
     /**
-     * <p>
+     * <p/>
      * Override the formatting locale's default currency symbol with the
      * specified currency code (specified via the "currencyCode" attribute) or
      * currency symbol (specified via the "currencySymbol" attribute).</p>
-     *
+     * <p/>
      * <p>If both "currencyCode" and "currencySymbol" are present,
      * "currencyCode" takes precedence over "currencySymbol" if the
      * java.util.Currency class is defined in the container's runtime (that
      * is, if the container's runtime is J2SE 1.4 or greater), and
      * "currencySymbol" takes precendence over "currencyCode" otherwise.</p>
-     *
+     * <p/>
      * <p>If only "currencyCode" is given, it is used as a currency symbol if
      * java.util.Currency is not defined.</p>
      * <pre>
      * Example:
-     *
+     * <p/>
      * JDK    "currencyCode" "currencySymbol" Currency symbol being displayed
      * -----------------------------------------------------------------------
      * all         ---            ---         Locale's default currency symbol
-     *
+     * <p/>
      * <1.4        EUR            ---         EUR
      * >=1.4       EUR            ---         Locale's currency symbol for Euro
-     *
+     * <p/>
      * all         ---           \u20AC       \u20AC
-     * 
+     * <p/>
      * <1.4        EUR           \u20AC       \u20AC
      * >=1.4       EUR           \u20AC       Locale's currency symbol for Euro
      * </pre>
@@ -690,57 +685,57 @@ public class NumberConverter implements Converter, StateHolder {
 
         // Implementation copied from JSTL's FormatNumberSupport.setCurrency()
 
-	String code = null;
-	String symbol = null;
+        String code = null;
+        String symbol = null;
 
-	if ((currencyCode == null) && (currencySymbol == null)) {
-	    return;
-	}
+        if ((currencyCode == null) && (currencySymbol == null)) {
+            return;
+        }
 
-	if ((currencyCode != null) && (currencySymbol != null)) {
-	    if (currencyClass != null)
-		code = currencyCode;
-	    else
-		symbol = currencySymbol;
-	} else if (currencyCode == null) {
-	    symbol = currencySymbol;
-	} else {
-	    if (currencyClass != null)
-		code = currencyCode;
-	    else
-		symbol = currencyCode;
-	}
+        if ((currencyCode != null) && (currencySymbol != null)) {
+            if (currencyClass != null)
+                code = currencyCode;
+            else
+                symbol = currencySymbol;
+        } else if (currencyCode == null) {
+            symbol = currencySymbol;
+        } else {
+            if (currencyClass != null)
+                code = currencyCode;
+            else
+                symbol = currencyCode;
+        }
 
-	if (code != null) {
-	    Object[] methodArgs = new Object[1];
+        if (code != null) {
+            Object[] methodArgs = new Object[1];
 
-	    /*
-	     * java.util.Currency.getInstance()
-	     */
-	    Method m = currencyClass.getMethod("getInstance",
-					       GET_INSTANCE_PARAM_TYPES);
-	    methodArgs[0] = code;
-	    Object currency = m.invoke(null, methodArgs);
+            /*
+            * java.util.Currency.getInstance()
+            */
+            Method m = currencyClass.getMethod("getInstance",
+                 GET_INSTANCE_PARAM_TYPES);
+            methodArgs[0] = code;
+            Object currency = m.invoke(null, methodArgs);
 
-	    /*
-	     * java.text.NumberFormat.setCurrency()
-	     */
-	    Class[] paramTypes = new Class[1];
-	    paramTypes[0] = currencyClass;
-	    Class numberFormatClass = Class.forName("java.text.NumberFormat");
-	    m = numberFormatClass.getMethod("setCurrency", paramTypes);
-	    methodArgs[0] = currency;
-	    m.invoke(formatter, methodArgs);
-	} else {
-	    /*
-	     * Let potential ClassCastException propagate up (will almost
-	     * never happen)
-	     */
-	    DecimalFormat df = (DecimalFormat) formatter;
-	    DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
-	    dfs.setCurrencySymbol(symbol);
-	    df.setDecimalFormatSymbols(dfs);
-	}
+            /*
+            * java.text.NumberFormat.setCurrency()
+            */
+            Class[] paramTypes = new Class[1];
+            paramTypes[0] = currencyClass;
+            Class numberFormatClass = Class.forName("java.text.NumberFormat");
+            m = numberFormatClass.getMethod("setCurrency", paramTypes);
+            methodArgs[0] = currency;
+            m.invoke(formatter, methodArgs);
+        } else {
+            /*
+            * Let potential ClassCastException propagate up (will almost
+            * never happen)
+            */
+            DecimalFormat df = (DecimalFormat) formatter;
+            DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
+            dfs.setCurrencySymbol(symbol);
+            df.setDecimalFormatSymbols(dfs);
+        }
 
     }
 
@@ -774,7 +769,7 @@ public class NumberConverter implements Converter, StateHolder {
      * <p>Return the <code>Locale</code> we will use for localizing our
      * formatting and parsing processing.</p>
      *
-     * @param context The {@link FacesContext} for the current request 
+     * @param context The {@link FacesContext} for the current request
      */
     private Locale getLocale(FacesContext context) {
 
@@ -782,7 +777,7 @@ public class NumberConverter implements Converter, StateHolder {
         Locale locale = this.locale;
         if (locale == null) {
             locale = context.getViewRoot().getLocale();
-        }      
+        }
         return (locale);
 
     }
@@ -791,18 +786,17 @@ public class NumberConverter implements Converter, StateHolder {
     /**
      * <p>Return a <code>NumberFormat</code> instance to use for formatting
      * and parsing in this {@link Converter}.</p>
-     *          
-     * @param locale The <code>Locale</code> used to select formatting
-     *  and parsing conventions
      *
+     * @param locale The <code>Locale</code> used to select formatting
+     *               and parsing conventions
      * @throws ConverterException if no instance can be created
      */
     private NumberFormat getNumberFormat(Locale locale) {
-        
+
         if (pattern == null && type == null) {
             throw new IllegalArgumentException("Either pattern or type must" +
-                                               " be specified.");
-        }  
+                 " be specified.");
+        }
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
 
@@ -822,7 +816,7 @@ public class NumberConverter implements Converter, StateHolder {
         } else {
             // PENDING(craigmcc) - i18n
             throw new ConverterException
-                (new IllegalArgumentException(type));
+                 (new IllegalArgumentException(type));
         }
 
 

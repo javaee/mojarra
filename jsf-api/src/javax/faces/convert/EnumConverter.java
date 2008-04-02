@@ -1,5 +1,5 @@
 /*
- * $Id: EnumConverter.java,v 1.6 2006/10/05 14:18:39 rogerk Exp $
+ * $Id: EnumConverter.java,v 1.7 2006/12/15 18:12:15 rlubke Exp $
  */
 
 /*
@@ -38,17 +38,17 @@ import javax.faces.context.FacesContext;
 /**
  * <p>{@link Converter} implementation for <code>java.lang.Enum</code>
  * (and enum primitive) values.</p>
- * 
+ *
  * @since 1.2
  */
 
 public class EnumConverter implements Converter, StateHolder {
-    
+
     // for StateHolder
     public EnumConverter() {
-        
+
     }
-    
+
     public EnumConverter(Class targetClass) {
         this.targetClass = (Class<? extends Enum>) targetClass;
     }
@@ -71,12 +71,12 @@ public class EnumConverter implements Converter, StateHolder {
      * <li><code>{1}</code> replaced by one of the enum constants or the empty
      * string if none can be found.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String ENUM_ID =
-        "javax.faces.converter.EnumConverter.ENUM";
-    
+         "javax.faces.converter.EnumConverter.ENUM";
+
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Enum</code> fails and no target class has been
@@ -86,40 +86,37 @@ public class EnumConverter implements Converter, StateHolder {
      * <ul>
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String ENUM_NO_CLASS_ID =
-        "javax.faces.converter.EnumConverter.ENUM_NO_CLASS";
-                                                                               
+         "javax.faces.converter.EnumConverter.ENUM_NO_CLASS";
+
     // ----------------------------------------------------- Converter Methods
-    
+
     private Class<? extends Enum> targetClass;
 
 
     /**
      * <p>Convert the <code>value</code> argument to one of the enum
-     * constants of the class provided in our constructor.  If no 
-     * target class argument has been provided to the constructor of 
-     * this instance, throw a <code>ConverterException</code> 
-     * containing the {@link #ENUM_NO_CLASS_ID} message with proper 
-     * parameters.  If the <code>value</code> argument is <code>null</code> 
-     * or it  has a length of zero, return <code>null</code>.  
-     * Otherwise, perform the equivalent of <code>Enum.valueOf</code> using 
+     * constants of the class provided in our constructor.  If no
+     * target class argument has been provided to the constructor of
+     * this instance, throw a <code>ConverterException</code>
+     * containing the {@link #ENUM_NO_CLASS_ID} message with proper
+     * parameters.  If the <code>value</code> argument is <code>null</code>
+     * or it  has a length of zero, return <code>null</code>.
+     * Otherwise, perform the equivalent of <code>Enum.valueOf</code> using
      * target class and <code>value</code> and return the <code>Object</code>.
-     * If the conversion fails, throw a <code>ConverterException</code> 
-     * containing the {@link #ENUM_ID} message with proper parameters. 
+     * If the conversion fails, throw a <code>ConverterException</code>
+     * containing the {@link #ENUM_ID} message with proper parameters.
      * </p>
      *
-     * @param context the <code>FacesContext</code> for this request.
-     *
+     * @param context   the <code>FacesContext</code> for this request.
      * @param component the <code>UIComponent</code> to which this value
-     * will be applied.
-     *
-     * @param value the String <code>value</code> to be converted to
-     * <code>Object</code>.
-     *
-     * @throws ConverterException {@inheritDoc}
+     *                  will be applied.
+     * @param value     the String <code>value</code> to be converted to
+     *                  <code>Object</code>.
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
      */
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -131,11 +128,11 @@ public class EnumConverter implements Converter, StateHolder {
 
         if (targetClass == null) {
             throw new ConverterException(
-                MessageFactory.getMessage(context,
-                    ENUM_NO_CLASS_ID,
-                    value,
-                    MessageFactory.getLabel(context,
-                    component)));
+                 MessageFactory.getMessage(context,
+                      ENUM_NO_CLASS_ID,
+                      value,
+                      MessageFactory.getLabel(context,
+                           component)));
         }
 
         // If the specified value is null or zero-length, return null
@@ -151,65 +148,65 @@ public class EnumConverter implements Converter, StateHolder {
             return Enum.valueOf(targetClass, value);
         } catch (IllegalArgumentException iae) {
             throw new ConverterException(
-                MessageFactory.getMessage(context,
-                    ENUM_ID,
-                    value,
-                    value,
-                    MessageFactory.getLabel(context,
-                    component)));
+                 MessageFactory.getMessage(context,
+                      ENUM_ID,
+                      value,
+                      value,
+                      MessageFactory.getLabel(context,
+                           component)));
         }
 
     }
 
     /**
      * <p>Convert the enum constant given by the <code>value</code>
-     * argument into a String.  If no target class argument has been 
-     * provided to the constructor of this instance, throw a 
-     * <code>ConverterException</code> containing the 
-     * {@link #ENUM_NO_CLASS_ID} message with proper parameters. If the 
+     * argument into a String.  If no target class argument has been
+     * provided to the constructor of this instance, throw a
+     * <code>ConverterException</code> containing the
+     * {@link #ENUM_NO_CLASS_ID} message with proper parameters. If the
      * <code>value,/code> argument is <code>null</code>, return <code>null</code>.
-     * If the value is an instance of the provided target class, return its 
-     * string value (<code>value.toString()</code>).  Otherwise, throw a 
-     * {@link ConverterException} containing the {@link #ENUM_ID} message with 
-     * proper parameters.</p> 
-     * 
-     * @throws ConverterException {@inheritDoc}
+     * If the value is an instance of the provided target class, return its
+     * string value (<code>value.toString()</code>).  Otherwise, throw a
+     * {@link ConverterException} containing the {@link #ENUM_ID} message with
+     * proper parameters.</p>
+     *
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-        
+
         if (targetClass == null) {
             throw new ConverterException(
-                MessageFactory.getMessage(context,
-                    ENUM_NO_CLASS_ID,
-                    value,
-                    MessageFactory.getLabel(context,
-                    component)));
+                 MessageFactory.getMessage(context,
+                      ENUM_NO_CLASS_ID,
+                      value,
+                      MessageFactory.getLabel(context,
+                           component)));
         }
 
         // If the specified value is null, return null
         if (value == null) {
             return (null);
         }
-        
+
         if (targetClass.isInstance(value)) {
             return value.toString();
         }
-      
+
         throw new ConverterException(
-            MessageFactory.getMessage(context,
-                ENUM_ID,
-                value,
-                value,
-                MessageFactory.getLabel(context,
-                component)));
+             MessageFactory.getMessage(context,
+                  ENUM_ID,
+                  value,
+                  value,
+                  MessageFactory.getLabel(context,
+                       component)));
     }
-    
+
     // ----------------------------------------------------------- StateHolder
 
     public void restoreState(FacesContext facesContext, Object object) {
@@ -221,7 +218,7 @@ public class EnumConverter implements Converter, StateHolder {
     }
 
     private transient boolean isTransient = false;
-    
+
     public void setTransient(boolean b) {
         isTransient = b;
     }

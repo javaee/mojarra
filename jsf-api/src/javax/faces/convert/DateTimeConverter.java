@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.31 2005/12/05 16:42:52 edburns Exp $
+ * $Id: DateTimeConverter.java,v 1.32 2006/12/15 18:12:14 rlubke Exp $
  */
 
 /*
@@ -30,49 +30,49 @@
 package javax.faces.convert;
 
 
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
-import javax.faces.component.StateHolder;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 
 
 /**
  * <p>{@link Converter} implementation for <code>java.util.Date</code>
  * values.</p>
- *
+ * <p/>
  * <p>The <code>getAsObject()</code> method parses a String into a
  * <code>java.util.Date</code>, according to the following algorithm:</p>
  * <ul>
  * <li>If the specified String is null, return
- *     a <code>null</code>.  Otherwise, trim leading and trailing
- *     whitespace before proceeding.</li>
+ * a <code>null</code>.  Otherwise, trim leading and trailing
+ * whitespace before proceeding.</li>
  * <li>If the specified String - after trimming - has a zero length,
- *     return <code>null</code>.</li>
+ * return <code>null</code>.</li>
  * <li>If the <code>locale</code> property is not null,
- *     use that <code>Locale</code> for managing parsing.  Otherwise, use the
- *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
+ * use that <code>Locale</code> for managing parsing.  Otherwise, use the
+ * <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
- *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
- *     a pattern will be used to parse, and the <code>type</code>,
- *     <code>dateStyle</code>, and <code>timeStyle</code> properties
- *     will be ignored.</li>
+ * the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
+ * a pattern will be used to parse, and the <code>type</code>,
+ * <code>dateStyle</code>, and <code>timeStyle</code> properties
+ * will be ignored.</li>
  * <li>If a <code>pattern</code> has not been specified, parsing will be based
- *     on the <code>type</code> property, which expects a date value, a time
- *     value, or both.  Any date and time values included will be parsed in
- *     accordance to the styles specified by <code>dateStyle</code> and
- *     <code>timeStyle</code>, respectively.</li>
+ * on the <code>type</code> property, which expects a date value, a time
+ * value, or both.  Any date and time values included will be parsed in
+ * accordance to the styles specified by <code>dateStyle</code> and
+ * <code>timeStyle</code>, respectively.</li>
  * <li>If a <code>timezone</code> has been specified, it must be passed
- *     to the underlying <code>DateFormat</code> instance.  Otherwise
- *     the "GMT" timezone is used.</li>
+ * to the underlying <code>DateFormat</code> instance.  Otherwise
+ * the "GMT" timezone is used.</li>
  * <li>In all cases, parsing must be non-lenient; the given string must
- *     strictly adhere to the parsing format.</li>
+ * strictly adhere to the parsing format.</li>
  * </ul>
- *
+ * <p/>
  * <p>The <code>getAsString()</code> method expects a value of type
  * <code>java.util.Date</code> (or a subclass), and creates a formatted
  * String according to the following algorithm:</p>
@@ -80,26 +80,25 @@ import javax.faces.context.FacesContext;
  * <li>If the specified value is null, return a zero-length String.</li>
  * <li>If the specified value is a String, return it unmodified.</li>
  * <li>If the <code>locale</code> property is not null,
- *     use that <code>Locale</code> for managing formatting.  Otherwise, use the
- *     <code>Locale</code> from the <code>UIViewRoot</code>.</li>
+ * use that <code>Locale</code> for managing formatting.  Otherwise, use the
+ * <code>Locale</code> from the <code>UIViewRoot</code>.</li>
  * <li>If a <code>timezone</code> has been specified, it must be passed
- *     to the underlying <code>DateFormat</code> instance.  Otherwise
- *     the "GMT" timezone is used.</li>
+ * to the underlying <code>DateFormat</code> instance.  Otherwise
+ * the "GMT" timezone is used.</li>
  * <li>If a <code>pattern</code> has been specified, its syntax must conform
- *     the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
- *     a pattern will be used to format, and the <code>type</code>,
- *     <code>dateStyle</code>, and <code>timeStyle</code> properties
- *     will be ignored.</li>
+ * the rules specified by <code>java.text.SimpleDateFormat</code>.  Such
+ * a pattern will be used to format, and the <code>type</code>,
+ * <code>dateStyle</code>, and <code>timeStyle</code> properties
+ * will be ignored.</li>
  * <li>If a <code>pattern</code> has not been specified, formatting will be
- *     based on the <code>type</code> property, which includes a date value,
- *     a time value, or both into the formatted String.  Any date and time
- *     values included will be formatted in accordance to the styles specified
- *     by <code>dateStyle</code> and <code>timeStyle</code>, respectively.</li>
+ * based on the <code>type</code> property, which includes a date value,
+ * a time value, or both into the formatted String.  Any date and time
+ * values included will be formatted in accordance to the styles specified
+ * by <code>dateStyle</code> and <code>timeStyle</code>, respectively.</li>
  * </ul>
  */
 
 public class DateTimeConverter implements Converter, StateHolder {
-
 
     // ------------------------------------------------------ Manifest Constants
 
@@ -118,12 +117,12 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String DATE_ID =
-        "javax.faces.converter.DateTimeConverter.DATE";
-                                                                                
+         "javax.faces.converter.DateTimeConverter.DATE";
+
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
      * the conversion to <code>Time</code> fails.  The message format
@@ -133,11 +132,11 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String TIME_ID =
-        "javax.faces.converter.DateTimeConverter.TIME";
+         "javax.faces.converter.DateTimeConverter.TIME";
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
@@ -148,30 +147,29 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String DATETIME_ID =
-        "javax.faces.converter.DateTimeConverter.DATETIME";
+         "javax.faces.converter.DateTimeConverter.DATETIME";
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
-     *  the conversion of the <code>DateTime</code> value to
-     *  <code>String</code> fails.   The message format string for this message
-     *  may optionally include the following placeholders:
+     * the conversion of the <code>DateTime</code> value to
+     * <code>String</code> fails.   The message format string for this message
+     * may optionally include the following placeholders:
      * <ul>
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String STRING_ID =
-        "javax.faces.converter.STRING";
+         "javax.faces.converter.STRING";
 
 
     private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT");
 
-    
     // ------------------------------------------------------ Instance Variables
 
 
@@ -181,7 +179,6 @@ public class DateTimeConverter implements Converter, StateHolder {
     private String timeStyle = "default";
     private TimeZone timeZone = DEFAULT_TIME_ZONE;
     private String type = "date";
-
 
     // -------------------------------------------------------------- Properties
 
@@ -216,14 +213,14 @@ public class DateTimeConverter implements Converter, StateHolder {
     /**
      * <p>Return the <code>Locale</code> to be used when parsing or formatting
      * dates and times. If not explicitly set, the <code>Locale</code> stored
-     * in the {@link javax.faces.component.UIViewRoot} for the current 
+     * in the {@link javax.faces.component.UIViewRoot} for the current
      * request is returned.</p>
      */
     public Locale getLocale() {
 
         if (this.locale == null) {
             this.locale =
-                getLocale(FacesContext.getCurrentInstance());
+                 getLocale(FacesContext.getCurrentInstance());
         }
         return (this.locale);
 
@@ -232,8 +229,8 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Set the <code>Locale</code> to be used when parsing or formatting
-     * dates and times.  If set to <code>null</code>, the <code>Locale</code> 
-     * stored in the {@link javax.faces.component.UIViewRoot} for the current 
+     * dates and times.  If set to <code>null</code>, the <code>Locale</code>
+     * stored in the {@link javax.faces.component.UIViewRoot} for the current
      * request will be utilized.</p>
      *
      * @param locale The new <code>Locale</code> (or <code>null</code>)
@@ -301,7 +298,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the <code>TimeZone</code> used to interpret a time value.
-     * If not explicitly set, the default time zone of <code>GMT</code> 
+     * If not explicitly set, the default time zone of <code>GMT</code>
      * returned.</p>
      */
     public TimeZone getTimeZone() {
@@ -325,7 +322,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     /**
      * <p>Return the type of value to be formatted or parsed.
-     * If not explicitly set, the default type, <code>date</code> 
+     * If not explicitly set, the default type, <code>date</code>
      * is returned.</p>
      */
     public String getType() {
@@ -350,13 +347,12 @@ public class DateTimeConverter implements Converter, StateHolder {
 
     }
 
-
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @throws ConverterException {@inheritDoc}
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
@@ -366,7 +362,7 @@ public class DateTimeConverter implements Converter, StateHolder {
 
         Object returnValue = null;
         DateFormat parser = null;
-        
+
         try {
 
             // If the specified value is null or zero-length, return null
@@ -382,29 +378,29 @@ public class DateTimeConverter implements Converter, StateHolder {
             Locale locale = getLocale(context);
 
             // Create and configure the parser to be used
-            parser = getDateFormat(context, locale);         
-	    if (null != timeZone) {
-		parser.setTimeZone(timeZone);            
-	    }
+            parser = getDateFormat(context, locale);
+            if (null != timeZone) {
+                parser.setTimeZone(timeZone);
+            }
 
             // Perform the requested parsing
             returnValue = parser.parse(value);
         } catch (ParseException e) {
             if (type.equals("date")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, DATE_ID, new Object[] {value, 
-                        parser.format(new Date(System.currentTimeMillis())),
-                         MessageFactory.getLabel(context, component)}));
+                     context, DATE_ID, new Object[]{value,
+                     parser.format(new Date(System.currentTimeMillis())),
+                     MessageFactory.getLabel(context, component)}));
             } else if (type.equals("time")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, TIME_ID, new Object[] {value, 
-                        parser.format(new Date(System.currentTimeMillis())),
-                         MessageFactory.getLabel(context, component)}));
+                     context, TIME_ID, new Object[]{value,
+                     parser.format(new Date(System.currentTimeMillis())),
+                     MessageFactory.getLabel(context, component)}));
             } else if (type.equals("both")) {
                 throw new ConverterException(MessageFactory.getMessage(
-                    context, DATETIME_ID, new Object[] {value,
-                        parser.format(new Date(System.currentTimeMillis())),
-                         MessageFactory.getLabel(context, component)}));
+                     context, DATETIME_ID, new Object[]{value,
+                     parser.format(new Date(System.currentTimeMillis())),
+                     MessageFactory.getLabel(context, component)}));
             }
         } catch (ConverterException e) {
             throw e;
@@ -415,9 +411,9 @@ public class DateTimeConverter implements Converter, StateHolder {
     }
 
     /**
-     * @throws ConverterException {@inheritDoc}
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 
@@ -426,7 +422,7 @@ public class DateTimeConverter implements Converter, StateHolder {
         }
 
         try {
-            
+
             // If the specified value is null, return a zero-length String
             if (value == null) {
                 return "";
@@ -443,25 +439,24 @@ public class DateTimeConverter implements Converter, StateHolder {
 
             // Create and configure the formatter to be used
             DateFormat formatter =
-                getDateFormat(context, locale);
-	    if (null != timeZone) {
-		formatter.setTimeZone(timeZone);            
-	    }
-	    
+                 getDateFormat(context, locale);
+            if (null != timeZone) {
+                formatter.setTimeZone(timeZone);
+            }
+
             // Perform the requested formatting
             return (formatter.format(value));
 
         } catch (ConverterException e) {
             throw new ConverterException(MessageFactory.getMessage(
-                context, STRING_ID, new Object[] {value, 
-                     MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, new Object[]{value,
+                 MessageFactory.getLabel(context, component)}), e);
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                context, STRING_ID, new Object[] {value, 
-                     MessageFactory.getLabel(context, component)}), e);
+                 context, STRING_ID, new Object[]{value,
+                 MessageFactory.getLabel(context, component)}), e);
         }
     }
-
 
     // --------------------------------------------------------- Private Methods
 
@@ -470,27 +465,26 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>Return a <code>DateFormat</code> instance to use for formatting
      * and parsing in this {@link Converter}.</p>
      *
-     * @param context The {@link FacesContext} for the current request     
-     * @param locale The <code>Locale</code> used to select formatting
-     *  and parsing conventions
-     *
+     * @param context The {@link FacesContext} for the current request
+     * @param locale  The <code>Locale</code> used to select formatting
+     *                and parsing conventions
      * @throws ConverterException if no instance can be created
      */
-    private DateFormat getDateFormat (FacesContext context, Locale locale) {
+    private DateFormat getDateFormat(FacesContext context, Locale locale) {
 
         // PENDING(craigmcc) - Implement pooling if needed for performance?
-        
+
         if (pattern == null && type == null) {
             throw new IllegalArgumentException("Either pattern or type must" +
-                " be specified.");
-        }    
-        
+                 " be specified.");
+        }
+
         DateFormat df = null;
         if (pattern != null) {
             df = new SimpleDateFormat(pattern, locale);
         } else if (type.equals("both")) {
             df = DateFormat.getDateTimeInstance
-                (getStyle(dateStyle), getStyle(timeStyle), locale);
+                 (getStyle(dateStyle), getStyle(timeStyle), locale);
         } else if (type.equals("date")) {
             df = DateFormat.getDateInstance(getStyle(dateStyle), locale);
         } else if (type.equals("time")) {
@@ -509,7 +503,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>Return the <code>Locale</code> we will use for localizing our
      * formatting and parsing processing.</p>
      *
-     * @param context The {@link FacesContext} for the current request     
+     * @param context The {@link FacesContext} for the current request
      */
     private Locale getLocale(FacesContext context) {
 
@@ -517,7 +511,7 @@ public class DateTimeConverter implements Converter, StateHolder {
         Locale locale = this.locale;
         if (locale == null) {
             locale = context.getViewRoot().getLocale();
-        }        
+        }
         return (locale);
 
     }
@@ -527,7 +521,6 @@ public class DateTimeConverter implements Converter, StateHolder {
      * <p>Return the style constant for the specified style name.</p>
      *
      * @param name Name of the style for which to return a constant
-     *
      * @throws ConverterException if the style name is not valid
      */
     private int getStyle(String name) {

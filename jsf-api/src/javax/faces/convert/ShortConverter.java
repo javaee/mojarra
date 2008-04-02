@@ -1,5 +1,5 @@
 /*
- * $Id: ShortConverter.java,v 1.16 2005/12/05 16:42:52 edburns Exp $
+ * $Id: ShortConverter.java,v 1.17 2006/12/15 18:12:14 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,6 @@ import javax.faces.context.FacesContext;
 
 public class ShortConverter implements Converter {
 
-
     // ------------------------------------------------------ Manifest Constants
 
 
@@ -59,41 +58,39 @@ public class ShortConverter implements Converter {
      * <li><code>{0}</code> replaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by an example value.</li>
      * <li><code>{2}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String SHORT_ID =
-        "javax.faces.converter.ShortConverter.SHORT";
-                                                                                
+         "javax.faces.converter.ShortConverter.SHORT";
+
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
-     *  the conversion of the <code>Short</code> value to
-     *  <code>String</code> fails.   The message format string for this message
-     *  may optionally include the following placeholders:
+     * the conversion of the <code>Short</code> value to
+     * <code>String</code> fails.   The message format string for this message
+     * may optionally include the following placeholders:
      * <ul>
      * <li><code>{0}</code> relaced by the unconverted value.</li>
      * <li><code>{1}</code> replaced by a <code>String</code> whose value
-     *   is the label of the input component that produced this message.</li>
+     * is the label of the input component that produced this message.</li>
      * </ul></p>
      */
     public static final String STRING_ID =
-        "javax.faces.converter.STRING";
-
-
+         "javax.faces.converter.STRING";
 
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @throws ConverterException {@inheritDoc}
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-        
+
         // If the specified value is null or zero-length, return null
         if (value == null) {
             return (null);
@@ -102,35 +99,35 @@ public class ShortConverter implements Converter {
         if (value.length() < 1) {
             return (null);
         }
-        
+
         try {
             return (Short.valueOf(value));
         } catch (NumberFormatException nfe) {
             throw new ConverterException(MessageFactory.getMessage(
-                context, SHORT_ID, new Object[] {value, "32456", 
-                     MessageFactory.getLabel(context, component)}));
+                 context, SHORT_ID, new Object[]{value, "32456",
+                 MessageFactory.getLabel(context, component)}));
         } catch (Exception e) {
             throw new ConverterException(e);
         }
     }
 
     /**
-     * @throws ConverterException {@inheritDoc}
+     * @throws ConverterException   {@inheritDoc}
      * @throws NullPointerException {@inheritDoc}
-     */ 
+     */
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
 
         if (context == null || component == null) {
             throw new NullPointerException();
         }
-        
+
         // If the specified value is null, return a 
         // zero-length String
         if (value == null) {
             return "";
         }
-        
+
         // If the incoming value is still a string, play nice
         // and return the value unmodified
         if (value instanceof String) {
@@ -141,7 +138,7 @@ public class ShortConverter implements Converter {
             return (Short.toString(((Short) value).shortValue()));
         } catch (Exception e) {
             throw new ConverterException(MessageFactory.getMessage(
-                context, STRING_ID, new Object[] {value, 
+                 context, STRING_ID, new Object[]{value,
                  MessageFactory.getLabel(context, component)}), e);
         }
     }

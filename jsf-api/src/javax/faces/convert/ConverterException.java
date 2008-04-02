@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterException.java,v 1.10 2005/08/22 22:08:01 ofung Exp $
+ * $Id: ConverterException.java,v 1.11 2006/12/15 18:12:15 rlubke Exp $
  */
 
 /*
@@ -42,7 +42,6 @@ import javax.faces.application.FacesMessage;
  */
 
 public class ConverterException extends FacesException {
-
 
     // ----------------------------------------------------------- Constructors
 
@@ -89,15 +88,13 @@ public class ConverterException extends FacesException {
      * root cause.</p>
      *
      * @param message The detail message for this exception
-     * @param cause The root cause for this exception
+     * @param cause   The root cause for this exception
      */
     public ConverterException(String message, Throwable cause) {
 
         super(message, cause);
 
     }
-
-
 
 
     /**
@@ -118,7 +115,7 @@ public class ConverterException extends FacesException {
      * root cause.</p>
      *
      * @param message The detail message for this exception
-     * @param cause The root cause for this exception
+     * @param cause   The root cause for this exception
      */
     public ConverterException(FacesMessage message, Throwable cause) {
 
