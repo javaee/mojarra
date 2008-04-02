@@ -25,7 +25,7 @@
   <property name="host"         value="localhost"/>
   <property name="port"         value="8080"/>
   <!-- SystestClient failure handling properties -->
-  <property name="failonerror"  value="false"/>
+  <property name="failonerror"  value="true"/>
   <!-- Set 'protocol' to a zero length string to use HttpURLConnection -->
   <property name="protocol"     value="HTTP/1.0"/>
   <property name="golden.path"  value="${context.path}/golden"/>
