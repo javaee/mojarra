@@ -6,7 +6,7 @@
 # modules that the jsf-api depends on.  Copy this file to "build.properties"
 # in the top-level source directory, and customize it as needed.
 #
-# $Id: build.properties.sample,v 1.1 2003/01/23 03:30:04 jvisvanathan Exp $
+# $Id: build.properties.sample,v 1.2 2003/02/12 00:56:24 craigmcc Exp $
 # -----------------------------------------------------------------------------
 
 
@@ -29,6 +29,15 @@ compile.deprecation = true
 
 # ----- Windows 
 #debug.jvm.args = -Xdebug -Xrunjdwp:transport=dt_shmem,address=jdbconn,server=y,suspend=n
+
+
+# -----------------------------------------------------------------------------
+# Required Settings for MIF Doclet (can be downloaded from
+# <http://developer.java.sun.com/developer/earlyAccess/mifdoclet>
+# -----------------------------------------------------------------------------
+
+mifdoclet.home=/usr/local/mifdoclet1.2
+mifdoclet.jar=${mifdoclet.home}/lib/mifdoclet.jar
 
 
 # --------------------------------------------------

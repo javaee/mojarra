@@ -18,7 +18,7 @@
 
   <property name="Name"             value="JavaServer Faces API"/>
   <property name="name"             value="jsf-api"/>
-  <property name="version"          value="20030203"/>
+  <property name="version"          value="Public Review Draft"/>
 
   <property name="debug"            value="true" />
   <property name="deprecation"      value="false" />
@@ -37,6 +37,8 @@
   <property name="build.lib"        value="${build.dir}/lib"/>
   <property name="build.test"       value="${build.dir}/test"/>
   <property name="build.javadocs"   value="${build.dir}/javadocs"/>
+  <property name="build.mifdocs"    value="${build.dir}/mifdocs"/>
+
 
   <!-- Default value for debugging arguments is no.  Override in
        build.properties -->
@@ -46,9 +48,6 @@
     <pathelement location="${build.classes}"/>
     <pathelement location="${servlet.jar}"/>
   </path>
-
-  <property name="test.failonerror" value="true"/>
-  <property name="test.runner"      value="junit.textui.TestRunner"/>
 
   <path id="test.classpath">
     <pathelement location="${build.classes}"/>
@@ -62,6 +61,9 @@
     <pathelement location="${commons-beanutils.jar}"/>
     <pathelement location="${xerces.jar}"/>
   </path>
+
+  <property name="test.failonerror" value="true"/>
+  <property name="test.runner"      value="junit.textui.TestRunner"/>
 
 
   <!--
@@ -344,13 +346,34 @@
     <javadoc packagenames="javax.*"
              sourcepath="${src.dir}"
              destdir="${build.javadocs}"
-             author="true"
-             version="true" private="false" protected="true"
+             private="false"
+             protected="true"
              windowtitle="${Name} (Version ${version})"
              doctitle="${Name} (Version ${version})"
-             bottom="Copyright &#169; 2002 Sun Microsystems, Inc. All Rights Reserved.">
+             bottom="Copyright &#169; 2002-2003 Sun Microsystems, Inc. All Rights Reserved.">
       <classpath refid="compile.classpath"/>
     </javadoc>
+  </target>
+
+
+  <target name="mifdocs" depends="prepare"
+   description="Create the JavaDoc API documentation in MIF format">
+
+    <mkdir dir="${build.mifdocs}"/>
+    <javadoc packagenames="javax.*"
+             sourcepath="${src.dir}"
+             destdir="${build.mifdocs}"
+             private="false"
+             protected="true">
+      <classpath refid="compile.classpath"/>
+      <doclet     name="com.sun.tools.doclets.mif.MIFDoclet"
+                  path="${mifdoclet.jar}">
+        <param    name="-batchfilepaths"
+                 value="relative"/>
+      </doclet>
+    </javadoc>
+
+
   </target>
 
 
