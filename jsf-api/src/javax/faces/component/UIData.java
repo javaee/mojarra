@@ -48,6 +48,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
 import javax.faces.model.ListDataModel;
+import javax.faces.model.ResultDataModel;
 import javax.faces.model.ResultSetDataModel;
 import javax.faces.model.ScalarDataModel;
 
@@ -58,6 +59,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.jsp.jstl.sql.Result;
 
 
 /**
@@ -773,6 +775,8 @@ public class UIData extends UIComponentBase
             this.model = new ArrayDataModel((Object[]) current);
         } else if (current instanceof ResultSet) {
             this.model = new ResultSetDataModel((ResultSet) current);
+        } else if (current instanceof Result) {
+            this.model = new ResultDataModel((Result) current);
         } else {
             this.model = new ScalarDataModel(current);
         }
