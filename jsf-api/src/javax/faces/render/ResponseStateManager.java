@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.13 2004/02/26 20:31:13 eburns Exp $
+ * $Id: ResponseStateManager.java,v 1.14 2005/01/11 20:56:43 edburns Exp $
  */
 
 /*
@@ -43,6 +43,13 @@ public abstract class ResponseStateManager {
      * written out to hidden fields, the implementation must take care
      * to make all necessary character replacements to make the Strings
      * suitable for inclusion as an HTTP request paramater.</p>
+     *
+     * <p>If the state saving method for this application is {@link
+     * javax.faces.application.StateManager.STATE_SAVING_METHOD_SERVER},
+     * the implementation may encrypt the state to be saved to the
+     * client.  We recommend that the state be unreadable by the client,
+     * and also be tamper evident.  The reference implementation follows
+     * these recommendations.  </p>
      *
      * @param context The {@link FacesContext} instance for the current request
      * @param state The serialized state information previously saved
