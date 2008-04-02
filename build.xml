@@ -58,6 +58,7 @@
     <delete file="${basedir}/javaserverfaces_source_${version}.zip" />
     <delete file="${basedir}/javaserverfaces_source_${version}.class" />
     <delete file="jsf-portlet.zip" />
+    <delete dir="{jsf-portlet.home}/dist" />
   </target>
 
   <!-- Create the source distribution -->
@@ -79,6 +80,10 @@
       <zipfileset dir="${jsf-portlet.home}"
              excludes="**/CVS/**, **/build/**"
                prefix="jsf-portlet"/>
+     
+      <zipfileset dir="${jsf-demo.home}"
+            excludes="**/CVS/**, **/build/**, **/dist/**"
+            prefix="jsf-demo"/>
   
     </zip>
   </target>
@@ -107,9 +112,9 @@
   -->
   <target name="build-portletLibrary"
       description="Build Portlet Integration Library">
-      <mkdir dir="${jsf-portlet.home}/dist"/>
-      <mkdir dir="${jsf-portlet.home}/dist/samples"/>
-      <mkdir dir="${jsf-portlet.home}/dist/lib"/>
+      <mkdir dir="${jsf-portlet.home}/dist/jsf-portlet" />
+      <mkdir dir="${jsf-portlet.home}/dist/jsf-portlet/samples"/>
+      <mkdir dir="${jsf-portlet.home}/dist/jsf-portlet/lib"/>
       <echo>
       jsf-portlet is ${jsf-portlet.home}
     </echo>
@@ -120,21 +125,21 @@
     
     <ant dir="${jsf-portlet.home}" inheritall="false" target="main"/>
     <copy file="${jsf-portlet.home}/portlet-lib/build/lib/jsf-portlet.jar"
-         todir="${jsf-portlet.home}/dist/lib" />
+         todir="${jsf-portlet.home}/dist/jsf-portlet/lib" />
     
     <!-- copy the portlet-guessNumber.war and source -->
     <ant dir="${jsf-demo.home}/portlet-guessNumber" inheritAll="false">
     </ant>
-    <copy todir="${jsf-portlet.home}/dist/samples"
+    <copy todir="${jsf-portlet.home}/dist/jsf-portlet/samples"
           file="${jsf-demo.home}/portlet-guessNumber/build/portlet-guessNumber.war"/>
           
-    <copy todir="${jsf-portlet.home}/dist/samples/portlet-guessNumber" 
+    <copy todir="${jsf-portlet.home}/dist/jsf-portlet/samples/portlet-guessNumber" 
         includeEmptyDirs="false">
       <fileset dir="${jsf-demo.home}/portlet-guessNumber" excludes="**/build/**"/>
     </copy>
      <zip zipfile="jsf-portlet.zip">
-      <fileset dir="${jsf-portlet.home}"
-               includes="dist/**"/>
+      <fileset dir="${jsf-portlet.home}/dist"
+               includes="jsf-portlet/**"/>
     </zip>
       
   </target>
