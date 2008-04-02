@@ -29,7 +29,7 @@
 # This build.properties allows for the building of 
 # javaserverfaces-sources against Glassfish.
 #
-# $Id: build.properties.glassfish,v 1.5 2005/12/14 22:57:49 rlubke Exp $
+# $Id: build.properties.glassfish,v 1.6 2006/01/27 22:22:57 rlubke Exp $
 # -----------------------------------------------------------------------------
 
 # --------------------------------------------------
@@ -86,7 +86,7 @@ glassfish.domain=domain1
 #    Compilation flags
 # --------------------------------------------------
 compile.deprecation=off
-compile.debug=off
+compile.debug=true
 
 # --------------------------------------------------
 #    Java 'Endorsed' directory
