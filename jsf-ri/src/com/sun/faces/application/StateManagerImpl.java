@@ -258,14 +258,9 @@ public class StateManagerImpl extends StateManager {
                     idInLogicalMap = createUniqueRequestId();
                 }
                 assert(null != idInLogicalMap);
-
-                // this value will not be null if this is a post
-                // back
-                String idInActualMap = (String)
-                      requestMap.get(RIConstants.ACTUAL_VIEW_MAP);
-                if (idInActualMap == null) {
-                    idInActualMap = createUniqueRequestId();
-                }
+                
+                String idInActualMap = createUniqueRequestId();
+               
                 LRUMap<String, Object[]> actualMap =
                       logicalMap.get(idInLogicalMap);
                 if (actualMap == null) {
