@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolverImpl.java,v 1.12 2003/08/28 15:52:30 rlubke Exp $
+ * $Id: VariableResolverImpl.java,v 1.13 2003/09/18 15:02:07 rlubke Exp $
  */
 
 /*
@@ -18,7 +18,6 @@ import javax.faces.el.VariableResolver;
 import javax.faces.FactoryFinder;
 
 import com.sun.faces.application.ApplicationImpl;
-import com.sun.faces.util.Util;
 
 
 
@@ -57,7 +56,7 @@ public class VariableResolverImpl extends VariableResolver {
         } else if ("requestScope".equals(name)) {
             return (ec.getRequestMap());
         } else if ("sessionScope".equals(name)) {
-            return (Util.getSessionMap(context));
+            return (ec.getSessionMap());
         } else if ("view".equals(name)) {
             return (context.getViewRoot());
         } else {
@@ -65,7 +64,7 @@ public class VariableResolverImpl extends VariableResolver {
             Object value = null;
 
 	    if (null == (value = ec.getRequestMap().get(name))) {
-            if (null == (value = Util.getSessionMap(context).get(name))) {
+            if (null == (value = ec.getSessionMap().get(name))) {
                 if (null == (value = ec.getApplicationMap().get(name))) {
                     // if it's a managed bean try and create it
                     ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(

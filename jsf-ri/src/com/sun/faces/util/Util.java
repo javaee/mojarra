@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.90 2003/09/16 18:11:09 rkitain Exp $
+ * $Id: Util.java,v 1.91 2003/09/18 15:02:09 rlubke Exp $
  */
 
 /*
@@ -61,7 +61,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.90 2003/09/16 18:11:09 rkitain Exp $
+ * @version $Id: Util.java,v 1.91 2003/09/18 15:02:09 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -787,15 +787,9 @@ private Util()
      */
     public static Map getSessionMap(FacesContext context) {
         if (context == null) {
-	    context = FacesContext.getCurrentInstance();
-	}
-	Map sessionMap = context.getExternalContext().getSessionMap();
-	if (sessionMap == null) {
-	    context.getExternalContext().getSession(true);
-	    sessionMap = context.getExternalContext().getSessionMap();
-	    Assert.assert_it(sessionMap != null);
+            context = FacesContext.getCurrentInstance();
         }
-	return sessionMap;
+        return context.getExternalContext().getSessionMap();
     }
 
     public static Converter getConverterForClass(Class converterClass) {

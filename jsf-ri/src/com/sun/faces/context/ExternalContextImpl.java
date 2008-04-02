@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.15 2003/09/11 19:00:56 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.16 2003/09/18 15:02:06 rlubke Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import java.util.AbstractMap;
 
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
-import javax.faces.application.StateManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -47,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.15 2003/09/11 19:00:56 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.16 2003/09/18 15:02:06 rlubke Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -104,18 +103,6 @@ public class ExternalContextImpl extends ExternalContext {
 	}
         this.response = response;
 
-        // Create a session (if needed) if we are saving state there
-        if (this.request instanceof HttpServletRequest) {
-            boolean createSession = true;
-            String paramValue = null;
-            if (null != (paramValue =
-            sc.getInitParameter(StateManager.STATE_SAVING_METHOD_PARAM_NAME))){
-                createSession = !paramValue.
-                    equalsIgnoreCase(StateManager.STATE_SAVING_METHOD_CLIENT);
-            }
-            ((HttpServletRequest) request).getSession(createSession);
-        }
-
     }
 
     public Object getSession(boolean create) {
@@ -142,15 +129,9 @@ public class ExternalContextImpl extends ExternalContext {
     }
 
     public Map getSessionMap() {
-        HttpSession session = (HttpSession) getSession(false);
-        if (session != null) {
-            if (sessionMap == null) {
-                sessionMap = new SessionMap(session);
-            }
-            return sessionMap;
-        } else {
-            return (null);
-        }
+        if (sessionMap == null)
+            sessionMap = new SessionMap((HttpSession) getSession(true));
+        return sessionMap;       
     }
 
     public Map getRequestMap() {
@@ -405,7 +386,7 @@ abstract class BaseContextMap extends AbstractMap {
 class ApplicationMap extends BaseContextMap {
     private ServletContext servletContext = null;
 
-    public ApplicationMap(ServletContext servletContext) {
+    ApplicationMap(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
@@ -457,7 +438,7 @@ class ApplicationMap extends BaseContextMap {
 class SessionMap extends BaseContextMap {
     private HttpSession session = null;
 
-    public SessionMap(HttpSession session) {
+    SessionMap(HttpSession session) {
         this.session = session;
     }
 
@@ -508,7 +489,7 @@ class SessionMap extends BaseContextMap {
 class RequestMap extends BaseContextMap {
     private ServletRequest request = null;
 
-    public RequestMap(ServletRequest request) {
+    RequestMap(ServletRequest request) {
         this.request = request;
     }
 
@@ -559,7 +540,7 @@ class RequestMap extends BaseContextMap {
 class RequestParameterMap extends BaseContextMap {
     private ServletRequest request = null;
 
-    public RequestParameterMap(ServletRequest request) {
+    RequestParameterMap(ServletRequest request) {
         this.request = request;
     }
 
@@ -593,7 +574,7 @@ class RequestParameterMap extends BaseContextMap {
 class RequestParameterValuesMap extends BaseContextMap {
     private ServletRequest request = null;
 
-    public RequestParameterValuesMap(ServletRequest request) {
+    RequestParameterValuesMap(ServletRequest request) {
         this.request = request;
     }
 
@@ -628,7 +609,7 @@ class RequestParameterValuesMap extends BaseContextMap {
 class RequestHeaderMap extends BaseContextMap {
     private HttpServletRequest request = null;
 
-    public RequestHeaderMap(HttpServletRequest request) {
+    RequestHeaderMap(HttpServletRequest request) {
         this.request = request;
     }
 
@@ -662,7 +643,7 @@ class RequestHeaderMap extends BaseContextMap {
 class RequestHeaderValuesMap extends BaseContextMap {
     private HttpServletRequest request = null;
 
-    public RequestHeaderValuesMap(HttpServletRequest request) {
+    RequestHeaderValuesMap(HttpServletRequest request) {
         this.request = request;
     }
 
@@ -750,7 +731,7 @@ class RequestHeaderValuesMap extends BaseContextMap {
 class RequestCookieMap extends BaseContextMap {
     private HttpServletRequest request = null;
 
-    public RequestCookieMap(HttpServletRequest newRequest) {
+    RequestCookieMap(HttpServletRequest newRequest) {
         this.request = newRequest;
     }
 
@@ -802,7 +783,7 @@ class RequestCookieMap extends BaseContextMap {
 class InitParameterMap extends BaseContextMap {
     private ServletContext servletContext;
 
-    public InitParameterMap(ServletContext newServletContext) {
+    InitParameterMap(ServletContext newServletContext) {
 	    servletContext = newServletContext;
     }
 
