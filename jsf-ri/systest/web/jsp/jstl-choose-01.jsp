@@ -6,19 +6,22 @@
 <f:view>
 <html>
 <head>
-<title>jstl-import-03</title>
+<title>jstl-choose-01</title>
 </head>
 <body>
 <h:output_text value="[1]"/>
 <c:choose>
   <c:when test="${param.choose == 'a'}">
-    <c:import url="jstl-import-03a.jsp"/>
+    <h:output_text id="comp2a" value="[2a]"/>
+    <h:output_text id="comp2z" value="[2z]"/>
   </c:when>
   <c:when test="${param.choose == 'b'}">
-    <c:import url="jstl-import-03b.jsp"/>
+    <h:output_text id="comp2b" value="[2b]"/>
+    <h:output_text id="comp2y" value="[2y]"/>
   </c:when>
   <c:otherwise>
-    <c:import url="jstl-import-03c.jsp"/>
+    <h:output_text id="comp2c" value="[2c]"/>
+    <h:output_text id="comp2x" value="[2x]"/>
   </c:otherwise>
 </c:choose>
 <h:output_text value="[3]"/>

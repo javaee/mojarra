@@ -1,5 +1,5 @@
 /*
- * $Id: JstlIntegrationTestCase.java,v 1.4 2003/09/15 23:46:15 craigmcc Exp $
+ * $Id: JstlIntegrationTestCase.java,v 1.5 2003/09/17 21:20:44 craigmcc Exp $
  */
 
 /*
@@ -75,6 +75,82 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
 
 
     // ------------------------------------------------- Individual Test Methods
+
+
+    // Components Inside Choose (Explicit Identifiers)
+    public void testJstlChoose01() throws Exception {
+
+        // Check each individual case multiple times
+        checkJstlChoose00();
+        checkJstlChoose01a();
+        checkJstlChoose01a();
+        checkJstlChoose01a();
+        checkJstlChoose00();
+        checkJstlChoose01b();
+        checkJstlChoose01b();
+        checkJstlChoose01b();
+        checkJstlChoose00();
+        checkJstlChoose01c();
+        checkJstlChoose01c();
+        checkJstlChoose01c();
+
+        // Check cases in ascending order
+        checkJstlChoose00();
+        checkJstlChoose01a();
+        checkJstlChoose01b();
+        checkJstlChoose01c();
+
+        // Check cases in descending order
+        checkJstlChoose00();
+        checkJstlChoose01c();
+        checkJstlChoose01b();
+        checkJstlChoose01a();
+
+        // Check cases in random order
+        checkJstlChoose00();
+        checkJstlChoose01b();
+        checkJstlChoose01a();
+        checkJstlChoose01c();
+
+    }
+
+
+    // Components Inside Choose (In Naming Container)
+    public void testJstlChoose02() throws Exception {
+
+        // Check each individual case multiple times
+        checkJstlChoose00();
+        checkJstlChoose02a();
+        checkJstlChoose02a();
+        checkJstlChoose02a();
+        checkJstlChoose00();
+        checkJstlChoose02b();
+        checkJstlChoose02b();
+        checkJstlChoose02b();
+        checkJstlChoose00();
+        checkJstlChoose02c();
+        checkJstlChoose02c();
+        checkJstlChoose02c();
+
+        // Check cases in ascending order
+        checkJstlChoose00();
+        checkJstlChoose02a();
+        checkJstlChoose02b();
+        checkJstlChoose02c();
+
+        // Check cases in descending order
+        checkJstlChoose00();
+        checkJstlChoose02c();
+        checkJstlChoose02b();
+        checkJstlChoose02a();
+
+        // Check cases in random order
+        checkJstlChoose00();
+        checkJstlChoose02b();
+        checkJstlChoose02a();
+        checkJstlChoose02c();
+
+    }
 
 
     // Components Inside Conditional
@@ -259,8 +335,8 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     }
 
 
-    // Test selectively importing JSPs with simple components
-    public void testJstImport03() throws Exception {
+    // Test selectively importing JSPs with simple components (explicit ids)
+    public void testJstlImport03() throws Exception {
 
         // Check each individual case multiple times
         checkJstlImport00();
@@ -297,7 +373,127 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     }
 
 
+    // Test selectively importing JSPs with simple components (naming container)
+    public void testJstlImport04() throws Exception {
+
+        // Check each individual case multiple times
+        checkJstlImport00();
+        checkJstlImport04a();
+        checkJstlImport04a();
+        checkJstlImport04a();
+        checkJstlImport00();
+        checkJstlImport04b();
+        checkJstlImport04b();
+        checkJstlImport04b();
+        checkJstlImport00();
+        checkJstlImport04c();
+        checkJstlImport04c();
+        checkJstlImport04c();
+
+        // Check cases in ascending order
+        checkJstlImport00();
+        checkJstlImport04a();
+        checkJstlImport04b();
+        checkJstlImport04c();
+
+        // Check cases in descending order
+        checkJstlImport00();
+        checkJstlImport04c();
+        checkJstlImport04b();
+        checkJstlImport04a();
+
+        // Check cases in random order
+        checkJstlImport00();
+        checkJstlImport04b();
+        checkJstlImport04a();
+        checkJstlImport04c();
+
+    }
+
+
     // --------------------------------------------------------- Private Methods
+
+
+    // Check the reset page to force a new component tree
+    private void checkJstlChoose00() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-00.jsp");
+        assertEquals("Correct page title",
+                     "jstl-choose-00", page.getTitleText());
+
+    }
+
+
+    // Check chosen components with explicit ids
+    private void checkJstlChoose01a() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-01.jsp?choose=a");
+        assertEquals("Correct page title",
+                     "jstl-choose-01", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2a] [2z] [3]", getBodyText(page));
+
+    }
+
+
+    // Check chosen components with explicit ids
+    private void checkJstlChoose01b() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-01.jsp?choose=b");
+        assertEquals("Correct page title",
+                     "jstl-choose-01", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2b] [2y] [3]", getBodyText(page));
+
+    }
+
+
+    // Check chosen components with explicit ids
+    private void checkJstlChoose01c() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-01.jsp?choose=c");
+        assertEquals("Correct page title",
+                     "jstl-choose-01", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2c] [2x] [3]", getBodyText(page));
+
+    }
+
+
+    // Check chosen components with naming containers
+    private void checkJstlChoose02a() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-02.jsp?choose=a");
+        assertEquals("Correct page title",
+                     "jstl-choose-02", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2a] [2z] [3]", getBodyText(page));
+
+    }
+
+
+    // Check chosen components with naming containers
+    private void checkJstlChoose02b() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-02.jsp?choose=b");
+        assertEquals("Correct page title",
+                     "jstl-choose-02", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2b] [2y] [3]", getBodyText(page));
+
+    }
+
+
+    // Check chosen components with naming containers
+    private void checkJstlChoose02c() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-choose-02.jsp?choose=c");
+        assertEquals("Correct page title",
+                     "jstl-choose-02", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2c] [2x] [3]", getBodyText(page));
+
+    }
 
 
     // Check the reset page to force a new component tree
@@ -486,38 +682,74 @@ public class JstlIntegrationTestCase extends AbstractTestCase {
     }
 
 
-    // Check selective imports with simple components
+    // Check selective imports with simple components (explicit ids)
     private void checkJstlImport03a() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=a");
         assertEquals("Correct page title",
                      "jstl-import-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2a] [3]", getBodyText(page));
+                     "[1] [2a][2z] [3]", getBodyText(page));
 
     }
 
 
-    // Check selective imports with simple components
+    // Check selective imports with simple components (explicit ids)
     private void checkJstlImport03b() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=b");
         assertEquals("Correct page title",
                      "jstl-import-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2b] [3]", getBodyText(page));
+                     "[1] [2b][2y] [3]", getBodyText(page));
 
     }
 
 
-    // Check selective imports with simple components
+    // Check selective imports with simple components (explicit ids)
     private void checkJstlImport03c() throws Exception {
 
         HtmlPage page = getPage("/faces/jsp/jstl-import-03.jsp?choose=c");
         assertEquals("Correct page title",
                      "jstl-import-03", page.getTitleText());
         assertEquals("Correct body element",
-                     "[1] [2c] [3]", getBodyText(page));
+                     "[1] [2c][2x] [3]", getBodyText(page));
+
+    }
+
+
+    // Check selective imports with simple components (naming container)
+    private void checkJstlImport04a() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-04.jsp?choose=a");
+        assertEquals("Correct page title",
+                     "jstl-import-04", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2a][2z] [3]", getBodyText(page));
+
+    }
+
+
+    // Check selective imports with simple components (naming container)
+    private void checkJstlImport04b() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-04.jsp?choose=b");
+        assertEquals("Correct page title",
+                     "jstl-import-04", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2b][2y] [3]", getBodyText(page));
+
+    }
+
+
+    // Check selective imports with simple components (naming container)
+    private void checkJstlImport04c() throws Exception {
+
+        HtmlPage page = getPage("/faces/jsp/jstl-import-04.jsp?choose=c");
+        assertEquals("Correct page title",
+                     "jstl-import-04", page.getTitleText());
+        assertEquals("Correct body element",
+                     "[1] [2c][2x] [3]", getBodyText(page));
 
     }
 
