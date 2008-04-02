@@ -7,78 +7,70 @@
 
 <messages>
   <message messageId="javax.faces.validator.DoubleRangeValidator.LIMIT" 
-           severity="1" summary="Erreur de validation." >
-      <detail>Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;." />
+
   <message messageId="javax.faces.validator.DoubleRangeValidator.MAXIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise {0}.</detail>
-  </message>
+           severity="1" summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''." />
+
   <message messageId="javax.faces.validator.DoubleRangeValidator.MINIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''." />
+
   <message messageId="javax.faces.validator.DoubleRangeValidator.TYPE" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e n'est pas du bon type.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type." />
 
   <message messageId="javax.faces.validator.LengthValidator.LIMIT" 
-           severity="1" summary="Erreur de validation." >
-      <detail>Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;." />
+
   <message messageId="javax.faces.validator.LengthValidator.MAXIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''." />
+
   <message messageId="javax.faces.validator.LengthValidator.MINIMUM" 
-           severity="1" summary="Erreur de validation" >
-      <detail>La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''." />
 
   <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" summary="Erreur de validation." >
-      <detail>Valeur requise.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: Valeur requise." />
 
   <message messageId="javax.faces.validator.LongRangeValidator.LIMIT" 
-           severity="1" summary="Erreur de validation." >
-      <detail>Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;" />
+
   <message messageId="javax.faces.validator.LongRangeValidator.MAXIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''." />
+ 
   <message messageId="javax.faces.validator.LongRangeValidator.MINIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''." />
+
   <message messageId="javax.faces.validator.LongRangeValidator.TYPE" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e n'est pas du bon type.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type." />
 
   <message messageId="javax.faces.validator.StringRangeValidator.LIMIT" 
-           severity="1" summary="Erreur de validation." >
-      <detail>Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: Attribut sp&#233;cifi&#233; ne peut etre converti &#224; un type appropri&#233;." />
+
   <message messageId="javax.faces.validator.StringRangeValidator.MAXIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est sup&#233;rieure &#224; la valeur maximale permise ''{0}''." />
+
   <message messageId="javax.faces.validator.StringRangeValidator.MINIMUM" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise {0}.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e est inf&#233;rieure &#224; la valeur minimale permise ''{0}''." />
+
   <message messageId="javax.faces.validator.StringRangeValidator.TYPE" 
-           severity="1" summary="Erreur de validation." >
-      <detail>La valeur sp&#233;cifi&#233;e n'est pas du bon type.</detail>
-  </message>
+           severity="1" 
+           summary="Erreur de validation: La valeur sp&#233;cifi&#233;e n'est pas du bon type." />
 
   <message messageId="javax.faces.validator.RequiredValidator.FAILED" 
-           severity="1" summary="Erreur de validation." >
-      <detail>Valeur requise.</detail>
-  </message>
-
+           severity="1" 
+           summary="Erreur de validation: Valeur requise." />
 </messages>
 

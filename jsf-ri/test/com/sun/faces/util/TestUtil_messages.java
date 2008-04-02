@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.8 2003/05/14 20:48:47 horwat Exp $
+ * $Id: TestUtil_messages.java,v 1.9 2003/05/19 18:16:28 horwat Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.util.Properties;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.8 2003/05/14 20:48:47 horwat Exp $
+ * @version $Id: TestUtil_messages.java,v 1.9 2003/05/19 18:16:28 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -128,7 +128,6 @@ public class TestUtil_messages extends ServletFacesTestCase {
         getFacesContext().setLocale(locale);
         verifyParamsInMessages(messageInfo);
 
-/* PENDING horwat: commented out until message format decided upon
         // French Language
         System.out.println("Verifying French Messages...");
         locale = new Locale("fr", "");
@@ -146,7 +145,6 @@ public class TestUtil_messages extends ServletFacesTestCase {
         locale = new Locale("es", "");
         getFacesContext().setLocale(locale);
         verifyParamsInMessages(messageInfo);
-*/
     }
 
     private void verifyParamsInMessages(String[][] messageInfo) {
