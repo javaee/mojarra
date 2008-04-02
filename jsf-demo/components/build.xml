@@ -40,11 +40,11 @@
 
   <property name="depth" value=".."/>
 
-  <property file="build.properties"/>                <!-- this demo local -->
-  <property file="../build.properties"/>             <!-- demos local     -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Demos local     -->
   <property file="../../build.properties"/>          <!-- jsf local       -->
-  <property file="${user.home}/build.properties"/>   <!-- user local      -->
-  <property file="../default.properties"/>           <!-- last resort     -->
+  <property file="../default.properties"/>           <!-- last resort     --> 
 
   <!-- Configure the context path for this application -->
   <property name="context.path" value="/jsf-components"/>
@@ -210,7 +210,8 @@
      description="Compile Java files for components, not webapp." >
       <touch file="${build}/last-build"/>
 
-    <javac debug="on" srcdir="src/java" destdir="${build}/classes/components">
+    <javac debug="on" srcdir="src/java" destdir="${build}/classes/components"
+           fork="true">
 	
         <include name="components/**" />
         <classpath refid="classpath"/>
@@ -219,7 +220,7 @@
     <copy todir="${build}/classes/components/META-INF" 
             file="src/java/components/taglib/components.tld"/>
 
-    <javac debug="on" srcdir="src/java" destdir="${build}/${webapp}/WEB-INF/classes">
+    <javac debug="on" srcdir="src/java" fork="true" destdir="${build}/${webapp}/WEB-INF/classes">
          <include name="demo/**" />
          <classpath refid="classpath"/>
     </javac>

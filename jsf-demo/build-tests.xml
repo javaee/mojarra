@@ -39,8 +39,10 @@
 <project name="JSF Demo unit tests" default="build" basedir=".">    
 
     <!-- Test Properties -->
-    <property file="build.properties"/>
-    <property file="default.properties"/>
+    <property file="${user.home}/build.properties"/>   <!-- User local        -->
+    <property file="build.properties"/>                <!-- Component local   -->
+    <property file="../build.properties"/>             <!-- Commons local     -->
+
     <property name="build" value="${basedir}/test/build"/>
     <property name="url" value="http://${host}:${port}/manager"/>
     <property name="guessNumber.context.path" value="/jsf-guessNumber"/>

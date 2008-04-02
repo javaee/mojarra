@@ -43,11 +43,11 @@
 
   <property name="depth" value=".."/>
 
-  <property file="build.properties"/>                <!-- this demo local -->
-  <property file="../build.properties"/>             <!-- demos local     -->
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../build.properties"/>             <!-- Demos local     -->
   <property file="../../build.properties"/>          <!-- jsf local       -->
-  <property file="${user.home}/build.properties"/>   <!-- user local      -->
-  <property file="../default.properties"/>           <!-- last resort     -->
+  <property file="../default.properties"/>           <!-- last resort     -->      
 
   <!-- Configure the context path for this application -->
   <property name="example" value="jsf-cardemo" />
@@ -248,7 +248,7 @@
 
   <target name="build" depends="copyJars,javadocs" 
      description="Compile Java files and copy static files." >
-    <javac debug="on" 
+    <javac debug="on" fork="true" 
            srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>

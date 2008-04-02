@@ -17,7 +17,7 @@
 <!-- ************ Per user local properties ******************************* -->
 
   <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- RI local          -->
+  <property file="../../build.properties"/>             <!-- RI local          -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
 
 

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.6 2004/06/17 16:50:37 eburns Exp $
+ $Id: build-tests.xml,v 1.7 2004/09/08 17:56:00 rlubke Exp $
 -->
 
 <!--
@@ -20,7 +20,7 @@
 
   <!-- Load properties in case this script executed directly -->
   <property file="build.properties"/>
-  <property file="../build.properties"/>
+  <property file="../../build.properties"/>
   <property file="${user.home}/build.properties"/>
 
   <!-- SystestClient connection properties -->

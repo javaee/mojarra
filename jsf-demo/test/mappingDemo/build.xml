@@ -42,7 +42,7 @@
 
   <property file="build.properties"/>                <!-- this demo local -->
   <property file="../build.properties"/>             <!-- demos local     -->
-  <property file="../../build.properties"/>          <!-- jsf local       -->
+  <property file="../../../build.properties"/>          <!-- jsf local       -->
   <property file="${user.home}/build.properties"/>   <!-- user local      -->
   <property file="../../default.properties"/>        <!-- last resort     -->
 
@@ -85,6 +85,7 @@
     
 
   <target name="clean" >
+    <echo message="JAR: ${catalina-ant.jar}"/>
     <delete dir="${build}" />
     <delete dir="${context.path}" />
   </target>
