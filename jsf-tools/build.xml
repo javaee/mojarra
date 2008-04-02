@@ -8,10 +8,10 @@
 
 <!--
   =======================================================================
-    JSF-API build file
+    JSF-TOOLS build file
   =======================================================================
 -->
-<project name="JSF-API" default="main" basedir=".">
+<project name="JSF-TOOLS" default="main" basedir=".">
 
   <property file="build.properties"/>                <!-- Component local   -->
   <property file="${user.home}/build.properties"/>   <!-- User local        -->
@@ -128,7 +128,7 @@ necessary to generate required classes.
 
   <!--
        ===================================================================
-         Build the API code
+         Build the Code Generating code
        ===================================================================
   -->
   <target name="build" depends="generate">
@@ -212,7 +212,7 @@ necessary to generate required classes.
 
   <!--
        ===================================================================
-         Create the API documentation
+         Create the documentation
        ===================================================================
   -->
 
@@ -225,7 +225,7 @@ necessary to generate required classes.
 
   <target name="javadocs" depends="javadoc_check, generate"
           unless="javadoc.notrequired"
-          description="Create the JavaDoc API documentation">
+          description="Create the JavaDoc documentation">
     <mkdir dir="${build.javadocs}"/>
     <javadoc packagenames="javax.*"
              destdir="${build.javadocs}"
