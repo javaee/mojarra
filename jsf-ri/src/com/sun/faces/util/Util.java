@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.129 2004/01/31 06:59:39 eburns Exp $
+ * $Id: Util.java,v 1.130 2004/02/02 18:31:50 eburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.129 2004/01/31 06:59:39 eburns Exp $ 
+ * @version $Id: Util.java,v 1.130 2004/02/02 18:31:50 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -704,6 +704,48 @@ private Util()
 	return result;
     }
 
+    /** 
+     * @return true if the component has any passthru attributes
+     */
+    // PENDING() it would be much more performant to have the tag be
+    // aware of the passthru attributes and have it set a
+    // "hasPassthruAttributes" attribute to true if the component has
+    // any.  
+
+    public static boolean hasPassThruAttributes(UIComponent component) {
+	if (null == component) {
+	    return false;
+	}
+
+	boolean result = false;
+	Map attrs = component.getAttributes();
+	if (null == attrs) {
+	    return false;
+	}
+	int i = 0;
+	Object attrVal;
+	String empty = "";
+	for (i = 0; i < passthruAttributes.length; i++) {
+	    if (null != (attrVal = attrs.get(passthruAttributes[i]))
+		&&
+		!empty.equals(attrVal)) {
+		result = true;
+		break;
+	    }
+	}
+	if (!result) {
+	    for (i = 0; i < booleanPassthruAttributes.length; i++) {
+		if (null != (attrVal = attrs.get(booleanPassthruAttributes[i]))
+		    &&
+		    !empty.equals(attrVal)) {
+		    result = true;
+		    break;
+		}
+	    }
+	}
+	return result;
+    }
+
     public static void renderBooleanPassThruAttributes(ResponseWriter writer,
         UIComponent component) throws IOException {
 	renderBooleanPassThruAttributes(writer, component, null);
@@ -730,7 +772,7 @@ private Util()
 	    if (null != excludes) {
 		for (j = 0; j < jLen; j++) {
 		    if (null != excludes[j] &&
-			excludes[j].equals(passthruAttributes[i])) {
+			excludes[j].equals(booleanPassthruAttributes[i])) {
 			skip = true;
 			break;
 		    }

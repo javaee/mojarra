@@ -59,7 +59,7 @@
   <h:panelGrid id="thanksPanel" columns="1" footerClass="subtitle"
    headerClass="subtitlebig" styleClass="medium" columnClasses="subtitle,medium">
     <f:facet name="header">
-       <h:outputFormat  value="#{bundle.thanksLabel}">
+       <h:outputFormat  title="thanks" value="#{bundle.thanksLabel}">
           <f:param value="#{sessionScope.firstName}"/>
        </h:outputFormat>
     </f:facet>

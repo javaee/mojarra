@@ -1,5 +1,5 @@
 /*
- * $Id: OutputMessageRenderer.java,v 1.6 2004/01/27 21:04:27 eburns Exp $
+ * $Id: OutputMessageRenderer.java,v 1.7 2004/02/02 18:31:49 eburns Exp $
  */
 
 /*
@@ -148,6 +148,7 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	boolean wroteSpan = false;
                 
 	if (null != styleClass || null != style || 
+	    Util.hasPassThruAttributes(component) ||
 	    shouldWriteIdAttribute(component)) {
 	    writer.startElement("span", component);
 	    wroteSpan = true;
@@ -155,9 +156,9 @@ public class OutputMessageRenderer extends HtmlBasicRenderer {
 	    if (null != styleClass) {
 		writer.writeAttribute("class", styleClass, "styleClass");
 	    }
-	    if (null != style) {
-		writer.writeAttribute("style", style, "style");
-	    }
+	    // style is rendered as a passthru attribute
+	    Util.renderPassThruAttributes(writer, component);
+	    Util.renderBooleanPassThruAttributes(writer, component);
 	}
         writer.writeText(message, null);
 	if (wroteSpan) {

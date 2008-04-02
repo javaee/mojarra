@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.61 2004/01/27 21:04:29 eburns Exp $
+ * $Id: TextRenderer.java,v 1.62 2004/02/02 18:31:49 eburns Exp $
  */
 
 /*
@@ -115,15 +115,17 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 
         } else if (isOutput = (component instanceof UIOutput)) {
 	    if (null != styleClass || null != style || 
+		Util.hasPassThruAttributes(component) ||
 		(shouldWriteIdAttribute = shouldWriteIdAttribute(component))) {
 		writer.startElement("span", component);
 		writeIdAttributeIfNecessary(context, writer, component);
 		if (null != styleClass) {
 		    writer.writeAttribute("class", styleClass, "styleClass");
 		}
-		if (null != style) {
-		    writer.writeAttribute("style", style, "style");
-		}
+		// style is rendered as a passthru attribute
+		Util.renderPassThruAttributes(writer, component);
+		Util.renderBooleanPassThruAttributes(writer, component);
+
 	    } 
             if (currentValue != null) {
 		Object val = null; 
@@ -149,6 +151,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
             }
         }
 	if (isOutput && (null != styleClass || null != style || 
+			 Util.hasPassThruAttributes(component) || 
 			 shouldWriteIdAttribute)) {
 	    writer.endElement("span");
 	}

@@ -658,6 +658,8 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 </h:commandLink>
   <TABLE>
 
+<h:outputText title="output text with title" value="should be spanned" />
+
 </h:form>
 </f:view>
 
