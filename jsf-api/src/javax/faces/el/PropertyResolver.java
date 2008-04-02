@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolver.java,v 1.13 2005/12/05 16:42:53 edburns Exp $
+ * $Id: PropertyResolver.java,v 1.14 2006/02/16 19:46:10 edburns Exp $
  */
 
 /*
@@ -178,12 +178,19 @@ public abstract class PropertyResolver {
 
 
     /**
-     * <p>Return the <code>java.lang.Class</code> representing the type of
-     * the specified property.</p>
+     * <p>Return the <code>java.lang.Class</code> representing the type
+     * of the specified property.  An instance of any Object of that
+     * type my be set as the value of that property, as long as the
+     * property is not read-only.  The actual value of the property, if
+     * non-null, is guaranteed to be an instance of this type, or an
+     * instance of a subclass of this type.  This method is also useful
+     * for discovering the type of Objects that may be set as the value
+     * of the property.</p>
+     *
      * <p>For a bean base object, the property is coerced to a
-     * <code>String</code> and used as the property name.
-     * For all other base object types (e.g., a Map), the property is used
-     * without any coercing.</p>
+     * <code>String</code> and used as the property name.  For all other
+     * base object types (e.g., a Map), the property is used without any
+     * coercing.</p>
      *
      * @param base The base object whose property is to be analyzed
      * @param property The property to be analyzed
