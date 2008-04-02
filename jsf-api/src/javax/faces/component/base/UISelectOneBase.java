@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneBase.java,v 1.3 2003/08/28 21:08:55 craigmcc Exp $
+ * $Id: UISelectOneBase.java,v 1.4 2003/08/28 21:17:26 craigmcc Exp $
  */
 
 /*
@@ -39,23 +39,6 @@ public class UISelectOneBase extends UIInputBase implements UISelectOne {
 
         super();
         setRendererType("Menu");
-
-    }
-
-
-    // -------------------------------------------------------------- Properties
-
-
-    public Object getSelectedValue() {
-
-        return (getValue());
-
-    }
-
-
-    public void setSelectedValue(Object selectedValue) {
-
-        setValue(selectedValue);
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.28 2003/08/28 21:08:52 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.29 2003/08/28 21:17:25 craigmcc Exp $
  */
 
 /*
@@ -42,27 +42,6 @@ public interface UISelectOne extends UIInput {
     public static final String INVALID_MESSAGE_ID =
         "javax.faces.component.UISelectOne.INVALID";
 
-
-
-    // -------------------------------------------------------------- Properties
-
-
-    /**
-     * <p>Return the currently selected value, or <code>null</code> if there
-     * is no currently selected value.  This is a typesafe alias for
-     * <code>getValue()</code>.</p>
-     */
-    public Object getSelectedValue();
-
-
-    /**
-     * <p>Set the currently selected value, or <code>null</code> to indicate
-     * that there is no currently selected value.  This is a typesafe
-     * alias for <code>setValue()</code>.</p>
-     *
-     * @param selectedValue The new selected value (if any)
-     */
-    public void setSelectedValue(Object selectedValue);
 
 
     // ------------------------------------------------------ Validation Methods

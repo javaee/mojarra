@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneBaseTestCase.java,v 1.3 2003/08/28 21:08:57 craigmcc Exp $
+ * $Id: UISelectOneBaseTestCase.java,v 1.4 2003/08/28 21:17:27 craigmcc Exp $
  */
 
 /*
@@ -72,8 +72,6 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
         super.testPristine();
         UISelectOne selectOne = (UISelectOne) component;
 
-        assertNull("no selectedValue", selectOne.getSelectedValue());
-
     }
 
 
@@ -91,23 +89,6 @@ public class UISelectOneBaseTestCase extends UIInputBaseTestCase {
 
         super.testPropertiesValid();
         UISelectOne selectOne = (UISelectOne) component;
-
-        Object value = "foo";
-
-        selectOne.setSelectedValue(value);
-        assertEquals(value, selectOne.getSelectedValue());
-        assertEquals(value, (Object) selectOne.getValue());
-        selectOne.setSelectedValue(null);
-        assertNull(selectOne.getSelectedValue());
-        assertNull(selectOne.getValue());
-
-        // Test transparency between "value" and "selectedValue" properties
-        selectOne.setValue(value);
-        assertEquals(value, selectOne.getSelectedValue());
-        assertEquals(value, (Object) selectOne.getValue());
-        selectOne.setValue(null);
-        assertNull(selectOne.getSelectedValue());
-        assertNull(selectOne.getValue());
 
     }
 
