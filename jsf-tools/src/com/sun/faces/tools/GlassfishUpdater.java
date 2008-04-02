@@ -70,8 +70,16 @@ public class GlassfishUpdater {
             return;
         }
         // Is it a glassfish install directory?
-        testFile = new File(gfInstallDir,"bin" + File.separator + ASADMIN_NAME);
-        if (!testFile.exists()) {
+        testFile = new File(gfInstallDir,"bin");
+        File [] files = testFile.listFiles();
+        boolean foundAsdmin = false;
+        for (File cur : files) {
+            if (-1 != cur.getName().indexOf("asadmin")) {
+                foundAsdmin = true;
+                break;
+            }
+        }
+        if (!foundAsdmin) {
             printUsage();
             return;
         }
@@ -95,7 +103,7 @@ public class GlassfishUpdater {
     public static boolean licenseAccepted() throws IOException {
         boolean result = false;
         InputStream is = Thread.currentThread().getContextClassLoader().
-                getResourceAsStream("CDDLv1.0.txt");
+                getResourceAsStream("BINARY_LICENSE.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line = null;
         while (null != (line = br.readLine())) {

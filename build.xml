@@ -326,7 +326,7 @@
         <fileset dir="${basedir}/jsf-ri/build/lib/"
                  includes="jsf-impl.jar" />
         <fileset dir="${basedir}/legal/jsf-cddl"
-                 includes="CDDLv1.0.txt" />
+                 includes="BINARY_LICENSE.txt" />
         <manifest>
           <attribute name="Main-Class" 
                      value="com.sun.faces.tools.GlassfishUpdater" />
