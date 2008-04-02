@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeListenerTag.java,v 1.24 2006/09/05 23:42:05 rlubke Exp $
+ * $Id: ValueChangeListenerTag.java,v 1.25 2006/12/12 19:28:17 rlubke Exp $
  */
 
 /*
@@ -73,12 +73,11 @@ import com.sun.faces.util.Util;
 
 public class ValueChangeListenerTag extends TagSupport {
 
-
     // ------------------------------------------------------------- Attributes
 
     private static final long serialVersionUID = -212845116876281363L;
-    private static final Logger logger = 
-            Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
+    private static final Logger logger =
+         Util.getLogger(Util.FACES_LOGGER + Util.TAGLIB_LOGGER);
 
 
     /**
@@ -92,7 +91,7 @@ public class ValueChangeListenerTag extends TagSupport {
      * is also used to wire up this listener to an {@link
      * ValueChangeListener} property of a JavaBean class.</p>
      */
-    private ValueExpression binding= null;
+    private ValueExpression binding = null;
 
     /**
      * <p>Set the fully qualified class name of the
@@ -130,16 +129,16 @@ public class ValueChangeListenerTag extends TagSupport {
     public int doStartTag() throws JspException {
 
         ValueChangeListener handler = null;
-        
+
         // Locate our parent UIComponentTag
         UIComponentClassicTagBase tag =
-            UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
+             UIComponentClassicTagBase.getParentUIComponentClassicTagBase(pageContext);
         if (tag == null) {
-          //  Object[] params = {this.getClass().getName()};
-	    // PENDING(rogerk): do something with params
+            //  Object[] params = {this.getClass().getName()};
+            // PENDING(rogerk): do something with params
             throw new JspException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.NOT_NESTED_IN_FACES_TAG_ERROR_MESSAGE_ID));
         }
 
         // Nothing to do unless this tag created a component
@@ -150,30 +149,30 @@ public class ValueChangeListenerTag extends TagSupport {
         UIComponent component = tag.getComponentInstance();
         if (component == null) {
             throw new JspException(
-                MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
+                 MessageUtils.getExceptionMessageString(MessageUtils.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
         if (!(component instanceof EditableValueHolder)) {
             Object[] params = {"valueChangeListener", "javax.faces.component.EditableValueHolder"};
             throw new JspException(
-                MessageUtils.getExceptionMessageString(
-                    MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
+                 MessageUtils.getExceptionMessageString(
+                      MessageUtils.NOT_NESTED_IN_TYPE_TAG_ERROR_MESSAGE_ID, params));
         }
-        
+
         // If "binding" is set, use it to create a listener instance.
         FacesContext context = FacesContext.getCurrentInstance();
         if (binding != null) {
-	    try {
-		handler = (ValueChangeListener)binding.getValue(context.getELContext());
-		if (handler != null) {
-		    // we ignore the type in this case, even though
-		    // it may have been set.
-		    ((EditableValueHolder)component).addValueChangeListener(handler);
-		    return (SKIP_BODY);
-		}
-	    } catch (ELException e) {
-		throw new JspException(e);
+            try {
+                handler = (ValueChangeListener) binding.getValue(context.getELContext());
+                if (handler != null) {
+                    // we ignore the type in this case, even though
+                    // it may have been set.
+                    ((EditableValueHolder) component).addValueChangeListener(handler);
+                    return (SKIP_BODY);
+                }
+            } catch (ELException e) {
+                throw new JspException(e);
             }
-        } 
+        }
         // If "type" is set, use it to create the listener
         // instance.  If "type" and "binding" are both set, store the 
         // listener instance in the value of the property represented by
@@ -181,21 +180,21 @@ public class ValueChangeListenerTag extends TagSupport {
         if (type != null) {
             handler = createValueChangeListener(context);
             if (handler != null && binding != null) {
-		try {
-		    binding.setValue(context.getELContext(), handler);
-		} catch (ELException e) {
-		    throw new JspException(e);
-		}
+                try {
+                    binding.setValue(context.getELContext(), handler);
+                } catch (ELException e) {
+                    throw new JspException(e);
+                }
             }
         }
-	
+
         // We need to cast here because addValueChangeListener
         // method does not apply to all components (it is not a method on
         // UIComponent/UIComponentBase).
         if (handler != null) {
             ((EditableValueHolder) component).addValueChangeListener(handler);
         } else {
-             if (logger.isLoggable(Level.FINE)) {
+            if (logger.isLoggable(Level.FINE)) {
                 if (binding == null && type == null) {
                     logger.fine("'handler' was not created because both 'binding' and 'type' were null.");
                 } else {
@@ -219,22 +218,22 @@ public class ValueChangeListenerTag extends TagSupport {
 
     }
 
-
     // ------------------------------------------------------ Protected Methods
 
 
     /**
      * <p>Create and return a new {@link ValueChangeListener} to be registered
      * on our surrounding {@link UIComponent}.</p>
-     *
+     * @param context the <code>FacesContext</code> for the current request
+     * @return a new <code>ValueChangeListener</code> instance.
      * @throws JspException if a new instance cannot be created
      */
     protected ValueChangeListener createValueChangeListener(FacesContext context)
-        throws JspException {
-	
+         throws JspException {
+
         try {
-	    String className = type.getValue(context.getELContext()).toString();
-	    
+            String className = type.getValue(context.getELContext()).toString();
+
             Class clazz = Util.loadClass(className, this);
             return ((ValueChangeListener) clazz.newInstance());
         } catch (Exception e) {
