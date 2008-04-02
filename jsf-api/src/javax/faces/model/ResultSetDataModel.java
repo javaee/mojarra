@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.2 2003/09/11 15:25:59 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.1 2003/10/11 22:59:43 craigmcc Exp $
  */
 
 /*
@@ -40,43 +40,47 @@
  * maintenance of any nuclear facility.
  */
 
-package javax.faces.component;
+package javax.faces.model;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.FacesException;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
+import javax.faces.el.PropertyNotFoundException;
 
 
 /**
- * <p><strong>ListDataModel</strong> is a private implementation of
- * {@link DataModel} that wraps a <code>List</code> of Java objects.</p>
+ * <p><strong>ResultSetDataModel</strong> is a convenience implementation of
+ * {@link DataModel} that wraps a <code>ResultSet</code> of Java objects.
+ * Note that the specified <code>ResultSet</code> <strong>MUST</strong>
+ * be scrollable.  In addition, if input components (that will be updating
+ * model values) reference this object in value reference expressions, the
+ * specified <code>ResultSet</code> <strong>MUST</strong> be updatable.</p>
  */
 
-class ListDataModel implements DataModel {
+public class ResultSetDataModel implements DataModel {
 
 
     // ------------------------------------------------------------ Constructors
 
 
     /**
-     * <p>Construct a new {@link ListDataModel} wrapping the specified
-     * <code>List</code>.</p>
+     * <p>Construct a new {@link ResultSetDataModel} wrapping the specified
+     * <code>ResultSet</code>.</p>
      *
-     * @param list <code>List</code> to be wrapped
+     * @param resultSet <code>ResultSet</code> to be wrapped
      *
-     * @exception NullPointerException if <code>list</code>
+     * @exception NullPointerException if <code>resultSet</code>
      *  is <code>null</code>
      */
-    public ListDataModel(List list) {
+    public ResultSetDataModel(ResultSet resultSet) {
 
-        if (list == null) {
+        if (resultSet == null) {
             throw new NullPointerException();
         }
-        this.list = list;
+        this.resultSet = resultSet;
 
     }
 
@@ -84,12 +88,12 @@ class ListDataModel implements DataModel {
     // ------------------------------------------------------ Instance Variables
 
 
+    // The row index for the row whose column values may be read or written
+    private int current = -1;
+
+
     // The current row index (one relative)
     private int index = 0;
-
-
-    // The list we are wrapping
-    private List list = null;
 
 
     // The DataModelListeners interested in our events
@@ -98,6 +102,14 @@ class ListDataModel implements DataModel {
 
     // The open flag
     private boolean open = false;
+
+
+    // The ResultSet we are wrapping
+    private ResultSet resultSet = null;
+
+
+    // The number of rows in this ResultSet, or Integer.MIN_VALUE if unknown yet
+    private int size = Integer.MIN_VALUE;
 
 
     // ------------------------------------------------------- Lifecycle Methods
@@ -115,8 +127,11 @@ class ListDataModel implements DataModel {
                 ((DataModelListener) listeners.get(i)).modelClosed(event);
             }
         }
-        this.list = null;
-        this.open = false;
+        // PENDING(craigmcc) - Delegate close() call to resultSet?
+        index = 0;
+        open = false;
+        resultSet = null;
+        size = Integer.MIN_VALUE;
 
     }
 
@@ -128,6 +143,7 @@ class ListDataModel implements DataModel {
         }
         index = 0;
         open = true;
+        size = Integer.MIN_VALUE;
         if (listeners != null) {
             DataModelEvent event = new DataModelEvent(this);
             int n = listeners.size();
@@ -154,7 +170,18 @@ class ListDataModel implements DataModel {
         if (!open) {
             throw new IllegalStateException();
         }
-        return (list.size());
+        if (size == Integer.MIN_VALUE) {
+            size = 0;
+            try {
+                resultSet.beforeFirst();
+                while (resultSet.next()) {
+                    size++;
+                }
+            } catch (SQLException e) {
+                throw new FacesException(e);
+            }
+        }
+        return (size);
 
     }
 
@@ -170,7 +197,8 @@ class ListDataModel implements DataModel {
         if (index == 0) {
             return (null);
         } else {
-            return (list.get(index - 1));
+            current = index;
+            return (this);
         }
 
     }
@@ -231,6 +259,112 @@ class ListDataModel implements DataModel {
         }
         if (listeners != null) {
             listeners.remove(listener);
+        }
+
+    }
+
+
+    // ---------------------------------------------------------- Public Methods
+
+
+    /**
+     * <p>Return the value of the specified column index, for the current row.
+     * </p>
+     *
+     * @param column One-relative index of the column whose value is to be
+     *  retrieved
+     *
+     * @exception IllegalStateException if the row index has been moved
+     * @exception PropertyNotFoundException if there is no column with
+     *  the specfied name
+     */
+    public Object value(int column) throws PropertyNotFoundException {
+
+        if (current != index) {
+            throw new IllegalStateException();
+        }
+        try {
+            return (resultSet.getObject(column));
+        } catch (SQLException e) {
+            throw new PropertyNotFoundException("" + column);
+        }
+
+    }
+
+
+
+    /**
+     * <p>Return the value of the specified column name, for the currrent row.
+     * </p>
+     *
+     * @param name Name of the column whose value is to be retrieved
+     *
+     * @exception IllegalStateException if the row index has been moved
+     * @exception PropertyNotFoundException if there is no column with
+     *  the specfied name
+     */
+    public Object value(String name) throws PropertyNotFoundException {
+
+        if (current != index) {
+            throw new IllegalStateException();
+        }
+        try {
+            return (resultSet.getObject(name));
+        } catch (SQLException e) {
+            throw new PropertyNotFoundException(name);
+        }
+
+    }
+
+
+    /**
+     * <p>Set the value of the specified column index, for the current row.
+     * </p>
+     *
+     * @param column One-relative index of the column whose value is to be set
+     * @param value New value for this column
+     *
+     * @exception IllegalStateException if the row index has been moved
+     * @exception PropertyNotFoundException if there is no column with
+     *  the specfied name
+     */
+    public void value(int column, Object value)
+        throws PropertyNotFoundException {
+
+        if (current != index) {
+            throw new IllegalStateException();
+        }
+        try {
+            resultSet.updateObject(column, value);
+        } catch (SQLException e) {
+            throw new PropertyNotFoundException("" + column);
+        }
+
+    }
+
+
+
+    /**
+     * <p>Set the value of the specified column name, for the currrent row.
+     * </p>
+     *
+     * @param name Name of the column whose value is to be set
+     * @param value New value for this column
+     *
+     * @exception IllegalStateException if the row index has been moved
+     * @exception PropertyNotFoundException if there is no column with
+     *  the specfied name
+     */
+    public void value(String name, Object value)
+        throws PropertyNotFoundException {
+
+        if (current != index) {
+            throw new IllegalStateException();
+        }
+        try {
+            resultSet.updateObject(name, value);
+        } catch (SQLException e) {
+            throw new PropertyNotFoundException(name);
         }
 
     }

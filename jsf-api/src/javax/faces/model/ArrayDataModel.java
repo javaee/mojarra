@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.4 2003/09/30 17:04:58 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.1 2003/10/11 22:59:41 craigmcc Exp $
  */
 
 /*
@@ -40,23 +40,20 @@
  * maintenance of any nuclear facility.
  */
 
-package javax.faces.component;
+package javax.faces.model;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.FacesException;
-import javax.faces.model.DataModel;
-import javax.faces.model.DataModelEvent;
-import javax.faces.model.DataModelListener;
 
 
 /**
- * <p><strong>ArrayDataModel</strong> is a private implementation of
+ * <p><strong>ArrayDataModel</strong> is a convenience implementation of
  * {@link DataModel} that wraps an array of Java objects.</p>
  */
 
-class ArrayDataModel implements DataModel {
+public class ArrayDataModel implements DataModel {
 
 
     // ------------------------------------------------------------ Constructors

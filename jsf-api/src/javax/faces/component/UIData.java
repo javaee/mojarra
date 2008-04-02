@@ -39,18 +39,22 @@
 package javax.faces.component;
 
 
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.RepeaterEvent;
+import javax.faces.model.ArrayDataModel;
 import javax.faces.model.DataModel;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import javax.faces.model.ListDataModel;
+import javax.faces.model.ResultSetDataModel;
+import javax.faces.model.ScalarDataModel;
 
 
 /**
@@ -608,8 +612,10 @@ public class UIData extends UIComponentBase
             this.model = new ListDataModel((List) current);
         } else if (isObjectArray(current)) {
             this.model = new ArrayDataModel((Object[]) current);
+        } else if (current instanceof ResultSet) {
+            this.model = new ResultSetDataModel((ResultSet) current);
         } else {
-            // PENDING(craigmcc) - Support ResultSet/RowSet?
+            this.model = new ScalarDataModel(current);
         }
 
         // Open the model if it is not already open
