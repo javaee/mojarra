@@ -1,5 +1,5 @@
 /*
- * $Id: MessagesRenderer.java,v 1.2 2003/11/11 01:22:36 eburns Exp $
+ * $Id: MessagesRenderer.java,v 1.3 2003/11/11 05:29:08 eburns Exp $
  */
 
 /*
@@ -75,12 +75,7 @@ public class MessagesRenderer extends HtmlBasicRenderer {
 
         String clientId = (String)component.getAttributes().get("for");
         //"for" attribute optional for Messages
-        if (clientId != null ) {
-            messageIter = context.getMessages(clientId);
-        } else	{
-            messageIter = context.getMessages();
-        }
-
+	messageIter = getMessageIter(context, clientId, component);
         Assert.assert_it(messageIter != null);
 
         String layout = (String) component.getAttributes().get("layout");

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.66 2003/11/10 01:08:53 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.67 2003/11/11 05:29:07 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.faces.FactoryFinder;
@@ -45,6 +46,9 @@ import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.sun.faces.RIConstants;
 
 /**
@@ -61,6 +65,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
     //
     // Class Variables
     //
+    private static final Log log = LogFactory.getLog(MessagesRenderer.class);
+   
 
     //
     // Instance Variables
@@ -384,6 +390,100 @@ public abstract class HtmlBasicRenderer extends Renderer {
       public String convertClientId(FacesContext context, String clientId) {          
           return clientId;
       }
+
+    protected Iterator getMessageIter(FacesContext context, 
+				      String forComponent, 
+				      UIComponent component) {
+	Iterator messageIter = null;
+        // Attempt to use the "for" attribute to locate 
+        // messages.  Three possible scenarios here:
+        // 1. valid "for" attribute - messages returned
+        //    for valid component identified by "for" expression.
+        // 2. zero length "for" expression - global errors
+        //    not associated with any component returned
+        // 3. no "for" expression - all messages returned.
+        // 
+
+        if (null != forComponent) {
+          
+            if (forComponent.length() == 0) {
+                messageIter = context.getMessages(null);
+            } else {               
+                UIComponent comp = null;
+                UIComponent currentParent = component;
+                try {
+                    // Check the naming container of the current 
+                    // component for component identified by
+                    // 'forComponent'
+                    while (currentParent != null) {       
+                        // If the current component is a NamingContainer,
+                        // see if it contains what we're looking for.
+                        comp = currentParent.findComponent(forComponent);
+                        if (comp != null)
+                            break;
+                        // if not, start checking further up in the view
+                        currentParent = currentParent.getParent();
+                    }                   
+                    
+                    // no hit from above, scan for a NamingContainer
+                    // that contains the component we're looking for from the root.    
+                    if (comp == null) {                                                                                             
+                        comp = findUIComponentBelow(context.getViewRoot(), forComponent);                                     
+                    }
+                } catch (Throwable t) {
+                    Object[] params = {forComponent};
+                    throw new RuntimeException(Util.getExceptionMessage(
+                        Util.COMPONENT_NOT_FOUND_ERROR_MESSAGE_ID, params));
+                }
+                // log a message if we were unable to find the specified
+                // component (probably a misconfigured 'for' attribute
+                if (comp == null) {
+                    if (log.isWarnEnabled()) {
+                        log.warn(Util.getExceptionMessage(
+                               Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID, 
+                               new Object[]{ forComponent }));
+                    }
+                }
+                messageIter = context.getMessages(comp.getClientId(context));
+            }
+        }
+	else {
+            messageIter = context.getMessages();
+        }
+
+	return messageIter;
+    }
+
+    /**
+     * <p>Recursively searches for {@link NamingContainer}s from the
+     * given start point looking for the component with the <code>id</code>
+     * specified by <code>forComponent</code>.
+     * @param startPoint - the starting point in which to begin the search
+     * @param forComponent - the component to search for
+     * @return the component with the the <code>id</code that matches 
+     *         <code>forComponent</code> otheriwse null if no match is found.
+     */
+    private UIComponent findUIComponentBelow(UIComponent startPoint, String forComponent) {        
+        UIComponent retComp = null;
+        List children = startPoint.getChildren();
+        for (int i = 0, size = children.size(); i < size; i++) {
+            UIComponent comp = (UIComponent) children.get(i);
+            
+            if (comp instanceof NamingContainer) {
+		retComp = comp.findComponent(forComponent);    
+            }
+            
+            if (retComp == null) {
+                if (comp.getChildCount() > 0) {                
+                    retComp = findUIComponentBelow(comp, forComponent);
+                }  
+            }                        
+            
+            if (retComp != null)
+                break;
+        }
+        return retComp;
+    }
 
     protected Param[] getParamList(FacesContext context, UIComponent command) {
         ArrayList parameterList = new ArrayList();
