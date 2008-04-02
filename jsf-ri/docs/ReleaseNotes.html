@@ -19,7 +19,7 @@ Release Notes</h1></center>
 <br><a NAME="14145"></a>
 For an updated, online version of these release notes, see 
  <a href="http://java.sun.com/j2ee/javaserverfaces/docs/ReleaseNotes.html">
- Release Notes</a><p>Revised:20031205
+ Release Notes</a><p>Revised:20040204
 <p><a NAME="13552"></a>The purpose of this release is to introduce you
 to the JavaServer Faces framework and to provide you with an opportunity
 to give us feedback on the work we've done so far.
@@ -167,462 +167,493 @@ Please see the <a href="README">README</a>.
 applications based on the Beta release into compliance with the 1.0
 release of JavaServer Faces technology. This section may not cover all
 the changes to the technology that went into the Beta release. Please
-refer to the <a
+refer to the <a href="README">README</a> or the preface of <a
 href="http://java.sun.com/j2ee/javaserverfaces/download.html">JavaServer
-Faces Specification</a> for more details on the changes listed because
-the descriptions below only give a summary of the changes.<p>
+Faces Specification</a> for more details on the changes listed.
+The descriptions below only give a summary of the changes.<p>
 
 <h2>
-<span style="font-weight: bold;">Required changes to JSP pages</h2>
-</span>This section lists new tags and attributes in the Beta release in
-addition to tags and attributes that
-<br>were replaced or deleted from EA4.
-<p><span style="font-weight: bold;"></span>
+<span style="font-weight: bold;"><a name="tags">Required</a> changes to
+JSP pages</h2>
+</span>
+<p>The major tag related change between Beta and 1.0 is to use a modified
+<a href="http://en.wikipedia.org/wiki/CamelCase"
+target="_">camelCasing</a> for tag names as described in the following
+table.</p>
 
-<table BORDER CELLSPACING=2 CELLPADDING=2 style="text-align: left; width: 512px; height: 265px;" >
-<caption><tbody>
-<br></tbody></caption>
+<table border="1" align="center">
+<thead>
 
 <tr>
-<td style="vertical-align: top; width: 100px;">EA4 Tag/Attribute</td>
 
-<td style="vertical-align: top; width: 100px;">Beta Tag/Attribute</td>
+<th>beta tag name</th>
+<th>1.0 tag name</th>
 
-<td style="vertical-align: top;">Description</td>
 </tr>
+</thead>
+
+<tbody>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">&lt;h:data_table></td>
+<td>column
+</td>
 
-<td style="vertical-align: top;">new table tag</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top; width: 100px;">&lt;f:use_faces></td>
-
-<td style="vertical-align: top;">&lt;f:view></td>
-
-<td style="vertical-align: top;">&lt;f:view> supports an optional "locale"
-attribute</td>
+<td>column
+</td>
 
 </tr>
 
 <tr>
-<td style="vertical-align: top;">actionRef</td>
 
-<td style="vertical-align: top;">action</td>
+<td>command_button
+</td>
 
-<td style="vertical-align: top;">action now takes a literal or JSF EL expression
-of the form #{logonBean.logon}</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">valueRef</td>
-
-<td style="vertical-align: top;">value</td>
-
-<td style="vertical-align: top;">value takes a literal or a JSF EL expression
-#{logonBean.userName}</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:selectitem></td>
-
-<td style="vertical-align: top;">&lt;f:selectitem></td>
-
-<td style="vertical-align: top;">Moved from HTML tag lib to Core tag library</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:selectitems></td>
-
-<td style="vertical-align: top;">&lt;f:selectitems></td>
-
-<td style="vertical-align: top;">Moved from HTML tag lib to Core tag library</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">commandName</td>
-
-<td style="vertical-align: top;"></td>
-
-<td style="vertical-align: top;">commandName is redundant, use "action"
-instead.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:input_date></td>
-
-<td style="vertical-align: top;">&lt;h:input_text></td>
-
-<td style="vertical-align: top;">converter has to be registered explicitly
-via "converter" attribute or &lt;f:converter> tag if the component is not
-bound to a model property.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:input_number></td>
-
-<td style="vertical-align: top;">&lt;h:input_text></td>
-
-<td style="vertical-align: top;">converter has to be registered explicitly
-via "converter" attribute or &lt;f:converter> tag if the component is not
-bound to a model property.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:input_datetime></td>
-
-<td style="vertical-align: top;">&lt;h:input_text></td>
-
-<td style="vertical-align: top;">converter has to be registered explicitly
-via "converter" attribute or &lt;f:converter> tag if the component is not
-bound to a model property.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:input_time></td>
-
-<td style="vertical-align: top;">&lt;h:input_text></td>
-
-<td style="vertical-align: top;">converter has to be registered explicitly
-via "converter" attribute or &lt;f:converter> tag if the component is not
-bound to a model property.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:output_errors></td>
-
-<td style="vertical-align: top;">&lt;h:message> or &lt;h:messages></td>
-
-<td style="vertical-align: top;"></td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">&lt;h:command_hyperlink></td>
-
-<td style="vertical-align: top;">&lt;h:output_link> or &lt;h:command_link></td>
-
-<td style="vertical-align: top;">&lt;h:output_link> renders as a&nbsp;
-regular hyperlink and does not perform a form submit.
-<br>&lt;h:command_link>&nbsp; acts like a button&nbsp; but renders as a
-hyperlink.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;">selected
-<br>(attribute on &lt;h:selectitem></td>
-
-<td style="vertical-align: top;">value on &lt;h:select*></td>
-
-<td style="vertical-align: top;">value on &lt;h:select*> points to selected
-item in the list.</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;"></td>
-
-<td style="vertical-align: top;">rendered</td>
-
-<td style="vertical-align: top;">an attribute on all component tags, if
-set, component will not be rendered.</td>
+<td>commandButton
+</td>
 
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">&lt;f:subview></td>
+<td>command_link
+</td>
 
-<td style="vertical-align: top;">namespace for all the components nested
-inside.&nbsp; Intended for use with &lt;jsp:include> and &lt;c:import></td>
-</tr>
-
-<tr>
-
-<td style="vertical-align: top;"></td>
-
-<td style="vertical-align: top;">&lt;f:verbatim></td>
-
-<td style="vertical-align: top;">outputs raw text</td>
-</tr>
-
-<tr>
-<td style="vertical-align: top;"></td>
-
-<td style="vertical-align: top;">&lt;f:converter></td>
-
-<td style="vertical-align: top;">register a converter</td>
+<td>commandLink
+</td>
 
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">&lt;f:validator></td>
+<td>data_table
+</td>
 
-<td style="vertical-align: top;">register a validator</td>
+<td>dataTable
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">binding</td>
+<td>form
+</td>
 
-<td style="vertical-align: top;">attribute that binds a component to a
-property in the bean.</td>
+<td>form
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">actionListener</td>
+<td>graphic_image
+</td>
 
-<td style="vertical-align: top;">methodbinding expression</td>
+<td>graphicImage
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">validator</td>
+<td>input_hidden
+</td>
 
-<td style="vertical-align: top;">methodbinding expression</td>
+<td>inputHidden
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">immediate</td>
+<td>input_secret
+</td>
 
-<td style="vertical-align: top;">attribute on command* tags which would
-cause the event to be executed immediately. (refer to Spec for details)</td>
+<td>inputSecret
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;">all *Class attribute</td>
 
-<td style="vertical-align: top;">styleClass</td>
+<td>input_text
+</td>
 
-<td style="vertical-align: top;">points to a CSS style class.</td>
+<td>inputText
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;">&lt;f:required_validator></td>
 
-<td style="vertical-align: top;">required</td>
+<td>input_textarea
+</td>
 
-<td style="vertical-align: top;">&lt;f:required_validator> has been replaced
-by the required attribute on input classes.</td>
+<td>inputTextarea
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;">formName</td>
 
-<td style="vertical-align: top;"></td>
+<td>message
+</td>
 
-<td style="vertical-align: top;">&lt;h:form> doesn not support FormName
-any more.</td>
+<td>message
+</td>
+
 </tr>
 
 <tr>
-<td style="vertical-align: top;"></td>
 
-<td style="vertical-align: top;">&lt;f:loadBundle></td>
+<td>messages
+</td>
 
-<td style="vertical-align: top;">used for localization.
-<br>usage &lt;f:loadBundle basename="carstore.bundles.Resources" var="bundle"/></td>
+<td>messages
+</td>
+
 </tr>
+
+<tr>
+
+<td>output_label
+</td>
+
+<td>outputFormat
+</td>
+
+</tr>
+
+<tr>
+
+<td>output_link
+</td>
+
+<td>outputLabel
+</td>
+
+</tr>
+
+<tr>
+
+<td>output_message
+</td>
+
+<td>outputLink
+</td>
+
+</tr>
+
+<tr>
+
+<td>output_text
+</td>
+
+<td>outputText
+</td>
+
+</tr>
+
+<tr>
+
+<td>panel_grid
+</td>
+
+<td>panelGrid
+</td>
+
+</tr>
+
+<tr>
+
+<td>panel_group
+</td>
+
+<td>panelGroup
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectboolean_checkbox
+</td>
+
+<td>selectBooleanCheckbox
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectmany_checkboxlist
+</td>
+
+<td>selectManyCheckbox
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectmany_listbox
+</td>
+
+<td>selectManyListbox
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectmany_menu
+</td>
+
+<td>selectManyMenu
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectone_listbox
+</td>
+
+<td>selectOneListbox
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectone_menu
+</td>
+
+<td>selectOneMenu
+</td>
+
+</tr>
+
+<tr>
+
+<td>selectone_radio
+</td>
+
+<td>selectOneRadio
+</td>
+
+</tr>
+
+</tbody>
+
+
 </table>
 
-<br>&nbsp;
-<h2>
-<span style="font-weight: bold;">Migration of Configuration Files(faces-config.xml)</span></h2>
+<p>Several minor changes include</p><span style="font-weight: bold;"></span>
 
 <ul>
 
-<li>
-All "value-ref" elements should be replaced with with "value", "action-ref"
-with "action".</li>
+	  <li><p>The <code>checked</code> attribute on
+	  <code>selectBooleanCheckbox</code> is now replaced by the
+	  <code>value</code> attribute.  </p></li>
 
-<li>
-All expressions must be modified to follow the JSF EL expression syntax
-which means including "#{...}" delimiters.</li>
+<li><p>The <code>method</code> and <code>action</code> attributes have
+been removed from <code>&lt;h:form&gt;</code> since their values must be
+constrained by the implementation.</p></li>
 
-<li>
-&lt;messageResources> element replaced by &lt;resourceBundle>. Messages
-from XML files should be moved to resource bundles. Standard error messages
-can be replaced by custom error messages only for validation errors by
-adding the appropriate messageId and message to the resource bundles.</li>
+	  <li><p>The <code>onclick</code> attribute has been removed from
+	  <code>&lt;h:commandLink&gt;</code>, since the renderer generates this attribute
+	  to allow the component to look like a hyperlink, but function
+	  like a button.  </p></li>
+
+	  <li><p>Allowing mixed literals and EL in a JSF EL expression.
+	  Allow full JSP 2.0 eval syntax and operators in JSF EL.
+	  </p></li>
+
+	  <li><p><code>&lt;h:message&gt;</code> and
+	  <code>&lt;h:messages&gt;</code> changes</p>
+
+<p><code>&lt;h:messages&gt;</code> no longer has a "for" property.</p>
+
+<p> The default values for <code>showSummary</code> and
+<code>showDetail</code> for <code>&lt;h:message&gt;</code> and
+<code>&lt;h:messages&gt;</code> are as follows:
+</p>
+
+<p>
+
+<table border="1" align="center">
+
+<thead>
+
+<tr>
+
+<th>attribute name
+</th>
+
+<th>&lt;h:message&gt;
+</th>
+
+<th>&lt;h:messages&gt;
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td><code>showSummary</code>
+</td>
+<td><code>false</code>
+</td>
+<td><code>true</code>
+</td>
+</tr>
+
+<tr>
+<td><code>showDetail</code>
+</td>
+<td><code>true</code>
+</td>
+<td><code>false</code>
+</td>
+<tr>
+
+</tbody>
+
+</table>
+
+</p>
+
+
+</li>
+
+
+</ul>
+
+<h2>
+<span style="font-weight: bold;"><a name="config">Migration</a> of Configuration Files(faces-config.xml)</span></h2>
+
+<p>Please see the <a href="../metadata/web-facesconfig_1_0.dtd">DTD</a>
+for complete information on these changes.</p>
+
+<ul>
+
+<li><p>Additional, optional, <code>default-render-kit-id</code>, and
+<code>state-manager</code> elements in <code>application</code>
+element.</p></li>
+
+<li><p>In the <code>attribute</code> and <code>property</code> elements, a
+new element, <code>default-value</code> is present, in addition to
+<code>suggested-value</code>.</p></li>
+
+<li><p>Each <code>renderer</code> element must declare a
+<code>component-family</code> element.</p></li>
+
+<li><p>Additional <code>component-family</code> element</p></li>
+
+<li><p>Additional <code>default-render-kit-id</code> element</p></li>
+
+<li><p>Additional <code>state-manager</code> element</p></li>
+
+<li><p>Additional <code>suggested-value</code> element</p></li>
+
+
 </ul>
 
 <h2>
 <span style="font-weight: bold;">Migration of Java Classes</span></h2>
 
 <ul>
-<li>
-ValueChangedEvent renamed to ValueChangeEvent.</li>
 
-<li>
-New state saving API allows developers to choose what state information
-to save if state saving method is "client"</li>
+	  <li><p>Custom component authors should be aware that the
+	  lifecycle phase in which validation takes place has changed,
+	  in addition to other subtle changes in the area of value
+	  handling.  Please see section 2.5.1 of the <i>JavaServer (TM)
+	  Faces Specification</i>.</p></li>
 
-<li>
-The default value for "valid" on UIInput component is now true, so setValid()
-should be called only if validation fails.</li>
-
-<li>
-SelectItemGroup is a new class that allows items in the list to be grouped.</li>
-
-<li>
-Since UIForm now implements a NamingContainer, "id" should be fully qualified.
-So any calls to findComponent should be fixed. If a textfield with an id
-of "userName" is enclosed inside a form called "helloForm", parameter passed
-to findComponent would be "helloForm:userName" instead of just "userName"
-in EA4.</li>
-
-<li>
-Tree and TreeFactory are now replaced with UIViewRoot component.</li>
-
-<li>
-ActionEvent doesn't include a commandName anymore.</li>
-
-<li>
-The javax.faces.application.Action API went away, along with the need to
-create a dummy getter to return an Action.</li>
 </ul>
 
-<span style="font-weight: bold;">
-<h2>
+
+<h2><span style="font-weight: bold;">
 Other changes required for migration to Beta</span></h2>
 
 <ul>
-<li>
-MethodBinding expression(syntax: #{logonBean.userName}) enables referencing
-methods in a single backing bean class.</li>
-
-<li>
-Components can be&nbsp; bound to properties in the model via "binding"
-attribute and attributes can be manipulated directly.</li>
-
-<li>
-
-New JSF EL expression syntax is #{logOnBean.userName}</li>
-
-<li>
-JSF is not interoperable with JSTL iterator tag.</li>
-
-<li>
-All JSP tag attributes are JSF EL enabled except "id", "var"</li>
-
-<li>
-JavaServer Faces Reference Implementation now can output XHTML if the content
-type is set appropriately.</li>
-
-<li>
-Because of a bug in UIData, literal values cannot be used with components
-nested inside a data_table tag. You have to bind the component value to
-a property in the model as a workaround.</li>
 
 <li>
 To get logging output from JavaServer Faces RI, follow the instructions
 in README.</li>
-
-<li>
-JSF now supports extension mapping/prefix mapping of a URL pattern to FacesServlet.
-For example *.jsf&nbsp; for /faces/* can be mapped to FacesServlet.</li>
-
-<li>
-Custom component classes should have their properties JSF EL-enabled where
-appropriate. Please refer to our Components demo tag handlers included
-with our samples for details on how to JSF EL enable component properties.(All
-custom components except TabbedPane are JSF EL enabled.)</li>
-
-<li>
-Custom component classes should be modified to support saving and restoring
-state if you are going to save state in client.</li>
-
-<li>
-Custom renderers should be modified to comply with changes to the ResponseWriter
-API.</li>
-
-<li>
-Custom tags for component+renderer combinations need to change overrideProperties
-to setProperties, and should JSF EL-enable the attributes that correspond
-to JSF EL-enabled component properties+attributes.</li>
 </ul>
-
 
    <h1>
-<a <a NAME="issues">Known</a> Issues With This Release</h1>
+<a NAME="issues">Known</a> Issues With This Release</h1>
 
-<ul>
+	<ul>
 
-<li>the algorithm for scanning jars for faces-config.xml files will miss
-  occurrences that reside outside of WEB-INF/lib, or on a custom
-  ClassLoader.  Workaround: make sure any faces-config files you want to
-  be found reside inside of jars that reside in WEB-INF/lib.</li>
+	  <li><p>When authoring a page that uses a
+	  <code>UISelectOne</code> or <code>UISelectOne</code> component
+	  that is backed by a value reference expression that points to
+	  a primitive type, a default selected value must be included in
+	  the configured values for the component.  This is because
+	  there is no way to express "null" using primitive values.
+	  Remember, you can't use "0" to express null, because "0" is a
+	  valid value.  </p></li>
 
-<li>UIData children that do not use VB expressions fail to maintain their
-  values.  In other words, if you have a literal value in a child of a
-  UIData component, that value will be lost on postback.  Workaround:
-  always use a VB expression with the value attribute for UIData
-  children.</li>
+	  <li><p>the value of
+	  <code>javax.faces.component.NamingContainer.SEPARATOR_CHAR</code>
+	  is '<code>:</code>'.  This means that the client id for
+	  components will be something like
+	  "<code>form:checkbox1</code>".  The use of the
+	  '<code>:</code>' character in the id causes problems for CSS
+	  stylesheets that try to apply style to components using their
+	  id.  The workaround is to use the CSS "<code>class</code>"
+	  concept to apply style to a component.  </p></li>
 
-<li>We don't have a consistent, robust, and documentable logging story.
-  We will for 1.0.</li>
+	  <li><p> When saving state on the server, there is no way for
+	  the server to know that a view has expired.  Thus, if the JSP
+	  page changes between requests, it's possible there will be
+	  inconsistencies between the restored tree and the JSP page.
+	  Therefore, if you change the JSP page, you need to re-start
+	  the browser so that the session is lost.</p>
 
-<li>
+<p> In related news, the number of views saved in the session when the
+application is configured to save state in the server is configurable by
+the RI init context parameter
+"<code>com.sun.faces.NUMBER_OF_VIEWS_IN_SESSION</code>" without quotes.
+This is a non-standard feature, so don't count on it.</p> </p></li>
 
-<p>UIComponent.broadcast() fails to throw IllegalStateException if
-passed invalid Parameter.</p>
+	  <li><p>Don't use the '.' character in
+	  <code>ResourceBundle</code> keys for use in Faces.  This
+	  character is a reserved character in the JSF EL.  </p></li>
 
-<pre>
-  From the javadocs of UIComponent.broadcast():
+	  <li><p>When deploying on a non-JWSDP container, you must
+	  include all the dependent jars in your webapp's WEB-INF/lib
+	  directory.  It's possible it may work without doing this, but
+	  this is not a supported configuration.  </p></li>
 
-  <quote> java.lang.IllegalStateException - if PhaseId.ANY_PHASE is
-  passed for the phase identifier </quote>
+	  <li><p>If you're using a tomcat 4 series container, or any
+	  container that strictly conforms to JSP1.1, Servlet 2.3, you
+	  must use JSTL 1.0 instead of JSTL 1.1.  </p></li>
 
-  No exception is currently thrown by the RI.
-</pre>
+	  <li><p>The non-jsp demo does not deploy under tomcat 4.1.29.
+	  </p></li>
 
-<li>UIInput.validate() does not store zero-length String into previous
-property.</li>
+	  <li><p>Some versions of some web containers, such as <a
+	  href="http://www.caucho.com/">Resin</a> and <a
+	  href="http://www.oracle.com/appserver/">Oracle App Server</a>,
+	  don't follow the Servlet 2.3 Spec rule of calling
+	  ServletContextListeners listeners defined in tld files in the
+	  META-INF directory of a jar. Running a faces webapp in such a
+	  container requires you to manually declare the
+	  ServletContextListener.  The <code>listener-class</code> you
+	  need to specify is
+	  <code>com.sun.faces.config.ConfigureListener</code> </p></li>
 
-<li><p>Incorrect type conversion for UISelectMany</p>
+	</ul>
 
-<p>This class doesn't properly deal with conversion for primitives.
-  Workaround: use wrapper classes instead of primitives for model objects.</p>
-</li>
-
-<li> <p>&lt;h:message&gt; ignores locale set in &lt;f:view&gt;</p>
-
-<pre>
-    My system locale is French and if I do this...
-    &lt;f:view locale='en'&gt;
-
-        &lt;h:output_text value='#{msgs.namePrompt}'/&gt;
-        &lt;h:input_text id='name' value='#{user.name}'/&gt;
-
-        &lt;h:message for='name'/&gt;
-
-    &lt;/f:view&gt;
-
-    &lt;h:output_text&gt; retrieves its output from my English resource bundle
-    (as it should), but &lt;h:message&gt; stubbornly produces its error message
-    in French (as it should not).
-</pre>
-</li>
-
-<p>When using the non-JSP use-case, it's possible to use a VB expression
-  for id attribute of UIComponent, but it should not be possible.
-  Workaround: don't use VB expressions for the id attribute of
-  UIComponent.</p>
-
-<p>The converterId attribute for &lt;f:converter&gt; is not VB enabled, and it
-  should be.</p>
-</ul>
 
 
 <p>

@@ -100,6 +100,9 @@ JavaServer(tm) Faces Technology.
   defines the contract for things that are have values that can be
   changed by the user.  As such, it supports listeners and validators.
 
+* The checked attribute on selectBooleanCheckbox is now replaced by the
+  value attribute.
+
 * The "method" and "action" attributes have been removed from <h:form>
   since their values must be constrained by the implementation.
 
@@ -254,9 +257,9 @@ well as logging for rest of the RI will be done in a future release.
 Known Issues With This Release
 ==============================
 
-* When authoring a page that uses a UISelectOne component that is backed
-  by a value reference expression that points to a primitive type, a
-  default selected value default selected value must be included in the
+* When authoring a page that uses a UISelectOne or UISelectOne component
+  that is backed by a value reference expression that points to a
+  primitive type, a default selected value must be included in the
   configured values for the component.  This is because there is no way
   to express "null" using primitive values.  Remember, you can't use "0"
   to express null, because "0" is a valid value.
@@ -288,24 +291,9 @@ Known Issues With This Release
   it may work without doing this, but this is not a supported
   configuration.
 
-* If you're using a tomcat 4 series container, you must use JSTL 1.0
+* If you're using a tomcat 4 series container, or any container that
+  strictly conforms to JSP1.1, Servlet 2.3, you must use JSTL 1.0
   instead of JSTL 1.1.
-
-* UIData children that do not use VB expressions fail to maintain their
-  values.  In other words, if you have a literal value in a child of a
-  UIData component, that value will be lost on postback.  Workaround:
-  always use a VB expression with the value attribute for UIData
-  children.
-
-* UIComponent.broadcast() fails to throw IllegalStateException if passed
-  invalid Parameter.
-
-  From the javadocs of UIComponent.broadcast():
-
-  <quote> java.lang.IllegalStateException - if PhaseId.ANY_PHASE is
-  passed for the phase identifier </quote>
-
-  No exception is currently thrown by the RI.
 
 * The non-jsp demo does not deploy under tomcat 4.1.29.  
 
@@ -316,8 +304,6 @@ Known Issues With This Release
   listener-class you need to specify is
 
   com.sun.faces.config.ConfigureListener
-
-
 
 Legal Notice
 ============
