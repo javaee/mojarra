@@ -1,5 +1,5 @@
 /*
- * $Id: InputTag.java,v 1.16 2003/10/07 20:15:52 horwat Exp $
+ * $Id: InputTag.java,v 1.17 2003/10/08 00:43:23 rlubke Exp $
  */
 
 /*
@@ -73,7 +73,8 @@ public abstract class InputTag extends BaseComponentTag
 	UIInput input = (UIInput) component;
 
         if (readonly) {
-	    input.getAttributes().put("readonly", new Boolean(readonly));
+	    input.getAttributes().put("readonly", 
+                                  readonly ? Boolean.TRUE : Boolean.FALSE);
 	}
 	if (size != Integer.MIN_VALUE) {
 	    input.getAttributes().put("size", new Integer(size));

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.63 2003/10/02 00:39:58 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.64 2003/10/08 00:43:21 rlubke Exp $
  */
 
 /*
@@ -30,11 +30,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.63 2003/10/02 00:39:58 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * @version $Id: FormRenderer.java,v 1.64 2003/10/08 00:43:21 rlubke Exp $ 
  */
 
 public class FormRenderer extends HtmlBasicRenderer {
@@ -152,11 +148,12 @@ public class FormRenderer extends HtmlBasicRenderer {
      *
      * @param context FacesContext for the response we are creating
      */
-    private String getActionStr(FacesContext context) {
+    private String getActionStr(FacesContext context) {        
         String contextPath = context.getExternalContext().getRequestContextPath();
         StringBuffer sb = new StringBuffer(contextPath);
-        sb.append(RIConstants.URL_PREFIX);
-	    sb.append(context.getViewRoot().getViewId());
+        sb.append(context.getApplication().
+                  getViewHandler().getViewIdPath(context, 
+                                            context.getViewRoot().getViewId()));       
         return (sb.toString());
     }     
 

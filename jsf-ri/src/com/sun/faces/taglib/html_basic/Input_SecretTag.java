@@ -1,5 +1,5 @@
 /*
- * $Id: Input_SecretTag.java,v 1.16 2003/10/07 20:15:53 horwat Exp $
+ * $Id: Input_SecretTag.java,v 1.17 2003/10/08 00:43:23 rlubke Exp $
  */
 
 /*
@@ -75,7 +75,8 @@ public class Input_SecretTag extends Input_TextTag
         UIInput input = (UIInput) component;
 
         if (redisplay) {
-            input.getAttributes().put("redisplay", new Boolean(redisplay));
+            input.getAttributes().put("redisplay", 
+                                      redisplay ? Boolean.TRUE : Boolean.FALSE);
         }
     }
 

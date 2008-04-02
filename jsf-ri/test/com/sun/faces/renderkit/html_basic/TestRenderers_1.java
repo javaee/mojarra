@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.44 2003/10/02 06:50:20 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.45 2003/10/08 00:43:26 rlubke Exp $
  */
 
 /*
@@ -21,6 +21,9 @@ import java.util.ResourceBundle;
 import java.util.ListResourceBundle;
 import java.util.Locale;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 import javax.faces.component.UIForm;
 import javax.faces.component.UICommand;
 import javax.faces.component.UISelectOne;
@@ -33,6 +36,7 @@ import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import javax.servlet.jsp.jstl.core.Config;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.application.ViewHandlerImpl;
 
 import com.sun.faces.renderkit.html_basic.FormRenderer;
 import com.sun.faces.renderkit.html_basic.ButtonRenderer;
@@ -45,7 +49,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.44 2003/10/02 06:50:20 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.45 2003/10/08 00:43:26 rlubke Exp $
  * 
  *
  */
@@ -138,6 +142,13 @@ public class TestRenderers_1 extends JspFacesTestCase
             // create a dummy root for the tree.
             UIViewRoot root = new UIViewRoot();
             root.setId("root");
+            root.setViewId("/root");
+            ViewHandlerImpl viewHandler = new ViewHandlerImpl();
+            List mappings = new ArrayList();
+            mappings.add("/faces");
+            viewHandler.setFacesMapping(mappings);
+            getFacesContext().getApplication().setViewHandler(viewHandler);
+            getFacesContext().setViewRoot(root);
 	    // Call this twice to test the multiple forms in a page logic.
             getFacesContext().getResponseWriter().startDocument();
             verifyFormRenderer(root, 0);
