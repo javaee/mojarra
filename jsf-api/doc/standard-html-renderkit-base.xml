@@ -1547,13 +1547,19 @@
                 <![CDATA[
      <p>The same as for the Message renderer, but output all the
      messages.  If the value of the "layout" attribute is "table",
-     render nested "table", "tr", and "td" elements, in that order,
-     otherwise, don't render the table.  The component is a
-     <code>UIMessages</code>, and there is no "for" attribute.
-     Therefore, use either <code>null</code> to obtain the messages from
-     the <code>FacesContext</code> or the empty string if the components
-     "globalOnly" property is <code>true</code>.  If the layout was
-     "table" close out the table elements.  </p>
+     render nested "table", "tr", and "td" elements, in that order.
+     If the value of the "layout" attribute is "list", or the "layout" 
+     attribute is not specified, render nested "ul", "li" elements,
+     in that order.  Output the value of the "style" attribute as the 
+     value of the "style" attribute, output the value of the "styleClass" 
+     attribute as the value of the "class" attribute, and output the dir
+     and lang attributes.  Output these values on the "table" element or 
+     the "ul" element.   The component is a <code>UIMessages</code>, and 
+     there is no "for" attribute.  Therefore, use either <code>null</code> 
+     to obtain the messages from the <code>FacesContext</code> or the 
+     empty string if the components "globalOnly" property is <code>true</code>.  
+     If the layout was "table" close out the table elements, otherwise, 
+     close out the list elements.</p>
             ]]>
             </description>
 
