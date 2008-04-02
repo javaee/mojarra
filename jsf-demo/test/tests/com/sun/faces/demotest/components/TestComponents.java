@@ -1,5 +1,5 @@
 /*
- * $Id: TestComponents.java,v 1.7 2003/09/17 20:37:32 rkitain Exp $
+ * $Id: TestComponents.java,v 1.8 2003/10/07 22:56:10 rlubke Exp $
  */
 
 /*
@@ -104,11 +104,11 @@ public class TestComponents extends HtmlUnitTestCase {
         HtmlPage page = accessAppAndGetPage("faces/tabbedpanes.jsp");
 	assertNotNull(page);
 	//tab 1
-	page= executeTabbedPane(page, "JSPid1:id0");
+	page= executeTabbedPane(page, "JSPid1:_id0");
 	//tab 2
-	page= executeTabbedPane(page, "JSPid1:id1");
+	page= executeTabbedPane(page, "JSPid1:_id1");
 	//tab3 
-	page= executeTabbedPane(page, "JSPid1:id2");
+	page= executeTabbedPane(page, "JSPid1:_id2");
     }
 
     protected HtmlPage executeTreeTest(HtmlPage page, 
