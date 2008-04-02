@@ -67,12 +67,17 @@ public class WebappLifecycleListener implements ServletRequestListener,
     // Log instance for this class
     private static final Logger LOGGER =
           Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
+    
+    private ServletContext servletContext;
 
     /** The request is about to go out of scope of the web application. */
     public void requestDestroyed(ServletRequestEvent event) {       
         ServletRequest request = event.getServletRequest();
         for (Enumeration e = request.getAttributeNames(); e.hasMoreElements(); ) {
-            request.removeAttribute((String) e.nextElement());
+            String beanName = (String)e.nextElement();
+            handleAttributeEvent(beanName, 
+                                 request.getAttribute(beanName), 
+                                 Scope.REQUEST);
         }
     }
 
@@ -98,7 +103,10 @@ public class WebappLifecycleListener implements ServletRequestListener,
     public void sessionDestroyed(HttpSessionEvent event) {        
         HttpSession session = event.getSession();
         for (Enumeration e = session.getAttributeNames(); e.hasMoreElements(); ) {
-            session.removeAttribute((String) e.nextElement());
+            String beanName = (String)e.nextElement();
+            handleAttributeEvent(beanName, 
+                                 session.getAttribute(beanName), 
+                                 Scope.SESSION);
         }
     }
 
@@ -117,7 +125,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
     public void attributeRemoved(ServletRequestAttributeEvent event) {
         handleAttributeEvent(event.getName(),
                              event.getValue(),
-                             event.getServletContext(),
                              Scope.REQUEST);
     }
 
@@ -135,7 +142,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
-                                 event.getServletContext(),
                                  Scope.REQUEST);
         }
     }
@@ -153,7 +159,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
     public void attributeRemoved(HttpSessionBindingEvent event) {
         handleAttributeEvent(event.getName(),
                              event.getValue(),
-                             event.getSession().getServletContext(),
                              Scope.SESSION);
     }
 
@@ -171,7 +176,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
-                                 session.getServletContext(),
                                  Scope.SESSION);
         }
 
@@ -190,7 +194,6 @@ public class WebappLifecycleListener implements ServletRequestListener,
     public void attributeRemoved(ServletContextAttributeEvent event) {
         handleAttributeEvent(event.getName(),
                              event.getValue(),
-                             event.getServletContext(),
                              Scope.APPLICATION);
     }
 
@@ -208,15 +211,13 @@ public class WebappLifecycleListener implements ServletRequestListener,
         if (event.getValue() != newValue) {
             handleAttributeEvent(attrName,
                                  event.getValue(),
-                                 context,
                                  Scope.APPLICATION);
         }
     }
 
-    private static void handleAttributeEvent(String beanName,
-                                             Object bean,
-                                             ServletContext servletContext,
-                                             Scope scope) {
+    private void handleAttributeEvent(String beanName,
+                                      Object bean,
+                                      Scope scope) {
 
         ApplicationAssociate associate =
               ApplicationAssociate.getInstance(servletContext);
@@ -262,7 +263,7 @@ public class WebappLifecycleListener implements ServletRequestListener,
      * application is initialized.
      */
     public void contextInitialized(ServletContextEvent sce) {
-        // not interested in this event
+        this.servletContext = sce.getServletContext();
     }
 
     /**
@@ -273,9 +274,11 @@ public class WebappLifecycleListener implements ServletRequestListener,
      */
     public void contextDestroyed(ServletContextEvent event) {
         
-        ServletContext context = event.getServletContext();
-        for (Enumeration e = context.getAttributeNames(); e.hasMoreElements(); ) {
-            context.removeAttribute((String) e.nextElement());
+        for (Enumeration e = servletContext.getAttributeNames(); e.hasMoreElements(); ) {
+            String beanName = (String)e.nextElement();
+            handleAttributeEvent(beanName, 
+                                 servletContext.getAttribute(beanName), 
+                                 Scope.APPLICATION);
         }
         
     }
