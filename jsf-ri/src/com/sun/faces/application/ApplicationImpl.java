@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.16 2003/07/08 15:38:27 eburns Exp $
+ * $Id: ApplicationImpl.java,v 1.17 2003/07/22 19:43:37 rkitain Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ import javax.faces.validator.Validator;
 import javax.faces.FacesException;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.context.MessageResourcesImpl;
 import com.sun.faces.config.ManagedBeanFactory;
 import com.sun.faces.el.ValueBindingImpl;
 import com.sun.faces.el.PropertyResolverImpl;
@@ -66,13 +67,31 @@ public class ApplicationImpl extends Application {
     private NavigationHandler navigationHandler = null;
     private PropertyResolver propertyResolver = null;
     private VariableResolver variableResolver = null;
-    private HashMap valueBindingMap;
-    private AppConfig appConfig = null;
-
-    private HashMap componentMap;
-    private HashMap converterMap;
-    private HashMap validatorMap;
-    private HashMap managedBeanFactoriesMap;
+    //
+    // This map stores reference expression | value binding instance
+    // mappings.
+    //
+    private Map valueBindingMap;
+    //
+    // These three maps store store "identifier" | "class name"
+    // mappings.
+    //
+    private Map componentMap = null;
+    private Map converterMap = null;
+    private Map validatorMap = null;
+    //
+    // This map stores "managed bean name" | "managed bean factory"
+    // mappings.
+    //
+    private Map managedBeanFactoriesMap = null;
+    //
+    // This map stores "message resource identifier" | "class name"
+    // mappings.  As information is requested using the 
+    // "getMessageResources" method, the class name is used to create
+    // the MessageRewources instance, and the class name in the map is replaced
+    // with the instance.
+    //
+    private Map messageResourcesMap = null;
 
 //
 // Constructors and Initializers
@@ -88,10 +107,7 @@ public class ApplicationImpl extends Application {
 	converterMap = new HashMap();
 	validatorMap = new HashMap();
 	managedBeanFactoriesMap = new HashMap();
-
-        actionListener = new ActionListenerImpl();
-
-	appConfig = new AppConfig(this);
+	messageResourcesMap = new HashMap();
     }
 
     /**
@@ -122,7 +138,8 @@ public class ApplicationImpl extends Application {
      */
     public void setActionListener(ActionListener listener) {
         if (listener == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         if (listener.getPhaseId() != PhaseId.INVOKE_APPLICATION) {
             throw new IllegalArgumentException(listener.getPhaseId().toString());
@@ -156,7 +173,8 @@ public class ApplicationImpl extends Application {
      */
     public void setNavigationHandler(NavigationHandler handler) {
         if (handler == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         this.navigationHandler = handler;
@@ -186,7 +204,8 @@ public class ApplicationImpl extends Application {
      */
     public void setPropertyResolver(PropertyResolver resolver) {
         if (resolver == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         this.propertyResolver = resolver;
@@ -217,7 +236,8 @@ public class ApplicationImpl extends Application {
     public ValueBinding getValueBinding(String ref)
 	throws ReferenceSyntaxException {
         if (ref == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         /* FIX_ME: check ref for valid syntax
@@ -261,7 +281,8 @@ public class ApplicationImpl extends Application {
      */
     public void setVariableResolver(VariableResolver resolver) {
         if (resolver == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+            throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
         this.variableResolver = resolver;
@@ -282,7 +303,8 @@ public class ApplicationImpl extends Application {
      */
     public void addComponent(String componentType, String componentClass) {
 	if (componentType == null || componentClass == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	componentMap.put(componentType, componentClass);
     }
@@ -303,7 +325,8 @@ public class ApplicationImpl extends Application {
      */
     public UIComponent getComponent(String componentType) throws FacesException {
 	if (componentType == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	UIComponent returnVal = (UIComponent)newThing(componentType, componentMap);
 	if (returnVal == null) {
@@ -314,12 +337,31 @@ public class ApplicationImpl extends Application {
 	return returnVal;
     }
 
+    /**
+     * <p>Instantiate and return a new instance of {@link UIcomponent} instance
+     * using either the component reference argument or the component type
+     * argument.</p>
+     *
+     * @param componentRef The component reference that may identify the component
+     *  instance that will be returned.
+     * @param context The Faces context.
+     * @param componentType The componentType that identifies the component instance
+     *  that will be created and returned (if the componentref argument is not a
+     *  {@link UIComponent} instance.
+     *
+     * @return {@link UIComponent} instance
+     *
+     * @exception FacesException if a {@link UIComponent} of the specified type cannot
+     *  be created.
+     * @exception NullPointerException if <code>componentType</code> is <code>null</code>.
+     */
     public UIComponent getComponent(ValueBinding componentRef,
                                     FacesContext context,
                                     String componentType)
                                     throws FacesException {
 	if (null == componentRef || null == context || null == componentType) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	
 	Object result = null;
@@ -368,7 +410,8 @@ public class ApplicationImpl extends Application {
      */
     public void addConverter(String converterId, String converterClass) {
         if (converterId == null || converterClass == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	converterMap.put(converterId, converterClass);
     }
@@ -389,7 +432,8 @@ public class ApplicationImpl extends Application {
      */
     public Converter getConverter(String converterId) throws FacesException {
 	if (converterId == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	Converter returnVal = (Converter)newThing(converterId, converterMap);
 	if (returnVal == null) {
@@ -425,7 +469,8 @@ public class ApplicationImpl extends Application {
      */
     public void addValidator(String validatorId, String validatorClass) {
         if (validatorId == null || validatorClass == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	validatorMap.put(validatorId, validatorClass);
     }
@@ -446,7 +491,8 @@ public class ApplicationImpl extends Application {
      */
     public Validator getValidator(String validatorId) throws FacesException {
 	if (validatorId == null) {
-	    throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	Validator returnVal = (Validator)newThing(validatorId, validatorMap);
 	if (returnVal == null) {
@@ -468,19 +514,84 @@ public class ApplicationImpl extends Application {
     }
 
 
+    /**
+     * This method adds a <code>messageResourcesId</code>, <code>messageResourcesClass</code>
+     * mapping to the message resources map.
+     *
+     * @param messageResourcesId The message resources identifier.
+     * @param messageResourcesClass The message resources class name.
+     * @exception NullPointerException if either argument supplied to this
+     *   method is null.
+     */
     public void addMessageResources(String messageResourcesId, String messageResourcesClass) {
-	appConfig.addMessageResources(messageResourcesId, 
-				      messageResourcesClass);
+        if (messageResourcesId == null || messageResourcesClass == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(
+	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	messageResourcesMap.put(messageResourcesId, messageResourcesClass);
     }
 
-    public MessageResources getMessageResources(String messageResourcesId) 
+    /**
+     * <p>This method returns a <code>MessageResources</code> instance given a 
+     * <code>messageResourcesId</code>.  The value in the map must be either
+     * a {@link MessageResources} instance, or a "class name" string.</p>
+     *
+     * @param messageResourcesId The identifier for the messages resource.
+     * @return MessageResources The messages resource instance.
+     * @exception FacesException
+     * @exception NullPointerException if the identofier argument to this
+     *    method is null.
+     */
+    public synchronized MessageResources getMessageResources(String messageResourcesId) 
         throws FacesException {
-	return 	appConfig.getMessageResources(messageResourcesId);
+	if (messageResourcesId == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(
+		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
 
+	Object value = messageResourcesMap.get(messageResourcesId);
+
+	//
+	// If an instance already exists, return it..
+	//
+	if (value instanceof MessageResourcesImpl) { 
+	    return ((MessageResourcesImpl)value);
+	}
+	
+	String className = null;
+	if (value == null) {
+	    className = "com.sun.faces.context.MessageResourcesImpl";
+	} else if (value instanceof String) {
+	    className = (String)value;
+	}
+	    
+	if (className != null) {
+            Class clazz = null;
+            Object result = null;
+            try {
+                clazz = Util.loadClass(className, className);
+                Assert.assert_it(clazz != null);
+	        result = clazz.newInstance();
+            } catch (Throwable t) {
+                Object[] params = {className};
+                throw new FacesException(Util.getExceptionMessage(
+		    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+            }
+	    messageResourcesMap.put(messageResourcesId, result);
+	    return (MessageResources)result;
+	}
+
+	return null;
     }
 
+    /**
+     *<p>This method returns an iteration of message resource identifiers
+     * contained in the message resources map.</p>
+     *
+     * @return Iterator the iteration of identifiers.
+     */
     public Iterator getMessageResourcesIds() { 
-	return appConfig.getMessageResourcesIds();
+        return messageResourcesMap.keySet().iterator();
     }
 
     // 
@@ -488,8 +599,8 @@ public class ApplicationImpl extends Application {
     //
 
     /**
-     * Adds a new mapping of managed bean name to a managed bean
-     * factory instance.
+     *<p>Adds a new mapping of managed bean name to a managed bean
+     * factory instance.</p>
      *
      * @param managedBeanName the name of the managed bean that will
      *  be created by the managed bean factory instance.
@@ -537,7 +648,8 @@ public class ApplicationImpl extends Application {
 	        map.put(key, clazz);
 	    } catch (Throwable t) {
                 Object[] params = {t.getMessage()};
-	        throw new FacesException(Util.getExceptionMessage(Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
+	        throw new FacesException(Util.getExceptionMessage(
+		    Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
 	    }
         } else {
             clazz = (Class)value;
@@ -547,16 +659,17 @@ public class ApplicationImpl extends Application {
 	    result = clazz.newInstance();
         } catch (Throwable t) {
             Object[] params = {clazz.getName()};
-            throw new FacesException(Util.getExceptionMessage(Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+            throw new FacesException(Util.getExceptionMessage(
+	        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
         }
         return result;
     }
 
     /**
-     * The managedBeanFactories HashMap has been populated
+     *<p>The managedBeanFactories HashMap has been populated
      * with ManagedBeanFactory object keyed by the bean name.
      * Find the ManagedBeanFactory object and if it exists instantiate
-     * the bean and store it in the appropriate scope, if any.
+     * the bean and store it in the appropriate scope, if any.</p>
      *
      * @param context The Faces context.
      * @param managedBeanName The name identifying the managed bean.
@@ -601,10 +714,6 @@ public class ApplicationImpl extends Application {
         }
 
         return bean;
-    }
-
-    public AppConfig getAppConfig() {
-	return appConfig;
     }
 
     // The testcase for this class is com.sun.faces.application.TestApplicationImpl.java 

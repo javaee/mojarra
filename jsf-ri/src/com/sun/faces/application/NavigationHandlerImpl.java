@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.8 2003/07/08 15:38:27 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.9 2003/07/22 19:43:37 rkitain Exp $
  */
 
 /*
@@ -9,7 +9,6 @@
 
 package com.sun.faces.application;
 
-import com.sun.faces.config.ConfigBase;
 import com.sun.faces.config.ConfigNavigationCase;
 import com.sun.faces.util.Util;
 
@@ -46,8 +45,6 @@ public class NavigationHandlerImpl extends NavigationHandler {
     //
 
     // Instance Variables
-
-    private ConfigBase configBase = null;
 
     /**
      * The original (entire) list of navigation cases.
