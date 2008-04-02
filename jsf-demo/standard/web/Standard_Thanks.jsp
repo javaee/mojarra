@@ -8,7 +8,7 @@
 
     <%@ taglib uri="http://java.sun.com/jsf/html" prefix="h" %>
     <%@ taglib uri="http://java.sun.com/jsf/core" prefix="f" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 
     <H3> Standard RenderKit Thank You Page </H3>
     <hr>
@@ -22,7 +22,8 @@
 
             <tr> 
               <td>The actuated component 
-                  was <h:output_text valueRef="model.whichComponent"/>. </td>
+                  was <h:output_text id="actuated"
+                               valueRef="model.whichComponent"/>. </td>
             </tr>
 
         </c:if>
