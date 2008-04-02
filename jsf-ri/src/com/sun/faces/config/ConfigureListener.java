@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.40 2005/07/03 19:17:14 jhook Exp $
+ * $Id: ConfigureListener.java,v 1.41 2005/07/14 13:31:40 edburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -1364,7 +1364,14 @@ public class ConfigureListener implements ServletContextListener {
         appAssociate.setExpressionFactory(jspAppContext.getExpressionFactory());
 
         // register compositeELResolver with JSP
-        jspAppContext.addELResolver(compositeELResolverForJsp);
+        try {
+            jspAppContext.addELResolver(compositeELResolverForJsp);
+        }
+        catch (IllegalStateException e) {
+            if (!Util.isUnitTestModeEnabled()) {
+                throw e;
+            }
+        }
 
         // register JSF ELContextListenerImpl with Jsp
         ELContextListenerImpl elContextListener = new ELContextListenerImpl();
