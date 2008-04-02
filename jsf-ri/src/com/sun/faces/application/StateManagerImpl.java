@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.2 2003/09/15 20:23:08 eburns Exp $ 
+ * $Id: StateManagerImpl.java,v 1.3 2003/09/16 00:29:37 jvisvanathan Exp $ 
  */ 
 
 
@@ -38,7 +38,7 @@ import javax.faces.render.ResponseStateManager;
 /** 
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
- * @version $Id: StateManagerImpl.java,v 1.2 2003/09/15 20:23:08 eburns Exp $ 
+ * @version $Id: StateManagerImpl.java,v 1.3 2003/09/16 00:29:37 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -109,7 +109,7 @@ public class StateManagerImpl extends StateManager  {
         UIComponent viewRoot = (UIComponent)context.getViewRoot();
         if (!(viewRoot.isTransient())) {
             structRoot = new TreeStructure(viewRoot);
-            buildTreeStructureToSave(viewRoot, structRoot, true);
+            buildTreeStructureToSave(viewRoot, structRoot);
         }
         return structRoot;
     }
@@ -155,7 +155,7 @@ public class StateManagerImpl extends StateManager  {
             return null;
         }
         viewRoot = structRoot.createComponent();
-        restoreComponentTreeStructure(structRoot, viewRoot,  true);
+        restoreComponentTreeStructure(structRoot, viewRoot);
         return ((UIViewRoot) viewRoot);
     }
     
@@ -168,36 +168,25 @@ public class StateManagerImpl extends StateManager  {
      * tree hierarchy.
      */
     public void  buildTreeStructureToSave(UIComponent component, 
-            TreeStructure treeStructure, boolean isRoot) {
+            TreeStructure treeStructure) {
         // traverse the component hierarchy and save the tree structure 
         // information for every component.
-        TreeStructure treeStructureChild= null;
-        UIComponent kid = null;
-        // if a component is marked transient do not persist its state.
-        if (component.isTransient()) {
-            return;
-        }
-        // we have already created the tree structure corresponding to root
-        // so don't create it again
-        if (isRoot) {
-            treeStructureChild = treeStructure;
-        } else {
-            treeStructureChild = new TreeStructure(component);
-        }
+        FacesContext context = FacesContext.getCurrentInstance();
+        
         // save the structure info of the children of the component 
         // being processed.
         Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
-            kid = (UIComponent) kids.next();
-            buildTreeStructureToSave(kid, treeStructureChild, false);
+            UIComponent kid = (UIComponent) kids.next();
+            // if a component is marked transient do not persist its state as
+            // well as its children.
+            if (!kid.isTransient()) {
+                TreeStructure treeStructureChild = new TreeStructure(kid);
+                treeStructure.addChild(treeStructureChild);
+                buildTreeStructureToSave(kid, treeStructureChild);
+            }
         }
 
-        // we should not add the treeStructure object representing the root
-        // to itself.
-        if (!isRoot) {
-            treeStructure.addChild(treeStructureChild);
-        }
-        
         // save structure info of the facets of the component currenly being 
         // processed.
         Iterator facets = component.getFacets().keySet().iterator();
@@ -205,50 +194,44 @@ public class StateManagerImpl extends StateManager  {
             String facetName = (String) facets.next();
             UIComponent facetComponent = (UIComponent) component.getFacets().
                     get(facetName);
+            // if a facet is marked transient do not persist its state as well as
+            // its children.
             if (!(facetComponent.isTransient())) {
                 TreeStructure treeStructureFacet = 
                         new TreeStructure(facetComponent);
-                treeStructureChild.addFacet(facetName, treeStructureFacet);
+                treeStructure.addFacet(facetName, treeStructureFacet);
+                // process children of facet.
+                buildTreeStructureToSave(facetComponent, treeStructureFacet);
             }
         }
-        
     }
     
     /**
      * Reconstitutes the component tree from TreeStructure hierarchy
      */
     public void restoreComponentTreeStructure(TreeStructure treeStructure, 
-            UIComponent component, boolean isRoot) {
+            UIComponent component) {
         // traverse the tree strucure hierarchy and restore component
-        // component structure.
-        UIComponent child = null;
-        // root of the tree has been created already, so don't create it again.
-        if (isRoot) {
-            child = component;
-        } else {
-           child = treeStructure.createComponent(); 
-        }
-     
-        if (!isRoot) {
-            component.getChildren().add(child);
-        }
+        // structure.
+      
         // restore the structure of the children of the component being processed.
         Iterator kids = treeStructure.getChildren();
         while (kids.hasNext()) {
-            restoreComponentTreeStructure((TreeStructure) kids.next(), child, 
-                    false);
+            TreeStructure kid = (TreeStructure) kids.next();
+            UIComponent child = kid.createComponent(); 
+            component.getChildren().add(child);
+            restoreComponentTreeStructure(kid, child);
         }
         
         // process facets
         Iterator facets = treeStructure.getFacetNames();
         while (facets.hasNext()) {
-            // component that is a facet cannot have children. Hence no need
-            // for recursion.
             String facetName = (String) facets.next();
             TreeStructure facetTreeStructure = 
                     treeStructure.getTreeStructureForFacet(facetName);
             UIComponent facetComponent = facetTreeStructure.createComponent();
-            child.getFacets().put(facetName, facetComponent);
+            component.getFacets().put(facetName, facetComponent);
+            restoreComponentTreeStructure(facetTreeStructure, facetComponent);
         }
     }
     
