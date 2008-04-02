@@ -9,10 +9,10 @@
 	<option value="Yellow">Yellow</option>
 </select>
 
-<label for="id0">Red<input name="myCheckboxlist" id="id0" value="Red" type="checkbox"></label>
-<label for="id0">Blue<input name="myCheckboxlist" id="id0" value="Blue" type="checkbox"  checked></label>
-<label for="id0">Green<input name="myCheckboxlist" id="id0" value="Green" type="checkbox"></label>
-<label for="id0">Yellow<input name="myCheckboxlist" id="id0" value="Yellow" type="checkbox"></label>
+<label for="id0"><input name="myCheckboxlist" id="id0" value="Red" type="checkbox">Red</label>
+<label for="id0"><input name="myCheckboxlist" id="id0" value="Blue" type="checkbox"  checked>Blue</label>
+<label for="id0"><input name="myCheckboxlist" id="id0" value="Green" type="checkbox">Green</label>
+<label for="id0"><input name="myCheckboxlist" id="id0" value="Yellow" type="checkbox">Yellow</label>
 <select name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>

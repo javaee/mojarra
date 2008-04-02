@@ -19,7 +19,7 @@
         <H3> JSF Basic Components Test Page </H3>
 
 
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=C48AE46FA7F1FB1B17E3563C715AA14B" class="formClass" title="basicForm" accept="html,wml">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=0E65BB38792A576EE35C891C4A72118D" class="formClass" title="basicForm" accept="html,wml">
 
 
   <TABLE BORDER="1">
@@ -153,7 +153,7 @@
 	</TD>
 
         <TD> 
-            <img id="basicForm_graphicImage" src="/test/duke.gif;jsessionid=C48AE46FA7F1FB1B17E3563C715AA14B" usemap="#map1" ismap> 
+            <img id="basicForm_graphicImage" src="/test/duke.gif;jsessionid=0E65BB38792A576EE35C891C4A72118D" usemap="#map1" ismap> 
         </TD>
 
       </TR>
@@ -510,16 +510,16 @@
 						
 						
 					 class="selectmanyClass"<span>
-<label for="basicForm.id4">zero<input name="basicForm_ManyApples3" id="basicForm.id4" value="0" type="checkbox"></label>
-<label for="basicForm.id5">one<input name="basicForm_ManyApples3" id="basicForm.id5" value="1" type="checkbox"></label>
-<label for="basicForm.id6">two<input name="basicForm_ManyApples3" id="basicForm.id6" value="2" type="checkbox"></label>
-<label for="basicForm.id7">three<input name="basicForm_ManyApples3" id="basicForm.id7" value="3" type="checkbox"></label>
-<label for="basicForm.id8">four<input name="basicForm_ManyApples3" id="basicForm.id8" value="4" type="checkbox"></label>
-<label for="basicForm.id9">five<input name="basicForm_ManyApples3" id="basicForm.id9" value="5" type="checkbox"></label>
-<label for="basicForm.id10">six<input name="basicForm_ManyApples3" id="basicForm.id10" value="6" type="checkbox"></label>
-<label for="basicForm.id11">seven<input name="basicForm_ManyApples3" id="basicForm.id11" value="7" type="checkbox"></label>
-<label for="basicForm.id12">eight<input name="basicForm_ManyApples3" id="basicForm.id12" value="8" type="checkbox"></label>
-<label for="basicForm.id13">nine<input name="basicForm_ManyApples3" id="basicForm.id13" value="9" type="checkbox"></label></TD>
+<label for="basicForm.id4"><input name="basicForm_ManyApples3" id="basicForm.id4" value="0" type="checkbox">zero</label>
+<label for="basicForm.id5"><input name="basicForm_ManyApples3" id="basicForm.id5" value="1" type="checkbox">one</label>
+<label for="basicForm.id6"><input name="basicForm_ManyApples3" id="basicForm.id6" value="2" type="checkbox">two</label>
+<label for="basicForm.id7"><input name="basicForm_ManyApples3" id="basicForm.id7" value="3" type="checkbox">three</label>
+<label for="basicForm.id8"><input name="basicForm_ManyApples3" id="basicForm.id8" value="4" type="checkbox">four</label>
+<label for="basicForm.id9"><input name="basicForm_ManyApples3" id="basicForm.id9" value="5" type="checkbox">five</label>
+<label for="basicForm.id10"><input name="basicForm_ManyApples3" id="basicForm.id10" value="6" type="checkbox">six</label>
+<label for="basicForm.id11"><input name="basicForm_ManyApples3" id="basicForm.id11" value="7" type="checkbox">seven</label>
+<label for="basicForm.id12"><input name="basicForm_ManyApples3" id="basicForm.id12" value="8" type="checkbox">eight</label>
+<label for="basicForm.id13"><input name="basicForm_ManyApples3" id="basicForm.id13" value="9" type="checkbox">nine</label></TD>
 </tr>
 
 

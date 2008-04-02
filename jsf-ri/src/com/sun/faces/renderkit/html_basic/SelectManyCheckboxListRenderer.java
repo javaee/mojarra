@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.13 2003/09/03 19:51:36 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.14 2003/09/04 02:01:56 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -105,7 +105,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 	    writer.writeText("\n", null);
 	    writer.startElement("label", curComponent);
 	    writer.writeAttribute("for", curComponent.getClientId(context), "clientId");
-	    writer.writeText(curItem.getLabel(), "label");
 	    writer.startElement("input", component);
 	    writer.writeAttribute("name", component.getClientId(context), "clientId");
 	    //PENDING(rogerk)clientId 3rd arg?
@@ -120,6 +119,7 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 	    }
             Util.renderPassThruAttributes(writer, curComponent);
             Util.renderBooleanPassThruAttributes(writer, curComponent);
+	    writer.writeText(curItem.getLabel(), "label");
 	    writer.endElement("label");
             if (layoutVertical) {
                 writer.startElement("br", curComponent);
