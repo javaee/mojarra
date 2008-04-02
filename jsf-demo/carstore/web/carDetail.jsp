@@ -99,8 +99,7 @@
         <jsp:include page="optionsPanel.jsp"/>
 
         <h:command_button value="#{bundle.recalculate}" 
-                      action="#{carstore.currentModel.updatePricing}" 
-                      immediate="true" />
+                      action="#{carstore.currentModel.updatePricing}" />
 
         <h:command_button action="#{carstore.buyCurrentCar}"
                  value="#{bundle.buy}" />

@@ -16,19 +16,19 @@
 
     <h:panel_grid columns="4">    
 
-      <h:command_button id="Custom" value="#{bundle.Custom}" immediate="true"
+      <h:command_button id="Custom" value="#{bundle.Custom}"
           styleClass="#{carstore.customizers.Custom.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-      <h:command_button id="Standard" value="#{bundle.Standard}" immediate="true"
+      <h:command_button id="Standard" value="#{bundle.Standard}"
           styleClass="#{carstore.customizers.Standard.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-      <h:command_button id="Performance" value="#{bundle.Performance}" immediate="true"
+      <h:command_button id="Performance" value="#{bundle.Performance}"
           styleClass="#{carstore.customizers.Performance.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
-      <h:command_button id="Deluxe" value="#{bundle.Deluxe}" immediate="true"
+      <h:command_button id="Deluxe" value="#{bundle.Deluxe}"
           styleClass="#{carstore.customizers.Deluxe.buttonStyle}"
           actionListener="#{carstore.choosePackage}" />
 
