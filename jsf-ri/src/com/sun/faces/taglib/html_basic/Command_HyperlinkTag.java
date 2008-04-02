@@ -1,5 +1,5 @@
 /*
- * $Id: Command_HyperlinkTag.java,v 1.40 2003/10/07 20:15:51 horwat Exp $
+ * $Id: Command_HyperlinkTag.java,v 1.41 2003/10/07 22:02:08 rlubke Exp $
  */
 
 /*
@@ -116,10 +116,10 @@ public class Command_HyperlinkTag extends BaseComponentTag
         if (commandname_ != null) {
             commandname = Util.evaluateElExpression(commandname_, pageContext);
         }
-        if (image != null) {
+        if (image_ != null) {
             image = Util.evaluateElExpression(image_, pageContext);
         }
-        if (actionRef != null) {
+        if (actionRef_ != null) {
             actionRef = Util.evaluateElExpression(actionRef_, pageContext);
         }
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: ValidateStringRangeTag.java,v 1.4 2003/10/07 20:16:05 horwat Exp $
+ * $Id: ValidateStringRangeTag.java,v 1.5 2003/10/07 22:02:09 rlubke Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ValidateStringRangeTag.java,v 1.4 2003/10/07 20:16:05 horwat Exp $
+ * @version $Id: ValidateStringRangeTag.java,v 1.5 2003/10/07 22:02:09 rlubke Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -119,8 +119,8 @@ public class ValidateStringRangeTag extends MaxMinValidatorTag {
         if (maximum_ != null) {
             maximum = Util.evaluateElExpression(maximum_, pageContext);
  	}
-        if (minimum != null) {
-            minimum= Util.evaluateElExpression(minimum, pageContext);
+        if (minimum_ != null) {
+            minimum= Util.evaluateElExpression(minimum_, pageContext);
  	}
     }
 

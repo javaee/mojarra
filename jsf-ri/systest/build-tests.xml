@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.27 2003/10/07 20:59:47 jvisvanathan Exp $
+ $Id: build-tests.xml,v 1.28 2003/10/07 22:02:06 rlubke Exp $
 -->
 
 
@@ -377,12 +377,10 @@
               request="${context.path}/faces/taglib/command_button_test.jsp"
               golden="${golden.path}/taglib/command_button_test.txt"/>
 
-<!-- PENDING horwat: JSFA86 changes break this test
       <echo message="Testing command_hyperlink..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/command_hyperlink_test.jsp"
               golden="${golden.path}/taglib/command_hyperlink_test.txt"/>
--->
   </target>
 
   <target name="test.verbatim"
