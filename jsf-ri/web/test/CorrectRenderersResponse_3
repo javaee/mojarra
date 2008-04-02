@@ -1,19 +1,29 @@
-<select name="myMenu" multiple size="1">	<option value="Red">Red</option>
+<select name="myMenu" multiple size="4">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<select name="myListbox" multiple size="4">	<option value="Red">Red</option>
+<select name="myListbox" multiple size="5">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
-	<option value="Green">Green</option>
+<optgroup label="group">	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
-</select>
-<span class="styleClass">
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"><span class="disabledClass">Red</span></label>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"><span class="enabledClass">Blue</span></label>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"><span class="enabledClass">Green</span></label>
-<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"><span class="enabledClass">Yellow</span></label>
-<select name="myOnemenu" size="1">	<option value="Red">Red</option>
+</optgroup></select>
+<span class="styleClass"><table border="0">
+	<tr>
+<td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"><span class="disabledClass">Red</span></label></td>
+<td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Blue" type="checkbox"  checked tabindex="5" title="title"><span class="enabledClass">Blue</span></label></td>
+<table border="0">
+	<tr>
+<td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Green" type="checkbox" tabindex="5" title="title"><span class="enabledClass">Green</span></label></td>
+<td>
+<label for="myCheckboxlist"><input name="myCheckboxlist" id="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"><span class="enabledClass">Yellow</span></label></td>
+	</tr>
+</table>	</tr>
+</table></span>
+<select name="myOnemenu" size="4">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>

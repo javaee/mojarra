@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.28 2003/10/30 22:15:47 jvisvanathan Exp $
+ * $Id: TestRenderers_3.java,v 1.29 2003/11/01 02:52:56 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.convert.Converter;
 import javax.faces.convert.NumberConverter;
 import javax.faces.model.SelectItem;
-
+import javax.faces.model.SelectItemGroup;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.Date;
@@ -49,7 +49,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.28 2003/10/30 22:15:47 jvisvanathan Exp $
+ * @version $Id: TestRenderers_3.java,v 1.29 2003/11/01 02:52:56 jvisvanathan Exp $
  * 
  *
  */
@@ -157,9 +157,13 @@ public class TestRenderers_3 extends JspFacesTestCase {
         selectMany.setId("myListbox");
         SelectItem item1 = new SelectItem("Red", "Red", null);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] selectItems = { item1, item2, item3, item4 };
+        SelectItem[] itemsArray = {item3, item4};
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true, 
+                itemsArray);
+        SelectItem[] selectItems = { item1, item2, itemGroup };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
         uiSelectItems.setId("manyListitems");
@@ -202,9 +206,13 @@ public class TestRenderers_3 extends JspFacesTestCase {
         SelectItem item1 = new SelectItem("Red", "Red", null);
         item1.setDisabled(true);
         SelectItem item2 = new SelectItem("Blue", "Blue", null);
+        
         SelectItem item3 = new SelectItem("Green", "Green", null);
         SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
-        SelectItem[] selectItems = { item1, item2, item3, item4 };
+        SelectItem[] itemsArray = {item3, item4};
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true, 
+                itemsArray);
+        SelectItem[] selectItems = { item1, item2, itemGroup };
 	Object selectedValues[] = null;
         uiSelectItems.setValue(selectItems);
         selectMany.getChildren().add(uiSelectItems);

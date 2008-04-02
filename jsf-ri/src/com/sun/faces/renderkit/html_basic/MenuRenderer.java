@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.31 2003/10/30 22:15:35 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.32 2003/11/01 02:52:49 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,10 +32,9 @@ import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.model.SelectItem;
-
+import javax.faces.model.SelectItemGroup;
 import org.mozilla.util.Assert;
 
-import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
 import java.lang.reflect.Array;
 
@@ -339,10 +338,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     
     public void encodeEnd(FacesContext context, UIComponent component) 
             throws IOException {
-                
-        String styleString = null;
-        ResponseWriter writer = null;
-	
+       
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -354,21 +350,16 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return;
         }    
           
-        writer = context.getResponseWriter();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
 	String styleClass = null;
         if (null != (styleClass = (String) component.getAttributes().get("styleClass"))) {
 	    writer.startElement("span", component);
 	    writer.writeAttribute("class", styleClass, "styleClass");
-	} else if (null != (styleClass = 
-	    (String) component.getAttributes().get("styleClass"))) {
-	    writer.writeAttribute("class", styleClass, "styleClass");
-	    writer.startElement("span", component);
-	}
-	
+	} 
         renderSelect(context, component);
-        if (null != styleString) {
+        if (null != styleClass) {
 	    writer.endElement("span");
 	}
     }
@@ -390,61 +381,83 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	// Determine how many option(s) we need to render, and update
 	// the component's "size" attribute accordingly;  The "size"
 	// attribute will be rendered as one of the "pass thru" attributes
-	//
 	int itemCount = getOptionNumber(context, component);
-        itemCount = getDisplaySize(itemCount, component);
+        getDisplaySize(itemCount, component);
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
 
 	// Now, render the "options" portion...
-	//
 	renderOptions(context, component);
 
 	writer.endElement("select");
     }
 
     int getOptionNumber(FacesContext context, UIComponent component) {
-        Iterator items = Util.getSelectItemWrappers(context, component);
+        Iterator items = Util.getSelectItems(context, component);
 	int itemCount = 0;
 	while(items.hasNext()) {
 	    itemCount++;
-	    items.next();
+	    SelectItem item = (SelectItem)items.next();
+            if ( item instanceof SelectItemGroup) {
+                int optionsLength = 
+                    ((SelectItemGroup)item).getSelectItems().length;
+                itemCount = itemCount + optionsLength;
+            }
 	}
 	return itemCount;
-    }
+    } 
 
     void renderOptions (FacesContext context, UIComponent component) 
-        throws IOException {
-        Object selectedValues[] = getCurrentSelectedValues(context, component);
-        Iterator items = Util.getSelectItemWrappers(context, component);
-
-        UIComponent curComponent;
-        SelectItem curItem = null;
-        SelectItemWrapper curItemWrapper = null;
-	ResponseWriter writer = context.getResponseWriter();
+	throws IOException {
+        
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
-
+        
+        Iterator items = Util.getSelectItems(context, component);
+        SelectItem curItem = null;
         while (items.hasNext()) {
-            curItemWrapper = (SelectItemWrapper) items.next();
-            curItem = curItemWrapper.getSelectItem();
-            curComponent = curItemWrapper.getUISelectItem();
-	    writer.writeText("\t", null);
-	    writer.startElement("option", curComponent);
-	    writer.writeAttribute("value", 
-                getFormattedValue(context, component, curItem.getValue()), "value");
-	    String selectText = getSelectedText(curItem, selectedValues);
-	    if (!selectText.equals("")) {
-	        writer.writeAttribute(selectText, new Boolean("true"), null);
-	    }
-            if ( curItem.isDisabled()) {
-                writer.writeAttribute("disabled", "disabled", "disabled");
+            curItem = (SelectItem) items.next();
+	    if ( curItem instanceof SelectItemGroup) {
+                // render OPTGROUP
+                writer.startElement("optgroup", component);
+                writer.writeAttribute("label", curItem.getLabel(), "label");
+                // render options of this group.
+                SelectItem[] itemsArray = 
+                    ((SelectItemGroup)curItem).getSelectItems();
+                for ( int i = 0; i < itemsArray.length; ++i ) {
+                    renderOption(context, component, itemsArray[i]);
+                }
+                writer.endElement("optgroup");
+            } else {
+                renderOption(context, component, curItem);
             }
-      
-	    writer.writeText(curItem.getLabel(), "label");
-	    writer.endElement("option");
-	    writer.writeText("\n", null);
         }
+    }
+    
+    protected void renderOption(FacesContext context, UIComponent component,
+            SelectItem curItem) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+        
+        writer.writeText("\t", null);
+        writer.startElement("option", component);
+        writer.writeAttribute("value", 
+            getFormattedValue(context, component, curItem.getValue()), "value");
+
+        Object selectedValues[] = getCurrentSelectedValues(context, component);
+        String selectText = getSelectedText(curItem, selectedValues);
+        if (!selectText.equals("")) {
+            writer.writeAttribute(selectText, new Boolean("true"), null);
+        }
+        if ( curItem.isDisabled()) {
+            writer.writeAttribute("disabled", "disabled", "disabled");
+        }
+
+        writer.writeText(curItem.getLabel(), "label");
+        writer.endElement("option");
+        writer.writeText("\n", null);
+        
     }
 
     String getSelectedText(SelectItem item, Object[] values) {
@@ -459,16 +472,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         return "";
     }
 
-    protected int getDisplaySize(int itemCount, UIComponent component) {
+    protected void getDisplaySize(int itemCount, UIComponent component) {
         // if size is not specified default to 1.
-        itemCount = 1;
         if (null != component.getAttributes().get("size")) {
             Integer size = (Integer) component.getAttributes().get("size");
             itemCount = size.intValue();
         } else {
 	    component.getAttributes().put("size", new Integer(itemCount));
-        }     
-        return itemCount;
+        }  
     }
     
     String getSelectedTextString() {

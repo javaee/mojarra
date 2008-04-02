@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.53 2003/10/30 22:15:35 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.54 2003/11/01 02:52:50 jvisvanathan Exp $
  */
 
 /*
@@ -17,11 +17,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.model.SelectItem;
 import javax.faces.component.UISelectOne;
-import javax.faces.component.UISelectItem;
 import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
-import com.sun.faces.util.SelectItemWrapper;
 
 import java.io.IOException;
 
@@ -33,7 +31,8 @@ import org.mozilla.util.Assert;
  * radio buttons
  */
 
-public class RadioRenderer extends HtmlBasicInputRenderer {
+public class RadioRenderer extends SelectManyCheckboxListRenderer {
+    
     //
     // Protected Constants
     //
@@ -70,149 +69,70 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
     //
     // Methods From Renderer
     //
-
-    public void encodeBegin(FacesContext context, UIComponent component) 
-            throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-    public void encodeChildren(FacesContext context, UIComponent component) {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-    }
-
-   protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue) throws IOException {
+    protected void renderOption(FacesContext context, UIComponent component,
+            SelectItem curItem, boolean alignVertical ) throws IOException {
+                
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        UISelectOne uiSelectOne = (UISelectOne) component;
-	String alignStr = null;
-	Object borderObj = null;
-	String styleClass = null;
-	boolean alignVertical = false;
-	int border = 0;
-
-        // cast component to UISelectOne.
-        Object curValue = uiSelectOne.currentValue(context);
-        Iterator items = Util.getSelectItemWrappers(context, uiSelectOne);
-	SelectItem curItem = null;
-        SelectItemWrapper curItemWrapper = null;
-        UIComponent curComponent = null;
-        
-        if ( items == null ) {
-            return;
-        }
-        
-        if (null != (alignStr = (String) uiSelectOne.getAttributes().get("layout"))) {
-	    alignVertical = alignStr.equalsIgnoreCase("PAGE_DIRECTION") ? 
-		true : false;
-	}
-	if (null != (borderObj = uiSelectOne.getAttributes().get("border"))){
-	    if (borderObj instanceof Integer) {
-		border = ((Integer)borderObj).intValue();
-	    }
-	    else {
-		try {
-		    border = Integer.valueOf(borderObj.toString()).intValue();
-		}
-		catch (Throwable e) {
-		    border = 0;
-		}
-	    }
-	}
-	if (null != (styleClass = (String) 
-		     component.getAttributes().get("styleClass"))) {
-	    writer.startElement("span", component);
-	    writer.writeAttribute("class", styleClass, "styleClass");
-	}
-	
-        writer.startElement("table", component);
-        if (border != Integer.MIN_VALUE) {
-            writer.writeAttribute("border", new Integer(border), "border");
-        }
-        writer.writeText("\n", null);
-
-	if (!alignVertical) {
+        Object curValue = ((UISelectOne)component).currentValue(context);
+        if (alignVertical) {
             writer.writeText("\t", null);
-	    writer.startElement("tr", component);
-	    writer.writeText("\n", null);
-	}
-        
-	while (items.hasNext()) {
-	    curItemWrapper = (SelectItemWrapper) items.next();
-            curItem = curItemWrapper.getSelectItem();
-            curComponent = curItemWrapper.getUISelectItem();
-	    if (alignVertical) {
-                writer.writeText("\t", null);
-		writer.startElement("tr", component);
-		writer.writeText("\n", null);
-	    }
-            // disable the radio button if the attribute is set.
-            String labelClass = null;
-            if ( curItem.isDisabled() ){
-                labelClass = (String) uiSelectOne.
-                    getAttributes().get("disabledClass");
-            } else {
-                labelClass = (String) uiSelectOne.
-                    getAttributes().get("enabledClass");
-            }
-	    writer.startElement("td", component);
-	    writer.startElement("input", component);
-	    writer.writeAttribute("type", "radio", "type");
-            if (null != curItem.getValue() &&
-		curItem.getValue().equals(curValue)){
-		writer.writeAttribute("checked", new Boolean("true"), null);
-            }
-	    writer.writeAttribute("name", uiSelectOne.getClientId(context), "clientId");
-	    writer.writeAttribute("value",(getFormattedValue(context, component,
-	        curItem.getValue())), "value");
-
-            if (curItem.isDisabled()) {
-                writer.writeAttribute("disabled", "disabled", "disabled");
-            }
-            // PENDING (visvan) Apply HTML 4.x attributes specified on selectone 
-            // component to all items in the list. This might need to be changed
-            // later.
-	    Util.renderPassThruAttributes(writer, uiSelectOne);
-	    Util.renderBooleanPassThruAttributes(writer, uiSelectOne);
-            writer.endElement("input");
-           
-            // apply any styleClass specified on the label.
-            if ( labelClass != null) {
-                writer.startElement("span", component);
-	        writer.writeAttribute("class", labelClass, "labelClass");
-            }
-            String itemLabel = curItem.getLabel();
-            if (itemLabel != null) {
-                writer.writeText(" ", null);
-		writer.writeText(itemLabel, null);
-            }
-            if (null != labelClass) {
-	        writer.endElement("span");
-	    }
-	    writer.endElement("td");
-	    writer.writeText("\n", null);
-	    if (alignVertical) {
-	        writer.writeText("\t", null);
-		writer.startElement("tr", component);
-		writer.writeText("\n", null);
-	    }
+            writer.startElement("tr", component);
+            writer.writeText("\n", null);
         }
+        
+        // disable the radio button if the attribute is set.
+        String labelClass = null;
+        if ( curItem.isDisabled() ){
+            labelClass = (String) component.
+                getAttributes().get("disabledClass");
+        } else {
+            labelClass = (String) component.
+                getAttributes().get("enabledClass");
+        }
+        writer.startElement("td", component);
+        writer.startElement("input", component);
+        writer.writeAttribute("type", "radio", "type");
+        if (null != curItem.getValue() &&
+            curItem.getValue().equals(curValue)){
+            writer.writeAttribute("checked", new Boolean("true"), null);
+        }
+        writer.writeAttribute("name", component.getClientId(context), 
+                "clientId");
+        writer.writeAttribute("value",(getFormattedValue(context, component,
+            curItem.getValue())), "value");
 
-	if (!alignVertical) {
-	    writer.writeText("\t", null);
-	    writer.endElement("tr");
-	    writer.writeText("\n", null);
-	}
-        writer.endElement("table");
-        if (null != styleClass) {
-	    writer.endElement("span");
-	}
-	
+        if (curItem.isDisabled()) {
+            writer.writeAttribute("disabled", "disabled", "disabled");
+        }
+        // PENDING (visvan) Apply HTML 4.x attributes specified on selectone 
+        // component to all items in the list. This might need to be changed
+        // later.
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
+        writer.endElement("input");
+
+        // apply any styleClass specified on the label.
+        if ( labelClass != null) {
+            writer.startElement("span", component);
+            writer.writeAttribute("class", labelClass, "labelClass");
+        }
+        String itemLabel = curItem.getLabel();
+        if (itemLabel != null) {
+            writer.writeText(" ", null);
+            writer.writeText(itemLabel, null);
+        }
+        if (null != labelClass) {
+            writer.endElement("span");
+        }
+        writer.endElement("td");
+        writer.writeText("\n", null);
+        if (alignVertical) {
+            writer.writeText("\t", null);
+            writer.endElement("tr");
+            writer.writeText("\n", null);
+        }
     }
 
 } // end of class RadioRenderer

@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.15 2003/10/30 22:15:35 jvisvanathan Exp $
+ * $Id: ListboxRenderer.java,v 1.16 2003/11/01 02:52:49 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,18 +15,7 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.SelectItemWrapper;
-import com.sun.faces.util.Util;
-
-import java.io.IOException;
-import java.util.Iterator;
-
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.model.SelectItem;
-
-import org.mozilla.util.Assert;
 
 /**
  * <B>ListRenderer</B> is a class that renders the current value of 
@@ -70,46 +59,10 @@ public class ListboxRenderer extends MenuRenderer {
     //
     // Methods From Renderer
     //
-
-    void renderOptions (FacesContext context, UIComponent component) 
-	throws IOException {
-
-	ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );            
-
-        Iterator items = Util.getSelectItemWrappers(context, component);
-        Object selectedValues[] = getCurrentSelectedValues(context, 
-							       component);
-        UIComponent curComponent;
-        SelectItem curItem = null;
-        SelectItemWrapper curItemWrapper = null;
-            
-        while (items.hasNext()) {
-            curItemWrapper = (SelectItemWrapper) items.next();
-            curItem = curItemWrapper.getSelectItem();
-            curComponent = curItemWrapper.getUISelectItem();
-	    writer.writeText("\t", null);
-	    writer.startElement("option", curComponent);
-	    writer.writeAttribute("value", 
-	        getFormattedValue(context, component, curItem.getValue()), "value");
-	    String selectText = getSelectedText(curItem, selectedValues);
-	    if (!selectText.equals("")) {
-	        writer.writeAttribute(selectText, new Boolean("true"), null);
-	    }
-            if ( curItem.isDisabled()) {
-                writer.writeAttribute("disabled", "disabled", "disabled");
-            }
-          
-	    writer.writeText(curItem.getLabel(), "label");
-	    writer.endElement("option");
-	    writer.writeText("\n", null);
-        }
-    }
-        
-    protected int getDisplaySize(int itemCount, UIComponent component) {
-        // display all items in the list.
+    protected void getDisplaySize(int itemCount, UIComponent component) {
+        // Listbox will display all items in the list, so override  size
+        // attribute is specified.
         component.getAttributes().put("size", new Integer(itemCount));
-        return itemCount;
     }
 
 } // end of class ListboxRenderer

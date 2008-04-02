@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.109 2003/10/30 22:15:43 jvisvanathan Exp $
+ * $Id: Util.java,v 1.110 2003/11/01 02:52:54 jvisvanathan Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.109 2003/10/30 22:15:43 jvisvanathan Exp $ 
+ * @version $Id: Util.java,v 1.110 2003/11/01 02:52:54 jvisvanathan Exp $ 
  */
 
 public class Util extends Object
@@ -571,7 +571,7 @@ private Util()
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public static Iterator getSelectItemWrappers(FacesContext context,
+    public static Iterator getSelectItems(FacesContext context,
 					  UIComponent component) {
 
         ArrayList list = new ArrayList();
@@ -582,13 +582,11 @@ private Util()
                 Object value = ((UISelectItem)kid).currentValue(context);
                 if ( value == null ) {
                     UISelectItem item = (UISelectItem) kid;
-                    list.add(new SelectItemWrapper( kid,
-                                        new SelectItem(item.getItemValue(),
-                                        item.getItemLabel(),
-                                        item.getItemDescription())));
+                    list.add(new SelectItem(item.getItemValue(),
+                        item.getItemLabel(),
+                        item.getItemDescription()));
                 } else if ( value instanceof SelectItem){
-                    list.add(new SelectItemWrapper(kid,
-                            ((SelectItem)value)));
+                    list.add(value);
                 } else {
                     throw new IllegalArgumentException(Util.getExceptionMessage(
                         Util.CONVERSION_ERROR_MESSAGE_ID));
@@ -596,17 +594,16 @@ private Util()
             } else if (kid instanceof UISelectItems && null != context) {
                 Object value = ((UISelectItems)kid).currentValue(context);
                 if (value instanceof SelectItem) {
-                    SelectItem item = (SelectItem) value;
-                    list.add(new SelectItemWrapper( kid, item));
+                    list.add(value);
                 } else if (value instanceof SelectItem[]) {
                     SelectItem items[] = (SelectItem[]) value;
                     for (int i = 0; i < items.length; i++) {
-                        list.add(new SelectItemWrapper(kid, items[i]));
+                        list.add(items[i]);
                     }
                 } else if (value instanceof Collection) {
                     Iterator elements = ((Collection) value).iterator();
                     while (elements.hasNext()) {
-                        list.add(new SelectItemWrapper(kid, (SelectItem) elements.next()));
+                        list.add(elements.next());
                     }
                 } else if (value instanceof Map) {
                     Iterator keys = ((Map) value).keySet().iterator();
@@ -619,8 +616,8 @@ private Util()
                         if (val == null) {
                             continue;
                         }
-                        list.add(new SelectItemWrapper( kid, 
-                            new SelectItem(val.toString(), key.toString(),null)));
+                        list.add(new SelectItem(val.toString(),key.toString(),
+                           null));
                     }
                 } else {
                     throw new IllegalArgumentException(Util.getExceptionMessage(

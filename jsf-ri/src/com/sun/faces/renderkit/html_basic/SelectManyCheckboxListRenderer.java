@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.17 2003/10/30 22:15:36 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.18 2003/11/01 02:52:51 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,7 +17,6 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
@@ -27,6 +26,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 
 import org.mozilla.util.Assert;
 
@@ -74,83 +74,162 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
 
     void renderSelect (FacesContext context, UIComponent component) 
         throws IOException {
-	    
+	
         ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
+       
+        String alignStr = null;
+	Object borderObj = null;
+	boolean alignVertical = false;
+	int border = 0;
 
-        String layoutStr;
-        boolean layoutVertical = false;
-
-        String classStr;
-
-        if (null != (layoutStr = (String) component.getAttributes().get("layout"))) {
-            layoutVertical = layoutStr.equalsIgnoreCase("PAGE_DIRECTION") ? true : false;
+        if (null != (alignStr = (String) component.getAttributes().get("layout"))) {
+	    alignVertical = alignStr.equalsIgnoreCase("PAGE_DIRECTION") ? 
+		true : false;
+	}
+	if (null != (borderObj = component.getAttributes().get("border"))){
+	    if (borderObj instanceof Integer) {
+		border = ((Integer)borderObj).intValue();
+	    }
+	    else {
+		try {
+		    border = Integer.valueOf(borderObj.toString()).intValue();
+		}
+		catch (Throwable e) {
+		    border = 0;
+		}
+	    }
+	}
+        
+	renderBeginText(component, border, alignVertical, context);
+        
+        Iterator items = Util.getSelectItems(context, component);
+        SelectItem curItem = null;
+        while (items.hasNext()) {
+            curItem = (SelectItem) items.next();
+            // If we come across a group of options, render them as a nested
+            // table.
+	    if ( curItem instanceof SelectItemGroup) {
+                renderBeginText(component, border, alignVertical, 
+                        context);
+                // render options of this group.
+                SelectItem[] itemsArray = 
+                    ((SelectItemGroup)curItem).getSelectItems();
+                for ( int i = 0; i < itemsArray.length; ++i ) {
+                    renderOption(context, component, itemsArray[i], 
+                            alignVertical);
+                }
+                renderEndText(alignVertical, context);
+            } else {
+                renderOption(context, component, curItem, alignVertical);
+            }
+        }
+        renderEndText(alignVertical, context);
+    }
+    
+    protected void renderOption(FacesContext context, UIComponent component,
+            SelectItem curItem, boolean alignVertical ) throws IOException {
+                
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+        
+        Object selectedValues[] = getCurrentSelectedValues(context, component);
+        
+        // disable the radio button if the attribute is set.
+        String labelClass = null;
+        if ( curItem.isDisabled()){
+            labelClass = (String) component.
+                getAttributes().get("disabledClass");
+        } else {
+            labelClass = (String) component.
+                getAttributes().get("enabledClass");
+        }
+        if (alignVertical) {
+            writer.writeText("\t", null);
+            writer.startElement("tr", component);
+            writer.writeText("\n", null);
+	}
+        writer.startElement("td", component);
+        writer.writeText("\n", null);
+        writer.startElement("label", component);
+        writer.writeAttribute("for", component.getClientId(context), 
+                "clientId");
+        writer.startElement("input", component);
+        writer.writeAttribute("name", component.getClientId(context), 
+               "clientId");
+        writer.writeAttribute("id", component.getClientId(context), 
+                "clientId");
+        writer.writeAttribute("value",
+            getFormattedValue(context, component, curItem.getValue()), "value");
+        writer.writeAttribute("type", "checkbox", "type");
+        String selectText = getSelectedText(curItem, selectedValues);
+        if (!selectText.equals("")) {
+            writer.writeAttribute(selectText, new Boolean("true"), null);
+        }
+        if ( curItem.isDisabled()) {
+            writer.writeAttribute("disabled", "disabled", "disabled");
         }
 
-        Iterator items = Util.getSelectItemWrappers(context, component);
-        SelectItem curItem = null;
-        SelectItemWrapper curItemWrapper = null;
-        UIComponent curComponent;
-        Object selectedValues[] = getCurrentSelectedValues(context, component);
+        // PENDING (visvan) Apply HTML 4.x attributes specified on selectone 
+        // component to all items in the list. This might need to be changed
+        // later.
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
 
-        while (items.hasNext()) {
-            curItemWrapper = (SelectItemWrapper) items.next();
-            curItem = curItemWrapper.getSelectItem();
-            curComponent = curItemWrapper.getUISelectItem();
-
-            // disable the radio button if the attribute is set.
-            String labelClass = null;
-            if ( curItem.isDisabled()){
-                labelClass = (String) component.
-                    getAttributes().get("disabledClass");
-            } else {
-                labelClass = (String) component.
-                    getAttributes().get("enabledClass");
-            }
-            
-	    writer.writeText("\n", null);
-            writer.startElement("label", curComponent);
-	    writer.writeAttribute("for", component.getClientId(context), "clientId");
-	    writer.startElement("input", component);
-	    writer.writeAttribute("name", component.getClientId(context), "clientId");
-	    writer.writeAttribute("id", component.getClientId(context), "clientId");
-	    writer.writeAttribute("value",
-	        getFormattedValue(context, component, curItem.getValue()), "value");
-	    writer.writeAttribute("type", "checkbox", "type");
-	    String selectText = getSelectedText(curItem, selectedValues);
-	    if (!selectText.equals("")) {
-	        writer.writeAttribute(selectText, new Boolean("true"), null);
-	    }
-            if ( curItem.isDisabled()) {
-                writer.writeAttribute("disabled", "disabled", "disabled");
-            }
-            
-            // PENDING (visvan) Apply HTML 4.x attributes specified on selectone 
-            // component to all items in the list. This might need to be changed
-            // later.
-            Util.renderPassThruAttributes(writer, component);
-            Util.renderBooleanPassThruAttributes(writer, component);
-            
-            // apply any styleClass specified on the label.
-            if ( labelClass != null) {
-                writer.startElement("span", component);
-	        writer.writeAttribute("class", labelClass, "labelClass");
-            }
-            writer.writeText(curItem.getLabel(), "label");
-            if (null != labelClass) {
-	        writer.endElement("span");
-	    }
-	    writer.endElement("label");
-            if (layoutVertical) {
-                writer.startElement("br", curComponent);
-                writer.endElement("br");
-	    }
+        // apply any styleClass specified on the label.
+        if ( labelClass != null) {
+            writer.startElement("span", component);
+            writer.writeAttribute("class", labelClass, "labelClass");
+        }
+        writer.writeText(curItem.getLabel(), "label");
+        if (null != labelClass) {
+            writer.endElement("span");
+        }
+        writer.endElement("label");
+        writer.endElement("td");
+	writer.writeText("\n", null);
+	if (alignVertical) {
+	    writer.writeText("\t", null);
+            writer.endElement("tr");
+            writer.writeText("\n", null);
         }
     }
-	
+    
     String getSelectedTextString() {
         return " checked";
     }
-	
+    
+    protected void renderBeginText (UIComponent component, int border, 
+           boolean alignVertical, FacesContext context ) throws IOException {
+            
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+        
+	writer.startElement("table", component);
+         if (border != Integer.MIN_VALUE) {
+            writer.writeAttribute("border", new Integer(border), "border");
+        }
+        writer.writeText("\n", null);
 
+	if (!alignVertical) {
+            writer.writeText("\t", null);
+	    writer.startElement("tr", component);
+	    writer.writeText("\n", null);
+	}
+    }
+    
+    protected void renderEndText(boolean alignVertical,
+            FacesContext context ) throws IOException {
+                
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+        
+        if (!alignVertical) {
+	    writer.writeText("\t", null);
+	    writer.endElement("tr");
+	    writer.writeText("\n", null);
+	}
+        writer.endElement("table");
+    }
+    
 } // end of class SelectManyCheckboxListRenderer

@@ -9,7 +9,12 @@
 <td><input type="radio" name="radioRenderer" value="One" disabled="disabled" tabindex="5" title="title" /><span class="disabledClass"> One</span></td>
 <td><input type="radio" checked name="radioRenderer" value="Two" tabindex="5" title="title" /><span class="enabledClass"> Two</span></td>
 <td><input type="radio" name="radioRenderer" value="Three" tabindex="5" title="title" /><span class="enabledClass"> Three</span></td>
+<table border="0">
+	<tr>
+<td><input type="radio" name="radioRenderer" value="Four" tabindex="5" title="title" /><span class="enabledClass"> Four</span></td>
+<td><input type="radio" name="radioRenderer" value="Five" tabindex="5" title="title" /><span class="enabledClass"> Five</span></td>
 	</tr>
+</table>	</tr>
 </table></span>
 <input type="image" src="duke.gif" name="imageButton" />
 <input type="image" src="resduke.gif" name="imageButton2" />

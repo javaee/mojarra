@@ -1,5 +1,5 @@
 /*
- * $Id: DebugUtil.java,v 1.15 2003/09/24 23:17:37 horwat Exp $
+ * $Id: DebugUtil.java,v 1.16 2003/11/01 02:52:52 jvisvanathan Exp $
  */
 
 /*
@@ -25,7 +25,7 @@ import java.io.PrintStream;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DebugUtil.java,v 1.15 2003/09/24 23:17:37 horwat Exp $
+ * @version $Id: DebugUtil.java,v 1.16 2003/11/01 02:52:52 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -132,16 +132,14 @@ public static void printTree(UIComponent root, PrintStream out)
     }
     
     Iterator items = null;
-    SelectItemWrapper curItemWrapper = null;
     SelectItem curItem = null;
     int j = 0;
 
     if (root instanceof javax.faces.component.UISelectOne) {
-	items = Util.getSelectItemWrappers(null, root);
+	items = Util.getSelectItems(null, root);
 	indentPrintln(out, " {");
 	while (items.hasNext()) {
-            curItemWrapper = (SelectItemWrapper) items.next();
-            curItem = curItemWrapper.getSelectItem();
+            curItem= (SelectItem) items.next();
 	    indentPrintln(out, "\t value=" + curItem.getValue() + 
 			  " label=" + curItem.getLabel() + " description=" + 
 			  curItem.getDescription());

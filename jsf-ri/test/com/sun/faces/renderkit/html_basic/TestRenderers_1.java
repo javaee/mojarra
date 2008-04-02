@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.50 2003/10/30 22:15:46 jvisvanathan Exp $
+ * $Id: TestRenderers_1.java,v 1.51 2003/11/01 02:52:56 jvisvanathan Exp $
  */
 
 /*
@@ -34,6 +34,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.model.SelectItem;
+import javax.faces.model.SelectItemGroup;
 import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -51,7 +52,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.50 2003/10/30 22:15:46 jvisvanathan Exp $
+ * @version $Id: TestRenderers_1.java,v 1.51 2003/11/01 02:52:56 jvisvanathan Exp $
  * 
  *
  */
@@ -577,7 +578,12 @@ public class TestRenderers_1 extends JspFacesTestCase
         SelectItem item2 = new SelectItem("Two", "Two", null);
         SelectItem item3 = new SelectItem("Three", "Three" ,null);
         
-        SelectItem[] items = {item1, item2,item3};
+        SelectItem item4 = new SelectItem("Four", "Four", null);
+        SelectItem item5 = new SelectItem("Five", "Five" ,null);
+        SelectItem[] itemsArray = {item4, item5};
+        SelectItemGroup itemGroup = new SelectItemGroup("group", null, true, 
+                itemsArray);
+        SelectItem[] items = {item1, item2,item3, itemGroup};
         uiSelectItems.setValue(items);
 	uiSelectItems.setId("items");
 	uiSelectOne.getChildren().add(uiSelectItems);
