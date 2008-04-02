@@ -206,8 +206,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                 continue;
             }
 
-            String propertyName = property.getPropertyName();
-            String propertyType = property.getPropertyClass();
+            String propertyName = property.getPropertyName();           
 
             // SPECIAL - Don't generate these properties
             if ("binding".equals(propertyName) ||
@@ -216,8 +215,7 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
                 "converter".equals(propertyName)) {
                 continue;
             }
-            String ivar = mangle(propertyName);
-            String vbKey = ivar;
+            String ivar = mangle(propertyName);           
             String comp =
                 GeneratorUtil.stripJavaxFacesPrefix(componentType).toLowerCase();
             String capPropName = capitalize(propertyName);
@@ -225,24 +223,14 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
             if (property.isValueExpressionEnabled()) {
                 writer.fwrite("if (" + ivar + " != null) {\n");
                 writer.indent();
-                writer.fwrite("if (!" + ivar + ".isLiteralText()) {\n");
-                writer.indent();
-                writer.fwrite(comp + ".setValueExpression(\"" + vbKey +
-                    "\", " + ivar + ");\n");
-                writer.outdent();
-                writer.fwrite("} else {\n");
-                writer.indent();
-                if (primitive(propertyType)) {
-                    writer.fwrite(comp + ".set" + capPropName +
-                        "(" + GeneratorUtil.convertToObject(propertyType) +
-                        ".valueOf(" + ivar + ".getExpressionString())." +
-                        propertyType + "Value());\n");
+                writer.fwrite(comp);
+                if ("_for".equals(ivar)) {
+                    writer.write(".setValueExpression(\"for\", " +
+                                 ivar + ");\n");
                 } else {
-                    writer.fwrite(comp + ".set" + capPropName + '(' + ivar +
-                        ".getExpressionString());\n");
+                    writer.write(".setValueExpression(\"" + ivar + "\", " +
+                                 ivar + ");\n");
                 }
-                writer.outdent();
-                writer.fwrite("}\n");
                 writer.outdent();
                 writer.fwrite("}\n\n");
             } else if (property.isMethodExpressionEnabled()) {
@@ -283,50 +271,24 @@ public class HtmlTaglib21Generator extends HtmlTaglib12Generator {
             if (!attribute.isTagAttribute()) {
                 continue;
             }
-            String attributeName = attribute.getAttributeName();
-            String attributeType = attribute.getAttributeClass();
+            String attributeName = attribute.getAttributeName();           
 
             String ivar = mangle(attributeName);
-            String vbKey = ivar;
             String comp =
                 GeneratorUtil.stripJavaxFacesPrefix(componentType).toLowerCase();
 
             writer.fwrite("if (" + ivar + " != null) {\n");
             writer.indent();
-            writer.fwrite("if (!" + ivar + ".isLiteralText()) {\n");
-            writer.indent();
+           
             writer.fwrite(comp);
-            if ("_for".equals(ivar)) {
-                writer.write(".setValueExpression(\"" + '_' + vbKey + "\", " +
+            if ("_for".equals(ivar)) {              
+                writer.write(".setValueExpression(\"for\", " +
                     ivar + ");\n");
             } else {
-                writer.write(".setValueExpression(\"" + vbKey + "\", " +
+                writer.write(".setValueExpression(\"" + ivar + "\", " +
                     ivar + ");\n");
             }
-            writer.outdent();
-            writer.fwrite("} else {\n");
-            writer.indent();
-            if (primitive(attributeType)) {
-                writer.fwrite(comp + ".getAttributes().put(\"" + ivar +
-                    "\", ");
-                writer.write(GeneratorUtil.convertToObject(attributeType) +
-                    ".valueOf(" + ivar + ".getExpressionString()));\n");
-            } else {
-                if ("bundle".equals(ivar)) {
-                    writer.fwrite(comp +
-                        ".getAttributes().put(com.sun.faces.RIConstants.BUNDLE_ATTR, ");
-                } else if ("_for".equals(ivar)) {
-                    writer.fwrite(comp +
-                        ".getAttributes().put(\"for\", ");
-                } else {
-                    writer.fwrite(comp +
-                        ".getAttributes().put(\"" + ivar + "\", ");
-                }
-                writer.write(ivar + ".getExpressionString());\n");
-            }
-            writer.outdent();
-            writer.fwrite("}\n");
-            writer.outdent();
+            writer.outdent();          
             writer.fwrite("}\n");
         }
 
