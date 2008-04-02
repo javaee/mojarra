@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.16 2003/03/19 21:16:34 jvisvanathan Exp $
+ * $Id: MessageRenderer.java,v 1.17 2003/04/04 22:47:28 eburns Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.16 2003/03/19 21:16:34 jvisvanathan Exp $
+ * @version $Id: MessageRenderer.java,v 1.17 2003/04/04 22:47:28 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -90,13 +90,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         return (componentType.equals(UIOutput.TYPE));
-    }
-
-    public void decode(FacesContext context, UIComponent component) 
-        throws IOException {
-        if (context == null || component == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.44 2003/03/28 18:01:38 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.45 2003/04/04 22:47:26 eburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.44 2003/03/28 18:01:38 jvisvanathan Exp $
+ * @version $Id: FormRenderer.java,v 1.45 2003/04/04 22:47:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -94,10 +94,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIForm.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
-        // decode is a no-op for UIForm.           
-    }           
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
         String formClass = null;         

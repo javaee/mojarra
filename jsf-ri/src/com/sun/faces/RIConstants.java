@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.30 2003/04/04 17:54:27 eburns Exp $
+ * $Id: RIConstants.java,v 1.31 2003/04/04 22:47:22 eburns Exp $
  */
 
 /*
@@ -95,6 +95,9 @@ public class RIConstants {
 
     public static final String NAVIGATION_CONFIG_ATTR = 
 	"com.sun.faces.NavigationConfig";
+
+    public static final String ONE_TIME_INITIALIZATION_ATTR = 
+	"com.sun.faces.OneTimeInitialization";
 
 
 

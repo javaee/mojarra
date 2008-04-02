@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactoryImpl.java,v 1.7 2003/03/21 23:19:17 rkitain Exp $
+ * $Id: FacesContextFactoryImpl.java,v 1.8 2003/04/04 22:47:25 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import javax.servlet.ServletResponse;
 import org.mozilla.util.ParameterCheck;
 
 import com.sun.faces.util.Util;
+import com.sun.faces.RIConstants;
 
 public class FacesContextFactoryImpl extends FacesContextFactory
 {
@@ -60,10 +61,10 @@ public class FacesContextFactoryImpl extends FacesContextFactory
     //
     // Methods from FacesContextFactory
     //
-    public FacesContext getFacesContext(Object sc,
-					Object request,
-					Object response,
-					Lifecycle lifecycle)
+    public synchronized FacesContext getFacesContext(Object sc,
+						     Object request,
+						     Object response,
+						     Lifecycle lifecycle)
         throws FacesException {
 
         try {
@@ -74,8 +75,16 @@ public class FacesContextFactoryImpl extends FacesContextFactory
         } catch (Exception e ) {
             throw new NullPointerException(Util.getExceptionMessage(Util.FACES_CONTEXT_CONSTRUCTION_ERROR_MESSAGE_ID));
         }    
-	
-		
+
+	ServletContext ctx = (ServletContext) sc;
+
+	// if this is the very first FacesContext instance we're being
+	// asked to create.
+	if (null == 
+	    ctx.getAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR)) {
+	    // initialize our Factories
+	    Util.verifyFactoriesAndInitDefaultRenderKit(ctx);
+	}
         return (new FacesContextImpl(new ExternalContextImpl((ServletContext)sc, 
             (ServletRequest)request, (ServletResponse)response), lifecycle));
 

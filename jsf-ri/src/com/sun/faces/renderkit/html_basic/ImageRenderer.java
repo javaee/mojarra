@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.11 2003/03/21 23:24:01 rkitain Exp $
+ * $Id: ImageRenderer.java,v 1.12 2003/04/04 22:47:28 eburns Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.11 2003/03/21 23:24:01 rkitain Exp $
+ * @version $Id: ImageRenderer.java,v 1.12 2003/04/04 22:47:28 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -84,10 +84,6 @@ public class ImageRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UIGraphic.TYPE));
-    }
-
-    public void decode(FacesContext context, UIComponent component) 
-        throws IOException {
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

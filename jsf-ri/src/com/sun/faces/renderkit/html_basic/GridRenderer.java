@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.8 2003/02/20 22:48:58 ofung Exp $
+ * $Id: GridRenderer.java,v 1.9 2003/04/04 22:47:27 eburns Exp $
  */
 
 /*
@@ -28,7 +28,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.8 2003/02/20 22:48:58 ofung Exp $
+ * @version $Id: GridRenderer.java,v 1.9 2003/04/04 22:47:27 eburns Exp $
  *  
  */
 
@@ -78,11 +78,6 @@ public class GridRenderer extends HtmlBasicRenderer {
         }    
         return (componentType.equals(UIPanel.TYPE));
     }
-
-    public void decode(FacesContext context, UIComponent component)
-        throws IOException {
-    }
-
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {

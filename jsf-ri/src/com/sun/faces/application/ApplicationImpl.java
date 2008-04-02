@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.4 2003/03/31 21:12:23 rkitain Exp $
+ * $Id: ApplicationImpl.java,v 1.5 2003/04/04 22:47:23 eburns Exp $
  */
 
 /*
@@ -67,7 +67,7 @@ public class ApplicationImpl extends Application {
         super();
         valueBindingMap = new HashMap();
 
-        actionListener = null;
+        actionListener = new ActionListenerImpl();
     }
 
     /**

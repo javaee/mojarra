@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.10 2003/03/21 18:28:44 jvisvanathan Exp $
+ * $Id: ErrorsRenderer.java,v 1.11 2003/04/04 22:47:26 eburns Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.10 2003/03/21 18:28:44 jvisvanathan Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.11 2003/04/04 22:47:26 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -86,10 +86,6 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }    
         return (componentType.equals(UIOutput.TYPE));
-    }
-
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException {
     }
 
     public void encodeBegin(FacesContext context, UIComponent component) 

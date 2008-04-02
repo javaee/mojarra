@@ -1,5 +1,5 @@
 /*
- * $Id: DataRenderer.java,v 1.5 2003/02/20 22:48:57 ofung Exp $
+ * $Id: DataRenderer.java,v 1.6 2003/04/04 22:47:26 eburns Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DataRenderer.java,v 1.5 2003/02/20 22:48:57 ofung Exp $
+ * @version $Id: DataRenderer.java,v 1.6 2003/04/04 22:47:26 eburns Exp $
  *  
  */
 
@@ -74,10 +74,6 @@ public class DataRenderer extends HtmlBasicRenderer {
         return (componentType.equals(UIPanel.TYPE));
     }
 
-    public void decode(FacesContext context, UIComponent component) 
-            throws IOException{
-    }
-    
     public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException{
         // "panel_data" component is just a holder for an Iterator 

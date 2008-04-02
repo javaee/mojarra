@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.35 2003/03/28 18:01:39 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.36 2003/04/04 22:47:28 eburns Exp $
  */
 
 /*
@@ -295,7 +295,8 @@ public abstract class HtmlBasicRenderer extends Renderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
         
-        if ((UIOutput.TYPE.equals(component.getComponentType()))) {
+        if (!(component instanceof UIInput)) {
+	    component.setValid(true);
             // do nothing in output case
             return;
         }

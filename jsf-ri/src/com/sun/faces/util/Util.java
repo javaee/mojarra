@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.53 2003/04/04 17:54:28 eburns Exp $
+ * $Id: Util.java,v 1.54 2003/04/04 22:47:32 eburns Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.53 2003/04/04 17:54:28 eburns Exp $
+ * @version $Id: Util.java,v 1.54 2003/04/04 22:47:32 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -418,6 +418,8 @@ private Util()
 	// PENDING(rogerk): need a cleaner way to do this
 	context.setAttribute(RIConstants.NAVIGATION_CONFIG_ATTR, 
 			     new NavigationConfig(context));
+	context.setAttribute(RIConstants.ONE_TIME_INITIALIZATION_ATTR,
+			     RIConstants.ONE_TIME_INITIALIZATION_ATTR);
     }
 
     /**
