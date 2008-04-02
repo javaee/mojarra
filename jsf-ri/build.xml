@@ -191,6 +191,9 @@
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <jvmarg line="${debug.jvm.args}"/>
+            <assertions>
+                <enable/>
+            </assertions>
         </generateTaglib>
 
         <copy todir="${build.generate.dir}">

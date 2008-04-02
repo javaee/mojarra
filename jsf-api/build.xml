@@ -190,6 +190,9 @@
                 <pathelement location="${jsf-api.jar}"/>
                 <pathelement location="${tools.dir}/build/classes"/>
             </classpath>
+            <assertions>
+                <enable/>
+            </assertions>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
         </generateComponents>
 
@@ -222,6 +225,9 @@
             </classpath>
             <sysproperty key="java.endorsed.dirs" value="${endorsed.dirs}"/>
             <sysproperty key="tools.src.dir" value="${tools.dir}/src"/>
+            <assertions>
+                <enable/>
+            </assertions>
         </generateRenderkitDocs>      
 
     </target>
