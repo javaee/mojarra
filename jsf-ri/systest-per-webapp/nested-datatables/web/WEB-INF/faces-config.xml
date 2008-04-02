@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<!DOCTYPE faces-config PUBLIC
+ "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+ "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+  <managed-bean>
+    <managed-bean-name>outer</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.BeanList
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>name</property-name>
+      <value>outer</value>
+    </managed-property>
+    <managed-property>
+      <property-name>size</property-name>
+      <value>3</value>
+    </managed-property>
+
+  </managed-bean>
+  <managed-bean>
+    <managed-bean-name>inner</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.BeanList
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>name</property-name>
+      <value>inner</value>
+    </managed-property>
+    <managed-property>
+      <property-name>size</property-name>
+      <value>5</value>
+    </managed-property>
+  </managed-bean>
+
+</faces-config>

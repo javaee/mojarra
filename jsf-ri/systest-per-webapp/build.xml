@@ -227,6 +227,11 @@
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-unique-view-id"/>
     </antcall>
+
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-nested-datatables"/>
+    </antcall>
+
     
     <antcall target="install.one">
       <param name="webapp.build.home" 
@@ -269,6 +274,17 @@
       <param name="source.home" 
              value="${basedir}/unique-view-id/src/java" />
       <param name="context.path" value="/jsf-unique-view-id"/>
+
+    </antcall>
+
+    <antcall target="install.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/nested-datatables/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/nested-datatables/web" />
+      <param name="source.home" 
+             value="${basedir}/nested-datatables/src/java" />
+      <param name="context.path" value="/jsf-nested-datatables"/>
 
     </antcall>
 
@@ -321,6 +337,17 @@
 
     </antcall>
 
+    <antcall target="reload.one">
+      <param name="webapp.build.home" 
+             value="${basedir}/nested-datatables/build" />
+      <param name="webapp.web.home" 
+             value="${basedir}/nested-datatables/web" />
+      <param name="source.home" 
+             value="${basedir}/nested-datatables/src/java" />
+      <param name="context.path" value="/jsf-nested-datatables"/>
+
+    </antcall>
+
 
   </target>
 
@@ -336,6 +363,9 @@
     </antcall>
     <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-unique-view-id"/>
+    </antcall>
+    <antcall target="safe.remove.one">
+      <param name="context.path" value="/jsf-nested-datatables"/>
     </antcall>
   </target>
 
@@ -367,6 +397,7 @@
     <delete    dir="${basedir}/el-performance/build"/>
     <delete    dir="${basedir}/command-link-redirect/build"/>
     <delete    dir="${basedir}/unique-view-id/build"/>
+    <delete    dir="${basedir}/nested-datatables/build"/>
   </target>
    
 
