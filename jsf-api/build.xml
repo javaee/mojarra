@@ -708,7 +708,7 @@ jsf-api.jar.
              protected="${javadoc.protected}"
              windowtitle="${Name} (${version})"
              doctitle="${Name} (${version})"
-             bottom="Copyright &#169; 2002-2003 Sun Microsystems, Inc. All Rights Reserved.">
+             bottom="Copyright &#169; 2002-2004 Sun Microsystems, Inc. All Rights Reserved.">
        <fileset dir="${src.dir}">
          <include name="**/*.java"/>
        </fileset>
