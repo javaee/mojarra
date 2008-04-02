@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.34 2003/04/30 19:55:21 eburns Exp $
+ * $Id: RIConstants.java,v 1.35 2003/05/05 15:18:04 rkitain Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ public class RIConstants {
 	FACES_PREFIX + "saveStateInClient";
 
     public static final String CONFIG_FILES_INITPARAM = 
-	FACES_PREFIX + "ConfigFilesList";
+        "javax.faces.application.CONFIG_FILES";
 
     public static final String JSF_RI_CONFIG = 
 	"com/sun/faces/jsf-ri-config.xml";
@@ -104,12 +104,8 @@ public class RIConstants {
 
     public static final String VALIDATE_XML = FACES_PREFIX + "validateXml";
 
-/////////// PENDING(roger) - remove when Navigation handling complete (config)
-    public static final String NAVIGATION_CONFIG_ATTR = 
-	FACES_PREFIX + "NavigationConfig";
     public static final String ONE_TIME_INITIALIZATION_ATTR = 
 	FACES_PREFIX + "OneTimeInitialization";
-/////////////////////////////////////////////////
 
 
 
