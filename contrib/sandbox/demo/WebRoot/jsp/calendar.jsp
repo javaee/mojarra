@@ -6,9 +6,9 @@
         <h:commandButton value="Submit"></h:commandButton>
     </h:form>
     <h:outputText value="#{testBean.date}" rendered="#{!empty testBean.date}"/>
-    <h3>Selects</h3>
+    <h3>Menus</h3>
     <h:form>
-        <risb:calendar value="#{testBean.date2}" showSelects="true"></risb:calendar>
+        <risb:calendar value="#{testBean.date2}" showMenus="true"></risb:calendar>
         <h:commandButton value="Submit"></h:commandButton>
     </h:form>
     <h:outputText value="#{testBean.date2}" rendered="#{!empty testBean.date2}"/>

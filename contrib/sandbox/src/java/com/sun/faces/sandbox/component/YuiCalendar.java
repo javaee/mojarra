@@ -17,11 +17,10 @@ public class YuiCalendar extends UIInput {
     protected Boolean showWeekFooter = false;
     protected Boolean showWeekHeader = false;
     protected Integer startWeekday = 0; // Sunday
-    protected Boolean showInput = true;
-    protected Boolean showSelects = false;
+    protected Boolean showMenus = false;
     protected String minDate = null;
-    protected String maxDate= null;
-
+    protected String maxDate = null;
+    
     public YuiCalendar() { setRendererType(RENDERER_TYPE); }
     public String getFamily() { return COMPONENT_TYPE; }
     
@@ -34,8 +33,7 @@ public class YuiCalendar extends UIInput {
     public Integer getStartWeekday()   { return ComponentHelper.getValue(this, "startWeekday", startWeekday); }
     public String getMinDate()         { return ComponentHelper.getValue(this, "minDate", minDate); }
     public String getMaxDate()         { return ComponentHelper.getValue(this, "maxDate", maxDate); }   
-    public Boolean getShowInput()      { return ComponentHelper.getValue(this, "showInput", showInput); }
-    public Boolean getShowSelects()    { return ComponentHelper.getValue(this, "showSelects", showSelects); }
+    public Boolean getShowMenus()    { return ComponentHelper.getValue(this, "showMenus", showMenus); }
 
     public void setHideBlankWeeks(Boolean hideBlankWeeks) { this.hideBlankWeeks = hideBlankWeeks; }
     public void setMultiSelect(Boolean multiSelect)       { this.multiSelect = multiSelect; }
@@ -46,8 +44,7 @@ public class YuiCalendar extends UIInput {
     public void setStartWeekday(Integer startWeekday)     { this.startWeekday = startWeekday; }
     public void setMinDate(String minDate)                { this.minDate = minDate; }
     public void setMaxDate(String maxDate)                { this.maxDate = maxDate; }
-    public void setShowInput(Boolean showInput)           { this.showInput = showInput; }
-    public void setShowSelects(Boolean showSelects)       { this.showSelects = showSelects; this.showInput = false; }
+    public void setShowMenus(Boolean showMenus)       { this.showMenus = showMenus; }
 
     public void restoreState(FacesContext _context, Object _state) {
         this._state = (Object[]) _state;
@@ -61,14 +58,13 @@ public class YuiCalendar extends UIInput {
         onChange = (java.lang.String) this._state[7];
         language = (java.lang.String) this._state[8];
         minDate = (java.lang.String) this._state[9];
-        maxDate = (java.lang.String) this._state[10];          
-        showInput = (java.lang.Boolean) this._state[11];
-        showSelects = (java.lang.Boolean) this._state[12];
+        maxDate = (java.lang.String) this._state[10];       
+        showMenus = (java.lang.Boolean) this._state[11];
     }
 
     public Object saveState(FacesContext _context) {
         if (_state == null) {
-            _state = new Object[13];
+            _state = new Object[12];
         }
         _state[0] = super.saveState(_context);
         _state[1] = multiSelect;
@@ -81,10 +77,8 @@ public class YuiCalendar extends UIInput {
         _state[8] = language;
         _state[9] = minDate;
         _state[10] = maxDate;     
-        _state[11] = showInput;
-        _state[12] = showSelects;
+        _state[11] = showMenus;
 
         return _state;
     }
-
 }

@@ -27,8 +27,7 @@ public class YuiCalendarTag extends UISandboxComponentTag {
     protected String onChange;
     protected String required;
     protected String requiredMessage;
-    protected String showInput;
-    protected String showSelects;
+    protected String showMenus;
     protected String showWeekdays;
     protected String showWeekFooter;
     protected String showWeekHeader;
@@ -60,8 +59,7 @@ public class YuiCalendarTag extends UISandboxComponentTag {
     public void setOnchange(String onChange)                       { this.onChange = onChange; }
     public void setRequired(String required)                       { this.required = required; } 
     public void setRequiredMessage(String requiredMessage)         { this.requiredMessage = requiredMessage; }
-    public void setShowInput(String showInput)                     { this.showInput = showInput; };
-    public void setShowSelects(String showSelects)                 { this.showSelects = showSelects; };
+    public void setShowMenus(String showMenus)                   { this.showMenus = showMenus; };
     public void setShowWeekdays(String showWeekdays)               { this.showWeekdays = showWeekdays; } 
     public void setShowWeekFooter(String showWeekFooter)           { this.showWeekFooter = showWeekFooter; } 
     public void setShowWeekHeader(String showWeekHeader)           { this.showWeekHeader = showWeekHeader; } 
@@ -96,8 +94,7 @@ public class YuiCalendarTag extends UISandboxComponentTag {
         setStringProperty(cal, "onChange", onChange);
         setBooleanProperty(cal, "required", required); 
         setBooleanProperty(cal, "requiredMessage", requiredMessage);
-        setBooleanProperty(cal, "showInput", showInput);
-        setBooleanProperty(cal, "showSelects", showSelects);
+        setBooleanProperty(cal, "showMenus", showMenus);
         setBooleanProperty(cal, "showWeekdays", showWeekdays);
         setBooleanProperty(cal, "showWeekFooter", showWeekFooter);
         setBooleanProperty(cal, "showWeekHeader", showWeekHeader);

@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import com.sun.faces.sandbox.model.FileHolderImpl;
 public class TestBean {
     protected YuiTree tree;
     protected Date date;
-    protected Date date2 = new Date(2005, 1, 1);
+    protected Date date2;
     protected FileHolder fileHolder = new FileHolderImpl();
     
     public TestBean() {
@@ -55,6 +56,9 @@ public class TestBean {
     }
 
     public Date getDate2() {
+        Calendar tempcal = Calendar.getInstance();
+        tempcal.set(1974, 11, 23);
+        date2 = tempcal.getTime();
         return date2;
     }
 

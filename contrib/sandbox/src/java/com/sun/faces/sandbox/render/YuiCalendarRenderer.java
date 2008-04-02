@@ -1,12 +1,13 @@
 package com.sun.faces.sandbox.render;
 
-import java.io.IOException;     
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
+import javax.faces.application.FacesMessage;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.ValueHolder;
@@ -31,27 +32,61 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         YuiConstants.JS_CALENDAR,
         YuiConstants.JS_YUI_CALENDAR_HELPER
     };
-
-    private static final String cssIds[] = { 
-        YuiConstants.CSS_CALENDAR 
+    
+    private static final String cssIds[] = {
+        YuiConstants.CSS_CALENDAR
     };
     
     private static final String DATE_FORMAT = "yyyy/MM/dd";
-
-    private final int MIN_YEAR = 1900;
-    private final int MAX_YEAR = 2100;
+    private static final String DATE_FORMAT_YAHOO = "MM/dd/yyyy";
     
-    // TODO: i18n
-    private static final String monthNames[] = {
-        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-    };
-
+    // Can't be final, but treat as if they were.
+    private int MIN_YEAR = 1900;
+    private int MAX_YEAR = 2100;
+    
+    private Date minDate;
+    private String minDateString;
+    private Date maxDate;
+    private String maxDateString;
+    
     public YuiCalendarRenderer() {
-        //
+        Calendar tempcal = Calendar.getInstance();
+        MIN_YEAR = tempcal.get(Calendar.YEAR) - 100;
+        MAX_YEAR = tempcal.get(Calendar.YEAR) + 100;
+        minDateString = "01/01/" + MIN_YEAR;
+        maxDateString = "12/31/" + MAX_YEAR;
     }
-
+    
     public void encodeBegin(FacesContext context, UIComponent component)
     throws IOException {
+        
+        YuiCalendar cal = (YuiCalendar) component;
+
+        if (null != cal.getMinDate()) {
+            minDateString = cal.getMinDate();
+        }        
+        if (null != cal.getMaxDate()) {
+            maxDateString = cal.getMaxDate();
+        }
+        
+        Calendar tempcal = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_YAHOO);
+        try {
+            tempcal.setTime(format.parse(minDateString));
+            minDate = tempcal.getTime();
+            tempcal.setTime(format.parse(maxDateString));
+            maxDate = tempcal.getTime();
+        } catch(ParseException e) {
+            throw new IllegalArgumentException("Invalid mindate or maxdate", e);
+        }
+        
+        if (null != cal.getValue()) {
+            Date date = (Date) cal.getValue();
+            if (date.before(minDate) || date.after(maxDate)) {
+                addErrorMessage(context, cal.getClientId(context));
+            }
+        }
+        
         for (int i = 0; i < scriptIds.length; i++) {
             Util.getXhtmlHelper().linkJavascript(context, component,
                     context.getResponseWriter(), Mechanism.CLASS_RESOURCE,
@@ -65,7 +100,7 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
 //        YuiRendererHelper.renderSandboxJavaScript(context, context.getResponseWriter(), component);
         YuiRendererHelper.renderSandboxStylesheet(context, context.getResponseWriter(), component);
     }
-
+    
     public void encodeEnd(FacesContext context, UIComponent component)
     throws IOException {
         if ((context == null) || (component == null)) {
@@ -73,23 +108,14 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         }
         YuiCalendar cal = (YuiCalendar) component;
         
-        if (Boolean.TRUE.equals(cal.getShowSelects()==true)) {
-            Date date = (Date) cal.getValue();
-            if (date == null) {
-                date = new Date();
-            }
-            Calendar tempcal = Calendar.getInstance();
-            tempcal.setTime(date);
-            int currDay = tempcal.get(Calendar.DAY_OF_MONTH);
-            int currMonth = tempcal.get(Calendar.MONTH);
-            int currYear = tempcal.get(Calendar.YEAR);
-            renderYearSelectField(context, context.getResponseWriter(), cal, currYear);
-            renderMonthSelectField(context, context.getResponseWriter(), cal, currMonth);
-            renderDaySelectField(context, context.getResponseWriter(), cal, currDay);
+        if (Boolean.TRUE.equals(cal.getShowMenus()==true)) {
+            renderYearSelectField(context, context.getResponseWriter(), cal);
+            renderMonthSelectField(context, context.getResponseWriter(), cal);
+            renderDaySelectField(context, context.getResponseWriter(), cal);
         } else {
             renderInputField(context, cal);
         }
-
+        
         writeCalendarMarkUp(context, context.getResponseWriter(), cal);
     }
     
@@ -105,127 +131,73 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         if (component.getOnChange() != null) {
             writer.writeAttribute("onchange", component.getOnChange(), "onchange");
         }
-        if (component.getShowInput() == false) {
-            writer.writeAttribute("style", "display: none", "style");
-        }
         writer.endElement("input");
     }
-
-    protected void renderDaySelectField(FacesContext context, ResponseWriter writer, UIComponent component, int currDay) throws IOException {
+    
+    protected void renderDaySelectField(FacesContext context, ResponseWriter writer, UIComponent component) throws IOException {
         String clientId = component.getClientId(context);
         writer.startElement("select", component);
-        writer.writeAttribute("id", component.getId()+"Day", null);
-        writer.writeAttribute("name", component.getId()+"Day", null);
+        writer.writeAttribute("id", clientId+"Day", null);
+        writer.writeAttribute("name", clientId+"Day", null);
         
         // TODO should be internationalized
         writer.startElement("option", component);
+        writer.writeAttribute("value", "", null);
         writer.writeText("Day", null);
         writer.endElement("option");
-        
-        for (int i = 1; i < 32; i++) {
-            writer.startElement("option", component);
-            writer.writeAttribute("value", i, null);
-            if (i == currDay) {
-                writer.writeAttribute("selected", Boolean.TRUE, null);
-            }
-            writer.writeText(i, null);
-            writer.endElement("option");
-        }
         writer.endElement("select");
     }
     
-    protected void renderMonthSelectField(FacesContext context, ResponseWriter writer, UIComponent component, int currMonth) throws IOException {
+    protected void renderMonthSelectField(FacesContext context, ResponseWriter writer, UIComponent component) throws IOException {
         String clientId = component.getClientId(context);
-        
         writer.startElement("select", component);
-        writer.writeAttribute("id", component.getId()+"Month", null);
-        writer.writeAttribute("name", component.getId()+"Month", null);
-
-        // TODO should be internationalized
+        writer.writeAttribute("id", clientId+"Month", null);
+        writer.writeAttribute("name", clientId+"Month", null);
+        
+        // TODO should be internationalized.
         writer.startElement("option", component);
+        writer.writeAttribute("value", "", null);
         writer.writeText("Month", null);
         writer.endElement("option");
-        
-        for (int i = 0; i < 12; i++) {
-            writer.startElement("option", component);
-            writer.writeAttribute("value", i, null);
-            if (i == currMonth) {
-                writer.writeAttribute("selected", Boolean.TRUE, null);
-            }
-            writer.writeText(monthNames[i], null);
-            writer.endElement("option");
-        }
         writer.endElement("select");
     }
     
-    protected void renderYearSelectField(FacesContext context, ResponseWriter writer, UIComponent component, int currYear) throws IOException {
+    protected void renderYearSelectField(FacesContext context, ResponseWriter writer, UIComponent component) throws IOException {
         String clientId = component.getClientId(context);
         writer.startElement("select", component);
-        writer.writeAttribute("id", component.getId()+"Year", null);
-        writer.writeAttribute("name", component.getId()+"Year", null);
+        writer.writeAttribute("id", clientId+"Year", null);
+        writer.writeAttribute("name", clientId+"Year", null);
         
         // TODO should be internationalized
         writer.startElement("option", component);
+        writer.writeAttribute("value", "", null);
         writer.writeText("Year", null);
         writer.endElement("option");
         
-        YuiCalendar cal = (YuiCalendar) component;
         Calendar tempcal = Calendar.getInstance();
-        
-        int minYear, maxYear;
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        
-        if (cal.getMaxDate() != null) {
-            try {
-                tempcal.setTime(format.parse(cal.getMaxDate()));
-                maxYear = tempcal.get(Calendar.YEAR);
-            } catch(ParseException e) {
-                maxYear = MAX_YEAR;
-            }
-        } else {
-            maxYear = MAX_YEAR;
-        }
-        
-        if (cal.getMinDate() != null) {
-            try {
-                tempcal.setTime(format.parse(cal.getMinDate()));
-                minYear = tempcal.get(Calendar.YEAR);
-            } catch(ParseException e) {
-                minYear = MIN_YEAR;
-            }
-        } else {
-            minYear = MIN_YEAR;
-        }
-        
-        // If we've set an illogical year then reset to defaults.
-        if (minYear > maxYear) {
-            minYear = MIN_YEAR;
-            maxYear = MAX_YEAR;
-        }
+        tempcal.setTime(minDate);
+        int minYear = tempcal.get(Calendar.YEAR);
+        tempcal.setTime(maxDate);
+        int maxYear = tempcal.get(Calendar.YEAR);
         
         for (int i = minYear; i < maxYear+1; i++) {
             writer.startElement("option", component);
             writer.writeAttribute("value", i, null);
-            if (i == currYear) {
-                writer.writeAttribute("selected", Boolean.TRUE, null);
-            }
             writer.writeText(i, null);
             writer.endElement("option");
         }
         writer.endElement("select");
     }
-
+    
     protected void writeCalendarMarkUp(FacesContext context,
             ResponseWriter writer, UIComponent component) throws IOException {
         String clientId = component.getClientId(context);
         YuiCalendar cal = (YuiCalendar) component;
         Date date = (Date) cal.getValue();
-        if (date == null) {
-            date = new Date();
-        }
-        String javaScript = String.format("new RISANDBOX.Calendar('%sContainer','%sTrigger', '%sDay', '%sMonth', '%sYear','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s,%s);",
-                component.getId(), component.getId(), component.getId(),component.getId(),component.getId(), clientId,
-                (date != null) ? new SimpleDateFormat("MM/yyyy").format(date) : "null",
+        
+        String javaScript = String.format("new RISANDBOX.Calendar('%sContainer','%sTrigger', '%sDay', '%sMonth', '%sYear','%s','%s','%s',%s,%s,%s,%s,%s,%s,'%s','%s',%s);",
+                component.getId(), component.getId(), clientId, clientId, clientId, clientId,
+                (date != null) ? new SimpleDateFormat("MM/yyyy").format(date) : new SimpleDateFormat("MM/yyyy").format(new Date()),
                 (date != null) ? new SimpleDateFormat("MM/dd/yyyy").format(date) : "null",
                 cal.getMultiSelect().toString(),
                 cal.getShowWeekdays().toString(),
@@ -233,10 +205,9 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
                 cal.getShowWeekHeader().toString(),
                 cal.getShowWeekFooter().toString(),
                 cal.getHideBlankWeeks().toString(),
-                (cal.getMinDate() != null) ? cal.getMinDate() : Integer.toString(MIN_YEAR),
-                (cal.getMaxDate() != null) ? cal.getMaxDate() : Integer.toString(MAX_YEAR),
-                cal.getShowInput().toString(),
-                cal.getShowSelects().toString());
+                (minDateString != null) ? minDateString : "null",
+                (maxDateString != null) ? maxDateString : "null",
+                cal.getShowMenus().toString());
         
         renderSupportingMarkup(context, writer, component);
         writer.startElement("script", component);
@@ -250,16 +221,16 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         writer.startElement("img", component);
         writer.writeAttribute("id", component.getId() + "Trigger", "id");
         writer.writeAttribute("alt", "calendar", "alt");
-        writer.writeAttribute("src", 
+        writer.writeAttribute("src",
                 Util.getXhtmlHelper().mapResourceId(context, Mechanism.CLASS_RESOURCE,"/yui/assets/calendar_icon.gif"), "src");
         writer.endElement("img");
-
+        
         writer.startElement("div", component);
         writer.writeAttribute("id", component.getId() + "Container", "id");
         writer.writeAttribute("style", "display: none;", "style");
         writer.endElement("div");
     }
-
+    
     public void decode(FacesContext context, UIComponent component) {
         if (context == null) {
             throw new NullPointerException("Argument Error: Parameter 'context' is null");
@@ -267,26 +238,81 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         if (component == null) {
             throw new NullPointerException("Argument Error: Parameter 'component' is null");
         }
-
+        
         if (!(component instanceof YuiCalendar)) {
             // decode needs to be invoked only for components that are
             // instances or subclasses of UIInput.
             return;
         }
-
+        
+        YuiCalendar cal = (YuiCalendar) component;
+        
         // TODO: If the component is disabled, do not change the value of the
         // component, since its state cannot be changed.
 //        if (RendererHelper.componentIsDisabledOrReadonly(component)) {
 //            return;
 //        }
-
+        
         String clientId = component.getClientId(context);
         assert(clientId != null);
         Map<String, String> requestMap = context.getExternalContext().getRequestParameterMap();
-        // Don't overwrite the value unless you have to!
-        if (requestMap.containsKey(clientId)) {
-            String newValue = requestMap.get(clientId);
-            ((YuiCalendar) component).setSubmittedValue(newValue);
+        
+        Calendar tempcal = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat();
+        Date newDate = null;
+        
+        if (Boolean.TRUE.equals(cal.getShowMenus()==true)) {
+            String daySelectId = clientId + "Day";
+            String monthSelectId = clientId + "Month";
+            String yearSelectId = clientId + "Year";
+            
+            if (requestMap.containsKey(daySelectId) &&
+                    requestMap.containsKey(monthSelectId) &&
+                    requestMap.containsKey(yearSelectId)) {
+                
+                String y = requestMap.get(yearSelectId);
+                String m = requestMap.get(monthSelectId);
+                String d = requestMap.get(daySelectId);
+                
+                if ("".equals(d) || "".equals(m) || "".equals(y)) {
+                    if ("".equals(d) && "".equals(m) && "".equals(y) && Boolean.FALSE.equals(cal.isRequired()==true)) {
+                        return;
+                    }
+                    // TODO use requiredMessage
+                    addErrorMessage(context, clientId);
+                    return;
+                }
+                
+                tempcal.set((int) Integer.parseInt(y), (int) Integer.parseInt(m),(int) Integer.parseInt(d));
+                newDate = tempcal.getTime();
+                if (newDate.before(minDate) || newDate.after(maxDate)) {
+                    addErrorMessage(context, clientId);
+                    return;
+                }
+                
+                format.applyPattern(DATE_FORMAT);
+                String newValue = format.format(newDate);
+                cal.setSubmittedValue(newValue);
+            }
+        } else {
+            // Don't overwrite the value unless you have to!
+            if (requestMap.containsKey(clientId)) {
+                String newValue = requestMap.get(clientId);
+                format.applyPattern(DATE_FORMAT);
+                
+                try {
+                    newDate = format.parse(newValue);
+                } catch(ParseException pe) {
+                    throw new IllegalStateException("Could not parse submitted date value", pe);
+                }
+                
+                if (newDate.before(minDate) || newDate.after(maxDate)) {
+                    addErrorMessage(context, clientId);
+                    return;
+                }
+                
+                cal.setSubmittedValue(newValue);
+            }
         }
     }
     
@@ -302,13 +328,19 @@ public class YuiCalendarRenderer extends HtmlBasicRenderer {//Renderer {
         }
         return converter;
     }
-
+    
     @Override
     public Object getConvertedValue(FacesContext context, UIComponent component, Object submittedValue) throws ConverterException {
         return getConverter(context, component).getAsObject(context, component, (String)submittedValue);
     }
-
-    protected String getStringValue (FacesContext context, UIComponent component) throws ConverterException {
+    
+    protected String getStringValue(FacesContext context, UIComponent component) throws ConverterException {
         return getConverter(context, component).getAsString(context, component, ((YuiCalendar)component).getValue());
+    }
+    
+    private void addErrorMessage(FacesContext context, String clientId) {
+        // TODO Move to resource bundle
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "invalid date", "invalid date");
+        context.addMessage(clientId, msg);
     }
 }
