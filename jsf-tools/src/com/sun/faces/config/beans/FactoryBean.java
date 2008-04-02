@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryBean.java,v 1.3 2004/02/04 23:46:07 ofung Exp $
+ * $Id: FactoryBean.java,v 1.4 2004/04/30 14:32:03 eburns Exp $
  */
 
 /*
@@ -8,6 +8,9 @@
  */
 
 package com.sun.faces.config.beans;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,28 +23,28 @@ public class FactoryBean {
     // -------------------------------------------------------------- Properties
 
 
-    private String applicationFactory;
-    public String getApplicationFactory() { return applicationFactory; }
-    public void setApplicationFactory(String applicationFactory)
-    { this.applicationFactory = applicationFactory; }
+    private List applicationFactories = new ArrayList();
+    public List getApplicationFactories() { return applicationFactories; }
+    public void addApplicationFactory(String applicationFactory)
+    { applicationFactories.add(applicationFactory); }
 
 
-    private String facesContextFactory;
-    public String getFacesContextFactory() { return facesContextFactory; }
-    public void setFacesContextFactory(String facesContextFactory)
-    { this.facesContextFactory = facesContextFactory; }
+    private List facesContextFactories = new ArrayList();
+    public List getFacesContextFactories() { return facesContextFactories; }
+    public void addFacesContextFactory(String facesContextFactory)
+    { facesContextFactories.add(facesContextFactory); }
 
 
-    private String lifecycleFactory;
-    public String getLifecycleFactory() { return lifecycleFactory; }
-    public void setLifecycleFactory(String lifecycleFactory)
-    { this.lifecycleFactory = lifecycleFactory; }
+    private List lifecycleFactories = new ArrayList();
+    public List getLifecycleFactories() { return lifecycleFactories; }
+    public void addLifecycleFactory(String lifecycleFactory)
+    { lifecycleFactories.add(lifecycleFactory); }
 
 
-    private String renderKitFactory;
-    public String getRenderKitFactory() { return renderKitFactory; }
-    public void setRenderKitFactory(String renderKitFactory)
-    { this.renderKitFactory = renderKitFactory; }
+    private List renderKitFactories = new ArrayList();
+    public List getRenderKitFactories() { return renderKitFactories; }
+    public void addRenderKitFactory(String renderKitFactory)
+    { renderKitFactories.add(renderKitFactory); }
 
 
 }

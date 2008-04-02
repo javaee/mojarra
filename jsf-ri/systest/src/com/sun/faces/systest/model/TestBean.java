@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.10 2004/04/17 02:01:39 eburns Exp $
+ * $Id: TestBean.java,v 1.11 2004/04/30 14:31:59 eburns Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.systest.model;
 
+import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIComponent;
 import javax.faces.component.NamingContainer;
@@ -341,6 +342,21 @@ public class TestBean {
     
     public void setBoundButton(HtmlCommandButton newBoundButton) {
 	boundButton = newBoundButton;
+    }
+
+    public String getFactoryPrintout() {
+	String result = "";
+	String [] factoryNames = {
+	    FactoryFinder.APPLICATION_FACTORY,
+	    FactoryFinder.FACES_CONTEXT_FACTORY,
+	    FactoryFinder.LIFECYCLE_FACTORY,
+	    FactoryFinder.RENDER_KIT_FACTORY
+	};
+	for (int i = 0; i < factoryNames.length; i++) {
+	    result = result + 
+		FactoryFinder.getFactory(factoryNames[i]).toString() + " ";
+	}
+	return result;
     }
 
 	

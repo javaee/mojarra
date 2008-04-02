@@ -16,6 +16,12 @@
   <application>
     <message-bundle>com.sun.faces.CustomMessages</message-bundle>
   </application>
+  <factory>
+    <application-factory>com.sun.faces.systest.lifecycle.ApplicationFactoryWrapper</application-factory>
+    <faces-context-factory>com.sun.faces.systest.lifecycle.FacesContextFactoryWrapper</faces-context-factory>
+    <lifecycle-factory>com.sun.faces.systest.lifecycle.LifecycleFactoryWrapper</lifecycle-factory>
+    <render-kit-factory>com.sun.faces.systest.lifecycle.RenderKitFactoryWrapper</render-kit-factory>
+  </factory>
 
 
   <!-- Managed Bean #1, No Property Overrides -->

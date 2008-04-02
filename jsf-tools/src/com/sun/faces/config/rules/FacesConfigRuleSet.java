@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.4 2004/02/04 23:46:21 ofung Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.5 2004/04/30 14:32:04 eburns Exp $
  */
 
 /*
@@ -163,16 +163,16 @@ public class FacesConfigRuleSet extends RuleSetBase {
                 ("faces-config/factory", new FactoryRule());
             digester.addCallMethod
                 ("faces-config/factory/application-factory",
-                 "setApplicationFactory", 0);
+                 "addApplicationFactory", 0);
             digester.addCallMethod
                 ("faces-config/factory/faces-context-factory",
-                 "setFacesContextFactory", 0);
+                 "addFacesContextFactory", 0);
             digester.addCallMethod
                 ("faces-config/factory/lifecycle-factory",
-                 "setLifecycleFactory", 0);
+                 "addLifecycleFactory", 0);
             digester.addCallMethod
                 ("faces-config/factory/render-kit-factory",
-                 "setRenderKitFactory", 0);
+                 "addRenderKitFactory", 0);
         }
 
         // faces-config/lifecycle

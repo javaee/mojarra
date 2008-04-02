@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.24 2004/04/06 15:37:14 eburns Exp $
+ * $Id: FactoryFinder.java,v 1.25 2004/04/30 14:31:54 eburns Exp $
  */
 
 /*
@@ -574,7 +574,7 @@ public final class FactoryFinder {
 	    factoryClasses.put(LIFECYCLE_FACTORY,
 			       javax.faces.lifecycle.LifecycleFactory.class);
 	    factoryClasses.put(RENDER_KIT_FACTORY,
-			       javax.faces.render.RenderKit.class);
+			       javax.faces.render.RenderKitFactory.class);
 	}
 	return ((Class) factoryClasses.get(factoryClassName));
     }

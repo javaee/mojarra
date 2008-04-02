@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.13 2004/04/20 18:27:23 eburns Exp $
+ * $Id: ConfigureListener.java,v 1.14 2004/04/30 14:31:55 eburns Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -657,43 +657,56 @@ public class ConfigureListener implements ServletContextListener {
         if (config == null) {
             return;
         }
+	Iterator iter = null;
         String value;
 
-        value = config.getApplicationFactory();
-        if (value != null) {
-            if (log.isTraceEnabled()) {
-                log.trace("setApplicationFactory(" + value + ")");
-            }
-            FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
-                                     value);
-        }
+	iter = config.getApplicationFactories().iterator();
+	while (iter.hasNext()) {
+	    value = (String) iter.next();
+	    if (value != null) {
+		if (log.isTraceEnabled()) {
+		    log.trace("setApplicationFactory(" + value + ")");
+		}
+		FactoryFinder.setFactory(FactoryFinder.APPLICATION_FACTORY,
+					 value);
+	    }
+	}
 
-        value = config.getFacesContextFactory();
-        if (value != null) {
-            if (log.isTraceEnabled()) {
-                log.trace("setFacesContextFactory(" + value + ")");
-            }
-            FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
-                                     value);
-        }
+	iter = config.getFacesContextFactories().iterator();
+	while (iter.hasNext()) {
+	    value = (String) iter.next();
+	    if (value != null) {
+		if (log.isTraceEnabled()) {
+		    log.trace("setFacesContextFactory(" + value + ")");
+		}
+		FactoryFinder.setFactory(FactoryFinder.FACES_CONTEXT_FACTORY,
+					 value);
+	    }
+	}
 
-        value = config.getLifecycleFactory();
-        if (value != null) {
-            if (log.isTraceEnabled()) {
-                log.trace("setLifecycleFactory(" + value + ")");
-            }
-            FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
-                                     value);
-        }
+	iter = config.getLifecycleFactories().iterator();
+	while (iter.hasNext()) {
+	    value = (String) iter.next();
+	    if (value != null) {
+		if (log.isTraceEnabled()) {
+		    log.trace("setLifecycleFactory(" + value + ")");
+		}
+		FactoryFinder.setFactory(FactoryFinder.LIFECYCLE_FACTORY,
+					 value);
+	    }
+	}
 
-        value = config.getRenderKitFactory();
-        if (value != null) {
-            if (log.isTraceEnabled()) {
-                log.trace("setRenderKitFactory(" + value + ")");
-            }
-            FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
-                                     value);
-        }
+	iter = config.getRenderKitFactories().iterator();
+	while (iter.hasNext()) {
+	    value = (String) iter.next();
+	    if (value != null) {
+		if (log.isTraceEnabled()) {
+		    log.trace("setRenderKitFactory(" + value + ")");
+		}
+		FactoryFinder.setFactory(FactoryFinder.RENDER_KIT_FACTORY,
+					 value);
+	    }
+	}
 
     }
 
