@@ -2601,7 +2601,22 @@
   <!-- standard renderkit -->
   <render-kit>
 
+    <description>In the descriptions of the renderers, when we say "the
+    value is passed thru", we mean that the name=value pair is rendered
+    just as is.  For example, if the Button renderer is rendering its
+    UICommand component, and the component has a "type" attribute, we
+    take the value of that attribute and render it as the right hand
+    side of the "type" attribute on the "input" element.  Passthru
+    attributes are not checked for validity.</description>
     <renderer>
+      <description>Renders an HTML "input" element.  If the type
+      attribute is specified it is passed thru un-checked as the value
+      of the "type" attribute in the rendered output.  If the type
+      attribute is not specified, "submit" is used.  Render the clientId
+      of the component as the value of the "name" attribute.  Render the
+      current value of the component as the value of the "value"
+      attribute.  If the "styleClass" attribute is specified, render its
+      value as the value of the "class" attribute.</description>
       <renderer-type>Button</renderer-type>
       <renderer-class>&button-renderer-class;</renderer-class>
       &core-attrs;
@@ -2713,6 +2728,12 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "input" element of type "checkbox".
+      Render the clientId of the component as the value of the "name"
+      attribute.  If the current value of the component is "true",
+      output "true" as the value of the "checked"
+      attribute.  If the "styleClass" attribute is specified, render its
+      value as the value of the "class" attribute.</description>
       <renderer-type>Checkbox</renderer-type>
       <renderer-class>&checkbox-renderer-class;</renderer-class>
       &core-attrs;
@@ -2819,6 +2840,12 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "form" element.  The value of the
+      "method" attribute must be "post".  The value of the "action"
+      attribute must be the request context path, followed by the view
+      id of this view.  If the "styleClass" attribute is specified,
+      render its value as the value of the "class"
+      attribute.</description>
       <renderer-type>Form</renderer-type>
       <renderer-class>&form-renderer-class;</renderer-class>
       &core-attrs;
@@ -2912,6 +2939,20 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "table" element.  Render the "header"
+      facet, if present, inside of "thead", "tr", and "th" elements,
+      nested in that order.  If the "headerClass" attribute is specifed,
+      render its value as the value of the "class" attribute on the "th"
+      element.  Render the value of the "columns" attribute as the value
+      of the "colspan" attribute on the "th" element.  Render the
+      children inside of a "tbody" element.  Render the children based
+      on the value of the "columns" attribute, creating a new row each
+      time a "columns" worth of children have been rendered.  Render the
+      "footer" facet if present, inside of "tfoot", "tr", and "th"
+      elements, nested in that order.  If the "footerClass" attribute is
+      specified, render its value as the value of the "class" attribute
+      on the "th" element.
+      </description>
       <renderer-type>Grid</renderer-type>
       <renderer-class>&grid-renderer-class;</renderer-class>
       &core-attrs;
@@ -3004,6 +3045,13 @@
     </renderer>
 
     <renderer>
+      <description>Intended for use in situations when only one
+      UIComponent child can be nested, such as in the case of facets.
+      If the "style" or "styleClass" attributes are present, render a
+      "span" element, outputting the value of the "style" attribute as
+      the value of the "style" attribute, and the value of the
+      "styleClass" attribute as the value of the "class"
+      attribute. </description>
       <renderer-type>Group</renderer-type>
       <renderer-class>&group-renderer-class;</renderer-class>
       <attribute>
@@ -3031,6 +3079,10 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "input" element of type
+      "hidden". Render the clientId of the component as the value of the
+      "name" attribute.  Render the current value of the component as
+      the value of the "value" attribute.</description>
       <renderer-type>Hidden</renderer-type>
       <renderer-class>&hidden-renderer-class;</renderer-class>
       <supported-component-type>
@@ -3150,6 +3202,12 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "img" element.  Render the clientId
+      as the value of the "id" attribute.  Render the value of the
+      component as the value of the "src" attribute.  If present, render
+      the value of the alt attribute as the value of the "alt"
+      attribute.  If the "styleClass" attribute is specified, render its
+      value as the value of the "class" attribute.</description>
       <renderer-type>Image</renderer-type>
       <renderer-class>&image-renderer-class;</renderer-class>
       &core-attrs;
@@ -3235,6 +3293,11 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "label" element.  Find the component
+      specified by the value of the "for" attribute, and render its
+      client id as the value of the "for" attribute.  If the
+      "styleClass" attribute is specified, render its value as the value
+      of the "class" attribute.</description>
       <renderer-type>Label</renderer-type>
       <renderer-class>&label-renderer-class;</renderer-class>
       &core-attrs;
@@ -3284,6 +3347,16 @@
     </renderer>
 
     <renderer>
+      <description>If the "styleClass" attribute is specified, render a
+      "span" element and render the value of the "styleClass attribute
+      as the value of the "class" attribute on the "span" element.
+      Render an HTML "select" element.  Render the clientId of the
+      component as the value of the "name" attribute.  If the component
+      to be rendered is a UISelectMany, render "true" as the value of
+      the "multiple" attribute.  If the "size" attribute is specified,
+      render its value as the value of the "size" attribute.  Otherwise
+      use the number of items as the value of the "size"
+      attribute.</description>
       <renderer-type>Listbox</renderer-type>
       <renderer-class>&listbox-renderer-class;</renderer-class>
       &core-attrs;
@@ -3368,6 +3441,16 @@
     </renderer>
 
     <renderer>
+      <description>If the "styleClass" attribute is specified, render a
+      "span" element and render the value of the "styleClass attribute
+      as the value of the "class" attribute on the "span" element.
+      Render an HTML "select" element.  Render the clientId of the
+      component as the value of the "name" attribute.  If the component
+      to be rendered is a UISelectMany, render "true" as the value of
+      the "multiple" attribute.  If the "size" attribute is specified,
+      render its value as the value of the "size" attribute.  Otherwise
+      use the number of items as the value of the "size"
+      attribute.</description>
       <renderer-type>Menu</renderer-type>
       <renderer-class>&menu-renderer-class;</renderer-class>
       &core-attrs;
@@ -3455,6 +3538,14 @@
     </renderer>
 
     <renderer>
+      <description>If the value of the "layout" attribute is "table",
+      render nested "table", "tr", and "td" elements, in that order.  If
+      either of the "style" or "styleClass" attributes has a non-null
+      value, render a "span" element, outputting the value of the
+      "style" attribute as the the value of the "style" attribute, and
+      outputting the value of the "styleClass" attribute as the value of
+      the "class" attribute on the "span" element.  PENDING(edburns):
+      complete this.</description>
       <renderer-type>Message</renderer-type>
       <renderer-class>&message-renderer-class;</renderer-class>
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
@@ -3634,6 +3725,20 @@
     </renderer>
 
     <renderer>
+      <description>If the "styleClass" attribute is specified, render a
+      "span" element and render the value of the "styleClass attribute
+      as the value of the "class" attribute on the "span" element.
+      Render a "table" element.  If the "border" attribute is specified,
+      pass it thru.  If the "layout" attribute is specified, and its
+      value is "PAGE_DIRECTION", render the children elements
+      vertically, otherwise horizontally, in the table.  If any of the
+      children are an instance of SelectItemGroup, render them as a
+      nested table.  Each of the children are ultimately rendererd as an
+      "input" element of "type" "radio".  If the value of the currently
+      rendered child is equal to the value of the parent UISelectOne,
+      render the "checked" attribute with the value of "true" for that
+      "input" element.  If the "disabled" attribute is specified, pass
+      its value thru.</description>
       <renderer-type>Radio</renderer-type>
       <renderer-class>&radio-renderer-class;</renderer-class>
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
@@ -3740,6 +3845,12 @@
     </renderer>
 
     <renderer>
+      <description>Renders an HTML "input" element of "type" "password".
+      Render the clientId of the component as the value of the "name"
+      attribute.  Render the current value of the component as the value
+      of the "value" attribute.  If the "styleClass" attribute is
+      specified, render its value as the value of the "class"
+      attribute.</description>
       <renderer-type>Secret</renderer-type>
       <renderer-class>&secret-renderer-class;</renderer-class>
       &core-attrs;
