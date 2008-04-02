@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.16 2004/11/11 18:03:07 edburns Exp $
+ * $Id: UIViewRootTestCase.java,v 1.17 2004/11/18 14:11:05 edburns Exp $
  */
 
 /*
@@ -251,7 +251,18 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 	
     public void doTestPhaseMethodBinding(UIViewRoot root) throws Exception {
-	PhaseListenerBean phaseListenerBean = new PhaseListenerBean();
+	doTestPhaseMethodBindingWithPhaseId(root, 
+					    PhaseId.APPLY_REQUEST_VALUES);
+	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.PROCESS_VALIDATIONS);
+	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.UPDATE_MODEL_VALUES);
+	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.INVOKE_APPLICATION);
+	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.RENDER_RESPONSE);
+	
+    }
+
+    public void doTestPhaseMethodBindingWithPhaseId(UIViewRoot root, 
+						    PhaseId phaseId) throws Exception {
+	PhaseListenerBean phaseListenerBean = new PhaseListenerBean(phaseId);
 	facesContext.getExternalContext().getRequestMap().put("bean",
 							    phaseListenerBean);
 	Class [] args = new Class [] { PhaseEvent.class };
@@ -260,28 +271,58 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	    afterBinding = facesContext.getApplication().createMethodBinding("#{bean.afterPhase}", args);
 	root.setBeforePhaseListener(beforeBinding);
 	root.setAfterPhaseListener(afterBinding);
-	root.encodeBegin(facesContext);
-	root.encodeEnd(facesContext);
+
+	callRightLifecycleMethodGivenPhaseId(root, phaseId);
+
 	assertTrue(phaseListenerBean.isBeforePhaseCalled());
 	assertTrue(phaseListenerBean.isAfterPhaseCalled());
 	
 	
     }
+
 
     public void doTestPhaseListener(UIViewRoot root) throws Exception {
-	PhaseListenerBean phaseListener = new PhaseListenerBean();
+	doTestPhaseListenerWithPhaseId(root, 
+					    PhaseId.APPLY_REQUEST_VALUES);
+	doTestPhaseListenerWithPhaseId(root, PhaseId.PROCESS_VALIDATIONS);
+	doTestPhaseListenerWithPhaseId(root, PhaseId.UPDATE_MODEL_VALUES);
+	doTestPhaseListenerWithPhaseId(root, PhaseId.INVOKE_APPLICATION);
+	doTestPhaseListenerWithPhaseId(root, PhaseId.RENDER_RESPONSE);
+
+    }
+
+    public void doTestPhaseListenerWithPhaseId(UIViewRoot root,
+					       PhaseId phaseId) throws Exception {
+	PhaseListenerBean phaseListener = new PhaseListenerBean(phaseId);
 	root.addPhaseListener(phaseListener);
-	root.encodeBegin(facesContext);
-	root.encodeEnd(facesContext);
+
+	callRightLifecycleMethodGivenPhaseId(root, phaseId);
+
 	assertTrue(phaseListener.isBeforePhaseCalled());
 	assertTrue(phaseListener.isAfterPhaseCalled());
 	
 	
     }
 
+
     public void doTestPhaseMethodBindingAndListener(UIViewRoot root) throws Exception {
-	PhaseListenerBean phaseListener = new PhaseListenerBean();
-	PhaseListenerBean phaseListenerBean = new PhaseListenerBean();
+	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+						       PhaseId.APPLY_REQUEST_VALUES);
+	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+						       PhaseId.PROCESS_VALIDATIONS);
+	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+						       PhaseId.UPDATE_MODEL_VALUES);
+	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+						       PhaseId.INVOKE_APPLICATION);
+	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
+						       PhaseId.RENDER_RESPONSE);
+
+    }
+
+    public void doTestPhaseMethodBindingAndListenerWithPhaseId(UIViewRoot root,
+							       PhaseId phaseId) throws Exception {
+	PhaseListenerBean phaseListener = new PhaseListenerBean(phaseId);
+	PhaseListenerBean phaseListenerBean = new PhaseListenerBean(phaseId);
 	facesContext.getExternalContext().getRequestMap().put("bean",
 							    phaseListenerBean);
 	Class [] args = new Class [] { PhaseEvent.class };
@@ -291,8 +332,9 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	root.setBeforePhaseListener(beforeBinding);
 	root.setAfterPhaseListener(afterBinding);
 	root.addPhaseListener(phaseListener);
-	root.encodeBegin(facesContext);
-	root.encodeEnd(facesContext);
+
+	callRightLifecycleMethodGivenPhaseId(root, phaseId);
+
 	assertTrue(phaseListenerBean.isBeforePhaseCalled());
 	assertTrue(phaseListenerBean.isAfterPhaseCalled());
 	assertTrue(phaseListener.isBeforePhaseCalled());
@@ -300,8 +342,22 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	
     }
 
-
-
+    private void callRightLifecycleMethodGivenPhaseId(UIViewRoot root,
+						      PhaseId phaseId) throws Exception {
+	if (phaseId.getOrdinal() == PhaseId.APPLY_REQUEST_VALUES.getOrdinal()) {
+	    root.processDecodes(facesContext);
+	}
+	else if(phaseId.getOrdinal() == PhaseId.PROCESS_VALIDATIONS.getOrdinal()) {
+	    root.processValidators(facesContext);
+	} else if(phaseId.getOrdinal() == PhaseId.UPDATE_MODEL_VALUES.getOrdinal()) {
+	    root.processUpdates(facesContext);
+	} else if(phaseId.getOrdinal() == PhaseId.INVOKE_APPLICATION.getOrdinal()) {
+	    root.processApplication(facesContext);
+	} else if(phaseId.getOrdinal() == PhaseId.RENDER_RESPONSE.getOrdinal()) {
+	    root.encodeBegin(facesContext);
+	    root.encodeEnd(facesContext);
+	}
+    }
 
     // --------------------------------------------------------- Support Methods
 
@@ -398,8 +454,11 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     public static class PhaseListenerBean extends Object implements PhaseListener {
 	private boolean beforePhaseCalled = false;
 	private boolean afterPhaseCalled = false;
+	private PhaseId phaseId = null;
 
-	public PhaseListenerBean() {}
+	public PhaseListenerBean(PhaseId phaseId) {
+	    this.phaseId = phaseId;
+	}
 
 	public boolean isBeforePhaseCalled() {
 	    return beforePhaseCalled;
@@ -417,7 +476,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	    afterPhaseCalled = true;
 	}
 
-	public PhaseId getPhaseId() { return PhaseId.RENDER_RESPONSE; }
+	public PhaseId getPhaseId() { return phaseId; }
 	    
     }
 

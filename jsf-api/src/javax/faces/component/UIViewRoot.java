@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.30 2004/11/11 20:39:30 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.31 2004/11/18 14:11:04 edburns Exp $
  */
 
 /*
@@ -35,7 +35,55 @@ import javax.faces.webapp.FacesServlet;
 /**
  * <p><strong>UIViewRoot</strong> is the UIComponent that represents the
  * root of the UIComponent tree.  This component has no rendering, it
- * just serves as the root of the component tree.</p>
+ * just serves as the root of the component tree, and as a place to hang
+ * per-view {@link PhaseListener}s.</p>
+ *
+ * <p>For each of the following lifecycle phase methods:</p>
+ *
+ * 	<ul>
+ *
+ *	  <li><p>{@link #processDecodes} </p></li>
+ *
+ *	  <li><p>{@link #processValidators} </p></li>
+ *
+ *	  <li><p>{@link #processUpdates} </p></li>
+ *
+ *	  <li><p>{@link #processApplication} </p></li>
+ *
+ *	  <li><p>RenderResponse, via {@link #encodeBegin} and {@link
+ *	  #encodeEnd} </p></li>
+ *
+ *	</ul>
+ *
+ * <p>Take the following action regarding
+ * <code>PhaseListener</code>s.</p>
+ *
+ * <ul>
+ *
+ * <p>If {@link #getBeforePhaseListener} returns non-<code>null</code>,
+ * invoke the listener, passing in the correct corresponding {@link
+ * PhaseId} for this phase.</p>
+ *
+ * <p>If or one or more listeners have been added by a call to {@link
+ * #addPhaseListener}, invoke the <code>beforePhase</code> method on
+ * each one whose {@link PhaseListener#getPhaseId} matches the current
+ * phaseId, passing in the same <code>PhaseId</code> as in the previous
+ * step.</p>
+ *
+ * <p>Execute any processing for this phase.</p>
+ *
+ * <p>If {@link #getAfterPhaseListener} returns non-<code>null</code>,
+ * invoke the listener, passing in the correct corresponding {@link
+ * PhaseId} for this phase.</p>
+ *
+ * <p>If or one or more listeners have been added by a call to {@link
+ * #addPhaseListener}, invoke the <code>afterPhase</code> method on each
+ * one whose {@link PhaseListener#getPhaseId} matches the current
+ * phaseId, passing in the same <code>PhaseId</code> as in the previous
+ * step.</p>
+ *
+ *
+ * </ul>
  */
 
 public class UIViewRoot extends UIComponentBase {
@@ -192,6 +240,16 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
+     * <p>Allow an arbitrary method to be called for the "beforePhase"
+     * event as the UIViewRoot runs through its lifecycle.  This method
+     * will be called for all phases except {@link
+     * PhaseId.RENDER_RESPONSE}.  Unlike a true {@link PhaseListener},
+     * this approach doesn't allow for only receiving {@link
+     * PhaseEvent}s for a given phase.</p>
+     *
+     * <p>The method must conform to the signature of {@link
+     * PhaseListener#beforePhase}.</p>
+     *
      * @param newBeforePhase the {@link MethodBinding} that will be
      * invoked before this view is rendered.
      *
@@ -212,8 +270,18 @@ public class UIViewRoot extends UIComponentBase {
     }
 
     /**
+     * <p>Allow an arbitrary method to be called for the "afterPhase"
+     * event as the UIViewRoot runs through its lifecycle.  This method
+     * will be called for all phases except {@link
+     * PhaseId.RENDER_RESPONSE}.  Unlike a true {@link PhaseListener},
+     * this approach doesn't allow for only receiving {@link
+     * PhaseEvent}s for a given phase.</p>
+     *
+     * <p>The method must conform to the signature of {@link
+     * PhaseListener#afterPhase}.</p>
+     *
      * @param newAfterPhase the {@link MethodBinding} that will be
-     * invoked after this view is rendered.
+     * invoked after this view is rendered.  
      *
      */
 
@@ -368,11 +436,21 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processDecodes(FacesContext context) {
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, true);
+	}
         super.processDecodes(context);
         broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
 	// clear out the events if we're skipping to render-response
 	if (context.getRenderResponse()) {
 	    events = null;
+	}
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, false);
 	}
 
     }
@@ -398,29 +476,7 @@ public class UIViewRoot extends UIComponentBase {
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
-	    PhaseEvent event = createPhaseEvent(context);
-	    if (null != beforePhase) {
-		try {
-		    beforePhase.invoke(context, 
-				       new Object [] { event });
-		}
-		catch (Exception e) {
-		    // PENDING(edburns): log this
-		}
-	    }
-	    if (null != phaseListeners) {
-		Iterator iter = phaseListeners.iterator();
-		PhaseListener curListener = null;
-		while (iter.hasNext()) {
-		    curListener = (PhaseListener) iter.next();
-		    try {
-			curListener.beforePhase(event);
-		    }
-		    catch (Exception e) {
-			// PENDING(edburns): log this
-		    }
-		}
-	    }
+	    notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, true);
 	}
 
 	super.encodeBegin(context);
@@ -441,35 +497,67 @@ public class UIViewRoot extends UIComponentBase {
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != afterPhase || null != phaseListeners) {
-	    PhaseEvent event = createPhaseEvent(context);
-	    if (null != afterPhase) {
-		try {
-		    afterPhase.invoke(context, 
-				      new Object [] { event });
-		}
-		catch (Exception e) {
-		    // PENDING(edburns): log this
-		}
+	    notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, false);
+	}
+	
+    }
+
+    /**
+     * <p>Utility method that notifies phaseListeners for the given
+     * phaseId.  Assumes that either or both the MethodBinding or
+     * phaseListeners data structure are non-null.</p>
+     *
+     * @param context the context for this request
+     *
+     * @param phaseId the {@link PhaseId} of the current phase
+     *
+     * @param isBefore, if true, notify beforePhase listeners.  Notify
+     * afterPhase listeners otherwise.
+     */
+
+    private void notifyPhaseListeners(FacesContext context,
+				      PhaseId phaseId,
+				      boolean isBefore) {
+	PhaseEvent event = createPhaseEvent(context, phaseId);
+	
+	boolean hasPhaseMethodBinding = 
+	    (isBefore && (null != beforePhase)) ||
+	    (!isBefore && (null != afterPhase));
+	MethodBinding binding = isBefore ? beforePhase : afterPhase;
+	
+	if (hasPhaseMethodBinding) {
+	    try {
+		binding.invoke(context, new Object [] { event });
 	    }
-	    if (null != phaseListeners) {
-		Iterator iter = phaseListeners.iterator();
-		PhaseListener curListener = null;
-		while (iter.hasNext()) {
-		    curListener = (PhaseListener) iter.next();
+	    catch (Exception e) {
+		// PENDING(edburns): log this
+	    }
+	}
+	if (null != phaseListeners) {
+	    Iterator iter = phaseListeners.iterator();
+	    PhaseListener curListener = null;
+	    while (iter.hasNext()) {
+		curListener = (PhaseListener) iter.next();
+		if (phaseId == curListener.getPhaseId() ||
+		    PhaseId.ANY_PHASE == curListener.getPhaseId()) {
 		    try {
-			curListener.afterPhase(event);
+			if (isBefore) {
+			    curListener.beforePhase(event);
+			}
+			else {
+			    curListener.afterPhase(event);
+			}
 		    }
 		    catch (Exception e) {
 			// PENDING(edburns): log this
 		    }
 		}
 	    }
-
 	}
-	
     }
 
-    private PhaseEvent createPhaseEvent(FacesContext context) throws FacesException {
+    private PhaseEvent createPhaseEvent(FacesContext context, 
+					PhaseId phaseId) throws FacesException {
 	Lifecycle lifecycle = null;
 	LifecycleFactory lifecycleFactory = (LifecycleFactory)
 	    FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
@@ -480,8 +568,7 @@ public class UIViewRoot extends UIComponentBase {
 	}
 	lifecycle = lifecycleFactory.getLifecycle(lifecycleId);
 	    
-	PhaseEvent result = new PhaseEvent(context, PhaseId.RENDER_RESPONSE,
-					   lifecycle);
+	PhaseEvent result = new PhaseEvent(context, phaseId, lifecycle);
 	return result;
     }
 	
@@ -499,6 +586,11 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processValidators(FacesContext context) {
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, true);
+	}
 
         super.processValidators(context);
         broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
@@ -507,6 +599,11 @@ public class UIViewRoot extends UIComponentBase {
 	    events = null;
 	}
 
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, false);
+	}
     }
 
 
@@ -520,10 +617,20 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processUpdates(FacesContext context) {
-
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, true);
+	}
+	
         super.processUpdates(context);
         broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
 
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, false);
+	}
     }
 
 
@@ -537,10 +644,20 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processApplication(FacesContext context) {
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, true);
+	}
 
         // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
         broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
 
+	// avoid creating the PhaseEvent if possible by doing redundant
+	// null checks.
+	if (null != beforePhase || null != phaseListeners) {
+	    notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, false);
+	}
     }
 
     /**
