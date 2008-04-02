@@ -1637,14 +1637,21 @@ lass</description>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>disabled</property-name>
-      <property-class>boolean</property-class>
+      <property-name>styleClass</property-name>
+      <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>styleClass</property-name>
+      <property-name>enabledClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>disabledClass</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
@@ -2090,13 +2097,6 @@ lass</description>
     <property>
       <display-name></display-name>
       <icon></icon>
-      <property-name>disabled</property-name>
-      <property-class>boolean</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
-    <property>
-      <display-name></display-name>
-      <icon></icon>
       <property-name>onchange</property-name>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
@@ -2129,14 +2129,26 @@ lass</description>
       <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>enabledClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>disabledClass</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
   </component>
 
   <component>
     <component-type>SelectItem</component-type>
     <component-class>javax.faces.component.UISelectItem</component-class>
     &core-attrs;
-    &events-attrs;
-
     <attribute>
       <description>unavailable in this context</description>
       <display-name></display-name>
@@ -2144,42 +2156,6 @@ lass</description>
       <attribute-name>disabled</attribute-name>
       <attribute-class>boolean</attribute-class>
     </attribute>
-    <attribute>
-      <description>unavailable in this context</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>size</attribute-name>
-      <attribute-class>boolean</attribute-class>
-    </attribute>
-    <attribute>
-      <description>language code</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>lang</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-    <attribute>
-      <description>direction for weak/neutral text</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>dir</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-    <attribute>
-      <description>position in tabbing order</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>tabindex</attribute-name>
-      <attribute-class>int</attribute-class>
-    </attribute>
-    <attribute>
-      <description>accessibility key character</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>accesskey</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-
     &base-props;
     <property>
       <display-name></display-name>
@@ -2215,8 +2191,7 @@ lass</description>
     <component-type>SelectItems</component-type>
     <component-class>javax.faces.component.UISelectItems</component-class>
     &core-attrs;
-    &events-attrs;
-
+    
     <attribute>
       <description>unavailable in this context</description>
       <display-name></display-name>
@@ -2224,57 +2199,7 @@ lass</description>
       <attribute-name>disabled</attribute-name>
       <attribute-class>boolean</attribute-class>
     </attribute>
-    <attribute>
-      <description>unavailable in this context</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>size</attribute-name>
-      <attribute-class>boolean</attribute-class>
-    </attribute>
-    <attribute>
-      <description>language code</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>lang</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-    <attribute>
-      <description>direction for weak/neutral text</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>dir</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-    <attribute>
-      <description>position in tabbing order</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>tabindex</attribute-name>
-      <attribute-class>int</attribute-class>
-    </attribute>
-    <attribute>
-      <description>accessibility key character</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>accesskey</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-    <attribute>
-      <description>the style</description>
-      <display-name></display-name>
-      <icon></icon>
-      <attribute-name>style</attribute-name>
-      <attribute-class>java.lang.String</attribute-class>
-    </attribute>
-
     &base-props;
-    <property>
-      <display-name></display-name>
-      <icon></icon>
-      <property-name>required</property-name>
-      <property-class>boolean</property-class>
-      <tag-attribute>yes</tag-attribute>
-    </property>
     <property>
       <display-name></display-name>
       <icon></icon>
