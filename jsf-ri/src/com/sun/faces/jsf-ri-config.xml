@@ -24,67 +24,72 @@
 
   <component>
     <component-type>Command</component-type>
-    <component-class>javax.faces.component.UICommand</component-class>
+    <component-class>javax.faces.component.base.UICommandBase</component-class>
   </component>
 
   <component>
     <component-type>Form</component-type>
-    <component-class>javax.faces.component.UIForm</component-class>
+    <component-class>javax.faces.component.base.UIFormBase</component-class>
   </component>
 
   <component>
     <component-type>Graphic</component-type>
-    <component-class>javax.faces.component.UIGraphic</component-class>
+    <component-class>javax.faces.component.base.UIGraphicBase</component-class>
   </component>
 
   <component>
     <component-type>Input</component-type>
-    <component-class>javax.faces.component.UIInput</component-class>
+    <component-class>javax.faces.component.base.UIInputBase</component-class>
   </component>
 
   <component>
     <component-type>NamingContainer</component-type>
-    <component-class>javax.faces.component.UINamingContainer</component-class>
+    <component-class>javax.faces.component.base.UINamingContainerBase</component-class>
   </component>
 
   <component>
     <component-type>Output</component-type>
-    <component-class>javax.faces.component.UIOutput</component-class>
+    <component-class>javax.faces.component.base.UIOutputBase</component-class>
   </component>
 
   <component>
     <component-type>Panel</component-type>
-    <component-class>javax.faces.component.UIPanel</component-class>
+    <component-class>javax.faces.component.base.UIPanelBase</component-class>
   </component>
 
   <component>
     <component-type>Parameter</component-type>
-    <component-class>javax.faces.component.UIParameter</component-class>
+    <component-class>javax.faces.component.base.UIParameterBase</component-class>
   </component>
 
   <component>
     <component-type>SelectBoolean</component-type>
-    <component-class>javax.faces.component.UISelectBoolean</component-class>
+    <component-class>javax.faces.component.base.UISelectBooleanBase</component-class>
   </component>
 
   <component>
     <component-type>SelectItem</component-type>
-    <component-class>javax.faces.component.UISelectItem</component-class>
+    <component-class>javax.faces.component.base.UISelectItemBase</component-class>
   </component>
 
   <component>
     <component-type>SelectItems</component-type>
-    <component-class>javax.faces.component.UISelectItems</component-class>
+    <component-class>javax.faces.component.base.UISelectItemsBase</component-class>
   </component>
 
   <component>
     <component-type>SelectMany</component-type>
-    <component-class>javax.faces.component.UISelectMany</component-class>
+    <component-class>javax.faces.component.base.UISelectManyBase</component-class>
   </component>
 
   <component>
     <component-type>SelectOne</component-type>
-    <component-class>javax.faces.component.UISelectOne</component-class>
+    <component-class>javax.faces.component.base.UISelectOneBase</component-class>
+  </component>
+    
+  <component>
+    <component-type>Page</component-type>
+    <component-class>javax.faces.component.base.UIPageBase</component-class>
   </component>
 
   <!-- standard converters -->
