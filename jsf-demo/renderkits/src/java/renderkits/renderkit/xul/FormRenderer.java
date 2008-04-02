@@ -170,7 +170,8 @@ public class FormRenderer extends BaseRenderer {
             context.getExternalContext().getRequestMap().put(RENDERED_SCRIPT,
                     Boolean.TRUE);
             writer.startElement("script", component);
-            writer.writeAttribute("src", "http-xul.es", null);
+            writer.writeAttribute("src", 
+                context.getExternalContext().getRequestContextPath()+"/src/script/http-xul.es", null);
             writer.endElement("script");
         }
     }

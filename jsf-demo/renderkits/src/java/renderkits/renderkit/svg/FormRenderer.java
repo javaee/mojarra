@@ -154,22 +154,14 @@ public class FormRenderer extends BaseRenderer {
         if (!context.getExternalContext().getRequestMap().containsKey(RENDERED_SCRIPT)) {
             context.getExternalContext().getRequestMap().put(RENDERED_SCRIPT,
                     Boolean.TRUE);
-            // PENDING - need to investigate why xlink:href path is specified twice for
-            // each script..
             writer.startElement("script", component);
-            writer.writeAttribute("xlink:href", "src/script/http-svg.es", null);
+            writer.writeAttribute("xlink:href", 
+                context.getExternalContext().getRequestContextPath()+"/src/script/http-svg.es", null);
             writer.endElement("script");
             writer.writeText("\n", null);
             writer.startElement("script", component);
-            writer.writeAttribute("xlink:href", "../src/script/http-svg.es", null);
-            writer.endElement("script");
-            writer.writeText("\n", null);
-            writer.startElement("script", component);
-            writer.writeAttribute("xlink:href", "src/script/lifecycle.es", null);
-            writer.endElement("script");
-            writer.writeText("\n", null);
-            writer.startElement("script", component);
-            writer.writeAttribute("xlink:href", "../src/script/lifecycle.es", null);
+            writer.writeAttribute("xlink:href",
+                context.getExternalContext().getRequestContextPath()+"/src/script/lifecycle.es", null);
             writer.endElement("script");
             writer.writeText("\n", null);
         }

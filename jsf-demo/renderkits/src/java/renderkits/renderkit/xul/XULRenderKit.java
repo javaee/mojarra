@@ -58,6 +58,7 @@ public class XULRenderKit extends RenderKit {
 //
     // used for ResponseWriter creation;
     private static String XUL_CONTENT_TYPE = "application/vnd.mozilla.xul+xml";
+    private static String ALL_MEDIA = "*/*";
     
     private static String CHAR_ENCODING = "ISO-8859-1";
     private static String CONTENT_TYPE_IS_XUL = "ContentTypeIsXUL";
@@ -173,9 +174,10 @@ public class XULRenderKit extends RenderKit {
             desiredContentTypeList = (String)
 	      context.getExternalContext().getRequestHeaderMap().get("Accept");
         }
-        // fourth, default to text/html
-        if (null == desiredContentTypeList) {
-            desiredContentTypeList = "text/html";
+        // fourth, default to "application/vnd.mozilla.xul+xml" 
+        if (null == desiredContentTypeList ||
+            desiredContentTypeList.equals(ALL_MEDIA)) {
+            desiredContentTypeList = XUL_CONTENT_TYPE;
         }
 
 	if (null != desiredContentTypeList) {

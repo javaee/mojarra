@@ -60,6 +60,7 @@ public class SVGRenderKit extends RenderKit {
     private static String SVG_CONTENT_TYPE = "image/svg+xml";
     private static String APPLICATION_XML_CONTENT_TYPE = "application/xml";
     private static String TEXT_XML_CONTENT_TYPE = "text/xml";
+    private static String ALL_MEDIA = "*/*";
     
     private static String CHAR_ENCODING = "ISO-8859-1";
     private static String CONTENT_TYPE_IS_SVG = "ContentTypeIsSVG";
@@ -160,7 +161,7 @@ public class SVGRenderKit extends RenderKit {
 	FacesContext context = FacesContext.getCurrentInstance();
         
         String [] supportedTypes = { SVG_CONTENT_TYPE, APPLICATION_XML_CONTENT_TYPE,
-            TEXT_XML_CONTENT_TYPE};
+            TEXT_XML_CONTENT_TYPE };
         String [] desiredTypes = null;
             
 
@@ -176,9 +177,10 @@ public class SVGRenderKit extends RenderKit {
             desiredContentTypeList = (String)
 	      context.getExternalContext().getRequestHeaderMap().get("Accept");
         }
-        // fourth, default to text/html
-        if (null == desiredContentTypeList) {
-            desiredContentTypeList = "text/html";
+        // fourth, default to image/svg+xml 
+        if (null == desiredContentTypeList ||
+            desiredContentTypeList.equals(ALL_MEDIA)) {
+            desiredContentTypeList = SVG_CONTENT_TYPE;
         }
 
 	if (null != desiredContentTypeList) {
