@@ -13,6 +13,10 @@
 
 <faces-config>
 
+  <application>
+    <message-bundle>cardemo.CardemoMessages</message-bundle>
+  </application>
+
    <!-- Validator -->
   <validator>
     <description>
@@ -392,28 +396,4 @@
     <managed-bean-class> cardemo.CustomerBean </managed-bean-class>
     <managed-bean-scope> session </managed-bean-scope>
   </managed-bean>
-
-
-  <message-resources>
-    <description>
-        Registers a set of localized messages identified by
-        carDemoResources with the Web application.
-    </description>
-    <message-resources-id>carDemoResources</message-resources-id>
-    <message>
-      <description>
-        A single localized message, identified by the ID, cardemo.Format_Invalid.
-        The Web application uses this ID to access the localized message.  
-        Each summary element contains the same error message text in a 
-        different language, as defined by the xml:lang attribute.
-      </description>
-      <message-id>cardemo.Format_Invalid</message-id>
-      
-      <summary xml:lang="en">Input must match one of the following patterns {0}</summary>
-      <summary xml:lang="de">Eingang muß eins der folgenden Muster zusammenbringen {0}</summary>
-      <summary xml:lang="es">La entrada debe emparejar uno de los patrones siguientes {0}</summary>
-      <summary xml:lang="fr">L'entrée doit assortir un des modèles suivants {0}</summary>
-     
-    </message>
-  </message-resources>
 </faces-config>

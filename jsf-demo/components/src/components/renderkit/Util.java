@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.10 2003/10/15 16:59:58 jvisvanathan Exp $
+ * $Id: Util.java,v 1.11 2003/10/30 23:16:03 eburns Exp $
  */
 
 /*
@@ -54,8 +54,6 @@ import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.context.FacesContextFactory;
 
 import javax.faces.FactoryFinder;
-import javax.faces.application.MessageResources;
-import javax.faces.application.Message;
 
 import javax.faces.component.UISelectItem;
 import javax.faces.component.UIComponent;
@@ -78,7 +76,7 @@ import java.util.Locale;
  *  <B>Util</B> is a class which houses common functionality used by
  *     other classes.
  *
- * @version $Id: Util.java,v 1.10 2003/10/15 16:59:58 jvisvanathan Exp $
+ * @version $Id: Util.java,v 1.11 2003/10/30 23:16:03 eburns Exp $
  * 
  */
 

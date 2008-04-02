@@ -1,5 +1,5 @@
 /*
- * $Id: LoginForm.java,v 1.3 2003/10/27 04:15:57 craigmcc Exp $
+ * $Id: LoginForm.java,v 1.4 2003/10/30 23:16:04 eburns Exp $
  */
 
 /*
@@ -10,8 +10,7 @@
 package standard;
 
 
-import javax.faces.application.Message;
-import javax.faces.application.MessageImpl;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 
@@ -58,9 +57,9 @@ public class LoginForm {
             FacesContext context = FacesContext.getCurrentInstance();
             context.addMessage
                 (this.username.getClientId(context),
-                 new MessageImpl(Message.SEVERITY_ERROR,
-                                 "Invalid username or password, please retry",
-                                 null));
+                 new FacesMessage(FacesMessage.SEVERITY_ERROR,
+				  "Invalid username or password, please retry",
+				  null));
             return (null);
         }
 

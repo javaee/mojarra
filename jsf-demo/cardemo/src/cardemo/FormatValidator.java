@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.7 2003/10/22 00:34:57 jvisvanathan Exp $
+ * $Id: FormatValidator.java,v 1.8 2003/10/30 23:16:02 eburns Exp $
  */
 
 /*
@@ -46,8 +46,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
-import javax.faces.application.Message;
-import javax.faces.application.MessageResources;
+import javax.faces.application.FacesMessage;
 import javax.faces.validator.Validator;
 import javax.faces.component.StateHolder;
 
@@ -213,7 +212,7 @@ public class FormatValidator implements Validator, StateHolder {
                 component.setValid(true);
             } else {
                 component.setValid(false);
-                Message errMsg = getMessageResources().getMessage(context, 
+                FacesMessage errMsg = MessageFactory.getMessage(context, 
                         FORMAT_INVALID_MESSAGE_ID, 
                         (new Object[] {formatPatterns}));
                 context.addMessage((component.getClientId(context)), errMsg);
@@ -272,22 +271,6 @@ public class FormatValidator implements Validator, StateHolder {
         }
         return valid;
         
-    }
-    
-    /**
-     * This method will be called before calling facesContext.addMessage, so 
-     * message can be localized.
-     * <p>Return the {@link MessageResources} instance for the message
-     * resources defined by the JavaServer Faces Specification.
-     */
-    public synchronized MessageResources getMessageResources() {
-        MessageResources carResources = null;
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        Application application = aFactory.getApplication();
-	
-	carResources = application.getMessageResources("carDemoResources");
-        return (carResources);
     }
     
     public Object saveState(FacesContext context) {
