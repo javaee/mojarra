@@ -35,7 +35,7 @@
     <name>Sun's JSF Implementation</name>
     <!-- PENDING(edburns): figure out how to pull this from common.xml
          ${impl.version} -->
-    <currentVersion>1.2-b19</currentVersion>
+    <currentVersion>1.2_01-SNAPSHOT</currentVersion>
     <shortDescription>
       Sun's Product Quality JSF Implementation
     </shortDescription>

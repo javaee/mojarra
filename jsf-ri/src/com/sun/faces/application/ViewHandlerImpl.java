@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.70 2006/03/29 23:03:42 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.71 2006/05/05 16:41:34 edburns Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.70 2006/03/29 23:03:42 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.71 2006/05/05 16:41:34 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -150,6 +150,7 @@ public class ViewHandlerImpl extends ViewHandler {
                     viewToRender.getViewId());
         }
         if (logger.isLoggable(Level.FINEST)) {
+            logger.log(Level.FINEST, "+=+=+=+=+=+= Printout for " + viewToRender.getViewId() + " about to render.");
             DebugUtil.printTree(viewToRender, logger, Level.FINEST);
         }
         
@@ -300,6 +301,11 @@ public class ViewHandlerImpl extends ViewHandler {
             viewRoot = Util.getStateManager(context).restoreView(context,
                                                                  viewId,
                                                                  renderKitId);
+            if (logger.isLoggable(Level.FINEST)) {
+                logger.log(Level.FINEST, "+=+=+=+=+=+= Restored View Printout for " + viewId);
+                DebugUtil.printTree(viewRoot, logger, Level.FINEST);
+            }
+
         }
 
         return viewRoot;
