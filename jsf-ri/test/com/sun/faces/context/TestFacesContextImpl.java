@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.28 2003/07/25 05:52:31 horwat Exp $
+ * $Id: TestFacesContextImpl.java,v 1.29 2003/08/13 21:15:10 rkitain Exp $
  */
 
 /*
@@ -51,7 +51,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.28 2003/07/25 05:52:31 horwat Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.29 2003/08/13 21:15:10 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -211,10 +211,10 @@ public void testFacesEvents()
 public void testRenderingControls() {
     System.out.println("Testing renderResponse()");
     getFacesContext().renderResponse();
-    assertTrue(((FacesContextImpl)getFacesContext()).getRenderResponse());
+    assertTrue(getFacesContext().getRenderResponse());
     System.out.println("Testing responseComplete()");
     getFacesContext().responseComplete();
-    assertTrue(((FacesContextImpl)getFacesContext()).getResponseComplete());
+    assertTrue(getFacesContext().getResponseComplete());
 }
 
 public void testCurrentInstance() {
