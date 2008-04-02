@@ -93,7 +93,7 @@
           
   <installerBuilder
           classFile="javaserverfaces_source.class"
-          licenseFile="${basedir}/jrl_1_3.txt"
+          licenseFile="${basedir}/legal/jsf-cddl/CDDLv1.0.txt"
           zipFile="${basedir}/javaserverfaces_source.zip" />
   </target>
   
