@@ -26,10 +26,8 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
-<f:subview id="bottom">
 
     <h:outputLink value="javadocs">
         Documentation for this demo
     </h:outputLink>
 
-</f:subview>

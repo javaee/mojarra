@@ -26,7 +26,6 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 <%@ taglib prefix="f" uri="http://java.sun.com/jsf/core" %>
 <%@ taglib prefix="h" uri="http://java.sun.com/jsf/html" %>
 
-<f:subview id="optionPanels">
 
 <h:panelGrid>
 
@@ -146,5 +145,4 @@ Copyright 2005 Sun Microsystems Inc. All Rights Reserved
 
 </h:panelGrid>
 
-</f:subview>
 
