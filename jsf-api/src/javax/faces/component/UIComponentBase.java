@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.44 2003/02/12 23:59:19 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.45 2003/02/14 00:40:10 craigmcc Exp $
  */
 
 /*
@@ -269,6 +269,20 @@ public abstract class UIComponentBase implements UIComponent {
 
 
     public abstract String getComponentType();
+
+
+    public String getConverter() {
+
+        return ((String) getAttribute("converter"));
+
+    }
+
+
+    public void setConverter(String converter) {
+
+        setAttribute("converter", converter);
+
+    }
 
 
     public String getModelReference() {

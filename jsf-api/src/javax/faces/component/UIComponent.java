@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.73 2003/02/12 23:59:19 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.74 2003/02/14 00:40:09 craigmcc Exp $
  */
 
 /*
@@ -49,15 +49,6 @@ public interface UIComponent extends Serializable {
      */
     public static final String CLIENT_ID_ATTR =
         "clientId";
-
-
-    /**
-     * <p>The attribute name under which the
-     * {@link javax.faces.convert.Converter} instance or identifier associated
-     * with thie {@link UIComponent}, if any, is stored.</p>
-     */
-    public static final String CONVERTER_ATTR =
-        "converter";
 
 
     /**
@@ -174,6 +165,23 @@ public interface UIComponent extends Serializable {
      * <p>Return the component type of this {@link UIComponent}.</p>
      */
     public String getComponentType();
+
+
+    /**
+     * <p>Return the converter id of the {@link javax.faces.convert.Converter}
+     * that is registered for this component.</p>
+     */
+    public String getConverter();
+
+
+    /**
+     * <p>Set the converter id of the {@link javax.faces.convert.Converter}
+     * that is registered for this component, or <code>null</code> to indicate
+     * that there is no registered Converter.</p>
+     *
+     * @param converter New converter identifier (or <code>null</code>)
+     */
+    public void setConverter(String converter);
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.23 2003/02/04 19:06:12 edburns Exp $
+ * $Id: UIComponentTestCase.java,v 1.24 2003/02/14 00:40:11 craigmcc Exp $
  */
 
 /*
@@ -226,6 +226,21 @@ public class UIComponentTestCase extends TestCase {
         component.setAttribute("componentId", null);
         assertNull("componentId7", component.getComponentId());
         assertNull("componentId8", component.getAttribute("componentId"));
+
+        // converter
+        assertNull("conv1", component.getConverter());
+        assertNull("conv2", component.getAttribute("converter"));
+        component.setConverter("foo");
+        assertEquals("conv3", "foo", component.getConverter());
+        assertEquals("conv4", "foo",
+                     (String) component.getAttribute("converter"));
+        component.setAttribute("converter", "bar");
+        assertEquals("conv5", "bar", component.getConverter());
+        assertEquals("conv6", "bar",
+                     (String) component.getAttribute("converter"));
+        component.setAttribute("converter", null);
+        assertNull("conv7", component.getConverter());
+        assertNull("conv8", component.getAttribute("converter"));
 
         // modelReference
         assertNull("model1", component.getModelReference());
