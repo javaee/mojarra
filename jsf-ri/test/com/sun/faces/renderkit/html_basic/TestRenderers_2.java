@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.48 2003/07/29 18:23:33 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.49 2003/08/08 16:20:39 rkitain Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.48 2003/07/29 18:23:33 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.49 2003/08/08 16:20:39 rkitain Exp $
  * 
  *
  */
@@ -171,6 +171,7 @@ public class TestRenderers_2 extends JspFacesTestCase
             // PENDING (visvan) revisit this test case once HyperLinkRenderer
             // is fixed.
             // testHyperlinkRenderer(root);
+            getFacesContext().getResponseWriter().startDocument();
             testListboxRenderer(root);
             testSecretRenderer(root);
             testInputTextRenderer(root);
@@ -193,6 +194,7 @@ public class TestRenderers_2 extends JspFacesTestCase
             // testOutputErrorsRenderer(root);
             testOutputMessageRenderer(root);
             testInputNumberRendererWithCharacter(root);
+            getFacesContext().getResponseWriter().endDocument();
             assertTrue(verifyExpectedOutput());
         } catch (Throwable t) {
             t.printStackTrace();
@@ -280,18 +282,18 @@ public class TestRenderers_2 extends JspFacesTestCase
         selectBoolean.setSelected(true);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
 
         System.out.println("    Testing encode method - rendering unchecked");
         selectBoolean.setSelected(false);
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
 
         System.out.println("    Testing encode method - rendering unchecked with label");
         checkboxRenderer.encodeBegin(getFacesContext(), selectBoolean);
         checkboxRenderer.encodeEnd(getFacesContext(), selectBoolean);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
     }
 
     public void testHyperlinkRenderer(UIComponent root) throws IOException {
@@ -316,8 +318,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), command);
         hyperlinkRenderer.encodeEnd(getFacesContext(), command);
-        getFacesContext().getResponseWriter().write("\n");
-
+        getFacesContext().getResponseWriter().writeText("\n");
     }
 
     public void testListboxRenderer(UIComponent root) throws IOException {
@@ -350,8 +351,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         //selectOne.setComponentId("my_listbox");
         listboxRenderer.encodeBegin(getFacesContext(), selectOne);
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
-        getFacesContext().getResponseWriter().write("\n");
-
+        getFacesContext().getResponseWriter().writeText("\n");
     }
 
     public void testSecretRenderer(UIComponent root) throws IOException {
@@ -374,8 +374,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         secretRenderer.encodeBegin(getFacesContext(), textEntry);
         secretRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().write("\n");
-
+        getFacesContext().getResponseWriter().writeText("\n");
     }
 
     public void testInputTextRenderer(UIComponent root) throws IOException {
@@ -398,8 +397,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         textRenderer.encodeBegin(getFacesContext(), text);
         textRenderer.encodeEnd(getFacesContext(), text);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testOutputTextRenderer(UIComponent root) throws IOException {
@@ -421,8 +418,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         textRenderer.encodeBegin(getFacesContext(), text);
         textRenderer.encodeEnd(getFacesContext(), text);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testGraphicImageRenderer(UIComponent root) throws IOException {
@@ -444,8 +439,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);
-        getFacesContext().getResponseWriter().flush();
-
 
         System.out.println("    Testing graphic support of modelReference...");
 	root.removeChild(img);
@@ -459,8 +452,6 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         imageRenderer.encodeBegin(getFacesContext(), img);
         imageRenderer.encodeEnd(getFacesContext(), img);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testOutputErrorsRenderer(UIComponent root) throws IOException {
@@ -485,8 +476,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         errorsRenderer.encodeBegin(getFacesContext(), output);
         errorsRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testOutputMessageRenderer(UIComponent root) throws IOException {
@@ -513,8 +502,6 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         messageRenderer.encodeBegin(getFacesContext(), output);
         messageRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().flush();
-
     }
         
 
@@ -546,8 +533,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         dateRenderer.encodeBegin(getFacesContext(), input);
         dateRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testInputTimeRenderer(UIComponent root) throws IOException {
@@ -579,8 +564,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         timeRenderer.encodeBegin(getFacesContext(), input);
         timeRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testInputDateTimeRendererWithPattern(UIComponent root) throws IOException {
@@ -610,8 +593,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         dateTimeRenderer.encodeBegin(getFacesContext(), input);
         dateTimeRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testTextAreaRenderer(UIComponent root) throws IOException {
@@ -634,8 +615,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         textAreaRenderer.encodeBegin(getFacesContext(), textEntry);
         textAreaRenderer.encodeEnd(getFacesContext(), textEntry);
-        getFacesContext().getResponseWriter().write("\n");
-
+        getFacesContext().getResponseWriter().writeText("\n");
     }
     
     public void testInputNumberRenderer(UIComponent root) throws IOException {
@@ -665,8 +645,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), input);
         numberRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().flush();
-
     }
     
     public void testInputNumberRendererWithPattern(UIComponent root) 
@@ -697,8 +675,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), input);
         numberRenderer.encodeEnd(getFacesContext(), input);
-        getFacesContext().getResponseWriter().write("\n");
-        getFacesContext().getResponseWriter().flush();
+        getFacesContext().getResponseWriter().writeText("\n");
     }    
 
     public void testOutputNumberRenderer(UIComponent root) throws IOException {
@@ -718,9 +695,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), output);
         numberRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().write("\n");
-        getFacesContext().getResponseWriter().flush();
-
+        getFacesContext().getResponseWriter().writeText("\n");
     }
     
     public void testOutputNumberRendererWithPattern(UIComponent root) throws IOException {
@@ -740,8 +715,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         numberRenderer.encodeBegin(getFacesContext(), output);
         numberRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().write("\n");
-        getFacesContext().getResponseWriter().flush();
+        getFacesContext().getResponseWriter().writeText("\n");
     }  
 
 
@@ -770,8 +744,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         dateRenderer.encodeBegin(getFacesContext(), output);
         dateRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testOutputTimeRenderer(UIComponent root) throws IOException {
@@ -799,8 +771,6 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         timeRenderer.encodeBegin(getFacesContext(), output);
         timeRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().flush();
-
     }
 
     public void testOutputDateTimeRendererWithPattern(UIComponent root) throws IOException {
@@ -827,20 +797,16 @@ public class TestRenderers_2 extends JspFacesTestCase
         System.out.println("    Testing encode method...");
         dateRenderer.encodeBegin(getFacesContext(), output);
         dateRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().flush();
-
 
 	// testing encode with invalid date
 	output.setValue("invalidDate");
         System.out.println("    Testing encode method...");
         dateRenderer.encodeBegin(getFacesContext(), output);
         dateRenderer.encodeEnd(getFacesContext(), output);
-        getFacesContext().getResponseWriter().write("\n");
-        getFacesContext().getResponseWriter().flush();
+        getFacesContext().getResponseWriter().writeText("\n");
         // decode() simply sets valid to true for UIOutput components. 
         // So valid will never be false.
 	assertTrue(output.isValid());
-	
     }
     
     public void testInputNumberRendererWithCharacter(UIComponent root) 

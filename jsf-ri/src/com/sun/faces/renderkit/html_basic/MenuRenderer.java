@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.16 2003/07/29 18:23:24 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.17 2003/08/08 16:20:22 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -173,7 +173,6 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             throws IOException {
                 
         String styleString = null;
-	StringBuffer buffer = null;
         ResponseWriter writer = null;
 	
         if (context == null || component == null) {
@@ -190,73 +189,89 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        // PENDING (visvan) here is where we'd hook in a buffer pooling scheme
-        buffer = new StringBuffer(1000);
         styleString = getStyleString(component);
         if (styleString != null ) {
-	    buffer.append("<span class=\"" + styleString + "\">");
+	    writer.startElement("span");
+	    writer.writeAttribute("class", styleString);
 	}
-        getSelectBuffer(context, component, buffer);
+        renderSelect(context, component);
         if (null != styleString) {
-	    buffer.append("</span>");
+	    writer.endElement("span");
 	}
-        writer.write(buffer.toString());
     }
 
-    void getSelectBuffer(
-        FacesContext context,
-        UIComponent component,
-        StringBuffer buff) {
+    // Render the "select" portion..
+    //
+    void renderSelect ( FacesContext context, 
+        UIComponent component) throws IOException {
         
-        buff.append("<select name=\"");
-        buff.append(component.getClientId(context));
-        buff.append("\"");
-        buff.append(getMultipleText(component));
-        StringBuffer optionsBuffer = new StringBuffer(1000);
-       
-        int itemCount =
-            getOptionBuffer(context, component, optionsBuffer);
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
+	writer.startElement("select");
+	writer.writeAttribute("name", component.getClientId(context));
+	if (!getMultipleText(component).equals("")) {
+	    writer.writeAttribute("multiple", new Boolean("true"));
+	}
+
+	// Determine how many option(s) we need to render, and update
+	// the component's "size" attribute accordingly;  The "size"
+	// attribute will be rendered as one of the "pass thru" attributes
+	//
+	int itemCount = getOptionNumber(context, component);
         itemCount = getDisplaySize(itemCount, component);
-        buff.append(Util.renderPassthruAttributes(context, component));
-        buff.append(Util.renderBooleanPassthruAttributes(context, component));
-        // do not render size attribute. It will be rendered as part of
-        // pass through attributes.
-        buff.append(">");
-        buff.append(optionsBuffer.toString());
-        buff.append("</select>");
+
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
+
+	// Now, render the "options" portion...
+	//
+	renderOptions(context, component);
+
+	writer.endElement("select");
     }
 
-    int getOptionBuffer(
-        FacesContext context, UIComponent component, StringBuffer buff) {
+    int getOptionNumber(FacesContext context, UIComponent component) {
+        Iterator items = Util.getSelectItemWrappers(context, component);
+	int itemCount = 0;
+	while(items.hasNext()) {
+	    itemCount++;
+	    items.next();
+	}
+	return itemCount;
+    }
+
+    void renderOptions (FacesContext context, UIComponent component) 
+        throws IOException {
         Object selectedValues[] = getCurrentSelectedValues(context, component);
-        int itemCount = 0;
         Iterator items = Util.getSelectItemWrappers(context, component);
 
         UIComponent curComponent;
         SelectItem curItem = null;
         SelectItemWrapper curItemWrapper = null;
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
         while (items.hasNext()) {
-            itemCount++;
             curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
-            buff.append("\t<option value=\"");
-            // In case a converter attribute is not specifed, we limit using 
-            // the valueRef set on UISelectOne/UISelectMany component to lookup
-            // the data type of value and not the individual UISelectItem to
-            // UISelectItems component. We also limit the data type of all the
-            // items to be the same.
-            buff.append((getFormattedValue(context, component,
-                    curItem.getValue())));
-            buff.append("\"");
-            buff.append(getSelectedText(curItem, selectedValues));
-            buff.append(Util.renderPassthruAttributes(context, curComponent));
-            buff.append(Util.renderBooleanPassthruAttributes(context, curComponent));
-            buff.append(">");
-            buff.append(curItem.getLabel());
-            buff.append("</option>\n");
+	    writer.writeText('\t');
+	    writer.startElement("option");
+	    writer.writeAttribute("value", 
+                getFormattedValue(context, component, curItem.getValue()));
+	    String selectText = getSelectedText(curItem, selectedValues);
+	    if (!selectText.equals("")) {
+	        writer.writeAttribute(selectText, new Boolean("true"));
+	    }
+
+            Util.renderPassThruAttributes(writer, curComponent);
+            Util.renderBooleanPassThruAttributes(writer, curComponent);
+
+	    writer.writeText(curItem.getLabel());
+	    writer.endElement("option");
+	    writer.writeText('\n');
         }
-        return itemCount;
     }
 
     String getSelectedText(SelectItem item, Object[] values) {

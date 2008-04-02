@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.52 2003/07/29 16:25:21 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.53 2003/08/08 16:20:18 rkitain Exp $
  */
 
 /*
@@ -13,12 +13,16 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import java.io.IOException;
-import java.util.Map;
+
+import org.mozilla.util.Assert;
 
 
 /**
@@ -27,7 +31,7 @@ import java.util.Map;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.52 2003/07/29 16:25:21 rlubke Exp $
+ * @version $Id: ButtonRenderer.java,v 1.53 2003/08/08 16:20:18 rkitain Exp $
  *
  */
 
@@ -109,7 +113,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
         return;
     }
     
-     public void encodeBegin(FacesContext context, UIComponent component) 
+    public void encodeBegin(FacesContext context, UIComponent component) 
              throws IOException  {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(
@@ -131,38 +135,30 @@ public class ButtonRenderer extends BaseCommandRenderer {
         }
 
         ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
 
         String imageSrc = getImageSrc(context, component);
         String label = getLabel(context, component);            
 
-         writer.write("<input type=");
-         if (imageSrc != null) {
-             writer.write("\"image\" src=\"");
-             writer.write(imageSrc);
-             writer.write("\"");
-             writer.write(" name=\"");
-             writer.write(component.getClientId(context));
-             writer.write("\"");
+        writer.startElement("input");
+        if (imageSrc != null) {
+            writer.writeAttribute("type", "image");
+            writer.writeURIAttribute("src", imageSrc);
+            writer.writeAttribute("name", component.getClientId(context));
          } else {
-             writer.write("\"");
-             writer.write(type.toLowerCase());
-             writer.write("\"");
-             writer.write(" name=\"");
-             writer.write(component.getClientId(context));
-             writer.write("\"");
-             writer.write(" value=\"");
-             writer.write(padLabel(label));
-             writer.write("\"");
+            writer.writeAttribute("type", type.toLowerCase());
+            writer.writeAttribute("name", component.getClientId(context));
+            writer.writeAttribute("value", padLabel(label));
          }
 
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
 
-        writer.write(Util.renderPassthruAttributes(context, component));
-        writer.write(Util.renderBooleanPassthruAttributes(context, component));
         if (null != (commandClass = (String) 
             component.getAttribute("commandClass"))) {
-	    writer.write(" class=\"" + commandClass + "\" ");
+            writer.writeAttribute("class", commandClass);
 	}
-        writer.write(">");
+        writer.endElement("input");
     }
     
     public void encodeChildren(FacesContext context, UIComponent component)

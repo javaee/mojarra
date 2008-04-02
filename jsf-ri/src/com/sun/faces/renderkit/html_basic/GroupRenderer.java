@@ -1,5 +1,5 @@
 /*
- * $Id: GroupRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
+ * $Id: GroupRenderer.java,v 1.9 2003/08/08 16:20:20 rkitain Exp $
  */
 
 /*
@@ -9,19 +9,20 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.Util;
+
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
-import javax.faces.render.Renderer;
-import java.util.Iterator;
-import com.sun.faces.util.Util;
+
 /**
  * Arbitrary grouping "renderer" that simply renders its children
  * recursively in the <code>encodeEnd()</code> method. 
  *
- * @version $Id: GroupRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
+ * @version $Id: GroupRenderer.java,v 1.9 2003/08/08 16:20:20 rkitain Exp $
  *  
  */
 public class GroupRenderer extends HtmlBasicRenderer {

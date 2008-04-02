@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.10 2003/04/29 20:51:54 eburns Exp $
+ * $Id: ListRenderer.java,v 1.11 2003/08/08 16:20:22 rkitain Exp $
  */
 
 /*
@@ -9,19 +9,20 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
 import javax.faces.FacesException;
-
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,14 +31,15 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.sun.faces.util.Util;
+import org.mozilla.util.Assert;
+
 /**
  *
  *  Render a <code>UIPanel</code> component in the proposed "List" style.
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.10 2003/04/29 20:51:54 eburns Exp $
+ * @version $Id: ListRenderer.java,v 1.11 2003/08/08 16:20:22 rkitain Exp $
  *  
  */
 
@@ -92,18 +94,19 @@ public class ListRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
+
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );   
+
         String panelClass = (String) component.getAttribute("panelClass");
         
         // Render the beginning of this panel
-        ResponseWriter writer = context.getResponseWriter();
-        writer.write("<table");
+	writer.startElement("table");
         if (panelClass != null) {
-            writer.write(" class=\"");
-            writer.write(panelClass);
-            writer.write("\"");
+	    writer.writeAttribute("class", panelClass);
         }
-        writer.write(Util.renderPassthruAttributes(context, component));
-        writer.write(">\n");
+	Util.renderPassThruAttributes(writer, component);
+	writer.writeText('\n');
     }
 
 
@@ -119,6 +122,9 @@ public class ListRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );   
+
         // Set up variables we will need
         // PENDING (visvan) is it possible to use hardcoded column headings
         // without using stylesheets ?
@@ -130,30 +136,31 @@ public class ListRenderer extends HtmlBasicRenderer {
         String rowClasses[] = getRowClasses(component);
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
-        ResponseWriter writer = context.getResponseWriter();
 	UIComponent facet = null;
 	Iterator kids = null;
 
         // Process the table header (if any)
         if (null != (facet = component.getFacet("header"))) {
-            writer.write("<tr>\n");
+	    writer.startElement("tr");
+	    writer.writeText('\n');
 	    // If the header has kids, render them recursively
 	    if (null != (kids = facet.getChildren())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table header
 		    if (null != headerClass) {
-			writer.write("<th class=\"");
-			writer.write(headerClass);
-			writer.write("\">");
+			writer.startElement("th");
+			writer.writeAttribute("class", headerClass);
 		    }
 		    else {
-			writer.write("<th>\n");
+			writer.startElement("th");
+			writer.writeText('\n');
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
-		    writer.write("</th>\n");
+		    writer.endElement("th");
+		    writer.writeText('\n');
 		}
 	    }
 	    else {
@@ -164,7 +171,8 @@ public class ListRenderer extends HtmlBasicRenderer {
 		}
 		facet.encodeEnd(context);
             }
-            writer.write("</tr>\n");
+	    writer.endElement("tr");
+	    writer.writeText('\n');
         }
 
 	if (null != (kids = component.getChildren())) {
@@ -184,16 +192,14 @@ public class ListRenderer extends HtmlBasicRenderer {
 			// will use this to get their values.
 			requestMap.put(var, row);
 		    }
-		    writer.write("<tr");
+		    writer.startElement("tr");
 		    if (rowStyles > 0) {
-			writer.write(" class=\"");
-			writer.write(rowClasses[rowStyle++]);
-			writer.write("\"");
+			writer.writeAttribute("class", rowClasses);
 			if (rowStyle >= rowStyles) {
 			    rowStyle = 0;
 			}
 		    }
-		    writer.write(">\n");
+		    writer.writeText('\n');
 		    
 		    // Process each column to be rendered
 		    columnStyle = 0;
@@ -203,22 +209,21 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    // rows in the list bean.
 		    while (columns.hasNext()) {
 			UIComponent column = (UIComponent) columns.next();
-			writer.write("<td");
+			writer.startElement("td");
 			if (columnStyles > 0) {
-			    writer.write(" class=\"");
-			    writer.write(columnClasses[columnStyle++]);
-			    writer.write("\"");
+			    writer.writeAttribute("class", columnClasses[columnStyle++]);
 			    if (columnStyle >= columnStyles) {
 				columnStyle = 0;
 			    }
 			}
-			writer.write(">");
 			encodeRecursive(context, column);
-			writer.write("</td>\n");
+			writer.endElement("td");
+			writer.writeText('\n');
 		    }
 		    
 		    // Finish the row that was just rendered
-		    writer.write("</tr>\n");
+		    writer.endElement("tr");
+		    writer.writeText('\n');
 		    if (var != null) {
 			requestMap.remove(var);
 		    }
@@ -228,24 +233,26 @@ public class ListRenderer extends HtmlBasicRenderer {
 
         // Process the table footer (if any)
         if (null != (facet = component.getFacet("footer"))) {
-            writer.write("<tr>\n");
+	    writer.startElement("tr");
+	    writer.writeText('\n');
 	    // If the footer has kids, render them recursively
 	    if (null != (kids = facet.getChildren())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table footer
 		    if (null != footerClass) {
-			writer.write("<td class=\"");
-			writer.write(footerClass);
-			writer.write("\">");
+			writer.startElement("td");
+			writer.writeAttribute("class", footerClass);
 		    }
 		    else {
-			writer.write("<th>\n");
+			writer.startElement("th");
+	                writer.writeText('\n');
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
-		    writer.write("</th>\n");
+		    writer.endElement("th");
+	            writer.writeText('\n');
 		}
 	    }
 	    else {
@@ -256,9 +263,9 @@ public class ListRenderer extends HtmlBasicRenderer {
 		}
 		facet.encodeEnd(context);
             }
-            writer.write("</tr>\n");
+	    writer.endElement("tr");
+	    writer.writeText('\n');
         }
-
     }
 
 
@@ -275,7 +282,8 @@ public class ListRenderer extends HtmlBasicRenderer {
         }
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("</table>\n");
+	writer.endElement("table");
+	writer.writeText('\n');
     }
 
 

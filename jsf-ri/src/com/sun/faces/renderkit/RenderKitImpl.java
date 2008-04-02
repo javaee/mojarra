@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.5 2003/07/28 22:27:40 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.6 2003/08/08 16:20:17 rkitain Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.5 2003/07/28 22:27:40 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.6 2003/08/08 16:20:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -152,9 +152,15 @@ public class RenderKitImpl extends RenderKit {
         return renderer;
     }
 
-    //PENDING(rogerk) Implement for ResponseWriter implementation
-    //Just to get things running;
-
+    /**
+     * Create a new {@link ResponseWriter} instance from the provided
+     * <code>Writer</code> and character encoding.
+     *
+     * @param writer The contained <code>Writer</code>.
+     * @param characterEncoding such as "ISO-8859-1" for this {@link ResponseWriter}.
+     *
+     * @return a new {@link ResponseWriter}.
+     */
     public ResponseWriter getResponseWriter(Writer writer, String characterEncoding) {
 	if (writer != null) {
 	    return new HtmlResponseWriter(writer, characterEncoding);

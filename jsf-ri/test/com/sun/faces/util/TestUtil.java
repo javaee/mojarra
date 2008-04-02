@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil.java,v 1.7 2003/05/15 22:25:51 rkitain Exp $
+ * $Id: TestUtil.java,v 1.8 2003/08/08 16:20:41 rkitain Exp $
  */
 
 /*
@@ -17,11 +17,17 @@ import org.mozilla.util.ParameterCheck;
 import com.sun.faces.ServletFacesTestCase;
 import com.sun.faces.RIConstants;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Map;
 
+import javax.faces.FactoryFinder;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitFactory;
 
 import javax.servlet.ServletContext;
 
@@ -31,7 +37,7 @@ import javax.servlet.ServletContext;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil.java,v 1.7 2003/05/15 22:25:51 rkitain Exp $
+ * @version $Id: TestUtil.java,v 1.8 2003/08/08 16:20:41 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -72,38 +78,64 @@ public class TestUtil extends ServletFacesTestCase
 //
 
     public void testRenderPassthruAttributes() {
-	UIInput input = new UIInput();
-	input.setComponentId("testRenderPassthruAttributes");
-	input.setAttribute("notPresent", "notPresent");
-	input.setAttribute("onblur", "javascript:f.blur()");
-	input.setAttribute("onchange", "javascript:h.change()");
-	String result = Util.renderPassthruAttributes(getFacesContext(),input);
-	String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\" ";
-	assertTrue(result.equals(expectedResult));
+	try {
+            RenderKitFactory renderKitFactory = (RenderKitFactory)
+	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	    StringWriter sw = new StringWriter();
+	    ResponseWriter writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    getFacesContext().setResponseWriter(writer);
 
-	// verify no passthru attributes returns empty string
-	input.setAttribute("onblur", null);
-	input.setAttribute("onchange", null);
-	result = Util.renderPassthruAttributes(getFacesContext(), input);
-	assertTrue(0 == result.length());
+	    UIInput input = new UIInput();
+	    input.setComponentId("testRenderPassthruAttributes");
+	    input.setAttribute("notPresent", "notPresent");
+	    input.setAttribute("onblur", "javascript:f.blur()");
+	    input.setAttribute("onchange", "javascript:h.change()");
+	    Util.renderPassThruAttributes(writer,input);
+	    String expectedResult = " onblur=\"javascript:f.blur()\" onchange=\"javascript:h.change()\"";
+	    assertTrue(sw.toString().equals(expectedResult));
+
+	    // verify no passthru attributes returns empty string
+	    sw = new StringWriter();
+	    writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    getFacesContext().setResponseWriter(writer);
+	    input.setAttribute("onblur", null);
+	    input.setAttribute("onchange", null);
+	    Util.renderPassThruAttributes(writer, input);
+	    assertTrue(0 == sw.toString().length());
+	} catch (IOException e) {
+	    assertTrue(false);
+	}
     }
 
     public void testRenderBooleanPassthruAttributes() {
-	UIInput input = new UIInput();
-	input.setComponentId("testBooleanRenderPassthruAttributes");
-	input.setAttribute("disabled", "true");
-	input.setAttribute("readonly", "false");
-	String result = Util.renderBooleanPassthruAttributes(getFacesContext(),
-							     input);
-	String expectedResult = " disabled ";
-	assertTrue(result.equals(expectedResult));
+	try {
+            RenderKitFactory renderKitFactory = (RenderKitFactory)
+	        FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
+	    RenderKit renderKit = renderKitFactory.getRenderKit("DEFAULT");
+	    StringWriter sw = new StringWriter();
+	    ResponseWriter writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    getFacesContext().setResponseWriter(writer);
+
+	    UIInput input = new UIInput();
+	    input.setComponentId("testBooleanRenderPassthruAttributes");
+	    input.setAttribute("disabled", "true");
+	    input.setAttribute("readonly", "false");
+	    Util.renderBooleanPassThruAttributes(writer, input);
+	    String expectedResult = " disabled";
+	    assertTrue(sw.toString().equals(expectedResult));
 
 	// verify no passthru attributes returns empty string
-	input.setAttribute("disabled", null);
-	input.setAttribute("readonly", null);
-	result = Util.renderBooleanPassthruAttributes(getFacesContext(), 
-						      input);
-	assertTrue(0 == result.length());
+	    sw = new StringWriter();
+	    writer = renderKit.getResponseWriter(sw, "ISO-8859-1");
+	    getFacesContext().setResponseWriter(writer);
+	    input.setAttribute("disabled", null);
+	    input.setAttribute("readonly", null);
+	    Util.renderBooleanPassThruAttributes(writer, input);
+	    assertTrue(0 == sw.toString().length());
+	} catch (IOException e) {
+	    assertTrue(false);
+	}
     }
 
     public void testVerifyRequiredClasses() {

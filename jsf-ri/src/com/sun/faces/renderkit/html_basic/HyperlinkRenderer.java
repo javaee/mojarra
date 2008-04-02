@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.48 2003/07/29 16:25:21 rlubke Exp $
+ * $Id: HyperlinkRenderer.java,v 1.49 2003/08/08 16:20:21 rkitain Exp $
  */
 
 /*
@@ -14,9 +14,9 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.ArrayList;
 import java.io.IOException;
 
 import javax.faces.component.UIForm;
@@ -35,7 +35,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.48 2003/07/29 16:25:21 rlubke Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.49 2003/08/08 16:20:21 rkitain Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -163,28 +163,9 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	return;
     }
 
-    protected String getCommandClass(UICommand command) {
-
-	String commandClass = (String)
-            command.getAttribute("commandClass");
-	if (commandClass != null) {
-            StringBuffer buffer = new StringBuffer();
-            buffer.append(" class=");
-            buffer.append(QUOTE);
-            buffer.append(commandClass);
-            buffer.append(QUOTE);
-            return buffer.toString();
-	}
-        return null;
-    }
-
     protected String getImageText(String image) {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<img src=");
-        buffer.append(QUOTE);
         buffer.append(image);
-        buffer.append(QUOTE);
-        buffer.append(">");
         return buffer.toString();
     }
 
@@ -218,64 +199,64 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	//Write Anchor attributes
 
         //make link act as if it's a button using javascript
-	writer.write("<a href=\"#\" onmousedown=\"document.forms[");
-        //need to have a String
-        writer.write("" + formNumber + "");
-        writer.write("].");
-        writer.write(clientId);
-        writer.write(".value='");
-        writer.write(commandName);
-        writer.write("'; document.forms[");
-        //need to have a String
-        writer.write("" + formNumber + "");
-        writer.write("].submit()");
-        writer.write(QUOTE);
+	StringBuffer sb = new StringBuffer();
+	writer.startElement("a");
+	writer.writeAttribute("href", "#");
+	sb = new StringBuffer();
+	sb.append("document.forms[");
+	sb.append("");
+	sb.append(formNumber);
+	sb.append("");
+	sb.append("].");
+	sb.append(clientId);
+	sb.append(".value='");
+	sb.append(commandName);
+	sb.append("'; document.forms[");
+	sb.append("");
+	sb.append(formNumber);
+	sb.append("");
+	sb.append("].submit()");
+
+	writer.writeAttribute("onmousedown", sb.toString()); 
 
         //handle css style class
-        String commandClass = getCommandClass(command);
-        if (commandClass != null) {
-            writer.write(commandClass);
+	String commandClass = (String)
+            command.getAttribute("commandClass");
+	if (commandClass != null) {
+            writer.writeAttribute("class", commandClass);
         }
-
-        //Done writing Anchor attributes.
-        writer.write(">");
 
 	//Write Anchor inline elements
 
         //label text
         String imageSrc = getImageSrc(context, command);
         if (imageSrc != null) {
-            writer.write(getImageText(imageSrc));
+	    writer.startElement("img");
+	    writer.writeAttribute("src", getImageText(imageSrc));
         } else {
-            writer.write(getLabel(context, command));
+            writer.writeText(getLabel(context, command));
         }
 
         //Done writing Anchor element
-	writer.write("</a>");
+        writer.endElement("a");
 
         //Handle hidden fields
 
         //hidden clientId field
-	writer.write("<input type=\"hidden\" name=");
-        writer.write(QUOTE);
-        writer.write(clientId);
-        writer.write(QUOTE);
-        writer.write("/>");
+	writer.startElement("input");
+	writer.writeAttribute("type", "hidden");
+	writer.writeAttribute("name", clientId);
+	writer.endElement("input");
 
 	// get UIParameter children...
         Param paramList[] = getParamList(context, command);
-            for (int i = 0; i < paramList.length; i++) {
-                writer.write("<input type=\"hidden\" name=");
-                writer.write(QUOTE);
-                writer.write((paramList[i]).getName());
-                writer.write(QUOTE);
-                writer.write(" value=");
-                writer.write(QUOTE);
-                writer.write((paramList[i]).getValue());
-                writer.write(QUOTE);
-                writer.write("/>");
-            }
-
+        for (int i = 0; i < paramList.length; i++) {
+            writer.startElement("input");
+	    writer.writeAttribute("type", "hidden");
+	    writer.writeAttribute("name", (paramList[i]).getName());
+	    writer.writeAttribute("value", (paramList[i]).getValue());
+	    writer.endElement("input");
+        }
     }
 
     //inner class to store parameter name and value pairs

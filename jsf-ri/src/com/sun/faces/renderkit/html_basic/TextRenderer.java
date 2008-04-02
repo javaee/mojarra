@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.45 2003/07/29 18:23:25 jvisvanathan Exp $
+ * $Id: TextRenderer.java,v 1.46 2003/08/08 16:20:23 rkitain Exp $
  */
 
 /*
@@ -13,13 +13,15 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
+import java.io.IOException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
-import java.io.IOException;
-import java.util.Iterator;
+import org.mozilla.util.Assert;
 
 /**
  * <B>TextRenderer</B> is a class that renders the current value of 
@@ -80,31 +82,32 @@ public class TextRenderer extends HtmlBasicInputRenderer {
     }
 
     protected void getEndTextToRender(FacesContext context, 
-        UIComponent component, String currentValue, StringBuffer buffer ) {
+        UIComponent component, String currentValue) throws IOException {
         
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
 	String styleClass = null;
         if ((null != (styleClass = (String) 
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    buffer.append("<span class=\"" + styleClass + "\">");
+	    writer.startElement("span");
+	    writer.writeAttribute("class", styleClass);
 	}
         if (component instanceof UIInput) {
-            buffer.append("<input type=\"text\"");
-            buffer.append(" name=\"");
-            buffer.append(component.getClientId(context));
-            buffer.append("\"");
+	    writer.startElement("input");
+	    writer.writeAttribute("type", "text");
+	    writer.writeAttribute("name", (component.getClientId(context)));
 
             // render default text specified
             if (currentValue != null) {
-                buffer.append(" value=\"");
-                buffer.append(currentValue);
-                buffer.append("\"");
+	        writer.writeAttribute("value", currentValue);
             }
-            buffer.append(Util.renderPassthruAttributes(context, component));
-            buffer.append(Util.renderBooleanPassthruAttributes(context, 
-                component));
-            buffer.append(">");            
+
+            Util.renderPassThruAttributes(writer, component);
+            Util.renderBooleanPassThruAttributes(writer, component);
+
         } else if (component instanceof UIOutput) {
             if (currentValue == null || currentValue == "") {
                 try {
@@ -117,11 +120,11 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                 }
             }
             if (currentValue != null) {
-                buffer.append(currentValue);
+		writer.writeText(currentValue);
             }
         }
 	if (null != styleClass) {
-	    buffer.append("</span>");
+	    writer.endElement("span");
 	}
     }
     

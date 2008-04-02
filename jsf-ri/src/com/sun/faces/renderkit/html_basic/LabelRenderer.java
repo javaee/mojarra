@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.10 2003/04/29 20:51:54 eburns Exp $
+ * $Id: LabelRenderer.java,v 1.11 2003/08/08 16:20:21 rkitain Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
+import java.io.IOException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
@@ -27,7 +27,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.IOException;
 
 /**
  *
@@ -35,7 +34,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.10 2003/04/29 20:51:54 eburns Exp $
+ * @version $Id: LabelRenderer.java,v 1.11 2003/08/08 16:20:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,13 +100,16 @@ public class LabelRenderer extends HtmlBasicRenderer {
 	forValue = (String) component.getAttribute("for");
 	Assert.assert_it(null != forValue);
 
-	writer.write("<label for=\"" + forValue + "\" ");
-	writer.write(Util.renderPassthruAttributes(context, component));
+	writer.startElement("label");
+	writer.writeAttribute("for", forValue);
+
+        Util.renderPassThruAttributes(writer, component);
+
 	if (null != (outputClass = (String) 
 		     component.getAttribute("outputClass"))) {
-	    writer.write(" class=\"" + outputClass + "\" ");
+	    writer.writeAttribute("class", outputClass);
 	}
-	writer.write(">\n");
+        writer.writeText('\n');
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {
@@ -122,12 +124,11 @@ public class LabelRenderer extends HtmlBasicRenderer {
         if (context == null || component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-        ResponseWriter writer = null;
 
-        writer = context.getResponseWriter();
+        ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-        writer.write("</label>");
+	writer.endElement("label");
     }
 
     // The testcase for this class is TestRenderResponsePhase.java

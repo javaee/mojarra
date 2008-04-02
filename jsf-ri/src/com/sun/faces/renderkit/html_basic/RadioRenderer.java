@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.42 2003/07/29 18:23:25 jvisvanathan Exp $
+ * $Id: RadioRenderer.java,v 1.43 2003/08/08 16:20:23 rkitain Exp $
  */
 
 /*
@@ -18,11 +18,14 @@ import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
+import javax.faces.context.ResponseWriter;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.SelectItemWrapper;
 
 import java.io.IOException;
+
+import org.mozilla.util.Assert;
 
 /**
  * <B>ReadoRenderer</B> is a class that renders the current value of 
@@ -82,8 +85,9 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
     }
 
    protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
-       
+            String currentValue) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
         UISelectOne uiSelectOne = (UISelectOne) component;
 	String alignStr = null;
 	String borderStr = null;
@@ -114,56 +118,65 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	}
 	if (null != (selectoneClass = (String) 
 		     component.getAttribute("selectoneClass"))) {
-	    buffer.append("<span class=\"" + selectoneClass + "\">");
+	    writer.startElement("span");
+	    writer.writeAttribute("class", selectoneClass);
 	}
 	
-	buffer.append("<table border=\"" + border + "\">\n");
+        writer.startElement("table");
+        writer.writeAttribute("border", new Integer(border));
+        writer.writeText('\n');
+
 	if (!alignVertical) {
-	    buffer.append("\t<tr>\n");
+            writer.writeText('\t');
+	    writer.startElement("tr");
+	    writer.writeText('\n');
 	}
 
 	while (items.hasNext()) {
 	    curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
 	    if (alignVertical) {
-		buffer.append("\t<tr>\n");
+                writer.writeText('\t');
+		writer.startElement("tr");
+		writer.writeText('\n');
 	    }
-            buffer.append("<td><input type=\"radio\"");
+	    writer.startElement("td");
+	    writer.startElement("input");
+	    writer.writeAttribute("type", "radio");
             if (null != curItem.getValue() &&
 		curItem.getValue().equals(curValue)){
-                buffer.append(" checked");
+		writer.writeAttribute("checked", new Boolean("true"));
             }
-            buffer.append(" name=\"");
-            buffer.append(uiSelectOne.getClientId(context));
-            buffer.append("\" value=\"");
-            buffer.append((getFormattedValue(context, component,
-                    curItem.getValue())));
-            buffer.append("\"");
-            // render HTML 4.0 attributes if any for radio tag.
-            buffer.append(Util.renderPassthruAttributes(context, 
-                    curItemWrapper.getUISelectItem()));
-	    buffer.append(Util.renderBooleanPassthruAttributes(context, 
-                    curItemWrapper.getUISelectItem()));
-            buffer.append(">");
-            
+	    writer.writeAttribute("name", uiSelectOne.getClientId(context));
+	    writer.writeAttribute("value",(getFormattedValue(context, component,
+	        curItem.getValue())));
+
+	    Util.renderPassThruAttributes(writer, curItemWrapper.getUISelectItem());
+	    Util.renderBooleanPassThruAttributes(writer, curItemWrapper.getUISelectItem());
+
             String itemLabel = curItem.getLabel();
             if (itemLabel != null) {
-                buffer.append(" ");
-                buffer.append(itemLabel);
+                writer.writeText(" ");
+		writer.writeText(itemLabel);
             }
-            buffer.append("</td>\n");
+	    writer.endElement("td");
+	    writer.writeText('\n');
 	    if (alignVertical) {
-		buffer.append("\t<tr>\n");
+	        writer.writeText('\t');
+		writer.startElement("tr");
+		writer.writeText('\n');
 	    }
         }
 
 	if (!alignVertical) {
-	    buffer.append("\t</tr>\n");
+	    writer.writeText('\t');
+	    writer.endElement("tr");
+	    writer.writeText('\n');
 	}
-	buffer.append("</table>");
+        writer.endElement("table");
 
 	if (null != selectoneClass) {
-	    buffer.append("</span>");
+	    writer.endElement("span");
 	}
     }
 

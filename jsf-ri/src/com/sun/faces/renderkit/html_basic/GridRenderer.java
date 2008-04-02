@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.10 2003/04/29 20:51:51 eburns Exp $
+ * $Id: GridRenderer.java,v 1.11 2003/08/08 16:20:20 rkitain Exp $
  */
 
 /*
@@ -10,25 +10,28 @@
 package com.sun.faces.renderkit.html_basic;
 
 
+import com.sun.faces.util.Util;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import javax.faces.FacesException;
 
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import com.sun.faces.util.Util;
+import org.mozilla.util.Assert;
+
 /**
  *
  *  Render a <code>UIPanel</code> component in the proposed "Grid" style.
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.10 2003/04/29 20:51:51 eburns Exp $
+ * @version $Id: GridRenderer.java,v 1.11 2003/08/08 16:20:20 rkitain Exp $
  *  
  */
 
@@ -88,14 +91,14 @@ public class GridRenderer extends HtmlBasicRenderer {
         
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("<table");
+        writer.startElement("table");
         if (panelClass != null) {
-            writer.write(" class=\"");
-            writer.write(panelClass);
-            writer.write("\"");
+            writer.writeAttribute("class", panelClass);
         }
-        writer.write(Util.renderPassthruAttributes(context, component));
-        writer.write(">\n");
+
+        Util.renderPassThruAttributes(writer, component);
+
+	writer.writeText('\n');
     }
 
 
@@ -112,6 +115,10 @@ public class GridRenderer extends HtmlBasicRenderer {
         if (!component.isRendered()) {
             return;
         }
+
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
         String footerClass = (String) component.getAttribute("footerClass");
         String headerClass = (String) component.getAttribute("headerClass");
         int columns = getColumns(component);
@@ -122,25 +129,25 @@ public class GridRenderer extends HtmlBasicRenderer {
         int rowStyle = 0;
         int rowStyles = rowClasses.length;
         boolean open = false;
-        ResponseWriter writer = context.getResponseWriter();
 	UIComponent facet = null;
 	Iterator kids = null;
 
 	if (null != (facet = component.getFacet("header"))) {
 	    
 	    if (headerClass != null) {
-		writer.write("<tr><th class=\"");
-		writer.write(headerClass);
-		writer.write("\" ");
+		writer.startElement("tr");
+		writer.startElement("th");
+		writer.writeAttribute("class", headerClass);
 	    } else {
-		writer.write("<tr><th ");
+                writer.startElement("tr");
+                writer.startElement("th");
 	    }
-	    writer.write("colspan=\"");
-	    writer.write("" + columns);
-	    writer.write("\">");
+	    writer.writeAttribute("colspan", new Integer(columns));
 	    
 	    encodeRecursive(context, facet);
-	    writer.write("</th></tr>\n");
+            writer.endElement("th");
+            writer.endElement("tr");
+	    writer.writeText('\n');
 	}
 
 	int i = 0;
@@ -148,58 +155,57 @@ public class GridRenderer extends HtmlBasicRenderer {
 	    while (kids.hasNext()) {
 		if ((i % columns) == 0) {
 		    if (open) {
-			writer.write("</tr>\n");
+			writer.endElement("tr");
+			writer.writeText('\n');
 			open = false;
 		    }
-		    writer.write("<tr");
+		    writer.startElement("tr");
 		    if (rowStyles > 0) {
-			writer.write(" class=\"");
-			writer.write(rowClasses[rowStyle++]);
-			writer.write("\"");
+			writer.writeAttribute("class", rowClasses[rowStyle++]);
 			if (rowStyle >= rowStyles) {
 			    rowStyle = 0;
 			}
 		    }
-		    writer.write(">\n");
+                    writer.writeText('\n');
 		    open = true;
 		    columnStyle = 0;
 		}
-		writer.write("<td");
+		writer.startElement("td");
 		if (columnStyles > 0) {
-		    writer.write(" class=\"");
-		    writer.write(columnClasses[columnStyle++]);
-		    writer.write("\"");
+		    writer.writeAttribute("class", columnClasses[columnStyle++]);
 		    if (columnStyle >= columnStyles) {
 			columnStyle = 0;
 		    }
 		}
-		writer.write(">");
 		UIComponent child = (UIComponent) kids.next();
 		encodeRecursive(context, child);
-		writer.write("</td>\n");
+		writer.endElement("td");
+		writer.writeText('\n');
 		i++;
 	    }
 	}
         if (open) {
-            writer.write("</tr>\n");
+            writer.endElement("tr");
+	    writer.writeText('\n');
         }
 
 	if (null != (facet = component.getFacet("footer"))) {
 
 	    if (footerClass != null) {
-		writer.write("<tr><th class=\"");
-		writer.write(footerClass);
-		writer.write("\" ");
+		writer.startElement("tr");
+		writer.startElement("th");
+		writer.writeAttribute("class", footerClass);
 	    } else {
-		writer.write("<tr><th ");
+		writer.startElement("tr");
+		writer.startElement("th");
 	    }
 	    
-	    writer.write("colspan=\"");
-	    writer.write("" + columns);
-	    writer.write("\">");
+	    writer.writeAttribute("colspan", new Integer(columns));
 
             encodeRecursive(context, facet);
-            writer.write("</th></tr>\n");
+	    writer.endElement("th");
+	    writer.endElement("tr");
+	    writer.writeText('\n');
         }
     }
 
@@ -218,7 +224,8 @@ public class GridRenderer extends HtmlBasicRenderer {
         }
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
-        writer.write("</table>\n");
+	writer.endElement("table");
+	writer.writeText('\n');
     }
 
     /**

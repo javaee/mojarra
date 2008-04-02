@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.48 2003/07/23 16:32:18 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.49 2003/08/08 16:20:20 rkitain Exp $
  */
 
 /*
@@ -11,29 +11,28 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
-import com.sun.faces.context.FacesContextImpl;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIForm;
-import javax.faces.FacesException;
-import com.sun.faces.RIConstants;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
-
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletRequest;
 
 /**
  *
@@ -41,7 +40,7 @@ import javax.servlet.ServletRequest;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.48 2003/07/23 16:32:18 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.49 2003/08/08 16:20:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -103,20 +102,18 @@ public class FormRenderer extends HtmlBasicRenderer {
         Assert.assert_it( writer != null );
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
-        writer.write("<form id=\"");
-        writer.write(component.getClientId(context));
-        writer.write("\"");
-        writer.write(" method=\"post\" action=\"");
-        writer.write(getActionStr(context, component));
-        writer.write("\"");
+	writer.startElement("form");
+	writer.writeAttribute("id", component.getClientId(context));
+	writer.writeAttribute("method", "post");
+	writer.writeAttribute("action", getActionStr(context, component));
         if (null != (formClass = (String) 
 		     component.getAttribute("formClass"))) {
-	    writer.write(" class=\"" + formClass + "\" ");
+            writer.writeAttribute("class", formClass);
 	}
-        writer.write(Util.renderPassthruAttributes(context, component));
-        writer.write(Util.renderBooleanPassthruAttributes(context, 
-                component));
-        writer.write(">");
+
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
+
 	updateFormNumber(context, component);
     }
 
@@ -186,9 +183,9 @@ public class FormRenderer extends HtmlBasicRenderer {
         String saveStateParam = context.getExternalContext().
             getInitParameter(RIConstants.SAVESTATE_INITPARAM);
         if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
-            writer.write(RIConstants.SAVESTATE_MARKER);
+	    writer.writeText(RIConstants.SAVESTATE_MARKER);
         }    
-        writer.write("</form>");
+	writer.endElement("form");
     }
 
 } // end of class FormRenderer

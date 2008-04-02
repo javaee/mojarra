@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.9 2003/07/29 18:23:22 jvisvanathan Exp $
+ * $Id: HiddenRenderer.java,v 1.10 2003/08/08 16:20:20 rkitain Exp $
  */
 
 /*
@@ -15,8 +15,11 @@ import com.sun.faces.util.Util;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
+
+import org.mozilla.util.Assert;
 
 /**
  * <B>HiddenRenderer</B> is a class that renders the current value of 
@@ -76,20 +79,20 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
     }
 
     protected void getEndTextToRender(FacesContext context, 
-        UIComponent component, String currentValue, StringBuffer buffer ) {
+        UIComponent component, String currentValue) throws IOException {
 
-        buffer.append("<input type=\"hidden\"");
-        buffer.append(" name=\"");
-        buffer.append(component.getClientId(context));
-        buffer.append("\"");
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
+	writer.startElement("input");
+	writer.writeAttribute("type", "hidden");
+	writer.writeAttribute("name", component.getClientId(context));
 
         // render default text specified
         if (currentValue != null) {
-            buffer.append(" value=\"");
-            buffer.append(currentValue);
-            buffer.append("\"");
+            writer.writeAttribute("value", currentValue);
         }
-        buffer.append(">");
+        writer.endElement("input");
     }
     
     // The testcase for this class is TestRenderers_3.java 

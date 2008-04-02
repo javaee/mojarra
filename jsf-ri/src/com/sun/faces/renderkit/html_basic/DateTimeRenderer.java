@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeRenderer.java,v 1.4 2003/04/29 20:51:50 eburns Exp $
+ * $Id: DateTimeRenderer.java,v 1.5 2003/08/08 16:20:19 rkitain Exp $
  */
 
 /*
@@ -21,7 +21,6 @@ import java.util.Calendar;
 import java.lang.Long;
 
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -51,7 +50,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateTimeRenderer.java,v 1.4 2003/04/29 20:51:50 eburns Exp $
+ * @version $Id: DateTimeRenderer.java,v 1.5 2003/08/08 16:20:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

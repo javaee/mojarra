@@ -1,5 +1,5 @@
 /*
- * $Id: ErrorsRenderer.java,v 1.13 2003/05/07 02:02:25 horwat Exp $
+ * $Id: ErrorsRenderer.java,v 1.14 2003/08/08 16:20:20 rkitain Exp $
  */
 
 /*
@@ -36,7 +36,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ErrorsRenderer.java,v 1.13 2003/05/07 02:02:25 horwat Exp $
+ * @version $Id: ErrorsRenderer.java,v 1.14 2003/08/08 16:20:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -151,22 +151,26 @@ public class ErrorsRenderer extends HtmlBasicRenderer {
 	String outputClass = null;
         boolean wroteIt = false;
         if (messageIter.hasNext()) {
-            writer.write("\n<font color=\"" + color + "\">");
+	    writer.writeText('\n');
+	    writer.startElement("font");
+	    writer.writeAttribute("color", color);
             wroteIt = true;
         }
 	if (null != (outputClass = (String) 
 		     component.getAttribute("outputClass"))) {
-	    writer.write("<span class=\"" + outputClass + "\">");
+            writer.startElement("span");
+	    writer.writeAttribute("class", outputClass);
 	}
         while (messageIter.hasNext()) {
             curMessage = (Message) messageIter.next();
-            writer.write("\t" + curMessage.getSummary());
+	    writer.writeText('\t');
+	    writer.writeText(curMessage.getSummary());
         }
 	if (null != outputClass) {
-	    writer.write("</span>");
+            writer.endElement("span");
 	}
         if (wroteIt) {
-            writer.write("</font>");
+	    writer.endElement("font");
         }
     }
     

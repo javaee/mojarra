@@ -1,5 +1,5 @@
 /*
- * $Id: CheckboxRenderer.java,v 1.49 2003/07/11 23:23:37 jvisvanathan Exp $
+ * $Id: CheckboxRenderer.java,v 1.50 2003/08/08 16:20:18 rkitain Exp $
  *
  */
 
@@ -42,7 +42,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: CheckboxRenderer.java,v 1.49 2003/07/11 23:23:37 jvisvanathan Exp $
+ * @version $Id: CheckboxRenderer.java,v 1.50 2003/08/08 16:20:18 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -177,25 +177,27 @@ public class CheckboxRenderer extends HtmlBasicInputRenderer {
     }
 
     protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
+            String currentValue) throws IOException {
  
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
 	String selectbooleanClass = null;
-        buffer.append("<input type=\"checkbox\" ");
-        buffer.append(" name=\"");
-        buffer.append(component.getClientId(context));
-        buffer.append("\"");
+
+	writer.startElement("input");
+	writer.writeAttribute("type", "checkbox");
+	writer.writeAttribute("name", component.getClientId(context)); 
 
         if (currentValue.equals("true")) {
-            buffer.append(" checked ");
+	    writer.writeAttribute("checked", new Boolean("true"));
         }
         if (null != (selectbooleanClass = (String) 
 		     component.getAttribute("selectbooleanClass"))) {
-	    buffer.append(" class=\"" + selectbooleanClass + "\" ");
+	    writer.writeAttribute("class", selectbooleanClass);
 	}
-        buffer.append(Util.renderPassthruAttributes(context, component));
-        buffer.append(Util.renderBooleanPassthruAttributes(context, 
-                component));
-        buffer.append(">");    
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
+
+	writer.endElement("input");
     }
 
 } // end of class CheckboxRenderer

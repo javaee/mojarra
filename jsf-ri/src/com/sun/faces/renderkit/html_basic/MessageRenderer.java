@@ -1,5 +1,5 @@
 /*
- * $Id: MessageRenderer.java,v 1.19 2003/05/13 22:55:23 eburns Exp $
+ * $Id: MessageRenderer.java,v 1.20 2003/08/08 16:20:22 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MessageRenderer.java,v 1.19 2003/05/13 22:55:23 eburns Exp $
+ * @version $Id: MessageRenderer.java,v 1.20 2003/08/08 16:20:22 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,6 +109,9 @@ public class MessageRenderer extends HtmlBasicRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
@@ -133,12 +136,6 @@ public class MessageRenderer extends HtmlBasicRenderer {
             }
         }
 
-/* PENDING(rogerk):
-        if ( supportsComponentType(component)) {
-            output = (UIOutput) component;
-        }
-*/
-       
         ArrayList parameterList = new ArrayList();
 
         // get UIParameter children...
@@ -172,15 +169,14 @@ public class MessageRenderer extends HtmlBasicRenderer {
             message = currentValue;
         }
                 
-        ResponseWriter writer = context.getResponseWriter();
-        Assert.assert_it(writer != null );
 	if (null != (outputClass = (String) 
 		     component.getAttribute("outputClass"))) {
-	    writer.write("<span class=\"" + outputClass + "\">");
+	    writer.startElement("span");
+	    writer.writeAttribute("class", outputClass);
 	}
-        writer.write(message);
+        writer.writeText(message);
 	if (null != outputClass) {
-	    writer.write("</span>");
+	    writer.endElement("span");
 	}
     }
 

@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.7 2003/07/29 18:23:24 jvisvanathan Exp $
+ * $Id: ListboxRenderer.java,v 1.8 2003/08/08 16:20:22 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -15,14 +15,18 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.SelectItemWrapper;
+import com.sun.faces.util.Util;
+
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.SelectItemWrapper;
-import com.sun.faces.util.Util;
+import org.mozilla.util.Assert;
 
 /**
  * <B>ListRenderer</B> is a class that renders the current value of 
@@ -67,43 +71,45 @@ public class ListboxRenderer extends MenuRenderer {
     // Methods From Renderer
     //
 
-    int getOptionBuffer(
-        FacesContext context,
-        UIComponent component,
-        StringBuffer buff) {
-            
-            Iterator items = Util.getSelectItemWrappers(context, component);
-            int itemCount = 0;
-            Object selectedValues[] = getCurrentSelectedValues(context, 
-							       component);
-            UIComponent curComponent;
-            SelectItem curItem = null;
-            SelectItemWrapper curItemWrapper = null;
-            
-            while (items.hasNext()) {
-                itemCount++;
-                curItemWrapper = (SelectItemWrapper) items.next();
-                curItem = curItemWrapper.getSelectItem();
-                curComponent = curItemWrapper.getUISelectItem();
-                buff.append("\t<option value=\"");
-                buff.append((getFormattedValue(context, component,
-                    curItem.getValue())));
-                buff.append("\"");
-                buff.append(getSelectedText(curItem, selectedValues));
+    void renderOptions (FacesContext context, UIComponent component) 
+	throws IOException {
 
-                buff.append(Util.renderPassthruAttributes(context, curComponent));
-                buff.append(Util.renderBooleanPassthruAttributes(context, curComponent));
-                buff.append(">");
-                buff.append(curItem.getLabel());
-                buff.append("</option>\n");
-            }
-            return itemCount;
-	}
-        
-        protected int getDisplaySize(int itemCount, UIComponent component) {
-            // display all items in the list.
-            component.setAttribute("size", String.valueOf(itemCount));
-            return itemCount;
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );            
+
+        Iterator items = Util.getSelectItemWrappers(context, component);
+        Object selectedValues[] = getCurrentSelectedValues(context, 
+							       component);
+        UIComponent curComponent;
+        SelectItem curItem = null;
+        SelectItemWrapper curItemWrapper = null;
+            
+        while (items.hasNext()) {
+            curItemWrapper = (SelectItemWrapper) items.next();
+            curItem = curItemWrapper.getSelectItem();
+            curComponent = curItemWrapper.getUISelectItem();
+	    writer.writeText('\t');
+	    writer.startElement("option");
+	    writer.writeAttribute("value", 
+	        getFormattedValue(context, component, curItem.getValue()));
+	    String selectText = getSelectedText(curItem, selectedValues);
+	    if (!selectText.equals("")) {
+	        writer.writeAttribute(selectText, new Boolean("true"));
+	    }
+
+            Util.renderPassThruAttributes(writer, curComponent);
+            Util.renderBooleanPassThruAttributes(writer, curComponent);
+
+	    writer.writeText(curItem.getLabel());
+	    writer.endElement("option");
+	    writer.writeText('\n');
         }
+    }
+        
+    protected int getDisplaySize(int itemCount, UIComponent component) {
+        // display all items in the list.
+        component.setAttribute("size", String.valueOf(itemCount));
+        return itemCount;
+    }
 
 } // end of class ListboxRenderer

@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.45 2003/07/29 18:23:23 jvisvanathan Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.46 2003/08/08 16:20:21 rkitain Exp $
  */
 
 /*
@@ -98,12 +98,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
 	if (attributeTable == null) {
 	    attributeTable = new Hashtable();
 	}
-
-/*
-        AttributeDescriptorImpl ad = new AttributeDescriptorImpl(name, 
-					 displayName, description, typeClass);
-        attributeTable.put(name, ad);
-*/
     }
 
     public boolean hasAttributeWithName(String name) {
@@ -118,53 +112,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // Methods From Renderer
     // PENDING: what if named attriubte doesn't exist? should exception be thrown?
     //
-/*
-    public AttributeDescriptor getAttributeDescriptor(
-        UIComponent component, String name) {
-
-        if (component == null || name == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-        return (getAttributeDescriptor(component.getComponentType(), name));
-    }
-*/
-
-/*
-    public AttributeDescriptor getAttributeDescriptor(
-        String componentType, String name) {
-
-        if (componentType == null || name == null) {
-            throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
-        }
-
-        if (!supportsComponentType(componentType)) {
-            Object [] params = {componentType}; 
-            throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
-        }
-        if (!hasAttributeWithName(name)) {
-            Object [] params = {name, componentType}; 
-            throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.ATTRIBUTE_NOT_SUPORTED_ERROR_MESSAGE_ID, params));
-        }
-	return (AttributeDescriptor)(attributeTable != null? attributeTable.get(name) : null); 
-    }
-*/
-
     public Iterator getAttributeNames(UIComponent component) {
 
         if (component == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_COMPONENT_ERROR_MESSAGE_ID));
         }
-
-/*
-        String componentType = component.getComponentType();
-        if (!supportsComponentType(componentType)) {
-            Object [] params = {componentType}; 
-            throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
-        }
-*/
 
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
     }
@@ -174,14 +126,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if (componentType == null) {
             throw new NullPointerException(Util.getExceptionMessage(Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
-
-/*
-        if (!supportsComponentType(componentType)) {
-            Object [] params = {componentType};
-            throw new IllegalArgumentException(Util.getExceptionMessage(
-                Util.SUPPORTS_COMPONENT_ERROR_MESSAGE_ID, params));
-        }
-*/
 
         return attributeTable != null? attributeTable.keySet().iterator() : emptyIterator();
 
@@ -342,7 +286,6 @@ public abstract class HtmlBasicRenderer extends Renderer {
             throws IOException {
                 
         String currentValue = null;
-	StringBuffer buffer = null;
         ResponseWriter writer = null;
 	String styleClass = null;
         
@@ -362,9 +305,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
         
         currentValue = getCurrentValue(context, component);
         // PENDING (visvan) here is where we'd hook in a buffer pooling scheme
-        buffer = new StringBuffer(1000);
-        getEndTextToRender(context, component, currentValue, buffer);
-        writer.write(buffer.toString());
+        getEndTextToRender(context, component, currentValue);
     }
     
     /**
@@ -390,7 +331,7 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * the buffer.
      */
     protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
+            String currentValue) throws IOException {
         return;
     }
    

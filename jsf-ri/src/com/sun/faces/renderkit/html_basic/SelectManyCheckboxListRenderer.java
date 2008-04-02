@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.8 2003/07/29 18:23:25 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.9 2003/08/08 16:20:23 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -17,14 +17,18 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.util.SelectItemWrapper;
+import com.sun.faces.util.Util;
+
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 
-import com.sun.faces.util.SelectItemWrapper;
-import com.sun.faces.util.Util;
+import org.mozilla.util.Assert;
 
 /**
  * <B>SelectManyCheckboxListRenderer</B> is a class that renders the 
@@ -71,10 +75,12 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     public final String PAGE_DIRECTION = "PAGE_START";
     public final String LINE_DIRECTION = "LINE_END";
 
-    void getSelectBuffer(
-        FacesContext context,
-        UIComponent component,
-        StringBuffer buff) {
+    void renderSelect (FacesContext context, UIComponent component) 
+        throws IOException {
+	    
+        ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
         String layoutStr;
         boolean layoutVertical = false;
 
@@ -84,8 +90,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             layoutVertical = layoutStr.equalsIgnoreCase(PAGE_DIRECTION) ? true : false;
         }
 
-        buff.append(Util.renderPassthruAttributes(context, component));
-        buff.append(Util.renderBooleanPassthruAttributes(context, component));
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
 
         Iterator items = Util.getSelectItemWrappers(context, component);
         SelectItem curItem = null;
@@ -98,24 +104,27 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
 
-            buff.append("\n<label for=\"");
-            buff.append(curComponent.getClientId(context));
-            buff.append("\">");
-            buff.append(curItem.getLabel());
-            buff.append("<input name=\"");
-            buff.append(component.getClientId(context));
-            buff.append("\" id=\"");
-            buff.append(curComponent.getClientId(context));
-            buff.append("\" value=\"");
-            buff.append((getFormattedValue(context, component,
-                    curItem.getValue())));
-            buff.append("\" type=\"checkbox\"");
-            buff.append(getSelectedText(curItem, selectedValues));
-            buff.append(Util.renderPassthruAttributes(context, curComponent));
-            buff.append(Util.renderBooleanPassthruAttributes(context, curComponent));
-            buff.append("></label>");
-            if (layoutVertical)
-                buff.append("<br>");
+	    writer.writeText('\n');
+	    writer.startElement("label");
+	    writer.writeAttribute("for", curComponent.getClientId(context));
+	    writer.writeText(curItem.getLabel());
+	    writer.startElement("input");
+	    writer.writeAttribute("name", component.getClientId(context));
+	    writer.writeAttribute("id", curComponent.getClientId(context));
+	    writer.writeAttribute("value",
+	        getFormattedValue(context, component, curItem.getValue()));
+	    writer.writeAttribute("type", "checkbox");
+	    String selectText = getSelectedText(curItem, selectedValues);
+	    if (!selectText.equals("")) {
+	        writer.writeAttribute(selectText, new Boolean("true"));
+	    }
+            Util.renderPassThruAttributes(writer, curComponent);
+            Util.renderBooleanPassThruAttributes(writer, curComponent);
+	    writer.endElement("label");
+            if (layoutVertical) {
+                writer.startElement("br");
+                writer.endElement("br");
+	    }
         }
     }
 	

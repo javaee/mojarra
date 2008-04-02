@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_1.java,v 1.31 2003/07/29 16:25:56 rlubke Exp $
+ * $Id: TestRenderers_1.java,v 1.32 2003/08/08 16:20:38 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.renderkit.html_basic.RadioRenderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_1.java,v 1.31 2003/07/29 16:25:56 rlubke Exp $
+ * @version $Id: TestRenderers_1.java,v 1.32 2003/08/08 16:20:38 rkitain Exp $
  * 
  *
  */
@@ -144,11 +144,13 @@ public class TestRenderers_1 extends JspFacesTestCase
 	    };
             root.setComponentId("root");
 	    // Call this twice to test the multiple forms in a page logic.
+            getFacesContext().getResponseWriter().startDocument();
             verifyFormRenderer(root, 0);
             verifyFormRenderer(root, 1);
             verifyRadioRenderer(root);
             verifyButtonRenderer(root);
             verifyHyperlinkRenderer(root);
+            getFacesContext().getResponseWriter().endDocument();
 
             assertTrue(verifyExpectedOutput());
             sessionMap.remove("Messages");
@@ -179,12 +181,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from local value...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // No value this round, ensure the valueRef for the button label
         // is pulled from the model
@@ -197,12 +194,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from model...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // No valueRef or explicit label.  Pull value from the
         // specified ResourceBundle using the key
@@ -214,12 +206,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from ResourceBundle...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // All lookup methods fail, test of hyperlink should be empty
         uiCommand = new UICommand();
@@ -231,12 +218,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing empty label...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // Test hyperlink as image
         uiCommand = new UICommand();
@@ -247,12 +229,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink as image");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Exception e) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // Test hyperlink as image with image specified in resource bundle
         uiCommand = new UICommand();
@@ -263,12 +240,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink image via resource lookup");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Exception e) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // Test hyperlink with parameters
         uiCommand = new UICommand();
@@ -288,12 +260,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink with UIParameters...");
         hyperlinkRenderer.encodeBegin(getFacesContext(), uiCommand);
         hyperlinkRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Exception e) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
     }
 
     public void verifyFormRenderer(UIComponent root,
@@ -319,12 +286,12 @@ public class TestRenderers_1 extends JspFacesTestCase
         // test encode method
         System.out.println("Testing encode method");
         formRenderer.encodeBegin(getFacesContext(), uiForm);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         
         // test encode method
         System.out.println("Testing encodeEnd method");
         formRenderer.encodeEnd(getFacesContext(), uiForm);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         
 	// test that our form number is correct.
 	Integer formNumber = (Integer)
@@ -349,15 +316,10 @@ public class TestRenderers_1 extends JspFacesTestCase
         uiCommand.setValue("SHOUD NOT BE HERE");
         root.addChild(uiCommand);
         System.out.println("Testing encode (<button> rendering) method");
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Exception e ) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // Test button as image with image specified in resource bundle
         uiCommand = new UICommand();
@@ -368,12 +330,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing hyperlink image via resource lookup");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Exception e) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
 // ------------------  Test label determination ------------------------------
         // Provide attributes for all possible lookups
@@ -389,12 +346,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from local value...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // No value this round, ensure the valueRef for the button label
         // is pulled from the model
@@ -408,12 +360,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from model...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // No valueRef or explicit label.  Pull value from the
         // specified ResourceBundle using the key
@@ -426,12 +373,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing label lookup from ResourceBundle...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
+        getFacesContext().getResponseWriter().writeText("\n");
 
         // All lookup methods fail, the value attribute should be empty
         uiCommand = new UICommand();
@@ -444,13 +386,7 @@ public class TestRenderers_1 extends JspFacesTestCase
         System.out.println("Testing empty label...");
         buttonRenderer.encodeBegin(getFacesContext(), uiCommand);
         buttonRenderer.encodeEnd(getFacesContext(), uiCommand);
-        getFacesContext().getResponseWriter().write("\n");
-        try {
-            getFacesContext().getResponseWriter().flush();
-        } catch (Throwable t) {
-            throw new FacesException("Exception while flushing buffer");
-        }
-
+        getFacesContext().getResponseWriter().writeText("\n");
     }
     
     public void verifyRadioRenderer(UIComponent root) throws IOException {

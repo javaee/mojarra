@@ -1,5 +1,5 @@
 /*
- * $Id: ImageRenderer.java,v 1.13 2003/04/29 20:51:52 eburns Exp $
+ * $Id: ImageRenderer.java,v 1.14 2003/08/08 16:20:21 rkitain Exp $
  */
 
 /*
@@ -13,7 +13,7 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
+import java.io.IOException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIGraphic;
@@ -26,7 +26,6 @@ import org.mozilla.util.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  *
@@ -34,7 +33,7 @@ import java.io.IOException;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ImageRenderer.java,v 1.13 2003/04/29 20:51:52 eburns Exp $
+ * @version $Id: ImageRenderer.java,v 1.14 2003/08/08 16:20:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -109,18 +108,18 @@ public class ImageRenderer extends HtmlBasicRenderer {
         writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
         
-        writer.write("<img id=\"");
-        writer.write(component.getClientId(context));
-        writer.write("\"");
-        writer.write(" src=\"");
-        writer.write(src(context, component) + "\"");
-	writer.write(Util.renderPassthruAttributes(context, component));
-	writer.write(Util.renderBooleanPassthruAttributes(context, component));
+	writer.startElement("img");
+	writer.writeAttribute("id", component.getClientId(context));
+	writer.writeAttribute("src", src(context, component));
+
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer, component);
+
 	if (null != (graphicClass = (String) 
 		     component.getAttribute("graphicClass"))) {
-	    writer.write(" class=\"" + graphicClass + "\"");
+	    writer.writeAttribute("class", graphicClass);
 	}
-        writer.write(">");
+	writer.endElement("img");
     }
 
     private String src(FacesContext context, UIComponent component) {

@@ -1,5 +1,5 @@
 /*
- * $Id: DateRenderer.java,v 1.23 2003/04/29 20:51:50 eburns Exp $
+ * $Id: DateRenderer.java,v 1.24 2003/08/08 16:20:18 rkitain Exp $
  */
 
 /*
@@ -11,23 +11,28 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.FormatPool;
 import com.sun.faces.util.Util;
 
+import java.io.IOException;
+import java.lang.Long;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Date;
-import java.lang.Long;
 
-import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
-import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
 import javax.faces.convert.ConverterException;
 import javax.faces.el.ValueBinding;
+import javax.faces.render.Renderer;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -36,14 +41,6 @@ import org.mozilla.util.ParameterCheck;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.io.IOException;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-
-
-import com.sun.faces.renderkit.FormatPool;
-import com.sun.faces.RIConstants;
 
 /**
  *
@@ -51,7 +48,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: DateRenderer.java,v 1.23 2003/04/29 20:51:50 eburns Exp $
+ * @version $Id: DateRenderer.java,v 1.24 2003/08/08 16:20:18 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -178,8 +175,11 @@ public class DateRenderer extends HtmlBasicInputRenderer {
     }
 
      protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
-                
+            String currentValue) throws IOException {
+
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+
         boolean isInput = false;
         if (component instanceof UIInput) {
             isInput = true;
@@ -190,33 +190,28 @@ public class DateRenderer extends HtmlBasicInputRenderer {
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    buffer.append("<span class=\"" + styleClass + "\">");
+	    writer.startElement("span");
+	    writer.writeAttribute("class", styleClass);
 	}
         
 	if (isInput) {
-	    buffer.append("<input type=\"text\"");
-	    buffer.append(" name=\"");
-	    buffer.append(component.getClientId(context));
-	    buffer.append("\"");
+	    writer.startElement("input");
+	    writer.writeAttribute("type", "text"); 
+	    writer.writeAttribute("name", component.getClientId(context)); 
 	    // deal with HTML 4.0 LABEL element
-	    buffer.append(" id=\"");
-	    buffer.append(component.getClientId(context));
-	    buffer.append("\"");
+	    writer.writeAttribute("id", component.getClientId(context));
 	    // render default text specified
 	    if ( currentValue != null ) {
-		buffer.append(" value=\"");
-		buffer.append(currentValue);
-		buffer.append("\"");
+	        writer.writeAttribute("value", currentValue);
             }    
-            buffer.append(Util.renderPassthruAttributes(context, component));
-            buffer.append(Util.renderBooleanPassthruAttributes(context, 
-                        component));
-            buffer.append(">");    
+
+            Util.renderPassThruAttributes(writer, component);
+            Util.renderBooleanPassThruAttributes(writer, component);
 	} else {
-            buffer.append(currentValue);
+	    writer.writeText(currentValue);
         }  
         if (null != styleClass) {
-	    buffer.append("</span>");
+	    writer.endElement("span");
 	}
     }
     

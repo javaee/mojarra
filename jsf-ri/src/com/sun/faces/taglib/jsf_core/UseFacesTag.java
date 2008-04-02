@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.15 2003/07/24 23:24:19 rkitain Exp $
+ * $Id: UseFacesTag.java,v 1.16 2003/08/08 16:20:35 rkitain Exp $
  */
 
 /*
@@ -11,31 +11,23 @@
 
 package com.sun.faces.taglib.jsf_core;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.jsp.PageContext;
-import javax.faces.context.FacesContext;
-import javax.faces.tree.Tree;
-import javax.servlet.http.HttpSession;
 import com.sun.faces.RIConstants;
-
 import com.sun.faces.util.Base64;
 import com.sun.faces.util.Util;
-import java.io.IOException;
+
 import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Map;
-import javax.servlet.ServletConfig;
-import javax.servlet.jsp.JspWriter;
-import javax.faces.webapp.UIComponentBodyTag;
-import javax.faces.component.UIComponent;
+
+import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-import javax.faces.FacesException;
+import javax.faces.webapp.UIComponentBodyTag;
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
+
+import org.mozilla.util.Assert;
 
 /**
  *
@@ -44,7 +36,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.15 2003/07/24 23:24:19 rkitain Exp $
+ * @version $Id: UseFacesTag.java,v 1.16 2003/08/08 16:20:35 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -56,7 +48,7 @@ public class UseFacesTag extends UIComponentBodyTag
     //
     // Protected Constants
     //
-
+    
     //
     // Class Variables
     //
@@ -101,6 +93,20 @@ public class UseFacesTag extends UIComponentBodyTag
         return BodyTag.EVAL_BODY_BUFFERED;
     }
     
+    public int doStartTag() throws JspException {
+        int rc = super.doStartTag();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Assert.assert_it(facesContext != null);
+	ResponseWriter writer = facesContext.getResponseWriter();
+        Assert.assert_it(writer != null);
+	try {
+            writer.startDocument();
+        } catch (IOException e) {
+            throw new JspException(e.getMessage());
+        }
+        return rc;
+    }
+ 
     public int doAfterBody() throws JspException {
        
         // Look up the FacesContext instance for this request
@@ -125,6 +131,19 @@ public class UseFacesTag extends UIComponentBodyTag
         return EVAL_PAGE;
     }    
     
+    public int doEndTag() throws JspException {
+        int rc = super.doEndTag();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ResponseWriter writer = facesContext.getResponseWriter();
+        Assert.assert_it(writer != null);
+        try {
+            writer.endDocument();
+        } catch (IOException e) {
+            throw new JspException(e.getMessage());
+        }
+        return rc;
+    }
+
     protected void saveStateInSession(FacesContext facesContext) 
             throws JspException {
         Map sessionMap = Util.getSessionMap(facesContext);

@@ -4,7 +4,7 @@
  */
 
 /**
- * $Id: TestRenderers_3.java,v 1.15 2003/04/29 20:52:37 eburns Exp $
+ * $Id: TestRenderers_3.java,v 1.16 2003/08/08 16:20:39 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -43,7 +43,7 @@ import com.sun.faces.tree.SimpleTreeImpl;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_3.java,v 1.15 2003/04/29 20:52:37 eburns Exp $
+ * @version $Id: TestRenderers_3.java,v 1.16 2003/08/08 16:20:39 rkitain Exp $
  * 
  *
  */
@@ -174,7 +174,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("    Testing encode method... ");
         selectManyListboxRenderer.encodeBegin(getFacesContext(), selectMany);
         selectManyListboxRenderer.encodeEnd(getFacesContext(), selectMany);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         getFacesContext().getResponseWriter().flush();
 
     }
@@ -216,7 +216,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
             selectMany);
         selectManyCheckboxListRenderer.encodeEnd(getFacesContext(), 
 						 selectMany);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         getFacesContext().getResponseWriter().flush();
 
     }
@@ -253,7 +253,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("    Testing encode method... ");
         selectManyMenuRenderer.encodeBegin(getFacesContext(), selectMany);
         selectManyMenuRenderer.encodeEnd(getFacesContext(), selectMany);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         getFacesContext().getResponseWriter().flush();
 
     }
@@ -289,7 +289,7 @@ public class TestRenderers_3 extends JspFacesTestCase {
         System.out.println("    Testing encode method... ");
         selectOneMenuRenderer.encodeBegin(getFacesContext(), selectOne);
         selectOneMenuRenderer.encodeEnd(getFacesContext(), selectOne);
-        getFacesContext().getResponseWriter().write("\n");
+        getFacesContext().getResponseWriter().writeText("\n");
         getFacesContext().getResponseWriter().flush();
 
     }

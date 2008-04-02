@@ -1,5 +1,5 @@
 /*
- * $Id: TimeRenderer.java,v 1.4 2003/04/29 20:51:56 eburns Exp $
+ * $Id: TimeRenderer.java,v 1.5 2003/08/08 16:20:24 rkitain Exp $
  */
 
 /*
@@ -11,39 +11,32 @@
 
 package com.sun.faces.renderkit.html_basic;
 
+import com.sun.faces.RIConstants;
+import com.sun.faces.renderkit.FormatPool;
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
+import java.io.IOException;
+import java.lang.Long;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Date;
-import java.util.Calendar;
-import java.lang.Long;
 
+import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.FacesException;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
 import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.io.IOException;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-
-import com.sun.faces.renderkit.FormatPool;
-import com.sun.faces.RIConstants;
 
 /**
  *
@@ -51,7 +44,7 @@ import com.sun.faces.RIConstants;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TimeRenderer.java,v 1.4 2003/04/29 20:51:56 eburns Exp $
+ * @version $Id: TimeRenderer.java,v 1.5 2003/08/08 16:20:24 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

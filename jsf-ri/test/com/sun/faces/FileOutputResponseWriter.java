@@ -1,5 +1,5 @@
 /*
- * $Id: FileOutputResponseWriter.java,v 1.6 2003/07/24 23:53:31 rkitain Exp $
+ * $Id: FileOutputResponseWriter.java,v 1.7 2003/08/08 16:20:37 rkitain Exp $
  */
 
 /*
@@ -10,6 +10,8 @@
 // FileOutputResponseWriter.java
 
 package com.sun.faces;
+
+import com.sun.faces.renderkit.html_basic.HtmlResponseWriter;
 
 import org.mozilla.util.Assert;
 import org.mozilla.util.Debug;
@@ -31,7 +33,7 @@ import java.io.Writer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FileOutputResponseWriter.java,v 1.6 2003/07/24 23:53:31 rkitain Exp $
+ * @version $Id: FileOutputResponseWriter.java,v 1.7 2003/08/08 16:20:37 rkitain Exp $
  * 
  *
  */
@@ -52,6 +54,7 @@ public class FileOutputResponseWriter extends ResponseWriter
 protected PrintWriter out = null;
 public static String  FACES_RESPONSE_ROOT = null;
 public static String  RESPONSE_WRITER_FILENAME = "ResponseWriter.txt";
+protected HtmlResponseWriter writer = null;
 
 // Attribute Instance Variables
 
@@ -64,12 +67,12 @@ public static String  RESPONSE_WRITER_FILENAME = "ResponseWriter.txt";
 
 public FileOutputResponseWriter()
 {
-    super();
     try {
 	initializeFacesResponseRoot();
         File file = new File ( RESPONSE_WRITER_FILENAME );
         FileOutputStream fs = new FileOutputStream(file);
         out = new PrintWriter(fs);
+        writer = new HtmlResponseWriter(out, "ISO-8859-1"); 
     } catch ( Exception e ) {
         System.out.println(e.getMessage());
 	Assert.assert_it(false);
@@ -134,49 +137,57 @@ public void close() throws IOException
     out.close();
 }
 
-public void writeText(char[] text,int off, int len) {
+public void writeText(char[] text,int off, int len) throws IOException {
+    writer.writeText(text, off, len);
 }
 
-public void writeText(char[] text ) {
+public void writeText(char[] text ) throws IOException {
+    writer.writeText(text);
 }
 
-public void writeText(char text ) {
+public void writeText(char text ) throws IOException {
+    writer.writeText(text);
 }
 
-public void writeText(Object text ) {
+public void writeText(Object text ) throws IOException {
+    writer.writeText(text);
 }
 
-public void writeComment(Object text ) {
+public void writeComment(Object text ) throws IOException {
+    writer.writeComment(text);
 }
 
 public void writeAttribute(String name, Object value) throws IOException {
+    writer.writeAttribute(name, value);
 }    
 
 public void writeURIAttribute(String name, Object value) throws IOException {
+    writer.writeURIAttribute(name, value);
 }    
 
 public void startElement(String name) throws IOException {
+    writer.startElement(name);
 }
 
 public void endElement(String name) throws IOException {
+    writer.endElement(name);
 }    
 
 public void startDocument() throws IOException {
-    throw new UnsupportedOperationException();
+    writer.startDocument();
 }
 
 public void endDocument() throws IOException {
-    throw new UnsupportedOperationException();
+    writer.endDocument();
 }
 
 //PENDING(rogerk) JSF_API_20030718 - implement
 public ResponseWriter cloneWithWriter(Writer writer) {
-    return null;
+    return this.writer.cloneWithWriter(writer);
 }
 public String getCharacterEncoding() {
-    return null;
+    return writer.getCharacterEncoding();
 }
-
 
 } // end of class FileOutputResponseWriter
 

@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.42 2003/07/29 18:23:25 jvisvanathan Exp $
+ * $Id: SecretRenderer.java,v 1.43 2003/08/08 16:20:23 rkitain Exp $
  */
 
 /*
@@ -17,6 +17,9 @@ import java.io.IOException;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+
+import org.mozilla.util.Assert;
 
 /**
  * <B>SecretRenderer</B> is a class that renders the current value of 
@@ -76,7 +79,9 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
     }
 
     protected void getEndTextToRender(FacesContext context, 
-        UIComponent component, String currentValue, StringBuffer buffer ) {
+        UIComponent component, String currentValue) throws IOException {
+	ResponseWriter writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
 
         String inputClass = null;
         
@@ -85,25 +90,24 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
             currentValue = "";
         }
 
-        buffer.append("<input type=\"password\"");
-        buffer.append(" name=\"");
-        buffer.append(component.getClientId(context));
-        buffer.append("\"");
+	writer.startElement("input");
+	writer.writeAttribute("type", "password");
+	writer.writeAttribute("name", component.getClientId(context)); 
 
         // render default text specified
         if (currentValue != null) {
-            buffer.append(" value=\"");
-            buffer.append(currentValue);
-            buffer.append("\"");
+	    writer.writeAttribute("value", currentValue);
         }
-        buffer.append(Util.renderPassthruAttributes(context, component));
-        buffer.append(Util.renderBooleanPassthruAttributes(context, component));
+
+        Util.renderPassThruAttributes(writer, component);
+        Util.renderBooleanPassThruAttributes(writer,component);
+
 	if (null != (inputClass = (String) 
 		     component.getAttribute("inputClass"))) {
-	    buffer.append(" class=\"" + inputClass + "\" ");
+	    writer.writeAttribute("class", inputClass);
 	}
 	
-        buffer.append(">");         
+	writer.endElement("input");
     }
 
 } // end of class SecretRenderer

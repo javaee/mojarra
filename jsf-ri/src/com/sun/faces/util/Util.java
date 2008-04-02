@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.69 2003/08/04 21:54:52 rkitain Exp $
+ * $Id: Util.java,v 1.70 2003/08/08 16:20:36 rkitain Exp $
  */
 
 /*
@@ -11,44 +11,41 @@
 
 package com.sun.faces.util;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.ServletContext;
-import javax.faces.FacesException;
-import javax.faces.FactoryFinder;
-
-import javax.faces.render.RenderKitFactory;
-import javax.faces.render.RenderKit;
-import javax.faces.lifecycle.LifecycleFactory;
-import javax.faces.tree.TreeFactory;
-import javax.faces.context.FacesContextFactory;
-
-import javax.faces.FactoryFinder;
-import javax.faces.application.Message;
-import javax.faces.application.Application;
-import javax.faces.application.MessageResources;
-
-
-import javax.faces.application.Application;
-import javax.faces.application.ApplicationFactory;
-import javax.faces.el.ValueBinding;
-
-import javax.faces.component.UISelectItem;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItems;
-import javax.faces.component.SelectItem;
-
 import com.sun.faces.RIConstants;
 import com.sun.faces.application.MessageResourcesImpl;
-import javax.faces.context.FacesContext;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
 import java.util.StringTokenizer;
+
+import javax.faces.FacesException;
+import javax.faces.FactoryFinder;
+import javax.faces.application.Application;
+import javax.faces.application.ApplicationFactory;
+import javax.faces.application.Message;
+import javax.faces.application.MessageResources;
+import javax.faces.component.SelectItem;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItem;
+import javax.faces.component.UISelectItems;
+import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextFactory;
+import javax.faces.context.ResponseWriter;
+import javax.faces.el.ValueBinding;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.render.RenderKitFactory;
+import javax.faces.render.RenderKit;
+import javax.faces.tree.TreeFactory;
+
+import javax.servlet.ServletContext;
+
+import org.mozilla.util.Assert;
+import org.mozilla.util.ParameterCheck;
 
 /**
  *
@@ -56,7 +53,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.69 2003/08/04 21:54:52 rkitain Exp $
+ * @version $Id: Util.java,v 1.70 2003/08/08 16:20:36 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -675,74 +672,45 @@ private Util()
 
 
     /**
-
     * Render any boolean "passthru" attributes.  
     * <P>
-
     * @see passthruAttributes
-
     */
+    public static void renderBooleanPassThruAttributes(ResponseWriter writer,
+        UIComponent component) throws IOException {
+	Assert.assert_it(null != writer);
+	Assert.assert_it(null != component);
 
-    public static String renderBooleanPassthruAttributes(FacesContext context,
-						       UIComponent component) {
-	int i = 0, len = booleanPassthruAttributes.length;
-	String value;
-	boolean thisIsTheFirstAppend = true;
-	StringBuffer renderedText = new StringBuffer();
-
-	for (i = 0; i < len; i++) {
-	    if (null != (value = (String) 
-		      component.getAttribute(booleanPassthruAttributes[i]))) {
-		if (thisIsTheFirstAppend) {
-		    // prepend ' '
-		    renderedText.append(' ');
-		    thisIsTheFirstAppend = false;
-		}
-		if (Boolean.valueOf(value).booleanValue()) {
-		    renderedText.append(booleanPassthruAttributes[i] + ' ');
-		}
+        int i = 0, len = booleanPassthruAttributes.length;
+	String value = null;
+        for (i = 0; i < len; i++) {
+            value = (String)component.getAttribute(booleanPassthruAttributes[i]);
+	    if (value != null && Boolean.valueOf(value).booleanValue()) {
+		writer.writeAttribute(booleanPassthruAttributes[i], new Boolean("true"));
 	    }
 	}
-	
-	return renderedText.toString();
     }
 
     /**
-
     * Render any "passthru" attributes, where we simply just output the
     * raw name and value of the attribute.  This method is aware of the
     * set of HTML4 attributes that fall into this bucket.  Examples are
     * all the javascript attributes, alt, rows, cols, etc.  <P>
-
-    * @return the rendererd attributes as specified in the component.
-    * Padded with leading and trailing ' '.  If there are no passthru
-    * attributes in the component, return the empty String.
-
     * @see passthruAttributes
-
     */
+    public static void renderPassThruAttributes(ResponseWriter writer,
+        UIComponent component) throws IOException {
+	Assert.assert_it(null != writer);
+	Assert.assert_it(null != component);
 
-    public static String renderPassthruAttributes(FacesContext context,
-						  UIComponent component) {
-	int i = 0, len = passthruAttributes.length;
-	String value;
-	boolean thisIsTheFirstAppend = true;
-	StringBuffer renderedText = new StringBuffer();
-
+        int i = 0, len = passthruAttributes.length;
+	String value = null;
 	for (i = 0; i < len; i++) {
-	    if (null != (value = (String) 
-			 component.getAttribute(passthruAttributes[i]))) {
-		if (thisIsTheFirstAppend) {
-		    // prepend ' '
-		    renderedText.append(' ');
-		    thisIsTheFirstAppend = false;
-		}
-		renderedText.append(passthruAttributes[i] + "=\"" + value + 
-				    "\" ");
+            value = (String)component.getAttribute(passthruAttributes[i]);
+	    if (value != null) {
+		writer.writeAttribute(passthruAttributes[i], value);
 	    }
 	}
-	
-	return renderedText.toString();
     }
 
     /**
