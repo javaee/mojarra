@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.34 2004/10/20 20:00:46 rlubke Exp $
+ * $Id: StateManager.java,v 1.35 2005/03/11 18:14:03 edburns Exp $
  */
 
 /*
@@ -152,11 +152,6 @@ public abstract class StateManager {
      * method assumes that the caller has positioned the
      * {@link ResponseWriter} at the correct position for the
      * saved state to be written.</p>
-     *
-     * <p>If the init parameter indicates that server side state
-     * saving should be used, this method must save the state in
-     * such a manner that it may be retrieved using only the
-     * <code>viewId</code>.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param state the serialized state to be written

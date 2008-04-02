@@ -108,6 +108,12 @@ import java.util.Map;
  * not be matched against the actual response.  If a golden file is
  * specified but not an ignore file, then the contents must match
  * exactly.</li>
+
+ * <li><strong>ignoreIfContains</strong> - The server-relative path of
+ * the static resource containing a String on each line, the presence of
+ * which in the actual response line will cause that response line to be
+ * ignored.</li>
+
  * <li><strong>inContent</strong> - The data content that will be submitted
  * with this request.  The test client will transparently add a carriage
  * return and line feed, and set the content length header, if this is
@@ -148,7 +154,7 @@ import java.util.Map;
  * </ul>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.11 $ $Date: 2004/10/05 21:36:45 $
+ * @version $Revision: 1.12 $ $Date: 2005/03/11 18:14:09 $
  */
 
 public class SystestClient extends Task {
@@ -184,6 +190,14 @@ public class SystestClient extends Task {
      * delimiters.
      */
     protected List saveIgnore = new ArrayList();
+
+    /**
+     * The saved ignoreIfContains lines for modifying our golden file
+     * comparison to the response.  Each element contains a line of text
+     * without any line delimiters.  The presence of that text as a
+     * substring in a response line causes that line to be ignored.
+     */
+    protected List saveIgnoreIfContains = new ArrayList();
 
 
     /**
@@ -259,6 +273,23 @@ public class SystestClient extends Task {
     public void setIgnore(String ignore) {
         this.ignore = ignore;
     }
+
+    /**
+     * The server-relative request URI of the ignoreIfContains file for this request.
+     */
+    protected String ignoreIfContains = null;
+
+
+    public String getIgnoreIfContains() {
+        return (this.ignoreIfContains);
+    }
+
+
+    public void setIgnoreIfContains(String ignoreIfContains) {
+        this.ignoreIfContains = ignoreIfContains;
+    }
+
+
 
 
     /**
@@ -515,6 +546,18 @@ public class SystestClient extends Task {
                 throw new BuildException("Failure reading golden file", e);
             }
         }
+
+        try {
+            readIgnoreIfContains();
+        } catch (IOException e) {
+            System.out.println("FAIL:  readIgnoreIfContains(" + 
+			       ignoreIfContains + ")");
+            e.printStackTrace(System.out);
+            if (failonerror) {
+                throw new BuildException("Failure reading golden file", e);
+            }
+        }
+
         if ((protocol == null) || (protocol.length() == 0)) {
             executeHttp();
         } else {
@@ -1117,6 +1160,46 @@ public class SystestClient extends Task {
 
     }
 
+    /**
+     * Read and save the contents of the ignoreIfContains file for this
+     * test, if any.  Otherwise, the <code>saveIgnoreIfContains</code>
+     * list will be empty.
+     *
+     * @throws IOException if an input/output error occurs
+     */
+    protected void readIgnoreIfContains() throws IOException {
+
+        // Was an ignoreIfContains file specified?
+        saveIgnoreIfContains.clear();
+        if (ignoreIfContains == null) {
+            return;
+        }
+
+        // Create a connection to receive the ignoreIfContains file contents
+        URL url = new URL("http", host, port, ignoreIfContains);
+        HttpURLConnection conn =
+            (HttpURLConnection) url.openConnection();
+        conn.setAllowUserInteraction(false);
+        conn.setDoInput(true);
+        conn.setDoOutput(false);
+        conn.setFollowRedirects(true);
+        conn.setRequestMethod("GET");
+
+        // Connect to the server and retrieve the ignoreIfContains file
+        conn.connect();
+        InputStream is = conn.getInputStream();
+        while (true) {
+            String line = read(is);
+            if (line == null) {
+                break;
+            }
+            saveIgnoreIfContains.add(line);
+        }
+        is.close();
+        conn.disconnect();
+
+    }
+
 
     /**
      * Save the specified header name and value in our collection.
@@ -1200,7 +1283,9 @@ public class SystestClient extends Task {
             for (int i = 0, size = saveGolden.size(); i < size; i++) {
                 String golden = (String) saveGolden.get(i);
                 String response = (String) saveResponse.get(i);
-                if (!validateIgnore(golden) && !golden.equals(response)) {
+                if (!validateIgnore(golden) && 
+		    !validateIgnoreIfContains(golden) && 
+		    !golden.equals(response)) {
                     response = stripJsessionidFromLine(response);
                     golden = stripJsessionidFromLine(golden);
                     if (!golden.equals(response)) {
@@ -1352,6 +1437,23 @@ public class SystestClient extends Task {
 
     }
 
+    /**
+     * Return <code>true</code> if we should ignore this golden file line
+     * because it is also in the ignore file.
+     *
+     * @param line Line from the golden file to be checked
+     */
+    protected boolean validateIgnoreIfContains(String line) {
+
+        for (int i = 0, size = saveIgnoreIfContains.size(); i < size; i++) {
+            String ignoreIfContains = (String) saveIgnoreIfContains.get(i);
+            if (-1 != line.indexOf(ignoreIfContains)) {
+                return (true);
+            }
+        }
+        return (false);
+
+    }
 
     /**
      * Validate the returned response message against what we expected.

@@ -1,5 +1,5 @@
 /*
- * $Id: TestRestoreViewPhase.java,v 1.18 2004/04/07 17:52:55 rkitain Exp $
+ * $Id: TestRestoreViewPhase.java,v 1.19 2005/03/11 18:14:24 edburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIPanel;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
 import javax.servlet.http.HttpSession;
 
@@ -30,7 +31,7 @@ import java.util.Locale;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRestoreViewPhase.java,v 1.18 2004/04/07 17:52:55 rkitain Exp $
+ * @version $Id: TestRestoreViewPhase.java,v 1.19 2005/03/11 18:14:24 edburns Exp $
  */
 
 public class TestRestoreViewPhase extends ServletFacesTestCase {
@@ -81,11 +82,15 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
     public void beginReconstituteRequestSubmit(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+	theRequest.addParameter("com.sun.faces.VIEW",
+				"H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=");
     }
 
 
     public void beginRegisterListeners(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", null, null, TEST_URI, null);
+	theRequest.addParameter("com.sun.faces.VIEW",
+				"H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=");
     }
 
 
@@ -116,14 +121,17 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         getFacesContext().setViewRoot(null);
     }
 
-
     public void testReconstituteRequestSubmit() {
 
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
-
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+	
+	FacesContext context = getFacesContext();
+        UIViewRoot root = Util.getViewHandler(context).createView(context, 
+								  null);
         root.setViewId(TEST_URI);
+	context.setViewRoot(root);
+	
 
         UIForm basicForm = new UIForm();
         basicForm.setId("basicForm");
@@ -133,12 +141,13 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         root.getChildren().add(basicForm);
         basicForm.getChildren().add(userName);
 
-        HttpSession session = (HttpSession)
-            getFacesContext().getExternalContext().getSession(false);
-        session.setAttribute(TEST_URI, root);
-        // set a locale
         Locale locale = new Locale("France", "french");
         root.setLocale(locale);
+
+	// here we do what the StateManager does to save the state in
+	// the server.
+	Util.getStateManager(context).saveSerializedView(context);
+	context.setViewRoot(null);
 
         Phase restoreView = new RestoreViewPhase();
 
@@ -162,8 +171,8 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         root = getFacesContext().getViewRoot();
         // components should exist.
         assertTrue(root.getChildCount() == 1);
-        assertTrue(basicForm == root.findComponent("basicForm"));
-        assertTrue(userName == basicForm.findComponent("userName"));
+        assertTrue(basicForm.getId().equals(root.findComponent("basicForm").getId()));
+	assertTrue(userName.getId().equals(basicForm.findComponent("userName").getId()));
         getFacesContext().setViewRoot(null);
     }
 
@@ -179,9 +188,12 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
 
         // precreate tree and set it in session and make sure the tree is
         // restored from session.
+	FacesContext context = getFacesContext();
 
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        UIViewRoot root = Util.getViewHandler(context).createView(context, 
+								  null);
         root.setViewId(TEST_URI);
+	context.setViewRoot(root);
 
         UIForm basicForm = new UIForm();
         basicForm.setId("basicForm");
@@ -196,29 +208,31 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         commandPanel.getChildren().add(command2);
         panel.getFacets().put("commandPanel", commandPanel);
 
-        HttpSession session = (HttpSession)
-            getFacesContext().getExternalContext().getSession(false);
-        session.setAttribute(TEST_URI, root);
+	// here we do what the StateManager does to save the state in
+	// the server.
+	Util.getStateManager(context).saveSerializedView(context);
+	context.setViewRoot(null);
 
         Phase restoreView = new RestoreViewPhase();
 
         try {
-            restoreView.execute(getFacesContext());
+            restoreView.execute(context);
         } catch (Throwable e) {
             e.printStackTrace();
             assertTrue(false);
         }
-        assertTrue(!(getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
-        assertTrue(getFacesContext().getViewRoot() != null);
+        assertTrue(!(context.getRenderResponse()) &&
+                   !(context.getResponseComplete()));
+        assertTrue(context.getViewRoot() != null);
 
         // Now test with no facets... Listeners should still be registered on UICommand
         // components....
         //
-        getFacesContext().setViewRoot(null);
+        context.setViewRoot(null);
 
-        root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+        root = Util.getViewHandler(context).createView(context, null);
         root.setViewId(TEST_URI);
+	context.setViewRoot(root);
 
         basicForm = new UIForm();
         basicForm.setId("basicForm");
@@ -228,21 +242,23 @@ public class TestRestoreViewPhase extends ServletFacesTestCase {
         basicForm.getChildren().add(command1);
         basicForm.getChildren().add(command2);
 
-        session = (HttpSession)
-            getFacesContext().getExternalContext().getSession(false);
-        session.setAttribute(TEST_URI, root);
+	// here we do what the StateManager does to save the state in
+	// the server.
+	com.sun.faces.application.TestStateManagerImpl.resetStateManagerRequestIdSerialNumber(context);
+	Util.getStateManager(context).saveSerializedView(context);
+	context.setViewRoot(null);
 
         restoreView = new RestoreViewPhase();
 
         try {
-            restoreView.execute(getFacesContext());
+            restoreView.execute(context);
         } catch (Throwable e) {
             assertTrue(false);
         }
-        assertTrue(!(getFacesContext().getRenderResponse()) &&
-                   !(getFacesContext().getResponseComplete()));
+        assertTrue(!(context.getRenderResponse()) &&
+                   !(context.getResponseComplete()));
 
-        getFacesContext().setViewRoot(null);
+        context.setViewRoot(null);
     }
 
 

@@ -1,5 +1,5 @@
 /* 
- * $Id: StateManagerImpl.java,v 1.24 2004/08/05 20:02:19 jayashri Exp $ 
+ * $Id: StateManagerImpl.java,v 1.25 2005/03/11 18:14:04 edburns Exp $ 
  */ 
 
 
@@ -18,6 +18,7 @@ import com.sun.faces.util.TreeStructure;
 import com.sun.faces.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.collections.LRUMap;
 
 import javax.faces.application.StateManager;
 import javax.faces.component.UIComponent;
@@ -35,7 +36,7 @@ import java.util.Set;
  * <B>StateManagerImpl</B> is the default implementation class for
  * StateManager.
  *
- * @version $Id: StateManagerImpl.java,v 1.24 2004/08/05 20:02:19 jayashri Exp $
+ * @version $Id: StateManagerImpl.java,v 1.25 2005/03/11 18:14:04 edburns Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class StateManagerImpl extends StateManager {
@@ -72,6 +73,8 @@ public class StateManagerImpl extends StateManager {
     public SerializedView saveSerializedView(FacesContext context) 
         throws IllegalStateException{
         SerializedView result = null;
+	Object treeStructure = null;
+	Object componentState = null;
         
         // irrespective of method to save the tree, if the root is transient
         // no state information needs to  be persisted.
@@ -84,78 +87,51 @@ public class StateManagerImpl extends StateManager {
         // that are marked transient.
         removeTransientChildrenAndFacets(context, viewRoot, new HashSet());
 
-        if (!isSavingStateInClient(context)) {
-            // save state in server
-            if (log.isDebugEnabled()) {
-                log.debug("Begin saving view in session for viewId " +
-                          viewRoot.getViewId());
-            }
-            Map sessionMap = Util.getSessionMap(context);
-            synchronized (this) {
-                // viewList maintains a list of viewIds corresponding to 
-                // all the views stored in session.
-                ArrayList viewList = (ArrayList) sessionMap.get(
-                    FACES_VIEW_LIST);
-                if (viewList == null) {
-                    viewList = new ArrayList();
-                }
-                // save the viewId in the viewList, so that we can keep
-                // track how many views are stored in session. If the
-                // number exceeds the limit, restoreView will remove the
-                // oldest view upon postback.
-		
-		// only save unique view ids
-		boolean foundMatch = false;
-		for (int i = 0, size = viewList.size(); i < size; i++) {
-		    if (viewList.get(i).equals(viewRoot.getViewId())) {
-			foundMatch = true;
-			break;
-		    }
-		}
-		if (!foundMatch) {
-		    viewList.add(viewRoot.getViewId());
-		}
-                sessionMap.put(FACES_VIEW_LIST, viewList);
-            
-                // if highly available state saving option is chosen, save
-                // the SerializedView in session instead of UIViewRoot since
-                // the UIComponent instances are not serializable.
-                if (isHAStateSavingSet(context)) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Highly Available state saving option enabled ");
-                        log.debug("Begin creating serialized view for " +
-                          viewRoot.getViewId());
-                    }
-                    result = new SerializedView(getTreeStructureToSave(context),
-                                        getComponentStateToSave(context));
-                    if (log.isDebugEnabled()) {
-                        log.debug("End creating serialized view " +
-                          viewRoot.getViewId());
-                    }
-                    sessionMap.put(viewRoot.getViewId(), result);
 
-                } else {
-                    sessionMap.put(viewRoot.getViewId(), viewRoot);
-                }
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("End saving view in session for viewId " +
-                      viewRoot.getViewId());
-            }
-        } else {
-            // save state in client
-            if (log.isDebugEnabled()) {
-                log.debug("Begin creating serialized view for " +
-                          viewRoot.getViewId());
-            }
-            result = new SerializedView(getTreeStructureToSave(context),
-                                        getComponentStateToSave(context));
-            if (log.isDebugEnabled()) {
-                log.debug("End creating serialized view " +
-                          viewRoot.getViewId());
-            }
-        }
+	if (log.isDebugEnabled()) {
+	    log.debug("Begin creating serialized view for " +
+		      viewRoot.getViewId());
+	}
+	result = new SerializedView(treeStructure = 
+				    getTreeStructureToSave(context),
+				    componentState =
+				    getComponentStateToSave(context));
+	if (log.isDebugEnabled()) {
+	    log.debug("End creating serialized view " +
+		      viewRoot.getViewId());
+	}
+	if (!isSavingStateInClient(context)) {
+	    String id = null;
+
+	    synchronized (this) {
+		id = createUniqueRequestId();
+		LRUMap lruMap = null;
+		Map sessionMap = Util.getSessionMap(context);
+		Object stateArray[] = { treeStructure, componentState };
+		
+		if (null == (lruMap = (LRUMap) 
+			     sessionMap.get(RIConstants.STATE_MAP))) {
+		    lruMap = new LRUMap(15); // PENDING(edburns):
+					  // configurable
+		    
+		    sessionMap.put(RIConstants.STATE_MAP, lruMap);
+		}
+		result = new SerializedView(id, null);
+		lruMap.put(id, stateArray);
+	    }
+	}
+
         return result;
+    }
+
+    char requestIdSerial = 0;
+
+    private String createUniqueRequestId() {
+	if (requestIdSerial++ == Character.MAX_VALUE) {
+	    requestIdSerial = 0;
+	}
+	
+	return UIViewRoot.UNIQUE_ID_PREFIX + ((int) requestIdSerial);
     }
 
 
@@ -251,91 +227,34 @@ public class StateManagerImpl extends StateManager {
             // restore tree from session.
             // if high available state saving option is chosen, restore
             // the SerializedView from session instead of UIViewRoot.
-            if (log.isDebugEnabled()) {
-                log.debug("Begin restoring view in session for viewId " + viewId);
-            }
-            Map sessionMap = Util.getSessionMap(context);
-            synchronized (this) {
-                if (isHAStateSavingSet(context)) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("High available state saving option enabled");
-                        log.debug("Begin restoring serialized view for "+viewId);
-                    }
-                    SerializedView serializedView = (SerializedView) 
-                        sessionMap.get(viewId);
-                    viewRoot = restoreSerializedView(context, serializedView, 
-                        viewId);
-                    if (log.isDebugEnabled()) {
-                        log.debug("End restoring serialized view " + viewId);
-                    }
+	    Object id = ((Util.getResponseStateManager(context, renderKitId)).
+			 getTreeStructureToRestore(context, viewId));
 
-                } else {
-                    viewRoot = (UIViewRoot) sessionMap.get(viewId);
-                    if (log.isDebugEnabled()) {
-                        log.debug(
-                            "Restoring view from session for viewId " + viewId);
-                    }
-                }
-                removeViewFromSession(context, viewRoot);
-            }
-            if (log.isDebugEnabled()) {
-                log.debug("End restoring view in session for viewId " + viewId);
-            }
+	    if (null != id) {
+	    
+		if (log.isDebugEnabled()) {
+		    log.debug("Begin restoring view in session for viewId " + viewId);
+		}
+		
+		Map lruMap, sessionMap = Util.getSessionMap(context);
+		TreeStructure structRoot = null;
+		Object [] stateArray = null;
+		synchronized (this) {
+		    lruMap = (Map) sessionMap.get(RIConstants.STATE_MAP);
+		    stateArray = (Object []) lruMap.get(id);
+		}
+		structRoot = (TreeStructure)stateArray[0];
+		viewRoot = (UIViewRoot) structRoot.createComponent();
+		restoreComponentTreeStructure(structRoot, viewRoot);
+		
+		viewRoot.processRestoreState(context, stateArray[1]);
+		
+		if (log.isDebugEnabled()) {
+		    log.debug("End restoring view in session for viewId " + viewId);
+		}
+	    }
         }
         return viewRoot;
-    }
-
-
-    /**
-     * Ensures that number of views stored in session does not exceed the
-     * specified number. If it exceeds, removes the oldest view from session
-     * and updates the viewList that maintains a list of active viewIds.
-     * PRECONDITION:  Number of views in session need to be checked only if
-     * viewList exists in session.
-     * POSTCONDITION: Number of views saved in session is always less than the
-     * specified number or the default.
-     */
-
-    private void removeViewFromSession(FacesContext context, UIViewRoot viewRoot) {
-        Map sessionMap = Util.getSessionMap(context);
-        // viewList maintains a list of viewIds corresponding to all the views
-        // stored in session.
-        ArrayList viewList = (ArrayList) sessionMap.get(FACES_VIEW_LIST);
-        if (viewList == null) {
-            return;
-        }
-        // If the parameter NUMBER_OF_VIEWS_IN_SESSION is specified as a servlet
-        // init parameter, use it otherwise use the default. Parse the
-        // servletInitParameter only once, since its not going to change for the
-        // lifetime of the servlet.
-        if (noOfViews == 0) {
-            noOfViews = DEFAULT_NUMBER_OF_VIEWS_IN_SESSION;
-            String noViews = context.getExternalContext().
-                getInitParameter(NUMBER_OF_VIEWS_IN_SESSION);
-            if (noViews != null) {
-                try {
-                    noOfViews = Integer.valueOf(noViews).intValue();
-                } catch (NumberFormatException nfe) {
-                    noOfViews = DEFAULT_NUMBER_OF_VIEWS_IN_SESSION;
-                    if (log.isDebugEnabled()) {
-                        log.debug("Error parsing the servetInitParameter " +
-                                  NUMBER_OF_VIEWS_IN_SESSION + ". Using the default " +
-                                  noOfViews);
-                    }
-                }
-            }
-        }
-        
-        // if number of views in session exceeds the specified number
-        // delete the oldest view in the list.
-        if (viewList.size() > noOfViews) {
-            String viewToRemove = (String) viewList.remove(0);
-            sessionMap.remove(viewToRemove);
-            if (log.isDebugEnabled()) {
-                log.debug("Number of views in session exceeded specified number " +
-                          noOfViews + ".Removing view " + viewToRemove);
-            }
-        }
     }
 
 
@@ -377,11 +296,8 @@ public class StateManagerImpl extends StateManager {
 
     public void writeState(FacesContext context, SerializedView state)
         throws IOException {
-        // only call thru on client case.
-        if (isSavingStateInClient(context)) {
-            Util.getResponseStateManager(context,
+	Util.getResponseStateManager(context,
             context.getViewRoot().getRenderKitId()).writeState(context, state);
-        }
     }
 
 

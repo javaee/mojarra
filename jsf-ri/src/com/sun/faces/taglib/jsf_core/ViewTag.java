@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.30 2005/02/28 18:48:21 jayashri Exp $
+ * $Id: ViewTag.java,v 1.31 2005/03/11 18:14:06 edburns Exp $
  */
 
 /*
@@ -42,7 +42,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.30 2005/02/28 18:48:21 jayashri Exp $
+ * @version $Id: ViewTag.java,v 1.31 2005/03/11 18:14:06 edburns Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -191,30 +191,22 @@ public class ViewTag extends UIComponentBodyTag {
                 Util.SAVING_STATE_ERROR_MESSAGE_ID, params), ie);    
         }
         try {
-            // if high availability is enabled, view will not null even in the
-            // state saving in server mode. Thats why it is required to check
-            // state saving method here.
-            if (view == null || 
-                (!(stateManager.isSavingStateInClient(context)))) {
-                getPreviousOut().write(content);
-            } else {
-                contentLen = content.length();
-                do {
-                    // if we have no more markers
-                    if (-1 == (markerIndex =
-                        content.indexOf(RIConstants.SAVESTATE_FIELD_MARKER,
-                                        beginIndex))) {
-                        // write out the rest of the content
-                        responseWriter.write(content.substring(beginIndex));
-                    } else {
-                        // we have more markers, write out the current chunk
-                        responseWriter.write(content.substring(beginIndex,
-                                                               markerIndex));
-                        stateManager.writeState(context, view);
-                        beginIndex = markerIndex + markerLen;
-                    }
-                } while (-1 != markerIndex && beginIndex < contentLen);
-            }
+	    contentLen = content.length();
+	    do {
+		// if we have no more markers
+		if (-1 == (markerIndex =
+			   content.indexOf(RIConstants.SAVESTATE_FIELD_MARKER,
+					   beginIndex))) {
+		    // write out the rest of the content
+		    responseWriter.write(content.substring(beginIndex));
+		} else {
+		    // we have more markers, write out the current chunk
+		    responseWriter.write(content.substring(beginIndex,
+							   markerIndex));
+		    stateManager.writeState(context, view);
+		    beginIndex = markerIndex + markerLen;
+		}
+	    } while (-1 != markerIndex && beginIndex < contentLen);
         } catch (IOException iox) {
             // catch any thrown while saving state in response.
             Object[] params = {"client", iox.getMessage()};

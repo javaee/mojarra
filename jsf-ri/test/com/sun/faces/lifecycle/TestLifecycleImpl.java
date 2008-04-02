@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.32 2004/11/09 15:42:39 rlubke Exp $
+ * $Id: TestLifecycleImpl.java,v 1.33 2005/03/11 18:14:24 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.32 2004/11/09 15:42:39 rlubke Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.33 2005/03/11 18:14:24 edburns Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -92,14 +92,19 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
     protected void initWebRequest(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
+	theRequest.addParameter("com.sun.faces.VIEW",
+				"H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=");
     }
 
 
     public void setUp() {
         RIConstants.IS_UNIT_TEST_MODE = true;
         super.setUp();
-        UIViewRoot root = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
+	FacesContext context = getFacesContext();
+        UIViewRoot root = Util.getViewHandler(context).createView(context, null);
         root.setViewId(TEST_URI);
+	context.setViewRoot(root);
+	
 
         UIForm basicForm = new UIForm();
         basicForm.setId("basicForm");
@@ -109,9 +114,10 @@ public class TestLifecycleImpl extends JspFacesTestCase {
         root.getChildren().add(basicForm);
         basicForm.getChildren().add(userName);
 
-        HttpSession session = (HttpSession)
-            getFacesContext().getExternalContext().getSession(false);
-        session.setAttribute(TEST_URI, root);
+	// here we do what the StateManager does to save the state in
+	// the server.
+	Util.getStateManager(context).saveSerializedView(context);
+
     }
 
 

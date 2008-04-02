@@ -7,7 +7,7 @@
 <html>
   <body>
      
-     <form id="_id0" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=DA8B02AD5051CA9A00973B7D7077C052" enctype="application/x-www-form-urlencoded">
+     <form id="_id0" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=BFF4F36C354132F7B6978D51C6B85BDA" enctype="application/x-www-form-urlencoded">
 
        
           
@@ -15,7 +15,8 @@
        
           
        <a href="#" onclick="clearFormHiddenParams__id0('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:_id3'; document.forms['_id0'].submit(); return false;">Link2</a>
-    <input type="hidden" name="_id0" value="_id0" /><input type="hidden" name="_id0:_idcl" />
+     <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIE1PjPF2LQAAK7CGUANAAAA" />
+ <input type="hidden" name="_id0" value="_id0" /><input type="hidden" name="_id0:_idcl" />
 <script type="text/javascript">
 <!--
 function clearFormHiddenParams__id0(curFormName) {
@@ -25,7 +26,7 @@ function clearFormHiddenParams__id0(curFormName) {
 //-->
 </script>
 </form> 
-    <form id="_id5" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=DA8B02AD5051CA9A00973B7D7077C052" enctype="application/x-www-form-urlencoded">
+    <form id="_id5" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=BFF4F36C354132F7B6978D51C6B85BDA" enctype="application/x-www-form-urlencoded">
 
        
           
@@ -33,7 +34,8 @@ function clearFormHiddenParams__id0(curFormName) {
        
           
        <a href="#" onclick="clearFormHiddenParams__id5('_id5');document.forms['_id5']['_id5:_idcl'].value='_id5:_id8'; document.forms['_id5'].submit(); return false;">Link4</a>
-   <input type="hidden" name="_id5" value="_id5" /><input type="hidden" name="_id5:_idcl" />
+    <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIE1PjPF2LQAAK7CGUANAAAA" />
+ <input type="hidden" name="_id5" value="_id5" /><input type="hidden" name="_id5:_idcl" />
 <script type="text/javascript">
 <!--
 function clearFormHiddenParams__id5(curFormName) {

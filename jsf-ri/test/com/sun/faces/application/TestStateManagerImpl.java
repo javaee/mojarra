@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.10 2004/04/07 17:52:44 rkitain Exp $
+ * $Id: TestStateManagerImpl.java,v 1.11 2005/03/11 18:14:23 edburns Exp $
  */
 
 /*
@@ -209,34 +209,9 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         testDuplicateIdDetectionServer();
     }
 
-
-    public void testRemoveViewFromSession() {
-        ArrayList viewList = new ArrayList(10);
-        FacesContext context = getFacesContext();
-        UIViewRoot newViewRoot = Util.getViewHandler(getFacesContext()).createView(context, null);
-        newViewRoot.setViewId("viewId");
-        context.setViewRoot(newViewRoot);
-
-        HttpSession session =
-            (HttpSession) context.getExternalContext().getSession(false);
-        for (int i = 0; i < 21; ++i) {
-            String viewId = "viewId" + i;
-            viewList.add(viewId);
-            UIViewRoot viewRoot = Util.getViewHandler(getFacesContext()).createView(getFacesContext(), null);
-            viewRoot.setViewId(viewId);
-            session.setAttribute(viewId, viewRoot);
-        }
-        session.setAttribute("com.sun.faces.VIEW_LIST", viewList);
-
-        StateManagerImpl stateManager = new StateManagerImpl();
-        stateManager.restoreView(context, "viewId2",
-                                 RenderKitFactory.HTML_BASIC_RENDER_KIT);
-
-        viewList = (ArrayList) session.getAttribute(RIConstants.FACES_PREFIX
-                                                    + "VIEW_LIST");
-        assertTrue(viewList.size() == 20);
-        assertTrue(!(viewList.contains("viewId0")));
-        assertTrue((session.getAttribute("viewId0")) == null);
+    public static void resetStateManagerRequestIdSerialNumber(FacesContext context) {
+	((StateManagerImpl) Util.getStateManager(context)).requestIdSerial = 0;
+	
     }
 
 }

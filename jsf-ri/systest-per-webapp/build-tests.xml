@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.12 2005/02/08 19:23:49 rlubke Exp $
+ $Id: build-tests.xml,v 1.13 2005/03/11 18:14:16 edburns Exp $
 -->
 
 <!--
@@ -81,18 +81,6 @@
              value="${basedir}/command-link-back-button/src/java" />
       <param name="context.path" value="/jsf-command-link-back-button"/>
       <param name="testcase" value="com/sun/faces/systest/CommandLinkBackButtonTestCase.class"/>
-
-    </antcall>
-
-    <antcall target="test.webapp">
-      <param name="webapp.build.home" 
-             value="${basedir}/unique-view-id/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/unique-view-id/web" />
-      <param name="source.home" 
-             value="${basedir}/unique-view-id/src/java" />
-      <param name="context.path" value="/jsf-unique-view-id"/>
-      <param name="testcase" value="com/sun/faces/systest/UniqueViewIdTestCase.class"/>
 
     </antcall>
 

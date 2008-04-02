@@ -15,6 +15,7 @@
 <body>
 Dummy page to force resetting the component tree.
 <h:outputText id="dummy" value="DUMMY"/>
+<h:outputText value="#{ResetUniqueRequestIdBean.reset}"/>
 </body>
 </html>
 </f:view>

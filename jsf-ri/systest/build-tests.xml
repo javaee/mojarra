@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
- $Id: build-tests.xml,v 1.66 2005/02/24 15:22:34 rogerk Exp $
+ $Id: build-tests.xml,v 1.67 2005/03/11 18:14:07 edburns Exp $
 -->
 
 <!--
@@ -371,7 +371,7 @@
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/factoryFinder.jsp"
-        golden="${golden.path}/factoryFinder.txt"
+        golden="${golden.path}/factoryFinder.txt" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         recordGolden="${local.golden.path}/factoryFinder.txt"
         failonerror="${failonerror}"/>
 
@@ -405,7 +405,7 @@
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/faces/managed04.jsp"
         golden="${golden.path}/managed04.txt"
-        recordGolden="${local.golden.path}/managed04.txt" 
+        recordGolden="${local.golden.path}/managed04.txt" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
         failonerror="${failonerror}"/> 
 
    <tester host="${host}" port="${port}" protocol="${protocol}"
@@ -628,20 +628,20 @@
       <echo message="Testing commandButton..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandButton_test.jsp"
-              golden="${golden.path}/taglib/commandButton_test.txt" failonerror="${failonerror}"
+              golden="${golden.path}/taglib/commandButton_test.txt" failonerror="${failonerror}" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandButton_test.txt" />
 
       <echo message="Testing commandLink..."/>
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandLink_test.jsp"
-              golden="${golden.path}/taglib/commandLink_test.txt" failonerror="${failonerror}"
+              golden="${golden.path}/taglib/commandLink_test.txt" failonerror="${failonerror}" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandLink_test.txt" />
       <tester host="${host}" port="${port}" protocol="${protocol}"
               request="${context.path}/faces/taglib/commandLink_multiform_test.jsp"
-              golden="${golden.path}/taglib/commandLink_multiform_test.txt" failonerror="${failonerror}"
+              golden="${golden.path}/taglib/commandLink_multiform_test.txt" failonerror="${failonerror}" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               recordGolden="${local.golden.path}/taglib/commandLink_multiform_test.txt" />
-      <tester host="${host}" port="${port}" protocol="${protocol}"
-              request="${context.path}/faces/taglib/attributeTest.jsp"
+      <tester host="${host}" port="${port}" protocol="${protocol}" 
+              request="${context.path}/faces/taglib/attributeTest.jsp" ignoreIfContains="${ignore.path}/ignoreIfContains.txt"
               golden="${golden.path}/taglib/attributeTest.txt" failonerror="${failonerror}" />
 
   </target>

@@ -235,10 +235,6 @@
     </antcall>
 
     <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-unique-view-id"/>
-    </antcall>
-
-    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-nested-datatables"/>
     </antcall>
 
@@ -291,17 +287,6 @@
       <param name="source.home" 
              value="${basedir}/command-link-back-button/src/java" />
       <param name="context.path" value="/jsf-command-link-back-button"/>
-
-    </antcall>
-
-    <antcall target="install.one">
-      <param name="webapp.build.home" 
-             value="${basedir}/unique-view-id/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/unique-view-id/web" />
-      <param name="source.home" 
-             value="${basedir}/unique-view-id/src/java" />
-      <param name="context.path" value="/jsf-unique-view-id"/>
 
     </antcall>
 
@@ -388,17 +373,6 @@
 
     <antcall target="reload.one">
       <param name="webapp.build.home" 
-             value="${basedir}/unique-view-id/build" />
-      <param name="webapp.web.home" 
-             value="${basedir}/unique-view-id/web" />
-      <param name="source.home" 
-             value="${basedir}/unique-view-id/src/java" />
-      <param name="context.path" value="/jsf-unique-view-id"/>
-
-    </antcall>
-
-    <antcall target="reload.one">
-      <param name="webapp.build.home" 
              value="${basedir}/nested-datatables/build" />
       <param name="webapp.web.home" 
              value="${basedir}/nested-datatables/web" />
@@ -445,9 +419,6 @@
       <param name="context.path" value="/jsf-command-link-back-button"/>
     </antcall>
     <antcall target="safe.remove.one">
-      <param name="context.path" value="/jsf-unique-view-id"/>
-    </antcall>
-    <antcall target="safe.remove.one">
       <param name="context.path" value="/jsf-nested-datatables"/>
     </antcall>
     <antcall target="safe.remove.one">
@@ -487,7 +458,6 @@
     <delete    dir="${basedir}/el-performance/build"/>
     <delete    dir="${basedir}/command-link-redirect/build"/>
     <delete    dir="${basedir}/command-link-back-button/build"/>
-    <delete    dir="${basedir}/unique-view-id/build"/>
     <delete    dir="${basedir}/nested-datatables/build"/>
     <delete    dir="${basedir}/core-tags/build"/>
     <delete    dir="${basedir}/replace-lifecycle/build"/>

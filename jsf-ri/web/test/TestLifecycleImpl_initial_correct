@@ -11,12 +11,13 @@
     <h2>Hi. My name is Duke.  I'm thinking of a number from 0 to 10.
     Can you guess it?</h2>
     
-    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=0EFCFD6E969E1F10F69208563EBB821D" enctype="application/x-www-form-urlencoded">
+    <form id="helloForm" method="post" action="/test/faces/greeting.jsp;jsessionid=D6339C491F975DABA538AC1D2F857495" enctype="application/x-www-form-urlencoded">
 
   	<input id="helloForm:userNo" type="text" name="helloForm:userNo" value="NUMBER" /> <BR>
 
 	 <input id="helloForm:submit" type="submit" name="helloForm:submit" value="Submit" onclick="clearFormHiddenParams_helloForm(this.form.id);" />
-    <input type="hidden" name="helloForm" value="helloForm" />
+     <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=" />
+ <input type="hidden" name="helloForm" value="helloForm" />
 <script type="text/javascript">
 <!--
 function clearFormHiddenParams_helloForm(curFormName) {

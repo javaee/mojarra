@@ -1,5 +1,5 @@
 /*
- * $Id: JspIntegrationTestCase.java,v 1.7 2004/05/04 19:19:21 eburns Exp $
+ * $Id: JspIntegrationTestCase.java,v 1.8 2005/03/11 18:14:08 edburns Exp $
  */
 
 /*
@@ -80,13 +80,13 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         checkJspDynamic00();
         checkJspDynamic01("",
                           "[A] { } [Z]");
-        checkJspDynamic01("?mode=create&id=C1&value=[1]",
+        checkJspDynamic01("?mode=create&id=C1&value=[1]&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=",
                           "[A] { [1] } [Z]");
-        checkJspDynamic01("?mode=create&id=C2&value=[2]",
+        checkJspDynamic01("?mode=create&id=C2&value=[2]&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFqAAAR+9SHQwAAAA=",
                           "[A] { [1] [2] } [Z]");
-        checkJspDynamic01("?mode=create&id=C3&value=[3]",
+        checkJspDynamic01("?mode=create&id=C3&value=[3]&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFuAAABt5JBAwAAAA=",
                           "[A] { [1] [2] [3] } [Z]");
-        checkJspDynamic01("?mode=delete&id=C2",
+        checkJspDynamic01("?mode=delete&id=C2&com.sun.faces.VIEW=H4sIAAAAAAAAAFvzloG1hIElPjPFpAAAwUgISwwAAAA=",
                           "[A] { [1] [3] } [Z]");
 
         checkJspDynamic00();
@@ -241,8 +241,9 @@ public class JspIntegrationTestCase extends AbstractTestCase {
         HtmlPage page = getPage("/faces/jsp/jsp-dynamic-01.jsp" + query);
         assertEquals("Correct page title",
                      "jsp-dynamic-01", page.getTitleText());
-        assertEquals("Correct body element",
-                     result, getBodyText(page));
+	String bodyText = getBodyText(page);
+        assertTrue("Correct body element",
+                     -1 != bodyText.indexOf(result));
 
     }
 

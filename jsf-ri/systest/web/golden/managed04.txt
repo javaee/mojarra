@@ -11,7 +11,7 @@
 
 
 
-  <form id="_id0" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=02D9ECDFEB2ABBEA6A35EF85D98F2378" enctype="application/x-www-form-urlencoded">
+  <form id="_id0" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=F37CC431CBD7C1A35266BB011B26538D" enctype="application/x-www-form-urlencoded">
 
  
      one two three four 
@@ -20,7 +20,8 @@
     seven
     eight
    
-  <input type="hidden" name="_id0" value="_id0" />
+   <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIE1PjPF2LwAACygL3INAAAA" />
+ <input type="hidden" name="_id0" value="_id0" />
 <script type="text/javascript">
 <!--
 function clearFormHiddenParams__id0(curFormName) {

@@ -11,12 +11,13 @@
 
 
 
-  <form id="_id0" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=C996989C87EAE013974F1D622FA45DF3" enctype="application/x-www-form-urlencoded">
+  <form id="_id0" method="post" action="/jsf-systest/faces/factoryFinder.jsp;jsessionid=A843CA16ADF67DD43245358177581F89" enctype="application/x-www-form-urlencoded">
 
 
       ApplicationFactoryWrapper FacesContextFactoryWrapper LifecycleFactoryWrapper RenderKitFactoryWrapper 
 
-  <input type="hidden" name="_id0" value="_id0" />
+   <input type="hidden" name="com.sun.faces.VIEW" value="H4sIAAAAAAAAAFvzloG1hIElPjPFqAAAR+9SHQwAAAA=" />
+ <input type="hidden" name="_id0" value="_id0" />
 <script type="text/javascript">
 <!--
 function clearFormHiddenParams__id0(curFormName) {

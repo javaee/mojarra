@@ -14,9 +14,11 @@
 <title>jsp-dynamic-01</title>
 </head>
 <body>
+<h:form>
 <h:outputText value="[A]"/>
 <s:dynamic id="dynamic"/>
 <h:outputText value="[Z]"/>
+</h:form>
 </body>
 </html>
 </f:view>
