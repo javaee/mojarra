@@ -1,0 +1,544 @@
+/*
+ * $Id: UIDataBean.java,v 1.2 2003/09/11 21:39:59 craigmcc Exp $
+ */
+
+/*
+ * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or
+ * without modification, are permitted provided that the following
+ * conditions are met:
+ * 
+ * - Redistributions of source code must retain the above copyright
+ *   notice, this list of conditions and the following disclaimer.
+ * 
+ * - Redistribution in binary form must reproduce the above
+ *   copyright notice, this list of conditions and the following
+ *   disclaimer in the documentation and/or other materials
+ *   provided with the distribution.
+ *    
+ * Neither the name of Sun Microsystems, Inc. or the names of
+ * contributors may be used to endorse or promote products derived
+ * from this software without specific prior written permission.
+ *  
+ * This software is provided "AS IS," without a warranty of any
+ * kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+ * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+ * EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+ * DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+ * RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+ * ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+ * FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+ * SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+ * CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+ * THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+ * BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+ *  
+ * You acknowledge that this software is not designed, licensed or
+ * intended for use in the design, construction, operation or
+ * maintenance of any nuclear facility.
+ */
+
+package standard;
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import javax.faces.application.Action;
+import javax.faces.component.UIColumn;
+import javax.faces.component.UICommand;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIData;
+import javax.faces.component.UIInput;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.context.FacesContext;
+
+
+/**
+ * <p>Backing file bean for <code>/UIData.jsp</code> demo.</p>
+ */
+
+public class UIDataBean {
+
+
+    // -------------------------------------------------------- Bound Components
+
+
+    /**
+     * <p>The <code>accountId</code> field for the current row.</p>
+     */
+    private UIInput accountId = null;
+    public UIInput getAccountId() { return accountId; }
+    public void setAccountId(UIInput accountId) { this.accountId = accountId; }
+
+
+
+    /**
+     * <p>The <code>checked</code> field for the current row.</p>
+     */
+    private UISelectBoolean checked = null;
+    public UISelectBoolean getChecked() { return checked; }
+    public void setChecked(UISelectBoolean checked) { this.checked = checked; }
+
+
+    /**
+     * <p>The <code>created</code> field for the current row.</p>
+     */
+    private UISelectBoolean created = null;
+    public UISelectBoolean getCreated() { return created; }
+    public void setCreated(UISelectBoolean created) { this.created = created; }
+
+
+    /**
+     * <p>The <code>UIData</code> component representing the entire table.</p>
+     */
+    private UIData data = null;
+    public UIData getData() { return data; }
+    public void setData(UIData data) { this.data = data; }
+
+
+    // --------------------------------------------------- Calculated Properties
+
+
+    /**
+     * <p>Return a customized label for the "Click" hyperlink.</p>
+     */
+    public String getClickLabel() {
+
+        return ("Click");
+        /* Causes NPE because data is not initialized yet?
+        CustomerBean customer = (CustomerBean) data.getRowData();
+        if (customer != null) {
+            return ("Click " + customer.getAccountId());
+        } else {
+            return ("Click");
+        }
+        */
+
+    }
+
+
+    /**
+     * <p>Return a customized label for the "Press" button.</p>
+     */
+    public String getPressLabel() {
+
+        return ("Press");
+        /* Causes NPE because data is not initialized yet?
+        CustomerBean customer = (CustomerBean) data.getRowData();
+        if (customer != null) {
+            return ("Press " + customer.getAccountId());
+        } else {
+            return ("Press");
+        }
+        */
+
+    }
+
+
+    // ---------------------------------------------------------- Event Handlers
+
+
+    /**
+     * <p>Acknowledge that a row-specific hyperlink was clicked.</p>
+     */
+    private String click() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        append("click(rowIndex=" + data.getRowIndex() +
+               ",accountId=" +
+               accountId.currentValue(context) + ")");
+	clear();
+	erase();
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Create a new empty row to be filled in for a new record
+     * in the database.</p>
+     */
+    private String create() {
+
+        append("create()");
+	clear();
+	erase();
+
+	// Add a new row to the table
+	List list = list();
+	if (list != null) {
+	    CustomerBean customer = new CustomerBean();
+	    list.add(customer);
+            int index = data.getRowIndex();
+            data.setRowIndex(list.size());
+            created.setSelected(true);
+            data.setRowIndex(index);
+	}
+
+	// Position so that the new row is visible if necessary
+	scroll(list.size());
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Delete any customers who have been checked from the list.</p>
+     */
+    private String delete() {
+
+        append("delete()");
+
+	// Delete customers for whom the checked field is selected
+        List removes = new ArrayList();
+        int n = data.getRowCount();
+        for (int i = 1; i <= n; i++) {
+            data.setRowIndex(i);
+            if (checked.isSelected()) {
+                removes.add(data.getRowData());
+                checked.setSelected(false);
+                created.setSelected(false);
+            }
+        }
+        if (removes.size() > 0) {
+            List list = list();
+            Iterator remove = removes.iterator();
+            while (remove.hasNext()) {
+                list.remove(remove.next());
+            }
+        }
+
+	clear();
+	erase();
+
+	return (null);
+    }
+
+
+    /**
+     * <p>Scroll directly to the first page.</p>
+     */
+    private String first() {
+
+        append("first()");
+	clear();
+	erase();
+	scroll(1);
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Scroll directly to the last page.</p>
+     */
+    private String last() {
+
+        append("last()");
+	clear();
+	erase();
+	scroll(data.getRowCount());
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Scroll forwards to the next page.</p>
+     */
+    private String next() {
+
+        append("next()");
+	clear();
+	erase();
+	int first = data.getFirst();
+	if (first <= 0) {
+	    first = 1;
+	}
+        scroll(first + data.getRows());
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Acknowledge that a row-specific button was pressed.</p>
+     */
+    private String press() {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        append("press(rowIndex=" + data.getRowIndex() +
+               ",accountId=" +
+               accountId.currentValue(context) + ")");
+	clear();
+	erase();
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Scroll backwards to the previous page.</p>
+     */
+    private String previous() {
+
+        append("previous()");
+	clear();
+	erase();
+	int first = data.getFirst();
+	if (first <= 0) {
+	    first = 1;
+	}
+        scroll(first - data.getRows());
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Handle a "reset" button by clearing local component values.</p>
+     */
+    private String reset() {
+
+        append("reset()");
+	clear();
+	erase();
+	return (null);
+
+    }
+
+
+    /**
+     * <p>Save any changes to the underlying database.  In a real application
+     * this would need to distinguish between inserts and updates, based on
+     * the state of the "created" property.</p>
+     */
+    private String update() {
+
+        append("update()");
+	; // Save to database as necessary
+	created();
+	erase();
+	return (null);
+
+    }
+
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * <p>Append the specified text to the message request attribute, creating
+     * this attribute if necessary.</p>
+     *
+     * @param text Text to be appended
+     */
+    private void append(String text) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        String message = (String)
+            context.getExternalContext().getRequestMap().get("message");
+        if (message == null) {
+            message = "";
+        }
+        message += "<li>" + text + "</li>";
+        context.getExternalContext().getRequestMap().put("message", message);
+
+    }
+
+
+    /**
+     * <p>Clear the checked state for all customers.</p>
+     */
+    private void clear() {
+
+        append("clear()");
+	int n = data.getRowCount();
+	for (int i = 1; i <= n; i++) {
+	    data.setRowIndex(i);
+	    checked.setSelected(false);
+	}
+
+    }
+
+
+    /**
+     * <p>Clear the created state of all customers.</p>
+     */
+    private void created() {
+
+        append("created()");
+	int n = data.getRowCount();
+	for (int i = 1; i <= n; i++) {
+	    data.setRowIndex(i);
+	    created.setSelected(false);
+	}
+
+    }
+
+
+    /**
+     * <p>Erase the previous and local values of all input components
+     * for this table.</p>
+     */
+    private void erase() {
+
+        append("erase()");
+	data.erase(FacesContext.getCurrentInstance());
+
+    }
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the customer list, if any;
+     * otherwise return <code>null</code>.</p>
+     */
+    private Iterator iterator() {
+
+	List list = list();
+	if (list != null) {
+	    return (list.iterator());
+	} else {
+	    return (null);
+	}
+
+    }
+
+
+    /**
+     * <p>Return the <code>List</code> containing our customers, if any;
+     * otherwise, return <code>null</code>.</p>
+     */
+    private List list() {
+
+	List list = (List)
+	    FacesContext.getCurrentInstance().getExternalContext().
+	    getSessionMap().get("list");
+	return (list);
+
+    }
+
+
+    /**
+     * <p>Scroll to the page that contains the specified row number.</p>
+     *
+     * @param row Desired row number
+     */
+    private void scroll(int row) {
+
+	int rows = data.getRows();
+	if (rows < 1) {
+            append("scroll(" + row + ") showing entire table already");
+	    return; // Showing entire table already
+	}
+	if (row <= 1) {
+	    data.setFirst(1);
+	} else if (row > data.getRowCount()) {
+            data.setFirst(data.getRowCount());
+        } else {
+            row--; // Convert to zero relative
+            data.setFirst(row - (row % rows) + 1);
+            row++;
+        }
+        append("scroll(" + row + "), first=" + data.getFirst());
+
+    }
+
+
+    // ------------------------------------------------------- Action Properties
+
+
+    public Action getClick() {
+	return new Action() {
+		public String invoke() {
+		    return (click());
+		}
+	    };
+    }
+
+
+    public Action getCreate() {
+	return new Action() {
+		public String invoke() {
+		    return (create());
+		}
+	    };
+    }
+
+
+    public Action getDelete() {
+	return new Action() {
+		public String invoke() {
+		    return (delete());
+		}
+	    };
+    }
+
+
+    public Action getFirst() {
+	return new Action() {
+		public String invoke() {
+		    return (first());
+		}
+	    };
+    }
+
+
+    public Action getLast() {
+	return new Action() {
+		public String invoke() {
+		    return (last());
+		}
+	    };
+    }
+
+
+    public Action getNext() {
+	return new Action() {
+		public String invoke() {
+		    return (next());
+		}
+	    };
+    }
+
+
+    public Action getPress() {
+	return new Action() {
+		public String invoke() {
+		    return (press());
+		}
+	    };
+    }
+
+
+    public Action getPrevious() {
+	return new Action() {
+		public String invoke() {
+		    return (previous());
+		}
+	    };
+    }
+
+
+    public Action getReset() {
+	return new Action() {
+		public String invoke() {
+		    return (reset());
+		}
+	    };
+    }
+
+
+    public Action getUpdate() {
+	return new Action() {
+		public String invoke() {
+		    return (update());
+		}
+	    };
+    }
+
+
+}

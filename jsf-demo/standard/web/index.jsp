@@ -1,11 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- $Id: index.html,v 1.1 2003/07/17 02:58:45 rlubke Exp $ -->
+<!-- $Id: index.jsp,v 1.2 2003/09/11 21:40:01 craigmcc Exp $ -->
 <html>
   <head>
     <title>JavaServer Faces 1.0 Standard RenderKit Demo</title>
   </head>
 
   <body>
+
+<%
+  pageContext.removeAttribute("list");
+%>
 
     <h1>JavaServer Faces 1.0 Standard RenderKit Demo</h1>
 
@@ -14,13 +18,17 @@
 	  <li><p><a href="faces/UICommand.jsp">UICommand</a>
 	  </p></li>
 
+	  <li><p><a href="faces/UIData.jsp">UIData</a>
+	  </p></li>
+
 	  <li><p><a href="faces/UIGraphic.jsp">UIGraphic</a>
 	  </p></li>
 
 	  <li><p><a href="faces/UIInput.jsp">UIInput</a>
 	  </p></li>
 
-	  <li><p><a href="faces/UIOutput.jsp">UIOutput</a></p></li>
+	  <li><p><a href="faces/UIOutput.jsp">UIOutput</a>
+          </p></li>
 
 	  <li><p><a href="faces/UIPanel.jsp">UIPanel</a>
 	  </p></li>
