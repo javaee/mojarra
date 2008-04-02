@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.12 2003/01/17 01:47:00 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.13 2003/01/21 20:37:14 eburns Exp $
  */
 
 /*
@@ -223,17 +223,6 @@ public class LengthValidator extends ValidatorBase {
 
     // --------------------------------------------------------- Public Methods
 
-
-    /**
-     * <p>Perform the correctness checks implemented by this
-     * {@link Validator} against the specified {@link UIComponent}.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  or <code>component</code> is <code>null</code>
-     */
     public void validate(FacesContext context, UIComponent component) {
 
         if ((context == null) || (component == null)) {

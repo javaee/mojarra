@@ -1,5 +1,5 @@
 /*
- * $Id: CommandEvent.java,v 1.6 2002/09/21 22:24:34 craigmcc Exp $
+ * $Id: CommandEvent.java,v 1.7 2003/01/21 20:37:14 eburns Exp $
  */
 
 /*
@@ -70,9 +70,6 @@ public class CommandEvent extends ApplicationEvent {
     }
 
 
-    /**
-     * <p>Return a String rendition of this object value.</p>
-     */
     public String toString() {
 
         StringBuffer sb = new StringBuffer("CommandEvent[source=");

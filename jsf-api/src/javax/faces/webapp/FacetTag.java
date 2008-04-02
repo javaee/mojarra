@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.1 2003/01/17 01:12:00 eburns Exp $
+ * $Id: FacetTag.java,v 1.2 2003/01/21 20:37:17 eburns Exp $
  */
 
 /*
@@ -10,7 +10,7 @@
 package javax.faces.webapp;
 
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.TagSupport;
 
 
 /**
@@ -24,7 +24,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * </p>
  */
 
-public abstract class FacetTag extends BodyTagSupport {
+public abstract class FacetTag extends TagSupport {
 
     // ------------------------------------------------- Instance Variables
 
@@ -56,17 +56,35 @@ public abstract class FacetTag extends BodyTagSupport {
     // ------------------------------------------------------------ Tag Methods
 
 
-    /**
-     * <p>Release any resources allocated during the execution of this
-     * tag handler.</p>
-     */
     public void release() {
 
         super.release();
         this.name = null;
     }
 
+    public int doStartTag() throws JspException {
+
+        return (EVAL_BODY_INCLUDE);
+
+    }
+
+    public int doEndTag() throws JspException {
+
+        return (EVAL_PAGE);
+
+    }
+
     // ----------------------------------------------------- General Methods
+
+    /**
+
+    * Cause a JspException to be thrown if we have more than one {@link
+    * FacesTag} child.
+
+    * @exception JspException if we have more than one {@link FacesTag}
+    * child.
+
+    */
 
     public void verifySingleChild() throws JspException {
 	if (++children > 1) {

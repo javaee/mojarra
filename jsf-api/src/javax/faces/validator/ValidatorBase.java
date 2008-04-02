@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorBase.java,v 1.8 2003/01/17 01:47:01 craigmcc Exp $
+ * $Id: ValidatorBase.java,v 1.9 2003/01/21 20:37:16 eburns Exp $
  */
 
 /*
@@ -34,16 +34,6 @@ abstract class ValidatorBase implements Validator {
     // --------------------------------------------------------- Public Methods
 
 
-    /**
-     * <p>Perform the correctness checks implemented by this
-     * {@link Validator} against the specified {@link UIComponent}.</p>
-     *
-     * @param context FacesContext for the request we are processing
-     * @param component UIComponent we are checking for correctness
-     *
-     * @exception NullPointerException if <code>context</code>
-     *  or <code>component</code> is <code>null</code>
-     */
     public abstract void validate(FacesContext context,
                                   UIComponent component);
 

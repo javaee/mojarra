@@ -1,5 +1,5 @@
 /*
- * $Id: FacesBodyTag.java,v 1.2 2002/08/07 17:04:59 craigmcc Exp $
+ * $Id: FacesBodyTag.java,v 1.3 2003/01/21 20:37:17 eburns Exp $
  */
 
 /*
@@ -55,10 +55,6 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
 
     }
 
-
-    /**
-     * <p>Release all resources acquired during tag execution.</p>
-     */
     public void release() {
 
         bodyContent = null;
@@ -111,14 +107,6 @@ public abstract class FacesBodyTag extends FacesTag implements BodyTag {
     // ------------------------------------------------------ Protected Methods
 
 
-    /**
-     * <p>Return the flag value that should be returned from the
-     * <code>doStart()</code> method when it is called.  Subclasses
-     * may override this method to return the appropriate value.</p>
-     *
-     * @exception JspException to cause <code>doStart()</code> to
-     *  throw an exception
-     */
     protected int getDoStartValue() throws JspException {
 
         return (EVAL_BODY_BUFFERED);

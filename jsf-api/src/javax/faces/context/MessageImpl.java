@@ -1,5 +1,5 @@
 /*
- * $Id: MessageImpl.java,v 1.4 2002/07/26 22:04:52 craigmcc Exp $
+ * $Id: MessageImpl.java,v 1.5 2003/01/21 20:37:13 eburns Exp $
  * @author Gary Karasiuk <karasiuk@ca.ibm.com>
  */
 
@@ -68,12 +68,6 @@ public class MessageImpl implements Message, Serializable {
     // --------------------------------------------------------- Public Methods
 
 
-    /**
-     * <p>Return the localized detail text for this <code>Message</code>
-     * (if any).  This should be additional text that can help the user
-     * understand the context of the problem, and offer suggestions for
-     * approaches to correcting it.</p>
-     */
     public String getDetail() {
 
         return (this.detail);
@@ -92,10 +86,6 @@ public class MessageImpl implements Message, Serializable {
 
     }
 
-
-    /**
-     * <p>Return the severity level of this <code>Message</code>.</p>
-     */
     public int getSeverity() {
 
         return (this.severity);
@@ -120,12 +110,6 @@ public class MessageImpl implements Message, Serializable {
 
     }
 
-
-    /**
-     * <p>Return the localized summary text for this <code>Message</code>.
-     * This should be the text that would normally be displayed to a user
-     * to identify the problem that needs to be corrected.</p>
-     */
     public String getSummary() {
 
         return (this.summary);
