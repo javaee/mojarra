@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.106 2003/10/18 02:18:59 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.107 2003/10/20 03:03:58 eburns Exp $
  */
 
 /*
@@ -557,7 +557,6 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IOException if an input/output error occurs during processing
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
@@ -678,7 +677,6 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception IOException if an input/output error occurs during processing
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */

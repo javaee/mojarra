@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.15 2003/10/16 18:25:17 rlubke Exp $
+ * $Id: DateTimeConverter.java,v 1.16 2003/10/20 03:03:59 eburns Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ public class DateTimeConverter implements Converter, StateHolder {
     // -------------------------------------------------------- Static Variables
     
     
-    private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getDefault();
+    private static final TimeZone DEFAULT_TIME_ZONE = TimeZone.getTimeZone("GMT");
 
     
     // ------------------------------------------------------ Instance Variables

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.26 2003/10/19 21:13:06 craigmcc Exp $
+ * $Id: DoubleRangeValidator.java,v 1.27 2003/10/20 03:04:00 eburns Exp $
  */
 
 /*
@@ -123,12 +123,14 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     // -------------------------------------------------------------- Properties
 
 
-    private double maximum = 0.0;
+    private double maximum = Double.MAX_VALUE;
     private boolean maximumSet = false;
 
 
     /**
-     * <p>Return the maximum value to be enforced by this {@link Validator}.</p>
+     * <p>Return the maximum value to be enforced by this {@link
+     * Validator} or <code>Double.MAX_VALUE</code> if it has not been
+     * set.</p>
      */
     public double getMaximum() {
 
@@ -156,12 +158,14 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     }
 
 
-    private double minimum = 0.0;
+    private double minimum = Double.MIN_VALUE;
     private boolean minimumSet = false;
 
 
     /**
-     * <p>Return the minimum value to be enforced by this {@link Validator}.</p>
+     * <p>Return the minimum value to be enforced by this {@link
+     * Validator}, or <code>Double.MIN_VALUE</code> if it has not been
+     * set.</p>
      */
     public double getMinimum() {
 

@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.16 2003/10/09 22:58:13 craigmcc Exp $
+ * $Id: UIInputTestCase.java,v 1.17 2003/10/20 03:04:01 eburns Exp $
  */
 
 /*
@@ -24,7 +24,6 @@ import junit.framework.TestSuite;
 import javax.faces.validator.DoubleRangeValidator;
 import javax.faces.validator.LengthValidator;
 import javax.faces.validator.LongRangeValidator;
-import javax.faces.validator.StringRangeValidator;
 import javax.faces.TestUtil;
 
 
