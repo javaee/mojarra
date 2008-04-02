@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.17 2004/02/26 20:32:54 eburns Exp $
+ * $Id: CommandLinkRenderer.java,v 1.18 2004/03/25 23:18:49 jvisvanathan Exp $
  */
 
 /*
@@ -168,7 +168,13 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         clientId = command.getClientId(context);
 
         UIForm uiform = getMyForm(context, command);
-        Util.doAssert(uiform != null);
+        if ( uiform == null ) {
+            if (log.isErrorEnabled()) {
+                log.error("component " + component.getId() +
+                          " must be enclosed inside a form ");
+            }
+            return;
+        }
         String formClientId = uiform.getClientId(context);
 
         //Write Anchor attributes

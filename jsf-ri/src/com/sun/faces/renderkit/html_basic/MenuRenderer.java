@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.45 2004/02/26 20:32:58 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.46 2004/03/25 23:18:49 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -394,19 +394,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             return;
         }
 
-        ResponseWriter writer = context.getResponseWriter();
-        Util.doAssert(writer != null);
-
-        String styleClass = null;
-        if (null !=
-            (styleClass = (String) component.getAttributes().get("styleClass"))) {
-            writer.startElement("span", component);
-            writer.writeAttribute("class", styleClass, "styleClass");
-        }
         renderSelect(context, component);
-        if (null != styleClass) {
-            writer.endElement("span");
-        }
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
         }
@@ -428,6 +416,12 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeAttribute("name", component.getClientId(context),
                               "clientId");
+        // render styleClass attribute if present.
+        String styleClass = null;
+        if (null !=
+            (styleClass = (String) component.getAttributes().get("styleClass"))) {
+            writer.writeAttribute("class", styleClass, "styleClass");
+        }
         if (!getMultipleText(component).equals("")) {
             writer.writeAttribute("multiple", Boolean.TRUE, null);
         }

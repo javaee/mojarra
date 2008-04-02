@@ -8,7 +8,7 @@
 <optgroup label="group">	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </optgroup></select>
-<span id="myCheckboxlist"><table border="0" class="styleClass">
+<table border="0" id="myCheckboxlist" class="styleClass">
 	<tr>
 <td>
 <label for="myCheckboxlist" class="disabledClass"><input name="myCheckboxlist" value="Red" type="checkbox" disabled="disabled" tabindex="5" title="title"> Red</input></label></td>
@@ -23,7 +23,7 @@
 <label for="myCheckboxlist" class="enabledClass"><input name="myCheckboxlist" value="Yellow" type="checkbox" tabindex="5" title="title"> Yellow</input></label></td>
 	</tr>
 </table></td>	</tr>
-</table></span>
+</table>
 <select id="myOnemenu" name="myOnemenu" size="1">	<option value="Red">Red</option>
 	<option value="Blue"  selected>Blue</option>
 	<option value="Green">Green</option>

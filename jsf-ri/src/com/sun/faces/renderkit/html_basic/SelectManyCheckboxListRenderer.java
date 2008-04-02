@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.33 2004/03/11 22:29:24 jvisvanathan Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.34 2004/03/25 23:18:49 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -261,12 +261,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         ResponseWriter writer = context.getResponseWriter();
         Util.doAssert(writer != null);
         
-        // render "id" and styleClass only for outerTable.
-        if (outerTable && shouldWriteIdAttribute(component)) {
-            writer.startElement("span", component);
-            writeIdAttributeIfNecessary(context, writer, component);
-        }
-
         writer.startElement("table", component);
         if (border != Integer.MIN_VALUE) {
             writer.writeAttribute("border", new Integer(border), "border");
@@ -275,6 +269,10 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         // render style and styleclass attribute on the outer table instead of 
         // rendering it as pass through attribute on every option in the list.
         if (outerTable) {
+            // render "id" only for outerTable.
+            if (shouldWriteIdAttribute(component)) {
+                writeIdAttributeIfNecessary(context, writer, component);
+            }
             String styleClass = (String) component.getAttributes().get(
                 "styleClass");
             String style= (String) component.getAttributes().get("style");
@@ -308,10 +306,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             writer.writeText("\n", null);
         }
         writer.endElement("table");
-        if (outerTable && shouldWriteIdAttribute(component)) {
-            writer.endElement("span");
-        }
-
     }
 
 } // end of class SelectManyCheckboxListRenderer

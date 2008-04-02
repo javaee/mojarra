@@ -15,7 +15,7 @@
 
 
   
-<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=9580CFB928E9FD3016783E57117FE37A" class="formClass" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
+<form id="basicForm" method="post" action="/test/faces/TestRenderResponsePhase.jsp;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" class="formClass" accept="html,wml" enctype="application/x-www-form-urlencoded" title="basicForm">
 
 
   <TABLE BORDER="1">
@@ -110,12 +110,12 @@
 
 	      
                 
-              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=9580CFB928E9FD3016783E57117FE37A" alt="" /></a>
+              <a id="basicForm:imageLink" href="#" style="someStyle" onclick="document.forms['basicForm']['basicForm:imageLink'].value='basicForm:imageLink'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=9580CFB928E9FD3016783E57117FE37A" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:graphicImage" src="/test/duke.gif;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" style="someStyle" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -149,7 +149,7 @@
               
               
               
-            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=9580CFB928E9FD3016783E57117FE37A" alt="" /></a>
+            <a id="basicForm:hrefParamLink" href="#" onclick="document.forms['basicForm']['basicForm:hrefParamLink'].value='basicForm:hrefParamLink';document.forms['basicForm']['name'].value='horwat';document.forms['basicForm']['value'].value='password'; document.forms['basicForm'].submit(); return false;"><img src="duke.gif;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" alt="" /></a>
         </TD>
       </TR>
 
@@ -157,7 +157,7 @@
 
 	<TD>
 
-	      <a id="basicForm:outputLink" href="test.html;jsessionid=9580CFB928E9FD3016783E57117FE37A" class="hyperlinkClass">output link text</a>
+	      <a id="basicForm:outputLink" href="test.html;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" class="hyperlinkClass">output link text</a>
 
 	</TD>
 
@@ -169,12 +169,12 @@
 
 	      
                 
-              <a id="basicForm:output_imageLink" href="test.html;jsessionid=9580CFB928E9FD3016783E57117FE37A" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=9580CFB928E9FD3016783E57117FE37A" alt="" /></a>
+              <a id="basicForm:output_imageLink" href="test.html;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" style="position: absolute; left: 96px; top: 168px"><img src="duke.gif;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" alt="" /></a>
 
 	</TD>
 
         <TD> 
-            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=9580CFB928E9FD3016783E57117FE37A" usemap="#map1" ismap="ismap" alt="" /> 
+            <img id="basicForm:output_graphicImage" src="/test/duke.gif;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" usemap="#map1" ismap="ismap" alt="" /> 
         </TD>
 
       </TR>
@@ -182,7 +182,7 @@
       <TR>
         <TD>
             
-            <a id="basicForm:output_commandLink" href="test.html;jsessionid=9580CFB928E9FD3016783E57117FE37A" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandLink" href="test.html;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" style="position: absolute; left: 96px; top: 168px" class="hyperlinkClass">link text</a>
        </TD>
       </TR>
 
@@ -192,13 +192,13 @@
               
               
               
-            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=9580CFB928E9FD3016783E57117FE37A?name=horwat&value=password" class="hyperlinkClass">link text</a>
+            <a id="basicForm:output_commandParamLink" href="test.html;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E?name=horwat&value=password" class="hyperlinkClass">link text</a>
         </TD>
       </TR>
 
       <TR>
         <TD>
-            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=9580CFB928E9FD3016783E57117FE37A"><img src="duke.gif"></a>
+            <a id="basicForm:output_hrefLink" href="test.html;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E"><img src="duke.gif"></a>
         </TD>
       </TR>
 
@@ -208,7 +208,7 @@
               
               
               
-            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=9580CFB928E9FD3016783E57117FE37A?name=horwat&value=password"><img src="duke.gif;jsessionid=9580CFB928E9FD3016783E57117FE37A" alt="" /></a>
+            <a id="basicForm:output_hrefParamLink" href="test.html;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E?name=horwat&value=password"><img src="duke.gif;jsessionid=DE98A44422F3C1271ECA47B80B0D0F1E" alt="" /></a>
         </TD>
       </TR>
 
@@ -276,7 +276,7 @@
                 
                 
 
-              <span class="selectoneClass"><select name="basicForm:_id13" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
+              <select name="basicForm:_id13" class="selectoneClass" size="10" style="someStyle" tabindex="20" title="Select Quantity">	<option value="0" disabled="disabled">0</option>
 	<option value="1">1</option>
 	<option value="2">2</option>
 	<option value="3">3</option>
@@ -286,7 +286,7 @@
 	<option value="7">7</option>
 	<option value="8">8</option>
 	<option value="9">9</option>
-</select></span>
+</select>
 
 	</TD>
 
@@ -302,7 +302,7 @@
                 
                 
                  
-              <span id="basicForm:shipType"><table class="someStyleClass" style="someStyle">
+              <table id="basicForm:shipType" class="someStyleClass" style="someStyle">
 	<tr>
 <td>
 <label for="basicForm:shipType" class="disabledClass"><input type="radio" name="basicForm:shipType" value="nextDay" disabled="disabled" accesskey="A" tabindex="3" disabled="disabled"> Next Day</input></label></td>
@@ -311,7 +311,7 @@
 <td>
 <label for="basicForm:shipType" class="disabledClass"><input type="radio" name="basicForm:shipType" value="nextMonth" accesskey="A" tabindex="3" disabled="disabled"> Next Month</input></label></td>
 	</tr>
-</table></span>
+</table>
 
 	</TD>
 
@@ -326,7 +326,7 @@
                 
                 
 
-           <span id="basicForm:verticalRadio"><table border="1">
+           <table border="1" id="basicForm:verticalRadio">
 	<tr>
 <td>
 <label for="basicForm:verticalRadio"><input type="radio" name="basicForm:verticalRadio" value="nextDay" disabled="disabled" border="1"> Next Day</input></label></td>
@@ -339,7 +339,7 @@
 <td>
 <label for="basicForm:verticalRadio"><input type="radio" name="basicForm:verticalRadio" value="nextMonth" border="1"> Next Month</input></label></td>
 	</tr>
-</table></span>
+</table>
 
 	</TD>
 
@@ -527,7 +527,7 @@
 						
 						
 						
-					<span class="selectmanyClass"><select id="basicForm:ManyApples" name="basicForm:ManyApples" multiple size="1" style="someStyle">	<option value="0">zero</option>
+					<select id="basicForm:ManyApples" name="basicForm:ManyApples" class="selectmanyClass" multiple size="1" style="someStyle">	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -537,7 +537,7 @@
 	<option value="7">seven</option>
 	<option value="8">eight</option>
 	<option value="9">nine</option>
-</select></span></TD>
+</select></TD>
 
 </tr>
 
@@ -579,7 +579,7 @@
 						
 						
 						
-					<span id="basicForm:ManyApples3"><table class="styleClass" style="someStyle">
+					<table id="basicForm:ManyApples3" class="styleClass" style="someStyle">
 	<tr>
 <td>
 <label for="basicForm:ManyApples3" class="disabledClass"><input name="basicForm:ManyApples3" value="0" type="checkbox" disabled="disabled" accesskey="A" tabindex="3"> zero</input></label></td>
@@ -602,7 +602,7 @@
 <td>
 <label for="basicForm:ManyApples3" class="enabledClass"><input name="basicForm:ManyApples3" value="9" type="checkbox" accesskey="A" tabindex="3"> nine</input></label></td>
 	</tr>
-</table></span></TD>
+</table></TD>
 </tr>
 
 <tr>
@@ -610,7 +610,7 @@
 						
 						
 						
-                                            <span id="basicForm:checklistmodel"><table>
+                                            <table id="basicForm:checklistmodel">
 	<tr>
 <td>
 <label for="basicForm:checklistmodel" class="disabedClass"><input name="basicForm:checklistmodel" value="1" type="checkbox" disabled="disabled"> one</input></label></td>
@@ -619,7 +619,7 @@
 <td>
 <label for="basicForm:checklistmodel" class="disabedClass"><input name="basicForm:checklistmodel" value="3" type="checkbox" disabled="disabled"> three</input></label></td>
 	</tr>
-</table></span></TD>
+</table></TD>
 </tr>
 
 <tr>
