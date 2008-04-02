@@ -83,7 +83,7 @@
         <rtexprvalue>false</rtexprvalue>
       </attribute>
       <attribute>
-        <name>accept-charset</name>
+        <name>acceptcharset</name>
         <required>false</required>
         <rtexprvalue>false</rtexprvalue>
       </attribute>
@@ -1095,11 +1095,6 @@
     </attribute>
     <attribute>
       <name>onmouseup</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>class</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
@@ -3348,11 +3343,6 @@
     </attribute>
     <attribute>
       <name>lang</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
-      <name>labelAlign</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
     </attribute>
