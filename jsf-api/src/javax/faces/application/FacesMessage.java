@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.2 2003/10/30 21:47:12 eburns Exp $
+ * $Id: FacesMessage.java,v 1.3 2003/10/30 21:53:55 eburns Exp $
  */
 
 /*
@@ -37,18 +37,18 @@ import java.util.HashMap;
  *
  * <ul>
  *
- * <p>Call {@link Application.getMessageBundle}.  If
+ * <p>Call {@link javax.faces.Application.getMessageBundle}.  If
  * non-<code>null</code>, locate the named <code>ResourceBundle</code>,
  * using the <code>Locale</code> from the current {@link
  * javax.faces.component.UIViewRoot} and see if it has a value for the
  * argument <code>messageId</code>.  If it does, treat the value as the
- * <code>summary</code> of the <code>FacesMessage</code>.  If it does not, or
- * if {@link Application.getMessageBundle} returned <code>null</code>,
- * look in the <code>ResourceBundle</code> named by the value of the
- * constant {@link #FACES_MESSAGES} and see if it has a value for the
- * argument <code>messageId</code>.  If it does, treat the value as the
- * <code>summary</code> of the <code>FacesMessage</code>.  If it does not,
- * there is no initialization information for the
+ * <code>summary</code> of the <code>FacesMessage</code>.  If it does
+ * not, or if {@link Application.getMessageBundle} returned
+ * <code>null</code>, look in the <code>ResourceBundle</code> named by
+ * the value of the constant {@link #FACES_MESSAGES} and see if it has a
+ * value for the argument <code>messageId</code>.  If it does, treat the
+ * value as the <code>summary</code> of the <code>FacesMessage</code>.
+ * If it does not, there is no initialization information for the
  * <code>FacesMessage</code> instance.</p>
  *
  * <p>In all cases, if a <code>ResourceBundle</code> hit is found for
@@ -124,8 +124,8 @@ public class FacesMessage implements Serializable {
     { SEVERITY_INFO, SEVERITY_WARN, SEVERITY_ERROR, SEVERITY_FATAL };
     
     /**
-     * <p>List of valid {@link Severity} instances, in ascending order
-     * of their ordinal value.</p>
+     * <p>List of valid {@link FacesMessage.Severity} instances, in
+     * ascending order of their ordinal value.</p>
      */
     public static final List VALUES = 
 	Collections.unmodifiableList(Arrays.asList(values));
@@ -328,10 +328,10 @@ public class FacesMessage implements Serializable {
 	// ---------------------------------------------------  Public Methods
 
 	/**
-	 * <p>Compare this {@link Severity} instance to the specified
-	 * one.  Returns a negative integer, zero, or a positive integer
-	 * if this object is less than, equal to, or greater than the
-	 * specified object.</p>
+	 * <p>Compare this {@link FacesMessage.Severity} instance to the
+	 * specified one.  Returns a negative integer, zero, or a
+	 * positive integer if this object is less than, equal to, or
+	 * greater than the specified object.</p>
 	 *
 	 * @param other The other object to be compared to
 	 */
@@ -341,16 +341,16 @@ public class FacesMessage implements Serializable {
 	
 	
 	/**
-	 * <p>Return the ordinal value of this {@link Severity}
-	 * instance.</p>
+	 * <p>Return the ordinal value of this {@link
+	 * FacesMessage.Severity} instance.</p>
 	 */
 	public int getOrdinal() {
 	    return (this.ordinal);
 	}
 	
 	/**
-	 * <p>Return a String representation of this {@link Severity}
-	 * instance.</p>
+	 * <p>Return a String representation of this {@link
+	 * FacesMessage.Severity} instance.</p>
 	 */
 	public String toString() {
 	    if (null == severityName) {
