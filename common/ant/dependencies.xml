@@ -48,7 +48,7 @@
     <property name="jstl.api.version" value="1.2"/>
     <property name="annotation.api.version" value="1.0"/>
 	
-	<property name="maven2.mirror" value="http://www.ibiblio.org/maven/"/>
+	<property name="maven2.mirror" value="http://mirrors.ibiblio.org/pub/mirrors/maven2"/>
 	<property name="java.net.maven" value="https://maven-repository.dev.java.net/nonav/repository/"/>
 
     <property name="maven.repository.importer.version" value="1.2"/>
@@ -75,7 +75,7 @@
     <target name="update" description="Download project dependencies">
         <mkdir dir="${dependency.base.dir}/downloads"/>
     	<mkdir dir="${dependency.jar.dir}" />
-    	
+
         <!-- setup the proxy if necessary -->
         <if>
             <and>
@@ -101,7 +101,7 @@
         </if>
 
         <!-- HTMLUNIT -->
-    	<!-- 
+    	<!--
     	This one needs a ton of extras, so we have to do this one like this or
     	add a bunch more deps.  Maybe another day... :)
     	-->
@@ -141,7 +141,7 @@
                 <available file="${taglibdoc.jar}" property="ignored"/>
             </not>
             <then>
-                <get src="${maven2.mirror}/taglibrarydoc/jars/tlddoc-${taglibdoc.version}.jar"
+                <get src="${maven2.mirror}/taglibrarydoc/tlddoc/${taglibdoc.version}/tlddoc-${taglibdoc.version}.jar"
                      dest="${tlddoc.jar}"
                      usetimestamp="true"/>
 
@@ -256,7 +256,7 @@ java -Xmx256m -jar ${dependency.base.dir}/glassfish-installer-v1_ur1-p01-b02.jar
                 <delete file="${dependency.base.dir}/input"/>
                 <ant antfile="${glassfish.home}/setup.xml" dir="${glassfish.home}" target="setup"/>
                 <echo file="${dependency.base.dir}/glassfish/password.txt">AS_ADMIN_PASSWORD=adminadmin</echo>
-                <!-- 
+                <!--
                 Download and install the Eclipse JDT compiler to help speed up unit tests.  See Jan Luehe's
                 blog for more information:  http://blogs.sun.com/jluehe/entry/how_to_enable_eclipse_s.
                 -->
