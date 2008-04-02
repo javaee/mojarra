@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.24 2003/12/19 00:52:38 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.25 2003/12/20 02:58:50 craigmcc Exp $
  */
 
 /*
@@ -663,12 +663,16 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
 
 
     // Check that the number of queued messages equals the expected count
+    // and that eacdh of them is of severity ERROR
     protected void checkMessages(int expected) {
 
         int n = 0;
         Iterator messages = facesContext.getMessages();
         while (messages.hasNext()) {
             FacesMessage message = (FacesMessage) messages.next();
+            assertEquals("Severity == ERROR",
+                         FacesMessage.SEVERITY_ERROR,
+                         message.getSeverity());
             n++;
             // System.err.println(message.getSummary());
         }

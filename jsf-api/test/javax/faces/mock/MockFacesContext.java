@@ -1,5 +1,5 @@
 /*
- * $Id: MockFacesContext.java,v 1.17 2003/12/17 23:25:59 eburns Exp $
+ * $Id: MockFacesContext.java,v 1.18 2003/12/20 02:58:52 craigmcc Exp $
  */
 
 /*
@@ -184,6 +184,9 @@ public class MockFacesContext extends FacesContext {
 
 
     public void addMessage(String clientId, FacesMessage message){ 
+        if (message == null) {
+            throw new NullPointerException();
+        }
         List list = (List) messages.get(clientId);
         if (list == null) {
             list = new ArrayList();

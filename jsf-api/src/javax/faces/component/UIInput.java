@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.50 2003/12/17 23:25:51 eburns Exp $
+ * $Id: UIInput.java,v 1.51 2003/12/20 02:58:46 craigmcc Exp $
  */
 
 /*
@@ -353,16 +353,19 @@ public class UIInput extends UIOutput {
 	    } catch (FacesException e) {
                 FacesMessage message =
                     MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
 	    } catch (IllegalArgumentException e) {
                 FacesMessage message =
                     MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
 	    } catch (Exception e) {
                 FacesMessage message =
                     MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
 	    }
@@ -429,6 +432,7 @@ public class UIInput extends UIOutput {
 	if (isValid() && isRequired() && isEmpty()) {
 	    FacesMessage message =
 		MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID);
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	    context.addMessage(getClientId(context), message);
 	    setValid(false);
 	}

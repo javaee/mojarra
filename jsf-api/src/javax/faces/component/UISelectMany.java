@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.37 2003/11/08 01:15:27 craigmcc Exp $
+ * $Id: UISelectMany.java,v 1.38 2003/12/20 02:58:47 craigmcc Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.component;
 
 
 import java.util.Iterator;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
 import javax.faces.model.SelectItem;
@@ -261,9 +262,10 @@ public class UISelectMany extends UIInput {
 
         // Enqueue an error message if an invalid value was specified
         if (!found) {
-            context.addMessage(getClientId(context), 
-			       MessageFactory.getMessage(context, 
-							 INVALID_MESSAGE_ID));
+            FacesMessage message =
+                MessageFactory.getMessage(context, INVALID_MESSAGE_ID);
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            context.addMessage(getClientId(context), message);
             setValid(false);
         }
         super.validate(context);

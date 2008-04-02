@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.24 2003/12/17 23:25:57 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.25 2003/12/20 02:58:50 craigmcc Exp $
  */
 
 /*
@@ -470,12 +470,16 @@ public class UIInputTestCase extends UIOutputTestCase {
 
 
     // Check that the number of queued messages equals the expected count
+    // and that each of them is of severity ERROR
     protected void checkMessages(int expected) {
 
         int n = 0;
         Iterator messages = facesContext.getMessages();
         while (messages.hasNext()) {
             FacesMessage message = (FacesMessage) messages.next();
+            assertEquals("Severity == ERROR",
+                         FacesMessage.SEVERITY_ERROR,
+                         message.getSeverity());
             n++;
             // System.err.println(message.getSummary());
         }
