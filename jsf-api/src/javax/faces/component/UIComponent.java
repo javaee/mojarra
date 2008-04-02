@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.117 2003/11/08 01:15:21 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.118 2003/11/11 14:53:07 rlubke Exp $
  */
 
 /*
@@ -506,6 +506,10 @@ public abstract class UIComponent implements StateHolder {
      * the value to be displayed should be acquired by calling
      * <code>getValue()</code>, and rendering the value as appropriate.
      * </p>
+     * 
+     * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
+     * the actual encoding will be delegated to 
+     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -522,6 +526,10 @@ public abstract class UIComponent implements StateHolder {
      * following the rules described for <code>encodeBegin()</code> to acquire
      * the appropriate value to be rendered.  This method will only be called
      * if the <code>rendersChildren</code> property is <code>true</code>.</p>
+     * 
+     * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
+     * the actual encoding will be delegated to 
+     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *
@@ -538,6 +546,10 @@ public abstract class UIComponent implements StateHolder {
      * {@link UIComponent}, following the rules described for
      * <code>encodeBegin()</code> to acquire the appropriate value
      * to be rendered.</p>
+     * 
+     * <p>If a {@link Renderer} is associated with this {@link UIComponent}, 
+     * the actual encoding will be delegated to 
+     * {@link Renderer#encodeBegin(FacesContext, UIComponent)}.</p> 
      *
      * @param context {@link FacesContext} for the response we are creating
      *
