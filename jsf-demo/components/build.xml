@@ -248,9 +248,7 @@
 
     <!-- copy the java source to the webapp for viewing by the user -->
     <copy todir="${build}/${webapp}/src/java/components">
-      <fileset dir="src/java/components"
-               excludes="components/CalendarComponent.java,
-               taglib/CalendarTag.java, renderkit/CalendarRenderer.java" />
+      <fileset dir="src/java/components"/>
     </copy>
     <copy todir="${build}/${webapp}/src/java/demo">
       <fileset dir="src/java/demo" 
@@ -268,14 +266,6 @@
         <include name="**/*.xml" />
       </fileset>   
     </copy>
-    
-    <!-- delete Calender demo related files. -->
-    <delete file="${build}/${webapp}/calendar.jsp" />
-    <delete file="${build}/${webapp}/images/calendar.css" />
-    <delete file="${build}/${webapp}/images/calendar.gif" />
-    <delete file="${build}/${webapp}/images/simplecalendar.js" />
-    <delete file="${build}/${webapp}/images/up.gif" />
-    <delete file="${build}/${webapp}/images/down.gif" />
            
     <jar jarfile="${build}/${webapp}/WEB-INF/lib/demo-components.jar" 
 	 basedir="${build}/classes/components"/>
