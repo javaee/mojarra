@@ -84,6 +84,9 @@
             <fileset dir="web/WEB-INF">
                 <include name="*.xml"/>
             </fileset>
+            <fileset dir="web/WEB-INF">
+                <include name="**/*.jspf"/>
+            </fileset>
         </copy>
 
         <copy todir="${build}/${example}/">
