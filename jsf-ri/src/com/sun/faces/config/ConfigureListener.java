@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.17 2004/05/11 19:28:41 rkitain Exp $
+ * $Id: ConfigureListener.java,v 1.18 2004/05/12 03:09:46 rkitain Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
@@ -1040,6 +1040,7 @@ public class ConfigureListener implements ServletContextListener {
         digester.setValidating(validateXml);
 
         // Configure parsing rules
+        // PENDING - Read from file?
         digester.addRuleSet(new FacesConfigRuleSet(false, false, true));
 
         // Configure preregistered entities
@@ -1047,6 +1048,11 @@ public class ConfigureListener implements ServletContextListener {
             ("/com/sun/faces/web-facesconfig_1_1.dtd");
         digester.register
             ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN",
+             url.toString());
+        url = this.getClass().getResource
+            ("/com/sun/faces/web-facesconfig_1_0.dtd");
+        digester.register
+            ("-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN",
              url.toString());
 
         // Push an initial FacesConfigBean onto the stack

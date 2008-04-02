@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.59 2004/05/07 13:53:21 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.60 2004/05/12 03:09:47 rkitain Exp $
  */
 
 /*
@@ -129,6 +129,85 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
             FactoryFinder.APPLICATION_FACTORY);
         ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
         parseConfig("WEB-INF/faces-config.xml",
+                    config.getServletContext());
+
+        // <application>
+        assertTrue(
+            application.getActionListener() instanceof com.sun.faces.TestActionListener);
+        assertTrue(
+            application.getNavigationHandler() instanceof com.sun.faces.TestNavigationHandler);
+        assertTrue(
+            application.getPropertyResolver() instanceof com.sun.faces.AdapterPropertyResolver);
+        assertTrue(
+            ((com.sun.faces.AdapterPropertyResolver) application.getPropertyResolver()).getRoot() instanceof com.sun.faces.TestPropertyResolver);
+        assertTrue(
+            application.getVariableResolver() instanceof com.sun.faces.TestVariableResolver);
+        assertTrue(
+            application.getViewHandler() instanceof com.sun.faces.TestViewHandler);
+
+        // <component>
+
+        Iterator iter = application.getComponentTypes();
+        assertTrue(iter.hasNext());
+        String cType = null;
+        UIComponent comp = null;
+        while (iter.hasNext()) {
+            cType = (String) iter.next();
+            comp = application.createComponent(cType);
+            assertNotNull(comp);
+        }
+        UIComponent command = application.createComponent("Command");
+        assertNotNull(command);
+        comp = null;
+        application.addComponent("fooType", "javax.faces.component.UICommand");
+        comp = application.createComponent("fooType");
+        assertNotNull(comp);
+
+        // <converter>
+
+        iter = application.getConverterIds();
+        assertTrue(iter.hasNext());
+        String convId = null;
+        Converter conv = null;
+        while (iter.hasNext()) {
+            convId = (String) iter.next();
+            conv = application.createConverter(convId);
+            assertNotNull(conv);
+        }
+        Converter first = application.createConverter("First");
+        assertNotNull(first);
+        conv = null;
+        application.addConverter("fooId",
+                                 "javax.faces.convert.DateTimeConverter");
+        conv = application.createConverter("fooId");
+        assertNotNull(conv);
+
+        // <validator>
+
+        iter = application.getValidatorIds();
+        assertTrue(iter.hasNext());
+        String valId = null;
+        Validator val = null;
+        while (iter.hasNext()) {
+            valId = (String) iter.next();
+            val = application.createValidator(valId);
+            assertNotNull(val);
+        }
+        Validator second = application.createValidator("Second");
+        assertNotNull(second);
+        val = null;
+        application.addValidator("fooId",
+                                 "javax.faces.validator.DoubleRangeValidator");
+        val = application.createValidator("fooId");
+        assertNotNull(val);
+
+    }
+
+    public void testFull_1_0() throws Exception {
+        ApplicationFactory aFactory = (ApplicationFactory) FactoryFinder.getFactory(
+            FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = (ApplicationImpl) aFactory.getApplication();
+        parseConfig("WEB-INF/faces-config-1.0.xml",
                     config.getServletContext());
 
         // <application>
