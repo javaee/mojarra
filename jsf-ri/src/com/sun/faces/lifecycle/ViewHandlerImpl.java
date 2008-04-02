@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.9 2003/02/20 22:48:48 ofung Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.10 2003/03/21 23:22:46 rkitain Exp $ 
  */ 
 
 
@@ -21,17 +21,18 @@ import org.mozilla.util.ParameterCheck;
 import java.io.IOException; 
 import javax.servlet.ServletException;
 
+import javax.faces.FacesException;
 import javax.faces.context.FacesContext; 
 import javax.faces.lifecycle.ViewHandler; 
 import javax.faces.tree.Tree; 
 
-import javax.servlet.http.HttpServletRequest; 
-import javax.servlet.ServletException; 
+import javax.servlet.ServletRequest; 
+import javax.servlet.ServletResponse; 
 import javax.servlet.RequestDispatcher; 
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.9 2003/02/20 22:48:48 ofung Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.10 2003/03/21 23:22:46 rkitain Exp $ 
  * 
  * @see javax.faces.lifecycle.ViewHandler 
  * 
@@ -39,20 +40,16 @@ import javax.servlet.RequestDispatcher;
 public class ViewHandlerImpl implements ViewHandler { 
 
     public void renderView(FacesContext context) throws IOException, 
-             ServletException { 
+             FacesException { 
 
         if (context == null) { 
             throw new NullPointerException(Util.getExceptionMessage(
                 Util.NULL_CONTEXT_ERROR_MESSAGE_ID));
         } 
 
-        HttpServletRequest request = (HttpServletRequest) 
-            context.getServletRequest(); 
-        RequestDispatcher requestDispatcher = null; 
         Tree tree = context.getTree(); 
         
         String requestURI = context.getTree().getTreeId();
-        requestDispatcher = request.getRequestDispatcher(requestURI); 
-        requestDispatcher.forward(request, context.getServletResponse()); 
+        context.getExternalContext().dispatchMessage(requestURI);
     } 
 } 

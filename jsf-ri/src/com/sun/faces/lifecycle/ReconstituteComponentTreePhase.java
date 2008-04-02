@@ -1,5 +1,5 @@
 /*
- * $Id: ReconstituteComponentTreePhase.java,v 1.3 2003/03/13 01:06:28 eburns Exp $
+ * $Id: ReconstituteComponentTreePhase.java,v 1.4 2003/03/21 23:22:45 rkitain Exp $
  */
 
 /*
@@ -21,6 +21,7 @@ import javax.faces.tree.Tree;
 import javax.faces.tree.TreeFactory;
 import javax.faces.FactoryFinder;
 import java.util.Iterator;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -40,7 +41,7 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: ReconstituteComponentTreePhase.java,v 1.3 2003/03/13 01:06:28 eburns Exp $
+ * @version $Id: ReconstituteComponentTreePhase.java,v 1.4 2003/03/21 23:22:45 rkitain Exp $
  * 
  */
 
@@ -109,8 +110,8 @@ public void execute(FacesContext facesContext) throws FacesException
     
     // look up saveStateInClient parameter to check whether to restore
     // state of tree from client or server. Default is server.
-    String saveState = facesContext.getServletContext().getInitParameter
-            (RIConstants.SAVESTATE_INITPARAM);
+    String saveState = facesContext.getExternalContext().
+        getInitParameter(RIConstants.SAVESTATE_INITPARAM);
     if ( saveState != null ) {
         Assert.assert_it (saveState.equalsIgnoreCase("true") || 
             saveState.equalsIgnoreCase("false"));
@@ -129,15 +130,13 @@ public void restoreTreeFromPage(FacesContext facesContext) {
     //long beginTime = System.currentTimeMillis();
    
     // reconstitute tree from page. 
-    HttpServletRequest request = (HttpServletRequest)
-            facesContext.getServletRequest();
-    String treeId = (String) 
-               request.getAttribute("javax.servlet.include.path_info");
+    Map requestMap = facesContext.getExternalContext().getRequestMap();
+    String treeId = (String)requestMap.get("javax.servlet.include.path_info");
     if (treeId == null) {
-        treeId = request.getPathInfo();
+        treeId = facesContext.getExternalContext().getRequestPathInfo();
     }
     
-    String treeRootString = request.getParameter(RIConstants.FACES_TREE);
+    String treeRootString = (String)requestMap.get(RIConstants.FACES_TREE);
     if ( treeRootString == null ) {
         requestTree = treeFactory.getTree(facesContext, treeId);
     } else {    
@@ -171,17 +170,16 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     
     // PENDING(visvan) - will not deal with simultaneous requests
     // for the same session
-    HttpSession session = facesContext.getHttpSession();
+    Map sessionMap = facesContext.getExternalContext().getSessionMap();
 
     // Reconstitute or create the request tree
-    HttpServletRequest request = (HttpServletRequest)
-            facesContext.getServletRequest();
+    Map requestMap = facesContext.getExternalContext().getRequestMap();
     String treeId = (String) 
-               request.getAttribute("javax.servlet.include.path_info");
+               requestMap.get("javax.servlet.include.path_info");
     if (treeId == null) {
-        treeId = request.getPathInfo();
+        treeId = facesContext.getExternalContext().getRequestPathInfo();
     }
-    requestTree = (Tree) session.getAttribute(RIConstants.FACES_TREE);
+    requestTree = (Tree) sessionMap.get(RIConstants.FACES_TREE);
     // If there is nothing in the session, 
     if (requestTree == null) {
 	// create the tree from the pathInfo
@@ -198,15 +196,15 @@ protected void restoreTreeFromSession(FacesContext facesContext) {
     }
 	
     facesContext.setTree(requestTree);
-    session.removeAttribute(RIConstants.FACES_TREE);
+    sessionMap.remove(RIConstants.FACES_TREE);
 
     // Set up the request locale if needed
-    Locale locale = (Locale) session.getAttribute(RIConstants.REQUEST_LOCALE);
+    Locale locale = (Locale)sessionMap.get(RIConstants.REQUEST_LOCALE);
     if (locale == null) {
-        locale = facesContext.getServletRequest().getLocale();
+        locale = facesContext.getExternalContext().getRequestLocale();
     }
     facesContext.setLocale(locale);
-    session.removeAttribute(RIConstants.REQUEST_LOCALE);
+    sessionMap.remove(RIConstants.REQUEST_LOCALE);
 }
 
 // The testcase for this class is TestReconstituteComponentTreePhase.java

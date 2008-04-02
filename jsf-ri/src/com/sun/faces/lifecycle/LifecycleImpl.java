@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.22 2003/03/18 17:18:46 rkitain Exp $
+ * $Id: LifecycleImpl.java,v 1.23 2003/03/21 23:22:45 rkitain Exp $
  */
 
 /*
@@ -37,7 +37,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.22 2003/03/18 17:18:46 rkitain Exp $
+ * @version $Id: LifecycleImpl.java,v 1.23 2003/03/21 23:22:45 rkitain Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -187,7 +187,7 @@ public void execute(FacesContext context) throws FacesException
 
     // for keeping track of events processed limit..
     //
-    limit = context.getServletContext().getInitParameter(
+    limit = context.getExternalContext().getInitParameter(
         RIConstants.EVENT_LIMIT);
     if (limit != null) {
         eventLimit = new Integer(limit).intValue();
