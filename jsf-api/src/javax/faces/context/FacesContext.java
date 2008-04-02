@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.40 2003/04/29 18:51:38 eburns Exp $
+ * $Id: FacesContext.java,v 1.41 2003/06/20 22:29:58 craigmcc Exp $
  */
 
 /*
@@ -41,6 +41,14 @@ public abstract class FacesContext {
 
 
     // ------------------------------------------------------------- Properties
+
+
+    /**
+     * <p>Return an <code>Iterator</code> over the {@link UIComponent}s for
+     * which at least one {@link Message} has been queued.  If there are no
+     * such components, an empty <code>Iterator</code> is returned.</p>
+     */
+    public abstract Iterator getComponentsWithMessages();
 
 
     /**
@@ -110,6 +118,20 @@ public abstract class FacesContext {
      *  any component
      */
     public abstract Iterator getMessages(UIComponent component);
+
+
+    /**
+     * <p>Return <code>true</code> if the <code>renderResponse()</code>
+     * method has been called for the current request.</p>
+     */
+    public abstract boolean getRenderResponse();
+
+
+    /**
+     * <p>Return <code>true</code> if the <code>responseComplete()</code>
+     * method has been called for the current request.</p>
+     */
+    public abstract boolean getResponseComplete();
 
 
     /**
