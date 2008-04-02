@@ -134,7 +134,7 @@
     <target name="build.java.net" 
             depends="prepare.build.java.net">
 
-        <antcall target="build.glassfish.updater.jar" />
+        <antcall target="build.as.updater.jars" />
 
         <installerBuilder
               classFile="${dist.dir}/javaserverfaces_binary.class"
@@ -323,7 +323,7 @@
               zipFile="${basedir}/jsf-samples.zip"/>
     </target>
 
-    <target name="build.glassfish.updater.jar">
+    <target name="build.as.updater.jars">
       <mkdir dir="${dist.dir}" />
 
       <ant dir="jsf-api" target="tools.javac" inheritAll="false" />
@@ -339,6 +339,22 @@
         <manifest>
           <attribute name="Main-Class" 
                      value="com.sun.faces.tools.GlassfishUpdater" />
+        </manifest>
+      </jar>
+     <jar destfile="${dist.dir}/jsf-sjsas9pebeta-updater-${impl.version}.jar">
+        <fileset dir="${basedir}/jsf-tools/build/classes"
+                 includes="com/sun/faces/tools/GlassfishUpdater.class,com/sun/faces/tools/AS9Updater.class" />
+        <fileset dir="${basedir}/jsf-api/build/lib/"
+                 includes="jsf-api.jar" />
+        <fileset dir="${basedir}/jsf-ri/build/lib/"
+                 includes="jsf-impl.jar" />
+        <fileset dir="${basedir}/lib/compiledJasper"
+                 includes="org/apache/jasper/compiler/TldLocationsCache.class" />
+        <fileset dir="${basedir}/legal/jsf-cddl"
+                 includes="BINARY_LICENSE.txt" />
+        <manifest>
+          <attribute name="Main-Class" 
+                     value="com.sun.faces.tools.AS9Updater" />
         </manifest>
       </jar>
     </target>

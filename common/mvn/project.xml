@@ -33,7 +33,7 @@
     <name>Sun's JSF Implementation</name>
     <!-- PENDING(edburns): figure out how to pull this from common.xml
          ${impl.version} -->
-    <currentVersion>1.2-b14-SNAPSHOT</currentVersion>
+    <currentVersion>1.2-NIGHTLY_20060227</currentVersion>
     <!-- details about the organization that 'owns' the project -->
     <organization>
         <name>Sun Microsystems Inc</name>

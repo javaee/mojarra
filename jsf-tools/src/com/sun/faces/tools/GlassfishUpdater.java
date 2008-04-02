@@ -53,8 +53,10 @@ public class GlassfishUpdater {
     private static final String BACKUP_SUFFIX = "jsfbak";
     
     /** Creates a new instance of GlassfishUpdater */
-    private GlassfishUpdater() {
+    protected GlassfishUpdater() {
     }
+    
+    protected static File libDir = null;
     
     public static void main(String args[]) throws IOException {
         if (0 == args.length) {
@@ -63,7 +65,6 @@ public class GlassfishUpdater {
             
         }
         File testFile = null,
-             libDir = null,
              gfInstallDir = new File(args[0]);
 
         // Have we been given a directory?
@@ -118,7 +119,10 @@ public class GlassfishUpdater {
         return result;
     }
     
+    protected static boolean printUsageCalled = false;
+    
     public static void printUsage() {
+        printUsageCalled = true;
         System.err.println("Usage: java -jar glassfish-jsf-update.jar <glassfish install directory>");
         System.err.println("\t<glassfish install directory> is the path to the\n\tglassfish binary install.");
     }
@@ -211,7 +215,7 @@ public class GlassfishUpdater {
         fos.close();
     }
     
-    private static String getBackupFilename(File libDir, String filename) {
+    protected static String getBackupFilename(File libDir, String filename) {
        File [] files = libDir.listFiles();
        Pattern pat = Pattern.compile(".*" + BACKUP_SUFFIX + "[0-9]*");
        Matcher mat = null;
