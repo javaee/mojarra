@@ -11,6 +11,7 @@
   <!ENTITY core-attrs SYSTEM "core-attrs.xml">
   <!ENTITY events-attrs SYSTEM "events-attrs.xml">
   <!ENTITY i18n-attrs SYSTEM "i18n-attrs.xml">
+  <!ENTITY table-attrs SYSTEM "table-attrs.xml">
   <!ENTITY % impl SYSTEM "standard-html-renderkit-impl.xml">
   %impl;
 ]>
@@ -190,6 +191,24 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>the ResourceBundle key for localized images</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>imageKey</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the path to the image for this button</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>image</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlCommandButton</component-class>
     </renderer>
 
@@ -290,6 +309,24 @@
       &events-attrs;
       &i18n-attrs;
 
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>the id of the component for which the errors should be displayed</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>for</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the color in which to display the error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>color</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlOutputErrors</component-class>
     </renderer>
 
@@ -298,7 +335,22 @@
       <renderer-class>&form-renderer-class;</renderer-class>
       &core-attrs;
       &events-attrs;
-      &i18n-attrs;
+
+      <attribute>
+        <description>language code</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>lang</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>direction for weak/neutral text</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>dir</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
 
       <attribute>
         <description>HTTP method used to submit the form</description>
@@ -348,14 +400,27 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>the name of the ResourceBundle</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>bundle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlForm</component-class>
     </renderer>
 
     <renderer>
       <renderer-type>Grid</renderer-type>
       <renderer-class>&grid-renderer-class;</renderer-class>
+      &table-attrs;
+
       <component-class>javax.faces.component.HtmlPanelGrid</component-class>
     </renderer>
+
     <renderer>
       <renderer-type>Group</renderer-type>
       <renderer-class>&group-renderer-class;</renderer-class>
@@ -422,14 +487,16 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- non-html renderer specific attributes -->
+
       <attribute>
-        <attribute-name>image</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      <attribute>
+        <description>the ResourceBundle key for localized images</description>
+        <display-name></display-name>
+        <icon></icon>
         <attribute-name>imageKey</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
+
       <component-class>javax.faces.component.HtmlCommandHyperlink</component-class>
     </renderer>
 
@@ -518,6 +585,75 @@
     <renderer>
       <renderer-type>List</renderer-type>
       <renderer-class>&list-renderer-class;</renderer-class>
+
+      <!-- non-html renderer specific attributes -->
+
+      &table-attrs;
+
+      <attribute>
+        <description>the summary of the list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>summary</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the background color for the list </description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>bgcolor</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>frame</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description></description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rules</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the border for the list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>border</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the cellspacing for the list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>cellspacing</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the cellpadding for the list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>cellpadding</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the width for the list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>width</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlPanelList</component-class>
     </renderer>
 
@@ -633,6 +769,16 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>the border for the Menu</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>border</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlSelectOneMenu</component-class>
       <component-class>javax.faces.component.HtmlSelectManyMenu</component-class>
     </renderer>
@@ -697,8 +843,35 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>the layout for this list, either PAGE_DIRECTION or LINE_DIRECTION</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>layout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>the border for the list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>border</attribute-name>
+        <attribute-class>int</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlSelectOneRadioButtonList</component-class>
     </renderer>
+
     <renderer>
       <renderer-type>Secret</renderer-type>
       <renderer-class>&secret-renderer-class;</renderer-class>
@@ -777,15 +950,44 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>should this text redisplay on a reload</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>redisplay</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlInputSecret</component-class>
     </renderer>
 
     <renderer>
       <renderer-type>CheckboxList</renderer-type>
       <renderer-class>&selectmanycheckboxlist-renderer-class;</renderer-class>
+      &core-attrs;
+      &events-attrs;
+      &i18n-attrs;
 
-      <!-- PENDING(edburns): this should probably be merged with the
-           Checkbox renderer -->
+      <!-- non-html renderer specific attributes -->
+
+      <attribute>
+        <description>the layout for this list, either PAGE_DIRECTION or LINE_DIRECTION</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>layout</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>unavailable in this context</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>disabled</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>
+
       <component-class>javax.faces.component.HtmlSelectManyCheckboxList</component-class>
     </renderer>
 
@@ -795,37 +997,7 @@
       &core-attrs;
       &events-attrs;
       &i18n-attrs;
-      <attribute>
-        <description>CSS classes for formatting columns</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>columnClasses</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS classes for formatting footers</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>footerClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS classes for formatting headers</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>headerClass</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <attribute>
-        <description>CSS classes for formatting rows</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>rowClasses</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
+      &table-attrs;
 
       <component-class>javax.faces.component.HtmlDataTable</component-class>
     </renderer>

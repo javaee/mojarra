@@ -17,36 +17,33 @@
 -->
 
       <attribute>
-        <description>language code</description>
+        <description>CSS classes for formatting columns</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>lang</attribute-name>
+        <attribute-name>columnClasses</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
-        <description>direction for weak/neutral text</description>
+        <description>CSS classes for formatting footers</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>dir</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-
-      <!-- non-html renderer specific attributes -->
-
-      <attribute>
-        <description>the ResourceBundle key for localized text</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>key</attribute-name>
+        <attribute-name>footerClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
-        <description>the name of the ResourceBundle</description>
+        <description>CSS classes for formatting headers</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>bundle</attribute-name>
+        <attribute-name>headerClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
+      <attribute>
+        <description>CSS classes for formatting rows</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>rowClasses</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
