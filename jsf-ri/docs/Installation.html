@@ -55,7 +55,7 @@ Running the Examples with the Java WSDP</big></a></li>
 Building, and Running the Examples in a Different Container</big></a></li>
 </ul>
 <hr style="width: 100%; height: 2px;">
-<h1><a name="Installing_JavaServer_Faces_Technology_AS"></a>Installing
+<h1><a name="Installing_Java_Server_Faces_Technology_AS"></a>Installing
 JavaServer Faces Technology in the Application Server<br>
 </h1>
 <ol>
@@ -109,8 +109,11 @@ package an application WAR file.  To deploy a pre-packaged WAR file using <code>
 <li>Start the server.</li>
 <li>Launch <code>deploytool</code>. (See the Quick Start Guide located in the <code>docs</code> directory of your
 Application Server installation for instructions on launching <code>deploytool</code>.)</li>
-<li>Go to the File Menu, select Open, and then Web Component.  Browse for and open your WAR file.</li>
+<li>Go to the File Menu, select Open.  Browse for and open your WAR file.</li>
 <li>From the tree, select your WAR file.</li>
+<li>On the General tabbed-pane for this WAR file, enter a context root in the Context Root field.
+For example, you could enter <code>/guessNumber</code> as the context root for the 
+<code>guessNumber</code> example.
 <li>Go to the Tools menu and select Deploy.</li>
 </ol>
 <br>
@@ -126,6 +129,13 @@ For example, to run <code>cardemo</code>, specify this URL in your Web browser:
 <pre>
 http://localhost:8080/jsf-cardemo/
 </pre>
+If you used <code>deploytool</code> to deploy the example, use the context root that you gave
+it in the URL.  For example, if you entered the context root <code>/guessNumber</code>, enter the
+following in your Web browser:
+<pre>
+http://localhost:8080/guessNumber
+</pre>
+
 <h1><a name="Building_and_Running_the_Examples_AS"></a>Building and Running the
  Examples Using the Application Server<br>
 </h1>
