@@ -55,7 +55,7 @@
 
 	      <td>
 
-		<h:messages id="inputDate2Errors" 
+		<h:message id="inputDate2Errors" 
 			  for="inputDate2" />
 
 	      </td>
@@ -87,7 +87,7 @@
 
 	      <td>
 
-		<h:messages id="inputDate3Errors" 
+		<h:message id="inputDate3Errors" 
 			  for="inputDate3" />
 
 	      </td>
@@ -120,7 +120,7 @@
 
 	      <td>
 
-		<h:messages id="inputDate4Errors" 
+		<h:message id="inputDate4Errors" 
 			  for="inputDate4" />
 
 	      </td>

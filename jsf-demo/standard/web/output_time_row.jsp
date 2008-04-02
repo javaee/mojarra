@@ -44,7 +44,7 @@
 
 	      <td>
 
-		<h:messages id="outputTime2Errors" 
+		<h:message id="outputTime2Errors" 
 		        for="outputTime2" />
 
 	      </td>

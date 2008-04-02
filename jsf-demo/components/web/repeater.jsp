@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: repeater.jsp,v 1.5 2004/01/17 23:27:21 craigmcc Exp $ --%>
+<%-- $Id: repeater.jsp,v 1.6 2004/01/19 19:38:02 craigmcc Exp $ --%>
 
 <%@ taglib uri="http://java.sun.com/jsf/core"  prefix="f" %>
 <%@ taglib uri="http://java.sun.com/jsf/html"  prefix="h" %>
@@ -52,7 +52,7 @@
                          size="6"
                         value="#{customer.accountId}">
       </h:input_text>
-      <h:messages         for="accountId"/>
+      <h:message          for="accountId"/>
     </h:column>
 
     <h:column>
@@ -64,7 +64,7 @@
                          size="50"
                         value="#{customer.name}">
       </h:input_text>
-      <h:messages         for="name"/>
+      <h:message          for="name"/>
     </h:column>
 
     <h:column>
@@ -79,7 +79,7 @@
                       maximum="6"
                       minimum="2"/>
       </h:input_text>
-      <h:messages         for="symbol"/>
+      <h:message          for="symbol"/>
     </h:column>
 
     <h:column>

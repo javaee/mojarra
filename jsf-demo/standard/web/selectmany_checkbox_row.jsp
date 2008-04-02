@@ -17,7 +17,7 @@
 							<f:selectItem itemValue="8" itemLabel="eight" />
 							<f:selectItem itemValue="9" itemLabel="nine" />
 						</h:selectmany_checkboxlist></td>
-                                                <td><h:messages id="Error1" for="ManyApples3"/></td>
+                                                <td><h:message id="Error1" for="ManyApples3"/></td>
 					</tr>
 					<tr>
 						<td>Multi-select checkbox [Vertical]:</td>
@@ -34,7 +34,7 @@
 							<f:selectItem itemValue="8" itemLabel="eight" />
 							<f:selectItem itemValue="9" itemLabel="nine" />
 						</h:selectmany_checkboxlist></td>
-                                                <td><h:messages id="Error2" for="ManyApples4"/></td>
+                                                <td><h:message id="Error2" for="ManyApples4"/></td>
 					</tr>
 					<tr>
 						<td>Multi-select checklistmodel:</td>
@@ -43,7 +43,7 @@
 							<f:selectItems id="checklistmodelitems"
 								value="#{LoginBean.options}" />
 						</h:selectmany_checkboxlist></td>
-                                                <td><h:messages id="Error3" for="checklistmodel"/></td>
+                                                <td><h:message id="Error3" for="checklistmodel"/></td>
 					</tr>
 
 					<tr>
@@ -54,7 +54,7 @@
 							<f:selectItems id="checkLonglistmodelitems"
 								value="#{LoginBean.longList}" />
 						</h:selectmany_checkboxlist></td>
-                                                <td><h:messages id="Error4" for="checkLonglistmodel"/></td>
+                                                <td><h:message id="Error4" for="checkLonglistmodel"/></td>
 					</tr>
 
 					<tr>
@@ -64,5 +64,5 @@
 							<f:selectItems id="checklistmodelitemsGroup"
 								value="#{LoginBean.optionsGroup}" />
 						</h:selectmany_checkboxlist></td>
-                                                <td><h:messages id="Error5" for="checklistmodelGroup"/></td>
+                                                <td><h:message id="Error5" for="checklistmodelGroup"/></td>
 				</tr

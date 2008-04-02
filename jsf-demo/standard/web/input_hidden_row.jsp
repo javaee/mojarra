@@ -9,7 +9,7 @@
               <td><h:input_hidden id="datetextHidden" value="#{LoginBean.date}">
                       <f:convertDateTime type="date"/>
                   </h:input_hidden></td>
-              <td><h:messages id="dateErr"
+              <td><h:message id="dateErr"
                       for="datetextHidden"/> </td>
             </tr>
             <tr>
@@ -19,7 +19,7 @@
                       value="#{LoginBean.time}">
                       <f:convertDateTime type="time" /> 
                   </h:input_hidden></td>
-              <td><h:messages id="timeErr"
+              <td><h:message id="timeErr"
                       for="timetextHidden"/> </td>
             </tr>
             <tr>
@@ -29,7 +29,7 @@
                       value="#{LoginBean.dateTime}">
                       <f:convertDateTime type="both"/>
                   </h:input_hidden></td>
-              <td><h:messages id="datetimeErr"
+              <td><h:message id="datetimeErr"
                       for="datetimetextHidden"/> </td>
             </tr>
             <tr>

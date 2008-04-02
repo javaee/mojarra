@@ -20,7 +20,7 @@
              </td>
              <td>
 
-             <h:messages id="outputNumber1Errors"
+             <h:message id="outputNumber1Errors"
                           for="outputNumber1" />
 
              </td>
@@ -45,7 +45,7 @@
 
 	      <td>
 
-		<h:messages id="outputNumber2Errors" 
+		<h:message id="outputNumber2Errors" 
 			  for="outputNumber2" />
 
 	      </td>
@@ -72,7 +72,7 @@
 
 	      <td>
 
-		<h:messages id="outputNumber3Errors" 
+		<h:message id="outputNumber3Errors" 
 			  for="outputNumber3" />
 
 	      </td>
@@ -98,7 +98,7 @@
 
 	      <td>
 
-		<h:messages id="outputNumber4Errors" 
+		<h:message id="outputNumber4Errors" 
 			  for="outputNumber4" />
 
 	      </td>
@@ -122,7 +122,7 @@
 
               <td>
 
-                <h:messages id="outputNumber5Errors"
+                <h:message id="outputNumber5Errors"
                           for="outputNumber5" />
 
               </td>

@@ -97,7 +97,7 @@
     </tr>
     <tr>
       <td>
-	<h:messages id="errors" for="date"/>
+	<h:message id="errors" for="date"/>
         <h:messages globalOnly="true"/>
       </td>
     </tr>

@@ -53,7 +53,7 @@
 
 	      <td>
 
-		<h:messages id="inputTime2Errors" 
+		<h:message id="inputTime2Errors" 
 		        for="inputTime2" />
 
 	      </td>

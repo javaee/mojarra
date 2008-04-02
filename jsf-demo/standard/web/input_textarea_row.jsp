@@ -50,7 +50,7 @@
 
 	      <td>
 
-		<h:messages id="inputTextarea2Errors" 
+		<h:message id="inputTextarea2Errors" 
 			  for="inputTextarea2" />
 
 	      </td>
@@ -79,7 +79,7 @@
 
 	      <td>
 
-		<h:messages id="inputTextarea3Errors" 
+		<h:message id="inputTextarea3Errors" 
 			  for="inputTextarea3" />
 
 	      </td>
@@ -109,7 +109,7 @@
 
 	      <td>
 
-		<h:messages id="inputTextarea4Errors" 
+		<h:message id="inputTextarea4Errors" 
 			  for="inputTextarea4" />
 
 	      </td>

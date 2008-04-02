@@ -75,13 +75,13 @@
     <h:input_text  id="firstName" value="#{customer.firstName}" required="true"> 
         <f:valueChangeListener type="carstore.FirstNameChanged" />
     </h:input_text>
-    <h:messages styleClass="validationMessage"  for="firstName"/>
+    <h:message styleClass="validationMessage"  for="firstName"/>
 
     <h:output_text value="#{bundle.middleLabel}" />
     <h:input_text id="middleInitial" size="1" maxlength="1" 
             value="#{customer.middleInitial}" > 
         </h:input_text>
-    <h:messages  styleClass="validationMessage" for="middleInitial"/>
+    <h:message  styleClass="validationMessage" for="middleInitial"/>
 
     <h:output_text value="#{bundle.lastLabel}" />
     <h:input_text  value="#{customer.lastName}" />
@@ -160,7 +160,7 @@
                         size="10" required="true">
           <cs:format_validator formatPatterns="99999|99999-9999|### ###"/> 
     </h:input_text>
-    <h:messages  styleClass="validationMessage" for="zip" />
+    <h:message  styleClass="validationMessage" for="zip" />
 
     <h:output_text  value="#{bundle.ccNumberLabel}" />
     <h:input_text id="ccno" size="16"
@@ -168,7 +168,7 @@
           <cs:format_validator 
           formatPatterns="9999999999999999|9999 9999 9999 9999|9999-9999-9999-9999"/>
      </h:input_text>
-     <h:messages styleClass="validationMessage"  for="ccno"/>  
+     <h:message styleClass="validationMessage"  for="ccno"/>  
  
     <h:output_text  value="#{bundle.monthLabel}" />
     <h:panel_grid id="monthYearPanel" columns="2" footerClass="medium"

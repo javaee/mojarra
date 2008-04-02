@@ -53,7 +53,7 @@
                       validator="#{UserNumberBean.validate}"/>          
 	 <h:command_button id="submit" action="success" value="Submit" />
          <p>
-	 <h:messages style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
+	 <h:message style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
 
     </h:form>
     </f:view>

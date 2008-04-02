@@ -65,7 +65,7 @@
 
 	      <td>
 
-		<h:messages id="outputText2Errors" 
+		<h:message id="outputText2Errors" 
 			  for="outputText2" />
 
 	      </td>

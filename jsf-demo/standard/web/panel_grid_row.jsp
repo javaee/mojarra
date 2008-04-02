@@ -37,7 +37,7 @@
                                    value="username"
                                 required="true"/>
 
-                    <h:messages for="form1:username1"/>
+                    <h:message for="form1:username1"/>
 
                     <h:output_text value="Password:"/>
 
@@ -45,7 +45,7 @@
                                    value="password"
                                 required="true"/>
 
-                    <h:messages for="form1:password1"/>
+                    <h:message for="form1:password1"/>
 
                     <h:command_button id="submit1"
                                action="#{LoginForm.login}"
@@ -106,7 +106,7 @@
                                  binding="#{LoginForm.username}"
                                 required="true"/>
 
-                    <h:messages for="form2:username2"/>
+                    <h:message for="form2:username2"/>
 
                     <h:output_text value="Password:"/>
 
@@ -114,7 +114,7 @@
                                  binding="#{LoginForm.password}"
                                 required="true"/>
 
-                    <h:messages for="form2:password2"/>
+                    <h:message for="form2:password2"/>
 
                     <h:command_button id="submit2"
                                action="#{LoginForm.login}"

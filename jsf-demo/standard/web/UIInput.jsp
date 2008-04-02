@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<%-- $Id: UIInput.jsp,v 1.8 2003/12/17 15:20:01 rkitain Exp $ --%>
+<%-- $Id: UIInput.jsp,v 1.9 2004/01/19 19:38:05 craigmcc Exp $ --%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -59,7 +59,7 @@
 </td>
 
 <td>
-		<h:messages id="globalErrors" for="" />
+		<h:messages id="globalErrors" />
 </td>
 
 </tr>
