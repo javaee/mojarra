@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.28 2003/11/08 01:15:23 craigmcc Exp $
+ * $Id: UIGraphic.java,v 1.29 2003/11/11 00:02:31 eburns Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
      * <p>Return the image URL for this {@link UIGraphic}.  This method is a
      * typesafe alias for <code>getValue()</code>.</p>
      */
-    public String getUrl() {
+    public String getURL() {
 
         return ((String) getValue());
 
@@ -70,7 +70,7 @@ public class UIGraphic extends UIComponentBase implements ValueHolder {
      *
      * @param url The new image URL
      */
-    public void setUrl(String url) {
+    public void setURL(String url) {
 
         setValue(url);
 

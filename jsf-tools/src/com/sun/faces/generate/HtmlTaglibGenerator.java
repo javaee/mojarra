@@ -445,9 +445,13 @@ public class HtmlTaglibGenerator extends GenerateTagBase implements TaglibGenera
 	    String ivar = generateIvar(attributeName);
 	    
 	    // setter
-	    result.append("    public void set" + 
-			  Character.toUpperCase(attributeName.charAt(0)) +
-			  attributeName.substring(1) + "(");
+	    String setWhat = attributeName;
+	    if (isAllUpperCase(setWhat)) {
+		setWhat = attributeName.toLowerCase();
+	    }
+	    setWhat = Character.toUpperCase(setWhat.charAt(0)) +
+		setWhat.substring(1);
+	    result.append("    public void set" + setWhat + "(");
 	    if (isRendererAttribute) {
 	        result.append("java.lang.String " + ivar + ") {\n");
 	    } else if (valueBindingEnabledProperties.contains(attributeName)) {

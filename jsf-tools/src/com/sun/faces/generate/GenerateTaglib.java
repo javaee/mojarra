@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateTaglib.java,v 1.4 2003/11/05 05:46:03 eburns Exp $
+ * $Id: GenerateTaglib.java,v 1.5 2003/11/11 00:02:33 eburns Exp $
  */
 
 /*
@@ -473,6 +473,9 @@ public class GenerateTaglib extends GenerateTagBase {
 
 	for (int i=0; i<propertyNames.size(); i++) {
 	    propertyName = (String)propertyNames.get(i);
+	    if (isAllUpperCase(propertyName)) {
+		propertyName = propertyName.toLowerCase();
+	    }
 	    propertyClass = getParser().getComponentPropertyClass(
 	        componentType, propertyName);
 	    //

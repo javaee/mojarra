@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateBase.java,v 1.3 2003/11/07 22:31:34 eburns Exp $
+ * $Id: GenerateBase.java,v 1.4 2003/11/11 00:02:33 eburns Exp $
  */
 
 /*
@@ -334,6 +334,21 @@ public abstract class GenerateBase extends Object {
 	    }
 	}
 
+	return result;
+    }
+
+    public boolean isAllUpperCase(String toTest) {
+	if (null == toTest) {
+	    return false;
+	}
+	
+	boolean result = true;
+	for (int i = 0, len = toTest.length(); i < len; i++) {
+	    if (Character.isLowerCase(toTest.charAt(i))) {
+		result = false;
+		break;
+	    }
+	}
 	return result;
     }
 
