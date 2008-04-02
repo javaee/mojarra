@@ -4,7 +4,7 @@
  Copyright 2003 Sun Microsystems, Inc. All rights reserved.
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 
- $Id: build-tests.xml,v 1.22 2003/09/08 20:10:21 jvisvanathan Exp $
+ $Id: build-tests.xml,v 1.23 2003/09/19 23:54:04 horwat Exp $
 -->
 
 
@@ -78,7 +78,8 @@
                 test.tlvalidator,
                 test.standard,
                 test.html.taglib,
-                test.verbatim
+                test.verbatim,
+                test.phases
                "/>
 
 
@@ -383,6 +384,16 @@
    <tester host="${host}" port="${port}" protocol="${protocol}"
         request="${context.path}/renderkit03.jsp"
 	golden="${golden.path}/renderkit03A.txt"/>
+  </target>
+
+  <target name="test.phases"
+   description="Test Phase processing with Phase Listener">
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/phaseListener01.jsp"
+         outContent="/phaseListener01.jsp PASSED"/>
+   <tester host="${host}" port="${port}" protocol="${protocol}"
+         request="${context.path}/faces/phaseListener01.jsp?param=foo"
+         outContent="/phaseListener01.jsp FAILED"/>
   </target>
 
 </project>

@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.32 2003/08/28 21:39:21 eburns Exp $
+ * $Id: LifecycleImpl.java,v 1.33 2003/09/19 23:54:03 horwat Exp $
  */
 
 /*
@@ -27,9 +27,14 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
+
+
 
 /**
  *
@@ -37,7 +42,7 @@ import java.util.HashMap;
  *  Lifecycle in the JSF RI. <P>
  *
  *
- * @version $Id: LifecycleImpl.java,v 1.32 2003/08/28 21:39:21 eburns Exp $
+ * @version $Id: LifecycleImpl.java,v 1.33 2003/09/19 23:54:03 horwat Exp $
  * 
  * @see	javax.faces.lifecycle.Lifecycle
  *
@@ -163,6 +168,13 @@ public class LifecycleImpl extends Lifecycle
             // Execute the current phase
             curPhase.execute(context);
 
+            // Go to Render Phase?
+            if ((curPhase.getId() == PhaseId.RESTORE_VIEW) && 
+                (!hasPostDataOrQueryParams(context))) {
+                curPhase = getRenderPhase(context);
+                context.renderResponse();
+            }
+
             // Process Events 
 
             if (curPhase.getId() == PhaseId.APPLY_REQUEST_VALUES) {
@@ -200,6 +212,42 @@ public class LifecycleImpl extends Lifecycle
 
             curPhaseId++;
         }
+    }
+
+    
+    /*
+     * Check for request parameters or save state. If neither are present
+     * then all phases can be skipped and can go directly to render response
+     * phase.
+     */
+    private boolean hasPostDataOrQueryParams(FacesContext context) {
+
+        Object request = context.getExternalContext().getRequest();
+        if (request instanceof HttpServletRequest) {
+            if ("GET".equals(((HttpServletRequest)request).getMethod())) {
+                //check for request parameters
+                Iterator paramNames = context.getExternalContext().
+                    getRequestParameterNames();
+                if (paramNames.hasNext()) {
+                   return true;
+                }
+                return false;
+            } else if ("POST".equals(((HttpServletRequest)request).getMethod()) ||
+                "PUT".equals(((HttpServletRequest)request).getMethod())) {
+                //we have to assume there is post data
+                return true;
+            }
+        } else if (request instanceof ServletRequest) {
+            Iterator paramNames = context.getExternalContext().
+                getRequestParameterNames();
+            if (paramNames.hasNext()) {
+               return true;
+            }
+            return false;
+        }
+
+        //default to going through all processing phases
+        return true;
     }
 
     // This method processes the events in the queue;
