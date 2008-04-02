@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.51 2005/07/11 17:43:48 jayashri Exp $
+ * $Id: LifecycleImpl.java,v 1.52 2005/07/12 01:37:25 jayashri Exp $
  */
 
 /*
@@ -248,6 +248,7 @@ public class LifecycleImpl extends Lifecycle {
                 logger.log(Level.WARNING, "executePhase(" + phaseId.toString() + "," 
                         + context + ") threw exception", e);
             }
+            throw new FacesException(e);
         } 
 	
         try {
