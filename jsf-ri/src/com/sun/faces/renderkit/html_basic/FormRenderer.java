@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.71 2004/01/30 00:31:20 jvisvanathan Exp $
+ * $Id: FormRenderer.java,v 1.72 2004/01/30 21:49:20 craigmcc Exp $
  */
 
 /*
@@ -134,12 +134,11 @@ public class FormRenderer extends HtmlBasicRenderer {
      * @param context FacesContext for the response we are creating
      */
     private String getActionStr(FacesContext context) {        
-        String contextPath = context.getExternalContext().getRequestContextPath();
-        StringBuffer sb = new StringBuffer(contextPath);
-        sb.append(context.getApplication().
-                  getViewHandler().getViewIdPath(context, 
-                                            context.getViewRoot().getViewId()));       
-        return (context.getExternalContext().encodeActionURL(sb.toString()));
+        String viewId = context.getViewRoot().getViewId();
+        String actionURL =
+            context.getApplication().getViewHandler().
+            getActionURL(context, viewId);
+        return (context.getExternalContext().encodeActionURL(actionURL));
     }     
 
     public void encodeChildren(FacesContext context, UIComponent component) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContextImpl.java,v 1.21 2004/01/27 21:04:12 eburns Exp $
+ * $Id: ExternalContextImpl.java,v 1.22 2004/01/30 21:49:18 craigmcc Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import com.sun.faces.util.Util;
  * servlet implementation.
  *
  * @author Brendan Murray
- * @version $Id: ExternalContextImpl.java,v 1.21 2004/01/27 21:04:12 eburns Exp $
+ * @version $Id: ExternalContextImpl.java,v 1.22 2004/01/30 21:49:18 craigmcc Exp $
  *
  */
 public class ExternalContextImpl extends ExternalContext {
@@ -289,7 +289,7 @@ public class ExternalContextImpl extends ExternalContext {
         return ((HttpServletResponse) response).encodeURL(url);
     };
 
-    public void dispatchMessage(String requestURI) throws IOException, FacesException {
+    public void dispatch(String requestURI) throws IOException, FacesException {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(requestURI);
         try {
             requestDispatcher.forward(this.request, this.response);
@@ -301,7 +301,7 @@ public class ExternalContextImpl extends ExternalContext {
         }
     }
 
-    public void redirectMessage(String requestURI) throws IOException {
+    public void redirect(String requestURI) throws IOException {
 	((HttpServletResponse) response).sendRedirect(requestURI);
 	FacesContext.getCurrentInstance().responseComplete();
     }

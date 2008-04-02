@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.35 2004/01/27 20:29:11 craigmcc Exp $
+ * $Id: ViewHandler.java,v 1.36 2004/01/30 21:48:23 craigmcc Exp $
  */
 
 /*
@@ -12,6 +12,7 @@ package javax.faces.application;
 import java.util.Locale;
 import java.io.IOException;
 import javax.faces.FacesException;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIViewRoot;
@@ -114,19 +115,38 @@ public abstract class ViewHandler {
 
 
     /**
-     * <p>Return a context relative path (beginning with a slash)
-     * for the specified <code>viewId</code>, including any required
-     * prefix or suffix mapping defined by the application.</p>
+     * <p>Return a URL suitable for rendering (after optional encoding
+     * performed by the <code>encodeActionURL()</code> method of
+     * {@link ExternalContext}) that selects the specified view identifier.</p>
      *
-     * @param context {@link FacesContext} for this request.
+     * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
      *
      * @exception IllegalArgumentException if <code>viewId</code> is not
-     * valid for this <code>ViewHandler</code>.
+     *  valid for this <code>ViewHandler</code>.
      * @exception NullPointerException if <code>context</code> or
-     * <code>viewId</code> is <code>null</code>.
+     *  <code>viewId</code> is <code>null</code>.
      */
-    public abstract String getViewIdPath(FacesContext context, String viewId);
+    public abstract String getActionURL(FacesContext context, String viewId);
+
+
+    /**
+     * <p>Return a URL suitable for rendering (after optional encoding
+     * perfomed by the <code>encodeResourceURL()</code> method of
+     * {@link ExternalContext}) that selects the specifed web application
+     * resource.  If the specified path starts with a slash, it must be
+     * treated as context relative; otherwise, it must be treated as relative
+     * to the action URL of the current view.</p>
+     *
+     * @param context {@link FacesContext} for the current request
+     * @param path Resource path to convert to a URL
+     *
+     * @exception IllegalArgumentException if <code>viewId</code> is not
+     *  valid for this <code>ViewHandler</code>.
+     * @exception NullPointerException if <code>context</code> or
+     *  <code>path</code> is <code>null</code>.
+     */
+    public abstract String getResourceURL(FacesContext context, String path);
 
 
     /**

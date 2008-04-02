@@ -1,5 +1,5 @@
 /*
- * $Id: MockExternalContext.java,v 1.10 2004/01/27 20:30:20 craigmcc Exp $
+ * $Id: MockExternalContext.java,v 1.11 2004/01/30 21:48:26 craigmcc Exp $
  */
 
 /*
@@ -199,13 +199,13 @@ public class MockExternalContext extends ExternalContext {
     }
 
 
-    public void dispatchMessage(String requestURI)
+    public void dispatch(String requestURI)
         throws IOException, FacesException {
         throw new UnsupportedOperationException();
     }
 
     
-    public void redirectMessage(String requestURI)
+    public void redirect(String requestURI)
         throws IOException {
         throw new UnsupportedOperationException();
     }

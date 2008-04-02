@@ -1243,8 +1243,9 @@
       <ul>
 
       <p>The value of the "method" attribute must be "post".  The value
-      of the "action" attribute must be the result of creating a String
-      from request context path, followed by the view id of this view,
+      of the "action" attribute must be the result of passing the view
+      identifier of the current view to the <code>getActionURL()</code>
+      method of the <code>ViewHandler</code> for this application,
       then passing that String to the <code>encodeActionURL()</code>
       method on the <code>ExternalContext</code>.  If the "styleClass"
       attribute is specified, render its value as the value of the
@@ -1275,6 +1276,8 @@
       <description>Renders an HTML "img" element.  Render the clientId
       as the value of the "id" attribute.  Render the value of the
       component as the value of the "src" attribute, after passing it
+      to the <code>getResourceUR()</code> method of the <code>ViewHandler</code>
+      for this application, and passing the result
       through the <code>encodeResourceURL()</code> method of the
       <code>ExternalContext</code>.  If present, render the value of the
       alt attribute as the value of the "alt" attribute.  If the

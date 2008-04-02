@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.17 2004/01/27 21:31:35 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.18 2004/01/30 21:48:53 craigmcc Exp $ 
  */ 
 
 
@@ -83,7 +83,7 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.17 2004/01/27 21:31:35 eburns Exp $ * 
+ * @version $Id: XulViewHandlerImpl.java,v 1.18 2004/01/30 21:48:53 craigmcc Exp $ * 
  * @see javax.faces.application.ViewHandler 
  * 
  */ 
@@ -256,7 +256,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         return restoreView(context, viewId);
     }
 
-    public String getViewIdPath(FacesContext context, String viewId) {
+    public String getActionURL(FacesContext context, String viewId) {
         if (viewId.charAt(0) != '/') {            
             throw new IllegalArgumentException(
 		"Illegal view ID "+viewId+". the ID must begin with '/'");
@@ -267,7 +267,16 @@ public class XulViewHandlerImpl extends ViewHandler {
 	if (!viewId.startsWith("/faces")) {
 	    viewId = "/faces" + viewId;
 	}
-        return viewId; 
+        return context.getExternalContext().getRequestContextPath() + viewId;
+    }
+
+
+    public String getResourceURL(FacesContext context, String path) {
+        if (path.startsWith("/")) {
+            return context.getExternalContext().getRequestContextPath() + path;
+        } else {
+            return (path);
+        }
     }
 
 

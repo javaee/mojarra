@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.9 2004/01/27 21:05:51 eburns Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.10 2004/01/30 21:49:22 craigmcc Exp $ 
  */ 
 
 
@@ -51,7 +51,7 @@ import java.util.Locale;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.9 2004/01/27 21:05:51 eburns Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.10 2004/01/30 21:49:22 craigmcc Exp $  
  */ 
 
 
@@ -157,7 +157,7 @@ public boolean sendResponseToFile()
     
     
     
-    public void testGetViewIdPath() {
+    public void testGetActionURL() {
        
        LifecycleFactory factory = (LifecycleFactory) 
            FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
@@ -171,6 +171,7 @@ public boolean sendResponseToFile()
                                                          testRequest,
                                                          response);
        FacesContext facesContext = new FacesContextImpl(extContext, lifecycle);
+       String contextPath = request.getContextPath();
        
        // Spoof the mappings so we can properly test the different possible
        // values
@@ -184,21 +185,21 @@ public boolean sendResponseToFile()
        
        
        // if getServletPath() returns "" then the viewId path returned should
-       // be the same as what was passed.
+       // be the same as what was passed, prefixed by the context path.
        testRequest.setServletPath("");
        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       String path = handler.getViewIdPath(facesContext, "/test.jsp");
+       String path = handler.getActionURL(facesContext, "/test.jsp");
        System.out.println("VIEW ID PATH 1: " + path);
-       assertTrue(path.equals("/test.jsp"));
+       assertEquals(contextPath + "/test.jsp", path);
        
        // if getServletPath() returns a path prefix, then the viewId path
        // returned must have that path prefixed.
        testRequest.setServletPath("/faces");
        testRequest.setPathInfo("/path/test.jsp");
        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getViewIdPath(facesContext, "/path/test.jsp");
+       path = handler.getActionURL(facesContext, "/path/test.jsp");
        System.out.println("VIEW ID PATH 2: " + path);
-       assertTrue(path.equals("/faces/path/test.jsp"));
+       assertEquals(contextPath + "/faces/path/test.jsp", path);
        
        
        // if getServletPath() returns a path indicating extension mapping
@@ -207,9 +208,9 @@ public boolean sendResponseToFile()
        testRequest.setServletPath("/path/firstRequest.jsf");
        testRequest.setPathInfo(null);
        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getViewIdPath(facesContext, "/path/test");
+       path = handler.getActionURL(facesContext, "/path/test");
        System.out.println("VIEW ID PATH 3: " + path);
-       assertTrue(path.equals("/path/test.jsf"));
+       assertEquals(contextPath + "/path/test.jsf", path);
        
        // if getServletPath() returns a path indicating extension mapping
        // and the viewId passed has an extension, replace the extension with
@@ -217,9 +218,9 @@ public boolean sendResponseToFile()
        testRequest.setServletPath("/path/firstRequest.jsf");
        testRequest.setPathInfo(null);
        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getViewIdPath(facesContext, "/path/t.est.jsp");
+       path = handler.getActionURL(facesContext, "/path/t.est.jsp");
        System.out.println("VIEW ID PATH 4: " + path);
-       assertTrue(path.equals("/path/t.est.jsf"));
+       assertEquals(contextPath + "/path/t.est.jsf", path);
        
        // if path info is null, the impl must check to see if 
        // there is an exact match on the servlet path, if so, return
@@ -227,18 +228,18 @@ public boolean sendResponseToFile()
        testRequest.setServletPath("/faces");
        testRequest.setPathInfo(null);
        testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
-       path = handler.getViewIdPath(facesContext, "/path/t.est");
+       path = handler.getActionURL(facesContext, "/path/t.est");
        System.out.println("VIEW ID PATH 5: " + path);
-       assertTrue(path.equals("/faces/path/t.est"));
+       assertEquals(contextPath + "/faces/path/t.est", path);
                      
     }
     
-    public void testGetViewIdExceptionsTest() throws Exception {
+    public void testGetActionURLExceptions() throws Exception {
         boolean exceptionThrown = false;
         ViewHandler handler = 
             getFacesContext().getApplication().getViewHandler();
         try {
-            handler.getViewIdPath(null, "/test.jsp");            
+            handler.getActionURL(null, "/test.jsp");            
         } catch (NullPointerException npe) {
             exceptionThrown = true;
         }
@@ -246,7 +247,7 @@ public boolean sendResponseToFile()
         
         exceptionThrown = false;
         try {
-            handler.getViewIdPath(getFacesContext(), null);
+            handler.getActionURL(getFacesContext(), null);
         } catch (NullPointerException npe) {
             exceptionThrown = true;
         }
@@ -254,11 +255,34 @@ public boolean sendResponseToFile()
         
         exceptionThrown = false;        
         try {
-            handler.getViewIdPath(getFacesContext(), "test.jsp");            
+            handler.getActionURL(getFacesContext(), "test.jsp");            
         } catch (IllegalArgumentException iae) {
             exceptionThrown = true;
         }
         assertTrue(exceptionThrown);                
+    }
+
+
+    public void testGetResourceURL() throws Exception {
+
+       LifecycleFactory factory = (LifecycleFactory) 
+           FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+       Lifecycle lifecycle = 
+           factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
+        ExternalContext extContext =
+            new ExternalContextImpl(config.getServletContext(),
+                                    request, response);
+        FacesContext context =
+            new FacesContextImpl(extContext, lifecycle);
+
+        // Validate correct calculations
+        assertEquals(request.getContextPath() + "/index.jsp",
+                     context.getApplication().getViewHandler().
+                     getResourceURL(context, "/index.jsp"));
+        assertEquals("index.jsp",
+                     context.getApplication().getViewHandler().
+                     getResourceURL(context, "index.jsp"));
+
     }
 
 

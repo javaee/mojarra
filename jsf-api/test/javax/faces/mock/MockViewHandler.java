@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.22 2004/01/27 20:30:21 craigmcc Exp $
+ * $Id: MockViewHandler.java,v 1.23 2004/01/30 21:48:26 craigmcc Exp $
  */
 
 /*
@@ -65,8 +65,16 @@ public class MockViewHandler extends ViewHandler {
 	return stateManager;
     }
 
-    public String getViewIdPath(FacesContext context, String viewId) {
-	return null;
+    public String getActionURL(FacesContext context, String viewId) {
+        throw new UnsupportedOperationException();
+    }
+
+    public String getResourceURL(FacesContext context, String path) {
+        if (path.startsWith("/")) {
+            return context.getExternalContext().getRequestContextPath() + path;
+        } else {
+            return (path);
+        }
     }
 
     public Locale calculateLocale(FacesContext context) {

@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandlerImpl.java,v 1.24 2004/01/27 21:04:02 eburns Exp $
+ * $Id: NavigationHandlerImpl.java,v 1.25 2004/01/30 21:49:17 craigmcc Exp $
  */
 
 /*
@@ -110,15 +110,15 @@ public class NavigationHandlerImpl extends NavigationHandler {
 	    
 	    if (caseStruct.navCase.hasRedirect()) {
 		// perform a 302 redirect.
-		String newPath = extContext.getRequestContextPath() + 
-		    viewHandler.getViewIdPath(context, caseStruct.viewId);
+		String newPath =
+		    viewHandler.getActionURL(context, caseStruct.viewId);
 		try {
                     if (log.isDebugEnabled()) {
                         log.debug("Redirecting to path " + newPath 
                             + " for outcome " + outcome + 
                             "and viewId " + caseStruct.viewId);
                     }
-		    extContext.redirectMessage(newPath);
+		    extContext.redirect(newPath);
 		}
 		catch (java.io.IOException ioe) {
 		    String message = "Redirect to " + newPath + " failed.";

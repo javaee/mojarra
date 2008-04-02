@@ -1,5 +1,5 @@
 /*
- * $Id: ExternalContext.java,v 1.14 2004/01/27 20:29:32 craigmcc Exp $
+ * $Id: ExternalContext.java,v 1.15 2004/01/30 21:48:25 craigmcc Exp $
  */
  
 /*
@@ -98,7 +98,7 @@ public abstract class ExternalContext {
      * @exception NullPointerException if <code>path</code>
      *  is <code>null</code>
      */
-    public abstract void dispatchMessage(String path)
+    public abstract void dispatch(String path)
 	throws IOException;
 
 
@@ -736,7 +736,7 @@ public abstract class ExternalContext {
      *  the current response has already been committed
      * @exception IOException if an input/output error occurs
      */
-    public abstract void redirectMessage(String url)
+    public abstract void redirect(String url)
 	throws IOException;
 
 
