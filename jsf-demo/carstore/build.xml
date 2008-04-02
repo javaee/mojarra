@@ -134,6 +134,7 @@
             </fileset>
         </copy>
 
+        <copy todir="${build}/${example}/WEB-INF/lib" file="${demo-components.jar}" />
         <copy todir="${build}/${example}/">
             <fileset dir="web">
                 <include name="**/*.html"/>
