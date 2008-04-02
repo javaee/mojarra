@@ -1,5 +1,5 @@
 /*
- * $Id: UseFacesTag.java,v 1.14 2003/05/15 22:25:48 rkitain Exp $
+ * $Id: UseFacesTag.java,v 1.15 2003/07/24 23:24:19 rkitain Exp $
  */
 
 /*
@@ -30,7 +30,6 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectOutput;
 import java.util.Map;
 import javax.servlet.ServletConfig;
-import javax.faces.webapp.JspResponseWriter;
 import javax.servlet.jsp.JspWriter;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.faces.component.UIComponent;
@@ -45,7 +44,7 @@ import javax.servlet.jsp.tagext.BodyTag;
  *  any renderers or attributes. It exists mainly to save the state of
  *  the response tree once all tags have been rendered.
  *
- * @version $Id: UseFacesTag.java,v 1.14 2003/05/15 22:25:48 rkitain Exp $
+ * @version $Id: UseFacesTag.java,v 1.15 2003/07/24 23:24:19 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

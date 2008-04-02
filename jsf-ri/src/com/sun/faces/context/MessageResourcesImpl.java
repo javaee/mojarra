@@ -1,5 +1,5 @@
 /*
- * $Id: MessageResourcesImpl.java,v 1.13 2003/07/22 19:46:00 rkitain Exp $
+ * $Id: MessageResourcesImpl.java,v 1.14 2003/07/24 23:24:15 rkitain Exp $
  */
 
 /*
@@ -23,7 +23,7 @@ import java.util.Properties;
 import javax.faces.FacesException;
 import javax.faces.application.MessageImpl;
 import javax.faces.application.Message;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
 import java.text.MessageFormat;

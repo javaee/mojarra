@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.43 2003/07/18 01:18:03 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.44 2003/07/24 23:24:18 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.faces.application.Application;
 import javax.faces.render.Renderer;
 import javax.faces.component.UIInput;
 import javax.faces.application.Message;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;

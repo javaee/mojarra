@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.65 2003/06/25 06:29:56 rkitain Exp $
+ * $Id: Util.java,v 1.66 2003/07/24 23:24:20 rkitain Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ import javax.faces.context.FacesContextFactory;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Message;
 import javax.faces.application.Application;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 
 
 import javax.faces.application.Application;
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.65 2003/06/25 06:29:56 rkitain Exp $
+ * @version $Id: Util.java,v 1.66 2003/07/24 23:24:20 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

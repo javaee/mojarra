@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.21 2003/07/24 16:41:08 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.22 2003/07/24 23:24:14 rkitain Exp $
  */
 
 /*
@@ -29,7 +29,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Message;
 import javax.faces.application.MessageImpl;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.application.NavigationHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.10 2003/07/22 19:50:49 rkitain Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.11 2003/07/24 23:24:21 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import com.sun.faces.TestComponent;
 import com.sun.faces.TestConverter;
 import com.sun.faces.context.MessageResourcesImpl;
 import com.sun.faces.config.*;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.FacesException;
 
 import java.util.HashMap;
@@ -52,7 +52,7 @@ import java.util.Iterator;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.10 2003/07/22 19:50:49 rkitain Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.11 2003/07/24 23:24:21 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo

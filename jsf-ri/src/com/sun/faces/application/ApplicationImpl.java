@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.17 2003/07/22 19:43:37 rkitain Exp $
+ * $Id: ApplicationImpl.java,v 1.18 2003/07/24 23:24:13 rkitain Exp $
  */
 
 /*
@@ -16,7 +16,7 @@ import java.util.Map;
 import javax.faces.application.Application;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.event.ActionListener;
 import javax.faces.el.PropertyNotFoundException;

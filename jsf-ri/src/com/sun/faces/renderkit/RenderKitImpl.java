@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.3 2003/07/22 19:47:05 rkitain Exp $
+ * $Id: RenderKitImpl.java,v 1.4 2003/07/24 23:24:17 rkitain Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import org.mozilla.util.ParameterCheck;
 import org.xml.sax.Attributes;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -31,8 +32,9 @@ import java.util.Stack;
 import java.util.Set;
 import java.util.NoSuchElementException;
 
-import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 
@@ -42,7 +44,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.3 2003/07/22 19:47:05 rkitain Exp $
+ * @version $Id: RenderKitImpl.java,v 1.4 2003/07/24 23:24:17 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -149,6 +151,11 @@ public class RenderKitImpl extends RenderKit {
         return renderer;
     }
 
+    //PENDING(rogerk) Implement for ResponseWriter implementation
+
+    public ResponseWriter getResponseWriter(Writer writer, String characterEncoding) {
+        return null;
+    }
 
     // The test for this class is in TestRenderKit.java
 

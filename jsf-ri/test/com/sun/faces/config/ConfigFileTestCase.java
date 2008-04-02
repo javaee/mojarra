@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.20 2003/07/22 19:51:13 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.21 2003/07/24 23:24:22 rkitain Exp $
  */
 
 /*
@@ -32,7 +32,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIComponent;
-import javax.faces.context.MessageResources;
+import javax.faces.application.MessageResources;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
 import javax.faces.render.RenderKit;
