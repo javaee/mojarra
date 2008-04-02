@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.42 2006/03/14 16:33:21 edburns Exp $
+ * $Id: UIViewRoot.java,v 1.43 2006/05/11 18:48:03 rlubke Exp $
  */
 
 /*
@@ -35,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.lifecycle.LifecycleFactory;
@@ -147,6 +150,9 @@ public class UIViewRoot extends UIComponentBase {
     static public final String UNIQUE_ID_PREFIX = "j_id";
     
     private static Lifecycle lifecycle;
+    
+    private static final Logger LOGGER =
+        Logger.getLogger("javax.faces", "javax.faces.LogStrings");
     
 
     // ------------------------------------------------------------ Constructors
@@ -433,7 +439,22 @@ public class UIViewRoot extends UIComponentBase {
                     try {
                         source.broadcast(event);
                     } catch (AbortProcessingException e) {
-                        ; // A "return" here would abort remaining events too
+                        if (LOGGER.isLoggable(Level.SEVERE)) {
+                            UIComponent component = event.getComponent();
+                            String id = "";
+                            if (component != null) {
+                                id = component.getId();
+                                if (id == null) {
+                                    id = component.getClientId(context);
+                                }
+                            }
+                            LOGGER.log(Level.SEVERE,
+                                       "error.component.abortprocessing_thrown",
+                                       new Object[] {event.getClass().getName(),
+                                                     phaseId.toString(),
+                                                     id});
+                            LOGGER.log(Level.SEVERE, e.toString(), e);
+                        }
                     }
 		    eventsForPhaseId.remove(cursor); // Stay at current position
 		}

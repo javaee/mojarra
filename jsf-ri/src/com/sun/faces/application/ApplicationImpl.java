@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.75 2006/05/03 14:49:21 edburns Exp $
+ * $Id: ApplicationImpl.java,v 1.76 2006/05/11 18:48:04 rlubke Exp $
  */
 
 /*
@@ -222,7 +222,7 @@ public class ApplicationImpl extends Application {
         compositeELResolver.add(new ImplicitObjectELResolver());
        
         Iterator it = null;
-        ArrayList resolvers = associate.geELResolversFromFacesConfig();
+        List<ELResolver> resolvers = associate.geELResolversFromFacesConfig();
         // add ELResolvers from faces-config.xml
         if (resolvers != null) {
             it = resolvers.iterator();

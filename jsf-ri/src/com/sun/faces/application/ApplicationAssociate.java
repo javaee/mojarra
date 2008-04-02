@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationAssociate.java,v 1.28 2006/03/29 23:03:42 rlubke Exp $
+ * $Id: ApplicationAssociate.java,v 1.29 2006/05/11 18:48:04 rlubke Exp $
  */
 
 /*
@@ -31,6 +31,7 @@ package com.sun.faces.application;
 
 import javax.el.CompositeELResolver;
 import javax.el.ExpressionFactory;
+import javax.el.ELResolver;
 import javax.faces.FacesException;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -154,7 +155,7 @@ public class ApplicationAssociate {
     private static final String ASSOCIATE_KEY = RIConstants.FACES_PREFIX + 
         "ApplicationAssociate";
 
-    private ArrayList elResolversFromFacesConfig = null;
+    private List<ELResolver> elResolversFromFacesConfig = null;
     
     @SuppressWarnings("deprecation")
     private VariableResolver legacyVRChainHead = null;
@@ -253,11 +254,11 @@ public class ApplicationAssociate {
         facesELResolverForJsp = celr;
     }
     
-    public void setELResolversFromFacesConfig(ArrayList resolvers) {
+    public void setELResolversFromFacesConfig(List<ELResolver> resolvers) {
         this.elResolversFromFacesConfig = resolvers;
     }
      
-    public ArrayList geELResolversFromFacesConfig() {
+    public List<ELResolver> geELResolversFromFacesConfig() {
          return elResolversFromFacesConfig;
     }
     
@@ -269,7 +270,7 @@ public class ApplicationAssociate {
         return this.expressionFactory;
     }
     
-    public ArrayList getApplicationELResolvers() {
+    public List<ELResolver> getApplicationELResolvers() {
         return app.getApplicationELResolvers();
     }
     

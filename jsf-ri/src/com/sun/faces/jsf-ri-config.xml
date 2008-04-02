@@ -56,10 +56,10 @@
   <application>
     <action-listener>
       com.sun.faces.application.ActionListenerImpl
-    </action-listener>
+    </action-listener>     
     <navigation-handler>
       com.sun.faces.application.NavigationHandlerImpl
-    </navigation-handler>
+    </navigation-handler>     
     <state-manager>
       com.sun.faces.application.StateManagerImpl
     </state-manager>
@@ -166,6 +166,11 @@
     <converter-for-class>java.lang.Enum</converter-for-class>
     <converter-class>javax.faces.convert.EnumConverter</converter-class>
   </converter>
+    
+    <!-- Add our InitializingPhaseListener -->
+    <lifecycle>
+        <phase-listener>com.sun.faces.lifecycle.ELResolverInitPhaseListener</phase-listener>
+    </lifecycle>
 
   <!-- Configure Standard Validators -->
 
