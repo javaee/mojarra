@@ -74,18 +74,20 @@ public class UserNumberBean {
 
 
     public String getResponse() {
-        if (userNumber != null && userNumber.compareTo(randomInt) == 0) {
+
+        assert (userNumber != null); // indicates an EL conversion failure
+        
+        if (userNumber.compareTo(randomInt) == 0) {
             return "Yay! You got it!";
         } else {
-            if (userNumber != null) {
-                int num = userNumber.intValue();
-                if (num > randomInt.intValue()) {
-                    return "Sorry, " + userNumber + " is incorrect. Try a smaller number.";
-                } else  {
-                    return "Sorry, " + userNumber + " is incorrect. Try a larger number.";    
-                }
+            int num = userNumber.intValue();
+            if (num > randomInt.intValue()) {
+                return "Sorry, " + userNumber +
+                    " is incorrect. Try a smaller number.";
+            } else {
+                return "Sorry, " + userNumber +
+                    " is incorrect. Try a larger number.";
             }
-            return "Sorry, " + userNumber + " is incorrect.";
         }
     }
 

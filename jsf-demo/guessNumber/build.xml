@@ -200,7 +200,8 @@
      description="Compile Java files and copy static files." >
       <touch file="${build}/last-build"/>
     <javac srcdir="src/java" destdir="${build}/${example}/WEB-INF/classes"
-           debug="${compile.debug}">
+           debug="${compile.debug}"
+           source="1.4">
     	<include name="**/*.java" />
      <classpath refid="classpath"/>
     </javac>

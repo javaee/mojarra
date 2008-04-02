@@ -100,7 +100,7 @@
     <managed-property>
       <property-name>minimum</property-name>
       <property-class>int</property-class>
-      <value>0</value>
+      <value>1</value>
     </managed-property>
     <managed-property>
       <property-name>maximum</property-name>
