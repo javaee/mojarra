@@ -1,5 +1,5 @@
 /*
- * $Id: SVGResponseStateManager.java,v 1.1 2005/06/13 15:47:36 rogerk Exp $
+ * $Id: SVGResponseStateManager.java,v 1.2 2005/08/17 18:39:48 rogerk Exp $
  */
 
 /*
@@ -13,7 +13,6 @@ package renderkits.renderkit.svg;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import javax.faces.application.StateManager.SerializedView;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
@@ -30,6 +29,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.Map;
 
+import renderkits.renderkit.SerializedView;
 import renderkits.util.Base64;
 import renderkits.util.ByteArrayGuard;
 
@@ -90,14 +90,10 @@ public class SVGResponseStateManager extends ResponseStateManager {
     // Methods From ResponseStateManager
     //
 
-    public Object getComponentStateToRestore(FacesContext context) {
-
-        // requestMap is a local variable so we don't need to synchronize
-        Map requestMap = context.getExternalContext().getRequestMap();
-        Object state = requestMap.get(FACES_VIEW_STATE);
-        // null out the temporary attribute, since we don't need it anymore.
-        requestMap.remove(FACES_VIEW_STATE);
-        return state;
+    public Object getState(FacesContext context, String viewId) {
+        Object stateArray[] = { getTreeStructure(context, viewId),
+                                getComponentState(context) };
+        return stateArray;
     }
 
     public boolean isPostback(FacesContext context) {
@@ -106,67 +102,22 @@ public class SVGResponseStateManager extends ResponseStateManager {
 	return result;
     }
 
-    public Object getTreeStructureToRestore(FacesContext context,
-                                            String treeId) {
-	StateManager stateManager = context.getApplication().getStateManager();
-        
-	Map requestParamMap = context.getExternalContext()
-	    .getRequestParameterMap();
-	
-	String viewString = (String) requestParamMap.get(
-							 javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
-	Object structure = null;
-	if (viewString == null) {
-	    return null;
-	}
-	
-	if (stateManager.isSavingStateInClient(context)) {
-	    Object state = null;
-	    ByteArrayInputStream bis = null;
-	    GZIPInputStream gis = null;
-	    ObjectInputStream ois = null;
-	    boolean compress = isCompressStateSet(context);
-	   
-	    try {
-                 byte[] bytes = byteArrayGuard.decrypt(context,
-                    (Base64.decode(viewString.getBytes())));
-		bis = new ByteArrayInputStream(bytes);
-		if (isCompressStateSet(context)) {
-		    if (log.isDebugEnabled()) {
-			log.debug("Deflating state before restoring..");
-		    }
-		    gis = new GZIPInputStream(bis);
-		    ois = new ObjectInputStream(gis);
-		} else {
-		    ois = new ObjectInputStream(bis);
-		}
-		structure = ois.readObject();
-		state = ois.readObject();
-		Map requestMap = context.getExternalContext().getRequestMap();
-		// store the state object temporarily in request scope
-		// until it is processed by getComponentStateToRestore
-		// which resets it.
-		requestMap.put(FACES_VIEW_STATE, state);
-		bis.close();
-		if ( compress) {
-		    gis.close();
-		}
-		ois.close();
-	    } catch (java.io.OptionalDataException ode) {
-		log.error(ode.getMessage(), ode);
-	    } catch (java.lang.ClassNotFoundException cnfe) {
-            log.error(cnfe.getMessage(), cnfe);
-	    } catch (java.io.IOException iox) {
-		log.error(iox.getMessage(), iox);
-	    }
-	}
-	else {
-	    structure = viewString;
-	}
-	return structure;
+    public void writeState(FacesContext context,
+                           Object state) throws IOException {
+        SerializedView view = null;
+        if (state instanceof SerializedView) {
+            view = (SerializedView) state;
+        }
+        else {
+            Object[] stateArray = (Object[])state;
+            StateManager stateManager =
+                context.getApplication().getStateManager();
+            view = new SerializedView(stateArray[0], null);
+        }
+        writeState(context, view);
     }
 
-    public void writeState(FacesContext context, SerializedView view)
+    private void writeState(FacesContext context, SerializedView view)
         throws IOException {
         String hiddenField = null;
 	StateManager stateManager = context.getApplication().getStateManager();
@@ -231,7 +182,76 @@ public class SVGResponseStateManager extends ResponseStateManager {
         }
     }
     
-    public boolean isCompressStateSet(FacesContext context) {
+    private Object getComponentState(FacesContext context) {
+        // requestMap is a local variable so we don't need to synchronize
+        Map requestMap = context.getExternalContext().getRequestMap();
+        Object state = requestMap.get(FACES_VIEW_STATE);
+        // null out the temporary attribute, since we don't need it anymore.
+        requestMap.remove(FACES_VIEW_STATE);
+        return state;
+    }
+
+    private Object getTreeStructure(FacesContext context,
+                                            String treeId) {
+        StateManager stateManager = context.getApplication().getStateManager();
+                                                                                                                           
+        Map requestParamMap = context.getExternalContext()
+            .getRequestParameterMap();
+                                                                                                                           
+        String viewString = (String) requestParamMap.get(
+                                                         javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
+        Object structure = null;
+        if (viewString == null) {
+            return null;
+        }
+                                                                                                                           
+        if (stateManager.isSavingStateInClient(context)) {
+            Object state = null;
+            ByteArrayInputStream bis = null;
+            GZIPInputStream gis = null;
+            ObjectInputStream ois = null;
+            boolean compress = isCompressStateSet(context);
+
+            try {
+                 byte[] bytes = byteArrayGuard.decrypt(context,
+                    (Base64.decode(viewString.getBytes())));
+                bis = new ByteArrayInputStream(bytes);
+                if (isCompressStateSet(context)) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Deflating state before restoring..");
+                    }
+                    gis = new GZIPInputStream(bis);
+                    ois = new ObjectInputStream(gis);
+                } else {
+                    ois = new ObjectInputStream(bis);
+                }
+                structure = ois.readObject();
+                state = ois.readObject();
+                Map requestMap = context.getExternalContext().getRequestMap();
+                // store the state object temporarily in request scope
+                // until it is processed by getComponentState
+                // which resets it.
+                requestMap.put(FACES_VIEW_STATE, state);
+                bis.close();
+                if ( compress) {
+                    gis.close();
+                }
+                ois.close();
+            } catch (java.io.OptionalDataException ode) {
+                log.error(ode.getMessage(), ode);
+            } catch (java.lang.ClassNotFoundException cnfe) {
+            log.error(cnfe.getMessage(), cnfe);
+            } catch (java.io.IOException iox) {
+                log.error(iox.getMessage(), iox);
+            }
+        }
+        else {
+            structure = viewString;
+        }
+        return structure;
+    }
+
+    private boolean isCompressStateSet(FacesContext context) {
 	if (null != compressStateSet) {
 	    return compressStateSet.booleanValue();
 	}
