@@ -901,21 +901,17 @@ public class UIData extends UIComponentBase
         String id = component.getId();
         component.setId(id); // Forces client id to be reset
 
-        // Restore state for this component
-        if (component instanceof ValueHolder) {
-            String clientId = component.getClientId(context);
+        // Restore state for this component (if it is a UIInput)
+        if (component instanceof UIInput) {
+            UIInput input = (UIInput) component;
+            String clientId = input.getClientId(context);
             SavedState state = (SavedState) saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
             }
-            ((ValueHolder) component).setValue(state.getValue());
-            // System.err.println("restoreDescendantState(" + clientId + "," + state.getValue());
-            if (component instanceof ConvertibleValueHolder) {
-                ((ConvertibleValueHolder) component).setValid(state.isValid());
-            }
-            if (component instanceof UIInput) {
-                ((UIInput) component).setPrevious(state.getPrevious());
-            }
+            input.setValue(state.getValue());
+            input.setValid(state.isValid());
+            input.setPrevious(state.getPrevious());
         }
 
         // Restore state for children of this component
@@ -956,22 +952,18 @@ public class UIData extends UIComponentBase
     private void saveDescendantState(UIComponent component,
                                      FacesContext context) {
 
-        // Save state for this component
-        if (component instanceof ValueHolder) {
+        // Save state for this component (if it is a UIInput)
+        if (component instanceof UIInput) {
+            UIInput input = (UIInput) component;
             String clientId = component.getClientId(context);
             SavedState state = (SavedState) saved.get(clientId);
             if (state == null) {
                 state = new SavedState();
                 saved.put(clientId, state);
             }
-            // System.err.println("saveDescendantState(" + clientId + "," + ((ValueHolder) component).getLocalValue());
-            state.setValue(((ValueHolder) component).getLocalValue());
-            if (component instanceof ConvertibleValueHolder) {
-                state.setValid(((ConvertibleValueHolder) component).isValid());
-            }
-            if (component instanceof UIInput) {
-                state.setPrevious(((UIInput) component).getPrevious());
-            }
+            state.setValue(input.getLocalValue());
+            state.setValid(input.isValid());
+            state.setPrevious(input.getPrevious());
         }
 
         // Save state for children of this component

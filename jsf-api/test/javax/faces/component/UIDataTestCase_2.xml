@@ -8,6 +8,9 @@
 <column-header id='data:outputHeader'>
 <text id='data:outputHeader' value='Output Header'/>
 </column-header>
+<column-header id='data:constantHeader'>
+<text id='data:constantHeader' value='Constant Header'/>
+</column-header>
 <table-row rowId='3'>
 <column id='data:3:commandColumn'>
 <button id='data:3:command' value='command3'/>
@@ -17,6 +20,9 @@
 </column>
 <column id='data:3:outputColumn'>
 <text id='data:3:output' value='output3'/>
+</column>
+<column id='data:3:constantColumn'>
+<text id='data:3:constant' value='Constant Value'/>
 </column>
 </table-row>
 <table-row rowId='4'>
@@ -29,6 +35,9 @@
 <column id='data:4:outputColumn'>
 <text id='data:4:output' value='output4C'/>
 </column>
+<column id='data:4:constantColumn'>
+<text id='data:4:constant' value='Constant Value'/>
+</column>
 </table-row>
 <table-row rowId='5'>
 <column id='data:5:commandColumn'>
@@ -39,6 +48,9 @@
 </column>
 <column id='data:5:outputColumn'>
 <text id='data:5:output' value='output5'/>
+</column>
+<column id='data:5:constantColumn'>
+<text id='data:5:constant' value='Constant Value'/>
 </column>
 </table-row>
 <table-row rowId='6'>
@@ -51,6 +63,9 @@
 <column id='data:6:outputColumn'>
 <text id='data:6:output' value='output6F'/>
 </column>
+<column id='data:6:constantColumn'>
+<text id='data:6:constant' value='Constant Value'/>
+</column>
 </table-row>
 <table-row rowId='7'>
 <column id='data:7:commandColumn'>
@@ -62,6 +77,9 @@
 <column id='data:7:outputColumn'>
 <text id='data:7:output' value='output7'/>
 </column>
+<column id='data:7:constantColumn'>
+<text id='data:7:constant' value='Constant Value'/>
+</column>
 </table-row>
 <column-footer id='data:commandFooter'>
 <text id='data:commandFooter' value='Command Footer'/>
@@ -71,5 +89,8 @@
 </column-footer>
 <column-footer id='data:outputFooter'>
 <text id='data:outputFooter' value='Output Footer'/>
+</column-footer>
+<column-footer id='data:constantFooter'>
+<text id='data:constantFooter' value='Constant Footer'/>
 </column-footer>
 </table>

@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.25 2003/12/20 02:58:50 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.26 2003/12/20 03:46:23 craigmcc Exp $
  */
 
 /*
@@ -880,6 +880,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         UIInput input;
         UIOutput output;
         UIOutput label;
+        UIOutput constant;
 
         column = new UIColumn();
         column.setId("commandColumn");
@@ -935,7 +936,24 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         column.getChildren().add(output);
         data.getChildren().add(column);
 
+        column = new UIColumn();
+        column.setId("constantColumn");
+        label = new UIOutput();
+        label.setId("constantHeader");
+        label.setValue("Constant Header");
+        column.getFacets().put("header", label);
+        label = new UIOutput();
+        label.setId("constantFooter");
+        label.setValue("Constant Footer");
+        column.getFacets().put("footer", label);
+        constant = new UIOutput();
+        constant.setId("constant");
+        constant.setValue("Constant Value");
+        column.getChildren().add(constant);
+        data.getChildren().add(column);
+
 	return command;
+
     }
 
 
