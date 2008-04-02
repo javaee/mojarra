@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.40 2006/01/11 15:28:13 rlubke Exp $
+ * $Id: ViewTag.java,v 1.41 2006/03/09 17:06:24 rlubke Exp $
  */
 
 /*
@@ -63,7 +63,7 @@ import com.sun.faces.util.MessageUtils;
  * Renderer. It exists mainly to provide a guarantee that all faces
  * components reside inside of this tag.
  *
- * @version $Id: ViewTag.java,v 1.40 2006/01/11 15:28:13 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.41 2006/03/09 17:06:24 rlubke Exp $
  */
 
 public class ViewTag extends UIComponentELTag {
@@ -155,7 +155,11 @@ public class ViewTag extends UIComponentELTag {
 
     public int doStartTag() throws JspException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        assert (facesContext != null);
+        if (facesContext == null) {
+            throw new IllegalStateException(
+                  MessageUtils.getExceptionMessageString(
+                        MessageUtils.FACES_CONTEXT_NOT_FOUND_ID));
+        }
 
 
     // flush out any content above the view tag

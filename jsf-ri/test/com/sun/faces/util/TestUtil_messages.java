@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.48 2006/01/11 15:28:17 rlubke Exp $
+ * $Id: TestUtil_messages.java,v 1.49 2006/03/09 17:06:25 rlubke Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import com.sun.faces.cactus.ServletFacesTestCase;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.48 2006/01/11 15:28:17 rlubke Exp $
+ * @version $Id: TestUtil_messages.java,v 1.49 2006/03/09 17:06:25 rlubke Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -148,6 +148,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {MessageUtils.VALUE_NOT_SELECT_ITEM_ID, "2"},
         {MessageUtils.CHILD_NOT_OF_EXPECTED_TYPE_ID, "3"},
         {MessageUtils.COMMAND_LINK_NO_FORM_MESSAGE_ID, "0"},
+        {MessageUtils.FACES_CONTEXT_NOT_FOUND_ID, "0"}
     };
 
     private String[][] toolsMessageInfo = {

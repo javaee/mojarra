@@ -111,6 +111,8 @@ public class MessageUtils {
           "com.sun.faces.FACES_CONTEXT_CONSTRUCTION_ERROR";
     public static final String FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED_ID =
           "com.sun.faces.FACES_SERVLET_MAPPING_CANNOT_BE_DETERMINED";
+    public static final String FACES_CONTEXT_NOT_FOUND_ID=
+          "com.sun.faces.FACES_CONTEXT_NOT_FOUND";
     public static final String FILE_NOT_FOUND_ERROR_MESSAGE_ID =
           "com.sun.faces.FILE_NOT_FOUND";
     public static final String ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID =
