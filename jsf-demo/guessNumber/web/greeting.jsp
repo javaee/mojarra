@@ -57,4 +57,5 @@
 
     </h:form>
     </f:view>
+    </body>
 </HTML>  
