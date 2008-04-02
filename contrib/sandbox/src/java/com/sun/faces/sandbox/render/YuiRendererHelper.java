@@ -44,13 +44,16 @@ public class YuiRendererHelper {
             cssClasses.put(".ygtvloading", YuiConstants.YUI_ROOT + "assets/loading.gif");
             cssClasses.put(".ygtvdepthcell", YuiConstants.YUI_ROOT + "assets/vline.gif");
             
-            cssClasses.put("div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu div.topscrollbar, div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu div.topscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu div.topscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu div.bottomscrollbar", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu div.bottomscrollbar_disabled", YuiConstants.YUI_ROOT + "assets/map.gif");
-            cssClasses.put("div.yuimenubar li.hassubmenu em.submenuindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
+            cssClasses.put("div.yuimenu li.hassubmenu em.submenuindicator, div.yuimenubar li.hassubmenu em.submenuindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
             cssClasses.put("div.yuimenu li.checked em.checkedindicator", YuiConstants.YUI_ROOT + "assets/map.gif");
+            
+            cssClasses.put(".yui-calendar .calnavleft", YuiConstants.YUI_ROOT + "assets/callt.gif");
+            cssClasses.put(".yui-calendar .calnavright", YuiConstants.YUI_ROOT + "assets/calrt.gif");
         }
         
         return cssClasses;
@@ -78,6 +81,14 @@ public class YuiRendererHelper {
                     YuiConstants.YUI_ROOT + "assets/menuarodwn8_hov_1.gif");
             imageVars.put("YAHOO.widget.MenuBarItem.prototype.DISABLED_SUBMENU_INDICATOR_IMAGE_PATH", 
                     YuiConstants.YUI_ROOT + "assets/menuarodwn8_dim_1.gif");
+            imageVars.put("YAHOO.widget.Calendar.prototype.IMG_ROOT", 
+                    YuiConstants.YUI_ROOT + "");
+            imageVars.put("YAHOO.widget.Calendar.prototype.NAV_ARROW_LEFT", 
+                    YuiConstants.YUI_ROOT + "assets/callt.gif");
+            imageVars.put("YAHOO.widget.Calendar.prototype.NAV_ARROW_RIGHT", 
+                    YuiConstants.YUI_ROOT + "assets/calrt.gif");
+
+
 
         }
         return imageVars;

@@ -36,6 +36,7 @@ public class YuiMenuRenderer extends Renderer {
         ,YuiConstants.JS_MENU
         ,YuiConstants.JS_YUI_MENU_HELPER
     };
+    protected String cssClass = "yuimenu";
     
     int idCount = 0;
 
@@ -55,6 +56,10 @@ public class YuiMenuRenderer extends Renderer {
         //
     }
 
+
+    protected String getCssClass() {
+        return "yuimenu";
+    }
 
     /**
      * This method will output the necessary JavaScript and CSS references to enable the 
@@ -102,7 +107,7 @@ public class YuiMenuRenderer extends Renderer {
         writer.startElement("div", component);
         writer.writeAttribute("id", component.getClientId(FacesContext.getCurrentInstance()) + "_" + idCount, "id");
         writer.writeAttribute("style", "padding: 0px;", "style");
-        writer.writeAttribute("class", "yuimenu", "class");
+        writer.writeAttribute("class", getCssClass(), "class");
 
         writer.startElement("div", component);
         writer.writeAttribute("class", "bd", "class");

@@ -926,6 +926,39 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             </description>
         </attribute>
 
+        <attribute>
+            <name>showInput</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Boolean indicating whether or not to render using an input field.  This is the default.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>showSelects</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[Boolean indicating whether or not to render using select fields (http://developer.yahoo.com/yui/examples/calendar/formsel/2.html).]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>minDate</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The minimum allowable date.]]>
+            </description>
+        </attribute>
+        <attribute>
+            <name>maxDate</name>
+            <required>false</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                <![CDATA[The maximum allowable date.]]>
+            </description>
+        </attribute>
+
         <!--  "Standard" properties -->
         <attribute>
             <name>converter</name>

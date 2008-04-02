@@ -21,10 +21,14 @@ public class YuiCalendarTag extends UISandboxComponentTag {
     protected String immediate;
     protected String label;
     protected String lang;
+    protected String maxDate;
+    protected String minDate;
     protected String multiSelect;
     protected String onChange;
     protected String required;
     protected String requiredMessage;
+    protected String showInput;
+    protected String showSelects;
     protected String showWeekdays;
     protected String showWeekFooter;
     protected String showWeekHeader;
@@ -50,10 +54,14 @@ public class YuiCalendarTag extends UISandboxComponentTag {
     public void setImmediate(String immediate)                     { this.immediate = immediate; } 
     public void setLabel(String label)                             { this.label = label; }
     public void setLang(String locale)                             { this.lang = locale; } 
+    public void setMaxDate(String maxDate)                         { this.maxDate = maxDate; };
+    public void setMinDate(String minDate)                         { this.minDate = minDate; };
     public void setMultiSelect(String multiSelect)                 { this.multiSelect = multiSelect; }
     public void setOnchange(String onChange)                       { this.onChange = onChange; }
     public void setRequired(String required)                       { this.required = required; } 
     public void setRequiredMessage(String requiredMessage)         { this.requiredMessage = requiredMessage; }
+    public void setShowInput(String showInput)                     { this.showInput = showInput; };
+    public void setShowSelects(String showSelects)                 { this.showSelects = showSelects; };
     public void setShowWeekdays(String showWeekdays)               { this.showWeekdays = showWeekdays; } 
     public void setShowWeekFooter(String showWeekFooter)           { this.showWeekFooter = showWeekFooter; } 
     public void setShowWeekHeader(String showWeekHeader)           { this.showWeekHeader = showWeekHeader; } 
@@ -82,10 +90,14 @@ public class YuiCalendarTag extends UISandboxComponentTag {
         setBooleanProperty(cal, "immediate", immediate);
         setStringProperty(cal, "label", label); // TODO
         setStringProperty(cal, "lang", lang); //TODO
+        setStringProperty(cal, "maxDate", maxDate);
+        setStringProperty(cal, "minDate", minDate); 
         setBooleanProperty(cal, "multiSelect", multiSelect);
         setStringProperty(cal, "onChange", onChange);
         setBooleanProperty(cal, "required", required); 
         setBooleanProperty(cal, "requiredMessage", requiredMessage);
+        setBooleanProperty(cal, "showInput", showInput);
+        setBooleanProperty(cal, "showSelects", showSelects);
         setBooleanProperty(cal, "showWeekdays", showWeekdays);
         setBooleanProperty(cal, "showWeekFooter", showWeekFooter);
         setBooleanProperty(cal, "showWeekHeader", showWeekHeader);

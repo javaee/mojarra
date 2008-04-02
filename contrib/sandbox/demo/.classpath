@@ -8,6 +8,8 @@
 	<classpathentry kind="lib" path="build/WEB-INF/lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="build/WEB-INF/lib/jsf-facelets-1.1.11.jar"/>
 	<classpathentry kind="lib" path="build/WEB-INF/lib/jsf-ri-sandbox-0.1.jar"/>
+	<classpathentry kind="lib" path="C:/src/jsf/HEAD/jsf-ri/build/lib/jsf-impl.jar"/>
+	<classpathentry kind="lib" path="C:/src/jsf/HEAD/jsf-api/build/lib/jsf-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="build/WEB-INF/classes"/>
 </classpath>

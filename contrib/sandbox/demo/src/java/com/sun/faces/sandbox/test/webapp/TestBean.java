@@ -24,6 +24,7 @@ import com.sun.faces.sandbox.model.FileHolderImpl;
 public class TestBean {
     protected YuiTree tree;
     protected Date date;
+    protected Date date2;
     protected FileHolder fileHolder = new FileHolderImpl();
     
     public TestBean() {
@@ -50,6 +51,14 @@ public class TestBean {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getDate2() {
+        return date2;
+    }
+
+    public void setDate2(Date date) {
+        this.date2 = date;
     }
 
     public byte[] getPdf() {

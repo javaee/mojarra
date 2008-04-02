@@ -62,7 +62,7 @@ public abstract class UISandboxComponentTag extends UIComponentTag {
 
     protected void setBooleanProperty(UIComponent component, String attributeName,
             String attributeValue) {
-        setStringProperty(component, attributeName, attributeValue, false);
+        setBooleanProperty(component, attributeName, attributeValue, false);
     }
 
     protected void setBooleanProperty(UIComponent component,
