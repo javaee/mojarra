@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.93 2006/11/10 23:20:31 rlubke Exp $
+ * $Id: ViewHandlerImpl.java,v 1.94 2006/12/13 16:41:35 rlubke Exp $
  */
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.93 2006/11/10 23:20:31 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.94 2006/12/13 16:41:35 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -227,6 +227,8 @@ public class ViewHandlerImpl extends ViewHandler {
      * @param context the <code>FacesContext</code> for the current request
      * @param viewToRender the view to render
      * @throws IOException if an error occurs rendering the view to the client
+     * @throws FacesException if some error occurs within the framework
+     *  processing
      */
 
     private void doRenderView(FacesContext context,
@@ -684,8 +686,8 @@ public class ViewHandlerImpl extends ViewHandler {
      * @since 1.2
      */
     private String normalizeRequestURI(String uri, String mapping) {
-        
-        if (!Util.isPrefixMapped(mapping)) {
+
+        if (mapping == null || !Util.isPrefixMapped(mapping)) {
             return uri;
         } else {
             int length = mapping.length() + 1;
