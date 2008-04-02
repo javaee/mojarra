@@ -47,10 +47,8 @@
     <f:view>
     <h:form id="helloForm" formName="helloForm" >
         <h:graphic_image id="wave_img" url="/wave.med.gif" />
-  	<h:input_text id="userNo" valueRef="UserNumberBean.userNumber">
-                <f:convert_number />
+  	<h:input_text id="userNo" valueRef="UserNumberBean.userNumber">                
 	        <f:validate_longrange minimum="0" maximum="10" />
-
          </h:input_text> 
 	 <h:command_button id="submit" action="success" label="Submit" />
          <p>
