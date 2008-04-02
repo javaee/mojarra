@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterFactory.java,v 1.2 2002/09/20 00:24:08 craigmcc Exp $
+ * $Id: ConverterFactory.java,v 1.3 2002/10/08 17:03:34 craigmcc Exp $
  */
 
 /*
@@ -68,8 +68,7 @@ public abstract class ConverterFactory {
      * @exception NullPointerException if <code>converterId</code>
      *  is <code>null</code>
      */
-    public abstract Converter getConverter(String converterId)
-        throws FacesException;
+    public abstract Converter getConverter(String converterId);
 
 
     /**
