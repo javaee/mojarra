@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBindingImpl.java,v 1.20 2003/10/23 02:04:19 rlubke Exp $
+ * $Id: ValueBindingImpl.java,v 1.21 2003/11/07 18:45:25 eburns Exp $
  */
 
 /*
@@ -17,6 +17,7 @@ import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ExternalContext;
+import javax.faces.component.StateHolder;
 import javax.faces.application.Application;
 
 import org.apache.commons.logging.Log;
@@ -30,7 +31,7 @@ import com.sun.faces.el.impl.ElException;
 import com.sun.faces.RIConstants;
 import com.sun.faces.util.Util;
 
-public class ValueBindingImpl extends ValueBinding
+public class ValueBindingImpl extends ValueBinding implements StateHolder
 {
 //
 // Private/Protected Constants
@@ -77,6 +78,11 @@ public class ValueBindingImpl extends ValueBinding
 //
 // Constructors and Initializers    
 //
+    /**
+     * <p>Necessary for {@link StateHolder} contract.</p>
+     */
+    public ValueBindingImpl() {
+    }
 
     public ValueBindingImpl(Application application) { 
 	ParameterCheck.nonNull(application);
@@ -573,6 +579,36 @@ public class ValueBindingImpl extends ValueBinding
     private boolean isReservedIdentifier(String identifier) {
         return (Arrays.binarySearch(FACES_IMPLICIT_OBJECTS, identifier) >= 0);
     }   
+
+    // 
+    // methods from StateHolder
+    //
+
+    public Object saveState(FacesContext context) {
+	Object result = ref;
+	application = null;
+	applicationMap = null;
+	reset();
+	return result;
+    }
+
+    public void restoreState(FacesContext context, Object state) {
+	ref = state.toString();
+	application = context.getApplication();
+	applicationMap = context.getExternalContext().getApplicationMap();
+    }
+
+    private boolean isTransient = false;
+    
+    public boolean isTransient() {
+	return isTransient;
+    }
+
+    public void setTransient(boolean newTransientValue) {
+	isTransient = newTransientValue;
+    }
+
+
     
     
 } // end of class ValueBindingImpl

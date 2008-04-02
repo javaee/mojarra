@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.110 2003/11/01 02:52:54 jvisvanathan Exp $
+ * $Id: Util.java,v 1.111 2003/11/07 18:45:26 eburns Exp $
  */
 
 /*
@@ -65,7 +65,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.110 2003/11/01 02:52:54 jvisvanathan Exp $ 
+ * @version $Id: Util.java,v 1.111 2003/11/07 18:45:26 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -283,6 +283,9 @@ public class Util extends Object
     
    public static final String ILLEGAL_VIEW_ID_ID =
          "com.sun.faces.ILLEGAL_VIEW_ID";
+
+   public static final String INVALID_EXPRESSION_ID =
+         "com.sun.faces.INVALID_EXPRESSION";
     
 
 // README - make sure to add the message identifier constant

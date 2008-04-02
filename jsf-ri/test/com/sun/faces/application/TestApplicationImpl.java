@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.12 2003/10/07 19:53:15 rlubke Exp $
+ * $Id: TestApplicationImpl.java,v 1.13 2003/11/07 18:45:30 eburns Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.12 2003/10/07 19:53:15 rlubke Exp $ 
+ * @version $Id: TestApplicationImpl.java,v 1.13 2003/11/07 18:45:30 eburns Exp $ 
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -231,6 +231,47 @@ public class TestApplicationImpl extends JspFacesTestCase {
             thrown = true;
         }
         assertTrue(thrown);
+
+        thrown = false;
+        try {
+            application.getValueBinding("#improperexpression");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        thrown = false;
+        try {
+            application.getValueBinding("#{improperexpression");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        thrown = false;
+        try {
+            application.getValueBinding("improperexpression}");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        thrown = false;
+        try {
+            application.getValueBinding("{improperexpression}");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
+        thrown = false;
+        try {
+            application.getValueBinding("improperexpression}#");
+        } catch (ReferenceSyntaxException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
 
         thrown = false;
         try {

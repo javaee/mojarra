@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.20 2003/10/02 06:50:13 jvisvanathan Exp $
+ * $Id: TestValueBindingImpl.java,v 1.21 2003/11/07 18:45:31 eburns Exp $
  */
 
 /*
@@ -27,13 +27,20 @@ import javax.servlet.http.Cookie;
 
 import javax.faces.el.PropertyNotFoundException;
 import javax.faces.el.ReferenceSyntaxException;
+import javax.faces.el.ValueBinding;
 import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIForm;
+import javax.faces.component.UIInput;
+import javax.faces.component.StateHolder;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.HashMap;
+
+import java.io.Serializable;
 
 /**
  *
@@ -41,7 +48,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.20 2003/10/02 06:50:13 jvisvanathan Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.21 2003/11/07 18:45:31 eburns Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -835,4 +842,111 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 
     }
 
+    public void testStateHolderSmall() throws Exception {
+	StateHolderSaver saver = null;
+	ValueBinding binding = 
+	    getFacesContext().getApplication().getValueBinding("TestBean.indexProperties[0]");
+	
+	assertEquals("ValueBinding not expected value", "Justyna", 
+		     (String) binding.getValue(getFacesContext()));
+	saver = new StateHolderSaver(getFacesContext(), binding);
+	binding = null;
+	binding = (ValueBinding) saver.restore(getFacesContext());
+	assertEquals("ValueBinding not expected value", "Justyna", 
+		     (String) binding.getValue(getFacesContext()));
+    }
+    
+    public void testStateHolderMedium() throws Exception {
+	UIViewRoot root = null;
+	UIForm form = null;
+	UIInput input = null;
+	Object state = null;
+	getFacesContext().setViewRoot(root = new UIViewRoot());
+	root.getChildren().add(form = new UIForm());
+	form.getChildren().add(input = new UIInput());
+	input.setValueBinding("buckaroo", 
+			      getFacesContext().getApplication().getValueBinding("TestBean.indexProperties[0]"));
+	state = root.processSaveState(getFacesContext());
+	
+	// synthesize the tree structure
+	getFacesContext().setViewRoot(root = new UIViewRoot());
+	root.getChildren().add(form = new UIForm());
+	form.getChildren().add(input = new UIInput());
+	root.processRestoreState(getFacesContext(), state);
+
+	assertEquals("ValueBinding not expected value", "Justyna", 
+		     (String) input.getValueBinding("buckaroo").getValue(getFacesContext()));
+	
+    }
+
+
+    class StateHolderSaver extends Object implements Serializable {
+	protected String className = null;
+	protected Object savedState = null;
+	
+	public StateHolderSaver(FacesContext context, Object toSave) {
+	    className = toSave.getClass().getName();
+	    
+	    if (toSave instanceof StateHolder) {
+		// do not save an attached object that is marked transient.
+		if (!((StateHolder)toSave).isTransient()) {
+		    savedState = ((StateHolder)toSave).saveState(context);
+		} else {
+		    className = null;
+		}
+	    }
+	}
+	
+	/**
+	 *
+	 * @return the restored {@link StateHolder} instance.
+	 */
+	
+	public Object restore(FacesContext context) throws IllegalStateException {
+	    Object result = null;
+	    Class toRestoreClass = null;
+	    if ( className == null) {
+		return null;
+	    }
+	    
+	    try {
+		toRestoreClass = loadClass(className, this);
+	    }
+	    catch (ClassNotFoundException e) {
+		throw new IllegalStateException(e.getMessage());
+	    }
+	    
+	    if (null != toRestoreClass) {
+		try {
+		    result = toRestoreClass.newInstance();
+		}
+		catch (InstantiationException e) {
+		    throw new IllegalStateException(e.getMessage());
+		}
+		catch (IllegalAccessException a) {
+		    throw new IllegalStateException(a.getMessage());
+		}
+	    }
+	    
+	    if (null != result && null != savedState &&
+		result instanceof StateHolder) {
+		// don't need to check transient, since that was done on
+		// the saving side.
+		((StateHolder)result).restoreState(context, savedState);
+	    }
+	    return result;
+	}
+	
+	
+	private Class loadClass(String name, 
+				Object fallbackClass) throws ClassNotFoundException {
+	    ClassLoader loader =
+		Thread.currentThread().getContextClassLoader();
+	    if (loader == null) {
+		loader = fallbackClass.getClass().getClassLoader();
+	    }
+	    return loader.loadClass(name);
+	}
+    }
+    
 } // end of class TestValueBindingImpl
