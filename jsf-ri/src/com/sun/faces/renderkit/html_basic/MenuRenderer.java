@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.26 2003/09/11 23:12:58 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.27 2003/09/23 17:23:11 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -19,6 +19,8 @@ package com.sun.faces.renderkit.html_basic;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
@@ -160,6 +162,9 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 			uiSelectMany.setValid(false);
 		    }
 		}
+		else if (List.class.isAssignableFrom(modelType)) {
+		    result = handleListCase(context, newValues);
+		}
 		else {
 		    // the model type must be an array.
 		    addConversionErrorMessage(context, uiSelectMany,
@@ -287,6 +292,19 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 							   newValues[i]));
 	    }
 	}
+	return result;
+    }
+
+    protected Object handleListCase(FacesContext context, 
+				    String [] newValues) {
+	int 
+	    i = 0, 
+	    len = newValues.length;
+	ArrayList result = new ArrayList(len);
+	for (i = 0; i < len; i++) {
+	    result.add(newValues[i]);
+	}
+
 	return result;
     }
 	

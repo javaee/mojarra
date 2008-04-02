@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.14 2003/09/16 17:29:16 rlubke Exp $
+ * $Id: TestConverters.java,v 1.15 2003/09/23 17:23:12 eburns Exp $
  */
 
 /*
@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 
 import java.util.Date;
+import java.util.List;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -44,7 +45,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.14 2003/09/16 17:29:16 rlubke Exp $
+ * @version $Id: TestConverters.java,v 1.15 2003/09/23 17:23:12 eburns Exp $
  * 
  *
  */
@@ -201,6 +202,15 @@ public class TestConverters extends JspFacesTestCase
 	    numbers = newNumbers;
 	}
 
+	List stringList = null;
+	public List getStringList() {
+	    return stringList;
+	}
+
+	public void setStringList(List newStringList) {
+	    stringList = newStringList;
+	}
+
     }
 
     public void beginUISelectMany(WebRequest theRequest)
@@ -260,6 +270,11 @@ public class TestConverters extends JspFacesTestCase
 	theRequest.addParameter("num", "12%");
 	theRequest.addParameter("num", "3.14");
 	theRequest.addParameter("num", "49.99");
+
+	theRequest.addParameter("stringList", "value1");
+	theRequest.addParameter("stringList", "value2");
+	theRequest.addParameter("stringList", "value3");
+
     }
 
     public void testUISelectMany() throws Exception {
@@ -441,6 +456,20 @@ public class TestConverters extends JspFacesTestCase
 	    assertTrue(e.getMessage(), false);
 	}
 	assertTrue(expected.equals(bean.getNumbers()[2]));
+
+	// test model type of List of Strings
+	UISelectManyBase stringList = new UISelectManyBase();
+	stringList.setId("stringList");
+	stringList.setRendererType("SelectManyCheckbox");
+	stringList.setValueRef("bean.stringList");
+	root.getChildren().add(stringList);
+	stringList.decode(getFacesContext());
+	stringList.updateModel(getFacesContext());
+	assertNotNull(bean.getStringList());
+	assertTrue(bean.getStringList().get(0).equals("value1"));
+	assertTrue(bean.getStringList().get(1).equals("value2"));
+	assertTrue(bean.getStringList().get(2).equals("value3"));
+
     }
     
     //
