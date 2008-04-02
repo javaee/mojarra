@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.201 2006/12/17 07:44:05 rlubke Exp $
+ * $Id: Util.java,v 1.202 2006/12/17 07:45:01 rlubke Exp $
  */
 
 /*
@@ -36,7 +36,6 @@ import javax.el.ELResolver;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.event.ActionListener;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
@@ -79,7 +78,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.201 2006/12/17 07:44:05 rlubke Exp $
+ * @version $Id: Util.java,v 1.202 2006/12/17 07:45:01 rlubke Exp $
  */
 
 public class Util {
