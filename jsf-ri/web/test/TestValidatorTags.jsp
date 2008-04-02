@@ -22,11 +22,11 @@
 
     <td>
 
-                   <h:input_number id="outOfBounds1" formatPattern="####"
-                        value="3.1415">
-                     <f:validate_doublerange minimum="10.0" 
+                   <h:input_text id="outOfBounds1" value="3.1415">
+                       <f:convert_number pattern="####"/>
+                       <f:validate_doublerange minimum="10.0" 
                                              maximum="10.5"/>
-                   </h:input_number>
+                   </h:input_text>
 
     </td>
 
@@ -37,11 +37,11 @@
 
     <td>
 
-                   <h:input_number id="inBounds1" formatPattern="####"
-                        value="10.25">
+                   <h:input_text id="inBounds1" value="10.25">
+                     <f:convert_number pattern="####"/>
                      <f:validate_doublerange minimum="10.0" 
                                              maximum="10.5"/>
-                   </h:input_number>
+                   </h:input_text>
 
     </td>
 
@@ -78,9 +78,10 @@
 
     <td>
 
-                   <h:input_number id="outOfBounds3" value="30000">
+                   <h:input_text id="outOfBounds3" value="30000">
+                     <f:convert_number  />
                      <f:validate_longrange minimum="100000" maximum="110000"/>
-                   </h:input_number>
+                   </h:input_text>
 
     </td>
 
@@ -91,9 +92,10 @@
 
     <td>
 
-                   <h:input_number id="inBounds3" value="1100">
+                   <h:input_text id="inBounds3" value="1100">
+                     <f:convert_number  />
                      <f:validate_longrange minimum="1000"  maximum="1200"/>
-                   </h:input_number>
+                   </h:input_text>
 
     </td>
 

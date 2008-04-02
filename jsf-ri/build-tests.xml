@@ -298,13 +298,14 @@
             <test name="com.sun.faces.el.TestVariableResolverImpl"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
-<!--
+            <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
+            <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl"/>
             <test name="com.sun.faces.taglib.jsf_core.TestValidatorTags"/>
             <test name="com.sun.faces.lifecycle.TestRenderResponsePhase"/>
             <test name="com.sun.faces.lifecycle.TestLifecycleImpl_initial"/>
             <test name="com.sun.faces.lifecycle.TestViewHandlerImpl"/>
--->
+
             <!-- To run the following tests, comment last 3 tests, uncomment
                  following tests and set saveStateInClient property in
                  conf/test/web.xml to true

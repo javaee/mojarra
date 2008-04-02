@@ -274,9 +274,10 @@
         <TD>Date: 
         </TD>
 
-	<TD><h:input_date value="Wed, Jul 10, 1996"
-                              inputClass="inputClass"
-                              dateStyle="long" />
+	<TD><h:input_text value="Wed, Jul 10, 1996"
+                              inputClass="inputClass">
+                <f:convert_datetime dateStyle="long"/>
+            </h:input_text>
 	</TD>
 
       </TR>
@@ -287,9 +288,11 @@
         <TD>Disabled Date: 
         </TD>
 
-	<TD><h:input_date id="date2" value="Thu, Jul 11, 1996"
-                        dateStyle="long" disabled="true"
-                        size="3" maxlength="20" tabindex="1" accesskey="D"/>
+	<TD><h:input_text id="date2" value="Thu, Jul 11, 1996"
+                         disabled="true"
+                        size="3" maxlength="20" tabindex="1" accesskey="D">
+                <f:convert_datetime dateStyle="long"/>
+            </h:input_text>
 	</TD>
 
       </TR>
@@ -299,9 +302,10 @@
         <TD>DateTime: 
         </TD>
 
-	<TD><h:input_datetime id="date3" 
-                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM"
-                          formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a" />
+	<TD><h:input_text id="date3" 
+                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
+                <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
+            </h:input_text>
 	</TD>
 
       </TR>
@@ -309,10 +313,12 @@
 
       <tr>
           <td>
-                   <h:input_number id="testPattern" formatPattern="####"
+            <h:input_text id="testPattern" 
                         value="9999.98765" size="3" maxlength="20" 
                         inputClass="inputClass" 
-                        tabindex="2" accesskey="D"/>
+                        tabindex="2" accesskey="D">
+               <f:convert_number pattern="####"/>
+            </h:input_text>
               </td>
 
       </tr>
@@ -320,8 +326,9 @@
       <tr>
           <td> <h:output_text outputClass="outputClass" id="percentLabel" value="OUTPUT-PERCENT" /> </td>
               <td>
-                   <h:output_number id="testPercent" numberStyle="percent"
-                        value="45%"/>
+                   <h:output_text id="testPercent" value="45%">
+                       <f:convert_number type="number"/>
+                   </h:output_text>
               </td>
       </tr>
 
@@ -330,8 +337,10 @@
         <TD>OutputDate: 
         </TD>
 
-	<TD><h:output_date id="date4" value="Wed, Jul 10, 1996"
-                              outputClass="outputClass" dateStyle="long" />
+	<TD><h:output_text id="date4" value="Wed, Jul 10, 1996"
+                              outputClass="outputClass" >
+                <f:convert_datetime dateStyle="long"/>
+            </h:output_text>
 	</TD>
 
       </TR>
@@ -341,9 +350,10 @@
         <TD>OutputDateTime: 
         </TD>
 
-	<TD><h:output_datetime id="date5" 
-                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM"
-                          formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a" />
+	<TD><h:output_text id="date5" 
+                          value="Wed, Jul 10, 1996 AD at 12:31:31 PM">
+                <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
+            </h:output_text>
 	</TD>
 
       </TR>
@@ -353,9 +363,10 @@
         <TD>InputTime: 
         </TD>
 
-	<TD><h:input_time id="date6" 
-                          value="12:31:31 PM"
-                          timeStyle="medium" />
+	<TD><h:input_text id="date6" 
+                          value="12:31:31 PM">
+                <f:convert_datetime timeStyle="medium"/>
+            </h:input_text>
 	</TD>
 
       </TR>
@@ -365,9 +376,10 @@
         <TD>OutputTime: 
         </TD>
 
-	<TD><h:output_time id="date7" 
-                          value="12:31:31 PM"
-                          timeStyle="medium" />
+	<TD><h:output_text id="date7" 
+                          value="12:31:31 PM">
+                <f:convert_datetime timeStyle="medium"/>
+            </h:output_text>
 	</TD>
 
       </TR>
@@ -376,13 +388,15 @@
 
              <td>
 
-               <h:input_date id="input_date1" dateStyle="medium"
+               <h:input_text id="input_date1" 
                                  value="Jan 12, 1952" 
                                  readonly="true"
                                  size="10" maxlength="20"
                                  alt="input_date medium readonly"
                                  accesskey="D" 
-                               title="input_date medium readonly"/>
+                               title="input_date medium readonly">
+                   <f:convert_datetime dateStyle="medium"/>
+                </h:input_text>
 
 
              </td>
@@ -393,10 +407,12 @@
 
              <td>
 
-               <h:input_date id="input_date2" dateStyle="medium"
+               <h:input_text id="input_date2" 
                                  value="Jan 12, 1952" 
                                  alt="input_date medium"
-                                  title="input_date medium"/>
+                                  title="input_date medium">
+                   <f:convert_datetime dateStyle="medium"/>
+                </h:input_text>
 
              </td>
 
@@ -406,11 +422,13 @@
 
              <td>
 
-               <h:input_date id="input_date3" dateStyle="short"
+               <h:input_text id="input_date3" 
                                  value="01/12/1952" 
                                  alt="input_date short"
-                                  title="input_date short"/>
-
+                                  title="input_date short">
+                   
+                   <f:convert_datetime dateStyle="short"/>
+                </h:input_text>
 
              </td>
 
@@ -420,12 +438,14 @@
 
              <td>
 
-               <h:input_date id="input_date4" dateStyle="long" 
+               <h:input_text id="input_date4"  
                                  value="January 12, 1952" 
                                  size="20" maxlength="40"
                                  alt="input_date long"
                                  accesskey="d"
-                               title="input_date long"/>
+                               title="input_date long">
+                   <f:convert_datetime dateStyle="long"/>
+                </h:input_text>
 
 
              </td>
@@ -481,10 +501,9 @@
 					</h:selectmany_checkboxlist></TD>
 </tr>
 
-<h:input_hidden converter="number"
-                  value="48%" >
-                     <f:attribute name="numberStyle" value="percent" />
-              </h:input_hidden>
+<h:input_hidden value="48%" >
+    <f:convert_number type="number"/>
+</h:input_hidden>
 
   <TABLE>
 

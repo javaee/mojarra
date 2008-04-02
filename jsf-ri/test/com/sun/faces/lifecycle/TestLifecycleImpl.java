@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.16 2003/07/15 23:59:21 eburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.17 2003/08/26 16:37:59 jvisvanathan Exp $
  */
 
 /*
@@ -16,11 +16,16 @@ import org.apache.cactus.WebRequest;
 import org.mozilla.util.Assert;
 import org.mozilla.util.ParameterCheck;
 
+import javax.servlet.http.HttpSession;
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.faces.component.UIViewRoot;
+import javax.faces.component.base.UIViewRootBase;
+import javax.faces.component.base.UIInputBase;
+import javax.faces.component.base.UIFormBase;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -36,7 +41,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.16 2003/07/15 23:59:21 eburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.17 2003/08/26 16:37:59 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -101,6 +106,20 @@ protected void initWebRequest(WebRequest theRequest)
 public void setUp() {
     RIConstants.IS_UNIT_TEST_MODE = true;
     super.setUp();
+    UIViewRoot root = new UIViewRootBase();
+    root.setViewId(TEST_URI);
+    
+    UIFormBase basicForm = new UIFormBase();
+    basicForm.setId("basicForm");
+    UIInputBase userName = new UIInputBase();
+    
+    userName.setId("userName");
+    root.getChildren().add(basicForm);
+    basicForm.getChildren().add(userName);
+    
+    HttpSession session = (HttpSession) 
+        getFacesContext().getExternalContext().getSession(false);
+    session.setAttribute(TEST_URI, root);
 }
 
 public void beginAnyPhaseWithListener(WebRequest theRequest) {
