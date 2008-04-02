@@ -55,6 +55,7 @@
     <pathelement location="${commons-digester.jar}"/>
     <pathelement location="${commons-logging.jar}"/>
     <pathelement location="${jsf-api.jar}"/>
+    <pathelement location="${jsf-impl.jar}"/>    
     <pathelement location="${jstl.jar}"/>
     <pathelement location="${standard.jar}"/>
     <pathelement location="${build}/WEB-INF/classes"/>

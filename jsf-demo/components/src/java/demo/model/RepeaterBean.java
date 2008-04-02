@@ -1,5 +1,5 @@
 /*
- * $Id: RepeaterBean.java,v 1.3 2005/08/22 22:08:58 ofung Exp $
+ * $Id: RepeaterBean.java,v 1.4 2005/08/29 19:40:24 edburns Exp $
  */
 
 /*
@@ -41,6 +41,8 @@ import javax.faces.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.ejb.PostConstruct;
+import javax.ejb.PreDestroy;
 
 
 /**
@@ -50,6 +52,15 @@ import java.util.List;
 public class RepeaterBean {
 
 
+    @PostConstruct public void postConstruct() {
+        System.out.printf("postConstruct Called\n");
+    }
+    
+    @PreDestroy public void preDestroy() {
+        System.out.printf("preDestroy Called\n");
+    }
+    
+    
     // -------------------------------------------------------- Bound Components
 
 
