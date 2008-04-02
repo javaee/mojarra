@@ -1,5 +1,5 @@
 /*
- * $Id: MenuRenderer.java,v 1.2 2002/10/01 18:30:18 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.3 2002/10/11 17:54:12 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: MenuRenderer.java,v 1.2 2002/10/01 18:30:18 jvisvanathan Exp $
+ * @version $Id: MenuRenderer.java,v 1.3 2002/10/11 17:54:12 rkitain Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -163,12 +163,12 @@ public class MenuRenderer extends HtmlBasicRenderer {
         StringBuffer optionsBuffer = new StringBuffer(1000);
         int itemCount =
             getOptionBuffer(context, component, curValue, optionsBuffer);
-
         itemCount = getDisplaySize(itemCount, component);
         buff.append(Util.renderPassthruAttributes(context, component));
         buff.append(Util.renderBooleanPassthruAttributes(context, component));
         // do not render size attribute. It will be rendered as part of
         // pass through attributes.
+        buff.append(">");
         buff.append(optionsBuffer);
         buff.append("</select>");
     }
