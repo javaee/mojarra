@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBeanProperty.java,v 1.4 2003/05/10 00:43:03 horwat Exp $
+ * $Id: ConfigManagedBeanProperty.java,v 1.5 2003/08/19 14:50:51 rlubke Exp $
  */
 
 /*
@@ -27,7 +27,7 @@ public class ConfigManagedBeanProperty implements Cloneable {
     private String mapKeyClass = null;
     private String mapValueClass = null;
 
-    public void convertValue(Class valueClass) {
+    public void convertValue(Class valueClass) {        
         value.convertValue(valueClass);
     }
 
@@ -47,13 +47,18 @@ public class ConfigManagedBeanProperty implements Cloneable {
 
     // For Array & Collection Property Assignments
 
-    public void addValue(ConfigManagedBeanPropertyValue value) {
+    public void addValue(ConfigManagedBeanPropertyValue value) {        
         if (values == null) {
             values = new ArrayList();
-        }
-        if (getArrayType() != null ) {
-            value.convertValue(findAppropriateClass(arrayValueType));
-        }
+        }  
+        // set the type only if the current CMBPV is of category VALUE .  
+        // Type information isn't needed for VALUE-CLASS or
+        // VALUE-REF.
+        if (value.getValueCategory() == ConfigManagedBeanPropertyValue.VALUE) {
+            if (getArrayType() != null) {
+                value.setType(findAppropriateClass(arrayValueType));
+            }
+        } 
         values.add(value);
     }
 
@@ -115,7 +120,7 @@ public class ConfigManagedBeanProperty implements Cloneable {
     public String getArrayType() {
         if (arrayValueType == null) {
             List list = getValues();
-            for (int i=0; i<list.size(); i++) {
+            for (int i = 0, size = list.size(); i < size; i++) {
                 ConfigManagedBeanPropertyValue cmpv = 
                     (ConfigManagedBeanPropertyValue)list.get(i);
                 if (cmpv.getValueCategory() == ConfigManagedBeanPropertyValue.VALUE_CLASS) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.25 2003/08/15 19:15:02 rlubke Exp $
+ * $Id: ConfigParser.java,v 1.26 2003/08/19 14:50:51 rlubke Exp $
  */
 
 /*
@@ -17,7 +17,6 @@ import com.sun.faces.application.MessageResourcesImpl;
 import com.sun.faces.application.MessageTemplate;
 import com.sun.faces.util.Util;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
@@ -45,6 +44,16 @@ import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.Rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.converters.BooleanConverter;
+import org.apache.commons.beanutils.converters.ByteConverter;
+import org.apache.commons.beanutils.converters.ShortConverter;
+import org.apache.commons.beanutils.converters.CharacterConverter;
+import org.apache.commons.beanutils.converters.IntegerConverter;
+import org.apache.commons.beanutils.converters.DoubleConverter;
+import org.apache.commons.beanutils.converters.FloatConverter;
+import org.apache.commons.beanutils.converters.LongConverter;
 import org.mozilla.util.Assert;
 
 import org.xml.sax.Attributes;
@@ -56,7 +65,53 @@ import org.xml.sax.InputSource;
 
 public class ConfigParser {
 
-
+    //
+    // Private Constants
+    //
+    private static final Class[][] TYPES = {
+        {
+            Boolean.class,
+            Boolean.TYPE,
+            BooleanConverter.class
+        },
+        {
+            Byte.class,
+            Byte.TYPE,
+            ByteConverter.class
+            
+        },
+        {
+            Character.class,
+            Character.TYPE,
+            CharacterConverter.class
+        },
+        {
+            Short.class,
+            Short.TYPE,
+            ShortConverter.class
+        },
+        {
+            Integer.class,
+            Integer.TYPE,
+            IntegerConverter.class
+        },
+        {
+            Long.class,
+            Long.TYPE,
+            LongConverter.class
+        },
+        {
+            Float.class,
+            Float.TYPE,
+            FloatConverter.class
+        },
+        {
+            Double.class,
+            Double.TYPE,
+            DoubleConverter.class
+        }
+    };
+    
     //
     // Instance Variables
     //
@@ -67,6 +122,27 @@ public class ConfigParser {
     // The public identifier of our DTD
     protected String CONFIG_DTD_PUBLIC_ID =
         "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN";
+    
+    static {
+        for (int i = 0; i < TYPES.length; i++) {
+            Converter converter = null;
+            try {
+                converter = (Converter) TYPES[i][2].newInstance();
+                ConvertUtils.register(converter, TYPES[i][0]);
+                ConvertUtils.register(converter, TYPES[i][1]);
+            } catch (Throwable t) {
+                String msg = Util.getExceptionMessage(
+                    Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
+                    new Object[]{TYPES[i][2]});
+                if (log.isErrorEnabled()) {
+                    log.error(
+                        msg + ":" + TYPES[i][2] + ":exception:" +
+                        t.getMessage());
+                }
+                throw new RuntimeException(msg);
+            }            
+        }        
+    }
 
     /**
      * The Digester instance we will use to parse configuration files.
@@ -98,12 +174,7 @@ public class ConfigParser {
      * <p>Parse the input stream.</p>
      */
 
-    protected void parseConfig(InputStream input) { 
-        ApplicationFactory aFactory = 
-	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = 
-	    (ApplicationImpl)aFactory.getApplication();
-	
+    protected void parseConfig(InputStream input) {        
 	try {
             digester.clear();
             digester.parse(input);
@@ -423,6 +494,7 @@ public class ConfigParser {
  
     protected void configureRulesManagedBeanPropertyValueArr(Digester digester, String prefix) {
         digester.addObjectCreate(prefix, "com.sun.faces.config.ConfigManagedBeanPropertyValue");
+        digester.addCallMethod(prefix, "convertValue");
         digester.addCallMethod(prefix, "setValue", 0);
         digester.addSetNext(prefix, "addValue", "com.sun.faces.config.ConfigManagedBeanPropertyValue");
     }
@@ -492,11 +564,12 @@ public class ConfigParser {
                 throw new RuntimeException(Util.getExceptionMessage(
                     Util.INVALID_INIT_PARAM_ERROR_MESSAGE_ID, obj));
             }
-        } else if (validateXml == null) {
+        } else {
             validateXml = "false";
         }
         return new Boolean(validateXml).booleanValue();
     }
+   
 }
 
 /**
@@ -829,7 +902,7 @@ final class MessageResourceRule extends Rule {
 	    Map messages = mr.getMessages();
 	    Iterator iter = messages.keySet().iterator();
 	    while (iter.hasNext()) {
-                ConfigMessage configMessage = (ConfigMessage)messages.get((String)iter.next());
+                ConfigMessage configMessage = (ConfigMessage)messages.get(iter.next());
 		String messageClazz = configMessage.getMessageClass();
 		if (messageClazz ==null) {
 		    messageClazz = MessageImpl.class.getName();

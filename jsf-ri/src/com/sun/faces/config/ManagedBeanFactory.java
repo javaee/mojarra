@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.5 2003/08/05 18:23:14 jvisvanathan Exp $
+ * $Id: ManagedBeanFactory.java,v 1.6 2003/08/19 14:50:52 rlubke Exp $
  */
 
 /*
@@ -113,10 +113,10 @@ public class ManagedBeanFactory extends Object {
         
         while (iter.hasNext()) {
             value = null;
-            cmp = (ConfigManagedBeanProperty)props.get((String)iter.next());
+            cmp = (ConfigManagedBeanProperty)props.get(iter.next());
             if (cmp.hasValuesArray()) {
             List list = cmp.getValues();
-            for (int i=0; i < list.size(); i++) {
+            for (int i = 0, size = list.size(); i < size; i++) {
                     cmpv = (ConfigManagedBeanPropertyValue)list.get(i);
 
                     //set the indexed property on the bean
@@ -156,7 +156,7 @@ public class ManagedBeanFactory extends Object {
             } else if (cmp.hasMapEntries()) {
                 ConfigManagedPropertyMap cmpm = null;
                 List list = cmp.getMapEntries();
-                for (int i=0; i < list.size(); i++) {
+                for (int i = 0, size = list.size(); i < size; i++) {
                     cmpm = (ConfigManagedPropertyMap)list.get(i);
 
                     //set the mapped property on the bean
@@ -188,7 +188,7 @@ public class ManagedBeanFactory extends Object {
                 }
             } else {
                
-                cmpv = (ConfigManagedBeanPropertyValue)cmp.getValue();
+                cmpv = cmp.getValue();
 
                 //find properties and set them on the bean
                 if (cmpv.getValueCategory() == 

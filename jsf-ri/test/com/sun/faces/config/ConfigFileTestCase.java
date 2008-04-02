@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.25 2003/08/07 16:02:18 eburns Exp $
+ * $Id: ConfigFileTestCase.java,v 1.26 2003/08/19 14:50:54 rlubke Exp $
  */
 
 /*
@@ -324,20 +324,7 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
      *
      */ 
 
-    public void testConversionErrorDuringParse() throws Exception {
-	// PENDING(edburns): need to make this behavior the default for
-	// the RI, not something we just do for this testcase.
-
-	//  Cause an exception to be thrown on Integer
-	// conversion errors No-args constructor gets the version that
-	// throws exceptions
-	org.apache.commons.beanutils.Converter myConverter =
-	    new org.apache.commons.beanutils.converters.IntegerConverter();
-	org.apache.commons.beanutils.ConvertUtils.register(myConverter, Integer.TYPE);    // Native type
-	org.apache.commons.beanutils.ConvertUtils.register(myConverter, Integer.class);   // Wrapper class
-
-
-
+    public void testConversionErrorDuringParse() throws Exception {	
         ConfigParser cp = new ConfigParser(config.getServletContext());
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);

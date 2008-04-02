@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBeanPropertyValue.java,v 1.4 2003/05/10 00:43:03 horwat Exp $
+ * $Id: ConfigManagedBeanPropertyValue.java,v 1.5 2003/08/19 14:50:51 rlubke Exp $
  */
 
 /*
@@ -21,11 +21,12 @@ public class ConfigManagedBeanPropertyValue implements Cloneable {
 
     private int valueCategory = -1;
     private Object value = null;
+    private Class type;
 
     public int getValueCategory() {
         return valueCategory;
     }
-    public void setValueCategory(int valueCategory) {
+    public void setValueCategory(int valueCategory) {        
         this.valueCategory = valueCategory;
     }
 
@@ -36,15 +37,31 @@ public class ConfigManagedBeanPropertyValue implements Cloneable {
         this.value = value;
     }
 
-    public void convertValue(Class valueClass) {
-        try {
-            value = ConvertUtils.convert((String) value, valueClass);
-        } catch (Exception ex) {
-            //value could not be converted. Default is String.
-            Object[] obj = new Object[2];
-            obj[0] = value; 
-            obj[1] = valueClass; 
-            throw new FacesException(Util.getExceptionMessage(Util.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, obj), ex);
+    public Class getType() {
+        return type;
+    }
+
+    public void setType(Class type) {      
+        this.type = type;
+    }
+    
+    public void convertValue(Class type) {
+        this.type = type;
+        convertValue();
+    }
+
+    public void convertValue() {
+        // only perform conversion if type is VALUE
+        if (valueCategory == VALUE) {         
+            try {
+                value = ConvertUtils.convert((String) value, type);
+            } catch (Exception ex) {
+                //value could not be converted. Default is String.
+                Object[] obj = new Object[2];
+                obj[0] = value;
+                obj[1] = type;
+                throw new FacesException(Util.getExceptionMessage(Util.CANT_CONVERT_VALUE_ERROR_MESSAGE_ID, obj), ex);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestManagedBeanFactory.java,v 1.7 2003/05/12 20:14:00 eburns Exp $
+ * $Id: TestManagedBeanFactory.java,v 1.8 2003/08/19 14:50:55 rlubke Exp $
  */
 
 /*
@@ -124,7 +124,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("boolProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue((new Boolean(testBoolean)).toString());
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue((new Boolean(testBoolean)).toString());        
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -132,7 +133,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("byteProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Byte.toString(testByte));
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue(Byte.toString(testByte));       
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -140,7 +142,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("charProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue((new Character(testChar)).toString());
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue((new Character(testChar)).toString());      
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -148,7 +151,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("doubleProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Double.toString(testDouble));
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue(Double.toString(testDouble));        
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -156,7 +160,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("floatProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Float.toString(testFloat));
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue(Float.toString(testFloat));        
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -164,7 +169,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("intProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Integer.toString(testInt));
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue(Integer.toString(testInt));        
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -172,7 +178,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("longProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Long.toString(testLong));
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue(Long.toString(testLong));        
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -180,7 +187,8 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp = new ConfigManagedBeanProperty();
         cmbp.setPropertyName("shortProp");
         cmbpv = new ConfigManagedBeanPropertyValue();
-        cmbpv.setValue(Short.toString(testShort));
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+        cmbpv.setValue(Short.toString(testShort));        
         cmbp.setValue(cmbpv);
         cmb.addProperty(cmbp); 
 
@@ -213,10 +221,12 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
         cmbp.setPropertyName("indexProperties");
 
         cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
         cmbpv.setValue("foo");
         cmbp.addValue(cmbpv);
 
         cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
         cmbpv.setValue("bar");
         cmbp.addValue(cmbpv);
 
@@ -291,7 +301,10 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 	cmbp.addValue(cmbpv);
 
 	cmbpv = new ConfigManagedBeanPropertyValue();
+    cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE);
+    cmbpv.setType(Integer.class);
 	cmbpv.setValue("23");
+    cmbpv.convertValue();
 	cmbp.addValue(cmbpv);
 
 	cmb.addProperty(cmbp);
@@ -316,6 +329,7 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 	cmb.setManagedBeanScope("session");
 
         cmpm = new ConfigManagedPropertyMap();
+        cmpm.setValueCategory(ConfigManagedPropertyMap.VALUE);
         cmpm.setKey("name");
         cmpm.setValue("23");
 
@@ -504,6 +518,63 @@ public class TestManagedBeanFactory extends ServletFacesTestCase {
 
         //make sure scope is stored properly
         assertTrue(mbf.getScope() == null);
+    }
+    
+    
+    public void testInvalidPropertyConfiguration() throws Exception {
+        // If a ConfigManagedPropertyValue has a value that requires converstion from
+        // String (the default type) to another type, say Integer as an example,
+        // and the CMPV's value category isn't set to Value, conversion will not
+        // take place.  Thus, an error should occur when creating a new instanced
+        // of the managed bean.
+        
+        // no value category set
+        cmb = new ConfigManagedBean();
+        cmb.setManagedBeanClass(beanName);
+        cmb.setManagedBeanScope("session");
+
+        boolean testBoolean = true;
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("boolProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();        
+        cmbpv.setValue((new Boolean(testBoolean)).toString());
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp); 
+        
+        mbf = new ManagedBeanFactory(cmb);
+
+        boolean exceptionThrown = false;
+        try {
+            mbf.newInstance();
+        } catch (FacesException fe) {
+            exceptionThrown = true;    
+        }
+        assertTrue(exceptionThrown);
+        
+        
+        // value category set to VALUE_REF
+        cmb = new ConfigManagedBean();
+        cmb.setManagedBeanClass(beanName);
+        cmb.setManagedBeanScope("session");
+      
+        cmbp = new ConfigManagedBeanProperty();
+        cmbp.setPropertyName("boolProp");
+        cmbpv = new ConfigManagedBeanPropertyValue();
+        cmbpv.setValueCategory(ConfigManagedBeanPropertyValue.VALUE_REF);
+        cmbpv.setValue((new Boolean(testBoolean)).toString());
+        cmbp.setValue(cmbpv);
+        cmb.addProperty(cmbp);
+
+        mbf = new ManagedBeanFactory(cmb);
+
+        exceptionThrown = false;
+        try {
+            mbf.newInstance();
+        } catch (FacesException fe) {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
+                        
     }
 
 }

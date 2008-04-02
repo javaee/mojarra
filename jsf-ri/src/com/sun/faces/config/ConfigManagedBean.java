@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigManagedBean.java,v 1.6 2003/08/05 18:23:14 jvisvanathan Exp $
+ * $Id: ConfigManagedBean.java,v 1.7 2003/08/19 14:50:51 rlubke Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
                 if (cmbp.hasValuesArray()) {
                     sb.append("\n    VALUES:");
                     List values = cmbp.getValues();
-                    for (int i=0; i<values.size(); i++) {
+                    for (int i = 0, size = values.size(); i < size; i++) {
                         ConfigManagedBeanPropertyValue cmbpv = 
                             (ConfigManagedBeanPropertyValue)values.get(i);
                         sb.append("\n      VALUE:CATEGORY:"+cmbpv.getValueCategory()+
@@ -124,7 +124,7 @@ public class ConfigManagedBean extends ConfigFeature implements Cloneable {
                     sb.append("\n    MAP VALUE CLASS:"+cmbp.getMapValueClass());
                     sb.append("\n    MAP ENTRIES:");
                     List mapEntries = cmbp.getMapEntries();
-                    for (int i=0; i<mapEntries.size(); i++) {
+                    for (int i = 0, size = mapEntries.size(); i < size; i++) {
                         ConfigManagedPropertyMap cmpm = 
                             (ConfigManagedPropertyMap)mapEntries.get(i);
                         sb.append("\n      KEY:"+cmpm.getKey()+
