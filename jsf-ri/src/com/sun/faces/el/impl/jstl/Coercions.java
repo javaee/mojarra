@@ -743,53 +743,6 @@ public class Coercions
   //-------------------------------------
   // Applying operators
   //-------------------------------------
-  /**
-   *
-   * Performs all of the necessary type conversions, then calls on the
-   * appropriate operator.
-   **/
-  public static Object applyArithmeticOperator 
-    (Object pLeft,
-     Object pRight,
-     ArithmeticOperator pOperator,
-     Logger pLogger)
-    throws ELException
-  {
-    if (pLeft == null &&
-	pRight == null) {
-      if (pLogger.isLoggingWarning ()) {
-	pLogger.logWarning
-	  (Constants.ARITH_OP_NULL,
-	   pOperator.getOperatorSymbol ());
-      }
-      return PrimitiveObjects.getInteger (0);
-    }
-
-    else if (isFloatingPointType (pLeft) ||
-	     isFloatingPointType (pRight) ||
-	     isFloatingPointString (pLeft) ||
-	     isFloatingPointString (pRight)) {
-      double left =
-	coerceToPrimitiveNumber (pLeft, Double.class, pLogger).
-	doubleValue ();
-      double right =
-	coerceToPrimitiveNumber (pRight, Double.class, pLogger).
-	doubleValue ();
-      return 
-	PrimitiveObjects.getDouble (pOperator.apply (left, right, pLogger));
-    }
-
-    else {
-      long left =
-	coerceToPrimitiveNumber (pLeft, Long.class, pLogger).
-	longValue ();
-      long right =
-	coerceToPrimitiveNumber (pRight, Long.class, pLogger).
-	longValue ();
-      return
-	PrimitiveObjects.getLong (pOperator.apply (left, right, pLogger));
-    }
-  }
 
   //-------------------------------------
   /**

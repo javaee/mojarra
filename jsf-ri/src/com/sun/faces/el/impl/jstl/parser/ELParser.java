@@ -391,7 +391,7 @@ public class ELParser implements ELParserConstants {
 
   final public Expression AddExpression() throws ParseException {
   Expression startExpression;
-  BinaryOperator operator;
+  BinaryOperator operator = null;
   Expression expression;
   List operators = null;
   List expressions = null;
@@ -409,12 +409,8 @@ public class ELParser implements ELParserConstants {
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PLUS:
-        jj_consume_token(PLUS);
-               operator = PlusOperator.SINGLETON;
-        break;
       case MINUS:
-        jj_consume_token(MINUS);
-                  operator = MinusOperator.SINGLETON;
+	  ;
         break;
       default:
         jj_la1[18] = jj_gen;
@@ -426,7 +422,9 @@ public class ELParser implements ELParserConstants {
           operators = new ArrayList ();
           expressions = new ArrayList ();
         }
-        operators.add (operator);
+	if (operator != null) {
+	    operators.add (operator);
+	}
         expressions.add (expression);
     }
     if (operators != null) {
@@ -442,7 +440,7 @@ public class ELParser implements ELParserConstants {
 
   final public Expression MultiplyExpression() throws ParseException {
   Expression startExpression;
-  BinaryOperator operator;
+  BinaryOperator operator = null;
   Expression expression;
   List operators = null;
   List expressions = null;
@@ -463,8 +461,7 @@ public class ELParser implements ELParserConstants {
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case MULTIPLY:
-        jj_consume_token(MULTIPLY);
-                   operator = MultiplyOperator.SINGLETON;
+	  ;
         break;
       case DIVIDE1:
       case DIVIDE2:
@@ -508,7 +505,9 @@ public class ELParser implements ELParserConstants {
           operators = new ArrayList ();
           expressions = new ArrayList ();
         }
-        operators.add (operator);
+	if (operator != null) {
+	    operators.add (operator);
+	}
         expressions.add (expression);
     }
     if (operators != null) {
