@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.22 2003/10/23 16:17:21 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.23 2003/10/23 20:16:46 eburns Exp $
  */
 
 /*
@@ -222,8 +222,8 @@ public class LongRangeValidator implements Validator, StateHolder {
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
 						new Long(maximum) }));
-			component.setValid(false);
 		    }
+		    component.setValid(false);
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
@@ -244,8 +244,8 @@ public class LongRangeValidator implements Validator, StateHolder {
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
 						new Long(minimum) }));
-			component.setValid(false);
 		    }
+		    component.setValid(false);
                 }
             } catch (NumberFormatException e) {
                 context.addMessage(component.getClientId(context),
