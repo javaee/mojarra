@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.15 2003/08/22 17:27:37 rlubke Exp $
+ * $Id: TestValueBindingImpl.java,v 1.16 2003/08/25 18:46:18 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.15 2003/08/22 17:27:37 rlubke Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.16 2003/08/25 18:46:18 jvisvanathan Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -535,7 +535,7 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	valueBinding.setRef("cookie.cookie");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.servlet.http.Cookie"));
         */
-	valueBinding.setRef("initParam.saveStateInClient");
+	valueBinding.setRef("initParam.javax.faces.STATE_SAVING_METHOD");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
 
 	// tree
