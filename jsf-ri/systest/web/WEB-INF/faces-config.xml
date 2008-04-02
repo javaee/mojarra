@@ -17,13 +17,13 @@
     <locale-config>
         <default-locale>en_US</default-locale>
     </locale-config>
-    <resource-bundle>
-      <var>resourceBundle01</var>
+    <resource-bundle>      
       <base-name>com.sun.faces.systest.resources.ResourceBundle01</base-name>
+      <var>resourceBundle01</var>
     </resource-bundle>
-    <resource-bundle>
-      <var>resourceBundle03</var>
+    <resource-bundle>      
       <base-name>com.sun.faces.systest.resources.ResourceBundle03</base-name>
+        <var>resourceBundle03</var>
     </resource-bundle>
   </application>
   <factory>
