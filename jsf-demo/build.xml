@@ -41,11 +41,31 @@
 
 <!-- ************ JSF build file ************************************** --> 
 
-<project name="jsf-demo" default="build-all" basedir=".">
+<project name="jsf-demo" default="main" basedir=".">
+<!--
+
+ This build is designed to build the JavaServer Faces Demos in two modes:
+
+ 1. engineering development mode
+
+    This is where you're working on the demos themselves and you have a
+    complete development environment to host your work.
+
+ 2. distribution mode
+
+    This is where you're producing a distribution bundle to deploy
+    JavaServer Faces for shipment either as a standalone product, with
+    minimal external dependencies, or for bundling into an existing
+    product, such as JWSDP.
+
+ See the target "verifyPreconditions" to discover the inputs to this
+ build file.
+
+-->
 
   <property name="Name" value="JSF Demos"/>
   <property name="name" value="jsf-demo"/>
-  <property name="version" value="post-EA2"/>
+  <property name="version" value="20030611"/>
 
 <!-- ************ Per user local properties ******************************* -->
 
@@ -59,13 +79,13 @@
   <!-- The base directory for compilation targets -->
   <property name="build.home" value="${basedir}/build"/>
 
-  <!-- The base directory for demo apps -->
-  <property name="jsf-demo.home" value="."/>
-
   <property name="jsf.build.home" value="../jsf-ri/build" />
   <!-- The base directory for the JSF API and RI -->
   <property name="jsf.api.home" value ="../jsf-api"/>
   <property name="jsf.ri.home" value ="../jsf-ri"/>
+
+  <!-- The base directory for distribution targets -->
+  <property name="dist.home" value="${basedir}/dist"/>
 
   <!-- dependent jars -->
   <property name="servlet.jar" value="${tomcat.home}/common/lib/servlet.jar"/>
@@ -79,7 +99,9 @@
 
   <target name="clean">
   
-    <delete dir="${jsf-demo.home}/lib"/> 
+    <delete dir="${basedir}/lib"/> 
+    <delete    dir="${dist.home}"/>
+
     <ant target="clean" dir="templateDemo"/>
 
     <ant target="clean" dir="guessNumber"/>
@@ -93,7 +115,96 @@
 
   </target>
 
-  <target name="test" depends="build-all">
+  <target name="verifyPreconditions" 
+          depends="verifyPreconditions.devmode,verifyPreconditions.distmode"> 
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${tomcat.home}"/>
+       <param name="fail.message" value="tomcat.home must be set."/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf.api.jar}"/>
+       <param name="fail.message" value="jsf.api.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf.ri.jar}"/>
+       <param name="fail.message" value="jsf.ri.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-logging.jar}"/>
+       <param name="fail.message" value="commons-logging.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-digester.jar}"/>
+       <param name="fail.message" value="commons-digester.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-beanutils.jar}"/>
+       <param name="fail.message" value="commons-beanutils.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${servlet.jar}"/>
+       <param name="fail.message" value="servlet.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-collections.jar}"/>
+       <param name="fail.message" value="commons-collections.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${xerces.jar}"/>
+       <param name="fail.message" value="xerces.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jstl.jar}"/>
+       <param name="fail.message" value="jstl.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${standard.jar}"/>
+       <param name="fail.message" value="standard.jar must be set"/>
+    </antcall>
+  </target>
+
+  <target name="verifyPreconditions.devmode" unless="build.wspack">
+  </target>
+  <target name="verifyPreconditions.distmode" if="build.wspack">
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsp.jar}"/>
+       <param name="fail.message" value="jsp.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-modeler.jar}"/>
+       <param name="fail.message" value="commons-modeler.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jmx.jar}"/>
+       <param name="fail.message" value="jmx.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${commons-el.jar}"/>
+       <param name="fail.message" value="commons-el.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${naming-resources.jar}"/>
+       <param name="fail.message" value="commons-el.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${naming-common.jar}"/>
+       <param name="fail.message" value="naming-common.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jasper-compiler.jar}"/>
+       <param name="fail.message" value="jasper-compiler.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jasper-runtime.jar}"/>
+       <param name="fail.message" value="jasper-runtime.jar must be set"/>
+    </antcall>
+    <antcall target="checkRequiredFile">
+       <param name="file" value="${jsf.api.dtd}"/>
+       <param name="fail.message" value="jsf.api.dtd must be set"/>
+    </antcall>
+  </target>
+
+  <target name="test" depends="main">
     <echo>
 Before running this target you must:
 
@@ -142,31 +253,142 @@ Before running this target you must:
     </delete>
 
     <!-- Delete the logs -->
-    <delete>
+    <delete failonerror="false">
       <fileset dir="${tomcat.home}/logs" includes="*.txt"/>
     </delete>
 
   </target>
 
   <target name="prepare.build" >
-      <mkdir dir="${jsf-demo.home}/lib"/>
+      <mkdir dir="${basedir}/lib"/>
   </target>
 
   <target name="copyJars" depends="prepare.build" if="build.standalone">
-    <copy todir="${jsf-demo.home}/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${commons-logging.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${commons-digester.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${commons-collections.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${jsf.api.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${jsf.ri.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${standard.jar}" />
-    <copy todir="${jsf-demo.home}/lib" file="${jstl.jar}" />
+    <copy todir="${basedir}/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${basedir}/lib" file="${commons-logging.jar}" />
+    <copy todir="${basedir}/lib" file="${commons-digester.jar}" />
+    <copy todir="${basedir}/lib" file="${commons-collections.jar}" />
+    <copy todir="${basedir}/lib" file="${jsf.api.jar}" />
+    <copy todir="${basedir}/lib" file="${jsf.ri.jar}" />
+    <copy todir="${basedir}/lib" file="${standard.jar}" />
+    <copy todir="${basedir}/lib" file="${jstl.jar}" />
   </target>
 
-  <target name="build-all" depends="prepare.build,copyJars">
+  <target name="dist.binary" 
+          depends="verifyPreconditions,copyDemoSource,main,wspack.copyJars">
+    <echo> Build the demos from the jsf-demo repository </echo>
+    <echo> copy the sample war files to the zip area </echo>
+    <copy todir="${dist.home}/samples" 
+          file="${basedir}/components/build/jsf-components.war"/>
+    <copy todir="${dist.home}/samples"
+          file="${basedir}/cardemo/build/jsf-cardemo.war"/>
+    <copy todir="${dist.home}/samples" 
+          file="${basedir}/guessNumber/build/jsf-guessNumber.war"/>
+    <copy todir="${dist.home}/samples" 
+          file="${basedir}/nonjsp/dist/jsf-nonjsp.war"/> 
+    <echo> copy the demo-components.jar </echo>
+    <copy todir="${dist.home}/samples" 
+     file="${basedir}/components/build/demo/WEB-INF/lib/demo-components.jar"/>
+  </target>
+
+  <target name="copyDemoSource">
+    <echo> copy the necessary samples </echo>
+
+    <copy todir="${dist.home}/samples/guessNumber" includeEmptyDirs="false">
+      <fileset dir="${basedir}/guessNumber" excludes="build.xml,wspack-build.xml"/>
+    </copy>
+    <copy file="${basedir}/guessNumber/wspack-build.xml"
+          tofile="${dist.home}/samples/guessNumber/build.xml" />
+
+    <copy todir="${dist.home}/samples/cardemo" includeEmptyDirs="false">
+      <fileset dir="${basedir}/cardemo"
+               excludes="**/build.properties.crashtest,**/crashtest.xml,**/testdriver.jar,build.xml,wspack-build.xml"/>
+    </copy>
+    <copy file="${basedir}/cardemo/wspack-build.xml"
+          tofile="${dist.home}/samples/cardemo/build.xml" />
+
+    <copy todir="${dist.home}/samples/nonjsp" includeEmptyDirs="false">
+      <fileset dir="${basedir}/nonjsp" excludes="build.xml,wspack-build.xml"/>
+    </copy>
+    <copy file="${basedir}/nonjsp/wspack-build.xml"
+          tofile="${dist.home}/samples/nonjsp/build.xml" />
+
+    <copy todir="${dist.home}/samples/components" includeEmptyDirs="false">
+      <fileset dir="${basedir}/components" excludes="build.xml,wspack-build.xml"/>
+    </copy>
+    <copy file="${basedir}/components/wspack-build.xml"
+          tofile="${dist.home}/samples/components/build.xml" />
+
+    <copy file="${basedir}/build.properties.sample"
+          todir="${dist.home}/samples" />
+
+  </target>
+
+
+  <target name="wspack.copyJars" depends="prepare.dist" if="build.wspack">
+    <echo> copy the necessary libs </echo>
+    <copy file="${jsf.api.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf.ri.jar}" todir="${dist.home}/lib"/>
+    <copy file="${jsf.ri.home}/conf/share/html_basic.tld" todir="${dist.home}/lib"/>
+    <copy file="${jsf.ri.home}/conf/share/jsf_core.tld" todir="${dist.home}/lib"/>
+  </target>
+
+  <target name="wspack" depends="dist.binary" >
+    <copy todir="${wspack.home}">
+      <fileset dir="${dist.home}"/>
+    </copy>
+  </target>
+
+  <target name="prepare.dist">
+    <mkdir dir="${dist.home}"/>
+    <mkdir dir="${dist.home}/samples"/>
+
+    <echo> Handle the top level files </echo>
+    <copy file="README" todir="${dist.home}"/>
+<!-- PENDING(edburrns): don't copy these for wspack
+    <copy file="LICENSE.html" todir="${dist.home}"/>
+    <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
+-->
+    <copy file="${jsf.ri.home}/LICENSE-MOZILLA.txt" todir="${dist.home}"/>
+    <copy file="${jsf.api.dtd}" todir="${dist.home}/lib"/>
+
+    <antcall target="api.javadocs"/>
+    <antcall target="copydocs"/>
+   </target>
+
+  <target name="api.javadocs" unless="build.wspack">
+
+    <echo> Build the API Javadocs </echo>
+    <ant dir="${jsf.api.home}" 
+         antfile="${jsf.api.home}/build.xml" target="javadocs"/>
+    <echo> Copy the API Javadocs to the dist </echo>
+    <copy todir="${dist.home}/javadocs">
+      <fileset dir="${jsf.api.home}/build/javadocs"/>
+    </copy>
+
+  </target>
+
+  <target name="copydocs" 
+          description="Copy necessary files from docs directory to dist.home">
+    <mkdir dir="${dist.home}"/>
+    <mkdir dir="${dist.home}/docs"/>
+    <mkdir dir="${dist.home}/docs/style"/>
+    <copy todir="${dist.home}/docs">
+      <fileset dir="${jsf.ri.home}/docs"
+               includes="index.html,samples.html,ReleaseNotes.html"/>
+      <fileset dir="${jsf.ri.home}" includes="README"/>
+    </copy>
+    <copy todir="${dist.home}/docs/style">
+      <fileset dir="${jsf.ri.home}/docs/style" includes="default.css"/>
+    </copy>
+    
+  </target>
+
+
+  <target name="main" depends="verifyPreconditions,prepare.build,copyJars">
 
     <ant dir="${basedir}/components"/>
-    <copy todir="${jsf-demo.home}/lib"
+    <copy todir="${basedir}/lib"
           file="components/build/${webapp}/WEB-INF/lib/demo-components.jar"/>
     <ant dir="${basedir}/cardemo"/>
     <ant dir="${basedir}/helloDuke"/>
@@ -174,5 +396,15 @@ Before running this target you must:
     <ant dir="${basedir}/nonjsp"/>
 
   </target>
+
+  <target name="checkRequiredFile">
+    <available file="${file}" property="requirement.satisfied"/>
+    <antcall target="checkRequired.fail"/>
+  </target>
+  
+  <target name="checkRequired.fail" unless="requirement.satisfied">
+    <fail message="${fail.message}"/>
+  </target>
+
 
 </project>
