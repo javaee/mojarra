@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.24 2004/02/26 20:31:33 eburns Exp $
+ * $Id: UISelectManyTestCase.java,v 1.25 2004/04/02 21:35:52 eburns Exp $
  */
 
 /*
@@ -267,9 +267,18 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
         selectMany.setValid(true);
         selectMany.setSubmittedValue(null);
+	// this execution of validate shouldn't add any messages to the
+	// queue, since a value of null means "don't validate".  This is
+	// different behavior than in previous versions of this
+	// testcase, which expected the UISelectMany.validate() to
+	// operate on the previously validated value, which is not
+	// correct.
         selectMany.validate(facesContext);
-        checkMessages(2);
-        assertTrue(!selectMany.isValid());
+        checkMessages(1);
+	// since we're setting the submitted value to null, we don't
+	// want validation to occurr, therefore, the valid state of the
+	// componet should be as we left it.
+        assertTrue(selectMany.isValid());
 
     }
 

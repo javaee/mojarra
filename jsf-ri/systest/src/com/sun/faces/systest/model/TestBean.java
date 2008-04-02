@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.6 2004/03/30 03:51:14 eburns Exp $
+ * $Id: TestBean.java,v 1.7 2004/04/02 21:35:57 eburns Exp $
  */
 
 /*
@@ -11,15 +11,24 @@ package com.sun.faces.systest.model;
 
 import javax.faces.component.UIInput;
 import javax.faces.model.SelectItem;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.AbortProcessingException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * <p>Test JavaBean for managed object creation facility.</p>
  */
 
 public class TestBean {
+
+    private Random random;
+
+    public TestBean() {
+	random = new Random(4143);
+    }	
 
 
     private boolean booleanProperty = true;
@@ -172,5 +181,44 @@ public class TestBean {
     public void setMultiSelection(String [] newMultiSelection) {
 	multiSelection = newMultiSelection;
     }
+
+    public void valueChanged(ValueChangeEvent event)
+        throws AbortProcessingException {
+	String [] values = (String []) event.getNewValue();
+	if (null == values) {
+	    valueChangeMessage = "";
+	}
+	else {
+	    valueChangeMessage = "value changed, new values: ";
+	    for (int i = 0; i < values.length; i++) {
+		valueChangeMessage = valueChangeMessage + " " + values[i];
+	    }
+	}
+    }
+
+    protected String valueChangeMessage;
+    public String getValueChangeMessage() {
+	return valueChangeMessage;
+    }
+
+    public void setValueChangeMessage(String newValueChangeMessage) {
+	valueChangeMessage = newValueChangeMessage;
+    }
+
+    public List getNondeterministicSelectList() {
+	ArrayList list = new ArrayList(3);
+	String str = new String((new Float(random.nextFloat())).toString());
+	list.add(new SelectItem(str, str, str));
+	str = new String((new Float(random.nextFloat())).toString());
+	list.add(new SelectItem(str, str, str));
+	str = new String((new Float(random.nextFloat())).toString());
+	list.add(new SelectItem(str, str, str));
+	return list;
+    }
+
+    public void setNondeterministicSelectList(List newNondeterministicSelectList) {
+    }
+
+
 	
 }

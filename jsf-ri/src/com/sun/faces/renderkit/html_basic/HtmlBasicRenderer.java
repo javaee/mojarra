@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.82 2004/03/31 18:48:36 eburns Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.83 2004/04/02 21:35:53 eburns Exp $
  */
 
 /*
@@ -282,8 +282,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
         } else {
             // throw converter exception if no converter can be
             // identified
-            throw new ConverterException(Util.getExceptionMessageString(
-                Util.CONVERSION_ERROR_MESSAGE_ID));
+	    Object [] params = {
+		currentValue,
+		"null Converter"
+	    };
+	    
+            throw new ConverterException(Util.getExceptionMessage(
+                Util.CONVERSION_ERROR_MESSAGE_ID, params));
         }
     }
 

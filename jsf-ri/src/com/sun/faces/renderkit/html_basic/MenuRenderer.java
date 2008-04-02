@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.48 2004/03/31 18:48:37 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.49 2004/04/02 21:35:54 eburns Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -296,8 +296,17 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 if (elementType.equals(Object.class)) {
                     return newValues;
                 }
+		String valueStr = "";
+		for (i = 0; i < newValues.length; i++) {
+		    valueStr = valueStr + " " + newValues[i];
+		}
+		Object [] params = {
+		    valueStr,
+		    "null Converter"
+		};
 
-                throw new ConverterException("null Converter");
+		throw new ConverterException(Util.getExceptionMessage(
+                  Util.CONVERSION_ERROR_MESSAGE_ID, params));
             }
         }
 

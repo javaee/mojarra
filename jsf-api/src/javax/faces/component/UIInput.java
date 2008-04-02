@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.70 2004/03/30 03:48:07 eburns Exp $
+ * $Id: UIInput.java,v 1.71 2004/04/02 21:35:48 eburns Exp $
  */
 
 /*
@@ -578,65 +578,12 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <li>Retrieve the submitted value with <code>getSubmittedValue()</code>.
      *   If this returns null, exit without further processing.  (This
      *   indicates that no value was submitted for this component.)</li>
+     *
      * <li> Convert the submitted value into a "local value" of the
-     * appropriate data type, if necessary, according to the following
-     * rules:
-     * <ul>
-     * <li>If a <code>Renderer</code> is present, call
-     *     <code>getConvertedValue()</code> to convert the submitted
-     *     value.</li>
-     * <li>If no <code>Renderer</code> is present, and the submitted
-     *     value is a String, locate a {@link Converter} as follows:
-     *     <ul>
-     *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
-     *         use that instance.</li>
-     *     <li>Otherwise, if a value binding for <code>value</code> exists,
-     *         call <code>getType()</code> on it.  
-     *         <ul>
-     *         <li>If this call returns <code>null</code>, assume the output
-     *             type is <code>String</code> and perform no conversion.</li>
-     *         <li>Otherwise, call
-     *             <code>Application.createConverter(Class)</code>
-     *             to locate any registered {@link Converter} capable of
-     *             converting data values of the specified type.</li>
-     *       </ul>
-     *     </li>
-     *     </ul>
-     * </li>
-     * <li>If a {@link Converter} instance was located, call its
-     *     <code>getAsObject()</code> method to perform the conversion.
-     *     If conversion fails:
-     *     <ul>
-     *       <li>Enqueue an appropriate error message by calling the
-     *         <code>addMessage()</code> method on the
-     *         <code>FacesContext</code>.</li>
-     *       <li>Set the <code>valid</code> property
-     *       on this component to <code>false</code> </li>
-     *     </ul></li>
-     * <li>Otherwise, use the submitted value without any conversion</li>
-     * </ul>
-     * </li>
-     * <li>If the <code>valid</code> property on this component is still
-     *     <code>true</code>, and the <code>required</code> property is also
-     *     true, ensure that the local value is not empty (where "empty" is
-     *     defined as <code>null</code> or a zero-length String.  If the local
-     *     value is empty:
-     *     <ul>
-     *     <li>Enqueue an appropriate error message by calling the
-     *         <code>addMessage()</code> method on the <code>FacesContext</code>
-     *         instance for the current request.</li>
-     *     <li>Set the <code>valid</code> property on this component to
-     *         <code>false</code>.</li>
-     *     </ul></li>
-     * <li>If the <code>valid</code> property on this component is still
-     *     <code>true</code>, and the local value is not empty, call the
-     *     <code>validate()</code> method of each {@link Validator}
-     *     registered for this {@link UIInput}, followed by the method
-     *     pointed at by the <code>validatorBinding</code> property (if any).
-     *     If any of these validators or the method throws a
-     *     {@link ValidatorException}, catch the exception, add
-     *     its message (if any) to the {@link FacesContext}, and set
-     *     the <code>valid</code> property of this component to false.</li>
+     * appropriate data type by calling {@link #getConvertedValue}.</li>
+     *
+     * <li>Validate the property by calling {@link #validateValue}.</li>
+     *
      * <li>If the <code>valid</code> property of this component is still
      *     <code>true</code>, retrieve the previous value of the component
      *     (with <code>getValue()</code>), store the new local value using
@@ -670,34 +617,137 @@ public class UIInput extends UIOutput implements EditableValueHolder {
         if (submittedValue == null) {
             return;
         }
-            
-        Renderer renderer = getRenderer(context);
-        Object newValue = null;
 
-        try {
-            if (renderer != null) {
-                newValue = renderer.getConvertedValue(context, this,
-                                                      submittedValue);
-            } else if (submittedValue instanceof String) {
-                // If there's no Renderer, and we've got a String,
-                // run it through the Converter (if any)
-                Converter converter = getConverterWithType(context);
-                if (converter != null) {
-                    newValue = converter.getAsObject(context, this,
-                                                     (String) submittedValue);
-                }
-                else {
-                    newValue = submittedValue;
-                }
-            } else {
-                newValue = submittedValue;
-            }
-            
-        } catch (ConverterException ce) {
+	Object newValue = null;
+
+	try {
+	    newValue = getConvertedValue(context, submittedValue);
+	}
+	catch (ConverterException ce) {
             addConversionErrorMessage(context, ce, submittedValue);
             setValid(false);
+        }	
+
+	validateValue(context, newValue);
+            
+	// If our value is valid, store the new value, erase the
+        // "submitted" value, and emit a ValueChangeEvent if appropriate
+	if (isValid()) {
+	    Object previous = getValue();
+            setValue(newValue);
+            setSubmittedValue(null);
+            if (compareValues(previous, newValue)) {
+                queueEvent(new ValueChangeEvent(this, previous, newValue));
+            }
         }
 
+    }
+
+    /**
+     * <p>Convert the submitted value into a "local value" of the
+     * appropriate data type, if necessary, according to the following
+     * rules:
+     * <ul>
+     * <li>If a <code>Renderer</code> is present, call
+     *     <code>getConvertedValue()</code> to convert the submitted
+     *     value.</li>
+     * <li>If no <code>Renderer</code> is present, and the submitted
+     *     value is a String, locate a {@link Converter} as follows:
+     *     <ul>
+     *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
+     *         use that instance.</li>
+     *     <li>Otherwise, if a value binding for <code>value</code> exists,
+     *         call <code>getType()</code> on it.  
+     *         <ul>
+     *         <li>If this call returns <code>null</code>, assume the output
+     *             type is <code>String</code> and perform no conversion.</li>
+     *         <li>Otherwise, call
+     *             <code>Application.createConverter(Class)</code>
+     *             to locate any registered {@link Converter} capable of
+     *             converting data values of the specified type.</li>
+     *       </ul>
+     *     </li>
+     *     </ul>
+     * <li>If a {@link Converter} instance was located, call its
+     *     <code>getAsObject()</code> method to perform the conversion.
+     *     If conversion fails:
+     *     <ul>
+     *       <li>Enqueue an appropriate error message by calling the
+     *         <code>addMessage()</code> method on the
+     *         <code>FacesContext</code>.</li>
+     *       <li>Set the <code>valid</code> property
+     *       on this component to <code>false</code> </li>
+     *     </ul></li>
+     * <li>Otherwise, use the submitted value without any conversion</li>
+     * </ul>
+     * </li>
+
+     * </p>
+     *
+     * <p>This method can be overridden by subclasses for more specific
+     * behavior.</p>
+     *
+     */
+
+
+    protected Object getConvertedValue(FacesContext context, 
+				       Object newSubmittedValue) throws ConverterException {
+        Renderer renderer = getRenderer(context);
+        Object newValue = null;
+	
+	if (renderer != null) {
+	    newValue = renderer.getConvertedValue(context, this,
+						  newSubmittedValue);
+	} else if (newSubmittedValue instanceof String) {
+	    // If there's no Renderer, and we've got a String,
+	    // run it through the Converter (if any)
+	    Converter converter = getConverterWithType(context);
+	    if (converter != null) {
+		newValue = converter.getAsObject(context, this,
+						 (String) newSubmittedValue);
+	    }
+	    else {
+		newValue = newSubmittedValue;
+	    }
+	} else {
+	    newValue = newSubmittedValue;
+	}
+	return newValue;
+    }
+
+    /**
+     *
+     * <p>Set the "valid" property according to the below algorithm.</p>
+     *
+     * <ul>
+     *
+     * <li>If the <code>valid</code> property on this component is still
+     *     <code>true</code>, and the <code>required</code> property is also
+     *     true, ensure that the local value is not empty (where "empty" is
+     *     defined as <code>null</code> or a zero-length String.  If the local
+     *     value is empty:
+     *     <ul>
+     *     <li>Enqueue an appropriate error message by calling the
+     *         <code>addMessage()</code> method on the <code>FacesContext</code>
+     *         instance for the current request.</li>
+     *     <li>Set the <code>valid</code> property on this component to
+     *         <code>false</code>.</li>
+     *     </ul></li>
+     * <li>If the <code>valid</code> property on this component is still
+     *     <code>true</code>, and the local value is not empty, call the
+     *     <code>validate()</code> method of each {@link Validator}
+     *     registered for this {@link UIInput}, followed by the method
+     *     pointed at by the <code>validatorBinding</code> property (if any).
+     *     If any of these validators or the method throws a
+     *     {@link ValidatorException}, catch the exception, add
+     *     its message (if any) to the {@link FacesContext}, and set
+     *     the <code>valid</code> property of this component to false.</li>
+     *
+     * </ul>
+     *
+     */
+
+    protected void validateValue(FacesContext context, Object newValue) {
 	// If our value is valid, enforce the required property if present
 	if (isValid() && isRequired() && isEmpty(newValue)) {
 	    FacesMessage message =
@@ -706,7 +756,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	    context.addMessage(getClientId(context), message);
 	    setValid(false);
 	}
-
+	
 	// If our value is valid and not empty, call all validators
 	if (isValid() && !isEmpty(newValue)) {
 	    if (this.validators != null) {
@@ -753,19 +803,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
                 }
             }
 	}
-
-	// If our value is valid, store the new value, erase the
-        // "submitted" value, and emit a ValueChangeEvent if appropriate
-	if (isValid()) {
-	    Object previous = getValue();
-            setValue(newValue);
-            setSubmittedValue(null);
-            if (compareValues(previous, newValue)) {
-                queueEvent(new ValueChangeEvent(this, previous, newValue));
-            }
-        }
-
     }
+
 
 
     /**

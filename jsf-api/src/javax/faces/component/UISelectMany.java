@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.50 2004/02/26 20:30:35 eburns Exp $
+ * $Id: UISelectMany.java,v 1.51 2004/04/02 21:35:50 eburns Exp $
  */
 
 /*
@@ -333,6 +333,8 @@ public class UISelectMany extends UIInput {
 
     // ------------------------------------------------------ Validation Methods
 
+    
+
     /**
      * <p>In addition to the standard validation behavior inherited from
      * {@link UIInput}, ensure that any specified values are equal to one of
@@ -344,16 +346,15 @@ public class UISelectMany extends UIInput {
      * @exception NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
-    public void validate(FacesContext context) {
 
-        super.validate(context);
+    protected void validateValue(FacesContext context, Object value) {
+        super.validateValue(context, value);
 
         // Skip validation if it is not necessary
-        Object value = getValue();
         if (!isValid() || (value == null)) {
             return;
         }
-
+	
         // Ensure that the values match one of the available options
         // Don't arrays cast to "Object[]", as we may now be using an array
         // of primitives
@@ -369,7 +370,7 @@ public class UISelectMany extends UIInput {
                 break;
             }
         }
-
+	
         // Enqueue an error message if an invalid value was specified
         if (!found) {
             FacesMessage message =
