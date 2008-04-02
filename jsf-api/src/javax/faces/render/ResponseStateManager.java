@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.19 2005/04/06 02:39:46 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.20 2005/04/06 02:44:44 edburns Exp $
  */
 
 /*
@@ -184,7 +184,8 @@ public abstract class ResponseStateManager {
      * javax.faces.application.ViewHandler#createView} should be called.
      * The default implementation must return <code>true</code> if this
      * <code>ResponseStateManager</code> instance wrote out state on a
-     * previous request to which this request is a postback.</p>
+     * previous request to which this request is a postback,
+     * <code>false</code> otherwise.</p>
      *
      */
 
