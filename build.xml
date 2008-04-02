@@ -35,8 +35,6 @@
   
   <property name="jsf-demo.home"    value="${basedir}/jsf-demo"/>
   
-  <property name="version"    value="20040714"/>
-  
   <property name="installer.home"    
       value="${tomcat.home}/../installer/"/>
 
@@ -54,16 +52,17 @@
   
   <target name="clean" 
    description="Clean build and distribution directories">
-    <delete file="${basedir}/javaserverfaces_binary_${version}.zip" />
-    <delete file="${basedir}/javaserverfaces_source_${version}.zip" />
-    <delete file="${basedir}/javaserverfaces_source_${version}.class" />
+    <delete file="${basedir}/javaserverfaces_binary.zip" />
+    <delete file="${basedir}/javaserverfaces_binary.class" />
+    <delete file="${basedir}/javaserverfaces_source.zip" />
+    <delete file="${basedir}/javaserverfaces_source.class" />
     <delete file="jsf-portlet.zip" />
     <delete dir="{jsf-portlet.home}/dist" />
   </target>
 
   <!-- Create the source distribution -->
   <target name="jsf.source">
-    <zip     destfile="${basedir}/javaserverfaces_source_${version}.zip">
+    <zip     destfile="${basedir}/javaserverfaces_source.zip">
     
       <zipfileset dir="${jsf-api.home}"
                excludes="**/CVS/**, **/build/**"
@@ -93,16 +92,21 @@
   <ant dir="${jsf-demo.home}" target="dist" inheritAll="false" />
  
   <copy file="${jsf-demo.home}/jsf-${version}.zip"
-          tofile="${basedir}/javaserverfaces_binary_${version}.zip" />
+          tofile="${basedir}/javaserverfaces_binary.zip" />
           
   <delete file="${jsf-demo.home}/jsf-${version}.zip" />
     
   <ant target="jsf.source" />
   
   <installerBuilder
-          classFile="javaserverfaces_source_${version}.class"
+          classFile="javaserverfaces_binary.class"
+          licenseFile="${jsf-ri.home}/PRE-RELEASE-LICENSE.txt"
+          zipFile="${basedir}/javaserverfaces_binary.zip" />
+          
+  <installerBuilder
+          classFile="javaserverfaces_source.class"
           licenseFile="${installer.home}/jrl_1_3.txt"
-          zipFile="${basedir}/javaserverfaces_source_${version}.zip" />
+          zipFile="${basedir}/javaserverfaces_source.zip" />
   </target>
   
    <!-- 
@@ -144,7 +148,8 @@
       
   </target>
   
-  <target name="nightly" description="update nightly build" >
+  <target name="nightly" depends="publish.java.net" 
+      description="update nightly build" >
   <taskdef resource="org/kohsuke/javanettasks.properties">
     <classpath>
       <fileset dir="${installer.home}/javanettasks-1.0.2-SNAPSHOT/lib" includes="*.jar"/>
@@ -152,12 +157,30 @@
   </taskdef>
   
   <javaNetUpload projectName="javaserverfaces" 
-      toFile="/nightly/javaserverfaces_binary.zip" fromFile="${basedir}/javaserverfaces_binary.zip" 
-      fileDescription="Use at own risk" overwrite="yes" />
+      toFile="/nightly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
+      fileDescription="Nightly snapshot.Use at own risk." overwrite="yes" />
   
      
   <javaNetUpload projectName="javaserverfaces" 
       toFile="/nightly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
-      fileDescription="Use at own risk" overwrite="yes" /> 
+      fileDescription="Nightly source snapshot." overwrite="yes" /> 
+  </target>
+  
+  <target name="weekly" depends="publish.java.net" 
+      description="update weekly build" >
+  <taskdef resource="org/kohsuke/javanettasks.properties">
+    <classpath>
+      <fileset dir="${installer.home}/javanettasks-1.0.2-SNAPSHOT/lib" includes="*.jar"/>
+    </classpath>
+  </taskdef>
+  
+  <javaNetUpload projectName="javaserverfaces" 
+      toFile="/weekly/javaserverfaces_binary.class" fromFile="${basedir}/javaserverfaces_binary.class" 
+      fileDescription="Weekly binary snapshot." overwrite="yes" />
+  
+     
+  <javaNetUpload projectName="javaserverfaces" 
+      toFile="/weekly/javaserverfaces_source.class" fromFile="${basedir}/javaserverfaces_source.class" 
+      fileDescription="Weekly source snapshot." overwrite="yes" /> 
   </target>
 </project>
