@@ -16,7 +16,7 @@
 
   <f:loadBundle basename="com.sun.faces.TestMessages" var="testMessages" />
 <h:form id="basicForm" title="basicForm" styleClass="formClass"
-      accept="html,wml" acceptcharset="some-charset">
+      accept="html,wml" acceptcharset="some-charset" target="_self">
 
   <TABLE BORDER="1">
 
@@ -33,7 +33,7 @@
                      </h:panelGroup>
 
                    
-                    <h:outputText id="text1" value="Username:" dir="LTR" lang="en"/>
+                    <h:outputText id="text1" value="Username:"/>
                    
                     <h:inputText id="username1" styleClass="inputClass" value="JavaServerFaces" />
 
@@ -155,7 +155,7 @@
 
       <TR>
         <TD>
-            <h:commandLink id="hrefParamLink">
+            <h:commandLink id="hrefParamLink" target="_top">
               <h:graphicImage url="duke.gif"/>
               <f:param id="hlParam3" name="name" value="horwat"/>
               <f:param id="hlParam4" name="value" value="password"/>
@@ -772,7 +772,7 @@ see the <i>angle brackets</i> on this text"></h:outputText>
 
 <h:outputText title="output text with title" value="should be spanned" />
 
-<h:outputFormat id="userMsg" value="Param 0: {0}" dir="LTR" lang="en">
+<h:outputFormat id="userMsg" value="Param 0: {0}" >
    <f:param value="my param"/>
 </h:outputFormat>
 

@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.22 2004/11/12 18:00:28 jayashri Exp $ 
  */ 
 
 
@@ -49,7 +49,7 @@ import java.util.Map;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.21 2004/07/20 21:54:50 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.22 2004/11/12 18:00:28 jayashri Exp $
  */
 
 
@@ -69,8 +69,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
 
 
     public static final String ignore[] = {
-        "    <form id=\"helloForm\" method=\"post\" action=\"/test/greeting.jsf\">"
-    };
+    }; 
 
     public String[] getLinesToIgnore() {
         return ignore;
@@ -315,7 +314,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
     }
 
 
-    public void testRender2() {
+   /* public void testRender2() {
         // Change the viewID to end with .jsf and make sure that
         // the implementation changes .jsf to .jsp and properly dispatches
         // the message.
@@ -340,7 +339,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
                    !(getFacesContext().getResponseComplete()));
 
         assertTrue(verifyExpectedOutput());
-    }
+    } */
 
 
     public void testCalculateLocaleLang() {

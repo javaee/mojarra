@@ -1,5 +1,5 @@
 /*
- * $Id: CommandLinkRenderer.java,v 1.23 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: CommandLinkRenderer.java,v 1.24 2004/11/12 18:00:25 jayashri Exp $
  */
 
 /*
@@ -118,35 +118,9 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         return;
     }
 
-
-    protected UIForm getMyForm(FacesContext context, UICommand command) {
-        UIComponent parent = command.getParent();
-        while (parent != null) {
-            if (parent instanceof UIForm) {
-                break;
-            }
-            parent = parent.getParent();
-        }
-        return (UIForm) parent;
-    }
-
-    protected String getHiddenFieldName(FacesContext context, 
-					UICommand command) {
-	UIForm uiform = getMyForm(context, command);
-	String formClientId = uiform.getClientId(context);
-	return (formClientId + NamingContainer.SEPARATOR_CHAR + 
-		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
-    }
-
-
-
     public boolean getRendersChildren() {
         return true;
     }
-
-
-    private String clientId = null;
-
 
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
@@ -174,7 +148,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         ResponseWriter writer = context.getResponseWriter();
         assert (writer != null);
 
-        clientId = command.getClientId(context);
+        String clientId = command.getClientId(context);
 
         UIForm uiform = getMyForm(context, command);
         if ( uiform == null ) {
@@ -195,9 +169,15 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         writeIdAttributeIfNecessary(context, writer, component);
         writer.writeAttribute("href", "#", "href");
         Util.renderPassThruAttributes(writer, component,
-                                      new String[]{"onclick"});
+                                      new String[]{"onclick", "target"});
         Util.renderBooleanPassThruAttributes(writer, component);
         sb = new StringBuffer();
+        // call the javascript function that clears the all the hidden field
+        // parameters in the form.
+        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
+        sb.append("('");
+        sb.append(formClientId);
+        sb.append("');");
         sb.append("document.forms[");
         sb.append("'");
         sb.append(formClientId);
@@ -218,6 +198,20 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
             sb.append(paramList[i].getValue());
             sb.append("';");
         }
+        // Set the target attribute on the form element using javascript.
+        // Because we treat commandLink as a button,setting target on it,
+        // will not have the desired effect since we "return false" for 
+        // onclick which would essentially cancel the click.
+        String target = (String) component.getAttributes().get("target");
+        if (target != null && target.trim().length() > 0) {
+            sb.append(" document.forms[");
+            sb.append("'");
+            sb.append(formClientId);
+            sb.append("'");
+            sb.append("].target='");
+            sb.append(target);
+            sb.append("';");
+        }
         sb.append(" document.forms[");
         sb.append("'");
         sb.append(formClientId);
@@ -225,7 +219,7 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         sb.append("].submit()");
 
         sb.append("; return false;");
-        writer.writeAttribute("onclick", sb.toString(), null);
+        writer.writeAttribute("onclick", sb.toString(), "onclick");
 
         //handle css style class
         String styleClass = (String)
@@ -331,6 +325,25 @@ public class CommandLinkRenderer extends HtmlBasicRenderer {
         }
 
         return;
+    }
+    
+    protected String getHiddenFieldName(FacesContext context, 
+					UIComponent component) {
+	UIForm uiform = getMyForm(context, component);
+	String formClientId = uiform.getClientId(context);
+	return (formClientId + NamingContainer.SEPARATOR_CHAR + 
+		UIViewRoot.UNIQUE_ID_PREFIX + "cl");
+    }
+    
+    protected UIForm getMyForm(FacesContext context, UIComponent component) {
+        UIComponent parent = component.getParent();
+        while (parent != null) {
+            if (parent instanceof UIForm) {
+                break;
+            }
+            parent = parent.getParent();
+        }
+        return (UIForm) parent;
     }
 
 } // end of class CommandLinkRenderer

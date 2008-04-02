@@ -510,7 +510,7 @@ must exist.  This is necessary for the MessageFactory class.
       <ant dir="${basedir}/systest" inheritall="false" target="remove"/>
     </target>
 
-    <target name="run.systest-per-webapp" description="Run per-webapp system tests" depends="init.test">
+    <target name="run.systest-per-webapp" description="Run per-webapp system tests" depends="init.test,compile.test">
       <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="test"/>
       <ant dir="${basedir}/systest-per-webapp" inheritall="false" target="remove"/>
     </target>

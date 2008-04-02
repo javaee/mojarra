@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.78 2004/10/12 14:39:51 rlubke Exp $
+ * $Id: ButtonRenderer.java,v 1.79 2004/11/12 18:00:25 jayashri Exp $
  */
 
 /*
@@ -159,19 +159,33 @@ public class ButtonRenderer extends HtmlBasicRenderer {
         String imageSrc = (String) component.getAttributes().get("image");
         writer.startElement("input", component);
         writeIdAttributeIfNecessary(context, writer, component);
+	String clientId = component.getClientId(context);
         if (imageSrc != null) {
             writer.writeAttribute("type", "image", "type");
             writer.writeURIAttribute("src", imageSrc, "image");
-            writer.writeAttribute("name", component.getClientId(context),
+            writer.writeAttribute("name", clientId,
                                   "clientId");
         } else {
             writer.writeAttribute("type", type.toLowerCase(), "type");
-            writer.writeAttribute("name", component.getClientId(context),
-                                  "clientId");
+            writer.writeAttribute("name", clientId, "clientId");
             writer.writeAttribute("value", label, "value");
         }
+        
+        StringBuffer sb = new StringBuffer();
+        // call the javascript function that clears the all the hidden field
+        // parameters in the form.
+        sb.append(CLEAR_HIDDEN_FIELD_FN_NAME);
+        sb.append("(this.form.id);");
+        // append user specified script for onclick if any.
+        String onclickAttr = (String)component.getAttributes().get("onclick");
+        if (onclickAttr != null && onclickAttr.length() != 0) {
+            sb.append(onclickAttr);
+            
+        }
+        writer.writeAttribute("onclick", sb.toString(), null);
 
-        Util.renderPassThruAttributes(writer, component);
+        Util.renderPassThruAttributes(writer, component, 
+				      new String[]{"onclick"});
         Util.renderBooleanPassThruAttributes(writer, component);
 
         if (null != (styleClass = (String)

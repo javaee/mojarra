@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.79 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: FormRenderer.java,v 1.80 2004/11/12 18:00:25 jayashri Exp $
  */
 
 /*
@@ -196,7 +196,6 @@ public class FormRenderer extends HtmlBasicRenderer {
         writer.endElement("input");
 
         renderNeededHiddenFields(context, component);
-
         writer.endElement("form");
         if (log.isTraceEnabled()) {
             log.trace("End encoding component " + component.getId());
@@ -229,6 +228,8 @@ public class FormRenderer extends HtmlBasicRenderer {
             Map requestMap = context.getExternalContext().getRequestMap();
             requestMap.put(HIDDEN_FIELD_KEY, null);
         }
+        String formTarget = (String) component.getAttributes().get("target");
+        renderClearHiddenParamsJavaScript(writer, map, formTarget);
     }
 
 
@@ -268,6 +269,43 @@ public class FormRenderer extends HtmlBasicRenderer {
         return map;
     }
 
+    /**
+     * Generates a JavaScript function to clear all the hidden fields
+     * associated with a form and reset the target attribute if necessary.
+     */
+    private static void renderClearHiddenParamsJavaScript(ResponseWriter writer,
+        Map formParams, String formTarget) throws IOException {
+            
+         // clear all the hidden field parameters in the form represented by
+         // formName.
+         writer.write("\n");
+         writer.startElement(SCRIPT_ELEMENT, null);
+         writer.writeAttribute(SCRIPT_TYPE, "text/javascript", null);
+         writer.write("\n<!--");
+         writer.write("\nfunction ");
+         writer.write(CLEAR_HIDDEN_FIELD_FN_NAME);
+         writer.write("(curFormName) {");
+         writer.write("\n  var curForm = document.forms[curFormName];"); 
+         if (formParams != null) {
+             for (Iterator it = formParams.keySet().iterator(); it.hasNext();){
+                 writer.write("\n curForm.elements['"); 
+                 writer.write((String)it.next());
+                 writer.write("'].value = null;");
+             }
+         }
+         // clear form target attribute if its present
+         if (formTarget != null && formTarget.length() > 0) {
+             writer.write("\n  curForm.target=");
+             writer.write("'");
+             writer.write(formTarget);
+             writer.write("';");
+         }
+         writer.write("\n}");
+         writer.write("\n//-->\n");
+         writer.endElement(SCRIPT_ELEMENT);
+         writer.write("\n");
+         
+     }
 
     private static final String HIDDEN_FIELD_KEY =
         RIConstants.FACES_PREFIX + "FormHiddenFieldMap";

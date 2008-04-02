@@ -7,24 +7,42 @@
 <html>
   <body>
      
-     <form id="_id0" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=1EB846E7E96D3A7E6406837CC33E36FD" enctype="application/x-www-form-urlencoded">
+     <form id="_id0" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=E273CAA8BBB80C8BA24154B7C7084AFF" enctype="application/x-www-form-urlencoded">
 
        
           
-       <a href="#" onclick="document.forms['_id0']['_id0:_idcl'].value='_id0:_id1'; document.forms['_id0'].submit(); return false;">Link1</a>
+       <a href="#" onclick="clearFormHiddenParams('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:_id1'; document.forms['_id0'].submit(); return false;">Link1</a>
        
           
-       <a href="#" onclick="document.forms['_id0']['_id0:_idcl'].value='_id0:_id3'; document.forms['_id0'].submit(); return false;">Link2</a>
-    <input type="hidden" name="_id0" value="_id0" /><input type="hidden" name="_id0:_idcl" /></form> 
-    <form id="_id5" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=1EB846E7E96D3A7E6406837CC33E36FD" enctype="application/x-www-form-urlencoded">
+       <a href="#" onclick="clearFormHiddenParams('_id0');document.forms['_id0']['_id0:_idcl'].value='_id0:_id3'; document.forms['_id0'].submit(); return false;">Link2</a>
+    <input type="hidden" name="_id0" value="_id0" /><input type="hidden" name="_id0:_idcl" />
+<script type="text/javascript">
+<!--
+function clearFormHiddenParams(curFormName) {
+  var curForm = document.forms[curFormName];
+ curForm.elements['_id0:_idcl'].value = null;
+}
+//-->
+</script>
+</form> 
+    <form id="_id5" method="post" action="/jsf-systest/faces/taglib/commandLink_multiform_test.jsp;jsessionid=E273CAA8BBB80C8BA24154B7C7084AFF" enctype="application/x-www-form-urlencoded">
 
        
           
-       <a href="#" onclick="document.forms['_id5']['_id5:_idcl'].value='_id5:_id6'; document.forms['_id5'].submit(); return false;">Link3</a>
+       <a href="#" onclick="clearFormHiddenParams('_id5');document.forms['_id5']['_id5:_idcl'].value='_id5:_id6'; document.forms['_id5'].submit(); return false;">Link3</a>
        
           
-       <a href="#" onclick="document.forms['_id5']['_id5:_idcl'].value='_id5:_id8'; document.forms['_id5'].submit(); return false;">Link4</a>
-   <input type="hidden" name="_id5" value="_id5" /><input type="hidden" name="_id5:_idcl" /></form>
+       <a href="#" onclick="clearFormHiddenParams('_id5');document.forms['_id5']['_id5:_idcl'].value='_id5:_id8'; document.forms['_id5'].submit(); return false;">Link4</a>
+   <input type="hidden" name="_id5" value="_id5" /><input type="hidden" name="_id5:_idcl" />
+<script type="text/javascript">
+<!--
+function clearFormHiddenParams(curFormName) {
+  var curForm = document.forms[curFormName];
+ curForm.elements['_id5:_idcl'].value = null;
+}
+//-->
+</script>
+</form>
    
   </body>
 </html>

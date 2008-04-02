@@ -11,14 +11,22 @@
     
     
     
-      <form id="form01" method="post" action="/jsf-systest/faces/taglib/command_button_test.jsp;jsessionid=9804610C1F5A391C51671ACD3B3DCE88" enctype="application/x-www-form-urlencoded">
+      <form id="form01" method="post" action="/jsf-systest/faces/taglib/commandButton_test.jsp;jsessionid=6F6047E0FDDB7E40668700EFC1F00BEE" enctype="application/x-www-form-urlencoded">
 
-        <input id="form01:button01" type="submit" name="form01:button01" value="My Label" />
-        <input id="form01:button02" type="reset" name="form01:button02" value="This is a String property" />
-        <input id="form01:button03" type="submit" name="form01:button03" value="RES-BUNDLE KEY" />
-        <input id="form01:button04" type="image" src="duke.gif" name="form01:button04" />
-        <input id="form01:button05" type="image" src="resbundle_image.gif" name="form01:button05" />
-      <input type="hidden" name="form01" value="form01" /></form>
+        <input id="form01:button01" type="submit" name="form01:button01" value="My Label" onclick="clearFormHiddenParams(this.form.id);" />
+        <input id="form01:button02" type="reset" name="form01:button02" value="This is a String property" onclick="clearFormHiddenParams(this.form.id);" />
+        <input id="form01:button03" type="submit" name="form01:button03" value="RES-BUNDLE KEY" onclick="clearFormHiddenParams(this.form.id);" />
+        <input id="form01:button04" type="image" src="duke.gif" name="form01:button04" onclick="clearFormHiddenParams(this.form.id);" />
+        <input id="form01:button05" type="image" src="resbundle_image.gif" name="form01:button05" onclick="clearFormHiddenParams(this.form.id);" />
+      <input type="hidden" name="form01" value="form01" />
+<script type="text/javascript">
+<!--
+function clearFormHiddenParams(curFormName) {
+  var curForm = document.forms[curFormName];
+}
+//-->
+</script>
+</form>
     
 </body>
 </html>

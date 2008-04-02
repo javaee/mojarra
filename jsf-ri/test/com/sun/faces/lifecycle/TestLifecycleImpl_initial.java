@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl_initial.java,v 1.26 2004/02/26 20:34:29 eburns Exp $
+ * $Id: TestLifecycleImpl_initial.java,v 1.27 2004/11/12 18:00:28 jayashri Exp $
  */
 
 /*
@@ -21,7 +21,7 @@ import javax.faces.FacesException;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl_initial.java,v 1.26 2004/02/26 20:34:29 eburns Exp $
+ * @version $Id: TestLifecycleImpl_initial.java,v 1.27 2004/11/12 18:00:28 jayashri Exp $
  */
 
 public class TestLifecycleImpl_initial extends JspFacesTestCase {
@@ -39,7 +39,6 @@ public class TestLifecycleImpl_initial extends JspFacesTestCase {
 
 
     public static final String ignore[] = {
-        "    <form id=\"helloForm\" method=\"post\" action=\"/test/faces/greeting.jsp\">"
     };
 
 

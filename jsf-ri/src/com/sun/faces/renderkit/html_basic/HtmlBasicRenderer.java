@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.86 2004/10/12 14:39:52 rlubke Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.87 2004/11/12 18:00:25 jayashri Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
+import javax.faces.component.UIForm;
 import javax.faces.component.UIParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.ValueHolder;
@@ -64,6 +65,13 @@ public abstract class HtmlBasicRenderer extends Renderer {
     // Constructors and Initializers    
     //
 
+    public static final String SCRIPT_ELEMENT = "script";
+    public static final String SCRIPT_LANGUAGE = "language";
+    public static final String SCRIPT_TYPE = "type";
+    public static final String SCRIPT_LANGUAGE_JAVASCRIPT = "JavaScript";
+
+    public static final String CLEAR_HIDDEN_FIELD_FN_NAME = 
+         "clearFormHiddenParams";
     public HtmlBasicRenderer() {
         super();
     }
