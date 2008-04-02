@@ -1,0 +1,89 @@
+#
+# Copyright 2004 Sun Microsystems, Inc. All Rights Reserved.
+# 
+# Redistribution and use in source and binary forms, with or
+# without modification, are permitted provided that the following
+# conditions are met:
+# 
+# - Redistributions of source code must retain the above copyright
+#   notice, this list of conditions and the following disclaimer.
+# 
+# - Redistribution in binary form must reproduce the above
+#   copyright notice, this list of conditions and the following
+#   disclaimer in the documentation and/or other materials
+#   provided with the distribution.
+#    
+# Neither the name of Sun Microsystems, Inc. or the names of
+# contributors may be used to endorse or promote products derived
+# from this software without specific prior written permission.
+#  
+# This software is provided "AS IS," without a warranty of any
+# kind. ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND
+# WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT, ARE HEREBY
+# EXCLUDED. SUN AND ITS LICENSORS SHALL NOT BE LIABLE FOR ANY
+# DAMAGES OR LIABILITIES SUFFERED BY LICENSEE AS A RESULT OF OR
+# RELATING TO USE, MODIFICATION OR DISTRIBUTION OF THIS SOFTWARE OR
+# ITS DERIVATIVES. IN NO EVENT WILL SUN OR ITS LICENSORS BE LIABLE
+# FOR ANY LOST REVENUE, PROFIT OR DATA, OR FOR DIRECT, INDIRECT,
+# SPECIAL, CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER
+# CAUSED AND REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF
+# THE USE OF OR INABILITY TO USE THIS SOFTWARE, EVEN IF SUN HAS
+# BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+#  
+# You acknowledge that this software is not designed, licensed or
+# intended for use in the design, construction, operation or
+# maintenance of any nuclear facility.
+#
+
+# -----------------------------------------------------------------------------
+# build.properties.sample
+#
+# This is an example "build.properties" file, used to customize building the
+# sample app for your local environment.  It defines the location of all 
+# external modules that the sample app depends on.  
+#
+# Copy this file to "build.properties" in the top-level source directory, 
+# and customize it as needed.
+#
+# After you are done editing the file, run "ant" in the same directory as
+# the build.xml file to build the Character Demo.
+#
+# Do display current property setting run the ant command: "ant props"
+#
+# $Id: build.properties.sample,v 1.1 2004/06/24 14:11:48 rogerk Exp $
+# -----------------------------------------------------------------------------
+
+# ----- Default Paths for Dependent Packages -----
+
+# These path values are based on a SJSAS 8.0 PE install. 
+
+# If you are running SJSAS 8.0 PE you will only need to modify the "base.path"
+# property to point to your SJSAS 8.0 PE installation.
+
+# If you are not running SJSAS 8.0 PE you will need to customize all runtime
+# dependency jar file paths to your specific installation.
+
+base.path=<SJSAS_HOME>
+
+commons-beanutils.jar=${base.path}/lib/appserv-rt.jar
+commons-collections.jar=${base.path}/lib/appserv-rt.jar
+commons-digester.jar=${base.path}/lib/appserv-rt.jar
+commons-logging.jar=${base.path}/lib/appserv-rt.jar
+jsf-api.jar=${base.path}/lib/jsf-api.jar
+jsf-impl.jar=${base.path}/lib/jsf-impl.jar
+jstl.jar=${base.path}/lib/appserv-jstl.jar
+servlet.jar=${base.path}/lib/j2ee.jar
+standard.jar=${base.path}/lib/appserv-jstl.jar
+
+# ----- Web Application Jar Bundling -----
+
+# Uncomment the following property if you want to bundle all dependent 
+# jars into the web application. 
+
+# If you are running in the Sun Java Systems Application Server 8.0 PE
+# environment or any other environment where JSF 1.0 and dependencies are
+# is already bundled, you do not need to bundle any of the run-time jar files
+# in your web application.
+
+# build.standalone=true
