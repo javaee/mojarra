@@ -1,5 +1,5 @@
 /*
- * $Id: FacesTag.java,v 1.36 2003/07/16 00:00:07 jvisvanathan Exp $
+ * $Id: FacesTag.java,v 1.37 2003/07/29 18:23:29 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: FacesTag.java,v 1.36 2003/07/16 00:00:07 jvisvanathan Exp $
+ * @version $Id: FacesTag.java,v 1.37 2003/07/29 18:23:29 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -154,7 +154,7 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     protected String cellpadding = null;
 
     protected String valueRef = null;
-
+    protected String converter = null;
      // Relationship Instance Variables
 
     //
@@ -186,6 +186,11 @@ public abstract class FacesTag extends javax.faces.webapp.UIComponentTag
     {
 	valueRef = newValueRef;
     }
+    
+    public void setConverter(String newConverter) {
+        this.converter = newConverter;
+    }
+
   
     public String getKey()
     {
@@ -1184,11 +1189,14 @@ protected void overrideProperties(UIComponent component)
     super.overrideProperties(component);
     String keyAttr = null;
 
-    if ( valueRef != null && component instanceof UIOutput ) {
+    if ( component instanceof UIOutput ) {
         UIOutput output = (UIOutput)component;
         if (null != valueRef) {
             output.setValueRef(valueRef);
         }    
+        if (null != converter) {
+            output.setConverter(converter);
+        }
     }    
 
     // PENDING(edburns): move this into a class that is the superclass

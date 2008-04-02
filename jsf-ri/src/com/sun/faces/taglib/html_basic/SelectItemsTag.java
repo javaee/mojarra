@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsTag.java,v 1.7 2003/07/16 00:00:13 jvisvanathan Exp $
+ * $Id: SelectItemsTag.java,v 1.8 2003/07/29 18:23:30 jvisvanathan Exp $
  */
 
 /*
@@ -9,6 +9,7 @@
 
 package com.sun.faces.taglib.html_basic;
 
+import javax.faces.component.UIComponent;
 import com.sun.faces.taglib.FacesTag;
 
 /**
@@ -29,7 +30,7 @@ public class SelectItemsTag extends FacesTag
     //
     // Instance Variables
     //
-
+   
     // Attribute Instance Variables
 
     // Relationship Instance Variables
@@ -50,7 +51,7 @@ public class SelectItemsTag extends FacesTag
     // 
     // Accessors
     //
-
+    
     //
     // General Methods
     //
@@ -65,5 +66,8 @@ public class SelectItemsTag extends FacesTag
     //
     // Methods from FacesTag
     //
+    protected void overrideProperties(UIComponent component) {
+	super.overrideProperties(component);
+    }
 
 } // end of class SelectItemsTag

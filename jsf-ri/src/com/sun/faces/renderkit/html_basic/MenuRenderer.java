@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.15 2003/06/26 18:52:43 jvisvanathan Exp $
+ * $Id: MenuRenderer.java,v 1.16 2003/07/29 18:23:24 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -27,6 +27,7 @@ import javax.faces.component.UISelectMany;
 import javax.faces.component.UISelectOne;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
+import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
 
@@ -34,18 +35,11 @@ import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
 
 /**
- *
- *  <B>MenuRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: MenuRenderer.java,v 1.15 2003/06/26 18:52:43 jvisvanathan Exp $
- * 
- * @see Blah
- * @see Bloo
- *
+ * <B>MenuRenderer</B> is a class that renders the current value of 
+ * <code>UISelectOne<code> or <code>UISelectMany<code> component as a list of 
+ * menu options.
  */
-
+ 
 public class MenuRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
@@ -102,16 +96,61 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                 getRequestParameterValuesMap();
             String newValues[] = (String[])requestParameterValuesMap.
                 get(clientId);
-            ((UISelectMany)component).setValue(newValues);
+            setSelectManyValue(context, ((UISelectMany)component), newValues);
         } else {
             Map requestParameterMap = context.getExternalContext().
                 getRequestParameterMap();
             String newValue = (String)requestParameterMap.get(clientId);
-            ((UISelectOne)component).setValue(newValue);
+            setSelectOneValue(context, ((UISelectOne)component), newValue);
         }    
         return;
     }
 
+    public void setSelectOneValue(FacesContext context, UISelectOne uiSelectOne,
+            String newValue) throws ConverterException {
+        Object convertedValue = null;
+        if ( newValue == null ) {
+            uiSelectOne.setValue(null);
+            return;
+        }
+        try {
+            convertedValue = getConvertedValue(context, uiSelectOne, newValue);   
+            uiSelectOne.setValue(convertedValue);
+        } catch (ConverterException ce) {
+            uiSelectOne.setValue(newValue);
+            addConversionErrorMessage(context, uiSelectOne, ce.getMessage());
+            uiSelectOne.setValid(false);
+            return;
+        }
+    }
+    
+    public void setSelectManyValue(FacesContext context, UISelectMany uiSelectMany,
+            String[] newValues) throws ConverterException {
+        if ( newValues == null ) {
+            uiSelectMany.setValue(null);
+            return;
+        }
+        Object[] convertedValues = new Object[newValues.length];
+        // PENDING (visvan) One restriction for UISelectMany component is that
+        // if there is converter set, we can't figure out the type using 
+        // valueRef since valueRef is not pointing to array of selectedValues.
+        // So, one has to explicitly set the connverter attribute for encoding
+        // and decoding to happen correctly.
+        for ( int i = 0; i < newValues.length; ++i ) {
+            try {
+                convertedValues[i] = getConvertedValue(context, uiSelectMany, 
+                        newValues[i]); 
+            } catch (ConverterException ce) {
+                uiSelectMany.setValue(newValues);
+                addConversionErrorMessage(context, uiSelectMany, 
+                        ce.getMessage());
+                uiSelectMany.setValid(false);
+                return;
+            }
+        }
+        uiSelectMany.setValue(convertedValues);
+    }
+    
     public void encodeBegin(FacesContext context, UIComponent component)
         throws IOException {
         if (context == null || component == null) {
@@ -129,42 +168,54 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
                     Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
     }
-
-    protected void getEndTextToRender(FacesContext context, UIComponent component,
-            String currentValue, StringBuffer buffer ) {
-      
-	String styleString = null;
+    
+    public void encodeEnd(FacesContext context, UIComponent component) 
+            throws IOException {
+                
+        String styleString = null;
+	StringBuffer buffer = null;
+        ResponseWriter writer = null;
+	
+        if (context == null || component == null) {
+            throw new NullPointerException(Util.getExceptionMessage(
+                    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+        }
+        
+        // suppress rendering if "rendered" property on the component is
+        // false.
+        if (!component.isRendered()) {
+            return;
+        }    
+          
+        writer = context.getResponseWriter();
+        Assert.assert_it(writer != null );
+        
+        // PENDING (visvan) here is where we'd hook in a buffer pooling scheme
+        buffer = new StringBuffer(1000);
         styleString = getStyleString(component);
         if (styleString != null ) {
 	    buffer.append("<span class=\"" + styleString + "\">");
 	}
-        getSelectBuffer(context, component, currentValue, buffer);
+        getSelectBuffer(context, component, buffer);
         if (null != styleString) {
 	    buffer.append("</span>");
 	}
+        writer.write(buffer.toString());
     }
 
     void getSelectBuffer(
         FacesContext context,
         UIComponent component,
-        String curValue,
         StringBuffer buff) {
+        
         buff.append("<select name=\"");
         buff.append(component.getClientId(context));
         buff.append("\"");
         buff.append(getMultipleText(component));
-        // PENDING (visvan) commenting it for now, in case we don't want to use
-        // span
-       /* String classStr;
-        if (null != (classStr = (String) component.getAttribute("selectClass"))) {
-            buff.append(" class=\"");
-            buff.append(classStr);
-            buff.append("\" ");
-        } */
-
         StringBuffer optionsBuffer = new StringBuffer(1000);
+       
         int itemCount =
-            getOptionBuffer(context, component, curValue, optionsBuffer);
+            getOptionBuffer(context, component, optionsBuffer);
         itemCount = getDisplaySize(itemCount, component);
         buff.append(Util.renderPassthruAttributes(context, component));
         buff.append(Util.renderBooleanPassthruAttributes(context, component));
@@ -176,11 +227,7 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
     }
 
     int getOptionBuffer(
-        FacesContext context,
-        UIComponent component,
-        String curValue,
-        StringBuffer buff) {
-
+        FacesContext context, UIComponent component, StringBuffer buff) {
         Object selectedValues[] = getCurrentSelectedValues(context, component);
         int itemCount = 0;
         Iterator items = Util.getSelectItemWrappers(context, component);
@@ -193,9 +240,14 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
-
             buff.append("\t<option value=\"");
-            buff.append((String) curItem.getValue());
+            // In case a converter attribute is not specifed, we limit using 
+            // the valueRef set on UISelectOne/UISelectMany component to lookup
+            // the data type of value and not the individual UISelectItem to
+            // UISelectItems component. We also limit the data type of all the
+            // items to be the same.
+            buff.append((getFormattedValue(context, component,
+                    curItem.getValue())));
             buff.append("\"");
             buff.append(getSelectedText(curItem, selectedValues));
             buff.append(Util.renderPassthruAttributes(context, curComponent));
@@ -272,5 +324,4 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         }    
         return styleString;     
     }
-  
-} // end of class MenuRenderer
+ } // end of class MenuRenderer

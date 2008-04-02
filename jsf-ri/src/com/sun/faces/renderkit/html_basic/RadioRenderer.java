@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.41 2003/05/02 17:37:48 eburns Exp $
+ * $Id: RadioRenderer.java,v 1.42 2003/07/29 18:23:25 jvisvanathan Exp $
  */
 
 /*
@@ -11,45 +11,23 @@
 
 package com.sun.faces.renderkit.html_basic;
 
-import com.sun.faces.util.Util;
-
 import java.util.Iterator;
 
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.render.Renderer;
 import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
 import javax.faces.component.UISelectOne;
 import javax.faces.component.SelectItem;
 
 import com.sun.faces.util.Util;
 import com.sun.faces.util.SelectItemWrapper;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConversionException;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
 
-
 /**
- *
- *  <B>RadioRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: RadioRenderer.java,v 1.41 2003/05/02 17:37:48 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * <B>ReadoRenderer</B> is a class that renders the current value of 
+ * <code>UISelectOne<code> or <code>UISelectMany<code> component as a list of 
+ * radio buttons
  */
 
 public class RadioRenderer extends HtmlBasicInputRenderer {
@@ -114,7 +92,7 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	int border = 0;
 
         // cast component to UISelectOne.
-
+        Object curValue = uiSelectOne.currentValue(context);
         Iterator items = Util.getSelectItemWrappers(context, uiSelectOne);
 	SelectItem curItem = null;
         SelectItemWrapper curItemWrapper = null;
@@ -152,13 +130,14 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	    }
             buffer.append("<td><input type=\"radio\"");
             if (null != curItem.getValue() &&
-		curItem.getValue().equals(currentValue)){
+		curItem.getValue().equals(curValue)){
                 buffer.append(" checked");
             }
             buffer.append(" name=\"");
             buffer.append(uiSelectOne.getClientId(context));
             buffer.append("\" value=\"");
-            buffer.append((String) curItem.getValue());
+            buffer.append((getFormattedValue(context, component,
+                    curItem.getValue())));
             buffer.append("\"");
             // render HTML 4.0 attributes if any for radio tag.
             buffer.append(Util.renderPassthruAttributes(context, 

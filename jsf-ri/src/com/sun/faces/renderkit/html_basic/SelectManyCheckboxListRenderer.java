@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.7 2003/04/18 21:33:53 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.8 2003/07/29 18:23:25 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -27,16 +27,8 @@ import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
 
 /**
- *
- *  <B>SelectManyCheckboxListRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: SelectManyCheckboxListRenderer.java,v 1.7 2003/04/18 21:33:53 rkitain Exp $
- * 
- * @see Blah
- * @see Bloo
- *
+ * <B>SelectManyCheckboxListRenderer</B> is a class that renders the 
+ * current value of <code>UISelectMany<code> component as a list of checkboxes.
  */
 
 public class SelectManyCheckboxListRenderer extends MenuRenderer {
@@ -82,7 +74,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
     void getSelectBuffer(
         FacesContext context,
         UIComponent component,
-        String curValue,
         StringBuffer buff) {
         String layoutStr;
         boolean layoutVertical = false;
@@ -92,12 +83,6 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
         if (null != (layoutStr = (String) component.getAttribute("labelAlign"))) {
             layoutVertical = layoutStr.equalsIgnoreCase(PAGE_DIRECTION) ? true : false;
         }
-
-      /*  if (null != (classStr = (String) component.getAttribute("selectClass"))) {
-            buff.append("<span class=\"");
-            buff.append(classStr);
-            buff.append("\">");
-        } */
 
         buff.append(Util.renderPassthruAttributes(context, component));
         buff.append(Util.renderBooleanPassthruAttributes(context, component));
@@ -122,7 +107,8 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             buff.append("\" id=\"");
             buff.append(curComponent.getClientId(context));
             buff.append("\" value=\"");
-            buff.append((String) curItem.getValue());
+            buff.append((getFormattedValue(context, component,
+                    curItem.getValue())));
             buff.append("\" type=\"checkbox\"");
             buff.append(getSelectedText(curItem, selectedValues));
             buff.append(Util.renderPassthruAttributes(context, curComponent));

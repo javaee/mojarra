@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: ListboxRenderer.java,v 1.6 2003/02/20 22:49:00 ofung Exp $
+ * $Id: ListboxRenderer.java,v 1.7 2003/07/29 18:23:24 jvisvanathan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -12,7 +12,6 @@
  * deposited with the U. S. Copyright Office.   
  */
 
-// ListboxRenderer.java
 
 package com.sun.faces.renderkit.html_basic;
 
@@ -26,16 +25,9 @@ import com.sun.faces.util.SelectItemWrapper;
 import com.sun.faces.util.Util;
 
 /**
- *
- *  <B>ListboxRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: ListboxRenderer.java,v 1.6 2003/02/20 22:49:00 ofung Exp $
- * 
- * @see Blah
- * @see Bloo
- *
+ * <B>ListRenderer</B> is a class that renders the current value of 
+ * <code>UISelectOne<code> or <code>UISelectMany<code> component as a list of 
+ * options.
  */
 
 public class ListboxRenderer extends MenuRenderer {
@@ -78,24 +70,24 @@ public class ListboxRenderer extends MenuRenderer {
     int getOptionBuffer(
         FacesContext context,
         UIComponent component,
-        String curValue,
         StringBuffer buff) {
+            
             Iterator items = Util.getSelectItemWrappers(context, component);
             int itemCount = 0;
             Object selectedValues[] = getCurrentSelectedValues(context, 
 							       component);
-
             UIComponent curComponent;
             SelectItem curItem = null;
             SelectItemWrapper curItemWrapper = null;
+            
             while (items.hasNext()) {
                 itemCount++;
                 curItemWrapper = (SelectItemWrapper) items.next();
                 curItem = curItemWrapper.getSelectItem();
                 curComponent = curItemWrapper.getUISelectItem();
-
                 buff.append("\t<option value=\"");
-                buff.append((String) curItem.getValue());
+                buff.append((getFormattedValue(context, component,
+                    curItem.getValue())));
                 buff.append("\"");
                 buff.append(getSelectedText(curItem, selectedValues));
 

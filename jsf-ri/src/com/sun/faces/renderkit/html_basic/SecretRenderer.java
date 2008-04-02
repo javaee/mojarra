@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.41 2003/04/29 20:51:55 eburns Exp $
+ * $Id: SecretRenderer.java,v 1.42 2003/07/29 18:23:25 jvisvanathan Exp $
  */
 
 /*
@@ -14,31 +14,13 @@ package com.sun.faces.renderkit.html_basic;
 import com.sun.faces.util.Util;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
-
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
 
 /**
- *
- *  <B>SecretRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: SecretRenderer.java,v 1.41 2003/04/29 20:51:55 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * <B>SecretRenderer</B> is a class that renders the current value of 
+ * <code>UIInput<code> component as a password field.
  */
 
 public class SecretRenderer extends HtmlBasicInputRenderer {
@@ -122,21 +104,6 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
 	}
 	
         buffer.append(">");         
-    }
-
-    protected String getFormattedValue(FacesContext context,
-        UIComponent component, Object currentValue ) {
-
-        Converter converter = getConverter(component);
-        if (converter != null) {
-            try {
-                return converter.getAsString(context, component, currentValue);
-            } catch (ConverterException e) {
-                return currentValue.toString();
-            }
-        } else {
-            return currentValue.toString();
-        }
     }
 
 } // end of class SecretRenderer

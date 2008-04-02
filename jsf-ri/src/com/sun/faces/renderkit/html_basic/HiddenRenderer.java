@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
+ * $Id: HiddenRenderer.java,v 1.9 2003/07/29 18:23:22 jvisvanathan Exp $
  */
 
 /*
@@ -13,39 +13,15 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
-
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
 
-import com.sun.faces.RIConstants;
-
 /**
- *
- *  <B>HiddenRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: HiddenRenderer.java,v 1.8 2003/04/29 20:51:51 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * <B>HiddenRenderer</B> is a class that renders the current value of 
+ * <code>UIInput<code> component as a HTML hidden variable.
  */
-
 public class HiddenRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
@@ -116,21 +92,6 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
         buffer.append(">");
     }
     
-    protected String getFormattedValue(FacesContext context, 
-        UIComponent component, Object currentValue ) {
-
-        Converter converter = getConverter(component);
-        if (converter != null) {
-            try {
-                return converter.getAsString(context, component, currentValue);
-            } catch (ConverterException e) {
-                return currentValue.toString();
-            }
-        } else {
-            return currentValue.toString();
-        }
-    }
-
     // The testcase for this class is TestRenderers_3.java 
 
 } // end of class TextRenderer

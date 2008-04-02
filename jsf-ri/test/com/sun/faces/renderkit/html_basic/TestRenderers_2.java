@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.47 2003/07/11 23:23:38 jvisvanathan Exp $
+ * $Id: TestRenderers_2.java,v 1.48 2003/07/29 18:23:33 jvisvanathan Exp $
  */
 
 /*
@@ -53,7 +53,7 @@ import com.sun.faces.TestBean;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.47 2003/07/11 23:23:38 jvisvanathan Exp $
+ * @version $Id: TestRenderers_2.java,v 1.48 2003/07/29 18:23:33 jvisvanathan Exp $
  * 
  *
  */
@@ -81,7 +81,7 @@ public class TestRenderers_2 extends JspFacesTestCase
 
     public String [] getLinesToIgnore() {
         String[] lines =  {
-	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=76B621B6E507363D26183534FE60CD50\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=76B621B6E507363D26183534FE60CD50\">My name is Bobby Orr"
+	    "<img id=\"my_graphic_image\" src=\"/test/nonModelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D\"><img id=\"id0\" src=\"/test/foo/modelReferenceImage.gif;jsessionid=41647E428768CD64158970BF4CD4E59D\">My name is Bobby Orr"
 };
         return lines;
     }   
@@ -131,7 +131,7 @@ public class TestRenderers_2 extends JspFacesTestCase
         theRequest.addParameter("action", "command");
         theRequest.addParameter("my_command", "HyperlinkRenderer");
         // for Listbox
-        theRequest.addParameter("my_listbox", "Blue");
+        theRequest.addParameter("my_listbox", "100");
         // for TextEntry_Secret
         theRequest.addParameter("my_secret", "secret");
         // for Text
@@ -326,30 +326,28 @@ public class TestRenderers_2 extends JspFacesTestCase
 	UISelectItems uiSelectItems = new UISelectItems();
         selectOne.setValue(null);
         selectOne.setComponentId("my_listbox");
-        SelectItem item1 = new SelectItem("Red", "Red", null);
-        SelectItem item2 = new SelectItem("Blue", "Blue", null);
-        SelectItem item3 = new SelectItem("Green", "Green", null);
-        SelectItem item4 = new SelectItem("Yellow", "Yellow", null);
+        SelectItem item1 = new SelectItem(new Long(100), "Long1", null);
+        SelectItem item2 = new SelectItem(new Long(101), "Long2", null);
+        SelectItem item3 = new SelectItem(new Long(102), "Long3", null);
+        SelectItem item4 = new SelectItem(new Long(103), "Long4", null);
         SelectItem[] selectItems = {item1, item2, item3, item4};
         uiSelectItems.setValue(selectItems);
 	uiSelectItems.setComponentId("items");
-	selectOne.addChild(uiSelectItems);
+        selectOne.setConverter("Number");
+        selectOne.addChild(uiSelectItems);
         root.addChild(selectOne);
 
         ListboxRenderer listboxRenderer = new ListboxRenderer();
 
         // test decode method
-
         System.out.println("    Testing decode method... ");
         listboxRenderer.decode(getFacesContext(), selectOne);
-        String value = (String)selectOne.getValue();
-        assertTrue(value.equals("Blue"));
+        Object value = selectOne.getValue();
+        assertTrue(value.equals(new Long(100)));
 
         // test encode method
-
         System.out.println("    Testing encode method... ");
-        selectOne.setComponentId("my_listbox");
-        selectOne.setValue("Blue");
+        //selectOne.setComponentId("my_listbox");
         listboxRenderer.encodeBegin(getFacesContext(), selectOne);
         listboxRenderer.encodeEnd(getFacesContext(), selectOne);
         getFacesContext().getResponseWriter().write("\n");
@@ -857,5 +855,4 @@ public class TestRenderers_2 extends JspFacesTestCase
 	String expectedStr = numberRenderer.getCurrentValue(getFacesContext(),input);
         assertTrue(expectedStr.equals("9"));
     } 
-
 } // end of class TestRenderers2_

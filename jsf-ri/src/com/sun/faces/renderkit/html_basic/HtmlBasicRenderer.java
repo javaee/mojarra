@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderer.java,v 1.44 2003/07/24 23:24:18 rkitain Exp $
+ * $Id: HtmlBasicRenderer.java,v 1.45 2003/07/29 18:23:23 jvisvanathan Exp $
  */
 
 /*
@@ -22,14 +22,11 @@ import javax.faces.FactoryFinder;
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UISelectItem;
-import javax.faces.component.UISelectItems;
 import javax.faces.component.UIInput;
 import javax.faces.component.NamingContainer;
 import javax.faces.el.ValueBinding;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.Application;
-
 
 import javax.faces.render.Renderer;
 import javax.faces.component.UIInput;
@@ -41,13 +38,10 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
 import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
 import org.mozilla.util.ParameterCheck;
 
 import java.util.ResourceBundle;
 import java.util.MissingResourceException;
-
 import java.io.IOException;
 
 import com.sun.faces.RIConstants;
@@ -56,11 +50,6 @@ import com.sun.faces.RIConstants;
  *
  *  <B>HtmlBasicRenderer</B> is a base class for implementing renderers
  *  for HtmlBasicRenderKit.
- * @version
- * 
- * @see	Blah
- * @see	Bloo
- *
  */
 
 public abstract class HtmlBasicRenderer extends Renderer {
@@ -388,15 +377,11 @@ public abstract class HtmlBasicRenderer extends Renderer {
         if ( component instanceof UIOutput) {
             uiOutput= (UIOutput) component;
         }
-        
         String currentValue = null;
         Object currentObj = uiOutput.currentValue(context);
         if ( currentObj != null) {
             currentValue = getFormattedValue(context, component, currentObj);
         } 
-        if (currentValue == null) {
-            currentValue = "";
-        }
         return currentValue;
     }    
     
@@ -408,24 +393,32 @@ public abstract class HtmlBasicRenderer extends Renderer {
             String currentValue, StringBuffer buffer ) {
         return;
     }
+   
+    /**
+     * This method gets a converter instance.  This method only applies to
+     * input and output renderers.
+     */
+    protected Converter getConverter(String converterId) {
+        if (converterId == null) {
+            return null;
+        }
+        try {
+	    ApplicationFactory aFactory = 
+		(ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+	    Application application = aFactory.getApplication();
+            return (application.getConverter(converterId));
+        } catch (Exception e) {
+            return (null);
+        }
+    }
     
     /**
-     * Renderers override this method in case output value needs to be
-     * formatted
+     * This method gets a converter instance given a converter 
+     * identifier
      */
-    protected String getFormattedValue(FacesContext context, UIComponent component,
-            Object currentValue ) {
-        return currentValue.toString();
-    }            
-
-    /**
-     * This method gets a converter instance.  This method may not
-     * apply to all renderers.
-     */
-    protected Converter getConverter(UIComponent component) {
-        String converterId = component.getConverter();
+    protected Converter getConverterForIdentifer(String converterId) {
         if (converterId == null) {
-            return (null);
+            return null;
         }
         try {
 	    ApplicationFactory aFactory = 
@@ -488,6 +481,76 @@ public abstract class HtmlBasicRenderer extends Renderer {
      * of the associated component.
      */
     protected void setPreviousValue(UIComponent component, Object value) {
+    }
+    
+   /**
+     * Renderers override this method in case output value needs to be
+     * formatted
+     */
+    protected String getFormattedValue(FacesContext context, UIComponent component,
+            Object currentValue ) throws ConverterException {
+         String result = null;
+        // formatting is supported only for components that support value and 
+         // valueRef attributes.
+        if ( !(component instanceof UIOutput) ){
+             if ( currentValue != null) {
+                 result= currentValue.toString();
+             } 
+             return result;
+        }
+       
+        // if this value is a non-null String use it "as is"
+        if ( currentValue != null && currentValue instanceof String) {
+            return ((String)currentValue);
+        }
+         
+        String valueRef = ((UIOutput)component).getValueRef();
+        Converter converter = null;
+        // If there is a converter attribute, use it to to ask application
+        // instance for a converter with this identifer.
+        String converterId = component.getConverter();
+        converter = getConverter(converterId);
+        // if value is null and no converter attribute is specified, then
+        // return a zero length String.
+        if ( converter == null && currentValue == null) {
+            return "";
+        }
+        // if the value is a non-null, non-String and no converter is
+        // specified, try to use one of the standard converters
+	if (converter == null && valueRef != null) {
+            Class converterType = 
+                (Util.getValueBinding(valueRef)).getType(context);
+
+            // if getType returns a type for which we support a default
+            // conversion, acquire an appropriate converter instance.
+            converterId = Util.getDefaultConverterForType(
+                     (converterType.getName()));
+            converter = getConverter(converterId);
+            
+	} else if ( converter == null && valueRef == null ) {
+            // if there is no valueRef and converter attribute set, try to acquire
+            // a converter using its class type.
+            converterId = currentValue.getClass().getName();
+            converter = getConverter(converterId);
+            // if there is no default converter available for this identifier,
+            // assume the model type to be String.
+            if ( converter == null && currentValue != null) {
+                result = currentValue.toString();
+                return result;
+            }
+        }
+        
+        if ( converter != null) {
+            result = converter.getAsString(context, component, currentValue);
+            
+	    return result;
+        } else {
+            // throw converter exception if no converter can be
+            // identified if a valueRef is set and converter could not be
+            // identified
+            throw new ConverterException(Util.getExceptionMessage(
+                    Util.CONVERSION_ERROR_MESSAGE_ID));
+        }
     }
 
 } // end of class HtmlBasicRenderer

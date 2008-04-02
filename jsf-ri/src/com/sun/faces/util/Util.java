@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.67 2003/07/25 05:52:24 horwat Exp $
+ * $Id: Util.java,v 1.68 2003/07/29 18:23:32 jvisvanathan Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.67 2003/07/25 05:52:24 horwat Exp $
+ * @version $Id: Util.java,v 1.68 2003/07/29 18:23:32 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -314,6 +314,18 @@ public class Util extends Object
         "onreset"
     };
 
+    private static String defaultConverters[][] = {
+        // PENDING (visvan) how do we decide whether to use date, datetime,
+        // or time renderers ?
+        {"java.util.Date", "Date"},
+        {"java.lang.Boolean", "Boolean"},
+        {"java.lang.Byte", "Number"},
+        {"java.lang.Double", "Number"},
+        {"java.lang.Float", "Number"},
+        {"java.lang.Integer", "Number"},
+        {"java.lang.Short", "Number"},
+        {"java.lang.Long", "Number"},
+    };
 private static long id = 0;
 
 
@@ -789,6 +801,21 @@ private Util()
 	    Assert.assert_it(sessionMap != null);
         }
 	return sessionMap;
+    }
+    
+    /**
+     * Returns the converter identifier for a given converter class name.
+     */
+    public static String getDefaultConverterForType(String converterClassName) {
+        // PENDING (visvan) This method is temporary until the lookup moves
+        // to API. 
+        for ( int i = 0; i < defaultConverters.length; ++i ) {
+            if ( (defaultConverters[i][0]).equals(converterClassName)) {
+                return (defaultConverters[i][1]);
+            }
+        }
+        return null;
+        
     }
 
 //

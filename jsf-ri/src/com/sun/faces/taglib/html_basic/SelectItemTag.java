@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemTag.java,v 1.17 2003/07/16 00:00:13 jvisvanathan Exp $
+ * $Id: SelectItemTag.java,v 1.18 2003/07/29 18:23:30 jvisvanathan Exp $
  */
 
 /*
@@ -9,15 +9,8 @@
 
 package com.sun.faces.taglib.html_basic;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.ParameterCheck;
-
-import javax.faces.component.UISelectOne;
-import javax.faces.component.UISelectMany;
 import javax.faces.component.UIComponent;
-import javax.faces.component.SelectItem;
 import javax.faces.component.UISelectItem;
-
 import com.sun.faces.taglib.FacesTag;
 
 /**
@@ -41,12 +34,11 @@ public class SelectItemTag extends FacesTag
 
     // Attribute Instance Variables
 
-    public String selected = null;
-    public String itemValue = null;
-    public String itemLabel = null;
-    public String description = null;
-
-
+    protected String selected = null;
+    protected String itemValue = null;
+    protected String itemLabel = null;
+    protected String description = null;
+   
     // Relationship Instance Variables
 
     //
@@ -65,14 +57,6 @@ public class SelectItemTag extends FacesTag
     // 
     // Accessors
     //
-
-    public String getSelected() {
-        return selected;
-    }
-
-    public void setSelected(String selected) {
-        this.selected = selected;
-    }
 
     public String getItemValue() {
         return itemValue;
@@ -97,6 +81,7 @@ public class SelectItemTag extends FacesTag
     public void setDescription(String description) {
         this.description = description;
     }
+    
 
     //
     // General Methods
@@ -115,66 +100,17 @@ public class SelectItemTag extends FacesTag
     protected void overrideProperties(UIComponent component) {
 	super.overrideProperties(component);
 	UISelectItem selectItem = (UISelectItem) component;
-	UIComponent parent = selectItem.getParent();
-	Assert.assert_it(null != parent);
 	
-	if (null != getItemValue()) {
-	    selectItem.setItemValue(getItemValue());
+	if (null != itemValue) {
+	    selectItem.setItemValue(itemValue);
 	}
-	if (null != getItemLabel()) {
-	    selectItem.setItemLabel(getItemLabel());
+	if (null != itemLabel) {
+	    selectItem.setItemLabel(itemLabel);
 	}
-	if (null != getDescription()) {
-	    selectItem.setItemDescription(getDescription());
+	if (null != description) {
+	    selectItem.setItemDescription(description);
 	}
-
-	// PENDING(edburns): not sure how the 20030620 UIComponentTag
-	// changes impact the following if-else clause.  Leaving it
-	// alone.
-
-        if (parent instanceof UISelectOne) {
-	    UISelectOne selectOne = (UISelectOne) parent;
-	    // If this SelectItemTag instance is selected and
-	    // there is no selected item in our UISelectOne...
-	    if (null != getSelected() && null == selectOne.getValue()) {
-		selectOne.setSelectedValue(selectItem.getItemValue());
-	    }
-	}
-        else if (parent instanceof UISelectMany) {
-	    UISelectMany selectMany = (UISelectMany) parent;
-	    Object newSelectItems[] = null, selectItems[] = null;
-	    int len, i = 0;
-	    boolean foundMatch = false;
-	    // If this SelectItemTag instance is marked as selected and
-	    // there is no Value in the UISelectMany values that matches
-	    // the current value
-	    if (null != getSelected()) {
-		// If there are no selected values
-		if (null == (selectItems = selectMany.getSelectedValues())) {
-		    // create some.
-		    selectItems = new Object[] { selectItem.getItemValue() };
-		}
-		else {
-		    // Search the items for a match.
-		    len = selectItems.length;
-		    for (i = 0; i < len; i++) {
-			if (foundMatch = selectItems[i].equals(
-			    selectItem.getItemValue())) {
-			    break;
-			}
-		    }
-		    if (!foundMatch) {
-			newSelectItems = new Object[len+1];
-			System.arraycopy(selectItems, 0, newSelectItems,0,len);
-			newSelectItems[len] = selectItem.getItemValue();
-			selectItems = newSelectItems;
-			newSelectItems = null;
-		    }
-		}
-		Assert.assert_it(null != selectItems);
-		selectMany.setSelectedValues(selectItems);
-	    }
-	}
+        
     }
 
 } // end of class SelectItemTag

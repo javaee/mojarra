@@ -294,6 +294,21 @@
     <list url="${url}" username="${username}" password="${password}"/>
   </target>
 
+     <!--
+      ===================================================================
+       This target copies the JSF libraries under ${jwsdp.home}. This
+       target simulates JWSDP 1.2 distribution environment.
+      ===================================================================
+     -->
+   <target name="jsf.deploy.wspack" depends="jars">
+     <mkdir dir="${tomcat.home}/jsf"/>
+     <mkdir dir="${tomcat.home}/jsf/lib"/>
+
+     <copy file="${build.home}/lib/${name}.jar" todir="${tomcat.home}/jsf/lib"/>
+     <copy file="${jsf-api.jar}" todir="${tomcat.home}/jsf/lib"/>
+   </target>
+
+
   <target name="main" depends="prepare,compile,jars"/>
 
 </project>

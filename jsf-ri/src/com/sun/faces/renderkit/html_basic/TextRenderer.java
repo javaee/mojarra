@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.44 2003/04/29 20:51:56 eburns Exp $
+ * $Id: TextRenderer.java,v 1.45 2003/07/29 18:23:25 jvisvanathan Exp $
  */
 
 /*
@@ -13,43 +13,19 @@ package com.sun.faces.renderkit.html_basic;
 
 import com.sun.faces.util.Util;
 
-import java.util.Iterator;
-
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.component.UIOutput;
-import javax.faces.component.UISelectBoolean;
-import javax.faces.component.UISelectOne;
-import javax.faces.component.UISelectMany;
 import javax.faces.context.FacesContext;
-import javax.faces.context.ResponseWriter;
-import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 
-import org.mozilla.util.Assert;
-import org.mozilla.util.Debug;
-import org.mozilla.util.Log;
-import org.mozilla.util.ParameterCheck;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.IOException;
-
-import com.sun.faces.RIConstants;
+import java.util.Iterator;
 
 /**
- *
- *  <B>TextRenderer</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: TextRenderer.java,v 1.44 2003/04/29 20:51:56 eburns Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * <B>TextRenderer</B> is a class that renders the current value of 
+ * <code>UIInput<code> or <code>UIOutput<code> component as a input field or
+ * static text.
  */
-
 public class TextRenderer extends HtmlBasicInputRenderer {
     //
     // Protected Constants
@@ -149,22 +125,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 	}
     }
     
-    protected String getFormattedValue(FacesContext context, 
-        UIComponent component, Object currentValue ) {
-
-        Converter converter = getConverter(component);
-        if (converter != null) {
-            try {
-                return converter.getAsString(context, component, currentValue);
-            } catch (ConverterException e) {
-                return currentValue.toString();
-            }
-        } else {
-            return currentValue.toString();
-        }
-    }
-
-    // The testcase for this class is TestRenderers_2.java 
+   // The testcase for this class is TestRenderers_2.java 
 
 } // end of class TextRenderer
 
