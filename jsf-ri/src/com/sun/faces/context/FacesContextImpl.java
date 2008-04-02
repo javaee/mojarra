@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextImpl.java,v 1.42 2003/08/22 16:49:44 eburns Exp $
+ * $Id: FacesContextImpl.java,v 1.43 2003/08/22 20:25:57 eburns Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ public class FacesContextImpl extends FacesContext
         this.externalContext = ec;
         this.locale = externalContext.getRequestLocale();
          
-        this.viewHandler = application.getViewHandler();
+        this.viewHandler = this.getApplication().getViewHandler();
 
 	// Verify the FormatPool is in the ApplicationMap
 
