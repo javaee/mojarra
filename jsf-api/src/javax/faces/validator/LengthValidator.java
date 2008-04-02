@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.21 2003/08/01 18:05:50 craigmcc Exp $
+ * $Id: LengthValidator.java,v 1.22 2003/08/13 22:29:51 craigmcc Exp $
  */
 
 /*
@@ -10,10 +10,10 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.UIInput;
-import javax.faces.component.StateHolder;
-import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -37,10 +37,10 @@ import javax.faces.application.Message;
  * </ul>
  */
 
-public class LengthValidator extends ValidatorBase implements StateHolder {
+public class LengthValidator implements Validator, StateHolder {
 
 
-    // ----------------------------------------------------- Manifest Constants
+    // ------------------------------------------------------ Manifest Constants
 
 
     /**
@@ -63,7 +63,7 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
         "javax.faces.validator.LengthValidator.MINIMUM";
 
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -109,14 +109,11 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>The maximum length to be enforced by this {@link Validator}, if
-     * <code>maximumSet</code> is <code>true</code>.</p>
-     */
     private int maximum = 0;
+    private boolean maximumSet = false;
 
 
     /**
@@ -150,27 +147,8 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    /**
-     * <p>Flag indicating whether a maximum length has been set.</p>
-     */
-    private boolean maximumSet = false;
-
-
-    /**
-     * <p>Return a flag indicating whether a maximum length has been set.</p>
-     */
-    public boolean isMaximumSet() {
-
-        return (this.maximumSet);
-
-    }
-
-
-    /**
-     * <p>The minimum length to be enforced by this {@link Validator}, if
-     * <code>minimumSet</code> is <code>true</code>.</p>
-     */
     private int minimum = 0;
+    private boolean minimumSet = false;
 
 
     /**
@@ -204,23 +182,7 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    /**
-     * <p>Flag indicating whether a minimum length has been set.</p>
-     */
-    private boolean minimumSet = false;
-
-
-    /**
-     * <p>Return a flag indicating whether a minimum limit has been set.</p>
-     */
-    public boolean isMinimumSet() {
-
-        return (this.minimumSet);
-
-    }
-
-
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------- Validator Methods
 
 
     public void validate(FacesContext context, UIInput component) {
@@ -231,22 +193,24 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
         Object value = ((UIInput) component).getValue();
         if (value != null) {
             String converted = stringValue(value);
-            if (isMaximumSet() &&
+            if (maximumSet &&
                 (converted.length() > maximum)) {
                 context.addMessage(component,
-                                   getMessage(context,
-                                              MAXIMUM_MESSAGE_ID,
-                                              new Object[] {
-                                       new Integer(maximum) } ));
+                                   ValidatorMessages.getMessage
+                                   (context,
+                                    MAXIMUM_MESSAGE_ID,
+                                    new Object[] {
+                                        new Integer(maximum) } ));
                 component.setValid(false);
             }
-            if (isMinimumSet() &&
+            if (minimumSet &&
                 (converted.length() < minimum)) {
                 context.addMessage(component,
-                                   getMessage(context,
-                                              MINIMUM_MESSAGE_ID,
-                                              new Object[] {
-                                       new Integer(minimum) } ));
+                                   ValidatorMessages.getMessage
+                                   (context,
+                                    MINIMUM_MESSAGE_ID,
+                                    new Object[] {
+                                        new Integer(minimum) } ));
                 component.setValid(false);
             }
         }
@@ -255,12 +219,16 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
 
 
     public boolean equals(Object otherObj) {
+
 	if (!(otherObj instanceof LengthValidator)) {
 	    return false;
 	}
 	LengthValidator other = (LengthValidator) otherObj;
-	return (maximum == other.maximum && minimum == other.minimum &&
-		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
+	return ((maximum == other.maximum) &&
+                (minimum == other.minimum) &&
+		(maximumSet == other.maximumSet) &&
+                (minimumSet == other.minimumSet));
+
     }
 
 
@@ -286,28 +254,47 @@ public class LengthValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    // ------------------------------------------ methods from StateHolder
+    // ----------------------------------------------------- StateHolder Methods
     
+
     public Object getState(FacesContext context) {
-	return maximum + "_" + maximumSet + "_" + minimum + "_" + minimumSet;
+
+        Object values[] = new Object[4];
+        values[0] = new Integer(maximum);
+        values[1] = maximumSet ? Boolean.TRUE : Boolean.FALSE;
+        values[2] = new Integer(minimum);
+        values[3] = minimumSet ? Boolean.TRUE : Boolean.FALSE;
+        return (values);
+
     }
+
 
     public void restoreState(FacesContext context, Object state) {
-	String stateStr = (String) state;
-	int i = stateStr.indexOf("_"), j;
-	maximum = Integer.valueOf(stateStr.substring(0,i)).intValue();
-	j = stateStr.indexOf("_", i + 1);
-	maximumSet = Boolean.valueOf(stateStr.substring(i + 1, j)).booleanValue();
-	i = stateStr.indexOf("_", j + 1);
-	minimum = Integer.valueOf(stateStr.substring(j + 1 ,i)).intValue();
-	minimumSet = Boolean.valueOf(stateStr.substring(i + 1)).booleanValue();
+
+        Object values[] = (Object[]) state;
+        maximum = ((Integer) values[0]).intValue();
+        maximumSet = ((Boolean) values[1]).booleanValue();
+        minimum = ((Integer) values[2]).intValue();
+        minimumSet = ((Boolean) values[3]).booleanValue();
+
     }
 
-    public boolean isTransient() { return false;
+
+    private boolean transientValue = false;
+
+
+    public boolean isTransient() {
+
+        return (this.transientValue);
+
     }
 
-    public void setTransient(boolean newT) {}    
 
+    public void setTransient(boolean transientValue) {
+
+        this.transientValue = transientValue;
+
+    }
 
 
 }

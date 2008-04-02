@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.14 2003/08/01 18:05:50 craigmcc Exp $
+ * $Id: LongRangeValidator.java,v 1.15 2003/08/13 22:29:51 craigmcc Exp $
  */
 
 /*
@@ -10,10 +10,10 @@
 package javax.faces.validator;
 
 
-import javax.faces.component.UIInput;
-import javax.faces.component.StateHolder;
-import javax.faces.context.FacesContext;
 import javax.faces.application.Message;
+import javax.faces.component.StateHolder;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 
 
 /**
@@ -40,10 +40,10 @@ import javax.faces.application.Message;
  * </ul>
  */
 
-public class LongRangeValidator extends ValidatorBase implements StateHolder {
+public class LongRangeValidator implements Validator, StateHolder {
 
 
-    // ----------------------------------------------------- Manifest Constants
+    // ------------------------------------------------------ Manifest Constants
 
 
     /**
@@ -74,7 +74,7 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
         "javax.faces.validator.LongRangeValidator.TYPE";
 
 
-    // ----------------------------------------------------------- Constructors
+    // ------------------------------------------------------------ Constructors
 
 
     /**
@@ -120,19 +120,15 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    // ------------------------------------------------------------- Properties
+    // -------------------------------------------------------------- Properties
 
 
-    /**
-     * <p>The maximum value to be enforced by this {@link Validator}, if
-     * <code>maximumSet</code> is <code>true</code>.</p>
-     */
     private long maximum = 0;
+    private boolean maximumSet = false;
 
 
     /**
-     * <p>Return the maximum value to be enforced by this {@link Validator},
-     * if <code>isMaximumSet()</code> returns <code>true</code>.</p>
+     * <p>Return the maximum value to be enforced by this {@link Validator}.</p>
      */
     public long getMaximum() {
 
@@ -160,32 +156,12 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    /**
-     * <p>Flag indicating whether a maximum limit has been set.</p>
-     */
-    private boolean maximumSet = false;
-
-
-    /**
-     * <p>Return a flag indicating whether a maximum limit has been set.</p>
-     */
-    public boolean isMaximumSet() {
-
-        return (this.maximumSet);
-
-    }
-
-
-    /**
-     * <p>The minimum value to be enforced by this {@link Validator}, if
-     * <code>minimumSet</code> is <code>true</code>.</p>
-     */
     private long minimum = 0;
+    private boolean minimumSet = false;
 
 
     /**
-     * <p>Return the minimum value to be enforced by this {@link Validator},
-     * if <code>isMinimumSet()</code> returns <code>true</code>.</p>
+     * <p>Return the minimum value to be enforced by this {@link Validator}.</p>
      */
     public long getMinimum() {
 
@@ -213,23 +189,7 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    /**
-     * <p>Flag indicating whether a minimum limit has been set.</p>
-     */
-    private boolean minimumSet = false;
-
-
-    /**
-     * <p>Return a flag indicating whether a minimum limit has been set.</p>
-     */
-    public boolean isMinimumSet() {
-
-        return (this.minimumSet);
-
-    }
-
-
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------- Validator Methods
 
 
     public void validate(FacesContext context, UIInput component) {
@@ -241,27 +201,30 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
         if (value != null) {
             try {
                 long converted = longValue(value);
-                if (isMaximumSet() &&
+                if (maximumSet &&
                     (converted > maximum)) {
                     context.addMessage(component,
-                                       getMessage(context,
-                                                  MAXIMUM_MESSAGE_ID,
-                                                  new Object[] {
-                                           new Long(maximum) }));
+                                       ValidatorMessages.getMessage
+                                       (context,
+                                        MAXIMUM_MESSAGE_ID,
+                                        new Object[] {
+                                            new Long(maximum) }));
                     component.setValid(false);
                 }
-                if (isMinimumSet() &&
+                if (minimumSet &&
                     (converted < minimum)) {
                     context.addMessage(component,
-                                       getMessage(context,
-                                                  MINIMUM_MESSAGE_ID,
-                                                  new Object[] {
-                                           new Long(minimum) }));
+                                       ValidatorMessages.getMessage
+                                       (context,
+                                        MINIMUM_MESSAGE_ID,
+                                        new Object[] {
+                                            new Long(minimum) }));
                     component.setValid(false);
                 }
             } catch (NumberFormatException e) {
                 context.addMessage(component,
-                                   getMessage(context, TYPE_MESSAGE_ID));
+                                   ValidatorMessages.getMessage
+                                   (context, TYPE_MESSAGE_ID));
                 component.setValid(false);
             }
         }
@@ -270,16 +233,20 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
 
 
     public boolean equals(Object otherObj) {
+
 	if (!(otherObj instanceof LongRangeValidator)) {
 	    return false;
 	}
 	LongRangeValidator other = (LongRangeValidator) otherObj;
-	return (maximum == other.maximum && minimum == other.minimum &&
-		maximumSet == other.maximumSet && minimumSet == other.minimumSet);
+	return ((maximum == other.maximum) &&
+                (minimum == other.minimum) &&
+		(maximumSet == other.maximumSet) &&
+                (minimumSet == other.minimumSet));
+
     }
 
 
-    // -------------------------------------------------------- Private Methods
+    // --------------------------------------------------------- Private Methods
 
 
     /**
@@ -302,26 +269,47 @@ public class LongRangeValidator extends ValidatorBase implements StateHolder {
     }
 
 
-    // ------------------------------------------ methods from StateHolder
+    // ----------------------------------------------------- StateHolder Methods
     
+
     public Object getState(FacesContext context) {
-	return maximum + "_" + maximumSet + "_" + minimum + "_" + minimumSet;
+
+        Object values[] = new Object[4];
+        values[0] = new Long(maximum);
+        values[1] = maximumSet ? Boolean.TRUE : Boolean.FALSE;
+        values[2] = new Long(minimum);
+        values[3] = minimumSet ? Boolean.TRUE : Boolean.FALSE;
+        return (values);
+
     }
+
 
     public void restoreState(FacesContext context, Object state) {
-	String stateStr = (String) state;
-	int i = stateStr.indexOf("_"), j;
-	maximum = Long.valueOf(stateStr.substring(0,i)).longValue();
-	j = stateStr.indexOf("_", i + 1);
-	maximumSet = Boolean.valueOf(stateStr.substring(i + 1, j)).booleanValue();
-	i = stateStr.indexOf("_", j + 1);
-	minimum = Long.valueOf(stateStr.substring(j + 1 ,i)).longValue();
-	minimumSet = Boolean.valueOf(stateStr.substring(i + 1)).booleanValue();
+
+        Object values[] = (Object[]) state;
+        maximum = ((Long) values[0]).longValue();
+        maximumSet = ((Boolean) values[1]).booleanValue();
+        minimum = ((Long) values[2]).longValue();
+        minimumSet = ((Boolean) values[3]).booleanValue();
+
     }
 
-    public boolean isTransient() { return false;
+
+    private boolean transientValue = false;
+
+
+    public boolean isTransient() {
+
+        return (this.transientValue);
+
     }
 
-    public void setTransient(boolean newT) {}
+
+    public void setTransient(boolean transientValue) {
+
+        this.transientValue = transientValue;
+
+    }
+
 
 }
