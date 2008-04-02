@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.29 2005/05/16 20:16:16 rlubke Exp $
+ * $Id: ManagedBeanFactory.java,v 1.30 2005/06/10 21:59:54 rlubke Exp $
  */
 
 /*
@@ -168,7 +168,7 @@ public class ManagedBeanFactory extends Object {
     public String getBeanDescription(String lang) {
         DescriptionBean db = managedBean.getDescription(lang);
         if (db != null) {
-            db.getDescription();
+            return db.getDescription();
         }
         return null;
     }
@@ -179,7 +179,7 @@ public class ManagedBeanFactory extends Object {
             if (loader == null) {
                 loader = this.getClass().getClassLoader();
             }
-            return loader.loadClass(managedBean.getManagedBeanName());
+            return loader.loadClass(managedBean.getManagedBeanClass());
         } catch (Exception e) {
         }
         return null;

@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanELResolver.java,v 1.2 2005/05/16 20:16:19 rlubke Exp $
+ * $Id: ManagedBeanELResolver.java,v 1.3 2005/06/10 21:59:55 rlubke Exp $
  */
 /*
  * Copyright 2004 Sun Microsystems, Inc. All rights reserved.
@@ -8,11 +8,9 @@
 
 package com.sun.faces.el;
 
-import java.beans.BeanInfo;
-import java.beans.FeatureDescriptor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import com.sun.faces.application.ApplicationAssociate;
+import com.sun.faces.config.ManagedBeanFactory;
+import com.sun.faces.util.Util;
 
 import javax.el.ELContext;
 import javax.el.ELException;
@@ -20,10 +18,11 @@ import javax.el.ELResolver;
 import javax.el.PropertyNotFoundException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
-import com.sun.faces.application.ApplicationAssociate;
-import com.sun.faces.config.ManagedBeanFactory;
-import com.sun.faces.util.Util;
+import java.beans.BeanInfo;
+import java.beans.FeatureDescriptor;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 
 public class ManagedBeanELResolver extends ELResolver {
 
@@ -146,6 +145,7 @@ public class ManagedBeanELResolver extends ELResolver {
         if (base != null) {
             return null;
         }
+
         ArrayList list = new ArrayList();
         BeanInfo info = null;
        
@@ -167,9 +167,14 @@ public class ManagedBeanELResolver extends ELResolver {
                 String desc = 
                 managedBean.getBeanDescription((
                     facesContext.getViewRoot().getLocale()).toString());
+                if (desc == null) {
+                    // handle the case where the lang or xml:lang attributes
+                    // are not specified on the description
+                    desc = managedBean.getBeanDescription("");
+                }
                 list.add(getFeatureDescriptor(managedBeanName, 
                     managedBeanName, desc,false, false, true,
-                    managedBean.getClass(), Boolean.TRUE));
+                    managedBean.getManagedBeanClass(), Boolean.TRUE));
             }
         }
         return list.iterator();
