@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.7 2003/12/17 15:13:48 rkitain Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.8 2003/12/23 20:27:51 eburns Exp $
  */
 
 /*
@@ -149,7 +149,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	hiddenField = " <input type=\"hidden\" name=\"" 
 	    + RIConstants.FACES_VIEW +  "\"" + " value=\"" +
 	    (new String(Base64.encode(bos.toByteArray()), "ISO-8859-1")) + 
-            "\">\n ";
+            "\" />\n ";
 	context.getResponseWriter().write(hiddenField);
     }
     
