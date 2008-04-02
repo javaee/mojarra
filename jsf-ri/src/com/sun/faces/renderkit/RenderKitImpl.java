@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitImpl.java,v 1.49 2006/10/03 23:38:48 rlubke Exp $
+ * $Id: RenderKitImpl.java,v 1.50 2006/11/11 00:05:29 rlubke Exp $
  */
 
 /*
@@ -56,25 +56,25 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: RenderKitImpl.java,v 1.49 2006/10/03 23:38:48 rlubke Exp $
+ * @version $Id: RenderKitImpl.java,v 1.50 2006/11/11 00:05:29 rlubke Exp $
  */
 
 public class RenderKitImpl extends RenderKit {
 
     private static final String[] SUPPORTED_CONTENT_TYPES_ARRAY =
-          new String[]{
-                RIConstants.HTML_CONTENT_TYPE,
-                RIConstants.XHTML_CONTENT_TYPE,
-                RIConstants.APPLICATION_XML_CONTENT_TYPE,
-                RIConstants.TEXT_XML_CONTENT_TYPE
-          };
-    
-    private static final String SUPPORTED_CONTENT_TYPES = 
-          RIConstants.HTML_CONTENT_TYPE + ',' 
-          + RIConstants.XHTML_CONTENT_TYPE + ',' 
-          + RIConstants.APPLICATION_XML_CONTENT_TYPE + ',' 
-          + RIConstants.TEXT_XML_CONTENT_TYPE;
-          
+         new String[]{
+              RIConstants.HTML_CONTENT_TYPE,
+              RIConstants.XHTML_CONTENT_TYPE,
+              RIConstants.APPLICATION_XML_CONTENT_TYPE,
+              RIConstants.TEXT_XML_CONTENT_TYPE
+         };
+
+    private static final String SUPPORTED_CONTENT_TYPES =
+         RIConstants.HTML_CONTENT_TYPE + ','
+              + RIConstants.XHTML_CONTENT_TYPE + ','
+              + RIConstants.APPLICATION_XML_CONTENT_TYPE + ','
+              + RIConstants.TEXT_XML_CONTENT_TYPE;
+
 
     /**
      * Keys are String renderer family.  Values are HashMaps.  Nested
@@ -82,7 +82,7 @@ public class RenderKitImpl extends RenderKit {
      * Renderer instances themselves.
      */
 
-    private ConcurrentHashMap<String,HashMap<Object,Renderer>> rendererFamilies;
+    private ConcurrentHashMap<String, HashMap<Object, Renderer>> rendererFamilies;
 
     private ResponseStateManager responseStateManager;
     private Boolean preferXHTML;
@@ -90,37 +90,37 @@ public class RenderKitImpl extends RenderKit {
 
     public RenderKitImpl() {
         super();
-        rendererFamilies =  
-            new ConcurrentHashMap<String, HashMap<Object,Renderer>>();
+        rendererFamilies =
+             new ConcurrentHashMap<String, HashMap<Object, Renderer>>();
     }
-    
+
 
     public void addRenderer(String family, String rendererType,
                             Renderer renderer) {
         if (family == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
             throw new NullPointerException(message);
         }
         if (rendererType == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
             throw new NullPointerException(message);
         }
         if (renderer == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderer");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "renderer");
             throw new NullPointerException(message);
         }
-        HashMap<Object,Renderer> renderers = null;
+        HashMap<Object, Renderer> renderers = null;
 
 
         if (null == (renderers = rendererFamilies.get(family))) {
             rendererFamilies
-                  .put(family, renderers = new HashMap<Object, Renderer>());
+                 .put(family, renderers = new HashMap<Object, Renderer>());
         }
         renderers.put(rendererType, renderer);
-        
+
     }
 
 
@@ -128,16 +128,16 @@ public class RenderKitImpl extends RenderKit {
 
         if (rendererType == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "rendererType");
             throw new NullPointerException(message);
         }
         if (family == null) {
             String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
+                 (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "family");
             throw new NullPointerException(message);
         }
 
-        assert (rendererFamilies != null);
+        assert(rendererFamilies != null);
 
         HashMap<Object, Renderer> renderers = null;
         Renderer renderer = null;
@@ -166,35 +166,35 @@ public class RenderKitImpl extends RenderKit {
         }
         String contentType = null;
         boolean contentTypeNullFromResponse = false;
-        FacesContext context = FacesContext.getCurrentInstance();        
+        FacesContext context = FacesContext.getCurrentInstance();
 
         // Step 0: Determine if we have a preference for XHTML   
         if (preferXHTML == null) {
             preferXHTML =
-              WebConfiguration.getInstance(context.getExternalContext())
-                    .getBooleanContextInitParameter(BooleanWebContextInitParameter.PreferXHTMLContentType);
+                 WebConfiguration.getInstance(context.getExternalContext())
+                      .getBooleanContextInitParameter(BooleanWebContextInitParameter.PreferXHTMLContentType);
         }
 
         // Step 1: Check the content type passed into this method 
         if (null != desiredContentTypeList) {
             contentType = findMatch(
-                  desiredContentTypeList, 
-                                    SUPPORTED_CONTENT_TYPES_ARRAY);
+                 desiredContentTypeList,
+                 SUPPORTED_CONTENT_TYPES_ARRAY);
         }
 
         // Step 2: Check the response content type
-    if (null == desiredContentTypeList) {
-        desiredContentTypeList =
-                    context.getExternalContext().getResponseContentType();
+        if (null == desiredContentTypeList) {
+            desiredContentTypeList =
+                 context.getExternalContext().getResponseContentType();
             if (null != desiredContentTypeList) {
                 contentType = findMatch(
-                      desiredContentTypeList, 
-                                        SUPPORTED_CONTENT_TYPES_ARRAY);
+                     desiredContentTypeList,
+                     SUPPORTED_CONTENT_TYPES_ARRAY);
                 if (null == contentType) {
                     contentTypeNullFromResponse = true;
                 }
             }
-    }
+        }
 
         // Step 3: Check the Accept Header content type
         // Evaluate the accept header in accordance with HTTP specification - 
@@ -203,43 +203,43 @@ public class RenderKitImpl extends RenderKit {
         //  1. content type was not specified to begin with
         //  2. an unsupported content type was retrieved from the response 
         if (null == desiredContentTypeList || contentTypeNullFromResponse) {
-            String[] typeArray = 
-                context.getExternalContext().getRequestHeaderValuesMap().get("Accept");
+            String[] typeArray =
+                 context.getExternalContext().getRequestHeaderValuesMap().get("Accept");
             if (typeArray.length > 0) {
                 StringBuffer buff = new StringBuffer();
                 buff.append(typeArray[0]);
-                for (int i = 1, len = typeArray.length ; i < len; i++) {
+                for (int i = 1, len = typeArray.length; i < len; i++) {
                     buff.append(',');
                     buff.append(typeArray[i]);
                 }
                 desiredContentTypeList = buff.toString();
             }
 
-            if (null != desiredContentTypeList) {                
+            if (null != desiredContentTypeList) {
                 if (preferXHTML) {
                     desiredContentTypeList = RenderKitUtils.determineContentType(
-                        desiredContentTypeList, SUPPORTED_CONTENT_TYPES, RIConstants.XHTML_CONTENT_TYPE);
+                         desiredContentTypeList, SUPPORTED_CONTENT_TYPES, RIConstants.XHTML_CONTENT_TYPE);
                 } else {
                     desiredContentTypeList = RenderKitUtils.determineContentType(
-                        desiredContentTypeList, SUPPORTED_CONTENT_TYPES, null);
+                         desiredContentTypeList, SUPPORTED_CONTENT_TYPES, null);
                 }
                 if (null != desiredContentTypeList) {
                     contentType = findMatch(
-                          desiredContentTypeList, 
-                                            SUPPORTED_CONTENT_TYPES_ARRAY);
+                         desiredContentTypeList,
+                         SUPPORTED_CONTENT_TYPES_ARRAY);
                 }
             }
         }
 
         // Step 4: Default to text/html
         if (null == desiredContentTypeList ||
-            RIConstants.ALL_MEDIA.equals(desiredContentTypeList)) {
+             RIConstants.ALL_MEDIA.equals(desiredContentTypeList)) {
             contentType = RIConstants.HTML_CONTENT_TYPE;
         }
 
         if (null == contentType) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
+                 MessageUtils.CONTENT_TYPE_ERROR_MESSAGE_ID));
         }
 
         if (characterEncoding == null) {
@@ -249,12 +249,12 @@ public class RenderKitImpl extends RenderKit {
         return new HtmlResponseWriter(writer, contentType, characterEncoding);
     }
 
-    private String[] contentTypeSplit(String contentTypeString) {        
+    private String[] contentTypeSplit(String contentTypeString) {
         String[] result = Util.split(contentTypeString, ",");
         for (int i = 0; i < result.length; i++) {
             int semicolon = result[i].indexOf(";");
             if (-1 != semicolon) {
-                result[i] = result[i].substring(0,semicolon);
+                result[i] = result[i].substring(0, semicolon);
             }
         }
         return result;
@@ -267,7 +267,7 @@ public class RenderKitImpl extends RenderKit {
                              String[] supportedTypes) {
         String contentType = null;
 
-        String [] desiredTypes = contentTypeSplit(desiredContentTypeList);
+        String[] desiredTypes = contentTypeSplit(desiredContentTypeList);
         String curContentType = null, curDesiredType = null;
 
         // For each entry in the desiredTypes array, look for a match in
@@ -279,9 +279,10 @@ public class RenderKitImpl extends RenderKit {
                 if (curDesiredType.contains(curContentType)) {
                     if (curContentType.contains(RIConstants.HTML_CONTENT_TYPE)) {
                         contentType = RIConstants.HTML_CONTENT_TYPE;
-                    } else if (curContentType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
-                               curContentType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE) ||
-                               curContentType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
+                    } else
+                    if (curContentType.contains(RIConstants.XHTML_CONTENT_TYPE) ||
+                         curContentType.contains(RIConstants.APPLICATION_XML_CONTENT_TYPE) ||
+                         curContentType.contains(RIConstants.TEXT_XML_CONTENT_TYPE)) {
                         contentType = RIConstants.XHTML_CONTENT_TYPE;
                     }
                     break;
