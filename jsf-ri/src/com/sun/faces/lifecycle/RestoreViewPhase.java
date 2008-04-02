@@ -1,5 +1,5 @@
 /*
- * $Id: RestoreViewPhase.java,v 1.37 2006/08/15 16:50:36 rlubke Exp $
+ * $Id: RestoreViewPhase.java,v 1.39 2006/09/18 23:15:05 rlubke Exp $
  */
 
 /*
@@ -59,49 +59,16 @@ import com.sun.faces.util.Util;
  * <B>Lifetime And Scope</B> <P> Same lifetime and scope as
  * DefaultLifecycleImpl.
  *
- * @version $Id: RestoreViewPhase.java,v 1.37 2006/08/15 16:50:36 rlubke Exp $
+ * @version $Id: RestoreViewPhase.java,v 1.39 2006/09/18 23:15:05 rlubke Exp $
  */
 
 public class RestoreViewPhase extends Phase {
 
-    //
-    // Protected Constants
-    //
-    private static Logger logger = Util.getLogger(Util.FACES_LOGGER 
-            + Util.LIFECYCLE_LOGGER);
 
-    //
-    // Class Variables
-    //
+    private static Logger logger = Util.getLogger(Util.FACES_LOGGER
+                                                  + Util.LIFECYCLE_LOGGER);
 
-    //
-    // Instance Variables
-    //    
-
-    // Attribute Instance Variables
-
-    // Relationship Instance Variables
-
-    //
-    // Constructors and Genericializers    
-    //
-
-    //
-    // Class methods
-    //
-
-    //
-    // General Methods
-    //
-
-    // 
-    // Methods from Phase
-    //
-
-
-    public PhaseId getId() {
-        return PhaseId.RESTORE_VIEW;
-    }
+    // ---------------------------------------------------------- Public Methods
 
 
     /**
@@ -112,15 +79,16 @@ public class RestoreViewPhase extends Phase {
      */
 
     public void execute(FacesContext facesContext) throws FacesException {
+
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Entering RestoreViewPhase");
         }
         if (null == facesContext) {
             throw new FacesException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_CONTEXT_ERROR_MESSAGE_ID));
         }
-        
-        Util.getViewHandler(facesContext).initView(facesContext);        
+
+        Util.getViewHandler(facesContext).initView(facesContext);
 
         // If an app had explicitely set the tree in the context, use that;
         //
@@ -139,17 +107,17 @@ public class RestoreViewPhase extends Phase {
         // Reconstitute or create the request tree
         Map requestMap = facesContext.getExternalContext().getRequestMap();
         String viewId = (String)
-            requestMap.get("javax.servlet.include.path_info");
+              requestMap.get("javax.servlet.include.path_info");
         if (viewId == null) {
             viewId = facesContext.getExternalContext().getRequestPathInfo();
         }
-        
+
         // It could be that this request was mapped using
         // a prefix mapping in which case there would be no
         // path_info.  Query the servlet path.
         if (viewId == null) {
             viewId = (String)
-                requestMap.get("javax.servlet.include.servlet_path");
+                  requestMap.get("javax.servlet.include.servlet_path");
         }
 
         if (viewId == null) {
@@ -164,33 +132,39 @@ public class RestoreViewPhase extends Phase {
                 logger.warning("viewId is null");
             }
             throw new FacesException(MessageUtils.getExceptionMessageString(
-                MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
+                  MessageUtils.NULL_REQUEST_VIEW_ERROR_MESSAGE_ID));
         }
 
-	if (isPostback(facesContext)) {
-	    // try to restore the view
+        if (isPostback(facesContext)) {
+            // try to restore the view
             ViewHandler viewHandler = Util.getViewHandler(facesContext);
-	    if (null == (viewRoot = viewHandler.restoreView(facesContext, viewId))) {
-                JSFVersionTracker tracker = 
-                        ApplicationAssociate.getInstance(facesContext.getExternalContext()).getJSFVersionTracker();
+            if (null == (viewRoot =
+                  viewHandler.restoreView(facesContext, viewId))) {
+                JSFVersionTracker tracker =
+                      ApplicationAssociate
+                            .getInstance(facesContext.getExternalContext())
+                            .getJSFVersionTracker();
 
-		// The tracker will be null if the user turned off the 
-		// version tracking feature.  
+                // The tracker will be null if the user turned off the 
+                // version tracking feature.  
                 if (null != tracker) {
-		    // Get the versions of the current ViewHandler and
-		    // StateManager.  If they are older than the current
-		    // version of the implementation, fall back to the
-		    // JSF 1.1 behavior.
+                    // Get the versions of the current ViewHandler and
+                    // StateManager.  If they are older than the current
+                    // version of the implementation, fall back to the
+                    // JSF 1.1 behavior.
                     Version toTest = tracker.
-                            getVersionForTrackedClassName(viewHandler.getClass().getName());
+                          getVersionForTrackedClassName(viewHandler
+                                .getClass().getName());
                     Version currentVersion = tracker.getCurrentVersion();
-		    boolean viewHandlerIsOld = false,
-			stateManagerIsOld = false;
-		    
-		    viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
-		    toTest = tracker.
-			getVersionForTrackedClassName(facesContext.getApplication().getStateManager().getClass().getName());
-		    stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
+                    boolean viewHandlerIsOld = false,
+                          stateManagerIsOld = false;
+
+                    viewHandlerIsOld = (toTest.compareTo(currentVersion) < 0);
+                    toTest = tracker.
+                          getVersionForTrackedClassName(facesContext
+                                .getApplication().getStateManager()
+                                .getClass().getName());
+                    stateManagerIsOld = (toTest.compareTo(currentVersion) < 0);
 
                     if (viewHandlerIsOld || stateManagerIsOld) {
                         viewRoot = viewHandler.createView(facesContext, viewId);
@@ -199,27 +173,27 @@ public class RestoreViewPhase extends Phase {
                         }
                     }
                 }
-                
+
                 if (null == viewRoot) {
                     Object[] params = {viewId};
                     throw new ViewExpiredException(MessageUtils.getExceptionMessageString(
-                            MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params), viewId);
+                          MessageUtils.RESTORE_VIEW_ERROR_MESSAGE_ID, params),
+                                                   viewId);
                 }
-	    }
+            }
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Postback: Restored view for " + viewId);
             }
-	}
-	else {
+        } else {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("New request: creating a view for " + viewId);
             }
             // if that fails, create one
             viewRoot = (Util.getViewHandler(facesContext)).
-                createView(facesContext, viewId);
+                  createView(facesContext, viewId);
             facesContext.renderResponse();
-        } 
-        assert (null != viewRoot);
+        }
+        assert(null != viewRoot);
 
         facesContext.setViewRoot(viewRoot);
         doPerComponentActions(facesContext, viewRoot);
@@ -227,30 +201,23 @@ public class RestoreViewPhase extends Phase {
         if (logger.isLoggable(Level.FINE)) {
             logger.fine("Exiting RestoreViewPhase");
         }
+
+    }    
+
+
+    public PhaseId getId() {
+
+        return PhaseId.RESTORE_VIEW;
+
     }
 
-    /**
-     *
-     * @return true if the request method is POST or PUT, or the method
-     * is GET but there are query parameters, or the request is not an
-     * instance of HttpServletRequest.
-     */
-
-    private boolean isPostback(FacesContext context) {
-        // Get the renderKitId by calling viewHandler.calculateRenderKitId().
-        String renderkitId = 
-                context.getApplication().getViewHandler().
-                calculateRenderKitId(context);
-        ResponseStateManager rsm = RenderKitUtils.getResponseStateManager(context,
-                renderkitId);
-        return rsm.isPostback(context);
-    }
+    // ------------------------------------------------------- Protected Methods
 
 
-    /**
-     * <p>Do any per-component actions necessary during reconstitute</p>
-     */
-    protected void doPerComponentActions(FacesContext context, UIComponent uic) {
+    /** <p>Do any per-component actions necessary during reconstitute</p> */
+    protected void doPerComponentActions(FacesContext context,
+                                         UIComponent uic) {
+
         // if this component has a component value reference expression,
         // make sure to populate the ValueExpression for it.
         ValueExpression valueExpression = null;
@@ -262,10 +229,31 @@ public class RestoreViewPhase extends Phase {
         while (kids.hasNext()) {
             doPerComponentActions(context, kids.next());
         }
-      
+
+    }
+
+    // --------------------------------------------------------- Private Methods
+
+
+    /**
+     * @return true if the request method is POST or PUT, or the method
+     *         is GET but there are query parameters, or the request is not an
+     *         instance of HttpServletRequest.
+     */
+
+    private boolean isPostback(FacesContext context) {
+
+        // Get the renderKitId by calling viewHandler.calculateRenderKitId().
+        String renderkitId =
+              context.getApplication().getViewHandler().
+                    calculateRenderKitId(context);
+        ResponseStateManager rsm =
+              RenderKitUtils.getResponseStateManager(context,
+                                                     renderkitId);
+        return rsm.isPostback(context);
+
     }
 
     // The testcase for this class is TestRestoreViewPhase.java
-
 
 } // end of class RestoreViewPhase
