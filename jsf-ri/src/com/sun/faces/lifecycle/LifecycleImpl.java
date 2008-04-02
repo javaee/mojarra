@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.71 2006/12/06 19:52:51 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.72 2007/02/07 22:08:10 rlubke Exp $
  */
 
 /*
@@ -62,6 +62,8 @@ public class LifecycleImpl extends Lifecycle {
     // Log instance for this class
     private static Logger LOGGER = Util.getLogger(Util.FACES_LOGGER 
             + Util.LIFECYCLE_LOGGER);
+    private static Logger TIMING_LOGGER = Util.getLogger(Util.FACES_LOGGER
+            + Util.TIMING_LOGGER);
 
 
     // ------------------------------------------------------ Instance Variables
@@ -248,8 +250,8 @@ public class LifecycleImpl extends Lifecycle {
                 long start = System.currentTimeMillis();
                 phase.execute(context);
                 long stop = System.currentTimeMillis();
-                if (LOGGER.isLoggable(Level.FINE)) {
-                    LOGGER.fine("TIMING: Exectution time for phase '"
+                if (TIMING_LOGGER.isLoggable(Level.FINE)) {
+                    TIMING_LOGGER.fine("TIMING: Exectution time for phase '"
                         + phaseId.toString() 
                         + "': "
                         + (stop - start));

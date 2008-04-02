@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.206 2007/01/31 22:44:19 jdlee Exp $
+ * $Id: Util.java,v 1.207 2007/02/07 22:08:11 rlubke Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.206 2007/01/31 22:44:19 jdlee Exp $
+ * @version $Id: Util.java,v 1.207 2007/02/07 22:08:11 rlubke Exp $
  */
 
 public class Util {
@@ -103,7 +103,8 @@ public class Util {
     public static final String APPLICATION_LOGGER = ".application";
     public static final String CONTEXT_LOGGER = ".context";
     public static final String CONFIG_LOGGER = ".config";
-    public static final String LIFECYCLE_LOGGER = ".lifecycle";        
+    public static final String LIFECYCLE_LOGGER = ".lifecycle";
+    public static final String TIMING_LOGGER = ".timing";
 
     /**
      * Flag that, when true, enables special behavior in the RI to enable
