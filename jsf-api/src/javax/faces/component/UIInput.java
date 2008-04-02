@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.72 2004/04/06 16:10:30 eburns Exp $
+ * $Id: UIInput.java,v 1.73 2004/05/10 19:52:33 jvisvanathan Exp $
  */
 
 /*
@@ -547,19 +547,22 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 		return;
 	    } catch (FacesException e) {
                 FacesMessage message =
-                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                    MessageFactory.getMessage(context, this, 
+                    CONVERSION_MESSAGE_ID );
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
 	    } catch (IllegalArgumentException e) {
                 FacesMessage message =
-                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                    MessageFactory.getMessage(context, this, 
+                    CONVERSION_MESSAGE_ID );
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
 	    } catch (Exception e) {
                 FacesMessage message =
-                    MessageFactory.getMessage(context, CONVERSION_MESSAGE_ID);
+                    MessageFactory.getMessage(context, this, 
+                    CONVERSION_MESSAGE_ID );
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 context.addMessage(getClientId(context), message);
 		setValid(false);
@@ -751,7 +754,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
 	// If our value is valid, enforce the required property if present
 	if (isValid() && isRequired() && isEmpty(newValue)) {
 	    FacesMessage message =
-		MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID);
+		MessageFactory.getMessage(context, this, REQUIRED_MESSAGE_ID );
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	    context.addMessage(getClientId(context), message);
 	    setValid(false);
@@ -1068,8 +1071,8 @@ public class UIInput extends UIOutput implements EditableValueHolder {
             ConverterException ce, Object value) {
         FacesMessage message = ce.getFacesMessage();
         if (message == null) {
-            message = MessageFactory.getMessage(context,
-                                                CONVERSION_MESSAGE_ID);
+            message = MessageFactory.getMessage(context, this, 
+                 CONVERSION_MESSAGE_ID);
             if (message.getDetail() == null) {
                 message.setDetail(ce.getMessage());
             }

@@ -1,5 +1,5 @@
 /*
- * $Id: LongRangeValidator.java,v 1.33 2004/02/26 20:31:16 eburns Exp $
+ * $Id: LongRangeValidator.java,v 1.34 2004/05/10 19:52:35 jvisvanathan Exp $
  */
 
 /*
@@ -207,43 +207,43 @@ public class LongRangeValidator implements Validator, StateHolder {
                     (converted > maximum)) {
 		    if (minimumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
+					   (context, component,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
-						new Long(minimum),
-						new Long(maximum) }));
+					    new Long(minimum),
+					    new Long(maximum) }));
 			
 		    }
 		    else {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
+					   (context, component,
 					    MAXIMUM_MESSAGE_ID,
 					    new Object[] {
-						new Long(maximum) }));
+					    new Long(maximum) }));
 		    }
                 }
                 if (minimumSet &&
                     (converted < minimum)) {
 		    if (maximumSet) {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
+					   (context, component,
 					    Validator.NOT_IN_RANGE_MESSAGE_ID,
 					    new Object[] {
-						new Double(minimum),
-						new Double(maximum) }));
+				            new Double(minimum),
+					    new Double(maximum) }));
 			
 		    }
 		    else {
                         throw new ValidatorException(MessageFactory.getMessage
-					   (context,
+					   (context, component,
 					    MINIMUM_MESSAGE_ID,
 					    new Object[] {
-						new Long(minimum) }));
+					    new Long(minimum) }));
 		    }
                 }
             } catch (NumberFormatException e) {
                 throw new ValidatorException(MessageFactory.getMessage
-                                     (context, TYPE_MESSAGE_ID));
+                        (context, component, TYPE_MESSAGE_ID ));
             }
         }
 
