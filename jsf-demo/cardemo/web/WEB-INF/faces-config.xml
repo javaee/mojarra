@@ -32,15 +32,6 @@
     <converter-class>cardemo.CreditCardConverter</converter-class>
   </converter>
   
-  <message-resources>
-    <message-resources-id>carDemoResources</message-resources-id>
-    <message-resources-class>cardemo.CarDemoMessageResourcesImpl</message-resources-class>
-    <message>
-      <message-id>cardemo.Format_Invalid</message-id>
-      <message-class>javax.faces.application.MessageImpl</message-class>
-    </message>
-  </message-resources>
-
   <navigation-rule>
     <from-tree-id>/Storefront.jsp</from-tree-id>
     <navigation-case>
@@ -53,6 +44,22 @@
     <from-tree-id>/more.jsp</from-tree-id>
     <navigation-case>
       <from-outcome>success</from-outcome>
+      <to-tree-id>/buy.jsp</to-tree-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>out of stock</from-outcome>
+      <to-tree-id>/outofstock.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+  
+  <navigation-rule>
+    <from-tree-id>/outofstock.jsp</from-tree-id>
+    <navigation-case>
+      <from-outcome>reconfigure</from-outcome>
+      <to-tree-id>/more.jsp</to-tree-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>buy</from-outcome>
       <to-tree-id>/buy.jsp</to-tree-id>
     </navigation-case>
   </navigation-rule>
@@ -167,4 +174,16 @@
     </managed-property>
   </managed-bean>
 
+  <message-resources>
+    <message-resources-id>carDemoResources</message-resources-id>
+    <message>
+      <message-id>cardemo.Format_Invalid</message-id>
+      
+      <summary xml:lang="en">Input must match one of the following patterns {0}</summary>
+      <summary xml:lang="de">Eingang muß eins der folgenden Muster zusammenbringen {0}</summary>
+      <summary xml:lang="es">La entrada debe emparejar uno de los patrones siguientes {0}</summary>
+      <summary xml:lang="fr">L'entrée doit assortir un des modèles suivants {0}</summary>
+     
+    </message>
+  </message-resources>
 </faces-config>

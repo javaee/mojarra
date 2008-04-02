@@ -1,5 +1,5 @@
 /*
- * $Id: CarActionListener.java,v 1.6 2003/05/21 21:50:24 jvisvanathan Exp $
+ * $Id: CarActionListener.java,v 1.7 2003/06/02 17:04:53 jvisvanathan Exp $
  */
 
 /*
@@ -48,6 +48,8 @@ import com.sun.faces.util.Util;
 import javax.faces.component.SelectItem;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIOutput;
+import javax.faces.component.UISelectBoolean;
+import javax.faces.component.UICommand;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 import javax.faces.event.ActionEvent;
@@ -59,59 +61,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
+import java.util.Properties;
+import java.util.Enumeration;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- *
- *  <B>CarActionListener</B> is a class ...
- *
- * <B>Lifetime And Scope</B> <P>
- *
- * @version $Id: CarActionListener.java,v 1.6 2003/05/21 21:50:24 jvisvanathan Exp $
- * 
- * @see	Blah
- * @see	Bloo
- *
+ * CarActionListener handles all the ActionEvents generated as a result
+ * of some action on command_button components of the car demo app.
  */
-
 public class CarActionListener implements ActionListener {
-//
-// Protected Constants
-//
-
-//
-// Class Variables
-//
-
-//
-// Instance Variables
-//
-
+    
     private static Log log = LogFactory.getLog(CarActionListener.class);
-// Attribute Instance Variables
-
-// Relationship Instance Variables
-
-//
-// Constructors and Initializers    
-//
-
+    
     public CarActionListener() {
     }
 
-//
-// Class methods
-//
 
-//
-// General Methods
-//
-
-    
     // This listener will process events after the phase specified.
-    
     public PhaseId getPhaseId() {
         return PhaseId.APPLY_REQUEST_VALUES;
     }
@@ -119,559 +87,189 @@ public class CarActionListener implements ActionListener {
     public void processAction(ActionEvent event) {
         log.debug("CarActionListener.processAction : actionCommand : "+
             event.getActionCommand());
+        FacesContext context = FacesContext.getCurrentInstance();
         String actionCommand = event.getActionCommand();
 
-        processActionCommand(actionCommand);
-        ResourceBundle rb = ResourceBundle.getBundle(
-            "cardemo/Resources", (FacesContext.getCurrentInstance().
-                getLocale()));
-
-        if (actionCommand.equals("custom")) {
-            processCustom(event, rb);
-        } else if (actionCommand.equals("standard")) {
-            processStandard(event, rb);
-        } else if (actionCommand.equals("performance")) {
-            processPerformance(event, rb);
-        } else if (actionCommand.equals("deluxe")) {
-            processDeluxe(event, rb);
-        } 
-        else if (actionCommand.equals("recalculate")) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            String currentPackage = (String)(Util.getValueBinding(
-                "CurrentOptionServer.currentPackage")).getValue(context);
-            if (currentPackage.equals("custom")) {
-                 processCustom(event, rb);
-            } else if (currentPackage.equals("standard")) {
-                processStandard(event, rb);
-            } else if (currentPackage.equals("performance")) {
-                processPerformance(event, rb);
-            } else if (currentPackage.equals("deluxe")) {
-                processDeluxe(event, rb);
-            }
+        if (actionCommand.equals("custom") || 
+            actionCommand.equals("standard") ||
+            actionCommand.equals("performance") || 
+            actionCommand.equals("deluxe")) {
+            processPackage(context, event);
+        } else if (actionCommand.equals("recalculate")) {
+            updateComponentState(context, event.getComponent());
         } else if (actionCommand.equals("buy")) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            String carPrice = (String)
-            (Util.getValueBinding("CurrentOptionServer.carCurrentPrice")).
-                getValue(context);
-            (Util.getValueBinding("CurrentOptionServer.packagePrice")).
-                setValue(context, carPrice);
+            // update the component state again based on the package selected.
+            // otherwise the checkboxes will appear unselected although the
+            // option has been selected if they are disabled due to the way
+            // checkboxes are handled by the browsers
+            updateComponentState(context, event.getComponent());
+        } else {
+            processActionCommand(actionCommand);  
+            // if user has already selected a car, we need to reset the state of 
+            // the component. If the car is being chosen for the first time,this
+            // will be a no-op. But if a car is chosen and for some reason, if
+            // the user decides to start all over from StoreFront page, then we
+            // need to reset the package back to "Custom", so that old package
+            // selections are lost.
+            (Util.getValueBinding("CarServer.currentPackageName")).
+                    setValue(context, "Custom"); 
+            updateComponentState(context, event.getComponent());
+            changeButtonStyle("Custom", event.getComponent()); 
         }
-            
-            
     }
 
-    // helper method to set UI values for "custom" package selection
-
-    private void processCustom(ActionEvent event, ResourceBundle rb) {
+    /**
+     * Handles the selection of the particular package. Updates the state
+     * of the component representing different options and packages.
+     */
+    private void processPackage(FacesContext context, ActionEvent event) {
         UIComponent component = event.getComponent();
         int i = 0;
         UIComponent foundComponent = null;
         UIOutput uiOutput = null;
         String value = null;
         boolean packageChange = false;
-//PENDING(rogerk) application data should be read from config file..
 
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        String[] engines = {"V4", "V6", "V8"};
-        ArrayList engineOption = new ArrayList(engines.length);
-        for (i=0; i<engines.length; i++) {
-            engineOption.add(new SelectItem(
-                engines[i], engines[i], engines[i]));
-        }
-        Util.getValueBinding("CurrentOptionServer.engineOption").
-                setValue(context,engineOption);
-        
-        foundComponent = component.findComponent("currentEngine");
-        uiOutput = (UIOutput) foundComponent;
-        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage"))
-                .getValue(context)).equals("custom")) {
-            value = engines[0];
-            packageChange = true;
-        } else {
-            value = (String)uiOutput.getValue();
-        }
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
-                setValue(context,value);
-        
-        String[] suspensions = new String[2];
-        suspensions[0] = (String)rb.getObject("Regular");
-        suspensions[1] = (String)rb.getObject("Performance");
-        ArrayList suspensionOption = new ArrayList(suspensions.length);
-        for (i=0; i<suspensions.length; i++) {
-            suspensionOption.add(new SelectItem(suspensions[i],
-                suspensions[i], suspensions[i]));
-        }
-        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
-                setValue(context, suspensionOption);
-        
-        foundComponent = component.findComponent("currentSuspension");
-        uiOutput = (UIOutput) foundComponent;
-        if (packageChange) {
-            value = suspensions[0];
-        } else {
-            value = (String)uiOutput.getValue();
-        }
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
-            setValue(context, value);
-      
-        (Util.getValueBinding("CurrentOptionServer.currentPackage")).
-                setValue(context,"custom");
-
-        foundComponent = component.findComponent("sunroof");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
-        setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("securitySystem");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
-            setValue(context, Boolean.FALSE);
-
-        foundComponent = component.findComponent("gps");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.gps")).
-            setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("cruisecontrol");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
-            setValue(context, Boolean.FALSE);
-
-        foundComponent = component.findComponent("skirack");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.skiRack")).
-            setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("keylessentry");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
-            setValue(context, Boolean.FALSE);
-
-        foundComponent = component.findComponent("towPackage");
-        foundComponent.setAttribute("disabled", "false");
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.towPackage")).
-        setValue(context,Boolean.FALSE);
-
-        // Display locale specific button labels..
-
-        String buttonLabel = null;
-        foundComponent = component.findComponent("custom");
-        foundComponent.setAttribute("commandClass", "package-selected");
-
-        foundComponent = component.findComponent("standard");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("performance");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("deluxe");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-    }
-
-    // helper method to set UI values for "standard" package selection
-
-    private void processStandard(ActionEvent event, ResourceBundle rb) {
-        UIComponent component = event.getComponent();
-        int i = 0;
-        UIComponent foundComponent = null;
-        UIOutput uiOutput = null;
-        String value = null;
-        boolean packageChange = false;
-//PENDING(rogerk) application data should be read from config file..
- 
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        String[] engines = {"V4", "V6"};
-        ArrayList engineOption = new ArrayList(engines.length);
-        for (i=0; i<engines.length; i++) {
-            engineOption.add(new SelectItem(
-                engines[i], engines[i], engines[i]));
-        }
-        (Util.getValueBinding("CurrentOptionServer.engineOption")).
-        setValue(context,engineOption);
-
-        foundComponent = component.findComponent("currentEngine");
-        uiOutput = (UIOutput) foundComponent;
-        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage"))
-            .getValue(context)).equals("standard")) {
-            value = engines[0];
-            packageChange = true;
-        } else {
-            value = (String)uiOutput.getValue();
-        }
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
-        setValue(context,value);
-       
-        String[] suspensions = new String[1];
-        suspensions[0] = (String)rb.getObject("Regular");
-        ArrayList suspensionOption = new ArrayList();
-        suspensionOption.add(new SelectItem(suspensions[0],
-            suspensions[0], suspensions[0]));
-        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
-        setValue(context,suspensionOption);
-        foundComponent = component.findComponent("currentSuspension");
-        uiOutput = (UIOutput) foundComponent;
-        if (packageChange) {
-            value = suspensions[0];
-        } else {
-            value = (String)uiOutput.getValue();
-        } 
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
-        setValue(context, value);
-     
-       (Util.getValueBinding("CurrentOptionServer.currentPackage")).
-        setValue(context, "standard");
-
-        foundComponent = component.findComponent("sunroof");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue( Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("securitySystem");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue( Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
-        setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("gps");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.gps")).
-        setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("cruisecontrol");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
-        setValue(context, Boolean.TRUE);
-
-        foundComponent = component.findComponent("skirack");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.skiRack")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("keylessentry");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("towPackage");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.towPackage")).
-        setValue(context,Boolean.FALSE);
-
-        // Display locale specific button labels..
-
-        String buttonLabel = null;
-        foundComponent = component.findComponent("custom");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("standard");
-        foundComponent.setAttribute("commandClass", "package-selected");
-
-        foundComponent = component.findComponent("performance");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("deluxe");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-    }
-
-    // helper method to set UI values for "performance" package selection
-
-    private void processPerformance(ActionEvent event, ResourceBundle rb) {
-       
-        UIComponent component = event.getComponent();
-        // "value" is an attibute on UIOutput and subclasses of UIOutput
-        // only. since we are dealing with ValueChangedEvent here, it is safe
-        // to cast the component to UIOutput.
-        UIComponent foundComponent = null;
-        UIOutput uiOutput = null;
-        String value = null;
-        boolean packageChange = false;
-//PENDING(rogerk) application data should be read from config file..
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        String[] engines = {"V8"};
-        ArrayList engineOption = new ArrayList();
-        engineOption.add(new SelectItem(engines[0], engines[0], engines[0]));
-        (Util.getValueBinding("CurrentOptionServer.engineOption")).
-        setValue(context,engineOption);
-
-        foundComponent = component.findComponent("currentEngine");
-        uiOutput = (UIOutput) foundComponent;
-        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage")).
-            getValue(context)).equals("performance")) {
-            value = engines[0];
-            packageChange = true;
-        } else {
-            value = (String)uiOutput.getValue();
-        }
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
-        setValue(context,value);
-      
-        String[] suspensions = new String[1];
-        suspensions[0] = (String)rb.getObject("Performance");
-        ArrayList suspensionOption = new ArrayList();
-        suspensionOption.add(new SelectItem(suspensions[0],
-            suspensions[0], suspensions[0]));
-        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
-            setValue(context,suspensionOption);
-        foundComponent = component.findComponent("currentSuspension");
-        uiOutput = (UIOutput) foundComponent;
-        if (packageChange) {
-            value = suspensions[0];
-        } else {
-            value = (String)uiOutput.getValue();
-        }
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
-            setValue(context,value);
-
-        (Util.getValueBinding("CurrentOptionServer.currentPackage")).
-        setValue(context,"performance");
-
-        foundComponent = component.findComponent("sunroof");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("securitySystem");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
-        setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("gps");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue( Boolean.FALSE);
-        foundComponent.setAttribute("selectbooleanClass", "option-unselected");
-        (Util.getValueBinding("CurrentOptionServer.gps")).
-        setValue(context,Boolean.FALSE);
-
-        foundComponent = component.findComponent("cruisecontrol");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("skirack");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.skiRack")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("keylessentry");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("towPackage");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.towPackage")).
-        setValue(context,Boolean.TRUE);
-
-        // Display locale specific button labels..
-
-        String buttonLabel = null;
-        foundComponent = component.findComponent("custom");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("standard");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("performance");
-        foundComponent.setAttribute("commandClass", "package-selected");
-
-        foundComponent = component.findComponent("deluxe");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-    }
-
-    // helper method to set UI values for "deluxe" package selection
-
-    private void processDeluxe(ActionEvent event, ResourceBundle rb) {
-        UIComponent component = event.getComponent();
-        UIComponent foundComponent = null;
-        UIOutput uiOutput = null;   
-        String value = null;
-        boolean packageChange = false;
-        int i = 0;
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-//PENDING(rogerk) application data should be read from config file..
-
-        String[] engines = {"V4", "V6", "V8"};
-        ArrayList engineOption = new ArrayList(engines.length);
-        for (i=0; i<engines.length; i++) {
-            engineOption.add(new SelectItem(
-                engines[i], engines[i], engines[i]));
-        }
-        (Util.getValueBinding("CurrentOptionServer.engineOption")).
-        setValue(context, engineOption);
-
-        foundComponent = component.findComponent("currentEngine");
-        uiOutput = (UIOutput) foundComponent;
-        if (!((Util.getValueBinding("CurrentOptionServer.currentPackage")).
-            getValue(context)).equals("deluxe")) {
-            value = engines[0];
-            packageChange = true;
-        } else {
-            value = (String)uiOutput.getValue();
-        }
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentEngineOption")).
-            setValue(context, value);
-       
-        String[] suspensions = new String[1];
-        suspensions[0] = (String)rb.getObject("Performance");
-        ArrayList suspensionOption = new ArrayList();
-        suspensionOption.add(new SelectItem(suspensions[0],
-            suspensions[0], suspensions[0]));
-        (Util.getValueBinding("CurrentOptionServer.suspensionOption")).
-            setValue(context, suspensionOption);
-
-        foundComponent = component.findComponent("currentSuspension");
-        uiOutput = (UIOutput) foundComponent;
-        if (packageChange) {
-            value = suspensions[0];
-        } else {
-            value = (String)uiOutput.getValue();
-        } 
-        uiOutput.setValue(value);
-        (Util.getValueBinding("CurrentOptionServer.currentSuspensionOption")).
-            setValue(context,value);
-       
-        (Util.getValueBinding("CurrentOptionServer.currentPackage")).
-        setValue(context,"deluxe");
-
-        foundComponent = component.findComponent("sunroof");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.sunRoof")).
-        setValue(context, Boolean.TRUE);
-
-        foundComponent = component.findComponent("securitySystem");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.securitySystem")).
-        setValue(context, Boolean.TRUE);
-
-        foundComponent = component.findComponent("gps");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue( Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.gps")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("cruisecontrol");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.cruiseControl")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("skirack");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.skiRack")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("keylessentry");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue( Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.keylessEntry")).
-        setValue(context,Boolean.TRUE);
-
-        foundComponent = component.findComponent("towPackage");
-        foundComponent.setAttribute("disabled", "true");
-        ((UIOutput)foundComponent).setValue(Boolean.TRUE);
-        foundComponent.setAttribute("selectbooleanClass", "package-selected");
-        (Util.getValueBinding("CurrentOptionServer.towPackage")).
-        setValue(context,Boolean.TRUE);
-
-        // Display locale specific button labels..
-
-        String buttonLabel = null;
-        foundComponent = component.findComponent("custom");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("standard");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("performance");
-        foundComponent.setAttribute("commandClass", "package-unselected");
-
-        foundComponent = component.findComponent("deluxe");
-        foundComponent.setAttribute("commandClass", "package-selected");
-
-    }
+        String cmdName = event.getActionCommand();
+        // Note: Name of the Package resources file must match the key attribute
+        // of the UICommand component. The key was chosen so that it is not
+        // dependent in any locale
+        String packageKey = (String)component.getAttribute("key");
+        (Util.getValueBinding("CarServer.currentPackageName")).
+                setValue(context, packageKey);
+        updateComponentState(context, component);
+        changeButtonStyle(packageKey, component);
+    }    
     
+    /**
+     * Updates the state of the component that represents different options
+     * based on the the options being available or not for the selected
+     * package
+     */
+    protected void updateComponentState(FacesContext context, 
+            UIComponent component) {
+         UIComponent foundComponent = null;
+         // get the available option for car package selected
+        Properties packageProps = (Properties) 
+        ((Util.getValueBinding("CarServer.currentPackage.packageProperties")).
+                getValue(context));
+        if ( packageProps == null) {
+            return;
+        }
+
+        // depending on each option for this package being available or not, 
+        // for every option available for the package, locate the component that
+        // is represented by the option and set the relevant attributes.
+        // NOTE: componentIds must match exactly the keys used to name the 
+        // options in the package resources files.
+        Enumeration propsIt = packageProps.keys();
+        while ( propsIt.hasMoreElements() ) {
+            String componentId = (String) propsIt.nextElement();    
+            String propValue = (String) packageProps.get(componentId);
+            foundComponent = component.findComponent(componentId);
+            if (foundComponent == null ) {
+                return;
+            }
+            String packageName = (String)
+                (Util.getValueBinding("CarServer.currentPackageName")).
+                getValue(context); 
+            
+            // propValue of 0 represents, the option will be enabled and 
+            // unselected.
+            // propValue of 1 represents, the option will be disabled and 
+            // selected.
+            // propValue of 2 represents, the option will be disabled and 
+            // unselected.
+            if ( propValue.equals("0")) {
+                foundComponent.setAttribute("selectbooleanClass", 
+                    "option-unselected");
+                foundComponent.setAttribute("disabled", "false");
+                // if we do not check for Custom here, current value will be lost
+                // and the value will be set to false.
+                if (!(packageName.equals("Custom"))) {
+                    ((UISelectBoolean)foundComponent).setValue(Boolean.FALSE);
+                }    
+            } else if (propValue.equals("1")){
+                foundComponent.setAttribute("selectbooleanClass", 
+                    "package-selected");
+                foundComponent.setAttribute("disabled", "true");
+                ((UISelectBoolean)foundComponent).setValue(Boolean.TRUE);
+            }  else if (propValue.equals("2")) {
+                 foundComponent.setAttribute("selectbooleanClass", 
+                    "package-selected");
+                foundComponent.setAttribute("disabled", "true");
+                ((UISelectBoolean)foundComponent).setValue(Boolean.FALSE);
+            } // end of if  
+        }  // end of while
+     }
+
+    /**
+     * Changes the style of the buttons representing different packages
+     * based on the currently selected package.
+     */
+    public void changeButtonStyle(String packName, UIComponent component) {
+        UIComponent foundComponent = null;
+        foundComponent = component.findComponent("custom");
+        if (foundComponent == null) {
+            return;
+        }
+        if ( packName.equals("Custom")) {
+            foundComponent.setAttribute("commandClass", "package-selected");
+        } else {
+            foundComponent.setAttribute("commandClass", "package-unselected"); 
+        }
+        
+        foundComponent = component.findComponent("standard");
+        if (foundComponent == null) {
+            return;
+        }
+        if ( packName.equals("Standard")) {
+            foundComponent.setAttribute("commandClass", "package-selected");
+        } else {
+            foundComponent.setAttribute("commandClass", "package-unselected"); 
+        }
+        
+        foundComponent = component.findComponent("performance");
+        if (foundComponent == null) {
+            return;
+        }
+        if ( packName.equals("Performance")) {
+            foundComponent.setAttribute("commandClass", "package-selected");
+        } else {
+            foundComponent.setAttribute("commandClass", "package-unselected"); 
+        }
+        
+        foundComponent = component.findComponent("deluxe");
+        if (foundComponent == null) {
+            return;
+        }
+        if ( packName.equals("Deluxe")) {
+            foundComponent.setAttribute("commandClass", "package-selected");
+        } else {
+            foundComponent.setAttribute("commandClass", "package-unselected"); 
+        }
+    }
+   
+    /**
+     * Sets the CarId of the currently chosen Car.
+     */
     protected void processActionCommand(String actionCommand) {
          // get CurrentOptionServer
         FacesContext context = FacesContext.getCurrentInstance();
-        CurrentOptionServer optServer = (CurrentOptionServer)
-        (Util.getValueBinding("CurrentOptionServer")).getValue(context);
-        
+        int carId = 0;
         if (actionCommand.equals("more1")) {
-            optServer.setCarId(1);
+            carId = 1;
         } else if (actionCommand.equals("more2")) {
-            optServer.setCarId(2);
+            carId = 2;
         } else if (actionCommand.equals("more3")) {
-            optServer.setCarId(3);
+            carId = 3;
         } else if (actionCommand.equals("more4")) {
-            optServer.setCarId(4);
-        } else if (actionCommand.equals("buy")) {
-            // if options were chosen form the "custom" package ...
-            if (optServer.getCurrentPackage().equals("custom")) {
-                optServer.setSunRoof(optServer.getSunRoofSelected());
-                optServer.setCruiseControl(optServer.getCruiseControlSelected());
-                optServer.setKeylessEntry(optServer.getKeylessEntrySelected());
-                optServer.setSecuritySystem(optServer.getSecuritySystemSelected());
-                optServer.setSkiRack(optServer.getSkiRackSelected());
-                optServer.setTowPackage(optServer.getTowPackageSelected());
-                optServer.setGps(optServer.getGpsSelected());
-            }
-        }
+            carId = 4;
+          
+        } 
+        if ( carId != 0 ) {
+            (Util.getValueBinding("CarServer.carId")).
+                    setValue(context, new Integer(carId));
+        }    
     }
 } // end of class CarActionListener

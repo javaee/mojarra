@@ -54,8 +54,8 @@
 	    basename="cardemo.Resources"
 	    scope="session" var="carDemoBundle"/>
 
-        <jsp:useBean id="CurrentOptionServer" class="cardemo.CurrentOptionServer" scope="session" >
-            <jsp:setProperty name="CurrentOptionServer" property="carImage"
+        <jsp:useBean id="CarServer" class="cardemo.CarServer" scope="session" >
+            <jsp:setProperty name="CarServer" property="carImage"
                 value="current.gif"/>
         </jsp:useBean>
 
@@ -110,7 +110,7 @@
             <BR>
             <h:command_button  label="More" key="moreButton" action="success"
                  bundle="carDemoBundle" commandName="more2">
-                 <f:action_listener type="cardemo.CarActionListener"/>
+                <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
         </TR>
@@ -158,7 +158,7 @@
             <BR>
             <h:command_button  key="moreButton" action="success" 
                  bundle="carDemoBundle" commandName="more4">
-                <f:action_listener type="cardemo.CarActionListener"/>
+               <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             </TD>
         </TR>

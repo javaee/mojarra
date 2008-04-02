@@ -1,5 +1,5 @@
 /*
- * $Id: FormatValidator.java,v 1.1 2003/05/08 18:55:00 jvisvanathan Exp $
+ * $Id: FormatValidator.java,v 1.2 2003/06/02 17:04:57 jvisvanathan Exp $
  */
 
 /*
@@ -183,7 +183,6 @@ public class FormatValidator implements Validator {
     //
     public void validate(FacesContext context, UIComponent component) {
         boolean valid = false;
-        
         if ((context == null) || (component == null)) {
             throw new NullPointerException();
         }
@@ -213,7 +212,7 @@ public class FormatValidator implements Validator {
             Message errMsg = getMessageResources().getMessage(context, 
                     FORMAT_INVALID_MESSAGE_ID, 
                     (new Object[] {formatPatterns}));
-             context.addMessage(component, errMsg);
+            context.addMessage(component, errMsg);
         }
     }
     

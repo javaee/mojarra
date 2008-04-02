@@ -50,6 +50,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.sun.faces.util.Util;
+
 /**
  * PackageValueChanged gets called when any of the package options for a
  * car in the more.jsp page changes
@@ -58,7 +59,9 @@ public class PackageValueChanged implements ValueChangedListener {
     
     private static Log log = LogFactory.getLog(PackageValueChanged.class);
 
-    /** Creates a new instance of PackageValueChanged */
+    /** 
+     * Creates a new instance of PackageValueChanged 
+     */
     public PackageValueChanged() {
     }
     
@@ -77,7 +80,7 @@ public class PackageValueChanged implements ValueChangedListener {
             String currentPrice;
             int cPrice = 0;
             currentPrice = (String)
-            (Util.getValueBinding("CurrentOptionServer.carCurrentPrice"))
+            (Util.getValueBinding("CarServer.carCurrentPrice"))
             .getValue(context);
             cPrice = Integer.parseInt(currentPrice);
             log.debug("Component Id: "+componentId);
@@ -87,109 +90,56 @@ public class PackageValueChanged implements ValueChangedListener {
             log.debug("Vevent name: " + (vEvent.getNewValue()).getClass().getName());
             // the if is for the SelectItems; else is for checkboxes
             if ((componentId.equals("currentEngine")) ||
-            (componentId.equals("currentBrake")) ||
-            (componentId.equals("currentSuspension")) ||
-            (componentId.equals("currentSpeaker")) ||
-            (componentId.equals("currentAudio")) ||
-            (componentId.equals("currentTransmission"))) {
+                (componentId.equals("currentBrake")) ||
+                (componentId.equals("currentSuspension")) ||
+                (componentId.equals("currentSpeaker")) ||
+                (componentId.equals("currentAudio")) ||
+                (componentId.equals("currentTransmission"))) {
                 log.debug("vEvent.getOldValue: "+vEvent.getOldValue());
                 log.debug("vEvent.getNewValue: "+vEvent.getNewValue());
 
-                cPrice = cPrice - (this.getPriceFor((String)vEvent.getOldValue()));
-                cPrice = cPrice + (this.getPriceFor((String)vEvent.getNewValue()));
-                //cPrice = cPrice + 100;
+                cPrice = cPrice - (getPriceFor(((String)vEvent.getOldValue()), 
+                        context));
+                cPrice = cPrice + (getPriceFor(((String)vEvent.getNewValue()), 
+                         context)); 
             } else {
-            
                 Boolean optionSet = (Boolean)vEvent.getNewValue();
-                cPrice = calculatePrice(componentId, optionSet, cPrice); 
+                cPrice = calculatePrice(componentId, vEvent, cPrice, context); 
             }
-            
             // update model value
             currentPrice = Integer.toString(cPrice);
-            (Util.getValueBinding("CurrentOptionServer.carCurrentPrice")).
+            (Util.getValueBinding("CarServer.carCurrentPrice")).
             setValue(context,currentPrice);
         } catch (NumberFormatException ignored) {}
         
     }
 
-    public int calculatePrice(String optionKey, Boolean optionSet, int cPrice) {
+    /**
+     * Updates the price of the Car based for a particular option being
+     * selected or deselected.
+     */
+    public int calculatePrice(String optionKey,ValueChangedEvent vEvent, 
+            int cPrice, FacesContext context) {
+        Boolean optionSet = (Boolean)vEvent.getNewValue();   
+        Boolean oldValue = (Boolean)vEvent.getOldValue(); 
         if (optionSet.equals(Boolean.TRUE)) {
-            cPrice = cPrice + (this.getPriceFor(optionKey));
+            cPrice = cPrice + (getPriceFor(optionKey, context));
         } else {
-            cPrice = cPrice - (this.getPriceFor(optionKey));
+            cPrice = cPrice - (getPriceFor(optionKey, context));
         }
         return cPrice;
     }
     
-    //PENDING(rajprem): this information should eventually 
-    //go into CarOptionsn.properties
-    public int getPriceFor(String option) {
-        ResourceBundle rb = ResourceBundle.getBundle(
-        "cardemo/Resources", (FacesContext.getCurrentInstance().getLocale()));
-
-        if (option.equals("V4")) {
-            return (100);
-        }
-        else if (option.equals("V6")) {
-            return (200);
-        }
-        else if (option.equals("V8")) {
-            return (300);
-        }
-        else if (option.equals((String)rb.getObject("Disc"))) {
-            return (100);
-        }
-        else if (option.equals((String)rb.getObject("Drum"))) {
-            return (200);
-        }
-        else if (option.equals((String)rb.getObject("Regular"))) {
-            return (150);
-        }
-        else if (option.equals((String)rb.getObject("Performance"))) {
-            return (300);
-        }
-        else if (option.equals("4")) {
-            return (100);
-        }
-        else if (option.equals("6")) {
-            return (200);
-        }
-        else if (option.equals((String)rb.getObject("Standard"))) {
-            return (100);
-        }
-        else if (option.equals((String)rb.getObject("Premium"))) {
-            return (200);
-        }
-        else if (option.equals((String)rb.getObject("Auto"))) {
-            return (300);
-        }
-        else if (option.equals((String)rb.getObject("Manual"))) {
-            return (200);
-        }
-        else if (option.equals("sunroof")) {
-            return (100);
-        }
-        else if (option.equals("cruisecontrol")) {
-            return (150);
-        }
-        else if (option.equals("keylessentry")) {
-            return (100);
-        }
-        else if (option.equals("securitySystem")) {
-            return (100);
-        }
-        else if (option.equals("skirack")) {
-            return (200);
-        }
-        else if (option.equals("towPackage")) {
-            return (200);
-        }
-        else if (option.equals("gps")) {
-            return (200);
-        }
-        else return 0;
-        
+    /**
+     * Returns the price for a particular option.
+     */
+    public int getPriceFor(String option, FacesContext context) {
+        if (option == null ) {
+            return 0;
+        }    
+        CarServer carServer =(CarServer)
+                (Util.getValueBinding("CarServer")).getValue(context);    
+        return carServer.getPriceForOption(option);
     }
-    
     
 }
