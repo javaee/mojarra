@@ -62,6 +62,7 @@
             <property name="exec.name" value="${container.home}/bin/asadmin"/>
             <property name="exec.arg.1" value=""/>
             <echo>
+                
 ---------------- Glassfish - Deploying @{appName} ---------------- 
                 
             </echo>
@@ -93,6 +94,7 @@
             <property name="exec.name" value="${container.home}/bin/asadmin"/>
             <property name="exec.arg.1" value=""/>
             <echo>
+                
 ---------------- Glassfish - Undeploying @{appName} ---------------- 
                 
             </echo>
