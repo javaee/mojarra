@@ -27,8 +27,6 @@ package renderkits.components.svg;
 
 import javax.faces.component.UIOutput;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>Shape</B> is a base class for <code>SVG</code> shapes. 
@@ -36,8 +34,6 @@ import org.apache.commons.logging.LogFactory;
                                                                                        
 public abstract class Shape extends UIOutput {
 
-    // Log instance for this class
-    protected static Log log = LogFactory.getLog(Shape.class);
 
 }
 

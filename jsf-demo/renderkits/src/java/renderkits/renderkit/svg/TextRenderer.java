@@ -26,6 +26,7 @@
 package renderkits.renderkit.svg;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
@@ -183,8 +184,8 @@ public class TextRenderer extends BaseRenderer {
     private Object getValue(UIComponent component) {
         if (component instanceof ValueHolder) {
             Object value = ((ValueHolder) component).getValue();
-            if (log.isDebugEnabled()) {
-                log.debug("component.getValue() returned " + value);
+            if (logger.isLoggable(Level.FINE)) {
+                logger.fine("component.getValue() returned " + value);
             }
             return value;
         }

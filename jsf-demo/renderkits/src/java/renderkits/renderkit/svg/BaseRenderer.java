@@ -33,8 +33,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.Renderer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import renderkits.util.Util;
 
 /**
  * <B>BaseRenderer</B> is a base class for implementing renderers
@@ -43,8 +45,8 @@ import org.apache.commons.logging.LogFactory;
                                                                                        
 public abstract class BaseRenderer extends Renderer {
 
-    // Log instance for this class
-    protected static Log log = LogFactory.getLog(BaseRenderer.class);
+    protected static Logger logger =
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
 
     /**
      * @return true if this renderer should render an id attribute.
@@ -64,9 +66,9 @@ public abstract class BaseRenderer extends Renderer {
                 writer.writeAttribute("id", component.getClientId(context),
                                       "id");
             } catch (IOException e) {
-                if (log.isDebugEnabled()) {
+                if (logger.isLoggable(Level.WARNING)) {
                     // PENDING I18N
-                    log.debug("Can't write ID attribute" + e.getMessage());
+                    logger.warning("Can't write ID attribute" + e.getMessage());
                 }
             }
         }

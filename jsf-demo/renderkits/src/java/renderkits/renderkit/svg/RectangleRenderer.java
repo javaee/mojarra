@@ -27,14 +27,14 @@
 
 package renderkits.renderkit.svg;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
-
-import java.io.IOException;
-import javax.faces.FacesException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>RectangleRenderer</B> is a class that renders an <code>SVG</code> 
@@ -46,8 +46,6 @@ public class RectangleRenderer extends BaseRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    protected static Log log = LogFactory.getLog(RectangleRenderer.class);
 
     //
     // Class Variables
@@ -82,9 +80,6 @@ public class RectangleRenderer extends BaseRenderer {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component is null");
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
-        }
     }
 
 
@@ -94,15 +89,17 @@ public class RectangleRenderer extends BaseRenderer {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component' is null");
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " +
+                component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
-                          " since rendered attribute is set to false ");
+            if (logger.isLoggable(Level.FINER)) {
+                logger.log(Level.FINER,"End encoding component " +
+                    component.getId() + " since rendered attribute " +
+                    "is set to false ");
             }
             return;
         }

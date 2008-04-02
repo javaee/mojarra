@@ -27,18 +27,18 @@
 
 package renderkits.renderkit.svg;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.logging.Level;
+
 import javax.faces.component.UICommand;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.event.ActionEvent;
 
-import java.io.IOException;
-import java.util.Map;
 import javax.faces.FacesException;
 import javax.faces.component.UIForm;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * <B>ButtonRenderer</B> is a class that renders the current value of
@@ -50,8 +50,6 @@ public class ButtonRenderer extends BaseRenderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    protected static Log log = LogFactory.getLog(ButtonRenderer.class);
 
     //
     // Class Variables
@@ -92,8 +90,8 @@ public class ButtonRenderer extends BaseRenderer {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component is null");
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin decoding component " + component.getId());
         }
         
         // Was our command the one that caused this submission?
@@ -107,12 +105,14 @@ public class ButtonRenderer extends BaseRenderer {
         ActionEvent actionEvent = new ActionEvent(component);
         component.queueEvent(actionEvent);
 
-        if (log.isDebugEnabled()) {
-            log.debug("This command resulted in form submission " +
-                      " ActionEvent queued " + actionEvent);
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"This command resulted in " + 
+                "form submission  ActionEvent queued " +
+                actionEvent);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End decoding component " + 
+                component.getId());
         }
         return;
     }
@@ -124,15 +124,17 @@ public class ButtonRenderer extends BaseRenderer {
             // PENDING - i18n
             throw new NullPointerException("'context' and/or 'component' is null");
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + 
+                component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " + component.getId() +
-                          " since rendered attribute is set to false ");
+            if (logger.isLoggable(Level.FINER)) {
+                logger.log(Level.FINER,"End encoding component " + 
+                    component.getId() + " since rendered attribute " +
+                    "is set to false "); 
             }
             return;
         }
@@ -222,8 +224,9 @@ public class ButtonRenderer extends BaseRenderer {
         writer.endElement("text");
         writer.writeText("\n", null);
 
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " + 
+                component.getId());
         }
     }
 

@@ -29,6 +29,8 @@ package renderkits.renderkit.svg;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIComponent;
@@ -42,9 +44,6 @@ import javax.faces.webapp.FacesServlet;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 /**
  * <B>FormRenderer</B> is a class that renders a <code>UIForm<code> as a Form.
  * This class specifically renders <code>SVG</code> markup - a <code><g></code>
@@ -52,7 +51,7 @@ import org.apache.commons.logging.LogFactory;
  * a form submission. 
  */
 
-public class FormRenderer extends Renderer {
+public class FormRenderer extends BaseRenderer {
 
     private Lifecycle lifecycle = null;
 
@@ -61,8 +60,7 @@ public class FormRenderer extends Renderer {
     //
     // Protected Constants
     //
-    // Log instance for this class
-    protected static Log log = LogFactory.getLog(FormRenderer.class);
+
     //
     // Class Variables
     //
@@ -108,8 +106,8 @@ public class FormRenderer extends Renderer {
         // the indicator accordingly..
         //
         String clientId = component.getClientId(context);
-        if (log.isTraceEnabled()) {
-            log.trace("Begin decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin decoding component " + component.getId());
         }
         Map<String,String> requestParameterMap = context.getExternalContext()
             .getRequestParameterMap();
@@ -118,10 +116,9 @@ public class FormRenderer extends Renderer {
         } else {
             ((UIForm) component).setSubmitted(false);
         }
-        if (log.isTraceEnabled()) {
-            log.trace("End decoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End decoding component " + component.getId());
         }
-
         getLifecycle(context).addPhaseListener(new ResponsePhaseListener());
     }
 
@@ -137,17 +134,17 @@ public class FormRenderer extends Renderer {
             //PENDING - i18n
             throw new NullPointerException("'context' and/or 'component' is null");
         }
-        if (log.isTraceEnabled()) {
-            log.trace("Begin encoding component " +
-                      component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"Begin encoding component " + 
+                component.getId());
         }
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+            if (logger.isLoggable(Level.FINER)) {
+                logger.log(Level.FINER,"Begin encoding component " + 
+                    component.getId() + " since " +
+                    "rendered attribute is set to false ");
             }
             return;
         }
@@ -218,10 +215,10 @@ public class FormRenderer extends Renderer {
         // suppress rendering if "rendered" property on the component is
         // false.
         if (!component.isRendered()) {
-            if (log.isTraceEnabled()) {
-                log.trace("End encoding component " +
-                          component.getId() + " since " +
-                          "rendered attribute is set to false ");
+            if (logger.isLoggable(Level.FINER)) {
+                logger.log(Level.FINER,"End encoding component " +
+                    component.getId() + " since " +
+                    "rendered attribute is set to false ");
             }
             return;
         }
@@ -232,8 +229,9 @@ public class FormRenderer extends Renderer {
         ResponseWriter writer = context.getResponseWriter();
         writer.endElement("g");
         writer.writeText("\n", null);
-        if (log.isTraceEnabled()) {
-            log.trace("End encoding component " + component.getId());
+        if (logger.isLoggable(Level.FINER)) {
+            logger.log(Level.FINER,"End encoding component " +
+                component.getId());
         }
 
         buildPost(context, component);

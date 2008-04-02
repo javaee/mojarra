@@ -127,6 +127,11 @@ function getPostData(form, control) {
     }
     var postData = ""; 
     for (var i=0; i<formValues.length; i++) {
+        if (formValues[i].id == "javax.faces.ViewState") {
+            var re = new RegExp("\\+", "g");
+            var val = formValues[i].value;
+            formValues[i].value = val.replace(re, "\%2B");
+        }
         postData += formValues[i].id + "=" + formValues[i].value; 
         if (i != formValues.length-1) {
             postData += "&";

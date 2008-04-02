@@ -1,5 +1,5 @@
 /*
- * $Id: XULResponseStateManager.java,v 1.4 2005/08/26 21:19:31 rogerk Exp $
+ * $Id: XULResponseStateManager.java,v 1.5 2005/09/07 15:25:58 rogerk Exp $
  */
 
 /*
@@ -30,9 +30,7 @@
 
 package renderkits.renderkit.xul;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import javax.faces.FacesException;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKitFactory;
@@ -45,6 +43,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.Map;
@@ -52,6 +52,7 @@ import java.util.Map;
 import renderkits.renderkit.SerializedView;
 import renderkits.util.Base64;
 import renderkits.util.ByteArrayGuard;
+import renderkits.util.Util;
 
 /**
  * <p><strong>XULResponseStateManager</strong> is the helper class to
@@ -64,8 +65,11 @@ public class XULResponseStateManager extends ResponseStateManager {
     //
     // Protected Constants
     //
-    protected static Log log =
-        LogFactory.getLog(XULResponseStateManager.class);
+
+    // Log instance for this class
+    private static final Logger logger =
+            Util.getLogger(Util.FACES_LOGGER + Util.RENDERKIT_LOGGER);
+
     private static final String FACES_VIEW_STATE =
         "com.sun.faces.FACES_VIEW_STATE";
     
@@ -129,10 +133,27 @@ public class XULResponseStateManager extends ResponseStateManager {
             view = (SerializedView) state;
         }
         else {
-            Object[] stateArray = (Object[])state;
-            StateManager stateManager =
-                context.getApplication().getStateManager();
-            view = new SerializedView(stateArray[0], null);
+            if (state instanceof Object[]) {
+                Object[] stateArray = (Object[])state;
+                if (2 == stateArray.length) {
+                    StateManager stateManager =
+                        context.getApplication().getStateManager();
+                    view = new SerializedView(stateArray[0],
+                        stateArray[1]);
+                } else {
+                    //PENDING - I18N
+                    if (logger.isLoggable(Level.SEVERE)) {
+                        logger.log(Level.SEVERE, "State is not an expected array of length 2.");
+                    }
+                    throw new IOException("State is not an expected array of length 2.");
+                }
+            } else {
+                //PENDING - I18N
+                if (logger.isLoggable(Level.SEVERE)) {
+                    logger.log(Level.SEVERE, "State is not an expected array of length 2.");
+                }
+                throw new IOException("State is not an expected array of length 2.");
+            }
         }
         writeState(context, view);
     }
@@ -154,9 +175,9 @@ public class XULResponseStateManager extends ResponseStateManager {
 	    
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	    if (compress) {
-		if (log.isDebugEnabled()) {
-		    log.debug("Compressing state before saving..");
-		}
+                if (logger.isLoggable(Level.FINE)) {
+                    logger.fine("Compressing state before saving..");
+                }
 		zos = new GZIPOutputStream(bos);
 		oos = new ObjectOutputStream(zos);
 	    } else {
@@ -238,8 +259,8 @@ public class XULResponseStateManager extends ResponseStateManager {
                     (Base64.decode(viewString.getBytes())));
                 bis = new ByteArrayInputStream(bytes);
                 if (isCompressStateSet(context)) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Deflating state before restoring..");
+                    if (logger.isLoggable(Level.FINE)) {
+                        logger.fine("Deflating state before restoring..");
                     }
                     gis = new GZIPInputStream(bis);
                     ois = new ObjectInputStream(gis);
@@ -259,11 +280,14 @@ public class XULResponseStateManager extends ResponseStateManager {
                 }
                 ois.close();
             } catch (java.io.OptionalDataException ode) {
-                log.error(ode.getMessage(), ode);
+                logger.log(Level.SEVERE, ode.getMessage(), ode);
+                throw new FacesException(ode);
             } catch (java.lang.ClassNotFoundException cnfe) {
-            log.error(cnfe.getMessage(), cnfe);
+                logger.log(Level.SEVERE,cnfe.getMessage(), cnfe);
+                throw new FacesException(cnfe);
             } catch (java.io.IOException iox) {
-                log.error(iox.getMessage(), iox);
+                logger.log(Level.SEVERE,iox.getMessage(), iox);
+                throw new FacesException(iox);
             }
         }
         else {

@@ -27,12 +27,3 @@ RUNNING:
     http://<hostname>:<port>/jsf-renderkits
    where <hostName> is the host where the server is running
    and <port> is the port for requests.
-
-KNOWN ISSUES:
- - Client side state saving appears to have problems.  Only part of the state
-   is written to the page.  For now, make sure your web.xml setting is:
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>server</param-value>
-    </context-param>
-
