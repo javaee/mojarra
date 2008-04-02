@@ -1,5 +1,5 @@
 /*
- * $Id: LoadBundleTag.java,v 1.1 2003/11/04 04:07:59 eburns Exp $
+ * $Id: LoadBundleTag.java,v 1.2 2003/11/04 16:57:46 rlubke Exp $
  */
 
 /*
@@ -60,7 +60,7 @@ public class LoadBundleTag extends TagSupport {
 
     /**
      * <p>Load the <code>ResourceBundle</code> named by our
-     * <code>basename</code> property</p>.  Wrap it in an immutable
+     * <code>basename</code> property.</p>  Wrap it in an immutable
      * <code>Map</code> implementation and store the <code>Map</code> in
      * the request attr set of under the key given by our
      * <code>var</code> property.
