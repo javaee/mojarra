@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.7 2003/10/27 19:14:11 craigmcc Exp $
+ * $Id: DataModel.java,v 1.8 2003/11/05 00:38:30 craigmcc Exp $
  */
 
 /*
@@ -83,46 +83,40 @@ public abstract class DataModel {
 
     /**
      * <p>Return a flag indicating whether there is <code>rowData</code>
-     * available at the current <code>rowIndex</code>.
+     * available at the current <code>rowIndex</code>.  If no
+     * <code>wrappedData</code> is available, return <code>false</code>.</p>
      *
      * @exception FacesException if an error occurs getting the row availability
-     * @exception IllegalStateException if this {@link DataModel} is not
-     *  currently attached to an underlying data collection
      */
     public abstract boolean isRowAvailable();
 
 
     /**
      * <p>Return the number of rows of data objects represented by this
-     * {@link DataModel}.  If the number of rows is unknown, return -1.</p>
+     * {@link DataModel}.  If the number of rows is unknown, or no
+     * <code>wrappedData</code> is available, return -1.</p>
      *
      * @exception FacesException if an error occurs getting the row count
-     * @exception IllegalStateException if this {@link DataModel} is not
-     *  currently attached to an underlying data collection
      */
     public abstract int getRowCount();
 
 
     /**
      * <p>Return an object representing the data for the currenty selected
-     * row index.</p>
+     * row index.  If no <code>wrappedData</code> is available, return
+     * <code>null</code>.</p>
      *
      * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if there is now row data available
-     *  at the currently selected row index
-     * @exception IllegalStateException if this {@link DataModel} is not
-     *  currently attached to an underlying data collection
      */
     public abstract Object getRowData();
 
 
     /**
      * <p>Return the zero-relative index of the currently selected row.  If
-     * we are not currently positioned on a row, return -1.</p>
+     * we are not currently positioned on a row, or no <code>wrappedData</code>
+     * is available, return -1.</p>
      *
      * @exception FacesException if an error occurs getting the row index
-     * @exception IllegalStateException if this {@link DataModel} is not
-     *  currently attached to an underlying data collection
      */
     public abstract int getRowIndex();
 
@@ -135,17 +129,19 @@ public abstract class DataModel {
      * use the <code>isRowAvailable()</code> method to detect whether row data
      * will be available for use by the <code>getRowData()</code> method.</p>
      *
-     * <p>If the currently selected row index is changed by this call,
-     * a {@link DataModelEvent} will be sent to the <code>rowSelected()</code>
-     * method of all registered {@link DataModelListener}s.</p>
+     * <p>If there is no <code>wrappedData</code> available when this method
+     * is called, the specified <code>rowIndex</code> is stored (and may be
+     * retrieved by a subsequent call to <code>getRowData()</code>), but no
+     * event is sent.  Otherwise, if the currently selected row index is
+     * changed by this call, a {@link DataModelEvent} will be sent to the
+     * <code>rowSelected()</code> method of all registered
+     * {@link DataModelListener}s.</p>
      *
      * @param rowIndex The new zero-relative index (must be non-negative)
      *
      * @exception FacesException if an error occurs setting the row index
      * @exception IllegalArgumentException if <code>rowIndex</code>
      *  is less than -1
-     * @exception IllegalStateException if this {@link DataModel} is not
-     *  currently attached to an underlying data collection
      */
     public abstract void setRowIndex(int rowIndex);
 
@@ -210,6 +206,23 @@ public abstract class DataModel {
             listeners = new ArrayList();
         }
         listeners.add(listener);
+
+    }
+
+
+    /**
+     * <p>Return the set of {@link DataModelListener}s interested in
+     * notifications from this {@link DataModel}.  If there are no such
+     * listeners, an empty array is returned.</p>
+     */
+    public DataModelListener[] getDataModelListeners() {
+
+	if (listeners == null) {
+	    return (new DataModelListener[0]);
+	} else {
+	    return ((DataModelListener[]) listeners.toArray
+		    (new DataModelListener[listeners.size()]));
+	}
 
     }
 

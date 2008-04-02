@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.7 2003/10/20 20:26:01 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.8 2003/11/05 00:38:30 craigmcc Exp $
  */
 
 /*
@@ -99,12 +99,11 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public boolean isRowAvailable() {
 
         if (list == null) {
-            throw new IllegalStateException();
+	    return (false);
         } else if ((index >= 0) && (index < list.size())) {
             return (true);
         } else {
@@ -116,12 +115,11 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
         if (list == null) {
-            throw new IllegalStateException();
+	    return (-1);
         }
         return (list.size());
 
@@ -131,12 +129,11 @@ public class ListDataModel extends DataModel {
     /**
      * @exception FacesException {@inheritDoc}     
      * @exception IllegalArgumentException (@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
         if (list == null) {
-            throw new IllegalStateException();
+	    return (null);
         } else if (!isRowAvailable()) {
             throw new IllegalArgumentException();
         } else {
@@ -148,13 +145,9 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
-        if (list == null) {
-            throw new IllegalStateException();
-        }
         return (index);
 
     }
@@ -162,18 +155,18 @@ public class ListDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if (list == null) {
-            throw new IllegalStateException();
-        } else if (rowIndex < -1) {
+        if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
         int old = index;
         index = rowIndex;
+	if (list == null) {
+	    return;
+	}
         if ((old != index) && (listeners != null)) {
             Object rowData = null;
             if (isRowAvailable()) {

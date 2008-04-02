@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.7 2003/10/20 20:26:01 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.8 2003/11/05 00:38:29 craigmcc Exp $
  */
 
 /*
@@ -98,12 +98,11 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public boolean isRowAvailable() {
 
         if (array == null) {
-            throw new IllegalStateException();
+	    return (false);
         } else if ((index >= 0) && (index < array.length)) {
             return (true);
         } else {
@@ -115,12 +114,11 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
         if (array == null) {
-            throw new IllegalStateException();
+	    return (-1);
         }
         return (array.length);
 
@@ -130,12 +128,11 @@ public class ArrayDataModel extends DataModel {
     /**
      * @exception FacesException {@inheritDoc}     
      * @exception IllegalArgumentException (@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
         if (array == null) {
-            throw new IllegalStateException();
+	    return (null);
         } else if (!isRowAvailable()) {
             throw new IllegalArgumentException();
         } else {
@@ -147,13 +144,9 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
-        if (array == null) {
-            throw new IllegalStateException();
-        }
         return (index);
 
     }
@@ -161,18 +154,18 @@ public class ArrayDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if (array == null) {
-            throw new IllegalStateException();
-        } else if (rowIndex < -1) {
+        if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
         int old = index;
         index = rowIndex;
+	if (array == null) {
+	    return;
+	}
         if ((old != index) && (listeners != null)) {
             Object rowData = null;
             if (isRowAvailable()) {

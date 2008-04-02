@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.13 2003/10/20 20:26:01 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.14 2003/11/05 00:38:30 craigmcc Exp $
  */
 
 /*
@@ -127,12 +127,11 @@ public class ResultSetDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public boolean isRowAvailable() {
 
         if (resultSet == null) {
-            throw new IllegalStateException();
+	    return (false);
         } else if (index < 0) {
             return (false);
         }
@@ -151,15 +150,10 @@ public class ResultSetDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowCount() {
 
-        if (resultSet == null) {
-            throw new IllegalStateException();
-        } else {
-            return (-1);
-        }
+	return (-1);
 
     }
 
@@ -167,12 +161,11 @@ public class ResultSetDataModel extends DataModel {
     /**
      * @exception FacesException {@inheritDoc}     
      * @exception IllegalArgumentException (@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public Object getRowData() {
 
         if (resultSet == null) {
-            throw new IllegalStateException();
+	    return (null);
         } else if (!isRowAvailable()) {
             throw new IllegalArgumentException();
         }
@@ -196,13 +189,9 @@ public class ResultSetDataModel extends DataModel {
 
     /**
      * @exception FacesException {@inheritDoc}     
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public int getRowIndex() {
 
-        if (resultSet == null) {
-            throw new IllegalStateException();
-        }
         return (index);
 
     }
@@ -211,18 +200,15 @@ public class ResultSetDataModel extends DataModel {
     /**
      * @exception FacesException {@inheritDoc}
      * @exception IllegalArgumentException {@inheritDoc}
-     * @exception IllegalStateException (@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
-        if (resultSet == null) {
-            throw new IllegalStateException();
-        } else if (rowIndex < -1) {
+        if (rowIndex < -1) {
             throw new IllegalArgumentException();
         }
 
         // Tell the ResultSet that the previous row was updated if necessary
-        if (updated) {
+        if (updated && (resultSet != null)) {
             try {
                 resultSet.updateRow();
                 updated = false;
@@ -233,6 +219,9 @@ public class ResultSetDataModel extends DataModel {
 
         int old = index;
         index = rowIndex;
+	if (resultSet == null) {
+	    return;
+	}
         if ((old != index) && (listeners != null)) {
             Object rowData = null;
             if (isRowAvailable()) {
@@ -263,11 +252,8 @@ public class ResultSetDataModel extends DataModel {
     public void setWrappedData(Object data) {
 
         if (data == null) {
-            this.resultSet = null;
             this.metadata = null;
-            return;
         }
-
         resultSet = (ResultSet) data;
         index = 0;
         updated = false;
