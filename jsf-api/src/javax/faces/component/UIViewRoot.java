@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.33 2005/03/18 14:52:07 rogerk Exp $
+ * $Id: UIViewRoot.java,v 1.34 2005/04/18 16:13:36 edburns Exp $
  */
 
 /*
@@ -60,9 +60,16 @@ import javax.faces.webapp.FacesServlet;
  *
  * <ul>
  *
+ * <p>Initialize a state flag to <code>false</code>.</p>
+ *
  * <p>If {@link #getBeforePhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
  * PhaseId} for this phase.</p>
+ *
+ * <p>Upon return from the listener, call {@link
+ * FacesContext#getResponseComplete} and {@link
+ * FacesContext#getRenderResponse}.  If either return <code>true</code>
+ * set the internal state flag to <code>true</code>. </p>
  *
  * <p>If or one or more listeners have been added by a call to {@link
  * #addPhaseListener}, invoke the <code>beforePhase</code> method on
@@ -70,7 +77,14 @@ import javax.faces.webapp.FacesServlet;
  * phaseId, passing in the same <code>PhaseId</code> as in the previous
  * step.</p>
  *
- * <p>Execute any processing for this phase.</p>
+ * <p>Upon return from each listener, call {@link
+ * FacesContext#getResponseComplete} and {@link
+ * FacesContext#getRenderResponse}.  If either return <code>true</code>
+ * set the internal state flag to <code>true</code>. </p>
+ *
+ *
+ * <p>Execute any processing for this phase if the internal state flag
+ * was not set.</p>
  *
  * <p>If {@link #getAfterPhaseListener} returns non-<code>null</code>,
  * invoke the listener, passing in the correct corresponding {@link
@@ -129,6 +143,14 @@ public class UIViewRoot extends UIComponentBase {
     // ------------------------------------------------------ Instance Variables
 
     private int lastId = 0;
+
+    /**
+     * <p>Set and cleared during the lifetime of a lifecycle phase.  Has
+     * no meaning between phases.  If <code>true</code>, the lifecycle
+     * processing for the current phase must not take place.</p>
+     */
+
+    private boolean skipPhase;
 
 
     // -------------------------------------------------------------- Properties
@@ -437,13 +459,16 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processDecodes(FacesContext context) {
+	skipPhase = false;
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
 	    notifyPhaseListeners(context, PhaseId.APPLY_REQUEST_VALUES, true);
 	}
-        super.processDecodes(context);
-        broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+	if (!skipPhase) {
+	    super.processDecodes(context);
+	    broadcastEvents(context, PhaseId.APPLY_REQUEST_VALUES);
+	}
 	// clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
 	if (context.getRenderResponse() || context.getResponseComplete()) {
@@ -484,13 +509,16 @@ public class UIViewRoot extends UIComponentBase {
     public void encodeBegin(FacesContext context) throws IOException {
 	lastId = 0;
 
+	skipPhase = false;
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
 	    notifyPhaseListeners(context, PhaseId.RENDER_RESPONSE, true);
 	}
-
-	super.encodeBegin(context);
+	
+	if (!skipPhase) {
+	    super.encodeBegin(context);
+	}
     }
 
     /**
@@ -535,10 +563,12 @@ public class UIViewRoot extends UIComponentBase {
 	    (isBefore && (null != beforePhase)) ||
 	    (!isBefore && (null != afterPhase));
 	MethodBinding binding = isBefore ? beforePhase : afterPhase;
-	
+
 	if (hasPhaseMethodBinding) {
 	    try {
 		binding.invoke(context, new Object [] { event });
+		skipPhase = context.getResponseComplete() ||
+		    context.getRenderResponse();
 	    }
 	    catch (Exception e) {
 		// PENDING(edburns): log this
@@ -558,6 +588,8 @@ public class UIViewRoot extends UIComponentBase {
 			else {
 			    curListener.afterPhase(event);
 			}
+			skipPhase = context.getResponseComplete() ||
+			    context.getRenderResponse();
 		    }
 		    catch (Exception e) {
 			// PENDING(edburns): log this
@@ -598,18 +630,19 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processValidators(FacesContext context) {
+	skipPhase = false;
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
 	    notifyPhaseListeners(context, PhaseId.PROCESS_VALIDATIONS, true);
 	}
-
-        super.processValidators(context);
-        broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
-
+	if (!skipPhase) {
+	    super.processValidators(context);
+	    broadcastEvents(context, PhaseId.PROCESS_VALIDATIONS);
+	}
         // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
-        if (context.getRenderResponse() || context.getResponseComplete()) {
+	if (context.getRenderResponse() || context.getResponseComplete()) {
             if (events != null) {
                 for (int i=0; i<PhaseId.VALUES.size(); i++) {
                     List eventList = events[i];
@@ -642,15 +675,16 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processUpdates(FacesContext context) {
+	skipPhase = false;
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
 	    notifyPhaseListeners(context, PhaseId.UPDATE_MODEL_VALUES, true);
 	}
-	
-        super.processUpdates(context);
-        broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
-
+	if (!skipPhase) {
+	    super.processUpdates(context);
+	    broadcastEvents(context, PhaseId.UPDATE_MODEL_VALUES);
+	}
         // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {
@@ -686,15 +720,17 @@ public class UIViewRoot extends UIComponentBase {
      *  is <code>null</code>
      */
     public void processApplication(FacesContext context) {
+	skipPhase = false;
 	// avoid creating the PhaseEvent if possible by doing redundant
 	// null checks.
 	if (null != beforePhase || null != phaseListeners) {
 	    notifyPhaseListeners(context, PhaseId.INVOKE_APPLICATION, true);
 	}
 
-        // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
-        broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
-
+	if (!skipPhase) {
+	    // NOTE - no tree walk is performed; this is a UIViewRoot-only operation
+	    broadcastEvents(context, PhaseId.INVOKE_APPLICATION);
+	}
         // clear out the events if we're skipping to render-response
         // or if there is a response complete signal.
         if (context.getRenderResponse() || context.getResponseComplete()) {

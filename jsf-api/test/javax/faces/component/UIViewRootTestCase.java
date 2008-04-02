@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.18 2005/03/18 14:52:07 rogerk Exp $
+ * $Id: UIViewRootTestCase.java,v 1.19 2005/04/18 16:13:37 edburns Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.io.IOException;
 import javax.faces.FactoryFinder;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.FacesEvent;
@@ -25,6 +26,7 @@ import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
+import javax.faces.component.UIInput;
 import javax.faces.event.PhaseId;
 import javax.faces.el.ValueBinding;
 import javax.faces.el.MethodBinding;
@@ -208,19 +210,33 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
     public void testPhaseMethBinding() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodBinding(root);
+	doTestPhaseMethodBinding(root, false);
+    }
+
+    public void testPhaseMethBindingSkipping() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	doTestPhaseMethodBinding(root, true);
     }
 
     public void testPhaseListener() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseListener(root);
+	doTestPhaseListener(root, false);
+    }
+
+    public void testPhaseListenerSkipping() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	doTestPhaseListener(root, true);
     }
 
     public void testPhaseMethodBindingAndListener() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
-	doTestPhaseMethodBindingAndListener(root);
+	doTestPhaseMethodBindingAndListener(root, false);
     }
 
+    public void testPhaseMethodBindingAndListenerSkipping() throws Exception {
+	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
+	doTestPhaseMethodBindingAndListener(root, true);
+    }
 
     public void testPhaseMethBindingState() throws Exception {
 	UIViewRoot root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
@@ -228,7 +244,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.restoreState(facesContext, state);
 
-	doTestPhaseMethodBinding(root);
+	doTestPhaseMethodBinding(root, false);
     }
 
     public void testPhaseListenerState() throws Exception {
@@ -237,7 +253,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.restoreState(facesContext, state);
 
-	doTestPhaseListener(root);
+	doTestPhaseListener(root, false);
     }
 
     public void testPhaseMethodBindingAndListenerState() throws Exception {
@@ -246,18 +262,37 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 	root = facesContext.getApplication().getViewHandler().createView(facesContext, null);
 	root.restoreState(facesContext, state);
 
-	doTestPhaseMethodBindingAndListener(root);
+	doTestPhaseMethodBindingAndListener(root, false);
     }
 
 
 	
-    public void doTestPhaseMethodBinding(UIViewRoot root) throws Exception {
+    public void doTestPhaseMethodBinding(UIViewRoot root, 
+					 boolean skipping) throws Exception {
+	PhaseSkipTestComponent comp = null;
+	if (skipping) {
+	    comp = new PhaseSkipTestComponent();
+	    root.getChildren().add(comp);
+	    facesContext.responseComplete();
+	}
 	doTestPhaseMethodBindingWithPhaseId(root, 
 					    PhaseId.APPLY_REQUEST_VALUES);
+	if (skipping) {
+	    assertTrue(!comp.isDecodeCalled());
+	}
 	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.PROCESS_VALIDATIONS);
+	if (skipping) {
+	    assertTrue(!comp.isProcessValidatorsCalled());
+	}
 	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.UPDATE_MODEL_VALUES);
+	if (skipping) {
+	    assertTrue(!comp.isProcessUpdatesCalled());
+	}
 	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.INVOKE_APPLICATION);
 	doTestPhaseMethodBindingWithPhaseId(root, PhaseId.RENDER_RESPONSE);
+	if (skipping) {
+	    assertTrue(!comp.isEncodeBeginCalled());
+	}
 	
     }
 
@@ -282,13 +317,32 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
 
-    public void doTestPhaseListener(UIViewRoot root) throws Exception {
+    public void doTestPhaseListener(UIViewRoot root, 
+				    boolean skipping) throws Exception {
+	PhaseSkipTestComponent comp = null;
+	if (skipping) {
+	    comp = new PhaseSkipTestComponent();
+	    root.getChildren().add(comp);
+	    facesContext.responseComplete();
+	}
 	doTestPhaseListenerWithPhaseId(root, 
 					    PhaseId.APPLY_REQUEST_VALUES);
+	if (skipping) {
+	    assertTrue(!comp.isDecodeCalled());
+	}
 	doTestPhaseListenerWithPhaseId(root, PhaseId.PROCESS_VALIDATIONS);
+	if (skipping) {
+	    assertTrue(!comp.isProcessValidatorsCalled());
+	}
 	doTestPhaseListenerWithPhaseId(root, PhaseId.UPDATE_MODEL_VALUES);
+	if (skipping) {
+	    assertTrue(!comp.isProcessUpdatesCalled());
+	}
 	doTestPhaseListenerWithPhaseId(root, PhaseId.INVOKE_APPLICATION);
 	doTestPhaseListenerWithPhaseId(root, PhaseId.RENDER_RESPONSE);
+	if (skipping) {
+	    assertTrue(!comp.isEncodeBeginCalled());
+	}
 
     }
 
@@ -306,17 +360,36 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
     }
 
 
-    public void doTestPhaseMethodBindingAndListener(UIViewRoot root) throws Exception {
+    public void doTestPhaseMethodBindingAndListener(UIViewRoot root, 
+						    boolean skipping) throws Exception {
+	PhaseSkipTestComponent comp = null;
+	if (skipping) {
+	    comp = new PhaseSkipTestComponent();
+	    root.getChildren().add(comp);
+	    facesContext.responseComplete();
+	}
 	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
 						       PhaseId.APPLY_REQUEST_VALUES);
+	if (skipping) {
+	    assertTrue(!comp.isDecodeCalled());
+	}
 	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
 						       PhaseId.PROCESS_VALIDATIONS);
+	if (skipping) {
+	    assertTrue(!comp.isProcessValidatorsCalled());
+	}
 	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
 						       PhaseId.UPDATE_MODEL_VALUES);
+	if (skipping) {
+	    assertTrue(!comp.isProcessUpdatesCalled());
+	}
 	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
 						       PhaseId.INVOKE_APPLICATION);
 	doTestPhaseMethodBindingAndListenerWithPhaseId(root, 
 						       PhaseId.RENDER_RESPONSE);
+	if (skipping) {
+	    assertTrue(!comp.isEncodeBeginCalled());
+	}
 
     }
 
@@ -673,6 +746,46 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
 
 	public PhaseId getPhaseId() { return phaseId; }
 	    
+    }
+
+    public static class PhaseSkipTestComponent extends UIInput {
+
+	private boolean decodeCalled = false;
+	
+	public void decode(FacesContext context) {
+	    decodeCalled = true;
+	}
+	public boolean isDecodeCalled() { return decodeCalled; }
+
+	private boolean encodeBeginCalled = false;
+
+	public void encodeBegin(FacesContext context) throws IOException {
+	    encodeBeginCalled = true;
+	}
+
+	public boolean isEncodeBeginCalled() { return encodeBeginCalled; }
+
+
+	private boolean processValidatorsCalled = false;
+	
+	public void processValidators(FacesContext context) {
+	    processValidatorsCalled = true;
+	}
+
+	public boolean isProcessValidatorsCalled() { 
+	    return processValidatorsCalled; 
+	}
+
+	private boolean processUpdatesCalled = false;
+
+	public void processUpdates(FacesContext context) {	
+	    processUpdatesCalled = true;
+	}
+
+	public boolean isProcessUpdatesCalled() { 
+	    return processUpdatesCalled; 
+	}
+
     }
 
 
