@@ -40,7 +40,6 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -52,23 +51,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.sun.faces.RIConstants;
-import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.config.WebConfiguration;
 import com.sun.faces.config.WebConfiguration.WebContextInitParameter;
+import com.sun.faces.io.FastStringWriter;
 import com.sun.faces.renderkit.RenderKitUtils;
+import com.sun.faces.util.DebugUtil;
 import com.sun.faces.util.LRUMap;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.TypedCollections;
 import com.sun.faces.util.Util;
-import com.sun.faces.util.DebugUtil;
 
 public class StateManagerImpl extends StateManager {
 
     private static final Logger LOGGER =
               Util.getLogger(Util.FACES_LOGGER + Util.APPLICATION_LOGGER);
-    private static final Object[] STATE_PLACEHOLDER = new Object[0];
-
-    private HashMap<String, Boolean> responseStateManagerInfo = null;
+    private static final Object[] STATE_PLACEHOLDER = new Object[0];   
     
     private char requestIdSerial;
 
@@ -97,9 +95,7 @@ public class StateManagerImpl extends StateManager {
             Object id;
             ResponseStateManager rsm =
                   RenderKitUtils.getResponseStateManager(context, renderKitId);
-            if (hasDeclaredMethod(renderKitId,
-                                  rsm,
-                                  "getState")) {
+            if (hasGetStateMethod(rsm)) {
                 Object[] stateArray = (Object[]) rsm.getState(context, viewId);
                 id = stateArray[0];
             } else {
@@ -293,9 +289,7 @@ public class StateManagerImpl extends StateManager {
         String renderKitId = context.getViewRoot().getRenderKitId();
         ResponseStateManager rsm =
               RenderKitUtils.getResponseStateManager(context, renderKitId);
-        if (hasDeclaredMethod(renderKitId,
-                              rsm,
-                              "getState")) {
+        if (hasGetStateMethod(rsm)) {
             Object[] stateArray = new Object[2];
             stateArray[0] = state.getStructure();
             stateArray[1] = state.getState();
@@ -492,32 +486,20 @@ public class StateManagerImpl extends StateManager {
      * Looks for the presence of a declared method (by name) in the specified 
      * class and returns a <code>boolean</code> outcome (true, if the method 
      * exists).
-     *
-     * @param renderKitId  The object that will be used for the lookup.  This key 
-     *  will also be stored in the <code>Map</code> with a corresponding 
-     *  <code>Boolean</code> value indicating the result of the search.
+     *      
      * @param instance The instance of the class that will be used as 
-     *  the search domain.
-     * @param methodName The name of the method we are looking for.
+     *  the search domain.     
      * 
      * @return <code>true</code> if the method exists, otherwise 
      *  <code>false</code>
      */
-    private boolean hasDeclaredMethod(String renderKitId,
-                                      ResponseStateManager instance,
-                                      String methodName) {
+    private boolean hasGetStateMethod(ResponseStateManager instance) {
 
-        boolean result;
-        if (responseStateManagerInfo == null) {
-            responseStateManagerInfo = new HashMap<String, Boolean>();
-        }
-        Boolean value = responseStateManagerInfo.get(renderKitId);
-        if (value != null) {
-            return value;
-        }
-        result = Util.hasDeclaredMethod(instance, methodName);
-        responseStateManagerInfo.put(renderKitId, result);
-        return result;
+        return (ReflectionUtils.lookupMethod(
+              instance.getClass(),
+                                             "getState",
+                                              FacesContext.class, 
+                                              String.class) != null);
 
     }
 
@@ -557,11 +539,9 @@ public class StateManagerImpl extends StateManager {
         ResponseStateManager rsm =
               RenderKitUtils.getResponseStateManager(context, renderKitId);
         Object[] treeStructure;
-         if (hasDeclaredMethod(renderKitId,
-                               rsm,
-                               "getState")) {
+         if (hasGetStateMethod(rsm)){
 
-            Object[] stateArray = (Object[]) rsm.getState(context, viewId);
+        Object[] stateArray = (Object[]) rsm.getState(context, viewId);
             treeStructure = (Object[]) stateArray[0];
         } else {
            treeStructure = (Object[]) rsm

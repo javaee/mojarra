@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.81 2006/09/01 01:22:31 tony_robertson Exp $
+ * $Id: ApplicationImpl.java,v 1.82 2006/09/11 20:45:55 rlubke Exp $
  */
 
 /*
@@ -57,8 +57,9 @@ import javax.faces.el.VariableResolver;
 import javax.faces.event.ActionListener;
 import javax.faces.validator.Validator;
 
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorManager;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,9 +82,8 @@ import com.sun.faces.el.ScopedAttributeELResolver;
 import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.MessageUtils;
+import com.sun.faces.util.ReflectionUtils;
 import com.sun.faces.util.Util;
-import java.beans.PropertyEditor;
-import java.beans.PropertyEditorManager;
 
 
 /**
@@ -1024,9 +1024,9 @@ public class ApplicationImpl extends Application {
         try {
             result = clazz.newInstance();
         } catch (Throwable t) {
-            Object[] params = {clazz.getName()};
             throw new FacesException((MessageUtils.getExceptionMessageString(
-                MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params)), t);
+                  MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID,
+                  clazz.getName())), t);
         }
         return result;
     }
@@ -1076,38 +1076,29 @@ public class ApplicationImpl extends Application {
             clazz = (Class) value;
         }
         
-        Constructor ctor = null;
+        Constructor ctor = 
+              ReflectionUtils.lookupConstructor(
+                    clazz,
+                                                Class.class);
         Throwable cause = null;
-        try {
-            ctor = clazz.getConstructor(new Class[] { Class.class });
-            result = ctor.newInstance(targetClass);
-        } catch (SecurityException ex) {
-            cause = ex;
-        } catch (NoSuchMethodException ex) {
-            // Take no action.
-        } catch (IllegalArgumentException ex) {
-            cause = ex;
-        } catch (IllegalAccessException ex) {
-            cause = ex;
-        } catch (InvocationTargetException ex) {
-            cause = ex;
-        } catch (InstantiationException ex) {
-            cause = ex;
-        }
-        // If there was no one-argument ctor that takes a Class.
-        if (null == ctor) {
+        if (ctor != null) {
+            try {
+                result = ctor.newInstance(targetClass);
+            } catch (Exception e) {
+                cause = e;
+            }
+        } else {
             try {
                 result = clazz.newInstance();
-            } catch (Throwable t) {
-                cause = t;
+            } catch (Exception e) {
+                cause = e;
             }
-        }
+        }       
         
-        if (null != cause) {
-            Object[] params = {clazz.getName()};
+        if (null != cause) {           
             throw new FacesException((MessageUtils.getExceptionMessageString(
                     MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
-                    params)), cause);
+                    clazz.getName())), cause);
             
         }
         return result;

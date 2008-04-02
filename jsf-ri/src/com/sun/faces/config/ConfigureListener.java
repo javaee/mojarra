@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigureListener.java,v 1.84 2006/08/30 17:42:50 rlubke Exp $
+ * $Id: ConfigureListener.java,v 1.85 2006/09/11 20:45:56 rlubke Exp $
  */
 /*
  * The contents of this file are subject to the terms
@@ -113,6 +113,7 @@ import com.sun.faces.renderkit.JsfJsResourcePhaseListener;
 import com.sun.faces.spi.ManagedBeanFactory;
 import com.sun.faces.util.MessageUtils;
 import com.sun.faces.util.Util;
+import com.sun.faces.util.ReflectionUtils;
 import com.sun.org.apache.commons.digester.Digester;
 
 /**
@@ -270,8 +271,7 @@ public class ConfigureListener implements ServletContextListener {
         return tlsExternalContext.get();
     }   
 
-    public void contextInitialized(ServletContextEvent sce) {
-        long start = System.currentTimeMillis();
+    public void contextInitialized(ServletContextEvent sce) {        
         ServletContext context = sce.getServletContext();
         webConfig = WebConfiguration.getInstance(context);
         logOverriddenContextConfigValues();
@@ -472,9 +472,7 @@ public class ConfigureListener implements ServletContextListener {
                 associate.setContextName(getServletContextIdentifier(context));
             }
                   
-            tlsExternalContext.set(null);
-            System.out.println("INIT TIME: " 
-                               + (System.currentTimeMillis() - start));   
+            tlsExternalContext.set(null);          
             if (LOGGER.isLoggable(Level.INFO)) {
                 LOGGER.log(Level.INFO,
                            "jsf.config.listener.version.complete",
@@ -496,6 +494,7 @@ public class ConfigureListener implements ServletContextListener {
 
             // Release any allocated application resources
             FactoryFinder.releaseFactories();
+            ReflectionUtils.clearCache(Util.getCurrentLoader(this));
             tlsExternalContext.set(new ServletContextAdapter(context));
             ApplicationAssociate
                   .clearInstance(tlsExternalContext.get());

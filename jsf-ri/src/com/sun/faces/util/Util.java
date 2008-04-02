@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.198 2006/09/05 23:00:30 rlubke Exp $
+ * $Id: Util.java,v 1.199 2006/09/11 20:45:55 rlubke Exp $
  */
 
 /*
@@ -56,7 +56,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.beans.FeatureDescriptor;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,9 +64,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import com.sun.faces.RIConstants;
 import com.sun.faces.renderkit.RenderKitImpl;
@@ -78,7 +77,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.198 2006/09/05 23:00:30 rlubke Exp $
+ * @version $Id: Util.java,v 1.199 2006/09/11 20:45:55 rlubke Exp $
  */
 
 public class Util {
@@ -548,35 +547,35 @@ public class Util {
     public static Object createInstance(String className,
                                         Class rootType,
                                         Object root) {
-        Class clazz = null;
+        Class clazz;
         Object returnObject = null;
         if (className != null) {
             try {
                 clazz = Util.loadClass(className, returnObject);
-                if (clazz != null) { 
+                if (clazz != null) {
                     // Look for an adapter constructor if we've got
                     // an object to adapt
                     if ((rootType != null) && (root != null)) {
-                        try {
-                            Class[] parameterTypes = new Class[]{rootType};
-                            Constructor construct =
-                                clazz.getConstructor(parameterTypes);
-                            Object[] parameters = new Object[]{root};
-                            returnObject = construct.newInstance(parameters);
-                        } catch (NoSuchMethodException nsme) {
-                            if (LOGGER.isLoggable(Level.FINE)) {                                
-                                LOGGER.log(Level.FINE,
-                                           "jsf.util.no.adapter.ctor.available",
-                                           new Object[] {
-                                                 clazz.getName(),
-                                                 rootType.getName()
-                                           });
-                            }                           
+
+                        Constructor construct =
+                              ReflectionUtils.lookupConstructor(
+                                    clazz,
+                                    rootType);
+                        if (construct != null) {
+                            returnObject = construct.newInstance(root);
+                        } 
+                    }
+                }
+                if (clazz != null && returnObject == null) {
+                    if (LOGGER.isLoggable(Level.FINE)) {
+                            LOGGER.log(Level.FINE,
+                                       "jsf.util.no.adapter.ctor.available",
+                                       new Object[]{
+                                             clazz.getName(),
+                                             rootType.getName()
+                                       });
                         }
-                    }
-                    if (returnObject == null) {
                         returnObject = clazz.newInstance();
-                    }
                 }
             } catch (Exception e) {
                 if (LOGGER.isLoggable(Level.SEVERE)) {
@@ -714,11 +713,7 @@ public class Util {
         }
         return expression;
     }
-    
-    //
-    // General Methods
-    //
-
+        
 
     public static void parameterNonNull(Object param) throws FacesException {
         if (null == param) {
@@ -915,41 +910,30 @@ public class Util {
      * servlet and portlet cases, without introducing a compile-time
      * dependency on the portlet api.</p>
      *
-     */ 
-
+     */
     public static String getContentTypeFromResponse(Object response) {
-	String result = null;
-	if (null != response) {
-	    Method method = null;
+        String result = null;
+        if (null != response) {           
 
-	    try {
-		method = response.getClass().getMethod("getContentType", 
-                                               RIConstants.EMPTY_CLASS_ARGS);
-		if (null != method) {
-		    Object obj = method.invoke(response, RIConstants.EMPTY_METH_ARGS);
-		    if (null != obj) {
-			result = obj.toString();
-		    }
-		}
-	    }
-	    catch (NoSuchMethodException nsme) {
-		throw new FacesException(nsme);
-	    }
-	    catch (IllegalAccessException iae) {
-		throw new FacesException(iae);
-	    }
-	    catch (IllegalArgumentException iare) {
-		throw new FacesException(iare);
-	    }
-	    catch (InvocationTargetException ite) {
-		throw new FacesException(ite);
-	    }
-	    catch (SecurityException e) {
-		throw new FacesException(e);
-	    }
-	}
-	return result;
-    }		
+            try {
+                Method method = ReflectionUtils.lookupMethod(
+                      response.getClass(),
+                      "getContentType",
+                      RIConstants.EMPTY_CLASS_ARGS
+                );
+                if (null != method) {
+                    Object obj =
+                          method.invoke(response, RIConstants.EMPTY_METH_ARGS);
+                    if (null != obj) {
+                        result = obj.toString();
+                    }
+                }
+            } catch (Exception e) {
+                throw new FacesException(e);
+            }
+        }
+        return result;
+    }
 
     public static boolean prefixViewTraversal(FacesContext context,
 					      UIComponent root,
@@ -986,24 +970,7 @@ public class Util {
         fd.setValue(ELResolver.RESOLVABLE_AT_DESIGN_TIME, designTime);
         return fd;
     }
-
-    /** <p>Checks for the existence of a method specified by the "methodName"
-     *  argument, on the "instance" argument.</p>
-     */
-    public static boolean hasDeclaredMethod(Object instance, String methodName) {
-        boolean result = false;
-        // Look for the presence of the method by method name.
-        Class c = instance.getClass();
-        Method[] methods = c.getDeclaredMethods();
-        
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].getName().equals(methodName)) {
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
+   
 
     /**
      * <p>A slightly more efficient version of 
@@ -1087,6 +1054,14 @@ public class Util {
                                new Object[]{servletPath});
                 }
             }
+        }
+        
+        // if the FacesServlet is mapped to /* throw an 
+        // Exception in order to prevent an endless 
+        // RequestDispatcher loop
+        if ("/*".equals(mapping)) {
+            throw new FacesException(MessageUtils.getExceptionMessageString(
+                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
         }
 
         if (mapping != null) {

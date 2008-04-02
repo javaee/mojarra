@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.82 2006/09/06 00:04:02 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.83 2006/09/11 20:45:55 rlubke Exp $ 
  */ 
 
 
@@ -46,7 +46,6 @@ import javax.faces.render.RenderKitFactory;
 import javax.faces.render.ResponseStateManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.jstl.core.Config;
 
@@ -69,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.82 2006/09/06 00:04:02 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.83 2006/09/11 20:45:55 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -79,15 +78,7 @@ public class ViewHandlerImpl extends ViewHandler {
                                                   + Util.APPLICATION_LOGGER);
 
     private static final String AFTER_VIEW_CONTENT = RIConstants.FACES_PREFIX+
-                                                     "AFTER_VIEW_CONTENT";
-
-    /**
-     * <p>The <code>request</code> scoped attribute to store the
-     * {@link javax.faces.webapp.FacesServlet} path of the original
-     * request.</p>
-     */
-    private static final String INVOCATION_PATH =
-        RIConstants.FACES_PREFIX + "INVOCATION_PATH";
+                                                     "AFTER_VIEW_CONTENT";    
 
     //
     // Relationship Instance Variables
@@ -212,20 +203,11 @@ public class ViewHandlerImpl extends ViewHandler {
             assert(false);
         }
         
-        response.flushBuffer(); // PENDING(edburns): necessary?
+        response.flushBuffer(); 
         
         // remove the AFTER_VIEW_CONTENT from the view root
         extContext.getRequestMap().remove(AFTER_VIEW_CONTENT);
-        
-        // PENDING (visvan) do we need this any more since we save the tree
-        // after encode ??
-       /* if (!context.getExternalContext().getRequestMap().containsKey(RIConstants.SAVED_STATE)) {
-            // if we didn't serialize the state, or we didn't save it in
-            // the client, we need to manually remove the transient
-            // children and facets.
-            removeTransientChildrenAndFacets(context, viewToRender,
-                    new HashSet());
-        } */
+               
     }
 
     /**
@@ -279,17 +261,17 @@ public class ViewHandlerImpl extends ViewHandler {
 
         ExternalContext extContext = context.getExternalContext();
 
-        String mapping = getFacesMapping(context);
+        String mapping = Util.getFacesMapping(context);
         UIViewRoot viewRoot = null;
 
-        if (mapping != null && !isPrefixMapped(mapping)) {
+        if (mapping != null && !Util.isPrefixMapped(mapping)) {
             viewId = convertViewId(context, viewId);
         }
 
         // maping could be null if a non-faces request triggered
         // this response.
         if (extContext.getRequestPathInfo() == null && mapping != null &&
-            isPrefixMapped(mapping)) {
+            Util.isPrefixMapped(mapping)) {
             // this was probably an initial request
             // send them off to the root of the web application
             try {
@@ -413,7 +395,7 @@ public class ViewHandlerImpl extends ViewHandler {
             throw new NullPointerException(message);
         }
 
-        String mapping = getFacesMapping(context);
+        String mapping = Util.getFacesMapping(context);
         String requestURI = 
               updateRequestURI(viewToExecute.getViewId(), mapping);
         
@@ -434,7 +416,7 @@ public class ViewHandlerImpl extends ViewHandler {
         String newViewId = requestURI;
         // If we have a valid mapping (meaning we were invoked via the
         // FacesServlet) and we're extension mapped, do the replacement.
-        if (!isPrefixMapped(mapping)) {
+        if (!Util.isPrefixMapped(mapping)) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine( "Found URL pattern mapping to FacesServlet "
                              + mapping);
@@ -446,15 +428,13 @@ public class ViewHandlerImpl extends ViewHandler {
             }
         }
 
-
         viewToExecute.setViewId(newViewId);
         ExternalContext extContext = context.getExternalContext();
 
         // update the JSTL locale attribute in request scope so that JSTL
         // picks up the locale from viewRoot. This attribute must be updated
         // before the JSTL setBundle tag is called because that is when the
-        // new LocalizationContext object is created based on the locale.
-        // PENDING: this only works for servlet based requests
+        // new LocalizationContext object is created based on the locale.       
         if (extContext.getRequest()
         instanceof ServletRequest) {
             Config.set((ServletRequest)
@@ -671,7 +651,7 @@ public class ViewHandlerImpl extends ViewHandler {
             context.getExternalContext().getRequestContextPath();
 
         // Acquire the mapping used to execute this request (if any)
-        String mapping = getFacesMapping(context);
+        String mapping = Util.getFacesMapping(context);
 
         // If no mapping can be identified, just return a server-relative path
         if (mapping == null) {
@@ -679,7 +659,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         // Deal with prefix mapping
-        if (isPrefixMapped(mapping)) {
+        if (Util.isPrefixMapped(mapping)) {
             if (mapping.equals("/*")) {
                 return contextPath + viewId;
             } else {
@@ -709,125 +689,7 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
     }
-
-
-    /**
-     * <p>Returns the URL pattern of the
-     * {@link javax.faces.webapp.FacesServlet} that
-     * is executing the current request.  If there are multiple
-     * URL patterns, the value returned by
-     * <code>HttpServletRequest.getServletPath()</code> and
-     * <code>HttpServletRequest.getPathInfo()</code> is
-     * used to determine which mapping to return.</p>
-     * If no mapping can be determined, it most likely means
-     * that this particular request wasn't dispatched through
-     * the {@link javax.faces.webapp.FacesServlet}.
-     *
-     * @param context the {@link FacesContext} of the current request
-     * @return the URL pattern of the {@link javax.faces.webapp.FacesServlet}
-     *         or <code>null</code> if no mapping can be determined
-     * @throws NullPointerException if <code>context</code> is null
-     */
-    private String getFacesMapping(FacesContext context) {
-       
-        if (context == null) {
-            String message = MessageUtils.getExceptionMessageString
-                (MessageUtils.NULL_PARAMETERS_ERROR_MESSAGE_ID, "context");
-            throw new NullPointerException(message);
-        }
-
-        // Check for a previously stored mapping   
-        ExternalContext extContext = context.getExternalContext();
-        String mapping =
-            (String) extContext.getRequestMap().get(INVOCATION_PATH);
-
-        if (mapping == null) {
-
-            Object request = extContext.getRequest();
-            String servletPath = null;
-            String pathInfo = null;
-
-            // first check for javax.servlet.forward.servlet_path
-            // and javax.servlet.forward.path_info for non-null
-            // values.  if either is non-null, use this
-            // information to generate determine the mapping.
-
-            if (request instanceof HttpServletRequest) {
-                servletPath = extContext.getRequestServletPath();
-                pathInfo = extContext.getRequestPathInfo();
-            }
-
-
-            mapping = getMappingForRequest(servletPath, pathInfo);
-            if (mapping == null) {
-                if (logger.isLoggable(Level.FINE)) {
-                    logger.log(Level.FINE,
-                               "jsf.faces_servlet_mapping_cannot_be_determined_error",
-                               new Object[]{servletPath});
-                }
-            }         
-        }
-
-        // if the FacesServlet is mapped to /* throw an 
-        // Exception in order to prevent an endless 
-        // RequestDispatcher loop
-        if ("/*".equals(mapping)) {
-            throw new FacesException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.FACES_SERVLET_MAPPING_INCORRECT_ID));
-        }
-
-        if (mapping != null) {
-            extContext.getRequestMap().put(INVOCATION_PATH, mapping);
-        }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE,
-                       "URL pattern of the FacesServlet executing the current request "
-                       + mapping);
-        }
-        return mapping;
-    }
-
-
-    /**
-     * <p>Return the appropriate {@link javax.faces.webapp.FacesServlet} mapping
-     * based on the servlet path of the current request.</p>
-     *
-     * @param servletPath the servlet path of the request
-     * @param pathInfo    the path info of the request
-     * @see HttpServletRequest#getServletPath()
-     * @return the appropriate mapping based on the current request
-     */
-    private String getMappingForRequest(String servletPath, String pathInfo) {
-
-        if (servletPath == null) {
-            return null;
-        }
-        if (logger.isLoggable(Level.FINE)) {
-            logger.log(Level.FINE, "servletPath " + servletPath);
-            logger.log(Level.FINE, "pathInfo " + pathInfo);
-        }
-        // If the path returned by HttpServletRequest.getServletPath()
-        // returns a zero-length String, then the FacesServlet has
-        // been mapped to '/*'.
-        if (servletPath.length() == 0) {
-                return "/*";
-        }
-
-        // presence of path info means we were invoked
-        // using a prefix path mapping
-        if (pathInfo != null) {
-            return servletPath;
-        } else if (servletPath.indexOf('.') < 0) {
-            // if pathInfo is null and no '.' is present, assume the
-            // FacesServlet was invoked using prefix path but without
-            // any pathInfo - i.e. GET /contextroot/faces or
-            // GET /contextroot/faces/
-            return servletPath;
-        } else {
-           // Servlet invoked using extension mapping
-            return servletPath.substring(servletPath.lastIndexOf('.'));
-        }
-    }
+   
 
     /**
      * <p>if the specified mapping is a prefix mapping, and the provided 
@@ -841,7 +703,7 @@ public class ViewHandlerImpl extends ViewHandler {
      */
     private String updateRequestURI(String uri, String mapping) {
         
-        if (!isPrefixMapped(mapping)) {
+        if (!Util.isPrefixMapped(mapping)) {
             return uri;
         } else {
             int length = mapping.length() + 1;
@@ -860,19 +722,7 @@ public class ViewHandlerImpl extends ViewHandler {
             }
             return uri;
         }
-    }
-
-
-    /**
-     * <p>Returns true if the provided <code>url-mapping</code> is
-     * a prefix path mapping (starts with <code>/</code>).</p>
-     *
-     * @param mapping a <code>url-pattern</code>
-     * @return true if the mapping starts with <code>/</code>
-     */
-    private static boolean isPrefixMapped(String mapping) {
-        return (mapping.charAt(0) == '/');
-    }
+    }    
 
 
     /**
