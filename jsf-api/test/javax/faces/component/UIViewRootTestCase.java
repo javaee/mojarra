@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRootTestCase.java,v 1.6 2003/10/09 22:58:14 craigmcc Exp $
+ * $Id: UIViewRootTestCase.java,v 1.7 2003/10/20 21:42:23 jvisvanathan Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.component;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import javax.faces.event.FacesEvent;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
@@ -179,6 +180,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         UIViewRoot vr2 = (UIViewRoot) comp2;
         assertEquals(vr2.getRenderKitId(), vr2.getRenderKitId());
         assertEquals(vr1.getViewId(), vr2.getViewId());
+        assertEquals(vr1.getLocale(), vr2.getLocale());
 
     }
 
@@ -197,6 +199,7 @@ public class UIViewRootTestCase extends UIComponentBaseTestCase {
         UIViewRoot vr = (UIViewRoot) component;
         vr.setRenderKitId("foo");
         vr.setViewId("bar");
+        vr.setLocale(new Locale("fr", "FR"));
     }
 
 

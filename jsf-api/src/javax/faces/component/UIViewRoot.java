@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.9 2003/10/15 18:11:35 eburns Exp $
+ * $Id: UIViewRoot.java,v 1.10 2003/10/20 21:42:23 jvisvanathan Exp $
  */
 
 /*
@@ -299,10 +299,11 @@ public class UIViewRoot extends UIComponentBase {
 
     public Object saveState(FacesContext context) {
 
-        Object values[] = new Object[3];
+        Object values[] = new Object[4];
         values[0] = super.saveState(context);
         values[1] = renderKitId;
         values[2] = viewId;
+        values[3] = locale;
         return (values);
 
     }
@@ -315,6 +316,7 @@ public class UIViewRoot extends UIComponentBase {
         super.restoreState(context, values[0]);
         renderKitId = (String) values[1];
         viewId = (String) values[2];
+        locale = (Locale)values[3];
 
     }
 
