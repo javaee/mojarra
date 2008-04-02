@@ -1,5 +1,5 @@
 /*
- * $Id: DataModel.java,v 1.17 2005/08/22 22:08:08 ofung Exp $
+ * $Id: DataModel.java,v 1.18 2005/12/05 16:42:58 edburns Exp $
  */
 
 /*
@@ -75,7 +75,7 @@ public abstract class DataModel {
      * available at the current <code>rowIndex</code>.  If no
      * <code>wrappedData</code> is available, return <code>false</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row availability
+     * @throws FacesException if an error occurs getting the row availability
      */
     public abstract boolean isRowAvailable();
 
@@ -85,7 +85,7 @@ public abstract class DataModel {
      * {@link DataModel}.  If the number of rows is unknown, or no
      * <code>wrappedData</code> is available, return -1.</p>
      *
-     * @exception FacesException if an error occurs getting the row count
+     * @throws FacesException if an error occurs getting the row count
      */
     public abstract int getRowCount();
 
@@ -95,8 +95,8 @@ public abstract class DataModel {
      * row index.  If no <code>wrappedData</code> is available, return
      * <code>null</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if now row data is available
+     * @throws FacesException if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
     public abstract Object getRowData();
@@ -107,7 +107,7 @@ public abstract class DataModel {
      * we are not currently positioned on a row, or no <code>wrappedData</code>
      * is available, return -1.</p>
      *
-     * @exception FacesException if an error occurs getting the row index
+     * @throws FacesException if an error occurs getting the row index
      */
     public abstract int getRowIndex();
 
@@ -130,8 +130,8 @@ public abstract class DataModel {
      *
      * @param rowIndex The new zero-relative index (must be non-negative)
      *
-     * @exception FacesException if an error occurs setting the row index
-     * @exception IllegalArgumentException if <code>rowIndex</code>
+     * @throws FacesException if an error occurs setting the row index
+     * @throws IllegalArgumentException if <code>rowIndex</code>
      *  is less than -1
      */
     public abstract void setRowIndex(int rowIndex);
@@ -158,7 +158,7 @@ public abstract class DataModel {
      * @param data Data collection to be wrapped, or <code>null</code> to
      *  detach from any previous data collection
      *
-     * @exception ClassCastException if <code>data</code> is not of the
+     * @throws ClassCastException if <code>data</code> is not of the
      *  appropriate type for this {@link DataModel} implementation
      */
     public abstract void setWrappedData(Object data);
@@ -185,7 +185,7 @@ public abstract class DataModel {
      *
      * @param listener The new {@link DataModelListener} to be registered
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public void addDataModelListener(DataModelListener listener) {
@@ -224,7 +224,7 @@ public abstract class DataModel {
      *
      * @param listener The old {@link DataModelListener} to be deregistered
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public void removeDataModelListener(DataModelListener listener) {

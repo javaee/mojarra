@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.31 2005/08/22 22:08:08 ofung Exp $
+ * $Id: ResultSetDataModel.java,v 1.32 2005/12/05 16:42:58 edburns Exp $
  */
 
 /*
@@ -115,7 +115,7 @@ public class ResultSetDataModel extends DataModel {
      * <code>ResultSet</code> uses one-relative indexing), returns
      * <code>true</code>.  Otherwise, return <code>false</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row availability
+     * @throws FacesException if an error occurs getting the row availability
      */ 
     public boolean isRowAvailable() {
 
@@ -143,7 +143,7 @@ public class ResultSetDataModel extends DataModel {
      * scrolling through the entire <code>ResultSet</code>, and this can
      * be very expensive if the number of rows is large.</p>
      *
-     * @exception FacesException if an error occurs getting the row count
+     * @throws FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -203,8 +203,8 @@ public class ResultSetDataModel extends DataModel {
      *     returned by the <code>Collection</code>.</li>
      * </ul>
      *
-     * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if now row data is available
+     * @throws FacesException if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */ 
     public Object getRowData() {
@@ -225,7 +225,7 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
+     * @throws FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -235,8 +235,8 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     * @exception IllegalArgumentException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
@@ -289,7 +289,7 @@ public class ResultSetDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
      */
     public void setWrappedData(Object data) {
 
@@ -314,7 +314,7 @@ public class ResultSetDataModel extends DataModel {
      * <code>ResultSet</code> we are wrapping, caching it the first time
      * it is returned.</p>
      *
-     * @exception FacesException if the <code>ResultSetMetaData</code>
+     * @throws FacesException if the <code>ResultSetMetaData</code>
      *  cannot be acquired
      */
     private ResultSetMetaData getMetaData() {

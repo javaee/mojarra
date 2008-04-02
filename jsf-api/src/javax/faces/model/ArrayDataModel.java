@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.18 2005/08/22 22:08:08 ofung Exp $
+ * $Id: ArrayDataModel.java,v 1.19 2005/12/05 16:42:58 edburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class ArrayDataModel extends DataModel {
      * than or equal to zero, and less than the length of the array.  Otherwise,
      * return <code>false</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row availability
+     * @throws FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
 
@@ -109,7 +109,7 @@ public class ArrayDataModel extends DataModel {
      * length of the array.  If no <code>wrappedData</code> is available,
      * return -1.</p>
      *
-     * @exception FacesException if an error occurs getting the row count
+     * @throws FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -126,8 +126,8 @@ public class ArrayDataModel extends DataModel {
      * specified by <code>rowIndex</code>.  If no wrapped data is available,
      * return <code>null</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if now row data is available
+     * @throws FacesException if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
     public Object getRowData() {
@@ -144,7 +144,7 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
+     * @throws FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -154,8 +154,8 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     * @exception IllegalArgumentException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
@@ -194,7 +194,7 @@ public class ArrayDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException if <code>data</code> is
+     * @throws ClassCastException if <code>data</code> is
      *  non-<code>null</code> and is not an array of Java objects.
      */
     public void setWrappedData(Object data) {

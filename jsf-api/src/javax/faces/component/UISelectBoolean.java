@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectBoolean.java,v 1.38 2005/08/22 22:07:57 ofung Exp $
+ * $Id: UISelectBoolean.java,v 1.39 2005/12/05 16:42:46 edburns Exp $
  */
 
 /*
@@ -133,7 +133,7 @@ public class UISelectBoolean extends UIInput {
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link
@@ -163,7 +163,7 @@ public class UISelectBoolean extends UIInput {
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #setValueExpression}.
@@ -187,7 +187,7 @@ public class UISelectBoolean extends UIInput {
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
@@ -211,7 +211,7 @@ public class UISelectBoolean extends UIInput {
      * @param binding The {@link ValueExpression} to set, or <code>null</code>
      *  to remove any currently set {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */

@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.37 2005/08/22 22:08:09 ofung Exp $
+ * $Id: Renderer.java,v 1.38 2005/12/05 16:42:59 edburns Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public abstract class Renderer {
      * @param context {@link FacesContext} for the request we are processing
      * @param component {@link UIComponent} to be decoded.
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
     public void decode(FacesContext context, UIComponent component) {
@@ -98,8 +98,8 @@ public abstract class Renderer {
      * @param context {@link FacesContext} for the request we are processing
      * @param component {@link UIComponent} to be rendered
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> is null
      */
     public void encodeBegin(FacesContext context,
@@ -121,8 +121,8 @@ public abstract class Renderer {
      * @param context {@link FacesContext} for the response we are creating
      * @param component {@link UIComponent} whose children are to be rendered
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
     public void encodeChildren(FacesContext context, UIComponent component)
@@ -149,8 +149,8 @@ public abstract class Renderer {
      * @param context {@link FacesContext} for the response we are creating
      * @param component {@link UIComponent} to be rendered
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
     public void encodeEnd(FacesContext context,
@@ -172,7 +172,7 @@ public abstract class Renderer {
      * @param clientId the client identifier to be converted to client a
      * specific format.
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  or <code>clientId</code> is <code>null</code>
      */ 
     public String convertClientId(FacesContext context, String clientId) {
@@ -208,9 +208,9 @@ public abstract class Renderer {
      * @param submittedValue a value stored on the component during
      *    <code>decode</code>.
      * 
-     * @exception ConverterException if the submitted value
+     * @throws ConverterException if the submitted value
      *   cannot be converted successfully.
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
     public Object getConvertedValue(FacesContext context,

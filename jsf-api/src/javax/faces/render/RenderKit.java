@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKit.java,v 1.34 2005/08/22 22:08:09 ofung Exp $
+ * $Id: RenderKit.java,v 1.35 2005/12/05 16:42:59 edburns Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public abstract class RenderKit {
      * @param rendererType Renderer type of the {@link Renderer} to register
      * @param renderer {@link Renderer} instance we are registering
      *
-     * @exception NullPointerException if <code>family</code> or
+     * @throws NullPointerException if <code>family</code> or
      *  <code>rendererType</code> or <code>renderer</code> is null
      */
     public abstract void addRenderer(String family, String rendererType,
@@ -96,7 +96,7 @@ public abstract class RenderKit {
      * @param rendererType Renderer type of the requested
      *  {@link Renderer} instance
      *
-     * @exception NullPointerException if <code>family</code> or
+     * @throws NullPointerException if <code>family</code> or
      *  <code>rendererType</code> is <code>null</code>
      */
     public abstract Renderer getRenderer(String family, String rendererType);
@@ -150,7 +150,7 @@ public abstract class RenderKit {
      *
      * @return a new {@link ResponseWriter}.
      *
-     * @exception IllegalArgumentException if no matching content type
+     * @throws IllegalArgumentException if no matching content type
      * can be found in <code>contentTypeList</code>, no appropriate
      * content type can be found with the implementation dependent best
      * fit algorithm, or no matching character encoding can be found for

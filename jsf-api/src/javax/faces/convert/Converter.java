@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.12 2005/08/22 22:08:01 ofung Exp $
+ * $Id: Converter.java,v 1.13 2005/12/05 16:42:52 edburns Exp $
  */
 
 /*
@@ -71,9 +71,9 @@ public interface Converter {
      * @return <code>null</code> if the value to convert is <code>null</code>, 
      *  otherwise the result of the conversion
      *
-     * @exception ConverterException if conversion cannot be successfully
+     * @throws ConverterException if conversion cannot be successfully
      *  performed
-     * @exception NullPointerException if <code>context</code> or
+     * @throws NullPointerException if <code>context</code> or
      *  <code>component</code> is <code>null</code>
      */
     public Object getAsObject(FacesContext context, UIComponent component,
@@ -97,9 +97,9 @@ public interface Converter {
      * @return a zero-length String if value is <code>null</code>, 
      *  otherwise the result of the conversion
      *
-     * @exception ConverterException if conversion cannot be successfully
+     * @throws ConverterException if conversion cannot be successfully
      *  performed
-     * @exception NullPointerException if <code>context</code> or
+     * @throws NullPointerException if <code>context</code> or
      *  <code>component</code> is <code>null</code>
      */
     public String getAsString(FacesContext context, UIComponent component,

@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.26 2005/08/22 22:07:49 ofung Exp $
+ * $Id: FactoryFinder.java,v 1.27 2005/12/05 16:42:40 edburns Exp $
  */
 
 /*
@@ -208,17 +208,17 @@ public final class FactoryFinder {
      * @param factoryName Fully qualified name of the JavaServer Faces factory
      *  for which an implementation instance is requested
      *
-     * @exception FacesException if the web application class loader
+     * @throws FacesException if the web application class loader
      *  cannot be identified
-     * @exception FacesException if an instance of the configured factory
+     * @throws FacesException if an instance of the configured factory
      *  implementation class cannot be loaded
-     * @exception FacesException if an instance of the configured factory
+     * @throws FacesException if an instance of the configured factory
      *  implementation class cannot be instantiated
-     * @exception IllegalArgumentException if <code>factoryName</code> does not
+     * @throws IllegalArgumentException if <code>factoryName</code> does not
      *  identify a standard JavaServer Faces factory name
-     * @exception IllegalStateException if there is no configured factory
+     * @throws IllegalStateException if there is no configured factory
      *  implementation class for the specified factory name
-     * @exception NullPointerException if <code>factoryname</code>
+     * @throws NullPointerException if <code>factoryname</code>
      *  is null
      */
     public static Object getFactory(String factoryName)
@@ -269,9 +269,9 @@ public final class FactoryFinder {
      * <p>This method can be used by implementations to store a factory
      * mapping while parsing the Faces configuration file</p>
      *
-     * @exception IllegalArgumentException if <code>factoryName</code> does not
+     * @throws IllegalArgumentException if <code>factoryName</code> does not
      *  identify a standard JavaServer Faces factory name
-     * @exception NullPointerException if <code>factoryname</code>
+     * @throws NullPointerException if <code>factoryname</code>
      *  is null
      *
      */
@@ -316,7 +316,7 @@ public final class FactoryFinder {
      * JavaServer Faces API classes are part of the container itself, rather
      * than being included inside the web application.</p>
      *
-     * @exception FacesException if the web application class loader
+     * @throws FacesException if the web application class loader
      *  cannot be identified
      */
     public static void releaseFactories() throws FacesException {
@@ -345,7 +345,7 @@ public final class FactoryFinder {
      * <p>Identify and return the class loader that is associated with the
      * calling web application.</p>
      *
-     * @exception FacesException if the web application class loader
+     * @throws FacesException if the web application class loader
      *  cannot be identified
      */
     private static ClassLoader getClassLoader() throws FacesException {
@@ -408,9 +408,9 @@ public final class FactoryFinder {
      * @param implementations A List of implementations for a given
      * factory class.
      *
-     * @exception FacesException if the specified implementation class
+     * @throws FacesException if the specified implementation class
      *  cannot be loaded
-     * @exception FacesException if an instance of the specified implementation
+     * @throws FacesException if an instance of the specified implementation
      *  class cannot be instantiated
      */
     private static Object getImplementationInstance(ClassLoader classLoader,

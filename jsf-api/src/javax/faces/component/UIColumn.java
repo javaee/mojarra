@@ -91,7 +91,7 @@ public class UIColumn extends UIComponentBase {
      * 
      * @param footer the new footer facet
      * 
-     * @exception NullPointerException if <code>footer</code> is
+     * @throws NullPointerException if <code>footer</code> is
      *   <code>null</code>
      */
     public void setFooter(UIComponent footer) {
@@ -118,7 +118,7 @@ public class UIColumn extends UIComponentBase {
      * 
      * @param header the new header facet
      * 
-     * @exception NullPointerException if <code>header</code> is
+     * @throws NullPointerException if <code>header</code> is
      *   <code>null</code>
      */
     public void setHeader(UIComponent header) {

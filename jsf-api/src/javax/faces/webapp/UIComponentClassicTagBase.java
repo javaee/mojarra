@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentClassicTagBase.java,v 1.12 2005/11/10 20:06:42 edburns Exp $
+ * $Id: UIComponentClassicTagBase.java,v 1.13 2005/12/05 16:43:04 edburns Exp $
  */
 
 /*
@@ -295,7 +295,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <code>doStart()</code> method when it is called.  Subclasses
      * may override this method to return the appropriate value.</p>
      *
-     * @exception JspException to cause <code>doStart()</code> to
+     * @throws JspException to cause <code>doStart()</code> to
      *  throw an exception
      */
     protected int getDoStartValue() throws JspException {
@@ -310,7 +310,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <code>doEnd()</code> method when it is called.  Subclasses
      * may override this method to return the appropriate value.</p>
      *
-     * @exception JspException to cause <code>doEnd()</code> to
+     * @throws JspException to cause <code>doEnd()</code> to
      *  throw an exception
      */
     protected int getDoEndValue() throws JspException {
@@ -326,7 +326,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * however, this method is abstracted out so that advanced tags can
      * conditionally perform this call.
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      *
      * @deprecated No encoding is done during JSP page execution.
      * Encoding is deferred until the page has completed executing to
@@ -346,7 +346,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * however, this method is abstracted out so that advanced tags can
      * conditionally perform this call.
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      *
      * @deprecated No encoding is done during JSP page execution.
      * Encoding is deferred until the page has completed executing to
@@ -366,7 +366,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * however, this method is abstracted out so that advanced tags can
      * conditionally perform this call.
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      *
      * @deprecated No encoding is done during JSP page execution.
      * Encoding is deferred until the page has completed executing to
@@ -974,7 +974,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <code>getDoStartValue()</code> method, which tag subclasses may
      * override if they do not want the default value.</p>
      *
-     * @exception JspException if an error occurs
+     * @throws JspException if an error occurs
      */
     public int doStartTag() throws JspException {
 	// make sure that these ivars are reset at the beginning of the
@@ -1120,7 +1120,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <code>getDoEndValue()</code> method, which tag subclasses may
      * override if they do not want the default value.</p>
      *
-     * @exception JspException if an error occurs
+     * @throws JspException if an error occurs
      */
     public int doEndTag() throws JspException {
 
@@ -1234,7 +1234,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * <code>doStartTag()</code> method returns <code>SKIP_BODY</code>
      * or <code>EVAL_BODY_INCLUDE</code>.</p>
      *
-     * @exception JspException if an error is encountered
+     * @throws JspException if an error is encountered
      */
     public void doInitBody() throws JspException {
 
@@ -1248,7 +1248,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * implications of CASE 4 in the class description.</p>
      *
      * <p>Return result from {@link #getDoAfterBodyValue}</p>
-     * @exception JspException if an error is encountered
+     * @throws JspException if an error is encountered
      */
     public int doAfterBody() throws JspException {
 	
@@ -1284,7 +1284,7 @@ public abstract class UIComponentClassicTagBase extends UIComponentTagBase imple
      * @param id The new component identifier.  This may not start with
      * {@link UIViewRoot#UNIQUE_ID_PREFIX}.
      *
-     * @exception IllegalArgumentException if the argument is
+     * @throws IllegalArgumentException if the argument is
      * non-<code>null</code> and starts with {@link
      * UIViewRoot#UNIQUE_ID_PREFIX}.
      */

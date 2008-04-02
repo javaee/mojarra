@@ -1,5 +1,5 @@
 /*
- * $Id: PhaseEvent.java,v 1.5 2005/08/22 22:08:05 ofung Exp $
+ * $Id: PhaseEvent.java,v 1.6 2005/12/05 16:42:54 edburns Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ public class PhaseEvent extends EventObject {
      *  lifecycle phase
      * @param lifecycle Lifecycle instance
      *
-     * @exception NullPointerException if <code>context</code> or
+     * @throws NullPointerException if <code>context</code> or
      *  <code>phaseId</code> or <code>Lifecycle</code>is <code>null</code>
      */
     public PhaseEvent(FacesContext context, PhaseId phaseId, 

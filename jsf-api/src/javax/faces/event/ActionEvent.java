@@ -1,5 +1,5 @@
 /*
- * $Id: ActionEvent.java,v 1.11 2005/08/22 22:08:05 ofung Exp $
+ * $Id: ActionEvent.java,v 1.12 2005/12/05 16:42:54 edburns Exp $
  */
 
 /*
@@ -50,7 +50,7 @@ public class ActionEvent extends FacesEvent {
      *
      * @param component Source {@link UIComponent} for this event
      *
-     * @exception IllegalArgumentException if <code>component</code> is
+     * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
     public ActionEvent(UIComponent component) {
@@ -70,7 +70,7 @@ public class ActionEvent extends FacesEvent {
     }
 
     /**
-     * @exception AbortProcessingException {@inheritDoc}
+     * @throws AbortProcessingException {@inheritDoc}
      */ 
     public void processListener(FacesListener listener) {
 

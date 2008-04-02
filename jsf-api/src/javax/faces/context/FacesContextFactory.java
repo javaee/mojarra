@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContextFactory.java,v 1.17 2005/08/22 22:07:59 ofung Exp $
+ * $Id: FacesContextFactory.java,v 1.18 2005/12/05 16:42:48 edburns Exp $
  */
 
 /*
@@ -76,9 +76,9 @@ public abstract class FacesContextFactory {
      * @param lifecycle The {@link Lifecycle} instance being used
      *  to process this request
      *
-     * @exception FacesException if a {@link FacesContext} cannot be
+     * @throws FacesException if a {@link FacesContext} cannot be
      *  constructed for the specified parameters
-     * @exception NullPointerException if any of the parameters
+     * @throws NullPointerException if any of the parameters
      *  are <code>null</code>
      */
     public abstract FacesContext getFacesContext

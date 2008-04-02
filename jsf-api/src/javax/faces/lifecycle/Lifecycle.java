@@ -1,5 +1,5 @@
 /*
- * $Id: Lifecycle.java,v 1.30 2005/08/22 22:08:07 ofung Exp $
+ * $Id: Lifecycle.java,v 1.31 2005/12/05 16:42:55 edburns Exp $
  */
 
 /*
@@ -62,7 +62,7 @@ public abstract class Lifecycle {
      *
      * @param listener The {@link PhaseListener} to be registered
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public abstract void addPhaseListener(PhaseListener listener);
@@ -80,9 +80,9 @@ public abstract class Lifecycle {
      *
      * @param context FacesContext for the request to be processed
      *
-     * @exception FacesException if thrown during the execution of the
+     * @throws FacesException if thrown during the execution of the
      *  request processing lifecycle
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void execute(FacesContext context) throws FacesException;
@@ -103,7 +103,7 @@ public abstract class Lifecycle {
      * listener instance has been registered, no action is taken.</p>
      *
      * @param listener The {@link PhaseListener} to be deregistered
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public abstract void removePhaseListener(PhaseListener listener);
@@ -117,9 +117,9 @@ public abstract class Lifecycle {
      *
      * @param context FacesContext for the request being processed
      *
-     * @exception FacesException if an exception is thrown during the execution
+     * @throws FacesException if an exception is thrown during the execution
      *  of the request processing lifecycle
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void render(FacesContext context) throws FacesException;

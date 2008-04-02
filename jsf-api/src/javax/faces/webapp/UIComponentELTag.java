@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentELTag.java,v 1.3 2005/08/22 22:08:11 ofung Exp $
+ * $Id: UIComponentELTag.java,v 1.4 2005/12/05 16:43:04 edburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public abstract class UIComponentELTag extends UIComponentClassicTagBase impleme
      *
      * @param binding The new value expression
      *
-     * @exception IllegalArgumentException if the specified binding is not a
+     * @throws IllegalArgumentException if the specified binding is not a
      * valid value binding expression.
      */
     public void setBinding(ValueExpression binding) throws JspException {

@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java,v 1.27 2005/08/22 22:08:10 ofung Exp $
+ * $Id: Validator.java,v 1.28 2005/12/05 16:43:03 edburns Exp $
  */
 
 /*
@@ -90,8 +90,8 @@ public interface Validator extends EventListener {
      * @param component UIComponent we are checking for correctness
      * @param value     the value to validate
      *
-     * @exception ValidatorException if validation fails
-     * @exception NullPointerException if <code>context</code>
+     * @throws ValidatorException if validation fails
+     * @throws NullPointerException if <code>context</code>
      *  or <code>component</code> is <code>null</code>
      */
     public void validate(FacesContext context,

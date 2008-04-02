@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationFactory.java,v 1.6 2005/08/22 22:07:51 ofung Exp $
+ * $Id: ApplicationFactory.java,v 1.7 2005/12/05 16:42:41 edburns Exp $
  */
 
 /*
@@ -59,7 +59,7 @@ public abstract class ApplicationFactory {
      * <p>Replace the {@link Application} instance that will be
      * returned for this web application.</p>
      *
-     * @exception NullPointerException if <code>application</code>
+     * @throws NullPointerException if <code>application</code>
      *  is <code>null</code>.
 
      * @param application The replacement {@link Application} instance

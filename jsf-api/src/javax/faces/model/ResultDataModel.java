@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.18 2005/08/22 22:08:08 ofung Exp $
+ * $Id: ResultDataModel.java,v 1.19 2005/12/05 16:42:58 edburns Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public class ResultDataModel extends DataModel {
      * by calling <code>getRows()</code> on the underlying <code>Result</code>.
      * Otherwise, return <code>false</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row availability
+     * @throws FacesException if an error occurs getting the row availability
      */ 
     public boolean isRowAvailable() {
 
@@ -121,7 +121,7 @@ public class ResultDataModel extends DataModel {
      * on the underlying <code>Result</code>.  If no <code>wrappedData</code>
      * is available, return -1.</p>
      *
-     * @exception FacesException if an error occurs getting the row count
+     * @throws FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -145,8 +145,8 @@ public class ResultDataModel extends DataModel {
      * current row, keyed by column name.  Column name comparisons must be
      * performed in a case-insensitive manner.</p>
      *
-     * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if now row data is available
+     * @throws FacesException if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
     public Object getRowData() {
@@ -163,7 +163,7 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
+     * @throws FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -173,8 +173,8 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     * @exception IllegalArgumentException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
@@ -213,7 +213,7 @@ public class ResultDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException if <code>data</code> is
+     * @throws ClassCastException if <code>data</code> is
      *  non-<code>null</code> and is not a <code>Result</code>
      */
     public void setWrappedData(Object data) {

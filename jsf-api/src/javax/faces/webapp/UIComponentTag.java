@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTag.java,v 1.56 2005/08/22 22:08:11 ofung Exp $
+ * $Id: UIComponentTag.java,v 1.57 2005/12/05 16:43:05 edburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      *
      * @param binding The new value binding expression
      *
-     * @exception IllegalArgumentException if the specified binding is not a
+     * @throws IllegalArgumentException if the specified binding is not a
      * valid value binding expression.
      */
     public void setBinding(String binding) throws JspException {
@@ -129,7 +129,7 @@ public abstract class UIComponentTag extends UIComponentClassicTagBase implement
      *
      * @param value The value to evaluate
      *
-     * @exception NullPointerException if <code>value</code> is
+     * @throws NullPointerException if <code>value</code> is
      *  <code>null</code>
      */
     public static boolean isValueReference(String value) {

@@ -1,5 +1,5 @@
 /*
- * $Id: ByteConverter.java,v 1.15 2005/08/22 22:08:01 ofung Exp $
+ * $Id: ByteConverter.java,v 1.16 2005/12/05 16:42:51 edburns Exp $
  */
 
 /*
@@ -83,8 +83,8 @@ public class ByteConverter implements Converter {
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @exception ConverterException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
+     * @throws ConverterException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
@@ -114,8 +114,8 @@ public class ByteConverter implements Converter {
     }
 
     /**
-     * @exception ConverterException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
+     * @throws ConverterException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {

@@ -1,5 +1,5 @@
 /*
- * $Id: BigIntegerConverter.java,v 1.10 2005/08/22 22:08:00 ofung Exp $
+ * $Id: BigIntegerConverter.java,v 1.11 2005/12/05 16:42:50 edburns Exp $
  */
 
 /*
@@ -85,8 +85,8 @@ public class BigIntegerConverter implements Converter {
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @exception ConverterException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
+     * @throws ConverterException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
@@ -116,8 +116,8 @@ public class BigIntegerConverter implements Converter {
     }
 
     /**
-     * @exception ConverterException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
+     * @throws ConverterException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {

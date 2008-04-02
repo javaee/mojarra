@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingValueChangeListener.java,v 1.2 2005/08/22 22:07:54 ofung Exp $
+ * $Id: MethodBindingValueChangeListener.java,v 1.3 2005/12/05 16:42:43 edburns Exp $
  */
 
 /*
@@ -75,8 +75,8 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
     // ------------------------------------------------------- Event Method
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     * @exception AbortProcessingException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
+     * @throws AbortProcessingException {@inheritDoc}     
      */ 
     public void processValueChange(ValueChangeEvent actionEvent) throws AbortProcessingException {
                          

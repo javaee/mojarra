@@ -216,7 +216,7 @@ public class UIData extends UIComponentBase
      *
      * @param first New first row number
      *
-     * @exception IllegalArgumentException if <code>first</code>
+     * @throws IllegalArgumentException if <code>first</code>
      *  is negative
      */
     public void setFirst(int first) {
@@ -247,7 +247,7 @@ public class UIData extends UIComponentBase
      * 
      * @param footer the new footer facet
      * 
-     * @exception NullPointerException if <code>footer</code> is
+     * @throws NullPointerException if <code>footer</code> is
      *   <code>null</code>
      */
     public void setFooter(UIComponent footer) {
@@ -274,7 +274,7 @@ public class UIData extends UIComponentBase
      * 
      * @param header the new header facet
      * 
-     * @exception NullPointerException if <code>header</code> is
+     * @throws NullPointerException if <code>header</code> is
      *   <code>null</code>
      */
     public void setHeader(UIComponent header) {
@@ -289,7 +289,7 @@ public class UIData extends UIComponentBase
      * available at the current <code>rowIndex</code>.  If no
      * <code>wrappedData</code> is available, return <code>false</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row availability
+     * @throws FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
 
@@ -302,7 +302,7 @@ public class UIData extends UIComponentBase
      * <p>Return the number of rows in the underlying data model.  If the
      * number of available rows is unknown, return -1.</p>
      *
-     * @exception FacesException if an error occurs getting the row count
+     * @throws FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -315,8 +315,8 @@ public class UIData extends UIComponentBase
      * <p>Return the data object representing the data for the currently
      * selected row index, if any.</p>
      *
-     * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if now row data is available
+     * @throws FacesException if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
     public Object getRowData() {
@@ -331,7 +331,7 @@ public class UIData extends UIComponentBase
      * we are not currently positioned on a row, return -1.  This property
      * is <strong>not</strong> enabled for value binding expressions.</p>
      *
-     * @exception FacesException if an error occurs getting the row index
+     * @throws FacesException if an error occurs getting the row index
      */
     public int getRowIndex() {
 
@@ -402,8 +402,8 @@ public class UIData extends UIComponentBase
      *
      * @param rowIndex The new row index value, or -1 for no associated row
      *
-     * @exception FacesException if an error occurs setting the row index
-     * @exception IllegalArgumentException if <code>rowIndex</code>
+     * @throws FacesException if an error occurs setting the row index
+     * @throws IllegalArgumentException if <code>rowIndex</code>
      *  is less than -1
      */
     public void setRowIndex(int rowIndex) {
@@ -477,7 +477,7 @@ public class UIData extends UIComponentBase
      *
      * @param rows New number of rows
      *
-     * @exception IllegalArgumentException if <code>rows</code>
+     * @throws IllegalArgumentException if <code>rows</code>
      *  is negative
      */
     public void setRows(int rows) {
@@ -614,10 +614,10 @@ public class UIData extends UIComponentBase
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}
      *
-     * @exception IllegalArgumentException if <code>name</code> is one of
+     * @throws IllegalArgumentException if <code>name</code> is one of
      *  <code>id</code>, <code>parent</code>, <code>var</code>, or
      *  <code>rowIndex</code>
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link
@@ -646,10 +646,10 @@ public class UIData extends UIComponentBase
      * @param binding The {@link ValueExpression} to set, or <code>null</code>
      *  to remove any currently set {@link ValueExpression}
      *
-     * @exception IllegalArgumentException if <code>name</code> is one of
+     * @throws IllegalArgumentException if <code>name</code> is one of
      *  <code>id</code>, <code>parent</code>, <code>var</code>, or
      *  <code>rowIndex</code>
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
@@ -673,7 +673,7 @@ public class UIData extends UIComponentBase
      * row-specific client identifiers (since {@link UIData} is a
      * {@link NamingContainer}).</p>
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public String getClientId(FacesContext context) {
@@ -698,9 +698,9 @@ public class UIData extends UIComponentBase
      *
      * @param event {@link FacesEvent} to be queued
      *
-     * @exception IllegalStateException if this component is not a
+     * @throws IllegalStateException if this component is not a
      *  descendant of a {@link UIViewRoot}
-     * @exception NullPointerException if <code>event</code>
+     * @throws NullPointerException if <code>event</code>
      *  is <code>null</code>
      */
     public void queueEvent(FacesEvent event) {
@@ -718,12 +718,12 @@ public class UIData extends UIComponentBase
      *
      * @param event The {@link FacesEvent} to be broadcast
      *
-     * @exception AbortProcessingException Signal the JavaServer Faces
+     * @throws AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
-     * @exception IllegalArgumentException if the implementation class
+     * @throws IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
-     * @exception NullPointerException if <code>event</code> is
+     * @throws NullPointerException if <code>event</code> is
      * <code>null</code>
      */
     public void broadcast(FacesEvent event)
@@ -756,8 +756,8 @@ public class UIData extends UIComponentBase
      *
      * @param context FacesContext for the current request
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void encodeBegin(FacesContext context) throws IOException {
@@ -805,7 +805,7 @@ public class UIData extends UIComponentBase
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */ 
     public void processDecodes(FacesContext context) {
@@ -857,7 +857,7 @@ public class UIData extends UIComponentBase
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */ 
     public void processValidators(FacesContext context) {
@@ -906,7 +906,7 @@ public class UIData extends UIComponentBase
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */ 
     public void processUpdates(FacesContext context) {
@@ -1291,7 +1291,7 @@ public class UIData extends UIComponentBase
      * row-specific client identifiers (since {@link UIData} is a
      * {@link NamingContainer}).</p>
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public String getContainerClientId(FacesContext context) {

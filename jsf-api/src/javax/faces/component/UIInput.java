@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.83 2005/08/22 22:07:56 ofung Exp $
+ * $Id: UIInput.java,v 1.84 2005/12/05 16:42:46 edburns Exp $
  */
 
 /*
@@ -622,7 +622,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * <code>immediate</code> property is true; if the component is
      * invalid afterwards or a <code>RuntimeException</code> is thrown,
      * calls {@link FacesContext#renderResponse}.  </p>
-     * @exception NullPointerException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
      */ 
     public void processDecodes(FacesContext context) {
 
@@ -652,7 +652,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * validation processing, calls {@link FacesContext#renderResponse}
      * and re-throw the exception.
      * </p>
-     * @exception NullPointerException {@inheritDoc}    
+     * @throws NullPointerException {@inheritDoc}    
      */ 
     public void processValidators(FacesContext context) {
 
@@ -681,7 +681,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      * update processing, calls {@link FacesContext#renderResponse}
      * and re-throw the exception.
      * </p>
-     * @exception NullPointerException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
      */ 
     public void processUpdates(FacesContext context) {
 
@@ -709,7 +709,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
     }
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
      */ 
     public void decode(FacesContext context) {
 
@@ -751,7 +751,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void updateModel(FacesContext context) {
@@ -846,7 +846,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param context The {@link FacesContext} for the current request
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is null
      */
     public void validate(FacesContext context) {
@@ -1120,7 +1120,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param validator The {@link Validator} to add
      *
-     * @exception NullPointerException if <code>validator</code>
+     * @throws NullPointerException if <code>validator</code>
      *  is null
      */
     public void addValidator(Validator validator) {
@@ -1178,7 +1178,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param listener The {@link ValueChangeListener} to be added
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public void addValueChangeListener(ValueChangeListener listener) {
@@ -1209,7 +1209,7 @@ public class UIInput extends UIOutput implements EditableValueHolder {
      *
      * @param listener The {@link ValueChangeListener} to be removed
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public void removeValueChangeListener(ValueChangeListener listener) {

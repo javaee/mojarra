@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.29 2005/11/22 17:45:54 rlubke Exp $
+ * $Id: FacesServlet.java,v 1.30 2005/12/05 16:43:04 edburns Exp $
  */
 
 /*
@@ -127,7 +127,7 @@ public final class FacesServlet implements Servlet {
     /**
      * <p>Acquire the factory instances we will require.</p>
      *
-     * @exception ServletException if, for any reason, the startup of
+     * @throws ServletException if, for any reason, the startup of
      * this Faces application failed.  This includes errors in the
      * config file that is parsed before or during the processing of
      * this <code>init()</code> method.
@@ -187,8 +187,8 @@ public final class FacesServlet implements Servlet {
      * @param request The servlet request we are processing
      * @param response The servlet response we are creating
      *
-     * @exception IOException if an input/output error occurs during processing
-     * @exception ServletException if a servlet error occurs during processing
+     * @throws IOException if an input/output error occurs during processing
+     * @throws ServletException if a servlet error occurs during processing
      */
     public void service(ServletRequest request,
                         ServletResponse response)

@@ -1,5 +1,5 @@
 /*
- * $Id: EditableValueHolder.java,v 1.11 2005/08/22 22:07:53 ofung Exp $
+ * $Id: EditableValueHolder.java,v 1.12 2005/12/05 16:42:42 edburns Exp $
  */
 
 /*
@@ -206,7 +206,7 @@ public interface EditableValueHolder extends ValueHolder {
      *
      * @param validator The {@link Validator} to add
      *
-     * @exception NullPointerException if <code>validator</code>
+     * @throws NullPointerException if <code>validator</code>
      *  is null
      */
     public void addValidator(Validator validator);
@@ -233,7 +233,7 @@ public interface EditableValueHolder extends ValueHolder {
      *
      * @param listener The {@link ValueChangeListener} to be added
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public void addValueChangeListener(ValueChangeListener listener);
@@ -252,7 +252,7 @@ public interface EditableValueHolder extends ValueHolder {
      *
      * @param listener The {@link ValueChangeListener} to be removed
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public void removeValueChangeListener(ValueChangeListener listener);

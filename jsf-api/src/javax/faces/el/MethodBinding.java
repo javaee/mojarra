@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBinding.java,v 1.11 2005/08/22 22:08:03 ofung Exp $
+ * $Id: MethodBinding.java,v 1.12 2005/12/05 16:42:53 edburns Exp $
  */
 
 /*
@@ -61,11 +61,11 @@ public abstract class MethodBinding {
      * @param params Array of parameters to be passed to the called method,
      *  or <code>null</code> for no parameters
      *
-     * @exception EvaluationException if an exception is thrown
+     * @throws EvaluationException if an exception is thrown
      *  by the called method (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception MethodNotFoundException if no suitable method can be found
-     * @exception NullPointerException if <code>context</code>
+     * @throws MethodNotFoundException if no suitable method can be found
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract Object invoke(FacesContext context, Object params[])
@@ -78,8 +78,8 @@ public abstract class MethodBinding {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception MethodNotFoundException if no suitable method can be found
-     * @exception NullPointerException if <code>context</code>
+     * @throws MethodNotFoundException if no suitable method can be found
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract Class getType(FacesContext context)

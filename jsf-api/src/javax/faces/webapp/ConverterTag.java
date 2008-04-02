@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterTag.java,v 1.18 2005/08/22 22:08:11 ofung Exp $
+ * $Id: ConverterTag.java,v 1.19 2005/12/05 16:43:04 edburns Exp $
  */
 
 /*
@@ -139,7 +139,7 @@ public class ConverterTag extends TagSupport {
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.</p>
      *
-     * @exception JspException if a JSP error occurs
+     * @throws JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
 
@@ -231,7 +231,7 @@ public class ConverterTag extends TagSupport {
      * <p>Create and return a new {@link Converter} to be registered
      * on our surrounding {@link UIComponent}.</p>
      *
-     * @exception JspException if a new instance cannot be created
+     * @throws JspException if a new instance cannot be created
      */
     protected Converter createConverter()
         throws JspException {

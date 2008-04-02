@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemGroup.java,v 1.4 2005/08/22 22:08:09 ofung Exp $
+ * $Id: SelectItemGroup.java,v 1.5 2005/12/05 16:42:59 edburns Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ public class SelectItemGroup extends SelectItem {
      *
      * @param label Label to be rendered for this group in the response
      *
-     * @exception NullPointerException if <code>label</code>
+     * @throws NullPointerException if <code>label</code>
      *  is <code>false</code>
      */
     public SelectItemGroup(String label) {
@@ -99,7 +99,7 @@ public class SelectItemGroup extends SelectItem {
      * @param selectItems Array of {@link SelectItem} describing the
      *  items available in this group
      *
-     * @exception NullPointerException if <code>label</code>
+     * @throws NullPointerException if <code>label</code>
      *  or <code>selectItems</code> is <code>false</code>
      */
     public SelectItemGroup(String label, String description, boolean disabled,
@@ -135,7 +135,7 @@ public class SelectItemGroup extends SelectItem {
      *
      * @param selectItems The new set of subordinate items
      *
-     * @exception NullPointerException if <code>selectItems</code>
+     * @throws NullPointerException if <code>selectItems</code>
      *  is <code>null</code>
      */
     public void setSelectItems(SelectItem selectItems[]) {

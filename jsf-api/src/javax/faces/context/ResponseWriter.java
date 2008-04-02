@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseWriter.java,v 1.16 2005/08/22 22:08:00 ofung Exp $
+ * $Id: ResponseWriter.java,v 1.17 2005/12/05 16:42:48 edburns Exp $
  */
 
 /*
@@ -77,7 +77,7 @@ public abstract class ResponseWriter extends Writer {
     /**
      * <p>Write whatever text should begin a response.</p>
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public abstract void startDocument() throws IOException;
 
@@ -87,7 +87,7 @@ public abstract class ResponseWriter extends Writer {
      * element that has been created by a call to <code>startElement()</code>,
      * that element will be closed first.</p>
      *
-     * @exception IOException if an input/output error occurs
+     * @throws IOException if an input/output error occurs
      */
     public abstract void endDocument() throws IOException;
 
@@ -109,8 +109,8 @@ public abstract class ResponseWriter extends Writer {
      * @param component The {@link UIComponent} (if any) to which
      *  this element corresponds
      *
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>name</code>
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
     public abstract void startElement(String name, UIComponent component)
@@ -125,8 +125,8 @@ public abstract class ResponseWriter extends Writer {
      *
      * @param name Name of the element to be ended
      *
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>name</code>
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
     public abstract void endElement(String name) throws IOException;
@@ -146,10 +146,10 @@ public abstract class ResponseWriter extends Writer {
      *  {@link UIComponent} associated with the containing element,
      *  to which this generated attribute corresponds
      *
-     * @exception IllegalStateException if this method is called when there
+     * @throws IllegalStateException if this method is called when there
      *  is no currently open element
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>name</code> is
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>name</code> is
      * <code>null</code>
      */
     public abstract void writeAttribute(String name, Object value, 
@@ -171,10 +171,10 @@ public abstract class ResponseWriter extends Writer {
      *  {@link UIComponent} associated with the containing element,
      *  to which this generated attribute corresponds
      *
-     * @exception IllegalStateException if this method is called when there
+     * @throws IllegalStateException if this method is called when there
      *  is no currently open element
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>name</code> is
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>name</code> is
      * <code>null</code>
      */
     public abstract void writeURIAttribute(String name, Object value, 
@@ -191,8 +191,8 @@ public abstract class ResponseWriter extends Writer {
      *
      * @param comment Text content of the comment
      *
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>comment</code>
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>comment</code>
      *  is <code>null</code>
      */
     public abstract void writeComment(Object comment) throws IOException;
@@ -210,8 +210,8 @@ public abstract class ResponseWriter extends Writer {
      *  {@link UIComponent} associated with the containing element,
      *  to which this generated text corresponds
      * 
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>text</code>
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
     public abstract void writeText(Object text, String property)
@@ -228,10 +228,10 @@ public abstract class ResponseWriter extends Writer {
      * @param off Starting offset (zero-relative)
      * @param len Number of characters to be written
      *
-     * @exception IndexOutOfBoundsException if the calculated starting or
+     * @throws IndexOutOfBoundsException if the calculated starting or
      *  ending position is outside the bounds of the character array
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>text</code>
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
     public abstract void writeText(char text[], int off, int len)

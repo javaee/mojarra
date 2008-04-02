@@ -1,5 +1,5 @@
 /*
- * $Id: AttributeTag.java,v 1.16 2005/08/22 22:08:10 ofung Exp $
+ * $Id: AttributeTag.java,v 1.17 2005/12/05 16:43:04 edburns Exp $
  */
 
 /*
@@ -107,7 +107,7 @@ public class AttributeTag extends TagSupport {
      * surrounding {@link UIComponentTag} instance, if this {@link UIComponent}
      * does not already have a value for the specified attribute name.</p>
      *
-     * @exception JspException if a JSP error occurs
+     * @throws JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
 

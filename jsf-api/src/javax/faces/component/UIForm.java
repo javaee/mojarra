@@ -1,5 +1,5 @@
 /*
- * $Id: UIForm.java,v 1.49 2005/08/22 22:07:55 ofung Exp $
+ * $Id: UIForm.java,v 1.50 2005/12/05 16:42:45 edburns Exp $
  */
 
 /*
@@ -161,7 +161,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * necessary to allow the <code>submitted</code> property to be
      * correctly set.</p>
      *
-     * @exception NullPointerException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     public void processDecodes(FacesContext context) {
 
@@ -192,7 +192,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * the children of this <code>UIForm</code> instance are only
      * processed if {@link #isSubmitted} returns <code>true</code>.</p>
      * 
-     * @exception NullPointerException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     public void processValidators(FacesContext context) {
 
@@ -218,7 +218,7 @@ public class UIForm extends UIComponentBase implements NamingContainer {
      * children of this <code>UIForm</code> instance are only processed
      * if {@link #isSubmitted} returns <code>true</code>.</p>
      * 
-     * @exception NullPointerException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */
     public void processUpdates(FacesContext context) {
 

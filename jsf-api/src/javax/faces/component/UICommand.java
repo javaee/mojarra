@@ -1,5 +1,5 @@
 /*
- * $Id: UICommand.java,v 1.74 2005/08/22 22:07:54 ofung Exp $
+ * $Id: UICommand.java,v 1.75 2005/12/05 16:42:43 edburns Exp $
  */
 
 /*
@@ -282,7 +282,7 @@ public class UICommand extends UIComponentBase
     }
     
     /** 
-     * @exception NullPointerException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public void addActionListener(ActionListener listener) {
 
@@ -301,7 +301,7 @@ public class UICommand extends UIComponentBase
 
 
     /**
-     * @exception NullPointerException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public void removeActionListener(ActionListener listener) {
 
@@ -354,12 +354,12 @@ public class UICommand extends UIComponentBase
      *
      * @param event {@link FacesEvent} to be broadcast
      *
-     * @exception AbortProcessingException Signal the JavaServer Faces
+     * @throws AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
-     * @exception IllegalArgumentException if the implementation class
+     * @throws IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
-     * @exception NullPointerException if <code>event</code> is
+     * @throws NullPointerException if <code>event</code> is
      * <code>null</code>
      */
     public void broadcast(FacesEvent event) throws AbortProcessingException {

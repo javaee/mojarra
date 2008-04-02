@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTagBase.java,v 1.5 2005/11/08 04:14:55 edburns Exp $
+ * $Id: UIComponentTagBase.java,v 1.6 2005/12/05 16:43:05 edburns Exp $
  */
 
 /*
@@ -98,7 +98,7 @@ public abstract class UIComponentTagBase extends Object implements JspTag {
      * @param id The new component identifier.  This may not start with
      * {@link javax.faces.component.UIViewRoot#UNIQUE_ID_PREFIX}.
      *
-     * @exception IllegalArgumentException if the argument is
+     * @throws IllegalArgumentException if the argument is
      * non-<code>null</code> and starts with {@link
      * javax.faces.component.UIViewRoot#UNIQUE_ID_PREFIX}.
      */

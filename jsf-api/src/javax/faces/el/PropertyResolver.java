@@ -1,5 +1,5 @@
 /*
- * $Id: PropertyResolver.java,v 1.12 2005/08/22 22:08:03 ofung Exp $
+ * $Id: PropertyResolver.java,v 1.13 2005/12/05 16:42:53 edburns Exp $
  */
 
 /*
@@ -64,10 +64,10 @@ public abstract class PropertyResolver {
      *  or <code>property</code> is <code>null</code>, or if the property
      *  doesn't exist and the base object is a <code>Map</code> instance
      *
-     * @exception EvaluationException if an exception is thrown while getting
+     * @throws EvaluationException if an exception is thrown while getting
      *  the property value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the specified property
+     * @throws PropertyNotFoundException if the specified property
      *  for a bean base object does not exist or is not readable
      */
     public abstract Object getValue(Object base, Object property)
@@ -84,10 +84,10 @@ public abstract class PropertyResolver {
      *  is <code>null</code>, or if the index is out of bounds for the base
      *  object
      *
-     * @exception EvaluationException if an exception is thrown while getting
+     * @throws EvaluationException if an exception is thrown while getting
      *  the property value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the index is out of
+     * @throws PropertyNotFoundException if the index is out of
      *  bounds or if <code>base</code> is <code>null</code>
      */
     public abstract Object getValue(Object base, int index)
@@ -106,10 +106,10 @@ public abstract class PropertyResolver {
      * @param property The property to be set
      * @param value The value of the property to be set
      *
-     * @exception EvaluationException if an exception is thrown while setting
+     * @throws EvaluationException if an exception is thrown while setting
      *  the property value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the specified bean base
+     * @throws PropertyNotFoundException if the specified bean base
      *  object property does not exist or is not writeable, or if
      *  <code>base</code> or <code>name</code> is <code>null</code>
      */
@@ -125,10 +125,10 @@ public abstract class PropertyResolver {
      * @param index The index of the value to set
      * @param value The value to be set
      *
-     * @exception EvaluationException if an exception is thrown while setting
+     * @throws EvaluationException if an exception is thrown while setting
      *  the property value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the index is out of
+     * @throws PropertyNotFoundException if the index is out of
      *  bounds or if <code>base</code> is <code>null</code>
      */
     public abstract void setValue(Object base, int index, Object value)
@@ -147,10 +147,10 @@ public abstract class PropertyResolver {
      * @return <code>true</code> if the specified property of the specified
      *  base object is known to be immutable; otherwise <code>false</code>
      *
-     * @exception EvaluationException if an exception is thrown while testing
+     * @throws EvaluationException if an exception is thrown while testing
      *  the property (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the specified bean base
+     * @throws PropertyNotFoundException if the specified bean base
      *  object property does not exist or if <code>base</code> or 
      *  <code>property</code> is <code>null</code>
      */
@@ -167,10 +167,10 @@ public abstract class PropertyResolver {
      *  the specified base object is known to be immutable; otherwise,
      *  <code>false</code>
      *
-     * @exception EvaluationException if an exception is thrown while testing
+     * @throws EvaluationException if an exception is thrown while testing
      *  the property (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the index is out of
+     * @throws PropertyNotFoundException if the index is out of
      *  bounds or if <code>base</code> is <code>null</code>
      */
     public abstract boolean isReadOnly(Object base, int index)
@@ -191,10 +191,10 @@ public abstract class PropertyResolver {
      *  the specified property of the specified base object, if it can be
      *  determined; otherwise <code>null</code>
      *
-     * @exception EvaluationException if an exception is thrown while testing
+     * @throws EvaluationException if an exception is thrown while testing
      *  the property (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the specified bean base
+     * @throws PropertyNotFoundException if the specified bean base
      *  object property does not exist or if <code>base</code> or
      *  <code>property</code> is <code>null</code>
      */
@@ -212,10 +212,10 @@ public abstract class PropertyResolver {
      *  value at the specified index of the specified base object, if it
      *  can be determined; otherwise <code>null</code>
      *
-     * @exception EvaluationException if an exception is thrown while testing
+     * @throws EvaluationException if an exception is thrown while testing
      *  the property (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception PropertyNotFoundException if the index is out of
+     * @throws PropertyNotFoundException if the index is out of
      *  bounds or if <code>base</code> is <code>null</code>
      */
     public abstract Class getType(Object base, int index)

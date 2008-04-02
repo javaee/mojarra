@@ -1,5 +1,5 @@
 /*
- * $Id: ValueChangeEvent.java,v 1.7 2005/08/22 22:08:06 ofung Exp $
+ * $Id: ValueChangeEvent.java,v 1.8 2005/12/05 16:42:54 edburns Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class ValueChangeEvent extends FacesEvent {
      * @param oldValue The previous local value of this {@link UIComponent}
      * @param newValue The new local value of thie {@link UIComponent}
      *
-     * @exception IllegalArgumentException if <code>component</code> is
+     * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
     public ValueChangeEvent(UIComponent component,
@@ -116,7 +116,7 @@ public class ValueChangeEvent extends FacesEvent {
     }
 
     /**
-     * @exception AbortProcessingException {@inheritDoc}
+     * @throws AbortProcessingException {@inheritDoc}
      */ 
     public void processListener(FacesListener listener) {
 

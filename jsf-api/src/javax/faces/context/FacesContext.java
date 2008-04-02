@@ -1,5 +1,5 @@
 /*
- * $Id: FacesContext.java,v 1.65 2005/08/22 22:07:59 ofung Exp $
+ * $Id: FacesContext.java,v 1.66 2005/12/05 16:42:48 edburns Exp $
  */
 
 /*
@@ -71,7 +71,7 @@ public abstract class FacesContext {
      * <p>Return the {@link Application} instance associated with this
      * web application.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract Application getApplication();
@@ -86,7 +86,7 @@ public abstract class FacesContext {
      * in the iterated values.  The elements in the <code>Iterator</code> must
      * be returned in the order in which they were added with {@link #addMessage}.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract Iterator<String> getClientIdsWithMessages();
@@ -118,7 +118,7 @@ public abstract class FacesContext {
      *
      * </ul>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */ 
 
@@ -128,7 +128,7 @@ public abstract class FacesContext {
      * <p>Return the {@link ExternalContext} instance for this
      * <code>FacesContext</code> instance.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract ExternalContext getExternalContext();
@@ -140,7 +140,7 @@ public abstract class FacesContext {
      * associated with any specific {@link UIComponent}.  If no such messages
      * have been queued, return <code>null</code>.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract Severity getMaximumSeverity();
@@ -154,7 +154,7 @@ public abstract class FacesContext {
      * must be returned in the order in which they were added with calls to {@link 
      * #addMessage}.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract Iterator<FacesMessage> getMessages();
@@ -175,7 +175,7 @@ public abstract class FacesContext {
      *  requested, or <code>null</code> for messages not associated with
      *  any client identifier
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract Iterator<FacesMessage> getMessages(String clientId);
@@ -195,7 +195,7 @@ public abstract class FacesContext {
      * <p>Return <code>true</code> if the <code>renderResponse()</code>
      * method has been called for the current request.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract boolean getRenderResponse();
@@ -205,7 +205,7 @@ public abstract class FacesContext {
      * <p>Return <code>true</code> if the <code>responseComplete()</code>
      * method has been called for the current request.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract boolean getResponseComplete();
@@ -217,7 +217,7 @@ public abstract class FacesContext {
      * can use either the ResponseStream or the ResponseWriter,
      * but not both.
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract ResponseStream getResponseStream();
@@ -229,10 +229,10 @@ public abstract class FacesContext {
      *
      * @param responseStream The new ResponseStream for this response
      *
-     * @exception NullPointerException if <code>responseStream</code>
+     * @throws NullPointerException if <code>responseStream</code>
      *  is <code>null</code>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract void setResponseStream(ResponseStream responseStream);
@@ -244,7 +244,7 @@ public abstract class FacesContext {
      * components can use either the ResponseStream or the ResponseWriter,
      * but not both.
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract ResponseWriter getResponseWriter();
@@ -256,9 +256,9 @@ public abstract class FacesContext {
      *
      * @param responseWriter The new ResponseWriter for this response
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
-     * @exception NullPointerException if <code>responseWriter</code>
+     * @throws NullPointerException if <code>responseWriter</code>
      *  is <code>null</code>
      */
     public abstract void setResponseWriter(ResponseWriter responseWriter);
@@ -268,7 +268,7 @@ public abstract class FacesContext {
      * <p>Return the root component that is associated with the this request.
      * </p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract UIViewRoot getViewRoot();
@@ -282,9 +282,9 @@ public abstract class FacesContext {
      *
      * @param root The new component {@link UIViewRoot} component
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
-     * @exception NullPointerException if <code>root</code>
+     * @throws NullPointerException if <code>root</code>
      *  is <code>null</code>
      */
     public abstract void setViewRoot(UIViewRoot root);
@@ -304,9 +304,9 @@ public abstract class FacesContext {
      *  associated (if any)
      * @param message The message to be appended
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
-     * @exception NullPointerException if <code>message</code>
+     * @throws NullPointerException if <code>message</code>
      *  is <code>null</code>
      */
     public abstract void addMessage(String clientId, FacesMessage message);
@@ -327,7 +327,7 @@ public abstract class FacesContext {
      * passing <code>null</code> to remove the association between this
      * thread and this dead <code>FacesContext</code> instance.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract void release();
@@ -339,7 +339,7 @@ public abstract class FacesContext {
      * control should be passed to the <em>Render Response</em> phase,
      * bypassing any phases that have not been executed yet.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract void renderResponse();
@@ -351,7 +351,7 @@ public abstract class FacesContext {
      * and that the request processing lifecycle should be terminated as soon
      * as the current phase is completed.</p>
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      *  this instance has been released
      */
     public abstract void responseComplete();

@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleRangeValidator.java,v 1.47 2005/08/22 22:08:09 ofung Exp $
+ * $Id: DoubleRangeValidator.java,v 1.48 2005/12/05 16:43:02 edburns Exp $
  */
 
 /*
@@ -247,8 +247,8 @@ public class DoubleRangeValidator implements Validator, StateHolder {
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     * @exception ValidatorException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
+     * @throws ValidatorException {@inheritDoc}     
      */ 
     public void validate(FacesContext context,
                          UIComponent  component,
@@ -345,7 +345,7 @@ public class DoubleRangeValidator implements Validator, StateHolder {
      *
      * @param attributeValue The attribute value to be converted
      *
-     * @exception NumberFormatException if conversion is not possible
+     * @throws NumberFormatException if conversion is not possible
      */
     private double doubleValue(Object attributeValue)
         throws NumberFormatException {

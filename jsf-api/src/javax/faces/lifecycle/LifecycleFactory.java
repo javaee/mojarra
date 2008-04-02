@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleFactory.java,v 1.15 2005/08/22 22:08:08 ofung Exp $
+ * $Id: LifecycleFactory.java,v 1.16 2005/12/05 16:42:56 edburns Exp $
  */
 
 /*
@@ -72,9 +72,9 @@ public abstract class LifecycleFactory {
      * @param lifecycleId Identifier of the new {@link Lifecycle}
      * @param lifecycle {@link Lifecycle} instance that we are registering
      *
-     * @exception IllegalArgumentException if a {@link Lifecycle} with the
+     * @throws IllegalArgumentException if a {@link Lifecycle} with the
      *  specified <code>lifecycleId</code> has already been registered
-     * @exception NullPointerException if <code>lifecycleId</code>
+     * @throws NullPointerException if <code>lifecycleId</code>
      *  or <code>lifecycle</code> is <code>null</code>
      */
     public abstract void addLifecycle(String lifecycleId,
@@ -94,9 +94,9 @@ public abstract class LifecycleFactory {
      * @param lifecycleId Lifecycle identifier of the requested
      *  {@link Lifecycle} instance
      *
-     * @exception IllegalArgumentException if no {@link Lifecycle} instance
+     * @throws IllegalArgumentException if no {@link Lifecycle} instance
      *  can be returned for the specified identifier
-     * @exception NullPointerException if <code>lifecycleId</code>
+     * @throws NullPointerException if <code>lifecycleId</code>
      *  is <code>null</code>
      */
     public abstract Lifecycle getLifecycle(String lifecycleId);

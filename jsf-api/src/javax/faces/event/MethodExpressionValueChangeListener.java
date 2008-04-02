@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionValueChangeListener.java,v 1.2 2005/08/22 22:08:05 ofung Exp $
+ * $Id: MethodExpressionValueChangeListener.java,v 1.3 2005/12/05 16:42:54 edburns Exp $
  */
 
 /*
@@ -66,8 +66,8 @@ public class MethodExpressionValueChangeListener implements ValueChangeListener,
     // ------------------------------------------------------- Event Method
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     * @exception AbortProcessingException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
+     * @throws AbortProcessingException {@inheritDoc}     
      */ 
     public void processValueChange(ValueChangeEvent valueChangeEvent) throws AbortProcessingException {
                          

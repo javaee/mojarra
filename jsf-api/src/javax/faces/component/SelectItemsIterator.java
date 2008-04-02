@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItemsIterator.java,v 1.9 2005/08/22 22:07:54 ofung Exp $
+ * $Id: SelectItemsIterator.java,v 1.10 2005/12/05 16:42:43 edburns Exp $
  */
 
 /*
@@ -103,7 +103,7 @@ final class SelectItemsIterator implements Iterator<SelectItem> {
     /**
      * <p>Return the next element in the iteration.</p>
      *
-     * @exception NoSuchElementException if there are no more elements
+     * @throws NoSuchElementException if there are no more elements
      */
     public SelectItem next() {
 

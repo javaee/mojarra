@@ -1,5 +1,5 @@
 /*
- * $Id: LengthValidator.java,v 1.46 2005/08/22 22:08:10 ofung Exp $
+ * $Id: LengthValidator.java,v 1.47 2005/12/05 16:43:02 edburns Exp $
  */
 
 /*
@@ -212,8 +212,8 @@ public class LengthValidator implements Validator, StateHolder {
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     * @exception ValidatorException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
+     * @throws ValidatorException {@inheritDoc}     
      */ 
     public void validate(FacesContext context,
                          UIComponent  component,

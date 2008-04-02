@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.56 2005/08/22 22:07:58 ofung Exp $
+ * $Id: UISelectMany.java,v 1.57 2005/12/05 16:42:47 edburns Exp $
  */
 
 /*
@@ -194,7 +194,7 @@ public class UISelectMany extends UIInput {
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated this has been replaced by {@link #getValueExpression(java.lang.String)}.
@@ -224,7 +224,7 @@ public class UISelectMany extends UIInput {
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #setValueExpression(java.lang.String, javax.el.ValueExpression)}.
@@ -247,7 +247,7 @@ public class UISelectMany extends UIInput {
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
@@ -271,7 +271,7 @@ public class UISelectMany extends UIInput {
      * @param binding The {@link ValueExpression} to set, or <code>null</code>
      *  to remove any currently set {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
@@ -426,7 +426,7 @@ public class UISelectMany extends UIInput {
      *
      * @param value The converted value to test for membership.
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
 

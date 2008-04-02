@@ -1,5 +1,5 @@
 /*
- * $Id: DateTimeConverter.java,v 1.30 2005/10/05 21:39:10 edburns Exp $
+ * $Id: DateTimeConverter.java,v 1.31 2005/12/05 16:42:52 edburns Exp $
  */
 
 /*
@@ -354,8 +354,8 @@ public class DateTimeConverter implements Converter, StateHolder {
     // ------------------------------------------------------- Converter Methods
 
     /**
-     * @exception ConverterException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
+     * @throws ConverterException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public Object getAsObject(FacesContext context, UIComponent component,
                               String value) {
@@ -415,8 +415,8 @@ public class DateTimeConverter implements Converter, StateHolder {
     }
 
     /**
-     * @exception ConverterException {@inheritDoc}
-     * @exception NullPointerException {@inheritDoc}
+     * @throws ConverterException {@inheritDoc}
+     * @throws NullPointerException {@inheritDoc}
      */ 
     public String getAsString(FacesContext context, UIComponent component,
                               Object value) {
@@ -474,7 +474,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      * @param locale The <code>Locale</code> used to select formatting
      *  and parsing conventions
      *
-     * @exception ConverterException if no instance can be created
+     * @throws ConverterException if no instance can be created
      */
     private DateFormat getDateFormat (FacesContext context, Locale locale) {
 
@@ -528,7 +528,7 @@ public class DateTimeConverter implements Converter, StateHolder {
      *
      * @param name Name of the style for which to return a constant
      *
-     * @exception ConverterException if the style name is not valid
+     * @throws ConverterException if the style name is not valid
      */
     private int getStyle(String name) {
 

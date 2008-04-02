@@ -1,5 +1,5 @@
 /*
- * $Id: UIViewRoot.java,v 1.40 2005/11/29 16:20:12 rlubke Exp $
+ * $Id: UIViewRoot.java,v 1.41 2005/12/05 16:42:47 edburns Exp $
  */
 
 /*
@@ -373,9 +373,9 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param event {@link FacesEvent} to be queued
      *
-     * @exception IllegalStateException if this component is not a
+     * @throws IllegalStateException if this component is not a
      *  descendant of a {@link UIViewRoot}
-     * @exception NullPointerException if <code>event</code>
+     * @throws NullPointerException if <code>event</code>
      *  is <code>null</code>
      */
     public void queueEvent(FacesEvent event) {
@@ -485,7 +485,7 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void processDecodes(FacesContext context) {
@@ -658,7 +658,7 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void processValidators(FacesContext context) {
@@ -703,7 +703,7 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void processUpdates(FacesContext context) {
@@ -748,7 +748,7 @@ public class UIViewRoot extends UIComponentBase {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public void processApplication(FacesContext context) {

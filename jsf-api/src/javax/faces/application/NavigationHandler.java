@@ -1,5 +1,5 @@
 /*
- * $Id: NavigationHandler.java,v 1.13 2005/08/22 22:07:51 ofung Exp $
+ * $Id: NavigationHandler.java,v 1.14 2005/12/05 16:42:41 edburns Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ public abstract class NavigationHandler {
      * @param outcome The logical outcome returned by a previous invoked
      *  application action (which may be <code>null</code>)
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void handleNavigation(FacesContext context,

@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionActionListener.java,v 1.2 2005/08/22 22:08:05 ofung Exp $
+ * $Id: MethodExpressionActionListener.java,v 1.3 2005/12/05 16:42:54 edburns Exp $
  */
 
 /*
@@ -66,8 +66,8 @@ public class MethodExpressionActionListener implements ActionListener,
     // ------------------------------------------------------- Event Method
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     * @exception AbortProcessingException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
+     * @throws AbortProcessingException {@inheritDoc}     
      */ 
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException {
                          

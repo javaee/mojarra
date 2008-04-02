@@ -1,5 +1,5 @@
 /*
- * $Id: UIGraphic.java,v 1.40 2005/08/22 22:07:56 ofung Exp $
+ * $Id: UIGraphic.java,v 1.41 2005/12/05 16:42:45 edburns Exp $
  */
 
 /*
@@ -173,7 +173,7 @@ public class UIGraphic extends UIComponentBase {
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #getValueExpression(java.lang.String)}.
@@ -201,7 +201,7 @@ public class UIGraphic extends UIComponentBase {
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #setValueExpression}.
@@ -224,7 +224,7 @@ public class UIGraphic extends UIComponentBase {
      * @param name Name of the attribute or property for which to retrieve
      *  a {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */
@@ -248,7 +248,7 @@ public class UIGraphic extends UIComponentBase {
      * @param binding The {@link ValueExpression} to set, or <code>null</code>
      *  to remove any currently set {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      * @since 1.2
      */

@@ -1,5 +1,5 @@
 /*
- * $Id: FacesEvent.java,v 1.11 2005/08/22 22:08:05 ofung Exp $
+ * $Id: FacesEvent.java,v 1.12 2005/12/05 16:42:54 edburns Exp $
  */
 
 /*
@@ -56,7 +56,7 @@ public abstract class FacesEvent extends EventObject {
      *
      * @param component Source {@link UIComponent} for this event
      *
-     * @exception IllegalArgumentException if <code>component</code> is
+     * @throws IllegalArgumentException if <code>component</code> is
      *  <code>null</code>
      */
     public FacesEvent(UIComponent component) {
@@ -95,7 +95,7 @@ public abstract class FacesEvent extends EventObject {
      * <p>Set the {@link PhaseId} during which this event will be
      * delivered.</p>
      *
-     * @exception IllegalArgumentException phaseId is null.
+     * @throws IllegalArgumentException phaseId is null.
      *
      */ 
 
@@ -114,7 +114,7 @@ public abstract class FacesEvent extends EventObject {
      * <p>Convenience method to queue this event for broadcast at the end
      * of the current request processing lifecycle phase.</p>
      *
-     * @exception IllegalStateException if the source component for this
+     * @throws IllegalStateException if the source component for this
      *  event is not a descendant of a {@link UIViewRoot}
      */
     public void queue() {
@@ -142,7 +142,7 @@ public abstract class FacesEvent extends EventObject {
      *
      * @param listener {@link FacesListener} to send this {@link FacesEvent} to
      *
-     * @exception AbortProcessingException Signal the JavaServer Faces
+     * @throws AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
      */

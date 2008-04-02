@@ -1,5 +1,5 @@
 /*
- * $Id: SelectItem.java,v 1.11 2005/08/22 22:08:08 ofung Exp $
+ * $Id: SelectItem.java,v 1.12 2005/12/05 16:42:59 edburns Exp $
  */
 
 /*
@@ -70,7 +70,7 @@ public class SelectItem implements Serializable {
      * @param value Value to be delivered to the model if this
      *  item is selected by the user
      *
-     * @exception NullPointerException if <code>value</code>
+     * @throws NullPointerException if <code>value</code>
      *  is <code>null</code>
      */
     public SelectItem(Object value) {
@@ -90,7 +90,7 @@ public class SelectItem implements Serializable {
      *  item is selected by the user
      * @param label Label to be rendered for this item in the response
      *
-     * @exception NullPointerException if <code>value</code>
+     * @throws NullPointerException if <code>value</code>
      *  or <code>label</code> <code>null</code>
      */
     public SelectItem(Object value, String label) {
@@ -110,7 +110,7 @@ public class SelectItem implements Serializable {
      * @param label Label to be rendered for this item in the response
      * @param description Description of this item, for use in tools
      *
-     * @exception NullPointerException if <code>value</code>
+     * @throws NullPointerException if <code>value</code>
      *  or <code>label</code> is <code>null</code>
      */
     public SelectItem(Object value, String label, String description) {
@@ -130,7 +130,7 @@ public class SelectItem implements Serializable {
      * @param description Description of this item, for use in tools
      * @param disabled Flag indicating that this option is disabled
      *
-     * @exception NullPointerException if <code>value</code>
+     * @throws NullPointerException if <code>value</code>
      *  or <code>label</code> is <code>null</code>
      */
     public SelectItem(Object value, String label, String description,
@@ -220,7 +220,7 @@ public class SelectItem implements Serializable {
      *
      * @param label The new label
      *
-     * @exception NullPointerException if <code>label</code>
+     * @throws NullPointerException if <code>label</code>
      *  is <code>null</code>
      */
     public void setLabel(String label) {

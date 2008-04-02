@@ -1,5 +1,5 @@
 /*
- * $Id: ValidatorELTag.java,v 1.2 2005/08/22 22:08:12 ofung Exp $
+ * $Id: ValidatorELTag.java,v 1.3 2005/12/05 16:43:05 edburns Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ public abstract class ValidatorELTag extends TagSupport {
      * the {@link UIComponent} instance was created by this execution of the
      * containing JSP page.</p>
      *
-     * @exception JspException if a JSP error occurs
+     * @throws JspException if a JSP error occurs
      */
     public int doStartTag() throws JspException {
         
@@ -131,7 +131,7 @@ public abstract class ValidatorELTag extends TagSupport {
      * <p>Create and return a new {@link Validator} to be registered
      * on our surrounding {@link UIComponent}.</p>
      *
-     * @exception JspException if a new instance cannot be created
+     * @throws JspException if a new instance cannot be created
      */
     protected abstract Validator createValidator()
         throws JspException;

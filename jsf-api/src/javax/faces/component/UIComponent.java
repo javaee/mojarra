@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.134 2005/08/22 22:07:54 ofung Exp $
+ * $Id: UIComponent.java,v 1.135 2005/12/05 16:42:44 edburns Exp $
  */
 
 /*
@@ -117,7 +117,7 @@ public abstract class UIComponent implements StateHolder {
      * @param name Name of the attribute or property for which to retrieve a
      *  {@link ValueBinding}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #getValueExpression}.
@@ -135,9 +135,9 @@ public abstract class UIComponent implements StateHolder {
      * @param binding The {@link ValueBinding} to set, or <code>null</code>
      *  to remove any currently set {@link ValueBinding}
      *
-     * @exception IllegalArgumentException if <code>name</code> is one of
+     * @throws IllegalArgumentException if <code>name</code> is one of
      *  <code>id</code> or <code>parent</code>
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      * @deprecated This has been replaced by {@link #setValueExpression}.
@@ -153,7 +153,7 @@ public abstract class UIComponent implements StateHolder {
      * @param name Name of the attribute or property for which to retrieve a
      *  {@link ValueExpression}
      *
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      */
@@ -185,9 +185,9 @@ public abstract class UIComponent implements StateHolder {
      * @param expression The {@link ValueExpression} to set, or <code>null</code>
      *  to remove any currently set {@link ValueExpression}
      *
-     * @exception IllegalArgumentException if <code>name</code> is one of
+     * @throws IllegalArgumentException if <code>name</code> is one of
      *  <code>id</code> or <code>parent</code>
-     * @exception NullPointerException if <code>name</code>
+     * @throws NullPointerException if <code>name</code>
      *  is <code>null</code>
      *
      */
@@ -227,7 +227,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context The {@link FacesContext} for the current request
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract String getClientId(FacesContext context);
@@ -241,7 +241,7 @@ public abstract class UIComponent implements StateHolder {
      * <p>By default, this method will call through to {@link
      * #getClientId} and return the result.
      * 
-     *  @exception NullPointerException if <code>context</code> is
+     *  @throws NullPointerException if <code>context</code> is
      *  <code>null</code>
      */
     public abstract String getContainerClientId(FacesContext context);
@@ -287,7 +287,7 @@ public abstract class UIComponent implements StateHolder {
      * @param id The new component identifier, or <code>null</code> to indicate
      *  that this {@link UIComponent} does not have a component identifier
      *
-     * @exception IllegalArgumentException if <code>id</code> is not
+     * @throws IllegalArgumentException if <code>id</code> is not
      *  syntactically valid
      */
     public abstract void setId(String id);
@@ -463,10 +463,10 @@ public abstract class UIComponent implements StateHolder {
      * @return the found {@link UIComponent}, or <code>null</code>
      *  if the component was not found.
      *
-     * @exception IllegalArgumentException if an intermediate identifier
+     * @throws IllegalArgumentException if an intermediate identifier
      *  in a search expression identifies a {@link UIComponent} that is
      *  not a {@link NamingContainer}
-     * @exception NullPointerException if <code>expr</code>
+     * @throws NullPointerException if <code>expr</code>
      *  is <code>null</code>
      */
     public abstract UIComponent findComponent(String expr);
@@ -552,12 +552,12 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param event The {@link FacesEvent} to be broadcast
      *
-     * @exception AbortProcessingException Signal the JavaServer Faces
+     * @throws AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
-     * @exception IllegalArgumentException if the implementation class
+     * @throws IllegalArgumentException if the implementation class
      *  of this {@link FacesEvent} is not supported by this component
-     * @exception NullPointerException if <code>event</code> is
+     * @throws NullPointerException if <code>event</code> is
      * <code>null</code>
      */
     public abstract void broadcast(FacesEvent event)
@@ -575,7 +575,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void decode(FacesContext context);
@@ -594,8 +594,8 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the response we are creating
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void encodeBegin(FacesContext context) throws IOException;
@@ -613,8 +613,8 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the response we are creating
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void encodeChildren(FacesContext context) throws IOException;
@@ -631,8 +631,8 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the response we are creating
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void encodeEnd(FacesContext context) throws IOException;
@@ -646,8 +646,8 @@ public abstract class UIComponent implements StateHolder {
      *
      * @since 1.2
      *
-     * @exception IOException if an input/output error occurs while rendering
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs while rendering
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void encodeAll(FacesContext context) throws IOException;
@@ -684,7 +684,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param listener The {@link FacesListener} to be registered
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     protected abstract void addFacesListener(FacesListener listener);
@@ -700,9 +700,9 @@ public abstract class UIComponent implements StateHolder {
      * @param clazz Class that must be implemented by a {@link FacesListener}
      *  for it to be returned
      *
-     * @exception IllegalArgumentException if <code>class</code> is not,
+     * @throws IllegalArgumentException if <code>class</code> is not,
      *  and does not implement, {@link FacesListener}
-     * @exception NullPointerException if <code>clazz</code>
+     * @throws NullPointerException if <code>clazz</code>
      *  is <code>null</code>
      */
     protected abstract FacesListener[] getFacesListeners(Class clazz);
@@ -714,7 +714,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param listener The {@link FacesListener} to be deregistered
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     protected abstract void removeFacesListener(FacesListener listener);
@@ -728,9 +728,9 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param event {@link FacesEvent} to be queued
      *
-     * @exception IllegalStateException if this component is not a
+     * @throws IllegalStateException if this component is not a
      *  descendant of a {@link UIViewRoot}
-     * @exception NullPointerException if <code>event</code>
+     * @throws NullPointerException if <code>event</code>
      *  is <code>null</code>
      */
     public abstract void queueEvent(FacesEvent event);
@@ -756,7 +756,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void processRestoreState(FacesContext context,
@@ -782,7 +782,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void processDecodes(FacesContext context);
@@ -803,7 +803,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void processValidators(FacesContext context);
@@ -824,7 +824,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void processUpdates(FacesContext context);
@@ -857,7 +857,7 @@ public abstract class UIComponent implements StateHolder {
      *
      * @param context {@link FacesContext} for the request we are processing
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract Object processSaveState(FacesContext context);

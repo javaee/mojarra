@@ -1,5 +1,5 @@
 /*
- * $Id: VariableResolver.java,v 1.7 2005/08/22 22:08:04 ofung Exp $
+ * $Id: VariableResolver.java,v 1.8 2005/12/05 16:42:53 edburns Exp $
  */
 
 /*
@@ -53,10 +53,10 @@ public abstract class VariableResolver {
      *  this variable name
      * @param name Name of the variable to be resolved
      *
-     * @exception EvaluationException if an exception is thrown while resolving
+     * @throws EvaluationException if an exception is thrown while resolving
      *  the variable name (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  or <code>name</code> is <code>null</code>
      */
     public abstract Object resolveVariable(FacesContext context, String name)

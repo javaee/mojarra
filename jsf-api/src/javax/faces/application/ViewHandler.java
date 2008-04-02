@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.43 2005/08/23 21:58:24 edburns Exp $
+ * $Id: ViewHandler.java,v 1.44 2005/12/05 16:42:42 edburns Exp $
  */
 
 /*
@@ -100,7 +100,7 @@ public abstract class ViewHandler {
      *
      * @param context {@link FacesContext} for the current request
      * 
-     * @exception NullPointerException if <code>context</code> is 
+     * @throws NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
      public abstract Locale calculateLocale(FacesContext context);
@@ -172,7 +172,7 @@ public abstract class ViewHandler {
      *
      * @param context {@link FacesContext} for the current request
      * 
-     * @exception NullPointerException if <code>context</code> is 
+     * @throws NullPointerException if <code>context</code> is 
      *  <code>null</code>
      */
     public abstract String calculateRenderKitId(FacesContext context);
@@ -192,7 +192,7 @@ public abstract class ViewHandler {
      * proeprties, respectively, of the newly created
      * <code>UIViewRoot</code>.</p>
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract UIViewRoot createView(FacesContext context, String viewId);
@@ -206,9 +206,9 @@ public abstract class ViewHandler {
      * @param context {@link FacesContext} for this request
      * @param viewId View identifier of the desired view
      *
-     * @exception IllegalArgumentException if <code>viewId</code> is not
+     * @throws IllegalArgumentException if <code>viewId</code> is not
      *  valid for this <code>ViewHandler</code>.
-     * @exception NullPointerException if <code>context</code> or
+     * @throws NullPointerException if <code>context</code> or
      *  <code>viewId</code> is <code>null</code>.
      */
     public abstract String getActionURL(FacesContext context, String viewId);
@@ -225,9 +225,9 @@ public abstract class ViewHandler {
      * @param context {@link FacesContext} for the current request
      * @param path Resource path to convert to a URL
      *
-     * @exception IllegalArgumentException if <code>viewId</code> is not
+     * @throws IllegalArgumentException if <code>viewId</code> is not
      *  valid for this <code>ViewHandler</code>.
-     * @exception NullPointerException if <code>context</code> or
+     * @throws NullPointerException if <code>context</code> or
      *  <code>path</code> is <code>null</code>.
      */
     public abstract String getResourceURL(FacesContext context, String path);
@@ -245,7 +245,7 @@ public abstract class ViewHandler {
      * and passes the result, if non-<code>null</code> into the
      * {@link ExternalContext#setRequestCharacterEncoding} method.
      *
-     * @exception FacesException if a problem occurs setting the encoding,
+     * @throws FacesException if a problem occurs setting the encoding,
      * such as the <code>UnsupportedEncodingException</code> thrown 
      * by the underlying Servlet or Portlet technology when the encoding is not
      * supported.
@@ -279,10 +279,10 @@ public abstract class ViewHandler {
      * @param context {@link FacesContext} for the current request
      * @param viewToRender the view to render
      *
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>context</code> or
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>context</code> or
      * <code>viewToRender</code> is <code>null</code>
-     * @exception FacesException if a servlet error occurs
+     * @throws FacesException if a servlet error occurs
      */
     public abstract void renderView(FacesContext context, UIViewRoot viewToRender)
         throws IOException, FacesException;
@@ -299,9 +299,9 @@ public abstract class ViewHandler {
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request
      *
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     * @exception FacesException if a servlet error occurs
+     * @throws FacesException if a servlet error occurs
      */
     public abstract UIViewRoot restoreView(FacesContext context, String viewId);
 
@@ -314,8 +314,8 @@ public abstract class ViewHandler {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception IOException if an input/output error occurs
-     * @exception NullPointerException if <code>context</code>
+     * @throws IOException if an input/output error occurs
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
      */
     public abstract void writeState(FacesContext context) throws IOException;

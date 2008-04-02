@@ -1,5 +1,5 @@
 /*
- * $Id: RenderKitFactory.java,v 1.21 2005/08/22 22:08:09 ofung Exp $
+ * $Id: RenderKitFactory.java,v 1.22 2005/12/05 16:42:59 edburns Exp $
  */
 
 /*
@@ -72,7 +72,7 @@ public abstract class RenderKitFactory {
      * @param renderKitId Identifier of the {@link RenderKit} to register
      * @param renderKit {@link RenderKit} instance that we are registering
      *
-     * @exception NullPointerException if <code>renderKitId</code> or
+     * @throws NullPointerException if <code>renderKitId</code> or
      *  <code>renderKit</code> is <code>null</code>
      */
     public abstract void addRenderKit(String renderKitId,
@@ -93,9 +93,9 @@ public abstract class RenderKitFactory {
      * @param renderKitId Render kit identifier of the requested
      *  {@link RenderKit} instance
      *
-     * @exception IllegalArgumentException if no {@link RenderKit} instance
+     * @throws IllegalArgumentException if no {@link RenderKit} instance
      *  can be returned for the specified identifier
-     * @exception NullPointerException if <code>renderKitId</code> is
+     * @throws NullPointerException if <code>renderKitId</code> is
      * <code>null</code>
      */
     public abstract RenderKit getRenderKit(FacesContext context, 

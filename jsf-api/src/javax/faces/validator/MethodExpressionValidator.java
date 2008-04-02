@@ -1,5 +1,5 @@
 /*
- * $Id: MethodExpressionValidator.java,v 1.3 2005/08/22 22:08:10 ofung Exp $
+ * $Id: MethodExpressionValidator.java,v 1.4 2005/12/05 16:43:03 edburns Exp $
  */
 
 /*
@@ -70,8 +70,8 @@ public class MethodExpressionValidator implements Validator, StateHolder {
     // ------------------------------------------------------- Validator Methods
 
     /**
-     * @exception NullPointerException {@inheritDoc}     
-     * @exception ValidatorException {@inheritDoc}     
+     * @throws NullPointerException {@inheritDoc}     
+     * @throws ValidatorException {@inheritDoc}     
      */ 
     public void validate(FacesContext context,
                          UIComponent  component,

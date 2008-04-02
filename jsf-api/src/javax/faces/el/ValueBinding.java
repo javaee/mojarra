@@ -1,5 +1,5 @@
 /*
- * $Id: ValueBinding.java,v 1.13 2005/08/22 22:08:04 ofung Exp $
+ * $Id: ValueBinding.java,v 1.14 2005/12/05 16:42:53 edburns Exp $
  */
 
 /*
@@ -55,12 +55,12 @@ public abstract class ValueBinding {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception EvaluationException if an exception is thrown while getting
+     * @throws EvaluationException if an exception is thrown while getting
      *  the value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     * @exception PropertyNotFoundException if a specified property name
+     * @throws PropertyNotFoundException if a specified property name
      *  does not exist, or is not readable
      */
     public abstract Object getValue(FacesContext context)
@@ -75,12 +75,12 @@ public abstract class ValueBinding {
      * @param context {@link FacesContext} for the current request
      * @param value The new value to be set
      *
-     * @exception EvaluationException if an exception is thrown while setting
+     * @throws EvaluationException if an exception is thrown while setting
      *  the value (the thrown exception must be included as the
      *  <code>cause</code> property of this exception)
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     * @exception PropertyNotFoundException if a specified property name
+     * @throws PropertyNotFoundException if a specified property name
      *  does not exist, or is not writeable
      */
     public abstract void setValue(FacesContext context, Object value)
@@ -94,12 +94,12 @@ public abstract class ValueBinding {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception EvaluationException if an exception is thrown while getting
+     * @throws EvaluationException if an exception is thrown while getting
      *  the description of the property (the thrown exception must be
      *  included as the <code>cause</code> property of this exception)
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     * @exception PropertyNotFoundException if a specified property name
+     * @throws PropertyNotFoundException if a specified property name
      *  does not exist
      */
     public abstract boolean isReadOnly(FacesContext context)
@@ -113,12 +113,12 @@ public abstract class ValueBinding {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception EvaluationException if an exception is thrown while getting
+     * @throws EvaluationException if an exception is thrown while getting
      *  the description of the property (the thrown exception must be
      *  included as the <code>cause</code> property of this exception)
-     * @exception NullPointerException if <code>context</code>
+     * @throws NullPointerException if <code>context</code>
      *  is <code>null</code>
-     * @exception PropertyNotFoundException if a specified property name
+     * @throws PropertyNotFoundException if a specified property name
      *  does not exist
      */
     public abstract Class getType(FacesContext context)

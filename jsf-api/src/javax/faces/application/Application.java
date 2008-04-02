@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.41 2005/08/26 22:20:03 edburns Exp $
+ * $Id: Application.java,v 1.42 2005/12/05 16:42:41 edburns Exp $
  */
 
 /*
@@ -143,7 +143,7 @@ public abstract class Application {
      *
      * @param listener The new default {@link ActionListener}
      *
-     * @exception NullPointerException if <code>listener</code>
+     * @throws NullPointerException if <code>listener</code>
      *  is <code>null</code>
      */
     public abstract void setActionListener(ActionListener listener);
@@ -161,7 +161,7 @@ public abstract class Application {
      *
      * @param locale The new default <code>Locale</code>
      *
-     * @exception NullPointerException if <code>locale</code>
+     * @throws NullPointerException if <code>locale</code>
      *  is <code>null</code>
      */
     public abstract void setDefaultLocale(Locale locale);
@@ -205,7 +205,7 @@ public abstract class Application {
      *
      * @param bundle Base name of the resource bundle to be used
      *
-     * @exception NullPointerException if <code>bundle</code>
+     * @throws NullPointerException if <code>bundle</code>
      *  is <code>null</code>
      */
     public abstract void setMessageBundle(String bundle);
@@ -228,7 +228,7 @@ public abstract class Application {
      *
      * @param handler The new {@link NavigationHandler} instance
      *
-     * @exception NullPointerException if <code>handler</code>
+     * @throws NullPointerException if <code>handler</code>
      *  is <code>null</code>
      */
     public abstract void setNavigationHandler(NavigationHandler handler);
@@ -268,7 +268,7 @@ public abstract class Application {
      *
      * @param resolver The new {@link PropertyResolver} instance
      *
-     * @exception NullPointerException if <code>resolver</code>
+     * @throws NullPointerException if <code>resolver</code>
      *  is <code>null</code>
      *
      * @deprecated The recommended way to affect the execution of the EL
@@ -280,7 +280,7 @@ public abstract class Application {
      * exposed to the EL resolution system as if the user had called
      * {@link #addELResolver}.
      *
-     * @exception IllegalStateException if called after the first
+     * @throws IllegalStateException if called after the first
      * request to the {@link javax.faces.webapp.FacesServlet} has been
      * serviced.
      */
@@ -340,7 +340,7 @@ public abstract class Application {
      *
      * @param resolver The new {@link VariableResolver} instance
      *
-     * @exception NullPointerException if <code>resolver</code>
+     * @throws NullPointerException if <code>resolver</code>
      *  is <code>null</code>
      *
      * @deprecated The recommended way to affect the execution of the EL
@@ -353,7 +353,7 @@ public abstract class Application {
      * exposed to the EL resolution system as if the user had called
      * {@link #addELResolver}.
      *
-     * @exception IllegalStateException if called after the first
+     * @throws IllegalStateException if called after the first
      * request to the {@link javax.faces.webapp.FacesServlet} has been
      * serviced.
      */
@@ -447,10 +447,10 @@ public abstract class Application {
      *
      * @param handler The new {@link ViewHandler} instance
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      * at least one request has been processed by the
      * <code>Lifecycle</code> instance for this application.
-     * @exception NullPointerException if <code>handler</code>
+     * @throws NullPointerException if <code>handler</code>
      *  is <code>null</code>
      */
     public abstract void setViewHandler(ViewHandler handler);
@@ -475,10 +475,10 @@ public abstract class Application {
      *
      * @param manager The new {@link StateManager} instance
      *
-     * @exception IllegalStateException if this method is called after
+     * @throws IllegalStateException if this method is called after
      * at least one request has been processed by the
      * <code>Lifecycle</code> instance for this application.
-     * @exception NullPointerException if <code>manager</code>
+     * @throws NullPointerException if <code>manager</code>
      *  is <code>null</code>
      */
     public abstract void setStateManager(StateManager manager);
@@ -497,7 +497,7 @@ public abstract class Application {
      * @param componentClass The fully qualified class name of the
      *  corresponding {@link UIComponent} implementation
      *
-     * @exception NullPointerException if <code>componentType</code> or
+     * @throws NullPointerException if <code>componentType</code> or
      *  <code>componentClass</code> is <code>null</code>
      */
     public abstract void addComponent(String componentType,
@@ -512,9 +512,9 @@ public abstract class Application {
      * @param componentType The component type for which to create and
      *  return a new {@link UIComponent} instance
      *
-     * @exception FacesException if a {@link UIComponent} of the
+     * @throws FacesException if a {@link UIComponent} of the
      *  specified type cannot be created
-     * @exception NullPointerException if <code>componentType</code>
+     * @throws NullPointerException if <code>componentType</code>
      *  is <code>null</code>
      */ 
     public abstract UIComponent createComponent(String componentType)
@@ -534,8 +534,8 @@ public abstract class Application {
      * @param componentType Component type to create if the {@link ValueBinding}
      *  does not return a component instance
      *
-     * @exception FacesException if a {@link UIComponent} cannot be created
-     * @exception NullPointerException if any parameter is <code>null</code>
+     * @throws FacesException if a {@link UIComponent} cannot be created
+     * @throws NullPointerException if any parameter is <code>null</code>
      *
      *
      * @deprecated This has been replaced by {@link
@@ -562,8 +562,8 @@ public abstract class Application {
      * @param componentType Component type to create if the {@link
      * ValueExpression} does not return a component instance
      *
-     * @exception FacesException if a {@link UIComponent} cannot be created
-     * @exception NullPointerException if any parameter is <code>null</code>
+     * @throws FacesException if a {@link UIComponent} cannot be created
+     * @throws NullPointerException if any parameter is <code>null</code>
      *
      * <p>A default implementation is provided that throws 
      * <code>UnsupportedOperationException</code> so that users
@@ -622,7 +622,7 @@ public abstract class Application {
      * @param converterClass The fully qualified class name of the
      *  corresponding {@link Converter} implementation
      *
-     * @exception NullPointerException if <code>converterId</code>
+     * @throws NullPointerException if <code>converterId</code>
      *  or <code>converterClass</code> is <code>null</code>
      */
     public abstract void addConverter(String converterId, 
@@ -637,7 +637,7 @@ public abstract class Application {
      * @param converterClass The fully qualified class name of the
      *  corresponding {@link Converter} implementation
      *
-     * @exception NullPointerException if <code>targetClass</code>
+     * @throws NullPointerException if <code>targetClass</code>
      *  or <code>converterClass</code> is <code>null</code>
      */
     public abstract void addConverter(Class targetClass,
@@ -653,9 +653,9 @@ public abstract class Application {
      * @param converterId The converter id for which to create and
      *  return a new {@link Converter} instance
      *
-     * @exception FacesException if the {@link Converter} cannot be
+     * @throws FacesException if the {@link Converter} cannot be
      *  created
-     * @exception NullPointerException if <code>converterId</code>
+     * @throws NullPointerException if <code>converterId</code>
      *  is <code>null</code>
      */ 
     public abstract Converter createConverter(String converterId);
@@ -682,9 +682,9 @@ public abstract class Application {
      *
      * @param targetClass Target class for which to return a {@link Converter}
      *
-     * @exception FacesException if the {@link Converter} cannot be
+     * @throws FacesException if the {@link Converter} cannot be
      *  created
-     * @exception NullPointerException if <code>targetClass</code>
+     * @throws NullPointerException if <code>targetClass</code>
      *  is <code>null</code>
      */
     public abstract Converter createConverter(Class targetClass);
@@ -757,9 +757,9 @@ public abstract class Application {
      *  of the method to be invoked, or a zero-length array or <code>null</code>
      *  for a method that takes no parameters
      *
-     * @exception NullPointerException if <code>ref</code>
+     * @throws NullPointerException if <code>ref</code>
      *  is <code>null</code>
-     * @exception ReferenceSyntaxException if the specified <code>ref</code>
+     * @throws ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
      *
      * @deprecated This has been replaced by calling {@link
@@ -785,7 +785,7 @@ public abstract class Application {
      * @param locales The set of supported <code>Locale</code>s
      *  for this application
      *
-     * @exception NullPointerException if the argument
+     * @throws NullPointerException if the argument
      * <code>newLocales</code> is <code>null</code>.
      *
      */ 
@@ -855,7 +855,7 @@ public abstract class Application {
      * @param validatorClass The fully qualified class name of the
      *  corresponding {@link Validator} implementation
      *
-     * @exception NullPointerException if <code>validatorId</code>
+     * @throws NullPointerException if <code>validatorId</code>
      *  or <code>validatorClass</code> is <code>null</code>
      */
     public abstract void addValidator(String validatorId, 
@@ -870,9 +870,9 @@ public abstract class Application {
      * @param validatorId The validator id for which to create and
      *  return a new {@link Validator} instance
      *
-     * @exception FacesException if a {@link Validator} of the
+     * @throws FacesException if a {@link Validator} of the
      *  specified id cannot be created
-     * @exception NullPointerException if <code>validatorId</code>
+     * @throws NullPointerException if <code>validatorId</code>
      *  is <code>null</code>
      */ 
     public abstract Validator createValidator(String validatorId)
@@ -896,9 +896,9 @@ public abstract class Application {
      * @param ref Value binding expression for which to return a
      *  {@link ValueBinding} instance
      *
-     * @exception NullPointerException if <code>ref</code>
+     * @throws NullPointerException if <code>ref</code>
      *  is <code>null</code>
-     * @exception ReferenceSyntaxException if the specified <code>ref</code>
+     * @throws ReferenceSyntaxException if the specified <code>ref</code>
      *  has invalid syntax
      *
      * @deprecated This has been replaced by calling {@link

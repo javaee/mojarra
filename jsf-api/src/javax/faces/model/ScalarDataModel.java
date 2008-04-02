@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.17 2005/08/22 22:08:08 ofung Exp $
+ * $Id: ScalarDataModel.java,v 1.18 2005/12/05 16:42:59 edburns Exp $
  */
 
 /*
@@ -89,7 +89,7 @@ public class ScalarDataModel extends DataModel {
      * available, and the current value of <code>rowIndex</code> is zero.
      * Otherwise, return <code>false</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row availability
+     * @throws FacesException if an error occurs getting the row availability
      */
     public boolean isRowAvailable() {
 
@@ -108,7 +108,7 @@ public class ScalarDataModel extends DataModel {
      * <p>If there is <code>wrappedData</code> available, return 1.
      * If no <code>wrappedData</code> is available, return -1.</p>
      *
-     * @exception FacesException if an error occurs getting the row count
+     * @throws FacesException if an error occurs getting the row count
      */
     public int getRowCount() {
 
@@ -124,8 +124,8 @@ public class ScalarDataModel extends DataModel {
      * <p>If wrapped data is available, return the wrapped data instance.
      * Otherwise, return <code>null</code>.</p>
      *
-     * @exception FacesException if an error occurs getting the row data
-     * @exception IllegalArgumentException if now row data is available
+     * @throws FacesException if an error occurs getting the row data
+     * @throws IllegalArgumentException if now row data is available
      *  at the currently specified row index
      */
     public Object getRowData() {
@@ -142,7 +142,7 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}     
+     * @throws FacesException {@inheritDoc}     
      */ 
     public int getRowIndex() {
 
@@ -152,8 +152,8 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
-     * @exception FacesException {@inheritDoc}
-     * @exception IllegalArgumentException {@inheritDoc}
+     * @throws FacesException {@inheritDoc}
+     * @throws IllegalArgumentException {@inheritDoc}
      */ 
     public void setRowIndex(int rowIndex) {
 
@@ -192,7 +192,7 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
-     * @exception ClassCastException {@inheritDoc}
+     * @throws ClassCastException {@inheritDoc}
      */
     public void setWrappedData(Object data) {
 

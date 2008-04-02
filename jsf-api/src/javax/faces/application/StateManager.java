@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.38 2005/08/22 22:07:51 ofung Exp $
+ * $Id: StateManager.java,v 1.39 2005/12/05 16:42:42 edburns Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ public abstract class StateManager {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception IllegalStateException if more than one component or
+     * @throws IllegalStateException if more than one component or
      * facet within the same {@link NamingContainer} in this view has
      * the same non-<code>null</code> component id
      */
@@ -151,7 +151,7 @@ public abstract class StateManager {
      *
      * @param context {@link FacesContext} for the current request
      *
-     * @exception IllegalStateException if more than one component or
+     * @throws IllegalStateException if more than one component or
      * facet within the same {@link NamingContainer} in this view has
      * the same non-<code>null</code> component id
      */
@@ -314,7 +314,7 @@ public abstract class StateManager {
      * @param renderKitId the renderKitId used to render this response.
      * Must not be <code>null</code>.
      *
-     * @exception IllegalArgumentException if <code>renderKitId</code>
+     * @throws IllegalArgumentException if <code>renderKitId</code>
      * is <code>null</code>.
      */
     public abstract UIViewRoot restoreView(FacesContext context, String viewId,
@@ -337,7 +337,7 @@ public abstract class StateManager {
      * state is now an implementation detail.  The default
      * implementation returns <code>null</code>.
      *
-     * @exception IllegalArgumentException if <code>renderKitId</code>
+     * @throws IllegalArgumentException if <code>renderKitId</code>
      * is <code>null</code>.
      */
     protected UIViewRoot restoreTreeStructure(FacesContext context, 
@@ -363,7 +363,7 @@ public abstract class StateManager {
      * state is now an implementation detail.  The default
      * implementation does nothing.
      *
-     * @exception IllegalArgumentException if <code>renderKitId</code>
+     * @throws IllegalArgumentException if <code>renderKitId</code>
      * is <code>null</code>.
      */
     protected void restoreComponentState(FacesContext context, 
@@ -387,7 +387,7 @@ public abstract class StateManager {
      * the value of the constant {@link #STATE_SAVING_METHOD_CLIENT}.
      * <code>false</code> otherwise.
      *
-     * @exception NullPointerException if <code>context</code> is
+     * @throws NullPointerException if <code>context</code> is
      * <code>null</code>.
      */
 

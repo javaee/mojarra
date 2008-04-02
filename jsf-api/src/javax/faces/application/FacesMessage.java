@@ -1,5 +1,5 @@
 /*
- * $Id: FacesMessage.java,v 1.13 2005/08/22 22:07:51 ofung Exp $
+ * $Id: FacesMessage.java,v 1.14 2005/12/05 16:42:41 edburns Exp $
  */
 
 /*
@@ -204,7 +204,7 @@ public class FacesMessage implements Serializable {
      * @param summary Localized summary message text
      * @param detail Localized detail message text
      *
-     * @exception IllegalArgumentException if the specified severity level
+     * @throws IllegalArgumentException if the specified severity level
      *  is not one of the supported values
      */
     public FacesMessage(String summary, String detail) {
@@ -224,7 +224,7 @@ public class FacesMessage implements Serializable {
      * @param summary Localized summary message text
      * @param detail Localized detail message text
      *
-     * @exception IllegalArgumentException if the specified severity level
+     * @throws IllegalArgumentException if the specified severity level
      *  is not one of the supported values
      */
     public FacesMessage(Severity severity, String summary, 
@@ -292,7 +292,7 @@ public class FacesMessage implements Serializable {
      *
      * @param severity The new severity level
      *
-     * @exception IllegalArgumentException if the specified severity level
+     * @throws IllegalArgumentException if the specified severity level
      *  is not one of the supported values
      */
     public void setSeverity(Severity severity) {
