@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.34 2006/08/15 17:19:05 rlubke Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.35 2006/10/03 21:21:34 rlubke Exp $ 
  */ 
 
 
@@ -74,7 +74,7 @@ import com.sun.faces.util.Util;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestViewHandlerImpl.java,v 1.34 2006/08/15 17:19:05 rlubke Exp $
+ * @version $Id: TestViewHandlerImpl.java,v 1.35 2006/10/03 21:21:34 rlubke Exp $
  */
 
 
@@ -235,7 +235,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         String path = handler.getActionURL(facesContext, "/path/test.jsp");
         System.out.println("VIEW ID PATH 2: " + path);
-        assertEquals(contextPath + "/faces/path/test.jsp", path);
+        assertEquals(contextPath + "/faces/path/test.jsp", path.substring(0, path.indexOf(";j")));
 
 
         // if getServletPath() returns a path indicating extension mapping
@@ -246,7 +246,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         path = handler.getActionURL(facesContext, "/path/test");
         System.out.println("VIEW ID PATH 3: " + path);
-        assertEquals(contextPath + "/path/test.jsf", path);
+        assertEquals(contextPath + "/path/test.jsf", path.substring(0, path.indexOf(";j")));
 
         // if getServletPath() returns a path indicating extension mapping
         // and the viewId passed has an extension, replace the extension with
@@ -256,7 +256,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         path = handler.getActionURL(facesContext, "/path/t.est.jsp");
         System.out.println("VIEW ID PATH 4: " + path);
-        assertEquals(contextPath + "/path/t.est.jsf", path);
+        assertEquals(contextPath + "/path/t.est.jsf", path.substring(0, path.indexOf(";j")));
 
         // if path info is null, the impl must check to see if
         // there is an exact match on the servlet path, if so, return
@@ -266,7 +266,7 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
         testRequest.setAttribute("com.sun.faces.INVOCATION_PATH", null);
         path = handler.getActionURL(facesContext, "/path/t.est");
         System.out.println("VIEW ID PATH 5: " + path);
-        assertEquals(contextPath + "/faces/path/t.est", path);
+        assertEquals(contextPath + "/faces/path/t.est", path.substring(0, path.indexOf(";j")));
 
     }
 
@@ -313,12 +313,14 @@ public class TestViewHandlerImpl extends JspFacesTestCase {
             new FacesContextImpl(extContext, lifecycle);
 
         // Validate correct calculations
+        String path = Util.getViewHandler(getFacesContext()).
+                     getResourceURL(context, "/index.jsp");
         assertEquals(request.getContextPath() + "/index.jsp",
-                     Util.getViewHandler(getFacesContext()).
-                     getResourceURL(context, "/index.jsp"));
+                     path.substring(0, path.indexOf(";j")));
+        path = Util.getViewHandler(getFacesContext()).
+                     getResourceURL(context, "index.jsp");
         assertEquals("index.jsp",
-                     Util.getViewHandler(getFacesContext()).
-                     getResourceURL(context, "index.jsp"));
+                     path.substring(0, path.indexOf(";j")));
 
     }
 

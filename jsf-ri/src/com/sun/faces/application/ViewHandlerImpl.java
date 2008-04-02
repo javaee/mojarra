@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.86 2006/09/20 19:37:46 rlubke Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.87 2006/10/03 21:21:34 rlubke Exp $ 
  */ 
 
 
@@ -68,7 +68,7 @@ import com.sun.faces.util.Util;
 /**
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler.
  *
- * @version $Id: ViewHandlerImpl.java,v 1.86 2006/09/20 19:37:46 rlubke Exp $
+ * @version $Id: ViewHandlerImpl.java,v 1.87 2006/10/03 21:21:34 rlubke Exp $
  * @see javax.faces.application.ViewHandler
  */
 public class ViewHandlerImpl extends ViewHandler {
@@ -645,45 +645,49 @@ public class ViewHandlerImpl extends ViewHandler {
         }
 
         // Acquire the context path, which we will prefix on all results
-        String contextPath =
-            context.getExternalContext().getRequestContextPath();
+        ExternalContext extContext = context.getExternalContext();
+        String contextPath = extContext.getRequestContextPath();
 
         // Acquire the mapping used to execute this request (if any)
         String mapping = Util.getFacesMapping(context);
 
         // If no mapping can be identified, just return a server-relative path
         if (mapping == null) {
-            return contextPath + viewId;
+            return extContext.encodeActionURL(contextPath + viewId);
         }
 
         // Deal with prefix mapping
         if (Util.isPrefixMapped(mapping)) {
             if (mapping.equals("/*")) {
-                return contextPath + viewId;
+                return extContext.encodeActionURL(contextPath + viewId);
             } else {
-                return contextPath + mapping + viewId;
+                return extContext
+                      .encodeActionURL(contextPath + mapping + viewId);
             }
         }
 
         // Deal with extension mapping
         int period = viewId.lastIndexOf(".");
         if (period < 0) {
-            return contextPath + viewId + mapping;
+            return extContext.encodeActionURL(contextPath + viewId + mapping);
         } else if (!viewId.endsWith(mapping)) {
-            return contextPath + viewId.substring(0, period) + mapping;
+            return extContext.encodeActionURL(contextPath
+                                                + viewId.substring(0, period)
+                                                + mapping);
         } else {
-            return contextPath + viewId;
+            return extContext.encodeActionURL(contextPath + viewId);
         }
 
     }
 
 
     public String getResourceURL(FacesContext context, String path) {
-
+        ExternalContext extContext = context.getExternalContext();
         if (path.startsWith("/")) {
-            return context.getExternalContext().getRequestContextPath() + path;
+            return extContext
+                  .encodeResourceURL(extContext.getRequestContextPath() + path);
         } else {
-            return (path);
+            return extContext.encodeResourceURL(path);
         }
 
     }
