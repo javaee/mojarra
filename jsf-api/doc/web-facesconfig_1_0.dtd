@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.14 2003/09/24 22:47:25 eburns Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.15 2003/09/25 21:41:31 eburns Exp $
 
 -->
 
@@ -197,6 +197,12 @@
 <!ELEMENT icon            (small-icon?, large-icon?)>
 <!ATTLIST icon            xml:lang        %Language;      #IMPLIED>
 
+<!--
+    The "lifecycle" element provides a mechanism to specify
+    modifications to the behaviour of the default Lifecycle
+    implementation for this web application.
+-->
+<!ELEMENT lifecycle       (phase-listener*)>
 
 <!--
     The "managed-bean" element represents a JavaBean, of a particular class,
@@ -301,13 +307,6 @@
 -->
 <!ELEMENT referenced-bean (description*, display-name*, icon*, referenced-bean-name, referenced-bean-class)>
 
-
-<!--
-    The "lifecycle" element provides a mechanism to specify
-    modifications to the behaviour of the default Lifecycle
-    implementation for this web application.
--->
-<!ELEMENT lifecycle       (phase-listener*)>
 
 <!--
     The "render-kit" element represents a concrete RenderKit implementation
