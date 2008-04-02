@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.32 2003/04/29 20:51:29 eburns Exp $
+ * $Id: RIConstants.java,v 1.33 2003/04/29 22:20:30 eburns Exp $
  */
 
 /*
@@ -56,7 +56,8 @@ public class RIConstants {
     public final static String IMPL_MESSAGES = FACES_PREFIX + "IMPL_MESSAGES";
 
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
-    public static final String SAVESTATE_INITPARAM = "saveStateInClient";
+    public static final String SAVESTATE_INITPARAM = 
+	FACES_PREFIX + "saveStateInClient";
 
     // PENDING(rogerk) this needs to be mentioned in the spec, 
     // under [ConfigFiles-26]
