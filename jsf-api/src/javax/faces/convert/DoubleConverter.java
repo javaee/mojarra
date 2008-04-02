@@ -1,5 +1,5 @@
 /*
- * $Id: DoubleConverter.java,v 1.17 2006/07/12 15:19:55 edburns Exp $
+ * $Id: DoubleConverter.java,v 1.18 2006/07/12 16:19:21 edburns Exp $
  */
 
 /*
@@ -48,7 +48,7 @@ public class DoubleConverter implements Converter {
     /**
      * <p>The standard converter id for this converter.</p>
      */
-    public static final String CONVERTER_ID = "javax.faces.Double";
+    public static final String CONVERTER_ID = "javax.faces.DoubleTime";
 
     /**
      * <p>The message identifier of the {@link javax.faces.application.FacesMessage} to be created if
