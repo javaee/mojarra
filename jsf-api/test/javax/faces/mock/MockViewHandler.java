@@ -1,5 +1,5 @@
 /*
- * $Id: MockViewHandler.java,v 1.16 2003/10/17 00:16:10 jvisvanathan Exp $
+ * $Id: MockViewHandler.java,v 1.17 2003/12/22 23:25:45 eburns Exp $
  */
 
 /*
@@ -11,7 +11,6 @@ package javax.faces.mock;
 
 import java.util.Locale;
 import java.io.IOException;
-import java.io.Reader;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;

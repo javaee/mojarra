@@ -1,5 +1,5 @@
 /* 
- * $Id: TestViewHandlerImpl.java,v 1.6 2003/10/16 22:11:32 jvisvanathan Exp $ 
+ * $Id: TestViewHandlerImpl.java,v 1.7 2003/12/22 23:25:59 eburns Exp $ 
  */ 
 
 
@@ -22,6 +22,7 @@ import org.apache.cactus.WebRequest;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIForm;
 import javax.faces.component.UIInput;
@@ -50,7 +51,7 @@ import java.util.Locale;
  * 
  * <B>Lifetime And Scope</B> <P> 
  * 
- * @version $Id: TestViewHandlerImpl.java,v 1.6 2003/10/16 22:11:32 jvisvanathan Exp $  
+ * @version $Id: TestViewHandlerImpl.java,v 1.7 2003/12/22 23:25:59 eburns Exp $  
  */ 
 
 
@@ -386,7 +387,9 @@ public boolean sendResponseToFile()
 
         ViewHandler viewHandler = 
             getFacesContext().getApplication().getViewHandler(); 
-        viewHandler.getStateManager().saveSerializedView(getFacesContext());
+        StateManager stateManager = 
+            getFacesContext().getApplication().getStateManager(); 
+        stateManager.saveSerializedView(getFacesContext());
 
         // make sure that the transient property is not persisted.
         basicForm = (UIForm)(getFacesContext().getViewRoot()).findComponent("basicForm");

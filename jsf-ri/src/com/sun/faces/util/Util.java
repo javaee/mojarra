@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.117 2003/12/17 23:26:04 eburns Exp $
+ * $Id: Util.java,v 1.118 2003/12/22 23:25:53 eburns Exp $
  */
 
 /*
@@ -66,7 +66,7 @@ import com.sun.faces.el.impl.JspVariableResolver;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.117 2003/12/17 23:26:04 eburns Exp $ 
+ * @version $Id: Util.java,v 1.118 2003/12/22 23:25:53 eburns Exp $ 
  */
 
 public class Util extends Object
@@ -266,6 +266,9 @@ public class Util extends Object
     
    public static final String ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID = 
          "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER";
+
+   public static final String ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID = 
+         "com.sun.faces.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER";
     
    public static final String INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID =
          "com.sun.faces.INVALID_MESSAGE_SEVERITY_IN_CONFIG";
@@ -999,7 +1002,7 @@ private Util()
     
     public static StateManager getStateManager(FacesContext context) 
             throws FacesException {
-        return(getViewHandler(context).getStateManager());
+        return(context.getApplication().getStateManager());
     }
     
     public static ViewHandler getViewHandler(FacesContext context) 

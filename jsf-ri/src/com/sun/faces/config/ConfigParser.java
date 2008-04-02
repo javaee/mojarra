@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.48 2003/12/17 23:26:01 eburns Exp $
+ * $Id: ConfigParser.java,v 1.49 2003/12/22 23:25:51 eburns Exp $
  */
 
 /*
@@ -38,6 +38,7 @@ import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
@@ -349,6 +350,8 @@ public class ConfigParser {
                                "setMessageBundle", 0);
         digester.addCallMethod(prefix+"/view-handler",
                                "setViewHandler", 0);
+        digester.addCallMethod(prefix+"/state-manager",
+                               "setStateManager", 0);
         digester.addCallMethod(prefix+"/property-resolver",
                                "setPropertyResolver", 0);
         digester.addCallMethod(prefix+"/variable-resolver",
@@ -966,6 +969,11 @@ final class ApplicationRule extends Rule {
 	    ((ViewHandlerImpl) viewHandler).setFacesMapping(mappings);
 	}    
 	application.setViewHandler(viewHandler);
+
+	returnObject = Util.createInstance(ca.getStateManager());
+	if (returnObject != null) {
+	    application.setStateManager((StateManager)returnObject);
+	}
 
 	String localeStr = null;
 	Iterator iter = null;

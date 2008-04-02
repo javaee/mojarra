@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.36 2003/12/17 15:13:22 rkitain Exp $
+ * $Id: ApplicationImpl.java,v 1.37 2003/12/22 23:25:48 eburns Exp $
  */
 
 /*
@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -66,13 +67,14 @@ public class ApplicationImpl extends Application {
     // Log instance for this class
     protected static Log log = LogFactory.getLog(ApplicationImpl.class);
 
-// Relationship Instance Variables
+   // Relationship Instance Variables
 
     private ActionListener actionListener = null;
     private NavigationHandler navigationHandler = null;
     private PropertyResolver propertyResolver = null;
     private VariableResolver variableResolver = null;
     private ViewHandler viewHandler = null;
+    private StateManager stateManager = null;
     //
     // This map stores reference expression | value binding instance
     // mappings.
@@ -123,7 +125,7 @@ public class ApplicationImpl extends Application {
 
     // Flag indicating that a response has been rendered.
     private boolean responseRendered = false;
-   
+
 //
 // Constructors and Initializers
 //
@@ -163,30 +165,58 @@ public class ApplicationImpl extends Application {
                             Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	synchronized (this) {
-        if (responseRendered) {
-            // at least one response has been rendered.
+	    if (responseRendered) {
+		// at least one response has been rendered.
                 if (log.isErrorEnabled()) {
                      log.error("Response for this request has been rendered already ");
                 }
-            throw new IllegalStateException(
-                    Util.getExceptionMessage(
-                            Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));            
-        }        
-        viewHandler = handler;    
+		throw new IllegalStateException(
+						Util.getExceptionMessage(
+				 Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID));
+	    }        
+	    viewHandler = handler;   
             if (log.isDebugEnabled()) {
                 log.debug("set ViewHandler Instance to " + viewHandler);
             }
 	}   
     }
 
-    public void setActionListener(ActionListener listener) {
-        if (listener == null) {
-            throw new NullPointerException(Util.getExceptionMessage(
-		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+    public StateManager getStateManager() {        
+        return stateManager;
+    }
+
+    
+    public void setStateManager(StateManager manager) {
+        if (manager == null) {
+            throw new NullPointerException(
+                    Util.getExceptionMessage(
+                            Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	synchronized (this) {
-        this.actionListener = listener;
+	    if (responseRendered) {
+		// at least one response has been rendered.
+                if (log.isErrorEnabled()) {
+                     log.error("Response for this request has been rendered already ");
+                }
+		throw new IllegalStateException(
+						Util.getExceptionMessage(
+				 Util.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID));
+	    }        
+	    stateManager = manager;   
+            if (log.isDebugEnabled()) {
+                log.debug("set StateManager Instance to " + stateManager);
+            }
+	}
     }
+
+    public void setActionListener(ActionListener listener) {
+	if (listener == null) {
+	    throw new NullPointerException(Util.getExceptionMessage(
+								    Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
+	}
+	synchronized (this) {
+	    this.actionListener = listener;
+	}
         if (log.isDebugEnabled()) {
             log.debug("set ActionListener Instance to " + actionListener);
         }
@@ -199,11 +229,11 @@ public class ApplicationImpl extends Application {
      */
     public NavigationHandler getNavigationHandler() {
 	synchronized (this) {
-        if (null == navigationHandler) {
-            navigationHandler = new NavigationHandlerImpl();
-        }
+	    if (null == navigationHandler) {
+		navigationHandler = new NavigationHandlerImpl();
+	    }
 	}
-        return navigationHandler;
+	return navigationHandler;
     }
 
     /**
@@ -218,8 +248,8 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	synchronized (this) {
-        this.navigationHandler = handler;
-    }
+	    this.navigationHandler = handler;
+	}
         if (log.isDebugEnabled()) {
             log.debug("set NavigationHandler Instance to " + navigationHandler);
         }
@@ -303,9 +333,9 @@ public class ApplicationImpl extends Application {
 
     public PropertyResolver getPropertyResolver() {
 	synchronized (this) {
-        if (null == propertyResolver) {
-            propertyResolver = new PropertyResolverImpl();
-        }
+	    if (null == propertyResolver) {
+		propertyResolver = new PropertyResolverImpl();
+	    }
 	}
         return propertyResolver;
     }
@@ -316,8 +346,8 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	synchronized (this) {
-        this.propertyResolver = resolver;
-    }
+	    this.propertyResolver = resolver;
+	}
         if (log.isDebugEnabled()) {
             log.debug("set PropertyResolver Instance to " + propertyResolver);
         }
@@ -353,19 +383,19 @@ public class ApplicationImpl extends Application {
 	    }
             // PENDING: Need to impelement the performance enhancement suggested
             // by Hans in the EG on 17 November 2003.
-	    ref = Util.stripBracketsIfNecessary(ref);
+            ref = Util.stripBracketsIfNecessary(ref);
             checkSyntax(ref);
             valueBinding = new ValueBindingImpl (this);
-            ((ValueBindingImpl) valueBinding).setRef(ref);
+            ((ValueBindingImpl) valueBinding).setRef(ref); 
         }
         return valueBinding;
     }
 
     public VariableResolver getVariableResolver() {
 	synchronized (this) {
-        if (null == variableResolver) {
-            variableResolver = new VariableResolverImpl();
-        }
+	    if (null == variableResolver) {
+		variableResolver = new VariableResolverImpl();
+	    }
 	}
         return variableResolver;
     }
@@ -376,8 +406,8 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	synchronized (this) {
-        this.variableResolver = resolver;
-    }
+	    this.variableResolver = resolver;
+	}
         if (log.isDebugEnabled()) {
             log.debug("set VariableResolver Instance to " + variableResolver);
         }
@@ -389,8 +419,8 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	synchronized (this) {
-	componentMap.put(componentType, componentClass);
-    }
+	    componentMap.put(componentType, componentClass);
+	}
         if (log.isTraceEnabled()) {
             log.trace("added component of type " + componentType + 
                  " class " + componentClass);
@@ -459,8 +489,8 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	synchronized (this) {
-	converterIdMap.put(converterId, converterClass);
-    }
+	    converterIdMap.put(converterId, converterClass);
+	}
         if (log.isTraceEnabled()) {
             log.trace("added converter of type " + converterId + 
                  " and class " + converterClass);
@@ -473,8 +503,8 @@ public class ApplicationImpl extends Application {
                 Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
         }
 	synchronized (this) {
-	converterTypeMap.put(targetClass, converterClass);
-    }
+	    converterTypeMap.put(targetClass, converterClass);
+	}
         if (log.isTraceEnabled()) {
             log.trace("added converter of class type " + converterClass); 
         }
@@ -571,9 +601,9 @@ public class ApplicationImpl extends Application {
 	Iterator result = Collections.EMPTY_LIST.iterator();
 
 	synchronized (this) {
-	if (null != supportedLocales) {
-	    result = supportedLocales.iterator();
-	}
+	    if (null != supportedLocales) {
+		result = supportedLocales.iterator();
+	    }
 	}
 	return result;
     }
@@ -583,8 +613,8 @@ public class ApplicationImpl extends Application {
 	    throw new NullPointerException();
 	}
 	synchronized (this) {
-	supportedLocales = new ArrayList(newLocales);
-    }
+	    supportedLocales = new ArrayList(newLocales);
+	}
         if (log.isTraceEnabled()) {
             log.trace("set Supported Locales"); 
         }
@@ -594,9 +624,9 @@ public class ApplicationImpl extends Application {
     public Locale getDefaultLocale(){
 	Locale result = defaultLocale;
 	synchronized (this) {
-	if (null == defaultLocale) {
-	    result = Locale.getDefault();
-	}
+	    if (null == defaultLocale) {
+		result = Locale.getDefault();
+	    }
 	}
         if (log.isTraceEnabled()) {
             log.trace("get defaultLocale " + result); 
@@ -607,7 +637,7 @@ public class ApplicationImpl extends Application {
     public void setDefaultLocale(Locale newLocale) {	
 	synchronized (this) {
 	    defaultLocale = newLocale;
-    }
+	}
         if (log.isTraceEnabled()) {
             log.trace("set defaultLocale " + defaultLocale); 
         }
@@ -619,8 +649,8 @@ public class ApplicationImpl extends Application {
 		Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
 	}
 	synchronized (this) {
-	validatorMap.put(validatorId, validatorClass);
-    }
+	    validatorMap.put(validatorId, validatorClass);
+	}
         if (log.isTraceEnabled()) {
             log.trace("added validator of type " + validatorId + 
                  " class " + validatorClass);
@@ -658,8 +688,8 @@ public class ApplicationImpl extends Application {
 
     public void setMessageBundle(String messageBundle) {
 	synchronized (this) {
-	this.messageBundle = messageBundle;
-    }
+	    this.messageBundle = messageBundle;
+	}
         if (log.isTraceEnabled()) {
             log.trace("set messageBundle " + messageBundle); 
         }
@@ -683,7 +713,7 @@ public class ApplicationImpl extends Application {
      */
     synchronized public void addManagedBeanFactory(String managedBeanName,
         ManagedBeanFactory factory) {
-        managedBeanFactoriesMap.put(managedBeanName, factory);
+	managedBeanFactoriesMap.put(managedBeanName, factory);
         if (log.isTraceEnabled()) {
             log.trace("Added managedBeanFactory " + factory + " for" + 
                     managedBeanName); 
@@ -721,33 +751,33 @@ public class ApplicationImpl extends Application {
 	synchronized (this) {
 	    value = map.get(key);
 
-        if (value == null) {
-	    return null;
-        }
+	    if (value == null) {
+		return null;
+	    }
 	    Util.doAssert(value instanceof String || value instanceof Class);
-        if (value instanceof String) {
-	    try {
-                clazz = Util.loadClass((String)value, value);
+	    if (value instanceof String) {
+		try {
+		    clazz = Util.loadClass((String)value, value);
 		    Util.doAssert(clazz != null);
-	        map.put(key, clazz);
-	    } catch (Throwable t) {
-                Object[] params = {t.getMessage()};
-	        throw new FacesException(Util.getExceptionMessage(
-		    Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
+		    map.put(key, clazz);
+		} catch (Throwable t) {
+		    Object[] params = {t.getMessage()};
+		    throw new FacesException(Util.getExceptionMessage(
+			      Util.CANT_LOAD_CLASS_ERROR_MESSAGE_ID, params));
+		}
+	    } else {
+		clazz = (Class)value;
 	    }
-        } else {
-            clazz = (Class)value;
-	    }
-        }
-
-        try {
+	}
+	
+	try {
 	    result = clazz.newInstance();
-        } catch (Throwable t) {
-            Object[] params = {clazz.getName()};
-            throw new FacesException(Util.getExceptionMessage(
-	        Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
-        }
-        return result;
+	} catch (Throwable t) {
+	    Object[] params = {clazz.getName()};
+	    throw new FacesException(Util.getExceptionMessage(
+		      Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+	}
+	return result;
     }
 
     /**
@@ -765,50 +795,50 @@ public class ApplicationImpl extends Application {
      *  could not be created.
      */
     synchronized public Object createAndMaybeStoreManagedBeans(FacesContext context,
-        String managedBeanName) throws PropertyNotFoundException {
-        ManagedBeanFactory managedBean = (ManagedBeanFactory)
-            managedBeanFactoriesMap.get(managedBeanName);
-        if ( managedBean == null ) {
+							       String managedBeanName) throws PropertyNotFoundException {
+	ManagedBeanFactory managedBean = (ManagedBeanFactory)
+		managedBeanFactoriesMap.get(managedBeanName);
+	if ( managedBean == null ) {
             if (log.isDebugEnabled()) {
                 log.debug("Couldn't find a factory for " + managedBeanName); 
             }
-            return null;
-        }
-
-        Object bean;
-        try {
-            bean = managedBean.newInstance();
+	    return null;
+	}
+	
+	Object bean;
+	try {
+	    bean = managedBean.newInstance();
             if (log.isDebugEnabled()) {
                 log.debug("Created bean" + managedBeanName + " successfully "); 
             }
-        } catch (Exception ex) {
-            Object []params = {ex.getMessage()};
+	} catch (Exception ex) {
+	    Object []params = {ex.getMessage()};
             if (log.isErrorEnabled()) {
                 log.error(ex.getMessage(), ex); 
             }
-            throw new PropertyNotFoundException(Util.getExceptionMessage(
-                Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
-        }
-        //add bean to appropriate scope
-        String scope = managedBean.getScope();
-        //scope cannot be null
+	    throw new PropertyNotFoundException(Util.getExceptionMessage(
+		Util.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, params));
+	}
+	//add bean to appropriate scope
+	String scope = managedBean.getScope();
+	//scope cannot be null
 	Util.doAssert(null != scope);
 	if (log.isTraceEnabled()) {
             log.trace("Storing " + managedBeanName + " in scope " + scope); 
         }
-
-        if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
-            context.getExternalContext().
-                getApplicationMap().put(managedBeanName, bean);
-        }
-        else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
-            Util.getSessionMap(context).put(managedBeanName, bean);
-        }
-        else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
-            context.getExternalContext().
-                getRequestMap().put(managedBeanName, bean);
-        }
-        return bean;
+        
+	if (scope.equalsIgnoreCase(RIConstants.APPLICATION)) {
+	    context.getExternalContext().
+		getApplicationMap().put(managedBeanName, bean);
+	}
+	else if (scope.equalsIgnoreCase(RIConstants.SESSION)) {
+	    Util.getSessionMap(context).put(managedBeanName, bean);
+	}
+	else if (scope.equalsIgnoreCase(RIConstants.REQUEST)) {
+	    context.getExternalContext().
+		getRequestMap().put(managedBeanName, bean);
+	}
+	return bean;
     }    
         
     private void checkSyntax(String ref) throws ReferenceSyntaxException { 
@@ -838,8 +868,8 @@ public class ApplicationImpl extends Application {
    
     // This is called by ViewHandlerImpl.renderView().
     synchronized void responseRendered() {
-       responseRendered = true;
-   }
+        responseRendered = true;
+    }
     /**
      * This Comparator class will help sort the <code>ConfigNavigationCase</code> objects
      * based on their <code>fromViewId</code> properties in descending order -

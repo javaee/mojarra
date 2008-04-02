@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.12 2003/12/17 23:26:12 eburns Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.13 2003/12/22 23:26:03 eburns Exp $ 
  */ 
 
 
@@ -56,7 +56,6 @@ import org.apache.commons.logging.impl.SimpleLog;
 
 import javax.faces.FacesException;
 import javax.faces.FactoryFinder;
-import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
@@ -84,7 +83,7 @@ import javax.servlet.ServletRequest;
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.12 2003/12/17 23:26:12 eburns Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.13 2003/12/22 23:26:03 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -256,11 +255,6 @@ public class XulViewHandlerImpl implements ViewHandler {
         }
 
         return restoreView(context, viewId);
-    }
-
-    //PENDING (horwat) Do we need state management for non-jsp example?
-    public StateManager getStateManager() {
-        return null;
     }
 
     public String getViewIdPath(FacesContext context, String viewId) {

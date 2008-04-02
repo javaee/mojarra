@@ -1,5 +1,5 @@
 /* 
- * $Id: ViewHandlerImpl.java,v 1.25 2003/12/17 15:13:23 rkitain Exp $ 
+ * $Id: ViewHandlerImpl.java,v 1.26 2003/12/22 23:25:49 eburns Exp $ 
  */ 
 
 
@@ -44,7 +44,7 @@ import java.util.Enumeration;
 
 /** 
  * <B>ViewHandlerImpl</B> is the default implementation class for ViewHandler. 
- * @version $Id: ViewHandlerImpl.java,v 1.25 2003/12/17 15:13:23 rkitain Exp $ 
+ * @version $Id: ViewHandlerImpl.java,v 1.26 2003/12/22 23:25:49 eburns Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -69,8 +69,6 @@ public class ViewHandlerImpl extends Object
     // Relationship Instance Variables
     // 
 
-    protected StateManager stateManagerImpl = null;
-    
     /**
      * <p>List of url-patterns defined for the FacesServlet.</p>
      */ 
@@ -94,7 +92,6 @@ public class ViewHandlerImpl extends Object
         if (log.isDebugEnabled()) {
             log.debug("Created ViewHandler instance ");
         }
-	stateManagerImpl = new StateManagerImpl();            
     }
 
     public void renderView(FacesContext context, 
@@ -148,9 +145,6 @@ public class ViewHandlerImpl extends Object
 
     }
 
-    public StateManager getStateManager() {
-	return stateManagerImpl;
-    }
     
     public UIViewRoot restoreView(FacesContext context, String viewId) {
         if (context == null) {
@@ -188,7 +182,7 @@ public class ViewHandlerImpl extends Object
             }           
         } 
 	else {
-	    viewRoot = getStateManager().restoreView(context, viewId);
+	    viewRoot = Util.getStateManager(context).restoreView(context, viewId);
         }        
 	
 
@@ -346,7 +340,7 @@ public class ViewHandlerImpl extends Object
             log.trace("Begin writing state to response for viewId" + 
                     context.getViewRoot().getViewId());
         }
-	if (getStateManager().isSavingStateInClient(context)) {
+	if (Util.getStateManager(context).isSavingStateInClient(context)) {
 	    context.getResponseWriter().writeText(RIConstants.SAVESTATE_FIELD_MARKER,null);
 	}
         if (log.isTraceEnabled()) {

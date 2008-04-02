@@ -30,6 +30,7 @@
   <application>
     <action-listener>com.sun.faces.application.ActionListenerImpl</action-listener>
     <variable-resolver>com.sun.faces.el.VariableResolverImpl</variable-resolver>
+    <state-manager>com.sun.faces.application.StateManagerImpl</state-manager>
   </application>
 
   <!-- Standard Components -->

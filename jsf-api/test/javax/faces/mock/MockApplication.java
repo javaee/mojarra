@@ -1,5 +1,5 @@
 /*
- * $Id: MockApplication.java,v 1.16 2003/12/17 15:11:24 rkitain Exp $
+ * $Id: MockApplication.java,v 1.17 2003/12/22 23:25:44 eburns Exp $
  */
 
 /*
@@ -19,6 +19,7 @@ import java.util.Locale;
 import javax.faces.FacesException;
 import javax.faces.application.Application;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UISelectMany;
@@ -142,6 +143,18 @@ public class MockApplication extends Application {
     }
     public void setViewHandler(ViewHandler viewHandler) {
         this.viewHandler = viewHandler;
+    }
+
+
+    private StateManager stateManager = null;
+    public StateManager getStateManager() {
+	if (null == stateManager) {
+	    stateManager = new MockStateManager();
+	}
+        return (this.stateManager);
+    }
+    public void setStateManager(StateManager stateManager) {
+        this.stateManager = stateManager;
     }
 
     private Map components = new HashMap();

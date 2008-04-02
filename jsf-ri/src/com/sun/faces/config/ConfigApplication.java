@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigApplication.java,v 1.5 2003/10/30 16:14:13 eburns Exp $
+ * $Id: ConfigApplication.java,v 1.6 2003/12/22 23:25:51 eburns Exp $
  */
 
 /*
@@ -28,6 +28,7 @@ public class ConfigApplication {
     private String propertyResolver = null;
     private String variableResolver = null;
     private String viewHandler = null;
+    private String stateManager = null;
 
     public String getActionListener() {
         return (this.actionListener);
@@ -71,6 +72,13 @@ public class ConfigApplication {
         this.viewHandler = viewHandler;
     }
 
+    public String getStateManager() {
+        return (this.stateManager);
+    }
+    public void setStateManager(String stateManager) {
+        this.stateManager = stateManager;
+    }
+
     protected String defaultLocale = null;
     public void setDefaultLocale(String newDefaultLocale) {
 	defaultLocale = newDefaultLocale;
@@ -107,6 +115,7 @@ public class ConfigApplication {
         sb.append("\nProperty Resolver:"+getPropertyResolver());
         sb.append("\nVariable Resolver:"+getVariableResolver());
         sb.append("\nView Handler:"+getViewHandler());
+        sb.append("\nState Manager:"+getStateManager());
         return sb.toString();
     }
 

@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl_Config.java,v 1.26 2003/12/17 15:15:05 rkitain Exp $
+ * $Id: TestApplicationImpl_Config.java,v 1.27 2003/12/22 23:25:58 eburns Exp $
  */
 
 /*
@@ -20,6 +20,7 @@ import com.sun.faces.el.VariableResolverImpl;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
@@ -56,7 +57,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl_Config.java,v 1.26 2003/12/17 15:15:05 rkitain Exp $
+ * @version $Id: TestApplicationImpl_Config.java,v 1.27 2003/12/22 23:25:58 eburns Exp $
  */
 
 public class TestApplicationImpl_Config extends ServletFacesTestCase {
@@ -429,6 +430,7 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	PropertyResolver propResolver = null;
 	VariableResolver varResolver = null;
 	ViewHandler viewHandler = null;
+	StateManager stateManager = null;
 	
 	assertTrue(null != (actionListener = 
 			    application.getActionListener()));
@@ -449,6 +451,10 @@ public class TestApplicationImpl_Config extends ServletFacesTestCase {
 	assertTrue(null != (viewHandler = 
 			    application.getViewHandler()));
 	assertTrue(viewHandler instanceof javax.faces.application.ViewHandler);
+
+	assertTrue(null != (stateManager = 
+			    application.getStateManager()));
+	assertTrue(stateManager instanceof javax.faces.application.StateManager);
     }
 
     public void testLocaleConfigPositive() {

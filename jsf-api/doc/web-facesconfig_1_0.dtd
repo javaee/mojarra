@@ -13,7 +13,7 @@
      "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
      "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
 
-    $Id: web-facesconfig_1_0.dtd,v 1.25 2003/12/17 15:10:29 rkitain Exp $
+    $Id: web-facesconfig_1_0.dtd,v 1.26 2003/12/22 23:25:40 eburns Exp $
 
 -->
 
@@ -131,7 +131,7 @@
     that are not specified, the JSF implementation must provide a suitable
     default.
 -->
-<!ELEMENT application     ((action-listener|message-bundle|navigation-handler|view-handler|property-resolver|variable-resolver|locale-config)*)>
+<!ELEMENT application     ((action-listener|message-bundle|navigation-handler|view-handler|state-manager|property-resolver|variable-resolver|locale-config)*)>
 
 
 <!--
@@ -629,6 +629,16 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ELEMENT view-handler (#PCDATA)>
 
 <!--
+
+    The "state-manager" element contains the fully qualified class name
+    of the concrete StateManager implementation class that will be called
+    during the Restore View and Render Response phases of the request
+    processing lifecycle.  The faces implementation must provide a
+    default implementation of this class
+-->
+<!ELEMENT state-manager (#PCDATA)>
+
+<!--
     The "null-value" element indicates that the managed property in which we
     are nested will be explicitly set to null if our managed bean is
     automatically created.  This is different from omitting the managed
@@ -855,6 +865,7 @@ registered on the Lifecycle. It must be of type "ClassName".
 <!ATTLIST renderer-extension                id ID #IMPLIED>
 <!ATTLIST renderer-type                     id ID #IMPLIED>
 <!ATTLIST small-icon                        id ID #IMPLIED>
+<!ATTLIST state-manager                     id ID #IMPLIED>
 <!ATTLIST suggested-value                   id ID #IMPLIED>
 <!ATTLIST supported-component-class         id ID #IMPLIED>
 <!ATTLIST supported-component-type          id ID #IMPLIED>

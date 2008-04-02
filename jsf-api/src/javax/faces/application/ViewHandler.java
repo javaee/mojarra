@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.26 2003/12/17 15:10:33 rkitain Exp $
+ * $Id: ViewHandler.java,v 1.27 2003/12/22 23:25:42 eburns Exp $
  */
 
 /*
@@ -28,11 +28,6 @@ import javax.faces.component.UIViewRoot;
  * of this interface by calling the <code>setViewHandler()</code> method
  * of the {@link Application} prior to the application receiving its
  * first request from a client.  </p>
- *
- * <p>The <code>ViewHandler</code> implementation must provide a
- * reference to an implementation of a {@link StateManager}, which is
- * used for saving and restoring the state of a Faces UI between
- * requests.</p>
  *
  * <p>A default implementation of <code>ViewHandler</code> must be
  * provided by the JSF implementation, which will be utilized unless
@@ -205,11 +200,6 @@ public interface ViewHandler {
 
     public UIViewRoot createView(FacesContext context, String viewId);
 
-    /**
-     * @return the {@link StateManager} instance for this
-     * <code>ViewHandler</code>.
-     */
-    public StateManager getStateManager();
 
     /**
      * <p>Must be called once for each call to {@link

@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.23 2003/10/22 04:43:03 eburns Exp $
+ * $Id: StateManager.java,v 1.24 2003/12/22 23:25:42 eburns Exp $
  */
 
 /*
@@ -27,12 +27,10 @@ import java.util.Iterator;
 /**
  * <p><strong>StateManager</strong> directs the process of saving and
  * restoring the view between requests.  StateManager is retrieved from
- * the {@link ViewHandler}, and therefore, it knows the kind of
- * rendering technology being used, for example JSPs or XML, or Java,
- * etc.  But it shouldn't know whether JSPs are being used to to render
- * HTML or XHTML or WML, etc.  Thus it can't know the mechanism of how
- * to save state (hidden fields, etc.).  The StateManager uses a helper
- * interface for that decision, the {@link
+ * the {@link Application} and therefore cannot know whether it
+ * is being used to to render HTML or XHTML or WML, etc.  Thus it can't
+ * know the mechanism of how to save state (hidden fields, etc.).  The
+ * StateManager uses a helper interface for that decision, the {@link
  * javax.faces.render.ResponseStateManager}.
  * <code>ResponseStateManager</code> is retrieved from the {@link
  * javax.faces.render.RenderKit}, since the RenderKit
@@ -124,19 +122,19 @@ public abstract class StateManager {
      *
      * <p>The default implementation of must walk through the component
      * tree rooted at the <code>FacesContext</code>'s
-     * <code>UIViewRoot</code> and thow
+     * <code>UIViewRoot</code> and throw
      * <code>IllegalStateException</code> if there is more than one
      * component or facet in the tree with the same client id.  In the
      * case where the <code>ViewHandler</code> implementation is
      * rendering a JSP page, this <code>IllegalStateException</code>
      * must be wrapped in a <code>JspException</code> and thrown to the
-     * Jsp engine.  Implementations are encouraged to use as effecient a
+     * JSP engine.  Implementations are encouraged to use as efficient a
      * means as possible to verify the id uniqueness property.</p>
      *
      * <p>The implementation must obtain the current <code>Locale</code>
      * from the {@link FacesContext} and save it in the returned
      * <code>SerializedView</code> object or in an implementation
-     * depenent way if no state needs to be written to the response.</p>
+     * dependent way if no state needs to be written to the response.</p>
      *
      * @return a SerializedView instance which encapsulates the state of this
      * view, or null if no state needs to be written to the response.
@@ -153,11 +151,8 @@ public abstract class StateManager {
      *
      * <p>The implementation must save the tree structure, from the root
      * of the component tree, to a <code>Serializable</code> Object.
-     * Tree structure is comprised of parent child relationships,
-     * including Facets, as well as the <code>id</code> for each
-     * component.  It is necessary to save the <code>id</code> of each
-     * component to allow the naming containers to be correctly
-     * populated as the tree is constructed.</p>
+     * Tree structure is at a minimum comprised of parent-child relationships,
+     * including Facets.</p>
      *
      * <p>Note that associations to {@link
      * javax.faces.validator.Validator}s, {@link
@@ -175,7 +170,7 @@ public abstract class StateManager {
      * <code>transient</code> property set to true, that component (and
      * its children) should not be included in the tree structure.</p>
      *
-     * @return an Serilizable Object representing the structure of the
+     * @return a Serializable Object representing the structure of the
      * tree.  For example, this could be an ASCII encoding of the actual
      * tree, or it could be a key to some in-memory data structure.
      *
@@ -215,7 +210,7 @@ public abstract class StateManager {
     *
     * </p>
     *
-    * @return A Serialzable Object representation of the state of the
+    * @return A Serializable Object representation of the state of the
     * tree.  
 
     */
@@ -242,7 +237,7 @@ public abstract class StateManager {
      * javax.faces.render.ResponseStateManager#writeState} to cause the
      * state to be saved to the response.  The state must be written in
      * such a way that it can be transmitted no matter what the request
-     * charset is.  The recommend encoding is Base64.</p>
+     * charset is.  A recommended encoding is Base64.</p>
      *
      * <p>If the <code>ServletContext</code> init parameter directs the
      * state to be saved on the server, it must be done so such that it
@@ -286,16 +281,13 @@ public abstract class StateManager {
      * the constant {@link #STATE_SAVING_METHOD_PARAM_NAME} to determine
      * whether state was saved in the response or on the server.</p>
      *
-     * <p>If the state was saved on the server, it is accessible using
-     * the <code>viewId</code> as a key.</p>
-     *
      * <p>If the state was saved in the client, this method calls
      * through to {@link #restoreTreeStructure} and, if necessary {@link
      * #restoreComponentState}</p>
      *
      * <p>The implementation must obtain the <code>Locale</code> from
-     * the saved state and store it as the current <code>Locale</code>
-     * in this {@link FacesContext}.</p>
+     * the saved state and store it as the <code>Locale</code>
+     * in this {@link UIViewRoot}.</p>
      *
      * @return the {@link UIViewRoot} that matches this
      * <code>viewId</code>, if there was a view to restore,
@@ -312,7 +304,7 @@ public abstract class StateManager {
      * javax.faces.render.ResponseStateManager#getTreeStructureToRestore}
      * to get back the Object which it returned from {@link
      * #getTreeStructureToSave}.  It must then turn that Object into the
-     * component tree with {@link UIViewRoot} root, which returns.  If
+     * component tree with {@link UIViewRoot} root, which it returns.  If
      * {@link
      * javax.faces.render.ResponseStateManager#getTreeStructureToRestore}
      * returns <code>null</code>, just return null.</p>

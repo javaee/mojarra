@@ -1,5 +1,5 @@
 /*
- * $Id: TestApplicationImpl.java,v 1.14 2003/12/17 15:15:04 rkitain Exp $
+ * $Id: TestApplicationImpl.java,v 1.15 2003/12/22 23:25:58 eburns Exp $
  */
 
 /*
@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.application.ApplicationFactory;
 import javax.faces.application.NavigationHandler;
+import javax.faces.application.StateManager;
 import javax.faces.application.ViewHandler;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.ReferenceSyntaxException;
@@ -41,7 +42,7 @@ import java.util.List;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestApplicationImpl.java,v 1.14 2003/12/17 15:15:04 rkitain Exp $ 
+ * @version $Id: TestApplicationImpl.java,v 1.15 2003/12/22 23:25:58 eburns Exp $ 
  */
 
 public class TestApplicationImpl extends JspFacesTestCase {
@@ -128,6 +129,15 @@ public class TestApplicationImpl extends JspFacesTestCase {
         assertTrue((variableResolver1 == variableResolver2) && 
                    (variableResolver1 == variableResolver3));
 
+        // 5. Verify "getStateManager" returns the same StateManager
+        //    instance if called multiple times.
+        //
+        StateManager stateManager1 = new StateManagerImpl();
+        application.setStateManager(stateManager1);
+        StateManager stateManager2 = application.getStateManager();
+        StateManager stateManager3 = application.getStateManager();
+        assertTrue((stateManager1 == stateManager2) && 
+                   (stateManager1 == stateManager3));
     }
 
     public void testExceptions() {
@@ -188,6 +198,17 @@ public class TestApplicationImpl extends JspFacesTestCase {
         }
         assertTrue(thrown);
        
+        // 7. Verify NullPointer exception which occurs when attempting
+        //    to set a null StateManager
+        //
+        thrown = false;
+        try {
+            application.setStateManager(null);
+        } catch (NullPointerException e) {
+            thrown = true;
+        }
+        assertTrue(thrown);
+
         thrown = false;
         try {
             application.createValueBinding("improperexpression");
@@ -399,7 +420,16 @@ public class TestApplicationImpl extends JspFacesTestCase {
         } catch (IllegalStateException ise)  {
             exceptionThrown = true;
         }
-        assertTrue(exceptionThrown);      
+        assertTrue(exceptionThrown);
+
+        // and test setting the StateManager too.
+        exceptionThrown = false;
+        try {
+            application.setStateManager(new StateManagerImpl());
+        } catch (IllegalStateException ise)  {
+            exceptionThrown = true;
+        }
+        assertTrue(exceptionThrown);
     }
 	
 

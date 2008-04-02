@@ -1,5 +1,5 @@
 /*
- * $Id: TestStateManagerImpl.java,v 1.2 2003/10/21 03:56:31 eburns Exp $
+ * $Id: TestStateManagerImpl.java,v 1.3 2003/12/22 23:25:59 eburns Exp $
  */
 
 /*
@@ -97,11 +97,11 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         context.setViewRoot(root);
         
-        ViewHandler viewHandler = new ViewHandlerImpl();
+        StateManagerImpl stateManager = new StateManagerImpl();
         
         boolean exceptionThrown = false;
         try {
-            viewHandler.getStateManager().saveSerializedView(context);
+            stateManager.saveSerializedView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }        
@@ -143,7 +143,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         exceptionThrown = false;
         try {
-            viewHandler.getStateManager().saveSerializedView(context);
+            stateManager.saveSerializedView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }
@@ -186,7 +186,7 @@ public class TestStateManagerImpl extends ServletFacesTestCase {
         
         exceptionThrown = false;
         try {
-            viewHandler.getStateManager().saveSerializedView(context);
+            stateManager.saveSerializedView(context);
         } catch (IllegalStateException ise) {
             exceptionThrown = true;
         }

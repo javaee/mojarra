@@ -1,5 +1,5 @@
 /*
- * $Id: TestUtil_messages.java,v 1.26 2003/12/17 15:15:47 rkitain Exp $
+ * $Id: TestUtil_messages.java,v 1.27 2003/12/22 23:26:02 eburns Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestUtil_messages.java,v 1.26 2003/12/17 15:15:47 rkitain Exp $
+ * @version $Id: TestUtil_messages.java,v 1.27 2003/12/22 23:26:02 eburns Exp $
  */
 
 public class TestUtil_messages extends ServletFacesTestCase {
@@ -100,6 +100,7 @@ public class TestUtil_messages extends ServletFacesTestCase {
         {Util.CONTENT_TYPE_ERROR_MESSAGE_ID, "0"},
         {Util.COMPONENT_NOT_FOUND_IN_VIEW_WARNING_ID, "1"},
         {Util.ILLEGAL_ATTEMPT_SETTING_VIEWHANDLER_ID, "0"},
+        {Util.ILLEGAL_ATTEMPT_SETTING_STATEMANAGER_ID, "0"},
         {Util.INVALID_MESSAGE_SEVERITY_IN_CONFIG_ID, "1"},
         {Util.CANT_CLOSE_INPUT_STREAM_ID, "0"},
         {Util.DUPLICATE_COMPONENT_ID_ERROR_ID, "1"},        

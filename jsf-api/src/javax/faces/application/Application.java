@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.21 2003/12/17 15:10:32 rkitain Exp $
+ * $Id: Application.java,v 1.22 2003/12/22 23:25:41 eburns Exp $
  */
 
 /*
@@ -249,6 +249,33 @@ public abstract class Application {
      *  is <code>null</code>
      */
     public abstract void setViewHandler(ViewHandler handler);
+
+
+
+    /**
+     * <p>Return the {@link StateManager} instance that will be utilized
+     * during the <em>Restore View</em> and <em>Render Response</em>
+     * phases of the request processing lifecycle.  If not explicitly set,
+     * a default implementation must be provided that performs the functions
+     * described in the {@link StateManager} class description.</p>
+     */
+    public abstract StateManager getStateManager();
+
+
+    /**
+     * <p>Set the {@link StateManager} instance that will be utilized
+     * during the <em>Restore View</em> and <em>Render Response</em>
+     * phases of the request processing lifecycle.</p>
+     *
+     * @param manager The new {@link StateManager} instance
+     *
+     * @exception IllegalStateException if this method is called after
+     * at least one request has been processed by the
+     * <code>Lifecycle</code> instance for this application.
+     * @exception NullPointerException if <code>manager</code>
+     *  is <code>null</code>
+     */
+    public abstract void setStateManager(StateManager manager);
 
 
     // ------------------------------------------------------- Object Factories
