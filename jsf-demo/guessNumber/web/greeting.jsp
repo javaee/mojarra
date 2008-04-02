@@ -58,7 +58,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                       validator="#{UserNumberBean.validate}"/>          
 	 <h:commandButton id="submit" action="success" value="Submit" />
          <p />
-	 <h:message style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
+	 <h:message showSummary="true" showDetail="false" style="color: red; font-family: 'New Century Schoolbook', serif; font-style: oblique; text-decoration: overline" id="errors1" for="userNo"/>
 
     </h:form>
     </f:view>
