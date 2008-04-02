@@ -994,6 +994,30 @@
       <property-class>boolean</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
+    <property>
+      <description>The clientId of the component for which to display messages.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>If false, the component must not display any summary, defaults to true.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>showSummary</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>If false, the component must not display any detail, defaults to false.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>showDetail</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
   </component>
 
   <component>
@@ -2891,41 +2915,6 @@
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
            attrs there.  -->
       &core-attrs;
-      <attribute>
-	<description>If true, the component must not display any summary.</description>
-	<display-name></display-name>
-	<icon></icon>
-	<attribute-name>showSummary</attribute-name>
-	<attribute-class>boolean</attribute-class>
-      </attribute>
-      <attribute>
-	<description>If true, the component must not display any detail.</description>
-	<display-name></display-name>
-	<icon></icon>
-	<attribute-name>showDetail</attribute-name>
-	<attribute-class>boolean</attribute-class>
-      </attribute>
-      <attribute>
-	<description>The clientId of the component for which to display the message.</description>
-	<display-name></display-name>
-	<icon></icon>
-	<attribute-name>for</attribute-name>
-	<attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      <attribute>
-        <description>the ResourceBundle key for localized text</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>key</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      <attribute>
-        <description>the name of the ResourceBundle</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>bundle</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
 
       <attribute>
         <description>CSS style for info messages</description>
@@ -2991,6 +2980,14 @@
         <attribute-class>java.lang.String</attribute-class>
       </attribute>      
 
+      <attribute>
+        <description>If showing summary and detail, and tooltip is true, show detail as a tooltip.</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>tooltip</attribute-name>
+        <attribute-class>boolean</attribute-class>
+      </attribute>      
+
       <supported-component-type>
         <component-type>OutputMessage</component-type>
       </supported-component-type>
@@ -3012,17 +3009,10 @@
            attrs there.  -->
       &core-attrs;
       <attribute>
-        <description>the ResourceBundle key for localized text</description>
+        <description>The layout for displaying messages, either table or list</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>key</attribute-name>
-        <attribute-class>java.lang.String</attribute-class>
-      </attribute>
-      <attribute>
-        <description>the name of the ResourceBundle</description>
-        <display-name></display-name>
-        <icon></icon>
-        <attribute-name>bundle</attribute-name>
+        <attribute-name>layout</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 

@@ -199,18 +199,18 @@
     <component-class>javax.faces.component.UIMessage</component-class>
     &base-props;
     <property>
-      <description>If true, the component must not display any summary.</description>
+      <description>If false, the component must not display any summary, defaults to true.</description>
       <display-name></display-name>
       <icon></icon>
-      <property-name>noSummary</property-name>
+      <property-name>showSummary</property-name>
       <property-class>boolean</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
     <property>
-      <description>If true, the component must not display any detail.</description>
+      <description>If false, the component must not display any detail, defaults to false.</description>
       <display-name></display-name>
       <icon></icon>
-      <property-name>noDetail</property-name>
+      <property-name>showDetail</property-name>
       <property-class>boolean</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
@@ -234,6 +234,30 @@
       <icon></icon>
       <property-name>globalOnly</property-name>
       <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>If false, the component must not display any summary, defaults to true.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>showSummary</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>If false, the component must not display any detail, defaults to false.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>showDetail</property-name>
+      <property-class>boolean</property-class>
+      <tag-attribute>yes</tag-attribute>
+    </property>
+    <property>
+      <description>The clientId of the component for which to display messages.</description>
+      <display-name></display-name>
+      <icon></icon>
+      <property-name>for</property-name>
+      <property-class>java.lang.String</property-class>
       <tag-attribute>yes</tag-attribute>
     </property>
   </component>
@@ -1250,19 +1274,112 @@
       <renderer-class>&message-renderer-class;</renderer-class>
       <!-- PENDING(edburns): make sure we render DIV and stuff the below
            attrs there.  -->
+
       <attribute>
-        <description>the ResourceBundle key for localized text</description>
+        <description>CSS style class</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>key</attribute-name>
+        <attribute-name>styleClass</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
       <attribute>
-        <description>the name of the ResourceBundle</description>
+        <description>CSS style</description>
         <display-name></display-name>
         <icon></icon>
-        <attribute-name>bundle</attribute-name>
+        <attribute-name>style</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for info messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>infoStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for warn messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>warnStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for error messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>errorStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyle</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>
+
+      <attribute>
+        <description>CSS style class for fatal messages</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>fatalStyleClass</attribute-name>
+        <attribute-class>java.lang.String</attribute-class>
+      </attribute>      
+
+      <supported-component-type>
+        <component-type>Output</component-type>
+      </supported-component-type>
+      <supported-component-type>
+        <component-type>Message</component-type>
+      </supported-component-type>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIOutput</component-class>
+      </supported-component-class>
+      <supported-component-class>
+        <component-class>javax.faces.component.UIMessage</component-class>
+      </supported-component-class>
+    </renderer>
+
+    <renderer>
+      <renderer-type>Messages</renderer-type>
+      <renderer-class>&messages-renderer-class;</renderer-class>
+      <!-- PENDING(edburns): make sure we render DIV and stuff the below
+           attrs there.  -->
+
+      <attribute>
+        <description>The layout for displaying messages, either table or list</description>
+        <display-name></display-name>
+        <icon></icon>
+        <attribute-name>layout</attribute-name>
         <attribute-class>java.lang.String</attribute-class>
       </attribute>
 
@@ -1625,14 +1742,8 @@
       <supported-component-type>
         <component-type>Data</component-type>
       </supported-component-type>
-      <supported-component-type>
-        <component-type>Messages</component-type>
-      </supported-component-type>
       <supported-component-class>
         <component-class>javax.faces.component.UIData</component-class>
-      </supported-component-class>
-      <supported-component-class>
-        <component-class>javax.faces.component.UIMessages</component-class>
       </supported-component-class>
     </renderer>
 
