@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolder.java,v 1.7 2003/09/24 22:24:49 eburns Exp $
+ * $Id: StateHolder.java,v 1.8 2003/11/03 21:00:31 rlubke Exp $
  */
 
 /*
@@ -70,6 +70,14 @@ public interface StateHolder {
 
     public boolean isTransient();
 
+    /**
+     * <p>Denotes whether or not the Object implementing this interface must
+     * or must not participate in state saving or restoring.</p>
+     * 
+     * @param newTransientValue boolean pass <code>true</code> if this Object 
+     *  will participate in state saving or restoring, otherwise 
+     *  pass <code>false</code>.
+     */ 
     public void setTransient(boolean newTransientValue);
 
 }
