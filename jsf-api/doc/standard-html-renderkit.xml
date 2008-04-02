@@ -1114,10 +1114,10 @@
 
       <ul>
 
-      <p>Render "#" as the value of the
-      "href" attribute.  Render javascript that is functionaly
-      equivalent to the following as the value of the "onclick"
-      attribute:</p>
+      <p>Render "#" as the value of the "href" attribute. Render the current 
+      value of the component as the link text if it is specified. Render 
+      javascript that is functionally equivalent to the following as the value 
+      of the "onclick" attribute:</p>
 
       <p><code>document.forms['CLIENT_ID']['CLIENT_ID'].value='CLIENT_ID';
       document.forms['CLIENT_ID']['PARAM1_NAME'].value='PARAM1_VALUE';
@@ -1605,7 +1605,8 @@
 
     <renderer>
 
-      <description>Renders an HTML "label" element.  If a "for" attribute is 
+      <description>Renders an HTML "label" element.  Render the current value 
+      of the component as label text if it is specified. If a "for" attribute is 
       specified, find the component specified by the value of the "for" 
       attribute, and render its client id as the value of the "for" attribute.  
       If "styleClass" attribute is specified, render its value as the value
