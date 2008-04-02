@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueBindingImpl.java
- * $Id: TestValueBindingImpl.java,v 1.39 2005/10/19 19:51:32 edburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.40 2006/01/13 19:08:33 rogerk Exp $
 =======
- * $Id: TestValueBindingImpl.java,v 1.39 2005/10/19 19:51:32 edburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.40 2006/01/13 19:08:33 rogerk Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -206,20 +206,11 @@ public class TestValueBindingImpl extends ServletFacesTestCase
         assertTrue(multiparam[1].equals("two"));
 
         valueBinding = this.create("headerValues.multiheader");
-        Enumeration multiHeader = (Enumeration) valueBinding
+        String[] multiHeader = (String[]) valueBinding
                 .getValue(getFacesContext());
         assertTrue(null != multiHeader);
-        int elements = 0;
-        while (multiHeader.hasMoreElements())
-        {
-            elements++;
-            // PENDING(edburns): due to an apparent bug in cactus, multiple
-            // calls to WebRequest.addHeader() still result in all the values
-            // being concatenated together into a comma separated String.
-            String element = (String) multiHeader.nextElement();
-            assertTrue(element.equals("1,2"));
-        }
-        assertTrue(1 == elements);
+        assertTrue(1 == multiHeader.length);
+        assertTrue(multiHeader[0].equals("1,2"));
 
         valueBinding = this.create("initParam.testInitParam");
         result = valueBinding.getValue(getFacesContext());

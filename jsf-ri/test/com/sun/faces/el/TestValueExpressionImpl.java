@@ -1,8 +1,8 @@
 /*
 <<<<<<< TestValueExpressionImpl.java
- * $Id: TestValueExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.6 2006/01/13 19:08:34 rogerk Exp $
 =======
- * $Id: TestValueExpressionImpl.java,v 1.5 2005/10/19 19:51:32 edburns Exp $
+ * $Id: TestValueExpressionImpl.java,v 1.6 2006/01/13 19:08:34 rogerk Exp $
 >>>>>>> 1.32.18.5
  */
 
@@ -202,20 +202,11 @@ public class TestValueExpressionImpl extends ServletFacesTestCase
         assertTrue(multiparam[1].equals("two"));
 
         valueExpression = this.create("headerValues.multiheader");
-        Enumeration multiHeader = (Enumeration) valueExpression
+        String[] multiHeader = (String[]) valueExpression
                 .getValue(getFacesContext().getELContext());
         assertTrue(null != multiHeader);
-        int elements = 0;
-        while (multiHeader.hasMoreElements())
-        {
-            elements++;
-            // PENDING(edburns): due to an apparent bug in cactus, multiple
-            // calls to WebRequest.addHeader() still result in all the values
-            // being concatenated together into a comma separated String.
-            String element = (String) multiHeader.nextElement();
-            assertTrue(element.equals("1,2"));
-        }
-        assertTrue(1 == elements);
+        assertTrue(1 == multiHeader.length);
+        assertTrue(multiHeader[0].equals("1,2"));
 
         valueExpression = this.create("initParam.testInitParam");
         result = valueExpression.getValue(getFacesContext().getELContext());
