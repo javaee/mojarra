@@ -1,5 +1,5 @@
 /*
- * $Id: SelectBoolean_CheckboxTag.java,v 1.49 2003/10/07 13:05:35 eburns Exp $
+ * $Id: SelectBoolean_CheckboxTag.java,v 1.50 2003/10/07 13:57:25 rlubke Exp $
  */
 
 /*
@@ -79,7 +79,7 @@ public class SelectBoolean_CheckboxTag extends BaseComponentTag
 	}
         if (readonly) {
 	    checkbox.getAttributes().put("readonly", 
-					 Boolean.valueOf(readonly));
+					 new Boolean(readonly));
 	}
         if (null != alt) {
 	    checkbox.getAttributes().put("alt", alt);

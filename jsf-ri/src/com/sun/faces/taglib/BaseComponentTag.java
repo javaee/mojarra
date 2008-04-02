@@ -1,5 +1,5 @@
 /*
- * $Id: BaseComponentTag.java,v 1.2 2003/10/07 13:05:32 eburns Exp $
+ * $Id: BaseComponentTag.java,v 1.3 2003/10/07 13:57:24 rlubke Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import javax.servlet.jsp.JspException;
  *  library.  Its primary purpose is to centralize common tag functions
  *  to a single base class. <P>
  *
- * @version $Id: BaseComponentTag.java,v 1.2 2003/10/07 13:05:32 eburns Exp $ 
+ * @version $Id: BaseComponentTag.java,v 1.3 2003/10/07 13:57:24 rlubke Exp $ 
  */
 
 public abstract class BaseComponentTag extends UIComponentTag
@@ -810,7 +810,7 @@ protected void overrideProperties(UIComponent component)
     }
     if (disabled) {
 	component.getAttributes().put("disabled", 
-				     Boolean.valueOf(disabled));
+				     new Boolean(disabled));
     }
     if (tabindex != Integer.MIN_VALUE) {
 	component.getAttributes().put("tabindex", new Integer(tabindex));
