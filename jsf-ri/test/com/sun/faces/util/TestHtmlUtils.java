@@ -1,5 +1,5 @@
 /*
- * $Id: TestHtmlUtils.java,v 1.2 2006/08/24 19:25:01 youngm Exp $
+ * $Id: TestHtmlUtils.java,v 1.3 2006/10/10 22:14:12 rlubke Exp $
  */
 
 /*
@@ -41,7 +41,7 @@ import junit.framework.TestCase;
 /**
  * <B>TestHtmlUtils</B> is a class ...
  *
- * @version $Id: TestHtmlUtils.java,v 1.2 2006/08/24 19:25:01 youngm Exp $
+ * @version $Id: TestHtmlUtils.java,v 1.3 2006/10/10 22:14:12 rlubke Exp $
  */
 public class TestHtmlUtils extends TestCase {
 	
@@ -53,24 +53,24 @@ public class TestHtmlUtils extends TestCase {
 		//Test URL with two params
 		testURLEncoding("http://www.google.com?joe=10&fred=20", "http://www.google.com?joe=10&fred=20", "http://www.google.com?joe=10&amp;fred=20");
 		//Test URL with & entity encoded
-		testURLEncoding("/index.jsf?joe=10&amp;fred=20", "/index.jsf?joe=10&amp%3Bfred=20", "/index.jsf?joe=10&amp;fred=20");
+		testURLEncoding("/index.jsf?joe=10&amp;fred=20", "/index.jsf?joe=10&amp;fred=20", "/index.jsf?joe=10&amp;fred=20");
 		//Test URL with two params and second & close to end of string
 		testURLEncoding("/index.jsf?joe=10&f=20", "/index.jsf?joe=10&f=20", "/index.jsf?joe=10&amp;f=20");
 		//Test URL with misplaced & expected behavior but not necissarily right.
 		testURLEncoding("/index.jsf?joe=10&f=20&", "/index.jsf?joe=10&f=20&", "/index.jsf?joe=10&amp;f=20&amp;");
 		//Test URL with encoded entity at end of URL expected behavior but not necissarily right.
-		testURLEncoding("/index.jsf?joe=10&f=20&amp;", "/index.jsf?joe=10&f=20&amp%3B", "/index.jsf?joe=10&amp;f=20&amp;");
+		testURLEncoding("/index.jsf?joe=10&f=20&amp;", "/index.jsf?joe=10&f=20&amp;", "/index.jsf?joe=10&amp;f=20&amp;");
 	}
 	
 	private void testURLEncoding(String urlToEncode, String expectedHTML, String expectedXML) throws UnsupportedEncodingException, IOException {
 		char[] buffer = new char[1024];
 		StringWriter xmlWriter = new StringWriter();
 		HtmlUtils.writeURL(xmlWriter, urlToEncode, "UTF-8", RIConstants.XHTML_CONTENT_TYPE);
-//		System.out.println(xmlWriter.toString());
+      System.out.println("XML: " + xmlWriter.toString());
 		assertEquals(xmlWriter.toString(), expectedXML);
 		StringWriter htmlWriter = new StringWriter();
 		HtmlUtils.writeURL(htmlWriter, urlToEncode, "UTF-8", RIConstants.HTML_CONTENT_TYPE);
-//		System.out.println(htmlWriter.toString());
+      System.out.println("HTML: " + htmlWriter.toString());
 		assertEquals(htmlWriter.toString(), expectedHTML);
 	}
 

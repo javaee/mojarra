@@ -1,5 +1,5 @@
 /*
- * $Id: LinkRenderer.java,v 1.17 2006/09/01 17:30:55 rlubke Exp $
+ * $Id: LinkRenderer.java,v 1.18 2006/10/10 22:14:13 rlubke Exp $
  */
 
 /*
@@ -120,7 +120,7 @@ public abstract class LinkRenderer extends HtmlBasicRenderer {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Value to be rendered " + label);
             }
-            writer.write(label);
+            writer.writeText(label, component, null);
         }
 
     }

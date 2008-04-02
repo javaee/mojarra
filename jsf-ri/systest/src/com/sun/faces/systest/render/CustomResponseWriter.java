@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseWriter.java,v 1.8 2006/08/24 19:57:10 youngm Exp $
+ * $Id: CustomResponseWriter.java,v 1.9 2006/10/10 22:14:13 rlubke Exp $
  */
 
 /*
@@ -29,16 +29,15 @@
 
 package com.sun.faces.systest.render;
 
-import com.sun.faces.util.HtmlUtils;
-import com.sun.faces.util.MessageUtils;
-
 import javax.faces.FacesException;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+
+import com.sun.faces.util.HtmlUtils;
+import com.sun.faces.util.MessageUtils;
 
 
 /**
@@ -95,11 +94,10 @@ public class CustomResponseWriter extends ResponseWriter {
         this.encoding = encoding;
 
         // Check the character encoding
-        try {
-            HtmlUtils.validateEncoding(encoding);
-        } catch (UnsupportedEncodingException e) {
+        // Check the character encoding
+        if (!HtmlUtils.validateEncoding(encoding)) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                MessageUtils.ENCODING_ERROR_MESSAGE_ID));
+                  MessageUtils.ENCODING_ERROR_MESSAGE_ID));    
         }
     }
 

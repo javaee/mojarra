@@ -597,6 +597,18 @@ public class RenderKitUtils {
                                                                                                                          
         return contentType;
     }
+    
+    
+    /**
+     * @param contentType the content type in question
+     * @return <code>true</code> if the content type is a known XML-based
+     *  content type, otherwise, <code>false</code>
+     */
+    public static boolean isXml(String contentType) {
+        return (RIConstants.XHTML_CONTENT_TYPE.equals(contentType)
+                || RIConstants.APPLICATION_XML_CONTENT_TYPE.equals(contentType)
+                || RIConstants.TEXT_XML_CONTENT_TYPE.equals(contentType));
+    }
 
 
     // --------------------------------------------------------- Private Methods

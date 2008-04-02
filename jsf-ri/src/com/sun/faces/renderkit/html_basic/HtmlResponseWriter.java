@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.33 2006/10/09 15:10:42 rogerk Exp $
+ * $Id: HtmlResponseWriter.java,v 1.34 2006/10/10 22:14:13 rlubke Exp $
  */
 
 /*
@@ -34,7 +34,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import com.sun.faces.RIConstants;
@@ -117,12 +116,11 @@ public class HtmlResponseWriter extends ResponseWriter {
         this.encoding = encoding;
 
         // Check the character encoding
-        try {
-            HtmlUtils.validateEncoding(encoding);
-        } catch (UnsupportedEncodingException e) {
+        if (!HtmlUtils.validateEncoding(encoding)) {
             throw new IllegalArgumentException(MessageUtils.getExceptionMessageString(
-                  MessageUtils.ENCODING_ERROR_MESSAGE_ID));
+                  MessageUtils.ENCODING_ERROR_MESSAGE_ID));    
         }
+        
 
     }
 
