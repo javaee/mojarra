@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.20 2003/09/18 22:01:10 eburns Exp $
+ * $Id: StateManager.java,v 1.21 2003/10/02 16:28:36 eburns Exp $
  */
 
 /*
@@ -122,6 +122,17 @@ public abstract class StateManager {
      * <code>doAfterBody()</code> method of the tag handler for the
      * {@link UIViewRoot} tag.</p>
      *
+     * <p>The default implementation of must walk through the component
+     * tree rooted at the <code>FacesContext</code>'s
+     * <code>UIViewRoot</code> and thow
+     * <code>IllegalStateException</code> if there is more than one
+     * component or facet in the tree with the same client id.  In the
+     * case where the <code>ViewHandler</code> implementation is
+     * rendering a JSP page, this <code>IllegalStateException</code>
+     * must be wrapped in a <code>JspException</code> and thrown to the
+     * Jsp engine.  Implementations are encouraged to use as effecient a
+     * means as possible to verify the id uniqueness property.</p>
+     *
      * <p>The implementation must obtain the current <code>Locale</code>
      * from the {@link FacesContext} and save it in the returned
      * <code>SerializedView</code> object or in an implementation
@@ -130,9 +141,12 @@ public abstract class StateManager {
      * @return a SerializedView instance which encapsulates the state of this
      * view, or null if no state needs to be written to the response.
      *
+     * @exception IllegalStateException if more than one component in
+     * the view has the same non-<code>null</code> component id.
+     *
      */
 
-    public abstract SerializedView saveSerializedView(FacesContext context);
+    public abstract SerializedView saveSerializedView(FacesContext context) throws IllegalStateException;
 
 
     /**
