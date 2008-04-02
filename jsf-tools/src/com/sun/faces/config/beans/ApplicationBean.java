@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationBean.java,v 1.3 2004/02/04 23:46:05 ofung Exp $
+ * $Id: ApplicationBean.java,v 1.4 2005/02/09 17:53:01 jayashri Exp $
  */
 
 /*
@@ -161,6 +161,29 @@ public class ApplicationBean {
 
     public void removeVariableResolver(String variableResolver) {
         variableResolvers.remove(variableResolver);
+    }
+    
+    // ------------------------------------------ ELResolver Holder Methods
+
+
+    private List elResolvers = new ArrayList();
+
+
+    public void addELResolver(String elResolver) {
+        if (!elResolvers.contains(elResolver)) {
+            elResolvers.add(elResolver);
+        }
+    }
+
+
+    public String[] getELResolvers() {
+        String results[] = new String[elResolvers.size()];
+        return ((String[]) elResolvers.toArray(results));
+    }
+
+
+    public void removeELResolver(String elResolver) {
+        elResolvers.remove(elResolver);
     }
 
 

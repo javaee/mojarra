@@ -1,5 +1,5 @@
 /*
- * $Id: FacesConfigRuleSet.java,v 1.5 2004/04/30 14:32:04 eburns Exp $
+ * $Id: FacesConfigRuleSet.java,v 1.6 2005/02/09 17:53:01 jayashri Exp $
  */
 
 /*
@@ -111,6 +111,9 @@ public class FacesConfigRuleSet extends RuleSetBase {
             digester.addCallMethod
                 ("faces-config/application/default-render-kit-id",
                  "setDefaultRenderKitId", 0);
+            digester.addCallMethod
+                ("faces-config/application/el-resolver",
+                 "addELResolver", 0);
         }
 
         // faces-config/component
