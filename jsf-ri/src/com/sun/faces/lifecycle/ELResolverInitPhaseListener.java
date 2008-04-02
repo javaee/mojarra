@@ -183,7 +183,7 @@ public class ELResolverInitPhaseListener implements PhaseListener {
         }
 
         if (LOGGER.isLoggable(Level.INFO)) {
-            LOGGER.log(Level.INFO,
+            LOGGER.log(Level.FINE,
                        "jsf.lifecycle.initphaselistener.resolvers_registered",
                        new Object[] { appAssociate.getContextName() });
         }

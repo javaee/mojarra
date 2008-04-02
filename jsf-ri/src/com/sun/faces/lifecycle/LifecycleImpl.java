@@ -1,5 +1,5 @@
 /*
- * $Id: LifecycleImpl.java,v 1.66 2006/06/05 17:44:35 rlubke Exp $
+ * $Id: LifecycleImpl.java,v 1.67 2006/06/15 17:46:31 rlubke Exp $
  */
 
 /*
@@ -197,24 +197,22 @@ public class LifecycleImpl extends Lifecycle {
         boolean exceptionThrown = false;
         Throwable ex = null;
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("phase(" + phaseId.toString() + "," + context + ")");
+            LOGGER.fine("phase(" + phaseId.toString() + ',' + context + ')');
         }
-
-
-        int size = listeners.size();
-        int revStartIndex = 0;
+               
+        ListIterator<PhaseListener> listenersIterator = listeners.listIterator();
         try {
             // Notify the "beforePhase" method of interested listeners
             // (ascending)
 
-            if (size > 0) {
+            if (listenersIterator.hasNext()) {
                 PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                for (PhaseListener listener : listeners) {
+                while (listenersIterator.hasNext())  {
+                    PhaseListener listener = listenersIterator.next();
                     if (phaseId.equals(listener.getPhaseId()) ||
                         PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
                         listener.beforePhase(event);                        
-                    }
-                    revStartIndex++;
+                    }                   
                 }
             }
         }
@@ -232,6 +230,10 @@ public class LifecycleImpl extends Lifecycle {
                                +
                                "\n"
                                + Util.getStackTraceString(e));
+            }
+            // move the iterator pointer back one
+            if (listenersIterator.hasPrevious()) {
+                listenersIterator.previous();
             }
         }
 
@@ -252,7 +254,7 @@ public class LifecycleImpl extends Lifecycle {
             // Log the problem, but continue
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.log(Level.WARNING,
-                           "executePhase(" + phaseId.toString() + ","
+                           "executePhase(" + phaseId.toString() + ','
                            + context + ") threw exception",
                            e);
             }
@@ -263,12 +265,10 @@ public class LifecycleImpl extends Lifecycle {
             try {
                 // Notify the "afterPhase" method of interested listeners
                 // (descending)
-                if (size > 0) {
+                if (listenersIterator.hasPrevious()) {
                     PhaseEvent event = new PhaseEvent(context, phaseId, this);
-                    for (ListIterator<PhaseListener> iter =
-                          listeners.listIterator(revStartIndex);
-                         iter.hasPrevious();) {
-                        PhaseListener listener = iter.previous();
+                    while (listenersIterator.hasPrevious()) {
+                        PhaseListener listener = listenersIterator.previous();
                         if (phaseId.equals(listener.getPhaseId()) ||
                             PhaseId.ANY_PHASE.equals(listener.getPhaseId())) {
                             listener.afterPhase(event);
