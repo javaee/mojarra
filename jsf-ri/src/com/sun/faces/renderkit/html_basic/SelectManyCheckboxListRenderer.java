@@ -5,7 +5,7 @@
 
 
 /**
- * $Id: SelectManyCheckboxListRenderer.java,v 1.9 2003/08/08 16:20:23 rkitain Exp $
+ * $Id: SelectManyCheckboxListRenderer.java,v 1.10 2003/08/19 15:19:26 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -104,25 +104,25 @@ public class SelectManyCheckboxListRenderer extends MenuRenderer {
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
 
-	    writer.writeText('\n');
-	    writer.startElement("label");
-	    writer.writeAttribute("for", curComponent.getClientId(context));
-	    writer.writeText(curItem.getLabel());
-	    writer.startElement("input");
-	    writer.writeAttribute("name", component.getClientId(context));
-	    writer.writeAttribute("id", curComponent.getClientId(context));
+	    writer.writeText("\n", null);
+	    writer.startElement("label", null);
+	    writer.writeAttribute("for", curComponent.getClientId(context), null);
+	    writer.writeText(curItem.getLabel(), null);
+	    writer.startElement("input", null);
+	    writer.writeAttribute("name", component.getClientId(context), null);
+	    writer.writeAttribute("id", curComponent.getClientId(context), null);
 	    writer.writeAttribute("value",
 	        getFormattedValue(context, component, curItem.getValue()));
-	    writer.writeAttribute("type", "checkbox");
+	    writer.writeAttribute("type", "checkbox", null);
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {
-	        writer.writeAttribute(selectText, new Boolean("true"));
+	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
             Util.renderPassThruAttributes(writer, curComponent);
             Util.renderBooleanPassThruAttributes(writer, curComponent);
 	    writer.endElement("label");
             if (layoutVertical) {
-                writer.startElement("br");
+                writer.startElement("br", null);
                 writer.endElement("br");
 	    }
         }

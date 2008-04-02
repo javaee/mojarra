@@ -1,5 +1,5 @@
 /*
- * $Id: ListRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
+ * $Id: ListRenderer.java,v 1.13 2003/08/19 15:19:22 rkitain Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ListRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
+ * @version $Id: ListRenderer.java,v 1.13 2003/08/19 15:19:22 rkitain Exp $
  *  
  */
 
@@ -101,12 +101,12 @@ public class ListRenderer extends HtmlBasicRenderer {
         String panelClass = (String) component.getAttribute("panelClass");
         
         // Render the beginning of this panel
-	writer.startElement("table");
+	writer.startElement("table", null);
         if (panelClass != null) {
-	    writer.writeAttribute("class", panelClass);
+	    writer.writeAttribute("class", panelClass, null);
         }
 	Util.renderPassThruAttributes(writer, component);
-	writer.writeText('\n');
+	writer.writeText("\n", null);
     }
 
 
@@ -141,27 +141,27 @@ public class ListRenderer extends HtmlBasicRenderer {
 
         // Process the table header (if any)
         if (null != (facet = component.getFacet("header"))) {
-	    writer.startElement("tr");
-	    writer.startElement("thead");
-	    writer.writeText('\n');
+	    writer.startElement("tr", null);
+	    writer.startElement("thead", null);
+	    writer.writeText("\n", null);
 	    // If the header has kids, render them recursively
 	    if (null != (kids = facet.getChildren())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table header
 		    if (null != headerClass) {
-			writer.startElement("th");
-			writer.writeAttribute("class", headerClass);
+			writer.startElement("th", null);
+			writer.writeAttribute("class", headerClass, null);
 		    }
 		    else {
-			writer.startElement("th");
-			writer.writeText('\n');
+			writer.startElement("th", null);
+			writer.writeText("\n", null);
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
 		    writer.endElement("th");
-		    writer.writeText('\n');
+		    writer.writeText("\n", null);
 		}
 	    }
 	    else {
@@ -174,10 +174,10 @@ public class ListRenderer extends HtmlBasicRenderer {
             }
 	    writer.endElement("thead");
 	    writer.endElement("tr");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
         }
 
-	writer.startElement("tbody");
+	writer.startElement("tbody", null);
 	if (null != (kids = component.getChildren())) {
 	    // Process each grouping of data items to be processed
             Map requestMap = context.getExternalContext().getRequestMap();
@@ -195,14 +195,14 @@ public class ListRenderer extends HtmlBasicRenderer {
 			// will use this to get their values.
 			requestMap.put(var, row);
 		    }
-		    writer.startElement("tr");
+		    writer.startElement("tr", null);
 		    if (rowStyles > 0) {
-			writer.writeAttribute("class", rowClasses);
+			writer.writeAttribute("class", rowClasses, null);
 			if (rowStyle >= rowStyles) {
 			    rowStyle = 0;
 			}
 		    }
-		    writer.writeText('\n');
+		    writer.writeText("\n", null);
 		    
 		    // Process each column to be rendered
 		    columnStyle = 0;
@@ -212,21 +212,22 @@ public class ListRenderer extends HtmlBasicRenderer {
 		    // rows in the list bean.
 		    while (columns.hasNext()) {
 			UIComponent column = (UIComponent) columns.next();
-			writer.startElement("td");
+			writer.startElement("td", null);
 			if (columnStyles > 0) {
-			    writer.writeAttribute("class", columnClasses[columnStyle++]);
+			    writer.writeAttribute("class", columnClasses[columnStyle++], 
+			        null);
 			    if (columnStyle >= columnStyles) {
 				columnStyle = 0;
 			    }
 			}
 			encodeRecursive(context, column);
 			writer.endElement("td");
-			writer.writeText('\n');
+			writer.writeText("\n", null);
 		    }
 		    
 		    // Finish the row that was just rendered
 		    writer.endElement("tr");
-		    writer.writeText('\n');
+		    writer.writeText("\n", null);
 		    if (var != null) {
 			requestMap.remove(var);
 		    }
@@ -237,27 +238,27 @@ public class ListRenderer extends HtmlBasicRenderer {
 
         // Process the table footer (if any)
         if (null != (facet = component.getFacet("footer"))) {
-	    writer.startElement("tr");
-	    writer.startElement("tfoot");
-	    writer.writeText('\n');
+	    writer.startElement("tr", null);
+	    writer.startElement("tfoot", null);
+	    writer.writeText("\n", null);
 	    // If the footer has kids, render them recursively
 	    if (null != (kids = facet.getChildren())) {
 		while (kids.hasNext()) {
 		    UIComponent kid = (UIComponent) kids.next();
 		    // write out the table footer
 		    if (null != footerClass) {
-			writer.startElement("td");
-			writer.writeAttribute("class", footerClass);
+			writer.startElement("td", null);
+			writer.writeAttribute("class", footerClass, null);
 		    }
 		    else {
-			writer.startElement("th");
-	                writer.writeText('\n');
+			writer.startElement("th", null);
+	                writer.writeText("\n", null);
 		    }
 		    // encode the children
 		    encodeRecursive(context, kid);
 		    // write out the table footer
 		    writer.endElement("th");
-	            writer.writeText('\n');
+	            writer.writeText("\n", null);
 		}
 	    }
 	    else {
@@ -270,7 +271,7 @@ public class ListRenderer extends HtmlBasicRenderer {
             }
 	    writer.endElement("tfoot");
 	    writer.endElement("tr");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
         }
     }
 
@@ -289,7 +290,7 @@ public class ListRenderer extends HtmlBasicRenderer {
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
 	writer.endElement("table");
-	writer.writeText('\n');
+	writer.writeText("\n", null);
     }
 
 

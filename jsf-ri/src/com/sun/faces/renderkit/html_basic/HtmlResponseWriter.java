@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.5 2003/08/14 23:14:43 horwat Exp $
+ * $Id: HtmlResponseWriter.java,v 1.6 2003/08/19 15:19:20 rkitain Exp $
  */
 
 /*
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
+import javax.faces.component.UIComponent;
 import javax.faces.FacesException;
 import javax.faces.context.ResponseWriter;
 
@@ -26,6 +27,10 @@ import javax.faces.context.ResponseWriter;
  * Kudos to Adam Winer (Oracle) for much of this code.
  */
 public class HtmlResponseWriter extends ResponseWriter {
+
+    // Content Type for this Writer.
+    //
+    private String contentType = null;
 
     // Character encoding of that Writer - this may be null
     // if the encoding isn't known.
@@ -75,6 +80,13 @@ public class HtmlResponseWriter extends ResponseWriter {
     }
 
     /**
+     * @return the content type such as "text/html" fr this ResponseWriter.
+     */
+    public String getContentType() {
+        return contentType;
+    }
+
+    /**
      * @return the character encoding, such as "ISO-8859-1" for this
      * ResponseWriter.  Refer to: 
      * <a href="http://www.iana.org/assignments/character-sets">theIANA</a> 
@@ -120,12 +132,15 @@ public class HtmlResponseWriter extends ResponseWriter {
      * calling this method.
      *
      * @param name Name of the starting element
+     * @param componentForElement The UIComponent instance that applies to this
+     * element.  This argument may be <code>null</code>.
      *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>name</code>
      *  is <code>null</code>
      */
-    public void startElement(String name) throws IOException {
+    public void startElement(String name, UIComponent componentForElement) 
+	throws IOException {
 	if (name == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -195,6 +210,9 @@ public class HtmlResponseWriter extends ResponseWriter {
      *
      * @param name Attribute name to be added
      * @param value Attribute value to be added
+     * @param componentPropertyName  The name of the component property to
+     * which this attribute argument applies.  This argument may be 
+     * <code>null</code>.
      *
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
@@ -202,7 +220,7 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @exception NullPointerException if <code>name</code> or
      *  <code>value</code> is <code>null</code>
      */
-    public void writeAttribute(String name, Object value) 
+    public void writeAttribute(String name, Object value, String componentPropertyName) 
         throws IOException {
 	if (name == null || value == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
@@ -243,6 +261,9 @@ public class HtmlResponseWriter extends ResponseWriter {
      *
      * @param name Attribute name to be added
      * @param value Attribute value to be added
+     * @param componentPropertyName  The name of the component property to
+     * which this attribute argument applies.  This argument may be 
+     * <code>null</code>.
      *
      * @exception IllegalStateException if this method is called when there
      *  is no currently open element
@@ -250,7 +271,8 @@ public class HtmlResponseWriter extends ResponseWriter {
      * @exception NullPointerException if <code>name</code> or
      *  <code>value</code> is <code>null</code>
      */
-    public void writeURIAttribute(String name, Object value) throws IOException {
+    public void writeURIAttribute(String name, Object value, 
+	String componentPropertyName) throws IOException {
 	if (name == null || value == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));
@@ -307,12 +329,15 @@ public class HtmlResponseWriter extends ResponseWriter {
      * that element will be closed first.</p>
      *
      * @param text Text to be written
+     * @param componentPropertyName  The name of the component property to
+     * which this text argument applies.  This argument may be <code>null</code>.
      *
      * @exception IOException if an input/output error occurs
      * @exception NullPointerException if <code>text</code>
      *  is <code>null</code>
      */
-    public void writeText(Object text) throws IOException {
+    public void writeText(Object text, String componentPropertyName) 
+	throws IOException {
         if (text == null) {
 	    throw new NullPointerException(Util.getExceptionMessage(
 	        Util.NULL_PARAMETERS_ERROR_MESSAGE_ID));

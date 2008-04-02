@@ -1,5 +1,5 @@
 /*
- * $Id: NumberRenderer.java,v 1.24 2003/08/12 15:26:39 rkitain Exp $
+ * $Id: NumberRenderer.java,v 1.25 2003/08/19 15:19:24 rkitain Exp $
  */
 
 /*
@@ -46,7 +46,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: NumberRenderer.java,v 1.24 2003/08/12 15:26:39 rkitain Exp $
+ * @version $Id: NumberRenderer.java,v 1.25 2003/08/19 15:19:24 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -196,26 +196,26 @@ public class NumberRenderer extends HtmlBasicInputRenderer {
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    writer.startElement("span");
-	    writer.writeAttribute("class", styleClass);
+	    writer.startElement("span", null);
+	    writer.writeAttribute("class", styleClass, null);
 	}
         if (isInput) {
-	    writer.startElement("input");
-	    writer.writeAttribute("type", "text"); 
-	    writer.writeAttribute("name", component.getClientId(context)); 	
+	    writer.startElement("input", null);
+	    writer.writeAttribute("type", "text", null); 
+	    writer.writeAttribute("name", component.getClientId(context), null); 	
 	    // deal with HTML 4.0 LABEL element
-            writer.writeAttribute("id", component.getClientId(context));
+            writer.writeAttribute("id", component.getClientId(context), null);
 	    
 	    // render default text specified
 	    if ( currentValue != null ) {
-                writer.writeAttribute("value", currentValue);
+                writer.writeAttribute("value", currentValue, null);
 	    }
 
             Util.renderPassThruAttributes(writer, component);
             Util.renderBooleanPassThruAttributes(writer, component);
 	    writer.endElement("input");
 	}else {
-	    writer.writeText(currentValue);
+	    writer.writeText(currentValue, null);
         }  
         if (null != styleClass) {
 	    writer.endElement("span");

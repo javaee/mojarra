@@ -1,5 +1,5 @@
 /*
- * $Id: RadioRenderer.java,v 1.44 2003/08/12 15:26:39 rkitain Exp $
+ * $Id: RadioRenderer.java,v 1.45 2003/08/19 15:19:25 rkitain Exp $
  */
 
 /*
@@ -118,38 +118,38 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 	}
 	if (null != (selectoneClass = (String) 
 		     component.getAttribute("selectoneClass"))) {
-	    writer.startElement("span");
-	    writer.writeAttribute("class", selectoneClass);
+	    writer.startElement("span", null);
+	    writer.writeAttribute("class", selectoneClass, null);
 	}
 	
-        writer.startElement("table");
-        writer.writeAttribute("border", new Integer(border));
-        writer.writeText('\n');
+        writer.startElement("table", null);
+        writer.writeAttribute("border", new Integer(border), null);
+        writer.writeText("\n", null);
 
 	if (!alignVertical) {
-            writer.writeText('\t');
-	    writer.startElement("tr");
-	    writer.writeText('\n');
+            writer.writeText("\t", null);
+	    writer.startElement("tr", null);
+	    writer.writeText("\n", null);
 	}
 
 	while (items.hasNext()) {
 	    curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
 	    if (alignVertical) {
-                writer.writeText('\t');
-		writer.startElement("tr");
-		writer.writeText('\n');
+                writer.writeText("\t", null);
+		writer.startElement("tr", null);
+		writer.writeText("\n", null);
 	    }
-	    writer.startElement("td");
-	    writer.startElement("input");
-	    writer.writeAttribute("type", "radio");
+	    writer.startElement("td", null);
+	    writer.startElement("input", null);
+	    writer.writeAttribute("type", "radio", null);
             if (null != curItem.getValue() &&
 		curItem.getValue().equals(curValue)){
-		writer.writeAttribute("checked", new Boolean("true"));
+		writer.writeAttribute("checked", new Boolean("true"), null);
             }
-	    writer.writeAttribute("name", uiSelectOne.getClientId(context));
+	    writer.writeAttribute("name", uiSelectOne.getClientId(context), null);
 	    writer.writeAttribute("value",(getFormattedValue(context, component,
-	        curItem.getValue())));
+	        curItem.getValue())), null);
 
 	    Util.renderPassThruAttributes(writer, curItemWrapper.getUISelectItem());
 	    Util.renderBooleanPassThruAttributes(writer, curItemWrapper.getUISelectItem());
@@ -158,22 +158,22 @@ public class RadioRenderer extends HtmlBasicInputRenderer {
 
             String itemLabel = curItem.getLabel();
             if (itemLabel != null) {
-                writer.writeText(" ");
-		writer.writeText(itemLabel);
+                writer.writeText(" ", null);
+		writer.writeText(itemLabel, null);
             }
 	    writer.endElement("td");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
 	    if (alignVertical) {
-	        writer.writeText('\t');
-		writer.startElement("tr");
-		writer.writeText('\n');
+	        writer.writeText("\t", null);
+		writer.startElement("tr", null);
+		writer.writeText("\n", null);
 	    }
         }
 
 	if (!alignVertical) {
-	    writer.writeText('\t');
+	    writer.writeText("\t", null);
 	    writer.endElement("tr");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
 	}
         writer.endElement("table");
 

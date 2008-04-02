@@ -1,5 +1,5 @@
 /*
- * $Id: FormRenderer.java,v 1.50 2003/08/12 15:26:38 rkitain Exp $
+ * $Id: FormRenderer.java,v 1.51 2003/08/19 15:19:18 rkitain Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import org.mozilla.util.ParameterCheck;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: FormRenderer.java,v 1.50 2003/08/12 15:26:38 rkitain Exp $
+ * @version $Id: FormRenderer.java,v 1.51 2003/08/19 15:19:18 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -102,18 +102,18 @@ public class FormRenderer extends HtmlBasicRenderer {
         Assert.assert_it( writer != null );
         // since method and action are rendered here they are not added
         // to the pass through attributes in Util class.
-	writer.startElement("form");
-	writer.writeAttribute("id", component.getClientId(context));
-	writer.writeAttribute("method", "post");
-	writer.writeAttribute("action", getActionStr(context, component));
+	writer.startElement("form", null);
+	writer.writeAttribute("id", component.getClientId(context), null);
+	writer.writeAttribute("method", "post", null);
+	writer.writeAttribute("action", getActionStr(context, component), null);
         if (null != (formClass = (String) 
 		     component.getAttribute("formClass"))) {
-            writer.writeAttribute("class", formClass);
+            writer.writeAttribute("class", formClass, null);
 	}
 
         Util.renderPassThruAttributes(writer, component);
         Util.renderBooleanPassThruAttributes(writer, component);
-	writer.writeText('\n');
+	writer.writeText("\n", null);
 	updateFormNumber(context, component);
     }
 
@@ -183,7 +183,7 @@ public class FormRenderer extends HtmlBasicRenderer {
         String saveStateParam = context.getExternalContext().
             getInitParameter(RIConstants.SAVESTATE_INITPARAM);
         if ( saveStateParam != null && saveStateParam.equalsIgnoreCase("true")){
-	    writer.writeText(RIConstants.SAVESTATE_MARKER);
+	    writer.writeText(RIConstants.SAVESTATE_MARKER, null);
         }    
 	writer.endElement("form");
     }

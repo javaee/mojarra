@@ -1,5 +1,5 @@
 /*
- * $Id: HiddenRenderer.java,v 1.10 2003/08/08 16:20:20 rkitain Exp $
+ * $Id: HiddenRenderer.java,v 1.11 2003/08/19 15:19:20 rkitain Exp $
  */
 
 /*
@@ -84,13 +84,13 @@ public class HiddenRenderer extends HtmlBasicInputRenderer {
 	ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-	writer.startElement("input");
-	writer.writeAttribute("type", "hidden");
-	writer.writeAttribute("name", component.getClientId(context));
+	writer.startElement("input", null);
+	writer.writeAttribute("type", "hidden", null);
+	writer.writeAttribute("name", component.getClientId(context), null);
 
         // render default text specified
         if (currentValue != null) {
-            writer.writeAttribute("value", currentValue);
+            writer.writeAttribute("value", currentValue, null);
         }
         writer.endElement("input");
     }

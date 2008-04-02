@@ -1,5 +1,5 @@
 /*
- * $Id: TextRenderer.java,v 1.47 2003/08/12 15:26:40 rkitain Exp $
+ * $Id: TextRenderer.java,v 1.48 2003/08/19 15:19:27 rkitain Exp $
  */
 
 /*
@@ -92,17 +92,17 @@ public class TextRenderer extends HtmlBasicInputRenderer {
 		      component.getAttribute("inputClass"))) || 
 	    (null != (styleClass = (String) 
 		      component.getAttribute("outputClass")))) {
-	    writer.startElement("span");
-	    writer.writeAttribute("class", styleClass);
+	    writer.startElement("span", null);
+	    writer.writeAttribute("class", styleClass, null);
 	}
         if (component instanceof UIInput) {
-	    writer.startElement("input");
-	    writer.writeAttribute("type", "text");
-	    writer.writeAttribute("name", (component.getClientId(context)));
+	    writer.startElement("input", null);
+	    writer.writeAttribute("type", "text", null);
+	    writer.writeAttribute("name", (component.getClientId(context)), null);
 
             // render default text specified
             if (currentValue != null) {
-	        writer.writeAttribute("value", currentValue);
+	        writer.writeAttribute("value", currentValue, null);
             }
 
             Util.renderPassThruAttributes(writer, component);
@@ -122,7 +122,7 @@ public class TextRenderer extends HtmlBasicInputRenderer {
                 }
             }
             if (currentValue != null) {
-		writer.writeText(currentValue);
+		writer.writeText(currentValue, null);
             }
         }
 	if (null != styleClass) {

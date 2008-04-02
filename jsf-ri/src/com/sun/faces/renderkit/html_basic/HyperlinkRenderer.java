@@ -1,5 +1,5 @@
 /*
- * $Id: HyperlinkRenderer.java,v 1.50 2003/08/13 21:28:05 eburns Exp $
+ * $Id: HyperlinkRenderer.java,v 1.51 2003/08/19 15:19:21 rkitain Exp $
  */
 
 /*
@@ -35,7 +35,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HyperlinkRenderer.java,v 1.50 2003/08/13 21:28:05 eburns Exp $
+ * @version $Id: HyperlinkRenderer.java,v 1.51 2003/08/19 15:19:21 rkitain Exp $
  */
 
 public class HyperlinkRenderer extends BaseCommandRenderer {
@@ -162,8 +162,8 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 
         //make link act as if it's a button using javascript
 	StringBuffer sb = new StringBuffer();
-	writer.startElement("a");
-	writer.writeAttribute("href", "#");
+	writer.startElement("a", null);
+	writer.writeAttribute("href", "#", null);
 	sb = new StringBuffer();
 	sb.append("document.forms[");
 	sb.append("");
@@ -179,13 +179,13 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
 	sb.append("");
 	sb.append("].submit()");
 
-	writer.writeAttribute("onmousedown", sb.toString()); 
+	writer.writeAttribute("onmousedown", sb.toString(), null); 
 
         //handle css style class
 	String commandClass = (String)
             command.getAttribute("commandClass");
 	if (commandClass != null) {
-            writer.writeAttribute("class", commandClass);
+            writer.writeAttribute("class", commandClass, null);
         }
 
 	//Write Anchor inline elements
@@ -193,10 +193,10 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         //label text
         String imageSrc = getImageSrc(context, command);
         if (imageSrc != null) {
-	    writer.startElement("img");
-	    writer.writeAttribute("src", getImageText(imageSrc));
+	    writer.startElement("img", null);
+	    writer.writeAttribute("src", getImageText(imageSrc), null);
         } else {
-            writer.writeText(getLabel(context, command));
+            writer.writeText(getLabel(context, command), null);
         }
 
         //Done writing Anchor element
@@ -205,18 +205,18 @@ public class HyperlinkRenderer extends BaseCommandRenderer {
         //Handle hidden fields
 
         //hidden clientId field
-	writer.startElement("input");
-	writer.writeAttribute("type", "hidden");
-	writer.writeAttribute("name", clientId);
+	writer.startElement("input", null);
+	writer.writeAttribute("type", "hidden", null);
+	writer.writeAttribute("name", clientId, null);
 	writer.endElement("input");
 
 	// get UIParameter children...
         Param paramList[] = getParamList(context, command);
         for (int i = 0; i < paramList.length; i++) {
-            writer.startElement("input");
-	    writer.writeAttribute("type", "hidden");
-	    writer.writeAttribute("name", (paramList[i]).getName());
-	    writer.writeAttribute("value", (paramList[i]).getValue());
+            writer.startElement("input", null);
+	    writer.writeAttribute("type", "hidden", null);
+	    writer.writeAttribute("name", (paramList[i]).getName(), null);
+	    writer.writeAttribute("value", (paramList[i]).getValue(), null);
 	    writer.endElement("input");
         }
 

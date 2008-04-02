@@ -1,5 +1,5 @@
 /*
- * $Id: SecretRenderer.java,v 1.43 2003/08/08 16:20:23 rkitain Exp $
+ * $Id: SecretRenderer.java,v 1.44 2003/08/19 15:19:26 rkitain Exp $
  */
 
 /*
@@ -90,13 +90,13 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
             currentValue = "";
         }
 
-	writer.startElement("input");
-	writer.writeAttribute("type", "password");
-	writer.writeAttribute("name", component.getClientId(context)); 
+	writer.startElement("input", null);
+	writer.writeAttribute("type", "password", null);
+	writer.writeAttribute("name", component.getClientId(context), null); 
 
         // render default text specified
         if (currentValue != null) {
-	    writer.writeAttribute("value", currentValue);
+	    writer.writeAttribute("value", currentValue, null);
         }
 
         Util.renderPassThruAttributes(writer, component);
@@ -104,7 +104,7 @@ public class SecretRenderer extends HtmlBasicInputRenderer {
 
 	if (null != (inputClass = (String) 
 		     component.getAttribute("inputClass"))) {
-	    writer.writeAttribute("class", inputClass);
+	    writer.writeAttribute("class", inputClass, null);
 	}
 	
 	writer.endElement("input");

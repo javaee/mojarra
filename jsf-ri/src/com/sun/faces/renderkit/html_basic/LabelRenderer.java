@@ -1,5 +1,5 @@
 /*
- * $Id: LabelRenderer.java,v 1.11 2003/08/08 16:20:21 rkitain Exp $
+ * $Id: LabelRenderer.java,v 1.12 2003/08/19 15:19:22 rkitain Exp $
  */
 
 /*
@@ -34,7 +34,7 @@ import javax.servlet.ServletResponse;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: LabelRenderer.java,v 1.11 2003/08/08 16:20:21 rkitain Exp $
+ * @version $Id: LabelRenderer.java,v 1.12 2003/08/19 15:19:22 rkitain Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -100,16 +100,16 @@ public class LabelRenderer extends HtmlBasicRenderer {
 	forValue = (String) component.getAttribute("for");
 	Assert.assert_it(null != forValue);
 
-	writer.startElement("label");
-	writer.writeAttribute("for", forValue);
+	writer.startElement("label", null);
+	writer.writeAttribute("for", forValue, null);
 
         Util.renderPassThruAttributes(writer, component);
 
 	if (null != (outputClass = (String) 
 		     component.getAttribute("outputClass"))) {
-	    writer.writeAttribute("class", outputClass);
+	    writer.writeAttribute("class", outputClass, null);
 	}
-        writer.writeText('\n');
+        writer.writeText("\n", null);
     }
 
     public void encodeChildren(FacesContext context, UIComponent component) {

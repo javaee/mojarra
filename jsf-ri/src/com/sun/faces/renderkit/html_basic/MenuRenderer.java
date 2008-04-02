@@ -4,7 +4,7 @@
  */
 
 /*
- * $Id: MenuRenderer.java,v 1.18 2003/08/13 02:08:04 eburns Exp $
+ * $Id: MenuRenderer.java,v 1.19 2003/08/19 15:19:23 rkitain Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -195,8 +195,8 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
         
         styleString = getStyleString(component);
         if (styleString != null ) {
-	    writer.startElement("span");
-	    writer.writeAttribute("class", styleString);
+	    writer.startElement("span", null);
+	    writer.writeAttribute("class", styleString, null);
 	}
         renderSelect(context, component);
         if (null != styleString) {
@@ -212,10 +212,10 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
 	ResponseWriter writer = context.getResponseWriter();
         Assert.assert_it(writer != null );
 
-	writer.startElement("select");
-	writer.writeAttribute("name", component.getClientId(context));
+	writer.startElement("select", null);
+	writer.writeAttribute("name", component.getClientId(context), null);
 	if (!getMultipleText(component).equals("")) {
-	    writer.writeAttribute("multiple", new Boolean("true"));
+	    writer.writeAttribute("multiple", new Boolean("true"), null);
 	}
 
 	// Determine how many option(s) we need to render, and update
@@ -260,21 +260,21 @@ public class MenuRenderer extends HtmlBasicInputRenderer {
             curItemWrapper = (SelectItemWrapper) items.next();
             curItem = curItemWrapper.getSelectItem();
             curComponent = curItemWrapper.getUISelectItem();
-	    writer.writeText('\t');
-	    writer.startElement("option");
+	    writer.writeText("\t", null);
+	    writer.startElement("option", null);
 	    writer.writeAttribute("value", 
-                getFormattedValue(context, component, curItem.getValue()));
+                getFormattedValue(context, component, curItem.getValue()), null);
 	    String selectText = getSelectedText(curItem, selectedValues);
 	    if (!selectText.equals("")) {
-	        writer.writeAttribute(selectText, new Boolean("true"));
+	        writer.writeAttribute(selectText, new Boolean("true"), null);
 	    }
 
             Util.renderPassThruAttributes(writer, curComponent);
             Util.renderBooleanPassThruAttributes(writer, curComponent);
 
-	    writer.writeText(curItem.getLabel());
+	    writer.writeText(curItem.getLabel(), null);
 	    writer.endElement("option");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
         }
     }
 

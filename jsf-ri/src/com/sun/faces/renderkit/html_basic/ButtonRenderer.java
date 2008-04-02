@@ -1,5 +1,5 @@
 /*
- * $Id: ButtonRenderer.java,v 1.53 2003/08/08 16:20:18 rkitain Exp $
+ * $Id: ButtonRenderer.java,v 1.54 2003/08/19 15:19:15 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: ButtonRenderer.java,v 1.53 2003/08/08 16:20:18 rkitain Exp $
+ * @version $Id: ButtonRenderer.java,v 1.54 2003/08/19 15:19:15 rkitain Exp $
  *
  */
 
@@ -140,15 +140,15 @@ public class ButtonRenderer extends BaseCommandRenderer {
         String imageSrc = getImageSrc(context, component);
         String label = getLabel(context, component);            
 
-        writer.startElement("input");
+        writer.startElement("input", null);
         if (imageSrc != null) {
-            writer.writeAttribute("type", "image");
-            writer.writeURIAttribute("src", imageSrc);
-            writer.writeAttribute("name", component.getClientId(context));
+            writer.writeAttribute("type", "image", null);
+            writer.writeURIAttribute("src", imageSrc, null);
+            writer.writeAttribute("name", component.getClientId(context), null);
          } else {
-            writer.writeAttribute("type", type.toLowerCase());
-            writer.writeAttribute("name", component.getClientId(context));
-            writer.writeAttribute("value", padLabel(label));
+            writer.writeAttribute("type", type.toLowerCase(), null);
+            writer.writeAttribute("name", component.getClientId(context), null);
+            writer.writeAttribute("value", padLabel(label), null);
          }
 
         Util.renderPassThruAttributes(writer, component);
@@ -156,7 +156,7 @@ public class ButtonRenderer extends BaseCommandRenderer {
 
         if (null != (commandClass = (String) 
             component.getAttribute("commandClass"))) {
-            writer.writeAttribute("class", commandClass);
+            writer.writeAttribute("class", commandClass, null);
 	}
         writer.endElement("input");
     }

@@ -1,5 +1,5 @@
 /*
- * $Id: GridRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
+ * $Id: GridRenderer.java,v 1.13 2003/08/19 15:19:19 rkitain Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import org.mozilla.util.Assert;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: GridRenderer.java,v 1.12 2003/08/08 23:34:44 eburns Exp $
+ * @version $Id: GridRenderer.java,v 1.13 2003/08/19 15:19:19 rkitain Exp $
  *  
  */
 
@@ -91,14 +91,14 @@ public class GridRenderer extends HtmlBasicRenderer {
         
         // Render the beginning of this panel
         ResponseWriter writer = context.getResponseWriter();
-        writer.startElement("table");
+        writer.startElement("table", null);
         if (panelClass != null) {
-            writer.writeAttribute("class", panelClass);
+            writer.writeAttribute("class", panelClass, null);
         }
 
         Util.renderPassThruAttributes(writer, component);
 
-	writer.writeText('\n');
+	writer.writeText("\n", null);
     }
 
 
@@ -135,47 +135,47 @@ public class GridRenderer extends HtmlBasicRenderer {
 	if (null != (facet = component.getFacet("header"))) {
 	    
 	    if (headerClass != null) {
-		writer.startElement("tr");
-		writer.startElement("th");
-		writer.writeAttribute("class", headerClass);
+		writer.startElement("tr", null);
+		writer.startElement("th", null);
+		writer.writeAttribute("class", headerClass, null);
 	    } else {
-                writer.startElement("tr");
-                writer.startElement("th");
+                writer.startElement("tr", null);
+                writer.startElement("th", null);
 	    }
-	    writer.writeAttribute("colspan", new Integer(columns));
-	    writer.startElement("thead");
+	    writer.writeAttribute("colspan", new Integer(columns), null);
+	    writer.startElement("thead", null);
 
 	    encodeRecursive(context, facet);
 	    writer.endElement("thead");
             writer.endElement("th");
             writer.endElement("tr");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
 	}
 
 	int i = 0;
-	writer.startElement("tbody");
+	writer.startElement("tbody", null);
 	if (null != (kids = component.getChildren())) {
 	    while (kids.hasNext()) {
 		if ((i % columns) == 0) {
 		    if (open) {
 			writer.endElement("tr");
-			writer.writeText('\n');
+			writer.writeText("\n", null);
 			open = false;
 		    }
-		    writer.startElement("tr");
+		    writer.startElement("tr", null);
 		    if (rowStyles > 0) {
-			writer.writeAttribute("class", rowClasses[rowStyle++]);
+			writer.writeAttribute("class", rowClasses[rowStyle++], null);
 			if (rowStyle >= rowStyles) {
 			    rowStyle = 0;
 			}
 		    }
-                    writer.writeText('\n');
+                    writer.writeText("\n", null);
 		    open = true;
 		    columnStyle = 0;
 		}
-		writer.startElement("td");
+		writer.startElement("td", null);
 		if (columnStyles > 0) {
-		    writer.writeAttribute("class", columnClasses[columnStyle++]);
+		    writer.writeAttribute("class", columnClasses[columnStyle++], null);
 		    if (columnStyle >= columnStyles) {
 			columnStyle = 0;
 		    }
@@ -183,35 +183,35 @@ public class GridRenderer extends HtmlBasicRenderer {
 		UIComponent child = (UIComponent) kids.next();
 		encodeRecursive(context, child);
 		writer.endElement("td");
-		writer.writeText('\n');
+		writer.writeText("\n", null);
 		i++;
 	    }
 	}
         if (open) {
             writer.endElement("tr");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
         }
 	writer.endElement("tbody");
 
 	if (null != (facet = component.getFacet("footer"))) {
 
 	    if (footerClass != null) {
-		writer.startElement("tr");
-		writer.startElement("th");
-		writer.writeAttribute("class", footerClass);
+		writer.startElement("tr", null);
+		writer.startElement("th", null);
+		writer.writeAttribute("class", footerClass, null);
 	    } else {
-		writer.startElement("tr");
-		writer.startElement("th");
+		writer.startElement("tr", null);
+		writer.startElement("th", null);
 	    }
 	    
-	    writer.writeAttribute("colspan", new Integer(columns));
-	    writer.startElement("tfoot");
+	    writer.writeAttribute("colspan", new Integer(columns), null);
+	    writer.startElement("tfoot", null);
 
             encodeRecursive(context, facet);
 	    writer.endElement("tfoot");
 	    writer.endElement("th");
 	    writer.endElement("tr");
-	    writer.writeText('\n');
+	    writer.writeText("\n", null);
         }
     }
 
@@ -231,7 +231,7 @@ public class GridRenderer extends HtmlBasicRenderer {
         // Render the ending of this panel
         ResponseWriter writer = context.getResponseWriter();
 	writer.endElement("table");
-	writer.writeText('\n');
+	writer.writeText("\n", null);
     }
 
     /**
