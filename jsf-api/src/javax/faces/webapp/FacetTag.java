@@ -1,5 +1,5 @@
 /*
- * $Id: FacetTag.java,v 1.2 2003/01/21 20:37:17 eburns Exp $
+ * $Id: FacetTag.java,v 1.3 2003/01/22 05:04:03 craigmcc Exp $
  */
 
 /*
@@ -24,7 +24,7 @@ import javax.servlet.jsp.tagext.TagSupport;
  * </p>
  */
 
-public abstract class FacetTag extends TagSupport {
+public class FacetTag extends TagSupport {
 
     // ------------------------------------------------- Instance Variables
 
