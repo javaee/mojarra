@@ -10,7 +10,7 @@
     <h1>Verify property ordering</h1>
 
 <form id="_id1" method="post" action="/jsf-systest/faces/managed04.jsp;jsessionid=5CD1A832A53E8B924F2A8027B6B7051D" enctype="application/x-www-form-urlencoded">
- one two three fourfivesixseveneight<input type="hidden" name="com.sun.faces.VIEW" id="com.sun.faces.VIEW" value="_id17" /><input type="hidden" name="_id1" value="_id1" /></form>
+ one two three fourfivesixseveneight<input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="_id17" /><input type="hidden" name="_id1" value="_id1" /></form>
 
     <hr>
   </body>

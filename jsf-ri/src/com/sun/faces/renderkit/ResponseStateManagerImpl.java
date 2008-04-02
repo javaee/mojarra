@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManagerImpl.java,v 1.18 2005/05/02 14:58:44 rogerk Exp $
+ * $Id: ResponseStateManagerImpl.java,v 1.19 2005/05/02 19:27:09 edburns Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
     public boolean isPostback(FacesContext context) {
 	boolean result = context.getExternalContext().getRequestParameterMap().
-                containsKey(RIConstants.FACES_VIEW);
+                containsKey(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
 	return result;
     }
 
@@ -113,7 +113,7 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 	    .getRequestParameterMap();
 	
 	String viewString = (String) requestParamMap.get(
-							 RIConstants.FACES_VIEW);
+							 javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
 	Object structure = null;
 	if (viewString == null) {
 	    return null;
@@ -173,8 +173,8 @@ public class ResponseStateManagerImpl extends ResponseStateManager {
 
 	writer.startElement("input", context.getViewRoot());
 	writer.writeAttribute("type", "hidden", null);
-	writer.writeAttribute("name", RIConstants.FACES_VIEW, null);
-	writer.writeAttribute("id", RIConstants.FACES_VIEW, null);
+	writer.writeAttribute("name", javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM, null);
+	writer.writeAttribute("id", javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM, null);
 	
 	
 	if (stateManager.isSavingStateInClient(context)) {

@@ -1,1 +1,1 @@
-com.sun.faces.VIEW
+javax.faces.ViewState

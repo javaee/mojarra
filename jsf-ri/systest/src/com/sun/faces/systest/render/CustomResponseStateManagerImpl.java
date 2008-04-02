@@ -1,5 +1,5 @@
 /*
- * $Id: CustomResponseStateManagerImpl.java,v 1.1 2005/05/02 14:58:47 rogerk Exp $
+ * $Id: CustomResponseStateManagerImpl.java,v 1.2 2005/05/02 19:27:11 edburns Exp $
  */
 
 /*
@@ -101,7 +101,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 
     public boolean isPostback(FacesContext context) {
 	boolean result = context.getExternalContext().getRequestParameterMap().
-                containsKey(RIConstants.FACES_VIEW);
+                containsKey(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
 	return result;
     }
 
@@ -113,7 +113,7 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    .getRequestParameterMap();
 	
 	String viewString = (String) requestParamMap.get(
-							 RIConstants.FACES_VIEW);
+							 javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM);
 	Object structure = null;
 	if (viewString == null) {
 	    return null;
@@ -196,13 +196,13 @@ public class CustomResponseStateManagerImpl extends ResponseStateManager {
 	    bos.close();
 	    
 	    hiddenField = " <input type=\"hidden\" name=\""
-		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
+		+ javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM + "\"" + " value=\"" +
                     (new String(Base64.encode(securedata), "ISO-8859-1"))
 		+ "\" />\n ";
 	}
 	else {
 	    hiddenField = " <input type=\"hidden\" name=\""
-		+ RIConstants.FACES_VIEW + "\"" + " value=\"" +
+		+ javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM + "\"" + " value=\"" +
 		view.getStructure() +
 		"\" />\n ";
 	    

@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.2 2005/02/08 19:24:36 rlubke Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.3 2005/05/02 19:27:08 edburns Exp $ 
  */ 
 
 
@@ -79,7 +79,7 @@ import nonjsp.util.RIConstants;
 /**
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.2 2005/02/08 19:24:36 rlubke Exp $ *
+ * @version $Id: XulViewHandlerImpl.java,v 1.3 2005/05/02 19:27:08 edburns Exp $ *
  * @see javax.faces.application.ViewHandler
  */
 public class XulViewHandlerImpl extends ViewHandler {
@@ -155,7 +155,7 @@ public class XulViewHandlerImpl extends ViewHandler {
         Map sessionMap = getSessionMap(context);
         sessionMap.put(RIConstants.REQUEST_LOCALE,
                        context.getViewRoot().getLocale());
-        sessionMap.put(RIConstants.FACES_VIEW, context.getViewRoot());
+        sessionMap.put(javax.faces.render.ResponseStateManager.VIEW_STATE_PARAM, context.getViewRoot());
 
     }
 

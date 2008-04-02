@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.71 2005/04/21 18:55:34 edburns Exp $
+ * $Id: RIConstants.java,v 1.72 2005/05/02 19:27:09 edburns Exp $
  */
 
 /*
@@ -34,8 +34,6 @@ public class RIConstants {
 
     public final static String INITIAL_REQUEST_NAME = "initialRequest";
     public final static String INITIAL_REQUEST_VALUE = "true";
-
-    public final static String FACES_VIEW = FACES_PREFIX + "VIEW";
 
     /**
      * The presence of this UIComponent attribute with the value the same

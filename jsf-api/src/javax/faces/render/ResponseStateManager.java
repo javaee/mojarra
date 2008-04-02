@@ -1,5 +1,5 @@
 /*
- * $Id: ResponseStateManager.java,v 1.21 2005/04/21 18:55:30 edburns Exp $
+ * $Id: ResponseStateManager.java,v 1.22 2005/05/02 19:27:07 edburns Exp $
  */
 
 /*
@@ -40,6 +40,13 @@ public abstract class ResponseStateManager {
      */
     public static final String RENDER_KIT_ID_PARAM =
             "javax.faces.RenderKitId";
+            
+    /**
+     * <p>Implementations must use this value as the name and id of the client
+     * parameter in which to save the state between requests.</p>
+     */
+
+    public static final String VIEW_STATE_PARAM = "javax.faces.ViewState";
 
     /*       
      * <p>Take the argument <code>state</code> and write it into the

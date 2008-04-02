@@ -1,5 +1,5 @@
 /*
- * $Id: TestLifecycleImpl.java,v 1.33 2005/03/11 18:14:24 edburns Exp $
+ * $Id: TestLifecycleImpl.java,v 1.34 2005/05/02 19:27:15 edburns Exp $
  */
 
 /*
@@ -30,7 +30,7 @@ import javax.servlet.http.HttpSession;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestLifecycleImpl.java,v 1.33 2005/03/11 18:14:24 edburns Exp $
+ * @version $Id: TestLifecycleImpl.java,v 1.34 2005/05/02 19:27:15 edburns Exp $
  */
 
 public class TestLifecycleImpl extends JspFacesTestCase {
@@ -92,7 +92,7 @@ public class TestLifecycleImpl extends JspFacesTestCase {
 
     protected void initWebRequest(WebRequest theRequest) {
         theRequest.setURL("localhost:8080", "/test", "/faces", TEST_URI, null);
-	theRequest.addParameter("com.sun.faces.VIEW",
+	theRequest.addParameter("javax.faces.ViewState",
 				"H4sIAAAAAAAAAFvzloG1hIElPjPFsAAAhLx/NgwAAAA=");
     }
 
