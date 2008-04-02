@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlBasicRenderKit.java,v 1.41 2003/03/13 01:06:32 eburns Exp $
+ * $Id: HtmlBasicRenderKit.java,v 1.42 2003/04/17 23:32:40 horwat Exp $
  */
 
 /*
@@ -45,7 +45,7 @@ import javax.faces.render.Renderer;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: HtmlBasicRenderKit.java,v 1.41 2003/03/13 01:06:32 eburns Exp $
+ * @version $Id: HtmlBasicRenderKit.java,v 1.42 2003/04/17 23:32:40 horwat Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -379,7 +379,7 @@ public class HtmlBasicRenderKit extends RenderKit
         Renderer renderer = (Renderer)renderersByRendererType.get(rendererType);
         if (renderer == null) {
 	    Object [] params = { rendererType };
-            throw new FacesException(Util.getExceptionMessage(Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, params));
+            throw new IllegalArgumentException(Util.getExceptionMessage(Util.MAXIMUM_EVENTS_REACHED_ERROR_MESSAGE_ID, params));
         }
 
         return renderer;
