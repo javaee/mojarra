@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentTestCase.java,v 1.28 2003/03/26 19:32:31 craigmcc Exp $
+ * $Id: UIComponentTestCase.java,v 1.29 2003/04/16 21:15:05 eburns Exp $
  */
 
 /*
@@ -120,6 +120,8 @@ public class UIComponentTestCase extends TestCase {
         form1a.setComponentId("form1"); // Duplicate id
         UIForm form2 = new UIForm();
         form2.setComponentId("form2");
+        UIForm form3 = new UIForm();
+        form3.setComponentId("form3");
 
         // Add first child explicitly
         component.addChild(form1);
@@ -172,6 +174,16 @@ public class UIComponentTestCase extends TestCase {
             ; // Expected result
         }
 
+        // Add the same child twice
+        try {
+            component.addChild(form3);
+            component.addChild(form3);
+            fail("Should have thrown IllegalArgumentException");
+        } catch (IllegalStateException e) {
+            ; // Expected result
+        }
+
+
     }
 
     public void testAddChildPositive() {
@@ -205,6 +217,18 @@ public class UIComponentTestCase extends TestCase {
         }
 	assertTrue(!exceptionThrown);
 
+
+        // Empty string component id
+	exceptionThrown = false; // expected result
+        try {
+	    UIForm emptyString = new UIForm();
+	    emptyString.setComponentId("");
+            component.addChild(emptyString);
+        } catch (IllegalArgumentException e) {
+            ; // Expected result
+        }
+	assertTrue(!exceptionThrown);
+	
 	// Make sure we can rename the component, and the clientId
 	// changes.
 
@@ -219,8 +243,68 @@ public class UIComponentTestCase extends TestCase {
 	    
     }
 
+    public void testComponentIdValidityNegative() {
+	UIForm form = new UIForm();
 
-    /**
+        try {
+            form.setComponentId(" startsWithSpace");
+            fail("Should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            form.setComponentId(" endsWithSpace");
+            fail("Should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            form.setComponentId("hasInvalidChars[");
+            fail("Should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            form.setComponentId("hasInvalidChars.");
+            fail("Should throw IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    public void testComponentIdValidityPositive() {
+	UIForm form = new UIForm();
+
+        try {
+            form.setComponentId("allchars");
+        } catch (Throwable e) {
+            fail("Should not throw anything");
+        }
+
+        try {
+            form.setComponentId("chars090and212numbers1212");
+        } catch (Throwable e) {
+            fail("Should not throw anything");
+        }
+
+        try {
+            form.setComponentId("chars-dashes");
+        } catch (Throwable e) {
+            fail("Should not throw anything");
+        }
+
+        try {
+            form.setComponentId("chars_underscores");
+        } catch (Throwable e) {
+            fail("Should not throw anything");
+        }
+
+        try {
+            form.setComponentId("chars090numbers--dashes__underscores_");
+        } catch (Throwable e) {
+            fail("Should not throw anything");
+        }
+
+    }    /**
      * [3.1.7] Attribute/Property Transparency.
      */
 
@@ -571,10 +655,12 @@ public class UIComponentTestCase extends TestCase {
             System.out.println("          displayName=" +
                                edesc.getDisplayName());
             System.out.println("               expert=" + edesc.isExpert());
-            method = edesc.getGetListenerMethod();
-            if (method != null) {
-                System.out.println("    getListenerMethod=" +
-                                   method.getName());
+	    Method methods []  = edesc.getListenerMethods();
+            if (methods != null) {
+		if ((method = methods[0]) != null) {
+		    System.out.println("    getListenerMethod=" +
+				       method.getName());
+		}
             }
             System.out.println("               hidden=" + bdesc.isHidden());
             System.out.println("    inDefaultEventSet=" +
