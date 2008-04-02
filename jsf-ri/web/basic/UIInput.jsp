@@ -8,7 +8,7 @@
 
     <h1>UIInput</h1>
 
-    <h3>$Id: UIInput.jsp,v 1.2 2002/09/10 21:47:51 edburns Exp $</h3>
+    <h3>$Id: UIInput.jsp,v 1.3 2002/09/13 19:23:14 visvan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
@@ -28,7 +28,7 @@
          <faces:command_button id="standardRenderKitSubmit" 
                       commandName="standardRenderKitSubmit">
              <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
-                      bundle="${basicBundle}" />
+                      bundle="basicBundle" />
          </faces:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -66,7 +66,7 @@
          <faces:command_button id="standardRenderKitSubmit" 
                       commandName="standardRenderKitSubmit">
              <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
-                      bundle="${basicBundle}" />
+                      bundle="basicBundle" />
          </faces:command_button>
 
        </faces:form>

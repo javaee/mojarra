@@ -174,7 +174,7 @@
 
 	<TD>
 
-	     <faces:selectone_listbox id="appleQuantity" size="6"
+	     <faces:selectone_listbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 

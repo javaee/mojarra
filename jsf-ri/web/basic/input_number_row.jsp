@@ -127,7 +127,7 @@
                <faces:input_number id="input_number5" numberStyle="INTEGER"
                                  value="9"
                                  size="2" maxlength="10"
-                                 modelReference="${LoginBean.char}"
+                                 modelReference="LoginBean.char"
                                  alt="input_number INTEGER with modelReference"
                                  accesskey="d"
                                title="input_number INTEGER with modelReference" />

@@ -57,12 +57,12 @@
 
              <td>
                  <faces:selectone_radio id="radioFromModel"
-                       modelReference="${LoginBean.currentOption}"
+                       modelReference="LoginBean.currentOption"
                        layout="LINE_DIRECTION" >
 
                 <faces:selectitems id="listboxOptions"
                                    title="options come from model"
-                                   modelReference="${LoginBean.options}"/>
+                                   modelReference="LoginBean.options"/>
 
               </faces:selectone_radio>
 

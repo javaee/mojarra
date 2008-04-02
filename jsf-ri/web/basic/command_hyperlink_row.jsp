@@ -15,7 +15,7 @@
                   target="/faces/Basic_Thanks.jsp"
                   commandName="thankyoulink" label="Link to Thank You page"
                                                 key="linkLabel" 
-                                                bundle="${basicBundle}"/>
+                                                bundle="basicBundle"/>
 
              </td>
 

@@ -8,7 +8,7 @@
 
     <h1>UISelectBoolean</h1>
 
-    <h3>$Id: UISelectBoolean.jsp,v 1.1 2002/09/10 20:18:41 edburns Exp $</h3>
+    <h3>$Id: UISelectBoolean.jsp,v 1.2 2002/09/13 19:23:14 visvan Exp $</h3>
 
     <%@ taglib uri="http://java.sun.com/jstl/fmt" prefix="fmt" %>
     <%@ taglib uri="http://java.sun.com/j2ee/html_basic/" prefix="faces" %>
@@ -16,6 +16,7 @@
      <fmt:setBundle basename="basic.Resources" scope="session" 
                     var="basicBundle"/>
 
+     <jsp:useBean id="LoginBean" class="basic.LoginBean" scope="session" />
      <faces:usefaces>  
 
        <p>Form is rendered after this.</p>
@@ -26,7 +27,7 @@
          <faces:command_button id="standardRenderKitSubmit" 
                       commandName="standardRenderKitSubmit">
              <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
-                      bundle="${basicBundle}" />
+                      bundle="basicBundle" />
          </faces:command_button>
 
          <table width="100%" border="1" cellpadding="3" cellspacing="3">
@@ -42,7 +43,7 @@
          <faces:command_button id="standardRenderKitSubmit" 
                       commandName="standardRenderKitSubmit">
              <faces:output_text id="stdRenderKitLabel" key="standardRenderKitSubmitLabel"
-                      bundle="${basicBundle}" />
+                      bundle="basicBundle" />
          </faces:command_button>
 
        </faces:form>

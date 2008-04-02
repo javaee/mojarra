@@ -49,11 +49,10 @@
 
             <tr> 
               <td> <faces:output_text id="userLabel" key="usernameLabel" 
-                                      bundle="${basicBundle}"/> </td>
+                                      bundle="basicBundle"/> </td>
               <td> 
 
-                   <faces:input_text id="userName" modelReference="${LoginBean.userName}"
-                       value="joebob" >
+                   <faces:input_text id="userName" modelReference="LoginBean.userName">
 
 		     <faces:validator type="javax.faces.validator.LengthValidator"/>
 		     <faces:validator type="javax.faces.validator.RequiredValidator"/>
@@ -74,7 +73,7 @@
 
             <tr>
                <td> <faces:output_text id="pwdLabel" key="passwordLabel" 
-                                      bundle="${basicBundle}" /> </td>
+                                      bundle="basicBundle" /> </td>
 
                <td> 
 
@@ -100,7 +99,7 @@
 
             <tr>
                <td> <faces:output_text id="doubleLabel" 
-                            key="doubleLabel" bundle="${basicBundle}" /> </td>
+                            key="doubleLabel" bundle="basicBundle" /> </td>
 
                <td> 
 
@@ -128,7 +127,7 @@
 
             <tr>
                <td> <faces:output_text id="intLabel" 
-                        key="intLabel" bundle="${basicBundle}" /> </td>
+                        key="intLabel" bundle="basicBundle" /> </td>
 
                <td> 
 
@@ -156,12 +155,12 @@
 
             <tr>
                <td> <faces:output_text id="stringLength" key="characterLabel" 
-                                      bundle="${basicBundle}" /> </td>
+                                      bundle="basicBundle" /> </td>
 
                <td> 
 
                     <faces:input_text id="string" size="1"
-                                  modelReference="${LoginBean.string}"> 
+                                  modelReference="LoginBean.string"> 
 
 		     <faces:validator 
                        type="javax.faces.validator.StringRangeValidator"/>
@@ -186,17 +185,17 @@
        
              <tr>
                 <td> <faces:output_text id="addrLabel" key="addressLabel" 
-                                      bundle="${basicBundle}" /> </td>
+                                      bundle="basicBundle" /> </td>
                 <td> <faces:input_textarea rows="10" cols="10" 
                                                id="address" /> </td>
              </tr>
 
               <tr>
              <td> <faces:selectboolean_checkbox id="validUser"
-                       modelReference="${LoginBean.validUser}"/> 
+                       modelReference="LoginBean.validUser"/> 
                   <faces:output_text id="checkLabel" 
                                      key="validUserLabel"
-                                                bundle="${basicBundle}"/>
+                                                bundle="basicBundle"/>
 
                   </td>
              </tr>
@@ -214,7 +213,7 @@
                   target="/faces/Basic_Thanks.jsp"
                   commandName="thankyoulink" label="Link to Thank You page"
                                                 key="linkLabel" 
-                                                bundle="${basicBundle}"/>
+                                                bundle="basicBundle"/>
 
 	</TD>
 
@@ -237,10 +236,10 @@
          <TD>
 
 	      <faces:selectone_listbox id="Listbox" 
-                             modelReference="${LoginBean.currentOption}">
+                             modelReference="LoginBean.currentOption">
 
 		<faces:selectitems id="listboxOptions"
-                                   modelReference="${LoginBean.options}"/>
+                                   modelReference="LoginBean.options"/>
 
 	      </faces:selectone_listbox>
                 <faces:output_text id="optionLabel" 
@@ -255,7 +254,7 @@
       
 	<TD>
 
-	      <faces:selectone_listbox id="appleQuantity" size="6"
+	      <faces:selectone_listbox id="appleQuantity" 
                      title="Select Quantity" 
                      accesskey="N" tabindex="20" >
 
@@ -320,12 +319,12 @@
 	<TD>
 
 	      <faces:selectone_radio id="radioFromModel" 
-                       modelReference="${LoginBean.currentOption}"
+                       modelReference="LoginBean.currentOption"
                        layout="LINE_DIRECTION" >
 
 		<faces:selectitems id="listboxOptions"
                                    title="options come from model" 
-                                   modelReference="${LoginBean.options}"/>
+                                   modelReference="LoginBean.options"/>
 
               </faces:selectone_radio>
               <faces:output_text id="modelLabel" value="Above options come from model " />
@@ -341,7 +340,7 @@
       <TR>
         <TD><faces:output_text id="graphicLabel1" value="Graphic Image (url From Resource Bundle): " /></TD>
         <TD><faces:graphic_image id="graphicImage1" key="imageurl"
-                bundle="${basicBundle}" /></TD>
+                bundle="basicBundle" /></TD>
       </TR>
 
       <TR>
@@ -360,7 +359,7 @@
              <faces:command_button id="resetButton"  title="Click to reset form"
                                    commandName="reset" type="reset" >
                 <faces:output_text id="resetLabel" key="resetButton" 
-                                bundle="${basicBundle}" />
+                                bundle="basicBundle" />
              </faces:command_button>
 
         </TD>
@@ -373,7 +372,7 @@
 
             <faces:command_button id="login" type="submit" 
                      commandName="login" >
-                 <faces:output_text id="submitLabel" key="loginButton" bundle="${basicBundle}" />       
+                 <faces:output_text id="submitLabel" key="loginButton" bundle="basicBundle" />       
              </faces:command_button>
 
 	</TD>
@@ -413,7 +412,7 @@
 					<TD>Multi-select menu with model:</TD>
 					<TD><faces:selectmany_menu id="menumodel" size="3">
 						<faces:selectitems id="menumodelitems"
-							modelReference="${LoginBean.options}" />
+							modelReference="LoginBean.options" />
 					</faces:selectmany_menu></TD>
 				</TR>
 				<TR>
@@ -434,9 +433,9 @@
 				<TR>
 					<TD>Multi-select listbox with model:</TD>
 					<TD><faces:selectmany_listbox id="listmodel"
-						modelReference="${LoginBean.currentOption}">
+						modelReference="LoginBean.currentOption">
 						<faces:selectitems id="listmodelitems"
-							modelReference="${LoginBean.options}" />
+							modelReference="LoginBean.options" />
 					</faces:selectmany_listbox></TD>
 				</TR>
 				<TR>
@@ -457,9 +456,9 @@
 				<TR>
 					<TD>Multi-select checkbox with model:</TD>
 					<TD><faces:selectmany_checkboxlist id="checklistmodel"
-						modelReference="${LoginBean.currentOption}">
+						modelReference="LoginBean.currentOption">
 						<faces:selectitems id="checklistmodelitems"
-							modelReference="${LoginBean.options}" />
+							modelReference="LoginBean.options" />
 					</faces:selectmany_checkboxlist></TD>
 				</TR>
                                 <TR>

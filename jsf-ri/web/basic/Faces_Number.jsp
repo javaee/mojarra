@@ -61,7 +61,7 @@
               <td> <faces:output_text id="byteLabel" value="BYTE" /> </td>
               <td>
                    <faces:input_number id="byteInput" numberStyle="INTEGER"
-                        modelReference="${LoginBean.byte}"/>
+                        modelReference="LoginBean.byte"/>
               </td>
               <td> <faces:output_errors id="errByte" compoundId="/numberForm/byteInput"/> </td>
              </tr>
@@ -70,7 +70,7 @@
               <td> <faces:output_text id="doubleLabel" value="DOUBLE" /> </td>
               <td>
                    <faces:input_number id="doubleInput" numberStyle="NUMBER"
-                        modelReference="${LoginBean.double}"/>
+                        modelReference="LoginBean.double"/>
               </td>
               <td> <faces:output_errors id="errDouble" compoundId="/numberForm/doubleInput"/> </td>
              </tr>
@@ -79,7 +79,7 @@
               <td> <faces:output_text id="floatLabel" value="FLOAT" /> </td>
               <td>
                    <faces:input_number id="floatInput" numberStyle="NUMBER"
-                        modelReference="${LoginBean.float}"/>
+                        modelReference="LoginBean.float"/>
               </td>
               <td> <faces:output_errors id="errFloat" compoundId="/numberForm/floatInput"/> </td>
              </tr>
@@ -88,7 +88,7 @@
               <td> <faces:output_text id="intLabel" value="INTEGER" /> </td>
               <td>
                    <faces:input_number id="intInput" numberStyle="INTEGER"
-                        modelReference="${LoginBean.int}"/>
+                        modelReference="LoginBean.int"/>
               </td>
               <td> <faces:output_errors id="errInt" compoundId="/numberForm/intInput"/> </td>
              </tr>
@@ -97,7 +97,7 @@
               <td> <faces:output_text id="longLabel" value="LONG" /> </td>
               <td>
                    <faces:input_number id="longInput" numberStyle="NUMBER"
-                        modelReference="${LoginBean.long}"/>
+                        modelReference="LoginBean.long"/>
               </td>
               <td> <faces:output_errors id="errLong" compoundId="/numberForm/longInput"/> </td>
              </tr>
@@ -106,7 +106,7 @@
               <td> <faces:output_text id="shortLabel" value="SHORT" /> </td>
               <td>
                    <faces:input_number id="shortInput" numberStyle="NUMBER"
-                        modelReference="${LoginBean.short}"/>
+                        modelReference="LoginBean.short"/>
               </td>
               <td> <faces:output_errors id="errShort" compoundId="/numberForm/shortInput"/> </td>
              </tr>
@@ -115,7 +115,7 @@
               <td> <faces:output_text id="charLabel" value="CHARACTER" /> </td>
               <td>
                    <faces:input_number id="charInput" numberStyle="INTEGER"
-                        modelReference="${LoginBean.char}"/>
+                        modelReference="LoginBean.char"/>
               </td>
               <td> <faces:output_errors id="errChar" compoundId="/numberForm/charInput"/> </td>
              </tr>

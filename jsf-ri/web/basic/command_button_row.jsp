@@ -36,10 +36,10 @@
                                 commandName="standardRenderKitSubmit">
 
                       <faces:output_text id="button2_label"
-                     key="loginButton" bundle="${basicBundle}" />
+                     key="loginButton" bundle="basicBundle" />
 
                      <faces:graphic_image id="imageButton"
-                            key="imageurl" bundle="${basicBundle}"  />
+                            key="imageurl" bundle="basicBundle"  />
                  </faces:command_button>
 
               </td>
@@ -60,7 +60,7 @@
                                  type="reset"
                                  commandName="reset">
                      <faces:output_text id="button3_label"
-                     key="resetButton" bundle="${basicBundle}" />
+                     key="resetButton" bundle="basicBundle" />
 
                  </faces:command_button>
 

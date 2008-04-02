@@ -17,7 +17,7 @@
              <p>
               <faces:output_message id="userMsg" value="Welcome {0}.  Thanks for trying the {1} application." >
                   <faces:parameter id="param1" 
-                      modelReference="${LoginBean.userName}"/>
+                      modelReference="LoginBean.userName"/>
                   <faces:parameter id="param2" 
                       value="Faces Basic"/>
               </faces:output_message>

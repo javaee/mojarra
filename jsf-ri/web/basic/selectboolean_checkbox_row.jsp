@@ -40,7 +40,7 @@
 
                <faces:selectboolean_checkbox id="checkbox3"
                                  checked="true"
-                                 modelReference="${LoginBean.validUser}"
+                                 modelReference="LoginBean.validUser"
                                  size="10"
                                  alt="checkbox"
                                  accesskey="C" 

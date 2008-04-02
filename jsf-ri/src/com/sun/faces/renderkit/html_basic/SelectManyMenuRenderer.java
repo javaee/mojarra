@@ -1,5 +1,5 @@
 /**
- * $Id: SelectManyMenuRenderer.java,v 1.4 2002/09/11 20:02:29 edburns Exp $
+ * $Id: SelectManyMenuRenderer.java,v 1.5 2002/09/13 19:23:13 visvan Exp $
  *
  * (C) Copyright International Business Machines Corp., 2001,2002
  * The source code for this program is not published or otherwise
@@ -32,7 +32,7 @@ import com.sun.faces.util.Util;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: SelectManyMenuRenderer.java,v 1.4 2002/09/11 20:02:29 edburns Exp $
+ * @version $Id: SelectManyMenuRenderer.java,v 1.5 2002/09/13 19:23:13 visvan Exp $
  * 
  * @see Blah
  * @see Bloo
@@ -184,21 +184,15 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
             buff.append("\" ");
         }
 
-        buff.append(Util.renderPassthruAttributes(context, component));
-        buff.append(Util.renderBooleanPassthruAttributes(context, component));
-
         StringBuffer optionsBuffer = new StringBuffer();
         int itemCount =
             getOptionBuffer(context, component, curValue, optionsBuffer);
 
-        if (null != component.getAttribute("size")) {
-            Integer size = Integer.valueOf((String)component.getAttribute("size"));
-            itemCount = size.intValue();
-        }
-
-        buff.append("size=\"");
-        buff.append(itemCount);
-        buff.append("\">");
+        itemCount = getDisplaySize(itemCount, component);
+        buff.append(Util.renderPassthruAttributes(context, component));
+        buff.append(Util.renderBooleanPassthruAttributes(context, component));
+        // do not render size attribute. It will be rendered as part of
+        // pass through attributes.
         buff.append(optionsBuffer);
         buff.append("</select>");
     }
@@ -247,6 +241,18 @@ public class SelectManyMenuRenderer extends HtmlBasicRenderer {
         return "";
     }
 
+    protected int getDisplaySize(int itemCount, UIComponent component) {
+        // if size is not specified default to 1.
+        itemCount = 1;
+        if (null != component.getAttribute("size")) {
+            Integer size = Integer.valueOf((String)component.getAttribute("size"));
+            itemCount = size.intValue();
+        } else {
+             component.setAttribute("size", String.valueOf(itemCount));
+        }     
+        return itemCount;
+    }
+    
     String getSelectedTextString() {
         return " selected";
     }

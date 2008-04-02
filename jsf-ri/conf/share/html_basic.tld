@@ -690,11 +690,6 @@
       <rtexprvalue>false</rtexprvalue>
     </attribute>
     <attribute>
-      <name>size</name>
-      <required>false</required>
-      <rtexprvalue>false</rtexprvalue>
-    </attribute>
-    <attribute>
       <name>lang</name>
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
@@ -3040,11 +3035,6 @@
 		</attribute>
 		<attribute>
 			<name>onmouseup</name>
-			<required>false</required>
-			<rtexprvalue>false</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>size</name>
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>

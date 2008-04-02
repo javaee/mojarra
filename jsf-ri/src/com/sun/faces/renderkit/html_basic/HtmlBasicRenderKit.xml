@@ -975,12 +975,6 @@
 			</attribute>
                         &event-attrs;
 			<attribute>
-				<name>size</name>
-				<display-name>Size</display-name>
-				<description>Number of rows displayed</description>
-				<type>java.lang.Integer</type>
-			</attribute>
-			<attribute>
 				<name>style</name>
 				<display-name>Style</display-name>
 				<description>Style-sheet information</description>
@@ -1060,12 +1054,6 @@
                 <description>Tool Tip for this element
                 </description>
                 <type>java.lang.String</type>
-            </attribute>
-            <attribute>
-                <name>size</name>
-                <display-name>Size</display-name>
-                <description>The number of elements in this list.</description>
-                <type>java.lang.Integer</type>
             </attribute>
             <attribute>
                 <name>accesskey</name>

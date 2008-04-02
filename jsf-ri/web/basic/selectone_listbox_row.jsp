@@ -7,7 +7,7 @@
 
 
              <td>
-                 <faces:selectone_listbox id="appleQuantity" size="6"
+                 <faces:selectone_listbox id="appleQuantity" 
                      title="Select Quantity"
                      accesskey="N" tabindex="20" >
 
@@ -39,10 +39,10 @@
 
              <td>
                 <faces:selectone_listbox id="Listbox"
-                             modelReference="${LoginBean.currentOption}">
+                             modelReference="LoginBean.currentOption">
 
                 <faces:selectitems id="listboxOptions"
-                                   modelReference="${LoginBean.options}"/>
+                                   modelReference="LoginBean.options"/>
 
               </faces:selectone_listbox>
 

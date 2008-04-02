@@ -1,5 +1,5 @@
 /*
- * $Id: TestRenderers_2.java,v 1.26 2002/09/08 21:30:59 eburns Exp $
+ * $Id: TestRenderers_2.java,v 1.27 2002/09/13 19:23:13 visvan Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.JspFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestRenderers_2.java,v 1.26 2002/09/08 21:30:59 eburns Exp $
+ * @version $Id: TestRenderers_2.java,v 1.27 2002/09/13 19:23:13 visvan Exp $
  * 
  *
  */
@@ -82,8 +82,8 @@ public class TestRenderers_2 extends JspFacesTestCase
         String[] lines =  {
 	    "<a href=\"/test/faces;jsessionid=4573B0C6B316F9D0D252D46330E31063?action=command&name=HyperlinkRenderer&tree=treeId\">HyperlinkRenderer</a>",
 	    "<img src=\"\">",
-	    "<img src=\";jsessionid=78B4E1C797D2F7533457F5F1D0037211\">",
-	    "<img src=\";jsessionid=33E510B47477A8B13558C3C21880D160\">"
+	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">",
+	    "<img src=\";jsessionid=614035E9A2D45743F4E803A0B536E386\">"
 
 };
         return lines;
@@ -346,7 +346,8 @@ public class TestRenderers_2 extends JspFacesTestCase
 
         System.out.println("    Testing decode method... ");
         listboxRenderer.decode(getFacesContext(), selectOne);
-        assertTrue(((String)selectOne.getValue()).equals("Blue"));
+        String[] values = (String[])selectOne.getValue();
+        assertTrue((values[0]).equals("Blue"));
 
         // test encode method
 

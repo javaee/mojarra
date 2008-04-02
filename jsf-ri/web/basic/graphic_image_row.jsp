@@ -30,7 +30,7 @@
              <td>
 
                <faces:graphic_image id="output_graphic2" key="imageurl"
-                                    bundle="${basicBundle}"
+                                    bundle="basicBundle"
 	                            alt="output_graphic with localized image"
                                   title="output_graphic with localized image"
                            />

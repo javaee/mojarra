@@ -4813,16 +4813,6 @@ SelectManyListboxRenderer
 
 		class java.lang.String
 
-	size
-
-		Number of rows displayed
-
-		Size
-
-		size
-
-		class java.lang.Integer
-
 	dir
 
 		Direction of the text - LTR or RTL
@@ -4893,16 +4883,6 @@ SelectManyListboxRenderer
 
 		class java.lang.String
 
-	name
-
-		Control name
-
-		Name
-
-		name
-
-		class java.lang.String
-
 	onclick
 
 		The element was clicked.
@@ -4930,6 +4910,16 @@ SelectManyListboxRenderer
 		On Mouse Down
 
 		onmousedown
+
+		class java.lang.String
+
+	name
+
+		Control name
+
+		Name
+
+		name
 
 		class java.lang.String
 
@@ -5185,16 +5175,6 @@ ListboxRenderer
 
 		class java.lang.String
 
-	disabled
-
-		If true, this component should be rendered as disabled.
-
-		Disabled
-
-		disabled
-
-		class java.lang.Boolean
-
 	onmouseout
 
 		Mouse was moved away from this element.
@@ -5204,6 +5184,16 @@ ListboxRenderer
 		onmouseout
 
 		class java.lang.String
+
+	disabled
+
+		If true, this component should be rendered as disabled.
+
+		Disabled
+
+		disabled
+
+		class java.lang.Boolean
 
 	onblur
 
@@ -5274,16 +5264,6 @@ ListboxRenderer
 		onmouseup
 
 		class java.lang.String
-
-	size
-
-		The number of elements in this list.
-
-		Size
-
-		size
-
-		class java.lang.Integer
 
 	dir
 

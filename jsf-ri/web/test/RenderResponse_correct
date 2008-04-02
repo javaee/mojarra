@@ -15,7 +15,7 @@
     <BODY>
         <H3> JSF Basic Components Test Page </H3>
 
-<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=80E952E078D3E3D4B4D955957296C2D3">
+<FORM METHOD="post" ACTION="/test/faces/TestRenderResponsePhase.jsp;jsessionid=94F03541F37336E57725E52024E2E4B8">
   <TABLE BORDER="1">
 
       <tr>
@@ -117,7 +117,7 @@
 
             <button id="/basicForm/pushButton" name="/basicForm/pushButton" type="button" value="button" disabled >
                  This is a push button 
-                 <img src="/test/duke.gif;jsessionid=80E952E078D3E3D4B4D955957296C2D3">
+                 <img src="/test/duke.gif;jsessionid=94F03541F37336E57725E52024E2E4B8">
                  <!-- this isn't valid HTML, but it works for our label case -->
                  <label for="/basicForm/pushButton"  accesskey="Z" lang="en_US" lang="en_US" style="12pt"  class="outputClass" >
 
@@ -135,7 +135,7 @@
 	<TD>
 
             <button id="/basicForm/imageOnlyButton" name="/basicForm/imageOnlyButton" type="submit" value="submit">
-                 <img src="/test/duke.gif;jsessionid=80E952E078D3E3D4B4D955957296C2D3" class="buttonImage1">
+                 <img src="/test/duke.gif;jsessionid=94F03541F37336E57725E52024E2E4B8" class="buttonImage1">
              </button>
 
 	</TD>
@@ -198,11 +198,11 @@
                 
                 
 
-              <select name="/basicForm/appleQuantity" accesskey="N" size="6" tabindex="20" title="Select Quantity" >	<option value="0" disabled >0</option>
+              <select name="/basicForm/appleQuantity" accesskey="N" size="10" tabindex="20" title="Select Quantity" 	<option value="0" disabled >0</option>
 	<option value="1" title="One" >1</option>
 	<option value="2" title="Two" >2</option>
 	<option value="3" title="Three" >3</option>
-	<option value="4" selected="selected" title="Four" >4</option>
+	<option value="4" selected title="Four" >4</option>
 	<option value="5" title="Five" >5</option>
 	<option value="6" title="Six" >6</option>
 	<option value="7" title="Seven" >7</option>
@@ -403,7 +403,7 @@
 						
 						
 						
-					<select name="/basicForm/ManyApples" multiple size="10">	<option value="0">zero</option>
+					<select name="/basicForm/ManyApples" multiple  size="1" 	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>
@@ -430,7 +430,7 @@
 						
 						
 						
-					<select name="/basicForm/ManyApples2" multiple size="10">	<option value="0">zero</option>
+					<select name="/basicForm/ManyApples2" multiple  size="10" 	<option value="0">zero</option>
 	<option value="1">one</option>
 	<option value="2">two</option>
 	<option value="3">three</option>

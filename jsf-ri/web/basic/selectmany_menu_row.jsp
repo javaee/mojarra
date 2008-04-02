@@ -1,6 +1,6 @@
 				<tr>
 					<td>Multi-select menu:</td>
-					<td><faces:selectmany_menu id="ManyApples">
+					<td><faces:selectmany_menu id="ManyApples" size="7">
 						<faces:selectitem itemValue="0" itemLabel="zero" />
 						<faces:selectitem itemValue="1" itemLabel="one" />
 						<faces:selectitem itemValue="2" itemLabel="two" />
@@ -17,6 +17,6 @@
 					<td>Multi-select menumodel:</td>
 					<td><faces:selectmany_menu id="menumodel" size="3">
 						<faces:selectitems id="menumodelitems"
-							modelReference="${LoginBean.options}" />
+							modelReference="LoginBean.options" />
 					</faces:selectmany_menu></td>
 				</tr>

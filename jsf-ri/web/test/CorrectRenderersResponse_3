@@ -1,9 +1,9 @@
-<select name="/my_menu" multiple size="4">	<option value="Red">Red</option>
+<select name="/my_menu" multiple  size="1" 	<option value="Red">Red</option>
 	<option value="Blue" selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
 </select>
-<select name="/my_listbox" multiple size="4">	<option value="Red">Red</option>
+<select name="/my_listbox" multiple  size="4" 	<option value="Red">Red</option>
 	<option value="Blue" selected>Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>
@@ -13,7 +13,7 @@
 <label for="/my_checkboxlist/manyitems">Blue<input name="/my_checkboxlist/manyitems" id="/my_checkboxlist/manyitems" value="Blue" type="checkbox" checked></label>
 <label for="/my_checkboxlist/manyitems">Green<input name="/my_checkboxlist/manyitems" id="/my_checkboxlist/manyitems" value="Green" type="checkbox"></label>
 <label for="/my_checkboxlist/manyitems">Yellow<input name="/my_checkboxlist/manyitems" id="/my_checkboxlist/manyitems" value="Yellow" type="checkbox"></label>
-<select name="/my_onemenu"size="4">	<option value="Red">Red</option>
+<select name="/my_onemenu" size="1" 	<option value="Red">Red</option>
 	<option value="Blue">Blue</option>
 	<option value="Green">Green</option>
 	<option value="Yellow">Yellow</option>

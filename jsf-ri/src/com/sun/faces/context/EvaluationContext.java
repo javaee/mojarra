@@ -1,5 +1,5 @@
 /*
- * $Id: EvaluationContext.java,v 1.1 2002/08/29 00:28:02 jvisvanathan Exp $
+ * $Id: EvaluationContext.java,v 1.2 2002/09/13 19:23:12 visvan Exp $
  */
 
 /*
@@ -99,7 +99,7 @@ public class EvaluationContext {
 
         // Extract the actual expression to be evaluated
         String expression = expression(modelReference);
-       
+
         // Direct access to implicit objects returns them
         if (isImplicit(expression)) {
             try {
@@ -118,7 +118,7 @@ public class EvaluationContext {
                 base = lookup(first);
                 expression = expression.substring(period + 1);
             }
-          
+         
             try {
                 return (PropertyUtils.getProperty(base, expression));
             } catch (Exception e) {
@@ -134,6 +134,7 @@ public class EvaluationContext {
 
          Class modelClass = null;
          Object modelObj = null;
+       
          // Extract the actual expression to be evaluated
          String expression = expression(modelReference);
   
@@ -141,6 +142,7 @@ public class EvaluationContext {
         if (isImplicit(expression)) {
             try {
                 modelClass = PropertyUtils.getPropertyType(this, expression);
+                return modelClass;
             } catch (Exception e) {
                 throw new FacesException(e);
             }
@@ -152,16 +154,44 @@ public class EvaluationContext {
             Object base = this;
             String first = expression.substring(0, period);
             if (!isImplicit(first)) {
+                // not a scoped expression
                 base = lookup(first);
                 expression = expression.substring(period+1);
-            }
-           
+               
+            } else {
+                // in the case of scoped expression, scope name should be
+                // removed from the expression. For example if expr is
+                // applicationScope.TestBean.pin, remove "applicationScope"
+                // Otherwise PropertyUtils would misinterpret TestBean to 
+                // a property in applicationScope bean.
+                String withoutFirst = expression.substring(period+1); 
+                // check if withoutFirst directly references a bean. 
+                period = withoutFirst.indexOf(".");
+                if ( period != -1 ) {
+                    // expre refers to nested property.
+                    // for the above example, baseName would be TestBean
+                    // necessary to get base here for reasons explained above.
+                    String baseName = withoutFirst.substring(0, period);
+                    base = get(baseName);
+                    // expression would refer to a property within bean.
+                    // ex: pin
+                    expression = withoutFirst.substring(period+1);
+                } else {
+                    // expr refers directly to a bean in scope object.
+                    // ex: applicationScope.TestBean. Then return modelType
+                    // directly by using getClass.
+                    base = get(expression);
+                    if ( base != null ) {
+                        modelClass = base.getClass();
+                        return modelClass;
+                    }  
+                }    
+            }    
             try {
                 modelClass = PropertyUtils.getPropertyType(base, expression);
             } catch (Exception e) {
                 throw new FacesException(e);
             }
-
         } else {
             // Simple expression -- scoped lookup
             modelObj =  lookup(expression);
@@ -169,8 +199,7 @@ public class EvaluationContext {
                 modelClass = modelObj.getClass();
             }          
         }
-        return modelClass;
-
+        return modelClass; 
     }
 
 
