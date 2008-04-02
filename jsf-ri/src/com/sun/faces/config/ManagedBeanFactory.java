@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactory.java,v 1.24 2004/08/02 19:25:09 rlubke Exp $
+ * $Id: ManagedBeanFactory.java,v 1.25 2004/08/02 20:21:07 rogerk Exp $
  */
 
 /*
@@ -987,12 +987,8 @@ public class ManagedBeanFactory extends Object {
 	    }
 	    else {
 		// we are referring to a bean that doesn't exist in the
-		// configuration file.
-		Object[] obj = new Object[1];
-		obj[0] = (null != firstSegment[0]) ? firstSegment[0] : value;
-		throw new EvaluationException(
-		      Util.getExceptionMessageString(
-			Util.NAMED_OBJECT_NOT_FOUND_ERROR_MESSAGE_ID, obj));
+		// configuration file.  Give it a wide scope...
+                valueScope = RIConstants.APPLICATION;
 	    }
 	}
 	return valueScope;
