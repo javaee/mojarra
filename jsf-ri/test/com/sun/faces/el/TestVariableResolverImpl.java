@@ -1,5 +1,5 @@
 /*
- * $Id: TestVariableResolverImpl.java,v 1.7 2003/08/22 17:27:37 rlubke Exp $
+ * $Id: TestVariableResolverImpl.java,v 1.8 2003/08/25 21:34:56 jvisvanathan Exp $
  */
 
 /*
@@ -40,7 +40,7 @@ import javax.faces.component.UIViewRoot;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestVariableResolverImpl.java,v 1.7 2003/08/22 17:27:37 rlubke Exp $
+ * @version $Id: TestVariableResolverImpl.java,v 1.8 2003/08/25 21:34:56 jvisvanathan Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -196,7 +196,7 @@ public class TestVariableResolverImpl extends ServletFacesTestCase
 	getFacesContext().setViewRoot(page);
 	
 	assertTrue(variableResolver.resolveVariable(getFacesContext(),
-						    "tree") ==
+						    "view") ==
 		   getFacesContext().getViewRoot());
 
 	

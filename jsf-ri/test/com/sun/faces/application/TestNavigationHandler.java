@@ -1,5 +1,5 @@
 /*
- * $Id: TestNavigationHandler.java,v 1.8 2003/08/22 17:27:33 rlubke Exp $
+ * $Id: TestNavigationHandler.java,v 1.9 2003/08/25 21:34:55 jvisvanathan Exp $
  */
 
 /*
@@ -55,7 +55,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestNavigationHandler.java,v 1.8 2003/08/22 17:27:33 rlubke Exp $
+ * @version $Id: TestNavigationHandler.java,v 1.9 2003/08/25 21:34:55 jvisvanathan Exp $
  * 
  */
 
@@ -162,6 +162,8 @@ public class TestNavigationHandler extends ServletFacesTestCase
 
         String newViewId = null;
         UIViewRoot page = null;
+        boolean gotException = false;
+        
         for (int i=0; i<testResultList.size(); i++) {
             TestResult testResult = (TestResult)testResultList.get(i);
             System.out.println("Testing from-view-id="+testResult.fromViewId+
@@ -170,11 +172,19 @@ public class TestNavigationHandler extends ServletFacesTestCase
             page = new UIViewRootBase();
             page.setViewId(testResult.fromViewId);
             context.setViewRoot(page);
-            navHandler.handleNavigation(
-	        context, testResult.fromActionRef, testResult.fromOutcome);
-            newViewId = context.getViewRoot().getViewId();
-            System.out.println("assertTrue("+newViewId+".equals("+testResult.toViewId+"))");
-            assertTrue(newViewId.equals(testResult.toViewId));
+            try {
+                navHandler.handleNavigation(
+	            context, testResult.fromActionRef, testResult.fromOutcome);
+            } catch (Exception e ) {
+                // exception is valid only if context or fromoutcome is null.
+                assertTrue(testResult.fromOutcome == null);
+                gotException = true;
+            }
+            if ( !gotException) {
+                newViewId = context.getViewRoot().getViewId();
+                System.out.println("assertTrue("+newViewId+".equals("+testResult.toViewId+"))");
+                assertTrue(newViewId.equals(testResult.toViewId));
+            }
         }
     }
 

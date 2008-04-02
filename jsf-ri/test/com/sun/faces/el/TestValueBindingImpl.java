@@ -1,5 +1,5 @@
 /*
- * $Id: TestValueBindingImpl.java,v 1.17 2003/08/25 21:05:00 eburns Exp $
+ * $Id: TestValueBindingImpl.java,v 1.18 2003/08/25 21:34:56 jvisvanathan Exp $
  */
 
 /*
@@ -43,7 +43,7 @@ import java.util.HashMap;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestValueBindingImpl.java,v 1.17 2003/08/25 21:05:00 eburns Exp $
+ * @version $Id: TestValueBindingImpl.java,v 1.18 2003/08/25 21:34:56 jvisvanathan Exp $
  */
 
 public class TestValueBindingImpl extends ServletFacesTestCase
@@ -535,14 +535,14 @@ public class TestValueBindingImpl extends ServletFacesTestCase
 	valueBinding.setRef("cookie.cookie");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.servlet.http.Cookie"));
         */
-	valueBinding.setRef("initParam.javax.faces.STATE_SAVING_METHOD");
+	valueBinding.setRef("initParam['javax.faces.STATE_SAVING_METHOD']");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("java.lang.String"));
 
 	// tree
 	// create a dummy root for the tree.
 	UIViewRoot page = new UIViewRootBase();
-    page.setId("root");
-    page.setViewId("newTree");
+        page.setId("root");
+        page.setViewId("newTree");
 	getFacesContext().setViewRoot(page);
 	valueBinding.setRef("view.root");
 	assertTrue(valueBinding.getType(getFacesContext()).getName().equals("javax.faces.component.UIComponent"));
