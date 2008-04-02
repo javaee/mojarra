@@ -1,5 +1,5 @@
 /*
- * $Id: Application.java,v 1.44 2006/02/24 18:05:03 edburns Exp $
+ * $Id: Application.java,v 1.45 2006/03/07 21:02:45 edburns Exp $
  */
 
 /*
@@ -694,6 +694,12 @@ public abstract class Application {
      *     of the target class, recursively working up the inheritance
      *     hierarchy.</li>
      * </ul>
+     *
+     * <p>If the <code>Converter</code> has a single argument constructor that
+     * accepts a <code>Class</code>, instantiate the <code>Converter</code>
+     * using that constructor, passing the argument <code>targetClass</code> as
+     * the sole argument.  Otherwise, simply use the zero-argument constructor.
+     * </p>
      *
      * @param targetClass Target class for which to return a {@link Converter}
      *

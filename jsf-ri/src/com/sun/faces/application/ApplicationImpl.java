@@ -1,5 +1,5 @@
 /*
- * $Id: ApplicationImpl.java,v 1.70 2006/01/11 15:28:02 rlubke Exp $
+ * $Id: ApplicationImpl.java,v 1.71 2006/03/07 21:02:46 edburns Exp $
  */
 
 /*
@@ -30,6 +30,7 @@
 package com.sun.faces.application;
 
 import com.sun.faces.el.FacesResourceBundleELResolver;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -78,6 +79,7 @@ import com.sun.faces.el.VariableResolverChainWrapper;
 import com.sun.faces.el.VariableResolverImpl;
 import com.sun.faces.util.Util;
 import com.sun.faces.util.MessageUtils;
+import java.lang.reflect.Constructor;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -696,8 +698,8 @@ public class ApplicationImpl extends Application {
             message = message +" targetClass " + targetClass;
             throw new NullPointerException(message);
         }
-        Converter returnVal = (Converter) newThing(targetClass,
-                                                   converterTypeMap);
+        Converter returnVal = (Converter) newConverter(targetClass,
+                                                   converterTypeMap,targetClass);
         if (returnVal != null) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Created converter of type " + 
@@ -711,7 +713,7 @@ public class ApplicationImpl extends Application {
         Class[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
-                returnVal = createConverterBasedOnClass(interfaces[i]);
+                returnVal = createConverterBasedOnClass(interfaces[i], targetClass);
                 if (returnVal != null) {
                    if (logger.isLoggable(Level.FINE)) {
                        logger.fine("Created converter of type " +
@@ -725,7 +727,7 @@ public class ApplicationImpl extends Application {
         //Search for converters registered to superclasses of targetClass
         Class superclass = targetClass.getSuperclass();
         if (superclass != null) {
-            returnVal = createConverterBasedOnClass(superclass);
+            returnVal = createConverterBasedOnClass(superclass, targetClass);
             if (returnVal != null) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Created converter of type " +
@@ -737,10 +739,11 @@ public class ApplicationImpl extends Application {
         return returnVal;
     }
 
-    protected Converter createConverterBasedOnClass(Class targetClass) {
+    protected Converter createConverterBasedOnClass(Class targetClass, 
+            Class baseClass) {
         
-        Converter returnVal = (Converter) newThing(targetClass,
-                                                   converterTypeMap);
+        Converter returnVal = (Converter) newConverter(targetClass,
+                converterTypeMap, baseClass);
         if (returnVal != null) {
             if (logger.isLoggable(Level.FINE)) {
                 logger.fine("Created converter of type " + 
@@ -754,7 +757,7 @@ public class ApplicationImpl extends Application {
         Class[] interfaces = targetClass.getInterfaces();
         if (interfaces != null) {
             for (int i = 0; i < interfaces.length; i++) {
-                returnVal = createConverterBasedOnClass(interfaces[i]);
+                returnVal = createConverterBasedOnClass(interfaces[i], null);
                 if (returnVal != null) {
                    if (logger.isLoggable(Level.FINE)) {
                        logger.fine("Created converter of type " +
@@ -768,7 +771,7 @@ public class ApplicationImpl extends Application {
         //Search for converters registered to superclasses of targetClass
         Class superclass = targetClass.getSuperclass();
         if (superclass != null) {
-            returnVal = createConverterBasedOnClass(superclass);
+            returnVal = createConverterBasedOnClass(superclass, null);
             if (returnVal != null) {
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Created converter of type " +
@@ -991,6 +994,90 @@ public class ApplicationImpl extends Application {
         }
         return result;
     }
+    
+    /**
+     * <p>The same as newThing except that a single argument constructor
+     * that accepts a Class is looked for before calling the no-arg version.</p>
+     *
+     * <p>PRECONDITIONS: the values in the Map are either Strings
+     * representing fully qualified java class names, or java.lang.Class
+     * instances.</p>
+     * <p>ALGORITHM: Look in the argument map for a value for the argument
+     * key.  If found, if the value is instanceof String, assume the String
+     * specifies a fully qualified java class name and obtain the
+     * java.lang.Class instance for that String using Util.loadClass().
+     * Replace the String instance in the argument map with the Class
+     * instance.  If the value is instanceof Class, proceed.  Assert that the
+     * value is either instanceof java.lang.Class or java.lang.String.</p>
+     * <p>Now that you have a java.lang.class, call its newInstance and
+     * return it as the result of this method.</p>
+     *
+     * @param key Used to look up the value in the <code>Map</code>.
+     * @param map The <code>Map</code> that will be searched.
+     * @return The new object instance.
+     */
+    protected Object newConverter(Object key, Map map, Class targetClass) {
+        assert (key != null && map != null);
+        assert (key instanceof String || key instanceof Class);
+
+        Object result = null;
+        Class clazz = null;
+        Object value = null;
+        synchronized (this) {
+            value = map.get(key);
+            if (value == null) {
+                return null;
+            }
+            assert (value instanceof String || value instanceof Class);
+            if (value instanceof String) {
+                try {
+                    clazz = Util.loadClass((String) value, value);
+                    assert (clazz != null);
+                    map.put(key, clazz);
+                } catch (Throwable t) {
+                    throw new FacesException(t.getMessage(), t);
+                }
+            } else {
+                clazz = (Class) value;
+            }
+        }
+        Constructor ctor = null;
+        Throwable cause = null;
+        try {
+            ctor = clazz.getConstructor(new Class[] { Class.class });
+            result = ctor.newInstance(targetClass);
+        } catch (SecurityException ex) {
+            cause = ex;
+        } catch (NoSuchMethodException ex) {
+            // Take no action.
+        } catch (IllegalArgumentException ex) {
+            cause = ex;
+        } catch (IllegalAccessException ex) {
+            cause = ex;
+        } catch (InvocationTargetException ex) {
+            cause = ex;
+        } catch (InstantiationException ex) {
+            cause = ex;
+        }
+        // If there was no one-argument ctor that takes a Class.
+        if (null == ctor) {
+            try {
+                result = clazz.newInstance();
+            } catch (Throwable t) {
+                cause = t;
+            }
+        }
+        
+        if (null != cause) {
+            Object[] params = {clazz.getName()};
+            throw new FacesException((MessageUtils.getExceptionMessageString(
+                    MessageUtils.CANT_INSTANTIATE_CLASS_ERROR_MESSAGE_ID, 
+                    params)), cause);
+            
+        }
+        return result;
+    }
+    
     
     ApplicationAssociate getAssociate() {
         return associate;

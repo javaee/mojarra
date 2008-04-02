@@ -1,5 +1,5 @@
 /*
- * $Id: TestBean.java,v 1.25 2006/02/03 21:39:12 edburns Exp $
+ * $Id: TestBean.java,v 1.26 2006/03/07 21:02:48 edburns Exp $
  */
 
 /*
@@ -64,6 +64,7 @@ import javax.servlet.http.HttpServletRequest;
 public class TestBean {
     
 public enum Suit { Hearts, Clubs, Diamonds, Spades }
+public enum Color { Red, Blue, Green, Orange }
 
     private Random random;
     private ArrayList newList1= new ArrayList();
@@ -811,6 +812,27 @@ public enum Suit { Hearts, Clubs, Diamonds, Spades }
      */
     public void setReferencedSuit(Suit referencedSuit) {
         this.referencedSuit = referencedSuit;
+    }
+
+    /**
+     * Holds value of property color.
+     */
+    private Color color;
+
+    /**
+     * Getter for property color.
+     * @return Value of property color.
+     */
+    public Color getColor() {
+        return this.color;
+    }
+
+    /**
+     * Setter for property color.
+     * @param color New value of property color.
+     */
+    public void setColor(Color color) {
+        this.color = color;
     }
 
 }

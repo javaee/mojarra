@@ -120,7 +120,6 @@
     <converter-class>javax.faces.convert.ShortConverter</converter-class>
   </converter>
 
-
   <!-- Configure Standard By-Class Converters -->
 
   <converter>
@@ -163,7 +162,10 @@
     <converter-for-class>java.lang.Short</converter-for-class>
     <converter-class>javax.faces.convert.ShortConverter</converter-class>
   </converter>
-
+  <converter>
+    <converter-for-class>java.lang.Enum</converter-for-class>
+    <converter-class>javax.faces.convert.EnumConverter</converter-class>
+  </converter>
 
   <!-- Configure Standard Validators -->
 

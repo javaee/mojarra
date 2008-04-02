@@ -90,6 +90,22 @@
         </jsf.war>
     </target>
 
+   <!-- PENDING(edburns): convert this to a re-usable macro -->
+
+    <target name="build.exploded.war" depends="compile">
+
+      <mkdir dir="${build.dir}/dist/jsf-systest" />
+      <copy todir="${build.dir}/dist/jsf-systest/WEB-INF/classes">
+        <fileset dir="${source.dir}"
+                    includes="**/*.properties,**/*.xml"/>
+        <fileset dir="${build.dir}/classes"/>
+      </copy>
+      <copy todir="${build.dir}/dist/jsf-systest">
+        <fileset dir="${web.dir}"/>
+      </copy>
+
+    </target>
+
 
     <target name="compile" depends=""
             description="Just compile the classes">

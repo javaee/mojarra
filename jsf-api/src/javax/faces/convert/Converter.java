@@ -1,5 +1,5 @@
 /*
- * $Id: Converter.java,v 1.13 2005/12/05 16:42:52 edburns Exp $
+ * $Id: Converter.java,v 1.14 2006/03/07 21:02:45 edburns Exp $
  */
 
 /*
@@ -45,6 +45,15 @@ import javax.faces.context.FacesContext;
  * constructor.  In addition, if the {@link Converter} class wishes to have
  * configuration property values saved and restored with the component tree,
  * the implementation must also implement {@link StateHolder}.</p>
+ *
+ * <p>Starting with version 1.2 of the specification, an exception to the above 
+ * zero-arguments constructor requirement has been introduced.  If a converter has
+ * a single argument constructor that takes a <code>Class</code> instance and
+ * the <code>Class</code> of the data to be converted is
+ * known at converter instantiation time, this constructor
+ * must be used to instantiate the converter instead of the zero-argument
+ * version.  This enables the per-class conversion
+ * of Java enumerated types.</p>
  *
  * <p>If any <code>Converter</code> implementation requires a
  * <code>java.util.Locale</code> to perform its job, it must obtain that
