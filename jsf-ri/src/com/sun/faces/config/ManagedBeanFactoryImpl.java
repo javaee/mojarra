@@ -1,5 +1,5 @@
 /*
- * $Id: ManagedBeanFactoryImpl.java,v 1.15 2006/11/09 21:09:14 rlubke Exp $
+ * $Id: ManagedBeanFactoryImpl.java,v 1.16 2007/02/04 19:32:26 rlubke Exp $
  */
 
 /*
@@ -335,8 +335,10 @@ public class ManagedBeanFactoryImpl extends ManagedBeanFactory {
                 cnfe);
         } catch (InjectionProviderException ipe) {
             throw new FacesException(ipe.getCause());
+        } finally {
+            beanList.remove(managedBean.getManagedBeanName());
         }
-        beanList.remove(managedBean.getManagedBeanName());
+        
         return bean;
     }
 
