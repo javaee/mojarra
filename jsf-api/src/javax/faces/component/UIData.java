@@ -1175,7 +1175,13 @@ public class UIData extends UIComponentBase
         while (kids.hasNext()) {
             restoreDescendantState((UIComponent) kids.next(), context);
         }
-
+        // Restore state for facets of this component
+        Iterator facetNames = component.getFacets().keySet().iterator();
+        while (facetNames.hasNext()) {
+            UIComponent c = component.getFacet( (String) facetNames.next() );
+            if (c!=null)
+                restoreDescendantState(c, context);
+        }
 
     }
 
@@ -1227,6 +1233,13 @@ public class UIData extends UIComponentBase
         Iterator kids = component.getChildren().iterator();
         while (kids.hasNext()) {
             saveDescendantState((UIComponent) kids.next(), context);
+        }
+        // Save state for facets of this component
+        Iterator facetNames = component.getFacets().keySet().iterator();
+        while (facetNames.hasNext()) {
+            UIComponent c = component.getFacet( (String) facetNames.next() );
+            if (c!=null)
+                restoreDescendantState(c, context);
         }
 
     }
