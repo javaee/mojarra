@@ -1,5 +1,5 @@
 /* 
- * $Id: XulViewHandlerImpl.java,v 1.9 2003/10/15 17:00:00 jvisvanathan Exp $ 
+ * $Id: XulViewHandlerImpl.java,v 1.10 2003/10/16 22:12:21 jvisvanathan Exp $ 
  */ 
 
 
@@ -76,12 +76,15 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Locale;
+import java.util.Enumeration;
+import javax.servlet.ServletRequest;
 
 
 /** 
  * <B>XulViewHandlerImpl</B> is the Xul non-JSP ViewHandler implementation
  *
- * @version $Id: XulViewHandlerImpl.java,v 1.9 2003/10/15 17:00:00 jvisvanathan Exp $ 
+ * @version $Id: XulViewHandlerImpl.java,v 1.10 2003/10/16 22:12:21 jvisvanathan Exp $ 
  * 
  * @see javax.faces.application.ViewHandler 
  * 
@@ -182,6 +185,8 @@ public class XulViewHandlerImpl implements ViewHandler {
             // (last parameter)????
             root.setViewId("default");
             context.setViewRoot(root);
+            Locale locale = calculateLocale(context);
+            root.setLocale(locale);
             return root;
         }
 
@@ -362,5 +367,60 @@ public class XulViewHandlerImpl implements ViewHandler {
     }
 
     public void writeState(FacesContext context) throws IOException {
+    }
+    
+    public Locale calculateLocale(FacesContext context) {
+        Locale result = null;
+        // determine the locales that are acceptable to the client based on the 
+        // Accept-Language header and the find the best match among the 
+        // supported locales specified by the client.
+        Enumeration enum = ((ServletRequest)
+                context.getExternalContext().getRequest()).getLocales();
+        while (enum.hasMoreElements()) {
+            Locale perf = (Locale) enum.nextElement();
+            result = findMatch(context, perf);
+            if (result != null) {
+                break;
+            }
+        }
+        // no match is found.
+        if ( result == null ) {
+            if (context.getApplication().getDefaultLocale() == null ) {
+                result = Locale.getDefault();
+            } else {
+                result = context.getApplication().getDefaultLocale();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Attempts to find a matching locale based on <code>perf></code> and 
+     * list of supported locales, using the matching algorithm
+     * as described in JSTL 8.3.2.
+     */
+    protected Locale findMatch(FacesContext context, Locale perf) {
+        Locale result = null;
+        Iterator it = context.getApplication().getSupportedLocales();
+        while (it.hasNext()) {
+            Locale supportedLocale = (Locale)it.next();
+            
+            if ( perf.equals(supportedLocale)) {
+                // exact match
+                result = supportedLocale;
+                break;
+            } else {
+                // Make sure the preferred locale doesn't have  country set, when 
+                // doing a language match, For ex., if the preferred locale is
+                // "en-US", if one of supported locales is "en-UK", even though 
+                // its language matches that of the preferred locale, we must 
+                // ignore it.
+                if (perf.getLanguage().equals(supportedLocale.getLanguage()) &&
+                    supportedLocale.getCountry().equals("")) {
+                    result = supportedLocale;
+                }
+            }
+        }
+        return result;
     }
 } 
