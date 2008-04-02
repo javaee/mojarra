@@ -1,5 +1,5 @@
 /*
- * $Id: ViewTag.java,v 1.28 2004/11/23 19:26:53 rlubke Exp $
+ * $Id: ViewTag.java,v 1.29 2004/12/08 15:10:26 edburns Exp $
  */
 
 /*
@@ -22,6 +22,8 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.el.ValueBinding;
+import javax.faces.el.MethodBinding;
+import javax.faces.event.PhaseEvent;
 import javax.faces.webapp.UIComponentBodyTag;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -40,7 +42,7 @@ import java.util.Locale;
  * any renderers or attributes. It exists mainly to save the state of
  * the response tree once all tags have been rendered.
  *
- * @version $Id: ViewTag.java,v 1.28 2004/11/23 19:26:53 rlubke Exp $
+ * @version $Id: ViewTag.java,v 1.29 2004/12/08 15:10:26 edburns Exp $
  */
 
 public class ViewTag extends UIComponentBodyTag {
@@ -67,6 +69,19 @@ public class ViewTag extends UIComponentBodyTag {
     public void setLocale(String newLocale) {
         locale = newLocale;
     }
+
+    protected String beforePhase = null;
+
+    public void setBeforePhase(String newBeforePhase) {
+	beforePhase = newBeforePhase;
+    }
+
+    protected String afterPhase = null;
+
+    public void setAfterPhase(String newAfterPhase) {
+	afterPhase = newAfterPhase;
+    }
+
 
     // Relationship Instance Variables
 
@@ -258,10 +273,12 @@ public class ViewTag extends UIComponentBodyTag {
         super.setProperties(component);
         Locale viewLocale = null;
         ValueBinding vb = null;
+        MethodBinding mb = null;
+	UIViewRoot viewRoot = (UIViewRoot) component;
         if (null != locale) {
             if (isValueReference(locale)) {
-                component.setValueBinding("locale",
-                                          vb = Util.getValueBinding(locale));
+                viewRoot.setValueBinding("locale",
+					 vb = Util.getValueBinding(locale));
                 Object resultLocale =
                     vb.getValue(FacesContext.getCurrentInstance());
                 if (resultLocale instanceof Locale) {
@@ -272,7 +289,7 @@ public class ViewTag extends UIComponentBodyTag {
             } else {
                 viewLocale = getLocaleFromString(locale);
             }
-            ((UIViewRoot) component).setLocale(viewLocale);
+            viewRoot.setLocale(viewLocale);
             // update the JSTL locale attribute in request scope so that
             // JSTL picks up the locale from viewRoot. This attribute
             // must be updated before the JSTL setBundle tag is called
@@ -280,7 +297,28 @@ public class ViewTag extends UIComponentBodyTag {
             // is created based on the locale.
             Config.set(pageContext.getRequest(),Config.FMT_LOCALE, viewLocale);
         }
-
+        if (null != beforePhase) {
+            if (isValueReference(beforePhase)) {
+                Class args[] = { PhaseEvent.class };
+                mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(beforePhase, args);
+                viewRoot.setBeforePhaseListener(mb);
+		
+            } else {
+		Object params [] = {beforePhase};
+		throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
+            }
+        }
+        if (null != afterPhase) {
+            if (isValueReference(afterPhase)) {
+                Class args[] = { PhaseEvent.class };
+                mb = FacesContext.getCurrentInstance().getApplication().createMethodBinding(afterPhase, args);
+                viewRoot.setAfterPhaseListener(mb);
+		
+            } else {
+		Object params [] = {afterPhase};
+		throw new javax.faces.FacesException(Util.getExceptionMessageString(Util.INVALID_EXPRESSION_ID, params));
+            }
+        }
     }
 
 

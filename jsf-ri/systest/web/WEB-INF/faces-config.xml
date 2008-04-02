@@ -134,6 +134,17 @@
     <managed-bean-scope>session</managed-bean-scope>
   </managed-bean>
 
+  <managed-bean>
+    <managed-bean-name>phaseListener</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.systest.model.PrintEventToRequestMapPhaseListener
+    </managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>phaseIdString</property-name>
+      <value>ANY_PHASE</value>
+    </managed-property>
+  </managed-bean>
 
    <!-- validator -->
   <validator>

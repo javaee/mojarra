@@ -522,6 +522,38 @@
 
   </tag>
 
+  <tag>
+
+    <name>phaseListener</name>
+    <tag-class>com.sun.faces.taglib.jsf_core.PhaseListenerTag</tag-class>
+    <tei-class>com.sun.faces.taglib.FacesTagExtraInfo</tei-class>
+    <body-content>empty</body-content>
+    <description>
+      Register a PhaseListener instance on the UIViewRoot in which
+      this tag is nested.
+    </description>
+
+    <attribute>
+      <name>type</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Fully qualified Java class name of an PhaseListener to be
+        created and registered.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>binding</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+        Value binding expression that evaluates to an object that 
+        implements javax.faces.event.PhaseListener.
+      </description>
+    </attribute>
+  </tag>
+
 
   <tag>
 
@@ -951,6 +983,30 @@
         Locale to use for localizing this page.  Expressions
         must evaluate to a java.util.Locale or to a String
         that is converted to a Locale.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>beforePhase</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+
+          MethodBinding pointing to a method that takes a
+          javax.faces.event.PhaseEvent and returns void.  This method
+          will be called before every phase except for restore view.
+      </description>
+    </attribute>
+
+    <attribute>
+      <name>afterPhase</name>
+      <required>false</required>
+      <rtexprvalue>false</rtexprvalue>
+      <description>
+
+          MethodBinding pointing to a method that takes a
+          javax.faces.event.PhaseEvent and returns void.  This method
+          will be called after every phase except for restore view.
       </description>
     </attribute>
 
