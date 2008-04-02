@@ -1,5 +1,5 @@
 /*
- * $Id: TestMessageResourcesImpl.java,v 1.5 2003/04/29 20:52:29 eburns Exp $
+ * $Id: TestMessageResourcesImpl.java,v 1.6 2003/05/14 22:46:35 eburns Exp $
  */
 
 /*
@@ -31,7 +31,7 @@ import java.util.Locale;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestMessageResourcesImpl.java,v 1.5 2003/04/29 20:52:29 eburns Exp $
+ * @version $Id: TestMessageResourcesImpl.java,v 1.6 2003/05/14 22:46:35 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -106,16 +106,15 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         Object[] params1 = {"JavaServerFaces"};
         msg = resources.getMessage(facesContext, "MSG0001", params1);
         assertTrue ( msg != null );
-        assertTrue((msg.getSummary()).equals("JavaServerFaces is not a valid number."));
+        assertTrue((msg.getSummary()).equals("'JavaServerFaces' is not a valid number."));
         
         msg = resources.getMessage( facesContext,"MSG0003", "userId");
         assertTrue ( msg != null );
-        assertTrue((msg.getSummary()).equals("userId field cannot be empty."));
+        assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
         
         msg = resources.getMessage( facesContext, "MSG0004", "userId", "1000","10000");
         assertTrue ( msg != null );
-        assertTrue((msg.getDetail()).equals("Value should be between 1000 and 10000.")); 
-        assertTrue((msg.getSummary()).equals("userId out of range."));
+        assertTrue((msg.getSummary()).equals("'userId' out of range. Value should be between '1000' and '10000'.")); 
     }
 
     public void testFindCatalog() {
@@ -130,7 +129,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         // JSFMessages.xml
         msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
         assertTrue ( msg != null );
-        assertTrue((msg.getSummary()).equals("userId field cannot be empty."));
+        assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
 
         // passing an invalid locale should use fall back.
         Locale en_locale = new Locale("eng", "us");
@@ -149,7 +148,7 @@ public class TestMessageResourcesImpl extends ServletFacesTestCase
         en_locale = new Locale("en", "us"); 
         msg = resources.getMessage(getFacesContext(),"MSG0003", "userId");
         assertTrue ( msg != null );
-        assertTrue((msg.getSummary()).equals("userId field cannot be empty."));
+        assertTrue((msg.getSummary()).equals("'userId' field cannot be empty."));
         msg = null;
 
     }

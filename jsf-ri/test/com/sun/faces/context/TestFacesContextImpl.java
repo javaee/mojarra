@@ -1,5 +1,5 @@
 /*
- * $Id: TestFacesContextImpl.java,v 1.23 2003/04/29 20:52:27 eburns Exp $
+ * $Id: TestFacesContextImpl.java,v 1.24 2003/05/14 22:46:34 eburns Exp $
  */
 
 /*
@@ -52,7 +52,7 @@ import com.sun.faces.ServletFacesTestCase;
  *
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestFacesContextImpl.java,v 1.23 2003/04/29 20:52:27 eburns Exp $
+ * @version $Id: TestFacesContextImpl.java,v 1.24 2003/05/14 22:46:34 eburns Exp $
  * 
  * @see	Blah
  * @see	Bloo
@@ -148,7 +148,7 @@ public void testAccessors()
     try {
         getFacesContext().setResponseWriter(null);
     } catch (Exception e) {
-        if (!e.getMessage().equals("responseWriter argument is null.")) {
+        if (-1 == e.getMessage().indexOf("esponseWriter")) {
             assertTrue(false);
         }
     }
