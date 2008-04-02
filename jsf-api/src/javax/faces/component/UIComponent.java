@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponent.java,v 1.52 2002/09/21 21:26:46 craigmcc Exp $
+ * $Id: UIComponent.java,v 1.53 2002/09/21 21:40:56 craigmcc Exp $
  */
 
 /*
@@ -553,10 +553,10 @@ public interface UIComponent extends Serializable {
     /**
      * <p>Process an individual event queued to this <code>UIComponent</code>.
      * The default implementation does nothing, but can be overridden by
-     * subclasses of <code>UIComponent</code>.  Return <code>true</code> if
+     * subclasses of <code>UIComponent</code>.  Return <code>false</code> if
      * lifecycle processing should proceed directly to the <em>Render
      * Response</em> phase once all events have been processed for all
-     * components, or <code>false</code> for the normal lifecycle flow.</p>
+     * components, or <code>true</code> for the normal lifecycle flow.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
@@ -576,9 +576,9 @@ public interface UIComponent extends Serializable {
      * primarily available for use by tools.  Component writers should
      * override the <code>processEvent()</code> method instead.</p>
      *
-     * <p>Return <code>true</code> if the <code>processEvent()</code> method
-     * call for any queued event returned <code>true</code>; otherwise,
-     * return <code>false</code>.</p>
+     * <p>Return <code>false</code> if the <code>processEvent()</code> method
+     * call for any queued event returned <code>false</code>; otherwise,
+     * return <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
      *

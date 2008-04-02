@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.23 2002/09/21 21:26:47 craigmcc Exp $
+ * $Id: UIComponentBase.java,v 1.24 2002/09/21 21:40:56 craigmcc Exp $
  */
 
 /*
@@ -1153,10 +1153,10 @@ public abstract class UIComponentBase implements UIComponent {
     /**
      * <p>Process an individual event queued to this <code>UIComponent</code>.
      * The default implementation does nothing, but can be overridden by
-     * subclasses of <code>UIComponent</code>.  Return <code>true</code> if
+     * subclasses of <code>UIComponent</code>.  Return <code>false</code> if
      * lifecycle processing should proceed directly to the <em>Render
      * Response</em> phase once all events have been processed for all
-     * components, or <code>false</code> for the normal lifecycle flow.</p>
+     * components, or <code>true</code> for the normal lifecycle flow.</p>
      *
      * @param context FacesContext for the request we are processing
      * @param event Event to be processed against this component
@@ -1169,7 +1169,7 @@ public abstract class UIComponentBase implements UIComponent {
         if ((context == null) || (event == null)) {
             throw new NullPointerException();
         }
-        return (false); // Default implementation does nothing
+        return (true); // Default implementation does nothing
 
     }
 
@@ -1183,9 +1183,9 @@ public abstract class UIComponentBase implements UIComponent {
      * primarily available for use by tools.  Component writers should
      * override the <code>processEvent()</code> method instead.</p>
      *
-     * <p>Return <code>true</code> if the <code>processEvent()</code> method
-     * call for any queued event returned <code>true</code>; otherwise,
-     * return <code>false</code>.</p>
+     * <p>Return <code>false</code> if the <code>processEvent()</code> method
+     * call for any queued event returned <code>false</code>; otherwise,
+     * return <code>true</code>.</p>
      *
      * @param context FacesContext for the request we are processing
      *
@@ -1197,20 +1197,20 @@ public abstract class UIComponentBase implements UIComponent {
         if (context == null) {
             throw new NullPointerException();
         }
-        boolean result = false;
+        boolean result = true;
         Iterator events = context.getRequestEvents(this);
         while (events.hasNext()) {
             FacesEvent event = (FacesEvent) events.next();
-            if (processEvent(context, event)) {
-                result = true;
+            if (!processEvent(context, event)) {
+                result = false;
             }
             if (handlers != null) {
                 Iterator handlers = getRequestEventHandlers();
                 while (handlers.hasNext()) {
                     RequestEventHandler handler =
                         (RequestEventHandler) handlers.next();
-                    if (handler.processEvent(context, this, event)) {
-                        result = true;
+                    if (!handler.processEvent(context, this, event)) {
+                        result = false;
                     }
                 }
             }
