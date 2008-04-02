@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.13 2003/01/23 17:42:49 rkitain Exp $
+ * $Id: UIInput.java,v 1.14 2003/01/24 18:02:00 rkitain Exp $
  */
 
 /*
@@ -171,7 +171,8 @@ public class UIInput extends UIComponentBase {
         // Determine whether a value change has actually occurred
         Object value = getValue();
         boolean changed;
-        if (previous == value) {
+        if (previous != null && value != null &&
+            previous.equals(value)) {
             // no change has occurred
             changed = false;
         } else if (previous == null) {
@@ -208,7 +209,7 @@ public class UIInput extends UIComponentBase {
      * @param value new value of this component
      */
     protected boolean compareValues(Object previous, Object value) {
-        return (!(previous == value));
+        return (!(previous.equals(value)));
     }
 
     // ----------------------------------------------- Event Processing Methods

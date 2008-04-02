@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.21 2003/01/23 17:42:49 rkitain Exp $
+ * $Id: UISelectMany.java,v 1.22 2003/01/24 18:02:00 rkitain Exp $
  */
 
 /*
@@ -219,9 +219,11 @@ public class UISelectMany extends UISelectBase {
         int count = 0;
         for ( int i= 0; i < array.length; ++i ) {
             Object arrayElement = array[i];
-            if (arrayElement == element) {
-                count ++;
-            }    
+            if (arrayElement != null && element != null) {
+                if (arrayElement.equals(element)) {
+                    count ++;
+                }
+            }
         }    
         return count;
     }    
