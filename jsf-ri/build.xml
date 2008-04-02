@@ -73,6 +73,7 @@
   <property name="commons-digester.jar" 
             value="{tomcat.home}/server/lib/commons-digester.jar"/>
   <property name="jsf.api.jar" value="${jsf.api.home}/build/lib/jsf-api.jar"/>
+  <property name="jsf.api.dtd" value="${jsf.api.home}/build/lib/web-facesconfig_1_0.dtd"/>
   <property name="jsp.jar" value="" />
 
 <!-- ************ Compiler Defaults *************************************** -->
@@ -182,9 +183,8 @@
     <copy todir="${build.home}/classes">
         <fileset dir="${source.home}" includes="**/*.xml"/>
     </copy>
-    <copy todir="${build.home}/classes">
-        <fileset dir="${source.home}" includes="**/*.dtd"/>
-    </copy>
+    <copy  file="${jsf.api.dtd}"
+          todir="${build.home}/classes/com/sun/faces/config"/>
 
     </target>
 
@@ -229,6 +229,7 @@
     <copy file="LICENSE.html" todir="${dist.home}"/>
     <copy file="LICENSE-APACHE.txt" todir="${dist.home}"/>
     <copy file="LICENSE-MOZILLA.txt" todir="${dist.home}"/>
+    <copy file="${jsf.api.dtd}" todir="${dist.home}"/>
 
     <echo> Build the API Javadocs </echo>
     <ant dir="${jsf.api.home}" 
