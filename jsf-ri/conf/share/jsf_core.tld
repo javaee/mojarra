@@ -435,7 +435,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression to a backing bean
+        Value binding expression to a backing bean
         property bound to the component instance for
         the UIComponent created by this custom action.
       </description>
@@ -489,7 +489,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression to a backing bean
+        Value binding expression to a backing bean
         property bound to the component instance for
         the UIComponent created by this custom action.
       </description>
@@ -552,7 +552,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression pointing at a
+        Value binding expression pointing at a
         SelectItem instance containing the
         information for this option.
       </description>
@@ -578,7 +578,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression to a backing bean
+        Value binding expression to a backing bean
         property bound to the component instance for
         the UIComponent created by this custom action.
       </description>
@@ -599,7 +599,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression pointing at a List
+        Value binding expression pointing at a List
         or array of SelectItem instances containing the
         information for these options.
       </description>
@@ -626,7 +626,7 @@
       <required>false</required>
       <rtexprvalue>false</rtexprvalue>
       <description>
-        Value reference expression to a backing bean
+        Value binding expression to a backing bean
         property bound to the component instance for
         the UIComponent created by this custom action.
       </description>
