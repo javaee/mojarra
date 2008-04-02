@@ -1,5 +1,5 @@
 /*
- * $Id: HtmlResponseWriter.java,v 1.37 2006/10/23 22:04:11 rlubke Exp $
+ * $Id: HtmlResponseWriter.java,v 1.38 2006/10/26 23:00:52 rlubke Exp $
  */
 
 /*
@@ -664,8 +664,7 @@ public class HtmlResponseWriter extends ResponseWriter {
             writer.write('>');
             closeStart = false;
             if (isScriptOrStyle() && !scriptOrStyleSrc) {
-                isScript = false;
-                isStyle = false;
+
                 isXhtml = getContentType().equals(
                      RIConstants.XHTML_CONTENT_TYPE);
                 if (isXhtml) {
@@ -677,6 +676,8 @@ public class HtmlResponseWriter extends ResponseWriter {
                 } else {
                     writer.write("\n<!--\n");
                 }
+                isScript = false;
+                isStyle = false;
             }
         }
 
