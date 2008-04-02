@@ -73,7 +73,7 @@ align=BOTTOM></td>
             modelReference="CustomerBean.middleInitial" > 
             <f:validate_stringrange minimum="A" maximum="z"/> 
         </h:input_text>
-        <h:output_errors id="mIError" compoundId="/CustomerForm/middleInitial"/> 
+        <h:output_errors id="mIError" clientId="middleInitial"/> 
         <br>
       </td>
     </tr>
@@ -187,7 +187,7 @@ align=BOTTOM></td>
                         size="5">
         <f:validate_longrange minimum="10000" maximum="99999" /> 
       </h:input_number>
-      <h:output_errors id="zipError" compoundId="/CustomerForm/zip" />    
+      <h:output_errors id="zipError" clientId="zip" />    
             <br>
       </td>
     </tr>

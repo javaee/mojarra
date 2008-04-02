@@ -54,7 +54,7 @@
          </h:input_number> 
 	 <h:command_button id="submit" label="Submit" commandName="submit" />
          <p>
-	 <h:output_errors id="errors1" compoundId="/helloForm/userNo"/>
+	 <h:output_errors id="errors1" clientId="userNo"/>
     </h:form>
     </f:use_faces>
 </HTML>  
