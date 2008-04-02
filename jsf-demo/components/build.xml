@@ -161,20 +161,20 @@
     <mkdir dir="${build}/classes/${example}" />
     <mkdir dir="${build}/classes/${example}/META-INF" />
     <mkdir dir="${build}/${webapp}/src/components" />
-    <mkdir dir="${build}/WEB-INF" />
     <mkdir dir="${build}/${webapp}/WEB-INF/lib" />
     <mkdir dir="${build}/${webapp}/WEB-INF/classes" />
   </target>
 
   <target name="copyJars" depends="prepare" if="build.standalone">
-    <copy todir="${build}/WEB-INF/lib" file="${commons-beanutils.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-collections.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-logging.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${commons-digester.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jsf-api.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jstl_el.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${jstl.jar}" />
-    <copy todir="${build}/WEB-INF/lib" file="${standard.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-beanutils.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-collections.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-logging.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${commons-digester.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-api.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl_el.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jstl.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${standard.jar}" />
+    <copy todir="${build}/${webapp}/WEB-INF/lib" file="${jsf-ri.jar}" />
   </target>
 
   <taskdef name="list" classname="org.apache.catalina.ant.ListTask"/>	
