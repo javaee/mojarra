@@ -58,7 +58,7 @@
 <BODY BGCOLOR="white">
 
 <f:use_faces>
-<h:form  formName="carStoreForm" valueRef="CurrentOptionServer" >
+<h:form  formName="carStoreForm" >
 
 <P>
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
@@ -104,7 +104,8 @@
                 valueRef="CurrentOptionServer.carCurrentPrice" />
 
             <BR> <BR>
-            <h:command_button commandName="buy" key="buy" bundle="carDemoBundle">
+            <h:command_button commandName="buy" action="success" key="buy" 
+                bundle="carDemoBundle">
                 <f:action_listener type="cardemo.CarActionListener"/>
             </h:command_button>
             <BR> <BR>
@@ -340,7 +341,7 @@
                     <f:action_listener type="cardemo.CarActionListener" />
                 </h:command_button>
                 <h:command_button id="buy2" key="buy" bundle="carDemoBundle" 
-                commandName="buy">
+                commandName="buy" action="success">
                     <f:action_listener type="cardemo.CarActionListener"/>
                 </h:command_button>
 

@@ -1,0 +1,28 @@
+<navigation>
+
+    <!-- CarDemo -->
+    <rule>
+        <page>/Storefront.jsp</page>
+        <outcome>success</outcome>
+        <select>/more.jsp</select>
+    </rule>
+
+    <rule>
+        <page>/more.jsp</page>
+        <outcome>success</outcome>
+        <select>/buy.jsp</select>
+    </rule>
+
+    <rule>
+        <page>/buy.jsp</page>
+        <outcome>success</outcome>
+        <select>/Customer.jsp</select>
+    </rule>
+
+    <rule>
+        <page>/Customer.jsp</page>
+        <outcome>success</outcome>
+        <select>/thanks.jsp</select>
+    </rule>
+
+</navigation>

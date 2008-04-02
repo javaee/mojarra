@@ -51,7 +51,7 @@
 <body bgcolor="#FFFFFF">
 <f:use_faces>  
 
-<h:form  formName="carStoreForm" valueRef="CurrentOptionServer" >
+<h:form  formName="carStoreForm" >
 
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
 <tr NOSAVE>
@@ -147,7 +147,7 @@
 <TD>
 <P>
 <h:command_button key="buy" bundle="carDemoBundle"
-                  commandName="customer"/>
+                  commandName="customer" action="success" />
 
 </TD></TR></TABLE>
 					

@@ -56,7 +56,7 @@
 
 <jsp:useBean id="CustomerBean" class="cardemo.CustomerBean" scope="session" />
 <f:use_faces>
-<h:form  formName="CustomerForm" valueRef="CustomerBean" >
+<h:form  formName="CustomerForm">
 <table border="0" width="660" bgcolor="#4f4f72">
     <tbody>
       <tr> 
@@ -241,7 +241,8 @@
                             </tbody>
                           </table>
     
-<h:command_button  key="finishButton" bundle="carDemoBundle" commandName="finish"/>
+<h:command_button  key="finishButton" bundle="carDemoBundle" commandName="finish"
+        action="success" />
 
 <p></p>
 <p>

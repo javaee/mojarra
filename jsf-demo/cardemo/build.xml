@@ -238,8 +238,9 @@
       <fileset dir="web/WEB-INF"    >
         <include name="web.xml" />
         <include name="*.tld" />
+        <include name="*.xml" />
       </fileset>
-    </copy>
+     </copy>
 
      <copy todir="${build}">
       <fileset dir="web">

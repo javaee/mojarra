@@ -61,7 +61,7 @@
 
 <f:use_faces>  
 
-<h:form  formName="carStoreForm" valueRef="CurrentOptionServer" >
+<h:form  formName="carStoreForm">
   
 <P>
 <TABLE BORDER="0" WIDTH="660" BGCOLOR="#4F4F72">
@@ -87,8 +87,10 @@
             </FONT></B><FONT FACE="Arial, Helvetica"><BR><BR>
             <h:output_text  key="car1Desc" bundle="carDemoBundle"  /> 
             <BR></FONT>
-            <h:command_button label="More" key="moreButton"
-                 bundle="carDemoBundle" commandName="more1"/>
+            <h:command_button label="More" key="moreButton" action="success"
+                 bundle="carDemoBundle" commandName="more1">
+                <f:action_listener type="cardemo.CarActionListener"/>
+            </h:command_button>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <table border="0" align="left">
@@ -106,8 +108,10 @@
             <h:output_text  key="car2Desc" bundle="carDemoBundle" />
 
             <BR>
-            <h:command_button  label="More" key="moreButton"
-                 bundle="carDemoBundle" commandName="more2"/>
+            <h:command_button  label="More" key="moreButton" action="success"
+                 bundle="carDemoBundle" commandName="more2">
+                 <f:action_listener type="cardemo.CarActionListener"/>
+            </h:command_button>
             </TD>
         </TR>
         <TR>
@@ -131,8 +135,10 @@
             <h:output_text  key="car3Desc" bundle="carDemoBundle"  />
 
             <BR>
-            <h:command_button label="More" key="moreButton"
-                 bundle="carDemoBundle" commandName="more3"/>
+            <h:command_button label="More" key="moreButton" action="success"
+                 bundle="carDemoBundle" commandName="more3">
+                <f:action_listener type="cardemo.CarActionListener"/>
+            </h:command_button>
             </TD>
             <TD WIDTH="50%" VALIGN="TOP" BGCOLOR="white">
             <table border="0" align="left">
@@ -150,8 +156,10 @@
             <h:output_text key="car4Desc" bundle="carDemoBundle"  /> 
 
             <BR>
-            <h:command_button  key="moreButton"
-                 bundle="carDemoBundle" commandName="more4"/>
+            <h:command_button  key="moreButton" action="success" 
+                 bundle="carDemoBundle" commandName="more4">
+                <f:action_listener type="cardemo.CarActionListener"/>
+            </h:command_button>
             </TD>
         </TR>
         </TABLE>

@@ -1,5 +1,5 @@
 /*
- * $Id: CarDemoServletContextListener.java,v 1.8 2003/04/08 00:40:51 jvisvanathan Exp $
+ * $Id: CarDemoServletContextListener.java,v 1.9 2003/04/15 17:08:58 jvisvanathan Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -125,10 +125,6 @@ public class CarDemoServletContextListener implements ServletContextListener
             FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
         Lifecycle lifecycle =
             factory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE); 
-        // PENDING will be fixed when required RI changes for ApplicationImpl
-        // is done.
-        // ApplicationHandler handler = new CarDemoApplicationHandler();
-        // lifecycle.setApplicationHandler(handler); 
 
         // register CreditCardConverter
         ConverterFactory convertFactory =
