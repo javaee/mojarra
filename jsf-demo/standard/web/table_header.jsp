@@ -3,7 +3,6 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-
 <tr>
 
   <th>
@@ -26,6 +25,5 @@
                    value="Validation/Conversion Errors"/>
 
   </th>
-
 
 </tr>

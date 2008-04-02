@@ -33,6 +33,12 @@
   </managed-bean>
 
   <managed-bean>
+    <managed-bean-name>LoginForm</managed-bean-name>
+    <managed-bean-class>standard.LoginForm</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
     <managed-bean-name>UIDataBean</managed-bean-name>
     <managed-bean-class>standard.UIDataBean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
