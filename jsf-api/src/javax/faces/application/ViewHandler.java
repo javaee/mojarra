@@ -1,5 +1,5 @@
 /*
- * $Id: ViewHandler.java,v 1.6 2003/08/22 14:03:08 eburns Exp $
+ * $Id: ViewHandler.java,v 1.7 2003/08/22 14:32:09 eburns Exp $
  */
 
 /*
@@ -86,6 +86,10 @@ public interface ViewHandler {
      * call <code>FacesContext.renderResponse()</code> to cause the
      * intervening phases between <em>Restore View</em> and <em>Render
      * Response</em> to be skipped.<p>
+     *
+     * <p>The implementation must ensure that the argument {@link
+     * FacesContext} has been populated with an appropriate {@link
+     * UIViewRoot} for the argument <code>viewId</code>.</p>
      *
      * @param context {@link FacesContext} for the current request
      * @param viewId the view identifier for the current request

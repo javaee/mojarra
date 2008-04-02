@@ -1,5 +1,5 @@
 /*
- * $Id: StateManager.java,v 1.8 2003/08/22 14:03:08 eburns Exp $
+ * $Id: StateManager.java,v 1.9 2003/08/22 14:32:08 eburns Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.component.StateHolder;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -59,7 +60,7 @@ import java.util.Iterator;
  * rendering technology being used.  For JSP-based applications, the
  * methods in this class are called indirectly by the {@link
  * ViewHandler} via the tag handlers for the {@link
- * javax.faces.component.UIViewRoot} and {@link
+ * UIViewRoot} and {@link
  * javax.faces.component.UIForm} tags.  In non-JSP applications, the
  * methods in this class may be called directly from the {@link
  * ViewHandler}.  The relevant public methods for state saving are:</p>
@@ -125,7 +126,7 @@ public abstract class StateManager {
      *
      * <p>In JSP applications, this method must be called from the
      * <code>doAfterBody()</code> method of the tag handler for the
-     * {@link javax.faces.component.UIViewRoot} tag.</p>
+     * {@link UIViewRoot} tag.</p>
      *
      * @return a SerializedView instance which encapsulates the state of this
      * view, or null if no state needs to be written to the response.
@@ -178,7 +179,7 @@ public abstract class StateManager {
 
     * <p>The implementation must get the state of the component tree as
     * a <code>Serializable</code> Object.  This may be done by calling {@link
-    * javax.faces.component.UIComponent#processGetState} on the root of
+    * UIComponent#processGetState} on the root of
     * the component tree.  This state includes the following kinds of
     * information.</p>
     *
@@ -223,7 +224,7 @@ public abstract class StateManager {
      * <p>In JSP applications, this method must be called during the
      * <code>doEndTag()</code> method of the tag handler for {@link
      * javax.faces.component.UIForm} <strong>before</strong> the {@link
-     * javax.faces.component.UIComponent#encodeEnd} method for the form
+     * UIComponent#encodeEnd} method for the form
      * component is called.  The implementation of this method may call
      * {@link javax.faces.render.ResponseStateManager#writeStateMarker}
      * to actually cause the marker to be written to the {@link
@@ -258,7 +259,7 @@ public abstract class StateManager {
      *
      * <p>In JSP applications, this method must be called from the
      * <code>doAfterBody()</code> method of the tag handler for the
-     * {@link javax.faces.component.UIViewRoot} component.</p>
+     * {@link UIViewRoot} component.</p>
      *
      * @param context the {@link FacesContext} for this view.
      * This is used to obtain the {@link
@@ -281,10 +282,7 @@ public abstract class StateManager {
      *
      * <p>This method causes the tree structure and the component state
      * of the view for this <code>viewId</code> to be restored.  In the
-     * initial request case, this method causes the tree to be created.
-     * When this method exits, the {@link
-     * javax.faces.component.UIComponent} tree is ready to be used for
-     * the remainder of the request processing lifecycle.</p>
+     * initial request case, this method returns <code>null</code>.</p>
      *
      * <p> The implementation must consult the
      * <code>ServletContext</code> init parameter named as the value of
@@ -298,54 +296,59 @@ public abstract class StateManager {
      * through to {@link #restoreTreeStructure} and, if necessary {@link
      * #restoreComponentState}</p>
      *
-     * @return true if there was a tree to restore, false if there was
-     * no state information from which to restore a tree and we had to
-     * create one ourselves.
+     * @return the {@link UIViewRoot} that matches this
+     * <code>viewId</code>, if there was a view to restore,
+     * <code>null</code> otherwise.
      */
 
-    public abstract boolean getView(FacesContext context, String viewId) throws IOException;
+    public abstract UIViewRoot getView(FacesContext context, String viewId) throws IOException;
 
     /**
      *
-     * <p>The implementation must cause the {@link
-     * javax.faces.component.UIViewRoot} root of the component tree for this
-     * request to be set as the root of this {@link FacesContext}.  The
-     * implementation may call {@link
+     * <p>The implementation must obtain the view with {@link
+     * UIViewRoot} root that corresponds to the argument
+     * <code>viewId</code>.  The implementation may call {@link
      * javax.faces.render.ResponseStateManager#getTreeStructureToRestore}
      * to get back the Object which it returned from {@link
      * #getTreeStructureToSave}.  It must then turn that Object into the
-     * component tree with {@link javax.faces.component.UIViewRoot} root,
-     * which it stores as the root in the FacesContext.  If {@link
+     * component tree with {@link UIViewRoot} root, which returns.  If
+     * {@link
      * javax.faces.render.ResponseStateManager#getTreeStructureToRestore}
-     * returns <code>null</code>, create a {@link
-     * javax.faces.component.UIViewRoot} instance, set its
-     * <code>viewId</code> property using the argument, and store that
-     * as the root node in the <code>FacesContext</code>.</p>
+     * returns <code>null</code>, just return null.</p>
      *
-     * @return true if there was a tree structure Object, false if we
-     * had to create a {@link javax.faces.component.UIViewRoot} from
-     * scratch.
+     * <p><strong>NOTE:</strong> the return from this method is just the
+     * tree structure.  Component state must still be applied to this
+     * tree structure by calling {@link #restoreComponentState}.</p>
+     *
+     * @return the {@link UIViewRoot} rooted tree structure, or null if
+     * no tree structure has been stored.
      */
 
-    protected abstract boolean restoreTreeStructure(FacesContext context, 
-						 String viewId);
+    protected abstract UIViewRoot restoreTreeStructure(FacesContext context, 
+						       String viewId);
 
     /**
      *
      * <p>This method should only be called if {@link
-     * #restoreTreeStructure} returned true, indicating there actually
-     * is some state to restore.  The implementation must take the
-     * argument <code>FacesContext</code> and pull out its {@link
-     * javax.faces.component.UIViewRoot} root and populate it with state
-     * information.  The implementation may call {@link
-     * javax.faces.render.ResponseStateManager#getComponentStateToRestore} to
-     * get back the Object which it returned from {@link
+     * #restoreTreeStructure} returned non-<code>null</code>, indicating
+     * there actually is some state to restore.  The implementation must
+     * take the argument {@link UIViewRoot} root and populate it with
+     * state information.  The implementation may call {@link
+     * javax.faces.render.ResponseStateManager#getComponentStateToRestore}
+     * to get back the Object which it returned from {@link
      * #getComponentStateToSave}, then it must call {@link
-     * javax.faces.component.UIComponent#processRestoreState} on the
-     * {@link javax.faces.component.UIViewRoot} root of the tree.</p>
+     * UIComponent#processRestoreState} on the {@link UIViewRoot} root
+     * of the tree.</p>
+     *
+     * @param context the FacesContext for this request
+     *
+     * @param root what was returned from {@link #restoreTreeStructure}
+     *
+     * @exception NullPointerException if any of the arguments are
+     * <code>null</code>.
      */
     
-    protected abstract void restoreComponentState(FacesContext context) throws IOException;
+    protected abstract void restoreComponentState(FacesContext context, UIViewRoot root) throws IOException;
 
     /**
      *
@@ -378,7 +381,7 @@ public abstract class StateManager {
     /**
      *
      * <p>This method is called by {@link
-     * javax.faces.component.UIComponent} subclasses that have attached
+     * UIComponent} subclasses that have attached
      * Objects.  It is a convenience method that does the work of saving
      * attached objects that may or may not implement the {@link
      * StateHolder} interface.</p>
