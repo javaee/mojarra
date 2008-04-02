@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="output_datetime2_label"
+               <h:output_text id="outputDatetime2Label"
                      value="output_datetime pattern"/>
 
              </td>
@@ -15,16 +15,16 @@
 
              <td>
 
-               <h:output_datetime id="output_datetime2" 
-                            formatPattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"
-                               valueRef="LoginBean.date"/>
+               <h:output_text id="outputDatetime2" valueRef="LoginBean.date">
+                   <f:convert_datetime pattern="EEE, MMM d, yyyy G 'at' hh:mm:ss a"/>
+              </h:output_text>
 
              </td>
 
 	      <td>
 
-		<h:output_errors id="output_datetime2_errors" 
-		        for="output_datetime2" />
+		<h:output_errors id="outputDatetime2Errors" 
+		        for="outputDatetime2" />
 
 	      </td>
 
@@ -34,24 +34,21 @@
 
              <td>
 
-               <h:output_text id="output_datetime3_label" 
+               <h:output_text id="outputDatetime3Label" 
                      value="output_datetime dateStyle=short timeStyle=full"/>
-
-             </td>
-
-
              <td>
 
-               <h:output_datetime id="output_datetime3" 
-                    dateStyle="short" timeStyle="full"
-                               valueRef="LoginBean.date"/>
+               <h:output_text id="outputDatetime3" valueRef="LoginBean.date">
+                   <f:convert_datetime type="both" timeStyle="full" dateStyle="short"/>
+               </h:output_text>
+
 
              </td>
 
 	      <td>
 
-		<h:output_errors id="output_datetime3_errors" 
-		        for="output_datetime2" />
+		<h:output_errors id="outputDatetime3Errors" 
+		        for="outputDatetime2" />
 
 	      </td>
 

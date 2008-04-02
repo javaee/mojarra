@@ -8,21 +8,21 @@
 
   <th>
 
-    <h:output_text id="column1_header" 
+    <h:output_text id="column1Header" 
                    value="Use Case Description"/>
 
   </th>
 
   <th>
 
-    <h:output_text id="column2_header" 
+    <h:output_text id="column2Header" 
                    value="Rendered Content"/>
 
   </th>
 
   <th>
 
-    <h:output_text id="column3_header" 
+    <h:output_text id="column3Header" 
                    value="Validation/Conversion Errors"/>
 
   </th>

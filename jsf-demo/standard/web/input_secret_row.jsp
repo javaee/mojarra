@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="input_secret1_label"
+               <h:output_text id="inputSecret1Label"
                      value="input_secret readonly"/>
 
              </td>
@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:input_secret id="input_secret1" 
+               <h:input_secret id="inputSecret1" 
                                  value="Text Value 1" 
                                  readonly="true"
                                  size="12" maxlength="20"
@@ -32,15 +32,15 @@
 
              <td>
 
-               <h:output_text id="input_secret2_label" 
-                     value="input_secret"/>
+               <h:output_text id="inputSecret2Label" 
+                     value="inputSecret"/>
 
              </td>
 
 
              <td>
 
-               <h:input_secret id="input_secret2"
+               <h:input_secret id="inputSecret2"
                                  value="Text Value 2" 
                                  alt="input_secret"
                                   title="input_secret"/>
@@ -50,8 +50,8 @@
 
 	      <td>
 
-		<h:output_errors id="input_secret2_errors" 
-			  for="input_secret2" />
+		<h:output_errors id="inputSecret2Errors" 
+			  for="inputSecret2" />
 
 	      </td>
 
@@ -61,7 +61,7 @@
 
              <td>
 
-               <h:output_text id="input_secret3_label" 
+               <h:output_text id="inputSecret3Label" 
                      value="input_secret"/>
 
              </td>
@@ -69,7 +69,7 @@
 
              <td>
 
-               <h:input_secret id="input_secret3"
+               <h:input_secret id="inputSecret3"
                                  value="Text Value 3" 
                                  size="12"
                                  alt="input_secret"
@@ -80,8 +80,8 @@
 
 	      <td>
 
-		<h:output_errors id="input_secret3_errors" 
-			  for="input_secret3" />
+		<h:output_errors id="inputSecret3Errors" 
+			  for="inputSecret3" />
 
 	      </td>
 
@@ -91,7 +91,7 @@
 
              <td>
 
-               <h:output_text id="input_secret4_label" 
+               <h:output_text id="inputSecret4Label" 
                      value="input_secret"/>
 
              </td>
@@ -99,7 +99,7 @@
 
              <td>
 
-               <h:input_secret id="input_secret4" 
+               <h:input_secret id="inputSecret4" 
                                  value="Text Value 4" 
                                  size="20" maxlength="40"
                                  alt="input_secret"
@@ -111,8 +111,8 @@
 
 	      <td>
 
-		<h:output_errors id="input_secret4_errors" 
-			  for="input_secret4" />
+		<h:output_errors id="inputSecret4Errors" 
+			  for="inputSecret4" />
 
 	      </td>
 

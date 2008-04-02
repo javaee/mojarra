@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="input_textarea1_label"
+               <h:output_text id="inputTextarea1Label"
                      value="input_textarea readonly "/>
 
              </td>
@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:input_textarea id="input_textarea1" 
+               <h:input_textarea id="inputTextarea1" 
                                  value="initial text"
                                  readonly="true"
                                  rows="5" cols="20"
@@ -32,7 +32,7 @@
 
              <td>
 
-               <h:output_text id="input_textarea2_label" 
+               <h:output_text id="inputTextarea2Label" 
                      value="input_textarea"/>
 
              </td>
@@ -40,7 +40,7 @@
 
              <td>
 
-               <h:input_textarea id="input_textarea2"
+               <h:input_textarea id="inputTextarea2"
                                  rows="5" cols="20"
                                  alt="input_textarea"
                                   title="input_textarea"/>
@@ -50,8 +50,8 @@
 
 	      <td>
 
-		<h:output_errors id="input_textarea2_errors" 
-			  for="input_textarea2" />
+		<h:output_errors id="inputTextarea2Errors" 
+			  for="inputTextarea2" />
 
 	      </td>
 
@@ -61,15 +61,15 @@
 
              <td>
 
-               <h:output_text id="input_textarea3_label" 
-                     value="input_textarea"/>
+               <h:output_text id="inputTextarea3Label" 
+                     value="inputTextarea"/>
 
              </td>
 
 
              <td>
 
-               <h:input_textarea id="input_textarea3"
+               <h:input_textarea id="inputTextarea3"
                                  rows="5" cols="20"
                                  alt="input_textarea"
                                   title="input_textarea"/>
@@ -79,8 +79,8 @@
 
 	      <td>
 
-		<h:output_errors id="input_textarea3_errors" 
-			  for="input_textarea3" />
+		<h:output_errors id="inputTextarea3Errors" 
+			  for="inputTextarea3" />
 
 	      </td>
 
@@ -90,7 +90,7 @@
 
              <td>
 
-               <h:output_text id="input_textarea4_label" 
+               <h:output_text id="inputTextarea4_label" 
                      value="input_textarea"/>
 
              </td>
@@ -98,7 +98,7 @@
 
              <td>
 
-               <h:input_textarea id="input_textarea4" 
+               <h:input_textarea id="inputTextarea4" 
                                  rows="5" cols="20"
                                  alt="input_textarea"
                                  accesskey="d"
@@ -109,8 +109,8 @@
 
 	      <td>
 
-		<h:output_errors id="input_textarea4_errors" 
-			  for="input_textarea4" />
+		<h:output_errors id="inputTextarea4Errors" 
+			  for="inputTextarea4" />
 
 	      </td>
 

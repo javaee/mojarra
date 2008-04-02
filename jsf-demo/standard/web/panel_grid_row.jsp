@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="panel3_label"
+               <h:output_text id="panel3Label"
                      value="Grid with hardcoded data and HTML attributes. "/>
 
              </td>
@@ -45,7 +45,7 @@
 
              <td>
 
-               <h:output_text id="panel4_label"
+               <h:output_text id="panel4Label"
                      value="Grid with model data and stylesheets "/>
 
              </td>

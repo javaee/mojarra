@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="output_time1_label"
+               <h:output_text id="outputTime1Label"
                      value="output_time medium readonly"/>
 
              </td>
@@ -15,8 +15,9 @@
 
              <td>
 
-               <h:output_time id="output_time1" timeStyle="medium"
-                         valueRef="LoginBean.date"/>
+               <h:output_text id="outputTime1" valueRef="LoginBean.date">
+                   <f:convert_datetime type="time" timeStyle="medium"/>
+               </h:output_text>
 
 
              </td>
@@ -27,7 +28,7 @@
 
              <td>
 
-               <h:output_text id="output_time2_label" 
+               <h:output_text id="outputTime2Label" 
                      value="output_time long "/>
 
              </td>
@@ -35,16 +36,16 @@
 
              <td>
 
-               <h:output_time id="output_time2" 
-                                 timeStyle="long"
-                         valueRef="LoginBean.date"/>
+               <h:output_text id="outputTime2" valueRef="LoginBean.date">
+                   <f:convert_datetime type="time" timeStyle="long"/>
+               </h:output_text>
 
              </td>
 
 	      <td>
 
-		<h:output_errors id="output_time2_errors" 
-		        for="output_time2" />
+		<h:output_errors id="outputTime2Errors" 
+		        for="outputTime2" />
 
 	      </td>
 

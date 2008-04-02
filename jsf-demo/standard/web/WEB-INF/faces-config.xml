@@ -21,24 +21,24 @@
   </managed-bean>
 
   <navigation-rule>
-    <from-tree-id> * </from-tree-id>
+    <from-view-id> * </from-view-id>
     <navigation-case>
       <description>If the action or ActionRef returns "success", goto
       Standard_Thanks.jsp</description> 
       <display-name>The Generic Rule</display-name> 
       <from-outcome>success</from-outcome>
-      <to-tree-id>/Standard_Thanks.jsp</to-tree-id>
+      <to-view-id>/Standard_Thanks.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 
   <navigation-rule>
-    <from-tree-id>/UIInput.jsp</from-tree-id>
+    <from-view-id>/UIInput.jsp</from-view-id>
     <navigation-case>
       <description>If the action or ActionRef returns "success", goto
       UIInput.jsp</description> 
       <display-name>The Generic Rule</display-name>
       <from-outcome>success</from-outcome>
-      <to-tree-id>/UIInput.jsp</to-tree-id>
+      <to-view-id>/UIInput.jsp</to-view-id>
     </navigation-case>
   </navigation-rule>
 

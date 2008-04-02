@@ -29,7 +29,7 @@
                                 <tr>
 					<td>Multi-select menumodel with options of the type java.lang.Long:</td>
 					<td><h:selectmany_menu id="menuLongmodel" size="3"
-                                               valueRef="LoginBean.currentLongOptions" converter="Number">
+                                               valueRef="LoginBean.currentLongOptions">
                                                
 						<h:selectitems id="menumodelonglitems"
 							valueRef="LoginBean.longList" />

@@ -86,7 +86,7 @@
              <td>
                  <h:selectone_radio id="radioLongOptions"
                        valueRef="LoginBean.currentLongOption"
-                       layout="LINE_DIRECTION" converter="Number">
+                       layout="LINE_DIRECTION">
                  
                 <h:selectitems id="longItemOptions"
                                    title="options come from model"
@@ -100,10 +100,10 @@
 
             <tr>
 	         <td>Single-select radiomodel - modelType Boolean:</td>
-	         <td><h:selectone_radio id="one_longradiomodel"
+	         <td><h:selectone_radio id="oneLongradiomodel"
                             valueRef="LoginBean.currentBooleanOption">
                            
-		         <h:selectitems id="one_radiomodelitems"
+		         <h:selectitems id="oneRadiomodelitems"
 				valueRef="LoginBean.booleanList" />
 		    </h:selectone_radio></td>
 	   </tr>

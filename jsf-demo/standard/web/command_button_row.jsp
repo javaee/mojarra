@@ -7,14 +7,14 @@
 
              <td>
 
-               <h:output_text id="command_button1_label"
+               <h:output_text id="commandButton1Label"
                      value="command_button with hard coded label"/>
 
              </td>
 
              <td>
 
-               <h:command_button id="command_button1" action="success"
+               <h:command_button id="commandButton1" action="success"
                    label="command_button with hard coded label">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
@@ -27,14 +27,14 @@
 
              <td>
 
-               <h:output_text id="command_button6_label"
+               <h:output_text id="commandButton6_label"
                      value="command_button with label from model"/>
 
              </td>
 
              <td>
 
-               <h:command_button id="command_button6" action="success"
+               <h:command_button id="commandButton6" action="success"
                    valueRef="model.label">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_button>
@@ -47,13 +47,13 @@
 
              <td>
 
-               <h:output_text id="command_button2_label"
+               <h:output_text id="commandButton2Label"
                      value="command_button with image from bundle "/>
 
              </td>
 
              <td>
-                  <h:command_button id="command_button2" 
+                  <h:command_button id="commandButton2" 
                       tabindex="50" accesskey="B"
                       label="click to submit form"
                       action="success"
@@ -69,7 +69,7 @@
 
              <td>
 
-               <h:output_text id="command_button3_label"
+               <h:output_text id="commandButton3Label"
                      value="command_button reset type"/>
 
              </td>
@@ -88,7 +88,7 @@
 
              <td>
 
-               <h:output_text id="command_button4_label"
+               <h:output_text id="commandButton4Label"
                      value="command_button push type and disabled"/>
 
              </td>
@@ -110,7 +110,7 @@
 
              <td>
 
-               <h:output_text id="command_button5_label"
+               <h:output_text id="commandButton5Label"
                      value="command_button image type"/>
 
              </td>

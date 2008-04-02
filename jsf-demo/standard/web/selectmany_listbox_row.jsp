@@ -30,8 +30,7 @@
                                 <tr>
 					<td>Multi-select listmodel with options of type java.lang.Long:</td>
 					<td><h:selectmany_listbox id="longlistmodel"
-						valueRef="LoginBean.currentLongOptions" converter="Number">
-                                                <f:attribute name="numberStyle" value="INTEGER"/>
+						valueRef="LoginBean.currentLongOptions">
 						<h:selectitems id="longlistmodelitems"
 							valueRef="LoginBean.longList" />
 					</h:selectmany_listbox></td>

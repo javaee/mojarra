@@ -15,18 +15,17 @@
 				</tr>
 				<tr>
 					<td>Single-select menu - modelType String:</td>
-					<td><h:selectone_menu id="one_menumodel" size="3">
-						<h:selectitems id="one_menumodelitems"
+					<td><h:selectone_menu id="oneMenumodel" size="3">
+						<h:selectitems id="oneMenumodelItems"
 							valueRef="LoginBean.options" />
 					</h:selectone_menu></td>
 				</tr>
 
                                 <tr>
 					<td>Single-select menumodel - modelType Boolean:</td>
-					<td><h:selectone_menu id="one_longmenumodel" size="3" 
-                                             valueRef="LoginBean.currentBooleanOption" 
-                                              converter="Boolean">
-						<h:selectitems id="one_menumodelitems"
+					<td><h:selectone_menu id="oneLongMenumodel" size="3" 
+                                             valueRef="LoginBean.currentBooleanOption">
+						<h:selectitems id="oneLongMenumodelItems"
 							valueRef="LoginBean.booleanList" />
 					</h:selectone_menu></td>
 				</tr>

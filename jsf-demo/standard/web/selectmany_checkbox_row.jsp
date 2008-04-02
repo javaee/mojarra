@@ -30,7 +30,7 @@
                                 <tr>
 					<td>Multi-select checklistmodel with options of the type java.lang.Long:</td>
 					<td><h:selectmany_checkboxlist id="checkLonglistmodel"
-						valueRef="LoginBean.currentLongOptions" converter="Number">
+						valueRef="LoginBean.currentLongOptions">
                                                  
 						<h:selectitems id="checkLonglistmodelitems"
 							valueRef="LoginBean.longList" />

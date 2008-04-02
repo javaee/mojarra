@@ -8,14 +8,14 @@
 
              <td>
 
-               <h:output_text id="command_hyperlink1_label"
+               <h:output_text id="commandHyperlink1Label"
                      value="command_hyperlink with hard coded label"/>
 
              </td>
 
              <td>
 
-	       <h:command_hyperlink id="command_hyperlink1" action="success"
+	       <h:command_hyperlink id="commandHyperlink1" action="success"
                   label="Submit Form">
                  <f:action_listener type="standard.DefaultListener"/>
                </h:command_hyperlink>
@@ -28,7 +28,7 @@
 
              <td>
 
-               <h:output_text id="command_hyperlink2_label" 
+               <h:output_text id="commandHyperlink2Label" 
                      value="command_hyperlink using the model for the label"/>
 
              </td>
@@ -48,7 +48,7 @@
 
              <td>
 
-               <h:output_text id="command_hyperlink3_label" 
+               <h:output_text id="commandHyperlink3Label" 
                      value="command_hyperlink using ResourceBundle for the label"/>
 
              </td>
@@ -68,7 +68,7 @@
 
              <td>
 
-               <h:output_text id="command_hyperlink4_label" 
+               <h:output_text id="commandHyperlink4Label" 
                      value="command_hyperlink as an image"/>
 
              </td>
@@ -89,7 +89,7 @@
 
              <td>
 
-               <h:output_text id="command_hyperlink5_label" 
+               <h:output_text id="commandHyperlink5Label" 
                      value="command_hyperlink using ResourceBundle for image path"/>
 
              </td>

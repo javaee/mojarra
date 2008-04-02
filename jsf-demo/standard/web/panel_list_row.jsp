@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="panel1_label"
+               <h:output_text id="panel1Label"
                      value="list with stylesheets."/>
 
              </td>
@@ -39,7 +39,7 @@
                   <!-- List Data -->
 
                   <h:panel_data    id="listData1" var="customer"
-                       valueRef="ListBean">
+                       valueRef="ListBean[0]">
                     <h:output_text id="accountId1"
                        valueRef="customer.accountId"/>
                     <h:output_text id="name1"
@@ -59,7 +59,7 @@
 
              <td>
 
-               <h:output_text id="panel2_label" 
+               <h:output_text id="panel2Label" 
                      value="list with HTML 4.0 attribute, headers, footers, and no stylesheets."/>
 
              </td>
@@ -89,7 +89,7 @@
                   <!-- List Data -->
 
                   <h:panel_data    id="listData2" var="customer"
-                       valueRef="ListBean">
+                       valueRef="ListBean[1]">
                     <h:output_text id="accountId2"
                        valueRef="customer.accountId"/>
                     <h:output_text id="name2"

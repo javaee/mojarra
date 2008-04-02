@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="checkbox1_label"
+               <h:output_text id="checkbox1Label"
                      value="checkbox disabled "/>
 
              </td>
@@ -25,7 +25,7 @@
                                title="checkbox disabled" />
 
                                 <h:output_text 
-                                      id="checkbox_label1" 
+                                      id="checkboxLabel1" 
                            value="checkbox disabled"/>
 
              </td>
@@ -36,7 +36,7 @@
 
              <td>
 
-               <h:output_text id="checkbox3_label_model"
+               <h:output_text id="checkbox3LabelModel"
                      value="checkbox with valueRef "/>
 
              </td>
@@ -53,14 +53,14 @@
                                title="checkbox with valueRef " />
 
                                 <h:output_text
-                                      id="checkbox_label_model"
+                                      id="checkboxLabelModel"
                            value="checkbox with valueRef"/>
 
              </td>
 
              <td>
 
-                <h:output_errors id="checkbox3_errors"
+                <h:output_errors id="checkbox3Errors"
                           for="checkbox3" />
 
               </td
@@ -71,7 +71,7 @@
 
              <td>
 
-               <h:output_text id="checkbox4_label"
+               <h:output_text id="checkbox4Label"
                      value="checkbox with label from JSP"/>
 
              </td>
@@ -86,7 +86,7 @@
                                  accesskey="C" 
                                title="checkbox with label from JSP" />
 
-                   <h:output_text id="checkbox_label_jsp" 
+                   <h:output_text id="checkboxLabelJsp" 
                                value="checkbox with label from JSP " />
 
              </td>

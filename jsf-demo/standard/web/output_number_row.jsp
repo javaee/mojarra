@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="output_number1_label"
+               <h:output_text id="outputNumber1Label"
                      value="output_number number"/>
 
              </td>
@@ -15,14 +15,13 @@
 
              <td>
 
-               <h:output_number id="output_number1" numberStyle="number"
-                               valueRef="LoginBean.floater"/>
+               <h:output_text id="outputNumber1" valueRef="LoginBean.floater"/>
 
              </td>
              <td>
 
-             <h:output_errors id="output_number1_errors"
-                          for="output_number1" />
+             <h:output_errors id="outputNumber1Errors"
+                          for="outputNumber1" />
 
              </td>
             </tr>
@@ -31,7 +30,7 @@
 
              <td>
 
-               <h:output_text id="output_number2_label" 
+               <h:output_text id="outputNumber2Label" 
                      value="output_number currency"/>
 
              </td>
@@ -39,14 +38,15 @@
 
              <td>
 
-               <h:output_number id="output_number2" numberStyle="currency"
-                          valueRef="LoginBean.floater"/>
+               <h:output_text id="outputNumber2" valueRef="LoginBean.floater">
+                   <f:convert_number type="currency"/>
+               </h:output_text>
              </td>
 
 	      <td>
 
-		<h:output_errors id="output_number2_errors" 
-			  for="output_number2" />
+		<h:output_errors id="outputNumber2Errors" 
+			  for="outputNumber2" />
 
 	      </td>
 
@@ -56,23 +56,24 @@
 
              <td>
 
-               <h:output_text id="output_number3_label" 
-                     value="output_number percent "/>
+               <h:output_text id="outputNumber3Label" 
+                     value="output_number percent"/>
 
              </td>
 
 
              <td>
 
-               <h:output_number id="output_number3" numberStyle="percent"
-                          valueRef="LoginBean.floater" />
+               <h:output_text id="outputNumber3" valueRef="LoginBean.floater">
+                   <f:convert_number type="percent"/>
+               </h:output_text>
 
              </td>
 
 	      <td>
 
-		<h:output_errors id="output_number3_errors" 
-			  for="output_number3" />
+		<h:output_errors id="outputNumber3Errors" 
+			  for="outputNumber3" />
 
 	      </td>
 
@@ -82,7 +83,7 @@
 
              <td>
 
-               <h:output_text id="output_number4_label" 
+               <h:output_text id="outputNumber4Label" 
                      value="output_number PATTERN "/>
 
              </td>
@@ -90,14 +91,15 @@
 
              <td>
 
-               <h:output_number id="output_number4" formatPattern="####" 
-                         valueRef="LoginBean.floater" />
+               <h:output_text id="outputNumber4" valueRef="LoginBean.floater">
+                   <f:convert_number pattern="####"/>
+               </h:output_text>
              </td>
 
 	      <td>
 
-		<h:output_errors id="output_number4_errors" 
-			  for="output_number4" />
+		<h:output_errors id="outputNumber4Errors" 
+			  for="outputNumber4" />
 
 	      </td>
 
@@ -107,7 +109,7 @@
 
              <td>
 
-               <h:output_text id="output_number5_label"
+               <h:output_text id="outputNumber5Label"
                      value="output_number integer with valueRef"/>
 
              </td>
@@ -115,14 +117,13 @@
 
              <td>
 
-               <h:output_number id="output_number5" numberStyle="integer"
-                                 valueRef="LoginBean.char" />
+               <h:output_text id="outputNumber5" valueRef="LoginBean.char"/>
              </td>
 
               <td>
 
-                <h:output_errors id="output_number5_errors"
-                          for="output_number5" />
+                <h:output_errors id="outputNumber5Errors"
+                          for="outputNumber5" />
 
               </td>
 

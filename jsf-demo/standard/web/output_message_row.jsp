@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="output_message2_label"
+               <h:output_text id="outputMessage2Label"
                      value="output_message value parameter substitution"/>
 
              </td>
@@ -30,7 +30,7 @@
 
              <td>
 
-               <h:output_text id="output_message1_label" 
+               <h:output_text id="outputMessage1Label" 
                      value="output_message bundle parameter substitution"/>
 
              </td>

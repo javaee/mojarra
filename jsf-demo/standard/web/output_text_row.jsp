@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="output_text1_label"
+               <h:output_text id="outputText1Label"
                      value="output_text"/>
 
              </td>
@@ -15,7 +15,7 @@
 
              <td>
 
-               <h:output_text id="output_text1" 
+               <h:output_text id="outputText1" 
                        valueRef="LoginBean.userName"/>
 
 
@@ -27,7 +27,7 @@
 
              <td>
 
-               <h:output_text id="output_text0_label" 
+               <h:output_text id="outputText0Label" 
                      value="output_text with outputClass"/>
 
              </td>
@@ -35,7 +35,7 @@
 
              <td>
 
-               <h:output_text id="output_text0" 
+               <h:output_text id="outputText0" 
                        outputClass="output_text0"
                        valueRef="LoginBean.userName"/>
 
@@ -49,7 +49,7 @@
 
              <td>
 
-               <h:output_text id="output_text2_label" 
+               <h:output_text id="outputText2Label" 
                      value="output_text from bundle"/>
 
              </td>
@@ -57,7 +57,7 @@
 
              <td>
 
-               <h:output_text id="output_text2"
+               <h:output_text id="outputText2"
                                   key="linkLabel" bundle="standardBundle"/>
 
 
@@ -65,8 +65,8 @@
 
 	      <td>
 
-		<h:output_errors id="output_text2_errors" 
-			  for="output_text2" />
+		<h:output_errors id="outputText2Errors" 
+			  for="outputText2" />
 
 	      </td>
 

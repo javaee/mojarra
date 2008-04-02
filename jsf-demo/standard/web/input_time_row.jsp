@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="input_time1_label"
+               <h:output_text id="inputTime1Label"
                      value="input_time medium readonly"/>
 
              </td>
@@ -15,14 +15,15 @@
 
              <td>
 
-               <h:input_time id="input_time1" timeStyle="medium"
+               <h:input_text id="inputTime1" 
                                  value="10:00:01 PM" 
                                  readonly="true"
-
                                  size="10" maxlength="20"
                                  alt="input_time medium readonly"
                                  accesskey="D" 
-                               title="input_time medium readonly"/>
+                               title="input_time medium readonly">
+                   <f:convert_datetime type="time" timeStyle="medium"/>
+               </h:input_text>
 
 
              </td>
@@ -33,7 +34,7 @@
 
              <td>
 
-               <h:output_text id="input_time2_label" 
+               <h:output_text id="inputTime2Label" 
                      value="input_time long "/>
 
              </td>
@@ -41,18 +42,19 @@
 
              <td>
 
-               <h:input_time id="input_time2" 
-                                 timeStyle="long"
+               <h:input_text id="inputTime2"                                  
                                  value="9:57:00 AM PST"
                                  alt="input_time long"
-                               title="input_time long"/>
+                               title="input_time long">
+                   <f:convert_datetime type="time" timeStyle="long"/>
+               </h:input_text>
 
              </td>
 
 	      <td>
 
-		<h:output_errors id="input_time2_errors" 
-		        for="input_time2" />
+		<h:output_errors id="inputTime2Errors" 
+		        for="inputTime2" />
 
 	      </td>
 

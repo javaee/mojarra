@@ -7,7 +7,7 @@
 
              <td>
 
-               <h:output_text id="input_number1_label"
+               <h:output_text id="inputNumber1Label"
                      value="input_number number readonly"/>
 
              </td>
@@ -15,19 +15,22 @@
 
              <td>
 
-               <h:input_number id="input_number1" numberStyle="number"
+               <h:input_text id="inputNumber1" 
                                  value="1239989.6079" 
                                  readonly="true"
                                  size="10" maxlength="20"
                                  alt="input_number number readonly"
                                  accesskey="N"
-                               title="input_number number readonly" />
+                               title="input_number number readonly">
+                   <f:convert_number type="number"/>
+               </h:input_text>
+                           
 
              </td>
              <td>
 
-             <h:output_errors id="input_number1_errors"
-                          for="input_number1" />
+             <h:output_errors id="inputNumber1Errors"
+                          for="inputNumber1" />
 
              </td>
             </tr>
@@ -36,7 +39,7 @@
 
              <td>
 
-               <h:output_text id="input_number2_label" 
+               <h:output_text id="inputNumber2Label" 
                      value="input_number currency"/>
 
              </td>
@@ -44,16 +47,18 @@
 
              <td>
 
-               <h:input_number id="input_number2" numberStyle="currency"
-                                 value="$1234789.60" 
+               <h:input_text id="inputNumber2" 
+                                 value="$1,234,789.60" 
                                  alt="input_number currency"
-                                  title="input_number currency" />
+                                  title="input_number currency">
+                   <f:convert_number type="currency"/>
+               </h:input_text>
              </td>
 
 	      <td>
 
-		<h:output_errors id="input_number2_errors" 
-			  for="input_number2" />
+		<h:output_errors id="inputNumber2Errors" 
+			  for="inputNumber2" />
 
 	      </td>
 
@@ -63,7 +68,7 @@
 
              <td>
 
-               <h:output_text id="input_number3_label" 
+               <h:output_text id="inputNumber3Label" 
                      value="input_number percent "/>
 
              </td>
@@ -71,18 +76,20 @@
 
              <td>
 
-               <h:input_number id="input_number3" numberStyle="percent"
+               <h:input_text id="inputNumber3" 
                                  value="45%" 
                                  size="10"
                                  alt="input_number percent"
-                                  title="input_number percent" />
+                                  title="input_number percent">
+                   <f:convert_number type="percent"/>
+              </h:input_text>
 
              </td>
 
 	      <td>
 
-		<h:output_errors id="input_number3_errors" 
-			  for="input_number3" />
+		<h:output_errors id="inputNumber3Errors" 
+			  for="inputNumber3" />
 
 	      </td>
 
@@ -92,7 +99,7 @@
 
              <td>
 
-               <h:output_text id="input_number4_label" 
+               <h:output_text id="inputNumber4Label" 
                      value="input_number PATTERN "/>
 
              </td>
@@ -100,18 +107,20 @@
 
              <td>
 
-               <h:input_number id="input_number4" formatPattern="####" 
+               <h:input_text id="inputNumber4" 
                                  value="9999.987651" 
                                  size="20" maxlength="40"
                                  alt="input_number PATTERN "
                                  accesskey="d"
-                               title="input_number PATTERN " />
+                               title="input_number PATTERN">
+                   <f:convert_number pattern="####"/>
+               </h:input_text>
              </td>
 
 	      <td>
 
-		<h:output_errors id="input_number4_errors" 
-			  for="input_number4" />
+		<h:output_errors id="inputNumber4Errors" 
+			  for="inputNumber4" />
 
 	      </td>
 
@@ -121,7 +130,7 @@
 
              <td>
 
-               <h:output_text id="input_number5_label"
+               <h:output_text id="inputNumber5Label"
                      value="input_number integer with valueRef"/>
 
              </td>
@@ -129,19 +138,22 @@
 
              <td>
 
-               <h:input_number id="input_number5" numberStyle="integer"
+               <h:input_text id="inputNumber5" 
                                  value="9"
                                  size="2" maxlength="10"
                                  valueRef="LoginBean.char"
                                  alt="input_number integer with valueRef"
                                  accesskey="d"
-                               title="input_number integer with valueRef" />
+                               title="input_number integer with valueRef">
+                   <f:convert_number integerOnly="true"/>
+               </h:input_text>
+                               
              </td>
 
               <td>
 
-                <h:output_errors id="input_number5_errors"
-                          for="input_number5" />
+                <h:output_errors id="inputNumber5Errors"
+                          for="inputNumber5" />
 
               </td>
 
