@@ -1,5 +1,5 @@
 /*
- * $Id: ChartServlet.java,v 1.6 2004/04/01 20:55:06 rkitain Exp $
+ * $Id: ChartServlet.java,v 1.7 2004/04/06 16:54:19 rkitain Exp $
  */
 
 /*
@@ -67,6 +67,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * <p><strong>ChartServlet</strong> is used to render the chart image.
+ */
 public final class ChartServlet extends HttpServlet {
 
     /**

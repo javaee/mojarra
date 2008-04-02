@@ -47,24 +47,43 @@ import javax.faces.webapp.UIComponentTag;
 
 
 /**
- * This class is the tag handler that processes the <code>chart</code> 
- * custom tag.
+ * <p><strong>ChartTag</strong> is the tag handler that processes the 
+ * <code>chart</code> custom tag.</p>
  */
 
 public class ChartTag extends UIComponentTag {
 
 
+    /**
+     * <p>The width of the chart</p>
+     */
     private String width = null;
+    /**
+     * <p>Set the width of the chart</p>
+     */
     public void setWidth(String width) {
         this.width = width;
     }
 
+    /**
+     * <p>The height of the chart</p>
+     */
     private String height = null;
+    /**
+     * <p>Set the height of the chart</p>
+     */
     public void setHeight(String height) {
         this.height = height;
     }
 
+    /**
+     * <p>The layout of the chart.  This attribute is applicable to bar
+     * charts, and the value can be "horizontal" or "vertical".</p>
+     */
     private String orientation = null;
+    /**
+     * <p>Set the orientation of the chart</p>
+     */
     public void setOrientation(String orientation) {
         this.orientation = orientation;
     }
@@ -74,36 +93,69 @@ public class ChartTag extends UIComponentTag {
         this.value = value;
     }
     
+    /**
+     * <p>The type of chart.  Values can be "bar" or "pie".</p>
+     */
     private String type = null;
+    /**
+     * <p>Set the type of the chart</p>
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * <p>The title of the chart</p>
+     */
     private String title = null;
+    /**
+     * <p>Set the title of the chart</p>
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * <p>The label for the x-axis of the bar chart</p>
+     */
     private String xlabel = null;
+    /**
+     * <p>Set the x-axis label for the bar chart</p>
+     */
     public void setXlabel(String xlabel) {
         this.xlabel = xlabel;
     }
 
+    /**
+     * <p>The label for the y-axis of the bar chart</p>
+     */
     private String ylabel = null;
+    /**
+     * <p>Set the y-axis label for the bar chart</p>
+     */
     public void setYlabel(String ylabel) {
         this.ylabel = ylabel;
     }
 
+    /**
+     * <p>Return the type of the component.</p>
+     */
     public String getComponentType() {
         return ("Chart");
     }
 
 
+    /**
+     * <p>Return the renderer type (if any)</p>
+     */
     public String getRendererType() {
         return (null);
     }
 
 
+    /**
+     * <p>Release any resources used by this tag handler</p>
+     */
     public void release() {
         super.release();
         width = null;
@@ -116,6 +168,9 @@ public class ChartTag extends UIComponentTag {
     }
 
 
+    /**
+     * <p>Set the component properties</p>
+     */
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         ChartComponent chart = (ChartComponent) component;

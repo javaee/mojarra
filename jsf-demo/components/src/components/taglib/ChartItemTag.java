@@ -1,5 +1,5 @@
 /*
- * $Id: ChartItemTag.java,v 1.1 2004/03/06 01:58:09 jvisvanathan Exp $
+ * $Id: ChartItemTag.java,v 1.2 2004/04/06 16:54:20 rkitain Exp $
  */
 
 /*
@@ -17,8 +17,8 @@ import javax.faces.el.ValueBinding;
 import javax.faces.webapp.UIComponentTag;
 
 /**
- * This class is the tag handler that processes the <code>chartItem</code> 
- * custom tag.
+ * <p><strong>ChartItemTag</strong> is the tag handler that processes the 
+ * <code>chartItem</code> custom tag.</p>
  */
 
 public class ChartItemTag extends UIComponentTag {
@@ -35,17 +35,35 @@ public class ChartItemTag extends UIComponentTag {
     // Accessors
     //
 
+    /**
+     * <p>The label for this item</p>
+     */
     private String itemLabel = null;
+    /**
+     *<p>Set the label for this item.</p>
+     */
     public void setItemLabel(String label) {
         this.itemLabel = label;
     }
 
+    /**
+     * <p>The color for this item.</p>
+     */
     private String itemColor = null;
+    /**
+     *<p>Set the color for this item.</p>
+     */
     public void setItemColor(String color) {
         this.itemColor = color;
     }
     
+    /**
+     * <p>The value for this item.</p>
+     */
     private String itemValue = null;
+    /**
+     *<p>Set the ualue for this item.</p>
+     */
     public void setItemValue(String itemVal) {
         this.itemValue = itemVal;
     }
@@ -58,19 +76,38 @@ public class ChartItemTag extends UIComponentTag {
     //
     // General Methods
     //
+
+    /**
+     * <p>Return the type of the component.</p>
+     */
+    public String getComponentType() {
+        return "ChartItem";
+    }
+
+    /**
+     * <p>Return the renderer type (if any)</p>
+     */
     public String getRendererType() {
         return null;
     }
 
-
-    public String getComponentType() {
-        return "ChartItem";
+    /**
+     * <p>Release any resources used by this tag handler</p>
+     */
+    public void release() {
+        super.release();
+        itemLabel = null;
+        itemValue = null;
+        itemColor = null;
     }
-    
+
     //
     // Methods from BaseComponentTag
     //
 
+    /**
+     * <p>Set the component properties</p>
+     */
     protected void setProperties(UIComponent component) {
         super.setProperties(component);
         ChartItemComponent chartItem = (ChartItemComponent) component;
@@ -115,4 +152,4 @@ public class ChartItemTag extends UIComponentTag {
         }
     }
 
-} // end of class SelectItemTag
+}
