@@ -1,5 +1,5 @@
 /*
- * $Id: StateHolderSaver.java,v 1.12 2005/08/22 22:07:54 ofung Exp $
+ * $Id: StateHolderSaver.java,v 1.13 2006/06/06 19:59:47 rlubke Exp $
  */
 
 /*
@@ -29,9 +29,9 @@
 
 package javax.faces.component;
 
-import java.io.Serializable;
-
 import javax.faces.context.FacesContext;
+
+import java.io.Serializable;
 
 /**
  * <p>Helper class for saving and restoring attached objects.</p>
@@ -119,6 +119,6 @@ class StateHolderSaver extends Object implements Serializable {
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+        return Class.forName(name, false, loader);
     }
 }

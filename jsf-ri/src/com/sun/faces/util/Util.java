@@ -1,5 +1,5 @@
 /*
- * $Id: Util.java,v 1.193 2006/05/26 01:10:37 rlubke Exp $
+ * $Id: Util.java,v 1.194 2006/06/06 19:59:47 rlubke Exp $
  */
 
 /*
@@ -78,7 +78,7 @@ import com.sun.faces.spi.ManagedBeanFactory.Scope;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: Util.java,v 1.193 2006/05/26 01:10:37 rlubke Exp $
+ * @version $Id: Util.java,v 1.194 2006/06/06 19:59:47 rlubke Exp $
  */
 
 public class Util {
@@ -182,7 +182,7 @@ public class Util {
                                   Object fallbackClass)
         throws ClassNotFoundException {
         ClassLoader loader = Util.getCurrentLoader(fallbackClass);
-        return loader.loadClass(name);
+        return Class.forName(name, false, loader);       
     }
 
 

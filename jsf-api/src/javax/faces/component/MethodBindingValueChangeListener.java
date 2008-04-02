@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingValueChangeListener.java,v 1.3 2005/12/05 16:42:43 edburns Exp $
+ * $Id: MethodBindingValueChangeListener.java,v 1.4 2006/06/06 19:59:47 rlubke Exp $
  */
 
 /*
@@ -29,15 +29,12 @@
 
 package javax.faces.component;
 
-import javax.faces.event.ValueChangeListener;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.event.AbortProcessingException;
-
-import javax.faces.el.MethodBinding;
-import javax.faces.el.EvaluationException;
-import javax.faces.el.MethodNotFoundException;
-
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
+import javax.faces.el.MethodBinding;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.event.ValueChangeListener;
 
 /**
  * <p><strong>MethodBindingValueChangeListener</strong> is an {@link
@@ -195,6 +192,6 @@ class MethodBindingValueChangeListener extends MethodBindingAdapterBase implemen
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+        return Class.forName(name, false, loader);
     }
 }

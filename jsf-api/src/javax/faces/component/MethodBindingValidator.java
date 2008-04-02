@@ -1,5 +1,5 @@
 /*
- * $Id: MethodBindingValidator.java,v 1.2 2005/08/22 22:07:53 ofung Exp $
+ * $Id: MethodBindingValidator.java,v 1.3 2006/06/06 19:59:47 rlubke Exp $
  */
 
 /*
@@ -198,6 +198,6 @@ class MethodBindingValidator extends MethodBindingAdapterBase implements Validat
         if (loader == null) {
             loader = fallbackClass.getClass().getClassLoader();
         }
-        return loader.loadClass(name);
+        return Class.forName(name, false, loader);
     }
 }

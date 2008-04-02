@@ -1,5 +1,5 @@
 /*
- * $Id: FactoryFinder.java,v 1.28 2006/03/07 20:35:52 rogerk Exp $
+ * $Id: FactoryFinder.java,v 1.29 2006/06/06 19:59:48 rlubke Exp $
  */
 
 /*
@@ -559,7 +559,7 @@ public final class FactoryFinder {
 	    (null != (factoryClass = getFactoryClass(classLoader, 
 						     factoryName)))) {
 	    try {
-		clazz = classLoader.loadClass(implName);
+		clazz = Class.forName(implName, false, classLoader);
 		getCtorArg = new Class[1];
 		getCtorArg[0] = factoryClass;
 		ctor = clazz.getConstructor(getCtorArg);
@@ -578,7 +578,7 @@ public final class FactoryFinder {
 	    // we have either no previousImpl or no appropriate one arg
 	    // ctor.
 	    try {
-		clazz = classLoader.loadClass(implName);
+		clazz = Class.forName(implName, false, classLoader);
 		// since this is the hard coded implementation default,
 		// there is no preceding implementation, so don't bother
 		// with a non-zero-arg ctor.
