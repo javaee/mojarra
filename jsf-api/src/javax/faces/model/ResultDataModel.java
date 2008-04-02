@@ -1,5 +1,5 @@
 /*
- * $Id: ResultDataModel.java,v 1.4 2003/10/15 20:43:00 craigmcc Exp $
+ * $Id: ResultDataModel.java,v 1.5 2003/10/15 22:32:37 craigmcc Exp $
  */
 
 /*
@@ -97,6 +97,10 @@ public class ResultDataModel extends DataModel {
     private int index = -1;
 
 
+    // The Result we are wraping
+    private Result result = null;
+
+
     // The individual rows of this Result, each represented as a Map
     // with column names as keys and associated data values as values
     private SortedMap rows[] = null;
@@ -163,6 +167,16 @@ public class ResultDataModel extends DataModel {
 
 
     /**
+     * <p>Return the wrapped data for this {@link ResultDataModel} instance.</p>
+     */
+    public Result getWrappedData() {
+
+        return (this.result);
+
+    }
+
+
+    /**
      * <p>Set the wrapped data for this {@link ResultDataModel} instance.</p>
      *
      * @param data The data to be wrapped
@@ -172,6 +186,7 @@ public class ResultDataModel extends DataModel {
      */
     public void setWrappedData(Result data) {
 
+        this.result = data;
         this.rows = data.getRows();
 
     }

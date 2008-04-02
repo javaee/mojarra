@@ -1,5 +1,5 @@
 /*
- * $Id: ScalarDataModel.java,v 1.3 2003/10/15 02:02:15 craigmcc Exp $
+ * $Id: ScalarDataModel.java,v 1.4 2003/10/15 22:32:37 craigmcc Exp $
  */
 
 /*
@@ -59,6 +59,17 @@ public class ScalarDataModel extends DataModel {
 
 
     /**
+     * <p>Construct a new {@link ScalarDataModel} with no specified
+     * wrapped data.</p>
+     */
+    public ScalarDataModel() {
+
+        super();
+
+    }
+
+
+    /**
      * <p>Construct a new {@link ScalarDataModel} wrapping the specified
      * object instance.</p>
      *
@@ -69,10 +80,8 @@ public class ScalarDataModel extends DataModel {
      */
     public ScalarDataModel(Object instance) {
 
-        if (instance == null) {
-            throw new NullPointerException();
-        }
-        this.instance = instance;
+        super();
+        setWrappedData(instance);
 
     }
 
@@ -144,6 +153,31 @@ public class ScalarDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Return the wrapped data for this {@link ScalarDataModel} instance.</p>
+     */
+    public Object getWrappedData() {
+
+        return (this.instance);
+
+    }
+
+
+    /**
+     * <p>Set the wrapped data for this {@link ScalarDataModel} instance.</p>
+     *
+     * @param data The data to be wrapped
+     *
+     * @exception NullPointerException if <code>data</code>
+     *  is <code>null</code>
+     */
+    public void setWrappedData(Object data) {
+
+        this.instance = data;
 
     }
 

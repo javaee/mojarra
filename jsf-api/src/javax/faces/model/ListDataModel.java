@@ -1,5 +1,5 @@
 /*
- * $Id: ListDataModel.java,v 1.4 2003/10/15 20:42:59 craigmcc Exp $
+ * $Id: ListDataModel.java,v 1.5 2003/10/15 22:32:37 craigmcc Exp $
  */
 
 /*
@@ -153,6 +153,16 @@ public class ListDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Return the wrapped data for this {@link ListDataModel} instance.</p>
+     */
+    public List getWrappedData() {
+
+        return (this.list);
 
     }
 

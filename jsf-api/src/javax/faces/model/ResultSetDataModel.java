@@ -1,5 +1,5 @@
 /*
- * $Id: ResultSetDataModel.java,v 1.9 2003/10/15 21:18:40 craigmcc Exp $
+ * $Id: ResultSetDataModel.java,v 1.10 2003/10/15 22:32:37 craigmcc Exp $
  */
 
 /*
@@ -538,6 +538,17 @@ public class ResultSetDataModel extends DataModel {
         public void remove() {
             throw new UnsupportedOperationException();
         }
+
+    }
+
+
+    /**
+     * <p>Return the wrapped data for this {@link ResultSetDataModel}
+     * instance.</p>
+     */
+    public ResultSet getWrappedData() {
+
+        return (this.resultSet);
 
     }
 

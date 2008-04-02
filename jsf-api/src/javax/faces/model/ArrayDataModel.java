@@ -1,5 +1,5 @@
 /*
- * $Id: ArrayDataModel.java,v 1.4 2003/10/15 20:42:59 craigmcc Exp $
+ * $Id: ArrayDataModel.java,v 1.5 2003/10/15 22:32:37 craigmcc Exp $
  */
 
 /*
@@ -152,6 +152,16 @@ public class ArrayDataModel extends DataModel {
                 ((DataModelListener) listeners.get(i)).rowSelected(event);
             }
         }
+
+    }
+
+
+    /**
+     * <p>Return the wrapped data for this {@link ArrayDataModel} instance.</p>
+     */
+    public Object[] getWrappedData() {
+
+        return (this.array);
 
     }
 
