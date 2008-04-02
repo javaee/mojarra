@@ -476,9 +476,10 @@ public class ConverterPropertyEditorFactory {
                 byte[] classBytes = getTemplateInfo().generateClassBytesFor(
                     className.replace('.', '/'),
                     targetClassName.replace('.', '/'));
-                Class editorClass = defineClass(className, classBytes, 0,
-                    classBytes.length, ConverterPropertyEditorFactory.class
-                        .getProtectionDomain());
+                Class editorClass = defineClass(className,
+                                                classBytes,
+                                                0,
+                                                classBytes.length);
                 if (logger.isLoggable(Level.FINE)) {
                     logger.fine("Defined editorClass " + editorClass);
                 }
