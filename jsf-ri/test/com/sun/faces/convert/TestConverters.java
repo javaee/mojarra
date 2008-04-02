@@ -1,5 +1,5 @@
 /*
- * $Id: TestConverters.java,v 1.30 2004/06/11 20:48:01 rogerk Exp $
+ * $Id: TestConverters.java,v 1.31 2005/01/03 18:16:52 rogerk Exp $
  */
 
 /*
@@ -39,7 +39,7 @@ import java.util.TimeZone;
  * <p/>
  * <B>Lifetime And Scope</B> <P>
  *
- * @version $Id: TestConverters.java,v 1.30 2004/06/11 20:48:01 rogerk Exp $
+ * @version $Id: TestConverters.java,v 1.31 2005/01/03 18:16:52 rogerk Exp $
  */
 
 public class TestConverters extends JspFacesTestCase {
@@ -676,6 +676,37 @@ public class TestConverters extends JspFacesTestCase {
         }
         assertTrue(exceptionThrown);
         
+        // test NullPointerException (if either context or component arg is null)
+        exceptionThrown = false;
+        try {
+            obj = converter.getAsObject(null, text, stringToConvert);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+        exceptionThrown = false;
+        try {
+            obj = converter.getAsObject(getFacesContext(), null, stringToConvert);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+       
+        exceptionThrown = false;
+        try {
+            str = converter.getAsString(null, text, obj);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
+
+        exceptionThrown = false;
+        try {
+            str = converter.getAsString(getFacesContext(), null, obj);
+        } catch (NullPointerException npe) {
+            exceptionThrown= true;
+        }
+        assertTrue(exceptionThrown);
     }
 
 
