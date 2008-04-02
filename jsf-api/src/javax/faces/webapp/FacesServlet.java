@@ -1,5 +1,5 @@
 /*
- * $Id: FacesServlet.java,v 1.14 2003/06/21 00:30:17 craigmcc Exp $
+ * $Id: FacesServlet.java,v 1.15 2003/06/26 17:51:21 craigmcc Exp $
  */
 
 /*
@@ -185,7 +185,6 @@ public final class FacesServlet implements Servlet {
         // Acquire the FacesContext instance for this request
         FacesContext context = facesContextFactory.getFacesContext
             (servletConfig.getServletContext(), request, response, lifecycle);
-	context.setApplication(application);
 
         // Execute the request processing lifecycle for this request
         try {
@@ -206,7 +205,6 @@ public final class FacesServlet implements Servlet {
         }
 
         // Release the FacesContext instance for this request
-	context.setApplication(null);
         context.release();
         
     }
