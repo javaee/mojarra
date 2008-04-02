@@ -1,5 +1,5 @@
 /*
- * $Id: UIMessage.java,v 1.14 2004/02/26 20:30:33 eburns Exp $
+ * $Id: UIMessage.java,v 1.15 2004/04/06 16:14:33 eburns Exp $
  */
 
 /*
@@ -113,7 +113,7 @@ public class UIMessage extends UIComponentBase {
     /**
      * <p>Return the flag indicating whether the <code>detail</code>
      * property of the associated message(s) should be displayed.
-     * Defaults to false.</p>
+     * Defaults to <code>true</code>.</p>
      */
     public boolean isShowDetail() {
 
@@ -147,7 +147,7 @@ public class UIMessage extends UIComponentBase {
     /**
      * <p>Return the flag indicating whether the <code>summary</code>
      * property of the associated message(s) should be displayed.
-     * Defaults to true.</p>
+     * Defaults to <code>false</code>.</p>
      */
     public boolean isShowSummary() {
 
