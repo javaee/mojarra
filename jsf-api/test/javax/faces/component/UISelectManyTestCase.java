@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectManyTestCase.java,v 1.17 2003/12/17 15:11:15 rkitain Exp $
+ * $Id: UISelectManyTestCase.java,v 1.18 2004/01/06 14:52:18 rkitain Exp $
  */
 
 /*
@@ -159,13 +159,13 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
         // Validate two values that are on the list
         selectMany.setValid(true);
-        selectMany.setValue(new Object[] { "foo", "baz" });
+        selectMany.setSubmittedValue(new Object[] { "foo", "baz" });
         selectMany.validate(facesContext);
         assertTrue(selectMany.isValid());
 
         // Validate one value on the list and one not on the list
         selectMany.setValid(true);
-        selectMany.setValue(new Object[] { "bar", "bop"});
+        selectMany.setSubmittedValue(new Object[] { "bar", "bop"});
         selectMany.setRendererType(null); // We don't have any renderers
         selectMany.validate(facesContext);
         assertTrue(!selectMany.isValid());
@@ -186,19 +186,19 @@ public class UISelectManyTestCase extends UIInputTestCase {
         checkMessages(0);
 
         selectMany.setValid(true);
-        selectMany.setValue(new Object[] { "foo" });
+        selectMany.setSubmittedValue(new Object[] { "foo" });
         selectMany.validate(facesContext);
         checkMessages(0);
         assertTrue(selectMany.isValid());
 
         selectMany.setValid(true);
-        selectMany.setValue(new Object[] { "" });
+        selectMany.setSubmittedValue(new Object[] { "" });
         selectMany.validate(facesContext);
         checkMessages(1);
         assertTrue(!selectMany.isValid());
 
         selectMany.setValid(true);
-        selectMany.setValue(null);
+        selectMany.setSubmittedValue(null);
         selectMany.validate(facesContext);
         checkMessages(2);
         assertTrue(!selectMany.isValid());
@@ -243,7 +243,7 @@ public class UISelectManyTestCase extends UIInputTestCase {
 
     protected void setupNewValue(UIInput input) {
 
-        input.setValue(new Object[] { "foo" });
+        input.setSubmittedValue(new Object[] { "foo" });
         UISelectItem si = new UISelectItem();
         si.setItemValue("foo");
         si.setItemLabel("foo label");

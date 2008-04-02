@@ -1,5 +1,5 @@
 /*
- * $Id: MockRenderKit.java,v 1.8 2003/12/17 15:11:26 rkitain Exp $
+ * $Id: MockRenderKit.java,v 1.9 2004/01/06 14:52:21 rkitain Exp $
  */
 
 /*
@@ -101,15 +101,12 @@ public class MockRenderKit extends RenderKit {
             String clientId = input.getClientId(context);
             // System.err.println("decode(" + clientId + ")");
 
-            // Save the previous value for future ValueChangeEvent handling
-            input.setPrevious(input.getValue());
-
             // Decode incoming request parameters
             Map params = context.getExternalContext().getRequestParameterMap();
             if (params.containsKey(clientId)) {
                 // System.err.println("  '" + input.currentValue(context) +
                 //                    "' --> '" + params.get(clientId) + "'");
-                input.setValue((String) params.get(clientId));
+                input.setSubmittedValue((String) params.get(clientId));
             }
 
         }

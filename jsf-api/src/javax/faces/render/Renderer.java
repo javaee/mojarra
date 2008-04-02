@@ -1,5 +1,5 @@
 /*
- * $Id: Renderer.java,v 1.28 2003/12/17 15:11:01 rkitain Exp $
+ * $Id: Renderer.java,v 1.29 2004/01/06 14:52:16 rkitain Exp $
  */
 
 /*
@@ -13,6 +13,7 @@ package javax.faces.render;
 import java.io.IOException;
 import java.util.Iterator;
 import javax.faces.component.UIComponent;
+import javax.faces.convert.ConverterException;
 import javax.faces.context.FacesContext;
 
 
@@ -201,4 +202,19 @@ public abstract class Renderer {
     }
 
 
+    /**
+     * @exception ConverterException if the submitted value
+     *   cannot be converted successfully.
+     * @exception NullPointerException if <code>context</code>
+     *  or <code>component</code> is <code>null</code>
+     */
+    public Object getConvertedValue(FacesContext context,
+                                    UIComponent  component,
+                                    Object       submittedValue)
+        throws ConverterException {
+        if ((context == null) || (component == null)) {
+            throw new NullPointerException();
+        }
+        return submittedValue;
+    }
 }

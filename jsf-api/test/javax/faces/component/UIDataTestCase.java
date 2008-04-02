@@ -1,5 +1,5 @@
 /*
- * $Id: UIDataTestCase.java,v 1.28 2003/12/24 20:44:38 craigmcc Exp $
+ * $Id: UIDataTestCase.java,v 1.29 2004/01/06 14:52:17 rkitain Exp $
  */
 
 /*
@@ -395,7 +395,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         assertEquals("", TestDataValidator.trace());
         assertEquals("", TestDataValueChangeListener.trace());
         checkMessages(0);
-        checkLocalValues(after);
+        checkSubmittedValues(after);
 
         //   PERFORM VALIDATIONS
         root.processValidators(facesContext);
@@ -411,6 +411,7 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         assertEquals("/data:4:input/input4/input4A" +
                      "/data:6:input/input6/input6B",
                      TestDataValueChangeListener.trace());
+        checkLocalValues(after);
         checkModelInputs(before);
         checkMessages(0);
 
@@ -437,104 +438,6 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
         checkResponse("/javax/faces/component/UIDataTestCase_3.xml");
         renderResponse();
         checkResponse("/javax/faces/component/UIDataTestCase_3.xml");
-
-    }
-
-
-    // Test request processing lifecycle (model modified by application handler)
-    public void testTreeModified() throws Exception {
-
-        ValueBinding vbCommand = application.createValueBinding("foo.command");
-        ValueBinding vbInput = application.createValueBinding("foo.input");
-        ValueBinding vbOutput = application.createValueBinding("foo.output");
-        String before[] =
-            { "input3", "input4", "input5", "input6", "input7" };
-        String after[] =
-            { "input3", "input4A", "input5", "input6B", "input7" };
-        String nulls[] =
-            { null, null, null, null, null };
-
-        // Set up for this test
-        setupModel();
-        setupRenderers();
-        UICommand command = setupTree();
-        UIData data = (UIData) component;
-        checkLocalValues(nulls);
-
-        // Set up our fake request parameters (two command invocations)
-        Map params = new HashMap();
-        params.put("data:5:command", "");
-        params.put("data:7:command", "");
-        params.put("data:3:input", "input3");
-        params.put("data:4:input", "input4A");
-        params.put("data:5:input", "input5");
-        params.put("data:6:input", "input6B");
-        params.put("data:7:input", "input7");
-        MockExternalContext econtext =
-          (MockExternalContext) facesContext.getExternalContext();
-        econtext.setRequestParameterMap(params);
-        checkMessages(0);
-
-        // Simulate the Request Processing Lifecycle
-        TestDataActionListener.trace(null);
-        TestDataValidator.trace(null);
-        TestDataValueChangeListener.trace(null);
-        UIViewRoot root = (UIViewRoot) data.getParent();
-
-        //   APPLY REQUEST VALUES
-	command.setImmediate(true);
-        root.processDecodes(facesContext);
-        assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
-        assertEquals("", TestDataValidator.trace());
-        assertEquals("", TestDataValueChangeListener.trace());
-        checkMessages(0);
-        checkLocalValues(after);
-
-        //   PERFORM VALIDATIONS
-        root.processValidators(facesContext);
-        assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
-        assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
-        assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
-        checkModelInputs(before);
-        checkMessages(0);
-
-        //   UPDATE MODEL VALUES
-        root.processUpdates(facesContext);
-        assertEquals("/data:5:command" +
-                     "/data:7:command",
-                     TestDataActionListener.trace());
-        assertEquals("/data:3:input/input3" +
-                     "/data:4:input/input4A" +
-                     "/data:5:input/input5" +
-                     "/data:6:input/input6B" +
-                     "/data:7:input/input7",
-                     TestDataValidator.trace());
-        assertEquals("/data:4:input/input4/input4A" +
-                     "/data:6:input/input6/input6B",
-                     TestDataValueChangeListener.trace());
-        checkModelInputs(after);
-        checkMessages(0);
-        checkLocalValues(nulls);
-
-        //   INVOKE APPLICATION (delete row 5 from the underlying data)
-        beans.remove(5); // Remove the middle row from this set of five
-
-        //   RENDER RESPONSE
-        renderResponse();
-        checkResponse("/javax/faces/component/UIDataTestCase_6.xml");
-        renderResponse();
-        checkResponse("/javax/faces/component/UIDataTestCase_6.xml");
 
     }
 
@@ -753,6 +656,28 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             assertEquals("Row " + (i + first) + " input localValue",
                          values[i],
                          (String) input.getLocalValue());
+        }
+        data.setRowIndex(-1);
+
+    }
+
+    // Check that the per-row submitted values of the input component are correct
+    protected void checkSubmittedValues(String values[]) {
+
+        UIData data = (UIData) component;
+        int first = data.getFirst();
+        for (int i = 0; i < values.length; i++) {
+            data.setRowIndex(i + first);
+            assertTrue("Row " + (i + first) + " available",
+                       data.isRowAvailable());
+            UIInput input = (UIInput) data.findComponent("input");
+            assertNotNull("Row " + (i + first) + " input exists", input);
+            assertEquals("Row " + (i + first) + " input clientId",
+                         "data:" + (i + first) + ":input",
+                         input.getClientId(facesContext));
+            assertEquals("Row " + (i + first) + " input submittedValue",
+                         values[i],
+                         (String) input.getSubmittedValue());
         }
         data.setRowIndex(-1);
 
@@ -1285,17 +1210,13 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             String clientId = input.getClientId(context);
             // System.err.println("decode(" + clientId + ")");
 
-            // Save the previous value for future ValueChangeEvent handling
-            input.setPrevious(input.getValue());
-
             // Decode incoming request parameters
             Map params = context.getExternalContext().getRequestParameterMap();
             if (params.containsKey(clientId)) {
                 // System.err.println("  '" + input.currentValue(context) +
                 //                    "' --> '" + params.get(clientId) + "'");
-                input.setValue((String) params.get(clientId));
+                input.setSubmittedValue((String) params.get(clientId));
             }
-
         }
 
         public void encodeBegin(FacesContext context, UIComponent component)
@@ -1304,10 +1225,22 @@ public class UIDataTestCase extends ValueHolderTestCaseBase {
             if ((context == null) || (component == null)) {
                 throw new NullPointerException();
             }
+            
+            Object value;
+            if (component instanceof UIInput) {
+                UIInput input = (UIInput) component;
+                value = input.getSubmittedValue();
+                if (value == null) {
+                    value = input.getValue();
+                }
+            } else {
+                value = ((ValueHolder) component).getValue();
+            }
+        
             ResponseWriter writer = context.getResponseWriter();
             writer.write
                 ("<text id='" + component.getClientId(context) + "' value='" +
-                 ((ValueHolder) component).getValue() + "'/>\n");
+                 value + "'/>\n");
 
         }
 

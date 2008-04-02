@@ -1,5 +1,5 @@
 /*
- * $Id: UIInputTestCase.java,v 1.26 2003/12/22 19:29:30 eburns Exp $
+ * $Id: UIInputTestCase.java,v 1.27 2004/01/06 14:52:18 rkitain Exp $
  */
 
 /*
@@ -82,16 +82,16 @@ public class UIInputTestCase extends UIOutputTestCase {
         super.testAttributesTransparency();
         UIInput input = (UIInput) component;
 
-        assertEquals(input.getPrevious(),
-                     (String) input.getAttributes().get("previous"));
-        input.setPrevious("foo");
-        assertEquals("foo", (String) input.getAttributes().get("previous"));
-        input.setPrevious(null);
-        assertNull((String) input.getAttributes().get("previous"));
-        input.getAttributes().put("previous", "bar");
-        assertEquals("bar", input.getPrevious());
-        input.getAttributes().put("previous", null);
-        assertNull(input.getPrevious());
+        assertEquals(input.getSubmittedValue(),
+                     (String) input.getAttributes().get("submittedValue"));
+        input.setSubmittedValue("foo");
+        assertEquals("foo", (String) input.getAttributes().get("submittedValue"));
+        input.setSubmittedValue(null);
+        assertNull((String) input.getAttributes().get("submittedValue"));
+        input.getAttributes().put("submittedValue", "bar");
+        assertEquals("bar", input.getSubmittedValue());
+        input.getAttributes().put("submittedValue", null);
+        assertNull(input.getSubmittedValue());
 
         input.setRequired(true);
         assertEquals(Boolean.TRUE,
@@ -222,7 +222,7 @@ public class UIInputTestCase extends UIOutputTestCase {
         super.testPristine();
         UIInput input = (UIInput) component;
 
-        assertNull("no previous", input.getPrevious());
+        assertNull("no submittedValue", input.getSubmittedValue());
         assertTrue("not required", !input.isRequired());
         assertNull("no validatorBinding", input.getValidator());
         assertNull("no valueChangeListener", input.getValueChangeListener());
@@ -245,10 +245,10 @@ public class UIInputTestCase extends UIOutputTestCase {
         super.testPropertiesValid();
         UIInput input = (UIInput) component;
 
-        input.setPrevious("foo");
-        assertEquals("foo", input.getPrevious());
-        input.setPrevious(null);
-        assertNull(input.getPrevious());
+        input.setSubmittedValue("foo");
+        assertEquals("foo", input.getSubmittedValue());
+        input.setSubmittedValue(null);
+        assertNull(input.getSubmittedValue());
 
         input.setRequired(true);
         assertTrue(input.isRequired());
@@ -369,23 +369,25 @@ public class UIInputTestCase extends UIOutputTestCase {
         checkMessages(0);
 
         input.setValid(true);
-        input.setValue("foo");
+        input.setSubmittedValue("foo");
         input.validate(facesContext);
         checkMessages(0);
         assertTrue(input.isValid());
 
         input.setValid(true);
-        input.setValue("");
+        input.setSubmittedValue("");
         input.validate(facesContext);
         checkMessages(1);
         assertTrue(!input.isValid());
-
+        
         input.setValid(true);
-        input.setValue(null);
+        input.setSubmittedValue(null);
         input.validate(facesContext);
-        checkMessages(2);
-        assertTrue(!input.isValid());
-
+        // awiner: this was formerly "checkMessages(2)", but a submitted
+        // value of null now explicitly means _do not validate_.
+        checkMessages(1);
+        // awiner: And this next line flipped as well
+        assertTrue(input.isValid());
     }
 
 
@@ -494,7 +496,8 @@ public class UIInputTestCase extends UIOutputTestCase {
         super.checkProperties(comp1, comp2);
         UIInput i1 = (UIInput) comp1;
         UIInput i2 = (UIInput) comp2;
-        assertEquals(i1.getPrevious(), i2.getPrevious());
+        // "submittedValue" is not preserved across state-saves
+        //        assertEquals(i1.getSubmittedValue(), i2.getSubmittedValue());
         assertEquals(i1.isRequired(), i2.isRequired());
         assertEquals(i1.getValidator(), i2.getValidator());
         assertEquals(i1.getValueChangeListener(), i2.getValueChangeListener());
@@ -513,7 +516,7 @@ public class UIInputTestCase extends UIOutputTestCase {
     protected void populateComponent(UIComponent component) {
         super.populateComponent(component);
         UIInput i = (UIInput) component;
-        i.setPrevious("previous");
+        i.setSubmittedValue("submittedValue");
         i.setRequired(true);
         Application app = facesContext.getApplication();
 	MethodBinding methodBinding = null;
@@ -543,7 +546,7 @@ public class UIInputTestCase extends UIOutputTestCase {
 
     protected void setupNewValue(UIInput input) {
 
-        input.setValue("foo");
+        input.setSubmittedValue("foo");
 
     }
 

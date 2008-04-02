@@ -1,5 +1,5 @@
 /*
- * $Id: UIComponentBase.java,v 1.86 2003/12/17 23:25:50 eburns Exp $
+ * $Id: UIComponentBase.java,v 1.87 2004/01/06 14:52:10 rkitain Exp $
  */
 
 /*
@@ -988,11 +988,7 @@ public abstract class UIComponentBase extends UIComponent {
         String rendererType = getRendererType();
         if (rendererType != null) {
             getRenderer(context).decode(context, this);
-        } else if (this instanceof UIInput) {
-            // PENDING(craigmcc): shouldn't this be in UIInputBase
-            ((UIInput) this).setValid(true);
         }
-
     }
 
 

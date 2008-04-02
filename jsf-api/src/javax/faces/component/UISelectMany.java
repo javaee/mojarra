@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectMany.java,v 1.39 2003/12/24 23:46:05 jvisvanathan Exp $
+ * $Id: UISelectMany.java,v 1.40 2004/01/06 14:52:12 rkitain Exp $
  */
 
 /*
@@ -10,7 +10,9 @@
 package javax.faces.component;
 
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.el.ValueBinding;
@@ -159,9 +161,20 @@ public class UISelectMany extends UIInput {
         boolean valueChanged = false;
         Object oldarray[] = null;
         Object newarray[] = null;
-        // If values are not of the type Object[], it is perhaps a mistake
-        // by the renderers, so return false, so that ValueChangedEvent is not
-        // queued in this case.
+
+        // The arrays may be arrays of primitives;  for simplicity,
+        // perform the boxing here.
+        if (!(previous instanceof Object[])) {
+            previous = toObjectArray(previous);
+        }
+
+        if (!(value instanceof Object[])) {
+            value = toObjectArray(value);
+        }
+
+        // If values are still not of the type Object[], it is perhaps a
+        // mistake by the renderers, so return false, so that
+        // ValueChangedEvent is not queued in this case.
         if (!(previous instanceof Object[]) || 
               !(value instanceof Object[])) {
               return false;
@@ -217,9 +230,41 @@ public class UISelectMany extends UIInput {
 
     }    
 
+    
+    /**
+     * Convert an array of primitives to an array of boxed objects.
+     * @param primitiveArray object containing the primitive values
+     * @return an Object array, or null if the incoming value is not
+     * in fact an array at all.
+     */
+    private Object[] toObjectArray(Object primitiveArray) {
+        if (primitiveArray == null) {
+            throw new NullPointerException();
+        }
+        
+        if (primitiveArray instanceof Object[]) {
+            return (Object[]) primitiveArray;
+        }
+
+        if (primitiveArray instanceof List) {
+            return ((List) primitiveArray).toArray();
+        }
+          
+        Class clazz = primitiveArray.getClass();
+        if (!clazz.isArray()) {
+            return null;
+        }
+
+        int length = Array.getLength(primitiveArray);
+        Object[] array = new Object[length];
+        for (int i = 0; i < length; i++) {
+            array[i] = Array.get(primitiveArray, i);
+        }
+
+        return array;
+    }
 
     // ------------------------------------------------------ Validation Methods
-
 
     /**
      * <p>In addition to the standard validation behavior inherited from
@@ -234,23 +279,27 @@ public class UISelectMany extends UIInput {
      */
     public void validate(FacesContext context) {
 
-        Object value = getLocalValue();
+        super.validate(context);
 
         // Skip validation if it is not necessary
-        if ((value == null) || !isValid()) {
-            super.validate(context);
+        Object value = getValue();
+        if (!isValid() || (value == null)) {
             return;
         }
 
         // Ensure that the values match one of the available options
-        Object values[] = (Object[]) value;
-        boolean found = false;
-        for (int i = 0; i < values.length; i++) {
+        // Don't arrays cast to "Object[]", as we may now be using an array
+        // of primitives
+        boolean isList = (value instanceof List);
+        int length = isList ? ((List) value).size() : Array.getLength(value);
+        boolean found = true;
+        for (int i = 0; i < length; i++) {
             found = false;
             Iterator items = new SelectItemsIterator(this);
+            Object indexValue = isList ? ((List) value).get(i) : Array.get(value, i);
             while (items.hasNext()) {
                 SelectItem item = (SelectItem) items.next();
-                if (values[i].equals(item.getValue())) {
+                if (indexValue.equals(item.getValue())) {
                     found = true;
                     break;
                 }
@@ -268,8 +317,6 @@ public class UISelectMany extends UIInput {
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
-        super.validate(context);
-
     }
 
 

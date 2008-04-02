@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectItem.java,v 1.26 2003/11/08 01:15:26 craigmcc Exp $
+ * $Id: UISelectItem.java,v 1.27 2004/01/06 14:52:12 rkitain Exp $
  */
 
 /*
@@ -57,7 +57,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
 
     private String itemDescription = null;
     private String itemLabel = null;
-    private String itemValue = null;
+    private Object itemValue = null;
     private Object value = null;
 
 
@@ -127,14 +127,14 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
     /**
      * <p>Return the server value for this selection item.</p>
      */
-    public String getItemValue() {
+    public Object getItemValue() {
 
 	if (this.itemValue != null) {
 	    return (this.itemValue);
 	}
 	ValueBinding vb = getValueBinding("itemValue");
 	if (vb != null) {
-	    return ((String) vb.getValue(getFacesContext()));
+	    return vb.getValue(getFacesContext());
 	} else {
 	    return (null);
 	}
@@ -147,7 +147,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
      *
      * @param itemValue The new server value
      */
-    public void setItemValue(String itemValue) {
+    public void setItemValue(Object itemValue) {
 
         this.itemValue = itemValue;
 
@@ -208,7 +208,7 @@ public class UISelectItem extends UIComponentBase implements ValueHolder {
         super.restoreState(context, values[0]);
         itemDescription = (String) values[1];
         itemLabel = (String) values[2];
-        itemValue = (String) values[3];
+        itemValue = values[3];
         value = values[4];
 
     }

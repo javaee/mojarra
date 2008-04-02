@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOne.java,v 1.35 2003/12/20 02:58:47 craigmcc Exp $
+ * $Id: UISelectOne.java,v 1.36 2004/01/06 14:52:12 rkitain Exp $
  */
 
 /*
@@ -77,11 +77,11 @@ public class UISelectOne extends UIInput {
      */
     public void validate(FacesContext context) {
 
-        Object value = getValue();
-
         // Skip validation if it is not necessary
-        if ((value == null) || !isValid()) {
-            super.validate(context);
+        super.validate(context);
+
+        Object value = getValue();
+        if (!isValid() || (value == null)) {
             return;
         }
 
@@ -104,8 +104,6 @@ public class UISelectOne extends UIInput {
             context.addMessage(getClientId(context), message);
             setValid(false);
         }
-        super.validate(context);
-
     }
 
 

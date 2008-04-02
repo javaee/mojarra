@@ -1,5 +1,5 @@
 /*
- * $Id: ConverterException.java,v 1.4 2003/09/25 19:27:19 rlubke Exp $
+ * $Id: ConverterException.java,v 1.5 2004/01/06 14:52:15 rkitain Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package javax.faces.convert;
 
 
 import javax.faces.FacesException;
+import javax.faces.application.FacesMessage;
 
 
 /**
@@ -77,4 +78,42 @@ public class ConverterException extends FacesException {
     }
 
 
+
+
+    /**
+     * <p>Construct a new exception with the specified detail message and
+     * no root cause.</p>
+     *
+     * @param message The detail message for this exception
+     */
+    public ConverterException(FacesMessage message) {
+
+        super(message.getSummary());
+        this.facesMessage = message;
+    }
+
+
+    /**
+     * <p>Construct a new exception with the specified detail message and
+     * root cause.</p>
+     *
+     * @param message The detail message for this exception
+     * @param cause The root cause for this exception
+     */
+    public ConverterException(FacesMessage message, Throwable cause) {
+
+        super(message.getSummary(), cause);
+        this.facesMessage = message;
+
+    }
+
+    /**
+     * <p>Returns the FacesMessage associated with this exception;  this
+     * will only be available if one of the Faces
+     */
+    public FacesMessage getFacesMessage() {
+        return facesMessage;
+    }
+
+    private FacesMessage facesMessage;
 }

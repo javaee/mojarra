@@ -1,5 +1,5 @@
 /*
- * $Id: UISelectOneTestCase.java,v 1.15 2003/12/17 15:11:15 rkitain Exp $
+ * $Id: UISelectOneTestCase.java,v 1.16 2004/01/06 14:52:19 rkitain Exp $
  */
 
 /*
@@ -109,14 +109,14 @@ public class UISelectOneTestCase extends UIInputTestCase {
 
         // Validate a value that is on the list
         selectOne.setValid(true);
-        selectOne.setValue("bar");
+        selectOne.setSubmittedValue("bar");
         selectOne.setRendererType(null); // We don't have any renderers
         selectOne.validate(facesContext);
         assertTrue(selectOne.isValid());
 
         // Validate a value that is not on the list
         selectOne.setValid(true);
-        selectOne.setValue("bop");
+        selectOne.setSubmittedValue("bop");
         selectOne.validate(facesContext);
         assertTrue(!selectOne.isValid());
 
@@ -136,22 +136,23 @@ public class UISelectOneTestCase extends UIInputTestCase {
         checkMessages(0);
 
         selectOne.setValid(true);
-        selectOne.setValue("foo");
+        selectOne.setSubmittedValue("foo");
         selectOne.validate(facesContext);
         checkMessages(0);
         assertTrue(selectOne.isValid());
 
         selectOne.setValid(true);
-        selectOne.setValue("");
+        selectOne.setSubmittedValue("");
         selectOne.validate(facesContext);
         checkMessages(1);
         assertTrue(!selectOne.isValid());
 
         selectOne.setValid(true);
-        selectOne.setValue(null);
+        selectOne.setSubmittedValue(null);
+        // awiner: see UIInputTestCase
         selectOne.validate(facesContext);
-        checkMessages(2);
-        assertTrue(!selectOne.isValid());
+        checkMessages(1);
+        assertTrue(selectOne.isValid());
 
     }
 
@@ -193,7 +194,7 @@ public class UISelectOneTestCase extends UIInputTestCase {
 
     protected void setupNewValue(UIInput input) {
 
-        input.setValue("foo");
+        input.setSubmittedValue("foo");
         UISelectItem si = new UISelectItem();
         si.setItemValue("foo");
         si.setItemLabel("foo label");

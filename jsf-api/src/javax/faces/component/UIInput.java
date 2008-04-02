@@ -1,5 +1,5 @@
 /*
- * $Id: UIInput.java,v 1.55 2003/12/24 23:46:04 jvisvanathan Exp $
+ * $Id: UIInput.java,v 1.56 2004/01/06 14:52:11 rkitain Exp $
  */
 
 /*
@@ -15,6 +15,7 @@ import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.el.EvaluationException;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.ValueBinding;
@@ -44,44 +45,17 @@ import java.util.List;
  * on the type of data they know how to display.</p>
  *
  * <p>During the <em>Apply Request Values</em> phase of the request
- * processing lifecycle, the decoded String value of this component must be
- * converted to the appropriate data type, if necessary, according to the
- * following rules:</p>
- * <ul>
- * <li>Decode the incoming request parameters as appropriate, and
- *     store the results, by calling <code>setValue()</code> with
- *     an appropriate parameter, as follows:\
- *     <ul>
- *     <li>A String if there was one value.</li>
- *     <li>A String[] array if there was more than one value.</li>
- *     <li>A <code>null</code> if there was no value.</li>
- *     </ul></li>
- * <li>If there is no {@link ValueBinding} for <code>value</code> AND there is
- *     no non-null <code>Converter</code>, exit (no conversion is required).
- *     </li>
- * <li>Locate a {@link Converter} (if any) to se for the conversion,
- *     as follows:
- *     <ul>
- *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
- *         use that one; otherwise</li>
- *     <li>If a value binding for <code>value</code> exists, call
- *         <code>getType()</code> on it.  based on results:
- *         <ul>
- *         <li>If this call returns <code>null</code>, assume the output type
- *             is <code>String</code> and perform no conversion.</li>
- *         <li>Otherwise, call <code>Application.createConverter(Class)</code>
- *             to locate any registered {@link Converter} capable of converting
- *             data values of the specified type.</li>
- *         </ul></li>
- *     </ul></li>
- * <li>If a {@link Converter} instance was located, call its
- *     <code>getAsObject()</code> method to perform the conversion.  If
- *     conversion was successful, store the converted result by calling
- *     <code>setValue()</code>.  Otherwise, enqueue a conversion failure
- *     message, set the <code>valid</code> property to <code>false</code>,
- *     and leave the original <code>String</code> value.</li>
- * </ul>
- *
+ * processing lifecycle, the decoded value of this component, usually
+ * but not necessarily a String, must be stored - but not yet converted -
+ * using <code>setSubmittedValue()</code>.  If the component wishes
+ * to indicate that no particular value was submitted, it can either
+ * do nothing, or set the submitted value to <code>null</code>.</p>
+ * <p>
+ * <p>During the <em>Process Validators</em> phase of the request processing
+ * lifecycle, the submitted value will be converted to a typesafe object,
+ * and, if validation succeeds, stored as a local value using
+ * <code>setValue()</code>.
+ * </p> 
  * <p>During the <em>Render Response</em> phase of the request processing
  * lifecycle, conversion for output occurs as for {@link UIOutput}.</p>
  *
@@ -93,7 +67,7 @@ import java.util.List;
  * listeners.</p>
  *
  * <p>By default, the <code>rendererType</code> property must be set to
- * "<code>Text</code>".  This value can be change by calling the
+ * "<code>Text</code>".  This value can be changed by calling the
  * <code>setRendererType()</code> method.</p>
  */
 
@@ -106,7 +80,8 @@ public class UIInput extends UIOutput {
     /**
      * <p>The message identifier of the
      * {@link javax.faces.application.FacesMessage} to be created if
-     * a conversion error occurs.</p>
+     * a conversion error occurs, and the {@link ConverterException}
+     * does not provide a message.</p>
      */
     public static final String CONVERSION_MESSAGE_ID =
         "javax.faces.component.UIInput.CONVERSION";
@@ -140,34 +115,63 @@ public class UIInput extends UIOutput {
 
 
     /**
-     * <p>The previous value of this {@link UIInput} component.</p>
+     * <p>The submittedValue value of this {@link UIInput} component.</p>
      */
-    private Object previous = null;
+    private Object submittedValue = null;
 
 
     /**
-     * <p>Return the previous value of this {@link UIInput} component.
-     * This method should only be utilized by the <code>decode()</code>
-     * method of this component, or its corresponding {@link Renderer}.</p>
+     * <p>Return the submittedValue value of this {@link UIInput} component.
+     * This method should only be used by the <code>decode()</code> and
+     * <code>validate()</code> method of this component, or
+     *  its corresponding {@link Renderer}.</p>
      */
-    public Object getPrevious() {
+    public Object getSubmittedValue() {
 
-        return (this.previous);
+        return (this.submittedValue);
 
     }
 
 
     /**
-     * <p>Set the previous value of this {@link UIInput} component.
-     * This method should only be utilized by the <code>decode()</code>
-     * method of this component, or its corresponding {@link Renderer}.</p>
-     *
-     * @param previous The new previous value
+     * <p>Set the submittedValue value of this {@link UIInput} component.
+     * This method should only be used by the <code>decode()</code> and
+     * <code>validate()</code> method of this component, or
+     *  its corresponding {@link Renderer}.</p>
+
+     * @param submittedValue The new submitted value
      */
-    public void setPrevious(Object previous) {
+    public void setSubmittedValue(Object submittedValue) {
 
-        this.previous = previous;
+        this.submittedValue = submittedValue;
 
+    }
+
+    public void setValue(Object value) {
+        super.setValue(value);
+        // Mark the local value as set.
+        setLocalValueSet(true);
+    }
+
+    /**
+     * <p>The "localValueSet" state for this component. 
+     */
+    private boolean localValueSet;
+
+    /**
+     * Return the "local value set" state for this component.
+     * Calls to <code>setValue()</code> automatically reset
+     * this property to <code>true</code>.
+     */
+    public boolean isLocalValueSet() {
+        return localValueSet;
+    }
+
+    /**
+     * Sets the "local value set" state for this component.
+     */
+    public void setLocalValueSet(boolean localValueSet) {
+        this.localValueSet = localValueSet;
     }
 
 
@@ -277,6 +281,19 @@ public class UIInput extends UIOutput {
 
 
     // ----------------------------------------------------- UIComponent Methods
+    /**
+     * @exception NullPointerException {@inheritDoc}     
+     */ 
+    public void decode(FacesContext context) {
+
+        if (context == null) {
+            throw new NullPointerException();
+        }
+
+        // Force validity back to "true"
+        setValid(true);
+        super.decode(context);
+    }
 
     /**
      * <p>In addition to to the default {@link UIComponent#broadcast}
@@ -288,22 +305,26 @@ public class UIInput extends UIOutput {
      * @exception AbortProcessingException Signal the JavaServer Faces
      *  implementation that no further processing on the current event
      *  should be performed
+     * @exception IllegalArgumentException if the implementation class
+     *  of this {@link FacesEvent} is not supported by this component
      * @exception NullPointerException if <code>event</code> is
      * <code>null</code>
      */
     public void broadcast(FacesEvent event)
         throws AbortProcessingException {
 
+        if (!(event instanceof ValueChangeEvent)) {
+            throw new IllegalArgumentException();
+        }
         // Perform standard superclass processing
         super.broadcast(event);
 
         // Notify the specified value change listener method (if any)
-        if (event instanceof ValueChangeEvent) {
-            MethodBinding valueChangeMethod = getValueChangeListener();
-            if (valueChangeMethod != null) {
-                FacesContext context = getFacesContext();
-                valueChangeMethod.invoke(context, new Object[] { event });
-            }
+        MethodBinding valueChangeMethod = getValueChangeListener();
+        if ((valueChangeMethod != null) &&
+            event.getPhaseId().equals(PhaseId.PROCESS_VALIDATIONS)) {
+            FacesContext context = getFacesContext();
+            valueChangeMethod.invoke(context, new Object[] { event });
         }
 
     }
@@ -315,6 +336,8 @@ public class UIInput extends UIOutput {
      * <ul>
      * <li>If the <code>valid</code> property of this component is
      *     <code>false</code>, take no further action.</li>
+     * <li>If the <code>localValueSet</code> property of this component is
+     *     <code>false</code>, take no further action.</li>
      * <li>If no {@link ValueBinding} for <code>value</code> exists,
      *     take no further action.</li>
      * <li>Call <code>setValue()</code> method of the {@link ValueBinding}
@@ -322,6 +345,8 @@ public class UIInput extends UIOutput {
      * <li>If the <code>setValue()</code> method returns successfully:
      *     <ul>
      *     <li>Clear the local value of this {@link UIInput}.</li>
+     *     <li>Set the <code>localValueSet</code> property of this
+     *         {@link UIInput} to false.</li>
      *     </ul></li>
      * <li>If the <code>setValue()</code> method call fails:
      *     <ul>
@@ -342,14 +367,17 @@ public class UIInput extends UIOutput {
         if (context == null) {
             throw new NullPointerException();
         }
-        if (!isValid()) {
+
+        if (!isValid() || !isLocalValueSet()) {
             return;
         }
+
 	ValueBinding vb = getValueBinding("value");
 	if (vb != null) {
 	    try {
 		vb.setValue(context, getLocalValue());
 		setValue(null);
+		setLocalValueSet(false);
 		return;
 	    } catch (FacesException e) {
                 FacesMessage message =
@@ -371,7 +399,6 @@ public class UIInput extends UIOutput {
 		setValid(false);
 	    }
 	}
-
     }
 
 
@@ -382,8 +409,47 @@ public class UIInput extends UIOutput {
      * <p>Perform the following algorithm to validate the local value of
      * this {@link UIInput}.</p>
      * <ul>
-     * <li>Save the current local value (if any) in the <code>previous</code>
-     *     property.</li>
+     * <li>Retrieve the submitted value with <code>getSubmittedValue()</code>.
+     *   If this returns null, exit without further processing.  (This
+     *   indicates that no value was submitted for this component.)</li>
+     * <li> Convert the submitted value into a "local value" of the
+     * appropriate data type, if necessary, according to the following
+     * rules:
+     * <ul>
+     * <li>If a <code>Renderer</code> is present, call
+     *     <code>getConvertedValue()</code> to convert the submitted
+     *     value.</li>
+     * <li>If no <code>Renderer</code> is present, and the submitted
+     *     value is a String, locate a {@link Converter} as follows:
+     *     <ul>
+     *     <li>If <code>getConverter()</code> returns a non-null {@link Converter},
+     *         use that instance.</li>
+     *     <li>Otherwise, if a value binding for <code>value</code> exists,
+     *         call <code>getType()</code> on it.  
+     *         <ul>
+     *         <li>If this call returns <code>null</code>, assume the output
+     *             type is <code>String</code> and perform no conversion.</li>
+     *         <li>Otherwise, call
+     *             <code>Application.createConverter(Class)</code>
+     *             to locate any registered {@link Converter} capable of
+     *             converting data values of the specified type.</li>
+     *       </ul>
+     *     </li>
+     *     </ul>
+     * </li>
+     * <li>If a {@link Converter} instance was located, call its
+     *     <code>getAsObject()</code> method to perform the conversion.
+     *     If conversion fails:
+     *     <ul>
+     *       <li>Enqueue an appropriate error message by calling the
+     *         <code>addMessage()</code> method on the
+     *         <code>FacesContext</code>.</li>
+     *       <li>Set the <code>valid</code> property
+     *       on this component to <code>false</code> </li>
+     *     </ul></li>
+     * <li>Otherwise, use the submitted value without any conversion</li>
+     * </ul>
+     * </li>
      * <li>If the <code>valid</code> property on this component is still
      *     <code>true</code>, and the <code>required</code> property is also
      *     true, ensure that the local value is not empty (where "empty" is
@@ -406,7 +472,10 @@ public class UIInput extends UIOutput {
      *     its message (if any) to the {@link FacesContext}, and set
      *     the <code>valid</code> property of this component to false.</li>
      * <li>If the <code>valid</code> property of this component is still
-     *     <code>true</code>, and if the local value is different from
+     *     <code>true</code>, retrieve the previous value of the component
+     *     (with <code>getValue()</code>), store the new local value using
+     *     <code>setValue()</code>, and reset the submitted value to 
+     *     null.  If the local value is different from
      *     the previous value of this component, fire a
      *     {@link ValueChangeEvent} to be broadcast to all interested
      *     listeners.</li>
@@ -429,12 +498,42 @@ public class UIInput extends UIOutput {
             throw new NullPointerException();
         }
 
-        // Save and reset the previous value for this component
-        Object previous = getPrevious();
-        setPrevious(null);
+        // Submitted value == null means "the component was not submitted
+        // at all";  validation should not continue
+        Object submittedValue = getSubmittedValue();
+        if (submittedValue == null) {
+            return;
+        }
+            
+        Renderer renderer = getRenderer(context);
+        Object newValue = null;
+
+        try {
+            if (renderer != null) {
+                newValue = renderer.getConvertedValue(context, this,
+                                                      submittedValue);
+            } else if (submittedValue instanceof String) {
+                // If there's no Renderer, and we've got a String,
+                // run it through the Converter (if any)
+                Converter converter = getConverterWithType(context);
+                if (converter != null) {
+                    newValue = converter.getAsObject(context, this,
+                                                     (String) submittedValue);
+                }
+                else {
+                    newValue = submittedValue;
+                }
+            } else {
+                newValue = submittedValue;
+            }
+            
+        } catch (ConverterException ce) {
+            addConversionErrorMessage(context, ce, submittedValue);
+            setValid(false);
+        }
 
 	// If our value is valid, enforce the required property if present
-	if (isValid() && isRequired() && isEmpty()) {
+	if (isValid() && isRequired() && isEmpty(newValue)) {
 	    FacesMessage message =
 		MessageFactory.getMessage(context, REQUIRED_MESSAGE_ID);
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -443,13 +542,13 @@ public class UIInput extends UIOutput {
 	}
 
 	// If our value is valid and not empty, call all validators
-	if (isValid() && !isEmpty()) {
+	if (isValid() && !isEmpty(newValue)) {
 	    if (this.validators != null) {
 		Iterator validators = this.validators.iterator();
 		while (validators.hasNext()) {
 		    Validator validator = (Validator) validators.next();
                     try { 
-                        validator.validate(context, this, getLocalValue());
+                        validator.validate(context, this, newValue);
                     }
                     catch (ValidatorException ve) {
                         // If the validator throws an exception, we're
@@ -466,7 +565,7 @@ public class UIInput extends UIOutput {
             if (validatorBinding != null) {
                 try {
                     validatorBinding.invoke(context,
-                              new Object[] { context, this, getLocalValue()});
+                              new Object[] { context, this, newValue});
                 }
                 catch (EvaluationException ee) {
                     if (ee.getCause() instanceof ValidatorException) {
@@ -489,11 +588,14 @@ public class UIInput extends UIOutput {
             }
 	}
 
-	// If our value is valid, emit a ValueChangeEvent if appropriate
+	// If our value is valid, store the new value, erase the
+        // "submitted" value, and emit a ValueChangeEvent if appropriate
 	if (isValid()) {
-	    Object value = getLocalValue();
-            if (compareValues(previous, value)) {
-                queueEvent(new ValueChangeEvent(this, previous, value));
+	    Object previous = getValue();
+            setValue(newValue);
+            setSubmittedValue(null);
+            if (compareValues(previous, newValue)) {
+                queueEvent(new ValueChangeEvent(this, previous, newValue));
             }
         }
 
@@ -519,10 +621,8 @@ public class UIInput extends UIOutput {
 
     }
 
+    private boolean isEmpty(Object value) {
 
-    private boolean isEmpty() {
-
-	Object value = getLocalValue();
 	if (value == null) {
 	    return (true);
 	} else if ((value instanceof String) &&
@@ -654,7 +754,7 @@ public class UIInput extends UIOutput {
 
         Object values[] = new Object[7];
         values[0] = super.saveState(context);
-        values[1] = previous;
+        values[1] = localValueSet ? Boolean.TRUE : Boolean.FALSE;
         values[2] = required ? Boolean.TRUE : Boolean.FALSE;
 	values[3] = requiredSet ? Boolean.TRUE : Boolean.FALSE;
         values[4] = saveAttachedState(context, validators);
@@ -669,7 +769,7 @@ public class UIInput extends UIOutput {
 
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
-        previous = values[1];
+        localValueSet = ((Boolean) values[1]).booleanValue();
         required = ((Boolean) values[2]).booleanValue();
         requiredSet = ((Boolean) values[3]).booleanValue();
 	List restoredValidators = null;
@@ -696,7 +796,52 @@ public class UIInput extends UIOutput {
         valueChangeMethod = (MethodBinding) restoreAttachedState(context,
 								 values[6]);
 
+
     }
 
+    private Converter getConverterWithType(FacesContext context) {
+        Converter converter = getConverter();
+        if (converter != null) {
+            return converter;
+        }
+
+        ValueBinding valueBinding = getValueBinding("value");
+        if (valueBinding == null) {
+            return null;
+        }
+
+        Class converterType = valueBinding.getType(context);
+        // if converterType is null, String, or Object, assume
+        // no conversion is needed
+        if (converterType == null || 
+            converterType == String.class ||
+            converterType == Object.class) {
+            return null;
+        }
+
+        // if getType returns a type for which we support a default
+        // conversion, acquire an appropriate converter instance.
+        try {
+            Application application = context.getApplication();
+            return application.createConverter(converterType);
+        } catch (Exception e) {
+            return (null);
+        }
+    }
+
+    private void addConversionErrorMessage(FacesContext context, 
+            ConverterException ce, Object value) {
+        FacesMessage message = ce.getFacesMessage();
+        if (message == null) {
+            message = MessageFactory.getMessage(context,
+                                                CONVERSION_MESSAGE_ID);
+            if (message.getDetail() == null) {
+                message.setDetail(ce.getMessage());
+            }
+        }
+
+        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(getClientId(context), message);
+    }
 
 }

@@ -299,11 +299,13 @@ public class UIData extends UIComponentBase
      * as follows:<p>
      * <ul>
      * <li>If the descendant is an instance of <code>UIInput</code>, save
-     *     the state of the <code>localValue</code> property.</li>
+     *     the state of its <code>localValue</code> property.</li>
+     * <li>If the descendant is an instance of <code>UIInput</code>,
+     *     save the state of the <code>localValueSet</code> property.</li>
      * <li>If the descendant is an instance of <code>UIInput</code>, save
      *     the state of the <code>valid</code> property.</li>
      * <li>If the descendant is an instance of <code>UIInput</code>,
-     *     save the state of the <code>previous</code> property.</li>
+     *     save the state of the <code>submittedValue</code> property.</li>
      * </ul>
      *
      * <p>To restore current state information for all descendant components,
@@ -314,9 +316,11 @@ public class UIData extends UIComponentBase
      * <li>If the descendant is an instance of <code>UIInput</code>,
      *     restore the <code>value</code> property.</li>
      * <li>If the descendant is an instance of <code>UIInput</code>,
+     *     restore the state of the <code>localValueSet</code> property.</li>
+     * <li>If the descendant is an instance of <code>UIInput</code>,
      *     restore the state of the <code>valid</code> property.</li>
      * <li>If the descendant is an instance of <code>UIInput</code>,
-     *     restore the state of the <code>previous</code> property.</li>
+     *     restore the state of the <code>submittedValue</code> property.</li>
      * </ul>
      *
      * @param rowIndex The new row index value, or -1 for no associated row
@@ -910,7 +914,10 @@ public class UIData extends UIComponentBase
             }
             input.setValue(state.getValue());
             input.setValid(state.isValid());
-            input.setPrevious(state.getPrevious());
+            input.setSubmittedValue(state.getSubmittedValue());
+            // This *must* be set after the call to setValue(), since
+            // calling setValue() always resets "localValueSet" to true.
+            input.setLocalValueSet(state.isLocalValueSet());
         }
 
         // Restore state for children of this component
@@ -962,7 +969,8 @@ public class UIData extends UIComponentBase
             }
             state.setValue(input.getLocalValue());
             state.setValid(input.isValid());
-            state.setPrevious(input.getPrevious());
+            state.setSubmittedValue(input.getSubmittedValue());
+            state.setLocalValueSet(input.isLocalValueSet());
         }
 
         // Save state for children of this component
@@ -983,12 +991,12 @@ public class UIData extends UIComponentBase
 // Private class to represent saved state information
 class SavedState implements Serializable {
 
-    private Object previous;
-    Object getPrevious() {
-	return (this.previous);
+    private Object submittedValue;
+    Object getSubmittedValue() {
+	return (this.submittedValue);
     }
-    void setPrevious(Object previous) {
-	this.previous = previous;
+    void setSubmittedValue(Object submittedValue) {
+	this.submittedValue = submittedValue;
     }
 
     private boolean valid = true;
@@ -1005,6 +1013,14 @@ class SavedState implements Serializable {
     }
     public void setValue(Object value) {
 	this.value = value;
+    }
+
+    private boolean localValueSet;
+    boolean isLocalValueSet() {
+	return (this.localValueSet);
+    }
+    public void setLocalValueSet(boolean localValueSet) {
+	this.localValueSet = localValueSet;
     }
 
 }
