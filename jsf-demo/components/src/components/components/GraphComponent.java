@@ -1,5 +1,5 @@
 /*
- * $Id: GraphComponent.java,v 1.8 2003/10/07 14:31:03 eburns Exp $
+ * $Id: GraphComponent.java,v 1.9 2003/11/06 15:57:53 eburns Exp $
  */
 
 /*
@@ -133,8 +133,7 @@ public class GraphComponent extends UIOutput {
             return null;
         }
         
-        public void restoreState(FacesContext context, Object state) 
-                throws IOException {
+        public void restoreState(FacesContext context, Object state) {
         }
         
         public void setTransient(boolean newTransientValue) {

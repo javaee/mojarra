@@ -190,8 +190,7 @@ public class AreaComponent extends UIOutput {
      *
      * @exception IOException if an input/output error occurs
      */
-    public void restoreState(FacesContext context, Object state)
-        throws IOException {
+    public void restoreState(FacesContext context, Object state) {
         Object values[] = (Object[]) state;
         super.restoreState(context, values[0]);
         alt = (String) values[1];

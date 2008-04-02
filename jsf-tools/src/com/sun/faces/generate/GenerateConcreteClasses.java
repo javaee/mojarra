@@ -1,5 +1,5 @@
 /*
- * $Id: GenerateConcreteClasses.java,v 1.3 2003/11/04 18:38:34 rkitain Exp $
+ * $Id: GenerateConcreteClasses.java,v 1.4 2003/11/06 15:57:55 eburns Exp $
  */
 
 /*
@@ -341,7 +341,7 @@ public class GenerateConcreteClasses extends GenerateBase {
 	curAttr = 1;
 	numAttrs= attrs.keySet().size() + 1; // + 1 for super.state,
 					     // saved in values[0]
-	result.append("  public void restoreState(FacesContext context, Object state) throws IOException {\n");
+	result.append("  public void restoreState(FacesContext context, Object state) {\n");
 	result.append("    Object [] values = (Object []) state;\n");
 	result.append("    super.restoreState(context, values[0]);\n");
 	// generate the state restoring for each attribute
