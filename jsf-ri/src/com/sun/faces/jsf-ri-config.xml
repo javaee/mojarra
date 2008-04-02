@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+
+<!--
+ Copyright 2003 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config>
+
+
+  <!-- Initial application element with partial values -->
+  <application>
+    <action-listener>com.mycompany.MyActionListener</action-listener>
+    <variable-resolver>com.mycompany.OldVariableResolver</variable-resolver>
+  </application>
+
+
+  <!-- Second validator -->
+  <validator>
+    <description>Second Validator Description</description>
+    <display-name>Second Validator Display Name</display-name>
+    <icon>
+      <small-icon>secondValidator.jpg</small-icon>
+      <large-icon>secondValidator.gif</large-icon>
+    </icon>
+    <validator-id>Second</validator-id>
+    <validator-class>com.mycompany.MySecondValidator</validator-class>
+    <property>
+      <description>Second Validator Property 1 Description</description>
+      <display-name>Second Validator Property 1 Display Name</display-name>
+      <property-name>prop1</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+  </validator>
+
+
+  <!-- First validator -->
+  <validator>
+    <description>First Validator Description</description>
+    <display-name>First Validator Display Name</display-name>
+    <icon>
+      <small-icon>firstValidator.jpg</small-icon>
+      <large-icon>firstValidator.gif</large-icon>
+    </icon>
+    <validator-id>First</validator-id>
+    <validator-class>com.mycompany.MyFirstValidator</validator-class>
+    <attribute>
+      <description>First Validator Attribute 1 Description</description>
+      <display-name>First Validator Attribute 1 Display Name</display-name>
+      <attribute-name>attr1</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+    </attribute>
+  </validator>
+
+
+  <!-- First component -->
+  <component>
+    <description>User Interface Command Component</description>
+    <display-name>User Interface Command</display-name>
+    <component-type>Command</component-type>
+    <component-class>javax.faces.component.UICommand</component-class>
+  </component>
+
+
+  <!-- First converter -->
+  <converter>
+    <description>First Converter Description</description>
+    <display-name>First Converter Display Name</display-name>
+    <icon>
+      <small-icon>firstConverter.jpg</small-icon>
+      <large-icon>firstConverter.gif</large-icon>
+    </icon>
+    <converter-id>First</converter-id>
+    <converter-class>com.mycompany.MyFirstConverter</converter-class>
+    <attribute>
+      <description>First Converter Attribute 1 Description</description>
+      <display-name>First Converter Attribute 1 Display Name</display-name>
+      <attribute-name>attr1</attribute-name>
+      <attribute-class>java.lang.String</attribute-class>
+    </attribute>
+  </converter>
+
+
+  <!-- Second application element with overapping values -->
+  <application>
+    <navigation-handler>
+      com.mycompany.MyNavigationHandler
+    </navigation-handler>
+    <property-resolver>com.mycompany.MyPropertyResolver</property-resolver>
+    <variable-resolver>com.mycompany.MyVariableResolver</variable-resolver>
+  </application>
+
+
+  <!-- Second converter -->
+  <converter>
+    <description>Second Converter Description</description>
+    <display-name>Second Converter Display Name</display-name>
+    <icon>
+      <small-icon>secondConverter.jpg</small-icon>
+      <large-icon>secondConverter.gif</large-icon>
+    </icon>
+    <converter-id>Second</converter-id>
+    <converter-class>com.mycompany.MySecondConverter</converter-class>
+    <property>
+      <description>Second Converter Property 1 Description</description>
+      <display-name>Second Converter Property 1 Display Name</display-name>
+      <property-name>prop1</property-name>
+      <property-class>java.lang.String</property-class>
+    </property>
+  </converter>
+
+
+  <!-- First navigation rule (global) -->
+  <navigation-rule>
+    <!-- Can also be omitted, since this is the default -->
+    <from-tree-id> * </from-tree-id>
+    <!-- Logout button on every page -->
+    <navigation-case>
+      <from-action-ref>UserBean.Logout</from-action-ref>
+      <to-tree-id>/logout.jsp</to-tree-id>
+    </navigation-case>
+    <!-- Generic "not logged in" handler -->
+    <navigation-case>
+      <from-outcome>loginRequired</from-outcome>
+      <to-tree-id>/must-login-first.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+
+  <!-- Second navigation rule (login page only) -->
+  <navigation-rule>
+    <from-tree-id> /login.jsp </from-tree-id>
+    <!-- Login action was invoked successfully -->
+    <navigation-case>
+      <from-action-ref>UserBean.login</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/home.jsp</to-tree-id>
+    </navigation-case>
+    <!-- User registration required -->
+    <navigation-case>
+      <from-action-ref>UserBean.register</from-action-ref>
+      <from-outcome>success</from-outcome>
+      <to-tree-id>/get-user-info.jsp</to-tree-id>
+    </navigation-case>
+    <!-- User registration failed -->
+    <navigation-case>
+      <from-action-ref>UserBean.register</from-action-ref>
+      <from-outcome>duplicate</from-outcome>
+      <to-tree-id>/try-another-name.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+
+  <!-- Third navigation rule (more global stuff) -->
+  <navigation-rule>
+    <!-- Omit the request tree id this time -->
+    <!-- General search form handling -->
+    <navigation-case>
+      <from-action-ref>SearchForm.go</from-action-ref>
+      <to-tree-id>/search-results.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+
+  <!-- Fourth navigation rule (special search handling) -->
+  <navigation-rule>
+    <!-- Search works differently for part of the app -->
+    <from-tree-id>/movies/*</from-tree-id>
+    <!-- Special search form handling -->
+    <navigation-case>
+      <from-action-ref>SearchForm.go</from-action-ref>
+      <to-tree-id>/movies/movie-search-results.jsp</to-tree-id>
+    </navigation-case>
+  </navigation-rule>
+
+
+  <!-- First managed bean -->
+  <managed-bean>
+    <!-- Basic information about this bean -->
+    <description>
+      Auto-creates the form handler for new customers into request scope
+      if it is not already present.
+    </description>
+    <display-name>New Customer Form Handler</display-name>
+    <managed-bean-name>NewCustomerFormHandler</managed-bean-name>
+    <managed-bean-class>
+      com.sun.faces.config.NewCustomerFormHandler
+    </managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <!-- Managed property initializations -->
+    <managed-property>
+      <property-name>minimumAge</property-name>
+      <value-ref>initParam.minimumCustomerAge</value-ref>
+    </managed-property>
+    <managed-property>
+      <property-name>maximumAge</property-name>
+      <value>65</value>
+    </managed-property>
+    <managed-property>
+      <property-name>nationality</property-name>
+      <null-value/>
+    </managed-property>
+    <managed-property>
+      <property-name>allowableValues</property-name>
+      <!-- Assume the type is java.util.List -->
+      <values>
+        <value-class>java.lang.Integer</value-class>
+        <value>10</value>
+        <value>20</value>
+        <value>60</value>
+      </values>
+    </managed-property>
+    <managed-property>
+      <property-name>firstNames</property-name>
+      <!-- Assume the type is java.util.List or java.lang.String[] -->
+      <values>
+        <value>Thomas</value>
+        <value-ref>someOtherBean.someName</value-ref>
+        <null-value/>
+      </values>
+    </managed-property>
+    <managed-property>
+      <description>
+        Map property with a description.
+      </description>
+      <display-name>Claim Amounts</display-name>
+      <property-name>claimAmounts</property-name>
+      <map-entries>
+        <key-class>java.lang.String</key-class> <!-- Default so redundant -->
+        <value-class>java.lang.Double</value-class>
+        <map-entry>
+          <key>fire</key>
+          <value>1000.00</value>
+        </map-entry>
+        <map-entry>
+          <key>water</key>
+          <value-ref>claimConfiguration.waterDamageAmount</value-ref>
+        </map-entry>
+        <map-entry>
+          <key>earthquake</key>
+          <null-value/>
+        </map-entry>
+      </map-entries>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <managed-bean-name>SimpleBean</managed-bean-name>
+    <managed-bean-class>com.sun.faces.config.SimpleBean</managed-bean-class>
+    <managed-bean-scope>session</managed-bean-scope>
+    <managed-property>
+      <property-name>simpleProperty</property-name>
+      <value>Bobby Orr</value>
+    </managed-property>
+  </managed-bean>
+
+
+  <!-- First referenced bean -->
+  <referenced-bean>
+    <description>
+      This element represents a JDBC DataSource that will be
+      initialized through some external means, and made available
+      in some scope (most likely application).
+    </description>
+    <display-name>Database Connection Pool</display-name>
+    <referenced-bean-name>connectionPool</referenced-bean-name>
+    <referenced-bean-class>javax.sql.DataSource</referenced-bean-class>
+  </referenced-bean>
+
+
+</faces-config>

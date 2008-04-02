@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigParser.java,v 1.3 2003/04/30 19:06:02 rkitain Exp $
+ * $Id: ConfigParser.java,v 1.4 2003/04/30 19:55:23 eburns Exp $
  */
 
 /*
@@ -59,9 +59,6 @@ public class ConfigParser {
      */
     protected Digester digester = null;
 
-    protected ConfigBase base = null;
-
-
     //
     // Constructors and Initializers
     //
@@ -79,69 +76,93 @@ public class ConfigParser {
         }
         digester = createDigester(validateXml);
         configureRules(digester);
-
-        base = parseConfig("/WEB-INF/faces-config.xml", servletContext);
-        Assert.assert_it(null != base);
     }
 
     /**
-     * Constuct a new instance of this configuration parser with a specified path.
      *
+     * <p>Create a brand new ConfigBase object, clearing the existing
+     * configuration, and populate it from the specified configPath.</p>
      */
-    public ConfigParser(String configPath, ServletContext servletContext) {
-        super();
-        boolean validateXml = validateTheXml(servletContext);
-        digester = createDigester(validateXml);
-        configureRules(digester);
 
-        base = parseConfig(configPath, servletContext);
-        Assert.assert_it(null != base);
+    protected ConfigBase parseConfig(String configPath, 
+				     ServletContext servletContext) { 
+	ConfigBase base = new ConfigBase();
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = 
+	    (ApplicationImpl)aFactory.getApplication();
+        application.clearManagedBeanFactories();
+	
+	base = this.parseConfig(configPath, servletContext, base);
+	return base;
     }
 
-    public ConfigBase getConfigBase() {
-        return base;
-    }            
+    /**
+     *
+     * <p>Create a brand new ConfigBase object, clearing the existing
+     * configuration, and populate it from the specified InputStream.</p>
+     */
+
+    protected ConfigBase parseConfig(InputStream input) { 
+	ConfigBase base = new ConfigBase();
+        ApplicationFactory aFactory = 
+	    (ApplicationFactory)FactoryFinder.getFactory(FactoryFinder.APPLICATION_FACTORY);
+        ApplicationImpl application = 
+	    (ApplicationImpl)aFactory.getApplication();
+        application.clearManagedBeanFactories();
+	
+	base = this.parseConfig(input, base);
+	return base;
+    }
+
+    /**
+
+    * <p>Add to the configuration of the specified ConfigBase with the
+    * config information at the specified configPath.</p>
+
+    */
 
     // Parse the configuration file at the specified path; 
-    protected ConfigBase parseConfig(String configPath, ServletContext servletContext) { 
-
-        // Clear before parsing..
-
-        ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
-            FactoryFinder.APPLICATION_FACTORY);
-        ApplicationImpl application = (ApplicationImpl)aFactory.getApplication();
-        application.clearManagedBeanFactories();
-
+    protected ConfigBase parseConfig(String configPath, 
+				     ServletContext servletContext, 
+				     ConfigBase base) { 
         InputStream input = null;
-        ConfigBase base = null;
 
         try {
             input = servletContext.getResourceAsStream(configPath);
         } catch (Throwable t) {
-            Object[] obj = new Object[1];
-            obj[0] = configPath;
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.ERROR_OPENING_FILE_ERROR_MESSAGE_ID, obj));
+            throw new RuntimeException("Error Opening File:"+configPath);
         }
-        try {
-            digester.clear();
-            digester.push(new ConfigBase());
-            base = (ConfigBase) digester.parse(input);
-        } catch (Throwable t) {
-            Object[] obj = new Object[1];
-            obj[0] = configPath;
-            throw new RuntimeException(Util.getExceptionMessage(
-                Util.ERROR_PARSING_FILE_ERROR_MESSAGE_ID, obj)+t.getMessage());
-        }
-            
-        try {
-            input.close();
-        } catch(Throwable t) {
-        }
+	base = this.parseConfig(input, base);
 
         return base;
     }
 
+    /**
+
+    * <p>Add to the configuration of the specified ConfigBase with the
+    * config information at the specified InputStream.</p>
+
+    */
+
+    protected ConfigBase parseConfig(InputStream input, ConfigBase base) {
+        try {
+            digester.clear();
+            digester.push(base);
+            base = (ConfigBase) digester.parse(input);
+        } catch (Throwable t) {
+            throw new RuntimeException("Unable to parse inputStream: " +
+				       input.toString() + ": "+
+				       t.getMessage());
+        }
+	
+        try {
+            input.close();
+        } catch(Throwable t) {
+        }
+	
+        return base;
+    }
 
     // Create a Digester instance with no rules yet
     protected Digester createDigester(boolean validateXml) {

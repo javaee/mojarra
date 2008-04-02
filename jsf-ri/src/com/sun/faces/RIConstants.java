@@ -1,5 +1,5 @@
 /*
- * $Id: RIConstants.java,v 1.33 2003/04/29 22:20:30 eburns Exp $
+ * $Id: RIConstants.java,v 1.34 2003/04/30 19:55:21 eburns Exp $
  */
 
 /*
@@ -58,6 +58,12 @@ public class RIConstants {
     public static final String SAVESTATE_MARKER = FACES_PREFIX + "saveStateMarker";
     public static final String SAVESTATE_INITPARAM = 
 	FACES_PREFIX + "saveStateInClient";
+
+    public static final String CONFIG_FILES_INITPARAM = 
+	FACES_PREFIX + "ConfigFilesList";
+
+    public static final String JSF_RI_CONFIG = 
+	"com/sun/faces/jsf-ri-config.xml";
 
     // PENDING(rogerk) this needs to be mentioned in the spec, 
     // under [ConfigFiles-26]

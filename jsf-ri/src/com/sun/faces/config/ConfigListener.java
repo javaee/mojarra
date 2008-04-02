@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigListener.java,v 1.3 2003/04/30 17:15:14 rkitain Exp $
+ * $Id: ConfigListener.java,v 1.4 2003/04/30 19:55:23 eburns Exp $
  */
 /*
  * Copyright 2002, 2003 Sun Microsystems, Inc. All Rights Reserved.
@@ -42,12 +42,19 @@
 package com.sun.faces.config;
 
 import com.sun.faces.RIConstants;
+import com.sun.faces.util.Util;
 
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContext;
+import java.util.StringTokenizer;
+import org.mozilla.util.Assert;
+import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import javax.faces.FacesException;
 
 public class ConfigListener implements ServletContextListener
 {
@@ -91,10 +98,48 @@ public class ConfigListener implements ServletContextListener
     // Methods from ServletContextListener
     //
 
-    public void contextInitialized(ServletContextEvent e) {
-        configParser = new ConfigParser(e.getServletContext());
-        ConfigBase configBase = configParser.getConfigBase();
-        e.getServletContext().setAttribute(RIConstants.CONFIG_ATTR, configBase);
+    public void contextInitialized(ServletContextEvent e) 
+    {
+	ServletContext servletContext = e.getServletContext();
+        configParser = new ConfigParser(servletContext);
+	ConfigBase configBase = null;
+	String initParamFileList = null;
+	InputStream jarInputStream = null;
+	
+	// Step 1, load our own JSF_RI_CONFIG
+	jarInputStream = this.getClass().getClassLoader().
+	    getResourceAsStream(RIConstants.JSF_RI_CONFIG);
+	Assert.assert_it(null != jarInputStream);
+
+        configBase = configParser.parseConfig(jarInputStream);
+	Assert.assert_it(null != configBase);
+	
+	// Step 2, load any additional config files from the
+	// ServletContext init parameter.
+	if (null != (initParamFileList = 
+		     servletContext.getInitParameter(RIConstants.CONFIG_FILES_INITPARAM))) {
+	    StringTokenizer toker = new StringTokenizer(initParamFileList, 
+							",");
+	    String cur;
+	    while (toker.hasMoreTokens()) {
+		cur = toker.nextToken();
+		if (null != cur && 0 < cur.length()) {
+		    cur = cur.trim();
+		    try {
+			configBase = configParser.parseConfig(cur,
+							      servletContext,
+							      configBase);
+		    } catch (Throwable t) {
+			throw new FacesException(Util.getExceptionMessage(
+                                       Util.CANT_PARSE_FILE_ERROR_MESSAGE_ID),
+						 t);
+		    }
+		}
+	    }
+	}
+	
+        servletContext.setAttribute(RIConstants.CONFIG_ATTR, 
+					   configBase);
         if (log.isTraceEnabled()) {
             log.trace("CONFIG BASE SET IN CONTEXT...");
         }

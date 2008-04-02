@@ -1,5 +1,5 @@
 /*
- * $Id: ConfigFileTestCase.java,v 1.3 2003/04/30 19:05:20 rkitain Exp $
+ * $Id: ConfigFileTestCase.java,v 1.4 2003/04/30 19:55:25 eburns Exp $
  */
 
 /*
@@ -11,6 +11,7 @@ package com.sun.faces.config;
 
 import com.sun.faces.application.ApplicationImpl;
 import com.sun.faces.el.ValueBindingImpl;
+import com.sun.faces.RIConstants;
 
 import java.io.File;
 import java.io.InputStream;
@@ -22,10 +23,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContext;
 import javax.faces.FactoryFinder;
 import javax.faces.application.ApplicationFactory;
 
 import org.apache.cactus.ServletTestCase;
+import org.apache.cactus.WebRequest;
+import org.apache.cactus.server.ServletContextWrapper;
 import com.sun.faces.ServletFacesTestCase;
 
 /**
@@ -33,11 +38,6 @@ import com.sun.faces.ServletFacesTestCase;
  */
 
 public class ConfigFileTestCase extends ServletFacesTestCase {
-
-
-    // The public identifier of our DTD
-    protected String CONFIG_DTD_PUBLIC_ID =
-        "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN";
 
 
     // ----------------------------------------------------- Instance Variables
@@ -75,7 +75,9 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     // Test parsing a full configuration file
     public void testFull() throws Exception {
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = cp.getConfigBase();
+        base = cp.parseConfig("/WEB-INF/faces-config.xml", 
+			      config.getServletContext());
+	assertTrue(null != base);
 
         // <application>
         assertEquals("com.mycompany.MyActionListener",
@@ -236,9 +238,10 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     }
 
     public void testEmpty() throws Exception {
-        ConfigParser cp = new ConfigParser("/WEB-INF/faces-config-empty.xml",
-            config.getServletContext());
-        base = cp.getConfigBase();
+        ConfigParser cp = new ConfigParser(config.getServletContext());
+        base = cp.parseConfig("/WEB-INF/faces-config-empty.xml",
+			      config.getServletContext());
+	assertTrue(null != base);
     }
 
     // Assert that create and stored managed bean is the same as specified in the 
@@ -247,7 +250,8 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
     public void testConfigManagedBeanFactory() {
 
         ConfigParser cp = new ConfigParser(config.getServletContext());
-        base = cp.getConfigBase();
+        base = cp.parseConfig("/WEB-INF/faces-config.xml", 
+			      config.getServletContext());
 
         ApplicationFactory aFactory = (ApplicationFactory)FactoryFinder.getFactory(
         FactoryFinder.APPLICATION_FACTORY);
@@ -270,5 +274,39 @@ public class ConfigFileTestCase extends ServletFacesTestCase {
         }
 
         assertTrue (clazz.isInstance(obj));
+    }
+
+    public void testInitParams() {
+	// clear out the attr that was set in the servletcontext attr set.
+	config.getServletContext().removeAttribute(RIConstants.CONFIG_ATTR);
+	final String paramVal = "config1.xml,config2.xml";
+
+	// work around a bug in cactus where calling
+	// config.setInitParameter() doesn't cause
+	// servletContext.getInitParameter() to relfect the call.
+	
+	ServletContextWrapper sc = 
+	    new ServletContextWrapper(config.getServletContext()) {
+		public String getInitParameter(String theName) {
+		    if (null != theName &&
+			theName.equals(RIConstants.CONFIG_FILES_INITPARAM)) {
+			return paramVal;
+		    }
+		    return super.getInitParameter(theName);
+		}
+	    };
+	    
+	ConfigListener configListener = new ConfigListener();
+	ServletContextEvent e = 
+	    new ServletContextEvent(sc);
+	configListener.contextInitialized(e);
+	ConfigBase configBase = (ConfigBase) 
+	    sc.getAttribute(RIConstants.CONFIG_ATTR);
+	assertTrue(null != configBase);
+	// make sure we have the managed beans from all three config
+	// files: 1. the stock RI 2. config1.xml 3. config2.xml
+	assertTrue(null != configBase.getManagedBeans().get("NewCustomerFormHandler"));
+	assertTrue(null != configBase.getManagedBeans().get("TestBean1"));
+	assertTrue(null != configBase.getManagedBeans().get("TestBean2"));
     }
 }
